@@ -38,6 +38,7 @@ export const Numeric = ({
     messageKey,
     infoKeys,
     suffix = '',
+    prefix = '',
     allowNegative = defaultOptions.allowNegative,
     allowZero = defaultOptions.allowZero,
     value = '',
@@ -47,7 +48,7 @@ export const Numeric = ({
     const validationOptions = { allowNegative, allowZero };
 
     const parseNumber = value => {
-        const num = value.replace(suffix, '');
+        const num = value.replace(suffix, '').replace(prefix, '');
         return (!Oskari.util.isNumber(num) && num !== '-') ? '' : num;
     };
 
@@ -58,7 +59,7 @@ export const Numeric = ({
         if (!Oskari.util.isNumber(value)) {
             return '';
         }
-        return value + suffix;
+        return prefix + value + suffix;
     };
 
     let input =
@@ -91,6 +92,7 @@ Numeric.propTypes = {
     messageKey: PropTypes.string,
     infoKeys: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string, PropTypes.any]),
     suffix: PropTypes.string,
+    prefix: PropTypes.string,
     allowNegative: PropTypes.bool,
     allowZero: PropTypes.bool,
     onChange: PropTypes.func.isRequired,

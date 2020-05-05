@@ -4,5 +4,6 @@ import styled from 'styled-components';
 
 export const Radio = {
     Group: styled(AntRadio.Group)``,
-    Button: styled(AntRadio.Button)``
+    Button: styled(AntRadio.Button)``,
+    Choice: styled(AntRadio)``
 };

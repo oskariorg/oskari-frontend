@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Slider, Icon } from 'oskari-ui';
-import { Controller } from 'oskari-ui/util';
+import { Numeric } from '../Numeric';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const VerticalComponent = styled('div')`
@@ -11,95 +12,144 @@ const VerticalComponent = styled('div')`
     margin-left: 25%;
 `;
 
-const CenteredLabel = styled('div')`
-    text-align: center;
+const FieldLabel = styled('div')`
     padding-bottom: 5px;
 `;
 
 const SliderContainer = styled('div')`
-    padding-left: calc(50% - 2px);
+    padding-left: 20%;
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
+
+    .ant-slider-mark-text {
+        padding-bottom: 3px;
+        font-size: 11px;
+    }
 `;
 
-const getClosestMatch = (arr, value) => (
-    arr.reduce((best, cur) => (Math.abs(cur - value) < Math.abs(best - value) ? cur : best))
-);
+const ScaleInput = styled(Numeric)`
+    width: 90%;
+    margin: 10px 0;
+`;
 
-const getLevel = (scale, levelToScale) => {
-    const level = Object.keys(levelToScale).find(key => levelToScale[key] === scale);
-    return parseInt(level);
-};
+const StyledIcon = styled(Icon)`
+text-align: left;
+padding-left: 16%;
+`;
 
-const getLayerValues = (layer, levelToScale, defaultValues) => {
-    const { minscale, maxscale } = layer;
-    const scaleOptions = Object.values(levelToScale);
-    let [ min, max ] = defaultValues;
-    if (minscale > 0) {
-        min = getClosestMatch(scaleOptions, minscale);
-        min = getLevel(min, levelToScale);
-    }
-    if (maxscale > 0) {
-        max = getClosestMatch(scaleOptions, maxscale);
-        max = getLevel(max, levelToScale);
-    }
-    return [ min, max ];
-};
-
-// Allow user to set values outside the system scale array.
-const maxScaleOption = 1; // 1:1
-const halfALevel = 0.5;
-
-export const Scale = ({ layer, scales, controller }) => {
-    const maxScale = scales[scales.length - 1];
-    let maxZoomLevel = scales.length - 1;
-    const levelToScale = {};
-    const marks = {
-        0: '0',
-        5: '5',
-        10: '10'
-    };
-    if (maxZoomLevel > 10) {
-        marks[maxZoomLevel] = maxZoomLevel;
-    }
-    if (scales[maxZoomLevel] !== maxScaleOption) {
-        // Allow one step over the max level
-        maxZoomLevel += halfALevel;
-        levelToScale[maxZoomLevel] = maxScaleOption;
-    }
-    scales.forEach((scale, i) => {
-        levelToScale[i] = scale;
-        if (scale === maxScale) {
-            return;
-        }
-        const nextScale = scales[i + 1];
-        // Add one option to the middle of zoom levels
-        levelToScale[i + halfALevel] = Math.round(scale - (scale - nextScale) / 2);
-    });
+const Scale = ({ layer, scales = [], controller, getMessage }) => {
+    const locNoLimit = getMessage('fieldNoRestriction');
+    let { minscale, maxscale } = normalizeScales(layer);
+    const mapScales = scales.slice(0);
+    const maxZoomLevel = mapScales.length - 1;
+    const layerMaxZoom = getMaxZoom(maxscale, mapScales);
+    const layerMinZoom = getMinZoom(minscale, mapScales);
     return (
         <VerticalComponent>
-            <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
-            <Icon type='plus-circle'/>
+            <Message messageKey='fields.scale' LabelComponent={FieldLabel} />
+            <ScaleInput
+                prefix="1:"
+                placeholder={locNoLimit}
+                value={ maxscale }
+                allowNegative={false}
+                allowZero={false}
+                onChange={value => controller.setMinAndMaxScale([minscale, value])} />
+            <StyledIcon type='plus-circle'/>
             <SliderContainer>
-                <Slider key={layer.id}
+                <Slider
                     vertical
                     range
                     reversed
-                    tipFormatter={value => `1:${levelToScale[value].toLocaleString()}`}
-                    step={halfALevel}
-                    marks={marks}
-                    min={0}
-                    max={maxZoomLevel}
-                    defaultValue={getLayerValues(layer, levelToScale, [0, maxZoomLevel])}
-                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => levelToScale[zoomLevel]))} />
+                    tipFormatter={createTooltipFormatter(mapScales, locNoLimit)}
+                    step={1}
+                    marks={createSliderLabels(mapScales, locNoLimit)}
+                    min={-1}
+                    max={maxZoomLevel + 1}
+                    value={ [layerMinZoom, layerMaxZoom] }
+                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
             </SliderContainer>
-            <Icon type='minus-circle'/>
+            <StyledIcon type='minus-circle'/>
+            <ScaleInput
+                prefix="1:"
+                placeholder={locNoLimit}
+                value={ minscale }
+                allowNegative={false}
+                allowZero={false}
+                onChange={value => controller.setMinAndMaxScale([value, maxscale])} />
         </VerticalComponent>
     );
 };
+
 Scale.propTypes = {
     layer: PropTypes.object.isRequired,
     scales: PropTypes.array.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    getMessage: PropTypes.func.isRequired
 };
+
+function normalizeScales (layer) {
+    let { minscale, maxscale } = layer;
+    if (minscale === -1) {
+        minscale = '';
+    }
+    if (maxscale === -1) {
+        maxscale = '';
+    }
+    return {
+        minscale,
+        maxscale
+    };
+}
+
+function getMinZoom (minscale, scales) {
+    return getZoomLevel(minscale, scales, -1);
+}
+
+function getMaxZoom (maxscale, scales) {
+    return getZoomLevel(maxscale, scales, scales.length);
+}
+
+// assumes scales go from big to small as they do on mapmodule
+function getZoomLevel (scale, mapScales, defaultValue) {
+    if (scale < 0) {
+        return defaultValue;
+    }
+    const index = mapScales.findIndex(s => scale >= s);
+    if (index === -1) {
+        return defaultValue;
+    }
+    return index;
+}
+
+function createSliderLabels (scales = [], locNoLimit) {
+    // Not restricted at each end
+    const marks = {
+        '-1': locNoLimit,
+        [scales.length]: locNoLimit
+    };
+    // labels every 5 levels
+    scales.forEach((scale, index) => {
+        if (index % 5 === 0) {
+            marks[index] = '' + index;
+        }
+    });
+    const maxZoomLevel = scales.length - 1;
+    // add label for the last zoom level as well
+    if (maxZoomLevel % 5 !== 0) {
+        marks[maxZoomLevel] = maxZoomLevel;
+    }
+    return marks;
+}
+
+function createTooltipFormatter (scales, locNoLimit) {
+    const maxZoom = scales.length - 1;
+    return function (value) {
+        if (value === -1 || value > maxZoom) {
+            return locNoLimit;
+        }
+        return `${value} / ${maxZoom}`;
+    };
+}
+const contextWrap = LocaleConsumer(Scale);
+export { contextWrap as Scale };

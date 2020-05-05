@@ -70,6 +70,7 @@ Oskari.registerLocalization(
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",
+            "fieldNoRestriction": "Ingen begränsning",
             "generalTabTitle": "Allmän",
             "visualizationTabTitle": "Visualisering",
             "additionalTabTitle": "Ytterligare",

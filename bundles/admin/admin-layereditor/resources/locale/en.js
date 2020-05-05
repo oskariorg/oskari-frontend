@@ -70,6 +70,7 @@ Oskari.registerLocalization(
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
+            "fieldNoRestriction": "No restriction",
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",

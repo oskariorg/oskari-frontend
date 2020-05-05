@@ -70,6 +70,7 @@ Oskari.registerLocalization(
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
+            "fieldNoRestriction": "Ei rajoitusta",
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
