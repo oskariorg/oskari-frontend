@@ -20,15 +20,16 @@ export const getZoomLevelHelper = (mapScales) => {
         throw new TypeError('Expects scales array as param');
     }
     const scaleArray = mapScales.slice(0);
+    const getZoom = (scale) => getZoomLevel(scale, scaleArray, -1);
     return {
         getMinZoom: (minScale) => {
-            return getZoomLevel(minScale, scaleArray, -1);
+            return getZoom(minScale);
         },
         getMaxZoom: (maxScale) => {
-            return getZoomLevel(maxScale, scaleArray, -1);
+            return getZoom(maxScale);
         },
         setOLZoomLimits: (olLayer, minScale, maxScale) => {
-            const min = this.getMinZoom(minScale);
+            const min = getZoom(minScale);
             if (min < 1) {
                 olLayer.setMinZoom(-Infinity);
             } else {
@@ -36,7 +37,7 @@ export const getZoomLevelHelper = (mapScales) => {
                 // -1 for min because of exclusivity
                 olLayer.setMinZoom(min - 1);
             }
-            const max = this.getMaxZoom(maxScale);
+            const max = getZoom(maxScale);
             if (max < 0 || max >= scaleArray.length) {
                 olLayer.setMaxZoom(Infinity);
             } else {
