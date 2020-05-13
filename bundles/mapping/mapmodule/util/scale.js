@@ -5,7 +5,7 @@ function scaleValueUndefined (scale) {
 
 // assumes scales go from big to small as they do on mapmodule
 function getZoomLevel (scale, scaleArray, defaultValue) {
-    if (scale < 0) {
+    if (typeof scale !== 'number' || scale < 0) {
         return defaultValue;
     }
     const index = scaleArray.findIndex(s => scale >= s);
