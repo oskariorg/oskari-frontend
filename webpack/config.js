@@ -88,7 +88,10 @@ const BABEL_LOADER_RULE = {
         /libraries/,
         /\.min\.js$/,
         // https://github.com/zloirock/core-js/issues/514 core-js shouldn't be run through babel
-        getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
+        // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
+        // Exclude all but named dependencies (containing es6+)
+        // FIXME: olcs is the problem - adding it takes reeeeaaaally long for build
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs'])
     ],
     use: {
         loader: 'babel-loader',
