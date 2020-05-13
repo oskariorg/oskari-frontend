@@ -246,7 +246,7 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            this._log.debug('TODO: addMapLayerToMap() not implemented on ' + this.getName());
+            this._log.warn('TODO: addMapLayerToMap() not implemented on ' + this.getName());
         },
 
         /**
@@ -300,7 +300,7 @@ Oskari.clazz.define(
          *            event
          */
         _afterChangeMapLayerStyleEvent: function (event) {
-            this._log.debug('TODO: handle layer style chance');
+            this._log.warn('TODO: handle layer style chance on ' + this.getName());
         },
         /**
          * Update the layer on map if style etc was changed when administrating layers
@@ -308,7 +308,7 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.AbstractLayer} layer [description]
          */
         _updateLayer: function (layer) {
-            this._log.debug('TODO: update layer on map');
+            this._log.warn('TODO: update layer on map in ' + this.getName());
         },
         /**
          * @method updateLayerParams
