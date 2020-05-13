@@ -5,6 +5,7 @@
  */
 import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
+import { version } from '../package.json';
 
 let _markers = [];
 
@@ -45,7 +46,7 @@ function appendQueryToURL(url, query) {
 }
 
 const Oskari = {
-    VERSION: '1.56.0-dev',
+    VERSION: version,
     setMarkers (markers) {
         _markers = markers || [];
     },
