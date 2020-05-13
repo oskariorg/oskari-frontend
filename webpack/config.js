@@ -78,6 +78,7 @@ const getWhitelistedModules = modules => {
  * @param {string[]} modules Modules we wan't to give a special treatment to.
  * @param {boolean} blacklisted Blacklisted or whitelist. Defaults to blacklisting.
  */
+// eslint-disable-next-line no-unused-vars
 const getExcludedNodeModules = (modules, blacklisted = true) => {
     return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules);
 };
