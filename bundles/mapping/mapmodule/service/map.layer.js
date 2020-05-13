@@ -310,14 +310,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.legendImage) {
                 layer.setLegendImage(newLayerConf.legendImage);
             }
+            // Scales need to be set always so they can be cleared with the admin.
+            // The server doesn't return scale if not set -> these will not get updated if only updated when value exists
+            layer.setMinScale(newLayerConf.minScale);
+            layer.setMaxScale(newLayerConf.maxScale);
 
-            if (newLayerConf.minScale) {
-                layer.setMinScale(newLayerConf.minScale);
-            }
-
-            if (newLayerConf.maxScale) {
-                layer.setMaxScale(newLayerConf.maxScale);
-            }
             if (newLayerConf.opacity) {
                 layer.setOpacity(newLayerConf.opacity);
             }
