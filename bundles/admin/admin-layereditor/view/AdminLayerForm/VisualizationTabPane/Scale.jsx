@@ -52,6 +52,19 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
         // if max zoom is undefined the slider needs to be at the max value
         layerMaxZoom = maxZoomUnrestrictedValue;
     }
+    const onValueChange = ([min, max]) => {
+        if (min < 0) {
+            min = -1;
+        } else {
+            min = mapScales[min];
+        }
+        if (max > mapScales.length - 1) {
+            max = -1;
+        } else {
+            max = mapScales[max];
+        }
+        controller.setMinAndMaxScale([min, max]);
+    };
     return (
         <VerticalComponent>
             <Message messageKey='fields.scale' LabelComponent={FieldLabel} />
@@ -74,7 +87,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                     min={-1}
                     max={maxZoomUnrestrictedValue}
                     value={ [layerMinZoom, layerMaxZoom] }
-                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
+                    onChange={onValueChange} />
             </SliderContainer>
             <StyledIcon type='minus-circle'/>
             <ScaleInput
