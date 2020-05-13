@@ -64,6 +64,10 @@ describe('getZoomLevelHelper function', () => {
     const helper = getZoomLevelHelper(scales);
 
     describe('getMaxZoom function', () => {
+        test('returns -1 as zoom level with undefined scale', () => {
+            expect.assertions(1);
+            expect(helper.getMaxZoom(undefined)).toEqual(-1);
+        });
         test('returns last zoom level if matching the last scale', () => {
             expect.assertions(1);
             expect(helper.getMaxZoom(128)).toEqual(scales.length - 1);
@@ -83,6 +87,10 @@ describe('getZoomLevelHelper function', () => {
     });
 
     describe('getMinZoom function', () => {
+        test('returns -1 as zoom level with undefined scale', () => {
+            expect.assertions(1);
+            expect(helper.getMinZoom(undefined)).toEqual(-1);
+        });
         test('returns first zoom level if matching the first scale', () => {
             expect.assertions(1);
             expect(helper.getMinZoom(2048)).toEqual(0);
