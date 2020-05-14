@@ -25,16 +25,6 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch"
   },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ],
-    "moduleNameMapper": {
-      "^oskari-ui(.*)$": "<rootDir>/src/react/$1",
-      "^antd(.*?)style/index.js$": "<rootDir>/tests/styleMock.js"
-    }
-  },
   "dependencies": {
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
