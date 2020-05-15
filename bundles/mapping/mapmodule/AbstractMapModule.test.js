@@ -1,24 +1,24 @@
 
 import '../../../src/global';
+import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 import './AbstractMapModule';
 import './mapmodule.ol';
-
 import './resources/locale/en.js';
 import './service/map.state';
 import jQuery from 'jquery';
-import * as olProjProj4 from 'ol/proj/proj4';
+// import * as olProjProj4 from 'ol/proj/proj4';
 
 const Oskari = window.Oskari;
 global.jQuery = jQuery;
-const proj4 = {
-    defs: {
-        'EPSG:3067': '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-        'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
-    }
-};
 
-// ensure static projections are defined
-// Object.keys(proj4.defs).forEach(srs => olProjProj4.defs(srs, proj4.defs[srs]));
+const projections = {
+    'EPSG:3067': '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
+    'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+};
+Object.keys(projections).forEach(code => {
+    proj4.defs(code, projections[code]);
+});
+window.proj4 = proj4;
 
 // const mapModule = Oskari.clazz.create('Oskari.mapping.mapmodule.AbstractMapModule', 'Test');
 const mapModule = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', 'Test');
@@ -33,6 +33,8 @@ describe('AbstractMapModule ', () => {
     });
     test('init.', () => {
         expect(mapModule.getProjection()).toEqual('EPSG:3067');
-        // mapModule.init(Oskari.getSandbox());
+        expect(mapModule.getScaleArray().length).toEqual(0);
+        mapModule.init(Oskari.getSandbox());
+        expect(mapModule.getScaleArray().length).toEqual(13);
     });
 });
