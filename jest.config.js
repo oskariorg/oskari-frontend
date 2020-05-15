@@ -6,8 +6,8 @@ module.exports = {
     ],
     'moduleNameMapper': {
         '^oskari-ui(.*)$': '<rootDir>/src/react/$1',
-        '^antd(.*?)style/index.js$': '<rootDir>/tests/styleMock.js',
-        '\\.(css|less)$': '<rootDir>/tests/styleMock.js'
+        '^antd(.*?)style/index.js$': '<rootDir>/tests/jest/styleMock.js',
+        '\\.(css|less)$': '<rootDir>/tests/jest/styleMock.js'
     },
     verbose: true,
     'transformIgnorePatterns': [
