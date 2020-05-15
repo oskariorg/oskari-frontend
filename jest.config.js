@@ -2,7 +2,7 @@
 module.exports = {
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: [
-        '<rootDir>/setupTests.js'
+        '<rootDir>/tests/jest/setupTests.js'
     ],
     moduleNameMapper: {
         '^oskari-ui(.*)$': '<rootDir>/src/react/$1',
@@ -13,4 +13,9 @@ module.exports = {
     transformIgnorePatterns: [
         'node_modules/(?!(ol)/)'
     ]
+    /*
+    ,transform: {
+        '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': '<rootDir>/tests/jest/fileTransformer.js'
+    }
+    */
 };
