@@ -391,6 +391,10 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         layer.saveUserStyle(styleWithMetadata);
         this.userStyleService.saveUserStyle(layer.getId(), styleWithMetadata);
     }
+    /**
+     * Called when layer details are updated (for example by the admin functionality)
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+     */
     _updateLayer (layer) {
         if (!this.isLayerSupported(layer)) {
             return;

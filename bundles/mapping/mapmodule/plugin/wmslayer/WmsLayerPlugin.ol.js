@@ -296,6 +296,10 @@ Oskari.clazz.define(
             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
             xhr.send(params);
         },
+        /**
+         * Called when layer details are updated (for example by the admin functionality)
+         * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+         */
         _updateLayer: function (layer) {
             if (!this.isLayerSupported(layer)) {
                 return;
