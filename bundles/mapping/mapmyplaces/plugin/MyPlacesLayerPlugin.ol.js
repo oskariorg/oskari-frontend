@@ -1,5 +1,6 @@
 import olLayerImage from 'ol/layer/Image';
 import olSourceImageWMS from 'ol/source/ImageWMS';
+import { getZoomLevelHelper } from '../../mapmodule/util/scale';
 
 /**
  * Provides functionality to draw MyPlaces layers on the map
@@ -81,17 +82,9 @@ Oskari.clazz.define(
                 opacity: layer.getOpacity() / 100
 
             });
-            // minresolution === maxscale and vice versa...
-            if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
-                openlayer.setMinResolution(map.getResolutionForScale(layer.getMaxScale()));
-            }
-            if (layer.getMinScale() && layer.getMinScale() !== -1) {
-                var maxResolution = map.getResolutionForScale(layer.getMinScale());
-                if (maxResolution !== map.getResolutionArray()[0]) {
-                    // ol3 maxReso is exclusive so don't set if it's the map max resolution
-                    openlayer.setMaxResolution(maxResolution);
-                }
-            }
+            const zoomLevelHelper = getZoomLevelHelper(map.getScaleArray());
+            // Set min max zoom levels that layer should be visible in
+            zoomLevelHelper.setOLZoomLimits(openlayer, layer.getMinScale(), layer.getMaxScale());
 
             this._registerLayerEvents(openlayer, layer);
 
@@ -110,19 +103,35 @@ Oskari.clazz.define(
          *
          */
         _registerLayerEvents: function (layer, oskariLayer) {
-            var me = this,
-                source = layer.getSource();
+            const mapModule = this.getMapModule();
+            const source = layer.getSource();
+            const layerId = oskariLayer.getId();
 
             source.on('imageloadstart', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), true);
+                mapModule.loadingState(layerId, true);
             });
 
             source.on('imageloadend', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), false);
+                mapModule.loadingState(layerId, false);
             });
 
             source.on('imageloaderror', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+                mapModule.loadingState(layerId, null, true);
+            });
+        },
+        /**
+         * Called when layer details are updated (for example by the admin functionality)
+         * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+         */
+        _updateLayer: function (layer) {
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+            const layersImpls = this.getOLMapLayers(layer.getId()) || [];
+            layersImpls.forEach(olLayer => {
+                // Update min max Resolutions
+                zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
             });
         }
     }, {
