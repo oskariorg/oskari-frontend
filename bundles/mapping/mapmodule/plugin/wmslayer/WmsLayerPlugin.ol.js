@@ -221,7 +221,7 @@ Oskari.clazz.define(
             });
         },
         updateLayerParams: function (layer, forced, params) {
-            if (!layer || !layer.isLayerOfType('WMS') || !params) {
+            if (!this.isLayerSupported(layer) || !params) {
                 return;
             }
             var me = this;
@@ -297,6 +297,9 @@ Oskari.clazz.define(
             xhr.send(params);
         },
         _updateLayer: function (layer) {
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
             const layersImpls = this.getOLMapLayers(layer.getId()) || [];
             layersImpls.forEach(olLayer => {
