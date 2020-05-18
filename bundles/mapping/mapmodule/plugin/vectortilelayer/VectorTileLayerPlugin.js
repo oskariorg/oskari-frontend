@@ -8,6 +8,7 @@ import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import { styleGenerator } from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
+import { getZoomLevelHelper } from '../../util/scale';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -202,14 +203,9 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             vectorTileLayer.setVisible(false);
         }
 
-        // Set min max Resolutions
-        if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
-            vectorTileLayer.setMinResolution(this.getMapModule().getResolutionForScale(layer.getMaxScale()));
-        }
-        // No definition, if scale is greater than max resolution scale
-        if (layer.getMinScale() && layer.getMinScale() !== -1 && (layer.getMinScale() < this.getMapModule().getScaleArray()[0])) {
-            vectorTileLayer.setMaxResolution(this.getMapModule().getResolutionForScale(layer.getMinScale()));
-        }
+        const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+        // Set min max zoom levels that layer should be visible in
+        zoomLevelHelper.setOLZoomLimits(vectorTileLayer, layer.getMinScale(), layer.getMaxScale());
 
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
@@ -270,6 +266,21 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
                 });
             }
         }
+    }
+    /**
+     * Called when layer details are updated (for example by the admin functionality)
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+     */
+    _updateLayer (layer) {
+        if (!this.isLayerSupported(layer)) {
+            return;
+        }
+        const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+        const layersImpls = this.getOLMapLayers(layer.getId()) || [];
+        layersImpls.forEach(olLayer => {
+            // Update min max Resolutions
+            zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
+        });
     }
 }
 
