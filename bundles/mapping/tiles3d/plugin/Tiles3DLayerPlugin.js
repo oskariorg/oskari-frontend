@@ -205,6 +205,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
 
             // store reference to layers
             this.setOLMapLayers(layer.getId(), tileset);
+        },
+        /**
+         * Called when layer details are updated (for example by the admin functionality)
+         * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+         */
+        _updateLayer: function (layer) {
+            // no-op - 3DTiles scale limits or runtime changes to config not supported at this time
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
