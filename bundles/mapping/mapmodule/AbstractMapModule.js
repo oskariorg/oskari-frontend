@@ -1097,6 +1097,10 @@ Oskari.clazz.define(
 
         _addMobileDiv: function () {
             var mapDiv = this.getMapEl();
+            if (!mapDiv.length || !mapDiv[0].parentElement) {
+                this.log.warn('Unable to create mobile toolbar for page');
+                return;
+            }
             jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
         },
 

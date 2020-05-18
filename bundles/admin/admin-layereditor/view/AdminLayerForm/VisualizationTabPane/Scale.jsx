@@ -4,6 +4,7 @@ import { Message, Slider, Icon } from 'oskari-ui';
 import { Numeric } from '../Numeric';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { getZoomLevelHelper } from '../../../../../mapping/mapmodule/util/scale';
 
 const VerticalComponent = styled('div')`
     display: flex;
@@ -41,10 +42,29 @@ padding-left: 16%;
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
     const locNoLimit = getMessage('fieldNoRestriction');
     let { minscale, maxscale } = normalizeScales(layer);
+    const zoomLevelHelper = getZoomLevelHelper(scales);
     const mapScales = scales.slice(0);
-    const maxZoomLevel = mapScales.length - 1;
-    const layerMaxZoom = getMaxZoom(maxscale, mapScales);
-    const layerMinZoom = getMinZoom(minscale, mapScales);
+    const maxZoomUnrestrictedValue = mapScales.length;
+
+    const layerMinZoom = zoomLevelHelper.getMinZoom(minscale);
+    let layerMaxZoom = zoomLevelHelper.getMaxZoom(maxscale);
+    if (layerMaxZoom === -1) {
+        // if max zoom is undefined the slider needs to be at the max value
+        layerMaxZoom = maxZoomUnrestrictedValue;
+    }
+    const onValueChange = ([min, max]) => {
+        if (min < 0) {
+            min = -1;
+        } else {
+            min = mapScales[min];
+        }
+        if (max > mapScales.length - 1) {
+            max = -1;
+        } else {
+            max = mapScales[max];
+        }
+        controller.setMinAndMaxScale([min, max]);
+    };
     return (
         <VerticalComponent>
             <Message messageKey='fields.scale' LabelComponent={FieldLabel} />
@@ -65,9 +85,9 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                     step={1}
                     marks={createSliderLabels(mapScales, locNoLimit)}
                     min={-1}
-                    max={maxZoomLevel + 1}
+                    max={maxZoomUnrestrictedValue}
                     value={ [layerMinZoom, layerMaxZoom] }
-                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
+                    onChange={onValueChange} />
             </SliderContainer>
             <StyledIcon type='minus-circle'/>
             <ScaleInput
@@ -100,26 +120,6 @@ function normalizeScales (layer) {
         minscale,
         maxscale
     };
-}
-
-function getMinZoom (minscale, scales) {
-    return getZoomLevel(minscale, scales, -1);
-}
-
-function getMaxZoom (maxscale, scales) {
-    return getZoomLevel(maxscale, scales, scales.length);
-}
-
-// assumes scales go from big to small as they do on mapmodule
-function getZoomLevel (scale, mapScales, defaultValue) {
-    if (scale < 0) {
-        return defaultValue;
-    }
-    const index = mapScales.findIndex(s => scale >= s);
-    if (index === -1) {
-        return defaultValue;
-    }
-    return index;
 }
 
 function createSliderLabels (scales = [], locNoLimit) {

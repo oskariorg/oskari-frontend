@@ -391,6 +391,23 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         layer.saveUserStyle(styleWithMetadata);
         this.userStyleService.saveUserStyle(layer.getId(), styleWithMetadata);
     }
+    /**
+     * Called when layer details are updated (for example by the admin functionality)
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+     */
+    _updateLayer (layer) {
+        if (!this.isLayerSupported(layer)) {
+            return;
+        }
+        const handler = this._getLayerHandler(layer);
+        if (!handler) {
+            return;
+        }
+        const layersImpls = this.getOLMapLayers(layer.getId()) || [];
+        layersImpls.forEach(olLayer => {
+            handler.applyZoomBounds(layer, olLayer);
+        });
+    }
 };
 
 Oskari.clazz.defineES('Oskari.wfsvector.WfsVectorLayerPlugin', WfsVectorLayerPlugin,
