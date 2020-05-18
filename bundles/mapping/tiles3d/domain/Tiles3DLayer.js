@@ -48,6 +48,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayer',
                 return style;
             }
         },
+        getQueryable: function () {
+            // not sure why but previously the plugin called layer.setQueryable(false); when layer was added to the map
+            // and this makes it more explicit
+            return false;
+        },
         /**
          * @method isSupported
          */
