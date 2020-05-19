@@ -327,14 +327,12 @@ Oskari.clazz.define(
                 // Removes only wanted features from the given maplayer
                 if (identifier && identifier !== null && value && value !== null) {
                     me._removeFeaturesByAttribute(olLayer, identifier, value);
-                }
-                // remove all features from the given layer
-                else {
+                } else {
+                    // remove all features from the given layer
                     this._removeAllFeatures(olLayer);
                 }
-            }
-            // Removes all features from all layers if layer is not specified
-            else if (!layer) {
+            } else if (!layer) {
+                // Removes all features from all layers if layer is not specified
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
@@ -1223,22 +1221,17 @@ Oskari.clazz.define(
         /**
          * @method getLayerIds
          *  -
-         * @param {Object} layerIds
-         * @return {Array} layres
+         * @param {Object} optional object with key layer that has an array of layer ids
+         * @return {Array} array of layer ids
          */
         getLayerIds: function (layerIds) {
-            var me = this;
-            var layers = [];
-            if (_.isEmpty(layerIds)) {
-                _.each(me._olLayers, function (key, value) {
-                    layers.push(value);
-                });
-            } else {
-                _.each(layerIds.layer, function (key, value) {
-                    layers.push(key);
-                });
+            if (typeof layerIds !== 'object' || !Object.keys(layerIds).length) {
+                return Object.keys(this._olLayers);
             }
-            return layers;
+            if (layerIds.layer && typeof layerIds.layer.slice === 'function') {
+                return layerIds.layer.slice(0);
+            }
+            return [];
         },
         /**
          * @method getLayerFeatures
