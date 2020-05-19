@@ -13,14 +13,16 @@ const dummyPlugin = {
     register: () => {},
     setMapModule: () => {}
 };
+let changeStyleCalls = [];
+let changeFontCalls = [];
 const nonUIPlugin = {
     getName: () => 'Non UI plugin',
     register: () => {},
     setMapModule: () => {},
-    hasUI: () => false
+    hasUI: () => false,
+    changeToolStyle: (style) => { changeStyleCalls.push(style); },
+    changeFont: (font) => { changeFontCalls.push(font); }
 };
-let changeStyleCalls = [];
-let changeFontCalls = [];
 const uiPlugin = {
     getName: () => 'UI plugin',
     register: () => {},
@@ -34,21 +36,23 @@ describe('MapModule', () => {
     mapModule.registerPlugin(dummyPlugin);
     mapModule.registerPlugin(nonUIPlugin);
     mapModule.registerPlugin(uiPlugin);
-    test('has 2 plugins', () => {
+    test('has 3 plugins', () => {
         expect(Object.keys(mapModule.getPluginInstances()).length).toEqual(3);
     });
-    test('changeToolStyle without value', () => {
-        mapModule.changeToolStyle();
-        expect(changeStyleCalls.length).toEqual(1);
-        expect(changeStyleCalls[0]).toBeUndefined();
-        expect(changeFontCalls.length).toEqual(1);
-        expect(changeFontCalls[0]).toBeUndefined();
-    });
-    test('changeToolStyle without toolstyle - no font', () => {
-        mapModule.changeToolStyle({ toolStyle: '3d-light' });
-        expect(changeStyleCalls.length).toEqual(2);
-        expect(changeStyleCalls[1]).toEqual('3d-light');
-        expect(changeFontCalls.length).toEqual(2);
-        expect(changeFontCalls[1]).toBeUndefined();
+    describe('changeToolStyle', () => {
+        test('only called for plugin with UI and with value [undefined]', () => {
+            mapModule.changeToolStyle();
+            expect(changeStyleCalls.length).toEqual(1);
+            expect(changeStyleCalls[0]).toBeUndefined();
+            expect(changeFontCalls.length).toEqual(1);
+            expect(changeFontCalls[0]).toBeUndefined();
+        });
+        test('only called for plugin with UI and with style "3d-light" and font [undefined]', () => {
+            mapModule.changeToolStyle({ toolStyle: '3d-light' });
+            expect(changeStyleCalls.length).toEqual(2);
+            expect(changeStyleCalls[1]).toEqual('3d-light');
+            expect(changeFontCalls.length).toEqual(2);
+            expect(changeFontCalls[1]).toBeUndefined();
+        });
     });
 });
