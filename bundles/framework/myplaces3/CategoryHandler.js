@@ -164,10 +164,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             const id = this._getMapLayerId(category.getId());
             const layer = mapLayerService.findMapLayer(id);
-            const options = layer.getOptions();
-            const style = category.getStyle();
             layer.setName(category.getName());
-            options.styles = this._geStyleForLayer(style);
+            layer.setOptions(category.getOptions());
         },
         _getMapLayerId: function (categoryId) {
             if (!categoryId) {
@@ -189,10 +187,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         _getMapLayerJson: function (categoryModel) {
             var baseJson = this._getMapLayerJsonBase();
-            const style = categoryModel.getStyle();
             baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
             baseJson.name = categoryModel.getName();
-            baseJson.options.styles = this._geStyleForLayer(style);
+            baseJson.options = categoryModel.getOptions();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             // Publish and download permissions are always ok for user's own data
             baseJson.permissions = {
@@ -200,24 +197,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 'download': 'download_permission_ok'
             };
             return baseJson;
-        },
-        _geStyleForLayer: function (style) {
-            style.text = {
-                font: 'bold 14px sans-serif',
-                labelProperty: ['attention_text', 'name'],
-                textAlign: 'left',
-                offsetX: 10,
-                fill: { color: '#000000' },
-                stroke: {
-                    color: '#FFFFFF',
-                    width: 2
-                }
-            };
-            return {
-                default: {
-                    featureStyle: style
-                }
-            };
         },
         /**
          * @method _getMapLayerJsonBase
@@ -279,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 name: category.getName(),
                 id: category.getId(),
                 _isDefault: category.isDefault(),
-                style: category.getStyle()
+                style: category.getDefaultFeatureStyle()
             };
             form.setValues(values);
             var content = form.getForm();
@@ -374,7 +353,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
             category.setName(Oskari.util.sanitize(values.name));
             category.setId(values.id);
-            category.setStyle(values.style);
+            category.setDefaultFeatureStyle(values.style);
             category.setDefault(values._isDefault);
             return category;
         },

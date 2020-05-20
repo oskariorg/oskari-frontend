@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory
         this._isPublic = false;
         this.uuid = undefined;
         this.isPlacesLoaded = false;
-        this.style = {};
+        this.options = {};
     }, {
         /**
          * @method setId
@@ -78,11 +78,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory
         isPlacesLoaded: function () {
             return !!this._isPlacesLoaded;
         },
-        setStyle: function (style) {
-            this.style = style;
+        setOptions: function (options) {
+            this.options = options;
         },
-        getStyle: function () {
-            return this.style;
+        getOptions: function () {
+            return this.options;
+        },
+        getDefaultFeatureStyle: function () {
+            const options = this.getOptions();
+            if (Oskari.util.keyExists(options, 'styles.default.featureStyle')) {
+                return options.styles.default.featureStyle;
+            }
+            return {};
+        },
+        setDefaultFeatureStyle: function (style) {
+            const options = this.getOptions();
+            if (!options.styles) {
+                options.styles = {};
+            }
+            if (!options.styles.default) {
+                options.styles.default = {};
+            }
+            options.styles.default.featureStyle = style;
         },
         /**
          * @method setUuid
