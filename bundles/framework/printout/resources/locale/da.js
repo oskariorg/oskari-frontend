@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Forhåndsvisning",
-                "tooltip": "Klik på den lille forhåndsvisning for at åbne en større forhåndsvisning",
                 "pending": "Forhåndsvisning opdateres inden længe",
                 "notes": {
                     "extent": "Forhåndsvisning kan bruges til at bedømme kortstørrelsen til udskrift"

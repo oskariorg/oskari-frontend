@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Forhåndsvisning",
-                "tooltip": "Du kan forstørre forhåndsvisningen ved å klikke på bildet",
                 "pending": "Forhåndsvisningen vil bli oppdatert",
                 "notes": {
                     "extent": "Du kan sjekke kartutstrekningen for utskriften i forhåndsvisningen"

@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Vorschau",
-                "tooltip": "Klicken Sie auf die Vorschau, um eine vergrößerte Ansicht zu erhalten.",
                 "pending": "Die Vorschau wird in Kürze aktualisiert",
                 "notes": {
                     "extent": "Die Vorschau kann verwendet werden, um die Größe des Druckbereichs festzustellen."
