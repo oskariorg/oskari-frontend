@@ -6,9 +6,8 @@ describe('saveUserStyle function ', () => {
         const layerId = 1;
         const styleWithMetadata = {
             name: 'My own style',
-            style: {
-                id: 1
-            }
+            id: 1,
+            style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata);
         const result = service.getUserStylesForLayer(layerId);
@@ -20,15 +19,13 @@ describe('saveUserStyle function ', () => {
         const layerId = 1;
         const styleWithMetadata1 = {
             name: 'First style',
-            style: {
-                id: 1
-            }
+            id: 1,
+            style: {}
         };
         const styleWithMetadata2 = {
             name: 'Second style',
-            style: {
-                id: 2
-            }
+            id: 2,
+            style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata1);
         service.saveUserStyle(layerId, styleWithMetadata2);
@@ -42,14 +39,13 @@ describe('saveUserStyle function ', () => {
         const layerId = 1;
         const originalStyleWithMetadata = {
             name: 'Original name',
-            style: {
-                id: 1
-            }
+            id: 1,
+            style: {}
         };
         const updatedStyleWithMetadata = {
             name: 'Updated name',
+            id: 1,
             style: {
-                id: 1,
                 someNewField: 'someValue'
             }
         };
@@ -68,9 +64,8 @@ describe('removeUserStyle function ', () => {
         const styleId = 1;
         const styleWithMetadata = {
             name: 'some style',
-            style: {
-                id: styleId
-            }
+            id: styleId,
+            style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata);
         const result1 = service.getUserStylesForLayer(layerId);

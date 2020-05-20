@@ -9,7 +9,7 @@ export class UserStyleService {
             return;
         }
         const layerStyles = this.styles.get(layerId) || [];
-        const index = layerStyles.findIndex(s => s.style.id === styleWithMetadata.style.id);
+        const index = layerStyles.findIndex(s => s.id === styleWithMetadata.id);
 
         if (index !== -1) {
             layerStyles[index] = styleWithMetadata;
@@ -32,7 +32,7 @@ export class UserStyleService {
 
         const layerStyles = this.styles.get(layerId);
         if (layerStyles) {
-            const index = layerStyles.findIndex(s => s.style.id === styleId);
+            const index = layerStyles.findIndex(s => s.id === styleId);
             if (index !== -1) {
                 layerStyles.splice(index, 1);
                 this.styles.set(layerId, layerStyles);

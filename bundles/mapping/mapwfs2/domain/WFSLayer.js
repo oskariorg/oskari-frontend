@@ -330,7 +330,7 @@ export class WFSLayer extends VectorTileLayer {
         if (!styleWithMetadata) {
             return;
         }
-        const index = this._userStyles.findIndex(s => s.style.id === styleWithMetadata.style.id);
+        const index = this._userStyles.findIndex(s => s.id === styleWithMetadata.id);
         if (index !== -1) {
             this._userStyles[index] = styleWithMetadata;
         } else {
