@@ -166,7 +166,6 @@ div.basic_printout {
         border-top-style: solid;
         border-top-width: 1pt;
         @include box-shadow(0 0 8px #D0D0D0);
-        cursor: pointer;
     }
 
     div.preview-landscape {
@@ -182,7 +181,6 @@ div.basic_printout {
         border-top-style: solid;
         border-top-width: 1pt;
         @include box-shadow(0 0 8px #D0D0D0);
-        cursor: pointer;
     }
 
     div.location {
