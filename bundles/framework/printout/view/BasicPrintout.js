@@ -403,7 +403,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var previewImgDiv = previewContent.find('img');
             previewImgDiv.on('click', function () {
-                me.showFullScaleMapPreview();
+                const params = me._gatherParams();
+                params.format = 'image/png';
+                me.printMap(params);
             });
             var previewSpan = previewContent.find('span');
 
@@ -454,14 +456,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 });
                 me.previewImgDiv.attr('src', url);
             }, 100);
-        },
-
-        /**
-         * @public @method showFullScaleMapPreview
-         */
-        showFullScaleMapPreview: function () {
-            const url = this._getUrlForPreview();
-            this.openURLinWindow(url);
         },
 
         /**
