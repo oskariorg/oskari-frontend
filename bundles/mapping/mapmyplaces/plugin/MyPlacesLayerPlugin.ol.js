@@ -32,9 +32,8 @@ Oskari.clazz.define(
          */
         _initImpl: function () {
             const layerClass = 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer';
-            const { clusteringDistance } = this._config;
             const modelBuilderClass = 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder';
-            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox(), clusteringDistance);
+            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox());
 
             const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             if (typeof wfsPlugin.registerLayerType === 'function') {
