@@ -380,14 +380,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
-    saveUserStyle (layer, styleId) {
-        const oskariStyle = this.visualizationForm.getOskariStyle();
-        const name = this.visualizationForm.getOskariStyleName();
-        oskariStyle.id = styleId;
-        const styleWithMetadata = {
-            name: name,
-            style: oskariStyle
-        };
+    saveUserStyle (layer, id) {
+        const style = this.visualizationForm.getOskariStyle();
+        const layerId = layer.getId();
+        let name = this.visualizationForm.getOskariStyleName();
+        if (!name) {
+            const existing = this.userStyleService.getUserStylesForLayer(layerId);
+            const count = Array.isArray(existing) ? existing.length + 1 : 1;
+            name = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + count;
+        }
+        const styleWithMetadata = { name, style, id };
         layer.saveUserStyle(styleWithMetadata);
         this.userStyleService.saveUserStyle(layer.getId(), styleWithMetadata);
     }
