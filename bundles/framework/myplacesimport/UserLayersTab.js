@@ -158,7 +158,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         _deleteSuccess: function (layerId) {
             var me = this;
             const sandbox = me.instance.sandbox;
-            const service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             // Remove layer from grid... this is really ugly, but so is jumping
             // through hoops to masquerade as a module
@@ -176,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             // also we need to do it before service.remove() to avoid problems on other components
             const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layerId);
             sandbox.request(me.instance, request);
-            service.removeLayer(layerId);
+            this.instance.getMapLayerService().removeLayer(layerId);
 
             // show msg to user about successful removal
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -200,8 +199,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @private
          */
         _getGridModel: function () {
-            const service = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            const layers = service.getAllLayersByMetaType(this.layerMetaType);
+            const layers = this.instance.getMapLayerService().getAllLayersByMetaType(this.layerMetaType);
             const gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
 
             gridModel.setIdField('id');
@@ -245,12 +243,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             var saveBtn;
             var cancelBtn;
             var action = this.instance.getService().getEditLayerUrl();
-            var tokenIndex = data.id.lastIndexOf('_') + 1;
-            var idParam = data.id.substring(tokenIndex);
+            const { id } = data;
+            var tokenIndex = id.lastIndexOf('_') + 1;
+            var idParam = id.substring(tokenIndex);
             me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             styleForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.StyleForm', me.instance);
-
-            me._setStyleValuesToStyleForm(idParam, styleForm);
+            const layer = this.instance.getMapLayerService().findMapLayer(id);
+            // has only one style default for now
+            const { featureStyle } = layer.getCurrentStyleDef();
+            styleForm.setStyleValues(featureStyle || {});
 
             form = styleForm.getForm();
             form.find('input[data-name=userlayername]').val(data.name);
@@ -311,33 +312,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
             dialog.show(me.loc('tab.editLayer'), form, buttons);
-        },
-        /**
-         * Retrieves the userlayer style from the backend and sets it to the style form
-         *
-         * @method _setStyleValuesToStyleForm
-         * @private
-         * @param {String} id
-         * @param {Object} form
-         */
-        _setStyleValuesToStyleForm: function (id, form) {
-            var me = this;
-            var action = this.instance.getService().getGetUserLayerStyleUrl();
-            action += '&id=' + id;
-            jQuery.ajax({
-                url: action,
-                type: 'GET',
-                success: function (response) {
-                    if (typeof response === 'object') {
-                        form.setStyleValues(response);
-                    } else {
-                        me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.getStyle'), false);
-                    }
-                },
-                error: function (jqXHR, textStatus) {
-                    me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.getStyle'), false);
-                }
-            });
         },
         /**
          * Displays a message on the screen

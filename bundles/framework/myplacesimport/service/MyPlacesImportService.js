@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     this.urls.create = Oskari.urls.getRoute('CreateUserLayer', { srs: srsName });
     this.urls.get = Oskari.urls.getRoute('GetUserLayers', { srs: srsName });
     this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
-    this.urls.getStyle = Oskari.urls.getRoute('GetUserLayerStyle');
 }, {
     __name: 'MyPlacesImport.MyPlacesImportService',
     __qname: 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
@@ -43,16 +42,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      */
     getEditLayerUrl: function () {
         return this.urls.edit;
-    },
-
-    /**
-     * Returns the url used to get userlayer style.
-     *
-     * @method getUserLayerStyleUrl
-     * @return {String}
-     */
-    getGetUserLayerStyleUrl: function () {
-        return this.urls.getStyle;
     },
 
     /**
@@ -97,9 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Object} updatedLayer
      */
     updateLayer: function (id, updatedLayer) {
-        const mapLayerService = this.sandbox
-            .getService('Oskari.mapframework.service.MapLayerService');
-        const layer = mapLayerService.findMapLayer(id);
+        const layer = this.instance.getMapLayerService().findMapLayer(id);
         layer.setName(updatedLayer.name);
         layer.setSource(updatedLayer.source);
         layer.setDescription(updatedLayer.description);
@@ -143,7 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {Function} cb (optional)
      */
     addLayerToService: function (layerJson, skipEvent, cb) {
-        const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        const mapLayerService = this.instance.getMapLayerService();
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer(layerJson);
         // mark that this has been added by this bundle.
