@@ -736,15 +736,35 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @return {String} link parameters
          */
         getStateParameters: function () {
-            var state = this.getState();
-            if (!state || !state.markers) {
-                return '';
+            const { markers } = this.getState();
+            return this.getMarkersString(markers);
+        },
+        getTransformedStateParameters: function (targetSrs) {
+            const mapmodule = this.getMapModule();
+            const currentSrs = mapmodule.getProjection();
+            if (!targetSrs || targetSrs === currentSrs) {
+                return this.getStateParameters();
             }
-
+            const { markers } = this.getState();
+            let transformedMarkers;
+            try {
+                transformedMarkers = markers.map(marker => {
+                    const lonlat = mapmodule.transformCoordinates({ lon: marker.x, lat: marker.y }, currentSrs, targetSrs);
+                    return {
+                        ...marker,
+                        x: lonlat.lon,
+                        y: lonlat.lat
+                    };
+                });
+            } catch (err) {
+                transformedMarkers = [];
+            };
+            return this.getMarkersString(transformedMarkers);
+        },
+        getMarkersString: function (markers = []) {
             var FIELD_SEPARATOR = '|';
             var MARKER_SEPARATOR = '___';
-            var markerParams = [];
-            _.each(state.markers, function (marker) {
+            const markerParams = markers.map(marker => {
                 var str = marker.shape + FIELD_SEPARATOR +
                     marker.size + FIELD_SEPARATOR;
                 if (marker.color.indexOf('#') === 0) {
@@ -752,10 +772,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 } else {
                     str = str + marker.color;
                 }
-                str = str + FIELD_SEPARATOR +
+                return str + FIELD_SEPARATOR +
                     marker.x + '_' + marker.y + FIELD_SEPARATOR +
                     encodeURIComponent(marker.msg);
-                markerParams.push(str);
             });
             if (markerParams.length > 0) {
                 return '&markers=' + markerParams.join(MARKER_SEPARATOR);

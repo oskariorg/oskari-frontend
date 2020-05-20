@@ -871,7 +871,6 @@ export class MapModule extends AbstractMapModule {
         if (!srs || targetSRS === srs) {
             return pLonlat;
         }
-
         var isSRSDefined = olProj.get(srs);
         var isTargetSRSDefined = olProj.get(targetSRS);
 
