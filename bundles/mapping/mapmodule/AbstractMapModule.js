@@ -1,6 +1,15 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 import { cloneDeep, sortBy } from 'lodash';
 
+import './domain/AbstractLayer';
+import './domain/LayerComposingModel';
+import './domain/style';
+import './domain/tool';
+import './domain/MaplayerGroup';
+import './service/map.layer';
+import './service/map.state';
+import './service/VectorFeatureService.ol';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *

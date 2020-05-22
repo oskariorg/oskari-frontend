@@ -23,6 +23,11 @@ import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
 import { LAYER_ID } from '../mapmodule/domain/constants';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
+// import code so it's usable via Oskari global
+import './AbstractMapModule';
+import './plugin/AbstractMapModulePlugin';
+import './plugin/BasicMapModulePlugin';
+import './AbstractMapLayerPlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 

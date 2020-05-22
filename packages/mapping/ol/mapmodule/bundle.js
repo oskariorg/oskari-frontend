@@ -26,22 +26,6 @@ Oskari.clazz.define(
 
             'scripts': [
                 /*
-                 * Abstract base
-                 */
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/AbstractMapModule.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/AbstractMapModulePlugin.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/BasicMapModulePlugin.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/AbstractMapLayerPlugin.js'
-                },
-                /*
                  * map-module
                  */
                 {
@@ -50,25 +34,6 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/Plugin.js'
-                },
-                /*
-                 * domain
-                 */
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/domain/AbstractLayer.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/domain/LayerComposingModel.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/domain/style.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/domain/tool.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/domain/MaplayerGroup.js'
                 },
                 /**
                  * controls plugin
@@ -405,20 +370,6 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/event/UserLocationEvent.js'
-                },
-
-                /**
-                 * Services
-                 */
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/service/map.layer.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/service/map.state.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/service/VectorFeatureService.ol.js'
                 },
 
                 /**
