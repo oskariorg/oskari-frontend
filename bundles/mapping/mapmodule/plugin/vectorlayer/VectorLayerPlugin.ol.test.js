@@ -98,6 +98,12 @@ describe('VectorLayerPlugin', () => {
             expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
                 'test_property': [2]
             }).length).toEqual(1);
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
+                'bool': [false]
+            }).length).toEqual(1);
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
+                'zero': [0]
+            }).length).toEqual(1);
         });
     });
 });
@@ -116,7 +122,8 @@ const generateGeoJSON = (x, y) => {
                     'coordinates': [[[x, y], [x + 1, y + 1], [x + 2, y + 5]]]
                 },
                 'properties': {
-                    'test_property': 1
+                    'test_property': 1,
+                    'bool': false
                 }
             },
             {
@@ -126,7 +133,8 @@ const generateGeoJSON = (x, y) => {
                     'coordinates': [x + 4, y + 3]
                 },
                 'properties': {
-                    'test_property': 2
+                    'test_property': 2,
+                    'zero': 0
                 }
             }
         ]

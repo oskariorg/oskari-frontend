@@ -1211,7 +1211,10 @@ Oskari.clazz.define(
                 const filteredAndModified = sourceFeatures.filter(feature => {
                     return Object.entries(featureQuery).some(([requestedProperty, allowedValues]) => {
                         var featureValue = feature.get(requestedProperty);
-                        return !!featureValue && allowedValues.includes(featureValue);
+                        if (typeof featureValue === 'undefined') {
+                            return false;
+                        }
+                        return allowedValues.includes(featureValue);
                     });
                 }).map(f => {
                     f.layerId = layerId;
