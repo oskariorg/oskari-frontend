@@ -386,8 +386,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         let name = this.visualizationForm.getOskariStyleName();
         if (!name) {
             const existing = this.userStyleService.getUserStylesForLayer(layerId);
-            const count = Array.isArray(existing) ? existing.length + 1 : 1;
-            name = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + count;
+            name = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + existing.length + 1;
         }
         const styleWithMetadata = { name, style, id };
         layer.saveUserStyle(styleWithMetadata);

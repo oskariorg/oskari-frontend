@@ -53,14 +53,11 @@ export class UserStyleService {
     }
 
     getUserStylesForLayer (layerId) {
-        return this.styles.get(layerId);
+        return this.styles.get(layerId) || [];
     }
 
     getUserStyle (layerId, styleId) {
-        const layerStyles = this.styles.get(layerId);
-        if (!layerStyles) {
-            return;
-        }
-        return layerStyles.find(s => s.style.id === styleId);
+        const layerStyles = this.getUserStylesForLayer(layerId);
+        return layerStyles.find(s => s.id === styleId);
     }
 }

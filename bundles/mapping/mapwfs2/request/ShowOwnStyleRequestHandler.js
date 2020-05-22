@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             const styleId = request.getStyleId();
             const createNew = request.isCreateNew();
             const userStylesForLayer = this.service.getUserStylesForLayer(layerId);
-            if (userStylesForLayer && userStylesForLayer.length > 0 && !styleId && !createNew) {
+            if (userStylesForLayer.length > 0 && !styleId && !createNew) {
                 this._showUserStylesList(layerId);
             } else {
                 this._showVisualizationForm(layerId, styleId);
