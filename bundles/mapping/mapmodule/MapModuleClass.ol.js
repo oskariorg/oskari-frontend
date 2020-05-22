@@ -22,9 +22,13 @@ import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
+if (!window.proj4) {
+    window.proj4 = proj4;
+}
 export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);

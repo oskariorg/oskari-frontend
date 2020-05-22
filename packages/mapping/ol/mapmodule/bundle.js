@@ -26,14 +26,6 @@ Oskari.clazz.define(
 
             'scripts': [
                 /*
-                 * Proj4js
-                 */
-                {
-                    'type': 'text/javascript',
-                    'expose': 'proj4',
-                    'src': '../../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js'
-                },
-                /*
                  * Abstract base
                  */
                 {
