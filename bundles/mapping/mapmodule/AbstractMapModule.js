@@ -10,6 +10,23 @@ import './service/map.layer';
 import './service/map.state';
 import './service/VectorFeatureService.ol';
 
+import './event/MapClickedEvent';
+import './event/MapMoveStartEvent';
+import './event/map.layer.activation';
+import './event/map.layer';
+import './event/map.layer.add';
+import './event/map.layer.remove';
+import './event/map.layer.order';
+import './event/map.layer.opacity';
+import './event/map.layer.style';
+import './event/ProgressEvent';
+import './event/MouseHoverEvent';
+import './event/EscPressedEvent';
+import './event/AfterMapMoveEvent';
+import './event/MapTourEvent';
+import './event/GetInfoResultEvent';
+import './event/MapSizeChangedEvent';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *

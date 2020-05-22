@@ -458,58 +458,6 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/request/StopUserLocationTrackingRequestHandler.js'
                 },
 
-                /**
-                 * Events
-                 */
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MapClickedEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MapMoveStartEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.activation.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.add.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.remove.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.order.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.opacity.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/map.layer.style.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/ProgressEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MouseHoverEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/EscPressedEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/AfterMapMoveEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MapTourEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/GetInfoResultEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MapSizeChangedEvent.js'
-                },
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js'

@@ -9,6 +9,8 @@ import { LAYER_ID } from './domain/constants';
 import moment from 'moment';
 import 'olcs/olcs.css';
 
+import './event/TimeChangedEvent';
+
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
 class MapModuleOlCesium extends MapModuleOl {
