@@ -1173,10 +1173,12 @@ Oskari.clazz.define(
         },
 
         getMobileDiv: function () {
-            var me = this;
-            var mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
-
-            return mobileDiv;
+            var mapDiv = this.getMapEl();
+            if (!mapDiv.length || !mapDiv[0].parentElement) {
+                this.log.warn('Unable to find mobile toolbar from page');
+                return jQuery('<div></div>');
+            }
+            return jQuery(mapDiv[0].parentElement).find('.mobileToolbarDiv');
         },
 
         getMobileToolbar: function () {

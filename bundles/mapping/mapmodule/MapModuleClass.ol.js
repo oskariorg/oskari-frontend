@@ -567,10 +567,10 @@ export class MapModule extends AbstractMapModule {
     }
 
     getSize () {
-        var size = this.getMap().getSize();
+        const [width = 0, height = 0] = this.getMap().getSize() || [];
         return {
-            width: size[0],
-            height: size[1]
+            width,
+            height
         };
     }
 
