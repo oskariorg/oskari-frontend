@@ -4,7 +4,7 @@ import '../../../../../src/global';
 import './VectorLayerPlugin.ol';
 import './vectorlayer';
 
-// mapmodule 
+// mapmodule
 import '../../mapmodule.ol';
 import '../../resources/locale/en.js';
 
@@ -42,7 +42,7 @@ mapModule.start(sandbox);
 plugin.startPlugin(sandbox);
 
 // "mock" setFeatureStyle since we don't have canvas without DOM
-plugin.setFeatureStyle = () => {}
+plugin.setFeatureStyle = () => {};
 
 const createFakeLayer = () => {
     return new olLayerVector({
