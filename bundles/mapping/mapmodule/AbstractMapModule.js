@@ -27,6 +27,47 @@ import './event/MapTourEvent';
 import './event/GetInfoResultEvent';
 import './event/MapSizeChangedEvent';
 
+import './request/ToolSelectionRequest';
+import './plugin/controls/ToolSelectionHandler';
+import './request/activate.map.layer';
+import './request/add.map.layer';
+import './request/remove.map.layer';
+import './request/set.opacity.map.layer';
+import './request/set.style.map.layer';
+import './request/set.order.map.layer';
+
+import './request/map.layer.handler';
+import './request/MapMoveRequest';
+import './request/MapMoveRequestHandler';
+
+import './request/MapLayerUpdateRequest';
+import './request/MapLayerUpdateRequestHandler';
+
+import './request/MapTourRequest';
+import './request/MapTourRequestHandler';
+
+import './request/SetTimeRequest';
+import './request/SetTimeRequestHandler';
+
+import './request/ShowProgressSpinnerRequest';
+import './request/ShowProgressSpinnerRequestHandler';
+
+import './request/RegisterStyleRequest';
+import './request/RegisterStyleRequestHandler';
+
+import './request/VectorLayerRequest';
+import './request/VectorLayerRequestHandler';
+
+import './request/StartUserLocationTrackingRequest';
+import './request/StartUserLocationTrackingRequestHandler';
+
+import './request/StopUserLocationTrackingRequest';
+import './request/StopUserLocationTrackingRequestHandler';
+
+import './request/GetUserLocationRequest';
+import './request/GetUserLocationRequestHandler';
+import './event/UserLocationEvent';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
