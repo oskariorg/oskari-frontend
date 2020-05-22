@@ -13,6 +13,14 @@ import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
 
+import './vectorlayer';
+import './request/AddFeaturesToMapRequest';
+import './request/AddFeaturesToMapRequestHandler';
+import './request/RemoveFeaturesFromMapRequest';
+import './request/RemoveFeaturesFromMapRequestHandler';
+import './request/ZoomToFeaturesRequest';
+import './request/ZoomToFeaturesRequestHandler';
+
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
@@ -1161,9 +1169,9 @@ Oskari.clazz.define(
         sendZoomFeatureEvent: function (features) {
             var me = this;
             var featureEvent = Oskari.eventBuilder('FeatureEvent')().setOpZoom();
-            if (!_.isEmpty(features)) {
+            if (features) {
                 var formatter = me._supportedFormats.GeoJSON;
-                _.each(features, function (feature) {
+                features.forEach(feature => {
                     var geojson = formatter.writeFeaturesObject([feature]);
                     featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
                 });
@@ -1186,35 +1194,30 @@ Oskari.clazz.define(
          * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
-        getFeaturesMatchingQuery: function (layers, featureQuery) {
+        getFeaturesMatchingQuery: function (layers = [], featureQuery) {
             var me = this;
-            var features = [];
-            _.each(layers, function (layerId) {
+            let features = [];
+            layers.forEach(layerId => {
                 if (!me._olLayers[layerId]) {
                     // invalid layerId
                     return;
                 }
                 var sourceFeatures = me._olLayers[layerId].getSource().getFeatures();
-                if (_.isEmpty(featureQuery)) {
+                if (typeof featureQuery !== 'object' || !Object.keys(featureQuery).length) {
                     // no query requirements, add all features in layer
                     features = features.concat(sourceFeatures);
                     return;
                 }
-                _.each(sourceFeatures, function (feature) {
-                    feature.layerId = layerId;
-                    _.each(featureQuery, function (allowedValues, requestedProperty) {
+                const filteredAndModified = sourceFeatures.filter(feature => {
+                    return Object.entries(featureQuery).some(([requestedProperty, allowedValues]) => {
                         var featureValue = feature.get(requestedProperty);
-                        if (!featureValue) {
-                            // feature doesn't have the property, don't include it
-                            return;
-                        }
-                        _.each(allowedValues, function (value) {
-                            if (featureValue === value) {
-                                features.push(feature);
-                            }
-                        });
+                        return !!featureValue && allowedValues.includes(featureValue);
                     });
+                }).map(f => {
+                    f.layerId = layerId;
+                    return f;
                 });
+                features = features.concat(filteredAndModified);
             });
             return features;
         },

@@ -270,30 +270,6 @@ Oskari.clazz.define(
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol.js'
                 }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/vectorlayer.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/FeatureEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/AddFeaturesToMapRequestHandler.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/RemoveFeaturesFromMapRequestHandler.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/ZoomToFeaturesRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/vectorlayer/request/ZoomToFeaturesRequestHandler.js'
-                }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/vectorlayer.scss'
                 },

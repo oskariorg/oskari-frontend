@@ -39,9 +39,10 @@ sandbox.register(mapModule);
 mapModule.requestHandlers = {};
 mapModule.registerPlugin(plugin);
 mapModule.start(sandbox);
-/// plugin.startPlugin(sandbox);
-plugin._sandbox = sandbox;
-// sandbox.register();
+plugin.startPlugin(sandbox);
+
+// "mock" setFeatureStyle since we don't have canvas without DOM
+plugin.setFeatureStyle = () => {}
 
 const createFakeLayer = () => {
     return new olLayerVector({
@@ -76,6 +77,27 @@ describe('VectorLayerPlugin', () => {
             const geojson = generateGeoJSON(1, 2);
             plugin.addFeaturesToMap(geojson);
             expect(plugin.getLayerIds().length).toEqual(3);
+        });
+    });
+    describe('getFeaturesMatchingQuery', () => {
+        test('no params', () => {
+            expect(plugin.getFeaturesMatchingQuery().length).toEqual(0);
+        });
+        test('with default layer as param', () => {
+            // assumes addFeaturesToMap() test added features and the default layer
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR']).length).toEqual(2);
+        });
+        test('with query', () => {
+            // assumes addFeaturesToMap() test added features and the default layer
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
+                'test_property': [1, 2]
+            }).length).toEqual(2);
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
+                'test_property': [1]
+            }).length).toEqual(1);
+            expect(plugin.getFeaturesMatchingQuery(['VECTOR'], {
+                'test_property': [2]
+            }).length).toEqual(1);
         });
     });
 });

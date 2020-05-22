@@ -26,6 +26,7 @@ import './event/AfterMapMoveEvent';
 import './event/MapTourEvent';
 import './event/GetInfoResultEvent';
 import './event/MapSizeChangedEvent';
+import './event/FeatureEvent';
 
 import './request/ToolSelectionRequest';
 import './plugin/controls/ToolSelectionHandler';
