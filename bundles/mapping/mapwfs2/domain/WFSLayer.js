@@ -341,14 +341,14 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     removeStyle (styleId) {
-        const index = this._userStyles.findIndex(s => s.style.id === styleId);
+        const index = this._userStyles.findIndex(s => s.id === styleId);
         if (index !== -1) {
             this._userStyles.splice(index, 1);
         }
 
         // Remove style from layer if active.
         const customStyleWrapper = this.getCustomStyle();
-        if (customStyleWrapper && customStyleWrapper.style.id === styleId) {
+        if (customStyleWrapper && customStyleWrapper.id === styleId) {
             this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), 'default']);
         } else {
             // Only notify to update list of styles in selected layers.
