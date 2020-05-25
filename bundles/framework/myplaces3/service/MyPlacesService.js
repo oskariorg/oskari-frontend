@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.setId(layers[i].id);
                 category.setName(Oskari.util.sanitize(properties.category_name));
                 category.setDefault(properties.default === true);
-                category.setStyle(properties.style);
+                category.setOptions(properties.options);
                 category.setUuid(properties.uuid);
                 if (properties.publisher_name) {
                     category.setPublic(true);
@@ -567,7 +567,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.properties = {
                     'category_name': cat.getName(),
                     'default': cat.isDefault(),
-                    'style': cat.getStyle()
+                    'style': cat.getDefaultFeatureStyle()
                 };
                 // FIXME: should setup two lists to work properly. Now just uses the last category as "everything is new or old"
                 isNew = !category.id;
@@ -627,7 +627,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setUuid(properties.uuid);
                 categoryModel.setDefault(!!properties.default);
                 categoryModel.setPublic(!!properties.publisher_name);
-                categoryModel.setStyle(properties.style);
+                categoryModel.setOptions(properties.options);
                 if (isNew) {
                     me._addCategory(categoryModel);
                 }

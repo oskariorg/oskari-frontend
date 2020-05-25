@@ -23,7 +23,6 @@ Oskari.clazz.define(
         this.lineStyleMap = ['', '5 2'];
         this._oskariLineStyleMap = ['solid', 'dash'];
         this.dialog = null;
-
         var defaultOptions = {
             validateValues: true,
             // include all forms by default
@@ -142,7 +141,6 @@ Oskari.clazz.define(
                     form.append(btnContainer);
                 }
             }
-
             return form;
         },
 
@@ -200,9 +198,6 @@ Oskari.clazz.define(
                         lineJoin: values.area.lineCorner
                     }
                 },
-                text: {
-                    labelText: values.dot.message
-                },
                 image: {
                     fill: {
                         color: values.dot.color
@@ -211,6 +206,9 @@ Oskari.clazz.define(
                     size: values.dot.size
                 }
             };
+            if (values.dot.message) {
+                oskariStyle.text = { labelText: values.dot.message };
+            }
             return oskariStyle;
         },
         getOskariStyleName () {
@@ -233,35 +231,38 @@ Oskari.clazz.define(
             if (styleName) {
                 this._options = jQuery.extend(this._options, { name: styleName });
             }
-
+            const { image, stroke, fill } = featureStyle;
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];
                     switch (fClazzName) {
                     case 'dot':
+                        if (typeof image !== 'object') break;
                         fClazz.setValues({
-                            color: featureStyle.image.fill.color,
-                            shape: featureStyle.image.shape,
-                            size: featureStyle.image.size
+                            color: image.fill.color,
+                            shape: image.shape,
+                            size: image.size
                         });
                         break;
                     case 'line':
+                        if (typeof stroke !== 'object') break;
                         fClazz.setValues({
-                            color: featureStyle.stroke.color,
-                            width: featureStyle.stroke.width,
-                            cap: featureStyle.stroke.lineCap,
-                            corner: featureStyle.stroke.lineJoin,
-                            style: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.lineDash)]
+                            color: stroke.color,
+                            width: stroke.width,
+                            cap: stroke.lineCap,
+                            corner: stroke.lineJoin,
+                            style: this.lineStyleMap[this._oskariLineStyleMap.indexOf(stroke.lineDash)]
                         });
                         break;
                     case 'area':
+                        if (typeof fill !== 'object' || typeof stroke !== 'object') break;
                         fClazz.setValues({
-                            fillColor: (typeof featureStyle.fill.color === 'string' ? featureStyle.fill.color : null),
-                            fillStyle: featureStyle.fill.area.pattern,
-                            lineColor: (typeof featureStyle.stroke.area.color === 'string' ? featureStyle.stroke.area.color : null),
-                            lineCorner: featureStyle.stroke.area.lineJoin,
-                            lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.area.lineDash)],
-                            lineWidth: featureStyle.stroke.area.width
+                            fillColor: (typeof fill.color === 'string' ? fill.color : null),
+                            fillStyle: fill.area.pattern,
+                            lineColor: (typeof stroke.area.color === 'string' ? stroke.area.color : null),
+                            lineCorner: stroke.area.lineJoin,
+                            lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(stroke.area.lineDash)],
+                            lineWidth: stroke.area.width
                         });
                         break;
                     }

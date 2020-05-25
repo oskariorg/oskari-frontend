@@ -101,12 +101,15 @@ Oskari.clazz.define(
          * @return {Object}
          */
         getValues: function () {
-            return {
+            const values = {
                 size: this.values.size,
                 color: this.values.color,
-                shape: this.values.shape,
-                message: this.values.message
+                shape: this.values.shape
             };
+            if (this.messageEnabled) {
+                values.message = this.values.message;
+            }
+            return values;
         },
         /**
          * @method setValues
