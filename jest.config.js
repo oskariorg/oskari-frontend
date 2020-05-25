@@ -11,7 +11,7 @@ module.exports = {
     },
     verbose: true,
     transformIgnorePatterns: [
-        'node_modules/(?!(ol)/)'
+        'node_modules/(?!(ol|jsts)/)'
     ]
     /*
     ,transform: {

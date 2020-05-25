@@ -1,4 +1,73 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
+import { cloneDeep, sortBy } from 'lodash';
+
+import './domain/AbstractLayer';
+import './domain/LayerComposingModel';
+import './domain/style';
+import './domain/tool';
+import './domain/MaplayerGroup';
+import './service/map.layer';
+import './service/map.state';
+import './service/VectorFeatureService.ol';
+
+import './event/MapClickedEvent';
+import './event/MapMoveStartEvent';
+import './event/map.layer.activation';
+import './event/map.layer';
+import './event/map.layer.add';
+import './event/map.layer.remove';
+import './event/map.layer.order';
+import './event/map.layer.opacity';
+import './event/map.layer.style';
+import './event/ProgressEvent';
+import './event/MouseHoverEvent';
+import './event/EscPressedEvent';
+import './event/AfterMapMoveEvent';
+import './event/MapTourEvent';
+import './event/GetInfoResultEvent';
+import './event/MapSizeChangedEvent';
+import './event/FeatureEvent';
+
+import './request/ToolSelectionRequest';
+import './plugin/controls/ToolSelectionHandler';
+import './request/activate.map.layer';
+import './request/add.map.layer';
+import './request/remove.map.layer';
+import './request/set.opacity.map.layer';
+import './request/set.style.map.layer';
+import './request/set.order.map.layer';
+
+import './request/map.layer.handler';
+import './request/MapMoveRequest';
+import './request/MapMoveRequestHandler';
+
+import './request/MapLayerUpdateRequest';
+import './request/MapLayerUpdateRequestHandler';
+
+import './request/MapTourRequest';
+import './request/MapTourRequestHandler';
+
+import './request/SetTimeRequest';
+import './request/SetTimeRequestHandler';
+
+import './request/ShowProgressSpinnerRequest';
+import './request/ShowProgressSpinnerRequestHandler';
+
+import './request/RegisterStyleRequest';
+import './request/RegisterStyleRequestHandler';
+
+import './request/VectorLayerRequest';
+import './request/VectorLayerRequestHandler';
+
+import './request/StartUserLocationTrackingRequest';
+import './request/StartUserLocationTrackingRequestHandler';
+
+import './request/StopUserLocationTrackingRequest';
+import './request/StopUserLocationTrackingRequestHandler';
+
+import './request/GetUserLocationRequest';
+import './request/GetUserLocationRequestHandler';
+import './event/UserLocationEvent';
 
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
@@ -557,7 +626,7 @@ Oskari.clazz.define(
          * @return {Object}        [description]
          */
         normalizeLonLat: function (lonlat) {
-            if (_.isArray(lonlat)) {
+            if (Array.isArray(lonlat)) {
                 return {
                     lon: Number(lonlat[0]),
                     lat: Number(lonlat[1])
@@ -1105,10 +1174,12 @@ Oskari.clazz.define(
         },
 
         getMobileDiv: function () {
-            var me = this;
-            var mobileDiv = jQuery(me.getMapEl()[0].parentElement).find('.mobileToolbarDiv');
-
-            return mobileDiv;
+            var mapDiv = this.getMapEl();
+            if (!mapDiv.length || !mapDiv[0].parentElement) {
+                this.log.warn('Unable to find mobile toolbar from page');
+                return jQuery('<div></div>');
+            }
+            return jQuery(mapDiv[0].parentElement).find('.mobileToolbarDiv');
         },
 
         getMobileToolbar: function () {
@@ -1189,11 +1260,11 @@ Oskari.clazz.define(
          *
          */
         redrawPluginUIs: function (modeChanged) {
-            var me = this;
-            var sortedList = me._getSortedPlugins();
-            _.each(sortedList, function (plugin) {
-                if (plugin && typeof plugin.redrawUI === 'function') {
-                    plugin.redrawUI(me.getMobileMode(), modeChanged);
+            const sortedList = this._getSortedPlugins() || [];
+            const isInMobileMode = this.getMobileMode();
+            sortedList.forEach((plugin = {}) => {
+                if (typeof plugin.redrawUI === 'function') {
+                    plugin.redrawUI(isInMobileMode, modeChanged);
                 }
             });
         },
@@ -1203,7 +1274,7 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
          */
         _getSortedPlugins: function () {
-            return _.sortBy(this._pluginInstances, function (plugin) {
+            return sortBy(this._pluginInstances, function (plugin) {
                 if (typeof plugin.getIndex === 'function') {
                     return plugin.getIndex();
                 }
@@ -1538,12 +1609,10 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            var me = this;
-            var sortedList = this._getSortedPlugins();
-
-            _.each(sortedList, function (plugin) {
-                if (plugin && typeof plugin.startPlugin === 'function') {
-                    me.startPlugin(plugin);
+            const sortedList = this._getSortedPlugins() || [];
+            sortedList.forEach((plugin = {}) => {
+                if (typeof plugin.startPlugin === 'function') {
+                    this.startPlugin(plugin);
                 }
             });
         },
@@ -2008,26 +2077,29 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
-            var me = this;
-
-            if (me._options) {
-                me._options.style = _.cloneDeep(style);
+            const clonedStyle = cloneDeep(style || {});
+            if (!this._options) {
+                this._options = {};
             }
+            this._options.style = clonedStyle;
 
             // notify plugins of the style change.
-            if (style) {
-                _.each(me._pluginInstances, function (plugin) {
-                    if (plugin && plugin.hasUI()) {
-                        var styleConfig = me._options.style.toolStyle !== 'default' ? me._options.style.toolStyle : null;
-                        if (plugin.changeToolStyle && typeof plugin.changeToolStyle === 'function') {
-                            plugin.changeToolStyle(styleConfig);
-                        }
-                        if (plugin.changeFont && typeof plugin.changeFont === 'function') {
-                            plugin.changeFont(me._options.style.font);
-                        }
+            Object.values(this._pluginInstances)
+                .filter((plugin = {}) => {
+                    if (typeof plugin.hasUI === 'function') {
+                        return plugin.hasUI();
+                    }
+                    return false;
+                })
+                .forEach((plugin) => {
+                    var styleConfig = clonedStyle.toolStyle !== 'default' ? clonedStyle.toolStyle : null;
+                    if (typeof plugin.changeToolStyle === 'function') {
+                        plugin.changeToolStyle(styleConfig);
+                    }
+                    if (typeof plugin.changeFont === 'function') {
+                        plugin.changeFont(clonedStyle.font);
                     }
                 });
-            }
         },
         /**
          * Gets the style to be used on plugins
@@ -2305,22 +2377,20 @@ Oskari.clazz.define(
             if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
+            const isSupported = (plugin, layer) => typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
 
-            _.each(layerPlugins, function (plugin) {
+            Object.values(layerPlugins).forEach((plugin) => {
                 // true if either plugin doesn't have the function or says the layer is supported.
-                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
-                if (_.isFunction(plugin.addMapLayerToMap) && isSupported) {
+                if (isSupported(plugin, layer) && typeof plugin.addMapLayerToMap === 'function') {
                     var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (_.isFunction(layerFunction)) {
+                    if (typeof layerFunction === 'function') {
                         layerFunctions.push(layerFunction);
                     }
                 }
             });
 
             // Execute each layer function
-            _.each(layerFunctions, function (func) {
-                func.apply();
-            });
+            layerFunctions.forEach((func) => func.apply());
         },
 
         /**
@@ -2389,10 +2459,10 @@ Oskari.clazz.define(
                 // couldn't find layer to update
                 return;
             }
-            _.each(layerPlugins, function (plugin) {
+            Object.values(layerPlugins).forEach((plugin) => {
                 // true if either plugin doesn't have the function or says the layer is supported.
-                var isSupported = !_.isFunction(plugin.isLayerSupported) || plugin.isLayerSupported(layer);
-                if (_.isFunction(plugin.updateLayerParams) && isSupported) {
+                var isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
+                if (isSupported && typeof plugin.updateLayerParams === 'function') {
                     plugin.updateLayerParams(layer, forced, params);
                 }
             });
