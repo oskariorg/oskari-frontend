@@ -582,12 +582,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
 
             selectedLayers.forEach(l => {
-                if (l.getCurrentStyle().getName() === 'oskari_custom') {
-                    customStyles[l.getId()] = l.getCustomStyle();
+                if (typeof l.getCustomStyle === 'function') {
+                    const custom = l.getCustomStyle();
+                    if (custom && custom.style) {
+                        customStyles[l.getId()] = custom.style;
+                    }
                 }
             });
-
-            return JSON.stringify(customStyles);
+            return customStyles;
         },
         /**
          * @public @method openURLinWindow
@@ -661,11 +663,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 var stringifiedJson = this._stringifyGeoJson(null);
                 var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
                 var stringifiedTableData = this._stringifyTableData(this.instance.tableJson);
+                const stringifiedCustomStyles = JSON.stringify(customStyles);
                 Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-                this.openPostURLinWindow(url, stringifiedJson, stringifiedTileData, stringifiedTableData, customStyles);
+                this.openPostURLinWindow(url, stringifiedJson, stringifiedTileData, stringifiedTableData, stringifiedCustomStyles);
             } else {
                 // Otherwise GET is satisfiable.
-                Oskari.log('BasicPrintout').warn('PRINT URL ' + url);
+                Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
                 this.openURLinWindow(url);
             }
         },
