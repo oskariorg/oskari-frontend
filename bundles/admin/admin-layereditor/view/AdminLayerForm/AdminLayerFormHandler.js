@@ -160,6 +160,15 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, realtime }
         });
     }
+    setSingleTile (singleTile) {
+        const layer = { ...this.getState().layer };
+        if (singleTile) {
+            layer.options.singleTile = singleTile;
+        } else {
+            delete layer.options.singleTile;
+        }
+        this.updateState({ layer });
+    }
     setRefreshRate (refreshRate) {
         this.updateState({
             layer: { ...this.getState().layer, refreshRate }
@@ -868,6 +877,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setOptions',
     'setPassword',
     'setPermissionForAll',
+    'setSingleTile',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
 import { LegendImage } from './LegendImage';
 import { Realtime } from './Realtime';
+import { SingleTile } from './SingleTile';
 import { SelectedTime } from './SelectedTime';
 import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
@@ -19,6 +20,7 @@ const {
     METADATAID,
     LEGEND_IMAGE,
     REALTIME,
+    SINGLE_TILE,
     GFI_CONTENT,
     GFI_TYPE,
     GFI_XSLT,
@@ -44,6 +46,9 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
             }
             { propertyFields.includes(LEGEND_IMAGE) &&
                 <LegendImage layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(SINGLE_TILE) &&
+                <SingleTile layer={layer} controller={controller} />
             }
             { propertyFields.includes(REALTIME) &&
                 <Realtime layer={layer} controller={controller} />
