@@ -1,6 +1,9 @@
 import '../../../../src/global';
+import { _ } from '../../../../libraries/lodash/2.3.0/lodash';
 import './WFSLayerService';
 
+window._ = _;
+// Just used to register some event listeners so fake it
 const sandbox = {
     registerForEventByName: () => {}
 };
@@ -15,5 +18,25 @@ describe('WFSLayerService', () => {
         expect(selections.length).toEqual(1);
         expect(selections[0].layerId).toEqual(layerId);
         expect(selections[0].featureIds.length).toEqual(2);
+        // For some reason the layer isn't added here...
+        expect(service.getSelectedWFSLayerIds().length).toEqual(0);
+    });
+
+    test('getSelectedWFSLayerIds()', () => {
+        const layer = {
+            getId: () => layerId
+        };
+        expect(service.getSelectedWFSLayerIds().length).toEqual(0);
+        service.setWFSLayerSelection(layer, true);
+        expect(service.getSelectedWFSLayerIds().length).toEqual(1);
+        // from previous test
+        let selections = service.getWFSSelections();
+        expect(selections.length).toEqual(1);
+        expect(selections[0].layerId).toEqual(layerId);
+        expect(selections[0].featureIds.length).toEqual(2);
+        // remove layer, check that selections are updated
+        service.setWFSLayerSelection(layer, false);
+        selections = service.getWFSSelections();
+        expect(selections.length).toEqual(0);
     });
 });
