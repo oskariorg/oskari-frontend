@@ -1,8 +1,6 @@
 import '../../../../src/global';
-import { _ } from '../../../../libraries/lodash/2.3.0/lodash';
 import './WFSLayerService';
 
-window._ = _;
 // Just used to register some event listeners so fake it
 const sandbox = {
     registerForEventByName: () => {}
