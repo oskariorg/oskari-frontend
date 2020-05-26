@@ -41,33 +41,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
          *      request to handle
          */
         handleRequest: function (core, request) {
-            const layerId = request.getId();
-            const styleId = request.getStyleId();
+            const layerId = request.getLayerId();
+            const styleName = request.getStyleName();
             const createNew = request.isCreateNew();
             const userStylesForLayer = this.service.getUserStylesForLayer(layerId);
-            if (userStylesForLayer.length > 0 && !styleId && !createNew) {
+            if (userStylesForLayer.length > 0 && !styleName && !createNew) {
                 this._showUserStylesList(layerId);
             } else {
-                this._showVisualizationForm(layerId, styleId);
+                this._showVisualizationForm(layerId, styleName);
             }
         },
-        _showVisualizationForm (layerId, styleId, createNew) {
+        _showVisualizationForm (layerId, styleName, createNew) {
             // init popup
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var title = this.localization('popup.title');
             var content = this.template.wrapper.clone();
             const layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            var customStyle;
-            var styleName;
-            if (styleId) {
-                const styleWithMetadata = this.service.getUserStyle(layerId, styleId);
-                customStyle = styleWithMetadata.style;
-                styleName = styleWithMetadata.name;
-            } else {
-                customStyle = null;
+            var style;
+            if (styleName) {
+                style = this.service.getUserStyle(layerId, styleName);
             }
             // add form
-            content.append(this.plugin.getCustomStyleEditorForm(customStyle, styleName));
+            content.append(this.plugin.getCustomStyleEditorForm(style));
 
             // buttons
             var self = this;
@@ -75,11 +70,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             saveOwnStyleBtn.setTitle(this.localization('popup.button.save'));
             saveOwnStyleBtn.addClass('primary saveOwnStyle');
             saveOwnStyleBtn.setHandler(function () {
-                if (!styleId) {
-                    styleId = Date.now();
+                if (!styleName) {
+                    // styles are stored only for runtime, use time to get unique name
+                    styleName = Date.now().toString();
                 }
-                self.plugin.applyEditorStyle(layer, styleId);
-                self.plugin.saveUserStyle(layer, styleId);
+                self.plugin.applyEditorStyle(layer, styleName);
+                self.plugin.saveUserStyle(layer, styleName);
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 self.plugin.getSandbox().notifyAll(event);
                 dialog.close();

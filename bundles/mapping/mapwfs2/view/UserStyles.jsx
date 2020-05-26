@@ -67,9 +67,9 @@ const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
             <List bordered={false} dataSource={styles} renderItem={styleWithMetadata => {
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleName={styleWithMetadata.name}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, styleWithMetadata.id, false)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, styleWithMetadata.id)}/>
+                        <UserStyleRow styleTitle={styleWithMetadata.title}
+                            editUserStyleHandler={() => showVisualizationForm(layerId, styleWithMetadata.name, false)}
+                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, styleWithMetadata.name)}/>
                     </StyledListItem>
                 );
             }}/>

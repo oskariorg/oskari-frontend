@@ -236,26 +236,27 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
 
     /**
      * @method getCustomStyleEditorForm To get editor ui element for custom style.
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {Object} styleWithMetadata
      * @return VisualizationForm's form element
      */
-    getCustomStyleEditorForm (customStyle, styleName) {
-        if (!customStyle) {
+    getCustomStyleEditorForm (styleWithMetadata = {}) {
+        const { style, title } = styleWithMetadata;
+        if (!style || !title) {
             this.visualizationForm = new VisualizationForm({ name: '' });
         } else {
-            this.visualizationForm.setOskariStyleValues(customStyle, styleName);
+            this.visualizationForm.setOskariStyleValues(style, title);
         }
         return this.visualizationForm.getForm();
     }
     /**
      * @method applyEditorStyle Applies custom style editor's style to the layer.
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {String} styleName
      */
-    applyEditorStyle (layer, styleId) {
+    applyEditorStyle (layer, styleName) {
         const style = this.visualizationForm.getOskariStyle();
-        style.id = styleId;
         layer.setCustomStyle(style);
-        layer.selectStyle(this.visualizationForm.getOskariStyleName());
+        layer.selectStyle(styleName);
     }
     /**
      * @method findLayerByOLLayer
@@ -380,17 +381,17 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
-    saveUserStyle (layer, id) {
+    saveUserStyle (layer, name) {
         const style = this.visualizationForm.getOskariStyle();
         const layerId = layer.getId();
-        let name = this.visualizationForm.getOskariStyleName();
-        if (!name) {
+        let title = this.visualizationForm.getOskariStyleName();
+        if (!title) {
             const existing = this.userStyleService.getUserStylesForLayer(layerId);
-            name = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + (existing.length + 1);
+            title = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + (existing.length + 1);
         }
-        const styleWithMetadata = { name, style, id };
+        const styleWithMetadata = { name, style, title };
         layer.saveUserStyle(styleWithMetadata);
-        this.userStyleService.saveUserStyle(layer.getId(), styleWithMetadata);
+        this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
     }
     /**
      * Called when layer details are updated (for example by the admin functionality)

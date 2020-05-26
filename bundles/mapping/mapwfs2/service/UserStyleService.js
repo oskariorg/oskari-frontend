@@ -8,8 +8,8 @@ export class UserStyleService {
         if (!layerId || !styleWithMetadata) {
             return;
         }
-        const layerStyles = this.styles.get(layerId) || [];
-        const index = layerStyles.findIndex(s => s.id === styleWithMetadata.id);
+        const layerStyles = this.getUserStylesForLayer(layerId);
+        const index = layerStyles.findIndex(s => s.name === styleWithMetadata.name);
 
         if (index !== -1) {
             layerStyles[index] = styleWithMetadata;
@@ -20,33 +20,30 @@ export class UserStyleService {
         this.trigger('update');
     }
 
-    removeStyle (layerId, styleId) {
-        this.removeUserStyle(layerId, styleId);
-        this.removeUserStyleFromLayer(layerId, styleId);
+    removeStyle (layerId, styleName) {
+        this.removeUserStyle(layerId, styleName);
+        this.removeUserStyleFromLayer(layerId, styleName);
     }
 
-    removeUserStyle (layerId, styleId) {
-        if (!layerId || !styleId) {
+    removeUserStyle (layerId, styleName) {
+        if (!layerId || !styleName) {
             return;
         }
-
-        const layerStyles = this.styles.get(layerId);
-        if (layerStyles) {
-            const index = layerStyles.findIndex(s => s.id === styleId);
-            if (index !== -1) {
-                layerStyles.splice(index, 1);
-                this.styles.set(layerId, layerStyles);
-                this.trigger('update');
-            }
+        const layerStyles = this.getUserStylesForLayer(layerId);
+        const index = layerStyles.findIndex(s => s.name === styleName);
+        if (index !== -1) {
+            layerStyles.splice(index, 1);
+            this.styles.set(layerId, layerStyles);
+            this.trigger('update');
         }
     }
 
-    removeUserStyleFromLayer (layerId, styleId) {
+    removeUserStyleFromLayer (layerId, styleName) {
         const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
         if (!layer) {
             return;
         }
-        layer.removeStyle(styleId);
+        layer.removeStyle(styleName);
     }
     getQName () {
         return 'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService';
@@ -56,8 +53,8 @@ export class UserStyleService {
         return this.styles.get(layerId) || [];
     }
 
-    getUserStyle (layerId, styleId) {
+    getUserStyle (layerId, styleName) {
         const layerStyles = this.getUserStylesForLayer(layerId);
-        return layerStyles.find(s => s.id === styleId);
+        return layerStyles.find(s => s.name === styleName);
     }
 }

@@ -5,8 +5,8 @@ describe('saveUserStyle function ', () => {
         const service = new UserStyleService();
         const layerId = 1;
         const styleWithMetadata = {
-            name: 'My own style',
-            id: 1,
+            title: 'My own style',
+            name: '1',
             style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata);
@@ -18,13 +18,13 @@ describe('saveUserStyle function ', () => {
         const service = new UserStyleService();
         const layerId = 1;
         const styleWithMetadata1 = {
-            name: 'First style',
-            id: 1,
+            title: 'First style',
+            name: '1',
             style: {}
         };
         const styleWithMetadata2 = {
-            name: 'Second style',
-            id: 2,
+            title: 'Second style',
+            name: '2',
             style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata1);
@@ -38,13 +38,13 @@ describe('saveUserStyle function ', () => {
         const service = new UserStyleService();
         const layerId = 1;
         const originalStyleWithMetadata = {
-            name: 'Original name',
-            id: 1,
+            title: 'Original name',
+            name: '1',
             style: {}
         };
         const updatedStyleWithMetadata = {
-            name: 'Updated name',
-            id: 1,
+            title: 'Updated name',
+            name: '1',
             style: {
                 someNewField: 'someValue'
             }
@@ -61,16 +61,16 @@ describe('removeUserStyle function ', () => {
     test('removes user style correctly when found', () => {
         const service = new UserStyleService();
         const layerId = 1;
-        const styleId = 1;
+        const styleName = Date.now().toString();
         const styleWithMetadata = {
-            name: 'some style',
-            id: styleId,
+            title: 'some style',
+            name: styleName,
             style: {}
         };
         service.saveUserStyle(layerId, styleWithMetadata);
         const result1 = service.getUserStylesForLayer(layerId);
         expect(result1.length).toEqual(1);
-        service.removeUserStyle(layerId, styleId);
+        service.removeUserStyle(layerId, styleName);
         const result2 = service.getUserStylesForLayer(layerId);
         expect(result2.length).toEqual(0);
     });

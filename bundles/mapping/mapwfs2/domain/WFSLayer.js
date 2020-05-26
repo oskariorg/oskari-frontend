@@ -244,7 +244,7 @@ export class WFSLayer extends VectorTileLayer {
             const styles = this._userStyles.map(s => {
                 const style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
                 style.setName(s.name);
-                style.setTitle(s.name);
+                style.setTitle(s.title);
                 style.setLegend('');
                 return style;
             });
@@ -330,7 +330,7 @@ export class WFSLayer extends VectorTileLayer {
         if (!styleWithMetadata) {
             return;
         }
-        const index = this._userStyles.findIndex(s => s.id === styleWithMetadata.id);
+        const index = this._userStyles.findIndex(s => s.name === styleWithMetadata.name);
         if (index !== -1) {
             this._userStyles[index] = styleWithMetadata;
         } else {
@@ -340,15 +340,15 @@ export class WFSLayer extends VectorTileLayer {
         this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), styleWithMetadata.name]);
     }
 
-    removeStyle (styleId) {
-        const index = this._userStyles.findIndex(s => s.id === styleId);
+    removeStyle (name) {
+        const index = this._userStyles.findIndex(s => s.name === name);
         if (index !== -1) {
             this._userStyles.splice(index, 1);
         }
 
         // Remove style from layer if active.
         const customStyleWrapper = this.getCustomStyle();
-        if (customStyleWrapper && customStyleWrapper.id === styleId) {
+        if (customStyleWrapper && customStyleWrapper.name === name) {
             this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), 'default']);
         } else {
             // Only notify to update list of styles in selected layers.

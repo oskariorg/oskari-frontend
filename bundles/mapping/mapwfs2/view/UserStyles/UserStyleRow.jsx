@@ -31,10 +31,10 @@ const IconColumnEdit = styled(IconColumn)`
     color: ${secondaryColor};
 `;
 
-export const UserStyleRow = ({ styleName, editUserStyleHandler, removeUserStyleHandler }) => {
+export const UserStyleRow = ({ styleTitle, editUserStyleHandler, removeUserStyleHandler }) => {
     return (
         <RowContainer>
-            <TextColumn>{styleName}</TextColumn>
+            <TextColumn>{styleTitle}</TextColumn>
             <IconContainer>
                 <IconColumnEdit><Icon type="edit" onClick={editUserStyleHandler}></Icon></IconColumnEdit>
                 <IconColumn><Icon type="delete" onClick={removeUserStyleHandler}></Icon></IconColumn>
@@ -44,7 +44,7 @@ export const UserStyleRow = ({ styleName, editUserStyleHandler, removeUserStyleH
 };
 
 UserStyleRow.propTypes = {
-    styleName: PropTypes.string.isRequired,
+    styleTitle: PropTypes.string.isRequired,
     editUserStyleHandler: PropTypes.func.isRequired,
     removeUserStyleHandler: PropTypes.func.isRequired
 };
