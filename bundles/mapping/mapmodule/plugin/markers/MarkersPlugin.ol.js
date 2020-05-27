@@ -436,9 +436,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.getSandbox().printWarn('Undefined coordinate in', markerData);
                 return null;
             }
-
+            // Remove null values to get defaults
+            Object.keys(markerData).forEach(key => markerData[key] === null && delete markerData[key]);
             // Combine default values with given values
-            var data = jQuery.extend(true, _.cloneDeep(this._defaultData), markerData);
+            var data = jQuery.extend(true, {}, this._defaultData, markerData);
 
             // generate id if not provided
             data.id = id;
