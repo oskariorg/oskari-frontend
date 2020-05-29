@@ -200,31 +200,29 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (data.layerCount === 0) {
             return;
         }
-        var me = this,
-            sandbox = this._sandbox,
-            coll;
+        const me = this;
+        const sandbox = this._sandbox;
 
-        coll = _.chain(data.features)
+        const coll = data.features
             .map(function (datum) {
-                var layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId),
-                    layerName = layer ? layer.getName() : '',
-                    pretty = me._formatGfiDatum(datum),
-                    layerIdString = datum.layerId + '';
-
-                if (pretty !== null && pretty !== undefined) {
-                    return {
-                        markup: pretty,
-                        layerId: layerIdString,
-                        layerName: layerName,
-                        type: datum.type,
-                        isMyPlace: !!layerIdString.match('myplaces_')
-                    };
+                const pretty = me._formatGfiDatum(datum);
+                if (typeof pretty === 'undefined') {
+                    return;
                 }
+
+                const layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId);
+                const layerName = layer ? layer.getName() : '';
+                const layerIdString = datum.layerId + '';
+
+                return {
+                    markup: pretty,
+                    layerId: layerIdString,
+                    layerName: layerName,
+                    type: datum.type,
+                    isMyPlace: !!layerIdString.match('myplaces_')
+                };
             })
-            .reject(function (feature) {
-                return feature === undefined;
-            })
-            .value();
+            .filter(feature => typeof feature !== 'undefined');
 
         return coll || [];
     },
@@ -249,10 +247,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
             // This is for my places info popup
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                return _.foldl(datum.content.parsed.places, function (div, place) {
-                    div.append(me.formatters.myplace(place));
-                    return div;
-                }, jQuery('<div></div>'));
+                const baseDiv = jQuery('<div></div>');
+                datum.content.parsed.places
+                    .map(place => me.formatters.myplace(place))
+                    .forEach(place => baseDiv.append(place));
+                return baseDiv;
             }
 
             var even = false,
@@ -364,7 +363,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 .value();
         }
 
-        result = _.map(data.features, function (feature) {
+        result = data.features.map(feature => {
             if (fields.length) {
                 var feat = _.chain(fields)
                     .zip(feature)
