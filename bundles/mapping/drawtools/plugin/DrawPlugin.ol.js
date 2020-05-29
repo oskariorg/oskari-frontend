@@ -18,6 +18,9 @@ import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
+const arrayValuesEqual = (array1, array2) => array1.length === array2.length && array1.every((value, index) => value === array2[index]);
+const firstAndLastCoordinatesEqual = (coordinates) => coordinates.length > 1 && arrayValuesEqual(coordinates[0], coordinates[coordinates.length - 1]);
+const hasEnoughCoordinatesForArea = (coordinates) => coordinates.length > 3;
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  * Map engine specific implementation for draw tools
@@ -952,7 +955,7 @@ Oskari.clazz.define(
             // That is because the first and the last point of the geometry are being modified at the same time
             // The points should have identical values but in the first call they don't
             // So the first call is ignored by the if statement below since it would otherwise throw an error from a 3rd party library
-            if (coordinates.length >= 4 && _.isEqual(coordinates[0], coordinates[coordinates.length - 1])) {
+            if (hasEnoughCoordinatesForArea(coordinates) && firstAndLastCoordinatesEqual(coordinates)) {
                 if (!isValidOp.isValid(olParser.read(geometry))) {
                     // lines intersect -> problem!!
                     currentDrawing.setStyle(me._styles.intersect);
