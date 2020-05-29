@@ -74,7 +74,7 @@ Oskari.registerLocalization(
                     "tooltip": "You can hide the logo if necessary."
                 },
                 "pageScale": {
-                    "label": "Add a scale to the map printout",
+                    "label": "Include scale bar",
                     "tooltip": "Add a scale to the map, if you want."
                 },
                 "pageDate": {
