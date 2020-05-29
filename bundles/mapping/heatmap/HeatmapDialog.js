@@ -12,9 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         this.loc = localization;
     }, {
         __templates: {
-            'main': _.template('<div>' +
-                '</div>'),
-            'propertySelect': _.template('<div><span>${label}</span></div>'),
+            'main': '<div></div>',
+            'propertySelect': (props) => `<div><span>${props.label}</span></div>`,
             'select': _.template('<select name="heatmapProperties">' +
                         '<option value="">${label}</option>' +
                         '<% props.forEach(function(value) {  %>' +
@@ -65,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             dialog.addClass('heatmap settings-dialog');
 
             this._createColorPickers();
-            var content = jQuery(this.__templates.main());
+            var content = jQuery(this.__templates.main);
 
             // TODO: maybe replace radius field with a slider?
             var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
