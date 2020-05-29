@@ -54,38 +54,41 @@ Oskari.registerLocalization(
             },
             "settings": {
                 "label": "Lisäasetukset",
-                "tooltip": "Valitse asetukset karttatulosteelle."
-            },
-            "format": {
-                "label": "Tiedostomuoto",
-                "tooltip": "Valitse tiedostomuoto, jossa haluat tulosteen.",
-                "options": {
-                    "png": "PNG-kuva",
-                    "pdf": "PDF-dokumentti"
-                }
-            },
-            "mapTitle": {
-                "label": "Näytettävät tiedot",
-                "tooltip": "Valitse tulosteessa näytettävät tiedot."
-            },
-            "content": {
-                "pageLogo": {
-                    "label": "Näytä palvelun logo",
-                    "tooltip": "Näytä tulosteessa tämän palvelun logo."
+                "tooltip": "Valitse asetukset karttatulosteelle.",
+
+                "format": {
+                    "label": "Tiedostomuoto",
+                    "tooltip": "Valitse tiedostomuoto, jossa haluat tulosteen.",
+                    "options": {
+                        "png": "PNG-kuva",
+                        "pdf": "PDF-dokumentti"
+                    }
                 },
-                "pageScale": {
-                    "label": "Näytä mittakaava",
-                    "tooltip": "Näytä tulosteessa kartan mittakaava."
+                "content": {
+                    "label": "Näytettävät tiedot",
+                    "tooltip": "Valitse tulosteessa näytettävät tiedot.",
+                    "png": "PNG-tulosteelle ei lisätä allaolevia tietoja.",
+                    "mapTitle": {
+                        "placeholder": "Lisää otsikko"
+                    },
+                    "pageLogo": {
+                        "label": "Näytä palvelun logo",
+                        "tooltip": "Näytä tulosteessa tämän palvelun logo."
+                    },
+                    "pageScale": {
+                        "label": "Näytä mittakaava",
+                        "tooltip": "Näytä tulosteessa kartan mittakaava."
+                    },
+                    "pageDate": {
+                        "label": "Näytä päivämäärä",
+                        "tooltip": "Näytä tulosteessa sen laatimispäivämäärä."
+                    },
+                    "pageTimeSeriesTime": {
+                        "label": "Näytä aikasarjan ajanhetki",
+                        "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
+                        "printLabel": "Aikasarjan ajanhetki"
+                    }
                 },
-                "pageDate": {
-                    "label": "Näytä päivämäärä",
-                    "tooltip": "Näytä tulosteessa sen laatimispäivämäärä."
-                },
-                "pageTimeSeriesTime": {
-                    "label": "Näytä aikasarjan ajanhetki",
-                    "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
-                    "printLabel": "Aikasarjan ajanhetki"
-                }
             },
             "help": "Ohje",
             "error": {
