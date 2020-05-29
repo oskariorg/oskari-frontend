@@ -404,71 +404,65 @@ Oskari.clazz.define(
          * @param  {Object[]} contentData
          * @return {jQuery}
          */
-        _renderContentData: function (id, contentData) {
+        _renderContentData: function (id, contentData = []) {
             var me = this;
-            return _.foldl(contentData, function (contentDiv, datum, index) {
-                var contentWrapper = me._contentWrapper.clone();
-                var actions = datum.actions;
-                var actionTemplate;
-                var btn;
-                var link;
-                var currentGroup;
-                var group;
-                var sanitizedHtml;
-                var targetElem;
-                var actionTemplateWrapper;
-
+            const baseDiv = this._contentDiv.clone();
+            contentData.map((datum, index) => {
+                const contentWrapper = me._contentWrapper.clone();
                 if (typeof datum.html === 'string') {
-                    sanitizedHtml = Oskari.util.sanitize(datum.html);
+                    contentWrapper.append(Oskari.util.sanitize(datum.html));
                 } else if (typeof datum.html === 'object') {
-                    sanitizedHtml = Oskari.util.sanitize(datum.html.outerHTML());
+                    contentWrapper.append(Oskari.util.sanitize(datum.html.outerHTML()));
                 }
-
-                contentWrapper.append(sanitizedHtml);
-
                 contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
-                if (actions && Array.isArray(actions)) {
-                    actions.forEach(function (action) {
-                        var sanitizedActionName = Oskari.util.sanitize(action.name);
-                        if (action.type === 'link') {
-                            actionTemplate = me._actionLink.clone();
-                            link = actionTemplate.find('a');
-                            link.attr('contentdata', index);
-                            link.attr('id', 'oskari_' + id + '_actionLink');
-                            link.append(sanitizedActionName);
-                        } else if (action.name) {
-                            actionTemplate = me._actionButton.clone();
-                            btn = actionTemplate.find('input');
-                            btn.attr({
-                                contentdata: index,
-                                value: sanitizedActionName
-                            });
-                        }
-                        currentGroup = action.group;
-                        if (action.selector) {
-                            targetElem = contentWrapper.find(action.selector);
-                        } else {
-                            targetElem = null;
-                        }
-                        if (targetElem instanceof jQuery) {
-                            targetElem.prepend(actionTemplate);
-                        } else if (currentGroup !== undefined && currentGroup === group) {
-                            actionTemplateWrapper.append(actionTemplate);
-                        } else {
-                            actionTemplateWrapper = me._actionTemplateWrapper.clone();
-                            actionTemplateWrapper.append(actionTemplate);
-                            contentWrapper.append(actionTemplateWrapper);
-                        }
-                        group = currentGroup;
-                    });
-                } else if (typeof actions === 'object') {
-                    me.log.warn('Popup actions must be an Array. Cannot add tools.');
+                if (!datum.actions) {
+                    return contentWrapper;
                 }
+                if (!Array.isArray(datum.actions)) {
+                    me.log.warn('Popup actions must be an Array. Cannot add tools.');
+                    return contentWrapper;
+                }
+                // attach links for the infobox segment
+                let group;
+                let actionTemplateWrapper;
+                datum.actions.forEach(function (action) {
+                    var sanitizedActionName = Oskari.util.sanitize(action.name);
+                    let actionTemplate;
+                    if (action.type === 'link') {
+                        actionTemplate = me._actionLink.clone();
+                        const link = actionTemplate.find('a');
+                        link.attr('contentdata', index);
+                        link.attr('id', 'oskari_' + id + '_actionLink');
+                        link.append(sanitizedActionName);
+                    } else if (action.name) {
+                        actionTemplate = me._actionButton.clone();
+                        const btn = actionTemplate.find('input');
+                        btn.attr({
+                            contentdata: index,
+                            value: sanitizedActionName
+                        });
+                    }
+                    const currentGroup = action.group;
+                    let targetElem = null;
+                    if (action.selector) {
+                        targetElem = contentWrapper.find(action.selector);
+                    }
+                    if (targetElem instanceof jQuery) {
+                        targetElem.prepend(actionTemplate);
+                    } else if (currentGroup !== undefined && currentGroup === group) {
+                        actionTemplateWrapper.append(actionTemplate);
+                    } else {
+                        actionTemplateWrapper = me._actionTemplateWrapper.clone();
+                        actionTemplateWrapper.append(actionTemplate);
+                        contentWrapper.append(actionTemplateWrapper);
+                    }
+                    group = currentGroup;
+                });
 
-                contentDiv.append(contentWrapper);
-                return contentDiv;
-            }, me._contentDiv.clone());
+                return contentWrapper;
+            }).forEach(data => baseDiv.append(data));
+            return baseDiv;
         },
 
         _setClickEvent: function (id, popup, contentData, additionalTools = [], isMobilePopup) {
