@@ -58,6 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
         me.scales = null;
     }, {
+        // TODO: check namings tool, optionPage, optionTool
         __templates: {
             preview: '<div><img /><span></span></div>',
             previewNotes: '<div class="previewNotes"><span></span></div>',
@@ -67,11 +68,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             help: '<div class="help icon-info"></div>',
             main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
-            mapTitle: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
+            mapTitleInput: '<input class="printout_title_field" type="text">', // TODO printout_settings_cont??
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
             optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
             scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
-            contentOptions: '<div class=""/>'
+            contentOptions: '<div class="printout_content"><div class="printout_content_title"/></div>', // printout_settings_cont?? check format
+            contentNotification: '<div class="icon-warning-light"/>'
         },
         /**
          * @public @method render
@@ -210,22 +212,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         _createSettingsPanel: function () {
             var me = this;
+            const loc = this.loc.settings;
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.addClass('printsettings');
-            panel.setTitle(me.loc.settings.label);
+            panel.setTitle(loc.label);
             var contentPanel = panel.getContainer();
             // tooltip
             var tooltipCont = me.template.help.clone();
-            tooltipCont.attr('title', me.loc.settings.tooltip);
+            tooltipCont.attr('title', loc.tooltip);
             panel.getHeader().append(tooltipCont);
             var format = me.template.format.clone();
-            format.find('.printout_format_label').html(me.loc.format.label);
+            format.find('.printout_format_label').html(loc.format.label);
 
             FORMAT_OPTIONS.forEach(function (option, i) {
                 const { name, mime } = option;
                 var toolContainer = me.template.optionTool.clone();
                 const id = 'printout-format-' + name;
-                const label = me.loc.format.options[name];
+                const label = loc.format.options[name];
                 toolContainer.find('label').append(label).attr('for', id);
                 const input = toolContainer.find('input');
                 if (i === 0) {
@@ -237,9 +240,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     id
                 });
                 input.on('change', function () {
+                    // TODO don't hide title and add warning icon
                     if (name === 'png') {
+                        contentOptions.addClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', true);
                     } else {
+                        contentOptions.removeClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', false);
                     }
                 });
@@ -248,10 +254,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             contentPanel.append(format);
             /* --- options available for pdf --- */
             const contentOptions = me.template.contentOptions.clone();
-            var mapTitle = me.template.mapTitle.clone();
-            mapTitle.find('.printout_title_label').html(me.loc.mapTitle.label);
-            mapTitle.find('.printout_title_field').attr('placeholder', me.loc.mapTitle.label);
-            contentOptions.append(mapTitle);
+            contentOptions.find('.printout_content_title').html(loc.content.label);
+            var mapTitleInput = me.template.mapTitleInput.clone();
+            mapTitleInput.attr('placeholder', loc.content.mapTitle.placeholder);
+            contentOptions.append(mapTitleInput);
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
                 options.push(TIME_OPTION);
@@ -260,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 var opt = me.template.optionPage.clone();
                 const id = 'printout-page-' + value;
                 opt.find('input').attr({ id, value }).prop('checked', true);
-                const label = me.loc.content[value].label;
+                const label = loc.content[value].label;
                 opt.find('label').html(label).attr('for', id);
                 contentOptions.append(opt);
             });
