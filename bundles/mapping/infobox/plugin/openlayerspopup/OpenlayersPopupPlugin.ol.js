@@ -112,13 +112,13 @@ Oskari.clazz.define(
          */
         popup: function (id, title, contentData, position, options, additionalTools) {
             var me = this;
-            if (_.isEmpty(contentData)) {
+            if (typeof contentData !== 'object' || !Object.keys(contentData).length) {
                 return;
             }
-            var currPopup = me._popups[id],
-                lon = null,
-                lat = null,
-                marker = null;
+            var currPopup = me._popups[id];
+            var lon = null;
+            var lat = null;
+            var marker = null;
 
             if (position.marker && me.markers[position.marker]) {
                 lon = me.markers[position.marker].data.x;
