@@ -157,16 +157,18 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     _renderFragments: function (fragments) {
         var me = this;
 
-        return _.foldl(fragments, function (wrapper, fragment) {
-            var fragmentTitle = fragment.layerName;
-            var fragmentMarkup = fragment.markup;
-
-            if (fragment.isMyPlace) {
-                if (fragmentMarkup) {
-                    wrapper.append(fragmentMarkup);
+        const baseDiv = me.template.wrapper.clone();
+        fragments
+            .map(fragment => {
+                var fragmentTitle = fragment.layerName;
+                var fragmentMarkup = fragment.markup;
+                if (fragment.isMyPlace) {
+                    if (fragmentMarkup) {
+                        return fragmentMarkup;
+                    }
+                    return;
                 }
-            } else {
-                var contentWrapper = me.template.wrapper.clone();
+                const contentWrapper = me.template.wrapper.clone();
                 var headerWrapper = me.template.header.clone();
                 var titleWrapper = me.template.headerTitle.clone();
 
@@ -178,13 +180,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 if (fragmentMarkup) {
                     contentWrapper.append(fragmentMarkup);
                 }
-                wrapper.append(contentWrapper);
-            }
-
-            delete fragment.isMyPlace;
-
-            return wrapper;
-        }, me.template.wrapper.clone());
+                return contentWrapper;
+            })
+            .filter(frag => typeof frag !== 'undefined')
+            .forEach(frag => baseDiv.append(frag));
+        return baseDiv;
     },
     /**
      * Parses and formats a GFI response
