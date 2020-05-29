@@ -322,7 +322,7 @@ Oskari.clazz.define(
             if (layer && layer !== null) {
                 if (layer instanceof olLayerVector) {
                     layerId = layer.get(LAYER_ID);
-                } else if (_.isString(layer) || _.isNumber(layer)) {
+                } else if (typeof layer === 'string' || typeof layer === 'number') {
                     layerId = layer;
                 }
                 olLayer = me._olLayers[layerId];
@@ -1128,7 +1128,7 @@ Oskari.clazz.define(
             var me = this;
             var layers = me.getLayerIds(layer);
             var features = me.getFeaturesMatchingQuery(layers, options);
-            if (!_.isEmpty(features)) {
+            if (features.length > 0) {
                 var vector = new olSourceVector({
                     features: features
                 });
