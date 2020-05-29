@@ -312,7 +312,8 @@ Oskari.clazz.define(
                 },
                 success: function (resp) {
                     if (me._isAjaxRequestBusy()) {
-                        _.each(resp.data, function (datum) {
+                        const data = resp.data || [];
+                        data.forEach((datum) => {
                             me._handleInfoResult({
                                 features: [datum],
                                 lonlat: lonlat,
@@ -365,11 +366,9 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [],
-                contentData = {},
-                fragments = [],
-                colourScheme,
-                font;
+            var content = [];
+            var contentData = {};
+            var fragments = [];
 
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
@@ -382,11 +381,7 @@ Oskari.clazz.define(
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-
-            if (_.isObject(this._config)) {
-                colourScheme = this._config.colourScheme;
-                font = this._config.font;
-            }
+            var { colourScheme, font } = this._config || {};
 
             this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,
