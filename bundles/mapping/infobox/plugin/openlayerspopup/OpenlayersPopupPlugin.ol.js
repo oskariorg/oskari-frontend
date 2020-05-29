@@ -471,7 +471,7 @@ Oskari.clazz.define(
             }, me._contentDiv.clone());
         },
 
-        _setClickEvent: function (id, popup, contentData, additionalTools, isMobilePopup) {
+        _setClickEvent: function (id, popup, contentData, additionalTools = [], isMobilePopup) {
             const me = this;
             const sandbox = this.getMapModule().getSandbox();
             let popupElement;
@@ -496,7 +496,8 @@ Oskari.clazz.define(
                         text = link.html();
                     }
                     if (contentData[i] && contentData[i].actions) {
-                        var actionObject = _.find(contentData[i].actions, { 'name': text });
+                        const actions = contentData[i].actions;
+                        var actionObject = actions.find(action => action.name === text);
                         if (typeof actionObject.action === 'function') {
                             actionObject.action();
                         } else {
@@ -505,14 +506,12 @@ Oskari.clazz.define(
                         }
                     }
                 }
-                if (additionalTools.length > 0) {
-                    jQuery.each(additionalTools, function (index, key) {
-                        if (link.hasClass(key.iconCls)) {
-                            me.close(id);
-                            key.callback(key.params);
-                        }
-                    });
-                }
+                additionalTools.forEach((key) => {
+                    if (link.hasClass(key.iconCls)) {
+                        me.close(id);
+                        key.callback(key.params);
+                    }
+                });
 
                 if (!link.is('a') || link.parents('.getinforesult_table').length) {
                     evt.stopPropagation();
