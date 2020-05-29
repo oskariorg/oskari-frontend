@@ -191,14 +191,9 @@ Oskari.clazz.define(
         _buildLayerIdList: function (layers) {
             var me = this;
             var selected = layers || me.getSandbox().findAllSelectedMapLayers();
-            var layerIds = _.chain(selected)
-                .filter(function (layer) {
-                    return me._isQualified(layer);
-                })
-                .map(function (layer) {
-                    return layer.getId();
-                })
-                .value()
+            var layerIds = selected
+                .filter(layer => me._isQualified(layer))
+                .map(layer => layer.getId())
                 .join(',');
 
             return layerIds || null;
