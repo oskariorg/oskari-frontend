@@ -144,11 +144,8 @@ Oskari.clazz.define(
 
             // setup color map
             // '<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
-            var colors = layer.getColorConfig();
-            var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
-            _.each(colors, function (color) {
-                SLD = SLD + entryTemplate(color);
-            });
+            const colors = layer.getColorConfig().map((config) => `<ColorMapEntry color="${config.color}" quantity="${config.quantity}" opacity="${config.opacity}" />`);
+            SLD = SLD + colors.join('');
             SLD = SLD +
     '</ColorMap>' +
     '</RasterSymbolizer>' +
@@ -167,14 +164,13 @@ Oskari.clazz.define(
          * @return {Array[Number]}
          */
         _calculateResolutions: function (layer) {
-            var mm = this.getMapModule(),
-                minScale = layer.getMinScale(),
-                maxScale = layer.getMaxScale();
+            const minScale = layer.getMinScale();
+            const maxScale = layer.getMaxScale();
 
             if (minScale || maxScale) {
                 // use resolutions instead of scales to minimiz
                 // chance of transformation errors
-                return mm.calculateLayerResolutions(maxScale, minScale);
+                return this.getMapModule().calculateLayerResolutions(maxScale, minScale);
             }
         }
     }, {
