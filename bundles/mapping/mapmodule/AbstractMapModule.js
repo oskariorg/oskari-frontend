@@ -363,6 +363,22 @@ Oskari.clazz.define(
                 return;
             }
 
+            sandbox = sandbox || this.getSandbox();
+            sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', null);
+            sandbox.requestHandler('MapMoveRequest', null);
+            sandbox.requestHandler('ShowProgressSpinnerRequest', null);
+            sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', null);
+            sandbox.requestHandler('StartUserLocationTrackingRequest', null);
+            sandbox.requestHandler('StopUserLocationTrackingRequest', null);
+            sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', null);
+            sandbox.requestHandler('activate.map.layer', null);
+            sandbox.requestHandler('AddMapLayerRequest', null);
+            sandbox.requestHandler('RemoveMapLayerRequest', null);
+            sandbox.requestHandler('RearrangeSelectedMapLayerRequest', null);
+            sandbox.requestHandler('ChangeMapLayerOpacityRequest', null);
+            sandbox.requestHandler('ChangeMapLayerStyleRequest', null);
+            sandbox.requestHandler('MapTourRequest', null);
+            sandbox.requestHandler('SetTimeRequest', null);
             this.stopPlugins();
             this.started = this._stopImpl();
         },
