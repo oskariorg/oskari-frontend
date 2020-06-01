@@ -4,6 +4,17 @@ import olFeature from 'ol/Feature';
 import * as olGeom from 'ol/geom';
 import { cloneDeep } from 'lodash';
 
+import '../../request/AddMarkerRequest';
+import '../../request/AddMarkerRequestHandler';
+import '../../request/RemoveMarkersRequest';
+import '../../request/RemoveMarkersRequestHandler';
+import '../../request/MarkerVisibilityRequest';
+import '../../request/MarkerVisibilityRequestHandler';
+
+import '../../event/AfterAddMarkerEvent';
+import '../../event/MarkerClickEvent';
+import '../../event/AfterRemoveMarkersEvent';
+
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
  * Provides marker functionality for the map.
