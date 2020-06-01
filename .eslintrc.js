@@ -8,7 +8,6 @@ module.exports = {
   },
   "globals": {
     "_": false,
-    "$": false,
     "ajaxUrl": false,
     "Backbone": false,
     "Cesium": false,
@@ -20,15 +19,14 @@ module.exports = {
     "jsts": false,
     "MobileDetect": false,
     "moment": false,
-    "OpenLayers": false,
     "Oskari": false,
-    "OskariNavigation": false,
-    "OskariPinchZoom": false,
     "Proj4js": false,
     "turf": false,
     "__webpack_public_path__": false,
     // ---- jest tests
     "describe": false,
+    "it": false,
+    "afterAll": false,
     "expect": false,
     "test": false,
     "jest": false
@@ -64,6 +62,8 @@ module.exports = {
     "no-fallthrough": "off",
     "standard/no-callback-literal": "off",
     "import/no-default-export": "error",
+    "quote-props": ["warn", "consistent-as-needed"],
+    "lines-between-class-members": ["warn", "always"],
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
