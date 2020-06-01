@@ -64,6 +64,13 @@ module.exports = {
     "import/no-default-export": "error",
     "quote-props": ["warn", "consistent-as-needed"],
     "lines-between-class-members": ["warn", "always"],
+    "prefer-const": ["warn", {
+      "destructuring": "any",
+      "ignoreReadBeforeAssign": false
+    }],
+    "no-prototype-builtins": "warn",
+    "object-curly-newline": ["warn", "always"],
+    "dot-notation": "warn",
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
