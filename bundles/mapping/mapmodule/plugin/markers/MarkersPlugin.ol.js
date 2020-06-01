@@ -312,9 +312,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     delete me._unVisibleMarkers;
                     me._unVisibleMarkers = {};
                 }
-            }
-            // remove single marker
-            else {
+            } else {
+                // remove single marker
                 var marker = me._markerFeatures[optionalMarkerId];
                 if (!marker) {
                     sandbox.printWarn('Tried to remove non-existing marker with id: ' + optionalMarkerId);

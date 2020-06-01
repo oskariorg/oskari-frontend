@@ -93,7 +93,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             var value = jQuery('<span></span>');
             // if value is an array -> format it first
             // TODO: maybe some nicer formatting?
-            if (Object.prototype.toString.call(pValue) === '[object Array]') {
+            if (Array.isArray(pValue)) {
                 var i,
                     obj,
                     objAttr,
