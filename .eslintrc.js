@@ -62,10 +62,13 @@ module.exports = {
         'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
         // enforce single quote
         'quotes': ['error', 'single', {
-            allowTemplateLiterals: true, avoidEscape: true
+            allowTemplateLiterals: true,
+            avoidEscape: true
         }],
         'no-unused-vars': ['error', {
-            vars: 'all', args: 'none', ignoreRestSiblings: false
+            vars: 'all',
+            args: 'none',
+            ignoreRestSiblings: false
         }],
         'no-fallthrough': 'off',
         'standard/no-callback-literal': 'off',
@@ -77,13 +80,11 @@ module.exports = {
             ignoreReadBeforeAssign: false
         }],
         'no-prototype-builtins': 'warn',
-        'object-curly-newline': ['warn', 'always'],
+        'object-curly-newline': ['error', { consistent: true }],
         'dot-notation': 'warn',
 
         // Temporary warn level for Travis-CI
-        'brace-style': ['warn', '1tbs', {
-            allowSingleLine: true
-        }],
+        'brace-style': ['warn', '1tbs', { allowSingleLine: true }],
         'camelcase': ['warn', {
             properties: 'never'
         }],
@@ -92,17 +93,15 @@ module.exports = {
         }],
         'handle-callback-err': ['warn', '^(err|error)$'],
         'new-cap': ['warn', {
-            newIsCap: true, capIsNew: false
+            newIsCap: true,
+            capIsNew: false
         }],
         'no-unmodified-loop-condition': 'warn',
-        'no-unneeded-ternary': ['warn', {
-            defaultAssignment: false
-        }],
-        'one-var': ['warn', {
-            initialized: 'never'
-        }],
+        'no-unneeded-ternary': ['warn', { defaultAssignment: false }],
+        'one-var': ['warn', { initialized: 'never' }],
         'no-labels': ['warn', {
-            allowLoop: false, allowSwitch: false
+            allowLoop: false,
+            allowSwitch: false
         }]
     },
     settings: {
@@ -113,8 +112,6 @@ module.exports = {
                 }
             }
         },
-        'react': {
-            version: 'detect'
-        }
+        'react': { version: 'detect' }
     }
 };
