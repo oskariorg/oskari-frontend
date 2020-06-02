@@ -1,7 +1,8 @@
-import '../../src/global';
 import './throwPropTypeErrors';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+// Oskari global
+import '../../src/global';
 
 // --- setup global jQuery --
 import jQuery from 'jquery';
