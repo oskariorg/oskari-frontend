@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             const labelPx = widestLabel * pxPerChar;
             let labelMargin = labelPx < maxForLabel ? labelPx : maxForLabel;
             let chartWidth = width - left - right;
-            const x = d3.scaleLinear().domain(this.getScaleArray(min, max)).range([ 0, chartWidth ]);
+            const x = d3.scaleLinear().domain(this.getScaleArray(min, max)).range([0, chartWidth]);
             let xOrigin = x(0);
             // calculate how much space is needed for labels, if negative then label fits inside chart
             const spaceForPositive = labelMargin - xOrigin;
@@ -459,8 +459,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         var me = this;
         const { height, width } = this.dimensions.chart;
         // update x & y scales
-        this.y.range([ height, 0 ]);
-        this.x.range([ 0, width ]);
+        this.y.range([height, 0]);
+        this.x.range([0, width]);
 
         selection.each(function (data) {
             me.initAxis();

@@ -219,9 +219,9 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
     getResolutionArray () {
-        return [ ...this.mapmodule.getResolutionArray() ];
+        return [...this.mapmodule.getResolutionArray()];
     }
-    setMinAndMaxScale ([ minscale, maxscale ]) {
+    setMinAndMaxScale ([minscale, maxscale]) {
         this.updateState({
             layer: {
                 ...this.getState().layer,

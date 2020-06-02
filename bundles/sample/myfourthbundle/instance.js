@@ -119,6 +119,5 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
             return this._localization;
         }
     }, {
-        protocol: [ 'Oskari.bundle.BundleInstance',
-            'Oskari.mapframework.module.Module']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

@@ -1300,7 +1300,7 @@ Oskari.clazz.define(
             tooltipElement.className = tooltipClass + ' ' + id;
             var tooltip = new olOverlay({
                 element: tooltipElement,
-                offset: [ 0, -5 ],
+                offset: [0, -5],
                 positioning: 'bottom-center',
                 id: id
             });
