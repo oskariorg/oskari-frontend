@@ -25,7 +25,7 @@ Object.keys(projections).forEach(code => {
 });
 //  -/for mapmodule
 
-const sandbox = Oskari.getSandbox();
+const sandbox = Oskari.getSandbox('VectorLayerPluginTest');
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.VectorLayerPlugin');
 const layerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
 sandbox.registerService(layerService);
