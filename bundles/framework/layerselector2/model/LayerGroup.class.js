@@ -89,7 +89,7 @@ export class LayerGroup {
         const clone = new LayerGroup(this.id, this.groupMethod, this.name);
         clone.layers = [...this.layers];
         clone.searchIndex = { ...this.searchIndex };
-        clone.tools = [ ...this.tools ];
+        clone.tools = [...this.tools];
         return clone;
     }
 };

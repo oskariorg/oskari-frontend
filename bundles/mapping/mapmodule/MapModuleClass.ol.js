@@ -660,6 +660,7 @@ export class MapModule extends AbstractMapModule {
             }
         }
 
+        const flyZoom = view.getZoom();
         switch (animation) {
         case 'pan':
             view.animate({
@@ -668,7 +669,6 @@ export class MapModule extends AbstractMapModule {
             }, callback);
             break;
         case 'fly':
-            const flyZoom = view.getZoom();
             view.animate({
                 center: location,
                 duration: duration
