@@ -84,7 +84,7 @@ describe('GetInfoPlugin', () => {
             expect(result[0].layerId).toEqual(123);
             expect(result[0].layerName).toEqual(otherLayer.getName());
             expect(result[0].type).toEqual('wfslayer');
-            // expect(typeof result[0].markup).toEqual('string');
+            expect(typeof result[0].markup).toEqual('string');
             expect(result[0].markup).toEqual('<table><tr><td>NO DATA</td></tr></table>');
         });
 
