@@ -335,20 +335,29 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      */
     _formatWFSFeaturesForInfoBox: function (data) {
         var me = this;
-        if (typeof data !== 'object' ||
-             typeof data.layerId === 'undefined' ||
-             typeof data.features === 'undefined') {
+        const { layerId, features } = data;
+        if (typeof layerId === 'undefined' || typeof features === 'undefined') {
             return;
         }
-        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId);
-        if (!data.features || data.features === 'empty' || layer === null || layer === undefined) {
+        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        if (features === 'empty' || !layer) {
             return;
         }
         const isMyPlace = layer.isLayerOfType('myplaces');
         const hiddenFields = ['__fid', '__centerX', '__centerY'];
         var fields = layer.getFields().slice();
         const locales = layer.getLocales().slice();
+        const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
 
+        if (!fields.length) {
+            return [{
+                markup: noDataResult,
+                layerId,
+                layerName: layer.getName(),
+                type: 'wfslayer',
+                isMyPlace
+            }];
+        }
         // use localized labels for properties when available instead of property names
         // keep property names for my places as it has custom formatter
         const localeMapping = fields.reduce((result, value, index) => {
@@ -363,44 +372,40 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         const result = data.features.map(featureValues => {
             let markup;
-            // feature is an array of values based on fields order
-            if (fields.length) {
-                const feature = fields.reduce((result, value, index) => {
-                    // gather two arrays (fields and featureValues) to a single object
-                    result[value] = featureValues[index];
+            // featureValues is an array of values based on fields order
+            const feature = fields.reduce((result, value, index) => {
+                // gather two arrays (fields and featureValues) to a single object
+                result[value] = featureValues[index];
+                return result;
+            }, {});
+            const feat = fields
+                // skip hidden fields for ui presentation
+                .filter(prop => !hiddenFields.includes(prop))
+                // construct object for UI having only selected fields
+                .reduce((result, prop) => {
+                    const uiLabel = localeMapping[prop] || prop;
+                    const value = feature[prop];
+                    if (typeof value !== 'undefined') {
+                        result[uiLabel] = value;
+                    }
                     return result;
                 }, {});
-                const feat = fields
-                    // skip hidden fields for ui presentation
-                    .filter(prop => !hiddenFields.includes(prop))
-                    // construct object for UI having only selected fields
-                    .reduce((result, prop) => {
-                        const uiLabel = localeMapping[prop] || prop;
-                        const value = feature[prop];
-                        if (typeof value !== 'undefined') {
-                            result[uiLabel] = value;
-                        }
-                        return result;
-                    }, {});
 
-                if (isMyPlace) {
-                    markup = me.formatters.myplace(feature);
-                } else {
-                    if (Object.keys(feat).length > 0) {
-                        markup = me._json2html(feat);
-                    } else {
-                        markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
-                    }
-                }
+            if (isMyPlace) {
+                markup = me.formatters.myplace(feature);
             } else {
-                markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
+                if (Object.keys(feat).length > 0) {
+                    markup = me._json2html(feat);
+                } else {
+                    markup = noDataResult;
+                }
             }
             return {
-                markup: markup,
-                layerId: data.layerId,
+                markup,
+                layerId,
                 layerName: layer.getName(),
                 type: 'wfslayer',
-                isMyPlace: isMyPlace
+                isMyPlace
             };
         });
 
