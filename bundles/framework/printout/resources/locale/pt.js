@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Pré-visualização",
-                "tooltip": "Clique na pré-visualização menor para abrir uma maior",
                 "pending": "Pré-visualização vai ser atualizada em breve",
                 "notes": {
                     "extent": "Pré-visualização pode ser usada para ter noção do conteúdo da carta na impressão"

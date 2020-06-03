@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Előnézet",
-                "tooltip": "Kattintson a kis előnézetre egy nagyobb méretű előnézethez.",
                 "pending": "Az előnézet hamarosan frissülni fog.",
                 "notes": {
                     "extent": "Az előnézetet a nyomtatási méretének beállításához használhatjuk."

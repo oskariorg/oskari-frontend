@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Predogled",
-                "tooltip": "Velikost predogleda lahko povečaš s klikom nanj.",
                 "pending": "Predogled bo kmalu osvežen",
                 "notes": {
                     "extent": "Velikost izrisa za tiskanje lahko preveriš v oknu za predogled."
