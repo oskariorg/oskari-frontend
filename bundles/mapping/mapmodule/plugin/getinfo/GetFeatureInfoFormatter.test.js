@@ -72,7 +72,7 @@ describe('GetInfoPlugin', () => {
             const html = result[0].markup.outerHTML();
             expect(html).toEqual(`<div class="myplaces_place"><h3 class="myplaces_header">TESTING</h3><br></div>`);
         });
-/*
+
         test('wfslayer without values', () => {
             // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
@@ -87,7 +87,7 @@ describe('GetInfoPlugin', () => {
             // expect(typeof result[0].markup).toEqual('string');
             expect(result[0].markup).toEqual('<table><tr><td>NO DATA</td></tr></table>');
         });
-*/
+
         test('wfslayer with values', () => {
             // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({

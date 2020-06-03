@@ -334,52 +334,59 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @method _formatWFSFeaturesForInfoBox
      */
     _formatWFSFeaturesForInfoBox: function (data) {
-        var me = this,
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
-            isMyPlace = layer.isLayerOfType('myplaces'),
-            fields = layer.getFields().slice(),
-            hiddenFields = ['__fid', '__centerX', '__centerY'],
-            type = 'wfslayer',
-            result,
-            markup;
-
-        if (data.features === 'empty' || layer === null || layer === undefined) {
+        var me = this;
+        if (typeof data !== 'object' ||
+             typeof data.layerId === 'undefined' ||
+             typeof data.features === 'undefined') {
             return;
         }
-
-        if (!isMyPlace) {
-            // replace fields with locales
-            fields = _.chain(fields)
-                .zip(layer.getLocales().slice())
-                .map(function (pair) {
-                    // pair is an array [field, locale]
-                    if (_.contains(hiddenFields, _.first(pair))) {
-                        // just return the field name for now if it's hidden
-                        return _.first(pair);
-                    }
-                    // return the localized name or field if former is undefined
-                    return _.last(pair) || _.first(pair);
-                })
-                .value();
+        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId);
+        if (!data.features || data.features === 'empty' || layer === null || layer === undefined) {
+            return;
         }
+        const isMyPlace = layer.isLayerOfType('myplaces');
+        const hiddenFields = ['__fid', '__centerX', '__centerY'];
+        var fields = layer.getFields().slice();
+        const locales = layer.getLocales().slice();
 
-        result = data.features.map(feature => {
+        // use localized labels for properties when available instead of property names
+        // keep property names for my places as it has custom formatter
+        const localeMapping = fields.reduce((result, value, index) => {
+            if (isMyPlace) {
+                return result;
+            }
+            // return the localized name, fallback to actual property name if localization is missing
+            const label = locales[index] || value;
+            result[value] = label;
+            return result;
+        }, {});
+
+        const result = data.features.map(featureValues => {
+            let markup;
+            // feature is an array of values based on fields order
             if (fields.length) {
-                var feat = _.chain(fields)
-                    .zip(feature)
-                    .filter(function (pair) {
-                        return !_.contains(hiddenFields, _.first(pair));
-                    })
-                    .foldl(function (obj, pair) {
-                        obj[_.first(pair)] = _.last(pair);
-                        return obj;
-                    }, {})
-                    .value();
+                const feature = fields.reduce((result, value, index) => {
+                    // gather two arrays (fields and featureValues) to a single object
+                    result[value] = featureValues[index];
+                    return result;
+                }, {});
+                const feat = fields
+                    // skip hidden fields for ui presentation
+                    .filter(prop => !hiddenFields.includes(prop))
+                    // construct object for UI having only selected fields
+                    .reduce((result, prop) => {
+                        const uiLabel = localeMapping[prop] || prop;
+                        const value = feature[prop];
+                        if (typeof value !== 'undefined') {
+                            result[uiLabel] = value;
+                        }
+                        return result;
+                    }, {});
 
                 if (isMyPlace) {
-                    markup = me.formatters.myplace(feat);
+                    markup = me.formatters.myplace(feature);
                 } else {
-                    if (!jQuery.isEmptyObject(feat)) {
+                    if (Object.keys(feat).length > 0) {
                         markup = me._json2html(feat);
                     } else {
                         markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
@@ -392,7 +399,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 markup: markup,
                 layerId: data.layerId,
                 layerName: layer.getName(),
-                type: type,
+                type: 'wfslayer',
                 isMyPlace: isMyPlace
             };
         });
