@@ -1,7 +1,27 @@
 import './GetInfoPlugin';
 import './GetFeatureInfoFormatter';
+import { _ } from '../../../../../libraries/lodash/2.3.0/lodash';
+global._ = _;
 
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin');
+// simple mock
+const myPlacesLayer = {
+    isLayerOfType: (type) => type === 'myplaces',
+    getFields: () => ['name', 'desc'],
+    getLocales: () => ['Name', 'Description'],
+    getName: () => 'testing_myplaces'
+};
+const otherLayer = {
+    isLayerOfType: (type) => type === 'wfsplaces',
+    getFields: () => ['jee'],
+    getLocales: () => ['moi'],
+    getName: () => 'testing_wfs'
+};
+plugin._sandbox = {
+    findMapLayerFromSelectedMapLayers: (layerId) => `${layerId}`.startsWith('myplaces_') ? myPlacesLayer : otherLayer
+};
+plugin._loc.noAttributeData = 'NO DATA';
+
 const removeWhitespace = (content) => content.replace(/\s/g, '');
 
 describe('GetInfoPlugin', () => {
@@ -31,6 +51,43 @@ describe('GetInfoPlugin', () => {
                 const scriptTags = result.find('script');
                 expect(scriptTags.length).toEqual(0);
             });
+        });
+    });
+    describe('_formatWFSFeaturesForInfoBox', () => {
+        test('is function', () => {
+            expect(typeof plugin._formatWFSFeaturesForInfoBox).toEqual('function');
+        });
+        test('myplaces', () => {
+            // [{"isMyPlace": true, "layerId": "myplaces_test", "layerName": "testing_myplaces", "markup": {"0": <div class="myplaces_place"><h3 class="myplaces_header" /><br /></div>, "length": 1}, "type": "wfslayer"}]
+            const result = plugin._formatWFSFeaturesForInfoBox({
+                layerId: 'myplaces_test',
+                features: [{
+                    name: 'TESTING'
+                }]
+            });
+            expect(result.length).toEqual(1);
+            expect(result[0].isMyPlace).toEqual(true);
+            expect(result[0].layerId).toEqual('myplaces_test');
+            expect(result[0].layerName).toEqual(myPlacesLayer.getName());
+            expect(result[0].type).toEqual('wfslayer');
+            expect(result[0].markup instanceof jQuery).toEqual(true);
+            expect(result[0].markup.outerHTML()).toEqual(`<div class="myplaces_place"><h3 class="myplaces_header"></h3><br></div>`);
+        });
+
+        test('wfslayer', () => {
+            // [{"isMyPlace": false, "layerId": "afmyplaces_test", "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
+            const result = plugin._formatWFSFeaturesForInfoBox({
+                layerId: 123,
+                features: [{
+                    test: 'not referenced in fields'
+                }]
+            });
+            expect(result.length).toEqual(1);
+            expect(result[0].isMyPlace).toEqual(false);
+            expect(result[0].layerId).toEqual(123);
+            expect(result[0].layerName).toEqual(otherLayer.getName());
+            expect(result[0].type).toEqual('wfslayer');
+            expect(result[0].markup).toEqual('<table><tr><td>NO DATA</td></tr></table>');
         });
     });
 });
