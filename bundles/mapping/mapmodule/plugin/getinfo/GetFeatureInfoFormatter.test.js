@@ -7,14 +7,14 @@ const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin'
 // simple mock
 const myPlacesLayer = {
     isLayerOfType: (type) => type === 'myplaces',
-    getFields: () => ['name', 'desc'],
-    getLocales: () => ['Name', 'Description'],
+    getFields: () => ['__fid', 'name', 'desc'],
+    getLocales: () => ['ID', 'Name', 'Description'],
     getName: () => 'testing_myplaces'
 };
 const otherLayer = {
     isLayerOfType: (type) => type === 'wfsplaces',
-    getFields: () => ['test'],
-    getLocales: () => ['Label for test'],
+    getFields: () => ['__fid', 'test'],
+    getLocales: () => ['ID', 'Label for test'],
     getName: () => 'testing_wfs'
 };
 plugin._sandbox = {
@@ -61,7 +61,7 @@ describe('GetInfoPlugin', () => {
             // [{"isMyPlace": true, "layerId": "myplaces_test", "layerName": "testing_myplaces", "markup": {"0": <div class="myplaces_place"><h3 class="myplaces_header" /><br /></div>, "length": 1}, "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 'myplaces_test',
-                features: [['TESTING']]
+                features: [[234, 'TESTING']]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(true);
@@ -92,7 +92,7 @@ describe('GetInfoPlugin', () => {
             // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 123,
-                features: [['TESTING']]
+                features: [[234, 'TESTING']]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(false);
