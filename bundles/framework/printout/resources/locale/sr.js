@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Prikaz",
-                "tooltip": "Klik na mali prikaz da otvorite veliki prikaz",
                 "pending": "Prikaz se ažurira",
                 "notes": {
                     "extent": "Prikaz se koristiti za pregled područja za štampu"
