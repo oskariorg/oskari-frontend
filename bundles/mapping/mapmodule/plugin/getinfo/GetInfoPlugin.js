@@ -1,3 +1,4 @@
+import '../BasicMapModulePlugin';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
