@@ -1,7 +1,5 @@
 import './GetInfoPlugin';
 import './GetFeatureInfoFormatter';
-import { _ } from '../../../../../libraries/lodash/2.3.0/lodash';
-global._ = _;
 
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin');
 // simple mock
@@ -58,7 +56,7 @@ describe('GetInfoPlugin', () => {
             expect(typeof plugin._formatWFSFeaturesForInfoBox).toEqual('function');
         });
         test('myplaces', () => {
-            // [{"isMyPlace": true, "layerId": "myplaces_test", "layerName": "testing_myplaces", "markup": {"0": <div class="myplaces_place"><h3 class="myplaces_header" /><br /></div>, "length": 1}, "type": "wfslayer"}]
+            // [{"isMyPlace": true, "layerId": "myplaces_test", "layerName": "testing_myplaces", "markup": {"0": <div class="myplaces_place"><h3 class="myplaces_header">TESTING</h3><br></div>, "length": 1}, "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 'myplaces_test',
                 features: [[234, 'TESTING']]
@@ -89,7 +87,7 @@ describe('GetInfoPlugin', () => {
         });
 
         test('wfslayer with values', () => {
-            // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
+            // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 123,
                 features: [[234, 'TESTING']]
