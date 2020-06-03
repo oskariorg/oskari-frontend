@@ -117,7 +117,10 @@ const getStyleForGeometry = (geometry, styleTypes) => {
     }
 
     let style = null;
-    const geometries = geometry.getGeometries();
+    let geometries = [];
+    if (typeof geometry.getGeometries === 'function') {
+        geometries = geometry.getGeometries() || [];
+    }
     switch (geometry.getType()) {
     case 'LineString':
     case 'MultiLineString':
@@ -129,7 +132,7 @@ const getStyleForGeometry = (geometry, styleTypes) => {
     case 'MultiPoint':
         style = styleTypes.dot || styleTypes; break;
     case 'GeometryCollection':
-        if (geometries && geometries.length > 0) {
+        if (geometries.length > 0) {
             log.debug('Received GeometryCollection. Using first feature to determine feature style.');
             style = getStyleForGeometry(geometries[0], styleTypes);
         } else {
