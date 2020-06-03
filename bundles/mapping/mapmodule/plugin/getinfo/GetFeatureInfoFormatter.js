@@ -344,12 +344,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return;
         }
         const isMyPlace = layer.isLayerOfType('myplaces');
-        const hiddenFields = ['__fid', '__centerX', '__centerY'];
         var fields = layer.getFields().slice();
-        const locales = layer.getLocales().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
 
         if (!fields.length) {
+            // layer doesn't have fields, "return no data"
             return [{
                 markup: noDataResult,
                 layerId,
@@ -358,6 +357,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 isMyPlace
             }];
         }
+
+        const locales = layer.getLocales().slice();
+        const hiddenFields = ['__fid', '__centerX', '__centerY'];
         // use localized labels for properties when available instead of property names
         // keep property names for my places as it has custom formatter
         const localeMapping = fields.reduce((result, value, index) => {
@@ -373,18 +375,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         const result = data.features.map(featureValues => {
             let markup;
             // featureValues is an array of values based on fields order
-            const feature = fields.reduce((result, value, index) => {
-                // gather two arrays (fields and featureValues) to a single object
-                result[value] = featureValues[index];
-                return result;
-            }, {});
-            const feat = fields
-                // skip hidden fields for ui presentation
-                .filter(prop => !hiddenFields.includes(prop))
-                // construct object for UI having only selected fields
-                .reduce((result, prop) => {
+            const feature = fields
+                // .filter(prop => !hiddenFields.includes(prop))
+                .reduce((result, prop, index) => {
+                    if (hiddenFields.includes(prop)) {
+                        // skip hidden fields for ui presentation but dont filter so the index is not mixed up(?)
+                        return result;
+                    }
+                    // construct object for UI having only selected fields with localized labels
                     const uiLabel = localeMapping[prop] || prop;
-                    const value = feature[prop];
+                    const value = featureValues[index];
                     if (typeof value !== 'undefined') {
                         result[uiLabel] = value;
                     }
@@ -393,12 +393,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
             if (isMyPlace) {
                 markup = me.formatters.myplace(feature);
+            } else if (Object.keys(feature).length > 0) {
+                markup = me._json2html(feature);
             } else {
-                if (Object.keys(feat).length > 0) {
-                    markup = me._json2html(feat);
-                } else {
-                    markup = noDataResult;
-                }
+                markup = noDataResult;
             }
             return {
                 markup,
