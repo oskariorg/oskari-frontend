@@ -164,33 +164,6 @@ Oskari.clazz.define(
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/AddMarkerRequestHandler.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/RemoveMarkersRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/RemoveMarkersRequestHandler.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/AfterAddMarkerEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/MarkerClickEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/AfterRemoveMarkersEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/MarkerVisibilityRequestHandler.js'
                 },
                 // FullScreen
                 {

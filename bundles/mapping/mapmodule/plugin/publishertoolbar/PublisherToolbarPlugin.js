@@ -383,7 +383,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     var buttonGroup = me.buttonGroups[group],
                         tool;
                     for (tool in buttonGroup.buttons) {
-                        if (_.indexOf(me._buttons, tool) !== -1) {
+                        if (!me._buttons.includes(tool)) {
                             var buttonConf = buttonGroup.buttons[tool];
                             buttonConf.toolbarid = toolbarId;
                             sandbox.request(this, addToolButtonBuilder(tool, buttonGroup.name, buttonGroup.buttons[tool]));
