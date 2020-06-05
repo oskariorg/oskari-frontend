@@ -37,8 +37,3 @@ export const PlayButton = ({ initial }) => {
 PlayButton.propTypes = {
     initial: PropTypes.bool.isRequired
 };
-
-// export const PlayPauseIcon = ({ initial, ...rest }) => <Icon component={() => <PlayPauseIconSvg initial={initial} />} {...rest} />;
-// PlayPauseIcon.propTypes = {
-//     initial: PropTypes.bool.isRequired
-// };
