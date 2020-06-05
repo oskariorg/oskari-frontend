@@ -33,6 +33,7 @@ const uiPlugin = {
     changeFont: (font) => { changeFontCalls.push(font); },
     getIndex: () => 20
 };
+afterAll(() => mapModule.stop());
 
 describe('MapModule', () => {
     mapModule.registerPlugin(dummyPlugin);
