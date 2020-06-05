@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Icon } from 'oskari-ui';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 // TODO: Fix this once style accessible smarter way
 const secondaryColor = '#006ce8';
@@ -36,8 +36,8 @@ export const UserStyleRow = ({ styleTitle, editUserStyleHandler, removeUserStyle
         <RowContainer>
             <TextColumn>{styleTitle}</TextColumn>
             <IconContainer>
-                <IconColumnEdit><Icon type="edit" onClick={editUserStyleHandler}></Icon></IconColumnEdit>
-                <IconColumn><Icon type="delete" onClick={removeUserStyleHandler}></Icon></IconColumn>
+                <IconColumnEdit><EditOutlined onClick={editUserStyleHandler} /></IconColumnEdit>
+                <IconColumn><DeleteOutlined onClick={removeUserStyleHandler} /></IconColumn>
             </IconContainer>
         </RowContainer>
     );
