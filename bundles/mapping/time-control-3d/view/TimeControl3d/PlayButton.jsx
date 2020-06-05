@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Icon } from 'oskari-ui';
 
 const PLAYPATH = 'M11,8 L18,11.74 18,20.28 11,24 11,8 M18,11.74 L26,16 26,16 18,20.28 18,11.74';
 const PAUSEPATH = 'M9,8 L14,8 14,24 9,24 9,8 M19,8 L24,8 24,24 19,24 19,8';

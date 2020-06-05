@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledIcon, StyledInput } from './styled';
+import { StyledInput } from './styled';
 
-export const Input = ({ value, changeHandler, iconType }) => {
+export const Input = ({ value, changeHandler, children }) => {
     const onChange = event => {
         const val = event.target.value;
         changeHandler(val);
@@ -10,7 +10,7 @@ export const Input = ({ value, changeHandler, iconType }) => {
 
     return (
         <Fragment>
-            <StyledIcon type={iconType}/>
+            { children }
             <StyledInput value={value} onChange={onChange} />
         </Fragment>
     );
@@ -19,5 +19,6 @@ export const Input = ({ value, changeHandler, iconType }) => {
 Input.propTypes = {
     value: PropTypes.string.isRequired,
     changeHandler: PropTypes.func.isRequired,
-    iconType: PropTypes.string.isRequired
+    // Element like <CalendarOutlined />
+    children: PropTypes.any
 };

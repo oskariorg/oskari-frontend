@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { Row, Col, ColFixed, StyledButton, StyledDateSlider } from './styled';
+import { Row, Col, ColFixed, StyledButton, StyledDateSlider, CalendarIcon } from './styled';
 import { Input } from './Input';
 import moment from 'moment';
 
@@ -44,7 +44,7 @@ export const DateControl = props => {
     return (
         <Row>
             <Col>
-                <Input iconType={'calendar'} value={dateValue} changeHandler={changeHandler}/>
+                <Input value={dateValue} changeHandler={changeHandler}><CalendarIcon /></Input>
             </Col>
             {!isMobile &&
                 <ColFixed>
