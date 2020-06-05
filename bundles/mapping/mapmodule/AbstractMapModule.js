@@ -1,5 +1,4 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
-import { cloneDeep } from 'lodash';
 
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
@@ -2096,7 +2095,9 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
-            const clonedStyle = cloneDeep(style || {});
+            const clonedStyle = {
+                ...style
+            };
             if (!this._options) {
                 this._options = {};
             }
