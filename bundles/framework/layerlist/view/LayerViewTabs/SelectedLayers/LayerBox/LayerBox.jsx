@@ -5,8 +5,9 @@ import { Footer } from './Footer/';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon, Message, Tooltip } from 'oskari-ui';
+import { Message, Tooltip } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -75,7 +76,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                                 {publishable &&
                                                 <Fragment>
                                                     <br/>
-                                                    <Icon type="check" style={{ color: '#01ca79' }} />
+                                                    <CheckOutlined style={{ color: '#01ca79' }} />
                                                     <Publishable>
                                                         <Message messageKey={'layer.publishable'} />
                                                     </Publishable>
@@ -85,8 +86,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                         </Row>
                                     </Col>
                                     <ColAutoRight>
-                                        <Icon
-                                            type="close"
+                                        <CloseOutlined
                                             onClick={handleRemoveLayer}
                                             style={{ fontSize: '12px', marginRight: '4px' }}
                                         />
