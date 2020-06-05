@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Slider, Icon } from 'oskari-ui';
+import { Message, Slider } from 'oskari-ui';
 import { Numeric } from '../Numeric';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { getZoomLevelHelper } from '../../../../../mapping/mapmodule/util/scale';
+import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 const VerticalComponent = styled('div')`
     display: flex;
@@ -34,14 +35,18 @@ const ScaleInput = styled(Numeric)`
     margin: 10px 0;
 `;
 
-const StyledIcon = styled(Icon)`
+const PlusIcon = styled(PlusCircleOutlined)`
+text-align: left;
+padding-left: 16%;
+`;
+const MinusIcon = styled(MinusCircleOutlined)`
 text-align: left;
 padding-left: 16%;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
     const locNoLimit = getMessage('fieldNoRestriction');
-    let { minscale, maxscale } = normalizeScales(layer);
+    const { minscale, maxscale } = normalizeScales(layer);
     const zoomLevelHelper = getZoomLevelHelper(scales);
     const mapScales = scales.slice(0);
     const maxZoomUnrestrictedValue = mapScales.length;
@@ -75,7 +80,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                 allowNegative={false}
                 allowZero={false}
                 onChange={value => controller.setMinAndMaxScale([minscale, value])} />
-            <StyledIcon type='plus-circle'/>
+            <PlusIcon />
             <SliderContainer>
                 <Slider
                     vertical
@@ -89,7 +94,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                     value={ [layerMinZoom, layerMaxZoom] }
                     onChange={onValueChange} />
             </SliderContainer>
-            <StyledIcon type='minus-circle'/>
+            <MinusIcon />
             <ScaleInput
                 prefix="1:"
                 placeholder={locNoLimit}
