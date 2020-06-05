@@ -1,5 +1,4 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
-import { cloneDeep, sortBy } from 'lodash';
 
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
@@ -1290,14 +1289,17 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
          */
         _getSortedPlugins: function () {
-            return sortBy(this._pluginInstances, function (plugin) {
+            const plugins = Object.values(this._pluginInstances);
+            const getIndex = (plugin) => {
                 if (typeof plugin.getIndex === 'function') {
                     return plugin.getIndex();
                 }
                 // index not defined, start after ones that have indexes
                 // This is just for the UI order, functionality shouldn't assume order
                 return 99999999999;
-            });
+            };
+            plugins.sort((a, b) => getIndex(a) - getIndex(b));
+            return plugins;
         },
 
         _adjustMobileMapSize: function () {
@@ -2093,7 +2095,9 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
-            const clonedStyle = cloneDeep(style || {});
+            const clonedStyle = {
+                ...style
+            };
             if (!this._options) {
                 this._options = {};
             }

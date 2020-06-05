@@ -17,6 +17,7 @@ class LocalizationPlugin {
         this.prevTimestamps = new Map();
         this.appPath = appName ? appName + '/' : '';
     }
+
     apply (compiler) {
         compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
             const localeFiles = Array.from(compilation.fileDependencies)
@@ -68,7 +69,7 @@ class LocalizationPlugin {
                 });
 
             const englishLoc = langToLoc.get('en') || new Map();
-            for (let entry of langToLoc.entries()) {
+            for (const entry of langToLoc.entries()) {
                 const lang = entry[0];
                 const langLoc = entry[1];
                 const langOverride = langToOverride.get(lang) || new Map();
@@ -86,7 +87,7 @@ class LocalizationPlugin {
                         return mergedOverride;
                     });
 
-                let fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
+                const fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
                 compilation.assets[`${this.appPath}oskari_lang_${lang}.js`] = {
                     source () {
                         return fileContent;

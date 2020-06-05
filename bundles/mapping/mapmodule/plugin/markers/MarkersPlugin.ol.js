@@ -2,7 +2,6 @@ import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFeature from 'ol/Feature';
 import * as olGeom from 'ol/geom';
-import { cloneDeep } from 'lodash';
 
 import '../../request/AddMarkerRequest';
 import '../../request/AddMarkerRequestHandler';
@@ -583,7 +582,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             var key;
             if (!visible && markerId) { // Check hiding for wanted marker
                 if (this._markers[markerId]) {
-                    this._unVisibleMarkers[markerId] = cloneDeep(this._markers[markerId]);
+                    this._unVisibleMarkers[markerId] = { ...this._markers[markerId] };
                     // remove if found
                     // event is suppressed as this is "modify"
                     this.removeMarkers(true, markerId, true);
@@ -591,7 +590,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             } else if (!visible) { // Check hiding for all markers
                 for (key in this._markers) {
-                    this._unVisibleMarkers[key] = cloneDeep(this._markers[key]);
+                    this._unVisibleMarkers[key] = { ...this._markers[key] };
                     // remove if found
                     // event is suppressed as this is "modify"
                     this.removeMarkers(true, key, true);
@@ -599,7 +598,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             } else if (markerId) { // Check showing for wanted marker
                 if (this._unVisibleMarkers[markerId]) {
-                    this._markers[markerId] = cloneDeep(this._unVisibleMarkers[markerId]);
+                    this._markers[markerId] = { ...this._unVisibleMarkers[markerId] };
                     // remove if found
                     // event is suppressed as this is "modify"
                     this.addMapMarker(this._markers[markerId], markerId, true);
@@ -607,7 +606,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 }
             } else { // Check showing for all markers
                 for (key in this._unVisibleMarkers) {
-                    this._markers[key] = cloneDeep(this._unVisibleMarkers[key]);
+                    this._markers[key] = { ...this._unVisibleMarkers[key] };
                     // remove if found
                     // event is suppressed as this is "modify"
                     this.addMapMarker(this._markers[key], key, true);

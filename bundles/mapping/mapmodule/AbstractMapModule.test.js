@@ -1,5 +1,5 @@
+import { afterAll } from '@jest/globals';
 import '../../../src/global';
-// import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 import './AbstractMapModule';
 import './service/map.state';
 import jQuery from 'jquery';
@@ -13,15 +13,16 @@ const dummyPlugin = {
     register: () => {},
     setMapModule: () => {}
 };
-let changeStyleCalls = [];
-let changeFontCalls = [];
+const changeStyleCalls = [];
+const changeFontCalls = [];
 const nonUIPlugin = {
     getName: () => 'Non UI plugin',
     register: () => {},
     setMapModule: () => {},
     hasUI: () => false,
     changeToolStyle: (style) => { changeStyleCalls.push(style); },
-    changeFont: (font) => { changeFontCalls.push(font); }
+    changeFont: (font) => { changeFontCalls.push(font); },
+    getIndex: () => 10
 };
 const uiPlugin = {
     getName: () => 'UI plugin',
@@ -29,8 +30,10 @@ const uiPlugin = {
     setMapModule: () => {},
     hasUI: () => true,
     changeToolStyle: (style) => { changeStyleCalls.push(style); },
-    changeFont: (font) => { changeFontCalls.push(font); }
+    changeFont: (font) => { changeFontCalls.push(font); },
+    getIndex: () => 20
 };
+afterAll(() => mapModule.stop());
 
 describe('MapModule', () => {
     mapModule.registerPlugin(dummyPlugin);
@@ -53,6 +56,17 @@ describe('MapModule', () => {
             expect(changeStyleCalls[1]).toEqual('3d-light');
             expect(changeFontCalls.length).toEqual(2);
             expect(changeFontCalls[1]).toBeUndefined();
+        });
+    });
+    describe('_getSortedPlugins', () => {
+        const sorted = mapModule._getSortedPlugins();
+        test('has 3 plugins', () => {
+            expect(sorted.length).toEqual(3);
+        });
+        test('has correct order', () => {
+            expect(sorted[0]).toEqual(nonUIPlugin);
+            expect(sorted[1]).toEqual(uiPlugin);
+            expect(sorted[2]).toEqual(dummyPlugin);
         });
     });
 });
