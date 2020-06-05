@@ -30,6 +30,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@ant-design/icons": "4.2.1",
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
