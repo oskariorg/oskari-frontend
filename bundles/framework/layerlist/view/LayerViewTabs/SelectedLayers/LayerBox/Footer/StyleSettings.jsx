@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Icon, Select, Option, InputGroup, Button, Message } from 'oskari-ui';
+import { Select, Option, InputGroup, Button, Message } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { THEME_COLOR } from '..';
+import { EditOutlined } from '@ant-design/icons';
 
 const StyledSelect = styled(Select)`
     width: 120px;
@@ -51,7 +52,7 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
                 { styleTool &&
                     <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
                         onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
-                        <Icon type="edit" style={{ color: THEME_COLOR, fontSize: '16px' }}/>
+                        <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
                     </Button>
                 }
             </InputGroup>
