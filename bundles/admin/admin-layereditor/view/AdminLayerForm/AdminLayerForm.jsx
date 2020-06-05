@@ -21,13 +21,17 @@ const getValidationMessage = (validationErrorMessages = []) => {
 };
 
 const SaveButton = ({ isNew, onSave, validationErrors = [] }) => {
-    const btn = (<StyledButton type='primary' onClick={() => onSave()} disabled={validationErrors.length}>
-        <Message messageKey={isNew ? 'add' : 'save'}/>
-    </StyledButton>);
-    if (!validationErrors.length) {
-        return btn;
+    const label = (<Message messageKey={isNew ? 'add' : 'save'}/>);
+    if (validationErrors.length > 0) {
+        return (
+            <Tooltip title={getValidationMessage(validationErrors)}>
+                <StyledButton type='dashed'>{label}</StyledButton>
+            </Tooltip>
+        );
     }
-    return (<Tooltip title={getValidationMessage(validationErrors)}>{btn}</Tooltip>);
+    return (<StyledButton type='primary' onClick={() => onSave()}>
+        {label}
+    </StyledButton>);
 };
 
 SaveButton.propTypes = {
