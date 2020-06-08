@@ -9,6 +9,7 @@ module.exports = {
         '^antd(.*?)style/index.js$': '<rootDir>/tests/jest/styleMock.js',
         '\\.(css|less)$': '<rootDir>/tests/jest/styleMock.js'
     },
+    timers: 'fake',
     verbose: true,
     transformIgnorePatterns: [
         'node_modules/(?!(ol|jsts)/)'
