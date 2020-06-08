@@ -1,18 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tooltip } from 'oskari-ui';
+import { Tooltip } from 'oskari-ui';
+import { WarningTwoTone } from '@ant-design/icons';
 
-const type = 'warning';
-const theme = 'twoTone';
 const color = '#FFBF00';
 
 export const WarningIcon = (props) => {
     return (
         props.tooltip
             ? <Tooltip title={props.tooltip}>
-                <Icon type={type} theme={theme} twoToneColor={color} {...props}/>
+                <WarningTwoTone twoToneColor={color} {...props}/>
             </Tooltip>
-            : <Icon type={type} theme={theme} twoToneColor={color} {...props}/>
+            : <WarningTwoTone twoToneColor={color} {...props}/>
     );
 };
 
