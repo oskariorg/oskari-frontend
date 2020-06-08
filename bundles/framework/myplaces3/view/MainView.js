@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                             this.drawingData = event.getData();
                         } else {
                             // update measurement result
-                            this._setMeasurementResult(event.getData());
+                            this._updateMeasurementResult(event.getData());
                         }
                     } else if (this.instance.isFinishedDrawing()) {
                         this._handleFinishedDrawingEvent(event);
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             this.drawingData = event.getData();
             this.showPlaceForm(location);
         },
-        _setMeasurementResult: function (drawingData) {
+        _updateMeasurementResult: function (drawingData) {
             if (this.form && drawingData) {
                 if (drawingData.shape === 'LineString') {
                     this.form.setMeasurementResult(drawingData.length, 'line');
@@ -164,52 +164,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         showPlaceForm: function (location, place) {
             var me = this,
                 layerId,
-                sandbox = this.instance.sandbox,
-                mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule'),
-                drawMode,
-                measurement;
+                sandbox = this.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             this.form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.instance,
                 this.options
             );
-            var categories = this.instance.getService().getAllCategories();
+            const categoryHandler = this.instance.getCategoryHandler();
             if (place) {
-                var param = {
-                    place: {
-                        id: place.getId(),
-                        name: place.getName(),
-                        link: place.getLink(),
-                        imageLink: place.getImageLink(),
-                        desc: place.getDescription(),
-                        attentionText: place.getAttentionText(),
-                        category: place.getCategoryId()
-                    }
-                };
-                this.form.setValues(param);
-                // set measurement result from place geometry
-                drawMode = this._getDrawModeFromGeometry(place.getGeometry());
-                measurement = mapModule.getMeasurementResult(place.getGeometry());
-                this.form.setMeasurementResult(measurement, drawMode);
-                this.tempGeom = place.getGeometry(); // store if geometry is not edited
-                layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryId());
+                this.tempGeom = place.getGeometry(); // store if geometry is not edited // TODO is this really needed
+                layerId = categoryHandler.getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
             // set measurement result from drawing
             } else {
-                this._setMeasurementResult(this.drawingData);
+                this._updateMeasurementResult(this.drawingData);
             }
-
-            var formEl = me.form.getForm(categories),
-                content = [{
-                    html: formEl,
-                    actions: {}
-                }];
-
-            if (layerId) {
-                content[0].layerId = layerId;
-            }
-
+            var categories = categoryHandler.getAllCategories();
+            var formEl = me.form.getForm(categories, place);
             var actions = [
                 {
                     name: me.loc('placeform.category.newLayer'),
@@ -235,9 +207,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     }
                 }
             ];
-
-            // cancel button
-            content[0].actions = actions;
+            const content = [{
+                html: formEl,
+                actions,
+                layerId
+            }];
 
             var options = {
                 hidePrevious: true
@@ -249,29 +223,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
 
             // Here need add bindings
             me.form.bindEvents();
-        },
-        /**
-         * @method _getDrawModeFromGeometry
-         * Returns a matching draw mode string-key for the geometry
-         * @param {Object} GeoJSON geometry from my place model
-         * @return {String} matching draw mode string-key for the geometry
-         * @private
-         */
-        // TODO move to more common place
-        _getDrawModeFromGeometry: function (geometry) {
-            if (geometry === null) {
-                return null;
-            }
-            var ret = null,
-                type = geometry.type;
-            if (type === 'MultiPoint' || type === 'Point') {
-                ret = 'point';
-            } else if (type === 'MultiLineString' || type === 'LineString') {
-                ret = 'line';
-            } else if (type === 'MultiPolygon' || type === 'Polygon') {
-                ret = 'area';
-            }
-            return ret;
         },
         /**
          * Destroys the opened form popup(s) from the screen.
@@ -286,41 +237,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this.getName(), request);
             }
-        },
-        /**
-         * @method _validateForm
-         * Validates form data, returns an object array if any errors.
-         * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
-         * @private
-         * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces3.view.PlaceForm.getValues()
-         * @return {Object[]}
-         */
-        _validateForm: function (values) {
-            var me = this,
-                errors = [],
-                categoryHandler = this.instance.getCategoryHandler();
-            if (categoryHandler && categoryHandler.validateCategoryFormValues) {
-                errors = categoryHandler.validateCategoryFormValues(values.category);
-            }
-
-            if (!values.place.name) {
-                errors.push({
-                    name: 'name',
-                    error: me.loc('validation.placeName')
-                });
-            } else if (Oskari.util.sanitize(values.place.name) !== values.place.name) {
-                errors.push({
-                    name: 'name',
-                    error: me.loc('validation.placeNameIllegal')
-                });
-            }
-            if (Oskari.util.sanitize(values.place.desc) !== values.place.desc) {
-                errors.push({
-                    name: 'desc',
-                    error: me.loc('validation.descIllegal')
-                });
-            }
-            return errors;
         },
         _showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -348,14 +264,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             if (!this.form) {
                 return;
             }
-            var me = this,
-                formValues = this.form.getValues();
+            var me = this;
+            const { place, category, errors } = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
             jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', true);
 
-            // validation
-            var errors = this._validateForm(formValues);
             if (errors.length !== 0) {
                 this._showValidationErrorMessage(errors);
                 // Enable buttons again
@@ -364,104 +278,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             }
             // validation passed -> go save stuff
             // new category given -> save it first
-            if (formValues.category) {
-                var category = this.instance.getCategoryHandler().getCategoryFromFormValues(formValues.category);
-                var serviceCallback = function (blnSuccess, model, blnNew) {
-                    if (blnSuccess) {
-                        // add category as a maplayer to oskari maplayer service
-                        // NOTE! added as a map layer to maplayer service through categoryhandler getting an event
-                        // me.instance.addLayerToService(model);
+            if (category) {
+                var serviceCallback = categoryId => {
+                    if (categoryId) {
                         // save the actual place
-                        formValues.place.category = model.getId();
-                        me.__savePlace(formValues.place);
+                        place.setCategoryId(categoryId);
+                        me._savePlace(place);
                     } else {
-                        // blnNew should always be true since we are adding a category
-                        if (blnNew) {
-                            me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.addCategory'));
-                        } else {
-                            me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.editCategory'));
-                        }
+                        me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.addCategory'));
                     }
                 };
-                this.instance.getService().saveCategory(category, serviceCallback);
+                this.instance.getCategoryHandler().saveCategory(category, serviceCallback);
             } else {
                 // category selected from list -> save place
-                this.__savePlace(formValues.place);
+                this._savePlace(place);
             }
         },
         /**
-         * @method __savePlace
+         * @method _savePlace
          * Handles save place after possible category save
          * @private
-         * @param {Object} values place properties
+         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
-        __savePlace: function (values) {
-            var me = this,
-                drawing = this.drawing,
-                isMovePlace = false,
-                oldPlace;
-            // form not open, nothing to do
-            if (!values) {
-                // should not happen
-                me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
-                return;
-            }
-            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace'),
-                oldCategory = -1;
-            if (values.id) {
-                oldPlace = this.instance.getService().findMyPlace(values.id);
-                oldCategory = oldPlace.getCategoryId();
-            }
-            place.setId(values.id);
-            place.setName(Oskari.util.sanitize(values.name));
-            place.setLink(values.link);
-            place.setImageLink(values.imageLink);
-            place.setDescription(Oskari.util.sanitize(values.desc));
-            place.setAttentionText(Oskari.util.sanitize(values.attention_text));
-            place.setCategoryId(values.category);
+        _savePlace: function (place) {
+            const drawing = this.drawing;
+            const isMovePlace = false;
             if (drawing) {
                 place.setDrawToolsMultiGeometry(drawing);
             } else if (this.tempGeom) {
-                place.setGeometry(this.tempGeom); // if not edited
+                place.setGeometry(this.tempGeom); // if not edited // TODO is this really needed
             }
-            if (values.category !== oldCategory) {
-                isMovePlace = true;
-            }
-
-            var sandbox = this.instance.sandbox;
-            var serviceCallback = function (blnSuccess, categoryId) {
+            var serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
                 if (blnSuccess) {
-                    // add map layer to map (we could check if its already there but core will handle that)
-                    var layerId = me.instance.getCategoryHandler()._getMapLayerId(categoryId),
-                        requestBuilder = Oskari.requestBuilder('AddMapLayerRequest'),
-                        updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
-                        updateRequest,
-                        request = requestBuilder(layerId, true);
-                    sandbox.request(me, request);
-                    // refresh map layer on map -> send update request
-                    updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);
+                    const handler = this.instance.getCategoryHandler();
+                    handler.refreshLayerIfSelected(categoryId);
+                    handler.addLayerToMap(categoryId);
                     // refresh old layer as well if category changed
-                    if (oldCategory !== categoryId) {
-                        layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
-                        request = requestBuilder(layerId, true);
-                        sandbox.request(me, request);
+                    if (oldCategoryId) {
+                        handler.refreshLayerIfSelected(oldCategoryId);
                     }
-                    // Update myplaces extra layers
-                    var eventBuilder = Oskari.eventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
-                    if (eventBuilder) {
-                        var event = eventBuilder(layerId, true);
-                        sandbox.notifyAll(event);
-                    }
-
-                    me.cleanupPopup();
+                    this.cleanupPopup();
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(me.loc('notification.placeAdded.title'), me.loc('notification.placeAdded.message'));
+                    dialog.show(this.loc('notification.placeAdded.title'), this.loc('notification.placeAdded.message'));
                     dialog.fadeout();
                     // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
                 } else {
-                    me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
+                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
                 }
             };
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);

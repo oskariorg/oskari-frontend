@@ -228,8 +228,14 @@ Oskari.clazz.define(
             }
 
             sandbox.register(this);
+
+            // back end communication
+            this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService', sandbox);
+            // register service so personal data can access it
+            this.sandbox.registerService(this.myPlacesService);
             // handles category related logic - syncs categories to my places map layers etc
             this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.CategoryHandler', this);
+            // start loads myplaces layers
             this.categoryHandler.start();
 
             // handles my places insert form etc
@@ -245,13 +251,6 @@ Oskari.clazz.define(
             if (this.tab.bindEvents) {
                 this.tab.bindEvents();
             }
-
-            // back end communication
-            this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService', sandbox);
-            // register service so personal data can access it
-            this.sandbox.registerService(this.myPlacesService);
-            // init loads the places/categories
-            this.myPlacesService.init();
 
             if (!sandbox.hasHandler('PersonalData.AddTabRequest')) {
                 return;
@@ -293,8 +292,7 @@ Oskari.clazz.define(
                     categoryHandler.showValidationErrorMessage(errors);
                     return;
                 }
-                var category = categoryHandler.getCategoryFromFormValues(values);
-                categoryHandler.saveCategory(category);
+                categoryHandler.saveCategory(values);
 
                 dialog.close();
                 me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
