@@ -1,5 +1,4 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
-import { cloneDeep, sortBy } from 'lodash';
 
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
@@ -363,6 +362,22 @@ Oskari.clazz.define(
                 return;
             }
 
+            sandbox = sandbox || this.getSandbox();
+            sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', null);
+            sandbox.requestHandler('MapMoveRequest', null);
+            sandbox.requestHandler('ShowProgressSpinnerRequest', null);
+            sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', null);
+            sandbox.requestHandler('StartUserLocationTrackingRequest', null);
+            sandbox.requestHandler('StopUserLocationTrackingRequest', null);
+            sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', null);
+            sandbox.requestHandler('activate.map.layer', null);
+            sandbox.requestHandler('AddMapLayerRequest', null);
+            sandbox.requestHandler('RemoveMapLayerRequest', null);
+            sandbox.requestHandler('RearrangeSelectedMapLayerRequest', null);
+            sandbox.requestHandler('ChangeMapLayerOpacityRequest', null);
+            sandbox.requestHandler('ChangeMapLayerStyleRequest', null);
+            sandbox.requestHandler('MapTourRequest', null);
+            sandbox.requestHandler('SetTimeRequest', null);
             this.stopPlugins();
             this.started = this._stopImpl();
         },
@@ -1274,14 +1289,17 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
          */
         _getSortedPlugins: function () {
-            return sortBy(this._pluginInstances, function (plugin) {
+            const plugins = Object.values(this._pluginInstances);
+            const getIndex = (plugin) => {
                 if (typeof plugin.getIndex === 'function') {
                     return plugin.getIndex();
                 }
                 // index not defined, start after ones that have indexes
                 // This is just for the UI order, functionality shouldn't assume order
                 return 99999999999;
-            });
+            };
+            plugins.sort((a, b) => getIndex(a) - getIndex(b));
+            return plugins;
         },
 
         _adjustMobileMapSize: function () {
@@ -2077,7 +2095,9 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
-            const clonedStyle = cloneDeep(style || {});
+            const clonedStyle = {
+                ...style
+            };
             if (!this._options) {
                 this._options = {};
             }

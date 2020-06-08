@@ -1,3 +1,4 @@
+import { afterAll } from '@jest/globals';
 // Oskari global
 import '../../../../../src/global';
 // VectorLayerPlugin stuff
@@ -8,13 +9,8 @@ import './vectorlayer';
 import '../../mapmodule.ol';
 import '../../resources/locale/en.js';
 
-import jQuery from 'jquery';
-import _ from 'lodash';
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
-
-global.jQuery = jQuery;
-global._ = _;
 
 // for mapmodule
 // defaults from mapfull
@@ -29,7 +25,7 @@ Object.keys(projections).forEach(code => {
 });
 //  -/for mapmodule
 
-const sandbox = Oskari.getSandbox();
+const sandbox = Oskari.getSandbox('VectorLayerPluginTest');
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.VectorLayerPlugin');
 const layerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService', sandbox);
 sandbox.registerService(layerService);
@@ -40,6 +36,10 @@ mapModule.requestHandlers = {};
 mapModule.registerPlugin(plugin);
 mapModule.start(sandbox);
 plugin.startPlugin(sandbox);
+
+afterAll(() => {
+    mapModule.stop();
+});
 
 // "mock" setFeatureStyle since we don't have canvas without DOM
 plugin.setFeatureStyle = () => {};

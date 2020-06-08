@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Preview",
-                "tooltip": "Click the preview image to open a larger image in another window.",
                 "pending": "The preview image will be updated shortly.",
                 "notes": {
                     "extent": "Check the map extent area in the preview image."

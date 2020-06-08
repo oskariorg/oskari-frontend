@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Eelvaade",
-                "tooltip": "Suurema eelvaate nägemiseks uues aknas klõpsa pisipildil.",
                 "pending": "Eelvaade värskendatakse",
                 "notes": {
                     "extent": "Kaardiulatust saab kontrollida eelvaate aknas."

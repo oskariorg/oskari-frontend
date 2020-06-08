@@ -179,20 +179,12 @@ Oskari.clazz.define(
          * @method _resetEveryInterval
          */
         _resetEveryInterval: function () {
-            var me = this,
-                sandbox = me.getSandbox();
+            const sb = this.getSandbox();
 
-            _.chain(this.intervals)
-                .keys()
-                .map(function (layerId) {
-                    return sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                })
-                .filter(function (layer) {
-                    return layer && layer.isRealtime();
-                })
-                .each(function (layer) {
-                    me._resetInterval(layer);
-                });
+            Object.keys(this.intervals)
+                .map(layerId => sb.findMapLayerFromSelectedMapLayers(layerId))
+                .filter(layer => layer && layer.isRealtime())
+                .forEach(layer => this._resetInterval(layer));
         },
 
         /**
@@ -203,10 +195,10 @@ Oskari.clazz.define(
          * @return {Number} rate in milliseconds
          */
         _getRefreshRate: function (rate) {
-            var minRate = this._config.minRefreshRate || this.minRefreshRate,
-                maxRate = this._config.maxRefreshRate || this.maxRefreshRate;
-
-            return _.min([_.max([(rate * 1000), minRate]), maxRate]);
+            const minRate = this._config.minRefreshRate || this.minRefreshRate;
+            const maxRate = this._config.maxRefreshRate || this.maxRefreshRate;
+            const requestedOrMinRate = Math.max((rate * 1000), minRate);
+            return Math.min(requestedOrMinRate, maxRate);
         },
 
         /**
@@ -217,9 +209,7 @@ Oskari.clazz.define(
          * @return {Boolean}
          */
         _isNotIgnored: function (layer) {
-            return !_.any(this._config.ignoredLayerTypes, function (type) {
-                return layer.isLayerOfType(type);
-            });
+            return !this._config.ignoredLayerTypes.some(type => layer.isLayerOfType(type));
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

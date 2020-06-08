@@ -73,7 +73,8 @@ export function getUserLocation (successCb, errorCB, options) {
                 // transform coordinates from browser projection to current
                 var lonlat = mapmodule.transformCoordinates({
                     lon: longitude,
-                    lat: latitude }, 'EPSG:4326');
+                    lat: latitude
+                }, 'EPSG:4326');
                 if (mapmodule.isValidLonLat(lonlat.lon, lonlat.lat)) {
                     notifyLonLat(successCb, lonlat, accuracy);
                 } else {
@@ -120,7 +121,8 @@ export function watchUserLocation (successCb, errorCB, options) {
                 // transform coordinates from browser projection to current
                 var pos = mapmodule.transformCoordinates({
                     lon: coords.longitude,
-                    lat: coords.latitude }, 'EPSG:4326');
+                    lat: coords.latitude
+                }, 'EPSG:4326');
                 if (!mapmodule.isValidLonLat(pos.lon, pos.lat)) {
                     notifyError(errorCB);
                     return;

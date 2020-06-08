@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Náhľad",
-                "tooltip": "Kliknite na náhľad, aby sa otvoril väčší obrázok v samostatnom okne.",
                 "pending": "Náhľad sa o chvíľu aktualizuje.",
                 "notes": {
                     "extent": "Skontrolujte oblasť mapového rozsahu v náhľade."

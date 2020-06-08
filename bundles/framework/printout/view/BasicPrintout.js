@@ -389,27 +389,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             panel.addClass('printpreview');
             panel.setTitle(me.loc.preview.label);
             var contentPanel = panel.getContainer();
-            var tooltipCont = me.template.help.clone();
-
-            tooltipCont.attr('title', me.loc.preview.tooltip);
-            panel.getHeader().append(tooltipCont);
-
             var previewContent = me.template.preview.clone();
-
             contentPanel.append(previewContent);
-
             /* progress */
             me.progressSpinner.insertTo(previewContent);
-
-            var previewImgDiv = previewContent.find('img');
-            previewImgDiv.on('click', function () {
-                me.showFullScaleMapPreview();
-            });
-            var previewSpan = previewContent.find('span');
-
             me.previewContent = previewContent;
-            me.previewImgDiv = previewImgDiv;
-            me.previewSpan = previewSpan;
+            me.previewImgDiv = previewContent.find('img');
+            me.previewSpan = previewContent.find('span');
 
             Object.keys(me.loc.preview.notes).forEach(function (locKey) {
                 var previewNotes = me.template.previewNotes.clone();
@@ -454,14 +440,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 });
                 me.previewImgDiv.attr('src', url);
             }, 100);
-        },
-
-        /**
-         * @public @method showFullScaleMapPreview
-         */
-        showFullScaleMapPreview: function () {
-            const url = this._getUrlForPreview();
-            this.openURLinWindow(url);
         },
 
         /**

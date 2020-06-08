@@ -4,10 +4,6 @@ import './AbstractMapModule';
 import './mapmodule.ol';
 import './resources/locale/en.js';
 import './service/map.state';
-import jQuery from 'jquery';
-
-const Oskari = window.Oskari;
-global.jQuery = jQuery;
 
 // defaults from mapfull
 const projections = {
@@ -19,8 +15,9 @@ Object.keys(projections).forEach(code => {
 });
 window.proj4 = proj4;
 
-// const mapModule = Oskari.clazz.create('Oskari.mapping.mapmodule.AbstractMapModule', 'Test');
 const mapModule = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', 'Test');
+// if the mapModule is started make sure to:
+// afterAll(() => mapModule.stop());
 
 describe('MapModule', () => {
     const res = mapModule.getResolutionArray();
