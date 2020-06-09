@@ -37,19 +37,22 @@ describe('<Filter/>', () => {
     );
 
     test('renders correct amount of options', () => {
-        expect.assertions(2);
-        const select = wrapper.find('.ant-select');
-        // expect(select.html()).toBe('to show html');
+        expect.assertions(3);
+
+        // expect(wrapper.html()).toBe('uncomment to show html');
+        const select = wrapper.find(Select);
+        expect(wrapper.find(Filter).exists()).toBe(true);
+
         expect(select.exists()).toBe(true);
         toggleOpen(wrapper);
-        expect(wrapper.find('.ant-select-item').length).toBe(2);
+        expect(wrapper.find(Option.__OskariTestSelector).length).toBe(2);
     });
 
     test('calls for update', () => {
         expect.assertions(1);
         toggleOpen(wrapper);
 
-        wrapper.find('.ant-select-item-option').first().simulate('click');
+        wrapper.find(Option.__OskariTestSelector).first().simulate('click');
         expect(mockFilterSelected).toHaveBeenCalled();
     });
 });
