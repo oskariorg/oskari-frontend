@@ -15,6 +15,7 @@ class ViewHandler extends StateHandler {
         this.layerlistService.on('Layerlist.Filter.Button.Add',
             ({ properties }) => this.addFilter(properties));
     }
+
     initFilters () {
         // Add all layers selection to first
         const all = {
