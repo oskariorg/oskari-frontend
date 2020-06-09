@@ -1,5 +1,4 @@
 import React from 'react';
-import { beforeEach, afterEach } from '@jest/globals';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import { Filter } from './Filter';
@@ -16,14 +15,6 @@ function toggleOpen (wrapper) {
         wrapper.update();
     });
 }
-
-beforeEach(() => {
-    jest.useFakeTimers();
-});
-
-afterEach(() => {
-    jest.useRealTimers();
-});
 
 describe('<Filter/>', () => {
     const instance = getBundleInstance();
