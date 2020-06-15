@@ -29,9 +29,7 @@ const SaveButton = ({ isNew, onSave, validationErrors = [] }) => {
             </Tooltip>
         );
     }
-    return (<StyledButton type='primary' onClick={() => onSave()}>
-        {label}
-    </StyledButton>);
+    return (<StyledButton type='primary' onClick={() => onSave()}>{label}</StyledButton>);
 };
 
 SaveButton.propTypes = {
@@ -100,7 +98,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     capabilities={capabilities} />
             </TabPane>
-            <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/> <MandatoryIcon /></Mandatory>}>
+            <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/>&nbsp;<MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
                     permissions={layer.role_permissions}

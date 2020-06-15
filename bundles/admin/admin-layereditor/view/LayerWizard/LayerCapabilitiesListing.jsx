@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Icon, Tooltip, Message, Confirm } from 'oskari-ui';
+import { List, ListItem, Tooltip, Message, Confirm } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
+import { CheckCircleTwoTone, QuestionCircleTwoTone, WarningTwoTone } from '@ant-design/icons';
 
 export const StyledListItem = styled(ListItem)`
 :hover {
@@ -130,15 +131,15 @@ const getIcon = (item) => {
     // <Tooltip title={message}>
     if (item.isExisting) {
         return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.existing" />}>
-            <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+            <CheckCircleTwoTone twoToneColor="#52c41a" />
         </Tooltip>);
     } else if (item.isProblematic) {
         return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.problematic" />}>
-            <Icon type="question-circle" theme="twoTone" twoToneColor="#ffde00" />
+            <QuestionCircleTwoTone twoToneColor="#ffde00" />
         </Tooltip>);
     } else if (item.isUnsupported) {
         return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.unsupported" />}>
-            <Icon type="warning" theme="twoTone" twoToneColor="#ab0000" />
+            <WarningTwoTone twoToneColor="#ab0000" />
         </Tooltip>);
     }
     return null;

@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Icon, Message } from 'oskari-ui';
+import { List, ListItem, Message } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
+import { PlusOutlined } from '@ant-design/icons';
 
 // TODO: Fix this once style accessible smarter way
 const secondaryColor = '#006ce8';
@@ -45,7 +46,7 @@ const StyledListItem = styled(ListItem)`
     border-color: #d9d9d9;
 `;
 
-const AddStyleIcon = styled(Icon)`
+const AddStyleIcon = styled(PlusOutlined)`
     margin-right: 10px;
 `;
 
@@ -59,7 +60,7 @@ const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
                 <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
-                    <AddStyleIcon type="plus"/>
+                    <AddStyleIcon />
                     <Message messageKey='add-style' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>

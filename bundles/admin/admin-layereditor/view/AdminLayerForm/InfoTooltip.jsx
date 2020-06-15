@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Tooltip, Message } from 'oskari-ui';
+import { Tooltip, Message } from 'oskari-ui';
 import styled from 'styled-components';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const InlineBlock = styled('div')`
     padding-left: 10px;
@@ -21,7 +22,7 @@ export const InfoTooltip = ({ message, messageKeys }) => {
     return (
         <Tooltip title={message}>
             <InlineBlock>
-                <Icon type="question-circle" />
+                <QuestionCircleOutlined />
             </InlineBlock>
         </Tooltip>
     );

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'oskari-ui';
+import { EyeFilled, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const defaultColor = '#979797';
 
@@ -96,11 +97,11 @@ RasterSvg.propTypes = {
 };
 
 export const EyeOpen = (props) => (
-    <Icon type="eye" theme="filled" style={{ fontSize: '18px', color: '#006ce8', marginRight: '5px', marginTop: '2px' }} {...props} />
+    <EyeFilled style={{ fontSize: '18px', color: '#006ce8', marginRight: '5px', marginTop: '2px' }} {...props} />
 );
 
 export const EyeShut = (props) => (
-    <Icon type="eye-invisible" style={{ fontSize: '18px', marginRight: '5px', marginTop: '2px' }} {...props} />
+    <EyeInvisibleOutlined style={{ fontSize: '18px', marginRight: '5px', marginTop: '2px' }} {...props} />
 );
 
 export const ThreeDIcon = ({ fill, ...rest }) => <Icon component={() => <ThreeDSvg fill={fill}/>} {...rest} />;

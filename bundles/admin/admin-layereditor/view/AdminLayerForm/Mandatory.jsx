@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon } from 'oskari-ui';
+import { StarTwoTone } from '@ant-design/icons';
 
 const MandatoryContext = React.createContext();
 
@@ -41,7 +41,7 @@ export const MandatoryIcon = () => (
                 // This was wrapped in mandatory -> Show users it's required
                 // red by default and when isValid=false
                 // green when isValid=true
-                return <Icon type="star" theme="twoTone" twoToneColor={isValid ? '#52c41a' : '#da5151'} />;
+                return <StarTwoTone twoToneColor={isValid ? '#52c41a' : '#da5151'} />;
             }
         }
     </MandatoryContext.Consumer>

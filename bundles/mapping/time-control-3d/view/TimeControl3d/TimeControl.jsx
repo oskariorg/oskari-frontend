@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Row, ColFixed, Col } from './styled';
+import { Row, ColFixed, Col, ClockIcon } from './styled';
 import { SpeedSelect } from './SpeedSelect';
 import { Input } from './Input';
 import { TimeSlider } from './TimeSlider';
-
-const timeIcon = 'clock-circle';
 
 export const TimeControl = props => {
     const { isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed } = props;
@@ -14,7 +12,7 @@ export const TimeControl = props => {
             <div>
                 <Row style={{ marginTop: '20px' }}>
                     <Col>
-                        <Input iconType={timeIcon} value={timeValue} changeHandler={changeHandler}/>
+                        <Input value={timeValue} changeHandler={changeHandler}><ClockIcon /></Input>
                     </Col>
                     <Col>
                         <SpeedSelect speedHandler={speedHandler} speed={speed}/>
@@ -35,7 +33,7 @@ export const TimeControl = props => {
     return (
         <Row style={{ marginTop: '5px' }}>
             <Col>
-                <Input iconType={timeIcon} value={timeValue} changeHandler={changeHandler}/>
+                <Input value={timeValue} changeHandler={changeHandler}><ClockIcon /></Input>
             </Col>
             <ColFixed>
                 <TimeSlider
