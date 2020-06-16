@@ -68,12 +68,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             help: '<div class="help icon-info"></div>',
             main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
-            mapTitleInput: '<input class="printout_title_field" type="text">', // TODO printout_settings_cont??
+            mapTitleInput: '<div class="printout_option_cont printout_settings_cont"><input class="printout_title_field" type="text"></div>',
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
             optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
             scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
-            contentOptions: '<div class="printout_content"><div class="printout_content_title"/></div>', // printout_settings_cont?? check format
-            contentNotification: '<div class="icon-warning-light"/>'
+            contentOptions: '<div class="printout_content"><div class="printout_content_title"></div><div class="printout_content_options"></div></div>',
+            pngNote: '<div class="icon-warning-light"/>'
         },
         /**
          * @public @method render
@@ -244,17 +244,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     if (name === 'png') {
                         contentOptions.addClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', true);
+                        title.append(pngNote);
                     } else {
                         contentOptions.removeClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', false);
+                        pngNote.remove();
                     }
                 });
                 format.append(toolContainer);
             });
             contentPanel.append(format);
             /* --- options available for pdf --- */
-            const contentOptions = me.template.contentOptions.clone();
-            contentOptions.find('.printout_content_title').html(loc.content.label);
+            const optionsContainer = me.template.contentOptions.clone();
+            const title = optionsContainer.find('.printout_content_title').html(loc.content.label);
+            const contentOptions = optionsContainer.find('.printout_content_options');
+            const pngNote = me.template.pngNote.clone();
+            pngNote.attr('title', this.loc.settings.content.pngNote);
             var mapTitleInput = me.template.mapTitleInput.clone();
             mapTitleInput.attr('placeholder', loc.content.mapTitle.placeholder);
             contentOptions.append(mapTitleInput);
@@ -270,7 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 opt.find('label').html(label).attr('for', id);
                 contentOptions.append(opt);
             });
-            contentPanel.append(contentOptions);
+            contentPanel.append(optionsContainer);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
             var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {

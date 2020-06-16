@@ -99,6 +99,15 @@ div.field select {
     font-weight: bold;
     margin: 5px 0;
 }
+.printout_content {
+    .printout_content_title {
+        display: flex;
+    }
+    .icon-warning-light {
+        float: right;
+        margin-left: 12px;
+    }
+}
 
 .printout_settings_cont {
     margin: 10px 5px;
