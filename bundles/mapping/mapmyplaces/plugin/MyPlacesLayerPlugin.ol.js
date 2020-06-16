@@ -1,5 +1,3 @@
-import olLayerImage from 'ol/layer/Image';
-import olSourceImageWMS from 'ol/source/ImageWMS';
 import { getZoomLevelHelper } from '../../mapmodule/util/scale';
 
 /**
