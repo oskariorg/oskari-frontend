@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             return this._placesList[categoryId] || [];
         },
         placesLoaded: function (categoryId) {
-            return this._placesList.hasOwnProperty(categoryId);
+            return !!this._placesList[categoryId];
         },
         /*
          * @method deleteCategories
@@ -312,9 +312,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             jQuery.ajax({
                 type: 'DELETE',
                 dataType: 'json',
-                url: Oskari.urls.getRoute('MyPlacesLayers') + '&layerIds=' + categoryId, // TODO backend shoud handle single layerId/categoryId
+                url: Oskari.urls.getRoute('MyPlacesLayers') + '&id=' + categoryId,
                 success: function (response) {
-                    callback(!!response);
+                    callback(response.success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
@@ -332,11 +332,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             jQuery.ajax({
                 type: data.id ? 'PUT' : 'POST',
                 dataType: 'json',
-                data, // TODO sync data keys with backend
+                data,
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
                 success: response => {
                     if (response) {
-                        callback(response.layers[0]); // TODO backend shoud return response.layer
+                        callback(response.layer);
                         return;
                     }
                     callback(null);
@@ -391,6 +391,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     this._addMyPlace(myplaceModel);
                 }
                 callback(success, categoryId, oldCategoryId);
+                this._notifyDataChanged();
             };
             this.commitMyPlaces([myplaceModel], callbackWrapper, !!id);
         },

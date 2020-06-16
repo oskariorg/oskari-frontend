@@ -162,9 +162,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place prepoluate form with place data (optional)
          */
         showPlaceForm: function (location, place) {
-            var me = this,
-                layerId,
-                sandbox = this.instance.sandbox;
+            const me = this;
+            let layerId;
+            const sandbox = this.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             this.form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
@@ -173,7 +173,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             );
             const categoryHandler = this.instance.getCategoryHandler();
             if (place) {
-                this.tempGeom = place.getGeometry(); // store if geometry is not edited // TODO is this really needed
                 layerId = categoryHandler.getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
             // set measurement result from drawing
@@ -264,13 +263,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             if (!this.form) {
                 return;
             }
-            var me = this;
             const { place, category, errors } = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
             jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', true);
 
-            if (errors.length !== 0) {
+            if (errors) {
                 this._showValidationErrorMessage(errors);
                 // Enable buttons again
                 jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', false);
@@ -283,9 +281,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     if (categoryId) {
                         // save the actual place
                         place.setCategoryId(categoryId);
-                        me._savePlace(place);
+                        this._savePlace(place);
                     } else {
-                        me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.addCategory'));
+                        this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.addCategory'));
                     }
                 };
                 this.instance.getCategoryHandler().saveCategory(category, serviceCallback);
@@ -305,8 +303,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             const isMovePlace = false;
             if (drawing) {
                 place.setDrawToolsMultiGeometry(drawing);
-            } else if (this.tempGeom) {
-                place.setGeometry(this.tempGeom); // if not edited // TODO is this really needed
             }
             var serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
                 if (blnSuccess) {
@@ -332,7 +328,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         cleanupDrawingVariables: function () {
             this.drawing = null;
             this.drawingData = null;
-            this.tempGeom = null;
         },
         /**
          * @method cleanupPopup

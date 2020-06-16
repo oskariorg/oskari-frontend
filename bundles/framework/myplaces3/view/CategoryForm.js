@@ -15,16 +15,16 @@ Oskari.clazz.define(
         this.instance = instance;
         this.visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
 
-        var loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
 
         this.template = jQuery(
             '<div class="myplacescategoryform">' +
             '  <div class="field">' +
-            '    <label for="categoryname">' + loc('categoryform.name.label') + '</label><br clear="all" />' +
-            '    <input type="text" data-name="categoryname" placeholder="' + loc('categoryform.name.placeholder') + '"/>' +
+            '    <label for="categoryname">' + this.loc('categoryform.name.label') + '</label><br clear="all" />' +
+            '    <input type="text" data-name="categoryname" placeholder="' + this.loc('categoryform.name.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field drawing">' +
-            '    <label>' + loc('categoryform.drawing.label') + '</label><br clear="all" />' +
+            '    <label>' + this.loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
             // Currently visible fields are not saved or used in any way so commenting out the UI for now

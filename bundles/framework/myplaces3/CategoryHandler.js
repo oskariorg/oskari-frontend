@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         refreshLayerIfSelected: function (categoryId) {
-            const id = this.getLayerId(categoryId);
+            const id = this.getMapLayerId(categoryId);
             if (this.sandbox.isLayerAlreadySelected(id)) {
                 // update layer on map
                 this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
@@ -273,13 +273,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             dialog.show(title, message, [okBtn]);
         },
         saveCategory: function (category, callback) {
-            const isNew = !category.id;
+            const id = category.categoryId;
             const data = {
+                id,
                 name: category.name,
                 isDefault: category.isDefault,
                 style: JSON.stringify(category.style)
             };
             this.instance.getService().commitCategory(data, layerJson => {
+                const isNew = !id;
                 if (layerJson) {
                     if (isNew) {
                         this.addLayerToService(layerJson);

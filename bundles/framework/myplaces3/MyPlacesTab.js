@@ -41,7 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
         initContainer: function () {
             this.addAddLayerButton();
             this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc('tab.nocategories'), this.addLayerButton);
-            // TODO do not load all places at startup, load when category is selected
             this.tabsContainer.addTabChangeListener((prevTab, newTab) => newTab.handleSelection(true));
         },
 
@@ -74,7 +73,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 var sandbox = this.instance.sandbox;
                 var editReqBuilder = Oskari.requestBuilder('MyPlaces.EditCategoryRequest');
                 var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
-                var categories = this.instance.getCategoryHandler().getAllCategories();
+                var categoryHandler = this.instance.getCategoryHandler();
+                const categories = categoryHandler.getAllCategories();
                 categories.forEach(({ name, categoryId }) => {
                     var panel = this.tabPanels[categoryId];
                     if (!panel) {
