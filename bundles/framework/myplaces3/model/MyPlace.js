@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
             'imageLink': undefined,
             'attentionText': undefined
         };
+        this.measurement = undefined;
     }, {
         /**
          * @method getType
@@ -154,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
         },
         /**
          * @method setCreateDate
-         * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
+         * Date in locale date string format
          * See Oskari.mapframework.bundle.myplaces3.service.MyPlacesService
          * @param {String} value
          */
@@ -163,8 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
         },
         /**
          * @method getCreateDate
-         * Returns date in string format:
-         * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
+         * Returns date in locale date string format
          * See Oskari.mapframework.bundle.myplaces3.service.MyPlacesService
          * @return {String}
          */
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
         },
         /**
          * @method setUpdateDate
-         * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
+         * Date in locale date string format
          * See Oskari.mapframework.bundle.myplaces3.service.MyPlacesService
          * @param {String} value
          */
@@ -182,8 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
         },
         /**
          * @method getUpdateDate
-         * Returns date in string format:
-         * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
+         * Returns date in locale date string format
          * See Oskari.mapframework.bundle.myplaces3.service.MyPlacesService
          * @return {String}
          */
@@ -203,5 +202,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
          */
         getUuid: function () {
             return this.uuid;
+        },
+        setMeasurement: function (result) {
+            this.measurement = result;
+        },
+        getMeasurement: function () {
+            return this.measurement;
         }
     });

@@ -17,21 +17,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
             var me = this;
             var loclayer = me.localization.layer;
-
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
 
             if (mapLayerJson.fields) {
                 layer.setFields(mapLayerJson.fields);
-            }
-            if (mapLayerJson.name) {
-                layer.setName(mapLayerJson.name);
-            }
-            if (mapLayerJson.wmsName) {
-                layer.setWmsName(mapLayerJson.wmsName);
-            }
-            if (mapLayerJson.wmsUrl) {
-                layer.setWmsUrl(mapLayerJson.wmsUrl);
             }
             if (loclayer.organization) {
                 layer.setOrganizationName(loclayer.organization);

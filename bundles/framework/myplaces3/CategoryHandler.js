@@ -13,10 +13,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.sandbox;
-        // init layers from link (for printing) on initial load
-        this.initialLoad = true;
         this.metaType = 'MYPLACES';
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.log = Oskari.log('Oskari.mapframework.bundle.myplaces3.CategoryHandler');
+        this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
     }, {
         __name: 'MyPlacesCategoryHandler',
         /**
@@ -36,17 +36,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          * implements Module protocol start methdod
          */
         start: function () {
-            var me = this;
             var sandbox = this.sandbox;
 
             if (!Oskari.user().isLoggedIn()) {
                 // guest users don't need this
                 return;
             }
-            sandbox.register(me);
-            Object.keys(this.eventHandlers).forEach(function (eventName) {
-                sandbox.registerForEventByName(me, eventName);
-            });
+            sandbox.register(this);
+            this.instance.getService().loadLayers(this.addLayersToService.bind(this));
         },
 
         /**
@@ -66,219 +63,163 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             }
             return handler.apply(this, [event]);
         },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method MyPlaces.MyPlacesChangedEvent
-             * Checks if categories have been changed and updates corresponding maplayers accordingly
-             * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
-             */
-            'MyPlaces.MyPlacesChangedEvent': function () {
-                this._handlePlacesChanged();
-            }
+        getAllCategories: function () {
+            return this.mapLayerService.getAllLayersByMetaType(this.metaType)
+                .map(layer => this._parseLayerToCategory(layer));
         },
-        /**
-         * @method _handlePlacesChanged
-         * Called when a place or category is added, updated or deleted (and on initial load)
-         */
-        _handlePlacesChanged: function () {
-            var me = this;
-            var sandbox = this.sandbox;
-            // check map layers for categorychanges
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var categories = this.instance.getService().getAllCategories();
-            var mapLayers = mapLayerService.getAllLayersByMetaType(this.metaType);
-            // check for removal
-            mapLayers.forEach(function (layer) {
-                var category = categories.find(function (cat) {
-                    return me._getMapLayerId(cat.getId()) === layer.getId();
-                });
-                // remove map layer if the category is no longer available
-                if (!category) {
-                    // remove maplayer from selected
-                    // TODO: do we need to check if the layer is selected or just send this out every time?
-                    sandbox.requestByName(me.getName(), 'RemoveMapLayerRequest', [layer.getId()]);
-                    // remove maplayer from all layers
-                    mapLayerService.removeLayer(layer.getId());
-                }
-            });
-
-            // check for update or add
-            categories.forEach(function (cat) {
-                var layer = mapLayers.find(function (layer) {
-                    return me._getMapLayerId(cat.getId()) === layer.getId();
-                });
-
-                if (!layer) {
-                    // add maplayer
-                    me.addLayerToService(cat);
-                    return;
-                }
-                // found a matching layer, check if name needs to be updated
-                if (cat.getName() !== layer.getName()) {
-                    var layerConf = {
-                        name: cat.getName()
-                    };
-                    // update maplayer name if category name has changed
-                    mapLayerService.updateLayer(layer.getId(), layerConf);
-                }
-            });
-
-            if (this.initialLoad) {
-                // notify components of added layer if not suppressed
-                var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
-                sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
-                // cant do this (run before the bundle adds the layers)
-                this._processStartupLinkLayers(sandbox);
-                // done here because layers aren't added to the service before this
-                this.initialLoad = false;
+        getDefaultCategory: function () {
+            const layer = this.mapLayerService.getAllLayersByMetaType(this.metaType)
+                .find(l => l.getOptions().isDefault === true);
+            if (!layer) {
+                this.log.error('Could not find default category');
+                return;
             }
+            return this._parseLayerToCategory(layer);
+        },
+        _parseLayerToCategory: function (layer) {
+            const layerId = layer.getId();
+            return {
+                categoryId: this.parseCategoryId(layerId),
+                layerId,
+                name: layer.getName(),
+                isDefault: !!layer.getOptions().isDefault
+            };
+        },
+        parseCategoryId: function (layerId) {
+            if (typeof layerId === 'string') {
+                return Number.parseInt(layerId.substring(layerId.indexOf('_') + 1));
+            }
+            return layerId;
+        },
+        getMapLayerId: function (categoryId) {
+            return this.instance.idPrefix + '_' + categoryId;
+        },
+        // Notify other components to update categories data
+        _notifyUpdate: function () {
+            this.sandbox.notifyAll(Oskari.eventBuilder('MyPlaces.MyPlacesChangedEvent')());
         },
         /**
          * @method addLayerToMap
          * Adds the my places map layer to selected if it is not there already
          */
         addLayerToMap: function (categoryId) {
-            var layerId = this._getMapLayerId(categoryId);
+            var layerId = this.getMapLayerId(categoryId);
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
                 this.sandbox.request(this.getName(), request);
             }
         },
+        // for initial load layers
+        addLayersToService: function (layers = []) {
+            layers.forEach(layerJson => {
+                this.addLayerToService(layerJson, true);
+            });
+            if (layers.length > 0) {
+                const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
+                this.sandbox.notifyAll(event);
+            }
+            this._processStartupLinkLayers();
+            this._notifyUpdate();
+        },
         /**
          * @method addLayerToService
          * Adds the my places map layer service
          */
-        addLayerToService: function (category) {
+        addLayerToService: function (layerJson, skipEvent) {
             // add maplayer to Oskari
-            var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var json = this._getMapLayerJson(category);
-            var myplacesLayer = mapLayerService.createMapLayer(json);
-            mapLayerService.addLayer(myplacesLayer);
-        },
-        updateLayerProperties: function (category) {
-            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            const id = this._getMapLayerId(category.getId());
-            const layer = mapLayerService.findMapLayer(id);
-            layer.setName(category.getName());
-            layer.setOptions(category.getOptions());
-        },
-        _getMapLayerId: function (categoryId) {
-            if (!categoryId) {
-                // default to default category id(?)
-                var defCat = this.instance.getService().getDefaultCategory();
-                if (defCat) {
-                    categoryId = defCat.getId();
-                } else {
-                    categoryId = '-99';
-                }
+            const service = this.mapLayerService; // Or getMapLayerService
+            var layer = service.createMapLayer(layerJson);
+            service.addLayer(layer, skipEvent);
+            if (!skipEvent) {
+                this._notifyUpdate();
             }
-            return this.instance.idPrefix + '_' + categoryId;
+            return layer;
         },
-        /**
-         * @method _getMapLayerJson
-         * Populates the category based data to the base maplayer json
-         * @private
-         * @return maplayer json for the category
-         */
-        _getMapLayerJson: function (categoryModel) {
-            var baseJson = this._getMapLayerJsonBase();
-            baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
-            baseJson.name = categoryModel.getName();
-            baseJson.options = categoryModel.getOptions();
-            baseJson.id = this._getMapLayerId(categoryModel.getId());
-            // Publish and download permissions are always ok for user's own data
-            baseJson.permissions = {
-                'publish': 'publication_permission_ok',
-                'download': 'download_permission_ok'
-            };
-            return baseJson;
-        },
-        /**
-         * @method _getMapLayerJsonBase
-         * Returns a base model for maplayer json to create my places map layer
-         * @private
-         * @return {Object}
-         */
-        _getMapLayerJsonBase: function () {
-            var json = {
-                wmsName: 'oskari:my_places_categories',
-                type: 'myplaces',
-                isQueryable: true,
-                opacity: 50,
-                metaType: this.metaType,
-                orgName: this.loc('category.organization'),
-                inspire: this.loc('category.inspire'),
-                options: {}
-            };
-            if (this.instance.conf &&
-                this.instance.conf.layerDefaults &&
-                typeof this.instance.conf.layerDefaults === 'object') {
-                var defaults = this.instance.conf.layerDefaults;
-                Object.keys(defaults).forEach(function (key) {
-                    json[key] = defaults[key];
-                });
+        updateLayer: function (layerJson) {
+            const { id, name, options } = layerJson;
+            const layer = this.mapLayerService.findMapLayer(id);
+            if (!layer) {
+                this.log.warn('tried to update layer which does not exist, id: ' + id);
+                return;
             }
-            return json;
+            layer.setName(name);
+            layer.setOptions(options);
+            const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
+            this.sandbox.notifyAll(evt);
+            if (this.sandbox.isLayerAlreadySelected(id)) {
+                // update layer on map
+                this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
+                this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [id]);
+            }
+            this._notifyUpdate();
         },
-        _processStartupLinkLayers: function (sandbox) {
-            var me = this;
+        refreshLayerIfSelected: function (categoryId) {
+            const id = this.getMapLayerId(categoryId);
+            if (this.sandbox.isLayerAlreadySelected(id)) {
+                // update layer on map
+                this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
+                this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [id]);
+            }
+        },
+        removeLayer: function (categoryId) {
+            const layerId = this.getMapLayerId(categoryId);
+            this.mapLayerService.removeLayer(layerId);
+            this._notifyUpdate();
+        },
+        _processStartupLinkLayers: function () {
             var mapLayers = Oskari.util.getRequestParam('mapLayers');
             if (!mapLayers) {
                 // no linked layers
                 return;
             }
-            var moduleName = me.getName();
+            var moduleName = this.getName();
             var layerStrings = mapLayers.split(',');
             var keepLayersOrder = true;
-            layerStrings.forEach(function (layerStr) {
+            layerStrings.forEach(layerStr => {
                 var splitted = layerStr.split('+');
                 var layerId = splitted[0];
                 var opacity = splitted[1];
-
-                if (layerId === null || layerId.indexOf(me.instance.idPrefix) === -1) {
+                if (layerId === null || layerId.indexOf(this.instance.idPrefix) === -1) {
                     return;
                 }
                 var addLayerReq = Oskari.requestBuilder('AddMapLayerRequest');
-                sandbox.request(moduleName, addLayerReq(layerId, keepLayersOrder));
+                this.sandbox.request(moduleName, addLayerReq(layerId, keepLayersOrder));
                 var opacityReq = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-                sandbox.request(moduleName, opacityReq(layerId, opacity));
+                this.sandbox.request(moduleName, opacityReq(layerId, opacity));
             });
         },
 
-        editCategory: function (category) {
+        editCategory: function (categoryId) {
             var me = this;
             this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const layer = mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
+            if (!layer) {
+                this.log.error('Could not find layer for editing. Category id: ' + categoryId);
+                return;
+            }
+            // has only one style default for now
+            const { featureStyle } = layer.getCurrentStyleDef();
             var values = {
-                name: category.getName(),
-                id: category.getId(),
-                _isDefault: category.isDefault(),
-                style: category.getDefaultFeatureStyle()
+                categoryId,
+                name: layer.getName(),
+                isDefault: !!layer.getOptions().isDefault,
+                style: featureStyle || {}
             };
-            form.setValues(values);
-            var content = form.getForm();
-            content.find('input[data-name=categoryname]').val(category.name);
-
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var buttons = [];
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc('buttons.save'));
             saveBtn.addClass('primary');
             saveBtn.setHandler(function () {
-                var values = form.getValues();
-                var errors = me.validateCategoryFormValues(values);
-                if (errors.length !== 0) {
-                    me.showValidationErrorMessage(errors);
+                const formValues = form.getValues();
+                if (formValues.errors) {
+                    me.showValidationErrorMessage(formValues.errors);
                     return;
                 }
-                var category = me.getCategoryFromFormValues(values);
-                me.saveCategory(category);
-
+                me.saveCategory({ ...values, ...formValues });
                 dialog.close();
                 me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
             });
@@ -290,7 +231,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
-            dialog.show(me.loc('categoryform.edit.title'), content, buttons);
+            form.getForm(values);
+            dialog.show(me.loc('categoryform.edit.title'), form.getForm(values), buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
             // bind listeners etc. for category form
             form.start();
@@ -329,59 +271,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             });
             dialog.show(title, message, [okBtn]);
         },
-        validateCategoryFormValues: function (values) {
-            var errors = [];
-            var me = this;
-            if (!values) {
-                return errors;
-            }
-
-            if (!values.name) {
-                errors.push({
-                    field: 'name',
-                    error: me.loc('validation.categoryName')
-                });
-            } else if (Oskari.util.sanitize(values.name) !== values.name) {
-                errors.push({
-                    field: 'name',
-                    error: me.loc('validation.categoryNameIllegal')
-                });
-            }
-            return errors;
-        },
-        getCategoryFromFormValues: function (values) {
-            var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
-            category.setName(Oskari.util.sanitize(values.name));
-            category.setId(values.id);
-            category.setDefaultFeatureStyle(values.style);
-            category.setDefault(values._isDefault);
-            return category;
-        },
-        saveCategory: function (category) {
-            var me = this;
-            this.instance.getService().saveCategory(category, function (blnSuccess, model, blnNew) {
-                if (blnSuccess) {
-                    if (!blnNew) {
-                        me.updateLayerProperties(model);
+        saveCategory: function (category, callback) {
+            const id = category.categoryId;
+            const data = {
+                id,
+                name: category.name,
+                isDefault: category.isDefault,
+                style: JSON.stringify(category.style)
+            };
+            this.instance.getService().commitCategory(data, layerJson => {
+                const isNew = !id;
+                if (layerJson) {
+                    if (isNew) {
+                        this.addLayerToService(layerJson);
+                    } else {
+                        this.updateLayer(layerJson);
+                    }
+                    if (callback) {
+                        callback(this.parseCategoryId(layerJson.id));
+                        return;
                     }
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(me.loc('notification.categorySaved.title'), me.loc('notification.categorySaved.message'));
+                    dialog.show(this.loc('notification.categorySaved.title'), this.loc('notification.categorySaved.message'));
                     dialog.fadeout();
-                    // refresh map layer on map -> send update request
-                    var layerId = me._getMapLayerId(model.getId());
-                    var layerIsSelected = me.sandbox.isLayerAlreadySelected(layerId);
-                    if (layerIsSelected) {
-                        var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
-                        me.sandbox.request(me, request);
-                        me.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId]);
-                    }
                     return;
                 }
-                // blnNew should always be true since we are adding a category
-                if (blnNew) {
-                    me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.addCategory'));
+                if (isNew) {
+                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.addCategory'));
                 } else {
-                    me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.editCategory'), blnNew);
+                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.editCategory'));
+                }
+                if (callback) {
+                    callback(null);
                 }
             });
         },
@@ -392,32 +313,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          * If category is empty -> only has delete and cancel
          * The message will also be different for both cases.
          */
-        confirmDeleteCategory: function (category) {
+        confirmDeleteCategory: function (categoryId, name) {
             var me = this;
             var service = this.instance.getService();
-            var defaultCategory = service.getDefaultCategory();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var deleteBtn;
 
             dialog.makeModal();
-
-            if (defaultCategory.getId() === category.getId()) {
+            const defaultCategory = this.getDefaultCategory();
+            if (defaultCategory.categoryId === categoryId) {
                 // cannot delete default category
                 var okBtn = dialog.createCloseButton(me.loc('buttons.ok'));
                 dialog.show(me.loc('notification.error.title'), me.loc('notification.error.deleteDefault'), [okBtn]);
                 return;
             }
-            var places = service.getPlacesInCategory(category.getId());
+            var placesCount = service.getPlacesInCategory(categoryId).length;
             var buttons = [dialog.createCloseButton(me.loc('buttons.cancel'))];
 
             var content = '';
-            if (places.length > 0) {
+            if (placesCount > 0) {
                 deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 deleteBtn.setTitle(me.loc('buttons.deleteCategoryAndPlaces'));
                 deleteBtn.setHandler(function () {
                     dialog.close();
                     // delete category and each place in it
-                    me._deleteCategory(category, false);
+                    me._deleteCategory(categoryId);
                 });
                 buttons.push(deleteBtn);
 
@@ -427,10 +347,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 moveBtn.setHandler(function () {
                     dialog.close();
                     // move the places in the category to default category
-                    me._deleteCategory(category, true);
+                    me._deleteCategory(categoryId, defaultCategory.categoryId);
                 });
                 buttons.push(moveBtn);
-                var locParams = [category.getName(), places.length, defaultCategory.getName()];
+                var locParams = [name, placesCount, defaultCategory.name];
                 content = me.loc('notification.categoryDelete.deleteConfirmMove', locParams);
             } else {
                 deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -440,10 +360,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 deleteBtn.setHandler(function () {
                     dialog.close();
                     // delete category and each place in it (none since there aren't any places there')
-                    me._deleteCategory(category, false);
+                    me._deleteCategory(categoryId);
                 });
 
-                content = me.loc('notification.categoryDelete.deleteConfirm', [category.getName()]);
+                content = me.loc('notification.categoryDelete.deleteConfirm', [name]);
             }
 
             dialog.show(me.loc('notification.categoryDelete.title'), content, buttons);
@@ -454,85 +374,69 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          * Internal method start actual category delete after confirm
          * @private
          */
-        _deleteCategory: function (category, movePlaces) {
-            var me = this;
-            var catId = category.getId();
+        _deleteCategory: function (categoryId, moveToId) {
             var service = this.instance.getService();
-            // wrap callback to get it into the scope we want
-            service.deleteCategory(catId, movePlaces, function (success) {
-                me._deleteCategoryCallback(success, movePlaces, catId);
-            });
-        },
-        /**
-         * @method _deleteCategoryCallback
-         * Internal method to handle server response for category delete
-         * @private
-         */
-        _deleteCategoryCallback: function (success, movePlaces) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var service = this.instance.getService();
-            var me = this;
-            if (success) {
-                if (movePlaces) {
-                    // places moved to default category -> update it
-                    var defCat = service.getDefaultCategory();
-                    var layerId = this._getMapLayerId(defCat.getId());
-                    var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
-                    this.sandbox.request(this, request);
+            const deleteCategoryCb = success => {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                if (success) {
+                    this.removeLayer(categoryId);
+                    dialog.show(this.loc('notification.categoryDelete.title'), this.loc('notification.categoryDelete.deleted'));
+                    dialog.fadeout();
+                } else {
+                    const btn = dialog.createCloseButton();
+                    dialog.show(this.loc('notification.error.title'), this.loc('notification.error.deleteCategory'), [btn]);
                 }
-                // NOTE OK
-                dialog.show(me.loc('notification.categoryDelete.title'), me.loc('notification.categoryDelete.deleted'));
-                dialog.fadeout();
+            };
+            const placesCb = success => {
+                if (success) {
+                    service.deleteCategory(categoryId, deleteCategoryCb);
+                    return;
+                }
+                this.log.error('Failed to move/delete places. Skipping delete category');
+                deleteCategoryCb(false);
+            };
+            if (moveToId) {
+                service.movePlacesToCategory(categoryId, moveToId, placesCb);
             } else {
-                // error handling
-                var okBtn = dialog.createCloseButton(me.loc('buttons.ok'));
-                dialog.show(me.loc('notification.error.title'), me.loc('notification.error.deleteCategory'), [okBtn]);
+                service.deletePlacesInCategory(categoryId, placesCb);
             }
         },
-        confirmPublishCategory: function (category, makePublic) {
-            var me = this;
+        confirmPublishCategory: function (categoryId, makePublic) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var service = this.instance.getService();
-            var buttons = [dialog.createCloseButton(me.loc('buttons.cancel'))];
-
+            var buttons = [dialog.createCloseButton(this.loc('buttons.cancel'))];
+            const mapLayer = this.mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
+            if (!mapLayer) {
+                this.log.error('Requested (un)/publish layer which does not exist, category id: ' + categoryId);
+                return;
+            }
             var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             operationalBtn.addClass('primary');
-            operationalBtn.setHandler(function () {
-                service.publishCategory(category.getId(), makePublic, function (wasSuccess) {
-                    me._handlePublishCategory(category, makePublic, wasSuccess);
+            operationalBtn.setHandler(() => {
+                service.publishCategory(categoryId, makePublic, (wasSuccess) => {
+                    this._handlePublishCategory(mapLayer, makePublic, wasSuccess);
                 });
                 dialog.close();
             });
             buttons.push(operationalBtn);
-            var locParams = [category.getName()];
+            var locParams = [mapLayer.getName()];
 
             if (makePublic) {
-                operationalBtn.setTitle(me.loc('buttons.changeToPublic'));
-                dialog.show(me.loc('notification.categoryToPublic.title'),
-                    me.loc('notification.categoryToPublic.message', locParams),
+                operationalBtn.setTitle(this.loc('buttons.changeToPublic'));
+                dialog.show(this.loc('notification.categoryToPublic.title'),
+                    this.loc('notification.categoryToPublic.message', locParams),
                     buttons);
             } else {
-                operationalBtn.setTitle(me.loc('buttons.changeToPrivate'));
-                dialog.show(me.loc('notification.categoryToPrivate.title'),
-                    me.loc('notification.categoryToPrivate.message', locParams),
+                operationalBtn.setTitle(this.loc('buttons.changeToPrivate'));
+                dialog.show(this.loc('notification.categoryToPrivate.title'),
+                    this.loc('notification.categoryToPrivate.message', locParams),
                     buttons);
             }
         },
 
-        _handlePublishCategory: function (category, makePublic, wasSuccess) {
-            var me = this;
+        _handlePublishCategory: function (mapLayer, makePublic, wasSuccess) {
             if (!wasSuccess) {
-                this._showMessage(me.loc('notification.error.title'), me.loc('notification.error.generic'));
-                return;
-            }
-            var sandbox = this.sandbox;
-            // check map layers for categorychanges
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var layerId = this._getMapLayerId(category.getId());
-            var mapLayer = mapLayerService.findMapLayer(layerId);
-            if (!mapLayer) {
-                // maplayer not found, this should not be possible
-                this._showMessage(me.loc('notification.error.title'), me.loc('notification.error.generic'));
+                this._showMessage(this.loc('notification.error.title'), this.loc('notification.error.generic'));
                 return;
             }
             if (makePublic) {
@@ -541,8 +445,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 mapLayer.addPermission('publish', 'no_publication_permission');
             }
             // send an event to notify other bundles of updated permissions
-            var evt = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
-            sandbox.notifyAll(evt);
+            var evt = Oskari.eventBuilder('MapLayerEvent')(mapLayer.getId(), 'update');
+            this.sandbox.notifyAll(evt);
         }
     }, {
         /**

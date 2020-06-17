@@ -14,9 +14,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.instance = instance;
         this.options = options;
         this.newCategoryId = '-new-';
-        this.placeId = undefined;
-        this.initialValues = undefined;
+        this.place = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.measurementResult = null;
 
         this.template = jQuery(
             '<div class="myplacesform">' +
@@ -58,31 +58,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory[]} categories array containing available categories
          * @return {jQuery} jquery reference for the form
          */
-        getForm: function (categories) {
-            var ui = this.template.clone(),
-                isPublished = (this.options ? this.options.published : false);
+        getForm: function (categories, place) {
+            const ui = this.template.clone();
+            const isPublished = (this.options ? this.options.published : false);
             // TODO: if a place is given for editing -> populate fields here
             // populate category options (only if not in a published map)
             if (categories && !isPublished) {
-                var selection = ui.find('select[data-name=category]'),
-                    option,
-                    i,
-                    cat;
-                for (i = 0; i < categories.length; ++i) {
-                    cat = categories[i];
-                    option = this.templateOption.clone();
-                    option.text(cat.getName());
-                    option.attr('value', cat.getId());
-                    // find another way if we want to keep selection between places
-                    if (this.initialValues) {
-                        if (this.initialValues.place.category === cat.getId()) {
-                            option.attr('selected', 'selected');
-                        }
-                    } else if (cat.isDefault()) {
+                const selection = ui.find('select[data-name=category]');
+                const selectedCategoryId = place ? place.getCategoryId() : categories.find(c => c.isDefault === true).categoryId;
+                categories.forEach(({ categoryId, name }) => {
+                    const option = this.templateOption.clone();
+                    option.text(name);
+                    option.attr('value', categoryId);
+                    if (categoryId === selectedCategoryId) {
                         option.attr('selected', 'selected');
                     }
                     selection.append(option);
-                }
+                });
+                selection.val(selectedCategoryId);
             }
             if (isPublished) {
                 // remove the layer selections if in a publised map
@@ -92,104 +85,130 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             // Hide the image preview at first
             this._updateImageUrl('', ui);
 
-            if (this.initialValues) {
-                ui.find('input[data-name=placename]').attr('value', this.initialValues.place.name);
-                ui.find('input[data-name=placedesc]').attr('value', this.initialValues.place.desc);
-                ui.find('input[data-name=placeAttention]').attr('value', this.initialValues.place.attentionText);
-                ui.find('input[data-name=placelink]').attr('value', this.initialValues.place.link);
-                ui.find('input[data-name=imagelink]').attr('value', this.initialValues.place.imageLink);
-                this._updateImageUrl(this.initialValues.place.imageLink, ui);
-            }
-
-            var measurementDiv = ui.find('div.measurementResult');
-            if (this.measurementResult) {
-                measurementDiv.html(this.measurementResult);
+            if (place) {
+                this.setValues(place, ui);
             } else {
-                measurementDiv.remove();
+                this.place = null;
+                if (this.measurementResult) {
+                    ui.find('div.measurementResult').html(this.measurementResult);
+                }
             }
 
             return ui;
         },
         /**
-         * @method getValues
-         * Returns form values as an object
+         * @method getPlace
+         * Returns MyPlace and category values
          * @return {Object}
          */
         getValues: function () {
-            var forcedCategory = (this.options ? this.options.category : undefined);
-            var values = {};
             // infobox will make us lose our reference so search
             // from document using the form-class
-            var onScreenForm = this._getOnScreenForm();
-
-            if (onScreenForm.length > 0) {
-                // found form on screen
-                var placeName = onScreenForm.find('input[data-name=placename]').val(),
-                    placeDesc = onScreenForm.find('input[data-name=placedesc]').val(),
-                    placeAttention = onScreenForm.find('input[data-name=placeAttention]').val(),
-                    placeLink = onScreenForm.find('input[data-name=placelink]').val();
-                if (placeLink) {
-                    if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
-                        placeLink = 'http://' + placeLink;
-                    }
-                    placeLink = placeLink.replace('<', '');
-                    placeLink = placeLink.replace('>', '');
-                }
-                var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
-                    categorySelection = onScreenForm.find('select[data-name=category]').val();
-                if (typeof categorySelection === 'string') {
-                    categorySelection = parseInt(categorySelection);
-                }
-                values.place = {
-                    name: placeName,
-                    desc: placeDesc,
-                    attention_text: placeAttention,
-                    link: placeLink,
-                    imageLink: imageLink,
-                    category: forcedCategory || categorySelection
-                };
-                if (this.placeId) {
-                    values.place.id = this.placeId;
+            const form = this._getOnScreenForm();
+            if (form.length === 0) {
+                return;
+            }
+            var forcedCategory = (this.options ? this.options.category : undefined);
+            const place = this.place || Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+            const errors = [];
+            const name = form.find('input[data-name=placename]').val();
+            const desc = form.find('input[data-name=placedesc]').val();
+            const att = form.find('input[data-name=placeAttention]').val();
+            // Validate values
+            if (!name) {
+                errors.push({
+                    name: 'name',
+                    error: this.loc('validation.placeName')
+                });
+            } else if (Oskari.util.sanitize(name) !== name) {
+                errors.push({
+                    name: 'name',
+                    error: this.loc('validation.placeNameIllegal')
+                });
+            }
+            if (Oskari.util.sanitize(desc) !== desc) {
+                errors.push({
+                    name: 'desc',
+                    error: this.loc('validation.descIllegal')
+                });
+            }
+            /*
+            TODO: Should we validate attention_text. Localization is missing!
+            if (Oskari.util.sanitize(att) !== att) {
+                errors.push({
+                    name: 'att',
+                    error: this.loc('validation.attIllegal')
+                });
+            }
+            */
+            if (errors.length > 0) {
+                return { errors };
+            }
+            place.setName(name);
+            place.setDescription(desc);
+            place.setAttentionText(att);
+            let placeLink = form.find('input[data-name=placelink]').val();
+            if (placeLink) {
+                if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
+                    placeLink = 'http://' + placeLink;
                 }
             }
+            place.setLink(placeLink);
+            place.setImageLink(form.find('input[data-name=imagelink]').val());
+            const categoryId = forcedCategory || parseInt(form.find('select[data-name=category]').val());
+            if (categoryId) {
+                place.setCategoryId(categoryId);
+            }
+            var values = { place };
             if (this.categoryForm && !forcedCategory) {
                 // add the values for a new category if present
                 // and not in a publised map
-                values.category = this.categoryForm.getValues();
+                const category = this.categoryForm.getValues();
+                if (category.errors) {
+                    return { errors: category.errors };
+                }
+                values.category = category;
             }
             return values;
         },
         /**
          * @method setValues
          * Sets form values from object.
-         * @param {Object} data place data as formatted in #getValues()
+         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
-        setValues: function (data) {
-            this.placeId = data.place.id;
+        setValues: function (place, form) {
             // infobox will make us lose our reference so search
             // from document using the form-class
-            var onScreenForm = this._getOnScreenForm();
-
+            var onScreenForm = form || this._getOnScreenForm();
             if (onScreenForm.length > 0) {
                 // found form on screen
-                onScreenForm.find('input[data-name=placename]').val(data.place.name);
-                onScreenForm.find('input[data-name=placedesc]').val(data.place.desc);
-                onScreenForm.find('input[data-name=placeAttention]').val(data.place.attentionText);
-                onScreenForm.find('input[data-name=placelink]').val(data.place.link);
-                onScreenForm.find('input[data-name=imagelink]').val(data.place.imageLink);
-                onScreenForm.find('select[data-name=category]').val(data.place.category);
-                this._updateImageUrl(data.place.imageLink, onScreenForm);
+                onScreenForm.find('input[data-name=placename]').attr('value', place.getName());
+                onScreenForm.find('input[data-name=placedesc]').attr('value', place.getDescription());
+                onScreenForm.find('input[data-name=placeAttention]').attr('value', place.getAttentionText());
+                onScreenForm.find('input[data-name=placelink]').attr('value', place.getLink());
+                onScreenForm.find('input[data-name=imagelink]').attr('value', place.getImageLink());
+                onScreenForm.find('select[data-name=category]').attr('value', place.getCategoryId());
+                this._updateImageUrl(place.getImageLink(), onScreenForm);
+                const measurementDiv = onScreenForm.find('div.measurementResult');
+                const measurement = place.getMeasurement();
+                if (measurement) {
+                    const drawMode = this.instance.getService().getDrawModeFromGeometry(place.getGeometry());
+                    measurementDiv.html(this.loc('placeform.measurement.' + drawMode) + ' ' + measurement);
+                } else {
+                    measurementDiv.remove();
+                }
             }
-
-            this.initialValues = data;
+            this.place = place;
         },
         setMeasurementResult: function (measurement, drawMode) {
             if (drawMode === 'point' || typeof measurement !== 'number') {
+                this.measurementResult = null;
                 return;
             }
             var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
-            this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
-            this._getOnScreenForm().find('div.measurementResult').html(this.measurementResult);
+            const measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
+            this._getOnScreenForm().find('div.measurementResult').html(measurementResult);
+            this.measurementResult = measurementResult;
         },
         bindEvents: function () {
             var me = this;

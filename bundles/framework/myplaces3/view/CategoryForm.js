@@ -15,16 +15,16 @@ Oskari.clazz.define(
         this.instance = instance;
         this.visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
 
-        var loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
 
         this.template = jQuery(
             '<div class="myplacescategoryform">' +
             '  <div class="field">' +
-            '    <label for="categoryname">' + loc('categoryform.name.label') + '</label><br clear="all" />' +
-            '    <input type="text" data-name="categoryname" placeholder="' + loc('categoryform.name.placeholder') + '"/>' +
+            '    <label for="categoryname">' + this.loc('categoryform.name.label') + '</label><br clear="all" />' +
+            '    <input type="text" data-name="categoryname" placeholder="' + this.loc('categoryform.name.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field drawing">' +
-            '    <label>' + loc('categoryform.drawing.label') + '</label><br clear="all" />' +
+            '    <label>' + this.loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
             // Currently visible fields are not saved or used in any way so commenting out the UI for now
@@ -39,20 +39,20 @@ Oskari.clazz.define(
         this.templateTableRow = jQuery('<tr></tr>');
         this.templateTableCell = jQuery('<td></td>');
         this.templateTextInput = jQuery('<input type="text"/>');
-        this.categoryId = undefined;
-        this._isDefault = undefined;
     }, {
         start: function () {},
         /**
          * @method getForm
          * @return {jQuery} jquery reference for the form
          */
-        getForm: function () {
+        getForm: function (values) {
             var ui = this.template.clone();
             // populate the rendering fields
             var content = ui.find('div.rendering');
             content.append(this.visualizationForm.getForm());
-
+            if (values) {
+                this.setValues(values, ui);
+            }
             return ui;
         },
 
@@ -62,49 +62,55 @@ Oskari.clazz.define(
          * @return {Object}
          */
         getValues: function () {
-            // Mappings
-            var values = {};
             // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
 
             if (onScreenForm.length > 0) {
                 // found form on screen
-                values.name = onScreenForm.find('input[data-name=categoryname]').val();
-                if (this.categoryId) {
-                    values.id = this.categoryId;
+                const name = onScreenForm.find('input[data-name=categoryname]').val();
+                const style = this.visualizationForm.getOskariStyle();
+                if (!name) {
+                    return {
+                        errors: [{
+                            field: 'name',
+                            error: this.loc('validation.categoryName')
+                        }]
+                    };
+                } else if (Oskari.util.sanitize(name) !== name) {
+                    return {
+                        errors: [{
+                            field: 'name',
+                            error: this.loc('validation.categoryNameIllegal')
+                        }]
+                    };
                 }
-                values._isDefault = this._isDefault || false;
-
-                values.style = this.visualizationForm.getOskariStyle();
-
                 // Get the names of the fields the user has checked.
-                values.visibleFields = [];
+                const visibleFields = [];
                 onScreenForm.find('div.visibleFields').find('input[type=checkbox]:checked').each(function () {
-                    values.visibleFields.push(this.name);
+                    visibleFields.push(this.name);
                 });
+                return { name, style };
             }
-
-            return values;
+            this.log.error('Could not find category form');
         },
         /**
          * @method setValues
          * Sets form values from object.
-         * @param {Object} data place data as formatted in #getValues()
+         * @param {Object} values category values
          */
-        setValues: function (data) {
-            this.categoryId = data.id;
-            this._isDefault = data._isDefault;
+        setValues: function (data, form) {
+            const { name, style, visibleFields } = data;
             // infobox will make us lose our reference so search
             // from document using the form-class
-            var onScreenForm = this._getOnScreenForm();
-
-            if (onScreenForm.length > 0) {
+            form = form || this._getOnScreenForm();
+            if (form.length > 0) {
+                form.find('input[data-name=categoryname]').val(name);
                 // found form on screen
-                this._checkVisibleFields(onScreenForm, data.visibleFields);
+                this._checkVisibleFields(form, visibleFields);
             }
 
-            this.visualizationForm.setOskariStyleValues(data.style);
+            this.visualizationForm.setOskariStyleValues(style);
         },
 
         /**
@@ -116,17 +122,14 @@ Oskari.clazz.define(
             return jQuery('div.myplacescategoryform');
         },
 
-        _checkVisibleFields: function (form, fields) {
+        _checkVisibleFields: function (form, fields = []) {
             form.find('div.visibleFields input[type=checkbox]').each(function (i, elem) {
                 elem.prop('checked', false);
-                var j,
-                    fLen = fields ? fields.length : 0;
-
-                for (j = 0; j < fLen; j += 1) {
-                    if (fields[j] === elem.attr('name')) {
+                fields.forEach(field => {
+                    if (field === elem.attr('name')) {
                         elem.prop('checked', true);
                     }
-                }
+                });
             });
         },
 

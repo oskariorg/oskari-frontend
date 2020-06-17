@@ -13,18 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
      */
 
     function (sandbox) {
-        // list of loaded categories & myplaces
-        this._categoryList = [];
-        this._placesList = {}; // {layerId:[places]}
-
+        this._placesList = {}; // {categoryId:[places]}
         this._sandbox = sandbox;
-        this.defaultCategory = null;
-        // skipLoading is used for published maps (value by init-method param)
-        // it means we shouldn't load any features on start and also when saving
-        this.skipLoading = false;
+        this.log = Oskari.log(this.getQName());
         this.srsName = sandbox.getMap().getSrsName();
-        this.loadedCategories = false; // TODO remove when places is loaded when category is selected
-        this.loadedPlaces = false; // TODO remove when places is loaded when category is selected
+        this.mapmodule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
     }, {
         __qname: 'Oskari.mapframework.bundle.myplaces3.service.MyPlacesService',
         getQName: function () {
@@ -38,68 +31,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
         /**
          * Initializes the service and loads categories
          * @method init
-         * @param {Boolean} blnSkipLoad true to skip loading existing categories (f.ex. in published map)
          */
-        init: function (blnSkipLoad) {
-            // preload stuff
-            if (blnSkipLoad === true) {
-                this.skipLoading = blnSkipLoad;
-                return;
-            }
-            this.getCategories();
-            this.getMyPlacesByUser(); // TODO remove when places is loaded when category is selected
-        },
+        init: function () {},
 
-        _allLoaded: function () { // TODO remove when places is loaded when category is selected
-            // when both places and categories have been loaded, notify that the data has changed
-            if (this.loadedPlaces && this.loadedCategories) {
-                this._notifyDataChanged();
-            }
-        },
-
-        /**
-         * @method _addCategory
-         * @private
-         * Adds the category to the selection
-         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory} categoryModel
-         */
-        _addCategory: function (categoryModel) {
-            if (categoryModel.isDefault()) {
-                this.defaultCategory = categoryModel;
-            }
-            this._categoryList.push(categoryModel);
-            // TODO uncomment when places is loaded by categories
-            // this._addCategoryToPlaceList(categoryModel.getId());
-        },
-
-        _addCategoryToPlaceList: function (categoryId) {
-            this._placesList[categoryId] = [];
-        },
-
-        /**
-         * @method getAllCategories
-         * Returns all categories ("maplayers" for my places) that is loaded in the system.
-         * @return {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory[]}
-         */
-        getAllCategories: function () {
-            return this._categoryList;
-        },
-        /**
-         * @method getAllMyPlaces
-         * Returns all users my places
-         * @return {Oskari.mapframework.bundle.myplaces3.model.MyPlace[]}
-         */
-        getAllMyPlaces: function () {
-            return this._placesList;
-        },
-
-        /**
-         * @method getDefaultCategory
-         * Returns users default category or undefined
-         * @return {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory}
-         */
-        getDefaultCategory: function () {
-            return this.defaultCategory;
+        getPlacesCount: function () {
+            let count = 0;
+            Object.keys(this._placesList).forEach(key => {
+                count += this._placesList[key].length;
+            });
+            return count;
         },
 
         /**
@@ -111,8 +51,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          */
         _addMyPlace: function (myplaceModel) {
             var categoryId = myplaceModel.getCategoryId();
-            if (typeof this._placesList[categoryId] === 'undefined') {
-                this._addCategoryToPlaceList(categoryId);
+            if (!this._placesList[categoryId]) {
+                this._placesList[categoryId] = [];
             }
             this._placesList[categoryId].push(myplaceModel);
         },
@@ -135,8 +75,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
             });
         },
+        _removePlacesFromCategory: function (categoryId) {
+            delete this._placesList[categoryId];
+        },
+        _removePlaceFromCategory: function (id, categoryId) {
+            this._placesList[categoryId] = this.getPlacesInCategory(categoryId)
+                .filter(place => place.getId() !== id);
+        },
         findMyPlaceByLonLat: function (lonlat, zoom) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').info('findMyPlaceByLonLat() is not implemented');
+            this.log.info('findMyPlaceByLonLat() is not implemented');
         },
         /**
          * @method findMyPlace
@@ -159,82 +106,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             return place;
         },
         /**
-         * @method findCategory
-         * Tries to find category with given id
-         * @param {Number} id
-         * @return {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory}
-         */
-        findCategory: function (id) {
-            return this._categoryList.find(function (category) {
-                return category.getId() === id;
-            });
-        },
-
-        /**
          * @method getCategories
          *
          * loads categories from backend to given service filters by
          * initialised user uuid
          */
-        getCategories: function () {
-            var me = this;
+        loadLayers: function (callback) {
             jQuery.ajax({
                 type: 'GET',
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
-                success: function (response) {
+                success: response => {
                     if (response) {
-                        me._handleGetCategoriesResponse(response);
-                        me.loadedCategories = true; // TODO remove when places is loaded by categories
-                        me._allLoaded();// TODO chance to me._notifyDataChanged();
+                        callback(response.layers);
                     } else {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces categories.');
+                        this.log.error('Failed to load myplaces categories.');
                     }
                 },
-                error: function (jqXHR, textStatus) {
+                error: jqXHR => {
                     if (jqXHR.status !== 0) {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces categories.');
+                        this.log.error('Failed to load myplaces categories.');
                     }
                 }
             });
         },
-
         /**
-         * @method _handleGetCategoriesResponse
-         *
-         * processes ajax response from backend
-         */
-        _handleGetCategoriesResponse: function (response) {
-            var layers = response.features;
-            if (layers === null || layers === undefined || layers.length === 0) {
-                return;
-            }
-            var properties,
-                category;
-            // found categories, proceed normally
-            for (var i = 0; i < layers.length; i++) {
-                properties = layers[i].properties;
-                category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
-                category.setId(layers[i].id);
-                category.setName(Oskari.util.sanitize(properties.category_name));
-                category.setDefault(properties.default === true);
-                category.setOptions(properties.options);
-                category.setUuid(properties.uuid);
-                if (properties.publisher_name) {
-                    category.setPublic(true);
-                }
-                this._addCategory(category);
-            }
-        },
-
-        /**
-         * @method _movePlacesToCategory
+         * @method movePlacesToCategory
          * @private
          * Moves places from one category to another and calls given callback when done.
          * @param {Number} oldCategoryId source category id
          * @param {Number} newCategoryId destination category id
          * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
-        _movePlacesToCategory: function (oldCategoryId, newCategoryId, callback) {
+        movePlacesToCategory: function (oldCategoryId, newCategoryId, callback) {
             var me = this;
             var placesInDeleteCategory = me.getPlacesInCategory(oldCategoryId);
             if (placesInDeleteCategory.length === 0) {
@@ -245,7 +148,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             for (var i = 0; i < placesInDeleteCategory.length; i++) {
                 placesInDeleteCategory[i].setCategoryId(newCategoryId);
             }
-            this.commitMyPlaces(placesInDeleteCategory, callback, true); // true isMovePlaces
+            const removeCbWrapper = success => {
+                if (success) {
+                    // remove from internal store
+                    this._removePlacesFromCategory(oldCategoryId);
+                }
+                callback(success);
+            };
+            this.commitMyPlaces(placesInDeleteCategory, removeCbWrapper, true);
         },
 
         /**
@@ -253,27 +163,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @private
          * Deletes all places in given category
          * @param {Number} categoryId category id to delete from
-         * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
-        _deletePlacesInCategory: function (categoryId, callback) {
-            var me = this;
-            var placesInDeleteCategory = me.getPlacesInCategory(categoryId);
+        deletePlacesInCategory: function (categoryId, callback) {
+            var placesInDeleteCategory = this.getPlacesInCategory(categoryId);
             var idList = placesInDeleteCategory.map(function (place) {
                 return place.getId();
             });
             if (idList.length === 0) {
-                // no places to delete -> callback right away
-                callback(true);
+                if (callback) {
+                    callback(true);
+                }
                 return;
             }
-            this.deleteMyPlaces(idList, function (success, list) {
+            this.deletePlaces(idList, success => {
                 if (success) {
-                    list.forEach(function (id) {
-                        me._removeMyPlace(id);
-                    });
-                    me._notifyDataChanged();
+                    this._removePlacesFromCategory(categoryId);
+                    this._notifyDataChanged();
                 }
-                callback(success);
+                if (callback) {
+                    callback(success);
+                }
             });
         },
         /*
@@ -281,7 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          *
          * delete a list of my places from backend
          */
-        deleteMyPlaces: function (idList, callback) {
+        deletePlaces: function (idList, callback) {
             jQuery.ajax({
                 type: 'DELETE',
                 url: Oskari.urls.getRoute('MyPlacesFeatures') + '&features=' + idList.join(),
@@ -300,72 +209,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             });
         },
         /**
-         * @method parseDate
-         *
-         * parses date for my places
-         *
-         * @param dateStr format 2011-11-02T15:27:48.981+02:00 (time part is
-         * optional)
-         * @return array with date part in first index, time (optional) in second,
-         * empty array if param is undefined or less than 10 characters
-         */
-        parseDate: function (dateStr) {
-            if (!dateStr) {
-                return [];
-            }
-            if (dateStr.length < 10) {
-                return [];
-            }
-            var year = dateStr.substring(0, 4);
-            var month = dateStr.substring(5, 7);
-            var day = dateStr.substring(8, 10);
-            var returnValue = [day + '.' + month + '.' + year];
-            var time = '';
-            // TODO: error handling
-            if (dateStr.length === 29) {
-                time = dateStr.substring(11);
-                var splitted = time.split('+');
-                time = splitted[0];
-                // take out milliseconds
-                time = time.split('.')[0];
-                var timeComps = time.split(':');
-                var hour = timeComps[0];
-                var min = timeComps[1];
-                var sec = timeComps[2];
-                /*
-                var timezone = splitted[1];
-                timezone = timezone.split(':')[0];
-                hour = parseInt(hour) + parseInt(timezone);
-                */
-                time = hour + ':' + min + ':' + sec;
-                returnValue.push(time);
-            }
-
-            return returnValue;
-        },
-        // TODO fix this and getplacesingategory when places is loaded when category is selected
-        loadPlacesInCategory: function (categoryId) {
-            var category = this.findCategory(categoryId);
-            if (category.isPlacesLoaded()) {
-                return this.getPlacesInCategory(categoryId);
-            }
-            var me = this;
-            this.getMyPlacesByLayerId(categoryId, function () {
-                category.setPlacesLoaded(true);
-                return me.getPlacesInCategory(categoryId);
-            });
-        },
-        /**
          * @method getPlaces
          *
          * loads places from backend to given service filters by layerId
          *
          */
-        getMyPlacesByLayerId: function (categoryId, callback) {
-            var me = this;
-            if (!categoryId) {
-                callback();
-            }
+        loadPlaces: function (categoryId) {
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -374,77 +223,71 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     layerId: categoryId,
                     crs: this.srsName
                 },
-                success: function (response) {
+                success: response => {
                     if (response) {
-                        me._handleMyPlacesResponse(response);
-                        me._notifyDataChanged();
+                        this._handleLoadPlacesResponse(categoryId, response.features);
                     } else {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces.');
+                        this.log.error('Failed to load myplaces.');
                     }
                 },
-                error: function (jqXHR, textStatus) {
+                error: jqXHR => {
                     if (jqXHR.status !== 0) {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces.');
+                        this.log.error('Failed to load myplaces.');
                     }
                 }
             });
         },
         /**
-         * @method getPlaces
-         * loads places from backend to given service filters by user
-         * @param cb
-         *
+         * @method getDrawModeFromGeometry
+         * Returns a matching draw mode string-key for the geometry
+         * @param {Object} GeoJSON geometry from my place model
+         * @return {String} matching draw mode string-key for the geometry
+         * @private
          */
-        getMyPlacesByUser: function () {
-            var me = this;
-            jQuery.ajax({
-                type: 'GET',
-                url: Oskari.urls.getRoute('MyPlacesFeatures'),
-                data: {
-                    crs: this.srsName
-                },
-                success: function (response) {
-                    if (response) {
-                        me._handleMyPlacesResponse(response);
-                        me.loadedPlaces = true;
-                        me._allLoaded();
-                    } else {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces.');
-                    }
-                },
-                error: function (jqXHR, textStatus) {
-                    if (jqXHR.status !== 0) {
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Failed to load myplaces.');
-                    }
-                }
-            });
+        getDrawModeFromGeometry: function (geometry) {
+            if (geometry === null) {
+                return null;
+            }
+            var type = geometry.type;
+            if (type === 'MultiPoint' || type === 'Point') {
+                return 'point';
+            } else if (type === 'MultiLineString' || type === 'LineString') {
+                return 'line';
+            } else if (type === 'MultiPolygon' || type === 'Polygon') {
+                return 'area';
+            }
+            return null;
+        },
+        /**
+         * @method _formatDate
+         * Formats timestamp for UI
+         * @return {String}
+         */
+        _formatDate: function (timestamp) {
+            if (!timestamp) {
+                return '';
+            }
+            const date = new Date(timestamp);
+            if (isNaN(date.getMilliseconds())) {
+                return '';
+            }
+            return date.toLocaleDateString();
         },
         /**
          * @method _handleCommitMyPlacesResponse
          * processes ajax response from backend
          * @param response server response
          */
-        _handleMyPlacesResponse: function (response) {
-            var features = response.features || [];
-            if (features.length === 0 || jQuery.isEmptyObject(features)) {
-                return;
-            }
-            var me = this;
-            features.forEach(function (feat) {
+        _handleLoadPlacesResponse: function (categoryId, features = []) {
+            this._placesList[categoryId] = [];
+            features.forEach(feat => {
                 var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
                 place.setId(feat.id);
-                place.setName(Oskari.util.sanitize(feat.properties.name));
-                place.setDescription(Oskari.util.sanitize(feat.properties.place_desc));
-                place.setAttentionText(Oskari.util.sanitize(feat.properties.attention_text));
-                place.setLink(Oskari.util.sanitize(feat.properties.link));
-                place.setImageLink(Oskari.util.sanitize(feat.properties.image_url));
-                place.setCategoryId(feat.properties.category_id);
-                place.setCreateDate(feat.properties.created);
-                place.setUpdateDate(feat.properties.updated);
-                place.setGeometry(feat.geometry);
                 place.setUuid(feat.properties.uuid);
-                me._addMyPlace(place);
+                this._setPlaceProperties(place, feat);
+                this._addMyPlace(place);
             });
+            this._notifyDataChanged();
         },
         /**
          * @method getPlacesInCategory
@@ -455,54 +298,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
         getPlacesInCategory: function (categoryId) {
             return this._placesList[categoryId] || [];
         },
-        /**
-         * @method deleteCategory
-         * Deletes all places in given category or moves the places to default category. After that
-         * deletes the category.
-         * @param {Number} categoryId category id to delete
-         * @param {Boolean} movePlacesToDefault true to move places, false to delete
-         * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
-         */
-        deleteCategory: function (categoryId, movePlacesToDefault, callback) {
-            var me = this;
-
-            // call actual category delete once category has been cleared of places
-            // successfully
-            var callBackWrapper = function (success) {
-                if (success) {
-                    me._deleteEmptyCategory(categoryId, callback);
-                } else {
-                    // only callback on fail here
-                    callback(success);
-                }
-            };
-            // move places handling
-            if (movePlacesToDefault === true) {
-                var defaultCategory = me.getDefaultCategory();
-                me._movePlacesToCategory(categoryId, defaultCategory.getId(), callBackWrapper);
-            } else {
-                // delete places to clear category if places will not be moved
-                me._deletePlacesInCategory(categoryId, callBackWrapper);
-            }
-        },
-        /**
-         * @method _deleteEmptyCategory
-         * @private
-         * Deletes given category. Assumes its empty.
-         * @param {Number} categoryId category id to delete
-         * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
-         */
-        _deleteEmptyCategory: function (categoryId, callback) {
-            var me = this;
-            this.deleteCategories([categoryId], function (success, list) {
-                if (success) {
-                    list.forEach(function (id) {
-                        me._removeCategory(id);
-                    });
-                }
-                callback(success);
-                me._notifyDataChanged();
-            });
+        placesLoaded: function (categoryId) {
+            return !!this._placesList[categoryId];
         },
         /*
          * @method deleteCategories
@@ -511,128 +308,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Array} categoryIds
          * @param {Function} callback
          */
-        deleteCategories: function (categoryIds, callback) {
+        deleteCategory: function (categoryId, callback) {
             jQuery.ajax({
                 type: 'DELETE',
                 dataType: 'json',
-                url: Oskari.urls.getRoute('MyPlacesLayers') + '&layers=' + categoryIds.join(),
+                url: Oskari.urls.getRoute('MyPlacesLayers') + '&id=' + categoryId,
                 success: function (response) {
-                    callback(!!response, categoryIds);
+                    callback(response.success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
-                        callback(false, categoryIds);
+                        callback(false);
                     }
                 }
             });
-        },
-        /**
-         * @method _removeCategory
-         * @private
-         * Removes given category from internal data structure. Called when similar backend function
-         * has returned successfully.
-         * @param {Number} categoryId category id to delete
-         */
-        _removeCategory: function (categoryId) {
-            var index = this._categoryList.findIndex(function (category) {
-                return category.getId() === categoryId;
-            });
-            if (index !== -1) {
-                this._categoryList.splice(index, 1);
-            }
-        },
-        /**
-         * @method saveCategory
-         * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
-         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory} categoryModel category to save
-         * @param {Function} callback function to call when done, receives boolean as
-         *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)
-         */
-        saveCategory: function (categoryModel, callback) {
-            this.commitCategories([categoryModel], callback);
         },
         /**
          * @method commitCategories
          *
          * handles insert & update (NO delete)
          */
-        commitCategories: function (list, callback) {
-            var me = this;
-            var categories = [];
-            var isNew = false;
-            list.forEach(function (cat) {
-                var category = {
-                    id: cat.getId()
-                };
-                category.properties = {
-                    'category_name': cat.getName(),
-                    'default': cat.isDefault(),
-                    'style': cat.getDefaultFeatureStyle()
-                };
-                // FIXME: should setup two lists to work properly. Now just uses the last category as "everything is new or old"
-                isNew = !category.id;
-                categories.push(category);
-            });
+        commitCategory: function (data, callback) {
             jQuery.ajax({
-                type: isNew ? 'POST' : 'PUT',
+                type: data.id ? 'PUT' : 'POST',
                 dataType: 'json',
-                contentType: 'application/json',
-                data: JSON.stringify({ 'features': categories }),
+                data,
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
-                success: function (response) {
+                success: response => {
                     if (response) {
-                        me._handleCommitCategoriesResponse(response, callback, isNew);
-                        me._notifyDataChanged();
-                    } else {
-                        callback(false, null, isNew);
-                    }
-                },
-                error: function (jqXHR, textStatus) {
-                    if (jqXHR.status !== 0) {
-                        callback(false, null, isNew);
-                    }
-                }
-            });
-        },
-        /**
-         * @method _handleCommitCategoriesResponse
-         *
-         */
-        _handleCommitCategoriesResponse: function (response, cb, isNew) {
-            var me = this;
-            var categories = response.features || [];
-
-            if (categories.length === 0) {
-                if (cb) {
-                    cb(false, null, isNew);
-                }
-                return;
-            }
-            categories.forEach(function (category) {
-                var categoryModel;
-                if (isNew) { // Insert
-                    categoryModel = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
-                    categoryModel.setId(category.id);
-                } else { // Update
-                    categoryModel = me.findCategory(category.id);
-                    if (!categoryModel) {
-                        cb(false, null, isNew);
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find category to update');
+                        callback(response.layer);
                         return;
                     }
-                }
-                var properties = category.properties;
-                // set values
-                categoryModel.setName(Oskari.util.sanitize(properties.category_name));
-                categoryModel.setUuid(properties.uuid);
-                categoryModel.setDefault(!!properties.default);
-                categoryModel.setPublic(!!properties.publisher_name);
-                categoryModel.setOptions(properties.options);
-                if (isNew) {
-                    me._addCategory(categoryModel);
-                }
-                // call callback for every category
-                cb(true, categoryModel, isNew);
+                    callback(null);
+                },
+                error: () => callback(null)
             });
         },
         /**
@@ -666,8 +375,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as
          *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)
          */
-        saveMyPlace: function (myplaceModel, callback, isMovePlace) {
-            this.commitMyPlaces([myplaceModel], callback, isMovePlace);
+        saveMyPlace: function (myplaceModel, callback) {
+            const id = myplaceModel.getId();
+            let oldCategoryId = null;
+            const categoryId = myplaceModel.getCategoryId();
+            if (id) {
+                const oldPlace = this.findMyPlace(id);
+                if (oldPlace.getCategoryId() !== categoryId) {
+                    oldCategoryId = oldPlace.getCategoryId();
+                }
+            }
+            const callbackWrapper = success => {
+                if (success && oldCategoryId) {
+                    this._removePlaceFromCategory(id, oldCategoryId);
+                    this._addMyPlace(myplaceModel);
+                }
+                callback(success, categoryId, oldCategoryId);
+                this._notifyDataChanged();
+            };
+            this.commitMyPlaces([myplaceModel], callbackWrapper, !!id);
         },
 
         /**
@@ -675,10 +401,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          *
          * handles insert & update (NO delete)
          */
-        commitMyPlaces: function (list, callback, isMovePlaces) {
+        commitMyPlaces: function (list, callback, isUpdate) {
             var me = this;
             var features = [];
-            var isNew = false;
             list.forEach(function (feat) {
                 // backend formatting
                 var id = feat.getId();
@@ -695,12 +420,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                         'image_url': feat.getImageLink()
                     }
                 };
-                // FIXME: should setup two lists to work properly. Now just uses the last item as "everything is new or old"
-                isNew = !id;
                 features.push(geojson);
             });
             jQuery.ajax({
-                type: isNew ? 'POST' : 'PUT',
+                type: isUpdate ? 'PUT' : 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -714,15 +437,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                             callback(true);
                             return;
                         }
-                        me._handleCommitMyPlacesResponse(response, callback, isNew, isMovePlaces);
-                        me._notifyDataChanged();
+                        const success = me._handleCommitMyPlacesResponse(response, isUpdate);
+                        callback(success);
                     } else {
-                        callback(false, null);
+                        callback(false);
                     }
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
-                        callback(false, null);
+                        callback(false);
                     }
                 }
             });
@@ -734,48 +457,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param response server response
          * @param cb callback to call with the model list as param
          */
-        _handleCommitMyPlacesResponse: function (response, cb, isNew, isMovePlaces) {
-            var me = this;
+        _handleCommitMyPlacesResponse: function (response, isUpdate) {
             var features = response.features || [];
-            if (features.length === 0 || jQuery.isEmptyObject(features)) {
-                if (cb) {
-                    cb(false, null);
-                }
-                return;
+            if (features.length === 0) {
+                return false;
             }
-            features.forEach(function (feature) {
+            features.forEach(feature => {
                 var id = feature.id;
                 var place;
-                if (isNew || isMovePlaces) {
+                if (isUpdate) {
+                    place = this.findMyPlace(id);
+                    if (!place) {
+                        this.log.error('Cannot find place to update');
+                        return false;
+                    }
+                } else {
                     place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
                     place.setId(id);
-                    place.setCreateDate(feature.properties.created);
                     place.setUuid(feature.uuid);
-                } else {
-                    place = me.findMyPlace(id);
-                    if (!place) {
-                        cb(false, null);
-                        Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find place to update');
-                        return;
-                    }
                 }
-                place.setName(Oskari.util.sanitize(feature.properties.name));
-                place.setDescription(Oskari.util.sanitize(feature.properties.place_desc));
-                place.setAttentionText(Oskari.util.sanitize(feature.properties.attention_text));
-                place.setLink(Oskari.util.sanitize(feature.properties.link));
-                place.setImageLink(Oskari.util.sanitize(feature.properties.image_url));
-                place.setCategoryId(feature.properties.category_id);
-                place.setUpdateDate(feature.properties.updated);
-                place.setGeometry(feature.geometry);
-                if (isNew || isMovePlaces) {
-                    me._removeMyPlace(place.getId());
-                    me._addMyPlace(place);
+                this._setPlaceProperties(place, feature);
+                if (!isUpdate) {
+                    this._addMyPlace(place);
                 }
             });
-            if (cb) {
-                // all committed places is in same category
-                cb(true, features[0].properties.category_id);
-            }
+            return true;
+        },
+        _setPlaceProperties: function (place, feature) {
+            const { properties, geometry } = feature;
+            place.setName(Oskari.util.sanitize(properties.name));
+            place.setDescription(Oskari.util.sanitize(properties.place_desc));
+            place.setAttentionText(Oskari.util.sanitize(properties.attention_text));
+            place.setLink(Oskari.util.sanitize(properties.link));
+            place.setImageLink(Oskari.util.sanitize(properties.image_url));
+            place.setCategoryId(properties.category_id);
+            place.setCreateDate(this._formatDate(properties.created));
+            place.setUpdateDate(this._formatDate(properties.updated));
+            place.setGeometry(geometry);
+            const drawMode = this.getDrawModeFromGeometry(geometry);
+            const measurement = this.mapmodule.formatMeasurementResult(this.mapmodule.getMeasurementResult(geometry), drawMode);
+            place.setMeasurement(measurement);
         },
         /**
          * @method publishCategory
@@ -785,31 +506,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Function} callback function receives a boolean parameter with true on successful operation
          */
         publishCategory: function (categoryId, makePublic, callback) {
-            var me = this;
-            var category = me.findCategory(categoryId);
-            if (!category) {
-                Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find place to update');
-                callback(false);
-                return;
-            }
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    id: category.getId(),
-                    makePublic: makePublic
+                    id: categoryId,
+                    makePublic
                 },
                 url: Oskari.urls.getRoute('PublishMyPlaceLayer'),
-                success: function (pResp) {
+                success: pResp => {
                     if (pResp) {
-                        category.setPublic(makePublic);
                         callback(true);
-                        me._notifyDataChanged();
                     } else {
                         callback(false);
                     }
                 },
-                error: function (jqXHR, textStatus) {
+                error: jqXHR => {
                     if (jqXHR.status !== 0) {
                         callback(false);
                     }

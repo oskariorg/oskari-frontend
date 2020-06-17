@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
     function (sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
+        this.log = Oskari.log('Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler');
     }, {
         /**
          * @method handleRequest
@@ -40,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             }
         },
         _handleEditPlace: function (sandbox, request) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler').debug('edit requested for place' + request.getId());
+            this.log.debug('edit requested for place' + request.getId());
             var service = this.instance.getService();
             var place = service.findMyPlace(request.getId());
             var mainMapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -63,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             }
         },
         _handleDeletePlace: function (sandbox, request) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.request.DeleteRequestHandler').debug('delete requested for place ' + request.getId());
+            this.log.debug('delete requested for place ' + request.getId());
             /* let's refresh map also if there */
             var categoryId = request.getId();
             var layerId = 'myplaces_' + categoryId;
@@ -83,28 +84,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             this.instance.getMainView().cleanupPopup();
         },
         _handleEditCategory: function (sandbox, request) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler').debug('edit requested for category ' + request.getId());
-            var service = this.instance.getService();
-            var category = service.findCategory(request.getId());
-            if (category) {
-                this.instance.getCategoryHandler().editCategory(category);
-            }
+            const id = request.getId();
+            this.log.debug('edit requested for category ' + id);
+            this.instance.getCategoryHandler().editCategory(id);
         },
         _handleDeleteCategory: function (sandbox, request) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler').debug('delete requested for category ' + request.getId());
-            var service = this.instance.getService();
-            var category = service.findCategory(request.getId());
-            if (category) {
-                this.instance.getCategoryHandler().confirmDeleteCategory(category);
-            }
+            const id = request.getId();
+            this.log.debug('delete requested for category ' + id);
+            this.instance.getCategoryHandler().confirmDeleteCategory(id);
         },
         _handlePublishCategory: function (sandbox, request) {
-            Oskari.log('Oskari.mapframework.bundle.myplaces3.request.EditRequestHandler').debug('(un/)publish requested for category ' + request.getId());
-            var service = this.instance.getService();
-            var category = service.findCategory(request.getId());
-            if (category) {
-                this.instance.getCategoryHandler().confirmPublishCategory(category, request.isPublic());
-            }
+            const id = request.getId();
+            this.log.debug('(un/)publish requested for category ' + id);
+            this.instance.getCategoryHandler().confirmPublishCategory(id, request.isPublic());
         }
     }, {
         /**
