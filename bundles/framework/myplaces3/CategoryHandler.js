@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             }
             sandbox.register(this);
             this.instance.getService().loadLayers(this.addLayersToService.bind(this));
-            this._processStartupLinkLayers();
         },
 
         /**
@@ -111,6 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 this.sandbox.request(this.getName(), request);
             }
         },
+        // for initial load layers
         addLayersToService: function (layers = []) {
             layers.forEach(layerJson => {
                 this.addLayerToService(layerJson, true);
@@ -119,6 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
                 this.sandbox.notifyAll(event);
             }
+            this._processStartupLinkLayers();
             this._notifyUpdate();
         },
         /**
@@ -180,7 +181,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 var splitted = layerStr.split('+');
                 var layerId = splitted[0];
                 var opacity = splitted[1];
-
                 if (layerId === null || layerId.indexOf(this.instance.idPrefix) === -1) {
                     return;
                 }
