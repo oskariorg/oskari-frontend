@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return this.mapLayerService.getAllLayersByMetaType(this.metaType)
                 .map(layer => this._parseLayerToCategory(layer));
         },
-        getDefaltCategory: function () {
+        getDefaultCategory: function () {
             const layer = this.mapLayerService.getAllLayersByMetaType(this.metaType)
                 .find(l => l.getOptions().isDefault === true);
             if (!layer) {
@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var deleteBtn;
 
             dialog.makeModal();
-            const defaultCategory = this.getDefaltCategory();
+            const defaultCategory = this.getDefaultCategory();
             if (defaultCategory.categoryId === categoryId) {
                 // cannot delete default category
                 var okBtn = dialog.createCloseButton(me.loc('buttons.ok'));
