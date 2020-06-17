@@ -130,7 +130,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             // add maplayer to Oskari
             const service = this.mapLayerService; // Or getMapLayerService
             var layer = service.createMapLayer(layerJson);
-            // layer.markAsInternalDownloadSource();
             service.addLayer(layer, skipEvent);
             if (!skipEvent) {
                 this._notifyUpdate();
