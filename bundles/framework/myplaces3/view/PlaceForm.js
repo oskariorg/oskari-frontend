@@ -152,8 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                     placeLink = 'http://' + placeLink;
                 }
-                placeLink = placeLink.replace('<', '');
-                placeLink = placeLink.replace('>', '');
             }
             place.setLink(placeLink);
             place.setImageLink(form.find('input[data-name=imagelink]').val());
