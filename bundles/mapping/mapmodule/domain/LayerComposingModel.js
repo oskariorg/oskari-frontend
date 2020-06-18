@@ -20,6 +20,7 @@ const PROPERTY_FIELDS = [
     'OPACITY',
     'ORGANIZATION_NAME',
     'REALTIME',
+    'SINGLE_TILE',
     'REFRESH_RATE',
     'SCALE',
     'SELECTED_TIME',

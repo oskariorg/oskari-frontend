@@ -44,6 +44,7 @@ Oskari.clazz.define(
                 LayerComposingModel.LEGEND_IMAGE,
                 LayerComposingModel.REALTIME,
                 LayerComposingModel.REFRESH_RATE,
+                LayerComposingModel.SINGLE_TILE,
                 LayerComposingModel.SELECTED_TIME,
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLE,
