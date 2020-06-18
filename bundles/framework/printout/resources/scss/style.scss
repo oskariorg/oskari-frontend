@@ -111,6 +111,9 @@ div.field select {
 
 .printout_settings_cont {
     margin: 10px 5px;
+    input:disabled+label {
+        color: #cccccc;
+    }
 }
 
 /* Buttons */

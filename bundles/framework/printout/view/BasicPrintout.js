@@ -211,24 +211,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {jQuery} Returns the created panel
          */
         _createSettingsPanel: function () {
-            var me = this;
-            const loc = this.loc.settings;
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.addClass('printsettings');
-            panel.setTitle(loc.label);
+            panel.setTitle(this.loc.settings.label);
             var contentPanel = panel.getContainer();
             // tooltip
-            var tooltipCont = me.template.help.clone();
-            tooltipCont.attr('title', loc.tooltip);
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', this.loc.settings.tooltip);
             panel.getHeader().append(tooltipCont);
-            var format = me.template.format.clone();
-            format.find('.printout_format_label').html(loc.format.label);
+            var format = this.template.format.clone();
+            format.find('.printout_format_label').html(this.loc.format.label);
 
-            FORMAT_OPTIONS.forEach(function (option, i) {
+            FORMAT_OPTIONS.forEach((option, i) => {
                 const { name, mime } = option;
-                var toolContainer = me.template.optionTool.clone();
+                var toolContainer = this.template.optionTool.clone();
                 const id = 'printout-format-' + name;
-                const label = loc.format.options[name];
+                const label = this.loc.format.options[name];
                 toolContainer.find('label').append(label).attr('for', id);
                 const input = toolContainer.find('input');
                 if (i === 0) {
@@ -240,13 +238,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     id
                 });
                 input.on('change', function () {
-                    // TODO don't hide title and add warning icon
                     if (name === 'png') {
-                        contentOptions.addClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', true);
                         title.append(pngNote);
                     } else {
-                        contentOptions.removeClass('oskari-hidden');
                         contentOptions.find('input').prop('disabled', false);
                         pngNote.remove();
                     }
@@ -255,31 +250,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             });
             contentPanel.append(format);
             /* --- options available for pdf --- */
-            const optionsContainer = me.template.contentOptions.clone();
-            const title = optionsContainer.find('.printout_content_title').html(loc.content.label);
+            const optionsContainer = this.template.contentOptions.clone();
+            const title = optionsContainer.find('.printout_content_title').html(this.loc.content.label);
             const contentOptions = optionsContainer.find('.printout_content_options');
-            const pngNote = me.template.pngNote.clone();
-            pngNote.attr('title', this.loc.settings.content.pngNote);
-            var mapTitleInput = me.template.mapTitleInput.clone();
-            mapTitleInput.attr('placeholder', loc.content.mapTitle.placeholder);
-            contentOptions.append(mapTitleInput);
+            const pngNote = this.template.pngNote.clone();
+            pngNote.attr('title', this.loc.content.pngNote);
+            var mapTitle = this.template.mapTitleInput.clone();
+            mapTitle.find('input').attr('placeholder', this.loc.content.mapTitle.placeholder);
+            contentOptions.append(mapTitle);
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
                 options.push(TIME_OPTION);
             }
-            options.forEach(function (value) {
-                var opt = me.template.optionPage.clone();
+            options.forEach(value => {
+                var opt = this.template.optionPage.clone();
                 const id = 'printout-page-' + value;
                 opt.find('input').attr({ id, value }).prop('checked', true);
-                const label = loc.content[value].label;
+                const label = this.loc.content[value].label;
                 opt.find('label').html(label).attr('for', id);
                 contentOptions.append(opt);
             });
             contentPanel.append(optionsContainer);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
-            var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {
-                me.contentOptionDivs.pageScale.css('display', 'none');
+                this.contentOptionDivs.pageScale.css('display', 'none');
             }
             return panel;
         },
