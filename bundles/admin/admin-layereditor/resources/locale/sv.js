@@ -58,6 +58,7 @@ Oskari.registerLocalization(
                 "params": {
                     "selectedTime": "Vald tid"
                 },
+                "singleTile": "Single Tile",
                 "realtime": "Realtidslager",
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
@@ -97,6 +98,7 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
+            "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
             "capabilities": {
                 "show": "Visa getCapabilities svar",
                 "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",

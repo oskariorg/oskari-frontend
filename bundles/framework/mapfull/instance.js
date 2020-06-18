@@ -442,17 +442,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // setting state
             if (state.selectedLayers) {
+                const layersNotAvailable = [];
                 rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
-
                 len = state.selectedLayers.length;
                 for (i = 0; i < len; i += 1) {
                     layer = state.selectedLayers[i];
 
                     var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if (oskariLayer) {
-                        oskariLayer.setVisible(!layer.hidden);
+                    if (!oskariLayer) {
+                        layersNotAvailable.push(layer);
+                        continue;
                     }
-                    if (layer.style && oskariLayer) {
+                    oskariLayer.setVisible(!layer.hidden);
+                    if (layer.style) {
                         oskariLayer.selectStyle(layer.style);
                     }
                     sandbox.request(
@@ -472,6 +474,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                         );
                     }
                 }
+                Oskari.on('app.start', function () {
+                    layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
+                        const oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(id);
+                        if (!oskariLayer) {
+                            return;
+                        }
+                        if (style) {
+                            oskariLayer.selectStyle(style);
+                        }
+                        sandbox.postRequestByName('AddMapLayerRequest', [id]);
+                        sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [id, !hidden]);
+                        if (!isNaN(opacity)) {
+                            sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [id, Number.parseInt(opacity)]);
+                        }
+                    });
+                });
             }
 
             /* Change to this once plugins can handle it...

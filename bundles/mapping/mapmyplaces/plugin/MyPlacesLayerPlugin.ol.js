@@ -1,5 +1,3 @@
-import olLayerImage from 'ol/layer/Image';
-import olSourceImageWMS from 'ol/source/ImageWMS';
 import { getZoomLevelHelper } from '../../mapmodule/util/scale';
 
 /**
@@ -56,68 +54,7 @@ Oskari.clazz.define(
             mapLayerService.registerLayerModel(this.layertype, layerClass);
             mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
-        /**
-         * Adds a single MyPlaces layer to this map
-         *
-         * @method addMapLayerToMap
-         * @param {Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer} layer
-         * @param {Boolean} keepLayerOnTop
-         * @param {Boolean} isBaseMap
-         */
-        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var map = this.getMapModule();
-            var openlayer = new olLayerImage({
-                source: new olSourceImageWMS({
-                    url: layer.getWmsUrl(),
-                    params: {
-                        'LAYERS': layer.getWmsName(),
-                        'FORMAT': 'image/png',
-                        // Avoid AxisOrder issues by not using WMS 1.3.0
-                        'VERSION': '1.1.1'
-                    },
-                    crossOrigin: layer.getAttributes('crossOrigin')
-                }),
-                visible: layer.isInScale(map.getMapScale()) && layer.isVisible(),
-                opacity: layer.getOpacity() / 100
 
-            });
-            const zoomLevelHelper = getZoomLevelHelper(map.getScaleArray());
-            // Set min max zoom levels that layer should be visible in
-            zoomLevelHelper.setOLZoomLimits(openlayer, layer.getMinScale(), layer.getMaxScale());
-
-            this._registerLayerEvents(openlayer, layer);
-
-            map.addLayer(openlayer, !keepLayerOnTop);
-            this.setOLMapLayers(layer.getId(), openlayer);
-
-            Oskari.log('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin').debug(
-                '#!#! CREATED OPENLAYER.LAYER.WMS for MyPlacesLayer ' +
-                layer.getId()
-            );
-        },
-        /**
-         * Adds event listeners to ol-layers
-         * @param {OL3 layer} layer
-         * @param {Oskari layerconfig} oskariLayer
-         *
-         */
-        _registerLayerEvents: function (layer, oskariLayer) {
-            const mapModule = this.getMapModule();
-            const source = layer.getSource();
-            const layerId = oskariLayer.getId();
-
-            source.on('imageloadstart', function () {
-                mapModule.loadingState(layerId, true);
-            });
-
-            source.on('imageloadend', function () {
-                mapModule.loadingState(layerId, false);
-            });
-
-            source.on('imageloaderror', function () {
-                mapModule.loadingState(layerId, null, true);
-            });
-        },
         /**
          * Called when layer details are updated (for example by the admin functionality)
          * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
