@@ -7,12 +7,12 @@ const linkFormatter = (value, params = {}) => {
     return `<a href="${value}" rel="noreferrer noopener" target="_blank">${params.label || value}</a>`;
 };
 
-const imgFormatter = (value) => {
-    return `<img src="${value}"></img>`;
-};
-const imageWithLinkFormatter = (value) => {
-    const img = imgFormatter(value);
-    return linkFormatter(value, { label: img });
+const imgFormatter = (value, params = {}) => {
+    const img = `<img src="${value}"></img>`;
+    if (params.link === true) {
+        return linkFormatter(value, { label: img });
+    }
+    return img;
 };
 // TODO: add decimal precision formatting etc localized formatting
 const numberFormatter = (value) => value;
@@ -27,7 +27,6 @@ const formatters = {
     [DEFAULT_FORMATTER]: (value) => value,
     link: linkFormatter,
     image: imgFormatter,
-    imageWithLink: imageWithLinkFormatter,
     number: numberFormatter
 };
 

@@ -64,6 +64,19 @@ export class WFSLayer extends VectorTileLayer {
         this._locales = locales;
     }
 
+    /**
+     * Returns an formatter object for given field name.
+     * The object can have type and params like:
+     * {
+     *   type: "link",
+     *   params: {
+     *     label: "Link title"
+     *   }
+     * }
+     * But it can be an empty config if nothing is configured.
+     * This is used to instruct GFI value formatting
+     * @param {String} field feature property name that might have formatter options configured
+     */
     getFieldFormatMetadata (field) {
         if (typeof field !== 'string') {
             return {};
