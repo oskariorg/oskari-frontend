@@ -68,13 +68,14 @@ export class WFSLayer extends VectorTileLayer {
         if (typeof field !== 'string') {
             return {};
         }
-        const { data } = this.getAttributes();
+        const { data = {} } = this.getAttributes();
         const { format } = data;
         if (typeof format !== 'object') {
             return {};
         }
         return format[field] || {};
     }
+
     /**
      * @method getActiveFeatures
      * @return {Object[]} features
@@ -325,6 +326,7 @@ export class WFSLayer extends VectorTileLayer {
     getWMSLayerId () {
         return this._WMSLayerId;
     }
+
     /**
      * @method getLayerUrl
      * Superclass override
