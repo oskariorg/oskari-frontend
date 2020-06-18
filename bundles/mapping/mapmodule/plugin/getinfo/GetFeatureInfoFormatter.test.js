@@ -15,8 +15,28 @@ const otherLayer = {
     getLocales: () => ['ID', 'Label for test'],
     getName: () => 'testing_wfs'
 };
+const attrConfigLayer = {
+    isLayerOfType: (type) => type === 'wfsplaces',
+    getFields: () => ['__fid', 'test', 'image_url'],
+    getLocales: () => ['ID', 'Label for test', 'Image'],
+    getFieldFormatMetadata: (field) => {
+        if (field === 'image_url') {
+            return { type: 'image', noLabel: true };
+        }
+        return {};
+    },
+    getName: () => 'testing_wfs'
+};
 plugin._sandbox = {
-    findMapLayerFromSelectedMapLayers: (layerId) => `${layerId}`.startsWith('myplaces_') ? myPlacesLayer : otherLayer
+    findMapLayerFromSelectedMapLayers: (layerId) => {
+        if (`${layerId}`.startsWith('myplaces_')) {
+            return myPlacesLayer;
+        }
+        if (layerId === 123) {
+            return otherLayer;
+        }
+        return attrConfigLayer;
+    }
 };
 plugin._loc.noAttributeData = 'NO DATA';
 
@@ -100,6 +120,19 @@ describe('GetInfoPlugin', () => {
             expect(result[0].markup instanceof jQuery).toEqual(true);
             const html = result[0].markup.outerHTML();
             expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr></table>`);
+        });
+
+        test('wfslayer with no label image formatter', () => {
+            const result = plugin._formatWFSFeaturesForInfoBox({
+                layerId: 468,
+                features: [[468, 'TESTING', 'http://test.domain/test.png']]
+            });
+            expect(result[0].layerName).toEqual(attrConfigLayer.getName());
+            expect(result[0].type).toEqual('wfslayer');
+            expect(result[0].markup instanceof jQuery).toEqual(true);
+            const html = result[0].markup.outerHTML();
+            // should skip "Image" label" and write colspan=2. Should have <img></img> but outerHTML() probably messes it up
+            expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr><tr><td colspan="2"><img src="http://test.domain/test.png"></td></tr></table>`);
         });
     });
 });

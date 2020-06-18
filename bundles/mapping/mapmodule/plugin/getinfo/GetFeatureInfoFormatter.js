@@ -1,4 +1,5 @@
 import { getFormatter } from './ValueFormatters';
+const ID_SKIP_LABEL = '$SKIP$__';
 
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
@@ -385,7 +386,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         return result;
                     }
                     // construct object for UI having only selected fields with localized labels
-                    const uiLabel = localeMapping[prop] || prop;
+                    let uiLabel = localeMapping[prop] || prop;
                     const value = featureValues[index];
                     let formatterOpts = {};
                     if (typeof layer.getFieldFormatMetadata === 'function') {
@@ -393,6 +394,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     }
                     const formatter = getFormatter(formatterOpts.type);
                     if (typeof value !== 'undefined') {
+                        if (formatterOpts.noLabel === true) {
+                            uiLabel = ID_SKIP_LABEL + uiLabel;
+                        }
                         result[uiLabel] = formatter(value, formatterOpts.params);
                     }
                     return result;
@@ -509,12 +513,17 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             if (!even) {
                 row.addClass('odd');
             }
-
-            keyColumn = this.template.tableCell.clone();
-            keyColumn.append(key);
-            row.append(keyColumn);
+            const skipLabel = key.startsWith(ID_SKIP_LABEL);
+            if (!skipLabel) {
+                keyColumn = this.template.tableCell.clone();
+                keyColumn.append(key);
+                row.append(keyColumn);
+            }
 
             valColumn = this.template.tableCell.clone();
+            if (skipLabel) {
+                valColumn.attr('colspan', 2);
+            }
             valColumn.append(valpres);
             row.append(valColumn);
 
