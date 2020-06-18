@@ -64,11 +64,13 @@ Oskari.registerLocalization(
                     "pdf": "PDF document"
                 }
             },
-            "mapTitle": {
-                "label": "Map Title",
-                "tooltip": "Add a title for the map."
-            },
             "content": {
+                "label": "Map Title",
+                "tooltip": "",
+                "pngNote": "PNG-print will not include additional information.",
+                "mapTitle": {
+                    "placeholder": "Add a title for the map"
+                },
                 "pageLogo": {
                     "label": "Include logo",
                     "tooltip": "You can hide the logo if necessary."
