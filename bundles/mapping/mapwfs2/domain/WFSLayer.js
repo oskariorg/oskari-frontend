@@ -64,6 +64,17 @@ export class WFSLayer extends VectorTileLayer {
         this._locales = locales;
     }
 
+    getFieldFormatMetadata (field) {
+        if (typeof field !== 'string') {
+            return {};
+        }
+        const { data } = this.getAttributes();
+        const { format } = data;
+        if (typeof format !== 'object') {
+            return {};
+        }
+        return format[field] || {};
+    }
     /**
      * @method getActiveFeatures
      * @return {Object[]} features

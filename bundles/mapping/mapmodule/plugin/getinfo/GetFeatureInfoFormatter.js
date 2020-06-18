@@ -1,3 +1,5 @@
+import { getFormatter } from './ValueFormatters';
+
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
         wrapper: '<div></div>',
@@ -385,8 +387,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // construct object for UI having only selected fields with localized labels
                     const uiLabel = localeMapping[prop] || prop;
                     const value = featureValues[index];
+                    let formatterOpts = {};
+                    if (typeof layer.getFieldFormatMetadata === 'function') {
+                        formatterOpts = layer.getFieldFormatMetadata(prop);
+                    }
+                    const formatter = getFormatter(formatterOpts.type);
                     if (typeof value !== 'undefined') {
-                        result[uiLabel] = value;
+                        result[uiLabel] = formatter(value, formatterOpts.params);
                     }
                     return result;
                 }, {});
