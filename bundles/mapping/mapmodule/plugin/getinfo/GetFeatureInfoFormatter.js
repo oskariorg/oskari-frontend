@@ -367,9 +367,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         // use localized labels for properties when available instead of property names
         // keep property names for my places as it has custom formatter
         const localeMapping = fields.reduce((result, value, index) => {
-            if (isMyPlace) {
-                return result;
-            }
             // return the localized name, fallback to actual property name if localization is missing
             const label = locales[index] || value;
             result[value] = label;
@@ -419,9 +416,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     return result;
                 }, {});
 
-            if (isMyPlace) {
-                markup = me.formatters.myplace(feature);
-            } else if (Object.keys(feature).length > 0) {
+            if (Object.keys(feature).length > 0) {
                 markup = me._json2html(feature);
             } else {
                 markup = noDataResult;
