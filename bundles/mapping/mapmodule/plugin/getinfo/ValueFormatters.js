@@ -8,7 +8,7 @@ const linkFormatter = (value, params = {}) => {
 };
 
 const imgFormatter = (value, params = {}) => {
-    const img = `<img src="${value}"></img>`;
+    const img = `<img class="oskari_gfi_img" src="${value}"></img>`;
     if (params.link === true) {
         return linkFormatter(value, { label: img });
     }
@@ -16,6 +16,9 @@ const imgFormatter = (value, params = {}) => {
 };
 // TODO: add decimal precision formatting etc localized formatting
 const numberFormatter = (value) => value;
+
+// Creates a formatter that takes value and wraps it in the html-element that was given as param when creating the formatter.
+const tagWrapper = (tag) => (value) => `<${tag}>${value}</${tag}>`;
 
 // ----------------------------------------------------------------------
 // Formatter REGISTRY
@@ -29,6 +32,8 @@ const formatters = {
     image: imgFormatter,
     number: numberFormatter
 };
+const tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'i', 'b', 'em'];
+tags.forEach(tag => { formatters[tag] = tagWrapper(tag); });
 
 const hasFormatter = type => type && typeof formatters[type] === 'function';
 const setFormatter = (type, func) => { formatters[type] = func; };
