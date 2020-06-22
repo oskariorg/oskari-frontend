@@ -34,14 +34,14 @@ describe('GetInfoPlugin', () => {
             test('formats image value', () => {
                 const formatter = getFormatter('image');
                 const result = formatter('https://my.domain');
-                expect(result).toEqual('<img src="https://my.domain"></img>');
+                expect(result).toEqual('<img class="oskari_gfi_img" src="https://my.domain"></img>');
             });
             test('formats image with link value', () => {
                 const formatter = getFormatter('image');
                 const result = formatter('https://my.domain', {
                     link: true
                 });
-                expect(result).toEqual('<a href="https://my.domain" rel="noreferrer noopener" target="_blank"><img src="https://my.domain"></img></a>');
+                expect(result).toEqual('<a href="https://my.domain" rel="noreferrer noopener" target="_blank"><img class="oskari_gfi_img" src="https://my.domain"></img></a>');
             });
         });
     });

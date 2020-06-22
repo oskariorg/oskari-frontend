@@ -346,8 +346,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (features === 'empty' || !layer) {
             return;
         }
-        // for testing we want to run myplaces with the normal wfs-formatting
-        const isMyPlace = false; // layer.isLayerOfType('myplaces');
+        // TODO: cleanup the my places references where they can be cleaned. Not sure if the boolean isMyPlace is used by the callers of this method
+        const isMyPlace = layer.isLayerOfType('myplaces');
         var fields = layer.getFields().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
 
