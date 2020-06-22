@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Platser",
         "desc": "",
-        "category": {
-            "defaultName": "Mitt kartlager",
-            "organization": "Mina platser",
-            "inspire": "Mina platser"
-        },
         "guest": {
             "loginShort": "Logga in för att lägga till dina egna platser på en karta."
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Namn",
                 "placeholder": "Namnge kartlagret"
             },
-            "drawing": {
-                "label": "Stil",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Färg",
-                    "size": "Storlek"
-                },
-                "line": {
-                    "label": "Linje",
-                    "color": "Färg",
-                    "size": "Bredd"
-                },
-                "area": {
-                    "label": "Område",
-                    "fillcolor": "Ifyllnadsfärg",
-                    "linecolor": "Linjens färg",
-                    "size": "Linjens bredd"
-                }
-            },
             "visibleFields": {
                 "label": "Uppgifter om objektet som visas",
                 "placename": "Namn",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Redigera linjens stil"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punktens stil",
-            "tooltip": "",
-            "symbol": {
-                "label": "Ikon"
-            },
-            "size": {
-                "label": "Storlek"
-            },
-            "color": {
-                "label": "Färg",
-                "labelOr": "eller",
-                "labelCustom": "Egen RGB-färg (0-255)"
-            },
-            "preview": {
-                "label": "Förhandsgranska"
-            },
-            "buttons": {
-                "save": "Spara",
-                "cancel": "Ångra"
-            }
-        },
-        "lineform": {
-            "title": "Linjens stil",
-            "tooltip": "",
-            "style": {
-                "label": "Stil"
-            },
-            "cap": {
-                "label": "Linjens ändpunkter"
-            },
-            "corner": {
-                "label": "Hörn"
-            },
-            "width": {
-                "label": "Bredd"
-            },
-            "color": {
-                "label": "Färg",
-                "labelOr": "eller",
-                "labelCustom": "Egen RGB-färg (0-255)"
-            },
-            "preview": {
-                "label": "Förhandsgranska"
-            },
-            "buttons": {
-                "save": "Spara",
-                "cancel": "Avbryt"
-            }
-        },
-        "areaform": {
-            "title": "Områdets stil",
-            "tooltip": "",
-            "linestyle": {
-                "label": "Konturlinjens stil"
-            },
-            "linecap": {
-                "label": "Konturlinjens ändpunkter"
-            },
-            "linecorner": {
-                "label": "Konturlinjens hörn"
-            },
-            "linewidth": {
-                "label": "Konturlinjens bredd"
-            },
-            "linecolor": {
-                "label": "Konturlinjens färg",
-                "labelOr": "eller",
-                "labelCustom": "Egen RGB-färg (0-255)"
-            },
-            "color": {
-                "label": "Ifyllnadsfärg för område",
-                "labelOr": "eller",
-                "labelCustom": "Egen RGB-färg (0-255)"
-            },
-            "fill": {
-                "label": "Ifyllnandsmönster"
-            },
-            "preview": {
-                "label": "Förhandsvisning"
-            },
-            "buttons": {
-                "save": "Spara",
-                "cancel": "Avbryt"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Kartlagrets namn saknas.",
             "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken.",
             "descIllegal": "Platsens beskrivning innehåller otillåtna tecken.",
-            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken.",
-            "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
-            "dotColor": "Punktens färg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
-            "dotShape": "Punktens form är ogiltig.",
-            "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
-            "lineColor": "Linjens färg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
-            "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",
-            "areaLineColor": "Områdets konturlinjefärg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
-            "areaFillColor": "Områdets ifyllnadsfärg är ogiltig. Färgvärdena måste vara mellan 0 och 255."
+            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken."
         }
     }
 });

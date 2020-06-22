@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Místa",
         "desc": "",
-        "category": {
-            "defaultName": "Moje mapová vrstva",
-            "organization": "Moje místa",
-            "inspire": "Moje místa"
-        },
         "guest": {
             "loginShort": "Pro použití se přihlašte"
         },
@@ -115,25 +110,6 @@ Oskari.registerLocalization(
                 "label": "Jméno",
                 "placeholder": "Pojmenovat mapovou vrstvu"
             },
-            "drawing": {
-                "label": "Styl",
-                "point": {
-                    "label": "Bod",
-                    "color": "Barva",
-                    "size": "Velikost"
-                },
-                "line": {
-                    "label": "Čára",
-                    "color": "Barva",
-                    "size": "Tloušťka"
-                },
-                "area": {
-                    "label": "Plocha",
-                    "fillcolor": "Barva výplně",
-                    "linecolor": "Barva čáry",
-                    "size": "Tloušťka čáry"
-                }
-            },
             "edit": {
                 "title": "Upravit mapovou vrstvu",
                 "save": "Uložit",
@@ -179,14 +155,7 @@ Oskari.registerLocalization(
             "categoryName": "Mapová vrstva není pojmenována.",
             "placeNameIllegal": "Jméno objektu obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
             "descIllegal": "Popis objektu  obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
-            "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
-            "dotSize": "Velikost bodu nesplňuje velikostní omezení (1-5).",
-            "dotColor": "Chybná barva bodu.",
-            "lineSize": "Velikost linie nesplňuje velikostní omezení (1-50).",
-            "lineColor": "Chybná barva čáry",
-            "areaLineSize": "Velikost hranice plochy nesplňuje velikostní omezení (0-50).",
-            "areaLineColor": "Chybná barva hranice plochy.",
-            "areaFillColor": "Chybná barva výplně."
+            "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky."
         }
     }
 });

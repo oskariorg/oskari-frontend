@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Vietas",
         "desc": "",
-        "category": {
-            "defaultName": "Mans kartes slānis",
-            "organization": "Manas vietas",
-            "inspire": "Vietas"
-        },
         "guest": {
             "loginShort": "Lūdzam pieteikties, lai izmantotu"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Vārds",
                 "placeholder": "Piešķirt kartes slānim nosaukumu"
             },
-            "drawing": {
-                "label": "Stils",
-                "point": {
-                    "label": "Punkts",
-                    "color": "Krāsa",
-                    "size": "Izmērs"
-                },
-                "line": {
-                    "label": "Līnija",
-                    "color": "Krāsa",
-                    "size": "Biezums"
-                },
-                "area": {
-                    "label": "Platība",
-                    "fillcolor": "Aizpildīt krāsu",
-                    "linecolor": "Līnijas krāsa",
-                    "size": "Līnijas biezums"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Pazudis kartes slāņa nosaukums",
             "placeNameIllegal": "Objekta nosaukums satur neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes",
             "descIllegal": "Objekta apraksts satur neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes",
-            "categoryNameIllegal": "Slāņa apraksts satur neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes",
-            "dotSize": "Punkta lielums neatbilst izmēra ierobežojumiem (1-5)",
-            "dotColor": "Nepareiza punkta krāsa",
-            "dotShape": "",
-            "lineSize": "Līnijas biezums neatbilst izmēra ierobežojumiem (1-50)",
-            "lineColor": "Nepareiza līnijas krāsa",
-            "areaLineSize": "Platības malas izmērs neatbilst izmēra ierobežojumiem (0-50)",
-            "areaLineColor": "Nepareiza apgabala apmales līnijas krāsa",
-            "areaFillColor": "Nepareizi aizpildīta krāsa"
+            "categoryNameIllegal": "Slāņa apraksts satur neatļautas rakstzīmes. Atļautās rakstzīmes ir burti no \"a\" līdz \"z\", kā arī \"ā\", \"č\", \"ķ\"..., cipari, atstarpes un domuzīmes"
         }
     }
 });

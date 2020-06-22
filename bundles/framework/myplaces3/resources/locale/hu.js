@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Helyek",
         "desc": "",
-        "category": {
-            "defaultName": "Saját térképréteg",
-            "organization": "Saját helyek",
-            "inspire": "Helyek"
-        },
         "guest": {
             "loginShort": "Használathoz jelentkezzen be"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Név",
                 "placeholder": "Adja meg a térképréteg nevét."
             },
-            "drawing": {
-                "label": "Stílus",
-                "point": {
-                    "label": "Pont",
-                    "color": "Szín",
-                    "size": "Méret"
-                },
-                "line": {
-                    "label": "Vonal",
-                    "color": "Szín",
-                    "size": "Vastagság"
-                },
-                "area": {
-                    "label": "Terület",
-                    "fillcolor": "Kitöltőszín",
-                    "linecolor": "Vonal színe",
-                    "size": "Vonal vastagság"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "A térképréteg neve hiányzik.",
             "placeNameIllegal": "Az objektum neve nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek.",
             "descIllegal": "Az objektum leírása nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek.",
-            "categoryNameIllegal": "A rétegleírás nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek.",
-            "dotSize": "A pont mérete nem felel meg a méret korlátoknak (1-50).",
-            "dotColor": "Rossz pontszín.",
-            "dotShape": "",
-            "lineSize": "A vonal mérete nem felel meg a méretkorlátoknak (1-50).",
-            "lineColor": "Rossz vonalszín.",
-            "areaLineSize": "A területt mérete nem felel meg a méretkorlátoknak (0-50).",
-            "areaLineColor": "Rossz élvonalszín.",
-            "areaFillColor": "Rossz kitöltőszín."
+            "categoryNameIllegal": "A rétegleírás nem megengedett karaktereket tartalmaz. Engedélyezett karakterek: angol betűk a-z-ig valamint az å, ä és ö betűk, számok, törlések és kötőjelek."
         }
     }
 });

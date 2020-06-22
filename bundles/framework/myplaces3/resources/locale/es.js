@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Sitios",
         "desc": "",
-        "category": {
-            "defaultName": "Mi capa",
-            "organization": "Mis sitios",
-            "inspire": "Sitios"
-        },
         "guest": {
             "loginShort": "Identificarse para usar"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Nombre",
                 "placeholder": "Asigne un nombre a la capa"
             },
-            "drawing": {
-                "label": "Estilo",
-                "point": {
-                    "label": "Punto",
-                    "color": "Color",
-                    "size": "Tamaño"
-                },
-                "line": {
-                    "label": "Línea",
-                    "color": "Color",
-                    "size": "Grosor"
-                },
-                "area": {
-                    "label": "Área",
-                    "fillcolor": "Color de relleno",
-                    "linecolor": "Color de línea",
-                    "size": "Grosor de línea"
-                }
-            },
             "visibleFields": {
                 "label": "Colocar datos visibles",
                 "placename": "Nombre",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Editar estilo de línea"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Estilo de punto",
-            "tooltip": "Define a style for point features.",
-            "symbol": {
-                "label": "Símbolo"
-            },
-            "size": {
-                "label": "Tamaño"
-            },
-            "color": {
-                "label": "Color",
-                "labelOr": "o",
-                "labelCustom": "Color personalizado RGB (0-255)"
-            },
-            "preview": {
-                "label": "Vista previa"
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Cancelar"
-            }
-        },
-        "lineform": {
-            "title": "Estilo de línea",
-            "tooltip": "Define a style for line features.",
-            "style": {
-                "label": "Estilo"
-            },
-            "cap": {
-                "label": "Final"
-            },
-            "corner": {
-                "label": "Esquinas"
-            },
-            "width": {
-                "label": "Anchura"
-            },
-            "color": {
-                "label": "Color",
-                "labelOr": "o",
-                "labelCustom": "Color RGB personalizado (0-255)"
-            },
-            "preview": {
-                "label": "Vista previa"
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Cancelar"
-            }
-        },
-        "areaform": {
-            "title": "Estilo de área",
-            "tooltip": "Define a style for area features.",
-            "linestyle": {
-                "label": "Estilo de línea borde"
-            },
-            "linecap": {
-                "label": "Final de línea borde"
-            },
-            "linecorner": {
-                "label": "Esquinas de línea borde"
-            },
-            "linewidth": {
-                "label": "Ancho de línea borde"
-            },
-            "linecolor": {
-                "label": "Color de línea borde",
-                "labelOr": "o",
-                "labelCustom": "Color RGB personalizado (0-255)"
-            },
-            "color": {
-                "label": "Color de relleno",
-                "labelOr": "o",
-                "labelCustom": "Color RGB personalizado (0-255)"
-            },
-            "fill": {
-                "label": "Patrón de relleno"
-            },
-            "preview": {
-                "label": "Vista previa"
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Cancelar"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Falta el nombre de la capa.",
             "placeNameIllegal": "El nombre del lugar contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
             "descIllegal": "La descripción del lugar contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
-            "categoryNameIllegal": "El nombre de la capa contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones.",
-            "dotSize": "El tamaño del punto no es válido. Tiene que estar entre 1 y 5",
-            "dotColor": "El color del punto no es válido. Los valores tienen que estar entre 0 y 255",
-            "dotShape": "La forma del punto no es válida",
-            "lineSize": "El tamaño de la línea no es válido. Tiene que estar entre 0 y 50",
-            "lineColor": "El color de la línea no es válido. Los valores tienen que estar entre 0 y 255",
-            "areaLineSize": "El grosor de la línea de borde no es válido. Tiene que estar entre 0 y 50",
-            "areaLineColor": "El color de la línea de borde no es válido. Los valores tienen que estar entre 0 y 255",
-            "areaFillColor": "El colo de relleno no es válido. Los valores tienen que estar entre 0 y 255"
+            "categoryNameIllegal": "El nombre de la capa contiene caracteres no válidos. Son válidos las letras entre a-z, números, retornos y guiones."
         }
     }
 });

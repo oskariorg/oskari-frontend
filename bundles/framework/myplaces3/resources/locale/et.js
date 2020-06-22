@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Kaardikihid",
         "desc": "",
-        "category": {
-            "defaultName": "Minu kaardikiht",
-            "organization": "Minu objektid",
-            "inspire": "Minu objektid"
-        },
         "guest": {
             "loginShort": "Kasutamiseks logi sisse."
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Nimi",
                 "placeholder": "Pane kaardikihile nimi"
             },
-            "drawing": {
-                "label": "Stiil",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Värvus",
-                    "size": "Suurus"
-                },
-                "line": {
-                    "label": "Joon",
-                    "color": "Värv",
-                    "size": "Paksus"
-                },
-                "area": {
-                    "label": "Pind",
-                    "fillcolor": "Täitevärv",
-                    "linecolor": "Joone värv",
-                    "size": "Joone paksus"
-                }
-            },
             "visibleFields": {
                 "label": "Nähtavad objekti andmed",
                 "placename": "Nimi",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Muuda joonestiili - puudutab kõiki jooni kaardil."
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punkti kujundus",
-            "tooltip": "Määra punktobjektide kujundus",
-            "symbol": {
-                "label": "Ikoon"
-            },
-            "size": {
-                "label": "Suurus"
-            },
-            "color": {
-                "label": "Värv",
-                "labelOr": "või",
-                "labelCustom": "Määra ise RGB värv(0-255)"
-            },
-            "preview": {
-                "label": "Eelvaade"
-            },
-            "buttons": {
-                "save": "Salvesta",
-                "cancel": "Tühista"
-            }
-        },
-        "lineform": {
-            "title": "Joone kujundus",
-            "tooltip": "Määra joonobjektide kujundus",
-            "style": {
-                "label": "Kujundus"
-            },
-            "cap": {
-                "label": "Joone lõpud"
-            },
-            "corner": {
-                "label": "Joone nurgapunktid"
-            },
-            "width": {
-                "label": "Laius"
-            },
-            "color": {
-                "label": "Värv",
-                "labelOr": "või",
-                "labelCustom": "Määra ise RGB värv(0-255)"
-            },
-            "preview": {
-                "label": "Eelvaade"
-            },
-            "buttons": {
-                "save": "Salvesta",
-                "cancel": "Tühista"
-            }
-        },
-        "areaform": {
-            "title": "Ala kujundus",
-            "tooltip": "Määra alaobjektide kujundus",
-            "linestyle": {
-                "label": "Joonestiil"
-            },
-            "linecap": {
-                "label": "Joonelõpud"
-            },
-            "linecorner": {
-                "label": "Nurgapunktid"
-            },
-            "linewidth": {
-                "label": "Joone laius"
-            },
-            "linecolor": {
-                "label": "Joone värvus",
-                "labelOr": "või",
-                "labelCustom": "Määra ise RGB värv(0-255)"
-            },
-            "color": {
-                "label": "Täitevärv",
-                "labelOr": "või",
-                "labelCustom": "Määra ise RGB värv(0-255)"
-            },
-            "fill": {
-                "label": "Täitemuster"
-            },
-            "preview": {
-                "label": "Eelvaade"
-            },
-            "buttons": {
-                "save": "Salvesta",
-                "cancel": "Tühista"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Kaardikihi nimi puudub.",
             "placeNameIllegal": "Objekti nimi sisaldab lubamatuid tähemärke. Lubatud  on tähed (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbrid, sidekriipsud.",
             "descIllegal": "Objekti kirjeldus sisaldab lubamatuid tähemärke. Lubatud  on tähed (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbrid, sidekriipsud.",
-            "categoryNameIllegal": "Kaardikihi nimi sisaldab lubamatuid tähemärke. Lubatud  on tähed (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbrid, sidekriipsud.",
-            "dotSize": "Punkti suurus ei mahu piirväärtuste (1-5) sisse.",
-            "dotColor": "Vale punkti värv. Kontrolli RGB koodi.",
-            "dotShape": "Punkti ikoon on probleemne.",
-            "lineSize": "Joone laius ei mahu piirväärtuste (1-50) sisse.",
-            "lineColor": "Vale joone värv. Kontrolli RGB koodi.",
-            "areaLineSize": "Pinna piirjoone laius ei mahu piirväärtuste (1-50) sisse.",
-            "areaLineColor": "Pinne piirjoone värv on probleemne. Kontrolli RGB koodi.",
-            "areaFillColor": "Pinne täitevärv on probleemne. Kontrolli RGB koodi."
+            "categoryNameIllegal": "Kaardikihi nimi sisaldab lubamatuid tähemärke. Lubatud  on tähed (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbrid, sidekriipsud."
         }
     }
 });
