@@ -375,6 +375,12 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return result;
         }, {});
 
+        const isEmpty = (value) => {
+            if (typeof value === 'string' && value.trim() === '') {
+                return true;
+            }
+            return false;
+        };
         const result = data.features.map(featureValues => {
             let markup;
             // featureValues is an array of values based on fields order
@@ -397,7 +403,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         if (formatterOpts.noLabel === true) {
                             uiLabel = ID_SKIP_LABEL + uiLabel;
                         }
-                        result[uiLabel] = formatter(value, formatterOpts.params);
+                        if (formatterOpts.skipEmpty === true && isEmpty(value)) {
+                            // don't write to result object
+                            // the next part doesn't have the data to process -> it won't show up on GFI popup
+                        } else {
+                            // write as normal to get the data on output
+                            result[uiLabel] = formatter(value, formatterOpts.params);
+                        }
                     }
                     return result;
                 }, {});
