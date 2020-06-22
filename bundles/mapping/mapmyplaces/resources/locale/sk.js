@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Údaje o objektoch",
         "layer": {
+            "defaultName": "Moja mapová vrstva",
             "organization": "Moje miesta",
             "inspire": "Moje mapové vrstvy"
         }

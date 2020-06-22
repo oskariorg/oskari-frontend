@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Objektdaten",
         "layer": {
+            "defaultName": "Meine Kartenebene",
             "organization": "Meine Orte",
             "inspire": "Meine Kartenebenen"
         }
