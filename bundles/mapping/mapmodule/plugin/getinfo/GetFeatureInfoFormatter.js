@@ -346,7 +346,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (features === 'empty' || !layer) {
             return;
         }
-        const isMyPlace = layer.isLayerOfType('myplaces');
+        // for testing we want to run myplaces with the normal wfs-formatting
+        const isMyPlace = false; // layer.isLayerOfType('myplaces');
         var fields = layer.getFields().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
 
@@ -381,6 +382,16 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             }
             return false;
         };
+        const isDataShown = (value, formatterOpts) => {
+            if (typeof value === 'undefined' || formatterOpts.type === 'hidden') {
+                return false;
+            }
+            if (formatterOpts.skipEmpty === true) {
+                return !isEmpty(value);
+            }
+            return true;
+        };
+
         const result = data.features.map(featureValues => {
             let markup;
             // featureValues is an array of values based on fields order
@@ -398,18 +409,12 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     if (typeof layer.getFieldFormatMetadata === 'function') {
                         formatterOpts = layer.getFieldFormatMetadata(prop);
                     }
-                    const formatter = getFormatter(formatterOpts.type);
-                    if (typeof value !== 'undefined') {
+                    if (isDataShown(value, formatterOpts)) {
+                        const formatter = getFormatter(formatterOpts.type);
                         if (formatterOpts.noLabel === true) {
                             uiLabel = ID_SKIP_LABEL + uiLabel;
                         }
-                        if (formatterOpts.skipEmpty === true && isEmpty(value)) {
-                            // don't write to result object
-                            // the next part doesn't have the data to process -> it won't show up on GFI popup
-                        } else {
-                            // write as normal to get the data on output
-                            result[uiLabel] = formatter(value, formatterOpts.params);
-                        }
+                        result[uiLabel] = formatter(value, formatterOpts.params);
                     }
                     return result;
                 }, {});
