@@ -65,11 +65,11 @@ Oskari.registerLocalization(
                 }
             },
             "content": {
-                "label": "Map Title",
+                "label": "Additional content",
                 "tooltip": "",
                 "pngNote": "PNG-print will not include additional information.",
                 "mapTitle": {
-                    "placeholder": "Add a title for the map"
+                    "placeholder": "Title"
                 },
                 "pageLogo": {
                     "label": "Include logo",

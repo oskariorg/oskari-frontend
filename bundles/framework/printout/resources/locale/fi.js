@@ -67,9 +67,9 @@ Oskari.registerLocalization(
             "content": {
                 "label": "Näytettävät tiedot",
                 "tooltip": "Valitse tulosteessa näytettävät tiedot.",
-                "pngNote": "PNG-tulosteelle ei lisätä allaolevia tietoja.",
+                "pngNote": "PNG-tulosteelle ei lisätä alla olevia tietoja.",
                 "mapTitle": {
-                    "placeholder": "Lisää otsikko"
+                    "placeholder": "Otsikko"
                 },
                 "pageLogo": {
                     "label": "Näytä palvelun logo",

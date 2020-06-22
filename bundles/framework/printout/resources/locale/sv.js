@@ -65,11 +65,11 @@ Oskari.registerLocalization(
                 }
             },
             "content": {
-                "label": "Kart rubrik",
+                "label": "Synlig information",
                 "tooltip": "",
-                "pngNote": "",
+                "pngNote": "Tilläggsinformationen ingår ej i PNG-utskriftet.",
                 "mapTitle": {
-                    "placeholder": "Lägg till rubrik för kartan"
+                    "placeholder": "Rubrik"
                 },
                 "pageLogo": {
                     "label": "Inkludera logotyp i utskriften",
