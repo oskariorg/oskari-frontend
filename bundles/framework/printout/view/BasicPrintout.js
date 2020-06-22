@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             panel.getHeader().append(tooltipCont);
             var format = this.template.format.clone();
             format.find('.printout_format_label').html(this.loc.format.label);
-
+            const tempValues = {};
             FORMAT_OPTIONS.forEach((option, i) => {
                 const { name, mime } = option;
                 var toolContainer = this.template.optionTool.clone();
@@ -239,10 +239,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 });
                 input.on('change', function () {
                     if (name === 'png') {
-                        contentOptions.find('input').prop('disabled', true);
+                        contentOptions.find('input:checkbox').each(function () {
+                            tempValues[this.value] = this.checked;
+                        }).prop('checked', false).prop('disabled', true);
+                        tempValues.mapTitle = mapTitleInput.val();
+                        mapTitleInput.val('');
+                        mapTitleInput.prop('disabled', true);
                         title.append(pngNote);
                     } else {
-                        contentOptions.find('input').prop('disabled', false);
+                        contentOptions.find('input:checkbox').prop('disabled', false)
+                            .each(function () {
+                                this.checked = !!tempValues[this.value];
+                            });
+                        mapTitleInput.val(tempValues.mapTitle || '');
+                        mapTitleInput.prop('disabled', false);
                         pngNote.remove();
                     }
                 });
@@ -256,7 +266,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const pngNote = this.template.pngNote.clone();
             pngNote.attr('title', this.loc.content.pngNote);
             var mapTitle = this.template.mapTitleInput.clone();
-            mapTitle.find('input').attr('placeholder', this.loc.content.mapTitle.placeholder);
+            const mapTitleInput = mapTitle.find('input');
+            mapTitleInput.attr('placeholder', this.loc.content.mapTitle.placeholder);
             contentOptions.append(mapTitle);
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
