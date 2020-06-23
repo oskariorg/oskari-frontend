@@ -58,7 +58,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
         me.scales = null;
     }, {
-        // TODO: check namings tool, optionPage, optionTool
         __templates: {
             preview: '<div><img /><span></span></div>',
             previewNotes: '<div class="previewNotes"><span></span></div>',
