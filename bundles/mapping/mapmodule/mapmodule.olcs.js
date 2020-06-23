@@ -34,7 +34,7 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     createMap () {
         var me = this;
-        // olProjProj4.register(window.proj4);
+        olProjProj4.register(window.proj4);
         // this is done BEFORE enhancement writes the values to map domain
         // object... so we will move the map to correct location
         // by making a MapMoveRequest in application startup

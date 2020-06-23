@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         return supportedLayers.length > 0;
     },
     _transformMarkers: function (uuid, currentMarkers) {
-        const targetApp = Oskari.app.getSystemDefaultViews().find(view => view.uuid === this.conf.uuid);
+        const targetApp = Oskari.app.getSystemDefaultViews().find(view => view.uuid === uuid);
         const mapmodule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
         if (!targetApp || targetApp.srsName === mapmodule.getProjection()) {
             return currentMarkers;
@@ -108,6 +108,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         this._changeDimension();
     }
 }, {
-    'extend': ['Oskari.BasicBundle'],
-    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+    extend: ['Oskari.BasicBundle'],
+    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });
