@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Voorbeeld",
-                "tooltip": "Klik op het kleine voorbeeld om een groter voorbeeld te openen",
                 "pending": "Voorbeeld zal binnenkort worden bijgewerkt",
                 "notes": {
                     "extent": "Voorbeeld kan worden gebruikt om er achter te komen wat de kaartomvang is voor de afdruk"

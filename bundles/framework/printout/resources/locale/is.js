@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Forskoðun",
-                "tooltip": "Smelltu á myndina í forskoðunarham til að opna stærri mynd í öðrum glugga.",
                 "pending": "Forskoðunarmyndin verður uppfærð fljótlega.",
                 "notes": {
                     "extent": "Skoðaðu umfang kortsins í forskoðunarglugganum."

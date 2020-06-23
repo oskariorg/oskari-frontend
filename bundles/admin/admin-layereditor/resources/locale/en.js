@@ -58,6 +58,7 @@ Oskari.registerLocalization(
                 "params": {
                     "selectedTime": "Selected time"
                 },
+                "singleTile": "Single Tile",
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
@@ -70,6 +71,7 @@ Oskari.registerLocalization(
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
+            "fieldNoRestriction": "No restriction",
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
@@ -96,6 +98,7 @@ Oskari.registerLocalization(
             "delete": "Remove",
             "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
+            "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
             "capabilities": {
                 "show": "Show GetCapabilities response",
                 "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",

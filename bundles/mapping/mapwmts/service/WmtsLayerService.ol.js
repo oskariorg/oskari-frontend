@@ -18,14 +18,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     this.requestsMap = {};
 }, {
     /**
-     * TEmp
+     * Cache for loaded capabilities
      */
     setCapabilities: function (name, caps) {
         this.capabilities[name] = caps;
     },
 
     /**
-     * Temp
+     * Cache for loaded capabilities
      */
     getCapabilities: function (name) {
         return this.capabilities[name];
@@ -107,14 +107,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @param  {Boolean} invokeFailure true to call the error callback (optional)
      */
     __handleCallbacksForLayerUrl: function (url, invokeFailure) {
-        var me = this;
         var caps = this.getCapabilities(url);
-        _.each(this.requestsMap[url], function (args) {
+        // requestsMap[url] is an array of "callers" that have attempted to get the url.
+        // Each array item will have the layer as first, success callback as second and optional error callback as third param
+        this.requestsMap[url].forEach(([layer, successCB, errorCB]) => {
             if (!invokeFailure) {
-                var layer = args[0];
-                args[1](me.__createWMTSLayer(caps, layer));
-            } else if (args.length > 2 && typeof args[2] === 'function') {
-                args[2]();
+                successCB(this.__createWMTSLayer(caps, layer));
+                return;
+            }
+            if (typeof errorCB === 'function') {
+                errorCB();
             }
         });
     },
@@ -139,28 +141,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     __getLayerConfig: function (caps, layer) {
         // default params and options
         // URL is tuned serverside so we use the correct one
-        var config = {
+        return {
             url: layer.getTileUrl(),
             name: 'layer_' + layer.getId(),
             style: layer.getCurrentStyle().getName(),
             layer: layer.getLayerName(),
             matrixSet: layer.getWmtsMatrixSetId(),
-            params: {},
+            params: {
+                ...layer.getParams()
+            },
             buffer: 0,
             displayInLayerSwitcher: false,
             isBaseLayer: false,
-            crossOrigin: layer.getAttributes('crossOrigin')
+            crossOrigin: layer.getAttributes('crossOrigin'),
+            ...layer.getOptions()
         };
-
-        // override default params and options from layer
-        _.each(layer.getOptions(), function (value, key) {
-            config[key] = value;
-        });
-
-        _.each(layer.getParams(), function (value, key) {
-            config.params[key] = value;
-        });
-
-        return config;
     }
 });

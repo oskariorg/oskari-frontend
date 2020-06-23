@@ -1,4 +1,5 @@
 import { getFieldsArray, getPropsArray } from '../util/props';
+import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
 
 const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
@@ -144,14 +145,8 @@ export class AbstractLayerHandler {
 
     applyZoomBounds (layerDef, layerImpl) {
         const mapModule = this.plugin.getMapModule();
-        // Set min max Resolutions
-        if (layerDef.getMaxScale() && layerDef.getMaxScale() !== -1) {
-            layerImpl.setMinResolution(mapModule.getResolutionForScale(layerDef.getMaxScale()));
-        }
-        // No definition, if scale is greater than max resolution scale
-        if (layerDef.getMinScale() && layerDef.getMinScale() !== -1 && (layerDef.getMinScale() < mapModule.getScaleArray()[0])) {
-            layerImpl.setMaxResolution(mapModule.getResolutionForScale(layerDef.getMinScale()));
-        }
+        const zoomLevelHelper = getZoomLevelHelper(mapModule.getScaleArray());
+        zoomLevelHelper.setOLZoomLimits(layerImpl, layerDef.getMinScale(), layerDef.getMaxScale());
     }
 
     sendWFSStatusChangedEvent (layerId, status) {

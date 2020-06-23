@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Anteprima",
-                "tooltip": "Puoi ingrandire l'anteprima cliccando su di essa.",
                 "pending": "L'anteprima sarà aggiornata a breve.",
                 "notes": {
                     "extent": "Puoi controllare l'area di stampadella mappa nell'anteprima"

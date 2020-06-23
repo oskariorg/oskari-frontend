@@ -12,38 +12,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         this.loc = localization;
     }, {
         __templates: {
-            'main': _.template('<div>' +
-                '</div>'),
-            'propertySelect': _.template('<div><span>${label}</span></div>'),
-            'select': _.template('<select name="heatmapProperties">' +
-                        '<option value="">${label}</option>' +
-                        '<% props.forEach(function(value) {  %>' +
-                            '<option>${value}</option>' +
-                        '<% }); %>' +
-                    '</select>'),
+            'main': '<div></div>',
+            'propertySelect': (props) => `<div><span>${props.label}</span></div>`,
+            'select': (values) => {
+                const options = values.props.map(value => `<option>${value}</option>`);
+                return `<select name="heatmapProperties">
+                    <option>${values.label}</option>
+                    ${options.join('')}
+                </select>`;
+            },
+            'colorThemes': (props) =>
+                `<div>
+                    <span>${props.label}</span>
+                </div>
+                <div class="color-themes">
+                    <div class="color-theme theme-1"><input id="theme1" type="radio" name="colorThemes">
+                    <div class="color-box theme-box theme-box-1" color="#4444FF" style="background-color:#4444FF"></div>
+                    <div class="color-box theme-box theme-box-2" color="#FF0000" style="background-color:#FF0000"></div>
+                    <div class="color-box theme-box theme-box-3" color="#FFFF00" style="background-color:#FFFF00"></div>
+                </div>
+                <div class="color-theme theme-2"><input id="theme2" type="radio" name="colorThemes">
+                    <div class="color-box theme-box theme-box-4" color="#CA4538" style="background-color:#CA4538"></div>
+                    <div class="color-box theme-box theme-box-5" color="#BB4E97" style="background-color:#BB4E97"></div>
+                    <div class="color-box theme-box theme-box-6" color="#117FC7" style="background-color:#117FC7"></div>
+                </div>
+                <div class="color-theme theme-3"><input id="theme3" type="radio" name="colorThemes">
+                    <div class="color-box theme-box theme-box-7" color="#B7CC16" style="background-color:#B7CC16"></div>
+                    <div class="color-box theme-box theme-box-8" color="#E09117" style="background-color:#E09117"></div>
+                    <div class="color-box theme-box theme-box-9" color="#DC5B49" style="background-color:#DC5B49"></div>
+                </div>
+            </div>`,
 
-            'colorThemes': _.template('<div><span>${label}</span></div>' +
-                                    '<div class="color-themes">' +
-                                        '<div class="color-theme theme-1"><input id="theme1" type="radio" name="colorThemes">' +
-                                            '<div class="color-box theme-box theme-box-1" color="#4444FF" style="background-color:#4444FF"></div>' +
-                                            '<div class="color-box theme-box theme-box-2" color="#FF0000" style="background-color:#FF0000"></div>' +
-                                            '<div class="color-box theme-box theme-box-3" color="#FFFF00" style="background-color:#FFFF00"></div>' +
-                                        '</div>' +
-                                        '<div class="color-theme theme-2"><input id="theme2" type="radio" name="colorThemes">' +
-                                            '<div class="color-box theme-box theme-box-4" color="#CA4538" style="background-color:#CA4538"></div>' +
-                                            '<div class="color-box theme-box theme-box-5" color="#BB4E97" style="background-color:#BB4E97"></div>' +
-                                            '<div class="color-box theme-box theme-box-6" color="#117FC7" style="background-color:#117FC7"></div>' +
-                                        '</div>' +
-                                        '<div class="color-theme theme-3"><input id="theme3" type="radio" name="colorThemes">' +
-                                            '<div class="color-box theme-box theme-box-7" color="#B7CC16" style="background-color:#B7CC16"></div>' +
-                                            '<div class="color-box theme-box theme-box-8" color="#E09117" style="background-color:#E09117"></div>' +
-                                            '<div class="color-box theme-box theme-box-9" color="#DC5B49" style="background-color:#DC5B49"></div>' +
-                                        '</div>' +
-                                    '</div>'),
-
-            'customThemeLabel': _.template('<div><span>${label}</span></div>'),
-            'customThemeGroup': _.template('<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>')
-
+            'customThemeLabel': (props) => `<div><span>${props.label}</span></div>`,
+            'customThemeGroup': '<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>'
         },
 
         _createColorPickers: function () {
@@ -59,13 +60,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 this.dialog.close(true);
                 delete this.dialog;
             }
-            var me = this,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const me = this;
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             dialog.addClass('heatmap settings-dialog');
 
             this._createColorPickers();
-            var content = jQuery(this.__templates.main());
+            var content = jQuery(this.__templates.main);
 
             // TODO: maybe replace radius field with a slider?
             var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
@@ -112,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             }));
             content.append(customThemeLabel);
 
-            var customThemeGroup = jQuery(this.__templates.customThemeGroup());
+            var customThemeGroup = jQuery(this.__templates.customThemeGroup);
             customThemeGroup.append(this._colorPickers[0].getElement());
             customThemeGroup.append(this._colorPickers[1].getElement());
             customThemeGroup.append(this._colorPickers[2].getElement());
@@ -176,10 +177,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
         },
 
         getSelectedColors: function (content) {
-            this.colors = [];
-            this.colors.push('#FFFFFF');
-            var me = this,
-                element = jQuery(content).find('input:checked');
+            this.colors = ['#FFFFFF'];
+            const me = this;
+            const element = jQuery(content).find('input:checked');
 
             if (element.attr('id') === 'customTheme') {
                 this.colors = this.colors.concat(this.getColorSetup());

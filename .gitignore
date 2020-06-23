@@ -23,3 +23,4 @@ tools/test-results.xml
 bower_components/*
 .DS_Store
 coverage/
+package-lock.json

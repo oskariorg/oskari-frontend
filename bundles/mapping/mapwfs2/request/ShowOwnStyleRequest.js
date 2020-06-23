@@ -11,13 +11,13 @@ Oskari.clazz
      * @method create called automatically on construction
      * @static
      *
-     * @param {Number} id layer identifier so we can select correct tab
-     * @param {Number} styleId style identifier so we can initialize visualization form with correct style
+     * @param {Number} layerId layer identifier so we can select correct tab
+     * @param {String} styleName style identifier so we can initialize visualization form with correct style
      * @param {Boolean} isCreateNew flag indicating that visualization form should be opened to create new style
      */
-        function (id, styleId, isCreateNew) {
-            this._id = id;
-            this._styleId = styleId;
+        function (layerId, styleName, isCreateNew) {
+            this._layerId = layerId;
+            this._styleName = styleName;
             this._isCreateNew = isCreateNew;
         }, {
             /** @static @property __name request name */
@@ -31,18 +31,18 @@ Oskari.clazz
                 return this.__name;
             },
             /**
-            * @method getId
+            * @method getLayerId
             * @return {Number} layer identifier so we can manage select correct tab
             */
-            getId: function () {
-                return this._id;
+            getLayerId: function () {
+                return this._layerId;
             },
             /**
-            * @method getStyleId
-            * @return {Number} style identifier so we can initialize visualization form with correct style
+            * @method getStyleName
+            * @return {String} style identifier so we can initialize visualization form with correct style
             */
-            getStyleId: function () {
-                return this._styleId;
+            getStyleName: function () {
+                return this._styleName;
             },
             /**
             * @method isCreateNew

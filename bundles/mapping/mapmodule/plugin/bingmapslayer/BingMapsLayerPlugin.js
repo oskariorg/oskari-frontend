@@ -1,6 +1,7 @@
 import olSourceBingMaps from 'ol/source/BingMaps';
 import olLayerTile from 'ol/layer/Tile';
 import { BingMapsLayerModelBuilder } from './BingMapsLayerModelBuilder';
+import { getZoomLevelHelper } from '../../util/scale';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -58,20 +59,22 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Oskari.mapframework.mapmodule.BingMapsLayer} oskariLayer
      */
     _updateLayerStyle (oskariLayer) {
-        const olLayers = this.getOLMapLayers(oskariLayer);
-        if (olLayers && olLayers.length > 0) {
-            const lyrWithOldSource = olLayers[0];
-            const lyrIndex = this.mapModule.getMap().getLayers().getArray().indexOf(lyrWithOldSource);
-            // Create a new layer with the selected style and replace the old one.
-            const lyrWithNewSource = this._createOlLayer(oskariLayer);
-            this.mapModule.getMap().getLayers().insertAt(lyrIndex + 1, lyrWithNewSource);
-            this.setOLMapLayers(oskariLayer.getId(), lyrWithNewSource);
-            // Keep the old layer in the background till the new layer has had time to load.
-            const removeOldLyrTimeout = 3000;
-            setTimeout(() => {
-                this.mapModule.getMap().removeLayer(lyrWithOldSource);
-            }, removeOldLyrTimeout);
+        const olLayers = this.getOLMapLayers(oskariLayer) || [];
+        if (!olLayers.length) {
+            return;
         }
+        const mapmodule = this.getMapModule();
+        const lyrWithOldSource = olLayers[0];
+        const lyrIndex = mapmodule.getMap().getLayers().getArray().indexOf(lyrWithOldSource);
+        // Create a new layer with the selected style and replace the old one.
+        const lyrWithNewSource = this._createOlLayer(oskariLayer);
+        mapmodule.getMap().getLayers().insertAt(lyrIndex + 1, lyrWithNewSource);
+        this.setOLMapLayers(oskariLayer.getId(), lyrWithNewSource);
+        // Keep the old layer in the background till the new layer has had time to load.
+        const removeOldLyrTimeout = 3000;
+        setTimeout(() => {
+            mapmodule.getMap().removeLayer(lyrWithOldSource);
+        }, removeOldLyrTimeout);
     }
     /**
      * Checks if the layer can be handled by this plugin
@@ -94,7 +97,7 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         const bingMapsLayer = this._createOlLayer(layer);
-        this.mapModule.addLayer(bingMapsLayer, !keepLayerOnTop);
+        this.getMapModule().addLayer(bingMapsLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), bingMapsLayer);
     }
 
@@ -108,6 +111,9 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
             opacity: layer.getOpacity() / 100,
             source: this._createSource(layer)
         });
+        const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+        // Set min max zoom levels that layer should be visible in
+        zoomLevelHelper.setOLZoomLimits(bingMapsLayer, layer.getMinScale(), layer.getMaxScale());
         return bingMapsLayer;
     }
 
@@ -119,6 +125,21 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
             maxZoom: 19
         };
         return new olSourceBingMaps(opts);
+    }
+    /**
+     * Called when layer details are updated (for example by the admin functionality)
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+     */
+    _updateLayer (layer) {
+        if (!this.isLayerSupported(layer)) {
+            return;
+        }
+        const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+        const layersImpls = this.getOLMapLayers(layer.getId()) || [];
+        layersImpls.forEach(olLayer => {
+            // Update min max Resolutions
+            zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
+        });
     }
 }
 

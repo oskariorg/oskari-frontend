@@ -93,7 +93,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             var value = jQuery('<span></span>');
             // if value is an array -> format it first
             // TODO: maybe some nicer formatting?
-            if (Object.prototype.toString.call(pValue) === '[object Array]') {
+            if (Array.isArray(pValue)) {
                 var i,
                     obj,
                     objAttr,
@@ -157,16 +157,18 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     _renderFragments: function (fragments) {
         var me = this;
 
-        return _.foldl(fragments, function (wrapper, fragment) {
-            var fragmentTitle = fragment.layerName;
-            var fragmentMarkup = fragment.markup;
-
-            if (fragment.isMyPlace) {
-                if (fragmentMarkup) {
-                    wrapper.append(fragmentMarkup);
+        const baseDiv = me.template.wrapper.clone();
+        fragments
+            .map(fragment => {
+                var fragmentTitle = fragment.layerName;
+                var fragmentMarkup = fragment.markup;
+                if (fragment.isMyPlace) {
+                    if (fragmentMarkup) {
+                        return fragmentMarkup;
+                    }
+                    return;
                 }
-            } else {
-                var contentWrapper = me.template.wrapper.clone();
+                const contentWrapper = me.template.wrapper.clone();
                 var headerWrapper = me.template.header.clone();
                 var titleWrapper = me.template.headerTitle.clone();
 
@@ -178,13 +180,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 if (fragmentMarkup) {
                     contentWrapper.append(fragmentMarkup);
                 }
-                wrapper.append(contentWrapper);
-            }
-
-            delete fragment.isMyPlace;
-
-            return wrapper;
-        }, me.template.wrapper.clone());
+                return contentWrapper;
+            })
+            .filter(frag => typeof frag !== 'undefined')
+            .forEach(frag => baseDiv.append(frag));
+        return baseDiv;
     },
     /**
      * Parses and formats a GFI response
@@ -200,31 +200,29 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (data.layerCount === 0) {
             return;
         }
-        var me = this,
-            sandbox = this._sandbox,
-            coll;
+        const me = this;
+        const sandbox = this._sandbox;
 
-        coll = _.chain(data.features)
+        const coll = data.features
             .map(function (datum) {
-                var layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId),
-                    layerName = layer ? layer.getName() : '',
-                    pretty = me._formatGfiDatum(datum),
-                    layerIdString = datum.layerId + '';
-
-                if (pretty !== null && pretty !== undefined) {
-                    return {
-                        markup: pretty,
-                        layerId: layerIdString,
-                        layerName: layerName,
-                        type: datum.type,
-                        isMyPlace: !!layerIdString.match('myplaces_')
-                    };
+                const pretty = me._formatGfiDatum(datum);
+                if (typeof pretty === 'undefined') {
+                    return;
                 }
+
+                const layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId);
+                const layerName = layer ? layer.getName() : '';
+                const layerIdString = datum.layerId + '';
+
+                return {
+                    markup: pretty,
+                    layerId: layerIdString,
+                    layerName: layerName,
+                    type: datum.type,
+                    isMyPlace: !!layerIdString.match('myplaces_')
+                };
             })
-            .reject(function (feature) {
-                return feature === undefined;
-            })
-            .value();
+            .filter(feature => typeof feature !== 'undefined');
 
         return coll || [];
     },
@@ -249,10 +247,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
             // This is for my places info popup
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                return _.foldl(datum.content.parsed.places, function (div, place) {
-                    div.append(me.formatters.myplace(place));
-                    return div;
-                }, jQuery('<div></div>'));
+                const baseDiv = jQuery('<div></div>');
+                datum.content.parsed.places
+                    .map(place => me.formatters.myplace(place))
+                    .forEach(place => baseDiv.append(place));
+                return baseDiv;
             }
 
             var even = false,
@@ -335,66 +334,76 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @method _formatWFSFeaturesForInfoBox
      */
     _formatWFSFeaturesForInfoBox: function (data) {
-        var me = this,
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
-            isMyPlace = layer.isLayerOfType('myplaces'),
-            fields = layer.getFields().slice(),
-            hiddenFields = ['__fid', '__centerX', '__centerY'],
-            type = 'wfslayer',
-            result,
-            markup;
-
-        if (data.features === 'empty' || layer === null || layer === undefined) {
+        var me = this;
+        const { layerId, features } = data;
+        if (typeof layerId === 'undefined' || typeof features === 'undefined') {
             return;
         }
+        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        if (features === 'empty' || !layer) {
+            return;
+        }
+        const isMyPlace = layer.isLayerOfType('myplaces');
+        var fields = layer.getFields().slice();
+        const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
 
-        if (!isMyPlace) {
-            // replace fields with locales
-            fields = _.chain(fields)
-                .zip(layer.getLocales().slice())
-                .map(function (pair) {
-                    // pair is an array [field, locale]
-                    if (_.contains(hiddenFields, _.first(pair))) {
-                        // just return the field name for now if it's hidden
-                        return _.first(pair);
-                    }
-                    // return the localized name or field if former is undefined
-                    return _.last(pair) || _.first(pair);
-                })
-                .value();
+        if (!fields.length) {
+            // layer doesn't have fields, "return no data"
+            return [{
+                markup: noDataResult,
+                layerId,
+                layerName: layer.getName(),
+                type: 'wfslayer',
+                isMyPlace
+            }];
         }
 
-        result = _.map(data.features, function (feature) {
-            if (fields.length) {
-                var feat = _.chain(fields)
-                    .zip(feature)
-                    .filter(function (pair) {
-                        return !_.contains(hiddenFields, _.first(pair));
-                    })
-                    .foldl(function (obj, pair) {
-                        obj[_.first(pair)] = _.last(pair);
-                        return obj;
-                    }, {})
-                    .value();
+        const locales = layer.getLocales().slice();
+        const hiddenFields = ['__fid', '__centerX', '__centerY'];
+        // use localized labels for properties when available instead of property names
+        // keep property names for my places as it has custom formatter
+        const localeMapping = fields.reduce((result, value, index) => {
+            if (isMyPlace) {
+                return result;
+            }
+            // return the localized name, fallback to actual property name if localization is missing
+            const label = locales[index] || value;
+            result[value] = label;
+            return result;
+        }, {});
 
-                if (isMyPlace) {
-                    markup = me.formatters.myplace(feat);
-                } else {
-                    if (!jQuery.isEmptyObject(feat)) {
-                        markup = me._json2html(feat);
-                    } else {
-                        markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
+        const result = data.features.map(featureValues => {
+            let markup;
+            // featureValues is an array of values based on fields order
+            const feature = fields
+                // .filter(prop => !hiddenFields.includes(prop))
+                .reduce((result, prop, index) => {
+                    if (hiddenFields.includes(prop)) {
+                        // skip hidden fields for ui presentation but dont filter so the index is not mixed up(?)
+                        return result;
                     }
-                }
+                    // construct object for UI having only selected fields with localized labels
+                    const uiLabel = localeMapping[prop] || prop;
+                    const value = featureValues[index];
+                    if (typeof value !== 'undefined') {
+                        result[uiLabel] = value;
+                    }
+                    return result;
+                }, {});
+
+            if (isMyPlace) {
+                markup = me.formatters.myplace(feature);
+            } else if (Object.keys(feature).length > 0) {
+                markup = me._json2html(feature);
             } else {
-                markup = '<table><tr><td>' + me._loc.noAttributeData + '</td></tr></table>';
+                markup = noDataResult;
             }
             return {
-                markup: markup,
-                layerId: data.layerId,
+                markup,
+                layerId,
                 layerName: layer.getName(),
-                type: type,
-                isMyPlace: isMyPlace
+                type: 'wfslayer',
+                isMyPlace
             };
         });
 

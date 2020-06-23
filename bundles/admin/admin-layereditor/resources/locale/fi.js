@@ -58,6 +58,7 @@ Oskari.registerLocalization(
                 "params": {
                     "selectedTime": "Valittu aika"
                 },
+                "singleTile": "Single Tile",
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
@@ -70,6 +71,7 @@ Oskari.registerLocalization(
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
+            "fieldNoRestriction": "Ei rajoitusta",
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
@@ -97,6 +99,7 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
+            "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
             "capabilities": {
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",

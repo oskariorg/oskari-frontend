@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function (layer) {
+            layers.forEach(function (layer) {
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events

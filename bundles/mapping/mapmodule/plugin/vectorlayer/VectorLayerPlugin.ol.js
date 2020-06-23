@@ -13,6 +13,14 @@ import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
 
+import './vectorlayer';
+import './request/AddFeaturesToMapRequest';
+import './request/AddFeaturesToMapRequestHandler';
+import './request/RemoveFeaturesFromMapRequest';
+import './request/RemoveFeaturesFromMapRequestHandler';
+import './request/ZoomToFeaturesRequest';
+import './request/ZoomToFeaturesRequestHandler';
+
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
@@ -314,7 +322,7 @@ Oskari.clazz.define(
             if (layer && layer !== null) {
                 if (layer instanceof olLayerVector) {
                     layerId = layer.get(LAYER_ID);
-                } else if (_.isString(layer) || _.isNumber(layer)) {
+                } else if (typeof layer === 'string' || typeof layer === 'number') {
                     layerId = layer;
                 }
                 olLayer = me._olLayers[layerId];
@@ -327,14 +335,12 @@ Oskari.clazz.define(
                 // Removes only wanted features from the given maplayer
                 if (identifier && identifier !== null && value && value !== null) {
                     me._removeFeaturesByAttribute(olLayer, identifier, value);
-                }
-                // remove all features from the given layer
-                else {
+                } else {
+                    // remove all features from the given layer
                     this._removeAllFeatures(olLayer);
                 }
-            }
-            // Removes all features from all layers if layer is not specified
-            else if (!layer) {
+            } else if (!layer) {
+                // Removes all features from all layers if layer is not specified
                 for (layerId in me._olLayers) {
                     if (me._olLayers.hasOwnProperty(layerId)) {
                         olLayer = me._olLayers[layerId];
@@ -1122,7 +1128,7 @@ Oskari.clazz.define(
             var me = this;
             var layers = me.getLayerIds(layer);
             var features = me.getFeaturesMatchingQuery(layers, options);
-            if (!_.isEmpty(features)) {
+            if (features.length > 0) {
                 var vector = new olSourceVector({
                     features: features
                 });
@@ -1163,9 +1169,9 @@ Oskari.clazz.define(
         sendZoomFeatureEvent: function (features) {
             var me = this;
             var featureEvent = Oskari.eventBuilder('FeatureEvent')().setOpZoom();
-            if (!_.isEmpty(features)) {
+            if (features) {
                 var formatter = me._supportedFormats.GeoJSON;
-                _.each(features, function (feature) {
+                features.forEach(feature => {
                     var geojson = formatter.writeFeaturesObject([feature]);
                     featureEvent.addFeature(feature.getId(), geojson, feature.layerId);
                 });
@@ -1188,57 +1194,50 @@ Oskari.clazz.define(
          * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
-        getFeaturesMatchingQuery: function (layers, featureQuery) {
+        getFeaturesMatchingQuery: function (layers = [], featureQuery) {
             var me = this;
-            var features = [];
-            _.each(layers, function (layerId) {
+            let features = [];
+            layers.forEach(layerId => {
                 if (!me._olLayers[layerId]) {
                     // invalid layerId
                     return;
                 }
                 var sourceFeatures = me._olLayers[layerId].getSource().getFeatures();
-                if (_.isEmpty(featureQuery)) {
+                if (typeof featureQuery !== 'object' || !Object.keys(featureQuery).length) {
                     // no query requirements, add all features in layer
                     features = features.concat(sourceFeatures);
                     return;
                 }
-                _.each(sourceFeatures, function (feature) {
-                    feature.layerId = layerId;
-                    _.each(featureQuery, function (allowedValues, requestedProperty) {
+                const filteredAndModified = sourceFeatures.filter(feature => {
+                    return Object.entries(featureQuery).some(([requestedProperty, allowedValues]) => {
                         var featureValue = feature.get(requestedProperty);
-                        if (!featureValue) {
-                            // feature doesn't have the property, don't include it
-                            return;
+                        if (typeof featureValue === 'undefined') {
+                            return false;
                         }
-                        _.each(allowedValues, function (value) {
-                            if (featureValue === value) {
-                                features.push(feature);
-                            }
-                        });
+                        return allowedValues.includes(featureValue);
                     });
+                }).map(f => {
+                    f.layerId = layerId;
+                    return f;
                 });
+                features = features.concat(filteredAndModified);
             });
             return features;
         },
         /**
          * @method getLayerIds
          *  -
-         * @param {Object} layerIds
-         * @return {Array} layres
+         * @param {Object} optional object with key layer that has an array of layer ids
+         * @return {Array} array of layer ids
          */
         getLayerIds: function (layerIds) {
-            var me = this;
-            var layers = [];
-            if (_.isEmpty(layerIds)) {
-                _.each(me._olLayers, function (key, value) {
-                    layers.push(value);
-                });
-            } else {
-                _.each(layerIds.layer, function (key, value) {
-                    layers.push(key);
-                });
+            if (typeof layerIds !== 'object' || !Object.keys(layerIds).length) {
+                return Object.keys(this._olLayers);
             }
-            return layers;
+            if (layerIds.layer && typeof layerIds.layer.slice === 'function') {
+                return layerIds.layer.slice(0);
+            }
+            return [];
         },
         /**
          * @method getLayerFeatures

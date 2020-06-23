@@ -22,9 +22,18 @@ import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
+// import code so it's usable via Oskari global
+import './AbstractMapModule';
+import './plugin/AbstractMapModulePlugin';
+import './plugin/BasicMapModulePlugin';
+import './AbstractMapLayerPlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
+if (!window.proj4) {
+    window.proj4 = proj4;
+}
 export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
@@ -558,10 +567,10 @@ export class MapModule extends AbstractMapModule {
     }
 
     getSize () {
-        var size = this.getMap().getSize();
+        const [width = 0, height = 0] = this.getMap().getSize() || [];
         return {
-            width: size[0],
-            height: size[1]
+            width,
+            height
         };
     }
 
@@ -651,6 +660,7 @@ export class MapModule extends AbstractMapModule {
             }
         }
 
+        const flyZoom = view.getZoom();
         switch (animation) {
         case 'pan':
             view.animate({
@@ -659,7 +669,6 @@ export class MapModule extends AbstractMapModule {
             }, callback);
             break;
         case 'fly':
-            const flyZoom = view.getZoom();
             view.animate({
                 center: location,
                 duration: duration

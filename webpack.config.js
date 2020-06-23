@@ -9,16 +9,18 @@ const generateEntries = require('./webpack/generateEntries.js');
 const { NormalModuleReplacementPlugin } = require('webpack');
 
 const proxyPort = 8081;
+// helpers
+const isDirectory = source => lstatSync(source).isDirectory();
+const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
     const { version, pathParam, publicPathPrefix, theme } = parseParams(env);
-
-    const isDirectory = source => lstatSync(source).isDirectory();
-    const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+    // assumes applications are directories under pathParam
     const appsetupPaths = getDirectories(path.resolve(pathParam));
 
+    // entries are configs for each app, plugins accumulate resource copying etc from all the apps
     const { entries, plugins } = generateEntries(appsetupPaths, isProd, __dirname);
     plugins.push(new MiniCssExtractPlugin({
         filename: '[name]/oskari.min.css'
@@ -66,12 +68,6 @@ module.exports = (env, argv) => {
         config.devServer = {
             port: proxyPort,
             proxy: [{
-                context: ['/transport/cometd'],
-                target: 'ws://localhost:8080',
-                secure: false,
-                changeOrigin: true,
-                ws: true
-            }, {
                 context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
                 target: 'http://localhost:8080',
                 secure: false,

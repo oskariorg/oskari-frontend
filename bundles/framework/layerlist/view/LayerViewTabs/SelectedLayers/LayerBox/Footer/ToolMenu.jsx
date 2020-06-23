@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon, Dropdown } from 'oskari-ui';
+import { Dropdown } from 'oskari-ui';
 import { THEME_COLOR } from '..';
+import { MoreOutlined } from '@ant-design/icons';
 
 const getToolTitle = tool => tool.getTooltip() || tool.getTitle() || tool.getName();
 
@@ -14,7 +15,7 @@ export const ToolMenu = ({ tools }) => {
         .map(tool => ({ title: getToolTitle(tool), action: tool.getCallback() }));
     return (
         <Dropdown items={items} placement="bottomRight">
-            <Icon type="more" style={{ color: THEME_COLOR, fontSize: '24px' }} />
+            <MoreOutlined style={{ color: THEME_COLOR, fontSize: '24px' }} />
         </Dropdown>
     );
 };

@@ -1,3 +1,4 @@
+import '../BasicMapModulePlugin';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -191,14 +192,9 @@ Oskari.clazz.define(
         _buildLayerIdList: function (layers) {
             var me = this;
             var selected = layers || me.getSandbox().findAllSelectedMapLayers();
-            var layerIds = _.chain(selected)
-                .filter(function (layer) {
-                    return me._isQualified(layer);
-                })
-                .map(function (layer) {
-                    return layer.getId();
-                })
-                .value()
+            var layerIds = selected
+                .filter(layer => me._isQualified(layer))
+                .map(layer => layer.getId())
                 .join(',');
 
             return layerIds || null;
@@ -312,7 +308,8 @@ Oskari.clazz.define(
                 },
                 success: function (resp) {
                     if (me._isAjaxRequestBusy()) {
-                        _.each(resp.data, function (datum) {
+                        const data = resp.data || [];
+                        data.forEach((datum) => {
                             me._handleInfoResult({
                                 features: [datum],
                                 lonlat: lonlat,
@@ -365,11 +362,9 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [],
-                contentData = {},
-                fragments = [],
-                colourScheme,
-                font;
+            var content = [];
+            var contentData = {};
+            var fragments = [];
 
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
@@ -382,11 +377,7 @@ Oskari.clazz.define(
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-
-            if (_.isObject(this._config)) {
-                colourScheme = this._config.colourScheme;
-                font = this._config.font;
-            }
+            var { colourScheme, font } = this._config || {};
 
             this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,

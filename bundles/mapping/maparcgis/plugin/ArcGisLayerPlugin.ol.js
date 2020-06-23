@@ -1,6 +1,7 @@
 import olLayerTile from 'ol/layer/Tile';
 import olSourceTileArcGISRest from 'ol/source/TileArcGISRest';
 import olSourceXYZ from 'ol/source/XYZ';
+import { getZoomLevelHelper } from '../../mapmodule/util/scale';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -63,11 +64,11 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
         },
 
-        __tuneURLsForOL3: function (urls) {
-            var strToFind = '/export',
-                length = strToFind.length;
-            return _.map(urls, function (url) {
-                // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
+        __tuneURLsForModernOL: function (urls = []) {
+            const strToFind = '/export';
+            const length = strToFind.length;
+            return urls.map(url => {
+                // Note! endsWith requires a polyfill for IE. One is available in src/polyfills.js
                 if (url.endsWith(strToFind)) {
                     return url.substring(0, url.length - length);
                 }
@@ -83,21 +84,20 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Boolean} keepLayerOnTop
          */
         addMapLayerToMap: function (layer, keepLayerOnTop) {
-            var me = this,
-                openlayer,
-                sandbox = me.getSandbox(),
-                layerType;
+            const sandbox = this.getSandbox();
+            let openlayer;
+            let layerType;
 
-            if (!layer.isLayerOfType(me._layerType) && !layer.isLayerOfType(me._layerType2)) {
+            if (!this.isLayerSupported(layer)) {
                 return;
             }
 
-            if (layer.isLayerOfType(me._layerType2)) {
+            if (layer.isLayerOfType(this._layerType2)) {
                 // ArcGIS REST layer
                 openlayer = new olLayerTile({
-                    extent: me.getMap().getView().getProjection().getExtent(),
+                    extent: this.getMap().getView().getProjection().getExtent(),
                     source: new olSourceTileArcGISRest({
-                        urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
+                        urls: this.__tuneURLsForModernOL(layer.getLayerUrls()),
                         params: {
                             'layers': 'show:' + layer.getLayerName()
                         },
@@ -124,15 +124,17 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 layerType = 'ol3 Arcgis CACHE';
             }
 
-            layer.setQueryable(true);
             openlayer.opacity = layer.getOpacity() / 100;
+            const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+            // Set min max zoom levels that layer should be visible in
+            zoomLevelHelper.setOLZoomLimits(openlayer, layer.getMinScale(), layer.getMaxScale());
 
-            me._registerLayerEvents(openlayer, layer);
-            me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
+            this._registerLayerEvents(openlayer, layer);
+            this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
 
-            me._log.debug(
+            this._log.debug(
                 '#!#! CREATED ' + layerType + ' for ArcGisLayer ' +
                 layer.getId()
             );
@@ -144,19 +146,35 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          *
          */
         _registerLayerEvents: function (layer, oskariLayer) {
-            var me = this;
-            var source = layer.getSource();
+            const mapModule = this.getMapModule();
+            const source = layer.getSource();
+            const layerId = oskariLayer.getId();
 
-            source.on('tileloadstart', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            source.on('imageloadstart', function () {
+                mapModule.loadingState(layerId, true);
             });
 
-            source.on('tileloadend', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            source.on('imageloadend', function () {
+                mapModule.loadingState(layerId, false);
             });
 
-            source.on('tileloaderror', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            source.on('imageloaderror', function () {
+                mapModule.loadingState(layerId, null, true);
+            });
+        },
+        /**
+         * Called when layer details are updated (for example by the admin functionality)
+         * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
+         */
+        _updateLayer: function (layer) {
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+            const layersImpls = this.getOLMapLayers(layer.getId()) || [];
+            layersImpls.forEach(olLayer => {
+                // Update min max Resolutions
+                zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
             });
         }
     }, {

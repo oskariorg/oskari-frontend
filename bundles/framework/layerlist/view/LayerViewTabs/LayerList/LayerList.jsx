@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
-import { Spin, Tooltip, Icon, Message } from 'oskari-ui';
+import { Spin, Tooltip, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
@@ -12,6 +12,7 @@ import { Alert } from './Alert';
 import { CreateTools } from './CreateTools';
 import { GroupingOption } from '../../../model/GroupingOption';
 import styled from 'styled-components';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const Column = styled('div')`
     display: flex;
@@ -39,7 +40,7 @@ const ControlsRow = styled(Row)`
     }
 `;
 
-const InfoIcon = styled(Icon)`
+const InfoIcon = styled(QuestionCircleOutlined)`
     color: #979797;
     font-size: 20px;
     margin-top: 5px;
@@ -87,7 +88,7 @@ const LayerList = React.forwardRef((props, ref) => {
                 </Column>
                 <div>
                     <Tooltip title={<Message messageKey='filter.search.tooltip'/>}>
-                        <InfoIcon type="question-circle" />
+                        <InfoIcon />
                     </Tooltip>
                 </div>
                 <div>

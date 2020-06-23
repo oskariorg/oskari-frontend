@@ -78,6 +78,7 @@ const getWhitelistedModules = modules => {
  * @param {string[]} modules Modules we wan't to give a special treatment to.
  * @param {boolean} blacklisted Blacklisted or whitelist. Defaults to blacklisting.
  */
+// eslint-disable-next-line no-unused-vars
 const getExcludedNodeModules = (modules, blacklisted = true) => {
     return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules);
 };
@@ -88,7 +89,10 @@ const BABEL_LOADER_RULE = {
         /libraries/,
         /\.min\.js$/,
         // https://github.com/zloirock/core-js/issues/514 core-js shouldn't be run through babel
-        getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
+        // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
+        // Exclude all but named dependencies (containing es6+)
+        // FIXME: olcs is the problem - adding it takes reeeeaaaally long for build
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs'])
     ],
     use: {
         loader: 'babel-loader',
@@ -99,7 +103,9 @@ const BABEL_LOADER_RULE = {
                     {
                         corejs: 3,
                         useBuiltIns: 'entry',
-                        targets: '> 0.25%, not dead, ie 11'
+                        targets: '> 0.25%, not dead, ie 11',
+                        // https://babeljs.io/blog/2020/03/16/7.9.0
+                        bugfixes: true
                     }
                 ],
                 require.resolve('@babel/preset-react') // Resolve path for use from external projects

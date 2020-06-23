@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         sticky: false
     };
     this.importService = undefined;
+    this.mapLayerService = null;
     this.tab = undefined;
     this.layerType = 'userlayer';
 }, {
@@ -98,6 +99,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             // ask toolbar to select the default tool
             sandbox.request(this, toolbarReqBuilder());
         }
+    },
+    getMapLayerService: function () {
+        if (!this.mapLayerService) {
+            this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        }
+        return this.mapLayerService;
     },
     /**
      * Adds the user layer to the map layer service and to the map.

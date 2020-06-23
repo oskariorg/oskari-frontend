@@ -1,10 +1,17 @@
 import styled from 'styled-components';
-import { Icon, Button, Slider, Select } from 'oskari-ui';
+import { Button, Slider, Select } from 'oskari-ui';
+import { CalendarOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
 const primaryColor = '#ffd400';
 const thickSlider = 8; // default is 4
 
-export const StyledIcon = styled(Icon)`
+export const CalendarIcon = styled(CalendarOutlined)`
+    margin-right: 15px;
+    color: #d9d9d9;
+    font-size: 18px;
+`;
+
+export const ClockIcon = styled(ClockCircleOutlined)`
     margin-right: 15px;
     color: #d9d9d9;
     font-size: 18px;

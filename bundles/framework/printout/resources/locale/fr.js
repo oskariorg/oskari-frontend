@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Aperçu",
-                "tooltip": "Cliquez sur l'aperçu pour ouvrir une image plus grande dans une nouvelle fenêtre.",
                 "pending": "L'aperçu va être mis a jour sous peu.",
                 "notes": {
                     "extent": "Vérifiez l'emprise de la carte sur l'aperçu."

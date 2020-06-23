@@ -23,8 +23,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
             var me = this;
             // maybe just copy url, name, technical stuff?
             // NOTE! this might have unwanted side-effects
-            _.each(parentLayer, function (value, key) {
-                me[key] = value;
+            Object.keys(parentLayer).forEach(prop => {
+                me[prop] = parentLayer[prop];
             });
             this.init();
             this.setMaxScale(null);

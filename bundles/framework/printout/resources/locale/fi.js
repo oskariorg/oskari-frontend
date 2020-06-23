@@ -35,7 +35,6 @@ Oskari.registerLocalization(
             },
             "preview": {
                 "label": "Esikatselu",
-                "tooltip": "Klikkaa esikatselukuvaa avataksesi sen suuremmassa koossa uudessa ikkunassa.",
                 "pending": "Esikatselukuva päivitetään hetken kuluttua.",
                 "notes": {
                     "extent": "Tarkista tulosteen kattavuusalue esikatselukuvasta."

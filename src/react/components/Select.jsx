@@ -3,5 +3,14 @@ import 'antd/es/select/style/index.js';
 import styled from 'styled-components';
 
 // Wrap to styled so components can be referred in component styling.
-export const Select = styled(AntSelect)``;
-export const Option = styled(AntSelect.Option)``;
+const Select = styled(AntSelect)``;
+Select.displayName = 'OskariUISelect';
+
+const Option = styled(AntSelect.Option)``;
+Option.displayName = 'OskariUIOption';
+Option.__OskariTestSelector = '.ant-select-item';
+
+export {
+    Select,
+    Option
+};

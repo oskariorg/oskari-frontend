@@ -12,12 +12,15 @@ Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
             this.__name = 'time-control-3d';
             this._log = Oskari.log(this.__name);
         }
+
         getName () {
             return this.__name;
         }
+
         getSandbox () {
             return this._sandbox;
         }
+
         start (sandbox) {
             if (this._started) {
                 return;
@@ -32,6 +35,7 @@ Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
             this._sandbox.register(this);
             this._started = true;
         }
+
         createPlugin () {
             if (this.plugin) {
                 return;
@@ -42,11 +46,13 @@ Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
         }
+
         stopPlugin () {
             this._mapmodule.unregisterPlugin(this.plugin);
             this._mapmodule.stopPlugin(this.plugin);
             this.plugin = null;
         }
+
         stop () {
             this.stopPlugin();
             this.sandbox = null;

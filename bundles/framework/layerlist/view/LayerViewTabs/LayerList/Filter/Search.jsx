@@ -1,7 +1,8 @@
 import React from 'react';
-import { TextInput, Icon } from 'oskari-ui';
+import { TextInput } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
+import { SearchOutlined } from '@ant-design/icons';
 
 const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) => {
     return <TextInput
@@ -9,7 +10,7 @@ const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) =>
         value={searchText}
         allowClear
         placeholder={getMessage('filter.search.placeholder')}
-        prefix={<Icon type="search"/>}
+        prefix={<SearchOutlined />}
         onChange={event => controller.setSearchText(event.currentTarget.value)}/>;
 });
 Search.displayName = 'Search';
