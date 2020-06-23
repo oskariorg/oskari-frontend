@@ -1,3 +1,6 @@
+import { getFormatter } from './ValueFormatters';
+const ID_SKIP_LABEL = '$SKIP$__';
+
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
         wrapper: '<div></div>',
@@ -343,6 +346,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (features === 'empty' || !layer) {
             return;
         }
+        // TODO: cleanup the my places references where they can be cleaned. Not sure if the boolean isMyPlace is used by the callers of this method
         const isMyPlace = layer.isLayerOfType('myplaces');
         var fields = layer.getFields().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
@@ -363,14 +367,27 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         // use localized labels for properties when available instead of property names
         // keep property names for my places as it has custom formatter
         const localeMapping = fields.reduce((result, value, index) => {
-            if (isMyPlace) {
-                return result;
-            }
             // return the localized name, fallback to actual property name if localization is missing
             const label = locales[index] || value;
             result[value] = label;
             return result;
         }, {});
+
+        const isEmpty = (value) => {
+            if (typeof value === 'string' && value.trim() === '') {
+                return true;
+            }
+            return false;
+        };
+        const isDataShown = (value, formatterOpts) => {
+            if (typeof value === 'undefined' || formatterOpts.type === 'hidden') {
+                return false;
+            }
+            if (formatterOpts.skipEmpty === true) {
+                return !isEmpty(value);
+            }
+            return true;
+        };
 
         const result = data.features.map(featureValues => {
             let markup;
@@ -383,17 +400,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         return result;
                     }
                     // construct object for UI having only selected fields with localized labels
-                    const uiLabel = localeMapping[prop] || prop;
+                    let uiLabel = localeMapping[prop] || prop;
                     const value = featureValues[index];
-                    if (typeof value !== 'undefined') {
-                        result[uiLabel] = value;
+                    let formatterOpts = {};
+                    if (typeof layer.getFieldFormatMetadata === 'function') {
+                        formatterOpts = layer.getFieldFormatMetadata(prop);
+                    }
+                    if (isDataShown(value, formatterOpts)) {
+                        const formatter = getFormatter(formatterOpts.type);
+                        if (formatterOpts.noLabel === true) {
+                            uiLabel = ID_SKIP_LABEL + uiLabel;
+                        }
+                        result[uiLabel] = formatter(value, formatterOpts.params);
                     }
                     return result;
                 }, {});
 
-            if (isMyPlace) {
-                markup = me.formatters.myplace(feature);
-            } else if (Object.keys(feature).length > 0) {
+            if (Object.keys(feature).length > 0) {
                 markup = me._json2html(feature);
             } else {
                 markup = noDataResult;
@@ -502,12 +525,17 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             if (!even) {
                 row.addClass('odd');
             }
-
-            keyColumn = this.template.tableCell.clone();
-            keyColumn.append(key);
-            row.append(keyColumn);
+            const skipLabel = key.startsWith(ID_SKIP_LABEL);
+            if (!skipLabel) {
+                keyColumn = this.template.tableCell.clone();
+                keyColumn.append(key);
+                row.append(keyColumn);
+            }
 
             valColumn = this.template.tableCell.clone();
+            if (skipLabel) {
+                valColumn.attr('colspan', 2);
+            }
             valColumn.append(valpres);
             row.append(valColumn);
 
