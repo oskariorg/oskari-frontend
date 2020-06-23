@@ -27,7 +27,7 @@ const myPlacesLayer = {
             formatterOpts.type = 'hidden';
         }
         return formatterOpts;
-    },
+    }
 };
 const otherLayer = {
     isLayerOfType: (type) => type === 'wfsplaces',
