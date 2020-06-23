@@ -67,11 +67,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             help: '<div class="help icon-info"></div>',
             main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
-            mapTitle: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
+            mapTitleInput: '<div class="printout_option_cont printout_settings_cont"><input class="printout_title_field" type="text"></div>',
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
             optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
             scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
-            contentOptions: '<div class=""/>'
+            contentOptions: '<div class="printout_content"><div class="printout_content_title"></div><div class="printout_content_options"></div></div>',
+            pngNote: '<div class="icon-warning-light"/>'
         },
         /**
          * @public @method render
@@ -209,23 +210,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {jQuery} Returns the created panel
          */
         _createSettingsPanel: function () {
-            var me = this;
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.addClass('printsettings');
-            panel.setTitle(me.loc.settings.label);
+            panel.setTitle(this.loc.settings.label);
             var contentPanel = panel.getContainer();
             // tooltip
-            var tooltipCont = me.template.help.clone();
-            tooltipCont.attr('title', me.loc.settings.tooltip);
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', this.loc.settings.tooltip);
             panel.getHeader().append(tooltipCont);
-            var format = me.template.format.clone();
-            format.find('.printout_format_label').html(me.loc.format.label);
-
-            FORMAT_OPTIONS.forEach(function (option, i) {
+            var format = this.template.format.clone();
+            format.find('.printout_format_label').html(this.loc.format.label);
+            const tempValues = {};
+            FORMAT_OPTIONS.forEach((option, i) => {
                 const { name, mime } = option;
-                var toolContainer = me.template.optionTool.clone();
+                var toolContainer = this.template.optionTool.clone();
                 const id = 'printout-format-' + name;
-                const label = me.loc.format.options[name];
+                const label = this.loc.format.options[name];
                 toolContainer.find('label').append(label).attr('for', id);
                 const input = toolContainer.find('input');
                 if (i === 0) {
@@ -238,37 +238,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 });
                 input.on('change', function () {
                     if (name === 'png') {
-                        contentOptions.find('input').prop('disabled', true);
+                        contentOptions.find('input:checkbox').each(function () {
+                            tempValues[this.value] = this.checked;
+                        }).prop('checked', false).prop('disabled', true);
+                        tempValues.mapTitle = mapTitleInput.val();
+                        mapTitleInput.val('');
+                        mapTitleInput.prop('disabled', true);
+                        title.append(pngNote);
                     } else {
-                        contentOptions.find('input').prop('disabled', false);
+                        contentOptions.find('input:checkbox').prop('disabled', false)
+                            .each(function () {
+                                this.checked = !!tempValues[this.value];
+                            });
+                        mapTitleInput.val(tempValues.mapTitle || '');
+                        mapTitleInput.prop('disabled', false);
+                        pngNote.remove();
                     }
                 });
                 format.append(toolContainer);
             });
             contentPanel.append(format);
             /* --- options available for pdf --- */
-            const contentOptions = me.template.contentOptions.clone();
-            var mapTitle = me.template.mapTitle.clone();
-            mapTitle.find('.printout_title_label').html(me.loc.mapTitle.label);
-            mapTitle.find('.printout_title_field').attr('placeholder', me.loc.mapTitle.label);
+            const optionsContainer = this.template.contentOptions.clone();
+            const title = optionsContainer.find('.printout_content_title').html(this.loc.content.label);
+            const contentOptions = optionsContainer.find('.printout_content_options');
+            const pngNote = this.template.pngNote.clone();
+            pngNote.attr('title', this.loc.content.pngNote);
+            var mapTitle = this.template.mapTitleInput.clone();
+            const mapTitleInput = mapTitle.find('input');
+            mapTitleInput.attr('placeholder', this.loc.content.mapTitle.placeholder);
             contentOptions.append(mapTitle);
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
                 options.push(TIME_OPTION);
             }
-            options.forEach(function (value) {
-                var opt = me.template.optionPage.clone();
+            options.forEach(value => {
+                var opt = this.template.optionPage.clone();
                 const id = 'printout-page-' + value;
                 opt.find('input').attr({ id, value }).prop('checked', true);
-                const label = me.loc.content[value].label;
+                const label = this.loc.content[value].label;
                 opt.find('label').html(label).attr('for', id);
                 contentOptions.append(opt);
             });
-            contentPanel.append(contentOptions);
+            contentPanel.append(optionsContainer);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
-            var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {
-                me.contentOptionDivs.pageScale.css('display', 'none');
+                this.contentOptionDivs.pageScale.css('display', 'none');
             }
             return panel;
         },

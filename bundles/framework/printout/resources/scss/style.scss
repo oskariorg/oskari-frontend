@@ -70,11 +70,6 @@ div.printout {
             }
         }
     }
-
-    div.basic_publisher div.content {
-        padding: 10px;
-    }
-
 }
 
 div.printout div.startview div.icon-info,
@@ -100,13 +95,25 @@ div.field select {
 }
 
 .printout_format_label,
-.printout_title_label {
+.printout_content_title {
     font-weight: bold;
     margin: 5px 0;
+}
+.printout_content {
+    .printout_content_title {
+        display: flex;
+    }
+    .icon-warning-light {
+        float: right;
+        margin-left: 12px;
+    }
 }
 
 .printout_settings_cont {
     margin: 10px 5px;
+    input:disabled+label {
+        color: #cccccc;
+    }
 }
 
 /* Buttons */
@@ -126,7 +133,7 @@ div.basic_printout {
 
     > div.header {
         background-color: #FDF8D9;
-        padding: 5px 10px;
+        padding: 10px 10px 0px;
 
         div.icon-close {
             float: right;
@@ -136,7 +143,7 @@ div.basic_printout {
 
     > div.content {
         overflow: auto;
-        height: 89%;
+        height: calc(100% - 46px);
     }
 
     div.tool {

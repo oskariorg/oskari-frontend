@@ -63,11 +63,13 @@ Oskari.registerLocalization(
                     "pdf": "PDF dokument"
                 }
             },
-            "mapTitle": {
-                "label": "Kart rubrik",
-                "tooltip": "Lägg till rubrik för kartan"
-            },
             "content": {
+                "label": "Synlig information",
+                "tooltip": "",
+                "pngNote": "Tilläggsinformationen ingår ej i PNG-utskriftet.",
+                "mapTitle": {
+                    "placeholder": "Rubrik"
+                },
                 "pageLogo": {
                     "label": "Inkludera logotyp i utskriften",
                     "tooltip": "Du kan dölja logotyp vid behov."
