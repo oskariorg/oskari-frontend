@@ -59,8 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             url += window.location.pathname;
         }
         const extraParams = {
-            noSavedState: true,
-            showIntro: false
+            noSavedState: true
         };
         if (this.conf.uuid) {
             extraParams.uuid = this.conf.uuid;
@@ -76,6 +75,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         }
         const mapQueryStr = this._sandbox.generateMapLinkParameters(extraParams);
         const mapParams = Oskari.util.getRequestParameters(mapQueryStr);
+        const { markers, uuid } = mapParams;
+        if (markers && uuid) {
+            mapParams.markers = this._transformMarkers(uuid, markers);
+        }
         window.location.href = url + '?' + Object.keys(mapParams)
             .filter(key => !blackListed.includes(key))
             .map(key => `${key}=${mapParams[key]}`)
@@ -88,10 +91,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         const supportedLayers = mapState.getLayers().filter(layer => isLayerSupported(layer, targetMapSupports3D));
         return supportedLayers.length > 0;
     },
+    _transformMarkers: function (uuid, currentMarkers) {
+        const targetApp = Oskari.app.getSystemDefaultViews().find(view => view.uuid === uuid);
+        const mapmodule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+        if (!targetApp || targetApp.srsName === mapmodule.getProjection()) {
+            return currentMarkers;
+        }
+        const markerStr = mapmodule.getPluginInstances('MarkersPlugin').getTransformedStateParameters(targetApp.srsName);
+        const { markers: targetMarkers } = Oskari.util.getRequestParameters(markerStr);
+        if (targetMarkers) {
+            return targetMarkers;
+        }
+        return '';
+    },
     handleRequest: function (core, request) {
         this._changeDimension();
     }
 }, {
-    'extend': ['Oskari.BasicBundle'],
-    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+    extend: ['Oskari.BasicBundle'],
+    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

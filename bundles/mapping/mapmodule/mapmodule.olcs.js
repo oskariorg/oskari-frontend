@@ -1,5 +1,6 @@
 import { defaults as olInteractionDefaults } from 'ol/interaction';
 import OLView from 'ol/View';
+import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
@@ -33,6 +34,7 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     createMap () {
         var me = this;
+        olProjProj4.register(window.proj4);
         // this is done BEFORE enhancement writes the values to map domain
         // object... so we will move the map to correct location
         // by making a MapMoveRequest in application startup
