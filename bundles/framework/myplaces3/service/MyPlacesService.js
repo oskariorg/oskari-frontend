@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             });
         },
         /*
-         * @method deleteMyPlaces
+         * @method deletePlaces
          *
          * delete a list of my places from backend
          */
@@ -360,7 +360,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          */
         deleteMyPlace: function (placeId, callback) {
             var me = this;
-            this.deleteMyPlaces([placeId], function (success, list) {
+            this.deletePlaces([placeId], function (success, list) {
                 if (success) {
                     me._removeMyPlace(list[0]);
                     me._notifyDataChanged();
