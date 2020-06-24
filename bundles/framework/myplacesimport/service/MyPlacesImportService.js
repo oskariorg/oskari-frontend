@@ -137,6 +137,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
         mapLayer.markAsInternalDownloadSource();
+        // Add organization and groups for users own datasets (otherwise left empty/data from baselayer)
+        var loclayer = this.instance.getLocalization().layer;
+        mapLayer.setOrganizationName(loclayer.organization);
+        mapLayer.setGroups([{
+            id: 'USERLAYER',
+            name: loclayer.inspire
+        }]);
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer, skipEvent);
         if (typeof cb === 'function') {
@@ -145,5 +152,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         return mapLayer;
     }
 }, {
-    'protocol': ['Oskari.mapframework.service.Service']
+    protocol: ['Oskari.mapframework.service.Service']
 });
