@@ -12,7 +12,7 @@ Oskari frontend applications are built using Webpack.
 
 ## Preparations
 
-Make sure you have at least Node 8.x / NPM 5.x. 
+Make sure you have at least Node 10.x / NPM 5.x. 
 
 * Run `npm install` in the frontend framework repository root.
 * Run `npm install` in the frontend application repository root.
