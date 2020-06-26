@@ -638,6 +638,8 @@ Oskari.clazz.define(
             vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
+                // when updating style -> options has new style and "geometry" is used for
+                // selecting feature to update like in thematic maps: { id: regionid }
                 for (var key in geometry) {
                     me._updateFeature(options, key, geometry[key]);
                 }
