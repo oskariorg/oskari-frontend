@@ -128,6 +128,9 @@ Oskari.clazz.define(
         },
 
         _createHoverOverlay: function () {
+            // FIXME: There is code in VectorFeatureService.ol.js that creates a tooltip overlay as well
+            // Changing this one seems doesn't seem to have any effect so this could be removed/cleaned out!!
+            // Not cleaning out now with release coming up but whoever sees this comment can clean this out
             var overlayDiv = document.createElement('div');
             overlayDiv.className = 'feature-hover-overlay';
             this._hoverOverlay = new olOverlay({
