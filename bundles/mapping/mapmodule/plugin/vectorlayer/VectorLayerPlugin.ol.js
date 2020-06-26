@@ -1190,7 +1190,7 @@ Oskari.clazz.define(
         /**
          * @method getFeaturesMatchingQuery
          *  - gets features matching query
-         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
+         * @param {Array} layers array of layer ids like ['layer1', 'layer2']
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
         getFeaturesMatchingQuery: function (layers = [], featureQuery) {
