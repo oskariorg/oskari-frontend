@@ -128,6 +128,9 @@ Oskari.clazz.define(
         },
 
         _createHoverOverlay: function () {
+            // FIXME: There is code in VectorFeatureService.ol.js that creates a tooltip overlay as well
+            // Changing this one seems doesn't seem to have any effect so this could be removed/cleaned out!!
+            // Not cleaning out now with release coming up but whoever sees this comment can clean this out
             var overlayDiv = document.createElement('div');
             overlayDiv.className = 'feature-hover-overlay';
             this._hoverOverlay = new olOverlay({
@@ -638,6 +641,8 @@ Oskari.clazz.define(
             vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
+                // when updating style -> options has new style and "geometry" is used for
+                // selecting feature to update like in thematic maps: { id: regionid }
                 for (var key in geometry) {
                     me._updateFeature(options, key, geometry[key]);
                 }
@@ -1190,7 +1195,7 @@ Oskari.clazz.define(
         /**
          * @method getFeaturesMatchingQuery
          *  - gets features matching query
-         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
+         * @param {Array} layers array of layer ids like ['layer1', 'layer2']
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
         getFeaturesMatchingQuery: function (layers = [], featureQuery) {

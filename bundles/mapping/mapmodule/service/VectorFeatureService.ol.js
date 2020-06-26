@@ -74,10 +74,14 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         getTooltipOverlay () {
             if (!this._tooltipOverlay) {
+                // FIXME: There is code in VectorLayerPlugin.o.js that creates a tooltip overlay as well
+                // Changing this one seems to take effect so the other one can probably be removed or cleaned out
                 const overlayDiv = document.createElement('div');
                 overlayDiv.className = 'feature-hover-overlay';
                 this._tooltipOverlay = new olOverlay({
-                    element: overlayDiv
+                    element: overlayDiv,
+                    offset: [10, -10],
+                    stopEvent: false
                 });
                 this._map.addOverlay(this._tooltipOverlay);
             }
