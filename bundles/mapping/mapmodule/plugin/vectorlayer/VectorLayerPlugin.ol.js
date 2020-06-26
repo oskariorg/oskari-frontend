@@ -757,13 +757,12 @@ Oskari.clazz.define(
          */
         _updateFeature: function (options, propertyName, value) {
             const { prio, layerId, featureStyle } = options;
-            var layers = { layer: layerId };
             var values = Array.isArray(value) ? value : [value];
             var searchValues = values.map(cur => typeof cur === 'object' ? cur.value : cur);
             var searchOptions = {
                 [propertyName]: searchValues
             };
-            this.getFeaturesMatchingQuery(layers, searchOptions).forEach(feature => {
+            this.getFeaturesMatchingQuery([layerId], searchOptions).forEach(feature => {
                 const updateValue = values.find(cur => typeof cur === 'object' && feature.get(propertyName) === cur.value);
                 if (updateValue && updateValue.properties) {
                     Object.keys(updateValue.properties).forEach(key => feature.set(key, updateValue.properties[key]));
