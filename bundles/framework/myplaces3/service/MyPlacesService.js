@@ -380,10 +380,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             let oldCategoryId = null;
             const categoryId = myplaceModel.getCategoryId();
             if (id) {
-                const oldPlace = this.findMyPlace(id);
-                if (oldPlace.getCategoryId() !== categoryId) {
-                    oldCategoryId = oldPlace.getCategoryId();
-                }
+                let oldPlace;
+                Object.keys(this._placesList).forEach(cat => {
+                    oldPlace = this._placesList[cat].find(place => {
+                        return place.getId() === id;
+                    });
+                    if (oldPlace) {
+                        const oldCat = parseInt(cat);
+                        if (categoryId !== oldCat) {
+                            oldCategoryId = oldCat;
+                        }
+                    }
+                });
             }
             const callbackWrapper = success => {
                 if (success && oldCategoryId) {
