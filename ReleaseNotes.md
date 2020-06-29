@@ -1,5 +1,69 @@
 # Release Notes
 
+## 1.56.0
+
+### Map layer administration (admin-layereditor)
+
+- Validation errors are now collectively from the save button
+- Scale limit handling fixed and UI for limits made clearer
+- Added "single tile" toggle in the admin-layereditor UI for WMS-layers 
+- Render mode/collection type selection fixed
+
+### Print functionality
+
+- Unavailable options are now disabled for PNG format
+- Misleading print preview link removed
+- Markers done with the coordinate tool can now be printed as well
+- Custom styles are now passed to the print functionality
+
+### WFS/Vector features
+
+- Added configurable formatters for WFS-layers featuredata "gfi" popup. For config/details see: https://github.com/oskariorg/oskari-frontend/pull/1307
+- Tooltip for WFS-layer features (enabled with styling) should no longer block events from reaching the map making them more useful
+- Files that were used by the old "transport" implementation continue to be cleaned out (documentation still has references...)
+- My places GFI popups are now handled as WFS-data with formatters (so the formatting is a a bit different in this release)
+
+### Build performance tuning
+
+The recently added examples with 3D-libraries makes build take 3x time. We are still considering how to handle this on the sample app so on-boarding/"unboxing"/first build wouldn't not be too terrifying.
+If you don't use the 3D apps we recommend removing them from the application-specific repositories when using sample-application as template.
+
+### AntD UI-components library version update
+
+AntD has been upgraded from 3.x to 4.x. This includes breaking changes for icon usage. See details here: https://github.com/oskariorg/oskari-frontend/pull/1302
+The good news is that the change in icon handling reduces the size clients need to download on their browser for Oskari apps by around 500kb (~200kb gzipped).
+
+Also we changed the `<Message />` tag so it can be used without localization (helps when creating tests for example).
+
+### Other library updates and Node JS version
+
+With the latest library updates the required version of NodeJS is now 10 (previously 8).
+We noticed that upgrading from NodeJS version 8 to version 12 improves build time by 25% or more so we encourage upgrading to the latest LTS.
+Errors from new coding conventions from ESLint upgrade have been overridden as warnings for now. This means that they won't break PRs but will be highlighted in an IDE like Visual studio code.
+Jest upgrade affects async tests and/or testing code that uses setTimeout() but should otherwise be transparent to developers.
+
+- Library updates: jQuery, jsts
+- Build-library updates: Babel, Webpack
+- Test library updates: ESLint, Jest, Enzyme
+
+### Tests for the frontend and lodash removal
+
+Tests have been added for parts of mapmodule and the code has been refactored a bit for better enabling testing. This comes as a by-product of code refactoring for removing the lodash dependency. Lodash was awesome previously but now we can use native JS functions instead of it thanks to the build process change to webpack and transpiling. Most of the code using lodash assumes it is linked as a global _ variable which makes understanding and testing the code more difficult than it should be. It also assumes the version of lodash is 2.x using functions that have been removed from the 4.x version mentioned in package.json so it's even more problematic/misleading.
+
+Any bundles under mapping no longer uses lodash and we will continue working on removing it until we can just drop the dependency. So please use the native versions instead on any new code.
+
+### Other changes
+
+- Thematic maps tool UX/state handling improved
+- Accessing map publishing functionality no longer breaks the feature info query tool
+- Measurement tool now provides more accurate results
+- Map layer filter now includes option for "all layers" - Previously clearing the filter was unnecessarily hidden as a simple x icon (layerlist bundle)
+- User-generated public content from other users are now grouped under "no group" instead of "user layers/places" to make it more apparent that they are not the current users layers
+- My places features are now loaded in smaller pieces for the my data listing (based on the layer selected instead of one big chunk) improving startup time
+- 3D camera mode tool now introduces itself in the guided tour
+- Dimension change bundle now tries to transform marker coordinates when changing projection
+- Version number for Oskari.VERSION now comes directly from package.json (it's not duplicated on code base)
+
 ## 1.55.2
 
 - Fix issue with styles on user generated content (myplaces and userlayer layers)
