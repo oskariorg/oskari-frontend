@@ -2,9 +2,12 @@
 
 ## 1.56.0
 
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/24?closed=1
+
 ### Map layer administration (admin-layereditor)
 
-- Validation errors are now collectively from the save button
+- Possible validation errors are now shown collectively when trying to use the save button instead of the button just being disabled
 - Scale limit handling fixed and UI for limits made clearer
 - Added "single tile" toggle in the admin-layereditor UI for WMS-layers 
 - Render mode/collection type selection fixed
