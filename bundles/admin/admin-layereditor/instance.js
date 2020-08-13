@@ -212,8 +212,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             }
             const { left, top } = position;
             const flyoutWidth = 330;
-            const flyoutHeight = 340;
-            flyout.setSize(flyoutWidth, flyoutHeight);
+            flyout.setSize(flyoutWidth);
             flyout.move(left, top, true);
             if (flyout.isVisible()) {
                 flyout.bringToTop();
