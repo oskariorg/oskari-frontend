@@ -33,10 +33,10 @@ Oskari.clazz.define(
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
             const animation = request.getAnimation();
-            const lon = request.getCenterX();
-            const lat = request.getCenterY();
+            // transform coordinates to given projection
+            const lonlat = this.mapModule.transformCoordinates({ request.getCenterX(), request.getCenterY() }, srsName);
             let zoom;
-            if (!this.mapModule.isValidLonLat(lon, lat)) {
+            if (!this.mapModule.isValidLonLat(lonlat.lon, lonlat.lat)) {
                 if (this.mapModule.isValidBounds(requestZoom)) {
                     this.mapModule.zoomToExtent(requestZoom);
                 } else {
@@ -44,8 +44,6 @@ Oskari.clazz.define(
                 }
                 return;
             }
-            // transform coordinates to given projection
-            const lonlat = this.mapModule.transformCoordinates({ lon, lat }, srsName);
 
             // check if zoom is not null or undefined
             if (requestZoom != null) {
