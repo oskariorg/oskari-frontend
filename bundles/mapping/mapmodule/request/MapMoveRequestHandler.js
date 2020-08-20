@@ -34,7 +34,7 @@ Oskari.clazz.define(
             const srsName = request.getSrsName();
             const animation = request.getAnimation();
             // transform coordinates to given projection
-            const lonlat = this.mapModule.transformCoordinates({ lon:request.getCenterX(), lat:request.getCenterY() }, srsName);
+            const lonlat = this.mapModule.transformCoordinates({ lon: request.getCenterX(), lat: request.getCenterY() }, srsName);
             let zoom;
             if (!this.mapModule.isValidLonLat(lonlat.lon, lonlat.lat)) {
                 if (this.mapModule.isValidBounds(requestZoom)) {
