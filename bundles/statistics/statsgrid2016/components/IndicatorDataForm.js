@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                                 '<div>${regionsetLabel}: ${regionset}</div>' +
                                 '<div>${yearLabel}: ${year}</div>' +
                             '</div>'),
-        row: _.template('<tr data-id="${regionId}">' +
+        row: _.template('<tr data-id="${regionId}" data-name="${regionName.toLowerCase()}">' +
                             '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
                             '<td class="uservalue" style="border: 1px solid black ;"><div contenteditable="true">${value}</div></td>' +
                         '</tr> '),
@@ -66,11 +66,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
     },
     fillTable: function (data) {
         var table = this.getElement().find('.user-indicator-table');
-        data.forEach(function (iteration) {
+        data.forEach(({ name, value }) => {
             table.find('tr').each(function (index, tr) {
-                if (tr.innerText.trim().toLowerCase() === iteration.name.toLowerCase() || tr.dataset.id === iteration.name) {
-                    var uservalue = jQuery(tr).find('td.uservalue div');
-                    uservalue.text(iteration.value);
+                if (tr.dataset.name === name.toLowerCase() || tr.dataset.id === name) {
+                    jQuery(tr).find('td.uservalue div').text(value);
                 }
             });
         });
