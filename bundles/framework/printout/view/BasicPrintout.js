@@ -521,7 +521,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
             var scaleText = '';
 
-            if (this.instance.conf.scaleSelection && this.scaleOptionsMap.usedefinedscale.selected) {
+            if (this.instance.conf.scaleSelection && container.find('input[type=radio]#printout-scale-configured').prop('checked')) {
                 resolution = this.mapmodule.getExactResolution(scale);
                 scaleText = '1:' + scale;
             }
