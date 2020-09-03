@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 this._scheduledLayers.push(layer);
             }
         } else {
-            this._scheduledLayers = mapLayerService.getAllLayers();
+            this._scheduledLayers = mapLayerService.getAllLayers().slice();
         }
     },
     /**
@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         var sandbox = this.getSandbox(),
             // populate layer list
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        var success = false;
+        var success = true;
         if (this.view !== null && this.view !== undefined) {
             if (blnForceCreate || !this._scheduledLayers || this._scheduledLayers.length > 30) {
                 // if more than 30 layers require update -> make full re-render
