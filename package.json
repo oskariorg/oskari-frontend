@@ -72,7 +72,7 @@
     "mini-css-extract-plugin": "0.8.0",
     "mobile-detect": "1.4.4",
     "moment": "2.24.0",
-    "node-sass": "4.12.0",
+    "node-sass": "4.14.1",
     "ol": "6.3.1",
     "ol-mapbox-style": "6.1.1",
     "olcs": "2.10.0",
