@@ -301,9 +301,10 @@ Oskari.clazz.define(
                     fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
                     fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
                     fixSize.height += popupHeaderChildren.height() - popupHeaderChildren.position().top;
-                    if (fixSize.height < 24) {
-                        // sending empty tags as title might result in height lower than 24 which breaks the heading visually
-                        fixSize.height = 24;
+                    if (fixSize.height < 37) {
+                        // sending empty tags as title might result in height lower than 37 which breaks the heading visually
+                        // magic numbers going on here... Perhaps a React rewrite will fix these.
+                        fixSize.height = 37;
                     }
                 });
 
