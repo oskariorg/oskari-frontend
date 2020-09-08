@@ -125,7 +125,7 @@ Oskari.clazz.define(
                 lat = me.markers[position.marker].data.y;
                 marker = me.markers[position.marker];
                 me.markerPopups[position.marker] = id;
-            } else if (position.lon && position.lat) {
+            } else if (typeof position.lon === 'number' && typeof position.lat === 'number') {
                 lon = position.lon;
                 lat = position.lat;
             } else {
