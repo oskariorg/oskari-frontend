@@ -386,11 +386,9 @@ export class WFSLayer extends VectorTileLayer {
     selectStyle (styleName) {
         // Select style with logic in AbstractLayer
         super.selectStyle(styleName);
-        // If style one of custom styles, set it to WFSLayer
+        // update custom style
         const style = this._userStyles.filter(style => style.name === styleName)[0];
-        if (style) {
-            this.setCustomStyle(style);
-        }
+        this.setCustomStyle(style);
     }
 }
 
