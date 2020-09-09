@@ -144,7 +144,7 @@ Oskari.registerLocalization(
                 "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
-                "saveSuccess": "Fel!",
+                "saveSuccess": "Sparad",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
                 "confirmDeleteGroup": "Gruppen kommer att tas bort. Fortsätt?",
