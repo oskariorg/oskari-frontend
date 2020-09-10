@@ -31,11 +31,11 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML = false }) => {
     if (!messageKey) {
         return null;
     }
-    const allowHTMLContent = allowHTML || false;
+
     let message = messageKey;
 
     if (typeof getMessage === 'function') {
@@ -43,12 +43,13 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     } else {
         message = getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs);
     }
+
     // If we didn't find localization AND we have default value -> use it
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;
     }
 
-    if(allowHTMLContent) {
+    if (allowHTML) {
         return ( <LabelComponent dangerouslySetInnerHTML={{ __html:message }}></LabelComponent> );
     }
 
