@@ -31,14 +31,10 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML }) => {
-    console.log('-- Message Init -- ');
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label }) => {
     if (!messageKey) {
         return null;
     }
-
-    const allowHTMLContent = allowHTML || false;
-
     let message = messageKey;
     if (typeof getMessage === 'function') {
         message = getMessage(messageKey, messageArgs);
@@ -49,16 +45,10 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;
     }
-
-    if(allowHTMLContent) {
-        return ( <LabelComponent dangerouslySetInnerHTML={{ __html:message }}></LabelComponent> );
-    }
-
     return (
-        <LabelComponent 
-            onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
-                { message }
-                { children }
+        <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
+            { message }
+            { children }
         </LabelComponent>
     );
 };
@@ -81,19 +71,6 @@ function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {
     }
     return messageKey;
 }
-
-
-/**
- * 
- * @param {String} rawMessage message as string
- * @returns {Object} object containing html markup
- * 
- */
-function createHTMLContent(rawMessage) {
-    return {
-        __html: rawMessage
-    }
-};
 
 const wrapped = LocaleConsumer(Message);
 export { wrapped as Message };
