@@ -31,11 +31,13 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label, allowHTML }) => {
     if (!messageKey) {
         return null;
     }
+    const allowHTMLContent = allowHTML || false;
     let message = messageKey;
+
     if (typeof getMessage === 'function') {
         message = getMessage(messageKey, messageArgs);
     } else {
@@ -45,10 +47,16 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;
     }
+
+    if(allowHTMLContent) {
+        return ( <LabelComponent dangerouslySetInnerHTML={{ __html:message }}></LabelComponent> );
+    }
+
     return (
-        <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
-            { message }
-            { children }
+        <LabelComponent 
+            onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
+                { message }
+                { children }
         </LabelComponent>
     );
 };
@@ -59,7 +67,8 @@ Message.propTypes = {
     messageArgs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     getMessage: PropTypes.func,
     children: PropTypes.node,
-    LabelComponent: PropTypes.elementType
+    LabelComponent: PropTypes.elementType,
+    allowHTML: PropTypes.bool
 };
 
 function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {
@@ -71,6 +80,7 @@ function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {
     }
     return messageKey;
 }
+
 
 const wrapped = LocaleConsumer(Message);
 export { wrapped as Message };
