@@ -89,9 +89,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             /// //////////////////////////////
             me.buttonGroups = [
                 {
-                    'name': 'basictools',
-                    'buttons': {
-                        'history_back': {
+                    name: 'basictools',
+                    buttons: {
+                        history_back: {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-history-back',
                             tooltip: me._loc.history.back,
@@ -109,7 +109,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                 }
                             }
                         },
-                        'history_forward': {
+                        history_forward: {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-history-forward',
                             tooltip: me._loc.history.next,
@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                 }
                             }
                         },
-                        'measureline': {
+                        measureline: {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-line',
                             tooltip: me._loc.measure.line,
@@ -134,31 +134,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toggleChangeIcon: (!me._isPublisherActive()),
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (!me._isPublisherActive()) {
-                                    if (me.activeTool === 'measureline') {
-                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
-                                        me.activeTool = undefined;
-                                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
-                                        sandbox.request(me, toolbarRequest);
-                                    } else {
-                                        if (me.activeTool === 'measurearea') {
-                                            sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
-                                            me.activeTool = undefined;
-                                        }
-                                        var rn = 'map_control_measure_tool';
-                                        if (gfiReqBuilder) {
-                                            sandbox.request(me, gfiReqBuilder(false));
-                                        }
-                                        var reqBuilder = Oskari.requestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                        sandbox.request(me, reqBuilder(rn));
-                                        me.activeTool = 'measureline';
-                                    }
-                                }
+                                const rn = 'map_control_measure_tool';
+                                const tool = 'measureline';
+                                me._handleMeasureTool(tool, rn);
                             }
                         },
-                        'measurearea': {
+                        measurearea: {
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-area',
                             tooltip: me._loc.measure.area,
@@ -166,28 +147,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toggleChangeIcon: (!me._isPublisherActive()),
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (!me._isPublisherActive()) {
-                                    if (me.activeTool === 'measurearea') {
-                                        sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
-                                        me.activeTool = undefined;
-                                        var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
-                                        sandbox.request(me, toolbarRequest);
-                                    } else {
-                                        if (me.activeTool === 'measureline') {
-                                            sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
-                                            me.activeTool = undefined;
-                                        }
-                                        var rn = 'map_control_measure_area_tool';
-                                        if (gfiReqBuilder) {
-                                            sandbox.request(me, gfiReqBuilder(false));
-                                        }
-                                        var reqBuilder = Oskari.requestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                        sandbox.request(me, reqBuilder(rn));
-                                        me.activeTool = 'measurearea';
-                                    }
-                                }
+                                const rn = 'map_control_measure_area_tool';
+                                const tool = 'measurearea';
+                                me._handleMeasureTool(tool, rn);
                             }
                         }
                     }
@@ -202,6 +164,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     this
                 )
             };
+        },
+        _handleMeasureTool: function (tool, requestName) {
+            if (this._isPublisherActive()) {
+                return;
+            }
+            const sb = this.getSandbox();
+            if (this.activeTool === 'measurearea' || this.activeTool === 'measureline') {
+                sb.postRequestByName('DrawTools.StopDrawingRequest', ['mapmeasure', true]);
+            }
+            if (this.activeTool === tool) {
+                const toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
+                sb.request(this, toolbarRequest);
+                this.activeTool = undefined;
+                return;
+            }
+            const toolRequest = Oskari.requestBuilder('ToolSelectionRequest')(requestName);
+            sb.request(this, toolRequest);
+            this.activeTool = tool;
         },
 
         _setLayerToolsEditModeImpl: function () {
