@@ -75,8 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         _initImpl: function () {
             var me = this;
             var sandbox = me.getSandbox();
-            var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
-            var gfiReqBuilder = Oskari.requestBuilder(gfiRn);
             var mapmodule = me.getMapModule();
             var theme = mapmodule.getTheme();
             var wantedTheme = (theme === 'dark') ? 'light' : 'dark';
