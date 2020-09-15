@@ -7,7 +7,7 @@ Oskari.registerLocalization(
             "title": "Kartpublicering"
         },
         "flyout": {
-            "title": "Skapa inbäddad karta"
+            "title": "Kartpublicering"
         },
         "published": {
             "title": "Kartan har skapats för att kunna bäddas in",
@@ -29,7 +29,7 @@ Oskari.registerLocalization(
             }
         },
         "BasicView": {
-            "title": "Inbädda kartan",
+            "title": "Skapa inbäddad karta",
             "titleEdit": "Redigera den inbäddade karta",
             "transfer": {
                 "label": "Överföra konfigurationen",
@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 "tooltip": "Välj språk för kartmaterial och användargränssnitt."
             },
             "size": {
-                "label": "Kart storlek",
+                "label": "Kartstorlek",
                 "tooltip": "Välj en kart storlek. Bredd måste vara minst 20 pixel och höjd minst 30 pixel. Skilj av decimal med ett komma. Du ka se uppdateringar på förvisningskartan."
             },
             "maptools": {
@@ -69,15 +69,15 @@ Oskari.registerLocalization(
                 "PanButtons": "Panoreringsverktyg",
                 "Portti2Zoombar": "Skalans glidreglage",
                 "MyLocationPlugin": "Centrera kartan på användarens position",
-                "ControlsPlugin": "Panorering kartan",
+                "ControlsPlugin": "Flytta kartvyn med musen",
                 "SearchPlugin": "Adress- och ortnamnssökning",
                 "FeaturedataPlugin": "Objektuppgifter",
-                "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet",
+                "GetInfoPlugin": "Frågverktyg för visande av objektuppgifter",
                 "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
-                "LayerSelectionPlugin": "Kartlagren meny",
+                "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinat verktyg",
-                "FeedbackServiceTool": "Feedback (Open311) functionality",
+                "FeedbackServiceTool": "Responsverktyg (Open311)",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
@@ -122,7 +122,7 @@ Oskari.registerLocalization(
                 }
             },
             "toollayout": {
-                "label": "Verktygs placering",
+                "label": "Verktygsplacering",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
                 "lefthanded": "Vänsterhänt",
                 "righthanded": "Högerhänt",
@@ -141,7 +141,7 @@ Oskari.registerLocalization(
                 "allowHidingSeriesControl" : "Tillåt att gömma seriespelare"
             },
             "layout": {
-                "label": "Grafisk Layout",
+                "label": "Grafisk layout",
                 "fields": {
                     "colours": {
                         "label": "Färgschema",
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerselection": {
-                "label": "Kartlagren",
+                "label": "Kartlager",
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
@@ -239,9 +239,9 @@ Oskari.registerLocalization(
             "register": "Registrera dig"
         },
         "StartView": {
-            "text": "Du kan inbädda den kartvy som du har definierat här på din egen webbplats.",
-            "touLink": "Vis användningsvillkor till kartinbäddningen",
-            "layerlist_title": "Kartlager som kan inbäddas",
+            "text": "Skapa kartvy som du kan inbädda på din egen webbplats.",
+            "touLink": "Visa användningsvillkoren till kartpublicering",
+            "layerlist_title": "Valda kartlager som kan inbäddas",
             "layerlist_empty": "Valda kartlager kan inte publiceras i en inbäddad karta. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "layerlist_denied": "Kartlagret kan inte publiceras i en inbäddad karta.",
             "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster eller denna kartlager kan inte visas med den valda kartprojektionen. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
