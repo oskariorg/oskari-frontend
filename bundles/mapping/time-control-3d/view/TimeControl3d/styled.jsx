@@ -128,11 +128,15 @@ export const StyledDateSlider = styled(StyledSlider)`
 
 export const StyledSelect = styled(Select)`
     &&&{
-        color: #ffffff;
+        color: #000000;
+        text-align: center;
     }
     width: 100%;
     .ant-select-selection {
         background-color: #595959;
+    }
+    .ant-select-selection-item {
+        padding-right: 0 !important;
     }
     .ant-select-arrow {
         color: #ffffff;
