@@ -76,7 +76,7 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Kartverktyg",
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
-                "CoordinateToolPlugin": "Koordinat verktyg",
+                "CoordinateToolPlugin": "Koordinatverktyg",
                 "FeedbackServiceTool": "Responsverktyg (Open311)",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
