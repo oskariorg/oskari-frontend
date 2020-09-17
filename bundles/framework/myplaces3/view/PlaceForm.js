@@ -65,7 +65,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             // populate category options (only if not in a published map)
             if (categories && !isPublished) {
                 const selection = ui.find('select[data-name=category]');
-                const selectedCategoryId = place ? place.getCategoryId() : categories.find(c => c.isDefault === true).categoryId;
+                const defaultCategory = categories.find(c => c.isDefault === true);
+                let selectedCategoryId;
+                if (place) {
+                    selectedCategoryId = place.getCategoryId();
+                } else if (defaultCategory) {
+                    selectedCategoryId = defaultCategory.categoryId;
+                }
                 categories.forEach(({ categoryId, name }) => {
                     const option = this.templateOption.clone();
                     option.text(name);
@@ -75,7 +81,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     }
                     selection.append(option);
                 });
-                selection.val(selectedCategoryId);
+                if (selectedCategoryId) {
+                    selection.val(selectedCategoryId);
+                }
             }
             if (isPublished) {
                 // remove the layer selections if in a publised map

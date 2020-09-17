@@ -285,7 +285,7 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Delete Map Layer",
-                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer before deleting the map layer?",
+                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer \"{2}\" before deleting the map layer?",
                 "deleteConfirm": "Do you want to delete the map layer \"{0}\"?",
                 "deleted": "The map layer has been deleted."
             },
