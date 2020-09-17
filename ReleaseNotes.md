@@ -1,5 +1,25 @@
 # Release Notes
 
+## 2.0.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/27?closed=1
+
+The 2.0 release is mainly for upgrading server-side components but we want to keep the frontend and server versions in sync. We do have a couple of bug fixes included since 1.56.0 but nothing that blows your mind with 2.0 fanfares:
+
+- Added possibility to show raw HTML from localization with Message-component
+- Fixed a bug in publisher that resulted in wrong tools being selected to embedded maps than ones based on user choices
+- Fixed a visual issue with popup height in admin functionality when more than 3 locales are enabled in the Oskari instance
+- Fixed an issue with MapMoveRequest when requested coordinates required reprojection
+- Bumped node-sass and lodash versions
+- Fixed an issue with infobox title height when an empty tag was provided as title
+- Fixed an issue with infobox when opened to 0,0 coordinates (coordinates are required as numbers now)
+- Fixed an issue with scales (optional field enabled with configuration) in printout 
+- Fixed an issue with user generated statistical data import from clipboard
+- Fixed an issue with measurement tools on embedded map
+- Fixed a visual issue with 3D-timecontrol plugin
+- Improved and fixed some translations in publisher and admin for sv and en languages
+
 ## 1.56.0
 
 For a full list of changes see:
