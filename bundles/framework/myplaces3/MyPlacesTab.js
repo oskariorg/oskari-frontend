@@ -162,7 +162,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          */
         _deletePlace: function (data) {
             var me = this;
-            var sandbox = this.instance.sandbox;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(me.loc('tab.notification.delete.btnDelete'));
@@ -170,21 +169,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
 
             okBtn.setHandler(function () {
                 dialog.close();
-                var service = sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
                 var callback = function (isSuccess) {
-                    var request;
-
+                    const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     if (isSuccess) {
-                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        request = Oskari.requestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
-
-                        me.instance.sandbox.request(me.instance, request);
+                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
+                        popup.fadeout();
                     } else {
-                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'));
+                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
                     }
-                    dialog.fadeout();
                 };
-                service.deleteMyPlace(data.id, callback);
+                me.instance.getService().deleteMyPlace(data.id, callback);
             });
             var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel'));
             var confirmMsg = me.loc('tab.notification.delete.confirm', { name: data.name });
