@@ -154,7 +154,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 type: 'DELETE',
                 url: Oskari.urls.getRoute('MyPlacesFeatures') + '&features=' + idList.join(),
                 success: function (response) {
-                    callback(response.success);
+                    const success = response.deleted > 0;
+                    callback(success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
@@ -373,7 +374,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }),
                 url: Oskari.urls.getRoute('MyPlacesFeatures') + '&crs=' + this.srsName,
                 success: function (response) {
-                    callback(response.success);
+                    const success = response.totalFeatures > 0;
+                    callback(success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
