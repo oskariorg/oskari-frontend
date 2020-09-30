@@ -26,3 +26,4 @@ export { WarningIcon } from './components/WarningIcon';
 export { Tooltip } from './components/Tooltip';
 export { LocalizationComponent } from './components/LocalizationComponent';
 export { Message } from './components/Message';
+export { GenericForm } from './components/GenericForm';
