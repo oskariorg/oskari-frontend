@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select } from 'oskari-ui'
 import { Form, Card, Space, Input } from 'antd';
+import styled from 'styled-components';
 
 import 'antd/es/form/style/index.js';
 import 'antd/es/card/style/index.js';
@@ -9,6 +10,21 @@ import 'antd/es/space/style/index.js';
 import 'antd/es/input/style/index.js';
 
 const { TextArea } = Input;
+
+const StyledFormItem = styled(Form.Item)`
+    margin-bottom: 12px;
+`;
+
+/**
+ * @class GenericForm
+ * @calssdesc <GenericForm>
+ * @memberof module:oskari-ui
+ * @see {@link module:oskari-ui/util.LocaleProvider|LocaleProvider}
+ * @param {Object} props - { formSettings, fields }
+ *
+ * @example <caption>Basic usage</caption>
+ * <GenericForm props={{ ...exampleProps }}/>
+ */
 
 /**
  * Generate generic Oskari UI form
@@ -52,14 +68,14 @@ export const GenericForm = ({ props }) => {
 const createFormItems = (fields, formSettings) => {
     return fields.map((field) => {
         return (
-            <Form.Item
+            <StyledFormItem
                 key={ field.key || field.name }
                 name={ field.name }
                 label={ formSettings.showLabels ? field.label : '' }
                 rules={ field.rules }
             >
                 { createFormInput( field ) }
-            </Form.Item>
+            </StyledFormItem>
         );
     });
 }
