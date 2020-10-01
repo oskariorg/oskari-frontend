@@ -1,12 +1,8 @@
-# printout
+# Printout
 
 ## Description
 
 Manages settings panel when user has entered to the print mode.
-
-## TODO
-
-* Backend does not take into account all the settings yet.
 
 ## Screenshot
 
@@ -14,20 +10,27 @@ Manages settings panel when user has entered to the print mode.
 
 ## Bundle configuration
 
-Configuration is available for print preview service urls, legend styling parameters and customized scale selection
-(portti_bundle_config_printout_update.sql)
+No configuration is required. Optional configuration is available for print customized scale selection.
 
-            "legend" : {
-                "general" : {
-                    "legendWidth" : 0.27,     (Legend size is 0.27 * Map longer edge)
-                    "legendRowHeight" : 0.02, (Legend row height is 0.02 * Map longer edge)
-                    "charsInrow" : 32         (Max length of title row without line break)
-                    ...
-                  }
-              },
-              "scaleSelection": true,         (show scale selection)
-              "scales": [500,1000,10000,25000,50000,100000] (define custom scales for scale selection, if not defined defaults to map scales)
+```javascript
+{
+    "scaleSelection": true,
+    "scales": [500,1000,10000,25000,50000,100000]
+}
+```
+* scaleSelection is to show scale selection (defaults to false)
+* scales define custom scales for scale selection, if not defined defaults to map scales
 
+## Requests the bundle handles
+
+<table class="table">
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>printout.PrintMapRequest</td><td>Prints map with given selections</td>
+  </tr>
+</table>
 
 ## Requests the bundle sends out
 
@@ -37,23 +40,11 @@ Configuration is available for print preview service urls, legend styling parame
   </tr>
   <tr>
     <td>DisableMapKeyboardMovementRequest</td><td>Disables keyboard listener for map movements</td>
+  </tr><tr>
     <td>EnableMapKeyboardMovementRequest</td><td>Enables keyboard listener for map movements</td>
+  </tr><tr>
     <td>userinterface.UpdateExtensionRequest</td><td>Bundle closes all flyouts when entering printing mode and its own flyouts when user clicks cancel button.</td>
-    <td></td><td>tbd</td>
   </tr>
-</table>
-
-### PrintService
-
-<table class="table">
-  <tr>
-    <th>Request</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>Ajax</td>
-    <td>Ajax requests to backend e.g. action_route = GetProxyRequest</td>
-  </tr>
-
 </table>
 
 ## Events the bundle listens to
@@ -63,18 +54,9 @@ Configuration is available for print preview service urls, legend styling parame
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>MapLayerVisibilityChangedEvent</td><td>Refresh printable map if event received</td>
-    <td>PrintableContentEvent</td><td>Set data for print legend, etc</td>
-    <td>PrintWithoutUIEvent</td>Print pdf/png with predefined params without UI</td>
+    <td>AfterMapMoveEvent</td><td>Refresh print preview</td>
   </tr>
 </table>
-
-## Plugins
-
-### LegendPlugin
-
-This plugin handles legend plot to OL map and to final print
-
 
 ## Dependencies
 
