@@ -67,7 +67,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
                 "src": "../../../../bundles/framework/myplaces3/view/MainView.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/view/PlaceForm.js"
+                "src": "../../../../bundles/framework/myplaces3/view/PlaceFormV2.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/myplaces3/view/CategoryForm.js"

@@ -42,6 +42,9 @@ export const GenericForm = ({ props }) => {
 
     const [form] = Form.useForm();
 
+    console.log('generic form this', this);
+    console.log('form --- ', form);
+
     if ( !props.fields ) {
         return null;
     }
@@ -69,7 +72,7 @@ const createFormItems = (fields, formSettings) => {
     return fields.map((field) => {
         return (
             <StyledFormItem
-                key={ field.key || field.name }
+                key={ field.name }
                 name={ field.name }
                 label={ formSettings.showLabels ? field.label : '' }
                 rules={ field.rules }
@@ -96,32 +99,46 @@ const createFormInput = (field) => {
         return null;
     }
 
+    const fieldKey = field.name + '_' + field.type + '_field';
+
     switch(field.type) {
         case 'text':
             return (
-                <Input placeholder={ field.placeholder } />
+                <Input
+                    key={ fieldKey }
+                    placeholder={ field.placeholder }
+                    value={ field.value } />
             );
         case 'textarea':
             return (
-                <TextArea placeholder={ field.placeholder } />
+                <TextArea
+                    key={ fieldKey }
+                    placeholder={ field.placeholder }
+                    value={ field.value } />
             );
         case 'info':
             return (
-                <Card>
+                <Card key={ fieldKey }>
                     { field.value }
                 </Card>
             );
         case 'dropdown':
             return (
-                <Select placeholder={ field.placeholder }>
+                <Select
+                    key={ fieldKey }
+                    placeholder={ field.placeholder }>
                     { field.value.map(
-                        (singleOption) => <Select.Option key={ singleOption }>{ singleOption }</Select.Option>
+                        (singleOption) => <Select.Option key={ singleOption + '_option' }>{ singleOption }</Select.Option>
                     ) }
                 </Select>
             );
-        case 'submit':
+        case 'button':
             return (
-                <Button type="primary" htmlType={ field.type }>
+                <Button
+                    key={ fieldKey }
+                    type={ field.style }
+                    htmlType={ field.buttonType }
+                    onClick={ field.onClick }>
                     { field.value }
                 </Button>
             );

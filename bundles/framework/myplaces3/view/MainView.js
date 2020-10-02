@@ -167,7 +167,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             const sandbox = this.instance.sandbox;
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             this.form = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
+                'Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
                 this.instance,
                 this.options
             );
