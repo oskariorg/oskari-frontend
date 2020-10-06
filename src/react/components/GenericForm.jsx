@@ -34,118 +34,110 @@ const StyledFormItem = styled(Form.Item)`
  * @param {Array} props.fields        - array of objects containing all single fields
  *
  */
-export const GenericForm = ({ props }) => {
-    const {
-        formSettings,
-        fields
-    } = props;
 
-    const [form] = Form.useForm();
-
-    console.log('generic form this', this);
-    console.log('form --- ', form);
-
-    if ( !props.fields ) {
-        return null;
+export class GenericForm extends React.Component {
+    constructor (props) {
+        super(props);
     }
 
-    return (
-        <Form
-            form={ form }
-            onFinishFailed={ formSettings.onFinishFailed(form) }
-            onFinish={ formSettings.onFinish }
-        >
-            <Space direction="vertical">
-                { createFormItems(fields, formSettings) }
-            </Space>     
-        </Form>
-    );
-};
-
-
-/**
- * 
- * @param {Object} fields - array containing all fields
- * @returns {React.Component} 
- */
-const createFormItems = (fields, formSettings) => {
-    return fields.map((field) => {
-        return (
-            <StyledFormItem
-                key={ field.name }
-                name={ field.name }
-                label={ formSettings.showLabels ? field.label : '' }
-                rules={ field.rules }
-            >
-                { createFormInput( field ) }
-            </StyledFormItem>
-        );
-    });
-}
-
-
-/**
- * Create single Form.Item content with provided field properties
- * 
- * @param {Object} field              - object containing information for single field
- * @param {String} field.type         - field type as string {text / textarea / info / dropdown}
- * @param {String} field.placeholder  - placeholder text for the current field
- * @param {String|Number} field.value - value for current field used in info card / drowdown / submit button
- * 
- * @returns {Component} React component for the provided field
- */
-const createFormInput = (field) => {
-    if (!field) {
-        return null;
+    /**
+     * 
+     * @param {Object} fields - array containing all fields
+     * @returns {React.Component} 
+     */
+    createFormItems (fields, formSettings) {
+        return fields.map((field) => {
+            return (
+                <StyledFormItem
+                    key={ field.name }
+                    name={ field.name }
+                    label={ formSettings.showLabels ? field.label : '' }
+                    rules={ field.rules }
+                >
+                    { this.createFormInput( field ) }
+                </StyledFormItem>
+            );
+        });
     }
 
-    const fieldKey = field.name + '_' + field.type + '_field';
+    /**
+     * Create single Form.Item content with provided field properties
+     * 
+     * @param {Object} field              - object containing information for single field
+     * @param {String} field.type         - field type as string {text / textarea / info / dropdown}
+     * @param {String} field.placeholder  - placeholder text for the current field
+     * @param {String|Number} field.value - value for current field used in info card / drowdown / submit button
+     * 
+     * @returns {Component} React component for the provided field
+     */
 
-    switch(field.type) {
-        case 'text':
-            return (
-                <Input
-                    key={ fieldKey }
-                    placeholder={ field.placeholder }
-                    value={ field.value } />
-            );
-        case 'textarea':
-            return (
-                <TextArea
-                    key={ fieldKey }
-                    placeholder={ field.placeholder }
-                    value={ field.value } />
-            );
-        case 'info':
-            return (
-                <Card key={ fieldKey }>
-                    { field.value }
-                </Card>
-            );
-        case 'dropdown':
-            return (
-                <Select
-                    key={ fieldKey }
-                    placeholder={ field.placeholder }>
-                    { field.value.map(
-                        (singleOption) => <Select.Option key={ singleOption + '_option' }>{ singleOption }</Select.Option>
-                    ) }
-                </Select>
-            );
-        case 'button':
-            return (
-                <Button
-                    key={ fieldKey }
-                    type={ field.style }
-                    htmlType={ field.buttonType }
-                    onClick={ field.onClick }>
-                    { field.value }
-                </Button>
-            );
-        default:
+    createFormInput (field) {
+        if (!field) {
             return null;
+        }
+    
+        const fieldKey = field.name + '_' + field.type + '_field';
+    
+        switch(field.type) {
+            case 'text':
+                return (
+                    <Input
+                        key={ fieldKey }
+                        placeholder={ field.placeholder }
+                    />
+                );
+            case 'textarea':
+                return (
+                    <TextArea
+                        key={ fieldKey }
+                        placeholder={ field.placeholder }
+                    />
+                );
+            case 'info':
+                return (
+                    <Card key={ fieldKey }>
+                        { field.value }
+                    </Card>
+                );
+            case 'dropdown':
+                return (
+                    <Select
+                        key={ fieldKey }
+                        placeholder={ field.placeholder }>
+                        { field.value.map(
+                            (singleOption) => <Select.Option key={ singleOption + '_option' }>{ singleOption }</Select.Option>
+                        ) }
+                    </Select>
+                );
+            case 'button':
+                return (
+                    <Button
+                        key={ fieldKey }
+                        type={ field.style }
+                        htmlType={ field.buttonType }
+                        onClick={ field.onClick }>
+                        { field.value }
+                    </Button>
+                );
+            default:
+                return null;
+        }
     }
-}
+    
+
+    render ()  {
+        return (
+            <Form
+                onFinishFailed={ this.props.formSettings.onFinishFailed }
+                onFinish={ this.props.formSettings.onFinish }
+            >
+                <Space direction="vertical">
+                    { this.createFormItems( this.props.fields, this.props.formSettings) }
+                </Space>     
+            </Form>
+        );
+    }
+};
 
 GenericForm.propTypes = {
     formName: PropTypes.string,
