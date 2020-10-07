@@ -11,8 +11,28 @@ import 'antd/es/input/style/index.js';
 
 const { TextArea } = Input;
 
+const zIndexValue = 999999;
+
 const StyledFormItem = styled(Form.Item)`
-    margin-bottom: 12px;
+    margin-bottom: 0;
+
+    display:flex;
+    flex-wrap: wrap;
+
+    .ant-form-item-label {
+        text-align: left;
+        width: 100%;
+
+        label {
+            color: #6d6d6d;
+            font-size: 12px;
+            height: 24px;
+        }
+    }
+
+    input {
+        height: 40px;
+    }
 `;
 
 /**
@@ -38,6 +58,12 @@ const StyledFormItem = styled(Form.Item)`
 export class GenericForm extends React.Component {
     constructor (props) {
         super(props);
+        
+        this.formRef = React.createRef();
+    }
+
+    componentDidMount () {
+        this._populateForm(); // Populate form fields on render
     }
 
     /**
@@ -103,7 +129,9 @@ export class GenericForm extends React.Component {
                 return (
                     <Select
                         key={ fieldKey }
-                        placeholder={ field.placeholder }>
+                        placeholder={ field.placeholder }
+                        dropdownStyle={{ zIndex: zIndexValue }}
+                    >
                         { field.value.map(
                             (singleOption) => <Select.Option key={ singleOption + '_option' }>{ singleOption }</Select.Option>
                         ) }
@@ -123,6 +151,17 @@ export class GenericForm extends React.Component {
                 return null;
         }
     }
+
+    /**
+     * Populates form on form init
+     */
+    _populateForm() {
+        for(const field of this.props.fields) {
+            this.formRef.current.setFieldsValue({
+                [field.name]: field.value
+            });
+        }
+    }
     
 
     render ()  {
@@ -130,6 +169,7 @@ export class GenericForm extends React.Component {
             <Form
                 onFinishFailed={ this.props.formSettings.onFinishFailed }
                 onFinish={ this.props.formSettings.onFinish }
+                ref={ this.formRef }
             >
                 <Space direction="vertical">
                     { this.createFormItems( this.props.fields, this.props.formSettings) }
@@ -141,14 +181,16 @@ export class GenericForm extends React.Component {
 
 GenericForm.propTypes = {
     formName: PropTypes.string,
-    fields: PropTypes.shape({
-        type: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        placeholder: PropTypes.string,
-        required: PropTypes.bool,
-        value: PropTypes.any,
-        validator: PropTypes.func,
-        rules: PropTypes.array
-    })
+    fields: PropTypes.arrayOf(
+        PropTypes.shape({
+            type: PropTypes.string.isRequired,
+            label: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            placeholder: PropTypes.string,
+            required: PropTypes.bool,
+            value: PropTypes.any,
+            validator: PropTypes.func,
+            rules: PropTypes.array
+        })
+    )
 };
