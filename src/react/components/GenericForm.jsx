@@ -131,10 +131,19 @@ export class GenericForm extends React.Component {
                         key={ fieldKey }
                         placeholder={ field.placeholder }
                         dropdownStyle={{ zIndex: zIndexValue }}
+                        defaultValue={ field.value.find(value => value.isDefault).name }
                     >
-                        { field.value.map(
-                            (singleOption) => <Select.Option key={ singleOption + '_option' }>{ singleOption }</Select.Option>
-                        ) }
+                        { field.value.map((singleOption) => {
+                            return (
+                                <Select.Option
+                                    value={ singleOption.name }
+                                    key={ singleOption.name + '_option' }
+                                    title={ singleOption.categoryId }
+                                >
+                                    { singleOption.name }
+                                </Select.Option>
+                            );
+                        }) }
                     </Select>
                 );
             case 'button':
@@ -157,9 +166,11 @@ export class GenericForm extends React.Component {
      */
     _populateForm() {
         for(const field of this.props.fields) {
-            this.formRef.current.setFieldsValue({
-                [field.name]: field.value
-            });
+            if(field.type !== 'dropdown') {
+                this.formRef.current.setFieldsValue({
+                    [field.name]: field.value
+                });
+            }
         }
     }
     
