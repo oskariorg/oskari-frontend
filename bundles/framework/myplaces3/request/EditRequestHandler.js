@@ -46,7 +46,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             var place = service.findMyPlace(request.getId());
             var mainMapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             var geometry, center, shape;
-            console.log('edit place');
             if (place) {
                 geometry = place.getGeometry();
                 center = mainMapModule.getCentroidFromGeoJSON(geometry);
