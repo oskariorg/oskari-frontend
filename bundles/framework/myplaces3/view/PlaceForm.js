@@ -13,9 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
      * @method create called automatically on construction
      * @static
      */
-
     function (instance, options) {
-       
         this.instance = instance;
         this.options = options;
         this.newCategoryId = '-new-';
@@ -23,40 +21,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.measurementResult = null;
 
-        this.template = jQuery(
-            '<div class="myplacesform">' +
-            '  <div class="field">' +
-            '    <div class="help icon-info" title="' + this.loc('placeform.tooltip') + '"></div>' +
-            '    <input type="text" data-name="placename" placeholder="' + this.loc('placeform.placename.placeholder') + '" />' +
-            '  </div>' +
-            '  <div class="field">' +
-            '    <input type="text" data-name="placedesc" placeholder="' + this.loc('placeform.placedesc.placeholder') + '" />' +
-            '  </div>' +
-            '  <div class="field">' +
-            '    <input type="text" data-name="placeAttention" placeholder="' + this.loc('placeform.placeAttention.placeholder') + '"/>' +
-            '  </div>' +
-            '  <div class="field measurementResult"></div>' +
-            '  <div class="field">' +
-            '    <input type="text" data-name="placelink" placeholder="' + this.loc('placeform.placelink.placeholder') + '"/>' +
-            '  </div>' +
-            '  <div class="field">' +
-            '    <input type="text" data-name="imagelink" placeholder="' + this.loc('placeform.imagelink.placeholder') + '"/>' +
-            '  </div>' +
-            '  <div class="field imagePreview">' +
-            '    <label>' + this.loc('placeform.imagelink.previewLabel') + '</label><br clear="all" />' +
-            '    <a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
-            '  </div>' +
-            '  <div class="field" id="newLayerForm">' +
-            '    <label for="category">' +
-            '      <span>' + this.loc('placeform.category.choose') + '</span>' +
-            '    </label>' +
-            '    <br clear="all" />' +
-            '    <select data-name="category"></select>' +
-            '  </div>' +
-            '</div>'
-        );
+
+        this.template = jQuery('<div class="myplacesform form-v2"></div>');
+
         this.templateOption = jQuery('<option></option>');
         this.categoryForm = undefined;
+
+        this.dialog = undefined;
+        this.dialogForm = undefined;
+        this.categories = [];
+
+        this.defaultRules = [
+            {
+                required: false,
+                message: 'Empty field'
+            }
+        ];
+
+        this.testRules = [
+            {
+                required: true,
+                message: 'Please fill in this area'
+            },
+            () => ({
+                validator: (_, value) => value ? Promise.resolve(value).then(value => console.log('Validated:', value)) : Promise.reject('Must validate')
+            })
+        ];
+
+        this.defaultProps = {
+            formSettings: {
+                label: 'Form settings label',
+                showLabels: true,
+                onFinish: (values) => {
+                    console.log(values);
+                    this._setNewValues(values);
+                    this.dialog.close();
+                },
+                onFinishFailed: () => {
+                    console.log('onFinishFailed');
+                }
+            }
+        };
     }, {
         /**
          * @method getForm
@@ -98,6 +103,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     ui.find('div.measurementResult').html(this.measurementResult);
                 }
             }
+
+            this.categories = categories;
+            this.createEditDialog(categories);
 
             return ui;
         },
@@ -276,13 +284,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 preview.hide();
             }
         },
-
-        createCategoryForm: function () {
-            var onScreenForm = this._getOnScreenForm();
-            this.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', this.instance);
-            onScreenForm.find('div#newLayerForm').html(this.categoryForm.getForm());
-            this.categoryForm.start();
-        },
         /**
          * @method destroy
          * Removes eventlisteners
@@ -306,5 +307,164 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         _getOnScreenForm: function () {
             // unbind live so
             return jQuery('div.myplacesform').filter(':visible');
+        },
+        createEditDialog: function (categories) {
+            const me = this;
+
+            this.populateForm();
+            this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+            // add new dialog to ui
+            this.dialog.show(me.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
+
+            [this.container] = jQuery('.places-edit-dialog');
+
+            this.placeForm = (<GenericForm { ...this.defaultProps } />);
+
+            this.populateForm();
+
+            this.renderForm();
+
+            this.dialog.moveTo('div.personaldata ul li select', 'right');
+        },
+        populateForm: function () {
+            const {
+                name,
+                description,
+                imageLink,
+                link,
+                attentionText
+            } = this.place.properties;
+
+            this.defaultProps.fields = [
+                {
+                    name: 'name',
+                    type: 'text',
+                    label: 'Name for place',
+                    placeholder: this.loc('placeform.placename.placeholder'),
+                    rules: this.testRules,
+                    value: name
+                },
+                {
+                    name: 'placedesc',
+                    type: 'textarea',
+                    label: 'Place description',
+                    placeholder: this.loc('placeform.placedesc.placeholder'),
+                    rules: this.defaultRules,
+                    value: description
+                },
+                {
+                    name: 'placeAttention',
+                    type: 'text',
+                    label: 'Text visible on map',
+                    placeholder: this.loc('placeform.placeAttention.placeholder'),
+                    rules: this.defaultRules,
+                    value: attentionText
+                },
+                {
+                    name: 'link',
+                    type: 'text',
+                    label: 'Link to additional information',
+                    placeholder: this.loc('placeform.placelink.placeholder'),
+                    rules: this.defaultRules,
+                    value: link
+                },
+                {
+                    name: 'imageLink',
+                    type: 'text',
+                    label: this.loc('placeform.imagelink.placeholder'),
+                    placeholder: this.loc('placeform.imagelink.placeholder'),
+                    rules: this.defaultRules,
+                    value: imageLink
+                },
+                {
+                    name: 'category',
+                    type: 'dropdown',
+                    label: this.loc('placeform.category.choose'),
+                    placeholder: this.loc('placeform.category.choose'),
+                    value: this.categories.map(category => {
+                        return {
+                            name: category.name,
+                            categoryId: category.categoryId,
+                            isDefault: (this.place.getCategoryId() === category.categoryId)
+                        };
+                    }),
+                    rules: this.defaultRules
+                },
+                {
+                    name: 'cancel',
+                    type: 'button',
+                    label: '',
+                    placeholder: 'Cancel',
+                    value: this.loc('buttons.cancel'),
+                    style: 'secondary',
+                    buttonType: 'button',
+                    onClick: (event) => {
+                        this.dialog.close();
+                    }
+                },
+                {
+                    name: 'submit',
+                    type: 'button',
+                    label: '',
+                    placeholder: 'Save',
+                    value: this.loc('buttons.save'),
+                    style: 'primary',
+                    buttonType: 'submit'
+                }
+            ];
+        },
+        /**
+         * @method _setNewValues
+         * Sets new place values
+         * @private
+         * @param {Object} values - form values as object
+         */
+        _setNewValues: function (values) {
+            const place = this.place || Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+            place.setName(values.name);
+            place.setAttentionText(values.placeAttention);
+            place.setDescription(values.placedesc);
+            place.setLink(values.link);
+            place.setImageLink(values.imageLink);
+            place.setCategoryId(values.category);
+
+            this._savePlace(place);
+        },
+        /**
+         * @method _savePlace
+         * Handles save place after possible category save
+         * @private
+         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
+         */
+        _savePlace: function (place) {
+            const drawing = this.drawing;
+            const isMovePlace = false;
+            if (drawing) {
+                place.setDrawToolsMultiGeometry(drawing);
+            }
+            var serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
+                if (blnSuccess) {
+                    const handler = this.instance.getCategoryHandler();
+                    handler.refreshLayerIfSelected(categoryId);
+                    handler.addLayerToMap(categoryId);
+                    // refresh old layer as well if category changed
+                    if (oldCategoryId) {
+                        handler.refreshLayerIfSelected(oldCategoryId);
+                    }
+                    //this.cleanupPopup();
+
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(this.loc('notification.placeAdded.title'), this.loc('notification.placeAdded.message'));
+                    dialog.fadeout();
+                    // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
+                } else {
+                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
+                }
+            };
+            this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
+        },
+        renderForm: function () {
+            ReactDOM.render(this.placeForm, this.container);
         }
     });
