@@ -131,14 +131,13 @@ export class GenericForm extends React.Component {
                         key={ fieldKey }
                         placeholder={ field.placeholder }
                         dropdownStyle={{ zIndex: zIndexValue }}
-                        defaultValue={ field.value.find(value => value.isDefault).name }
+
                     >
                         { field.value.map((singleOption) => {
                             return (
                                 <Select.Option
-                                    value={ singleOption.name }
-                                    key={ singleOption.name + '_option' }
-                                    title={ singleOption.categoryId }
+                                    value={ singleOption.categoryId }
+                                    key={ singleOption.categoryId }
                                 >
                                     { singleOption.name }
                                 </Select.Option>
@@ -152,7 +151,8 @@ export class GenericForm extends React.Component {
                         key={ fieldKey }
                         type={ field.style }
                         htmlType={ field.buttonType }
-                        onClick={ field.onClick }>
+                        onClick={ field.onClick }
+                        block>
                         { field.value }
                     </Button>
                 );
@@ -166,11 +166,15 @@ export class GenericForm extends React.Component {
      */
     _populateForm() {
         for(const field of this.props.fields) {
-            if(field.type !== 'dropdown') {
+            if (field.type === 'dropdown') {
+                this.formRef.current.setFieldsValue({
+                    [field.name]: field.value.find(option => option.isDefault).categoryId
+                });
+            } else if (field.type !== 'dropdown') {
                 this.formRef.current.setFieldsValue({
                     [field.name]: field.value
                 });
-            }
+            } 
         }
     }
     
