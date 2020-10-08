@@ -127,7 +127,7 @@ Oskari.registerLocalization(
             "category": {
                 "label": "Map layer",
                 "newLayer": "Create new layer",
-                "choose": "or select one of your existing map layers:"
+                "choose": "Select layer for the place:"
             },
             "imagelink": {
                 "placeholder": "Link to feature image",

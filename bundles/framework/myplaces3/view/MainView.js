@@ -144,7 +144,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             // TODO: closestPoint or centroid
             var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
-            this.showPlaceForm(location);
         },
         _updateMeasurementResult: function (drawingData) {
             if (this.form && drawingData) {
@@ -215,8 +214,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             var options = {
                 hidePrevious: true
             };
-            var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, me.loc('placeform.title'), content, location, options);
-            sandbox.request(me.getName(), request);
+
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
 

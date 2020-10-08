@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { GenericForm } from 'oskari-ui';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.view.PlaceForm
  *
@@ -11,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
      */
 
     function (instance, options) {
+       
         this.instance = instance;
         this.options = options;
         this.newCategoryId = '-new-';

@@ -28,15 +28,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
         this.categoryForm = undefined;
 
         this.dialog = undefined;
+        this.dialogForm = undefined;
+        this.categories = [];
 
-        const defaultRules = [
+        this.defaultRules = [
             {
                 required: false,
                 message: 'Empty field'
             }
         ];
-        
-        const testRules = [
+
+        this.testRules = [
             {
                 required: true,
                 message: 'Please fill in this area'
@@ -45,83 +47,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
                 validator: (_, value) => value ? Promise.resolve(value).then(value => console.log('Validated:', value)) : Promise.reject('Must validate')
             })
         ];
-        
+
         this.defaultProps = {
             formSettings: {
                 label: 'Form settings label',
                 showLabels: true,
                 onFinish: (values) => {
-                    console.log('onFinish');
-                    this.setNewValues(values);
+                    console.log(values);
+                    this._setNewValues(values);
                     this.dialog.close();
                 },
                 onFinishFailed: () => {
                     console.log('onFinishFailed');
                 }
-            },
-            fields: [
-                {
-                    type: 'text',
-                    label: 'Name for place',
-                    name: 'name',
-                    placeholder: this.loc('placeform.placename.placeholder'),
-                    rules: testRules
-                },
-                {
-                    type: 'textarea',
-                    label: 'Place description',
-                    placeholder: this.loc('placeform.placedesc.placeholder'),
-                    name: 'placedesc',
-                    rules: defaultRules
-                },
-                {
-                    type: 'text',
-                    label: 'Text visible on map',
-                    placeholder: this.loc('placeform.placeAttention.placeholder'),
-                    name: 'placeAttention',
-                    rules: defaultRules
-                },
-                {
-                    type: 'text',
-                    label: 'Link to additional information',
-                    placeholder: this.loc('placeform.placelink.placeholder'),
-                    name: 'placelink',
-                    rules: defaultRules
-                },
-                {
-                    type: 'dropdown',
-                    label: this.loc('placeform.category.choose'),
-                    placeholder: this.loc('placeform.category.choose'),
-                    value: [
-                        'First',
-                        'Second',
-                        'Third'
-                    ],
-                    name: 'dropdown_test',
-                    rules: defaultRules
-                },
-                {
-                    type: 'button',
-                    label: '',
-                    placeholder: 'Cancel',
-                    value: 'Cancel',
-                    style: 'secondary',
-                    onClick: (event) => {
-                        this.dialog.close();
-                    }
-                },
-                {
-                    type: 'button',
-                    label: '',
-                    placeholder: 'Save',
-                    value: 'Submit',
-                    style: 'primary',
-                    buttonType: 'submit'
-                }
-            ]
+            }
         };
-
-
     }, {
         /**
          * @method getForm
@@ -164,9 +104,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
                 }
             }
 
-            this.container = ui[0];
-            //ReactDOM.render(<GenericForm props={{ ...this.defaultProps }} />, this.container);
-            this.createEditDialog();
+            this.categories = categories;
+            this.createEditDialog(categories);
 
             return ui;
         },
@@ -345,13 +284,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
                 preview.hide();
             }
         },
-
-        createCategoryForm: function () {
-            var onScreenForm = this._getOnScreenForm();
-            this.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', this.instance);
-            onScreenForm.find('div#newLayerForm').html(this.categoryForm.getForm());
-            this.categoryForm.start();
-        },
         /**
          * @method destroy
          * Removes eventlisteners
@@ -376,69 +308,126 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
             // unbind live so
             return jQuery('div.myplacesform').filter(':visible');
         },
-        createEditDialog: function () {
-            console.log(' -- creating dialog -- ');
+        createEditDialog: function (categories) {
             const me = this;
-            //var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
-            
+
+            this.populateForm();
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            console.log('this place atm', this.place);
+            // add new dialog to ui
+            this.dialog.show(me.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
 
-            const buttons = [];
-            const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc('buttons.save'));
-            saveBtn.addClass('primary');
-            saveBtn.setHandler(function () {
-                /*const formValues = form.getValues();
-                if (formValues.errors) {
-                    me.showValidationErrorMessage(formValues.errors);
-                    return;
-                }*/
-                console.log('save');
-                this.dialog.close();
-                //me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
+            [this.container] = jQuery('.places-edit-dialog');
 
+            this.placeForm = (<GenericForm { ...this.defaultProps } />);
 
-            const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(me.loc('buttons.cancel'));
-            cancelBtn.setHandler(function () {
-                this.dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
+            this.populateForm();
 
-            //buttons.push(cancelBtn);
-            //buttons.push(saveBtn);
-
-            //form.getForm(values);
-            //dialog.show(me.loc('categoryform.edit.title'), '', buttons);
-            this.dialog.show(me.loc('placeform.title'), '<div class="places-edit-dialog"></div>', buttons);
-
-            const container = jQuery('.places-edit-dialog')[0];
-
-            this.placeForm = (
-                <GenericForm props={{ ...this.defaultProps }} />
-            );
-
-            this.populateForm(this.placeForm);
-
-            ReactDOM.render(this.placeForm, container);
+            this.renderForm();
 
             this.dialog.moveTo('div.personaldata ul li select', 'right');
         },
-        populateForm: function (form) {
-            console.log(form);
-            //form.setFieldsValue({ ...this.place });
-        },
-        setNewValues: function (values) {
-            console.log('This place ', this.place);
-            console.log(' -- values -- ', values);
+        populateForm: function () {
+            const {
+                name,
+                description,
+                imageLink,
+                link,
+                attentionText
+            } = this.place.properties;
 
+            this.defaultProps.fields = [
+                {
+                    name: 'name',
+                    type: 'text',
+                    label: 'Name for place',
+                    placeholder: this.loc('placeform.placename.placeholder'),
+                    rules: this.testRules,
+                    value: name
+                },
+                {
+                    name: 'placedesc',
+                    type: 'textarea',
+                    label: 'Place description',
+                    placeholder: this.loc('placeform.placedesc.placeholder'),
+                    rules: this.defaultRules,
+                    value: description
+                },
+                {
+                    name: 'placeAttention',
+                    type: 'text',
+                    label: 'Text visible on map',
+                    placeholder: this.loc('placeform.placeAttention.placeholder'),
+                    rules: this.defaultRules,
+                    value: attentionText
+                },
+                {
+                    name: 'link',
+                    type: 'text',
+                    label: 'Link to additional information',
+                    placeholder: this.loc('placeform.placelink.placeholder'),
+                    rules: this.defaultRules,
+                    value: link
+                },
+                {
+                    name: 'imageLink',
+                    type: 'text',
+                    label: this.loc('placeform.imagelink.placeholder'),
+                    placeholder: this.loc('placeform.imagelink.placeholder'),
+                    rules: this.defaultRules,
+                    value: imageLink
+                },
+                {
+                    name: 'category',
+                    type: 'dropdown',
+                    label: this.loc('placeform.category.choose'),
+                    placeholder: this.loc('placeform.category.choose'),
+                    value: this.categories.map(category => {
+                        return {
+                            name: category.name,
+                            categoryId: category.categoryId,
+                            isDefault: (this.place.getCategoryId() === category.categoryId)
+                        };
+                    }),
+                    rules: this.defaultRules
+                },
+                {
+                    name: 'cancel',
+                    type: 'button',
+                    label: '',
+                    placeholder: 'Cancel',
+                    value: this.loc('buttons.cancel'),
+                    style: 'secondary',
+                    buttonType: 'button',
+                    onClick: (event) => {
+                        this.dialog.close();
+                    }
+                },
+                {
+                    name: 'submit',
+                    type: 'button',
+                    label: '',
+                    placeholder: 'Save',
+                    value: this.loc('buttons.save'),
+                    style: 'primary',
+                    buttonType: 'submit'
+                }
+            ];
+        },
+        /**
+         * @method _setNewValues
+         * Sets new place values
+         * @private
+         * @param {Object} values - form values as object
+         */
+        _setNewValues: function (values) {
             const place = this.place || Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
             place.setName(values.name);
             place.setAttentionText(values.placeAttention);
             place.setDescription(values.placedesc);
+            place.setLink(values.link);
+            place.setImageLink(values.imageLink);
+            place.setCategoryId(values.category);
 
             this._savePlace(place);
         },
@@ -475,4 +464,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceFormV2',
             };
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
+        renderForm: function () {
+            ReactDOM.render(this.placeForm, this.container);
+        }
     });
