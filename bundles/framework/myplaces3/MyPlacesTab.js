@@ -236,25 +236,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 return link;
             });
 
-
-            var sandbox = this.instance.sandbox;
-            var editReqBuilder = Oskari.requestBuilder('MyPlaces.EditCategoryRequest');
-
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.on('click', function () {
-                    console.log('edit clicked and data:', data);
                     me._editPlace(data);
-                    console.log('clicked edit -- handler');
-                    //sandbox.request(this.instance, editReqBuilder(data.categoryId));
                     return false;
                 });
                 return link;
             });
-
-
 
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('delete', function (name, data) {
