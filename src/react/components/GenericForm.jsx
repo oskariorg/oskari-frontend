@@ -33,6 +33,14 @@ const StyledFormItem = styled(Form.Item)`
     input {
         height: 40px;
     }
+
+    .ant-form-item-explain {
+        font-size: 12px;
+
+        & > div {
+            margin: 5px 0 0; 
+        }
+    }
 `;
 
 /**
