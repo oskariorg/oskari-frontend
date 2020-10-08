@@ -152,7 +152,7 @@ export class GenericForm extends React.Component {
                         type={ field.style }
                         htmlType={ field.buttonType }
                         onClick={ field.onClick }
-                        block>
+                        block={ (field.buttonType === 'submit' || field.buttonType === 'button') }>
                         { field.value }
                     </Button>
                 );
