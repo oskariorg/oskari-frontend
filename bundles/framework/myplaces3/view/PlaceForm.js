@@ -313,6 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.populateForm();
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            this.dialog.makeDraggable();
 
             // add new dialog to ui
             this.dialog.show(me.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
