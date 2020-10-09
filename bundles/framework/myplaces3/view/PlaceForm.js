@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 message: 'Please fill in this area'
             },
             () => ({
-                validator: (_, value) => value ? Promise.resolve(value).then(value => console.log('Validated:', value)) : Promise.reject('Must validate')
+                validator: (_, value) => value ? Promise.resolve(value) : Promise.reject('Must validate')
             })
         ];
 
@@ -53,13 +53,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 label: 'Form settings label',
                 showLabels: true,
                 onFinish: (values) => {
-                    console.log(values);
                     this._setNewValues(values);
                     this.dialog.close();
                 },
-                onFinishFailed: () => {
-                    console.log('onFinishFailed');
-                }
+                onFinishFailed: () => {}
             }
         };
     }, {
@@ -96,7 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             this._updateImageUrl('', ui);
 
             if (place) {
-                this.setValues(place, ui);
+                //this.setValues(place, ui);
+                this.place = place;
             } else {
                 this.place = null;
                 if (this.measurementResult) {
@@ -183,6 +181,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 values.category = category;
             }
             return values;
+        },
+        /**
+         * @method setValues
+         * Sets form values from object.
+         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
+         */
+        setValues: function (place, form) {
+            this.place = place;
         },
         setMeasurementResult: function (measurement, drawMode) {
             if (drawMode === 'point' || typeof measurement !== 'number') {
