@@ -184,35 +184,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             }
             return values;
         },
-        /**
-         * @method setValues
-         * Sets form values from object.
-         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
-         */
-        setValues: function (place, form) {
-            // infobox will make us lose our reference so search
-            // from document using the form-class
-            var onScreenForm = form || this._getOnScreenForm();
-            if (onScreenForm.length > 0) {
-                // found form on screen
-                onScreenForm.find('input[data-name=placename]').attr('value', place.getName());
-                onScreenForm.find('input[data-name=placedesc]').attr('value', place.getDescription());
-                onScreenForm.find('input[data-name=placeAttention]').attr('value', place.getAttentionText());
-                onScreenForm.find('input[data-name=placelink]').attr('value', place.getLink());
-                onScreenForm.find('input[data-name=imagelink]').attr('value', place.getImageLink());
-                onScreenForm.find('select[data-name=category]').attr('value', place.getCategoryId());
-                this._updateImageUrl(place.getImageLink(), onScreenForm);
-                const measurementDiv = onScreenForm.find('div.measurementResult');
-                const measurement = place.getMeasurement();
-                if (measurement) {
-                    const drawMode = this.instance.getService().getDrawModeFromGeometry(place.getGeometry());
-                    measurementDiv.html(this.loc('placeform.measurement.' + drawMode) + ' ' + measurement);
-                } else {
-                    measurementDiv.remove();
-                }
-            }
-            this.place = place;
-        },
         setMeasurementResult: function (measurement, drawMode) {
             if (drawMode === 'point' || typeof measurement !== 'number') {
                 this.measurementResult = null;
