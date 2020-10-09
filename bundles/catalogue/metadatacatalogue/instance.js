@@ -48,7 +48,7 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
-        this.drawCoverage = false;
+        this.drawCoverage = true;
         // Search result actions array.
         this.searchResultActions = [];
         this.conf = this.conf || {};
