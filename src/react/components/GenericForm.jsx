@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select } from 'oskari-ui'
-import { Form, Card, Space, Input } from 'antd';
+import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
 
 import 'antd/es/form/style/index.js';
@@ -84,7 +84,7 @@ export class GenericForm extends React.Component {
             return (
                 <StyledFormItem
                     key={ field.name }
-                    name={ field.name }
+                    name={ field.type !== 'buttongroup' ? field.name : '' }
                     label={ formSettings.showLabels ? field.label : '' }
                     rules={ field.rules }
                 >
@@ -164,6 +164,24 @@ export class GenericForm extends React.Component {
                         { field.value }
                     </Button>
                 );
+            case 'buttongroup':
+                return ( 
+                <Row justify={ 'center' }>
+                    <Space>
+                        { field.buttons.map((singleItem) => {
+                            return (
+                                <Button
+                                    key={ singleItem.name + '' }
+                                    type={ singleItem.style }
+                                    htmlType={ singleItem.buttonType }
+                                    onClick={ singleItem.onClick }>
+                                    { singleItem.value }
+                                </Button>
+                            );
+                        }) }
+                    </Space>
+                </Row>
+                );
             default:
                 return null;
         }
@@ -207,7 +225,7 @@ GenericForm.propTypes = {
     fields: PropTypes.arrayOf(
         PropTypes.shape({
             type: PropTypes.string.isRequired,
-            label: PropTypes.string.isRequired,
+            label: PropTypes.string,
             name: PropTypes.string.isRequired,
             placeholder: PropTypes.string,
             required: PropTypes.bool,

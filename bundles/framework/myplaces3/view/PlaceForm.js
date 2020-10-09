@@ -309,21 +309,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             return jQuery('div.myplacesform').filter(':visible');
         },
         createEditDialog: function (categories) {
-            const me = this;
-
             this.populateForm();
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog.makeDraggable();
 
             // add new dialog to ui
-            this.dialog.show(me.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
+            this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
 
             [this.container] = jQuery('.places-edit-dialog');
 
             this.placeForm = (<GenericForm { ...this.defaultProps } />);
 
             this.populateForm();
-
             this.renderForm();
 
             this.dialog.moveTo('div.personaldata ul li select', 'right');
@@ -393,25 +390,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     rules: this.defaultRules
                 },
                 {
-                    name: 'cancel',
-                    type: 'button',
-                    label: '',
-                    placeholder: 'Cancel',
-                    value: this.loc('buttons.cancel'),
-                    style: 'secondary',
-                    buttonType: 'button',
-                    onClick: (event) => {
-                        this.dialog.close();
-                    }
-                },
-                {
-                    name: 'submit',
-                    type: 'button',
-                    label: '',
-                    placeholder: 'Save',
-                    value: this.loc('buttons.save'),
-                    style: 'primary',
-                    buttonType: 'submit'
+                    name: 'formcontrols',
+                    type: 'buttongroup',
+                    buttons: [
+                        {
+                            name: 'cancel',
+                            type: 'button',
+                            label: '',
+                            placeholder: 'Cancel',
+                            value: this.loc('buttons.cancel'),
+                            style: 'secondary',
+                            buttonType: 'button',
+                            onClick: (event) => {
+                                this.dialog.close();
+                            }
+                        },
+                        {
+                            name: 'submit',
+                            type: 'button',
+                            label: '',
+                            placeholder: 'Save',
+                            value: this.loc('buttons.save'),
+                            style: 'primary',
+                            buttonType: 'submit'
+                        }
+                    ]
                 }
             ];
         },
