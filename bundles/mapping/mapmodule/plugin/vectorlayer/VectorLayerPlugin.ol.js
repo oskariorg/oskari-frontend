@@ -1129,8 +1129,8 @@ Oskari.clazz.define(
          * @param {Object} featureFilter
          */
         zoomToFeatures: function (opts = {}, featureFilter) {
-            const layers = me.getLayerIds(opts);
-            const features = me.getFeaturesMatchingQuery(layers, featureFilter);
+            const layers = this.getLayerIds(opts);
+            const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
                 const tmpLayer = new olSourceVector({
                     features: features
