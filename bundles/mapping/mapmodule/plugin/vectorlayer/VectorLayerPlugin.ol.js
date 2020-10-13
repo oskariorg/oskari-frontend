@@ -1128,7 +1128,7 @@ Oskari.clazz.define(
          * @param {Object} opts
          * @param {Object} featureFilter
          */
-        zoomToFeatures: function (opts, featureFilter) {
+        zoomToFeatures: function (opts = {}, featureFilter) {
             const layers = me.getLayerIds(opts);
             const features = me.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
@@ -1136,7 +1136,7 @@ Oskari.clazz.define(
                     features: features
                 });
                 const extent = this.getBufferedExtent(tmpLayer.getExtent(), 35);
-                this.getMapModule().zoomToExtent(extent);
+                this.getMapModule().zoomToExtent(extent, false, false, opts.maxZoomLevel);
             }
             this.sendZoomFeatureEvent(features);
         },
