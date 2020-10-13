@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
     function (instance, options) {
         this.instance = instance;
         this.options = options;
+        console.log('options -- ', this.options);
         this.popupId = 'myplacesForm3';
         this.form = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
@@ -43,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         },
 
         getForm: function () {
+            console.log(this.form);
             return this.form;
         },
         /**
@@ -144,6 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             // TODO: closestPoint or centroid
             var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
+            this.showPlaceForm(location);
         },
         _updateMeasurementResult: function (drawingData) {
             if (this.form && drawingData) {
@@ -161,16 +164,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place prepoluate form with place data (optional)
          */
         showPlaceForm: function (location, place) {
-            const me = this;
             let layerId;
+            const me = this;
             const sandbox = this.instance.sandbox;
+            const categoryHandler = this.instance.getCategoryHandler();
+            this.categories = categoryHandler.getAllCategories();
+
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+
             this.form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.instance,
-                this.options
+                this.options,
+                this.categories
             );
-            const categoryHandler = this.instance.getCategoryHandler();
+
+            this.form.setDrawing(this.drawing);
+
             if (place) {
                 layerId = categoryHandler.getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
@@ -178,8 +188,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             } else {
                 this._updateMeasurementResult(this.drawingData);
             }
-            var categories = categoryHandler.getAllCategories();
-            var formEl = me.form.getForm(categories, place);
+
+            var formEl = me.form.getForm(this.categories, place);
             var actions = [
                 {
                     name: me.loc('placeform.category.newLayer'),
@@ -297,6 +307,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         _savePlace: function (place) {
+
+            console.log('saving place in MainView.js');
             const drawing = this.drawing;
             const isMovePlace = false;
             if (drawing) {

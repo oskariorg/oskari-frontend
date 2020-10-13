@@ -196,7 +196,7 @@ export class GenericForm extends React.Component {
                 this.formRef.current.setFieldsValue({
                     [field.name]: field.value.find(option => option.isDefault).categoryId
                 });
-            } else if (field.type !== 'dropdown') {
+            } else {
                 this.formRef.current.setFieldsValue({
                     [field.name]: field.value
                 });

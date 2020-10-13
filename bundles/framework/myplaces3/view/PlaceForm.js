@@ -13,11 +13,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
      * @method create called automatically on construction
      * @static
      */
-    function (instance, options) {
+    function (instance, options, categories) {
         this.instance = instance;
         this.options = options;
+        this.categories = categories;
         this.newCategoryId = '-new-';
         this.place = undefined;
+        this.drawing = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.measurementResult = null;
 
@@ -29,7 +31,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
         this.dialog = undefined;
         this.dialogForm = undefined;
-        this.categories = [];
 
         this.defaultRules = [
             {
@@ -188,6 +189,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         setValues: function (place, form) {
+            //const measurementDiv = onScreenForm.find('div.measurementResult');
+            const measurement = place.getMeasurement();
+            /**
+            if (measurement) {
+                const drawMode = this.instance.getService().getDrawModeFromGeometry(place.getGeometry());
+                measurementDiv.html(this.loc('placeform.measurement.' + drawMode) + ' ' + measurement);
+            } else {
+                measurementDiv.remove();
+            } */
+
             this.place = place;
         },
         setMeasurementResult: function (measurement, drawMode) {
@@ -285,9 +296,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             // unbind live so
             return jQuery('div.myplacesform').filter(':visible');
         },
-        createEditDialog: function (categories) {
-            this.populateForm();
-            this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        /**
+         * Initializes place to ensure that we don't have null pointers
+         */
+        _initializePlace: function () {
+            if (!this.place) {
+                this.place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+            }
+
+            const initialCategory = this.options ? this.options.category : 1;
+            this.place.setCategoryId(initialCategory);
+        },
+        createEditDialog: function () {
+            this._initializePlace(); // initialize place so we have empty place to fill on
+            this.populateForm(); // populate form with data from place
+
+            this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'); // Create popup dialog
             this.dialog.makeDraggable();
 
             // add new dialog to ui
@@ -302,6 +326,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.dialog.moveTo('div.personaldata ul li select', 'right');
         },
+        /**
+         * Populate form with empty values or data got from place -object
+         */
         populateForm: function () {
             const {
                 name,
@@ -318,7 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: 'Name for place',
                     placeholder: this.loc('placeform.placename.placeholder'),
                     rules: this.testRules,
-                    value: name
+                    value: name !== '' ? name : ''
                 },
                 {
                     name: 'placedesc',
@@ -326,7 +353,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: 'Place description',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
                     rules: this.defaultRules,
-                    value: description
+                    value: description !== '' ? description : ''
                 },
                 {
                     name: 'placeAttention',
@@ -334,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: 'Text visible on map',
                     placeholder: this.loc('placeform.placeAttention.placeholder'),
                     rules: this.defaultRules,
-                    value: attentionText
+                    value: attentionText !== '' ? attentionText : ''
                 },
                 {
                     name: 'link',
@@ -342,7 +369,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: 'Link to additional information',
                     placeholder: this.loc('placeform.placelink.placeholder'),
                     rules: this.defaultRules,
-                    value: link
+                    value: link !== '' ? link : ''
                 },
                 {
                     name: 'imageLink',
@@ -350,7 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: this.loc('placeform.imagelink.placeholder'),
                     placeholder: this.loc('placeform.imagelink.placeholder'),
                     rules: this.defaultRules,
-                    value: imageLink
+                    value: imageLink !== '' ? imageLink : ''
                 },
                 {
                     name: 'category',
@@ -361,7 +388,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                         return {
                             name: category.name,
                             categoryId: category.categoryId,
-                            isDefault: (this.place.getCategoryId() === category.categoryId)
+                            isDefault: (typeof this.place.getCategoryId() !== 'undefined' && this.place.getCategoryId() === category.categoryId)
                         };
                     }),
                     rules: this.defaultRules
@@ -412,6 +439,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this._savePlace(place);
         },
+        setDrawing: function (drawing) {
+            if (drawing) {
+                this.drawing = drawing;
+            }
+        },
         /**
          * @method _savePlace
          * Handles save place after possible category save
@@ -424,6 +456,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             if (drawing) {
                 place.setDrawToolsMultiGeometry(drawing);
             }
+
             var serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
                 if (blnSuccess) {
                     const handler = this.instance.getCategoryHandler();
