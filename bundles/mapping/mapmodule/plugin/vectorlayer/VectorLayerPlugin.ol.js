@@ -1124,23 +1124,38 @@ Oskari.clazz.define(
 
         /**
          * @method zoomToFeatures
-         *  - zooms to features
-         * @param {Object} layer
-         * @param {Object} options
+         *  - moves map to show to features on the viewport
+         * @param {Object} opts
+         * @param {Object} featureFilter
          */
-        zoomToFeatures: function (layer, options) {
-            var me = this;
-            var layers = me.getLayerIds(layer);
-            var features = me.getFeaturesMatchingQuery(layers, options);
+        zoomToFeatures: function (opts, featureFilter) {
+            const layers = me.getLayerIds(opts);
+            const features = me.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
-                var vector = new olSourceVector({
+                const tmpLayer = new olSourceVector({
                     features: features
                 });
-                var extent = vector.getExtent();
-                extent = me.getBufferedExtent(extent, 35);
-                me.getMapModule().zoomToExtent(extent);
+                const extent = this.getBufferedExtent(tmpLayer.getExtent(), 35);
+                this.getMapModule().zoomToExtent(extent);
             }
-            me.sendZoomFeatureEvent(features);
+            this.sendZoomFeatureEvent(features);
+        },
+        /**
+         * @method getLayerIds
+         *  -
+         * @param {Object} optional object with key layer that has an array of layer ids
+         * @return {Array} array of layer ids
+         */
+        getLayerIds: function (opts) {
+            if (typeof opts !== 'object' || !Object.keys(opts).length) {
+                // return all layers we know of
+                return Object.keys(this._olLayers);
+            }
+            if (opts.layer && typeof opts.layer.slice === 'function') {
+                // the value for "layer" needs to be an array or we return an empty array
+                return opts.layer.slice(0);
+            }
+            return [];
         },
         /**
          * @method getBufferedExtent
@@ -1227,21 +1242,6 @@ Oskari.clazz.define(
                 features = features.concat(filteredAndModified);
             });
             return features;
-        },
-        /**
-         * @method getLayerIds
-         *  -
-         * @param {Object} optional object with key layer that has an array of layer ids
-         * @return {Array} array of layer ids
-         */
-        getLayerIds: function (layerIds) {
-            if (typeof layerIds !== 'object' || !Object.keys(layerIds).length) {
-                return Object.keys(this._olLayers);
-            }
-            if (layerIds.layer && typeof layerIds.layer.slice === 'function') {
-                return layerIds.layer.slice(0);
-            }
-            return [];
         },
         /**
          * @method getLayerFeatures
