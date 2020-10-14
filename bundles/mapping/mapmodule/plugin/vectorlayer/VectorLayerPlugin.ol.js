@@ -1147,7 +1147,7 @@ Oskari.clazz.define(
          * @return {Array} array of layer ids
          */
         getLayerIds: function (opts = {}) {
-            const {layer} = opts;
+            const { layer } = opts;
             const allLayers = Object.keys(this._olLayers);
             if (!layer || typeof layer.filter !== 'function') {
                 // return all layers we know of
