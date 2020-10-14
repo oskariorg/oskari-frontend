@@ -58,17 +58,17 @@ describe('VectorLayerPlugin', () => {
         test('without param returns 2 faked layers', () => {
             expect(plugin.getLayerIds().length).toEqual(2);
         });
-        test('with valid param returns 1', () => {
-            expect(plugin.getLayerIds({ layer: [12] }).length).toEqual(1);
+        test('with valid and recognized layer key returns 1', () => {
+            expect(plugin.getLayerIds({ layer: ['test_2'] }).length).toEqual(1);
         });
-        test('with valid param returns 3', () => {
-            expect(plugin.getLayerIds({ layer: [1, 2, 3] }).length).toEqual(3);
+        test('with layer key referencing unrecognized layer ids returns 0', () => {
+            expect(plugin.getLayerIds({ layer: [1, 2, 3] }).length).toEqual(0);
         });
         test('with invalid param returns 0', () => {
             expect(plugin.getLayerIds({ layer: 12 }).length).toEqual(0);
         });
-        test('with invalid param 2 returns 0', () => {
-            expect(plugin.getLayerIds({ testing: true }).length).toEqual(0);
+        test('without layer key returns all layers', () => {
+            expect(plugin.getLayerIds({ testing: true }).length).toEqual(2);
         });
     });
 
