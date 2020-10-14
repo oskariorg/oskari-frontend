@@ -588,14 +588,14 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd, maxZoomLevel = -1) {
         var extent = this.__boundsToArray(bounds);
-        this.getMap().getView().fit(extent);
-        if (maxZoomLevel !== -1 && this.getMapZoom() > maxZoomLevel) {
-            // restrict that we don't "overzoom" for point features etc
-            this.setZoomLevel(maxZoomLevel, true);
-        } else {
-            // setZoomLevel updates domain so only do it once
-            this.updateDomain();
+        const opts = {};
+
+        if (maxZoomLevel !== -1) {
+            // if param is defined enable restriction to prevent "overzooming" for point features etc
+            opts.maxZoom = maxZoomLevel;
         }
+        this.getMap().getView().fit(extent, opts);
+        this.updateDomain();
 
         // send note about map change
         if (suppressStart !== true) {
