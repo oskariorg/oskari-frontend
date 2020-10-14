@@ -67,8 +67,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.service.PrintService',
                     }
                 }
             });
+        },
+        fetchPrint: function (url, payload, successCb, errorCb) {
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'blob',
+                body: JSON.stringify(payload)
+            }).then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    return Promise.reject(new Error('Failed to get print'));
+                }
+            }).then(blob => {
+                successCb(blob);
+            }).catch(error => errorCb(error));
         }
 
     }, {
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     });
