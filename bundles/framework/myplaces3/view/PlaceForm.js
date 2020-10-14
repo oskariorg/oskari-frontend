@@ -22,7 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.drawing = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.measurementResult = null;
-
         this.template = jQuery('<div class="myplacesform form-v2"></div>');
 
         this.templateOption = jQuery('<option></option>');
@@ -31,11 +30,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.dialog = undefined;
         this.dialogForm = undefined;
 
+        // Default generic rules
         this.defaultRules = [
             {
                 required: false,
                 message: 'Empty field'
             }
+        ];
+
+        // Rules for description field
+        this.nameRules = [
+            {
+                required: true,
+                message: this.loc('validation.placeName')
+            },
+            () => ({
+                validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.placeNameIllegal')))
+            })
+        ];
+
+        // Rules for description field
+        this.descriptionRules = [
+            {
+                required: false
+            },
+            () => ({
+                validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.descIllegal')))
+            })
         ];
 
         this.testRules = [
@@ -44,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 message: 'Please fill in this area'
             },
             () => ({
-                validator: (_, value) => value ? Promise.resolve(value) : Promise.reject('Must validate')
+                validator: (_, value) => value ? Promise.resolve(value) : Promise.reject(new Error('Must validate'))
             })
         ];
 
@@ -142,15 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     error: this.loc('validation.descIllegal')
                 });
             }
-            /*
-            TODO: Should we validate attention_text. Localization is missing!
-            if (Oskari.util.sanitize(att) !== att) {
-                errors.push({
-                    name: 'att',
-                    error: this.loc('validation.attIllegal')
-                });
-            }
-            */
+
             if (errors.length > 0) {
                 return { errors };
             }
@@ -311,7 +324,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     type: 'text',
                     label: 'Name for place',
                     placeholder: this.loc('placeform.placename.placeholder'),
-                    rules: this.testRules,
+                    rules: this.nameRules,
                     value: name !== '' ? name : ''
                 },
                 {
@@ -319,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     type: 'textarea',
                     label: 'Place description',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
-                    rules: this.defaultRules,
+                    rules: this.descriptionRules,
                     value: description !== '' ? description : ''
                 },
                 {
@@ -429,7 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 place.setDrawToolsMultiGeometry(drawing);
             }
 
-            var serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
+            let serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
                 if (blnSuccess) {
                     const handler = this.instance.getCategoryHandler();
                     handler.refreshLayerIfSelected(categoryId);
