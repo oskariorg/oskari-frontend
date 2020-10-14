@@ -632,6 +632,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             };
             const errorCb = error => {
                 Oskari.log('BasicPrintout').error(error);
+                const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                popup.show(this.loc.error.title, this.loc.error.saveFailed, [popup.createCloseButton()]);
                 showSpinner(false);
             };
             this.instance.getService().fetchPrint(printUrl, payload, successCb, errorCb);
@@ -654,16 +656,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
             const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
             const url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
-            const hasCustomStyles = Object.keys(customStyles).length > 0;
-            // We need to use the POST method if there's custom styles.
-            if (hasCustomStyles) {
-                Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-                this.getPostPrint(url, params, customStyles);
-            } else {
-                // Otherwise GET is satisfiable.
-                Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
-                this.openURLinWindow(url);
-            }
+
+            Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
+            this.getPostPrint(url, params, customStyles);
         },
 
         /**
