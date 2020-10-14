@@ -1146,16 +1146,17 @@ Oskari.clazz.define(
          * @param {Object} optional object with key layer that has an array of layer ids
          * @return {Array} array of layer ids
          */
-        getLayerIds: function (opts) {
-            if (typeof opts !== 'object' || !Object.keys(opts).length) {
+        getLayerIds: function (opts = {}) {
+            const {layer} = opts;
+            const allLayers = Object.keys(this._olLayers);
+            if (!layer || typeof layer.filter !== 'function') {
                 // return all layers we know of
-                return Object.keys(this._olLayers);
+                return allLayers;
             }
-            if (opts.layer && typeof opts.layer.slice === 'function') {
-                // the value for "layer" needs to be an array or we return an empty array
-                return opts.layer.slice(0);
-            }
-            return [];
+
+            // the value for "layer" needs to be an array
+            // filtering the requested layers by checking that we know of them
+            return layer.filter(id => allLayers.includes(id));
         },
         /**
          * @method getBufferedExtent
