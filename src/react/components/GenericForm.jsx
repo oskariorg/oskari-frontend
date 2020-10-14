@@ -68,10 +68,15 @@ export class GenericForm extends React.Component {
         super(props);
         
         this.formRef = React.createRef();
+
+        this.state = {
+            buttonsDisabled: true
+        };
     }
 
     componentDidMount () {
         this._populateForm(); // Populate form fields on render
+        this.setLoadingState(false);
     }
 
     /**
@@ -173,6 +178,7 @@ export class GenericForm extends React.Component {
                                 <Button
                                     key={ singleItem.name + '' }
                                     type={ singleItem.style }
+                                    disabled={ this.props.formSettings.disabledButtons }
                                     htmlType={ singleItem.buttonType }
                                     onClick={ singleItem.onClick }>
                                     { singleItem.value }
@@ -203,8 +209,13 @@ export class GenericForm extends React.Component {
             } 
         }
     }
-    
 
+    setLoadingState(loadingState) {
+        this.setState({
+            buttonsDisabled: loadingState
+        });
+    };
+    
     render ()  {
         return (
             <Form

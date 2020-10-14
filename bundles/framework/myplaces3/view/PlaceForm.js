@@ -79,8 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             formSettings: {
                 label: 'Form settings label',
                 showLabels: true,
+                disabledButtons: false,
                 onFinish: (values) => {
                     this._setNewValues(values);
+                    this._disableFormSubmit();
                     this.dialog.close();
                 },
                 onFinishFailed: () => {}
@@ -266,9 +268,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * Remove dialog and form
          */
         destroy: function () {
-            ReactDOM.unmountComponentAtNode(this.placeForm);
+            // ReactDOM.unmountComponentAtNode(this.placeForm);
             this.dialog = null;
-            this.placeForm = null;
+            // this.placeForm = null;
         },
         /**
          * @method _getOnScreenForm
@@ -303,8 +305,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
 
             [this.container] = jQuery('.places-edit-dialog');
-
-            this.placeForm = (<GenericForm { ...this.defaultProps } />);
+            // this.placeForm = (<GenericForm { ...this.defaultProps } />);
 
             this._renderForm();
 
@@ -470,12 +471,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
         /**
+         * @method _disableFormSubmit
+         * disables submitting form for multiple times
+         * @private
+         */
+        _disableFormSubmit: function () {
+            this.defaultProps.formSettings.disabledButtons = true;
+            this._renderForm();
+        },
+        /**
          * @method _renderForm
          * - renders form to popup
          *
          * @private
          */
         _renderForm: function () {
-            ReactDOM.render(this.placeForm, this.container);
+            console.log('rendering form');
+            ReactDOM.render((<GenericForm { ...this.defaultProps } />), this.container);
         }
     });
