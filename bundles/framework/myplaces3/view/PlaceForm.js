@@ -23,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.measurementResult = null;
 
-
         this.template = jQuery('<div class="myplacesform form-v2"></div>');
 
         this.templateOption = jQuery('<option></option>');
@@ -94,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             this._updateImageUrl('', ui);
 
             if (place) {
-                //this.setValues(place, ui);
                 this.place = place;
             } else {
                 this.place = null;
@@ -171,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             if (categoryId) {
                 place.setCategoryId(categoryId);
             }
-            var values = { place };
+            const values = { place };
             if (this.categoryForm && !forcedCategory) {
                 // add the values for a new category if present
                 // and not in a publised map
@@ -189,15 +187,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         setValues: function (place, form) {
-            //const measurementDiv = onScreenForm.find('div.measurementResult');
-            const measurement = place.getMeasurement();
-            /**
-            if (measurement) {
-                const drawMode = this.instance.getService().getDrawModeFromGeometry(place.getGeometry());
-                measurementDiv.html(this.loc('placeform.measurement.' + drawMode) + ' ' + measurement);
-            } else {
-                measurementDiv.remove();
-            } */
+            //const measurement = place.getMeasurement();
 
             this.place = place;
         },
@@ -220,26 +210,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             me._bindImageUrlChange();
         },
-        /**
-         * @method _bindCategoryChange
-         * Binds change listener for category selection.
-         * NOTE! THIS IS A WORKAROUND since infobox uses OpenLayers popup which accepts
-         * only HTML -> any bindings will be lost
-         * @private
-         * @param {String} newCategoryId category id for the new category option == when we need to react
-         */
-        _bindCategoryChange: function () {
-            var me = this,
-                onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[data-name=category]').on('change', function () {
-                // remove category form is initialized
-                if (me.categoryForm) {
-                    me.categoryForm.destroy();
-                    me.categoryForm = undefined;
-                }
-            });
-        },
-
         /**
          * Changes the src attribute of the preview image when the user changes the
          * value of the image link field.
@@ -274,18 +244,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         },
         /**
          * @method destroy
-         * Removes eventlisteners
+         * Remove dialog and form
          */
         destroy: function () {
-            // unbind on bindings
-            var onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[data-name=category]').off();
-            onScreenForm.find('input[data-name=imagelink]').off();
-            onScreenForm.find('a.newLayerLink').off();
-            if (this.categoryForm) {
-                this.categoryForm.destroy();
-                this.categoryForm = undefined;
-            }
+            ReactDOM.unmountComponentAtNode(this.placeForm);
+            this.dialog = null;
+            this.placeForm = null;
         },
         /**
          * @method _getOnScreenForm
@@ -297,7 +261,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             return jQuery('div.myplacesform').filter(':visible');
         },
         /**
+         * @method _initializePlace
          * Initializes place to ensure that we don't have null pointers
+         * @private
          */
         _initializePlace: function () {
             if (!this.place) {
@@ -309,7 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         },
         createEditDialog: function () {
             this._initializePlace(); // initialize place so we have empty place to fill on
-            this.populateForm(); // populate form with data from place
+            this._populateForm(); // populate form with data from place
 
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'); // Create popup dialog
             this.dialog.makeDraggable();
@@ -321,15 +287,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.placeForm = (<GenericForm { ...this.defaultProps } />);
 
-            this.populateForm();
-            this.renderForm();
+            this._renderForm();
 
             this.dialog.moveTo('div.personaldata ul li select', 'right');
         },
         /**
+         * @method _populateForm
          * Populate form with empty values or data got from place -object
+         * @private
          */
-        populateForm: function () {
+        _populateForm: function () {
             const {
                 name,
                 description,
@@ -439,6 +406,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this._savePlace(place);
         },
+        /**
+         * @method setDrawing
+         * Sets new drawing for current place
+         * @param {GeoJSON} drawing - current drawing
+         */
         setDrawing: function (drawing) {
             if (drawing) {
                 this.drawing = drawing;
@@ -478,7 +450,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             };
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
-        renderForm: function () {
+        /**
+         * @method _renderForm
+         * - renders form to popup
+         *
+         * @private
+         */
+        _renderForm: function () {
             ReactDOM.render(this.placeForm, this.container);
         }
     });

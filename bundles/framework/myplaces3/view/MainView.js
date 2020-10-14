@@ -307,8 +307,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         _savePlace: function (place) {
-
-            console.log('saving place in MainView.js');
             const drawing = this.drawing;
             const isMovePlace = false;
             if (drawing) {
