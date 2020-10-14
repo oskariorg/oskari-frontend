@@ -48,12 +48,13 @@ Oskari.clazz.define(
         // last sort parameters are saved so we can change sort direction
         // if the same column is sorted again
         this.lastSort = null;
-        this.drawCoverage = false;
+        this.drawCoverage = true;
         // Search result actions array.
         this.searchResultActions = [];
         this.conf = this.conf || {};
         this.state = this.state || {};
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        this._vectorLayerId = 'METADATACATALOGUE_VECTORLAYER';
     }, {
         /**
          * @static
@@ -387,12 +388,10 @@ Oskari.clazz.define(
          *
          * @param {String} identifier the identifier
          * @param {String} value the identifier value
-         * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        _removeFeaturesFromMap: function (identifier, value, layer) {
-            var me = this;
-            me._unactiveShowInfoAreaIcons();
-            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, layer]);
+        _removeFeaturesFromMap: function (identifier, value) {
+            this._unactiveShowInfoAreaIcons();
+            this.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, this._vectorLayerId]);
         },
         /**
          * @method stop
@@ -1133,7 +1132,7 @@ Oskari.clazz.define(
                                 else {
                                     var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                                     me.sandbox.postRequestByName(rn, [row.geom, {
-                                        layerId: 'METADATACATALOGUE_VECTORLAYER',
+                                        layerId: this._vectorLayerId,
                                         clearPrevious: true,
                                         layerOptions: null,
                                         centerTo: true,
