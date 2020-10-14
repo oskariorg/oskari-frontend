@@ -55,7 +55,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 required: false
             },
             () => ({
-                validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.descIllegal')))
+                validator: (_, value) => {
+                    if (typeof value !== 'undefined'  && value !== '') {
+                        return Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.descIllegal')));
+                    } else {
+                        return Promise.resolve('');
+                    }
+                }
             })
         ];
 
