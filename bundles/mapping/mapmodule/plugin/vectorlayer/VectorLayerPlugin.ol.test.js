@@ -54,21 +54,24 @@ describe('VectorLayerPlugin', () => {
     plugin._olLayers['test_1'] = createFakeLayer();
     plugin._olLayers['test_2'] = createFakeLayer();
 
-    describe('getLayerIds', () => {
-        test('without param returns 2 faked layers', () => {
-            expect(plugin.getLayerIds().length).toEqual(2);
+    describe('_getLayerIds', () => {
+        test('without param returns all layers (2)', () => {
+            expect(plugin._getLayerIds().length).toEqual(2);
         });
-        test('with valid and recognized layer key returns 1', () => {
-            expect(plugin.getLayerIds({ layer: ['test_2'] }).length).toEqual(1);
+        test('with valid and recognized layer id in array returns 1', () => {
+            expect(plugin._getLayerIds(['test_2']).length).toEqual(1);
         });
-        test('with layer key referencing unrecognized layer ids returns 0', () => {
-            expect(plugin.getLayerIds({ layer: [1, 2, 3] }).length).toEqual(0);
+        test('with valid and recognized layer id returns 1', () => {
+            expect(plugin._getLayerIds('test_2').length).toEqual(1);
         });
-        test('with invalid param returns 0', () => {
-            expect(plugin.getLayerIds({ layer: 12 }).length).toEqual(0);
+        test('with referencing some unrecognized layer ids returns one that matches', () => {
+            expect(plugin._getLayerIds([1, 2, 'test_1']).length).toEqual(1);
         });
-        test('without layer key returns all layers', () => {
-            expect(plugin.getLayerIds({ testing: true }).length).toEqual(2);
+        test('with referencing unrecognized layer id returns 0', () => {
+            expect(plugin._getLayerIds(12).length).toEqual(0);
+        });
+        test('without random input returns 0', () => {
+            expect(plugin._getLayerIds({ testing: true }).length).toEqual(0);
         });
     });
 
@@ -76,7 +79,7 @@ describe('VectorLayerPlugin', () => {
         test('add geojson', () => {
             const geojson = generateGeoJSON(1, 2);
             plugin.addFeaturesToMap(geojson);
-            expect(plugin.getLayerIds().length).toEqual(3);
+            expect(plugin._getLayerIds().length).toEqual(3);
         });
     });
     describe('getFeaturesMatchingQuery', () => {

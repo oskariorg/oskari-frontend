@@ -1129,7 +1129,7 @@ Oskari.clazz.define(
          * @param {Object} featureFilter
          */
         zoomToFeatures: function (opts = {}, featureFilter) {
-            const layers = this.getLayerIds(opts);
+            const layers = this._getLayerIds(opts.layer);
             const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
                 const tmpLayer = new olSourceVector({
@@ -1141,22 +1141,20 @@ Oskari.clazz.define(
             this.sendZoomFeatureEvent(features);
         },
         /**
-         * @method getLayerIds
-         *  -
-         * @param {Object} optional object with key layer that has an array of layer ids
-         * @return {Array} array of layer ids
+         * @method _getLayerIds
+         * @private
+         * @param {Array|String|Number} layer id or array of layer ids (optional)
+         * @return {Array} array of layer ids that was requested and we recognized
          */
-        getLayerIds: function (opts = {}) {
-            let { layer } = opts;
-            const allLayers = Object.keys(this._olLayers);
-            if (!layer) {
-                // return all layers we know of if layer is not specified
-                return allLayers;
-            }
-
+        _getLayerIds: function (layer = []) {
             if (!Array.isArray(layer)) {
                 // the value for "layer" needs to be an array so wrap it in one if it isn't
                 layer = [layer];
+            }
+            const allLayers = Object.keys(this._olLayers);
+            if (!layer.length) {
+                // return all layers we know of if layer is not specified
+                return allLayers;
             }
 
             // filtering the requested layers by checking that we know of them
