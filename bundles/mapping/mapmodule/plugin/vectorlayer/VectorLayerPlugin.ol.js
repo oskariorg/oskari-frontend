@@ -1129,7 +1129,7 @@ Oskari.clazz.define(
          * @param {Object} featureFilter
          */
         zoomToFeatures: function (opts = {}, featureFilter) {
-            const layers = this.getLayerIds(opts);
+            const layers = this._getLayerIds(opts.layer);
             const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
                 const tmpLayer = new olSourceVector({
@@ -1141,21 +1141,24 @@ Oskari.clazz.define(
             this.sendZoomFeatureEvent(features);
         },
         /**
-         * @method getLayerIds
-         *  -
-         * @param {Object} optional object with key layer that has an array of layer ids
-         * @return {Array} array of layer ids
+         * @method _getLayerIds
+         * @private
+         * @param {Array|String|Number} layer id or array of layer ids (optional)
+         * @return {Array} array of layer ids that was requested and we recognized
          */
-        getLayerIds: function (opts) {
-            if (typeof opts !== 'object' || !Object.keys(opts).length) {
-                // return all layers we know of
-                return Object.keys(this._olLayers);
+        _getLayerIds: function (layer = []) {
+            if (!Array.isArray(layer)) {
+                // the value for "layer" needs to be an array so wrap it in one if it isn't
+                layer = [layer];
             }
-            if (opts.layer && typeof opts.layer.slice === 'function') {
-                // the value for "layer" needs to be an array or we return an empty array
-                return opts.layer.slice(0);
+            const allLayers = Object.keys(this._olLayers);
+            if (!layer.length) {
+                // return all layers we know of if layer is not specified
+                return allLayers;
             }
-            return [];
+
+            // filtering the requested layers by checking that we know of them
+            return layer.filter(id => allLayers.includes(id));
         },
         /**
          * @method getBufferedExtent
