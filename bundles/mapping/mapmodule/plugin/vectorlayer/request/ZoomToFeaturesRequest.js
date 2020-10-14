@@ -8,12 +8,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
      * @method create called automatically on construction
      * @static
      *
-     * @param {Object} layer
-     * @param {Object} options additional options
+     * @param {Object} options object with layer references and/or maxZoomLevel
+     * @param {Object} featureFilter object with attribute names and accepted values
      */
-    function (layer, options) {
-        this._layer = layer;
+    function (options, featureFilter) {
         this._options = options;
+        this._featureFilter = featureFilter;
     }, {
         /** @static @property __name request name */
         __name: 'MapModulePlugin.ZoomToFeaturesRequest',
@@ -25,18 +25,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
             return this.__name;
         },
         /**
-         * @method getLayer
-         * @return {Object} layer
-         */
-        getLayer: function () {
-            return this._layer;
-        },
-        /**
          * @method getOptions
-         * @return {Object} options
+         * @return {Object} options for layer references and/or maxZoomLevel
          */
         getOptions: function () {
             return this._options;
+        },
+        /**
+         * @method getFeatureFilter
+         * @return {Object} object with attribute names and accepted values
+         */
+        getFeatureFilter: function () {
+            return this._featureFilter;
         }
     }, {
         /**
