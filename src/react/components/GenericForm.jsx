@@ -75,8 +75,7 @@ export class GenericForm extends React.Component {
     }
 
     componentDidMount () {
-        this._populateForm(); // Populate form fields on render
-        this.setLoadingState(false);
+        this._populateForm(); // Populate form fields after render
     }
 
     /**
@@ -209,12 +208,6 @@ export class GenericForm extends React.Component {
             } 
         }
     }
-
-    setLoadingState(loadingState) {
-        this.setState({
-            buttonsDisabled: loadingState
-        });
-    };
     
     render ()  {
         return (
