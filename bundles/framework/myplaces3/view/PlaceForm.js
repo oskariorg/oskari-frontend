@@ -75,6 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             })
         ];
 
+        // Default form settings
         this.defaultProps = {
             formSettings: {
                 label: 'Form settings label',
@@ -208,8 +209,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         setValues: function (place, form) {
-            //const measurement = place.getMeasurement();
-
+            // const measurement = place.getMeasurement();
             this.place = place;
         },
         setMeasurementResult: function (measurement, drawMode) {
@@ -268,9 +268,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * Remove dialog and form
          */
         destroy: function () {
-            // ReactDOM.unmountComponentAtNode(this.placeForm);
+            this.dialog.close();
             this.dialog = null;
-            // this.placeForm = null;
         },
         /**
          * @method _getOnScreenForm
@@ -305,7 +304,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
 
             [this.container] = jQuery('.places-edit-dialog');
-            // this.placeForm = (<GenericForm { ...this.defaultProps } />);
 
             this._renderForm();
 
@@ -486,7 +484,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @private
          */
         _renderForm: function () {
-            console.log('rendering form');
             ReactDOM.render((<GenericForm { ...this.defaultProps } />), this.container);
         }
     });

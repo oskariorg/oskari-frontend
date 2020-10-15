@@ -70,7 +70,7 @@ export class GenericForm extends React.Component {
         this.formRef = React.createRef();
 
         this.state = {
-            buttonsDisabled: true
+            disabledButtons: this.props.formSettings.disabledButtons
         };
     }
 

@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
     function (instance, options) {
         this.instance = instance;
         this.options = options;
-        console.log('options -- ', this.options);
         this.popupId = 'myplacesForm3';
         this.form = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
@@ -44,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         },
 
         getForm: function () {
-            console.log(this.form);
             return this.form;
         },
         /**
@@ -109,8 +107,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 if (!event.getSticky()) {
                     return;
                 }
-                // changed tool
+
+                // changed tool -> clean popup
                 this.cleanupPopup();
+                this.form.destroy();
             },
 
             'DrawingEvent': function (event) {
