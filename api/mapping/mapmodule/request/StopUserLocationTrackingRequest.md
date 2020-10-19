@@ -1,4 +1,4 @@
-# StopUserLocationTrackingRequestHandler
+# StopUserLocationTrackingRequest [RPC]
 
 Stop tracking user's location.
 
