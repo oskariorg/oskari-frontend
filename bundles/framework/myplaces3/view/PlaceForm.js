@@ -376,8 +376,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: this.loc('placeform.category.choose'),
                     placeholder: this.loc('placeform.category.choose'),
                     value: this.categories.map(category => {
-                        console.log('this getcategoryid', this.place.getCategoryId());
-                        console.log('category categoryid', category.categoryId);
                         return {
                             name: category.name,
                             value: category.categoryId,

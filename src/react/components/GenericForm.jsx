@@ -13,6 +13,12 @@ const { TextArea } = Input;
 
 const zIndexValue = 999999;
 
+// Array of field types where children are objects
+const groupedFields = [
+    'buttongroup',
+    'dropdown'
+];
+
 const StyledFormItem = styled(Form.Item)`
     margin-bottom: 0;
 
@@ -74,10 +80,6 @@ export class GenericForm extends React.Component {
         };
     }
 
-    componentDidMount () {
-        this._populateForm(); // Populate form fields after render
-    }
-
     /**
      * 
      * @param {Object} fields - array containing all fields
@@ -91,6 +93,7 @@ export class GenericForm extends React.Component {
                     name={ field.type !== 'buttongroup' ? field.name : '' }
                     label={ formSettings.showLabels ? field.label : '' }
                     rules={ field.rules }
+                    initialValue={ this._getFieldInitialValue(field) }
                 >
                     { this.createFormInput( field ) }
                 </StyledFormItem>
@@ -149,7 +152,7 @@ export class GenericForm extends React.Component {
                             return (
                                 <Select.Option
                                     value={ singleOption.value }
-                                    key={ singleOption.value || singleOption }
+                                    key={ singleOption.label || singleOption.value || singleOption }
                                 >
                                     { singleOption.name }
                                 </Select.Option>
@@ -193,20 +196,19 @@ export class GenericForm extends React.Component {
     }
 
     /**
-     * Populates form on form init
+     * @method _getFieldInitialValue
+     * Get initial value for each field
+     * @param {Object} currentField - current field to find value from
+     * 
+     * @return {String} fieldValue - return initial value for current field
+     * @private
      */
-    _populateForm() {
-        for(const field of this.props.fields) {
-            if (field.type === 'dropdown') {
-                this.formRef.current.setFieldsValue({
-                    [field.name]: field.value.find(option => option.isDefault).value
-                });
-            } else {
-                this.formRef.current.setFieldsValue({
-                    [field.name]: field.value
-                });
-            } 
-        }
+    _getFieldInitialValue(currentField) {
+        if (currentField.type === 'dropdown') {
+            return currentField.value.find(option => option.isDefault).value;
+        } else {
+            return currentField.value;
+        }         
     }
     
     render ()  {
