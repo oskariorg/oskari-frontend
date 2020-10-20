@@ -110,7 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
 
                 // changed tool -> clean popup
                 this.cleanupPopup();
-                this.form.destroy();
             },
 
             'DrawingEvent': function (event) {
@@ -167,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             const me = this;
             const sandbox = this.instance.sandbox;
             const categoryHandler = this.instance.getCategoryHandler();
-            this.categories = categoryHandler.getAllCategories();
+            const categories = categoryHandler.getAllCategories();
 
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
 
@@ -175,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.instance,
                 this.options,
-                this.categories
+                categories
             );
 
             this.form.setDrawing(this.drawing);
@@ -187,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 this._updateMeasurementResult(this.drawingData);
             }
 
-            me.form.getForm(this.categories, place); // Get form
+            me.form.getForm(categories, place); // Get form
 
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
@@ -309,13 +308,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @private
          */
         cleanupPopup: function () {
-            var sandbox = this.instance.sandbox,
-                hideRequest;
+            const sandbox = this.instance.sandbox;
+            let hideRequest;
 
             if (sandbox.hasHandler('InfoBox.HideInfoBoxRequest')) {
                 hideRequest = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this, hideRequest);
             }
+
+            this.form.destroy();
         }
     }, {
         /**

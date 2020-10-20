@@ -148,8 +148,8 @@ export class GenericForm extends React.Component {
                         { field.value.map((singleOption) => {
                             return (
                                 <Select.Option
-                                    value={ singleOption.categoryId }
-                                    key={ singleOption.categoryId }
+                                    value={ singleOption.value }
+                                    key={ singleOption.value || singleOption }
                                 >
                                     { singleOption.name }
                                 </Select.Option>
@@ -199,7 +199,7 @@ export class GenericForm extends React.Component {
         for(const field of this.props.fields) {
             if (field.type === 'dropdown') {
                 this.formRef.current.setFieldsValue({
-                    [field.name]: field.value.find(option => option.isDefault).categoryId
+                    [field.name]: field.value.find(option => option.isDefault).value
                 });
             } else {
                 this.formRef.current.setFieldsValue({

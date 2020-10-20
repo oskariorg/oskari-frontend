@@ -65,20 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             })
         ];
 
-        this.testRules = [
-            {
-                required: true,
-                message: 'Please fill in this area'
-            },
-            () => ({
-                validator: (_, value) => value ? Promise.resolve(value) : Promise.reject(new Error('Must validate'))
-            })
-        ];
-
         // Default form settings
         this.defaultProps = {
             formSettings: {
-                label: 'Form settings label',
                 showLabels: true,
                 disabledButtons: false,
                 onFinish: (values) => {
@@ -232,6 +221,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             me._bindImageUrlChange();
         },
         /**
+         * @method _bindCategoryChange
+         * Binds change listener for category selection.
+         * NOTE! THIS IS A WORKAROUND since infobox uses OpenLayers popup which accepts
+         * only HTML -> any bindings will be lost
+         * @private
+         * @param {String} newCategoryId category id for the new category option == when we need to react
+         */
+        _bindCategoryChange: function () {
+            var me = this,
+                onScreenForm = this._getOnScreenForm();
+            onScreenForm.find('select[data-name=category]').on('change', function () {
+                // remove category form is initialized
+                if (me.categoryForm) {
+                    me.categoryForm.destroy();
+                    me.categoryForm = undefined;
+                }
+            });
+        },
+        /**
          * Changes the src attribute of the preview image when the user changes the
          * value of the image link field.
          *
@@ -245,7 +253,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 me._updateImageUrl(jQuery(this).val(), me._getOnScreenForm());
             });
         },
-
         _updateImageUrl: function (src, form) {
             if (form === null || form === undefined) {
                 return;
@@ -288,10 +295,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         _initializePlace: function () {
             if (!this.place) {
                 this.place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+                const initialCategory = this.options ? this.options.category : 1;
+                this.place.setCategoryId(initialCategory);
             }
-
-            const initialCategory = this.options ? this.options.category : 1;
-            this.place.setCategoryId(initialCategory);
         },
         createEditDialog: function () {
             this._initializePlace(); // initialize place so we have empty place to fill on
@@ -370,9 +376,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: this.loc('placeform.category.choose'),
                     placeholder: this.loc('placeform.category.choose'),
                     value: this.categories.map(category => {
+                        console.log('this getcategoryid', this.place.getCategoryId());
+                        console.log('category categoryid', category.categoryId);
                         return {
                             name: category.name,
-                            categoryId: category.categoryId,
+                            value: category.categoryId,
                             isDefault: (typeof this.place.getCategoryId() !== 'undefined' && this.place.getCategoryId() === category.categoryId)
                         };
                     }),
