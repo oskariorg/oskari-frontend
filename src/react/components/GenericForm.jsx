@@ -13,12 +13,6 @@ const { TextArea } = Input;
 
 const zIndexValue = 999999;
 
-// Array of field types where children are objects
-const groupedFields = [
-    'buttongroup',
-    'dropdown'
-];
-
 const StyledFormItem = styled(Form.Item)`
     margin-bottom: 0;
 
@@ -72,8 +66,6 @@ const StyledFormItem = styled(Form.Item)`
 export class GenericForm extends React.Component {
     constructor (props) {
         super(props);
-        
-        this.formRef = React.createRef();
 
         this.state = {
             disabledButtons: this.props.formSettings.disabledButtons
@@ -216,7 +208,6 @@ export class GenericForm extends React.Component {
             <Form
                 onFinishFailed={ this.props.formSettings.onFinishFailed }
                 onFinish={ this.props.formSettings.onFinish }
-                ref={ this.formRef }
             >
                 <Space direction="vertical">
                     { this.createFormItems( this.props.fields, this.props.formSettings) }
