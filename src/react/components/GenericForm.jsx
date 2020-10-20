@@ -11,6 +11,8 @@ import 'antd/es/input/style/index.js';
 
 const { TextArea } = Input;
 
+// If the form is shown on popup the Select dropdown opens behind popup without this
+// FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
 const zIndexValue = 999999;
 
 const StyledFormItem = styled(Form.Item)`
