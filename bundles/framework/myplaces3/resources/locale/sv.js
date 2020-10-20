@@ -127,7 +127,7 @@ Oskari.registerLocalization(
             "category": {
                 "label": "Kartlager",
                 "newLayer": "Skapa ett nytt kartlager",
-                "choose": "eller välja ett av dina befintliga kartlager:"
+                "choose": "Välja ett av dina befintliga kartlager:"
             },
             "imagelink": {
                 "placeholder": "Länk till bilden",
