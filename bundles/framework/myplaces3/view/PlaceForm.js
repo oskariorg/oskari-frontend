@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             },
             () => ({
                 validator: (_, value) => {
-                    if (typeof value !== 'undefined'  && value !== '') {
+                    if (typeof value !== 'undefined' && value !== '') {
                         return Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.descIllegal')));
                     } else {
                         return Promise.resolve('');
@@ -447,7 +447,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 place.setDrawToolsMultiGeometry(drawing);
             }
 
-            let serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
+            const serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
                 if (blnSuccess) {
                     const handler = this.instance.getCategoryHandler();
                     handler.refreshLayerIfSelected(categoryId);
@@ -456,7 +456,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     if (oldCategoryId) {
                         handler.refreshLayerIfSelected(oldCategoryId);
                     }
-                    //this.cleanupPopup();
 
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(this.loc('notification.placeAdded.title'), this.loc('notification.placeAdded.message'));

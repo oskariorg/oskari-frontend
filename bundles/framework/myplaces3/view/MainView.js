@@ -215,15 +215,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     }
                 }
             ];
-            const content = [{
-                html: formEl,
-                actions,
-                layerId
-            }];
-
-            var options = {
-                hidePrevious: true
-            };
 
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
