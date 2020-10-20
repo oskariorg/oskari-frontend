@@ -148,7 +148,7 @@ export class GenericForm extends React.Component {
                                     value={ singleOption.value }
                                     key={ singleOption.label || singleOption.value || singleOption }
                                 >
-                                    { singleOption.name }
+                                    { singleOption.label || singleOption.name || singleOption.value || singleOption }
                                 </Select.Option>
                             );
                         }) }
