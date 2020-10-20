@@ -80,11 +80,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         };
     }, {
         /**
-         * @method getForm
+         * @method showForm
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory[]} categories array containing available categories
          * @return {jQuery} jquery reference for the form
          */
-        getForm: function (categories, place) {
+        showForm: function (categories, place) {
             const ui = this.template.clone();
             const isPublished = (this.options ? this.options.published : false);
             // TODO: if a place is given for editing -> populate fields here

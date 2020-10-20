@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 this._updateMeasurementResult(this.drawingData);
             }
 
-            me.form.getForm(categories, place); // Get form
+            me.form.showForm(categories, place); // Get form
 
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
