@@ -343,6 +343,19 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
             return _selectedLayers || [];
         },
         /**
+         * @public @method deleteLayers
+         * Delete layers based on their ids provided as array
+         *
+         * @param {Array} list - list of layer ids to be deleted
+         */
+        deleteLayers: function (layerList) {
+            if (layerList && Array.isArray(layerList)) {
+                layerList.forEach((item) => {
+                    _selectedLayers.splice(_selectedLayers.indexOf(_selectedLayers.find(element => element._id === item)));
+                });
+            }
+        },
+        /**
          * @public @method getSelectedLayer
          * Checks if the layer matching the id is added to map
          *
