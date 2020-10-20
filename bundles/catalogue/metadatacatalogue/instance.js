@@ -1132,7 +1132,7 @@ Oskari.clazz.define(
                                 else {
                                     var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                                     me.sandbox.postRequestByName(rn, [row.geom, {
-                                        layerId: this._vectorLayerId,
+                                        layerId: me._vectorLayerId,
                                         clearPrevious: true,
                                         layerOptions: null,
                                         centerTo: true,
