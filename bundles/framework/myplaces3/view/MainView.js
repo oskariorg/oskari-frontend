@@ -164,7 +164,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place prepoluate form with place data (optional)
          */
         showPlaceForm: function (location, place) {
-            let layerId;
             const me = this;
             const sandbox = this.instance.sandbox;
             const categoryHandler = this.instance.getCategoryHandler();
@@ -182,39 +181,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             this.form.setDrawing(this.drawing);
 
             if (place) {
-                layerId = categoryHandler.getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
             // set measurement result from drawing
             } else {
                 this._updateMeasurementResult(this.drawingData);
             }
 
-            var formEl = me.form.getForm(this.categories, place);
-            var actions = [
-                {
-                    name: me.loc('placeform.category.newLayer'),
-                    type: 'link',
-                    group: 0,
-                    selector: '#newLayerForm > label',
-                    action: function () {
-                        me.form.createCategoryForm();
-                    }
-                }, {
-                    name: me.loc('buttons.cancel'),
-                    type: 'button',
-                    group: 1,
-                    action: function () {
-                        me.cleanupPopup();
-                    }
-                }, {
-                    name: me.loc('buttons.save'),
-                    type: 'button',
-                    group: 1,
-                    action: function () {
-                        me._saveForm();
-                    }
-                }
-            ];
+            me.form.getForm(this.categories, place); // Get form
 
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
