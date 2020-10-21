@@ -13,8 +13,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
      * @method create called automatically on construction
      * @static
      */
-    function (instance, options, categories) {
-        this.instance = instance;
+    function (options, categories, saveCallback) {
+        this.saveCallback = saveCallback;
         this.options = options;
         this.categories = categories;
         this.newCategoryId = '-new-';
@@ -201,12 +201,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             // const measurement = place.getMeasurement();
             this.place = place;
         },
-        setMeasurementResult: function (measurement, drawMode) {
+        setMeasurementResult: function (measurement, drawMode, instance) {
             if (drawMode === 'point' || typeof measurement !== 'number') {
                 this.measurementResult = null;
                 return;
             }
-            var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
+            const measurementWithUnit = instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
             const measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
             this._getOnScreenForm().find('div.measurementResult').html(measurementResult);
             this.measurementResult = measurementResult;
@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         _initializePlace: function () {
             if (!this.place) {
                 this.place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
-                const initialCategory = this.options ? this.options.category : 1;
+                const initialCategory = this.options && typeof this.options.category !== 'undefined' ? this.options.category : 1;
                 this.place.setCategoryId(initialCategory);
             }
         },
@@ -428,7 +428,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             place.setImageLink(values.imageLink);
             place.setCategoryId(values.category);
 
-            this._savePlace(place);
+            this.saveCallback(place);
         },
         /**
          * @method setDrawing
@@ -439,39 +439,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             if (drawing) {
                 this.drawing = drawing;
             }
-        },
-        /**
-         * @method _savePlace
-         * Handles save place after possible category save
-         * @private
-         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
-         */
-        _savePlace: function (place) {
-            const drawing = this.drawing;
-            const isMovePlace = false;
-            if (drawing) {
-                place.setDrawToolsMultiGeometry(drawing);
-            }
-
-            const serviceCallback = (blnSuccess, categoryId, oldCategoryId) => {
-                if (blnSuccess) {
-                    const handler = this.instance.getCategoryHandler();
-                    handler.refreshLayerIfSelected(categoryId);
-                    handler.addLayerToMap(categoryId);
-                    // refresh old layer as well if category changed
-                    if (oldCategoryId) {
-                        handler.refreshLayerIfSelected(oldCategoryId);
-                    }
-
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(this.loc('notification.placeAdded.title'), this.loc('notification.placeAdded.message'));
-                    dialog.fadeout();
-                    // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
-                } else {
-                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
-                }
-            };
-            this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
         /**
          * @method _disableFormSubmit
