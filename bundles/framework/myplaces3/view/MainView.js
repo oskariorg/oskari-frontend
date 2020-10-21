@@ -107,7 +107,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 if (!event.getSticky()) {
                     return;
                 }
-                // changed tool
+
+                // changed tool -> clean popup
                 this.cleanupPopup();
             },
 
@@ -149,9 +150,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         _updateMeasurementResult: function (drawingData) {
             if (this.form && drawingData) {
                 if (drawingData.shape === 'LineString') {
-                    this.form.setMeasurementResult(drawingData.length, 'line');
+                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.length, 'line');
+                    const measurementResult = this.loc('placeform.measurement.' + 'line') + ' ' + measurementWithUnit;
+                    this.form.setMeasurementResult(measurementResult);
                 } else if (drawingData.shape === 'Polygon') {
-                    this.form.setMeasurementResult(drawingData.area, 'area');
+                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.length, 'area');
+                    const measurementResult = this.loc('placeform.measurement.' + 'area') + ' ' + measurementWithUnit;
+                    this.form.setMeasurementResult(measurementResult);
                 }
             }
         },
@@ -163,60 +168,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          */
         showPlaceForm: function (location, place) {
             const me = this;
-            let layerId;
             const sandbox = this.instance.sandbox;
+            const categoryHandler = this.instance.getCategoryHandler();
+            const categories = categoryHandler.getAllCategories();
+
             sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+
             this.form = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
-                this.instance,
-                this.options
+                this.options,
+                categories,
+                this.savePlace.bind(this)
             );
-            const categoryHandler = this.instance.getCategoryHandler();
+
+            this.form.setDrawing(this.drawing);
+
             if (place) {
-                layerId = categoryHandler.getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
             // set measurement result from drawing
             } else {
                 this._updateMeasurementResult(this.drawingData);
             }
-            var categories = categoryHandler.getAllCategories();
-            var formEl = me.form.getForm(categories, place);
-            var actions = [
-                {
-                    name: me.loc('placeform.category.newLayer'),
-                    type: 'link',
-                    group: 0,
-                    selector: '#newLayerForm > label',
-                    action: function () {
-                        me.form.createCategoryForm();
-                    }
-                }, {
-                    name: me.loc('buttons.cancel'),
-                    type: 'button',
-                    group: 1,
-                    action: function () {
-                        me.cleanupPopup();
-                    }
-                }, {
-                    name: me.loc('buttons.save'),
-                    type: 'button',
-                    group: 1,
-                    action: function () {
-                        me._saveForm();
-                    }
-                }
-            ];
-            const content = [{
-                html: formEl,
-                actions,
-                layerId
-            }];
 
-            var options = {
-                hidePrevious: true
-            };
-            var request = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, me.loc('placeform.title'), content, location, options);
-            sandbox.request(me.getName(), request);
+            me.form.showForm(categories, place); // Get form
+
             // A tad ugly, but for some reason this won't work if we find the input from formEl
             jQuery('input[data-name=placename]').focus();
 
@@ -255,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @method _saveForm
          * @private
          * Handles save button on my places form.
-         * If a new category has been defined -> saves it and calls _savePlace()
+         * If a new category has been defined -> saves it and calls savePlace()
          * for saving the actual place data after making the new category available.
          */
         _saveForm: function () {
@@ -281,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     if (categoryId) {
                         // save the actual place
                         place.setCategoryId(categoryId);
-                        this._savePlace(place);
+                        this.savePlace(place);
                     } else {
                         this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.addCategory'));
                     }
@@ -289,16 +264,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 this.instance.getCategoryHandler().saveCategory(category, serviceCallback);
             } else {
                 // category selected from list -> save place
-                this._savePlace(place);
+                this.savePlace(place);
             }
         },
         /**
-         * @method _savePlace
+         * @method savePlace
          * Handles save place after possible category save
-         * @private
+         *
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
-        _savePlace: function (place) {
+        savePlace: function (place) {
             const drawing = this.drawing;
             const isMovePlace = false;
             if (drawing) {
@@ -323,6 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
                 }
             };
+
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
         },
         cleanupDrawingVariables: function () {
@@ -337,13 +313,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @private
          */
         cleanupPopup: function () {
-            var sandbox = this.instance.sandbox,
-                hideRequest;
+            const sandbox = this.instance.sandbox;
+            let hideRequest;
 
             if (sandbox.hasHandler('InfoBox.HideInfoBoxRequest')) {
                 hideRequest = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(this.popupId);
                 sandbox.request(this, hideRequest);
             }
+
+            this.form.destroy();
         }
     }, {
         /**
