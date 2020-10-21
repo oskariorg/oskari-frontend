@@ -145,8 +145,8 @@ export class GenericForm extends React.Component {
                         { field.value.map((singleOption) => {
                             return (
                                 <Select.Option
-                                    value={ singleOption.value }
-                                    key={ singleOption.label || singleOption.value }
+                                    value={ singleOption.value || singleOption }
+                                    key={ singleOption.label || singleOption.value || singleOption }
                                 >
                                     { singleOption.label || singleOption.name || singleOption.value || singleOption }
                                 </Select.Option>
