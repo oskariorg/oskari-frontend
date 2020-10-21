@@ -301,11 +301,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             // add new dialog to ui
             this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
 
-            [this.container] = jQuery('.places-edit-dialog');
+            this._renderForm(this.dialog.getJqueryContent().find('.places-edit-dialog')[0]);
 
-            this._renderForm();
-
-            this.dialog.moveTo('div.personaldata ul li select', 'right');
+            this.dialog.moveTo('div.personaldata .tab-content.myplaces ul li select', 'right');
         },
         /**
          * @method _populateForm
@@ -444,10 +442,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         /**
          * @method _renderForm
          * - renders form to popup
+         * @param {jQuery} container - jQuery reference to container where form is rendered
          *
          * @private
          */
-        _renderForm: function () {
-            ReactDOM.render((<GenericForm { ...this.defaultProps } />), this.container);
+        _renderForm: function (container) {
+            console.log(container);
+            ReactDOM.render((<GenericForm { ...this.defaultProps } />), container);
         }
     });
