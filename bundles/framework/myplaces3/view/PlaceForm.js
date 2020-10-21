@@ -198,18 +198,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
         setValues: function (place, form) {
-            // const measurement = place.getMeasurement();
             this.place = place;
         },
-        setMeasurementResult: function (measurement, drawMode, instance) {
-            if (drawMode === 'point' || typeof measurement !== 'number') {
-                this.measurementResult = null;
-                return;
-            }
-            const measurementWithUnit = instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
-            const measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
-            this._getOnScreenForm().find('div.measurementResult').html(measurementResult);
-            this.measurementResult = measurementResult;
+        setMeasurementResult: function (measurementResult) {
+            this.measurementResult = measurementResult || null;
         },
         bindEvents: function () {
             var me = this;

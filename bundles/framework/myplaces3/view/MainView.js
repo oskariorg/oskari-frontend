@@ -150,9 +150,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         _updateMeasurementResult: function (drawingData) {
             if (this.form && drawingData) {
                 if (drawingData.shape === 'LineString') {
-                    this.form.setMeasurementResult(drawingData.length, 'line', this.instance);
+                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.length, 'line');
+                    const measurementResult = this.loc('placeform.measurement.' + 'line') + ' ' + measurementWithUnit;
+                    this.form.setMeasurementResult(measurementResult);
                 } else if (drawingData.shape === 'Polygon') {
-                    this.form.setMeasurementResult(drawingData.area, 'area', this.instance);
+                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.length, 'area');
+                    const measurementResult = this.loc('placeform.measurement.' + 'area') + ' ' + measurementWithUnit;
+                    this.form.setMeasurementResult(measurementResult);
                 }
             }
         },
