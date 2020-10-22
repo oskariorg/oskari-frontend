@@ -16,10 +16,9 @@ const { TextArea } = Input;
 const zIndexValue = 999999;
 
 const StyledFormItem = styled(Form.Item)`
-    margin-bottom: 0;
-
     display:flex;
     flex-wrap: wrap;
+    margin-bottom: 0;
 
     .ant-form-item-label {
         text-align: left;
@@ -43,6 +42,10 @@ const StyledFormItem = styled(Form.Item)`
             margin: 5px 0 0; 
         }
     }
+`;
+
+const StyledButton = styled(Button)`
+    margin: 0 5px;
 `;
 
 /**
@@ -171,14 +174,14 @@ export class GenericForm extends React.Component {
                     <Space>
                         { field.buttons.map((singleItem) => {
                             return (
-                                <Button
+                                <StyledButton
                                     key={ singleItem.name }
                                     type={ singleItem.style }
                                     disabled={ this.props.formSettings.disabledButtons }
                                     htmlType={ singleItem.buttonType }
                                     onClick={ singleItem.onClick }>
                                     { singleItem.value }
-                                </Button>
+                                </StyledButton>
                             );
                         }) }
                     </Space>

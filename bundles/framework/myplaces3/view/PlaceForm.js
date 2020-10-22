@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this._renderForm();
 
-            this.dialog.moveTo('div.personaldata .tab-content.myplaces ul li select', 'right');
+            this.dialog.moveTo('#toolbar', 'right');
         },
         /**
          * @method _populateForm
