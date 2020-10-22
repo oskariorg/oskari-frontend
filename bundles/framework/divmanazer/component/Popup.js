@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (jQuery(this.dialog).hasClass('mobile-popup')) {
                 var openPopups = jQuery('.mobile-popup');
 
-                _.each(openPopups, function (openPopup) {
+                openPopups.each(function (index, openPopup) {
                     if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
                         zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
                     }
@@ -531,9 +531,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (!this.__listeners[type]) {
                 return;
             }
-            _.each(this.__listeners[type], function (cb) {
-                cb(event);
-            });
+            this.__listeners[type].forEach((cb) => cb(event));
         },
         /**
          * Returns an array of listeners for given type.
