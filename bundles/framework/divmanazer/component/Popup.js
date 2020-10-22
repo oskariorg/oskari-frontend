@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (jQuery(this.dialog).hasClass('mobile-popup')) {
                 var openPopups = jQuery('.mobile-popup');
 
-                openPopups.each(function(index, openPopup) {
+                openPopups.each(function (index, openPopup) {
                     if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
                         zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
                     }
