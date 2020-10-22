@@ -7,7 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "tabTitle": "Location Search",
         "invalid_characters": "The search term contains illegal characters. Allowed characters are letters (a-z, å, ä, ö, A-Z, Å, Ä, Ö), numbers (0-9), a dot (.), a comma (,), a hyphen (-) and an exclamation mark (!). You can also replace one mark with a question mark (?) or an end part with an asterisk (*).",
-        "searchDescription": "Search location by placename, address or real estate unit identifier.",
+        "searchDescription": "Search locations by typing a name of a place.",
         "searchAssistance": "Type search term",
         "searchResultCount": "Your search returned",
         "searchResultCount2": "results.",
