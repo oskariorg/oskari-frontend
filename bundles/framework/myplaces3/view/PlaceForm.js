@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.saveCallback = saveCallback;
         this.options = options;
         this.categories = categories;
+        this.initialCategory = typeof this.categories !== 'undefined' ? this.categories.find(category => category.isDefault) : null;
+        this.container = null;
         this.newCategoryId = '-new-';
         this.place = undefined;
         this.drawing = undefined;
@@ -287,8 +289,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         _initializePlace: function () {
             if (!this.place) {
                 this.place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
-                const initialCategory = this.options && typeof this.options.category !== 'undefined' ? this.options.category : 1;
-                this.place.setCategoryId(initialCategory);
+                this.place.setCategoryId(this.initialCategory.categoryId);
             }
         },
         createEditDialog: function () {
@@ -300,8 +301,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             // add new dialog to ui
             this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
+            this.container = this.dialog.getJqueryContent().find('.places-edit-dialog')[0];
 
-            this._renderForm(this.dialog.getJqueryContent().find('.places-edit-dialog')[0]);
+            this._renderForm();
 
             this.dialog.moveTo('div.personaldata .tab-content.myplaces ul li select', 'right');
         },
@@ -369,7 +371,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                         return {
                             name: category.name,
                             value: category.categoryId,
-                            isDefault: (typeof this.place.getCategoryId() !== 'undefined' && this.place.getCategoryId() === category.categoryId)
+                            isDefault: category.isDefault
                         };
                     }),
                     rules: this.defaultRules
@@ -437,7 +439,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          */
         _disableFormSubmit: function () {
             this.defaultProps.formSettings.disabledButtons = true;
-            this._renderForm();
+            this._renderForm(this.container);
         },
         /**
          * @method _renderForm
@@ -446,8 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          *
          * @private
          */
-        _renderForm: function (container) {
-            console.log(container);
-            ReactDOM.render((<GenericForm { ...this.defaultProps } />), container);
+        _renderForm: function () {
+            ReactDOM.render((<GenericForm { ...this.defaultProps } />), this.container);
         }
     });

@@ -172,7 +172,7 @@ export class GenericForm extends React.Component {
                         { field.buttons.map((singleItem) => {
                             return (
                                 <Button
-                                    key={ singleItem.name + '' }
+                                    key={ singleItem.name }
                                     type={ singleItem.style }
                                     disabled={ this.props.formSettings.disabledButtons }
                                     htmlType={ singleItem.buttonType }
@@ -199,7 +199,8 @@ export class GenericForm extends React.Component {
      */
     _getFieldInitialValue(currentField) {
         if (currentField.type === 'dropdown') {
-            return currentField.value.find(option => option.isDefault).value;
+            const currentValue = typeof currentField.value.find(option => option.isDefault) !== 'undefined' ? currentField.value.find(option => option.isDefault).value : null;
+            return currentValue;
         } else {
             return currentField.value;
         }         

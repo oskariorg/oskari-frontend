@@ -107,7 +107,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 if (!event.getSticky()) {
                     return;
                 }
-
                 // changed tool -> clean popup
                 this.cleanupPopup();
             },
@@ -154,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     const measurementResult = this.loc('placeform.measurement.' + 'line') + ' ' + measurementWithUnit;
                     this.form.setMeasurementResult(measurementResult);
                 } else if (drawingData.shape === 'Polygon') {
-                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.length, 'area');
+                    const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.area, 'area');
                     const measurementResult = this.loc('placeform.measurement.' + 'area') + ' ' + measurementWithUnit;
                     this.form.setMeasurementResult(measurementResult);
                 }
@@ -191,9 +190,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             }
 
             me.form.showForm(categories, place); // Get form
-
-            // A tad ugly, but for some reason this won't work if we find the input from formEl
-            jQuery('input[data-name=placename]').focus();
 
             // Here need add bindings
             me.form.bindEvents();
@@ -321,7 +317,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 sandbox.request(this, hideRequest);
             }
 
-            this.form.destroy();
+            if (typeof this.form !== 'undefined') {
+                this.form.destroy();
+            }
         }
     }, {
         /**
