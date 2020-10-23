@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     this.form.setMeasurementResult(measurementResult);
                 } else if (drawingData.shape === 'Polygon') {
                     const measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(drawingData.area, 'area');
-                    const measurementResult = this.loc('placeform.measurement.' + 'area') + ' ' + measurementWithUnit;
+                    const measurementResult = this.loc('placeform.measurement.area') + ' ' + measurementWithUnit;
                     this.form.setMeasurementResult(measurementResult);
                 }
             }
