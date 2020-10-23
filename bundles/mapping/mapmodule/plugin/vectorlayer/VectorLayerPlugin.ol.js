@@ -590,6 +590,16 @@ Oskari.clazz.define(
                     var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
                     this._sandbox.notifyAll(evt);
                 }
+                if (options.remove) {
+                    const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
+                    this._sandbox.request(this, request);
+
+                    const mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    mapLayerService.removeLayer(layer);
+
+                    this.removeMapLayerFromMap(layer);
+                    delete this._oskariLayers[layer.getId()];
+                }
             }
             return layer;
         },
@@ -606,7 +616,8 @@ Oskari.clazz.define(
             typeof options.opacity !== 'undefined' ||
             options.hover ||
             options.layerDescription ||
-            typeof options.showLayer !== 'undefined');
+            typeof options.showLayer !== 'undefined' ||
+            options.remove);
         },
         /**
          * @method addFeaturesToMap
