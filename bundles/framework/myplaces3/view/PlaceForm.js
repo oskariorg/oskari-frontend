@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         ];
 
         // Default form settings
-        this.defaultProps = {
+        this.formProps = {
             formSettings: {
                 showLabels: true,
                 disabledButtons: false,
@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 attentionText
             } = this.place.properties;
 
-            this.defaultProps.fields = [
+            this.formProps.fields = [
                 {
                     name: 'name',
                     type: 'text',
@@ -438,8 +438,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @private
          */
         _disableFormSubmit: function () {
-            this.defaultProps.formSettings.disabledButtons = true;
-            this._renderForm(this.container);
+            this.formProps.formSettings.disabledButtons = true;
+            this._renderForm();
         },
         /**
          * @method _renderForm
@@ -449,6 +449,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @private
          */
         _renderForm: function () {
-            ReactDOM.render((<GenericForm { ...this.defaultProps } />), this.container);
+            ReactDOM.render((<GenericForm { ...this.formProps } />), this.container);
         }
     });
