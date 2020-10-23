@@ -17,6 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.saveCallback = saveCallback;
         this.options = options;
         this.categories = categories;
+        this.initialCategory = typeof this.categories !== 'undefined' ? this.categories.find(category => category.isDefault) : null;
+        this.container = null;
         this.newCategoryId = '-new-';
         this.place = undefined;
         this.drawing = undefined;
@@ -66,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         ];
 
         // Default form settings
-        this.defaultProps = {
+        this.formProps = {
             formSettings: {
                 showLabels: true,
                 disabledButtons: false,
@@ -295,8 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         _initializePlace: function () {
             if (!this.place) {
                 this.place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
-                const initialCategory = this.options && typeof this.options.category !== 'undefined' ? this.options.category : 1;
-                this.place.setCategoryId(initialCategory);
+                this.place.setCategoryId(this.initialCategory.categoryId);
             }
         },
         createEditDialog: function () {
@@ -308,10 +309,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             // add new dialog to ui
             this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
+            this.container = this.dialog.getJqueryContent().find('.places-edit-dialog')[0];
 
-            this._renderForm(this.dialog.getJqueryContent().find('.places-edit-dialog')[0]);
+            this._renderForm();
 
-            this.dialog.moveTo('div.personaldata .tab-content.myplaces ul li select', 'right');
+            this.dialog.moveTo('#toolbar', 'right');
         },
         /**
          * @method _populateForm
@@ -327,36 +329,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 attentionText
             } = this.place.properties;
 
-            this.defaultProps.fields = [
+            this.formProps.fields = [
                 {
                     name: 'name',
                     type: 'text',
-                    label: 'Name for place',
-                    placeholder: this.loc('placeform.placename.placeholder'),
+                    label: this.loc('placeform.placename.placeholder'),
+                    placeholder: '',
                     rules: this.nameRules,
                     value: name !== '' ? name : ''
                 },
                 {
                     name: 'placedesc',
                     type: 'textarea',
-                    label: 'Place description',
-                    placeholder: this.loc('placeform.placedesc.placeholder'),
+                    label: this.loc('placeform.placedesc.placeholder'),
+                    placeholder: '',
                     rules: this.descriptionRules,
                     value: description !== '' ? description : ''
                 },
                 {
                     name: 'placeAttention',
                     type: 'text',
-                    label: 'Text visible on map',
-                    placeholder: this.loc('placeform.placeAttention.placeholder'),
+                    label: this.loc('placeform.placeAttention.placeholder'),
+                    placeholder: '',
                     rules: this.defaultRules,
                     value: attentionText !== '' ? attentionText : ''
                 },
                 {
                     name: 'link',
                     type: 'text',
-                    label: 'Link to additional information',
-                    placeholder: this.loc('placeform.placelink.placeholder'),
+                    label: this.loc('placeform.placelink.placeholder'),
+                    placeholder: '',
                     rules: this.defaultRules,
                     value: link !== '' ? link : ''
                 },
@@ -364,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     name: 'imageLink',
                     type: 'text',
                     label: this.loc('placeform.imagelink.placeholder'),
-                    placeholder: this.loc('placeform.imagelink.placeholder'),
+                    placeholder: '',
                     rules: this.defaultRules,
                     value: imageLink !== '' ? imageLink : ''
                 },
@@ -372,12 +374,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     name: 'category',
                     type: 'dropdown',
                     label: this.loc('placeform.category.choose'),
-                    placeholder: this.loc('placeform.category.choose'),
+                    placeholder: '',
                     value: this.categories.map(category => {
                         return {
                             name: category.name,
                             value: category.categoryId,
-                            isDefault: (typeof this.place.getCategoryId() !== 'undefined' && this.place.getCategoryId() === category.categoryId)
+                            isDefault: category.isDefault
                         };
                     }),
                     rules: this.defaultRules
@@ -444,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * @private
          */
         _disableFormSubmit: function () {
-            this.defaultProps.formSettings.disabledButtons = true;
+            this.formProps.formSettings.disabledButtons = true;
             this._renderForm();
         },
         /**
@@ -454,8 +456,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          *
          * @private
          */
-        _renderForm: function (container) {
-            console.log(container);
-            ReactDOM.render((<GenericForm { ...this.defaultProps } />), container);
+        _renderForm: function () {
+            ReactDOM.render((<GenericForm { ...this.formProps } />), this.container);
         }
     });
