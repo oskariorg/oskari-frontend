@@ -617,7 +617,7 @@ Oskari.clazz.define(
             options.hover ||
             options.layerDescription ||
             typeof options.showLayer !== 'undefined' ||
-            options.remove);
+            typeof options.remove !== 'undefined');
         },
         /**
          * @method addFeaturesToMap
