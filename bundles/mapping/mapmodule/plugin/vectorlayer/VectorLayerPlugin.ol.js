@@ -69,6 +69,7 @@ Oskari.clazz.define(
         this._styleCache = {};
         this._animatingFeatures = {};
     }, {
+        __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
          * @method register
          * Interface method for the plugin protocol
@@ -564,32 +565,41 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
         _updateVectorLayer: function (layer, options) {
-            if (layer && options) {
-                var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                if (options.layerName) {
-                    layer.setName(options.layerName);
-                }
-                if (options.layerOrganizationName) {
-                    layer.setOrganizationName(options.layerOrganizationName);
-                }
-                if (typeof options.opacity !== 'undefined') {
-                    layer.setOpacity(options.opacity);
-                    // Apply changes to ol layer
-                    this._getOlLayer(layer);
-                }
-                if (options.hover) {
-                    layer.setHoverOptions(options.hover);
-                    this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
-                }
-                if (options.layerDescription) {
-                    layer.setDescription(options.layerDescription);
-                }
-                var lyrInService = mapLayerService.findMapLayer(layer.getId());
-                if (lyrInService) {
-                    // Send layer updated notification
-                    var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                    this._sandbox.notifyAll(evt);
-                }
+            if (!layer || !options) {
+                // nothing to do here
+                return layer;
+            }
+            const sandbox = this.getSandbox();
+            const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            let layerUpdate = false;
+            if (options.layerName) {
+                layer.setName(options.layerName);
+                layerUpdate = true;
+            }
+            if (options.layerOrganizationName) {
+                layer.setOrganizationName(options.layerOrganizationName);
+                layerUpdate = true;
+            }
+            if (typeof options.opacity !== 'undefined') {
+                layer.setOpacity(options.opacity);
+                // Apply changes to ol layer
+                this._getOlLayer(layer);
+            }
+            if (options.hover) {
+                layer.setHoverOptions(options.hover);
+                this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
+            }
+            if (options.layerDescription) {
+                layer.setDescription(options.layerDescription);
+                layerUpdate = true;
+            }
+            var lyrInService = mapLayerService.findMapLayer(layer.getId());
+            if (lyrInService && layerUpdate) {
+                // Send layer updated notification
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
+                // this causes performance problems with layer listing when spammed
+                // only send event if name/organization or description was changed
+                sandbox.notifyAll(evt);
             }
             return layer;
         },
@@ -613,27 +623,35 @@ Oskari.clazz.define(
          * @public
          * Add feature on the map
          *
+         * For loading indication:
+            // for each feature at start:
+            me.getMapModule().loadingState(layerId, true);
+            // for each feature after processed:
+            me.getMapModule().loadingState(layerId, false);
+            // for each feature that couldn't be added to map:
+            me.getMapModule().loadingState(layerId, null, true);
+         *
          * @param {Object} geometry the geometry WKT string or GeoJSON object or object containing feature properties for updating
          * @param {Object} options additional options
          */
-        addFeaturesToMap: function (geometry, options) {
+        addFeaturesToMap: function (geometry, options = {}) {
             var me = this;
-            var geometryType = me._getGeometryType(geometry);
-            var format = me._supportedFormats[geometryType];
+            const geometryType = me._getGeometryType(geometry);
+            const format = me._supportedFormats[geometryType];
             var olLayer;
             var layer;
             var vectorSource;
+            const layerId = options.layerId || 'VECTOR';
 
-            options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
-                options.layerId = 'VECTOR';
+                options.layerId = layerId;
             }
             if (!options.attributes) {
                 options.attributes = {};
             }
-            if (!me._features[options.layerId]) {
-                me._features[options.layerId] = [];
+            if (!me._features[layerId]) {
+                me._features[layerId] = [];
             }
 
             layer = me.prepareVectorLayer(options);
@@ -643,10 +661,14 @@ Oskari.clazz.define(
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
                 // when updating style -> options has new style and "geometry" is used for
                 // selecting feature to update like in thematic maps: { id: regionid }
+                me.getMapModule().loadingState(layerId, true);
                 for (var key in geometry) {
+                    me.getMapModule().loadingState(layerId, true);
                     me._updateFeature(options, key, geometry[key]);
+                    me.getMapModule().loadingState(layerId, false);
                 }
                 me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+                me.getMapModule().loadingState(layerId, false);
                 return;
             }
 
@@ -657,6 +679,8 @@ Oskari.clazz.define(
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
+            // initial loading stopped at end of function
+            this.getMapModule().loadingState(layerId, true);
             var features = format.readFeatures(geometry);
             // add cursor if defined so
             if (options.cursor) {
@@ -669,6 +693,8 @@ Oskari.clazz.define(
                 });
             }
             features.forEach(function (feature) {
+                // start loading/feature
+                me.getMapModule().loadingState(layerId, true);
                 if (typeof feature.getId() === 'undefined' && typeof feature.get(FTR_PROPERTY_ID) === 'undefined') {
                     var id = 'F' + me._nextFeatureId++;
                     feature.setId(id);
@@ -680,16 +706,16 @@ Oskari.clazz.define(
             // clear old features if defined so
             if (options.clearPrevious === true) {
                 vectorSource.clear();
-                me._features[options.layerId] = [];
+                me._features[layerId] = [];
             }
             // prio handling
             var prio = options.prio || 0;
-            me._features[options.layerId].push({
+            me._features[layerId].push({
                 data: features,
                 prio: prio
             });
 
-            me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+            me._applyPrioOnSource(layerId, vectorSource, options.prio);
             vectorSource.addFeatures(features);
 
             // notify other components that features have been added
@@ -703,6 +729,11 @@ Oskari.clazz.define(
                 var event = addEvent;
                 if (!feature.getGeometry()) {
                     event = errorEvent;
+                    // signal error on loading
+                    me.getMapModule().loadingState(layerId, null, true);
+                } else {
+                    // signal end of loading
+                    me.getMapModule().loadingState(layerId, false);
                 }
                 event.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
@@ -725,6 +756,7 @@ Oskari.clazz.define(
                     }
                 }
             }
+            me.getMapModule().loadingState(layerId, false);
         },
         /**
          * @method _applyPrioOnSource
