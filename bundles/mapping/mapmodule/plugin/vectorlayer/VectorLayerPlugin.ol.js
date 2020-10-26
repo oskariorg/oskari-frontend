@@ -565,33 +565,41 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
         _updateVectorLayer: function (layer, options) {
-            if (layer && options) {
-                var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                if (options.layerName) {
-                    layer.setName(options.layerName);
-                }
-                if (options.layerOrganizationName) {
-                    layer.setOrganizationName(options.layerOrganizationName);
-                }
-                if (typeof options.opacity !== 'undefined') {
-                    layer.setOpacity(options.opacity);
-                    // Apply changes to ol layer
-                    this._getOlLayer(layer);
-                }
-                if (options.hover) {
-                    layer.setHoverOptions(options.hover);
-                    this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
-                }
-                if (options.layerDescription) {
-                    layer.setDescription(options.layerDescription);
-                }
-                var lyrInService = mapLayerService.findMapLayer(layer.getId());
-                if (lyrInService) {
-                    // Send layer updated notification
-                    var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                    // TODO: FIXME: this is causing performance problems with layer listing
-                    this._sandbox.notifyAll(evt);
-                }
+            if (!layer || !options) {
+                // nothing to do here
+                return layer;
+            }
+            const sandbox = this.getSandbox();
+            const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            let layerUpdate = false;
+            if (options.layerName) {
+                layer.setName(options.layerName);
+                layerUpdate = true;
+            }
+            if (options.layerOrganizationName) {
+                layer.setOrganizationName(options.layerOrganizationName);
+                layerUpdate = true;
+            }
+            if (typeof options.opacity !== 'undefined') {
+                layer.setOpacity(options.opacity);
+                // Apply changes to ol layer
+                this._getOlLayer(layer);
+            }
+            if (options.hover) {
+                layer.setHoverOptions(options.hover);
+                this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
+            }
+            if (options.layerDescription) {
+                layer.setDescription(options.layerDescription);
+                layerUpdate = true;
+            }
+            var lyrInService = mapLayerService.findMapLayer(layer.getId());
+            if (lyrInService && layerUpdate) {
+                // Send layer updated notification
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
+                // this causes performance problems with layer listing when spammed
+                // only send event if name/organization or description was changed
+                sandbox.notifyAll(evt);
             }
             return layer;
         },
