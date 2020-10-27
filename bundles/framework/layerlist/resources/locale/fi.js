@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Uusimmat',
                     'tooltip': 'Näytä ## uusinta karttatasoa'
+                },
+                'raster': {
+                    'title': 'Rasteritasot',
+                    'tooltip': 'Näytä vain rasteritasot'
                 }
             },
             'grouping': {

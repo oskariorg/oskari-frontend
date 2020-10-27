@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Nyaste',
                     'tooltip': 'Visa de ## nyaste kartlager'
+                },
+                'raster': {
+                    'title': 'Rasterlager',
+                    'tooltip': 'Visa endast kartlager med rastergrafik'
                 }
             },
             'grouping': {

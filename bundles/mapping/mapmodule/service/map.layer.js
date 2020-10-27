@@ -60,20 +60,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /*
          * Layer filters
          */
+        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93'];
         this.layerFilters = {
-            'featuredata': function (layer) {
+            featuredata: function (layer) {
                 return layer.hasFeatureData();
             },
-            'newest': function (layer) {
+            newest: function (layer) {
                 // kinda heavy, but get a list of 20 newest layers and check if the requested layer is one them
                 // getNewestLayers() caches the result so in practice it's not as heavy as it looks.
                 return !!me.getNewestLayers(20).find(function (newLayer) {
                     return layer.getId() === newLayer.getId();
                 });
             },
-            'timeseries': function (layer) {
+            timeseries: function (layer) {
                 return layer.hasTimeseries();
-            }
+            },
+            raster: layer => rasterLayerTypes.includes(layer.getLayerType())
         };
 
         Oskari.makeObservable(this);
