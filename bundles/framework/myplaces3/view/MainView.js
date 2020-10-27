@@ -177,7 +177,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.options,
                 categories,
-                this.savePlace.bind(this)
+                this.savePlace.bind(this),
+                this.instance
             );
 
             this.form.setDrawing(this.drawing);
@@ -296,6 +297,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             };
 
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
+        },
+        /**
+         * @method sendStopDrawRequest
+         * Sends a StopDrawingingRequest.
+         * @param {Boolean} clearDrawing boolean param for StopDrawingRequest, true == canceled -> clear current drawing
+         * @param {Boolean} supressEvent boolean param for StopDrawingRequest, true to not send drawing event
+         */
+        sendStopDrawRequest: function (clearDrawing, supressEvent = false) {
+            this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), clearDrawing, supressEvent]);
+            this.instance.setIsFinishedDrawing((!clearDrawing || true));
         },
         cleanupDrawingVariables: function () {
             this.drawing = null;
