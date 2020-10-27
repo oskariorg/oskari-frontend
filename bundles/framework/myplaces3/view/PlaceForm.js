@@ -13,11 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
      * @method create called automatically on construction
      * @static
      */
-    function (options, categories, saveCallback, instance) {
+    function (options, categories, saveCallback, mainView) {
         this.options = options;
         this.categories = categories;
         this.saveCallback = saveCallback;
-        this.instance = instance;
+        this.mainView = mainView;
 
         this.initialCategory = typeof this.categories !== 'undefined' ? this.categories.find(category => category.isDefault) : null;
         this.container = null;
@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 showLabels: true,
                 disabledButtons: false,
                 onFinish: (values) => {
-                    this.instance.getMainView().sendStopDrawRequest(true, true);
+                    this.mainView.sendStopDrawRequest(true, true);
                     this._setNewValues(values);
                     this._disableFormSubmit();
                     this.dialog.close();
@@ -392,7 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                             buttonType: 'button',
                             onClick: (event) => {
                                 this.dialog.close();
-                                this.instance.getMainView().sendStopDrawRequest(true, true);
+                                this.mainView.sendStopDrawRequest(true, true);
                             }
                         },
                         {
