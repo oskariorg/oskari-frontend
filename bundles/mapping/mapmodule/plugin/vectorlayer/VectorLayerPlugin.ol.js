@@ -565,7 +565,19 @@ Oskari.clazz.define(
          */
         _updateVectorLayer: function (layer, options) {
             if (layer && options) {
-                var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                const mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+                if (options.remove) {
+                    const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
+                    this._sandbox.request(this, request);
+
+                    mapLayerService.removeLayer(layer);
+
+                    this.removeMapLayerFromMap(layer);
+                    delete this._oskariLayers[layer.getId()];
+
+                    return;
+                }
                 if (options.layerName) {
                     layer.setName(options.layerName);
                 }
@@ -589,16 +601,6 @@ Oskari.clazz.define(
                     // Send layer updated notification
                     var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
                     this._sandbox.notifyAll(evt);
-                }
-                if (options.remove) {
-                    const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
-                    this._sandbox.request(this, request);
-
-                    const mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                    mapLayerService.removeLayer(layer);
-
-                    this.removeMapLayerFromMap(layer);
-                    delete this._oskariLayers[layer.getId()];
                 }
             }
             return layer;
