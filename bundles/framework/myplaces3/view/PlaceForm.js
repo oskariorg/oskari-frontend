@@ -75,7 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 showLabels: true,
                 disabledButtons: false,
                 onFinish: (values) => {
-                    this.cancelCallback(true, true);
                     this._setNewValues(values);
                     this._disableFormSubmit();
                     this.dialog.close();

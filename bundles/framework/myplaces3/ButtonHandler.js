@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             finishBtn.setTitle(me.loc('buttons.finish'));
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                me.instance.getMainView().sendStopDrawRequest();
+                me.instance.getMainView().sendStopDrawRequest(false, false, true);
                 dialog.close(true);
                 me.dialog = null;
             });
@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                 if (event.getId() !== popupId) {
                     return;
                 }
-                this.instance.getMainView().sendStopDrawRequest(true, true);
+                this.instance.getMainView().sendStopDrawRequest(true, true, false);
                 var sandbox = this.instance.getSandbox();
                 if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
                     sandbox.request(this, Oskari.requestBuilder('EnableMapKeyboardMovementRequest')());

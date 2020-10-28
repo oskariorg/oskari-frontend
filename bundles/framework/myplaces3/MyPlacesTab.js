@@ -11,8 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
      *      reference to component that created the tile
      */
 
-    function (instance) {
+    function (instance, stopDrawingCallback) {
         this.instance = instance;
+        this.stopDrawingCallback = stopDrawingCallback;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.tabsContainer = undefined;
         this.tabPanels = {};
@@ -252,6 +253,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.on('click', function () {
+                    me.stopDrawingCallback();
                     me._deletePlace(data);
                     return false;
                 });
