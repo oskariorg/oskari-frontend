@@ -572,6 +572,18 @@ Oskari.clazz.define(
             const sandbox = this.getSandbox();
             const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             let layerUpdate = false;
+
+            if (options.remove) {
+                const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
+                this._sandbox.request(this, request);
+
+                mapLayerService.removeLayer(layer);
+
+                this.removeMapLayerFromMap(layer);
+                delete this._oskariLayers[layer.getId()];
+
+                return layer;
+            }
             if (options.layerName) {
                 layer.setName(options.layerName);
                 layerUpdate = true;
@@ -616,7 +628,8 @@ Oskari.clazz.define(
             typeof options.opacity !== 'undefined' ||
             options.hover ||
             options.layerDescription ||
-            typeof options.showLayer !== 'undefined');
+            typeof options.showLayer !== 'undefined' ||
+            typeof options.remove !== 'undefined');
         },
         /**
          * @method addFeaturesToMap
