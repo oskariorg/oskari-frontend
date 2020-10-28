@@ -1,17 +1,13 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
-import olRenderFeature from 'ol/render/Feature';
-import { intersects } from 'ol/extent';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import * as olGeom from 'ol/geom';
-import { fromKey as tileCoordFromKey } from 'ol/tilecoord';
 
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
 import { WFS_ID_KEY } from '../../util/props';
-import { convertRenderFeatures } from './convertRenderFeatures';
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
@@ -32,6 +28,7 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
         const features = this._getDistinctFeatures(extent);
         return features.map(f => f.getProperties());
     }
+
     /**
      * @method getPropsIntersectingGeom
      * Returns properties of features whose geometry intersects given GeoJson geometry
@@ -41,15 +38,18 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
     getPropsIntersectingGeom (geom) {
         const geomFilter = reader.read(geom);
         const envelope = geomFilter.getEnvelopeInternal();
-        const features = this._getDistinctFeatures([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()]);
-        return features.map(feature => ({
+        const features = this._getDistinctFeatures([envelope.getMinX(), envelope.getMinY(),
+            envelope.getMaxX(), envelope.getMaxY()]);
+        const jstsGeomFeatures = features.map(feature => ({
             id: feature.get(WFS_ID_KEY),
             properties: feature.getProperties(),
             geometry: olParser.read(feature.getGeometry())
-        }))
-        .filter(feature => RelateOp.relate(geomFilter, feature.geometry).isIntersects())
-        .map(f => f.getProperties());
+        }));
+        return jstsGeomFeatures
+            .filter(feature => RelateOp.relate(geomFilter, feature.geometry).isIntersects())
+            .map(f => f.getProperties());
     }
+
     /**
      * Returns all features in extent and gets rid of duplicates based on id (WFS_ID_KEY)
      * @private @method _getDistinctFeatures
@@ -66,19 +66,5 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
             }
         });
         return Array.from(featuresById.values());
-    }
-    /**
-     * @method _getRenderFeatureExtent
-     * RenderFeature's extent might be in tile coordinates instead of projected map coordinates.
-     * This helper method recalculates the feature's extent when it doesn't intersect with it's tile extent.
-     *
-     * @param {olRenderFeature} renderFeature
-     * @param {ol/VectorTile} tile
-     */
-    _getRenderFeatureExtent (renderFeature, tile) {
-        if (intersects(renderFeature.getExtent(), tile.extent)) {
-            renderFeature.extent_ = null;
-        }
-        return renderFeature.getExtent();
     }
 }
