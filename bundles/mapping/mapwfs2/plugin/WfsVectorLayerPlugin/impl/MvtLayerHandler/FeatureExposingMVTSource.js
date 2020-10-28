@@ -29,15 +29,8 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
      * @return {Object[]} List of feature properties objects
      */
     getFeaturePropsInExtent (extent) {
-        const propertiesById = new Map();
-
-        this._applyInExtent(extent, propertiesById, (features, tile) => {
-            features.forEach((feature) => {
-                propertiesById.set(feature.get(WFS_ID_KEY), feature.getProperties());
-            });
-        });
-
-        return Array.from(propertiesById.values());
+        const features = this._getDistinctFeatures(extent);
+        return features.map(f => f.getProperties());
     }
     /**
      * @method getPropsIntersectingGeom
@@ -48,65 +41,32 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
     getPropsIntersectingGeom (geom) {
         const geomFilter = reader.read(geom);
         const envelope = geomFilter.getEnvelopeInternal();
-        const propertiesById = new Map();
-
-        this._applyInExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], propertiesById, (features, tile) => {
-            if (!features || features.length === 0) {
-                return;
-            }
-            const olFeatures = features[0] instanceof olRenderFeature ? convertRenderFeatures(features, tile, this) : features;
-            olFeatures
-                .map(feature => ({
-                    id: feature.get(WFS_ID_KEY),
-                    properties: feature.getProperties(),
-                    geometry: olParser.read(feature.getGeometry())
-                }))
-                .filter(({ geometry }) => RelateOp.relate(geomFilter, geometry).isIntersects())
-                .forEach(({ id, properties }) => propertiesById.set(id, properties));
-        });
-
-        return Array.from(propertiesById.values());
+        const features = this._getDistinctFeatures([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()]);
+        return features.map(feature => ({
+            id: feature.get(WFS_ID_KEY),
+            properties: feature.getProperties(),
+            geometry: olParser.read(feature.getGeometry())
+        }))
+        .filter(feature => RelateOp.relate(geomFilter, feature.geometry).isIntersects())
+        .map(f => f.getProperties());
     }
     /**
-     * @private @method _applyInExtent
-     * Calls given function for every tile that has features whose extent intersects with the given extent
+     * Returns all features in extent and gets rid of duplicates based on id (WFS_ID_KEY)
+     * @private @method _getDistinctFeatures
      * @param {ol/extent | Number[]} extent requested extent [minx, miny, maxx, maxy]
-     * @param {Map} skipIds If feature id is found in this map, it is skipped
-     * @param {Function} continuation called with matching features array & tile as arguments
      */
-    _applyInExtent (extent, skipIds, continuation) {
-        const key = this.tileCache.peekFirstKey();
-        const z = tileCoordFromKey(key)[0]; // most recent zoom level in cache
-
-        Object.values(this.sourceTileByCoordKey_).forEach(tile => {
-            const tileCoord = tile.getTileCoord();
-            if (z !== tileCoord[0]) {
-                return; // wrong zoom level
+    _getDistinctFeatures (extent) {
+        const featuresById = new Map();
+        const features = this.getFeaturesInExtent(extent);
+        // map will only hold one feature/id so we get get rid of duplicates
+        features.forEach((feature) => {
+            const id = feature.get(WFS_ID_KEY);
+            if (typeof id !== 'undefined') {
+                featuresById.set(id, feature);
             }
-            const tileExtent = this.getTileGrid().getTileCoordExtent(tileCoord);
-            if (!intersects(tileExtent, extent)) {
-                return; // tile not in extent
-            }
-            const features = tile.getFeatures();
-            if (!features) {
-                return;
-            }
-            const matching = features.filter(feature => {
-                const id = feature.get(WFS_ID_KEY);
-                if (skipIds.has(id)) {
-                    return false;
-                }
-                const ftrExtent = feature instanceof olRenderFeature
-                    ? this._getRenderFeatureExtent(feature, tile) : feature.getGeometry().getExtent();
-                return intersects(ftrExtent, extent);
-            });
-            if (!matching.length) {
-                return;
-            }
-            continuation(matching, tile);
         });
+        return Array.from(featuresById.values());
     }
-
     /**
      * @method _getRenderFeatureExtent
      * RenderFeature's extent might be in tile coordinates instead of projected map coordinates.
