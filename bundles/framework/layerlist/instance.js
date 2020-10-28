@@ -101,13 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 }
             }
 
-            // Add newest layers filter.
-            const loc = this.getLocalization('filter');
-            layerlistService.registerLayerlistFilterButton(
-                loc.newest.title,
-                loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
-                {},
-                'newest');
+            this._registerFilterButtons(layerlistService);
 
             // Let's extend UI
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
@@ -303,7 +297,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 return [openLink, closeLink];
             }
         },
-
+        _registerFilterButtons: function (service) {
+            // Add newest layers filter
+            const loc = this.getLocalization('filter');
+            service.registerLayerlistFilterButton(
+                loc.newest.title,
+                loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
+                {},
+                'newest');
+            // Add raster layers filter
+            service.registerLayerlistFilterButton(
+                loc.raster.title,
+                loc.raster.tooltip,
+                {},
+                'raster');
+        },
         /**
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
