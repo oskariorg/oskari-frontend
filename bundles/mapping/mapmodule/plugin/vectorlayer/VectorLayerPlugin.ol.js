@@ -582,7 +582,7 @@ Oskari.clazz.define(
                 this.removeMapLayerFromMap(layer);
                 delete this._oskariLayers[layer.getId()];
 
-                return;
+                return layer;
             }
             if (options.layerName) {
                 layer.setName(options.layerName);
