@@ -229,6 +229,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 });
                 return link;
             });
+
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.linkTemplate.clone();
@@ -239,6 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 });
                 return link;
             });
+
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('delete', function (name, data) {
                 var link = me.linkTemplate.clone();

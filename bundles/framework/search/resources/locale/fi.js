@@ -7,7 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "tabTitle": "Paikkahaku",
         "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9) sekä piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Voit myös korvata sanassa yhden merkin kysymysmerkillä (?) tai sana loppuosan jokerimerkillä (*).",
-        "searchDescription": "Hae paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella.",
+        "searchDescription": "Hae paikkoja paikannimen perusteella.",
         "searchAssistance": "Anna hakusana",
         "searchResultCount": "Hakusanalla löytyi",
         "searchResultCount2": "hakutulosta.",

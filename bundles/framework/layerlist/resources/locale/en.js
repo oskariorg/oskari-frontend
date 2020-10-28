@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Newest',
                     'tooltip': 'Show ## newest map layers'
+                },
+                'raster': {
+                    'title': 'Raster layers',
+                    'tooltip': 'Show only raster layers'
                 }
             },
             'grouping': {

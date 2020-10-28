@@ -14,7 +14,7 @@ Prepares a layer for later use or updates an existing layer.
 The request takes one parameter, options.
 
 |Key|Type|Description|Example value|
-|---:|:---:|:---|:---:|
+|:---|:---:|:---|:---:|
 | layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. | `'MY_VECTOR_LAYER'` |
 | layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). | `'Inspire theme name'` |
 | layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). | `'Organization name'` |
