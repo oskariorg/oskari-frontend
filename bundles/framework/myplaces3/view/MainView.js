@@ -303,9 +303,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         /**
          * @method completeDrawing
          * Calls sendStopDrawRequest to stop drawing correctly
+         *
+         * @param {Boolean} supressEvent - dont send event on completion
          */
-        completeDrawing: function () {
-            this.sendStopDrawRequest(false, true, true);
+        completeDrawing: function (supressEvent) {
+            this.sendStopDrawRequest(false, supressEvent, true);
         },
         /**
          * @method cancelDrawing
