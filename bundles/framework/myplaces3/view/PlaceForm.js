@@ -62,7 +62,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
                     return Promise.resolve(value);
                 }
-                // validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.placeNameIllegal')))
             })
         ];
 
@@ -92,7 +91,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     this._disableFormSubmit();
                     this.dialog.close();
                 },
-                onFinishFailed: () => {}
+                onFinishFailed: () => {
+                    this.cancelCallback();
+                }
             }
         };
     }, {
