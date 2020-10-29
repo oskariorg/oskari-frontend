@@ -177,7 +177,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.options,
                 categories,
-                this.savePlace.bind(this)
+                (place) => this.savePlace(place),
+                () => this.cancelDrawing()
             );
 
             this.form.setDrawing(this.drawing);
@@ -296,6 +297,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             };
 
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
+            // this.sendStopDrawRequest(false, true, true);
+            this.completeDrawing();
+        },
+        /**
+         * @method completeDrawing
+         * Calls sendStopDrawRequest to stop drawing correctly
+         *
+         * @param {Boolean} supressEvent - dont send event on completion
+         */
+        completeDrawing: function (supressEvent) {
+            this.sendStopDrawRequest(false, supressEvent, true);
+        },
+        /**
+         * @method cancelDrawing
+         * Calls sendStopDrawRequest to cancel and stop drawing
+         */
+        cancelDrawing: function () {
+            this.sendStopDrawRequest(true, true, true);
+        },
+        /**
+         * @method sendStopDrawRequest
+         * Sends a StopDrawingingRequest.
+         * @param {Boolean} clearDrawing boolean param for StopDrawingRequest, true == canceled -> clear current drawing
+         * @param {Boolean} supressEvent boolean param for StopDrawingRequest, true to not send drawing event
+         * @param {Boolean} isFinished   boolean param for setIsFinishedDrawing, true to show place form and trigger finished drawing handler
+         */
+        sendStopDrawRequest: function (clearDrawing = true, supressEvent = true, isFinished = true) {
+            this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), clearDrawing, supressEvent]);
+            this.instance.setIsFinishedDrawing(isFinished);
         },
         cleanupDrawingVariables: function () {
             this.drawing = null;
