@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                     return;
                 }
                 // changed tool -> cancel any drawing
-                this.instance.getMainView().sendStopDrawRequest(true, true);
+                this.instance.getMainView().cancelDrawing();
                 if (this.dialog) {
                     this.dialog.close();
                 }
