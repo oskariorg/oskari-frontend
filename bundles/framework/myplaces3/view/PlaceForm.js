@@ -339,40 +339,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 {
                     name: 'name',
                     type: 'text',
-                    label: this.loc('placeform.placename.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placename.placeholder'),
                     rules: this.nameRules,
                     value: name !== '' ? name : ''
                 },
                 {
                     name: 'placedesc',
                     type: 'textarea',
-                    label: this.loc('placeform.placedesc.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placedesc.placeholder'),
                     rules: this.descriptionRules,
                     value: description !== '' ? description : ''
                 },
                 {
                     name: 'placeAttention',
                     type: 'text',
-                    label: this.loc('placeform.placeAttention.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placeAttention.placeholder'),
                     rules: this.defaultRules,
                     value: attentionText !== '' ? attentionText : ''
                 },
                 {
                     name: 'link',
                     type: 'text',
-                    label: this.loc('placeform.placelink.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placelink.placeholder'),
                     rules: this.defaultRules,
                     value: link !== '' ? link : ''
                 },
                 {
                     name: 'imageLink',
                     type: 'text',
-                    label: this.loc('placeform.imagelink.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.imagelink.placeholder'),
                     rules: this.defaultRules,
                     value: imageLink !== '' ? imageLink : ''
                 },
