@@ -42,6 +42,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             }
         ];
 
+        const PLACE_NAME_MAX_LENGTH = 256;
+
         // Rules for description field
         this.nameRules = [
             {
@@ -49,7 +51,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 message: this.loc('validation.placeName')
             },
             () => ({
-                validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.placeNameIllegal')))
+                validator: (_, value) => {
+                    if (Oskari.util.sanitize(value) !== value) {
+                        return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
+                    }
+
+                    if (value.length > PLACE_NAME_MAX_LENGTH) {
+                        return Promise.reject(new Error(this.loc('validation.placeNameTooLong')));
+                    }
+
+                    return Promise.resolve(value);
+                }
+                // validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.placeNameIllegal')))
             })
         ];
 

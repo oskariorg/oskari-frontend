@@ -312,6 +312,7 @@ Oskari.registerLocalization(
             "placeName": "Platsnamnet saknas.",
             "categoryName": "Kartlagrets namn saknas.",
             "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken.",
+            "placeNameTooLong": "Platsnamnet är för lång.",
             "descIllegal": "Platsens beskrivning innehåller otillåtna tecken.",
             "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken.",
             "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",

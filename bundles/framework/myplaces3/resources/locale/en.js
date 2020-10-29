@@ -312,6 +312,7 @@ Oskari.registerLocalization(
             "placeName": "A place name is missing.",
             "categoryName": "A map layer name is missing.",
             "placeNameIllegal": "The place name contains illegal characters.",
+            "placeNameTooLong": "The place name is too long.",
             "descIllegal": "The place description contains illegal characters.",
             "categoryNameIllegal": "The map layer name contains illegal characters.",
             "dotSize": "The point size is invalid. It must be between 1 and 5.",
