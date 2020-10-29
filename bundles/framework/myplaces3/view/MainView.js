@@ -177,8 +177,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.options,
                 categories,
-                this.savePlace.bind(this),
-                this.sendStopDrawRequest.bind(this)
+                (place) => this.savePlace(place),
+                () => this.sendStopDrawRequest
             );
 
             this.form.setDrawing(this.drawing);

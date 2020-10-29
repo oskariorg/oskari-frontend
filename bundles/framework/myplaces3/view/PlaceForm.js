@@ -391,7 +391,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                             buttonType: 'button',
                             onClick: (event) => {
                                 this.dialog.close();
-                                this.cancelCallback(true, true);
+                                this.cancelCallback();
                             }
                         },
                         {
