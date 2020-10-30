@@ -299,7 +299,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
             // this.sendStopDrawRequest(false, true, true);
             this.completeDrawing();
-            this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
         },
         /**
          * @method completeDrawing
@@ -313,14 +312,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         /**
          * @method cancelDrawing
          * Calls sendStopDrawRequest to cancel and stop drawing
-         *
-         * @params {Boolean} isNewDrawing - to define if we trigger sendStopDrawRequest on new place form or editing existing
          */
-        cancelDrawing: function (isNewDrawing = true) {
+        cancelDrawing: function () {
             this.sendStopDrawRequest(true, true, true);
-            if (!isNewDrawing) {
-                this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
-            }
         },
         /**
          * @method sendStopDrawRequest
