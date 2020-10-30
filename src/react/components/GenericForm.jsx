@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select } from 'oskari-ui'
+import { Button, Select} from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
 
@@ -121,19 +121,25 @@ export class GenericForm extends React.Component {
                 return (
                     <Input
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
+                        maxLength={ field.maxLength }
                     />
                 );
             case 'textarea':
                 return (
                     <TextArea
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                     />
                 );
             case 'info':
                 return (
-                    <Card key={ fieldKey }>
+                    <Card
+                        key={ fieldKey }
+                        className={ field.optionalClass }
+                    >
                         { field.value }
                     </Card>
                 );
@@ -141,6 +147,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Select
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                         dropdownStyle={{ zIndex: zIndexValue }}
 
@@ -161,6 +168,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Button
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         type={ field.style }
                         htmlType={ field.buttonType }
                         onClick={ field.onClick }
@@ -175,6 +183,7 @@ export class GenericForm extends React.Component {
                         { field.buttons.map((singleItem) => {
                             return (
                                 <StyledButton
+                                    className={ singleItem.optionalClass }
                                     key={ singleItem.name }
                                     type={ singleItem.style }
                                     disabled={ this.props.formSettings.disabledButtons }

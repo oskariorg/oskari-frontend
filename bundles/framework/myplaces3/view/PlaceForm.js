@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             }
         ];
 
-        const PLACE_NAME_MAX_LENGTH = 256;
+        this.PLACE_NAME_MAX_LENGTH = 256;
 
         // Rules for description field
         this.nameRules = [
@@ -54,10 +54,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 validator: (_, value) => {
                     if (Oskari.util.sanitize(value) !== value) {
                         return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
-                    }
-
-                    if (value.length > PLACE_NAME_MAX_LENGTH) {
-                        return Promise.reject(new Error(this.loc('validation.placeNameTooLong')));
                     }
 
                     return Promise.resolve(value);
@@ -343,7 +339,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: '',
                     placeholder: this.loc('placeform.placename.placeholder'),
                     rules: this.nameRules,
-                    value: name !== '' ? name : ''
+                    value: name !== '' ? name : '',
+                    maxLength: this.PLACE_NAME_MAX_LENGTH
                 },
                 {
                     name: 'placedesc',
@@ -397,6 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     buttons: [
                         {
                             name: 'cancel',
+                            optionalClass: 't_btn_cancel',
                             type: 'button',
                             label: '',
                             placeholder: 'Cancel',
@@ -410,6 +408,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                         },
                         {
                             name: 'submit',
+                            optionalClass: 't_btn_save',
                             type: 'button',
                             label: '',
                             placeholder: 'Save',

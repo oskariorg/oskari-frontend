@@ -312,7 +312,6 @@ Oskari.registerLocalization(
             "placeName": "Kohteen nimi puuttuu.",
             "categoryName": "Karttatason nimi puuttuu.",
             "placeNameIllegal": "Kohteen nimessä on kiellettyjä merkkejä.",
-            "placeNameTooLong": "Kohteen nimi on liian pitkä.",
             "descIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä.",
             "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä.",
             "dotSize": "Pisteen koko on virheellinen. Pisteen koon oltava välillä 1-5.",
