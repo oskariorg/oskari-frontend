@@ -153,21 +153,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             this._showDrawHelper(config.drawMode);
         },
         /**
-         * @method sendStopDrawRequest
-         * Sends a StopDrawingingRequest.
-         * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled -> clear current drawing
-         * @param {Boolean} supressEvent boolean param for StopDrawingRequest, true to not send drawing event
-         */
-        sendStopDrawRequest: function (isCancel, supressEvent) {
-            if (isCancel) {
-                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), true, supressEvent]);
-                this.instance.setIsFinishedDrawing(false);
-            } else {
-                this.instance.setIsFinishedDrawing(true);
-                this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.instance.getName(), false]);
-            }
-        },
-        /**
          * @method update
          * implements Module protocol update method
          */
@@ -198,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
             finishBtn.setTitle(me.loc('buttons.finish'));
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                me.sendStopDrawRequest();
+                me.instance.getMainView().completeDrawing(false);
                 dialog.close(true);
                 me.dialog = null;
             });
@@ -288,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                     return;
                 }
                 // changed tool -> cancel any drawing
-                this.sendStopDrawRequest(true, true);
+                this.instance.getMainView().cancelDrawing();
                 if (this.dialog) {
                     this.dialog.close();
                 }
@@ -328,7 +313,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                 if (event.getId() !== popupId) {
                     return;
                 }
-                this.sendStopDrawRequest(true, true);
+
+                this.instance.getMainView().cancelDrawing();
                 var sandbox = this.instance.getSandbox();
                 if (sandbox.hasHandler('EnableMapKeyboardMovementRequest')) {
                     sandbox.request(this, Oskari.requestBuilder('EnableMapKeyboardMovementRequest')());
