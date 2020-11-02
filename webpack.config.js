@@ -6,12 +6,17 @@ const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
-const { NormalModuleReplacementPlugin } = require('webpack');
+const { DefinePlugin, NormalModuleReplacementPlugin } = require('webpack');
+const CopywebpackPlugin = require('copy-webpack-plugin');
 
 const proxyPort = 8081;
 // helpers
 const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+
+// The path to the CesiumJS source code
+const cesiumSource = 'node_modules/cesium/Source';
+const cesiumWorkers = '../Build/Cesium/Workers';
 
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
@@ -30,6 +35,18 @@ module.exports = (env, argv) => {
     const replacement = path.join(__dirname, 'src/react/ant-globals.less');
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
+    // Copy Cesium Assets, Widgets, and Workers to a static directory
+    plugins.push(new CopywebpackPlugin([
+            { from: path.join(__dirname, cesiumSource, cesiumWorkers), to: 'cesium/Workers' },
+            { from: path.join(__dirname, cesiumSource, 'Assets'), to: 'cesium/Assets' },
+            { from: path.join(__dirname, cesiumSource, 'Widgets'), to: 'cesium/Widgets' }]
+    ));
+
+    // Define relative base path in Cesium for loading assets
+    plugins.push(new DefinePlugin({
+        CESIUM_BASE_URL: JSON.stringify(`${publicPathPrefix}Oskari/dist/${version}/cesium`)
+    }));
+
     const themeFile = theme ? path.resolve(theme) : path.join(__dirname, 'src/react/ant-theme.less');
 
     // Common config for both prod & dev
@@ -37,13 +54,20 @@ module.exports = (env, argv) => {
         node: {
             fs: 'empty'
         },
+        amd: {
+            // Enable webpack-friendly use of require in Cesium
+            toUrlUndefined: true
+        },
         mode: isProd ? 'production' : 'development',
         entry: entries,
         devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
         output: {
             path: path.resolve(`dist/${version}/`),
             publicPath: `${publicPathPrefix}Oskari/dist/${version}/`,
-            filename: '[name]/oskari.min.js'
+            filename: '[name]/oskari.min.js',
+
+            // Needed to compile multiline strings in Cesium
+            sourcePrefix: ''
         },
         module: {
             rules: OskariConfig.getModuleRules(isProd, themeFile)

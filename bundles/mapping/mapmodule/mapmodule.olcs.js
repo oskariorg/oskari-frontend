@@ -4,6 +4,7 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
+import * as Cesium from 'cesium/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
@@ -12,6 +13,8 @@ import 'olcs/olcs.css';
 
 import './event/TimeChangedEvent';
 
+// OL-cesium expects to find this global
+window.Cesium = Cesium;
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
 class MapModuleOlCesium extends MapModuleOl {
@@ -113,7 +116,8 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     _createSkyBox () {
-        const skyboxIconsDir = 'Oskari/libraries/Cesium/Assets/Textures/SkyBox/';
+        // Base URL from Webpack DefinePlugin
+        const skyboxIconsDir = `${CESIUM_BASE_URL}/Assets/Textures/SkyBox`;
         return new Cesium.SkyBox({
             sources: {
                 positiveX: `${skyboxIconsDir}/tycho2t3_80_px.jpg`,
