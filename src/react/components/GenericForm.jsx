@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select } from 'oskari-ui'
+import { Button, Select, Tooltip } from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 import 'antd/es/form/style/index.js';
 import 'antd/es/card/style/index.js';
 import 'antd/es/space/style/index.js';
 import 'antd/es/input/style/index.js';
+import 'antd/es/tooltip/style/index.js';
 
 const { TextArea } = Input;
 
 // If the form is shown on popup the Select dropdown opens behind popup without this
 // FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
-const zIndexValue = 999999;
+const zIndexValue = 99998;
+
+const GlobalStyle = createGlobalStyle`
+    body {
+        .ant-tooltip {
+            z-index: 999999;
+        }
+    }
+`;
 
 const StyledFormItem = styled(Form.Item)`
     display:flex;
@@ -42,6 +52,7 @@ const StyledFormItem = styled(Form.Item)`
             margin: 5px 0 0; 
         }
     }
+
 `;
 
 const StyledButton = styled(Button)`
@@ -78,11 +89,15 @@ export class GenericForm extends React.Component {
     }
 
     /**
+     * @method _createFormItems
+     * @private
+     * 
+     * Crate single form items
      * 
      * @param {Object} fields - array containing all fields
      * @returns {React.Component} 
      */
-    createFormItems (fields, formSettings) {
+    _createFormItems (fields, formSettings) {
         return fields.map((field) => {
             return (
                 <StyledFormItem
@@ -92,13 +107,41 @@ export class GenericForm extends React.Component {
                     rules={ field.rules }
                     initialValue={ this._getFieldInitialValue(field) }
                 >
-                    { this.createFormInput( field ) }
+                    { this._createInputComponent( field ) }
                 </StyledFormItem>
             );
         });
     }
 
+
     /**
+     * @method _createInputComponent
+     * @private
+     * Wraps single field into Tooltip if it is wanted to be shown
+     * 
+     * @param {Object} field - all necessary information about field needed to render it
+     * 
+     * @returns {React.Component} - input wrapped into Tooltip or not 
+     */
+    _createInputComponent (field) {
+        if (field.showTooltip) {
+            return (
+                <Tooltip
+                    title={ field.placeholder }
+                    placement={ 'topLeft' }
+                    trigger={ ['focus'] }
+                >
+                    { this._createFormInput( field ) }
+                </Tooltip>
+            );
+        } else {
+            return this._createFormInput( field );
+        }
+    }
+
+    /**
+     * @method _createFormInput
+     * @private
      * Create single Form.Item content with provided field properties
      * 
      * @param {Object} field              - object containing information for single field
@@ -108,8 +151,7 @@ export class GenericForm extends React.Component {
      * 
      * @returns {Component} React component for the provided field
      */
-
-    createFormInput (field) {
+    _createFormInput (field) {
         if (!field) {
             return null;
         }
@@ -203,13 +245,15 @@ export class GenericForm extends React.Component {
 
     /**
      * @method _getFieldInitialValue
+     * @private
+     * 
      * Get initial value for each field
+     * 
      * @param {Object} currentField - current field to find value from
      * 
      * @return {String} fieldValue - return initial value for current field
-     * @private
      */
-    _getFieldInitialValue(currentField) {
+    _getFieldInitialValue (currentField) {
         if (currentField.type === 'dropdown') {
             const currentValue = typeof currentField.value.find(option => option.isDefault) !== 'undefined' ? currentField.value.find(option => option.isDefault).value : null;
             return currentValue;
@@ -224,8 +268,9 @@ export class GenericForm extends React.Component {
                 onFinishFailed={ this.props.formSettings.onFinishFailed }
                 onFinish={ this.props.formSettings.onFinish }
             >
+                <GlobalStyle />
                 <Space direction="vertical">
-                    { this.createFormItems( this.props.fields, this.props.formSettings) }
+                    { this._createFormItems( this.props.fields, this.props.formSettings) }
                 </Space>     
             </Form>
         );

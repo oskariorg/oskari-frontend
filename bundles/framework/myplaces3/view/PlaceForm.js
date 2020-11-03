@@ -52,6 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             },
             () => ({
                 validator: (_, value) => {
+                    console.log(value);
                     if (Oskari.util.sanitize(value) !== value) {
                         return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
                     }
@@ -340,7 +341,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     placeholder: this.loc('placeform.placename.placeholder'),
                     rules: this.nameRules,
                     value: name !== '' ? name : '',
-                    maxLength: this.PLACE_NAME_MAX_LENGTH
+                    maxLength: this.PLACE_NAME_MAX_LENGTH,
+                    showTooltip: true
                 },
                 {
                     name: 'placedesc',
@@ -348,7 +350,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: '',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
                     rules: this.descriptionRules,
-                    value: description !== '' ? description : ''
+                    value: description !== '' ? description : '',
+                    showTooltip: true
                 },
                 {
                     name: 'placeAttention',
@@ -356,7 +359,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: '',
                     placeholder: this.loc('placeform.placeAttention.placeholder'),
                     rules: this.defaultRules,
-                    value: attentionText !== '' ? attentionText : ''
+                    value: attentionText !== '' ? attentionText : '',
+                    showTooltip: true
                 },
                 {
                     name: 'link',
@@ -364,7 +368,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: '',
                     placeholder: this.loc('placeform.placelink.placeholder'),
                     rules: this.defaultRules,
-                    value: link !== '' ? link : ''
+                    value: link !== '' ? link : '',
+                    showTooltip: true
                 },
                 {
                     name: 'imageLink',
@@ -372,7 +377,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     label: '',
                     placeholder: this.loc('placeform.imagelink.placeholder'),
                     rules: this.defaultRules,
-                    value: imageLink !== '' ? imageLink : ''
+                    value: imageLink !== '' ? imageLink : '',
+                    showTooltip: true
                 },
                 {
                     name: 'category',
