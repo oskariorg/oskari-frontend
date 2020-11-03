@@ -451,7 +451,10 @@ class MapModuleOlCesium extends MapModuleOl {
             return;
         }
         if (layerImpl instanceof Cesium.Cesium3DTileset) {
-            layerImpl.destroy();
+            this._map3D.getCesiumScene().primitives.remove(layerImpl);
+            if (!layerImpl.isDestroyed()) {
+                layerImpl.destroy();
+            }
         } else {
             this.getMap().removeLayer(layerImpl);
             if (typeof layerImpl.destroy === 'function') {
@@ -557,14 +560,14 @@ class MapModuleOlCesium extends MapModuleOl {
                 var view = {};
                 if (options.location) {
                     var pos = options.location;
-                    var lonlat = olProj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
-                    view.destination = Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], pos.altitude);
+                    var lonlat = olProj.transform([parseInt(pos.x, 10), parseInt(pos.y, 10)], this.getProjection(), 'EPSG:4326');
+                    view.destination = Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], parseInt(pos.altitude, 10));
                 }
                 if (options.orientation) {
                     view.orientation = {
-                        heading: this._toRadians(options.orientation.heading),
-                        pitch: this._toRadians(options.orientation.pitch),
-                        roll: this._toRadians(options.orientation.roll)
+                        heading: this._toRadians(parseInt(options.orientation.heading, 10)),
+                        pitch: this._toRadians(parseInt(options.orientation.pitch, 10)),
+                        roll: this._toRadians(parseInt(options.orientation.roll, 10))
                     };
                 }
                 camera.setView(view);
