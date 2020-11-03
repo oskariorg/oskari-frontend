@@ -37,10 +37,10 @@ module.exports = (env, argv) => {
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     plugins.push(new CopywebpackPlugin([
-            { from: path.join(__dirname, cesiumSource, cesiumWorkers), to: 'cesium/Workers' },
-            { from: path.join(__dirname, cesiumSource, 'Assets'), to: 'cesium/Assets' },
-            { from: path.join(__dirname, cesiumSource, 'Widgets'), to: 'cesium/Widgets' }]
-    ));
+        { from: path.join(__dirname, cesiumSource, cesiumWorkers), to: 'cesium/Workers' },
+        { from: path.join(__dirname, cesiumSource, 'Assets'), to: 'cesium/Assets' },
+        { from: path.join(__dirname, cesiumSource, 'Widgets'), to: 'cesium/Widgets' }
+    ]));
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({

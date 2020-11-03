@@ -23,6 +23,7 @@ module.exports = {
         Proj4js: false,
         turf: false,
         __webpack_public_path__: false,
+        CESIUM_BASE_URL: false,
         // ---- jest tests
         describe: false,
         it: false,
