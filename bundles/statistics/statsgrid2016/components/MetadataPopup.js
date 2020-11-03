@@ -94,10 +94,10 @@ export class MetadataPopup extends Popup {
             // Open the last panel
             this._accordions[this._accordions.length - 1].getPanels()[0].open();
         }
+        const btn = this.createCloseButton();
+        btn.setPrimary(true);
         const title = this.loc('metadataPopup.title', { indicators: this._accordions.length });
-        const okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-        okButton.setHandler(() => this.close());
-        super.show(title, container, [okButton]);
+        super.show(title, container, [btn]);
     }
 
     /**
