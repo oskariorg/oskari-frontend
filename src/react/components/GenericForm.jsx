@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip } from 'oskari-ui'
+import { Button, Select } from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
@@ -9,7 +9,6 @@ import 'antd/es/form/style/index.js';
 import 'antd/es/card/style/index.js';
 import 'antd/es/space/style/index.js';
 import 'antd/es/input/style/index.js';
-import 'antd/es/tooltip/style/index.js';
 
 const { TextArea } = Input;
 
@@ -107,36 +106,10 @@ export class GenericForm extends React.Component {
                     rules={ field.rules }
                     initialValue={ this._getFieldInitialValue(field) }
                 >
-                    { this._createInputComponent( field ) }
+                    { this._createFormInput( field ) }
                 </StyledFormItem>
             );
         });
-    }
-
-
-    /**
-     * @method _createInputComponent
-     * @private
-     * Wraps single field into Tooltip if it is wanted to be shown
-     * 
-     * @param {Object} field - all necessary information about field needed to render it
-     * 
-     * @returns {React.Component} - input wrapped into Tooltip or not 
-     */
-    _createInputComponent (field) {
-        if (field.showTooltip) {
-            return (
-                <Tooltip
-                    title={ field.placeholder }
-                    placement={ 'topLeft' }
-                    trigger={ ['focus'] }
-                >
-                    { this._createFormInput( field ) }
-                </Tooltip>
-            );
-        } else {
-            return this._createFormInput( field );
-        }
     }
 
     /**
