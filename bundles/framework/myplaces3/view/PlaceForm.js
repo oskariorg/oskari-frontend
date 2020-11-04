@@ -52,8 +52,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             },
             () => ({
                 validator: (_, value) => {
-                    console.log(value);
-                    console.log(_);
                     if (Oskari.util.sanitize(value) !== value) {
                         return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
                     }
@@ -392,7 +390,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 },
                 {
                     name: 'categoryinfo',
-                    type: 'additionalinfo',
+                    type: 'info',
                     label: '',
                     placeholder: '',
                     value: this.loc('placeform.category.creatingNew')

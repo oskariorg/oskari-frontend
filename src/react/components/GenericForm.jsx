@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Select } from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
 
 import 'antd/es/form/style/index.js';
 import 'antd/es/card/style/index.js';
@@ -15,14 +14,6 @@ const { TextArea } = Input;
 // If the form is shown on popup the Select dropdown opens behind popup without this
 // FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
 const zIndexValue = 99998;
-
-const GlobalStyle = createGlobalStyle`
-    body {
-        .ant-tooltip {
-            z-index: 999999;
-        }
-    }
-`;
 
 const StyledFormItem = styled(Form.Item)`
     display:flex;
@@ -40,6 +31,10 @@ const StyledFormItem = styled(Form.Item)`
         }
     }
 
+    .ant-input {
+        font-family: Arial;
+    }
+
     input {
         height: 40px;
     }
@@ -52,8 +47,8 @@ const StyledFormItem = styled(Form.Item)`
         }
     }
 
-    span {
-        font-style: italic;
+    .ant-card-body {
+        padding: 12px 24px;
     }
 `;
 
@@ -214,10 +209,6 @@ export class GenericForm extends React.Component {
                     </Space>
                 </Row>
                 );
-            case 'additionalinfo':
-                return (
-                <span>{ field.value }</span>
-                );
             default:
                 return null;
         }
@@ -248,7 +239,6 @@ export class GenericForm extends React.Component {
                 onFinishFailed={ this.props.formSettings.onFinishFailed }
                 onFinish={ this.props.formSettings.onFinish }
             >
-                <GlobalStyle />
                 <Space direction="vertical">
                     { this._createFormItems( this.props.fields, this.props.formSettings) }
                 </Space>     
