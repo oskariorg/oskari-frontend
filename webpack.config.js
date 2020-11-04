@@ -16,7 +16,7 @@ const getDirectories = source => readdirSync(source).map(name => path.join(sourc
 
 // The path to the CesiumJS source code
 const cesiumSource = 'node_modules/cesium/Source';
-const cesiumWorkers = '../Build/Cesium/Workers';
+const cesiumTarget = 'cesium';
 
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
@@ -37,14 +37,16 @@ module.exports = (env, argv) => {
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     plugins.push(new CopywebpackPlugin([
-        { from: path.join(__dirname, cesiumSource, cesiumWorkers), to: 'cesium/Workers' },
-        { from: path.join(__dirname, cesiumSource, 'Assets'), to: 'cesium/Assets' },
-        { from: path.join(__dirname, cesiumSource, 'Widgets'), to: 'cesium/Widgets' }
+        { from: path.join(__dirname, cesiumSource, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
+        { from: path.join(__dirname, cesiumSource, 'Assets'), to: cesiumTarget + '/Assets' },
+        { from: path.join(__dirname, cesiumSource, 'Widgets'), to: cesiumTarget + '/Widgets' },
+        // copy Cesium's minified third-party scripts
+        {from: path.join(__dirname, cesiumSource, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty'},
     ]));
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({
-        CESIUM_BASE_URL: JSON.stringify(`${publicPathPrefix}Oskari/dist/${version}/cesium`)
+        CESIUM_BASE_URL: JSON.stringify(`${publicPathPrefix}Oskari/dist/${version}/${cesiumTarget}`)
     }));
 
     const themeFile = theme ? path.resolve(theme) : path.join(__dirname, 'src/react/ant-theme.less');
