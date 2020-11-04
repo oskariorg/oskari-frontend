@@ -4,6 +4,7 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
+import * as Cesium from 'cesium/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
@@ -11,6 +12,28 @@ import moment from 'moment';
 import 'olcs/olcs.css';
 
 import './event/TimeChangedEvent';
+
+// OL-cesium expects to find this global
+window.Cesium = Cesium;
+
+// Polyfills DOM4 MouseEvent for olcs if needed
+(function (window) {
+    try {
+        // eslint-disable-next-line no-new, no-use-before-define
+        new MouseEvent('test');
+        return false; // No need to polyfill
+    } catch (e) {
+        // Need to polyfill - fall through
+    }
+    var MouseEvent = function (eventType, params) {
+        params = params || { bubbles: false, cancelable: false };
+        var mouseEvent = document.createEvent('MouseEvent');
+        mouseEvent.initMouseEvent(eventType, params.bubbles, params.cancelable, window, 0, params.screenX || 0, params.screenY || 0, params.clientX || 0, params.clientY || 0, false, false, false, false, 0, null);
+        return mouseEvent;
+    };
+    MouseEvent.prototype = Event.prototype;
+    window.MouseEvent = MouseEvent;
+})(window);
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
@@ -113,7 +136,8 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     _createSkyBox () {
-        const skyboxIconsDir = 'Oskari/libraries/Cesium/Assets/Textures/SkyBox/';
+        // Base URL from Webpack DefinePlugin
+        const skyboxIconsDir = `${CESIUM_BASE_URL}/Assets/Textures/SkyBox`;
         return new Cesium.SkyBox({
             sources: {
                 positiveX: `${skyboxIconsDir}/tycho2t3_80_px.jpg`,
@@ -427,7 +451,10 @@ class MapModuleOlCesium extends MapModuleOl {
             return;
         }
         if (layerImpl instanceof Cesium.Cesium3DTileset) {
-            layerImpl.destroy();
+            this._map3D.getCesiumScene().primitives.remove(layerImpl);
+            if (!layerImpl.isDestroyed()) {
+                layerImpl.destroy();
+            }
         } else {
             this.getMap().removeLayer(layerImpl);
             if (typeof layerImpl.destroy === 'function') {
@@ -533,14 +560,14 @@ class MapModuleOlCesium extends MapModuleOl {
                 var view = {};
                 if (options.location) {
                     var pos = options.location;
-                    var lonlat = olProj.transform([pos.x, pos.y], this.getProjection(), 'EPSG:4326');
-                    view.destination = Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], pos.altitude);
+                    var lonlat = olProj.transform([parseInt(pos.x, 10), parseInt(pos.y, 10)], this.getProjection(), 'EPSG:4326');
+                    view.destination = Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], parseInt(pos.altitude, 10));
                 }
                 if (options.orientation) {
                     view.orientation = {
-                        heading: this._toRadians(options.orientation.heading),
-                        pitch: this._toRadians(options.orientation.pitch),
-                        roll: this._toRadians(options.orientation.roll)
+                        heading: this._toRadians(parseInt(options.orientation.heading, 10)),
+                        pitch: this._toRadians(parseInt(options.orientation.pitch, 10)),
+                        roll: this._toRadians(parseInt(options.orientation.roll, 10))
                     };
                 }
                 camera.setView(view);
