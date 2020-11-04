@@ -42,6 +42,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             }
         ];
 
+        this.PLACE_NAME_MAX_LENGTH = 256;
+
         // Rules for description field
         this.nameRules = [
             {
@@ -49,7 +51,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 message: this.loc('validation.placeName')
             },
             () => ({
-                validator: (_, value) => Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.placeNameIllegal')))
+                validator: (_, value) => {
+                    if (Oskari.util.sanitize(value) !== value) {
+                        return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
+                    }
+
+                    return Promise.resolve(value);
+                }
             })
         ];
 
@@ -79,7 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     this._disableFormSubmit();
                     this.dialog.close();
                 },
-                onFinishFailed: () => {}
+                onFinishFailed: () => {
+                    this.cancelCallback();
+                }
             }
         };
     }, {
@@ -334,40 +344,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 {
                     name: 'name',
                     type: 'text',
-                    label: this.loc('placeform.placename.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placename.placeholder'),
                     rules: this.nameRules,
-                    value: name !== '' ? name : ''
+                    value: name !== '' ? name : '',
+                    maxLength: this.PLACE_NAME_MAX_LENGTH
                 },
                 {
                     name: 'placedesc',
                     type: 'textarea',
-                    label: this.loc('placeform.placedesc.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placedesc.placeholder'),
                     rules: this.descriptionRules,
                     value: description !== '' ? description : ''
                 },
                 {
                     name: 'placeAttention',
                     type: 'text',
-                    label: this.loc('placeform.placeAttention.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placeAttention.placeholder'),
                     rules: this.defaultRules,
                     value: attentionText !== '' ? attentionText : ''
                 },
                 {
                     name: 'link',
                     type: 'text',
-                    label: this.loc('placeform.placelink.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.placelink.placeholder'),
                     rules: this.defaultRules,
                     value: link !== '' ? link : ''
                 },
                 {
                     name: 'imageLink',
                     type: 'text',
-                    label: this.loc('placeform.imagelink.placeholder'),
-                    placeholder: '',
+                    label: '',
+                    placeholder: this.loc('placeform.imagelink.placeholder'),
                     rules: this.defaultRules,
                     value: imageLink !== '' ? imageLink : ''
                 },
@@ -386,11 +397,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     rules: this.defaultRules
                 },
                 {
+                    name: 'categoryinfo',
+                    type: 'info',
+                    label: '',
+                    placeholder: '',
+                    value: this.loc('placeform.category.creatingNew')
+                },
+                {
                     name: 'formcontrols',
                     type: 'buttongroup',
                     buttons: [
                         {
                             name: 'cancel',
+                            optionalClass: 't_btn_cancel',
                             type: 'button',
                             label: '',
                             placeholder: 'Cancel',
@@ -404,6 +423,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                         },
                         {
                             name: 'submit',
+                            optionalClass: 't_btn_save',
                             type: 'button',
                             label: '',
                             placeholder: 'Save',

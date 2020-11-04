@@ -490,3 +490,7 @@ select:not([class*="ant-"]) {
   animation-name: backgroundFlash;
   animation-duration: 0.5s;
 }
+
+.ant-tooltip {
+  z-index: 999999;
+}

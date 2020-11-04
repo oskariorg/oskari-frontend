@@ -195,6 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          */
         _createLayerTab: function (categoryId, name) {
             var me = this;
+            const sandbox = this.instance.getSandbox();
             var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setId(categoryId);
             panel.setTitle(name);
@@ -237,6 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 link.append(name);
                 link.on('click', function () {
                     me._editPlace(data);
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
                     return false;
                 });
                 return link;

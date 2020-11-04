@@ -13,7 +13,7 @@ const { TextArea } = Input;
 
 // If the form is shown on popup the Select dropdown opens behind popup without this
 // FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
-const zIndexValue = 999999;
+const zIndexValue = 99998;
 
 const StyledFormItem = styled(Form.Item)`
     display:flex;
@@ -26,9 +26,13 @@ const StyledFormItem = styled(Form.Item)`
 
         label {
             color: #6d6d6d;
-            font-size: 12px;
+            font-size: 14px;
             height: 24px;
         }
+    }
+
+    .ant-input {
+        font-family: Arial;
     }
 
     input {
@@ -41,6 +45,10 @@ const StyledFormItem = styled(Form.Item)`
         & > div {
             margin: 5px 0 0; 
         }
+    }
+
+    .ant-card-body {
+        padding: 12px 24px;
     }
 `;
 
@@ -78,11 +86,15 @@ export class GenericForm extends React.Component {
     }
 
     /**
+     * @method _createFormItems
+     * @private
+     * 
+     * Crate single form items
      * 
      * @param {Object} fields - array containing all fields
      * @returns {React.Component} 
      */
-    createFormItems (fields, formSettings) {
+    _createFormItems (fields, formSettings) {
         return fields.map((field) => {
             return (
                 <StyledFormItem
@@ -92,13 +104,15 @@ export class GenericForm extends React.Component {
                     rules={ field.rules }
                     initialValue={ this._getFieldInitialValue(field) }
                 >
-                    { this.createFormInput( field ) }
+                    { this._createFormInput( field ) }
                 </StyledFormItem>
             );
         });
     }
 
     /**
+     * @method _createFormInput
+     * @private
      * Create single Form.Item content with provided field properties
      * 
      * @param {Object} field              - object containing information for single field
@@ -108,8 +122,7 @@ export class GenericForm extends React.Component {
      * 
      * @returns {Component} React component for the provided field
      */
-
-    createFormInput (field) {
+    _createFormInput (field) {
         if (!field) {
             return null;
         }
@@ -121,19 +134,25 @@ export class GenericForm extends React.Component {
                 return (
                     <Input
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
+                        maxLength={ field.maxLength }
                     />
                 );
             case 'textarea':
                 return (
                     <TextArea
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                     />
                 );
             case 'info':
                 return (
-                    <Card key={ fieldKey }>
+                    <Card
+                        key={ fieldKey }
+                        className={ field.optionalClass }
+                    >
                         { field.value }
                     </Card>
                 );
@@ -141,6 +160,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Select
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                         dropdownStyle={{ zIndex: zIndexValue }}
 
@@ -161,6 +181,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Button
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         type={ field.style }
                         htmlType={ field.buttonType }
                         onClick={ field.onClick }
@@ -175,6 +196,7 @@ export class GenericForm extends React.Component {
                         { field.buttons.map((singleItem) => {
                             return (
                                 <StyledButton
+                                    className={ singleItem.optionalClass }
                                     key={ singleItem.name }
                                     type={ singleItem.style }
                                     disabled={ this.props.formSettings.disabledButtons }
@@ -194,13 +216,15 @@ export class GenericForm extends React.Component {
 
     /**
      * @method _getFieldInitialValue
+     * @private
+     * 
      * Get initial value for each field
+     * 
      * @param {Object} currentField - current field to find value from
      * 
      * @return {String} fieldValue - return initial value for current field
-     * @private
      */
-    _getFieldInitialValue(currentField) {
+    _getFieldInitialValue (currentField) {
         if (currentField.type === 'dropdown') {
             const currentValue = typeof currentField.value.find(option => option.isDefault) !== 'undefined' ? currentField.value.find(option => option.isDefault).value : null;
             return currentValue;
@@ -216,7 +240,7 @@ export class GenericForm extends React.Component {
                 onFinish={ this.props.formSettings.onFinish }
             >
                 <Space direction="vertical">
-                    { this.createFormItems( this.props.fields, this.props.formSettings) }
+                    { this._createFormItems( this.props.fields, this.props.formSettings) }
                 </Space>     
             </Form>
         );
