@@ -35,7 +35,7 @@ const StyledFormItem = styled(Form.Item)`
 
         label {
             color: #6d6d6d;
-            font-size: 12px;
+            font-size: 14px;
             height: 24px;
         }
     }
@@ -52,6 +52,9 @@ const StyledFormItem = styled(Form.Item)`
         }
     }
 
+    span {
+        font-style: italic;
+    }
 `;
 
 const StyledButton = styled(Button)`
@@ -210,6 +213,10 @@ export class GenericForm extends React.Component {
                         }) }
                     </Space>
                 </Row>
+                );
+            case 'additionalinfo':
+                return (
+                <span>{ field.value }</span>
                 );
             default:
                 return null;

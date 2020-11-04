@@ -391,6 +391,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     rules: this.defaultRules
                 },
                 {
+                    name: 'categoryinfo',
+                    type: 'additionalinfo',
+                    label: '',
+                    placeholder: '',
+                    value: this.loc('placeform.category.creatingNew')
+                },
+                {
                     name: 'formcontrols',
                     type: 'buttongroup',
                     buttons: [
