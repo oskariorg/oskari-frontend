@@ -41,7 +41,7 @@ module.exports = (env, argv) => {
         { from: path.join(__dirname, cesiumSource, 'Assets'), to: cesiumTarget + '/Assets' },
         { from: path.join(__dirname, cesiumSource, 'Widgets'), to: cesiumTarget + '/Widgets' },
         // copy Cesium's minified third-party scripts
-        {from: path.join(__dirname, cesiumSource, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty'},
+        { from: path.join(__dirname, cesiumSource, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
     ]));
 
     // Define relative base path in Cesium for loading assets
