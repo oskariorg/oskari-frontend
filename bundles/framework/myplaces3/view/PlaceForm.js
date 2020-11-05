@@ -341,7 +341,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     rules: this.nameRules,
                     value: name !== '' ? name : '',
                     maxLength: this.PLACE_NAME_MAX_LENGTH,
-                    showTooltip: true
+                    tooltip: this.loc('placeform.placename.placeholder')
                 },
                 {
                     name: 'placedesc',
@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
                     rules: this.descriptionRules,
                     value: description !== '' ? description : '',
-                    showTooltip: true
+                    tooltip: this.loc('placeform.placedesc.placeholder')
                 },
                 {
                     name: 'placeAttention',
@@ -359,7 +359,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     placeholder: this.loc('placeform.placeAttention.placeholder'),
                     rules: this.defaultRules,
                     value: attentionText !== '' ? attentionText : '',
-                    showTooltip: true
+                    tooltip: this.loc('placeform.placeAttention.placeholder')
                 },
                 {
                     name: 'link',
@@ -368,7 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     placeholder: this.loc('placeform.placelink.placeholder'),
                     rules: this.defaultRules,
                     value: link !== '' ? link : '',
-                    showTooltip: true
+                    tooltip: this.loc('placeform.placelink.placeholder')
                 },
                 {
                     name: 'imageLink',
@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     placeholder: this.loc('placeform.imagelink.placeholder'),
                     rules: this.defaultRules,
                     value: imageLink !== '' ? imageLink : '',
-                    showTooltip: true
+                    tooltip: this.loc('placeform.imagelink.placeholder')
                 },
                 {
                     name: 'category',

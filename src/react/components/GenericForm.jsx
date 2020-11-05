@@ -86,6 +86,29 @@ export class GenericForm extends React.Component {
     }
 
     /**
+     * @method _addTooltip
+     * @private
+     * 
+     * Adds tooltip around provided form component
+     * 
+     * @param {React.Component} formItem - provided form item to wrap with tooltip
+     * @param {String} tooltipTitle      - title text for tooltip
+     * 
+     * @returns {React.Component}        - field wrapped with Tooltip
+     */
+    _addTooltip (formItem, tooltipTitle) {
+        if (!tooltipTitle) {
+            return formItem;
+        }
+
+        return (
+            <Tooltip title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
+                { formItem }
+            </Tooltip>  
+        );
+    }
+
+    /**
      * @method _createFormComponents
      * @private
      * 
@@ -97,15 +120,13 @@ export class GenericForm extends React.Component {
      */
     _createFormComponents (fields) {
         return fields.map((field) => {
-            if(field.showTooltip) {
-                return (
-                    <Tooltip title={ field.placeholder || field.label } trigger={ ['focus', 'hover'] }>
-                        { this._createFormItem( field ) }
-                    </Tooltip>
-                );
-            } else {
-                return this._createFormItem( field );
+            const formItem = this._createFormItem(field);
+
+            if (field.tooltip) {
+                return this._addTooltip(formItem, field.tooltip);
             }
+
+            return formItem;
         });
     }
 
@@ -119,7 +140,7 @@ export class GenericForm extends React.Component {
      * 
      * @returns {React.Component} - component with Tooltip or not 
      */
-    _createFormItem( field ) {
+    _createFormItem (field) {
         return (
             <StyledFormItem
                 key={ field.name }
