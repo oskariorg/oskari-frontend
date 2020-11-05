@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select } from 'oskari-ui'
+import { Button, Select, Tooltip } from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
 
@@ -86,39 +86,65 @@ export class GenericForm extends React.Component {
     }
 
     /**
-     * @method _createFormItems
+     * @method _createFormComponents
      * @private
      * 
-     * Crate single form items
+     * Create all form components
      * 
-     * @param {Object} fields - array containing all fields
+     * @param {Object[]} fields - array containing all fields
+     * 
      * @returns {React.Component} 
      */
-    _createFormItems (fields, formSettings) {
+    _createFormComponents (fields) {
         return fields.map((field) => {
-            return (
-                <StyledFormItem
-                    key={ field.name }
-                    name={ field.type !== 'buttongroup' ? field.name : '' }
-                    label={ formSettings.showLabels ? field.label : '' }
-                    rules={ field.rules }
-                    initialValue={ this._getFieldInitialValue(field) }
-                >
-                    { this._createFormInput( field ) }
-                </StyledFormItem>
-            );
+            if(field.showTooltip) {
+                return (
+                    <Tooltip title={ field.placeholder || field.label } trigger={ ['focus', 'hover'] }>
+                        { this._createFormItem( field ) }
+                    </Tooltip>
+                );
+            } else {
+                return this._createFormItem( field );
+            }
         });
+    }
+
+    /**
+     * @method _createFormItem
+     * @private
+     * 
+     * Creates single form item with provided field values
+     * 
+     * @param {Object} field - single field
+     * 
+     * @returns {React.Component} - component with Tooltip or not 
+     */
+    _createFormItem( field ) {
+        return (
+            <StyledFormItem
+                key={ field.name }
+                name={ field.type !== 'buttongroup' ? field.name : '' }
+                label={ this.props.formSettings.showLabels ? field.label : '' }
+                rules={ field.rules }
+                initialValue={ this._getFieldInitialValue(field) }
+            >
+                { this._createFormInput( field ) }
+            </StyledFormItem>
+        );
     }
 
     /**
      * @method _createFormInput
      * @private
-     * Create single Form.Item content with provided field properties
+     * Create single input content with provided field values
      * 
-     * @param {Object} field              - object containing information for single field
-     * @param {String} field.type         - field type as string {text / textarea / info / dropdown}
-     * @param {String} field.placeholder  - placeholder text for the current field
-     * @param {String|Number} field.value - value for current field used in info card / drowdown / submit button
+     * @param {Object} field                      - object containing information for single field
+     * @param {String} field.name                 - unique name for the field
+     * @param {String|Object} field.type          - field type as string {text / textarea / info / dropdown}
+     * @param {String} field.placeholder          - placeholder text for the current field
+     * @param {Number} field.maxLength            - input field max length
+     * @param {String} field.optionalClass        - class name for the field
+     * @param {String|Number} field.value         - value for current field used in info card / drowdown / submit button
      * 
      * @returns {Component} React component for the provided field
      */
@@ -240,7 +266,7 @@ export class GenericForm extends React.Component {
                 onFinish={ this.props.formSettings.onFinish }
             >
                 <Space direction="vertical">
-                    { this._createFormItems( this.props.fields, this.props.formSettings) }
+                    { this._createFormComponents( this.props.fields, this.props.formSettings) }
                 </Space>     
             </Form>
         );
