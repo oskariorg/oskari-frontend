@@ -67,15 +67,13 @@ Oskari.registerLocalization(
                 "noAttributeData": "Ei näytettäviä ominaisuustietoja. Avaa kohdetiedot nähdäksesi piilotetut ominaisuustiedot."
             },
             "PublisherToolbarPlugin": {
-                "test": "testi",
                 "history": {
-                    "reset": "Palaa alkutilaan.",
-                    "back": "Siirry edelliseen näkymään.",
-                    "next": "Siirry seuraavaan näkymään."
+                    "back": "Siirry edelliseen näkymään",
+                    "next": "Siirry seuraavaan näkymään"
                 },
                 "measure": {
-                    "line": "Mittaa etäisyys.",
-                    "area": "Mittaa pinta-ala."
+                    "line": "Mittaa etäisyys",
+                    "area": "Mittaa pinta-ala"
                 }
             },
             "MarkersPlugin": {
@@ -122,7 +120,8 @@ Oskari.registerLocalization(
             },
             "PanButtonsPlugin": {
                 "center" : {
-                    "tooltip": "Palaa alkutilaan"
+                    "tooltip": "Palaa alkutilaan",
+                    "confirmReset": "Haluatko palata alkutilaan?"
                 }
             },
             "Tiles3DLayerPlugin": {
