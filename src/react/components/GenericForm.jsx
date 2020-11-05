@@ -101,8 +101,10 @@ export class GenericForm extends React.Component {
             return formItem;
         }
 
+        const tooltipKey = tooltipTitle + '_tooltip';
+
         return (
-            <Tooltip title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
+            <Tooltip key={ tooltipKey } title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
                 { formItem }
             </Tooltip>  
         );
