@@ -231,6 +231,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             okBtn.setHandler(() => this.close(true));
             return okBtn;
         },
+        createConfirmButtons: function (callback) {
+            const cancelBtn = this.createCloseButton(Oskari.getMsg('DivManazer', 'buttons.no'));
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(Oskari.getMsg('DivManazer', 'buttons.yes'));
+            okBtn.setPrimary(true);
+            if (typeof callback === 'function') {
+                okBtn.setHandler(() => {
+                    this.close(true);
+                    callback();
+                });
+            }
+            return [cancelBtn, okBtn];
+        },
 
         /**
         * @method createCloseIcon
