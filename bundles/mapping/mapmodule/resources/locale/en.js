@@ -122,7 +122,8 @@ Oskari.registerLocalization(
             },
             "PanButtonsPlugin": {
                 "center" : {
-                    "tooltip": "Move to the original map view"
+                    "tooltip": "Move to the original map view",
+                    "confirmReset": "Do you wish to return to the original view?"
                 }
             },
             "Tiles3DLayerPlugin": {

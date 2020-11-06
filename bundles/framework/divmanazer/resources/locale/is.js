@@ -12,7 +12,9 @@ Oskari.registerLocalization(
             "exit": "Hætta",
             "ok": "Í lagi",
             "save": "Vista",
-            "search": "Leita"
+            "search": "Leita",
+            "yes": "Já",
+            "no": "Nei"
         },
         "LanguageSelect": {
             "title": "tungumál",

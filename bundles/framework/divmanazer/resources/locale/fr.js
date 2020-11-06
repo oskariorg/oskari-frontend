@@ -16,7 +16,9 @@ Oskari.registerLocalization(
             "exit": "Sortir",
             "ok": "OK",
             "save": "Enregistrer",
-            "search": "Rechercher"
+            "search": "Rechercher",
+            "yes": "Oui",
+            "no": "Non"
         },
         "LanguageSelect": {
             "title": "Langue",

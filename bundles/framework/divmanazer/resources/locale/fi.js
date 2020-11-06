@@ -16,7 +16,9 @@ Oskari.registerLocalization(
             "exit": "Poistu",
             "ok": "OK",
             "save": "Tallenna",
-            "search": "Hae"
+            "search": "Hae",
+            "yes": "Kyllä",
+            "no": "Ei"
         },
         "LanguageSelect": {
             "title": "Kieli",

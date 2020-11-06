@@ -16,7 +16,9 @@ Oskari.registerLocalization(
             "exit": "Avsluta",
             "ok": "OK",
             "save": "Spara",
-            "search": "Sök"
+            "search": "Sök",
+            "yes": "Ja",
+            "no": "Nej"
         },
         "LanguageSelect": {
             "title": "Språk",
