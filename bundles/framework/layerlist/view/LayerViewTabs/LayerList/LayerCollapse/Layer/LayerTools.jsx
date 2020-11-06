@@ -87,14 +87,15 @@ LayerTools.propTypes = {
 };
 
 const LayerStatus = ({ backendStatus, model, onClick }) => {
-    const icon = (<LayerIcon
-        fill={backendStatus.color}
-        type={model.getLayerType()}
-        onClick={() => onClick()} />);
-    if (backendStatus.addTooltip) {
-        return (<Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>);
-    }
-    return icon;
+    const icon = (
+        <LayerIcon
+            fill={backendStatus.color}
+            type={model.getLayerType()}
+            onClick={() => onClick()}
+        />
+    );
+
+    return (<Tooltip title={<Message messageKey={ backendStatus.messageKey } />}>{icon}</Tooltip>);
 };
 
 LayerStatus.propTypes = {

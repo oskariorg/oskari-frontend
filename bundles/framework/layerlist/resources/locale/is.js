@@ -51,7 +51,7 @@ Oskari.registerLocalization(
                 'DOWN': 'Kortalagið er ekki tiltækt í augnablikinu.',
                 'ERROR': 'Kortalagið er ekki tiltækt í augnablikinu.',
                 'MAINTENANCE': 'Kortalagið getur verið ófánlegt í nokkra daga.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Stöðuupplýsingar fyrir kortalagið eru ekki í boði.',
                 'UNSTABLE': ''
             },
             'guidedTour': {
