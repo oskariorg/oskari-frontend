@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { GenericForm } from 'oskari-ui';
-import { initial } from 'lodash';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.view.PlaceForm
