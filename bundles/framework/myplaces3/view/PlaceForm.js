@@ -340,6 +340,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 attentionText
             } = this.place.properties;
 
+            const currentCategory = this.categories.find(category => category.categoryId === this.place.categoryId) || this.initialCategory;
+
             this.formProps.fields = [
                 {
                     name: 'name',
@@ -396,7 +398,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                         return {
                             name: category.name,
                             value: category.categoryId,
-                            isDefault: category.isDefault
+                            isDefault: category.categoryId === currentCategory.categoryId
                         };
                     }),
                     rules: this.defaultRules
