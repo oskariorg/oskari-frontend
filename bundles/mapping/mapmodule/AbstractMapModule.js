@@ -1331,7 +1331,7 @@ Oskari.clazz.define(
             if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
                 var totalHeight = jQuery('#contentMap').height();
                 if (totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
-                    mapDivHeight -= mobileDiv.outerHeight();
+                    mapDivHeight = totalHeight - mobileDiv.outerHeight();
                 }
                 if ((mobileDiv.attr('data-height')) !== mapDivHeight.toString()) {
                     jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
