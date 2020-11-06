@@ -169,6 +169,9 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+        if (!this.getSandbox().getMap().isLayerSupported(layer)) {
+            return;
+        }
         let url = layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection());
         const urlParams = this.getUrlParams(layer);
         if (urlParams) {
@@ -197,11 +200,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
         vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
         vectorTileLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-
-        if (!this.getSandbox().getMap().isLayerSupported(layer)) {
-            layer.setVisible(false);
-            vectorTileLayer.setVisible(false);
-        }
 
         const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
         // Set min max zoom levels that layer should be visible in
