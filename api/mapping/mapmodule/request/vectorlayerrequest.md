@@ -6,6 +6,7 @@ Adds a new feature layer to map or updates an existing layer.
 
 - Add a new feature layer
 - Update layer properties
+- Remove vector features layer
 
 ## Description
 
@@ -26,6 +27,7 @@ The request takes one parameter, options.
 | minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1451336` |
 | maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1` |
 | hover | object | Describes how to visualize features on hover and what kind of tooltip should be shown. | See Hover Settings below |
+| remove | boolean | If the key is present with "truthy" value the layer referenced with layerId is removed from the map. Defaults to undefined. | `true` |
 
 ### Hover Settings
 
@@ -88,6 +90,7 @@ Oskari.getSandbox().postRequestByName('VectorLayerRequest', [options]);
 
 ```
 ### Update layer properties example
+
 Define layerId which matches layer's id which should be updated. Add properties which should be updated. Note that if id doesn't match any existing layer, a new layer will be created.
 
 ```javascript
@@ -107,7 +110,18 @@ var newOptions = {
 Oskari.getSandbox().postRequestByName('VectorLayerRequest', [newOptions]); 
 ```
 
+### Remove existing vector layer as part of cleanup
+
+Define layerId which matches layer's id which should be removed. Add a remove-flag with boolean true value to remove the layer.
+
+```javascript
+Oskari.getSandbox().postRequestByName('VectorLayerRequest', [{
+    layerId: 'MY_VECTOR_LAYER', // existing id
+    remove: true
+}]);
+```
+
 ## Related api
 
-- VectorLayerRequest
+- AddFeaturesToMapRequest
 - RemoveFeaturesFromMapRequest
