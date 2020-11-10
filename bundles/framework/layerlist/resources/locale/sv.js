@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 'DOWN': 'Kartlagret är inte tillgängligt just nu.',
                 'ERROR': 'Kartlagret är inte tillgängligt just nu.',
                 'MAINTENANCE': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Statusinformationen för det här kartlagret är inte tillgängligt.',
                 'UNSTABLE': ''
             },
             'guidedTour': {
