@@ -31,7 +31,7 @@ const hasSubLayerMetadata = layer => {
 const getBackendStatus = layer => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
-        addTooltip: backendStatus !== 'UNKNOWN',
+        status: backendStatus,
         messageKey: `backendStatus.${backendStatus}`,
         color: getStatusColor(backendStatus)
     };
@@ -62,6 +62,7 @@ const LayerTools = ({ model, controller }) => {
     const map = Oskari.getSandbox().getMap();
     const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
+    const statusOnClick = backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
     return (
         <Tools className="layer-tools">
             {reason &&
@@ -73,7 +74,7 @@ const LayerTools = ({ model, controller }) => {
                 </Tooltip>
             }
             <LayerStatus backendStatus={backendStatus} model={model}
-                onClick={() => controller.showLayerBackendStatus(model.getId())} />
+                onClick={ statusOnClick } />
             <SpriteIcon
                 className={infoIcon.classes.join(' ')}
                 onClick={() => controller.showLayerMetadata(model)} />
@@ -91,7 +92,7 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
         <LayerIcon
             fill={backendStatus.color}
             type={model.getLayerType()}
-            onClick={() => onClick()}
+            onClick={onClick ? () => onClick() : undefined}
         />
     );
 
@@ -101,7 +102,7 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
 LayerStatus.propTypes = {
     backendStatus: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func
 };
 
 const wrapped = LocaleConsumer(LayerTools);
