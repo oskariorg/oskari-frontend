@@ -23,6 +23,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
         if (!pInstance || typeof pInstance.getState !== 'function') {
             // not a stateful component -> unregister instead
             this.unregisterStateful(pBundleId);
+            this.getLog().info('Registered without impl param -> unregistering');
             return;
         }
         this._statefuls[pBundleId] = pInstance;

@@ -55,33 +55,27 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      * @param {Object} extraParams - object with parameters to add {param: value}
      * @return {String}
      */
-    generateMapLinkParameters: function (extraParams) {
-        // get stateful component parameters
-        // Note! These parameters must be passed to the server in index.js to be used
-        var components = this.getStatefulComponents();
-        var iterator = null;
-        var component = null;
-        var optionsLinkParameterArray = [];
-        var componentLinkParameterArray = [];
-        for (iterator in components) {
-            if (components.hasOwnProperty(iterator)) {
-                component = components[iterator];
-
-                // Make sure the function exists and is a function
-                if (component.getStateParameters && typeof component.getStateParameters === 'function') {
-                    var params = component.getStateParameters();
-                    if (params) {
-                        componentLinkParameterArray.push(params);
-                    }
-                }
-            }
+    generateMapLinkParameters: function (extraParams = {}) {
+        if (typeof extraParams !== 'object') {
+            this.getLog().warn('Extra params for map links is not an object (ignoring)', extraParams);
+            extraParams = {};
         }
+        // get stateful component parameters
+        const bundleStates = Object.values(this.getStatefulComponents())
+            .map(bundle => {
+                if (!bundle || typeof bundle.getStateParameters !== 'function') {
+                    // invalid bundle or getStateParameters() is not implemented for stateful bundle
+                    return;
+                }
+                return bundle.getStateParameters();
+            })
+            .filter(value => typeof value !== 'undefined');
 
-        Object.keys(extraParams || {}).forEach(function (param) {
-            optionsLinkParameterArray.push(param + '=' + extraParams[param]);
+        const additionalParams = Object.keys(extraParams).map(function (param) {
+            return param + '=' + extraParams[param];
         });
 
         // Use array join to make sure the values are always separated with '&', but not the first or last
-        return componentLinkParameterArray.concat(optionsLinkParameterArray).join('&') || null;
+        return bundleStates.concat(additionalParams).join('&') || null;
     }
 });
