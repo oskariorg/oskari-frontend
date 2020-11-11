@@ -16,6 +16,15 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      *            pInstance reference to actual bundle instance
      */
     registerAsStateful: function (pBundleId, pInstance) {
+        if (typeof pBundleId !== 'string') {
+            throw new TypeError('Tried registering bundle as stateful without bundleid');
+        }
+
+        if (!pInstance || typeof pInstance.getState !== 'function') {
+            // not a stateful component -> unregister instead
+            this.unregisterStateful(pBundleId);
+            return;
+        }
         this._statefuls[pBundleId] = pInstance;
     },
 
@@ -27,6 +36,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      *            pBundleId bundle instance id which to unregister
      */
     unregisterStateful: function (pBundleId) {
+        if (typeof pBundleId !== 'string') {
+            throw new TypeError('Tried unregistering stateful without bundleid');
+        }
         this._statefuls[pBundleId] = null;
         delete this._statefuls[pBundleId];
     },
@@ -40,7 +52,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      * @return {Object}
      */
     getStatefulComponents: function () {
-        return this._statefuls;
+        return this._statefuls || {};
     },
 
     /**
