@@ -53,9 +53,10 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
      * Generates query string for an URL that has the maps state with coordinates, zoom and selected map layers
      *
      * @param {Object} extraParams - object with parameters to add {param: value}
+     * @param {Boolean} optimized - hint for stateful components to leavy some params out (like hidden layers etc when we want to get the state for printing etc)
      * @return {String}
      */
-    generateMapLinkParameters: function (extraParams = {}) {
+    generateMapLinkParameters: function (extraParams = {}, optimized = false) {
         if (typeof extraParams !== 'object') {
             this.getLog().warn('Extra params for map links is not an object (ignoring)', extraParams);
             extraParams = {};
@@ -67,7 +68,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
                     // invalid bundle or getStateParameters() is not implemented for stateful bundle
                     return;
                 }
-                return bundle.getStateParameters();
+                return bundle.getStateParameters(optimized);
             })
             .filter(value => typeof value !== 'undefined');
 
