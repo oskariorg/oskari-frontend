@@ -1151,8 +1151,9 @@ export class MapModule extends AbstractMapModule {
             return false;
         }
         if (Array.isArray(layer)) {
-            // getOLMapLayers() returns an array
-            return (layer.filter(l => this.isLayerVisible(l)).length === layer.length);
+            // getOLMapLayers() returns an array -> check that atleast one of them is visible
+            // group layers can have multiple layers with only some visible
+            return layer.some(l => this.isLayerVisible(l));
         }
         if (typeof layer === 'object') {
             // probably passed the layer impl directly
