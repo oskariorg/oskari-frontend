@@ -1150,13 +1150,17 @@ export class MapModule extends AbstractMapModule {
         if (typeof layer === 'undefined') {
             return false;
         }
+        if (Array.isArray(layer)) {
+            // getOLMapLayers() returns an array
+            return (layer.filter(l => this.isLayerVisible(l)).length === layer.length);
+        }
         if (typeof layer === 'object') {
             // probably passed the layer impl directly
             return layer.getVisible();
         }
         // layer is probably id
         const layerImpl = this.getOLMapLayers(layer);
-        this.isLayerVisible(layerImpl);
+        return this.isLayerVisible(layerImpl);
     }
 
     /**

@@ -455,6 +455,10 @@ class MapModuleOlCesium extends MapModuleOl {
             // probably passed the layer impl directly
             return layer.show || false;
         }
+        if (Array.isArray(layer)) {
+            // getOLMapLayers() returns an array
+            return (layer.filter(l => this.isLayerVisible(l)).length === layer.length);
+        }
         if (typeof layer === 'object') {
             // probably passed the ol layer impl directly
             return super.isLayerVisible(layer);
