@@ -33,7 +33,7 @@ describe('Sandbox', () => {
         // initial value is null
         expect(sb.generateMapLinkParameters()).toBeNull();
         // good value is written out
-        expect(sb.generateMapLinkParameters({ test: 'testing'})).toEqual("test=testing");
+        expect(sb.generateMapLinkParameters({ test: 'testing' })).toEqual("test=testing");
         // non-object params should be ignored
         expect(sb.generateMapLinkParameters('test')).toBeNull();
         // weird case, just documenting current behavior

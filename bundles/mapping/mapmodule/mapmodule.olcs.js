@@ -444,6 +444,26 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     * Returns if the layer is currently being shown to the user
+     * @param {String|Number|Cesium.Cesium3DTileset|ol.layer} layer id in Oskari or the layer implementation
+     */
+    isLayerVisible (layer) {
+        if (typeof layer === 'undefined') {
+            return false;
+        }
+        if (layer instanceof Cesium.Cesium3DTileset) {
+            // probably passed the layer impl directly
+            return layer.show || false;
+        }
+        if (typeof layer === 'object') {
+            // probably passed the ol layer impl directly
+            return super.isLayerVisible(layer);
+        }
+        // layer is probably id
+        const layerImpl = this.getOLMapLayers(layer);
+        return this.isLayerVisible(layerImpl);
+    }
+    /**
      * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
      */
     removeLayer (layerImpl) {

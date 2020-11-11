@@ -551,7 +551,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 const json = {
                     id: layer.getId(),
                     opacity: layer.getOpacity()
-                }
+                };
                 if (!layer.isVisible()) {
                     json.hidden = true;
                 }
@@ -589,26 +589,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 coord: state.east + '_' + state.north
             };
             // add maplayers
-            params.mapLayers = state.selectedLayers.map(layer => {
-                if (layer.hidden) {
-                    return;
-                }
-                if (optimized) {
-                    if (layer.opacity === 0) {
-                        // leave out layers that are not visible
+            params.mapLayers = state.selectedLayers
+                .map(layer => {
+                    if (layer.hidden) {
                         return;
                     }
-                    // TODO: also leave out layers that are not inside zoom-limits
-                }
-                return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
-            })
-            // filter out hidden == undefined from map-function
-            .filter(layer => typeof layer !== 'undefined')
-            // separate with comma
-            .join(',');
+                    if (optimized) {
+                        if (layer.opacity === 0) {
+                            // leave out layers that are not visible
+                            return;
+                        }
+                        // also leave out layers that are not inside zoom-limits, are outside of extent
+                        //  or are otherwise not shown to user
+                        if (!this.getMapModule().isLayerVisible(layer.id)) {
+                            return;
+                        }
+                    }
+                    return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
+                })
+                // filter out hidden == undefined from map-function
+                .filter(layer => typeof layer !== 'undefined')
+                // separate with comma
+                .join(',');
 
             const link = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
-            return link + layers + this.getMapModule().getStateParameters();
+            return link + this.getMapModule().getStateParameters();
         },
         _getConfiguredLinkParams: function () {
             if (!this.conf || typeof this.conf.link !== 'object') {
