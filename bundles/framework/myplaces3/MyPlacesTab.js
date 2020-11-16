@@ -238,7 +238,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 link.append(name);
                 link.on('click', function () {
                     me._editPlace(data);
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
+                    // FIX ME: Usability of this?
+                    // sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
                     return false;
                 });
                 return link;

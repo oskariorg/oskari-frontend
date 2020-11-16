@@ -299,7 +299,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             this.instance.getService().saveMyPlace(place, serviceCallback, isMovePlace);
             // this.sendStopDrawRequest(false, true, true);
             this.completeDrawing();
-            this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+
+            // FIX ME: Usability of this?
+            // this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
         },
         /**
          * @method completeDrawing
@@ -319,7 +321,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         cancelDrawing: function (isNewDrawing = true) {
             this.sendStopDrawRequest(true, true, true);
             if (!isNewDrawing) {
-                this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+                // FIX ME: Usability of this?
+                // this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
             }
         },
         /**

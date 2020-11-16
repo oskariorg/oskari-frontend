@@ -103,9 +103,13 @@ export class GenericForm extends React.Component {
 
         const tooltipKey = tooltipTitle + '_tooltip';
 
+        // FIX ME: Because of bug in AntD we're adding empty div-wrapper around formItem to avoid ref warning
+        // https://github.com/ant-design/ant-design/issues/21892
         return (
             <Tooltip key={ tooltipKey } title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
-                { formItem }
+                <div>
+                    { formItem }
+                </div>
             </Tooltip>  
         );
     }
