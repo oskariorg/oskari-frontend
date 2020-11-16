@@ -13,7 +13,6 @@ const { TextArea } = Input;
 
 // If the form is shown on popup the Select dropdown opens behind popup without this
 // FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
-// https://github.com/ant-design/ant-design/issues/21892
 const zIndexValue = 99998;
 
 const StyledFormItem = styled(Form.Item)`
@@ -105,6 +104,7 @@ export class GenericForm extends React.Component {
         const tooltipKey = tooltipTitle + '_tooltip';
 
         // FIX ME: Because of bug in AntD we're adding empty div-wrapper around formItem to avoid ref warning
+        // https://github.com/ant-design/ant-design/issues/21892
         return (
             <Tooltip key={ tooltipKey } title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
                 <div>
