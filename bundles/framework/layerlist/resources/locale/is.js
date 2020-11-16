@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             'filter': {
                 'title': 'Sýna',
                 'all': {
-                    'title': 'All layers',
+                    'title': 'Öll lög',
                     'tooltip': ''
                 },
                 'search': {
@@ -26,17 +26,21 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Nýjast',
                     'tooltip': 'Sýna ## nýjustu kortalög'
+                },
+                'raster': {
+                    'title': 'Rastalög',
+                    'tooltip': 'Sýna eingöngu rastalög'
                 }
             },
             'grouping': {
-                'title': 'Grouping',
+                'title': 'Sameina',
                 'inspire': 'Eftir þema',
                 'organization': 'Eftir gagnaeigendum',
-                'noGroup' : 'No group'
+                'noGroup' : 'Tvístra hóp'
             },
             'layer': {
                 'tooltip': {
-                    'timeseries': 'Time series layer'
+                    'timeseries': 'Tímaraðir'
                 },
                 'styles': {
                     'title': 'Stíll'
@@ -56,7 +60,7 @@ Oskari.registerLocalization(
             },
             'guidedTour': {
                 'title': 'Kortalög',
-                'message': 'Í valmyndinni Kortalög finnur þú öll kortalögin í kortaþjónustunni.<br/><br/>Flokka kortalög eftir þema eða gagnaeiganda.<br/><br/>Leita í kortalögum eftir nafni kortalags, nafni gagnaeiganda eða lykilorði. Nýjustu kortalögin, vektorlög og lög sem hægt er að birta getur þú fundið í fyrirfram skilgreindum listum.<br/><br/>Opna kortalögin sem þú getur valið í Valin Lög valmyndinni.',
+                'message': ' Í valmyndinni fyrir “Kortalög” getur þú fundið öll kortalögin í kortaþjónustunni.<br/><br/>Hægt er að flokka kortalög eftir þema eða gagnaframleiðanda.<br/><br/>Leitaðu að kortalagi eftir nafni, gagnaframleiðanda eða lykilorði. Einnig er hægt að skoða nýjustu gögnin, vektorgögn og tímaraðir á þar til gerðum fellilista.<br/><br/>Hægt er að skoða opin kortalög í ”Valin lög” flipanum. Hægt er að breyta uppröðun kortalaga, gegnsæi og útliti þar sem það er í boði.',
                 'openLink': 'Sýna kortalög',
                 'closeLink': 'Fela kortalög',
                 'tileText': 'Kortalög'

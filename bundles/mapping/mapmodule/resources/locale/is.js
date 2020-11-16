@@ -65,6 +65,7 @@ Oskari.registerLocalization(
                 "test": "Prufa",
                 "history": {
                     "reset": "Fara til baka í sjálfgefna sýn",
+                    "confirmReset": "Viltu fara til baka í upphafsskjá?",
                     "back": "Fara til baka í síðustu sýn",
                     "next": "Fara á næstu sýn"
                 },
