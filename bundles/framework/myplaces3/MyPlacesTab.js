@@ -195,7 +195,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          */
         _createLayerTab: function (categoryId, name) {
             var me = this;
-            const sandbox = this.instance.getSandbox();
             var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setId(categoryId);
             panel.setTitle(name);
