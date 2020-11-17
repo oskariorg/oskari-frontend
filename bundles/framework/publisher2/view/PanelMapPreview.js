@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             id: 'fill',
             width: '',
             height: '',
-            selected: true
+            selected: true // default option
         }, {
             id: 'small',
             width: 580,
@@ -33,20 +33,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         }, {
             id: 'medium',
             width: 700,
-            height: 600,
-            // default option
-            selected: true
+            height: 600
         }, {
             id: 'large',
             width: 1240,
             height: 700
         }, {
-            id: 'custom',
+            id: 'custom'
+        }];
+        this.sizeLimits = {
             minWidth: 30,
             minHeight: 20,
             maxWidth: 4000,
             maxHeight: 2000
-        }];
+        };
 
         me.selected = me.sizeOptions.filter(function (option) {
             return option.selected;
@@ -274,8 +274,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
                 width = parseInt(widthInput.val(), 10);
                 height = parseInt(heightInput.val(), 10);
-                validWidth = Oskari.util.isNumber(widthInput.val()) && me._validateNumberRange(width, option.minWidth, option.maxWidth);
-                validHeight = Oskari.util.isNumber(heightInput.val()) && me._validateNumberRange(height, option.minHeight, option.maxHeight);
+                validWidth = Oskari.util.isNumber(widthInput.val()) && Oskari.util.isNumberBetween(width, this.sizeLimits.minWidth, this.sizeLimits.maxWidth);
+                validHeight = Oskari.util.isNumber(heightInput.val()) && Oskari.util.isNumberBetween(height, this.sizeLimits.minHeight, this.sizeLimits.maxHeight);
             }
 
             return {
@@ -287,29 +287,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 option: option
             };
         },
-        /**
-         * @private @method _validateNumberRange
-         * Validates number in range
-         *
-         * @param {Object} value number to validate
-         * @param {Number} min min value
-         * @param {Number} max max value
-         *
-         * @return {Boolean} Number validity
-         */
-        _validateNumberRange: function (value, min, max) {
-            var ret = true;
-            // FIXME : use Oskari.util.???
-            if (isNaN(parseInt(value, 10))) {
-                ret = false;
-            } else if (!isFinite(value)) {
-                ret = false;
-            } else if (value < min || value > max) {
-                ret = false;
-            }
-            return ret;
-        },
-
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
          * sets up validation etc. Prepopulates the form fields if pData parameter is given.
@@ -328,7 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 tooltipCont = me.templates.help.clone();
 
             me.modeChangedCB = modeChangedCB;
-
             // initial mode selection if modify.
             if (pData && pData.metadata && pData.metadata.preview) {
                 var selectedOptions = me.sizeOptions.filter(function (option) {
@@ -389,7 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 }
             }
             panel.setTitle(me.loc.size.label);
-            tooltipCont.attr('title', me.loc.size.tooltip);
+            tooltipCont.attr('title', Oskari.getMsg('Publisher2', 'BasicView.size.tooltip', this.sizeLimits));
             panel.getHeader().append(tooltipCont);
 
             for (fkey in this.fields) {
@@ -503,7 +479,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             if (!this._getSelectedMapSize().valid) {
                 errors.push({
                     field: 'size',
-                    error: this.loc.error.size
+                    error: Oskari.getMsg('Publisher2', 'BasicView.error.size', this.sizeLimits)
                 });
             }
             return errors;
