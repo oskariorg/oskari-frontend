@@ -28,3 +28,4 @@ export { LocalizationComponent } from './components/LocalizationComponent';
 export { Message } from './components/Message';
 export { GenericForm } from './components/GenericForm';
 export { ColorPicker } from './components/ColorPicker';
+export { StylizedRadio } from './components/StylizedRadio';

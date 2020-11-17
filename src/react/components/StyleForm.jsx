@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip, ColorPicker } from 'oskari-ui';
+import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio } from 'antd';
 import styled from 'styled-components';
 
@@ -59,13 +59,15 @@ export class StyleForm extends React.Component {
                         </Form.Item>
 
                         <Card>
-                            <Form.Item label='Muokkaa' { ...formLayout }>    
-                                <Radio.Group defaultValue={ 'dot' } { ...formLayout } >
-                                    <Radio.Button value='dot'>Piste</Radio.Button>
-                                    <Radio.Button value='line'>Viiva</Radio.Button>
-                                    <Radio.Button value='area'>Alue</Radio.Button>
-                                </Radio.Group>
-                            </Form.Item>
+                            <Row>
+                                <Form.Item label='Muokkaa' { ...formLayout }>    
+                                    <Radio.Group defaultValue={ 'dot' } { ...formLayout } >
+                                        <Radio.Button value='dot'>Piste</Radio.Button>
+                                        <Radio.Button value='line'>Viiva</Radio.Button>
+                                        <Radio.Button value='area'>Alue</Radio.Button>
+                                    </Radio.Group>
+                                </Form.Item>
+                            </Row>
 
                             <Row>
                                 <Form.Item label='Viivan väri' { ...formLayout }>
@@ -73,6 +75,12 @@ export class StyleForm extends React.Component {
                                 </Form.Item>
                                 <Form.Item label='Täyttö väri' { ...formLayout }>
                                     <ColorPicker />
+                                </Form.Item>
+                            </Row>
+
+                            <Row>
+                                <Form.Item label='Viivan tyyli' { ...formLayout }>
+                                    <StylizedRadio />
                                 </Form.Item>
                             </Row>
                         </Card>
