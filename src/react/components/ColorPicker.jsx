@@ -11,6 +11,7 @@ const StyledColorPicker = styled(Input)`
     }
 
     &:focus {
+        box-shadow: none;
         outline-color: #ffd400;
     }
 `;
