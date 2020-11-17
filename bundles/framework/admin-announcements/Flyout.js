@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AnnouncementsFormMapper, AnnouncementsFormMapperHandler } from './view/';
+import { AnnouncementsFormMapper, AnnouncementsFormMapperHandler } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -94,7 +94,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
             );
             ReactDOM.render(content, this.container);
         }
-		
     }, {
 
         /**

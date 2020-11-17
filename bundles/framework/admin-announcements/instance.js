@@ -81,11 +81,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.AdminAnnounceme
             this.started = true;
             this.sandbox = sandbox;
 
-            
             var announcementService = Oskari.clazz.create('Oskari.framework.bundle.announcements.AnnouncementsService', sandbox, this.getLocalization().service);
             this.sandbox.registerService(announcementService);
             this.announcementService = announcementService;
-
 
             sandbox.register(this);
 
@@ -98,7 +96,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.AdminAnnounceme
             // Let's extend UI
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
-
         },
 
         /**
@@ -204,7 +201,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.AdminAnnounceme
         createUi: function () {
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }
-        
     }, {
         /**
          * @property {String[]} protocol

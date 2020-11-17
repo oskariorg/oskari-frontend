@@ -15,7 +15,7 @@ class ViewHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.locale = instance.getLocalization();
         this.announcementsService = this._createAnnouncementsService();
-        this.newTitle = "Uusi ilmoitus" ;
+        this.newTitle = 'Uusi ilmoitus';
         this.state = {
             update: false,
             announcements: [],
@@ -32,23 +32,20 @@ class ViewHandler extends StateHandler {
         return service;
     }
 
-    getAdminAnnouncements(callback) {
-        this.announcementsService.getAdminAnnouncements(function(err, data){
+    getAdminAnnouncements (callback) {
+        this.announcementsService.getAdminAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
                 return;
             }
-            
             callback(data);
         });
-        
     }
 
-    saveAnnouncement(data) {
-        this.announcementsService.saveAnnouncement(data, function(err, data){
+    saveAnnouncement (data) {
+        this.announcementsService.saveAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
-                return;
             } else {
                 Messaging.success(getMessage('messages.saveSuccess'));
             }
@@ -59,12 +56,11 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    //Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
-    updateAnnouncement(data) {
-        this.announcementsService.updateAnnouncement(data, function(err, data){
+    // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
+    updateAnnouncement (data) {
+        this.announcementsService.updateAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
-                return;
             }
         });
         this.updateState({
@@ -73,24 +69,22 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    deleteAnnouncement (index,id) {
+    deleteAnnouncement (index, id) {
+        const test = { id };
 
-        const test = {id};
-
-        //TODO: Better/different way to confirm deleting an announcement
+        // TODO: Better/different way to confirm deleting an announcement
         if (window.confirm(this.instance.getLocalization('deleteAnnouncementConfirm'))) {
-            this.announcementsService.deleteAnnouncement(test, function(err){
+            this.announcementsService.deleteAnnouncement(test, function (err) {
                 if (err) {
                     Messaging.error(getMessage('messages.deleteFailed'));
                     return;
                 }
                 Messaging.success(getMessage('messages.deleteSuccess'));
             });
-            
             const newList = [...this.state.announcements];
             newList.splice(index, 1);
 
-            //Update accordion with announcements and keep all closed
+            // Update accordion with announcements and keep all closed
             this.updateState({
                 announcements: newList,
                 activeKey: []
@@ -98,9 +92,8 @@ class ViewHandler extends StateHandler {
         }
     }
 
-    //Cancel creating a new announcement or editing one. Close all panels.
-    cancel(index,id) {
-
+    // Cancel creating a new announcement or editing one. Close all panels.
+    cancel (index, id) {
         if (id !== undefined) {
             this.updateState({
                 updated: false,
@@ -115,12 +108,11 @@ class ViewHandler extends StateHandler {
             });
         }
     }
-    
-    //Create new announcement (Rename?)
+    // Create new announcement (Rename?)
     addForm () {
         const newList = [...this.state.announcements];
         newList.push({
-          title: this.newTitle
+            title: this.newTitle
         });
         this.updateState({
             announcements: newList,
@@ -128,26 +120,25 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    pushAnnouncements(data) {
+    pushAnnouncements (data) {
         this.updateState({
             announcements: data,
             updated: true
         });
     }
 
-    updateTitle(value) {
+    updateTitle (value) {
         this.updateState({
             title: value
         });
     }
-    
-    toggleActive() {
+    toggleActive () {
         this.updateState({
             active: !this.state.active
         });
-    };
+    }
 
-    updateActiveKey(key) {
+    updateActiveKey (key) {
         this.updateState({
             activeKey: key
         });
@@ -155,5 +146,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsFormMapperHandler = controllerMixin(ViewHandler, [
-    'pushAnnouncements','getAdminAnnouncements','addForm','deleteAnnouncement','updateTitle','toggleActive','saveAnnouncement','updateAnnouncement','cancel','updateActiveKey'
+    'pushAnnouncements', 'getAdminAnnouncements', 'addForm', 'deleteAnnouncement', 'updateTitle', 'toggleActive', 'saveAnnouncement', 'updateAnnouncement', 'cancel', 'updateActiveKey'
 ]);

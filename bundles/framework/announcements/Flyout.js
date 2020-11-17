@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AnnouncementsHandler, AnnouncementsCollapse} from './view/';
+import { AnnouncementsHandler, AnnouncementsCollapse } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             if (!this.container) {
                 return;
             }
-            
+
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <AnnouncementsCollapse
@@ -94,10 +94,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
                     />
                 </LocaleProvider>
             );
-            //this._saveMessage();
             ReactDOM.render(content, this.container);
-        },
-
+        }
     }, {
 
         /**

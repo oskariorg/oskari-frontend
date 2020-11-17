@@ -2,7 +2,7 @@ import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 
-//Handler for announcements. Handles state and service calls.
+// Handler for announcements. Handles state and service calls.
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='announcements' />;
 
@@ -17,8 +17,8 @@ class ViewHandler extends StateHandler {
             panels: [],
             modals: [],
             updated: false,
-            announcements: [] ,
-            checked: false,
+            announcements: [],
+            checked: false
         };
     }
 
@@ -27,16 +27,14 @@ class ViewHandler extends StateHandler {
         return service;
     }
 
-    getAnnouncements(callback) {
-        this.announcementsService.getAnnouncements(function(err, data){
+    getAnnouncements (callback) {
+        this.announcementsService.getAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getFailed'));
                 return;
             }
-            
             callback(data);
         });
-        
     }
 
     updatePanelsModals (panels, modals) {
@@ -49,11 +47,10 @@ class ViewHandler extends StateHandler {
 
     handleOk (index, id, checked) {
         if (checked) {
-           localStorage.setItem(id, checked);
-           this.updateState({
-            checked: false
-        });
-
+            localStorage.setItem(id, checked);
+            this.updateState({
+                checked: false
+            });
         }
         const newList = [...this.state.modals];
         newList.splice(index, 1);
@@ -62,16 +59,16 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    showModal(id) {
+    showModal (id) {
         if (localStorage.getItem(id)) {
-            return false
+            return false;
         }
         else {
-            return true
+            return true;
         }
     }
 
-    onCheckboxChange(checked) {
+    onCheckboxChange (checked) {
         this.updateState({
             checked: checked
         });
@@ -79,5 +76,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'getAnnouncements','updatePanelsModals','handleOk','onCheckboxChange','showModal'
+    'getAnnouncements', 'updatePanelsModals', 'handleOk', 'onCheckboxChange', 'showModal'
 ]);

@@ -86,7 +86,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             this.sandbox.registerService(announcementService);
             this.announcementService = announcementService;
 
-
             sandbox.register(this);
 
             for (let p in this.eventHandlers) {
@@ -203,7 +202,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         createUi: function () {
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }
-        
     }, {
         /**
          * @property {String[]} protocol
