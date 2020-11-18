@@ -48,9 +48,6 @@ export class StyleForm extends React.Component {
     
     }
 
-    /*_changeTab (changeTo) {
-        this.setState({ currentTab: changeTo });
-    }*/
     _getCurrentTab (tab) {
         switch(tab) {
             case 'point':
