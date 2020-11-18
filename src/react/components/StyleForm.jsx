@@ -36,6 +36,105 @@ const formLayout = {
 export class StyleForm extends React.Component {
     constructor (props) {
         super(props);
+
+        this.state = {
+            currentTab: 'point'
+        };
+
+        this._changeTab = (event) => {
+            console.log(event.target.value);
+            this.setState({ currentTab: event.target.value });
+        };
+    
+    }
+
+    /*_changeTab (changeTo) {
+        this.setState({ currentTab: changeTo });
+    }*/
+    _getCurrentTab (tab) {
+        switch(tab) {
+            case 'point':
+                return this._getDotTab();
+            case 'line':
+                return this._getLineTab();
+            case 'area':
+                return this._getAreaTab();
+            default:
+                return (
+                    <Card>
+                        <span>EMPTY</span>
+                    </Card>
+                );
+        }
+    }
+
+    _getDotTab () {
+        return (
+            <Card>
+                <Row>
+                    <Form.Item label='Pisteen väri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                    <Form.Item label='Pisteen täyttöväri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                </Row>
+
+                <Row>
+                    <Form.Item label='Viivan tyyli' { ...formLayout }>
+                        <StylizedRadio />
+                    </Form.Item>
+                </Row>
+            </Card>
+        );
+    }
+
+    _getLineTab () {
+        return (
+            <Card>
+                <Row>
+                    <Form.Item label='Viivan väri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                    <Form.Item label='Täyttö väri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                </Row>
+
+                <Row>
+                    <Form.Item label='Viivan tyyli' { ...formLayout }>
+                        <StylizedRadio />
+                    </Form.Item>
+                </Row>
+            </Card>
+        );
+    }
+
+    _getAreaTab () {
+        return (
+            <Card>
+                <Row>
+                    <Form.Item label='Viivan väri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                    <Form.Item label='Täyttö väri' { ...formLayout }>
+                        <ColorPicker />
+                    </Form.Item>
+                </Row>
+
+                <Row>
+                    <Form.Item label='Viivan tyyli' { ...formLayout }>
+                        <StylizedRadio />
+                    </Form.Item>
+                </Row>
+
+                <Row>
+                    <Form.Item label='Täytön tyyli' { ...formLayout }>
+                        <StylizedRadio />
+                    </Form.Item>
+                </Row>
+            </Card>
+        );
     }
 
     render () {
@@ -44,7 +143,7 @@ export class StyleForm extends React.Component {
                 <Space direction='vertical'>
                     <Card>
                         <Form.Item label='Tyylit' { ...formLayout }>
-                            <Select>
+                            <Select { ...formLayout }>
                                 { testOptions.map((singleOption) => {
                                     return (
                                         <Select.Option
@@ -58,32 +157,17 @@ export class StyleForm extends React.Component {
                             </Select>
                         </Form.Item>
 
-                        <Card>
-                            <Row>
-                                <Form.Item label='Muokkaa' { ...formLayout }>    
-                                    <Radio.Group defaultValue={ 'dot' } { ...formLayout } >
-                                        <Radio.Button value='dot'>Piste</Radio.Button>
-                                        <Radio.Button value='line'>Viiva</Radio.Button>
-                                        <Radio.Button value='area'>Alue</Radio.Button>
-                                    </Radio.Group>
-                                </Form.Item>
-                            </Row>
+                        <Row>
+                            <Form.Item label='Muokkaa' { ...formLayout }>    
+                                <Radio.Group defaultValue={ 'point' } { ...formLayout } onChange={ this._changeTab } >
+                                    <Radio.Button value='point'>Piste</Radio.Button>
+                                    <Radio.Button value='line'>Viiva</Radio.Button>
+                                    <Radio.Button value='area'>Alue</Radio.Button>
+                                </Radio.Group>
+                            </Form.Item>
+                        </Row>
 
-                            <Row>
-                                <Form.Item label='Viivan väri' { ...formLayout }>
-                                    <ColorPicker />
-                                </Form.Item>
-                                <Form.Item label='Täyttö väri' { ...formLayout }>
-                                    <ColorPicker />
-                                </Form.Item>
-                            </Row>
-
-                            <Row>
-                                <Form.Item label='Viivan tyyli' { ...formLayout }>
-                                    <StylizedRadio />
-                                </Form.Item>
-                            </Row>
-                        </Card>
+                        { this._getCurrentTab( this.state.currentTab ) }
                         
                     </Card>
 
