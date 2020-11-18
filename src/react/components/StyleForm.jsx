@@ -59,7 +59,7 @@ export class StyleForm extends React.Component {
             default:
                 return (
                     <Card>
-                        <span>EMPTY</span>
+                        <span>EMPTY!</span>
                     </Card>
                 );
         }
