@@ -23,7 +23,7 @@ export class ColorPicker extends React.Component {
 
     render () {
         return (
-            <StyledColorPicker type='color' />
+            <StyledColorPicker type='color' { ...this.props } />
         );
     }
 }

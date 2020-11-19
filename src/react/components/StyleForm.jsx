@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio } from 'antd';
@@ -7,13 +7,19 @@ import styled from 'styled-components';
 
 const testOptions = [
     {
-        value: 'testi tyyli'
+        value: 'testi tyyli',
+        style: 'point',
+        dotColorPicker: '#cc99ff',
+        dotFillColorPicker: '#0098dd',
+        dotIcon: 'line'
     },
     {
-        value: 'tyyli 2'
+        value: 'tyyli 2',
+        style: 'area'
     },
     {
-        value: 'storybooktyyli'
+        value: 'storybooktyyli',
+        style: 'area'
     }
 ];
 
@@ -37,14 +43,31 @@ export class StyleForm extends React.Component {
     constructor (props) {
         super(props);
 
+        this.ref = React.createRef();
+
         this.state = {
             currentTab: 'point'
         };
 
         this._changeTab = (event) => {
-            console.log(event.target.value);
             this.setState({ currentTab: event.target.value });
         };
+
+        
+        this._populateWithStyle = (style) => {
+            let currentStyle = testOptions.find(option => option.value == style);
+            this.setState({ currentTab: currentStyle.style }); // change tab
+            
+            currentStyle.styleSelectorItem = currentStyle.style;
+            this.ref.current.setFieldsValue(currentStyle); // Populate fields
+            
+            console.log(currentStyle);
+            console.log(this.state);
+        }
+
+        this.colorPickerCallback = (event) => {
+            console.log(event.target.value);
+        }
     
     }
 
@@ -69,16 +92,16 @@ export class StyleForm extends React.Component {
         return (
             <Card>
                 <Row>
-                    <Form.Item label='Pisteen väri' { ...formLayout }>
-                        <ColorPicker />
+                    <Form.Item name={ 'dotColorPicker' } label='Pisteen väri' { ...formLayout }>
+                        <ColorPicker onChange={ this.colorPickerCallback } />
                     </Form.Item>
-                    <Form.Item label='Pisteen täyttöväri' { ...formLayout }>
-                        <ColorPicker />
+                    <Form.Item name={ 'dotFillColorPicker' } label='Pisteen täyttöväri' { ...formLayout }>
+                        <ColorPicker onChange={ this.colorPickerCallback } />
                     </Form.Item>
                 </Row>
 
                 <Row>
-                    <Form.Item label='Viivan tyyli' { ...formLayout }>
+                    <Form.Item name={ 'dotIcon' } label='Icon' { ...formLayout }>
                         <StylizedRadio />
                     </Form.Item>
                 </Row>
@@ -90,16 +113,16 @@ export class StyleForm extends React.Component {
         return (
             <Card>
                 <Row>
-                    <Form.Item label='Viivan väri' { ...formLayout }>
+                    <Form.Item name={ 'lineColor' } label='Viivan väri' { ...formLayout }>
                         <ColorPicker />
                     </Form.Item>
-                    <Form.Item label='Täyttö väri' { ...formLayout }>
+                    <Form.Item name={ 'fillColor' } label='Täyttö väri' { ...formLayout }>
                         <ColorPicker />
                     </Form.Item>
                 </Row>
 
                 <Row>
-                    <Form.Item label='Viivan tyyli' { ...formLayout }>
+                    <Form.Item name={ 'lineStyle' } label='Viivan tyyli' { ...formLayout }>
                         <StylizedRadio />
                     </Form.Item>
                 </Row>
@@ -136,11 +159,11 @@ export class StyleForm extends React.Component {
 
     render () {
         return (
-            <Form>
+            <Form ref={ this.ref }>
                 <Space direction='vertical'>
                     <Card>
                         <Form.Item label='Tyylit' { ...formLayout }>
-                            <Select { ...formLayout }>
+                            <Select onChange={ this._populateWithStyle }>
                                 { testOptions.map((singleOption) => {
                                     return (
                                         <Select.Option
@@ -155,8 +178,8 @@ export class StyleForm extends React.Component {
                         </Form.Item>
 
                         <Row>
-                            <Form.Item label='Muokkaa' { ...formLayout }>    
-                                <Radio.Group defaultValue={ 'point' } { ...formLayout } onChange={ this._changeTab } >
+                            <Form.Item label='Muokkaa' { ...formLayout } name={ 'styleSelectorItem' } initialValue={ this.state.currentTab }>    
+                                <Radio.Group { ...formLayout } onChange={ this._changeTab } key={ 'styleSelector' } name='styleSelector' >
                                     <Radio.Button value='point'>Piste</Radio.Button>
                                     <Radio.Button value='line'>Viiva</Radio.Button>
                                     <Radio.Button value='area'>Alue</Radio.Button>
