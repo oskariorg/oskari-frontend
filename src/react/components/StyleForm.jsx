@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio } from 'antd';
@@ -28,6 +28,19 @@ const formLayout = {
     wrapperCol: { span: 24 }
 }
 
+const TabSelector = styled(Radio.Group)`
+    &&& {
+        display: flex;
+        flex-basis: 0;
+        flex-grow: 1;
+    }
+
+    .ant-radio-button-wrapper {
+        text-align: center;
+        width: 100%;
+    }
+`;
+
 /**
  * @class StyleForm
  * @calssdesc <StyleForm>
@@ -54,20 +67,29 @@ export class StyleForm extends React.Component {
         };
 
         
+        this.selectStyleFromList = () => {
+
+        };
+
         this._populateWithStyle = (style) => {
             let currentStyle = testOptions.find(option => option.value == style);
             this.setState({ currentTab: currentStyle.style }); // change tab
             
-            currentStyle.styleSelectorItem = currentStyle.style;
+            currentStyle.styleFormatSelector = currentStyle.style;
             this.ref.current.setFieldsValue(currentStyle); // Populate fields
-            
-            console.log(currentStyle);
-            console.log(this.state);
+
         }
 
         this.colorPickerCallback = (event) => {
-            console.log(event.target.value);
         }
+
+
+        // To reset style list into new style. We
+        this._resetAsNewStyle = () => {
+            this.setState({
+                currentStyle: {}
+            });
+        };
     
     }
 
@@ -162,7 +184,7 @@ export class StyleForm extends React.Component {
             <Form ref={ this.ref }>
                 <Space direction='vertical'>
                     <Card>
-                        <Form.Item label='Tyylit' { ...formLayout }>
+                        <Form.Item label='Tyylit' { ...formLayout } name={ 'styleListSelector' }>
                             <Select onChange={ this._populateWithStyle }>
                                 { testOptions.map((singleOption) => {
                                     return (
@@ -177,15 +199,15 @@ export class StyleForm extends React.Component {
                             </Select>
                         </Form.Item>
 
-                        <Row>
-                            <Form.Item label='Muokkaa' { ...formLayout } name={ 'styleSelectorItem' } initialValue={ this.state.currentTab }>    
-                                <Radio.Group { ...formLayout } onChange={ this._changeTab } key={ 'styleSelector' } name='styleSelector' >
+
+                            <Form.Item label='Muokkaa' { ...formLayout } name={ 'styleFormatSelector' } initialValue={ this.state.currentTab }>    
+                                <TabSelector { ...formLayout } onChange={ this._changeTab } key={ 'styleSelector' } name='styleSelector' >
                                     <Radio.Button value='point'>Piste</Radio.Button>
                                     <Radio.Button value='line'>Viiva</Radio.Button>
                                     <Radio.Button value='area'>Alue</Radio.Button>
-                                </Radio.Group>
+                                </TabSelector>
                             </Form.Item>
-                        </Row>
+
 
                         { this._getCurrentTab( this.state.currentTab ) }
                         
