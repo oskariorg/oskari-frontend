@@ -29,3 +29,5 @@ export { Message } from './components/Message';
 export { GenericForm } from './components/GenericForm';
 export { ColorPicker } from './components/ColorPicker';
 export { StylizedRadio } from './components/StylizedRadio';
+export { Preview } from './components/Preview';
+

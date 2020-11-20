@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
+import { Button, Select, Tooltip, ColorPicker, StylizedRadio, Preview } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
@@ -141,6 +141,10 @@ export class StyleForm extends React.Component {
                     <Form.Item name='dotSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
                         <InputNumber min={ 1 } max={ 5 } formatter={ number => Math.abs(number) } parser={ number => Math.abs(number) } />
                     </Form.Item>
+                </Row>
+
+                <Row>
+                    <Preview />
                 </Row>
             </Card>
         );
