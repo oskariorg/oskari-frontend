@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
-import { Form, Card, Space, Input, Row, Radio } from 'antd';
+import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
 
@@ -11,7 +11,8 @@ const testOptions = [
         style: 'point',
         dotColorPicker: '#cc99ff',
         dotFillColorPicker: '#0098dd',
-        dotIcon: 'line'
+        dotIcon: 'line',
+        dotSizeControl: 2
     },
     {
         value: 'tyyli 2',
@@ -37,6 +38,14 @@ const TabSelector = styled(Radio.Group)`
 
     .ant-radio-button-wrapper {
         text-align: center;
+        width: 100%;
+    }
+`;
+
+const StaticForm = styled(Form)`
+    width: 400px;
+
+    & > .ant-space {
         width: 100%;
     }
 `;
@@ -114,17 +123,23 @@ export class StyleForm extends React.Component {
         return (
             <Card>
                 <Row>
-                    <Form.Item name={ 'dotColorPicker' } label='Pisteen väri' { ...formLayout }>
+                    <Form.Item name='dotColorPicker' label='Pisteen väri' { ...formLayout }>
                         <ColorPicker onChange={ this.colorPickerCallback } />
                     </Form.Item>
-                    <Form.Item name={ 'dotFillColorPicker' } label='Pisteen täyttöväri' { ...formLayout }>
+                    <Form.Item name='dotFillColorPicker' label='Pisteen täyttöväri' { ...formLayout }>
                         <ColorPicker onChange={ this.colorPickerCallback } />
                     </Form.Item>
                 </Row>
 
                 <Row>
-                    <Form.Item name={ 'dotIcon' } label='Icon' { ...formLayout }>
+                    <Form.Item name='dotIcon' label='Icon' { ...formLayout }>
                         <StylizedRadio />
+                    </Form.Item>
+                </Row>
+                
+                <Row>
+                    <Form.Item name='dotSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
+                        <InputNumber min={ 1 } max={ 5 } formatter={ number => Math.abs(number) } parser={ number => Math.abs(number) } />
                     </Form.Item>
                 </Row>
             </Card>
@@ -135,19 +150,23 @@ export class StyleForm extends React.Component {
         return (
             <Card>
                 <Row>
-                    <Form.Item name={ 'lineColor' } label='Viivan väri' { ...formLayout }>
+                    <Form.Item name='lineColor' label='Viivan väri' { ...formLayout }>
                         <ColorPicker />
                     </Form.Item>
-                    <Form.Item name={ 'fillColor' } label='Täyttö väri' { ...formLayout }>
+                    <Form.Item name='fillColor' label='Täyttö väri' { ...formLayout }>
                         <ColorPicker />
                     </Form.Item>
                 </Row>
 
                 <Row>
-                    <Form.Item name={ 'lineStyle' } label='Viivan tyyli' { ...formLayout }>
+                    <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
                         <StylizedRadio />
                     </Form.Item>
                 </Row>
+
+                <Form.Item name='lineSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
+                    <InputNumber min={ 1 } max={ 5 } formatter={ number => Math.abs(number) } parser={ number => Math.abs(number) } />
+                </Form.Item>
             </Card>
         );
     }
@@ -175,13 +194,17 @@ export class StyleForm extends React.Component {
                         <StylizedRadio />
                     </Form.Item>
                 </Row>
+
+                <Form.Item name='outlineSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
+                    <InputNumber min={ 1 } max={ 5 } formatter={ number => Math.abs(number) } parser={ number => Math.abs(number) } />
+                </Form.Item>
             </Card>
         );
     }
 
     render () {
         return (
-            <Form ref={ this.ref }>
+            <StaticForm ref={ this.ref }>
                 <Space direction='vertical'>
                     <Card>
                         <Form.Item label='Tyylit' { ...formLayout } name={ 'styleListSelector' }>
@@ -214,7 +237,7 @@ export class StyleForm extends React.Component {
                     </Card>
 
                 </Space>
-            </Form>
+            </StaticForm>
         );
     }
 };
