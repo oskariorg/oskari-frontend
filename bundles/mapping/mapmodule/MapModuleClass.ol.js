@@ -1146,6 +1146,24 @@ export class MapModule extends AbstractMapModule {
         return -1;
     }
 
+    isLayerVisible (layer) {
+        if (typeof layer === 'undefined') {
+            return false;
+        }
+        if (Array.isArray(layer)) {
+            // getOLMapLayers() returns an array -> check that atleast one of them is visible
+            // group layers can have multiple layers with only some visible
+            return layer.some(l => this.isLayerVisible(l));
+        }
+        if (typeof layer === 'object') {
+            // probably passed the layer impl directly
+            return layer.getVisible();
+        }
+        // layer is probably id
+        const layerImpl = this.getOLMapLayers(layer);
+        return this.isLayerVisible(layerImpl);
+    }
+
     /**
      * @param {ol/control/Control} layer ol3 specific!
      */

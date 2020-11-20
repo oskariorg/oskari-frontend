@@ -538,41 +538,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.getSandbox().getMap(),
-                selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
-                mapmodule = this.getMapModule(),
-                i,
-                layer,
-                layerJson,
-                state = jQuery.extend(
-                    {
-                        north: map.getY(),
-                        east: map.getX(),
-                        zoom: map.getZoom(),
-                        srs: map.getSrsName(),
-                        selectedLayers: []
-                    },
-                    mapmodule.getState()
-                );
-
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                layer = selectedLayers[i];
-                layerJson = {
+            var map = this.getSandbox().getMap();
+            const state = {
+                north: map.getY(),
+                east: map.getX(),
+                zoom: map.getZoom(),
+                srs: map.getSrsName(),
+                selectedLayers: [],
+                ...this.getMapModule().getState()
+            };
+            state.selectedLayers = map.getLayers().map(layer => {
+                const json = {
                     id: layer.getId(),
                     opacity: layer.getOpacity()
                 };
                 if (!layer.isVisible()) {
-                    layerJson.hidden = true;
+                    json.hidden = true;
                 }
                 // check if we have a style selected and doesn't have THE magic string
-                if (layer.getCurrentStyle &&
-                    layer.getCurrentStyle() &&
-                    layer.getCurrentStyle().getName() &&
-                    layer.getCurrentStyle().getName() !== '!default!') {
-                    layerJson.style = layer.getCurrentStyle().getName();
+                if (typeof layer.getCurrentStyle !== 'function') {
+                    return json;
                 }
-                state.selectedLayers.push(layerJson);
-            }
+                const currentStyle = layer.getCurrentStyle();
+                if (!currentStyle) {
+                    return json;
+                }
+                const styleName = currentStyle.getName();
+                if (styleName && styleName !== '!default!') {
+                    json.style = styleName;
+                }
+                return json;
+            });
 
             return state;
         },
@@ -585,40 +581,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          * @return {String} layers separated with ',' and layer values separated with '+'
          */
-        getStateParameters: function () {
-            var state = this.getState(),
-                link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=',
-                selectedLayers = state.selectedLayers,
-                mapmodule = this.getMapModule(),
-                layers = '',
-                layer = null,
-                i = 0,
-                ilen = 0,
-                key;
+        getStateParameters: function (optimized = false) {
+            const state = this.getState();
+            const params = {
+                ...this._getConfiguredLinkParams(),
+                zoomLevel: state.zoom,
+                coord: state.east + '_' + state.north
+            };
+            // add maplayers
+            params.mapLayers = state.selectedLayers
+                .map(layer => {
+                    if (layer.hidden) {
+                        return;
+                    }
+                    if (optimized) {
+                        if (layer.opacity === 0) {
+                            // leave out layers that are not visible
+                            return;
+                        }
+                        // also leave out layers that are not inside zoom-limits, are outside of extent
+                        //  or are otherwise not shown to user
+                        if (!this.getMapModule().isLayerVisible(layer.id)) {
+                            return;
+                        }
+                    }
+                    return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
+                })
+                // filter out hidden == undefined from map-function
+                .filter(layer => typeof layer !== 'undefined')
+                // separate with comma
+                .join(',');
 
-            if (this.conf && this.conf.link) {
-                // add additional link params (version etc)
-                for (key in this.conf.link) {
-                    if (this.conf.link.hasOwnProperty(key)) {
-                        link = key + '=' + this.conf.link[key] + '&' + link;
-                    }
-                }
+            const link = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+            return link + this.getMapModule().getStateParameters();
+        },
+        _getConfiguredLinkParams: function () {
+            if (!this.conf || typeof this.conf.link !== 'object') {
+                return {};
             }
-            for (i = 0, ilen = selectedLayers.length; i < ilen; i += 1) {
-                layer = selectedLayers[i];
-                if (!layer.hidden) {
-                    if (layers !== '') {
-                        layers += ',';
-                    }
-                    layers += layer.id + '+' + layer.opacity;
-                    if (layer.style) {
-                        layers += '+' + layer.style;
-                    } else {
-                        layers += '+';
-                    }
-                }
-            }
-            return link + layers + mapmodule.getStateParameters();
+            return this.conf.link || {};
         },
 
         /**
