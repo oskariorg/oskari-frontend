@@ -6,7 +6,9 @@ Admin bundle for making announcements.
 
 The bundle allows admins to create announcements to be displayed in announcements tab. Admins can optionally also set the announcement to be displayed in a pop-up. 
 
-## Parameters
+## Announcement parameters
+
+These are the parameters you can set for an announcement when creating a new announcement or editing an old one.
 
 <table class="table">
   <tr>
