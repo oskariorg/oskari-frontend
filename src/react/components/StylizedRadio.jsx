@@ -33,9 +33,9 @@ export class StylizedRadio extends React.Component {
     render () {
         return (
             <Radio.Group defaultValue={ 'dot' } { ...formLayout } { ...this.props } >
-                <RadioIcon value='dot'>{ this.props.icon }</RadioIcon>
-                <RadioIcon value='line'>{ this.props.icon }</RadioIcon>
-                <RadioIcon value='area'>{ this.props.icon }</RadioIcon>
+                <RadioIcon value='dot'>{ this.props.icon() }</RadioIcon>
+                <RadioIcon value='line'>{ this.props.icon() }</RadioIcon>
+                <RadioIcon value='area'>{ this.props.icon() }</RadioIcon>
             </Radio.Group>
         );
     }
