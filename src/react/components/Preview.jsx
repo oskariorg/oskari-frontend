@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip, ColorPicker, StylizedRadio } from 'oskari-ui';
-import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
 const previewBaseSvg = (path) => {
@@ -43,15 +41,14 @@ export class Preview extends React.Component {
 
     _combineSvg (path) {
         return(
-            previewBaseSvg(this.props.previewIcon())
+            previewBaseSvg(path)
         );
     }
 
     render () {
-        console.log(this.props);
         return (
             <div style={ previewStyling }>
-                { this._combineSvg() }
+                { this._combineSvg(this.props.previewIcon) }
             </div>
         );
     }
