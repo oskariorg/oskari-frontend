@@ -8,7 +8,7 @@ import styled from 'styled-components';
 const testOptions = [
     {
         value: 'testi tyyli',
-        style: 'point',
+        tab: 'point',
         dotColorPicker: '#cc99ff',
         dotFillColorPicker: '#0098dd',
         dotIcon: 'line',
@@ -16,11 +16,11 @@ const testOptions = [
     },
     {
         value: 'tyyli 2',
-        style: 'area'
+        tab: 'area'
     },
     {
         value: 'storybooktyyli',
-        style: 'area'
+        tab: 'area'
     }
 ];
 
@@ -49,6 +49,10 @@ const StaticForm = styled(Form)`
         width: 100%;
     }
 `;
+
+const placeHolderIcon = () => {
+    return(<svg width="32" height="30" x="0" y="0"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0"></path></svg>);
+}
 
 /**
  * @class StyleForm
@@ -80,11 +84,14 @@ export class StyleForm extends React.Component {
 
         };
 
-        this._populateWithStyle = (style) => {
-            let currentStyle = testOptions.find(option => option.value == style);
-            this.setState({ currentTab: currentStyle.style }); // change tab
+        this._populateWithStyle = (tab) => {
+            let currentStyle = testOptions.find(option => option.value == tab);
+            this.setState({ 
+                currentTab: currentStyle.tab,
+                currentStyle: currentStyle
+            }); // change tab
             
-            currentStyle.styleFormatSelector = currentStyle.style;
+            currentStyle.styleFormatSelector = currentStyle.tab;
             this.ref.current.setFieldsValue(currentStyle); // Populate fields
 
         }
@@ -133,7 +140,7 @@ export class StyleForm extends React.Component {
 
                 <Row>
                     <Form.Item name='dotIcon' label='Icon' { ...formLayout }>
-                        <StylizedRadio />
+                        <StylizedRadio icon={ placeHolderIcon() } />
                     </Form.Item>
                 </Row>
                 
@@ -144,7 +151,7 @@ export class StyleForm extends React.Component {
                 </Row>
 
                 <Row>
-                    <Preview />
+                    <Preview previewStyle={ this.state.currentStyle } />
                 </Row>
             </Card>
         );
@@ -164,7 +171,7 @@ export class StyleForm extends React.Component {
 
                 <Row>
                     <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio />
+                        <StylizedRadio icon={ placeHolderIcon() } />
                     </Form.Item>
                 </Row>
 
@@ -189,13 +196,13 @@ export class StyleForm extends React.Component {
 
                 <Row>
                     <Form.Item label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio />
+                        <StylizedRadio icon={ placeHolderIcon() } />
                     </Form.Item>
                 </Row>
 
                 <Row>
                     <Form.Item label='Täytön tyyli' { ...formLayout }>
-                        <StylizedRadio />
+                        <StylizedRadio icon={ placeHolderIcon() } />
                     </Form.Item>
                 </Row>
 
