@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip, ColorPicker } from 'oskari-ui';
+import { Button, Select, Tooltip } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio } from 'antd';
 import styled from 'styled-components';
 
@@ -32,10 +32,12 @@ export class StylizedRadio extends React.Component {
 
     render () {
         return (
-            <Radio.Group defaultValue={ 'dot' } { ...formLayout } { ...this.props } >
-                <RadioIcon value='dot'>{ this.props.icon() }</RadioIcon>
-                <RadioIcon value='line'>{ this.props.icon() }</RadioIcon>
-                <RadioIcon value='area'>{ this.props.icon() }</RadioIcon>
+            <Radio.Group defaultValue={ 'dot' } { ...formLayout }>
+                { this.props.options.map((singleOption) => {
+                    return(
+                        <RadioIcon value={ singleOption.value }>{ singleOption.icon() }</RadioIcon>
+                    );
+                })}
             </Radio.Group>
         );
     }
