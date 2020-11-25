@@ -5,6 +5,12 @@ Oskari.registerLocalization(
     "value": {
         "title": "Announcements",
         "desc": "",
+        "flyout": {
+            "title": "Announcements"
+        },
+        "tile": {
+            "title": "Announcements"
+        },
         "valid": "Valid:",
         "dontShow" : "Don't show this again",
         "messages": {

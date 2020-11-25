@@ -5,6 +5,12 @@ Oskari.registerLocalization(
     "value": {
         "title": "Admin-announcements",
         "desc": "",
+        "flyout": {
+            "title": "Admin-announcements"
+        },
+        "tile": {
+            "title": "Admin-announcements"
+        },
         "addNewForm": "New Announcement",
         "delete": "Delete",
         "save": "Save",

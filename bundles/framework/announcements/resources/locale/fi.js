@@ -5,6 +5,12 @@ Oskari.registerLocalization(
         "value": {
             "title": "Ilmoitukset",
             "desc": "",
+            "flyout": {
+                "title": "Ilmoitukset"
+            },
+            "tile": {
+                "title": "Ilmoitukset"
+            },
             "valid": "Voimassa:",
             "dontShow" : "Älä näytä uudelleen",
             "messages": {

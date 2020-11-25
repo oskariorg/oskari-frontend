@@ -5,6 +5,12 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-ilmoitukset",
             "desc": "",
+            "flyout": {
+                "title": "Admin-ilmoitukset"
+            },
+            "tile": {
+                "title": "Admin-ilmoitukset"
+            },
             "addNewForm": "Uusi Ilmoitus",
             "delete": "Poista",
             "save": "Tallenna",
