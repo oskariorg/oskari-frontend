@@ -38,12 +38,6 @@ Oskari.clazz.define("Oskari.framework.bundle.announcements.AnnouncementsBundle",
             "src": "../../../../bundles/framework/announcements/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/announcements/Tile.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/announcements/service/AnnouncementsService.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/announcements/Flyout.js"
         }],
         "locales": [

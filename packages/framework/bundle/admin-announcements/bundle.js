@@ -38,9 +38,6 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-announcements.AdminAnnounceme
             "src": "../../../../bundles/framework/admin-announcements/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/Tile.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/admin-announcements/Flyout.js"
         }],
         "locales": [
