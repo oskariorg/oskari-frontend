@@ -18,20 +18,10 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.sb = instance.getSandbox();
         this.announcementsHandler = new AnnouncementsHandler(this.instance);
         this.announcementsHandler.addStateListener(() => this.render());
         this.container = null;
     }, {
-
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return 'Oskari.framework.bundle.announcements.Flyout';
-        },
-
         /**
          * @method setEl
          * @param {Object} el
@@ -55,29 +45,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             this.render();
         },
         /**
-         * @method stopPlugin
-         *
-         * Interface method implementation, does nothing atm
-         */
-        stopPlugin: function () { },
-
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the flyout
-         */
-        getTitle: function () {
-            return this.instance.getLocalization('title');
-        },
-
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the flyout
-         */
-        getDescription: function () {
-            return this.instance.getLocalization('desc');
-        },
-
-        /**
          * @method render
          * Renders React content
          */
@@ -97,10 +64,5 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             ReactDOM.render(content, this.container);
         }
     }, {
-
-        /**
-         * @property {String[]} protocol
-         * @static
-         */
-        protocol: ['Oskari.userinterface.Flyout']
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

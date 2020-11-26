@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance} instance
+     * @param {Oskari.framework.bundle.admin-announcements.Flyout} instance
      *    reference to component that created the flyout
      */
     function (instance) {
@@ -22,15 +22,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
         this.announcementsFormMapperHandler = new AnnouncementsFormMapperHandler(this.instance);
         this.announcementsFormMapperHandler.addStateListener(() => this.render());
     }, {
-
-        /**
-         * @method getName
-         * @return {String} the name for the component
-         */
-        getName: function () {
-            return 'Oskari.framework.bundle.admin-announcements.Flyout';
-        },
-
         /**
          * @method setEl
          * @param {Object} el
@@ -53,28 +44,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
         startPlugin: function () {
             this.render();
         },
-        /**
-         * @method stopPlugin
-         *
-         * Interface method implementation, does nothing atm
-         */
-        stopPlugin: function () { },
-
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the flyout
-         */
-        getTitle: function () {
-            return this.instance.getLocalization('title');
-        },
-
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the flyout
-         */
-        getDescription: function () {
-            return this.instance.getLocalization('desc');
-        },
 
         /**
          * @method render
@@ -95,10 +64,5 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
             ReactDOM.render(content, this.container);
         }
     }, {
-
-        /**
-         * @property {String[]} protocol
-         * @static
-         */
-        protocol: ['Oskari.userinterface.Flyout']
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });
