@@ -9,7 +9,7 @@ Oskari.registerLocalization(
                 "title": "Admin-ilmoitukset"
             },
             "tile": {
-                "title": "Admin-ilmoitukset"
+                "title": "A: Ilmoitukset"
             },
             "addNewForm": "Uusi Ilmoitus",
             "delete": "Poista",

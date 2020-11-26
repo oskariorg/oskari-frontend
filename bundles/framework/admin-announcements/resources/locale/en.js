@@ -9,7 +9,7 @@ Oskari.registerLocalization(
             "title": "Admin-announcements"
         },
         "tile": {
-            "title": "Admin-announcements"
+            "title": "A: Announcements"
         },
         "addNewForm": "New Announcement",
         "delete": "Delete",
