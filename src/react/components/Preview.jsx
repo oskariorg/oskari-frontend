@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 const previewBaseSvg = (path) => {
     return (
-        <svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-            <svg viewBox="0 0 32 32" width="32" height="32" x="9" y="9" id="marker">
+        <svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 80 80" width="120" height="120" x="0" y="0" id="marker">
                 { path }
             </svg>
         </svg>
