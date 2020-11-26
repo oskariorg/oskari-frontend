@@ -90,7 +90,18 @@ class UIHandler extends StateHandler {
         const found = capabilities.layers[name];
         if (found) {
             const typesAndRoles = this.getAdminMetadata();
-            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
+            // current layer values as template, override with values from capabilities
+            const mergedLayerData = {
+                ...layer,
+                ...found
+            };
+            // keep dataProviderId if we have one (remove the -1 we might get from server)
+            if (mergedLayerData.dataprovider_id === -1) {
+                delete mergedLayerData.dataprovider_id;
+                mergedLayerData.dataProviderId = layer.dataProviderId;
+            }
+
+            const updateLayer = this.layerHelper.fromServer(mergedLayerData, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
