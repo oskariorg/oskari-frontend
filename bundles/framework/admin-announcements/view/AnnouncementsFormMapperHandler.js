@@ -1,5 +1,6 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
+import { announcementsCalls } from './AnnouncementsCalls';
 import { Message } from 'oskari-ui';
 
 /*
@@ -14,7 +15,7 @@ class ViewHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.locale = instance.getLocalization();
-        this.announcementsService = this._createAnnouncementsService();
+        this.announcementsCalls = announcementsCalls();
         this.newTitle = 'Uusi ilmoitus';
         this.state = {
             update: false,
@@ -27,13 +28,8 @@ class ViewHandler extends StateHandler {
         };
     }
 
-    _createAnnouncementsService () {
-        const service = this.sandbox.getService('Oskari.framework.bundle.announcements.AnnouncementsService');
-        return service;
-    }
-
     getAdminAnnouncements (callback) {
-        this.announcementsService.getAdminAnnouncements(function (err, data) {
+        this.announcementsCalls.getAdminAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
                 return;
@@ -43,7 +39,7 @@ class ViewHandler extends StateHandler {
     }
 
     saveAnnouncement (data) {
-        this.announcementsService.saveAnnouncement(data, function (err, data) {
+        this.announcementsCalls.saveAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
             } else {
@@ -58,7 +54,7 @@ class ViewHandler extends StateHandler {
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
     updateAnnouncement (data) {
-        this.announcementsService.updateAnnouncement(data, function (err, data) {
+        this.announcementsCalls.updateAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
             }
@@ -74,7 +70,7 @@ class ViewHandler extends StateHandler {
 
         // TODO: Better/different way to confirm deleting an announcement
         if (window.confirm(this.instance.getLocalization('deleteAnnouncementConfirm'))) {
-            this.announcementsService.deleteAnnouncement(test, function (err) {
+            this.announcementsCalls.deleteAnnouncement(test, function (err) {
                 if (err) {
                     Messaging.error(getMessage('messages.deleteFailed'));
                     return;

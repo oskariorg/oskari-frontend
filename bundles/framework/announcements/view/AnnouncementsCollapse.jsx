@@ -41,7 +41,7 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
   return (
     <div>
       {modals.map((modal, index) => {
-            const visible = controller.showModal(modal.id);
+            const visible = controller.showModal(modal.title, modal.content);
             return (
               <AnnouncementsModal
               controller={controller}
@@ -49,14 +49,13 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
               content={modal.content}
               key={modal.id}
               index={index}
-              id={modal.id}
               checked={checked}
               visible={visible}
               />
             );
           })}
       <div>
-        <Collapse accordion >{panels}</Collapse>
+        <Collapse accordion>{panels}</Collapse>
       </div>
     </div>
   );

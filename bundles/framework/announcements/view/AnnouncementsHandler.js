@@ -12,7 +12,6 @@ class ViewHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.locale = instance.getLocalization();
-        this.announcementsService = this._createAnnouncementsService();
         this.state = {
             panels: [],
             modals: [],
@@ -22,18 +21,21 @@ class ViewHandler extends StateHandler {
         };
     }
 
-    _createAnnouncementsService () {
-        const service = this.sandbox.getService('Oskari.framework.bundle.announcements.AnnouncementsService');
-        return service;
-    }
-
     getAnnouncements (callback) {
-        this.announcementsService.getAnnouncements(function (err, data) {
-            if (err) {
+        if (typeof callback !== 'function') {
+            return;
+        }
+
+        jQuery.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: Oskari.urls.getRoute('GetAnnouncements'),
+            success: function (pResp) {
+                callback(pResp);
+            },
+            error: function (jqXHR, textStatus) {
                 Messaging.error(getMessage('messages.getFailed'));
-                return;
             }
-            callback(data);
         });
     }
 
@@ -45,9 +47,9 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    handleOk (index, id, checked) {
+    handleOk (index, title, content, checked) {
         if (checked) {
-            localStorage.setItem(id, checked);
+            localStorage.setItem(title, content);
             this.updateState({
                 checked: false
             });
@@ -59,8 +61,8 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    showModal (id) {
-        if (localStorage.getItem(id)) {
+    showModal (title, content) {
+        if (localStorage.getItem(title) === content) {
             return false;
         }
         else {
