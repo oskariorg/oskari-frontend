@@ -4,30 +4,6 @@ import { Button, Select, Tooltip, ColorPicker, StylizedRadio, Preview } from 'os
 import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
-const testOptions = [
-    {
-        value: 'testi tyyli',
-        format: 'point',
-        dotColor: '#cc99ff',
-        dotFilLColor: '#0098dd',
-        dotIcon: 'line',
-        dotSizeControl: 2
-    },
-    {
-        value: 'tyyli 2',
-        format: 'line',
-        lineColor: '#99ccff',
-        strokeWidth: 5
-    },
-    {
-        value: 'storybooktyyli',
-        format: 'area',
-        areaLineColor: '#ff99dd',
-        areaFillColor: '#ffccdd'
-    }
-];
-
-
 const formLayout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 }
@@ -105,7 +81,7 @@ export class StyleForm extends React.Component {
 
         this.ref = React.createRef();
 
-        // initialize state with these parameters
+        // initialize state with these parameters to show preview correctly
         this.state = {
             format: 'point',
             lineColor: '#000000',
@@ -113,18 +89,24 @@ export class StyleForm extends React.Component {
         };
 
         this._populateWithStyle = (format) => {
-            let currentStyle = testOptions.find(option => option.value == format);
-            this.setState({
-                ...currentStyle,
-                format: currentStyle.format
-            });
-
-            this.ref.current.setFieldsValue(currentStyle); // Populate fields
+            if (this.props.icons) {
+                let currentStyle = this.props.icons.find(option => option.value == format);
+                this.setState({
+                    ...currentStyle,
+                    format: currentStyle.format
+                });
+    
+                this.ref.current.setFieldsValue(currentStyle); // Populate fields    
+            }
         }
 
         this.styleInputCallback = (event) => this.setState({ [event.target.id || event.target.name]: event.target.value });
 
         this.lineSizeCallback = (value) => this.setState({ 'strokeWidth': value});
+
+        this.resetStyles = () => {
+
+        };
     }
 
     _getCurrentTab (tab) {
@@ -262,7 +244,7 @@ export class StyleForm extends React.Component {
             <StaticForm ref={ this.ref }>
                 <Space direction='vertical'>
                     <Card>
-                        { this._buildStyleList( testOptions ) }
+                        { this._buildStyleList( this.props.styleList ) }
 
 
                         <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ this.state.format }>
