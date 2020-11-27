@@ -128,10 +128,10 @@ export class StyleForm extends React.Component {
 
     _getColorPickers () {
         const strokeColorPicker = (
-                <Form.Item name='strokeColor' label='Pisteen väri' { ...formLayout }>
-                    <ColorPicker onChange={ this.styleInputCallback } />
-                </Form.Item>
-            );
+            <Form.Item name='strokeColor' label='Pisteen väri' { ...formLayout }>
+                <ColorPicker onChange={ this.styleInputCallback } />
+            </Form.Item>
+        );
 
         const fillColorPicker = this.state.format !== 'line' ? (
             <Form.Item name='fillColor' label='Pisteen täyttöväri' { ...formLayout }>
@@ -159,45 +159,31 @@ export class StyleForm extends React.Component {
 
     _getDotTab () {
         return (
-            <Card>
-                { this._getColorPickers() }
-
+            <>
                 <Row>
                     <Form.Item name='dotIcon' label='Ikoni' { ...formLayout }>
                         <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
-                </Row>
-                
-                { this._getSizeControl() }
-
-                { this._createPreview() }
-            </Card>
+                </Row>  
+            </>
         );
     }
 
     _getLineTab () {
         return (
-            <Card>
-                { this._getColorPickers() }
-
+            <>
                 <Row>
                     <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
                         <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
-
-                { this._getSizeControl() }
-
-                { this._createPreview() }
-            </Card>
+            </>
         );
     }
 
     _getAreaTab () {
         return (
-            <Card>
-                { this._getColorPickers() }
-
+            <>
                 <Row>
                     <Form.Item label='Viivan tyyli' { ...formLayout }>
                         <StylizedRadio options={ this.props.styleOptions } />
@@ -209,11 +195,8 @@ export class StyleForm extends React.Component {
                         <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
+            </>
 
-                { this._getSizeControl() }
-
-                { this._createPreview() }
-            </Card>
         );
     }
 
@@ -251,8 +234,18 @@ export class StyleForm extends React.Component {
                             </TabSelector>
                         </Form.Item>
 
-                        { this._getCurrentTab( this.state.format ) }
                         
+
+                        <Card>
+                            { this._getColorPickers() }
+
+                            { this._getCurrentTab( this.state.format ) }
+
+                            { this._getSizeControl() }
+
+                            { this._createPreview() }
+                        </Card>
+
                     </Card>
 
                 </Space>
