@@ -9,6 +9,13 @@ const formLayout = {
     wrapperCol: { span: 24 }
 }
 
+const initState = {
+    format: 'point',
+    strokeColor: '#000000',
+    fillColor: '#000000',
+    strokeWidth: 3
+};
+
 const TabSelector = styled(Radio.Group)`
     &&& {
         display: flex;
@@ -32,11 +39,14 @@ const StaticForm = styled(Form)`
 
 const sizeFormatter = (number) => Math.abs(number); 
 
-const placeHolderIcon = () => {
-    return(<svg width="32" height="30" x="0" y="0"><path fill="#000000" stroke="#000000" d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0"></path></svg>);
-}
+const previewPlaceholderIcon = (options) => {
+    const {
+        format,
+        strokeColor,
+        fillColor,
+        strokeWidth
+    } = options;
 
-const previewPlaceholderIcon = (format, strokeColor, strokeWidth, fillColor) => {
     switch(format) {
         case 'point':
            return(<svg width="80" height="80" x="0" y="0"><path fill={ fillColor } stroke={ strokeColor} d="m 17.662202,6.161625 c -2.460938,-0.46875 -4.101563,-0.234375 -4.921875,0.585937 -0.234375,0.234376 -0.234375,0.468751 -0.117188,0.820313 0.234375,0.585938 0.585938,1.171875 1.054688,2.109375 0.46875,0.9375 0.703125,1.523438 0.820312,1.757813 -0.351562,0.351562 -1.054687,1.054687 -2.109375,1.992187 -1.523437,1.40625 -1.523437,1.40625 -2.226562,2.109375 -0.8203126,0.820312 -0.117188,1.757812 2.109375,2.8125 0.9375,0.46875 1.992187,0.820312 3.046875,0.9375 2.695312,0.585937 4.570312,0.351562 5.742187,-0.585938 0.351563,-0.351562 0.46875,-0.703125 0.351563,-1.054687 0,0 -1.054688,-2.109375 -1.054688,-2.109375 -0.46875,-1.054688 -0.46875,-1.171875 -0.9375,-2.109375 -0.351562,-0.703125 -0.46875,-1.054687 -0.585937,-1.289062 0.234375,-0.234375 0.234375,-0.351563 1.289062,-1.289063 1.054688,-0.9375 1.054688,-0.9375 1.757813,-1.640625 0.703125,-0.585937 0.117187,-1.40625 -1.757813,-2.34375 -0.820312,-0.351563 -1.640625,-0.585938 -2.460937,-0.703125 0,0 0,0 0,0 M 14.615327,26.0835 c 0,0 1.054687,-5.625 1.054687,-5.625 0,0 -1.40625,-0.234375 -1.40625,-0.234375 0,0 -1.054687,5.859375 -1.054687,5.859375 0,0 1.40625,0 1.40625,0 0,0 0,0 0,0"></path></svg>);
@@ -48,21 +58,6 @@ const previewPlaceholderIcon = (format, strokeColor, strokeWidth, fillColor) => 
             return;
     }
 }
-
-const radioTestOptions = [
-    {
-        value: 'dot',
-        icon: placeHolderIcon
-    },
-    {
-        value: 'line',
-        icon: placeHolderIcon
-    },
-    {
-        value: 'area',
-        icon: placeHolderIcon
-    }
-];
 
 /**
  * @class StyleForm
@@ -81,12 +76,8 @@ export class StyleForm extends React.Component {
 
         this.ref = React.createRef();
 
-        // initialize state with these parameters to show preview correctly
-        this.state = {
-            format: 'point',
-            lineColor: '#000000',
-            strokeWidth: 3
-        };
+        // initialize state with these initialization parameters to show preview correctly
+        this.state = initState;
 
         this._populateWithStyle = (format) => {
             if (this.props.icons) {
@@ -102,7 +93,7 @@ export class StyleForm extends React.Component {
 
         this.styleInputCallback = (event) => this.setState({ [event.target.id || event.target.name]: event.target.value });
 
-        this.lineSizeCallback = (value) => this.setState({ 'strokeWidth': value});
+        this.sizeControlCallback = (value) => this.setState({ 'strokeWidth': value, 'size': value });
 
         this.resetStyles = () => {
 
@@ -122,39 +113,64 @@ export class StyleForm extends React.Component {
         }
     }
 
-    _createPreview (strokeColor, fillColor, strokeWidth) {
+    _createPreview () {
         return (
-            <Preview previewIcon={ previewPlaceholderIcon( this.state.format, strokeColor, strokeWidth, fillColor ) } />
+            <Row>
+                <Preview previewIcon={ previewPlaceholderIcon({ 
+                    format: this.state.format,
+                    strokeColor: this.state.strokeColor,
+                    strokeWidth: this.state.strokeWidth,
+                    fillColor: this.state.fillColor 
+                }) } />
+            </Row>
+        );
+    }
+
+    _getColorPickers () {
+        const strokeColorPicker = (
+                <Form.Item name='strokeColor' label='Pisteen väri' { ...formLayout }>
+                    <ColorPicker onChange={ this.styleInputCallback } />
+                </Form.Item>
+            );
+
+        const fillColorPicker = this.state.format !== 'line' ? (
+            <Form.Item name='fillColor' label='Pisteen täyttöväri' { ...formLayout }>
+                <ColorPicker onChange={ this.styleInputCallback } />
+            </Form.Item>
+        ) : false;
+
+        return (
+            <Row>
+                { strokeColorPicker }
+                { fillColorPicker }
+            </Row>
+        );
+    }
+
+    _getSizeControl () {
+        return (
+            <Row>
+                <Form.Item name='sizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
+                    <InputNumber min={ 1 } max={ 5 } formatter={ sizeFormatter } parser={ sizeFormatter } onChange={ this.sizeControlCallback } />
+                </Form.Item>
+            </Row>
         );
     }
 
     _getDotTab () {
         return (
             <Card>
-                <Row>
-                    <Form.Item name='dotColor' label='Pisteen väri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } />
-                    </Form.Item>
-                    <Form.Item name='dotFillColor' label='Pisteen täyttöväri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } />
-                    </Form.Item>
-                </Row>
+                { this._getColorPickers() }
 
                 <Row>
                     <Form.Item name='dotIcon' label='Ikoni' { ...formLayout }>
-                        <StylizedRadio options={ radioTestOptions } />
+                        <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
                 
-                <Row>
-                    <Form.Item name='strokeWidthInput' label='Size' initialValue={ 3 } { ...formLayout }>
-                        <InputNumber min={ 1 } max={ 5 } formatter={ sizeFormatter } parser={ sizeFormatter } onChange={ this.lineSizeCallback } />
-                    </Form.Item>
-                </Row>
+                { this._getSizeControl() }
 
-                <Row>
-                    { this._createPreview(this.state.dotColor, this.state.dotFillColor, this.state.strokeWidthInput) }
-                </Row>
+                { this._createPreview() }
             </Card>
         );
     }
@@ -162,25 +178,17 @@ export class StyleForm extends React.Component {
     _getLineTab () {
         return (
             <Card>
-                <Row>
-                    <Form.Item name='lineColor' label='Viivan väri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback }/>
-                    </Form.Item>
-                </Row>
+                { this._getColorPickers() }
 
                 <Row>
                     <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio options={ radioTestOptions } icon={ placeHolderIcon } />
+                        <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
 
-                <Form.Item name='lineSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
-                    <InputNumber min={ 1 } max={ 5 } formatter={ sizeFormatter } parser={ sizeFormatter } onChange={ this.lineSizeCallback } />
-                </Form.Item>
+                { this._getSizeControl() }
 
-                <Row>
-                    { this._createPreview(this.state.lineColor, this.state.lineColor, this.state.strokeWidth) }
-                </Row>
+                { this._createPreview() }
             </Card>
         );
     }
@@ -188,34 +196,23 @@ export class StyleForm extends React.Component {
     _getAreaTab () {
         return (
             <Card>
-                <Row>
-                    <Form.Item name='areaLineColor' label='Viivan väri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } />
-                    </Form.Item>
-                    <Form.Item name='areaFillColor' label='Täyttö väri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } />
-                    </Form.Item>
-                </Row>
+                { this._getColorPickers() }
 
                 <Row>
                     <Form.Item label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio options={ radioTestOptions } />
+                        <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
 
                 <Row>
                     <Form.Item label='Täytön tyyli' { ...formLayout }>
-                        <StylizedRadio options={ radioTestOptions } />
+                        <StylizedRadio options={ this.props.styleOptions } />
                     </Form.Item>
                 </Row>
 
-                <Form.Item name='outlineSizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
-                    <InputNumber min={ 1 } max={ 5 } formatter={ sizeFormatter } parser={ sizeFormatter } onChange={ this.lineSizeCallback } />
-                </Form.Item>
+                { this._getSizeControl() }
 
-                <Row>
-                    { this._createPreview(this.state.areaLineColor, this.state.areaFillColor, this.state.strokeWidth) }
-                </Row>
+                { this._createPreview() }
             </Card>
         );
     }
@@ -246,7 +243,6 @@ export class StyleForm extends React.Component {
                     <Card>
                         { this._buildStyleList( this.props.styleList ) }
 
-
                         <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ this.state.format }>
                             <TabSelector { ...formLayout } onChange={ this.styleInputCallback } key={ 'formatSelector' } name='format' >
                                 <Radio.Button value='point'>Piste</Radio.Button>
@@ -254,7 +250,6 @@ export class StyleForm extends React.Component {
                                 <Radio.Button value='area'>Alue</Radio.Button>
                             </TabSelector>
                         </Form.Item>
-
 
                         { this._getCurrentTab( this.state.format ) }
                         
