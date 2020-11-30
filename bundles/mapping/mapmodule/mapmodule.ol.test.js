@@ -60,5 +60,8 @@ describe('MapModule', () => {
         test('resolution 50000000', () => {
             expect(mapModule.getZoomForResolution(50000000)).toEqual(-1);
         });
+        test('resolution undefined', () => {
+            expect(mapModule.getZoomForResolution()).toEqual(-1);
+        });
     });
 });

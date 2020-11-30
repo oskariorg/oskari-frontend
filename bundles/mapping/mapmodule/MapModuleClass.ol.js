@@ -611,6 +611,9 @@ export class MapModule extends AbstractMapModule {
      * @param {Number} resolution
      */
     getZoomForResolution (resolution) {
+        if (typeof resolution !== 'number') {
+            return -1;
+        }
         const view = this.getMap().getView();
         const zoom = Math.floor(view.getZoomForResolution(resolution));
 
