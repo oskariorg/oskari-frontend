@@ -1,4 +1,4 @@
-import { getZoomLevelHelper, isInScale } from './scale';
+import { getZoomLevelHelper, isInScale, getScalesFromOptions } from './scale';
 
 describe('isInScale function', () => {
     test('returns true when scale limits are undefined', () => {
@@ -84,5 +84,17 @@ describe('getZoomLevelHelper function', () => {
         test('returns 0 if before first scale value', () => {
             expect(helper.getMinZoom(3000)).toEqual(0);
         });
+    });
+});
+
+describe('getScalesFromOptions function', () => {
+    const fakeMapModule = {
+        getScaleArray: () => [],
+        getZoomForResolution: (resolution) => -1
+    };
+    test('returns -1 when scale limits are undefined', () => {
+        let result = getScalesFromOptions(fakeMapModule, {});
+        expect(result.min).toEqual(-1);
+        expect(result.max).toEqual(-1);
     });
 });

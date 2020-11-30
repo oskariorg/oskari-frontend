@@ -54,3 +54,37 @@ export const isInScale = (currentScale, minScale, maxScale) => {
     // scale undefined or between min & max
     return maxOk && minOk;
 };
+
+export const getScalesFromOptions = (mapModule, options) => {
+    const result = {
+        min: options.minScale || -1,
+        max: options.maxScale || -1
+    };
+    const scales = mapModule.getScaleArray();
+
+    if (typeof options.minResolution === 'number') {
+        const minZoom = mapModule.getZoomForResolution(options.minResolution);
+        if (minZoom !== -1) {
+            result.max = scales[minZoom];
+        }
+    }
+    if (typeof options.maxResolution === 'number') {
+        const maxZoom = mapModule.getZoomForResolution(options.maxResolution);
+        if (maxZoom !== -1) {
+            result.min = scales[maxZoom];
+        }
+    }
+    const minZoom = options.minZoomLevel;
+    if (typeof minZoom === 'number') {
+        if (minZoom >= 0 && minZoom < mapModule.getMaxZoomLevel()) {
+            result.max = scales[options.minZoomLevel];
+        }
+    }
+    const maxZoom = options.maxZoomLevel;
+    if (typeof maxZoom === 'number') {
+        if (maxZoom >= 0 && maxZoom < mapModule.getMaxZoomLevel()) {
+            result.min = scales[options.minZoomLevel];
+        }
+    }
+    return result;
+};
