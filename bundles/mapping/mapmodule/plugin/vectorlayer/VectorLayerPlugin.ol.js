@@ -12,6 +12,7 @@ import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
+import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
 
 import './vectorlayer';
 import './request/AddFeaturesToMapRequest';
@@ -450,6 +451,10 @@ Oskari.clazz.define(
                 olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
                 olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
                 me._olLayers[layer.getId()] = olLayer;
+
+                const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+                // Set min max zoom levels that layer should be visible in
+                zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
             }
@@ -527,6 +532,11 @@ Oskari.clazz.define(
                     }
                 }
                 layer.setHoverOptions(options.hover);
+
+                // scale limits
+                const scales = getScalesFromOptions(this.getMapModule(), options);
+                layer.setMinScale(scales.min);
+                layer.setMaxScale(scales.max);
 
                 if (options.layerPermissions) {
                     for (var permission in options.layerPermissions) {
