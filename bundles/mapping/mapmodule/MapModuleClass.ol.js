@@ -605,7 +605,22 @@ export class MapModule extends AbstractMapModule {
             this.notifyMoveEnd();
         }
     }
+    /**
+     * Returns a matching zoom level (within range) that matches the
+     * given resolution. Rounds down to closest integer and returns -1 if out of range.
+     * @param {Number} resolution
+     */
+    getZoomForResolution (resolution) {
+        const view = this.getMap().getView();
+        const zoom = Math.floor(view.getZoomForResolution(resolution));
 
+        if (zoom > this.getMaxZoomLevel()) {
+            return -1;
+        } else if (zoom < 0) {
+            return -1;
+        }
+        return zoom;
+    }
     /**
      * @method getResolutionForScale
      * Calculate resolution for the scale
