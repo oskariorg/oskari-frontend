@@ -534,7 +534,9 @@ Oskari.clazz.define(
                 layer.setHoverOptions(options.hover);
 
                 // scale limits
-                const scales = getScalesFromOptions(this.getMapModule(), options);
+                const mapModule = this.getMapModule();
+                const scales = getScalesFromOptions(
+                    mapModule.getScaleArray(), mapModule.getResolutionArray(), options);
                 layer.setMinScale(scales.min);
                 layer.setMaxScale(scales.max);
 

@@ -55,34 +55,44 @@ export const isInScale = (currentScale, minScale, maxScale) => {
     return maxOk && minOk;
 };
 
-export const getScalesFromOptions = (mapModule, options) => {
+export const getScalesFromOptions = (scales = [], resolutions = [], options= {}) => {
     const result = {
         min: options.minScale || -1,
         max: options.maxScale || -1
     };
-    const scales = mapModule.getScaleArray();
+    
+    const zoomHelper = getZoomLevelHelper(resolutions);
+    /*
+        if (typeof resolution !== 'number') {
+            return -1;
+        }
+        if (zoom === 0) {
+            // same as no limit but optimized
+            return -1;
+        }
+    */
 
     if (typeof options.minResolution === 'number') {
-        const minZoom = mapModule.getZoomForResolution(options.minResolution);
+        const minZoom = zoomHelper.getMaxZoom(options.minResolution);
         if (minZoom !== -1) {
             result.max = scales[minZoom];
         }
     }
     if (typeof options.maxResolution === 'number') {
-        const maxZoom = mapModule.getZoomForResolution(options.maxResolution);
+        const maxZoom = zoomHelper.getMaxZoom(options.maxResolution);
         if (maxZoom !== -1) {
             result.min = scales[maxZoom];
         }
     }
     const minZoom = options.minZoomLevel;
     if (typeof minZoom === 'number') {
-        if (minZoom >= 0 && minZoom < mapModule.getMaxZoomLevel()) {
+        if (minZoom >= 0 && minZoom < scales.length) {
             result.max = scales[options.minZoomLevel];
         }
     }
     const maxZoom = options.maxZoomLevel;
     if (typeof maxZoom === 'number') {
-        if (maxZoom >= 0 && maxZoom < mapModule.getMaxZoomLevel()) {
+        if (maxZoom >= 0 && maxZoom < scales.length) {
             result.min = scales[options.minZoomLevel];
         }
     }
