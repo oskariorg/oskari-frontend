@@ -28,11 +28,13 @@ Oskari.registerLocalization(
             "updateFailed": "Updating announcements failed",
             "deleteFailed": "Deleting announcement failed",
             "deleteSuccess": "Announcement deleted",
+            "updateSuccess": "Announcement updated.",
             "getAdminAnnouncementsFailed": "Fetching admin announcements failed"
         },
         "yes": "Yes",
         "cancel": "Cancel",
         "deleteAnnouncementConfirmTitle": "Note!",
-        "deleteAnnouncementConfirm": "Do you want to delete announcement: "
+        "deleteAnnouncementConfirm": "Do you want to delete announcement: ",
+        "titleError": "Lisää otsikko!"
     }
 });

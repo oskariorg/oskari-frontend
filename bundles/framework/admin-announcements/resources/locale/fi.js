@@ -28,12 +28,14 @@ Oskari.registerLocalization(
                 "updateFailed": "Ilmoitusten päivittäminen epäonnistui.",
                 "deleteFailed": "Ilmoituksen poistaminen epäonnistui.",
                 "deleteSuccess": "Ilmoitus poistettu.",
+                "updateSuccess": "Ilmoitus päivitetty.",
                 "getAdminAnnouncementsFailed": "Admin ilmoitusten haku epäonnistui"
             },
             "yes": "Kyllä",
             "cancel": "Peruuta",
             "deleteAnnouncementConfirmTitle": "Huom!",
-            "deleteAnnouncementConfirm": "Poistetaanko taso "
+            "deleteAnnouncementConfirm": "Poistetaanko taso ",
+            "titleError": "Lisää otsikko!"
 
         }
     });

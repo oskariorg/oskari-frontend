@@ -32,6 +32,7 @@ Oskari.registerLocalization(
                 "updateFailed": "Uppdateringen avisering misslyckades",
                 "deleteFailed": "Radering av avisering misslyckades",
                 "deleteSuccess": "Avisering raderat",
+                "updateSuccess": "Avisering uppdaterat.",
                 "getAdminAnnouncementsFailed": "Att hämta admin aviseringar misslyckades"
             }
         }

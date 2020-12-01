@@ -34,7 +34,6 @@ These are the parameters you can set for an announcement when creating a new ann
 ## TODO
 
 * Make Admin-announcements bundle to be a separate tab on the same tile OR make the functionality be similar to admin-layereditor.
-* Finish DeleteButton.js
 * Tests
 
 ## Bundle configuration

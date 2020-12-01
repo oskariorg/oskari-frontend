@@ -2,8 +2,8 @@ import React from "react";
 import "antd/dist/antd.css";
 import PropTypes from 'prop-types';
 import { Form, Input, Button, DatePicker, Switch, Row } from "antd";
-import { Message } from 'oskari-ui';
-import { Controller, LocaleConsumer } from 'oskari-ui/util';
+import { Message, Confirm } from 'oskari-ui';
+import { Controller, LocaleConsumer, StyledButton } from 'oskari-ui/util';
 import moment from 'moment';
 
 /*
@@ -27,13 +27,18 @@ const rangeConfig = {
   ]
 };
 
+const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-announcements' />;
+
 const dateFormat = 'YYYY-MM-DD';
+
+
 
 const AnnouncementsForm = ({controller,  title, key, form, index}) => {
 
   const onFinish  = fieldsValue => {
     // Should format date value before submit.
     const rangeValue = fieldsValue["range_picker"];
+    console.log(form.id);
 
     //If creating new announcement
     if (form.id === undefined) {
@@ -50,6 +55,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
 
     // Else when editing old announcement
     else {
+      console.log("update in form");
 
       const values = {
         id: form.id,
@@ -59,7 +65,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
         end_date: rangeValue[1].format('YYYY-MM-DD'),
         active: fieldsValue["active"]
       };
-      controller.updateAnnouncement(values, form.id);
+      controller.updateAnnouncement(values);
     }
   }
   
@@ -99,7 +105,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 rules={[
                   {
                     required: true,
-                    message: titleError,
+                    message: <Message messageKey='titleError' />,
                     whitespace: true
                   }
                 ]}

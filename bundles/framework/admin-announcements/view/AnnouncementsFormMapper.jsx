@@ -48,12 +48,9 @@ const AnnouncementsFormMapper = ({controller,  announcements, updated, title, ac
               <AnnouncementsForm
                 controller={controller}
                 form={form}
-                id={form.id}
-                content={form.content}
                 index={index}
                 title={title}
                 key={index}
-                checked={checked}
               />
               </Panel>
             );

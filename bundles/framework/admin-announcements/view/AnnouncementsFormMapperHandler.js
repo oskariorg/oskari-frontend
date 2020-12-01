@@ -9,12 +9,30 @@ Handler for admin-announcements forms.
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-announcements' />;
 
+/**
+* Remove item from a localStorage() array
+* @param {String} name  The localStorage() key
+* @param {String} value The localStorage() value
+*/
+const removeFromLocalStorageArray = (name, value) => {
+    // Get the existing data
+    var existing = localStorage.getItem(name);
+    // If no existing data, create an array
+    // Otherwise, convert the localStorage string to an array
+    existing = existing ? existing.split(',') : [];
+    //Get index of announcement id and remove it from the array
+    const index = existing.indexOf(value);
+    if (index > -1) {
+        existing.splice(index, 1);
+    }
+    // Save back to localStorage
+    localStorage.setItem(name, existing.toString());
+};
+
 class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
-        this.sandbox = instance.getSandbox();
-        this.locale = instance.getLocalization();
         this.announcementsCalls = announcementsCalls();
         this.newTitle = 'Uusi ilmoitus';
         this.state = {
@@ -39,6 +57,7 @@ class ViewHandler extends StateHandler {
     }
 
     saveAnnouncement (data) {
+        console.log("SAVE");
         this.announcementsCalls.saveAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
@@ -54,9 +73,16 @@ class ViewHandler extends StateHandler {
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
     updateAnnouncement (data) {
-        this.announcementsCalls.updateAnnouncement(data, function (err, data) {
+        console.log("update");
+        this.announcementsCalls.updateAnnouncement(data, function (err,data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
+                return false;
+            } else {
+                console.log("success");
+                console.log(data);
+                Messaging.success(getMessage('messages.updateSuccess'));
+                removeFromLocalStorageArray("oskari-announcements",data.data[0].toString());
             }
         });
         this.updateState({
@@ -73,9 +99,9 @@ class ViewHandler extends StateHandler {
             this.announcementsCalls.deleteAnnouncement(test, function (err) {
                 if (err) {
                     Messaging.error(getMessage('messages.deleteFailed'));
-                    return;
+                } else {
+                    Messaging.success(getMessage('messages.deleteSuccess'));
                 }
-                Messaging.success(getMessage('messages.deleteSuccess'));
             });
             const newList = [...this.state.announcements];
             newList.splice(index, 1);

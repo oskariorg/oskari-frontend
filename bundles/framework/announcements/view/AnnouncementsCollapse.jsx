@@ -41,9 +41,10 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
   return (
     <div>
       {modals.map((modal, index) => {
-            const visible = controller.showModal(modal.title, modal.content);
+            const visible = controller.showModal(modal.id);
             return (
               <AnnouncementsModal
+              id={modal.id}
               controller={controller}
               title={modal.title}
               content={modal.content}

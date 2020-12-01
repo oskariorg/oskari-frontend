@@ -47,9 +47,9 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    handleOk (index, title, content, checked) {
+    setAnnouncementAsSeen (index, checked, id) {
         if (checked) {
-            localStorage.setItem(title, content);
+            this.addToLocalStorageArray("oskari-announcements", id);
             this.updateState({
                 checked: false
             });
@@ -61,8 +61,10 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    showModal (title, content) {
-        if (localStorage.getItem(title) === content) {
+    showModal (id) {
+        var announcements = localStorage.getItem("oskari-announcements");
+        //is the modal stored in the localstorage aka has it been set to not show again
+        if (announcements && announcements.includes(id)) {
             return false;
         }
         else {
@@ -75,8 +77,30 @@ class ViewHandler extends StateHandler {
             checked: checked
         });
     }
+
+    /**
+     * Add an item to a localStorage() array
+     * @param {String} name  The localStorage() key
+     * @param {String} value The localStorage() value
+     */
+    addToLocalStorageArray (name, value) {
+
+        // Get the existing data
+        var existing = localStorage.getItem(name);
+
+        // If no existing data, create an array
+        // Otherwise, convert the localStorage string to an array
+        existing = existing ? existing.split(',') : [];
+
+        // Add new data to localStorage Array
+        existing.push(value);
+
+        // Save back to localStorage
+        localStorage.setItem(name, existing.toString());
+
+    }
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'getAnnouncements', 'updatePanelsModals', 'handleOk', 'onCheckboxChange', 'showModal'
+    'getAnnouncements', 'updatePanelsModals', 'setAnnouncementAsSeen', 'onCheckboxChange', 'showModal'
 ]);
