@@ -55,45 +55,50 @@ export const isInScale = (currentScale, minScale, maxScale) => {
     return maxOk && minOk;
 };
 
-export const getScalesFromOptions = (scales = [], resolutions = [], options= {}) => {
+/**
+ * Parses minScale, maxScale, minResolution, maxResolution, minZoomLevel, maxZoomLevel from options
+ * and returns an object with min and max keys having values of minScale and maxScale regardless of the input type
+ *
+ * - minScale, minZoom, maxResolution: how close _do you need to_ zoom to see the layer
+ * - maxScale, maxZoom, minResolution: how close _can_ you zoom to _still_ see the layer
+ */
+export const getScalesFromOptions = (scales = [], resolutions = [], options = {}) => {
     const result = {
+        // minScale == how close _do you need to_ zoom to see the layer
         min: options.minScale || -1,
+        // maxScale == how close _can_ you zoom to _still_ see the layer
         max: options.maxScale || -1
     };
     
     const zoomHelper = getZoomLevelHelper(resolutions);
-    /*
-        if (typeof resolution !== 'number') {
-            return -1;
-        }
-        if (zoom === 0) {
-            // same as no limit but optimized
-            return -1;
-        }
-    */
 
+    // only set limits if they actually limit visibility (between 1 and max-1)
     if (typeof options.minResolution === 'number') {
-        const minZoom = zoomHelper.getMaxZoom(options.minResolution);
-        if (minZoom !== -1) {
-            result.max = scales[minZoom];
+        // how close _can_ you zoom to _still_ see the layer
+        const maxZoom = zoomHelper.getMaxZoom(options.minResolution);
+        if (maxZoom > 0 && maxZoom < scales.length -1) {
+            result.max = scales[maxZoom];
         }
     }
     if (typeof options.maxResolution === 'number') {
-        const maxZoom = zoomHelper.getMaxZoom(options.maxResolution);
-        if (maxZoom !== -1) {
-            result.min = scales[maxZoom];
+        // how close _do you need to_ zoom to see the layer
+        const minZoom = zoomHelper.getMinZoom(options.maxResolution);
+        if (minZoom > 0 && minZoom < scales.length -1) {
+            result.min = scales[minZoom];
         }
     }
     const minZoom = options.minZoomLevel;
     if (typeof minZoom === 'number') {
-        if (minZoom >= 0 && minZoom < scales.length) {
-            result.max = scales[options.minZoomLevel];
+        if (minZoom > 0 && minZoom < scales.length -1) {
+            // how close _do you need to_ zoom to see the layer
+            result.min = scales[minZoom];
         }
     }
     const maxZoom = options.maxZoomLevel;
     if (typeof maxZoom === 'number') {
-        if (maxZoom >= 0 && maxZoom < scales.length) {
-            result.min = scales[options.minZoomLevel];
+        if (maxZoom > 0 && maxZoom < scales.length -1) {
+            // how close _can_ you zoom to _still_ see the layer
+            result.max = scales[maxZoom];
         }
     }
     return result;
