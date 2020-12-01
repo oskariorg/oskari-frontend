@@ -10,6 +10,7 @@ import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
+import { TimeSeries } from './TimeSeries';
 
 const {
     OPACITY,
@@ -19,7 +20,8 @@ const {
     STYLES_JSON,
     EXTERNAL_STYLES_JSON,
     HOVER,
-    SCALE
+    SCALE,
+    TIMES
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFields, controller }) => (
@@ -27,6 +29,9 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(TIMES) && layer.capabilities.times &&
+                <TimeSeries layer={layer} scales={scales} controller={controller} />
             }
             { propertyFields.includes(CLUSTERING_DISTANCE) &&
                 <ClusteringDistance layer={layer} controller={controller} />

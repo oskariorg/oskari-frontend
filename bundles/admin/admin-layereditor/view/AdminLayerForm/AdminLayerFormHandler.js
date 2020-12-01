@@ -180,6 +180,36 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+    setTimeSeriesUI (ui) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries, ui };
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataLayer (layerId) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, layer: layerId };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataAttribute (attribute) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, attribute };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataToggleLevel (toggleLevel) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, toggleLevel };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
     setRefreshRate (refreshRate) {
         this.updateState({
             layer: { ...this.getState().layer, refreshRate }
@@ -889,6 +919,10 @@ const wrapped = controllerMixin(UIHandler, [
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',
+    'setTimeSeriesUI',
+    'setTimeSeriesMetadataLayer',
+    'setTimeSeriesMetadataAttribute',
+    'setTimeSeriesMetadataToggleLevel',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',
