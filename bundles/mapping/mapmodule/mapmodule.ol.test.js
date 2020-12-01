@@ -38,30 +38,4 @@ describe('MapModule', () => {
             expect(mapModule.getScaleArray().length).toEqual(13);
         });
     });
-    describe('getZoomForResolution', () => {
-        test('resolution 5', () => {
-            expect(mapModule.getZoomForResolution(5)).toEqual(8);
-        });
-        test('resolution 0.5', () => {
-            expect(mapModule.getZoomForResolution(0.5)).toEqual(11);
-        });
-        test('resolution 0.3', () => {
-            expect(mapModule.getZoomForResolution(0.3)).toEqual(12);
-        });
-        test('resolution 0.25', () => {
-            expect(mapModule.getZoomForResolution(0.25)).toEqual(12);
-        });
-        test('resolution 0.1', () => {
-            expect(mapModule.getZoomForResolution(0.1)).toEqual(-1);
-        });
-        test('resolution 0.0000001', () => {
-            expect(mapModule.getZoomForResolution(0.00001)).toEqual(-1);
-        });
-        test('resolution 50000000', () => {
-            expect(mapModule.getZoomForResolution(50000000)).toEqual(-1);
-        });
-        test('resolution undefined', () => {
-            expect(mapModule.getZoomForResolution()).toEqual(-1);
-        });
-    });
 });

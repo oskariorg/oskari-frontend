@@ -607,23 +607,6 @@ export class MapModule extends AbstractMapModule {
         }
     }
     /**
-     * Returns a matching zoom level (within range) that matches the
-     * given resolution. Rounds down to closest integer and returns -1 if out of range.
-     * @param {Number} resolution
-     */
-    getZoomForResolution (resolution) {
-        if (typeof resolution !== 'number') {
-            return -1;
-        }
-        const zoomHelper = getZoomLevelHelper(this.getResolutionArray());
-        const zoom = zoomHelper.getMaxZoom(resolution);
-        if (zoom === 0) {
-            // same as no limit but optimized
-            return -1;
-        }
-        return zoom;
-    }
-    /**
      * @method getResolutionForScale
      * Calculate resolution for the scale
      * If scale is not defined return -1
