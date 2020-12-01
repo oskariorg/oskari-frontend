@@ -88,13 +88,39 @@ describe('getZoomLevelHelper function', () => {
 });
 
 describe('getScalesFromOptions function', () => {
-    const fakeMapModule = {
-        getScaleArray: () => [],
-        getZoomForResolution: (resolution) => -1
-    };
+    const resolutions = [10, 4, 2, 1, 0.5];
+    // just to check that the returned value is something else that is found on the resolutions array
+    const scales = resolutions.map(r => r * 10000);
+
+    
     test('returns -1 when scale limits are undefined', () => {
-        let result = getScalesFromOptions(fakeMapModule, {});
+        let result = getScalesFromOptions(scales, resolutions, {});
         expect(result.min).toEqual(-1);
         expect(result.max).toEqual(-1);
+    });
+    test('scales', () => {
+        let result = getScalesFromOptions(scales, resolutions, {minScale: 1234, maxScale: 5678});
+        expect(result.min).toEqual(1234);
+        expect(result.max).toEqual(5678);
+    });
+    test('exact resolutions', () => {
+        let result = getScalesFromOptions(scales, resolutions, {minResolution: resolutions[3], maxResolution: resolutions[1]});
+        expect(result.min).toEqual(scales[1]);
+        expect(result.max).toEqual(scales[3]);
+    });
+    test('in between resolutions', () => {
+        let result = getScalesFromOptions(scales, resolutions, {minResolution: 1.5, maxResolution: 5});
+        expect(result.min).toEqual(scales[1]);
+        expect(result.max).toEqual(scales[3]);
+    });
+    test('only max resolution to set min scale', () => {
+        let result = getScalesFromOptions(scales, resolutions, {maxResolution: 5});
+        expect(result.min).toEqual(scales[1]);
+        expect(result.max).toEqual(-1);
+    });
+    test('zoom levels', () => {
+        let result = getScalesFromOptions(scales, resolutions, {minZoomLevel: 1, maxZoomLevel: 3});
+        expect(result.min).toEqual(scales[1]);
+        expect(result.max).toEqual(scales[3]);
     });
 });
