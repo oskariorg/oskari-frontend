@@ -605,6 +605,7 @@ export class MapModule extends AbstractMapModule {
             this.notifyMoveEnd();
         }
     }
+
     /**
      * @method getResolutionForScale
      * Calculate resolution for the scale

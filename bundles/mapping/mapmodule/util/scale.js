@@ -69,37 +69,41 @@ export const getScalesFromOptions = (scales = [], resolutions = [], options = {}
         // maxScale == how close _can_ you zoom to _still_ see the layer
         max: options.maxScale || -1
     };
-    
-    const zoomHelper = getZoomLevelHelper(resolutions);
 
-    // only set limits if they actually limit visibility (between 1 and max-1)
+    const zoomHelper = getZoomLevelHelper(resolutions);
+    const maxAllowedZoom = scales.length - 1;
+
     if (typeof options.minResolution === 'number') {
         // how close _can_ you zoom to _still_ see the layer
         const maxZoom = zoomHelper.getMaxZoom(options.minResolution);
-        if (maxZoom > 0 && maxZoom < scales.length -1) {
+        if (isBetween(maxZoom, 0, maxAllowedZoom)) {
             result.max = scales[maxZoom];
         }
     }
     if (typeof options.maxResolution === 'number') {
         // how close _do you need to_ zoom to see the layer
         const minZoom = zoomHelper.getMinZoom(options.maxResolution);
-        if (minZoom > 0 && minZoom < scales.length -1) {
+        if (isBetween(minZoom, 0, maxAllowedZoom)) {
             result.min = scales[minZoom];
         }
     }
     const minZoom = options.minZoomLevel;
-    if (typeof minZoom === 'number') {
-        if (minZoom > 0 && minZoom < scales.length -1) {
-            // how close _do you need to_ zoom to see the layer
-            result.min = scales[minZoom];
-        }
+    if (isBetween(minZoom, 0, maxAllowedZoom)) {
+        // how close _do you need to_ zoom to see the layer
+        result.min = scales[minZoom];
     }
     const maxZoom = options.maxZoomLevel;
-    if (typeof maxZoom === 'number') {
-        if (maxZoom > 0 && maxZoom < scales.length -1) {
-            // how close _can_ you zoom to _still_ see the layer
-            result.max = scales[maxZoom];
-        }
+    if (isBetween(maxZoom, 0, maxAllowedZoom)) {
+        // how close _can_ you zoom to _still_ see the layer
+        result.max = scales[maxZoom];
     }
     return result;
+};
+
+// only set limits if they actually limit visibility (between 1 and max-1)
+function isBetween (num, min, max) {
+    if (typeof num !== 'number') {
+        return false;
+    }
+    return num > min && num < max;
 };
