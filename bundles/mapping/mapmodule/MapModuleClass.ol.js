@@ -22,6 +22,7 @@ import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import { getZoomLevelHelper } from './util/scale';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
 import './AbstractMapModule';
@@ -614,12 +615,10 @@ export class MapModule extends AbstractMapModule {
         if (typeof resolution !== 'number') {
             return -1;
         }
-        const view = this.getMap().getView();
-        const zoom = Math.floor(view.getZoomForResolution(resolution));
-
-        if (zoom > this.getMaxZoomLevel()) {
-            return -1;
-        } else if (zoom < 0) {
+        const zoomHelper = getZoomLevelHelper(this.getResolutionArray());
+        const zoom = zoomHelper.getMaxZoom(resolution);
+        if (zoom === 0) {
+            // same as no limit but optimized
             return -1;
         }
         return zoom;

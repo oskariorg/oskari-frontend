@@ -40,13 +40,13 @@ describe('MapModule', () => {
     });
     describe('getZoomForResolution', () => {
         test('resolution 5', () => {
-            expect(mapModule.getZoomForResolution(5)).toEqual(7);
+            expect(mapModule.getZoomForResolution(5)).toEqual(8);
         });
         test('resolution 0.5', () => {
-            expect(mapModule.getZoomForResolution(0.3)).toEqual(11);
+            expect(mapModule.getZoomForResolution(0.5)).toEqual(11);
         });
         test('resolution 0.3', () => {
-            expect(mapModule.getZoomForResolution(0.3)).toEqual(11);
+            expect(mapModule.getZoomForResolution(0.3)).toEqual(12);
         });
         test('resolution 0.25', () => {
             expect(mapModule.getZoomForResolution(0.25)).toEqual(12);
