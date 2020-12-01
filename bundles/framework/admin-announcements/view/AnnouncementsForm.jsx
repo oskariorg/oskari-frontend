@@ -3,17 +3,13 @@ import "antd/dist/antd.css";
 import PropTypes from 'prop-types';
 import { Form, Input, Button, DatePicker, Switch, Row } from "antd";
 import { Message, Confirm } from 'oskari-ui';
-import { Controller, LocaleConsumer, StyledButton } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import moment from 'moment';
 
 /*
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-
-const titleError = "Lisää otsikko!";
-const contentError = "Lisää sisältö!";
-const dateError = "Lisää aikaväli!";
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -22,7 +18,7 @@ const rangeConfig = {
     {
       type: "array",
       required: true,
-      message: dateError
+      message: <Message messageKey='dateError' />
     }
   ]
 };
@@ -31,14 +27,11 @@ const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} b
 
 const dateFormat = 'YYYY-MM-DD';
 
-
-
 const AnnouncementsForm = ({controller,  title, key, form, index}) => {
 
   const onFinish  = fieldsValue => {
     // Should format date value before submit.
     const rangeValue = fieldsValue["range_picker"];
-    console.log(form.id);
 
     //If creating new announcement
     if (form.id === undefined) {
@@ -55,7 +48,6 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
 
     // Else when editing old announcement
     else {
-      console.log("update in form");
 
       const values = {
         id: form.id,
@@ -120,7 +112,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 rules={[
                   {
                     required: true,
-                    message: contentError,
+                    message: <Message messageKey='contentError' />,
                     whitespace: true
                   }
                 ]}
@@ -144,12 +136,19 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                   </Button>
                 </Form.Item>
                 <Form.Item>
-                  <Button
-                    key={key}
-                    onClick={() => controller.deleteAnnouncement(index, form.id, form.title)}
+                  <Confirm
+                      title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
+                      onConfirm={() => controller.deleteAnnouncement(index, form.id, form.title)}
+                      okText={getMessage('yes')}
+                      cancelText={getMessage('cancel')}
+                      placement='top'
+                      popupStyle={{zIndex: '999999'}}
                   >
-                    <Message messageKey={'delete'}/>
-                  </Button>
+                      <Button
+                    key={key}>
+                          <Message messageKey='delete'/>
+                      </Button>
+                  </Confirm>
                 </Form.Item>
                 <Form.Item>
                   <Button

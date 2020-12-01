@@ -32,9 +32,10 @@ Oskari.registerLocalization(
             "getAdminAnnouncementsFailed": "Fetching admin announcements failed"
         },
         "yes": "Yes",
-        "cancel": "Cancel",
         "deleteAnnouncementConfirmTitle": "Note!",
         "deleteAnnouncementConfirm": "Do you want to delete announcement: ",
-        "titleError": "Lisää otsikko!"
+        "titleError": "Add title",
+        "contentError": "Add content!",
+        "dateError": "Add daterange!"
     }
 });

@@ -17,9 +17,9 @@ const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
 
-const AnnouncementsFormMapper = ({controller,  announcements, updated, title, activeKey, checked }) => {
+const AnnouncementsFormMapper = ({controller,  announcements, updated, title, activeKey }) => {
 
-  //TODO(?) Create maybe a better way to handle updating the collapse panels
+  // TODO(?) Create maybe a better way to handle updating the collapse panels
   if (!updated) {
     controller.getAdminAnnouncements(function(ann){
       var announcements = [];

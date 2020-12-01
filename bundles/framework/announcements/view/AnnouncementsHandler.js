@@ -49,7 +49,7 @@ class ViewHandler extends StateHandler {
 
     setAnnouncementAsSeen (index, checked, id) {
         if (checked) {
-            this.addToLocalStorageArray("oskari-announcements", id);
+            this.addToLocalStorageArray('oskari-announcements', id);
             this.updateState({
                 checked: false
             });
@@ -62,8 +62,8 @@ class ViewHandler extends StateHandler {
     }
 
     showModal (id) {
-        var announcements = localStorage.getItem("oskari-announcements");
-        //is the modal stored in the localstorage aka has it been set to not show again
+        var announcements = localStorage.getItem('oskari-announcements');
+        // is the modal stored in the localstorage aka has it been set to not show again
         if (announcements && announcements.includes(id)) {
             return false;
         }
@@ -84,7 +84,6 @@ class ViewHandler extends StateHandler {
      * @param {String} value The localStorage() value
      */
     addToLocalStorageArray (name, value) {
-
         // Get the existing data
         var existing = localStorage.getItem(name);
 
@@ -97,7 +96,6 @@ class ViewHandler extends StateHandler {
 
         // Save back to localStorage
         localStorage.setItem(name, existing.toString());
-
     }
 }
 

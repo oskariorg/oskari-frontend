@@ -34,6 +34,12 @@ Oskari.registerLocalization(
                 "deleteSuccess": "Avisering raderat",
                 "updateSuccess": "Avisering uppdaterat.",
                 "getAdminAnnouncementsFailed": "Att hämta admin aviseringar misslyckades"
-            }
+            },
+            "yes": "Ja",
+            "deleteAnnouncementConfirmTitle": "Obs!",
+            "deleteAnnouncementConfirm": "Huruvida avisering ska raderas ",
+            "titleError": "Lägg till en titel!",
+            "contentError": "Lägg till innehåll!",
+            "dateError": "Lägg till intervall!"
         }
     });

@@ -20,7 +20,7 @@ const removeFromLocalStorageArray = (name, value) => {
     // If no existing data, create an array
     // Otherwise, convert the localStorage string to an array
     existing = existing ? existing.split(',') : [];
-    //Get index of announcement id and remove it from the array
+    // Get index of announcement id and remove it from the array
     const index = existing.indexOf(value);
     if (index > -1) {
         existing.splice(index, 1);
@@ -57,7 +57,6 @@ class ViewHandler extends StateHandler {
     }
 
     saveAnnouncement (data) {
-        console.log("SAVE");
         this.announcementsCalls.saveAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
@@ -73,16 +72,13 @@ class ViewHandler extends StateHandler {
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
     updateAnnouncement (data) {
-        console.log("update");
-        this.announcementsCalls.updateAnnouncement(data, function (err,data) {
+        this.announcementsCalls.updateAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
                 return false;
             } else {
-                console.log("success");
-                console.log(data);
                 Messaging.success(getMessage('messages.updateSuccess'));
-                removeFromLocalStorageArray("oskari-announcements",data.data[0].toString());
+                removeFromLocalStorageArray('oskari-announcements', data.data[0].toString());
             }
         });
         this.updateState({
@@ -92,28 +88,23 @@ class ViewHandler extends StateHandler {
     }
 
     deleteAnnouncement (index, id) {
-        const test = { id };
+        this.id = { id };
+        this.announcementsCalls.deleteAnnouncement(this.id, function (err) {
+            if (err) {
+                Messaging.error(getMessage('messages.deleteFailed'));
+            } else {
+                Messaging.success(getMessage('messages.deleteSuccess'));
+            }
+        });
+        const newList = [...this.state.announcements];
+        newList.splice(index, 1);
 
-        // TODO: Better/different way to confirm deleting an announcement
-        if (window.confirm(this.instance.getLocalization('deleteAnnouncementConfirm'))) {
-            this.announcementsCalls.deleteAnnouncement(test, function (err) {
-                if (err) {
-                    Messaging.error(getMessage('messages.deleteFailed'));
-                } else {
-                    Messaging.success(getMessage('messages.deleteSuccess'));
-                }
-            });
-            const newList = [...this.state.announcements];
-            newList.splice(index, 1);
-
-            // Update accordion with announcements and keep all closed
-            this.updateState({
-                announcements: newList,
-                activeKey: []
-            });
-        }
+        // Update accordion with announcements and keep all closed
+        this.updateState({
+            announcements: newList,
+            activeKey: []
+        });
     }
-
     // Cancel creating a new announcement or editing one. Close all panels.
     cancel (index, id) {
         if (id !== undefined) {
@@ -130,7 +121,7 @@ class ViewHandler extends StateHandler {
             });
         }
     }
-    // Create new announcement (Rename?)
+
     addForm () {
         const newList = [...this.state.announcements];
         newList.push({

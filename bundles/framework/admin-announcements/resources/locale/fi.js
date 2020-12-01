@@ -29,13 +29,16 @@ Oskari.registerLocalization(
                 "deleteFailed": "Ilmoituksen poistaminen epäonnistui.",
                 "deleteSuccess": "Ilmoitus poistettu.",
                 "updateSuccess": "Ilmoitus päivitetty.",
-                "getAdminAnnouncementsFailed": "Admin ilmoitusten haku epäonnistui"
+                "getAdminAnnouncementsFailed": "Admin ilmoitusten haku epäonnistui",
+                "deleteAnnouncementConfirm": "Poistetaanko taso "
             },
             "yes": "Kyllä",
-            "cancel": "Peruuta",
             "deleteAnnouncementConfirmTitle": "Huom!",
-            "deleteAnnouncementConfirm": "Poistetaanko taso ",
-            "titleError": "Lisää otsikko!"
+            "deleteAnnouncementConfirm": "Poistetaanko ilmoitus: ",
+            "titleError": "Lisää otsikko!",
+            "contentError": "Lisää sisältö!",
+            "dateError": "Lisää aikaväli!"
+
 
         }
     });
