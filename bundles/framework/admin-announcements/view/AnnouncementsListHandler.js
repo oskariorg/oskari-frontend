@@ -65,7 +65,6 @@ class ViewHandler extends StateHandler {
             }
         });
         this.updateState({
-            updated: false,
             activeKey: []
         });
     }
@@ -82,7 +81,6 @@ class ViewHandler extends StateHandler {
             }
         });
         this.updateState({
-            updated: false,
             activeKey: []
         });
     }
@@ -109,7 +107,6 @@ class ViewHandler extends StateHandler {
     cancel (index, id) {
         if (id !== undefined) {
             this.updateState({
-                updated: false,
                 activeKey: []
             });
         } else {

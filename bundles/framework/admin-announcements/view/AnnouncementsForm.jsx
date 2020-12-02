@@ -1,8 +1,7 @@
 import React from "react";
-import "antd/dist/antd.css";
 import PropTypes from 'prop-types';
-import { Form, Input, Button, DatePicker, Switch, Row } from "antd";
-import { Message, Confirm } from 'oskari-ui';
+import { Form, Input, Button, Switch, Row } from "antd";
+import { Message, Confirm, DateRange } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import moment from 'moment';
 
@@ -10,8 +9,6 @@ import moment from 'moment';
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-
-const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 const rangeConfig = {
   rules: [
@@ -112,7 +109,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 label={<Message messageKey='newAnnouncement.date-range' />}
                 {...rangeConfig}
               >
-                <RangePicker popupStyle={{zIndex: '999999'}} />
+                <DateRange popupStyle={{zIndex: '999999'}} />
               </Form.Item>
               <Form.Item name="active" label={<Message messageKey='newAnnouncement.show-popup' />} valuePropName="checked">
                 <Switch onClick={() => controller.toggleActive()}/>

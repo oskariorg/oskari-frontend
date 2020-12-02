@@ -1,9 +1,9 @@
 import React from "react";
-import {AnnouncementsForm} from './AnnouncementsForm';
-import "antd/dist/antd.css";
+import { AnnouncementsForm } from './AnnouncementsForm';
 import PropTypes from 'prop-types';
-import { Button, Collapse } from "antd";
+import { Collapse } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
+import { Button } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
@@ -16,7 +16,6 @@ const { Panel } = Collapse;
 const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
-
 const AnnouncementsList = ({controller,  announcements, updated, title, activeKey }) => {
 
   // TODO(?) Create maybe a better way to handle updating the collapse panels
