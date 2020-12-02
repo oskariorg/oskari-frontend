@@ -30,9 +30,8 @@ const removeFromLocalStorageArray = (name, value) => {
 };
 
 class ViewHandler extends StateHandler {
-    constructor (instance) {
+    constructor () {
         super();
-        this.instance = instance;
         this.announcementsHelper = announcementsHelper();
         this.newTitle = 'Uusi ilmoitus';
         this.state = {

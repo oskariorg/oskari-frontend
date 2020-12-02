@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { Message } from 'oskari-ui';
+import { Message, Collapse, CollapsePanel } from 'oskari-ui';
 import { AnnouncementsModal } from './AnnouncementsModal';
-import { Collapse, Divider } from 'antd';
+import { Divider } from 'antd';
 
 //Collapse panel -> set title, content and date range according to announcement
 
@@ -24,13 +24,13 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
                 modals.push(announcement);
               }
               panels.push(
-                      <Panel header={announcement.title} key={announcement.id}>
+                      <CollapsePanel header={announcement.title} key={announcement.id}>
                           <h3>{announcement.title}</h3>
                           <p>{announcement.content}</p>
                           <Divider />
                           <b><Message messageKey={'valid'} /></b>
                           <p>{announcement.begin_date} - {announcement.end_date}</p>
-                      </Panel>
+                      </CollapsePanel>
                 );
             });
             controller.updatePanelsModals(panels,modals);

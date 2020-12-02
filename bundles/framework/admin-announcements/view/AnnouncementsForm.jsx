@@ -20,9 +20,7 @@ const rangeConfig = {
   ]
 };
 
-const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-announcements' />;
-
-const dateFormat = 'YYYY-MM-DD';
+const DATEFORMAT = 'YYYY-MM-DD';
 
 const AnnouncementsForm = ({controller,  title, key, form, index}) => {
 
@@ -33,8 +31,8 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
     const values = {
       title: fieldsValue["title"],
       content: fieldsValue["content"],
-      begin_date: rangeValue[0].format('YYYY-MM-DD'), 
-      end_date: rangeValue[1].format('YYYY-MM-DD'),
+      begin_date: rangeValue[0].format(DATEFORMAT), 
+      end_date: rangeValue[1].format(DATEFORMAT),
       active: fieldsValue["active"]
     };
 
@@ -50,9 +48,9 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
   const rangeInitial = () => {
 
     if (form.begin_date && form.end_date) {
-      return [moment(form.begin_date, dateFormat), moment(form.end_date, dateFormat)]; 
+      return [moment(form.begin_date, DATEFORMAT), moment(form.end_date, DATEFORMAT)]; 
     } else {
-      return [moment(moment(),dateFormat), moment(moment(),dateFormat)];  
+      return [moment(moment(),DATEFORMAT), moment(moment(),DATEFORMAT)];  
     }
 
   } 
@@ -124,8 +122,8 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                   <Confirm
                       title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
                       onConfirm={() => controller.deleteAnnouncement(index, form.id, form.title)}
-                      okText={getMessage('yes')}
-                      cancelText={getMessage('cancel')}
+                      okText={<Message messageKey='yes'/>}
+                      cancelText={<Message messageKey='cancel'/>}
                       placement='top'
                       popupStyle={{zIndex: '999999'}}
                   >

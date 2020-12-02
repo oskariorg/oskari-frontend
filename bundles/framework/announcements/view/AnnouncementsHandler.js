@@ -7,11 +7,8 @@ import { Message } from 'oskari-ui';
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='announcements' />;
 
 class ViewHandler extends StateHandler {
-    constructor (instance) {
+    constructor () {
         super();
-        this.instance = instance;
-        this.sandbox = instance.getSandbox();
-        this.locale = instance.getLocalization();
         this.state = {
             panels: [],
             modals: [],
