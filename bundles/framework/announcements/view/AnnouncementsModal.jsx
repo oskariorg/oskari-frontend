@@ -13,7 +13,7 @@ const StyledCheckbox = styled(Checkbox)`
     padding: 4px 15px !important;
 `;
 
-const AnnouncementsModal = ({ id, title, content, controller, index, visible, checked }) => {
+const AnnouncementsModal = ({ id, title, content, controller, index, checked }) => {
 
     const handleOk = (index, checked, id) => {
         controller.setAnnouncementAsSeen(index, checked, id);
@@ -28,7 +28,7 @@ const AnnouncementsModal = ({ id, title, content, controller, index, visible, ch
               mask={false}
               centered
               title={title}
-              visible={visible}
+              visible={true}
               onCancel={() => handleOk(index)}
               footer={[
                 <StyledCheckbox key="checkbox" onChange={onCheckboxChange} ><Message messageKey={'dontShow'}/></StyledCheckbox>,

@@ -19,7 +19,7 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
           var modals = [];
             ann.data.forEach((announcement) => {
 
-              if (announcement.active) {
+              if (announcement.active && controller.showModal(announcement.id)) {
                 //if announcement is active, then show pop-up of the content
                 modals.push(announcement);
               }
@@ -41,7 +41,6 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
   return (
     <div>
       {modals.map((modal, index) => {
-            const visible = controller.showModal(modal.id);
             return (
               <AnnouncementsModal
               id={modal.id}
@@ -51,7 +50,6 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
               key={modal.id}
               index={index}
               checked={checked}
-              visible={visible}
               />
             );
           })}
