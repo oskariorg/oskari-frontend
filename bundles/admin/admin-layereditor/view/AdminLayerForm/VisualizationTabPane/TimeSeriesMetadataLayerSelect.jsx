@@ -21,7 +21,12 @@ export const TimeSeriesMetadataLayerSelect = ({ layer, controller }) => {
         <Fragment>
             <Message messageKey="timeSeries.metadataLayer" />
             <StyledFormField>
-                <Select value={metadata.layer} onChange={(value) => controller.setTimeSeriesMetadataLayer(value)}>
+                <Select
+                    showSearch
+                    filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    value={metadata.layer}
+                    onChange={(value) => controller.setTimeSeriesMetadataLayer(value)}
+                >
                     {metadataOptions.map((option) => (
                         <Option key={option.value} value={option.value}>
                             {option.name}
