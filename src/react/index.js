@@ -28,3 +28,4 @@ export { LocalizationComponent } from './components/LocalizationComponent';
 export { Message } from './components/Message';
 export { GenericForm } from './components/GenericForm';
 export { DateRange } from './components/DateRange';
+export { Modal } from './components/Modal';

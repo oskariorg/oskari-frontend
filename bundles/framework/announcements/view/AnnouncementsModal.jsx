@@ -1,8 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Checkbox , Modal } from 'antd';
-import { Message } from 'oskari-ui';
+import { Message, Button, Checkbox, Modal } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
