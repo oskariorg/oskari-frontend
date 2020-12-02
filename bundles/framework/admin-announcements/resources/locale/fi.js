@@ -19,8 +19,7 @@ Oskari.registerLocalization(
                 "title": "Otsikko",
                 "content": "Sisältö",
                 "date-range": "Aikaväli",
-                "show-popup": "Näytä ponnahdusikkuna",
-                "save": "Tallenna"
+                "show-popup": "Näytä ponnahdusikkuna"
             },
             "messages": {
                 "saveSuccess": "Ilmoitus tallennettu.",

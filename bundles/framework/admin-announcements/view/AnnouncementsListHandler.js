@@ -1,6 +1,6 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { announcementsCalls } from './AnnouncementsCalls';
+import { announcementsHelper } from './AnnouncementsHelper';
 import { Message } from 'oskari-ui';
 
 /*
@@ -33,7 +33,7 @@ class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
-        this.announcementsCalls = announcementsCalls();
+        this.announcementsHelper = announcementsHelper();
         this.newTitle = 'Uusi ilmoitus';
         this.state = {
             update: false,
@@ -47,7 +47,7 @@ class ViewHandler extends StateHandler {
     }
 
     getAdminAnnouncements (callback) {
-        this.announcementsCalls.getAdminAnnouncements(function (err, data) {
+        this.announcementsHelper.getAdminAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
                 return;
@@ -57,7 +57,7 @@ class ViewHandler extends StateHandler {
     }
 
     saveAnnouncement (data) {
-        this.announcementsCalls.saveAnnouncement(data, function (err, data) {
+        this.announcementsHelper.saveAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
             } else {
@@ -72,7 +72,7 @@ class ViewHandler extends StateHandler {
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
     updateAnnouncement (data) {
-        this.announcementsCalls.updateAnnouncement(data, function (err, data) {
+        this.announcementsHelper.updateAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
                 return false;
@@ -89,7 +89,7 @@ class ViewHandler extends StateHandler {
 
     deleteAnnouncement (index, id) {
         this.id = { id };
-        this.announcementsCalls.deleteAnnouncement(this.id, function (err) {
+        this.announcementsHelper.deleteAnnouncement(this.id, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {
@@ -158,6 +158,6 @@ class ViewHandler extends StateHandler {
     }
 }
 
-export const AnnouncementsFormMapperHandler = controllerMixin(ViewHandler, [
+export const AnnouncementsListHandler = controllerMixin(ViewHandler, [
     'pushAnnouncements', 'getAdminAnnouncements', 'addForm', 'deleteAnnouncement', 'updateTitle', 'toggleActive', 'saveAnnouncement', 'updateAnnouncement', 'cancel', 'updateActiveKey'
 ]);

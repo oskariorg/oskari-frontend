@@ -23,8 +23,7 @@ Oskari.registerLocalization(
                 "title": "Titel",
                 "content": "Innehåll",
                 "date-range": "Datumintervall",
-                "show-popup": "Visa popup",
-                "save": "Spara"
+                "show-popup": "Visa popup"
             },
             "messages": {
                 "saveSuccess": "Avisering sparat",

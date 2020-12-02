@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AnnouncementsFormMapper, AnnouncementsFormMapperHandler } from './view/';
+import { AnnouncementsList, AnnouncementsListHandler } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -19,8 +19,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.announcementsFormMapperHandler = new AnnouncementsFormMapperHandler(this.instance);
-        this.announcementsFormMapperHandler.addStateListener(() => this.render());
+        this.AnnouncementsListHandler = new AnnouncementsListHandler(this.instance);
+        this.AnnouncementsListHandler.addStateListener(() => this.render());
     }, {
         /**
          * @method setEl
@@ -55,9 +55,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
             }
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <AnnouncementsFormMapper
-                        {...this.announcementsFormMapperHandler.getState()}
-                        controller={this.announcementsFormMapperHandler.getController()}
+                    <AnnouncementsList
+                        {...this.AnnouncementsListHandler.getState()}
+                        controller={this.AnnouncementsListHandler.getController()}
                     />
                 </LocaleProvider>
             );

@@ -1,4 +1,4 @@
-export const announcementsCalls = () => {
+export const announcementsHelper = () => {
     const getAdminAnnouncements = (handler) => {
         if (typeof handler !== 'function') {
             return;

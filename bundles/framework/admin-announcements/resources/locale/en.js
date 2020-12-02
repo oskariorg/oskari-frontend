@@ -19,8 +19,7 @@ Oskari.registerLocalization(
             "title": "Title",
             "content": "Content",
             "date-range": "Date range",
-            "show-popup": "Show pop-up",
-            "save": "Save"
+            "show-popup": "Show pop-up"
         },
         "messages": {
             "saveSuccess": "Announcement saved",

@@ -33,30 +33,18 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
     // Should format date value before submit.
     const rangeValue = fieldsValue["range_picker"];
 
-    //If creating new announcement
+    const values = {
+      title: fieldsValue["title"],
+      content: fieldsValue["content"],
+      begin_date: rangeValue[0].format('YYYY-MM-DD'), 
+      end_date: rangeValue[1].format('YYYY-MM-DD'),
+      active: fieldsValue["active"]
+    };
+
     if (form.id === undefined) {
-      const values = {
-        title: fieldsValue["title"],
-        content: fieldsValue["content"],
-        begin_date: rangeValue[0].format('YYYY-MM-DD'), 
-        end_date: rangeValue[1].format('YYYY-MM-DD'),
-        active: fieldsValue["active"]
-      };
       controller.saveAnnouncement(values);
-      
-    } 
-
-    // Else when editing old announcement
-    else {
-
-      const values = {
-        id: form.id,
-        title: fieldsValue["title"],
-        content: fieldsValue["content"],
-        begin_date: rangeValue[0].format('YYYY-MM-DD'), 
-        end_date: rangeValue[1].format('YYYY-MM-DD'),
-        active: fieldsValue["active"]
-      };
+    } else {
+      values.id = form.id;
       controller.updateAnnouncement(values);
     }
   }
@@ -132,7 +120,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
               <Row>
                 <Form.Item>
                   <Button type="primary" htmlType="submit" >
-                    <Message messageKey={'newAnnouncement.save'}/>
+                    <Message messageKey={'save'}/>
                   </Button>
                 </Form.Item>
                 <Form.Item>

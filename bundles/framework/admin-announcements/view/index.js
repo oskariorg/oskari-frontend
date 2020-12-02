@@ -1,3 +1,3 @@
 export { AnnouncementsForm } from './AnnouncementsForm';
-export { AnnouncementsFormMapper } from './AnnouncementsFormMapper';
-export { AnnouncementsFormMapperHandler } from './AnnouncementsFormMapperHandler';
+export { AnnouncementsList } from './AnnouncementsList';
+export { AnnouncementsListHandler } from './AnnouncementsListHandler';

@@ -17,7 +17,7 @@ const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
 
-const AnnouncementsFormMapper = ({controller,  announcements, updated, title, activeKey }) => {
+const AnnouncementsList = ({controller,  announcements, updated, title, activeKey }) => {
 
   // TODO(?) Create maybe a better way to handle updating the collapse panels
   if (!updated) {
@@ -26,9 +26,7 @@ const AnnouncementsFormMapper = ({controller,  announcements, updated, title, ac
 
         ann.data.forEach((announcement) => {
           announcements.push(announcement);
-          
         });
-        
         controller.pushAnnouncements(announcements);
       });
   }
@@ -66,9 +64,9 @@ const AnnouncementsFormMapper = ({controller,  announcements, updated, title, ac
   );
 };
 
-AnnouncementsFormMapper.propTypes = {
+AnnouncementsList.propTypes = {
   controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const contextWrap = LocaleConsumer(AnnouncementsFormMapper);
-export { contextWrap as AnnouncementsFormMapper };
+const contextWrap = LocaleConsumer(AnnouncementsList);
+export { contextWrap as AnnouncementsList };
