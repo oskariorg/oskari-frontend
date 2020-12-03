@@ -93,9 +93,11 @@ class ViewHandler extends StateHandler {
                     this.updateState({ autoFocusSearch: true });
                     return;
                 }
-                if (event.getViewState() === 'close' && this.hasStashedState()) {
-                    this.useStashedState();
-                    this.getLayerListHandler().getFilterHandler().useStashedState();
+                if (event.getViewState() === 'close') {
+                    const filterHandler = this.getLayerListHandler().getFilterHandler();
+                    if (filterHandler.hasStashedState()) {
+                        filterHandler.useStashedState();
+                    }
                 }
             },
             'MapLayerEvent': event => {
