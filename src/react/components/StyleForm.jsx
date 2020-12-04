@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip, ColorPicker, StylizedRadio, Preview } from 'oskari-ui';
+import { Button, Select, ColorPicker, SvgRadioButton, Preview } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
@@ -9,12 +9,50 @@ const formLayout = {
     wrapperCol: { span: 24 }
 }
 
-const initState = {
-    format: 'point',
-    strokeColor: '#000000',
-    fillColor: '#000000',
-    strokeWidth: 3
+const lineIcons = {
+    linecaps: [
+        {
+            name: 'square',
+            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><polygon points="32 9 9 9 9 16 9 23 9 32 23 32 23 23 32 23 32 9"/><path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>'
+        },
+        {
+            name: 'round',
+            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path d="M32,9H19.5A10.5,10.5,0,0,0,9,19.5V32H23V23h9Z"/><path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>'
+        }
+    ],
+    corners: [
+        {
+            name: 'round',
+            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><polygon points="9 32 23 32 23 21 18.17 16 13.94 16 9 21 9 32"/></svg>',
+        },
+
+        {
+            name: 'square',
+            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect x="9" y="21.04" width="14" height="10.96"/></svg>'
+        }
+    ]
 };
+
+const areaFills = [
+    {
+        name: 'line',
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 4, 4" width="50%" height="50%"> <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" style="stroke:black; stroke-width:1"/></pattern></defs><rect width="32" height="32" fill="url(#line)"/></svg>'
+    },
+    {
+        name: 'line2',
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line2" viewBox="0, 0, 4, 4" width="80%" height="80%"><path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" style="stroke:black; stroke-width:1"/></pattern></defs><rect width="32" height="32" fill="url(#line2)"/></svg>'
+    },
+    {
+        name: 'line3',
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M19,15.5L38.6,15.5M12.1,19.5L37,19.5M15.4,23.5L35.4,23.5M18.7,27.5L33.9,27.5M22,31.5L32.3,31.5M25.3,35.5L30.7,35.5M28.6,39.5L29.1,39.5" stroke-width="1" stroke="#000000" fill="none"></path></svg>'
+    },
+    {
+        name: 'line4',
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 10, 10" width="10%" height="10%"><line x1="0" y1="10" x2="10" y2="0" stroke="black" /></pattern></defs><rect width="100" height="100" fill="url(#line)" /></svg>'
+    }
+];
+
+
 
 const TabSelector = styled(Radio.Group)`
     &&& {
@@ -77,11 +115,12 @@ export class StyleForm extends React.Component {
         this.ref = React.createRef();
 
         // initialize state with these initialization parameters to show preview correctly
-        this.state = initState;
+        this.state = this.props.styleSettings;
+        this.state.format = 'point'; // Add format manually which doesnt come with style JSON
 
         this._populateWithStyle = (format) => {
             if (this.props.icons) {
-                let currentStyle = this.props.icons.find(option => option.value == format);
+                let currentStyle = this.props.styleList.find(option => option.value == format);
                 this.setState({
                     ...currentStyle,
                     format: currentStyle.format
@@ -91,7 +130,16 @@ export class StyleForm extends React.Component {
             }
         }
 
-        this.styleInputCallback = (event) => this.setState({ [event.target.id || event.target.name]: event.target.value });
+        this.styleInputCallback = (event) => {
+            this.setState({
+                [event.target.id || event.target.name]: {
+                    ...this.state[event.target.id || event.target.name],
+                    color: event.target.value 
+                }
+            });
+        };
+
+        this.changeTab = (event) => this.setState({ [event.target.name]: event.target.value });
 
         this.sizeControlCallback = (value) => this.setState({ 'strokeWidth': value, 'size': value });
 
@@ -116,25 +164,24 @@ export class StyleForm extends React.Component {
     _createPreview () {
         return (
             <Row>
-                <Preview previewIcon={ previewPlaceholderIcon({ 
-                    format: this.state.format,
-                    strokeColor: this.state.strokeColor,
-                    strokeWidth: this.state.strokeWidth,
-                    fillColor: this.state.fillColor 
-                }) } />
+                <Preview
+                    markers={ this.props.markers }
+                    fillPatterns={ areaFills }
+                    styleSettings={ this.state }
+                />
             </Row>
         );
     }
 
     _getColorPickers () {
         const strokeColorPicker = (
-            <Form.Item name='strokeColor' label='Pisteen väri' { ...formLayout }>
+            <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
                 <ColorPicker onChange={ this.styleInputCallback } />
             </Form.Item>
         );
 
         const fillColorPicker = this.state.format !== 'line' ? (
-            <Form.Item name='fillColor' label='Pisteen täyttöväri' { ...formLayout }>
+            <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
                 <ColorPicker onChange={ this.styleInputCallback } />
             </Form.Item>
         ) : false;
@@ -151,7 +198,23 @@ export class StyleForm extends React.Component {
         return (
             <Row>
                 <Form.Item name='sizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
-                    <InputNumber min={ 1 } max={ 5 } formatter={ sizeFormatter } parser={ sizeFormatter } onChange={ this.sizeControlCallback } />
+                    <InputNumber
+                        min={ 1 }
+                        max={ 5 }
+                        formatter={ sizeFormatter }
+                        parser={ sizeFormatter }
+                        onChange={ (value) => {
+                            this.setState({
+                                stroke: {
+                                    ...this.state.stroke,
+                                    width: value
+                                },
+                                image: {
+                                    ...this.state.image,
+                                    size: value
+                                }
+                            });
+                        } } />
                 </Form.Item>
             </Row>
         );
@@ -161,8 +224,20 @@ export class StyleForm extends React.Component {
         return (
             <>
                 <Row>
-                    <Form.Item name='dotIcon' label='Ikoni' { ...formLayout }>
-                        <StylizedRadio options={ this.props.styleOptions } />
+                    <Form.Item
+                        { ...formLayout }
+                        name='image'
+                        label='Ikoni'
+                        onChange={ (event) => {
+                            this.setState({
+                                image: {
+                                    ...this.state.image,
+                                    shape: event.target.value
+                                }
+                            });
+                        }
+                    }>
+                        <SvgRadioButton options={ this.props.markers }  />
                     </Form.Item>
                 </Row>  
             </>
@@ -174,7 +249,22 @@ export class StyleForm extends React.Component {
             <>
                 <Row>
                     <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio options={ this.props.styleOptions } />
+                        <SvgRadioButton options={ lineIcons.linecaps } onChange={
+                            (event) => {
+                                this.setState({
+                                    stroke: {
+                                        ...this.state.stroke,
+                                        lineCap: event.target.value
+                                    }
+                                });
+                            }
+                        } />
+                    </Form.Item>
+                </Row>
+
+                <Row>
+                    <Form.Item name='lineStyle' label='Viivan tyyli' { ...formLayout }>
+                        <SvgRadioButton options={ lineIcons.corners } />
                     </Form.Item>
                 </Row>
             </>
@@ -186,13 +276,18 @@ export class StyleForm extends React.Component {
             <>
                 <Row>
                     <Form.Item label='Viivan tyyli' { ...formLayout }>
-                        <StylizedRadio options={ this.props.styleOptions } />
-                    </Form.Item>
-                </Row>
-
-                <Row>
-                    <Form.Item label='Täytön tyyli' { ...formLayout }>
-                        <StylizedRadio options={ this.props.styleOptions } />
+                        <SvgRadioButton options={ areaFills } onChange={
+                            (event) => {
+                                this.setState({
+                                    fill: {
+                                        area: {
+                                            ...this.state.fill.area,
+                                            pattern: event.target.value
+                                        }
+                                    }
+                                });
+                            }
+                        }/>
                     </Form.Item>
                 </Row>
             </>
@@ -220,6 +315,7 @@ export class StyleForm extends React.Component {
     }
 
     render () {
+        console.log(this.state);
         return (
             <StaticForm ref={ this.ref }>
                 <Space direction='vertical'>
@@ -227,14 +323,12 @@ export class StyleForm extends React.Component {
                         { this._buildStyleList( this.props.styleList ) }
 
                         <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ this.state.format }>
-                            <TabSelector { ...formLayout } onChange={ this.styleInputCallback } key={ 'formatSelector' } name='format' >
+                            <TabSelector { ...formLayout } onChange={ this.changeTab } key={ 'formatSelector' } name='format' >
                                 <Radio.Button value='point'>Piste</Radio.Button>
                                 <Radio.Button value='line'>Viiva</Radio.Button>
                                 <Radio.Button value='area'>Alue</Radio.Button>
                             </TabSelector>
                         </Form.Item>
-
-                        
 
                         <Card>
                             { this._getColorPickers() }
@@ -245,9 +339,7 @@ export class StyleForm extends React.Component {
 
                             { this._createPreview() }
                         </Card>
-
                     </Card>
-
                 </Space>
             </StaticForm>
         );

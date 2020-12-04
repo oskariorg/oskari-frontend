@@ -10,32 +10,36 @@ const formLayout = {
 }
 
 const RadioIcon = styled(Radio.Button)`
-    margin: 0 10px 0 0;
+    height: 34px;    
+    margin: 0 7px 10px 0;
     padding: 0;
+    width: 34px;
 `;
 
 /**
- * @class StyleForm
- * @calssdesc <StyleForm>
+ * @class SvgRadioButton
+ * @calssdesc <SvgRadioButton>
  * @memberof module:oskari-ui
  * @see {@link module:oskari-ui/util.LocaleProvider|LocaleProvider}
  * @param {Object} props - { }
  *
  * @example <caption>Basic usage</caption>
- * <StyleForm props={{ ...exampleProps }}/>
+ * <SvgRadioButton props={{ ...exampleProps }}/>
  */
 
-export class StylizedRadio extends React.Component {
+export class SvgRadioButton extends React.Component {
     constructor (props) {
         super(props);
     }
 
     render () {
         return (
-            <Radio.Group defaultValue={ 'dot' } { ...formLayout }>
-                { this.props.options.map((singleOption) => {
+            <Radio.Group defaultValue={ 'dot' } { ...formLayout } onChange={ this.props.onChange }>
+                { this.props.options.map((singleOption, index) => {
                     return(
-                        <RadioIcon value={ singleOption.value }>{ singleOption.icon() }</RadioIcon>
+                        <RadioIcon value={ singleOption.name || index }>
+                            <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
+                        </RadioIcon>
                     );
                 })}
             </Radio.Group>
