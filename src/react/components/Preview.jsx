@@ -25,11 +25,14 @@ const areaPreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="h
 
 const defaults = {
     defaultStrokeWidth: 1,
+    defaultStrokeColor: '#000000',
+    defaultFill: '#ffffff',
     defaultFillColor: '#ffffff',
     defaultSize: 3,
     defaultLineCap: 'square',
     defaultLineJoin: 'mitter',
-    defaultFillPattern: -1
+    defaultFillPattern: '',
+    defaultPatternId: 'patternPreview'
 }
 
 /**
@@ -49,32 +52,51 @@ export class Preview extends React.Component {
     constructor (props) {
         super(props);
 
-        console.log(this.props);
         this.currentStyle = this.props.styleSettings;
         this.markers = this.props.markers;
         this.size = 3;
-    }
 
+        this.previewAttributes = {
+            strokeColor: defaults.defaultStrokeColor,
+            strokeWidth: defaults.defaultStrokeWidth,
+            strokeLineCap: defaults.defaultLineCap,
+            fill: defaults.defaultFill,
+            fillColor: defaults.defaultFillColor,
+            pattern: defaults.defaultFillPattern,
+            patternId: defaults.defaultPatternId
+        };
+    }
+    
     _fillSvgWithStyle () {
         const format = this.props.styleSettings.format;
-        const strokeColor = this.props.styleSettings.stroke.color;
-        
-        const strokeWidth = format !== 'point' ? this.props.styleSettings.stroke.width : defaults.defaultStrokeWidth;
-        const strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.defaultLineCap;
-        
-        const fill = format === 'area' ? ('url(#' + this.props.styleSettings.fill.area.pattern + ')')
-            : format !== 'line' ? this.props.styleSettings.fill.color : defaults.defaultFillColor;
-
-        const size = format === 'point' ? this.props.styleSettings.image.size : defaults.defaultSize;
-
         const path = this._parsePath(format);
+        
+        this.previewAttributes.strokeColor = this.props.styleSettings.stroke.color;
+        this.previewAttributes.fillColor = this.props.styleSettings.fill.color;
 
-        path.setAttribute('stroke', strokeColor);
-        path.setAttribute('stroke-width', strokeWidth);
-        path.setAttribute('stroke-linecap', strokeLineCap);
-        path.setAttribute('fill', fill);
+        this.previewAttributes.fill = format === 'area'
+            ? ('url(#' + this.previewAttributes.patternId + ')') : format !== 'line' 
+            ? this.props.styleSettings.fill.color : defaults.defaultFillColor;
 
-        this.size = size;
+        if (format === 'area' && ~this.props.styleSettings.fill.area.pattern) {
+            const patternPath = this._parsePattern(this.props.fillPatterns.find(pattern => pattern.name === this.props.styleSettings.fill.area.pattern));
+            this.previewAttributes.pattern = this._composeSvgPattern(patternPath);
+        }
+
+        this.previewAttributes.strokeWidth = format === 'point'
+            ? defaults.defaultStrokeWidth : format === 'area'
+            ? this.props.styleSettings.stroke.area.width : this.props.styleSettings.stroke.width;
+        
+        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.defaultLineCap;
+        
+        path.setAttribute('stroke', this.previewAttributes.strokeColor);
+        path.setAttribute('stroke-width', this.previewAttributes.strokeWidth);
+        path.setAttribute('stroke-linecap', this.previewAttributes.strokeLineCap);
+        if (format !== 'line') {
+            path.setAttribute('fill', this.previewAttributes.fill);
+        }
+        
+        this.size = format === 'point' ? this.props.styleSettings.image.size : defaults.defaultSize;
 
         return path.outerHTML;
     }
@@ -97,6 +119,28 @@ export class Preview extends React.Component {
         return rawHtmlPath;
     }
 
+    _parsePattern (pattern) {
+        const domParser = new DOMParser();
+        const parsed = domParser.parseFromString(pattern.data, 'image/svg+xml');
+        const rawHtmlPath = parsed.getElementsByTagName('path')[0];
+
+        rawHtmlPath.setAttribute('stroke', this.previewAttributes.fillColor);
+
+        return rawHtmlPath;
+    }
+
+    _composeSvgPattern (patternPath) {
+        return '<defs><pattern id="' + this.previewAttributes.patternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
+    }
+
+    _composePreviewViewbox () {
+        let viewboxString = ''
+        const widthV = previewViewbox.width - (5 * this.size); // multiply by negative to shrink viewbox
+        const heightV = previewViewbox.height - (5 * this.size); // multiply by negative to shrink viewbox
+        viewboxString = previewViewbox.minX + ' ' + previewViewbox.minY + ' ' +  widthV + ' ' + heightV;
+        return viewboxString;
+    }
+
     /**
      * @method _addBaseSvg
      *
@@ -105,18 +149,16 @@ export class Preview extends React.Component {
      */
     _addBaseSvg () {
         const svgIcon = this._fillSvgWithStyle();
-        const widthV = previewViewbox.width - (5 * this.size); // multiply by negative to shrink viewbox
-        const heightV = previewViewbox.height - (5 * this.size); // multiply by negative to shrink viewbox
+
+        const combinedSvg = this.previewAttributes.pattern + svgIcon;
 
         return (
             <svg
-                viewBox={
-                    previewViewbox.minX + ' ' + previewViewbox.minY + ' ' +  widthV + ' ' + heightV
-                }
+                viewBox={ this._composePreviewViewbox() }
                 width={ previewSize }
                 height={ previewSize }
                 xmlns="http://www.w3.org/2000/svg"
-                dangerouslySetInnerHTML={ {__html: svgIcon } }
+                dangerouslySetInnerHTML={ {__html: combinedSvg } }
             >
             </svg>
         );

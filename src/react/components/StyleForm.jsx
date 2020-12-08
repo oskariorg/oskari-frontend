@@ -36,19 +36,19 @@ const lineIcons = {
 const areaFills = [
     {
         name: 'line',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 4, 4" width="50%" height="50%"> <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" style="stroke:black; stroke-width:1"/></pattern></defs><rect width="32" height="32" fill="url(#line)"/></svg>'
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 4, 4" width="50%" height="50%"> <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/></pattern></defs><rect width="32" height="32" fill="url(#line)"/></svg>'
     },
     {
         name: 'line2',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line2" viewBox="0, 0, 4, 4" width="80%" height="80%"><path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" style="stroke:black; stroke-width:1"/></pattern></defs><rect width="32" height="32" fill="url(#line2)"/></svg>'
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line2" viewBox="0, 0, 4, 4" width="80%" height="80%"><path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/></pattern></defs><rect width="32" height="32" fill="url(#line2)"/></svg>'
     },
     {
         name: 'line3',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M19,15.5L38.6,15.5M12.1,19.5L37,19.5M15.4,23.5L35.4,23.5M18.7,27.5L33.9,27.5M22,31.5L32.3,31.5M25.3,35.5L30.7,35.5M28.6,39.5L29.1,39.5" stroke-width="1" stroke="#000000" fill="none"></path></svg>'
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line3" viewBox="0, 0, 32, 32" width="100%" height="100%"> <path d="M0,4 l32,0, M0,12 l32,0 M0,20 l32,0 M0,28 l32,0" stroke="#000000" stroke-width="5"/></pattern></defs><rect width="32" height="32" fill="url(#line3)"/></svg>'
     },
     {
         name: 'line4',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 10, 10" width="10%" height="10%"><line x1="0" y1="10" x2="10" y2="0" stroke="black" /></pattern></defs><rect width="100" height="100" fill="url(#line)" /></svg>'
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line4" viewBox="0, 0, 32, 32" width="100%" height="100%"> <path d="M0,4 l32,0, M0,15 l32,0 M0,26 l32,0" stroke="#000000" stroke-width="5"/></pattern></defs><rect width="32" height="32" fill="url(#line4)"/></svg>'
     }
 ];
 
@@ -207,7 +207,11 @@ export class StyleForm extends React.Component {
                             this.setState({
                                 stroke: {
                                     ...this.state.stroke,
-                                    width: value
+                                    width: value,
+                                    area: {
+                                        ...this.state.stroke.area,
+                                        width: value
+                                    }
                                 },
                                 image: {
                                     ...this.state.image,
@@ -276,18 +280,22 @@ export class StyleForm extends React.Component {
             <>
                 <Row>
                     <Form.Item label='Viivan tyyli' { ...formLayout }>
-                        <SvgRadioButton options={ areaFills } onChange={
-                            (event) => {
-                                this.setState({
-                                    fill: {
-                                        area: {
-                                            ...this.state.fill.area,
-                                            pattern: event.target.value
+                        <SvgRadioButton
+                            options={ areaFills }
+                            onChange={
+                                (event) => {
+                                    this.setState({
+                                        fill: {
+                                            ...this.state.fill,
+                                            area: {
+                                                ...this.state.fill.area,
+                                                pattern: event.target.value
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
-                        }/>
+                        />
                     </Form.Item>
                 </Row>
             </>
@@ -315,7 +323,6 @@ export class StyleForm extends React.Component {
     }
 
     render () {
-        console.log(this.state);
         return (
             <StaticForm ref={ this.ref }>
                 <Space direction='vertical'>
