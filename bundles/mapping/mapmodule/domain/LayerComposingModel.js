@@ -28,6 +28,7 @@ const PROPERTY_FIELDS = [
     'STYLE',
     'STYLES_JSON',
     'TILE_GRID',
+    'TIMES',
     'URL',
     'VERSION',
     'WFS_RENDER_MODE'

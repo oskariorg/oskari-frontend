@@ -134,6 +134,16 @@ Oskari.registerLocalization(
                 "geojson": "Big objects",
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Player",
+                "range": "Range slider",
+                "none": "None"
+            },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
                 "styles" : "Invalid JSON syntax in Style definitions.",

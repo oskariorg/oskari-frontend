@@ -11,6 +11,7 @@ Oskari.registerLocalization(
             },
             "history": {
                 "reset": "Til baka í sjálfgefið notendaviðmót",
+                "confirmReset": "Viltu fara til baka í upphafsskjá?",
                 "back": "Til baka í fyrri kortasýn.",
                 "next": "Færa í næstu kortasýn."
             },

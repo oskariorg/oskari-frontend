@@ -90,7 +90,18 @@ class UIHandler extends StateHandler {
         const found = capabilities.layers[name];
         if (found) {
             const typesAndRoles = this.getAdminMetadata();
-            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
+            // current layer values as template, override with values from capabilities
+            const mergedLayerData = {
+                ...layer,
+                ...found
+            };
+            // keep dataProviderId if we have one (remove the -1 we might get from server)
+            if (mergedLayerData.dataprovider_id === -1) {
+                delete mergedLayerData.dataprovider_id;
+                mergedLayerData.dataProviderId = layer.dataProviderId;
+            }
+
+            const updateLayer = this.layerHelper.fromServer(mergedLayerData, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
@@ -167,6 +178,36 @@ class UIHandler extends StateHandler {
         } else {
             delete layer.options.singleTile;
         }
+        this.updateState({ layer });
+    }
+    setTimeSeriesUI (ui) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries, ui };
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataLayer (layerId) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, layer: layerId };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataAttribute (attribute) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, attribute };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataToggleLevel (toggleLevel) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, toggleLevel };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
     setRefreshRate (refreshRate) {
@@ -878,6 +919,10 @@ const wrapped = controllerMixin(UIHandler, [
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',
+    'setTimeSeriesUI',
+    'setTimeSeriesMetadataLayer',
+    'setTimeSeriesMetadataAttribute',
+    'setTimeSeriesMetadataToggleLevel',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',
