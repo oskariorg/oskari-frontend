@@ -150,9 +150,8 @@ export class Preview extends React.Component {
      *
      */
     _addBaseSvg () {
-        const svgIcon = this._fillSvgWithStyle();
-
-        const combinedSvg = this.previewAttributes.pattern + svgIcon;
+        const svgIcon = this._fillSvgWithStyle(); // Get svg icon
+        const combinedSvg = this.previewAttributes.pattern + svgIcon; // Add pattern to svg icon
 
         return (
             <svg
