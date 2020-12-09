@@ -16,14 +16,8 @@ const StyledColorPicker = styled(Input)`
     }
 `;
 
-export class ColorPicker extends React.Component {
-    constructor (props) {
-        super(props);
-    }
-
-    render () {
+export const ColorPicker = (props) => {
         return (
             <StyledColorPicker type='color' { ...this.props } />
         );
-    }
 }
