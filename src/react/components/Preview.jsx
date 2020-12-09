@@ -32,7 +32,8 @@ const defaults = {
     defaultLineCap: 'square',
     defaultLineJoin: 'mitter',
     defaultFillPattern: '',
-    defaultPatternId: 'patternPreview'
+    defaultPatternId: 'patternPreview',
+    defaultStrokeDashArray: ''
 }
 
 /**
@@ -51,6 +52,8 @@ const defaults = {
 export class Preview extends React.Component {
     constructor (props) {
         super(props);
+
+        console.log(this.props);
 
         this.currentStyle = this.props.styleSettings;
         this.markers = this.props.markers;
@@ -88,10 +91,13 @@ export class Preview extends React.Component {
             ? this.props.styleSettings.stroke.area.width : this.props.styleSettings.stroke.width;
         
         this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.defaultLineCap;
+
+        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.styleSettings.stroke.lineDash === 'dash' ? '4, 4' : defaults.defaultStrokeDashArray;
         
         path.setAttribute('stroke', this.previewAttributes.strokeColor);
         path.setAttribute('stroke-width', this.previewAttributes.strokeWidth);
         path.setAttribute('stroke-linecap', this.previewAttributes.strokeLineCap);
+        path.setAttribute('stroke-dasharray', this.previewAttributes.strokeDashArray);
         if (format !== 'line') {
             path.setAttribute('fill', this.previewAttributes.fill);
         }
@@ -102,15 +108,11 @@ export class Preview extends React.Component {
     }
 
     _parsePath (format) {
-        let baseSvg = '';
-
-        if (format === 'point') {
-            baseSvg = this.props.markers[this.props.styleSettings.image.shape].data;
-        } else if (format === 'line') {
-            baseSvg = linePreviewSVG;
-        } else if (format === 'area') {
-            baseSvg = areaPreviewSVG;
-        }
+        let baseSvg =
+              format === 'point' ? this.props.markers[this.props.styleSettings.image.shape].data
+            : format === 'line' ? baseSvg = linePreviewSVG
+            : format === 'area' ? baseSvg = areaPreviewSVG
+            : false;
         
         const domParser = new DOMParser();
         const parsed = domParser.parseFromString(baseSvg, 'image/svg+xml');
