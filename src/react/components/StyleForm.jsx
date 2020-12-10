@@ -255,22 +255,18 @@ export class StyleForm extends React.Component {
     }
 
     _getColorPickers () {
-        const strokeColorPicker = (
-            <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
-                <ColorPicker onChange={ this.styleInputCallback } />
-            </Form.Item>
-        );
-
-        const fillColorPicker = this.state.format !== 'line' ? (
-            <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
-                <ColorPicker onChange={ this.styleInputCallback } />
-            </Form.Item>
-        ) : false;
-
         return (
             <Row>
-                { strokeColorPicker }
-                { fillColorPicker }
+                <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
+                    <ColorPicker onChange={ this.styleInputCallback } />
+                </Form.Item>
+
+                { this.state.format !== 'line' ?
+                    <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
+                        <ColorPicker onChange={ this.styleInputCallback } />
+                    </Form.Item>
+                    : false
+                }
             </Row>
         );
     }
