@@ -30,4 +30,3 @@ export { GenericForm } from './components/GenericForm';
 export { ColorPicker } from './components/ColorPicker';
 export { SvgRadioButton } from './components/SvgRadioButton';
 export { Preview } from './components/Preview';
-

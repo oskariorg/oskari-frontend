@@ -4,6 +4,10 @@ import { Button, Select, ColorPicker, SvgRadioButton, Preview } from 'oskari-ui'
 import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
 import styled from 'styled-components';
 
+import { LineTab } from './styleform/LineTab';
+import { AreaTab } from './styleform/AreaTab';
+import { PointTab } from './styleform/PointTab';
+
 const formLayout = {
     labelCol: { span: 24 },
     wrapperCol: { span: 24 }
@@ -152,20 +156,87 @@ export class StyleForm extends React.Component {
         this.changeTab = (event) => this.setState({ [event.target.name]: event.target.value });
 
         this.sizeControlCallback = (value) => this.setState({ 'strokeWidth': value, 'size': value });
-
-        this.resetStyles = () => {
-
-        };
     }
 
     _getCurrentTab (tab) {
         switch(tab) {
             case 'point':
-                return this._getDotTab();
+                return (
+                    <PointTab
+                        formLayout={ formLayout }
+                        iconSelectorCallback={
+                            (event) => {
+                                this.setState({
+                                    image: {
+                                        ...this.state.image,
+                                        shape: event.target.value
+                                    }
+                                });
+                            }
+                        }
+                        markers={ this.props.markers }
+                    />
+                );
             case 'line':
-                return this._getLineTab();
+                return (
+                    <LineTab
+                        formLayout={ formLayout }
+                        lineDashCallback={
+                            (event) => {
+                                this.setState({
+                                    stroke: {
+                                        ...this.state.stroke,
+                                        lineDash: event.target.value
+                                    }
+                                });
+                            }
+                        }
+                        lineCapCallback={
+                            (event) => {
+                                this.setState({
+                                    stroke: {
+                                        ...this.state.stroke,
+                                        lineCap: event.target.value
+                                    }
+                                });
+                            }
+                        }
+                        lineIcons={ lineIcons }
+                    />
+                );
             case 'area':
-                return this._getAreaTab();
+                return (
+                    <AreaTab
+                        lineIcons={ lineIcons.lineDash }
+                        areaFills={ areaFills }
+                        formLayout={ formLayout }
+                        lineDashCallback={
+                            (event) => {
+                                this.setState({
+                                    stroke: {
+                                        ...this.state.stroke,
+                                        lineDash: event.target.value
+                                    }
+                                });
+
+
+                            }
+                        }
+                        lineStyleCallback={
+                            (event) => {
+                                this.setState({
+                                    fill: {
+                                        ...this.state.fill,
+                                        area: {
+                                            ...this.state.fill.area,
+                                            pattern: event.target.value
+                                        }
+                                    }
+                                });
+                            }                            
+                        }
+                    />
+                );
             default:
                 return false;
         }
@@ -231,115 +302,6 @@ export class StyleForm extends React.Component {
                         } } />
                 </Form.Item>
             </Row>
-        );
-    }
-
-    _getDotTab () {
-        return (
-            <>
-                <Row>
-                    <Form.Item
-                        { ...formLayout }
-                        name='image'
-                        label='Ikoni'
-                        onChange={ (event) => {
-                            this.setState({
-                                image: {
-                                    ...this.state.image,
-                                    shape: event.target.value
-                                }
-                            });
-                        }
-                    }>
-                        <SvgRadioButton options={ this.props.markers }  />
-                    </Form.Item>
-                </Row>  
-            </>
-        );
-    }
-
-    _getLineTab () {
-        return (
-            <>
-                <Row>
-                    <Form.Item name='lineStyle' label='Line dash' { ...formLayout }>
-                        <SvgRadioButton options={ lineIcons.lineDash } onChange={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineDash: event.target.value
-                                    }
-                                });
-                            }
-                        } />
-                    </Form.Item>
-                </Row>
-
-                <Row>
-                    <Form.Item name='lineStyle' label='Line join' { ...formLayout }>
-                        <SvgRadioButton options={ lineIcons.linecaps } onChange={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineCap: event.target.value
-                                    }
-                                });
-                            }
-                        } />
-                    </Form.Item>
-                </Row>
-
-                <Row>
-                    <Form.Item name='lineStyle' label='Line endings' { ...formLayout }>
-                        <SvgRadioButton options={ lineIcons.corners } />
-                    </Form.Item>
-                </Row>
-            </>
-        );
-    }
-
-    _getAreaTab () {
-        return (
-            <>
-                <Row>
-                    <Form.Item name='lineStyle' label='Line dash' { ...formLayout }>
-                        <SvgRadioButton options={ lineIcons.lineDash } onChange={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineDash: event.target.value
-                                    }
-                                });
-                            }
-                        } />
-                    </Form.Item>
-                </Row>
-
-                <Row>
-                    <Form.Item label='Viivan tyyli' { ...formLayout }>
-                        <SvgRadioButton
-                            options={ areaFills }
-                            onChange={
-                                (event) => {
-                                    this.setState({
-                                        fill: {
-                                            ...this.state.fill,
-                                            area: {
-                                                ...this.state.fill.area,
-                                                pattern: event.target.value
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        />
-                    </Form.Item>
-                </Row>
-            </>
-
         );
     }
 

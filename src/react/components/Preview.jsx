@@ -53,8 +53,6 @@ export class Preview extends React.Component {
     constructor (props) {
         super(props);
 
-        console.log(this.props);
-
         this.currentStyle = this.props.styleSettings;
         this.markers = this.props.markers;
         this.size = 3;
