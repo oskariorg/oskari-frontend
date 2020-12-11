@@ -21,7 +21,7 @@ const removeFromLocalStorageArray = (name, value) => {
     // Otherwise, convert the localStorage string to an array
     existing = existing ? existing.split(',') : [];
     // Get index of announcement id and remove it from the array
-    const index = existing.indexOf(value);
+    const index = existing.indexOf(value.toString());
     if (index > -1) {
         existing.splice(index, 1);
     }
@@ -64,7 +64,8 @@ class ViewHandler extends StateHandler {
             }
         });
         this.updateState({
-            activeKey: []
+            activeKey: [],
+            updated: false
         });
     }
 
@@ -76,20 +77,23 @@ class ViewHandler extends StateHandler {
                 return false;
             } else {
                 Messaging.success(getMessage('messages.updateSuccess'));
-                removeFromLocalStorageArray('oskari-announcements', data.data[0].toString());
+                removeFromLocalStorageArray('oskari-announcements', data.id);
             }
         });
         this.updateState({
-            activeKey: []
+            activeKey: [],
+            updated: false
         });
     }
 
     deleteAnnouncement (index, id) {
         this.id = { id };
-        this.announcementsHelper.deleteAnnouncement(this.id, function (err) {
+        this.announcementsHelper.deleteAnnouncement(this.id, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {
+                
+                console.log(data);
                 Messaging.success(getMessage('messages.deleteSuccess'));
             }
         });
@@ -99,7 +103,8 @@ class ViewHandler extends StateHandler {
         // Update accordion with announcements and keep all closed
         this.updateState({
             announcements: newList,
-            activeKey: []
+            activeKey: [],
+            updated: false
         });
     }
     // Cancel creating a new announcement or editing one. Close all panels.

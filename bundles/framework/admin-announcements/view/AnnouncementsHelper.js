@@ -7,7 +7,7 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
-            url: Oskari.urls.getRoute('GetAdminAnnouncements'),
+            url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
             },
@@ -24,10 +24,9 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {
-                params: JSON.stringify(data)
-            },
-            url: Oskari.urls.getRoute('SaveAnnouncement'),
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(data),
+            url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
             },
@@ -42,12 +41,11 @@ export const announcementsHelper = () => {
             return;
         }
         jQuery.ajax({
-            type: 'POST',
+            type: 'PUT',
             dataType: 'json',
-            data: {
-                params: JSON.stringify(data)
-            },
-            url: Oskari.urls.getRoute('UpdateAnnouncement'),
+            contentType: 'application/json; charset=UTF-8',
+            data: JSON.stringify(data),
+            url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
             },
@@ -63,12 +61,10 @@ export const announcementsHelper = () => {
         }
 
         jQuery.ajax({
-            type: 'POST',
+            type: 'DELETE',
             dataType: 'json',
-            data: {
-                params: JSON.stringify(data)
-            },
-            url: Oskari.urls.getRoute('DeleteAnnouncement'),
+            data: JSON.stringify(data),
+            url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
             },

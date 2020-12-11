@@ -14,11 +14,8 @@ Oskari.registerLocalization(
             "addNewForm": "Ny avisering",
             "delete": "Ta bort",
             "save": "Spara",
+            "yes": "Ja",
             "cancel": "Annullera",
-            "title": "Titel",
-            "content": "Innehåll",
-            "date-range": "Datumintervall",
-            "show-popup": "Visa popup",
             "newAnnouncement": {
                 "title": "Titel",
                 "content": "Innehåll",
@@ -32,11 +29,10 @@ Oskari.registerLocalization(
                 "deleteFailed": "Radering av avisering misslyckades",
                 "deleteSuccess": "Avisering raderat",
                 "updateSuccess": "Avisering uppdaterat.",
-                "getAdminAnnouncementsFailed": "Att hämta admin aviseringar misslyckades"
+                "getAdminAnnouncementsFailed": "Att hämta admin aviseringar misslyckades",
+                "deleteAnnouncementConfirm": "Radera avisering?",
+                "cancelAnnouncementConfirm": "Är du säker?"
             },
-            "yes": "Ja",
-            "deleteAnnouncementConfirmTitle": "Obs!",
-            "deleteAnnouncementConfirm": "Huruvida avisering ska raderas ",
             "titleError": "Lägg till en titel!",
             "contentError": "Lägg till innehåll!",
             "dateError": "Lägg till intervall!"

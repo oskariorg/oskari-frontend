@@ -26,7 +26,7 @@ class ViewHandler extends StateHandler {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
-            url: Oskari.urls.getRoute('GetAnnouncements'),
+            url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 callback(pResp);
             },

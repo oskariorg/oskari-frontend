@@ -134,10 +134,18 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                   </Confirm>
                 </Form.Item>
                 <Form.Item>
-                  <Button
-                  onClick={() => controller.cancel(index,form.id)}>
-                    <Message messageKey={'cancel'}/>
-                  </Button>
+                  <Confirm
+                        title={<Message messageKey='messages.cancelAnnouncementConfirm'/>}
+                        onConfirm={() => controller.cancel(index,form.id)}
+                        okText={<Message messageKey='yes'/>}
+                        cancelText={<Message messageKey='cancel'/>}
+                        placement='top'
+                        popupStyle={{zIndex: '999999'}}
+                    >
+                      <Button>
+                        <Message messageKey={'cancel'}/>
+                      </Button>
+                  </Confirm>
                 </Form.Item>
               </Row>
             </Form>

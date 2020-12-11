@@ -14,6 +14,7 @@ Oskari.registerLocalization(
             "addNewForm": "Uusi Ilmoitus",
             "delete": "Poista",
             "save": "Tallenna",
+            "yes": "Kyllä",
             "cancel": "Peruuta",
             "newAnnouncement": {
                 "title": "Otsikko",
@@ -29,11 +30,9 @@ Oskari.registerLocalization(
                 "deleteSuccess": "Ilmoitus poistettu.",
                 "updateSuccess": "Ilmoitus päivitetty.",
                 "getAdminAnnouncementsFailed": "Admin ilmoitusten haku epäonnistui",
-                "deleteAnnouncementConfirm": "Poistetaanko taso "
+                "deleteAnnouncementConfirm": "Poistetaanko ilmoitus?",
+                "cancelAnnouncementConfirm": "Oletko varma?"
             },
-            "yes": "Kyllä",
-            "deleteAnnouncementConfirmTitle": "Huom!",
-            "deleteAnnouncementConfirm": "Poistetaanko ilmoitus: ",
             "titleError": "Lisää otsikko!",
             "contentError": "Lisää sisältö!",
             "dateError": "Lisää aikaväli!"

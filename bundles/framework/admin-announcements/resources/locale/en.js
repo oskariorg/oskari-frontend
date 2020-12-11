@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "addNewForm": "New Announcement",
         "delete": "Delete",
         "save": "Save",
+        "yes": "Yes",
         "cancel": "Cancel",
         "newAnnouncement": {
             "title": "Title",
@@ -28,11 +29,10 @@ Oskari.registerLocalization(
             "deleteFailed": "Deleting announcement failed",
             "deleteSuccess": "Announcement deleted",
             "updateSuccess": "Announcement updated.",
-            "getAdminAnnouncementsFailed": "Fetching admin announcements failed"
+            "getAdminAnnouncementsFailed": "Fetching admin announcements failed",
+            "deleteAnnouncementConfirm": "Delete the announcement?",
+            "cancelAnnouncementConfirm": "Are you sure?"
         },
-        "yes": "Yes",
-        "deleteAnnouncementConfirmTitle": "Note!",
-        "deleteAnnouncementConfirm": "Do you want to delete announcement: ",
         "titleError": "Add title",
         "contentError": "Add content!",
         "dateError": "Add daterange!"
