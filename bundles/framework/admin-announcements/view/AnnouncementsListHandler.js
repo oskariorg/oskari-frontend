@@ -92,8 +92,6 @@ class ViewHandler extends StateHandler {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {
-                
-                console.log(data);
                 Messaging.success(getMessage('messages.deleteSuccess'));
             }
         });
