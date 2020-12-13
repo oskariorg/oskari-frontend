@@ -4,16 +4,16 @@ import { AnnouncementsList, AnnouncementsListHandler } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
- * @class Oskari.framework.bundle.admin-announcements.Flyout
+ * @class Oskari.admin.bundle.admin-announcements.Flyout
  *
  * Renders the admin-announcements flyout.
  */
-Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.Flyout',
+Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.Flyout',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.framework.bundle.admin-announcements.Flyout} instance
+     * @param {Oskari.admin.bundle.admin-announcements.Flyout} instance
      *    reference to component that created the flyout
      */
     function (instance) {

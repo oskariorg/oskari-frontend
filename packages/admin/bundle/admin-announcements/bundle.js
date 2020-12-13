@@ -4,7 +4,7 @@
  *
  */
 
-Oskari.clazz.define("Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundle", function () {
+Oskari.clazz.define("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundle", function () {
 
 }, {
     /**
@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-announcements.AdminAnnounceme
      */
     "create": function () {
 
-        return Oskari.clazz.create("Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance");
+        return Oskari.clazz.create("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundleInstance");
     },
     /**
      * @method update called by the bundle manager to inform on changes in bundlage
@@ -35,24 +35,24 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-announcements.AdminAnnounceme
          */
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/instance.js"
+            "src": "../../../../bundles/admin/admin-announcements/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/Flyout.js"
+            "src": "../../../../bundles/admin/admin-announcements/Flyout.js"
         }],
         "locales": [
         {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/resources/locale/en.js"
+            "src": "../../../../bundles/admin/admin-announcements/resources/locale/en.js"
         }, {
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/resources/locale/fi.js"
+            "src": "../../../../bundles/admin/admin-announcements/resources/locale/fi.js"
         },{
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/admin-announcements/resources/locale/sv.js"
+            "src": "../../../../bundles/admin/admin-announcements/resources/locale/sv.js"
         }]
     },
     "bundle": {
@@ -95,4 +95,4 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-announcements.AdminAnnounceme
     }
 });
 
-Oskari.bundle_manager.installBundleClass("admin-announcements", "Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundle");
+Oskari.bundle_manager.installBundleClass("admin-announcements", "Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundle");

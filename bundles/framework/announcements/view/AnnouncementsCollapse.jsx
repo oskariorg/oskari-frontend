@@ -13,6 +13,8 @@ const AnnouncementsCollapse = ({controller, updated, panels, modals, checked }) 
 
       if (!updated) {
         controller.getAnnouncements(function(ann){
+          console.log("get announcements collapse");
+          console.log(ann);
 
         
           var panels = [];

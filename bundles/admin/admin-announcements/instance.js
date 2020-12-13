@@ -5,7 +5,7 @@
  *
  * See Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance for bundle definition.
  */
-Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance',
+Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-announcements.AdminAnnounceme
     function () {
         var conf = this.getConfiguration();
         conf.name = 'admin-announcements';
-        conf.flyoutClazz = 'Oskari.framework.bundle.admin-announcements.Flyout';
+        conf.flyoutClazz = 'Oskari.admin.bundle.admin-announcements.Flyout';
     }, {
 
         afterStart: function () {
