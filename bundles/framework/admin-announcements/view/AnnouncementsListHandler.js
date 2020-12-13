@@ -56,17 +56,17 @@ class ViewHandler extends StateHandler {
     }
 
     saveAnnouncement (data) {
-        this.announcementsHelper.saveAnnouncement(data, function (err, data) {
+        this.announcementsHelper.saveAnnouncement(data, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
             } else {
                 Messaging.success(getMessage('messages.saveSuccess'));
+                this.updateState({
+                    activeKey: [],
+                    updated: false
+                });
             }
-        });
-        this.updateState({
-            activeKey: [],
-            updated: false
-        });
+        }.bind(this));
     }
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
@@ -78,32 +78,32 @@ class ViewHandler extends StateHandler {
             } else {
                 Messaging.success(getMessage('messages.updateSuccess'));
                 removeFromLocalStorageArray('oskari-announcements', data.id);
+                this.updateState({
+                    activeKey: [],
+                    updated: false
+                });
             }
-        });
-        this.updateState({
-            activeKey: [],
-            updated: false
-        });
+        }.bind(this));
     }
 
     deleteAnnouncement (index, id) {
         this.id = { id };
-        this.announcementsHelper.deleteAnnouncement(this.id, function (err, data) {
+        this.announcementsHelper.deleteAnnouncement(this.id, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {
                 Messaging.success(getMessage('messages.deleteSuccess'));
+                const newList = [...this.state.announcements];
+                newList.splice(index, 1);
+        
+                // Update accordion with announcements and keep all closed
+                this.updateState({
+                    announcements: newList,
+                    activeKey: [],
+                    updated: false
+                });
             }
-        });
-        const newList = [...this.state.announcements];
-        newList.splice(index, 1);
-
-        // Update accordion with announcements and keep all closed
-        this.updateState({
-            announcements: newList,
-            activeKey: [],
-            updated: false
-        });
+        }.bind(this));
     }
     // Cancel creating a new announcement or editing one. Close all panels.
     cancel (index, id) {
