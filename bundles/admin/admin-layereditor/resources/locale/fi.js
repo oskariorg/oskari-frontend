@@ -101,6 +101,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
             "capabilities": {
+                "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
