@@ -12,7 +12,7 @@ export const PointTab = (props) => {
                     label='Ikoni'
                     onChange={ props.iconSelectorCallback }
                 >
-                    <SvgRadioButton options={ props.markers }  />
+                    <SvgRadioButton options={ props.markers } defaultValue={ props.styleSettings.image.shape } />
                 </Form.Item>
             </Row>  
         </>

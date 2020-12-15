@@ -49,6 +49,10 @@ const lineIcons = {
 
 const areaFills = [
     {
+        name: 'solid',
+        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="solid" viewBox="0, 0, 4, 4" width="100%" height="100%"><path d="M-1,2 l6,0" stroke="#000000" stroke-width="4"/></pattern></defs><rect width="32" height="32" fill="url(#solid)"/></svg>' 
+    },
+    {
         name: 'line',
         data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 4, 4" width="50%" height="50%"> <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/></pattern></defs><rect width="32" height="32" fill="url(#line)"/></svg>'
     },
@@ -175,6 +179,7 @@ export class StyleForm extends React.Component {
                             }
                         }
                         markers={ this.props.markers }
+                        styleSettings={ this.state }
                     />
                 );
             case 'line':
@@ -202,6 +207,7 @@ export class StyleForm extends React.Component {
                             }
                         }
                         lineIcons={ lineIcons }
+                        styleSettings={ this.state }
                     />
                 );
             case 'area':
@@ -235,6 +241,7 @@ export class StyleForm extends React.Component {
                                 });
                             }                            
                         }
+                        styleSettings={ this.state }
                     />
                 );
             default:
@@ -258,12 +265,12 @@ export class StyleForm extends React.Component {
         return (
             <Row>
                 <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
-                    <ColorPicker onChange={ this.styleInputCallback } />
+                    <ColorPicker onChange={ this.styleInputCallback } defaultValue={ this.state.stroke.color } />
                 </Form.Item>
 
                 { this.state.format !== 'line' ?
                     <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } />
+                        <ColorPicker onChange={ this.styleInputCallback } defaultValue={ this.state.fill.color } />
                     </Form.Item>
                     : false
                 }

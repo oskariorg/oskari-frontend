@@ -10,15 +10,17 @@ export const AreaTab = (props) => {
                     <SvgRadioButton
                         options={ props.lineIcons }
                         onChange={ props.lineDashCallback}
+                        defaultValue={ props.styleSettings.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
                     />
                 </Form.Item>
             </Row>
 
             <Row>
-                <Form.Item label='Viivan tyyli' { ...props.formLayout }>
+                <Form.Item label='Fill style' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.areaFills }
                         onChange={ props.lineStyleCallback }
+                        defaultValue={ props.styleSettings.fill.area.pattern }
                     />
                 </Form.Item>
             </Row>

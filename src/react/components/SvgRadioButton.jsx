@@ -34,7 +34,7 @@ export class SvgRadioButton extends React.Component {
 
     render () {
         return (
-            <Radio.Group defaultValue={ 'dot' } { ...formLayout } onChange={ this.props.onChange }>
+            <Radio.Group defaultValue={ this.props.defaultValue } { ...formLayout } onChange={ this.props.onChange }>
                 { this.props.options.map((singleOption, index) => {
                     return(
                         <RadioIcon value={ singleOption.name || index }>

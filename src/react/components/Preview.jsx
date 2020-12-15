@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 const previewSize = '80px';
 
 // Viewbox settings for preview svg
-//const previewViewbox = '0 0 60 60';
 const previewViewbox = {
     minX: 0,
     minY: 0,
@@ -14,7 +13,7 @@ const previewViewbox = {
 }
 
 // Style settings for wrapping preview rectangle
-const previewStyling = {
+const previewWrapperStyle = {
     border: '1px solid #d9d9d9',
     height: previewSize,
     width: previewSize
@@ -23,18 +22,53 @@ const previewStyling = {
 const linePreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="#000000" d="M10,15L20,35L40,25" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt" strokeDasharray="0"></path></svg>';
 const areaPreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="checker" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect fill="#eee" x="0" width="10" height="10" y="0"><rect fill="#eee" x="10" width="10" height="10" y="10"></rect></rect></pattern></defs><rect x="0" y="0" width="80" height="80" fill="url(#checker)"></rect><path d="M10,17L40,12L29,40Z" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>';
 
-const defaults = {
+const defaults2 = {
     defaultStrokeWidth: 1,
     defaultStrokeColor: '#000000',
     defaultFill: '#ffffff',
     defaultFillColor: '#ffffff',
     defaultSize: 3,
-    defaultLineCap: 'square',
     defaultLineJoin: 'mitter',
     defaultFillPattern: '',
-    defaultPatternId: 'patternPreview',
     defaultStrokeDashArray: ''
 }
+
+const defaultPatternId = 'patternPreview';
+
+const defaults = {
+    fill: {
+        color: '#ffffff',
+        area: {
+            pattern: -1
+        }
+    },
+    stroke: {
+        color: '#000000',
+        width: 1,
+        lineDash: 'solid',
+        lineCap: 'round',
+        area: {
+            color: '#000000',
+            width: 3,
+            lineDash: 'dot',
+            lineJoin: 'round'
+        }
+    },
+    image: {
+        shape: 5,
+        size: 3,
+        sizePx: 20,
+        offsetX: 0,
+        offsetY: 0,
+        opacity: 0.7,
+        radius: 2,
+        fill: {
+            color: '#ff00ff'
+        }
+    }
+};
+
+
 
 /**
  * @class Preview
@@ -53,18 +87,16 @@ export class Preview extends React.Component {
     constructor (props) {
         super(props);
 
-        this.currentStyle = this.props.styleSettings;
         this.markers = this.props.markers;
         this.size = 3;
 
         this.previewAttributes = {
-            strokeColor: defaults.defaultStrokeColor,
-            strokeWidth: defaults.defaultStrokeWidth,
-            strokeLineCap: defaults.defaultLineCap,
-            fill: defaults.defaultFill,
-            fillColor: defaults.defaultFillColor,
-            pattern: defaults.defaultFillPattern,
-            patternId: defaults.defaultPatternId
+            strokeColor: defaults.stroke.color,
+            strokeWidth: defaults.stroke.width,
+            strokeLineCap: defaults.stroke.lineCap,
+            fill: defaults.defaultFill, // tyhjä stringi tähän?
+            fillColor: defaults.fill.color,
+            pattern: defaults.fill.area.pattern
         };
     }
     
@@ -76,7 +108,7 @@ export class Preview extends React.Component {
         this.previewAttributes.fillColor = this.props.styleSettings.fill.color;
 
         this.previewAttributes.fill = format === 'area'
-            ? ('url(#' + this.previewAttributes.patternId + ')') : format !== 'line' 
+            ? ('url(#' + defaultPatternId + ')') : format !== 'line' 
             ? this.props.styleSettings.fill.color : defaults.defaultFillColor;
 
         if (format === 'area' && ~this.props.styleSettings.fill.area.pattern) {
@@ -88,7 +120,7 @@ export class Preview extends React.Component {
             ? defaults.defaultStrokeWidth : format === 'area'
             ? this.props.styleSettings.stroke.area.width : this.props.styleSettings.stroke.width;
         
-        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.defaultLineCap;
+        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.stroke.lineCap;
 
         this.previewAttributes.strokeDashArray = format !== 'point' && this.props.styleSettings.stroke.lineDash === 'dash' ? '4, 4' : defaults.defaultStrokeDashArray;
         
@@ -100,11 +132,18 @@ export class Preview extends React.Component {
             path.setAttribute('fill', this.previewAttributes.fill);
         }
         
-        this.size = format === 'point' ? this.props.styleSettings.image.size : defaults.defaultSize;
+        this.size = format === 'point' ? this.props.styleSettings.image.size : defaults.image.size;
 
         return path.outerHTML;
     }
 
+    /**
+     * @method _parsePath
+     * @param {String} format - format of the current icon as string (point | line | area)
+     * @description Parses correct svg based on provided format
+     *
+     * @returns rawHtmlPath - DOM object of parsed SVG
+     */
     _parsePath (format) {
         let baseSvg =
               format === 'point' ? this.props.markers[this.props.styleSettings.image.shape].data
@@ -119,6 +158,13 @@ export class Preview extends React.Component {
         return rawHtmlPath;
     }
 
+    /**
+     * @method _parsePattern
+     * @param {String} format - current pattern to be parsed as DOM SVG element
+     * @description Parses provided pattern and fills it with correct attributes
+     *
+     * @returns rawHtmlPath - DOM object of current SVG
+     */
     _parsePattern (pattern) {
         const domParser = new DOMParser();
         const parsed = domParser.parseFromString(pattern.data, 'image/svg+xml');
@@ -129,8 +175,14 @@ export class Preview extends React.Component {
         return rawHtmlPath;
     }
 
+    /**
+     * @method _composeSvgPattern
+     * @param {HTMLElement} patternPath pattern as DOM node element
+     * @description Combine provided plain pattern path with definitive svg base
+     * @returns {String} full pattern as string
+     */
     _composeSvgPattern (patternPath) {
-        return '<defs><pattern id="' + this.previewAttributes.patternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
+        return '<defs><pattern id="' + defaultPatternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
     }
 
     _composePreviewViewbox () {
@@ -165,7 +217,7 @@ export class Preview extends React.Component {
 
     render () {
         return (
-            <div style={ previewStyling }>
+            <div style={ previewWrapperStyle }>
                 { this._addBaseSvg(this.props.previewIcon) }
             </div>
         );

@@ -49,9 +49,9 @@ let oskariLineSvgs = [
 
 const oskariTestStyle = {
     "fill": { // fill styles
-        "color": "#FAEBD7", // fill color
+        "color": "#b5b5b5", // fill color
         "area": {
-            "pattern": -1 // fill style
+            "pattern": 'solid' // fill style - original default: -1
         }
     },
     "stroke": { // stroke styles
@@ -62,7 +62,7 @@ const oskariTestStyle = {
         "area": {
             "color": "#000000", // area stroke color
             "width": 3, // area stroke width
-            "lineDash": "dot", // area line dash
+            "lineDash": "solid", // area line dash
             "lineJoin": "round" // area line corner
         }
     },
@@ -150,28 +150,12 @@ const styleList = [
     }
 ];
 
-const radioTestOptions = [
-    {
-        value: 'dot',
-        icon: placeHolderIcon
-    },
-    {
-        value: 'line',
-        icon: placeHolderIcon
-    },
-    {
-        value: 'area',
-        icon: placeHolderIcon
-    }
-];
-
 
 storiesOf('StyleForm', module)
     .add('Default', () => (
         <StyleForm
             icons={ testOptions }
             styleList={ styleList }
-            styleOptions={ radioTestOptions }
             markers={ oskariMarkers }
             styleSettings={ oskariTestStyle }
             lineIcons={ oskariLineSvgs }

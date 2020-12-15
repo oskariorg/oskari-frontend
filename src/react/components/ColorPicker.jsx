@@ -17,6 +17,7 @@ const StyledColorPicker = styled(Input)`
 `;
 
 export const ColorPicker = (props) => {
+    console.log(props);
     return (
         <StyledColorPicker type='color' { ...props } />
     );

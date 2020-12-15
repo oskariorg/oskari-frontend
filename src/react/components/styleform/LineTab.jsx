@@ -10,22 +10,25 @@ export const LineTab = (props) => {
                     <SvgRadioButton
                         options={ props.lineIcons.lineDash }
                         onChange={ props.lineDashCallback }
+                        defaultValue={ props.styleSettings.stroke.lineDash }
                     />
                 </Form.Item>
-            </Row>
 
-            <Row>
-                <Form.Item name='lineStyle' label='Line join' { ...props.formLayout }>
+                <Form.Item name='lineStyle' label='Line endings' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.lineIcons.linecaps }
                         onChange={ props.lineCapCallback }
+                        defaultValue={ props.styleSettings.stroke.lineCap }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
-                <Form.Item name='lineStyle' label='Line endings' { ...props.formLayout }>
-                    <SvgRadioButton options={ props.lineIcons.corners } />
+                <Form.Item name='lineStyle' label='Line corners' { ...props.formLayout }>
+                    <SvgRadioButton
+                        options={ props.lineIcons.corners }
+                        defaultValue={ props.styleSettings.stroke.area.lineJoin }
+                    />
                 </Form.Item>
             </Row>
         </>
