@@ -137,14 +137,14 @@ export class StyleForm extends React.Component {
         this.state.format = 'point'; // Add format manually which doesnt come with style JSON
 
         this._populateWithStyle = (format) => {
-            if (this.props.icons) {
+            if (this.props.styleList) {
                 let currentStyle = this.props.styleList.find(option => option.value == format);
                 this.setState({
                     ...currentStyle,
                     format: currentStyle.format
                 });
     
-                this.ref.current.setFieldsValue(currentStyle); // Populate fields    
+                this.ref.current.setFieldsValue(currentStyle); // Populate fields -- FIX ME
             }
         }
 
@@ -262,6 +262,11 @@ export class StyleForm extends React.Component {
         }
     }
 
+    /**
+     * @method _createPreview
+     * @description Compose Preview -component
+     * @returns {React.Component} Preview component with provided style
+     */
     _createPreview () {
         return (
             <Row>
@@ -274,6 +279,12 @@ export class StyleForm extends React.Component {
         );
     }
 
+    /**
+     * @method _getColorPickers
+     * @description Compose fill and stroke color picker elements for style form
+     * 
+     * @returns {React.Component} Only stroke color picker or both stroke and fill 
+     */
     _getColorPickers () {
         return (
             <Row>
@@ -294,7 +305,7 @@ export class StyleForm extends React.Component {
     _getSizeControl () {
         return (
             <Row>
-                <Form.Item name='sizeControl' label='Size' initialValue={ 3 } { ...formLayout }>
+                <Form.Item name='size' label='Size' initialValue={ 3 } { ...formLayout }>
                     <InputNumber
                         min={ 1 }
                         max={ 5 }
