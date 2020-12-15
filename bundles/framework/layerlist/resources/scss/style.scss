@@ -1,3 +1,6 @@
+$editIcon: url("../images/glyphicons-151-edit.png");
+$addSubThemeIcon: url("../images/glyphicons-191-plus-sign.png");
+
 @keyframes blinking {
     0% {opacity: 1;}
     50% {opacity: 0.25;}
@@ -14,4 +17,22 @@ div.layerlist {
         animation-iteration-count: 2;
         opacity: 1;
     }
+}
+
+.edit-layer {
+    /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+    background-image: $editIcon !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+    margin-right: 5px !important;
+}
+
+.add-sub-theme {
+    /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+    background-image: $addSubThemeIcon !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+    margin-right: 5px !important;
 }

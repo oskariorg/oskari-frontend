@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Opacity",
                 "style": "Default Style",
-                "params": {
+                "params": {
                     "selectedTime": "Selected time"
                 },
                 "singleTile": "Single Tile",
@@ -85,7 +85,9 @@ Oskari.registerLocalization(
             "editDataProvider": "Edit dataprovider",
             "themeName": "Theme name",
             "addTheme": "Add theme",
-            "editTheme" : "Edit theme",
+            "editTheme": "Edit theme",
+            "addSubtheme": "Add subtheme",
+            "editSubtheme": "Edit subtheme",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
             "close": "Close",
@@ -136,12 +138,12 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
-                "styles" : "Invalid JSON syntax in Style definitions.",
-                "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
-                "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
-                "attributes" : "Invalid Attribute JSON syntax.",
-                "attributions" : "Invalid Attributions JSON syntax.",
-                "tileGrid" : "Invalid Tile grid JSON syntax."
+                "styles": "Invalid JSON syntax in Style definitions.",
+                "externalStyles": "Invalid JSON syntax in 3rd party style definitions.",
+                "hover": "Invalid JSON syntax in Feature highlighting and tooltip.",
+                "attributes": "Invalid Attribute JSON syntax.",
+                "attributions": "Invalid Attributions JSON syntax.",
+                "tileGrid": "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
@@ -157,8 +159,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Request timed out before getting response from service. Check the interface URL.",
                 "connectionErrorFetchCapabilities": "Connection could not be established to the service. Check the interface URL.",
                 "parsingErrorFetchCapabilities": "The response from the service didn't match the requested standard. Check the map layer type and/or version.",
-                "deleteSuccess" : "Deleted",
-                "deleteFailed" : "Delete failed",
+                "deleteSuccess": "Deleted",
+                "deleteFailed": "Delete failed",
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?"
@@ -167,7 +169,7 @@ Oskari.registerLocalization(
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Delete the map layers in the group",
+            "deleteGroupLayers": "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

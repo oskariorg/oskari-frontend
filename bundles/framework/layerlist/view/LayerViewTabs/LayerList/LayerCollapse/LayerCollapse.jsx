@@ -22,7 +22,7 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
-        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
+        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>

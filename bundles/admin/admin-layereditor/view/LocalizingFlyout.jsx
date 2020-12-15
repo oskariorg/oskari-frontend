@@ -9,7 +9,7 @@ const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout
 
 // NOTE: Everything is in the single file for demonstrating purposes.
 export class LocalizingFlyout extends ExtraFlyout {
-    constructor (instance, title, options = {}, deleteMapLayersText) {
+    constructor(instance, title, options = {}, deleteMapLayersText) {
         super(title, options);
         this.instance = instance;
         this.addClass('admin-localizing-flyout');
@@ -39,37 +39,37 @@ export class LocalizingFlyout extends ExtraFlyout {
         }
     }
 
-    setSaveAction (action) {
+    setSaveAction(action) {
         this.uiHandler.setSaveAction(action);
     }
-    setDeleteAction (action) {
+    setDeleteAction(action) {
         this.uiHandler.setDeleteAction(action);
     }
-    setLoading (loading) {
+    setLoading(loading) {
         this.uiHandler.updateState({ loading: !!loading });
     }
-    onCancel () {
+    onCancel() {
         this.hide();
     }
-    onShow () {
+    onShow() {
         // The UI handler may provide functions that can be accessed outside React Elements.
         this.uiHandler.reset();
     }
-    onHide () {
+    onHide() {
         ReactDOM.unmountComponentAtNode(this.mountPoint);
     }
-    onUpdate () {
+    onUpdate() {
         // The UI handler itself should never be passed to a component.
         // Instead, the handler should provide a controller object, a subset of the handlers methods.
         // The controller should contain only methods the components require.
         const controller = this.uiHandler.getController();
         let ui = (
             <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                <LocalizedContent { ...this.uiHandler.getState() }
+                <LocalizedContent {...this.uiHandler.getState()}
                     controller={controller}
                     isNew={!this.id}
                     deleteMapLayersText={this.deleteMapLayersText}
-                    layerCountInGroup={this.layerCountInGroup}/>
+                    layerCountInGroup={this.layerCountInGroup} />
             </LocaleProvider>
         );
         ReactDOM.render(ui, this.mountPoint);
@@ -78,7 +78,7 @@ export class LocalizingFlyout extends ExtraFlyout {
 
 // Create a service responsible of the UI state.
 class UIService extends StateHandler {
-    constructor (instance, id) {
+    constructor(instance, id) {
         super();
         const getMsg = Oskari.getMsg.bind(null, instance.getName());
         const labels = {};
@@ -102,22 +102,22 @@ class UIService extends StateHandler {
         this.cancelAction = null;
         this.id = id;
     }
-    setSaveAction (saveAction) {
+    setSaveAction(saveAction) {
         this.saveAction = saveAction;
     }
-    setCancelAction (cancelAction) {
+    setCancelAction(cancelAction) {
         this.cancelAction = cancelAction;
     }
-    setDeleteAction (deleteAction) {
+    setDeleteAction(deleteAction) {
         this.deleteAction = deleteAction;
     }
-    setValue (value) {
+    setValue(value) {
         this.updateState({ value });
     }
-    setDeleteLayers (value) {
+    setDeleteLayers(value) {
         this.updateState({ deleteLayers: value });
     }
-    save () {
+    save() {
         if (typeof this.saveAction !== 'function') {
             return;
         }
@@ -125,20 +125,20 @@ class UIService extends StateHandler {
         this.updateState({ loading: true });
         this.saveAction(value, this.id);
     }
-    cancel () {
+    cancel() {
         if (typeof this.cancelAction !== 'function') {
             return;
         }
         const { value } = this.getState();
         this.cancelAction(value);
     }
-    delete () {
+    delete() {
         if (typeof this.deleteAction !== 'function') {
             return;
         }
         this.deleteAction(this.id, this.getState().deleteLayers);
     }
-    reset () {
+    reset() {
         this.setState(this.initialState);
     }
 }
@@ -192,17 +192,17 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
             </LocalizationComponent>
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
-                    <Message messageKey='cancel'/>
+                    <Message messageKey='cancel' />
                 </Button>
-                { !isNew &&
-                <DeleteButton
-                    controller={controller}
-                    deleteMapLayersText={deleteMapLayersText}
-                    layerCountInGroup={layerCountInGroup}
-                    deleteLayers={deleteLayers} />
+                {!isNew &&
+                    <DeleteButton
+                        controller={controller}
+                        deleteMapLayersText={deleteMapLayersText}
+                        layerCountInGroup={layerCountInGroup}
+                        deleteLayers={deleteLayers} />
                 }
                 <Button onClick={() => controller.save()} type='primary'>
-                    <Message messageKey='save'/>
+                    <Message messageKey='save' />
                 </Button>
             </Buttons>
         </Container>
@@ -225,20 +225,20 @@ const DeleteButton = ({ controller, deleteMapLayersText, layerCountInGroup, dele
     return (<Confirm
         title={<React.Fragment>
             <div>
-                <Message messageKey='messages.confirmDeleteGroup'/>
+                <Message messageKey='messages.confirmDeleteGroup' />
             </div>
-            { layerCountInGroup > 0 &&
-                <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>
+            {layerCountInGroup > 0 &&
+                <DeleteLayersCheckbox checked={deleteLayers} onChange={evt => controller.setDeleteLayers(evt.target.checked)}>
                     {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
                 </DeleteLayersCheckbox>
             }
         </React.Fragment>}
         onConfirm={() => controller.delete()}
-        okText={<Message messageKey='ok'/>}
-        cancelText={<Message messageKey='cancel'/>}
+        okText={<Message messageKey='ok' />}
+        cancelText={<Message messageKey='cancel' />}
         placement='bottomLeft'>
         <Button>
-            <Message messageKey='delete'/>
+            <Message messageKey='delete' />
         </Button>
     </Confirm>);
 };

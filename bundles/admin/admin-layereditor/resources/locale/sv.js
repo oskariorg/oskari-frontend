@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Opacitet",
                 "style": "Förvald utseende",
-                "params": {
+                "params": {
                     "selectedTime": "Vald tid"
                 },
                 "singleTile": "Single Tile",
@@ -85,7 +85,9 @@ Oskari.registerLocalization(
             "editDataProvider": "Redigera dataproducent",
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
-            "editTheme" : "Redigera tema",
+            "editTheme": "Redigera tema",
+            "addSubtheme": "Lägg subtema", // FIX!? Is this correct translation?
+            "editSubtheme": "Redigera subtema",  // FIX!? Is this correct translation?
             "selectMapLayerGroupsButton": "Välj grupp",
             "cancel": "Tillbaka",
             "close": "Stäng",
@@ -136,12 +138,12 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
-                "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
-                "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
-                "hover" : "Hover JSON-syntaxen är ogiltig.",
-                "attributes" : "Attribut JSON-syntaxen är ogiltig.",
-                "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
-                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
+                "styles": "Stildefinitioner JSON-syntaxen är ogiltig.",
+                "externalStyles": "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
+                "hover": "Hover JSON-syntaxen är ogiltig.",
+                "attributes": "Attribut JSON-syntaxen är ogiltig.",
+                "attributions": "Tillskrivningar JSON-syntaxen är ogiltig.",
+                "tileGrid": "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
                 "saveSuccess": "Sparad",
@@ -157,8 +159,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Din förfrågan överskred tidsgränsen för anslutning till tjänsten. Kolla gränssnittets URL.",
                 "connectionErrorFetchCapabilities": "Anslutning till tjänsten kunde inte etableras. Kolla gränssnittets URL.",
                 "parsingErrorFetchCapabilities": "Tjänstens svar kan inte tolkas. Kolla kartlagrets typ och/eller version.",
-                "deleteSuccess" : "Utgår",
-                "deleteFailed" : "Borttagningen misslyckades",
+                "deleteSuccess": "Utgår",
+                "deleteFailed": "Borttagningen misslyckades",
                 "updateCapabilitiesFail": "Gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnittstjänsten är för tilfället ur funktion.",
                 "errorFetchLayerFailed": "Kartlagret returnerar ingen data. Kartlagret existerar möjligen inte längre eller du har inte rättigheter att använda det.",
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?"
@@ -167,7 +169,7 @@ Oskari.registerLocalization(
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Radera kartlagren i gruppen",
+            "deleteGroupLayers": "Radera kartlagren i gruppen",
             "hover": "Framhävning av objekt och tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

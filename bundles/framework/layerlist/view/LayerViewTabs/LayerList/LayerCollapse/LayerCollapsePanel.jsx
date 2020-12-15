@@ -1,15 +1,27 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
+import { Badge, Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
+import Style from 'ol/style/Style';
+
+const StyledCollapse = styled(Collapse)`
+    border-radius: 0 !important;
+    &>div {
+        border-radius: 0 !important;
+        &:last-child {
+            padding-bottom: 2px;
+        }
+    };
+`;
 
 const StyledCollapsePanel = styled(CollapsePanel)`
     & > div:first-child {
         min-height: 22px;
-    }
+    };
+    padding-left: 10px;
 `;
 const StyledListItem = styled(ListItem)`
     padding: 0 !important;
@@ -42,17 +54,66 @@ renderLayer.propTypes = {
     controller: PropTypes.any
 };
 
-const onToolClick = (event, id, groupMethod, tool, layerCountInGroup) => {
+const onToolClick = (event, tool, group) => {
+    const id = group.getId();
+    const parentId = group.getParentId();
+    const groupMethod = group.getGroupMethod();
+    const layerCountInGroup = group.getLayers().length;
     const cb = tool.getCallback();
     if (cb) {
-        cb(event, id, groupMethod, layerCountInGroup);
+        cb(event, id, groupMethod, layerCountInGroup, parentId);
     }
     // Prevent collapse open on tool icon click
     event.stopPropagation();
 };
 
+const SubCollapsePanel = ({ group, selectedLayerIds, controller, propsNeededForPanel }) => {
+    const layerRows = group.getLayers().map((layer, index) => {
+        const layerProps = {
+            model: layer,
+            even: index % 2 === 0,
+            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
+            controller
+        };
+        return layerProps;
+    });
+
+    const badgeText = group.unfilteredLayerCount
+        ? layerRows.length + ' / ' + group.unfilteredLayerCount
+        : layerRows.length;
+
+    return (
+        <StyledCollapse>
+            <StyledCollapsePanel {...propsNeededForPanel}
+                header={group.getTitle()}
+                showArrow
+                //showArrow={group.getLayers().length > 0}
+                extra={
+                    <React.Fragment>
+                        {
+                            group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
+                                <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
+                                    <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
+                                        onToolClick(event, tool, group)} />
+                                </Tooltip>
+                            )
+                        }
+                        <Badge inversed={true} count={badgeText} />
+                    </React.Fragment>
+                }>
+                {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
+                {group.getGroups().map(subgroup => {
+                    return <SubCollapsePanel key={subgroup.id} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel} />
+                })}
+            </StyledCollapsePanel>
+        </StyledCollapse>
+    );
+};
+
+
 const LayerCollapsePanel = (props) => {
     const { group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
+    //console.log(group);
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             model: layer,
@@ -69,21 +130,28 @@ const LayerCollapsePanel = (props) => {
     return (
         <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
-            showArrow={layerRows.length > 0 }
+            showArrow={layerRows.length > 0}
             extra={
                 <React.Fragment>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
                                 <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
-                                    onToolClick(event, group.getId(), group.getGroupMethod(), tool, group.getLayers().length)}/>
+                                    onToolClick(event, tool, group)} />
                             </Tooltip>
                         )
                     }
-                    <Badge inversed={true} count={badgeText}/>
+                    <Badge inversed={true} count={badgeText} />
                 </React.Fragment>
             }>
-            { layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/> }
+            {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
+            {group.getGroups().map(subgroup => (
+                <SubCollapsePanel key={subgroup.id} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel}>
+                    {/* {subgroup.getGroups().map(subsubgroup => {
+                        return <SubCollapsePanel key={subsubgroup.id} group={subsubgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel} />
+                    })} */}
+                </SubCollapsePanel>
+            ))}
         </StyledCollapsePanel>
     );
 };

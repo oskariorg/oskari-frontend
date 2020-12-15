@@ -58,6 +58,46 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                     groupId, method, groupAttr
                 );
+
+                allGroups.map(parentGroup => {
+                    console.log(parentGroup);
+                    if (parentGroup.id === group.id && parentGroup.hasSubgroups()) {
+                        const newSubgroups = parentGroup.getGroups().map(subgroup => {
+                            //console.log(parentGroup.getChildren());
+                            const lang = Oskari.getLang();
+                            const name = subgroup.getName();
+                            let newSubgroup = Oskari.clazz.create(
+                                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                                subgroup.id, method, name[lang]
+                            );
+                            newSubgroup.setParentId(parentGroup.getId());
+                            newSubgroup.setTools(tools);
+
+                            // if(subgroup.hasOwnProperty('layers')){
+                            //     subgroup.layers.forEach(layer => {
+                            //         newSubgroup.addLayer(layer);
+                            //     });
+                            // };
+
+                            const newSubsubgroups = subgroup.hasSubgroups() && subgroup.getGroups().map(subsubgroup => {
+                                //console.log(subsubgroup.getChildren());
+                                const lang = Oskari.getLang();
+                                const name = subsubgroup.getName();
+                                let newSubsubgroup = Oskari.clazz.create(
+                                    'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                                    subsubgroup.id, method, name[lang]
+                                );
+                                newSubsubgroup.setParentId(parentGroup.getId());
+                                newSubsubgroup.setTools(tools);
+                                return newSubsubgroup;
+                            });
+                            newSubsubgroups && newSubgroup.setGroups(newSubsubgroups);
+                            return newSubgroup
+                        });
+                        group.setGroups(newSubgroups);
+                    }
+                });
+                console.log(group);
                 groupList.push(group);
             }
             // Add layer and tools to group if grouping can be determined
