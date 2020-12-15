@@ -51,7 +51,7 @@ const defaults = {
             color: '#000000',
             width: 3,
             lineDash: 'dot',
-            lineJoin: 'round'
+            lineJoin: 'miter'
         }
     },
     image: {
@@ -122,12 +122,15 @@ export class Preview extends React.Component {
         
         this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.stroke.lineCap;
 
-        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.styleSettings.stroke.lineDash === 'dash' ? '4, 4' : defaults.defaultStrokeDashArray;
-        
+        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.styleSettings.stroke.lineDash === 'dash' ? '4, 4' : '';
+
+        this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.styleSettings.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
+
         path.setAttribute('stroke', this.previewAttributes.strokeColor);
         path.setAttribute('stroke-width', this.previewAttributes.strokeWidth);
         path.setAttribute('stroke-linecap', this.previewAttributes.strokeLineCap);
         path.setAttribute('stroke-dasharray', this.previewAttributes.strokeDashArray);
+        path.setAttribute('stroke-linejoin', this.previewAttributes.strokeLineJoin);
         if (format !== 'line') {
             path.setAttribute('fill', this.previewAttributes.fill);
         }

@@ -26,7 +26,7 @@ const lineIcons = {
     ],
     corners: [
         {
-            name: 'square',
+            name: 'miter',
             data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><polygon points="32 9 9 9 9 16 9 23 9 32 23 32 23 23 32 23 32 9"/><path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>'
         },
         {
@@ -202,6 +202,19 @@ export class StyleForm extends React.Component {
                                     stroke: {
                                         ...this.state.stroke,
                                         lineCap: event.target.value
+                                    }
+                                });
+                            }
+                        }
+                        lineJoinCallback={
+                            (event) => {
+                                this.setState({
+                                    stroke: {
+                                        ...this.state.stroke,
+                                        area: {
+                                            ...this.state.stroke.area,
+                                            lineJoin: event.target.value
+                                        }
                                     }
                                 });
                             }

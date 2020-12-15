@@ -27,6 +27,7 @@ export const LineTab = (props) => {
                 <Form.Item name='lineStyle' label='Line corners' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.lineIcons.corners }
+                        onChange={ props.lineJoinCallback }
                         defaultValue={ props.styleSettings.stroke.area.lineJoin }
                     />
                 </Form.Item>
