@@ -22,22 +22,12 @@ const previewWrapperStyle = {
 const linePreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="none" stroke="#000000" d="M10,15L20,35L40,25" stroke-width="3" stroke-linejoin="miter" stroke-linecap="butt" strokeDasharray="0"></path></svg>';
 const areaPreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="checker" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect fill="#eee" x="0" width="10" height="10" y="0"><rect fill="#eee" x="10" width="10" height="10" y="10"></rect></rect></pattern></defs><rect x="0" y="0" width="80" height="80" fill="url(#checker)"></rect><path d="M10,17L40,12L29,40Z" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>';
 
-const defaults2 = {
-    defaultStrokeWidth: 1,
-    defaultStrokeColor: '#000000',
-    defaultFill: '#ffffff',
-    defaultFillColor: '#ffffff',
-    defaultSize: 3,
-    defaultLineJoin: 'mitter',
-    defaultFillPattern: '',
-    defaultStrokeDashArray: ''
-}
+const defaultPatternId = 'patternPreview'; // Static pattern id filled into svg - with this we identify pattern made solely for preview from other dom-elements
 
-const defaultPatternId = 'patternPreview';
-
+// Default values for every style settings value
 const defaults = {
     fill: {
-        color: '#ffffff',
+        color: '#b5b5b5',
         area: {
             pattern: -1
         }
@@ -67,8 +57,6 @@ const defaults = {
         }
     }
 };
-
-
 
 /**
  * @class Preview
@@ -109,7 +97,7 @@ export class Preview extends React.Component {
 
         this.previewAttributes.fill = format === 'area'
             ? ('url(#' + defaultPatternId + ')') : format !== 'line' 
-            ? this.props.styleSettings.fill.color : defaults.defaultFillColor;
+            ? this.props.styleSettings.fill.color : defaults.fill.color;
 
         if (format === 'area' && ~this.props.styleSettings.fill.area.pattern) {
             const patternPath = this._parsePattern(this.props.fillPatterns.find(pattern => pattern.name === this.props.styleSettings.fill.area.pattern));
