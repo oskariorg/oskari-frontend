@@ -68,6 +68,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         },
         init: function () { },
         /**
+         * @method getLayer
+         * Returns the layer domain object
+         * @return {Oskari.mapframework.domain.WmsLayer} layer domain object
+         */
+        getLayer: function () {
+            return this._layer;
+        },
+        /**
          * @method getCurrentTime
          * Returns current selected time instant
          * @return {String} current time as ISO-string
