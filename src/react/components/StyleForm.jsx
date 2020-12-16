@@ -260,12 +260,17 @@ export class StyleForm extends React.Component {
         return (
             <Row>
                 <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
-                    <ColorPicker onChange={ this.styleInputCallback } defaultValue={ this.state.stroke.color } />
+                    <ColorPicker
+                        onChange={ (event) => this.updateState('stroke.color', event.target.value) }
+                        defaultValue={ this.state.stroke.color } />
                 </Form.Item>
 
                 { this.state.format !== 'line' ?
                     <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
-                        <ColorPicker onChange={ this.styleInputCallback } defaultValue={ this.state.fill.color } />
+                        <ColorPicker
+                            onChange={ (event) => this.updateState('fill.color', event.target.value) }
+                            defaultValue={ this.state.fill.color }
+                        />
                     </Form.Item>
                     : false
                 }
@@ -283,20 +288,9 @@ export class StyleForm extends React.Component {
                         formatter={ sizeFormatter }
                         parser={ sizeFormatter }
                         onChange={ (value) => {
-                            this.setState({
-                                stroke: {
-                                    ...this.state.stroke,
-                                    width: value,
-                                    area: {
-                                        ...this.state.stroke.area,
-                                        width: value
-                                    }
-                                },
-                                image: {
-                                    ...this.state.image,
-                                    size: value
-                                }
-                            });
+                            this.updateState('stroke.width', value);
+                            this.updateState('stroke.area.width', value);
+                            this.updateState('image.size', value);
                         } } />
                 </Form.Item>
             </Row>
