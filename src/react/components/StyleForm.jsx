@@ -160,6 +160,42 @@ export class StyleForm extends React.Component {
         this.changeTab = (event) => this.setState({ [event.target.name]: event.target.value });
 
         this.sizeControlCallback = (value) => this.setState({ 'strokeWidth': value, 'size': value });
+
+        /**
+         * 
+         * @param {String} targetString - target parameter in object provided in full dot notation 
+         * @param {String|Number} value - value to be set 
+         */
+        this.updateState = (targetString, value) => {
+            const firstTarget = targetString.substr(0, targetString.indexOf('.'));
+            let currentTarget = this.state;
+            currentTarget = this.parseThru(currentTarget, targetString, value);
+
+            this.setState({
+                [firstTarget]: {
+                    ...this.state[firstTarget],
+                    currentTarget
+                }
+            });
+        };
+
+        /**
+         * 
+         * @param {Object} targetObject - target object to be parsed through
+         * @param {String} targetString - target parameter in object provided in full dot notation 
+         * @param {String|Number} value - value to be set
+         */
+        this.parseThru = (targetObject, targetString, value) => {
+            if (typeof targetString === 'string') {
+                return this.parseThru(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
+            } else if (targetString.length == 1 && value !== undefined) {
+                return targetObject[targetString[0]] = value; // We reach end of the recursion
+            } else if (targetString.length === 0) {
+                return targetObject; // target is already on level 0 so no need for recursion
+            } else {
+                return this.parseThru(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
+            }
+        }
     }
 
     _getCurrentTab (tab) {
@@ -168,16 +204,7 @@ export class StyleForm extends React.Component {
                 return (
                     <PointTab
                         formLayout={ formLayout }
-                        iconSelectorCallback={
-                            (event) => {
-                                this.setState({
-                                    image: {
-                                        ...this.state.image,
-                                        shape: event.target.value
-                                    }
-                                });
-                            }
-                        }
+                        onChangeCallback={ (key, value) => this.updateState(key, value) }
                         markers={ this.props.markers }
                         styleSettings={ this.state }
                     />
@@ -186,39 +213,7 @@ export class StyleForm extends React.Component {
                 return (
                     <LineTab
                         formLayout={ formLayout }
-                        lineDashCallback={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineDash: event.target.value
-                                    }
-                                });
-                            }
-                        }
-                        lineCapCallback={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineCap: event.target.value
-                                    }
-                                });
-                            }
-                        }
-                        lineJoinCallback={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        area: {
-                                            ...this.state.stroke.area,
-                                            lineJoin: event.target.value
-                                        }
-                                    }
-                                });
-                            }
-                        }
+                        onChangeCallback={ (key, value) => this.updateState(key, value) }
                         lineIcons={ lineIcons }
                         styleSettings={ this.state }
                     />
@@ -229,31 +224,7 @@ export class StyleForm extends React.Component {
                         lineIcons={ lineIcons.lineDash }
                         areaFills={ areaFills }
                         formLayout={ formLayout }
-                        lineDashCallback={
-                            (event) => {
-                                this.setState({
-                                    stroke: {
-                                        ...this.state.stroke,
-                                        lineDash: event.target.value
-                                    }
-                                });
-
-
-                            }
-                        }
-                        lineStyleCallback={
-                            (event) => {
-                                this.setState({
-                                    fill: {
-                                        ...this.state.fill,
-                                        area: {
-                                            ...this.state.fill.area,
-                                            pattern: event.target.value
-                                        }
-                                    }
-                                });
-                            }                            
-                        }
+                        onChangeCallback={ (key, value) => this.updateState(key, value) }
                         styleSettings={ this.state }
                     />
                 );

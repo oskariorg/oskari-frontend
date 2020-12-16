@@ -9,7 +9,7 @@ export const LineTab = (props) => {
                 <Form.Item name='lineStyle' label='Line dash' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.lineIcons.lineDash }
-                        onChange={ props.lineDashCallback }
+                        onChange={ (event) => props.onChangeCallback('stroke.lineDash', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.lineDash }
                     />
                 </Form.Item>
@@ -17,7 +17,7 @@ export const LineTab = (props) => {
                 <Form.Item name='lineStyle' label='Line endings' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.lineIcons.linecaps }
-                        onChange={ props.lineCapCallback }
+                        onChange={ (event) => props.onChangeCallback('stroke.lineCap', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.lineCap }
                     />
                 </Form.Item>
@@ -27,7 +27,7 @@ export const LineTab = (props) => {
                 <Form.Item name='lineStyle' label='Line corners' { ...props.formLayout }>
                     <SvgRadioButton
                         options={ props.lineIcons.corners }
-                        onChange={ props.lineJoinCallback }
+                        onChange={ (event) => props.onChangeCallback('stroke.area.lineJoin', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.area.lineJoin }
                     />
                 </Form.Item>
