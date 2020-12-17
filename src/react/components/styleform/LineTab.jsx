@@ -4,7 +4,7 @@ import { Form, Row } from 'antd';
 
 export const LineTab = (props) => {
     return (
-        <>
+        <React.Fragment>
             <Row>
                 <Form.Item name='lineStyle' label='Line dash' { ...props.formLayout }>
                     <SvgRadioButton
@@ -32,6 +32,6 @@ export const LineTab = (props) => {
                     />
                 </Form.Item>
             </Row>
-        </>
+        </React.Fragment>
     );
 };

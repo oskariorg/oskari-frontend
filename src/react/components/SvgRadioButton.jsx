@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select, Tooltip } from 'oskari-ui';
-import { Form, Card, Space, Input, Row, Radio } from 'antd';
+import { Radio } from 'antd';
 import styled from 'styled-components';
 
 const formLayout = {
@@ -27,22 +26,27 @@ const RadioIcon = styled(Radio.Button)`
  * <SvgRadioButton props={{ ...exampleProps }}/>
  */
 
-export class SvgRadioButton extends React.Component {
-    constructor (props) {
-        super(props);
-    }
+export const SvgRadioButton = (props) => {
+    return (
+        <Radio.Group defaultValue={ props.defaultValue } { ...formLayout } onChange={ props.onChange }>
+            { props.options.map((singleOption, index) => {
+                return(
+                    <RadioIcon value={ singleOption.name || index }>
+                        <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
+                    </RadioIcon>
+                );
+            })}
+        </Radio.Group>
+    );
+};
 
-    render () {
-        return (
-            <Radio.Group defaultValue={ this.props.defaultValue } { ...formLayout } onChange={ this.props.onChange }>
-                { this.props.options.map((singleOption, index) => {
-                    return(
-                        <RadioIcon value={ singleOption.name || index }>
-                            <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
-                        </RadioIcon>
-                    );
-                })}
-            </Radio.Group>
-        );
-    }
+SvgRadioButton.propTypes = {
+    defaultValue: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    options: PropTypes.arrayOf(
+        PropTypes.shape({
+            data: PropTypes.string.isRequired,
+            name: PropTypes.string,
+        })
+    )
 };

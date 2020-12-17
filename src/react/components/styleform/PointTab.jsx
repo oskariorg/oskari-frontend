@@ -4,7 +4,7 @@ import { Form, Row } from 'antd';
 
 export const PointTab = (props) => {
     return (
-        <>
+        <React.Fragment>
             <Row>
                 <Form.Item
                     { ...props.formLayout }
@@ -15,6 +15,6 @@ export const PointTab = (props) => {
                     <SvgRadioButton options={ props.markers } defaultValue={ props.styleSettings.image.shape } />
                 </Form.Item>
             </Row>  
-        </>
+        </React.Fragment>
     );
 };
