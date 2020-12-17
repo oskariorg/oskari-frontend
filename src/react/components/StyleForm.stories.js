@@ -138,10 +138,54 @@ const styleList = [
     {
         value: 'tyyli 2',
         format: 'line',
+        fill: {
+            color: '#c5c5c5',
+            area: {
+                pattern: 'solid'
+            }
+        },
+        stroke: {
+            color: "#88f8c2",
+            width: 3,
+            lineDash: "solid",
+            lineCap: "round",
+            area: {
+                color: "##88ffc9",
+                width: 3,
+                lineDash: "solid",
+                lineJoin: "round"
+            }
+        },
+        image: {
+            shape: 2,
+            size: 4,
+        }
     },
     {
         value: 'storybooktyyli',
         format: 'area',
+        fill: {
+            color: '#4600b0',
+            area: {
+                pattern: 'solid'
+            }
+        },
+        stroke: {
+            color: "#78a300",
+            width: 3,
+            lineDash: "solid",
+            lineCap: "round",
+            area: {
+                color: "#622eff",
+                width: 3,
+                lineDash: "solid",
+                lineJoin: "round"
+            }
+        },
+        image: {
+            shape: 2,
+            size: 4,
+        }
     }
 ];
 

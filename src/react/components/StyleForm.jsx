@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Select, ColorPicker, Preview } from 'oskari-ui';
 import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
@@ -10,8 +10,8 @@ import { PointTab } from './styleform/PointTab';
 
 // AntD width settings for grid
 const formLayout = {
-    labelCol: { span: 24 },
-    wrapperCol: { span: 24 }
+    labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
+    wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
 }
 
 const lineIcons = {
@@ -107,109 +107,103 @@ const sizeFormatter = (number) => Math.abs(number);
  * <StyleForm props={{ ...exampleProps }}/>
  */
 
-export class StyleForm extends React.Component {
-    constructor (props) {
-        super(props);
+export const StyleForm = (props) => {
+    let [form] = Form.useForm();
 
-        this.ref = React.createRef();
+    // initialize state with propvided style settings to show preview correctly and set default format as point
+    const [state, setState] = useState({
+        ...props.styleSettings,
+        format: 'point'
+    });
 
-        // initialize state with these initialization parameters to show preview correctly
-        this.state = this.props.styleSettings;
-        this.state.format = 'point'; // Add format manually which doesnt come with style JSON
 
-        this._populateWithStyle = (format) => {
-            if (this.props.styleList) {
-                let currentStyle = this.props.styleList.find(option => option.value == format);
-                this.setState({
-                    ...currentStyle,
-                    format: currentStyle.format
-                });
-    
-                this.ref.current.setFieldsValue(currentStyle); // Populate fields -- FIX ME
-            }
-        }
+    /**
+     * 
+     * @param {String} styleSelected - name of the style selected from the list 
+     */
+    const _populateWithStyle = (styleSelected) => {
+        if (props.styleList) {
+            const currentStyle = props.styleList.find(option => option.value == styleSelected);
 
-        this.styleInputCallback = (event) => {
-            this.setState({
-                [event.target.id || event.target.name]: {
-                    ...this.state[event.target.id || event.target.name],
-                    color: event.target.value 
-                }
+            setState({
+                ...currentStyle
             });
-        };
 
-        this.changeTab = (event) => this.setState({ [event.target.name]: event.target.value });
-
-        this.sizeControlCallback = (value) => this.setState({ 'strokeWidth': value, 'size': value });
-
-        /**
-         * 
-         * @param {String} targetString - target parameter in object provided in full dot notation 
-         * @param {String|Number} value - value to be set 
-         */
-        this.updateState = (targetString, value) => {
-            const firstTarget = targetString.substr(0, targetString.indexOf('.'));
-            let currentTarget = this.state;
-            currentTarget = this.setStateValue(currentTarget, targetString, value);
-
-            this.setState({
-                [firstTarget]: {
-                    ...this.state[firstTarget],
-                    currentTarget
-                }
-            });
-        };
-
-        /**
-         * @method setStateValue
-         * @description Parses through and sets provided value into state based on provided target parameter as dot-notation string
-         * @param {Object} targetObject - state provided as object
-         * @param {String} targetString - target parameter in object provided in full dot notation 
-         * @param {String|Number} value - value to be set
-         *
-         * @returns {Object} - returns object where new value is set
-         */
-        this.setStateValue = (targetObject, targetString, value) => {
-            if (typeof targetString === 'string') {
-                return this.setStateValue(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
-            } else if (targetString.length == 1 && value !== undefined) {
-                return targetObject[targetString[0]] = value; // We reach end of the recursion
-            } else if (targetString.length === 0) {
-                return targetObject; // target is already on level 0 so no need for recursion
-            } else {
-                return this.setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
-            }
+            
+            form.setFieldsValue(currentStyle); // Populate fields -- FIX ME
         }
     }
 
-    _getCurrentTab (tab) {
+    const changeTab = (event) => setState({ ...state, [event.target.name]: event.target.value });
+
+    /**
+     * 
+     * @param {String} targetString - target parameter in object provided in full dot notation 
+     * @param {String|Number} value - value to be set 
+     */
+    const updateState = (targetString, value) => {
+        const firstTarget = targetString.substr(0, targetString.indexOf('.'));
+        let currentTarget = state;
+        currentTarget = setStateValue(currentTarget, targetString, value);
+
+        setState({
+            ...state,
+            [firstTarget]: {
+                ...state[firstTarget],
+                currentTarget
+            }
+        });
+    };
+
+    /**
+     * @method setStateValue
+     * @description Parses through and sets provided value into state based on provided target parameter as dot-notation string
+     * @param {Object} targetObject - state provided as object
+     * @param {String} targetString - target parameter in object provided in full dot notation 
+     * @param {String|Number} value - value to be set
+     *
+     * @returns {Object} - returns object where new value is set
+     */
+    const setStateValue = (targetObject, targetString, value) => {
+        if (typeof targetString === 'string') {
+            return setStateValue(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
+        } else if (targetString.length == 1 && value !== undefined) {
+            return targetObject[targetString[0]] = value; // We reach end of the recursion
+        } else if (targetString.length === 0) {
+            return targetObject; // target is already on level 0 so no need for recursion
+        } else {
+            return setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
+        }
+    }
+
+    const _getCurrentTab = (tab) => {
         switch(tab) {
             case 'point':
                 return (
                     <PointTab
+                        styleSettings={ state }
                         formLayout={ formLayout }
-                        onChangeCallback={ (key, value) => this.updateState(key, value) }
-                        markers={ this.props.markers }
-                        styleSettings={ this.state }
+                        onChangeCallback={ (key, value) => updateState(key, value) }
+                        markers={ props.markers }
                     />
                 );
             case 'line':
                 return (
                     <LineTab
+                        styleSettings={ state }
                         formLayout={ formLayout }
-                        onChangeCallback={ (key, value) => this.updateState(key, value) }
+                        onChangeCallback={ (key, value) => updateState(key, value) }
                         lineIcons={ lineIcons }
-                        styleSettings={ this.state }
                     />
                 );
             case 'area':
                 return (
                     <AreaTab
+                        styleSettings={ state }
+                        formLayout={ formLayout }
+                        onChangeCallback={ (key, value) => updateState(key, value) }
                         lineIcons={ lineIcons.lineDash }
                         areaFills={ areaFills }
-                        formLayout={ formLayout }
-                        onChangeCallback={ (key, value) => this.updateState(key, value) }
-                        styleSettings={ this.state }
                     />
                 );
             default:
@@ -222,13 +216,13 @@ export class StyleForm extends React.Component {
      * @description Compose Preview -component
      * @returns {React.Component} Preview component with provided style
      */
-    _createPreview () {
+    const _createPreview = () => {
         return (
             <Row>
                 <Preview
-                    markers={ this.props.markers }
+                    markers={ props.markers }
                     fillPatterns={ areaFills }
-                    styleSettings={ this.state }
+                    styleSettings={ state }
                 />
             </Row>
         );
@@ -240,20 +234,22 @@ export class StyleForm extends React.Component {
      * 
      * @returns {React.Component} Only stroke color picker or both stroke and fill 
      */
-    _getColorPickers () {
+    const _getColorPickers = () => {
+        console.log(state);
+
         return (
             <Row>
                 <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
                     <ColorPicker
-                        onChange={ (event) => this.updateState('stroke.color', event.target.value) }
-                        defaultValue={ this.state.stroke.color } />
+                        onChange={ (event) => updateState('stroke.color', event.target.value) }
+                        defaultValue={ state.stroke.color } />
                 </Form.Item>
 
-                { this.state.format !== 'line' ?
+                { state.format !== 'line' ?
                     <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
                         <ColorPicker
-                            onChange={ (event) => this.updateState('fill.color', event.target.value) }
-                            defaultValue={ this.state.fill.color }
+                            onChange={ (event) => updateState('fill.color', event.target.value) }
+                            defaultValue={ state.fill.color }
                         />
                     </Form.Item>
                     : false
@@ -262,7 +258,7 @@ export class StyleForm extends React.Component {
         );
     }
 
-    _getSizeControl () {
+    const _getSizeControl = () => {
         return (
             <Row>
                 <Form.Item name='size' label='Size' initialValue={ 3 } { ...formLayout }>
@@ -272,19 +268,19 @@ export class StyleForm extends React.Component {
                         formatter={ sizeFormatter }
                         parser={ sizeFormatter }
                         onChange={ (value) => {
-                            this.updateState('stroke.width', value);
-                            this.updateState('stroke.area.width', value);
-                            this.updateState('image.size', value);
+                            updateState('stroke.width', value);
+                            updateState('stroke.area.width', value);
+                            updateState('image.size', value);
                         } } />
                 </Form.Item>
             </Row>
         );
     }
 
-    _buildStyleList (options) {
+    const _buildStyleList = (options) => {
         return (
             <Form.Item label='Tyylit' { ...formLayout } name={ 'styleListSelector' }>
-                <Select onChange={ this._populateWithStyle }>
+                <Select onChange={ (styleSelected) => _populateWithStyle(styleSelected) }>
                     { options.map((singleOption) => {
                         return (
                             <Select.Option
@@ -300,33 +296,31 @@ export class StyleForm extends React.Component {
         );
     }
 
-    render () {
-        return (
-            <StaticForm ref={ this.ref }>
-                <Space direction='vertical'>
+    return (
+        <StaticForm form={ form }>
+            <Space direction='vertical'>
+                <Card>
+                    { _buildStyleList( props.styleList ) }
+
+                    <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ state.format }>
+                        <TabSelector { ...formLayout } onChange={ changeTab } key={ 'formatSelector' } name='format' >
+                            <Radio.Button value='point'>Piste</Radio.Button>
+                            <Radio.Button value='line'>Viiva</Radio.Button>
+                            <Radio.Button value='area'>Alue</Radio.Button>
+                        </TabSelector>
+                    </Form.Item>
+
                     <Card>
-                        { this._buildStyleList( this.props.styleList ) }
+                        { _getColorPickers() }
 
-                        <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ this.state.format }>
-                            <TabSelector { ...formLayout } onChange={ this.changeTab } key={ 'formatSelector' } name='format' >
-                                <Radio.Button value='point'>Piste</Radio.Button>
-                                <Radio.Button value='line'>Viiva</Radio.Button>
-                                <Radio.Button value='area'>Alue</Radio.Button>
-                            </TabSelector>
-                        </Form.Item>
+                        { _getCurrentTab( state.format ) }
 
-                        <Card>
-                            { this._getColorPickers() }
+                        { _getSizeControl() }
 
-                            { this._getCurrentTab( this.state.format ) }
-
-                            { this._getSizeControl() }
-
-                            { this._createPreview() }
-                        </Card>
+                        { _createPreview() }
                     </Card>
-                </Space>
-            </StaticForm>
-        );
-    }
+                </Card>
+            </Space>
+        </StaticForm>
+    );
 };

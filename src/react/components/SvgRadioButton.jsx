@@ -28,7 +28,7 @@ const RadioIcon = styled(Radio.Button)`
 
 export const SvgRadioButton = (props) => {
     return (
-        <Radio.Group defaultValue={ props.defaultValue } { ...formLayout } onChange={ props.onChange }>
+        <Radio.Group defaultValue={ props.defaultValue } { ...props.formLayout } onChange={ props.onChange }>
             { props.options.map((singleOption, index) => {
                 return(
                     <RadioIcon value={ singleOption.name || index }>
