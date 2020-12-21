@@ -95,7 +95,6 @@ class ViewHandler extends StateHandler {
                 Messaging.success(getMessage('messages.deleteSuccess'));
                 const newList = [...this.state.announcements];
                 newList.splice(index, 1);
-        
                 // Update accordion with announcements and keep all closed
                 this.updateState({
                     announcements: newList,
