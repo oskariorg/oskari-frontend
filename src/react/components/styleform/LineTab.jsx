@@ -1,10 +1,18 @@
 import React from 'react';
-import { SvgRadioButton } from 'oskari-ui';
+import { SvgRadioButton, Preview, SizeControl, ColorPicker } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
 export const LineTab = (props) => {
     return (
         <React.Fragment>
+            <Row>
+                <Form.Item name='stroke' label='Pisteen väri' { ...props.formLayout }>
+                    <ColorPicker
+                        onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
+                        defaultValue={ props.styleSettings.stroke.color } />
+                </Form.Item>
+            </Row>
+
             <Row>
                 <Form.Item name='lineStyle' label='Line dash' { ...props.formLayout }>
                     <SvgRadioButton
@@ -32,6 +40,13 @@ export const LineTab = (props) => {
                     />
                 </Form.Item>
             </Row>
+
+            <Preview styleSettings={ props.styleSettings } />
+
+            <SizeControl
+                formLayout={ props.formLayout }
+                onChangeCallback={ props.onChangeCallback }
+            />
         </React.Fragment>
     );
 };

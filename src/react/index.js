@@ -30,3 +30,6 @@ export { GenericForm } from './components/GenericForm';
 export { ColorPicker } from './components/ColorPicker';
 export { SvgRadioButton } from './components/SvgRadioButton';
 export { Preview } from './components/Preview';
+export { StyleSelector } from './components/styleform/StyleSelector'
+export { SizeControl } from './components/styleform/SizeControl'
+export { StyleEditor } from './components/styleform/StyleEditor'

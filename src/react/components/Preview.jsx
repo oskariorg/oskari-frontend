@@ -100,7 +100,7 @@ export class Preview extends React.Component {
             ? this.props.styleSettings.fill.color : defaults.fill.color;
 
         if (format === 'area' && ~this.props.styleSettings.fill.area.pattern) {
-            const patternPath = this._parsePattern(this.props.fillPatterns.find(pattern => pattern.name === this.props.styleSettings.fill.area.pattern));
+            const patternPath = this._parsePattern(this.props.areaFills.find(pattern => pattern.name === this.props.styleSettings.fill.area.pattern));
             this.previewAttributes.pattern = this._composeSvgPattern(patternPath);
         }
 
@@ -216,6 +216,7 @@ export class Preview extends React.Component {
 };
 
 Preview.propTypes = {
-    markers: PropTypes.array.isRequired,
-    styleSettings: PropTypes.object.isRequired
+    styleSettings: PropTypes.object.isRequired,
+    markers: PropTypes.array,
+    areaFills: PropTypes.array
 };

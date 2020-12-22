@@ -2,6 +2,14 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { StyleForm } from './StyleForm';
 
+import '../../global';
+import '../../../bundles/framework/oskariui/resources/locale/fi';
+import '../../../bundles/framework/oskariui/resources/locale/en';
+import '../../../bundles/framework/oskariui/resources/locale/sv';
+
+Oskari.setSupportedLocales(['en_US', 'fi_FI', 'sv_SE']);
+Oskari.setLang('en');
+
 const oskariMarkers = [
     {
         "offsetX": 14.06,
@@ -189,6 +197,7 @@ const styleList = [
     }
 ];
 
+let currentStyle = oskariTestStyle;
 
 storiesOf('StyleForm', module)
     .add('Default', () => (
@@ -196,7 +205,7 @@ storiesOf('StyleForm', module)
             icons={ testOptions }
             styleList={ styleList }
             markers={ oskariMarkers }
-            styleSettings={ oskariTestStyle }
+            styleSettings={ currentStyle }
             lineIcons={ oskariLineSvgs }
         />
     ));

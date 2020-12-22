@@ -40,7 +40,7 @@ export const SvgRadioButton = (props) => {
     );
 };
 
-SvgRadioButton.propTypes = {
+/*SvgRadioButton.propTypes = {
     defaultValue: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     options: PropTypes.arrayOf(
@@ -49,4 +49,4 @@ SvgRadioButton.propTypes = {
             name: PropTypes.string,
         })
     )
-};
+};*/
