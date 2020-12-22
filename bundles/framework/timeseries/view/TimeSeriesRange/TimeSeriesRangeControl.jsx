@@ -1,25 +1,11 @@
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Background, Header, Col, ColFixed, Row, YearInput, YearRangeSlider } from './styled';
+import { Background, Header, Col, ColFixed, Row, YearInput } from './styled';
+import { YearRangeSlider } from './YearRangeSlider';
 
 export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile }) => {
     const [startValue, endValue] = value;
-    const marks = {
-        [start]: start,
-        [end]: end,
-    };
-    for (let i = start + 1; i < end; i++) {
-        if (i % 10 === 0) {
-            marks[i] = i;
-        }
-    }
-
-    // data years are those years that has timeseries photos in current map view
-    // data years are also marks on the range slider but they are represented
-    // as small circles on the timeline (via css styling)
-    dataYears.filter((year) => !marks[year]).forEach((year) => (marks[year] = ''));
-
     return (
         <Background isMobile={isMobile}>
             <Header className="timeseries-range-drag-handle">{title}</Header>
@@ -35,9 +21,8 @@ export const TimeSeriesRangeControl = ({ controller, title, start, end, value, d
                         <YearRangeSlider
                             range
                             step={1}
-                            min={start}
-                            max={end}
-                            marks={marks}
+                            start={start}
+                            end={end}
                             dataYears={dataYears}
                             value={value}
                             onChange={(val) => controller.updateValue(val)}

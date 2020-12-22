@@ -68,7 +68,7 @@ const getDataYearStyles = (props) => {
     return styles;
 };
 
-export const YearRangeSlider = styled(Slider)`
+export const StyledRangeSlider = styled(Slider)`
     &&& {
         height: 16px;
     }
