@@ -1,3 +1,5 @@
+import './view/TimeSeriesRangeControlPlugin';
+
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance
  *
@@ -129,8 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             case 'player':
                 return 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
             case 'range':
-                // TODO: implement range UI control plugin
-                throw new Error('Not implemented');
+                return 'Oskari.mapframework.bundle.timeseries.TimeSeriesRangeControlPlugin';
             case 'none':
                 return null;
             default:
