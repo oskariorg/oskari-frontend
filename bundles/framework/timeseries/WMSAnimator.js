@@ -66,6 +66,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
             }
             return times;
         },
+        /**
+         * @method getYearRange
+         * Returns the start and end year of timeseries times
+         * @return {number[]} Start and end year of timeseries times
+         */
+        getYearRange: function () {
+            const times = this._layer.getAttributes().times;
+            const start = moment(times[0]).year();
+            const end = moment(times[times.length - 1]).year();
+            return [start, end];
+        },
         init: function () { },
         /**
          * @method getLayer
