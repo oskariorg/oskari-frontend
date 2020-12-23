@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
@@ -5,6 +6,8 @@ class UIHandler extends StateHandler {
         super();
         this._delegate = delegate;
         this._layer = delegate.getLayer();
+        this._timer = null;
+        this._debounceTime = 300;
         const [start, end] = delegate.getYearRange();
         this.state = {
             title: this._layer.getName(),
@@ -18,6 +21,18 @@ class UIHandler extends StateHandler {
 
     updateValue (value) {
         this.updateState({ value });
+        if (this._timer) {
+            clearTimeout(this._timer);
+        }
+        this._timer = setTimeout(() => this._requestNewTime(value), this._debounceTime);
+    }
+
+    _requestNewTime (value) {
+        const [startYear, endYear] = value;
+        const startTime = moment.utc(startYear.toString()).startOf('year').toISOString();
+        const endTime = moment.utc(endYear.toString()).endOf('year').toISOString();
+        const newTime = `${startTime}/${endTime}`;
+        this._delegate.requestNewTime(newTime);
     }
 }
 
