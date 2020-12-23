@@ -9,14 +9,20 @@ class UIHandler extends StateHandler {
         this._timer = null;
         this._debounceTime = 300;
         const [start, end] = delegate.getYearRange();
+        const dataYears = this._getDataYears();
         this.state = {
             title: this._layer.getName(),
             start,
             end,
             value: [start, end],
-            dataYears: [1950, 1990, 1996, 2010]
+            dataYears
         };
         this.addStateListener(stateListener);
+    }
+
+    _getDataYears () {
+        const times = this._layer.getAttributes().times;
+        return times.map(time => moment(time).year());
     }
 
     updateValue (value) {
