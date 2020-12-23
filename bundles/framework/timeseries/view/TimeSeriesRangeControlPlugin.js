@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -51,6 +52,7 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
     redrawUI (mapInMobileMode, forced) {
         super.redrawUI(mapInMobileMode, forced);
         this.updateUI();
+        this.updateDataYears();
         this.makeDraggable();
     }
 
@@ -67,6 +69,54 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
     _createControlElement () {
         return jQuery('<div class="mapplugin timeseriesrangecontrolplugin"></div>');
+    }
+
+    _createEventHandlers () {
+        return {
+            AfterMapMoveEvent: (event) => this.updateDataYears()
+        };
+    }
+
+    updateDataYears () {
+        const sandbox = this.getSandbox();
+        const layer = this._delegate.getLayer();
+        const options = layer.getOptions();
+        const timeseries = options.timeseries || {};
+        const metadata = timeseries.metadata || {};
+        const attribute = metadata.attribute || 'time';
+        const layerId = metadata.layer;
+        if (!layerId) {
+            return;
+        }
+
+        const url = Oskari.urls.getRoute('GetWFSFeatures', {
+            id: layerId,
+            bbox: sandbox.getMap().getBboxAsString(),
+            srs: sandbox.getMap().getSrsName()
+        });
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                // TODO: add error handling
+                return Promise.reject(new Error('GetWFSFeatures error'));
+            }
+            return response.json();
+        }).then(json => {
+            const yearSet = new Set();
+            const { features } = json;
+            features.forEach(feature => {
+                const time = feature.properties[attribute];
+                if (time) {
+                    const year = moment(time).year();
+                    yearSet.add(year);
+                }
+            });
+            this.stateHandler.updateDataYears(Array.from(yearSet));
+        });
     }
 }
 
