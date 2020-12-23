@@ -18,7 +18,8 @@ Oskari.registerLocalization({
                 "lineSize": "The line width is invalid. It must be between 1 and 50.",
                 "borderWidth": "The line width is invalid. It must be between 1 and 50."
             },
-            "dot": {
+            "point": {
+                "tabtitle": "Point",
                 "title": "Point feature style",
                 "tooltip": "Define a style for point features.",
                 "symbol": {

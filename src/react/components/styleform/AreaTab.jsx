@@ -73,6 +73,8 @@ export const AreaTab = (props) => {
             <SizeControl
                 formLayout={ props.formLayout }
                 onChangeCallback={ props.onChangeCallback }
+                format={ props.styleSettings.format }
+                locSettings={ props.locSettings }
             />
         </React.Fragment>
     );

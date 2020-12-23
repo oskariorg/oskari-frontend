@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { LineTab } from './LineTab';
 import { AreaTab } from './AreaTab';
 import { PointTab } from './PointTab';
+import { io } from 'jsts';
 
 // AntD width settings for grid
 const formLayout = {
@@ -90,34 +91,45 @@ export const StyleEditor = (props) => {
     });
 
     useEffect(() => {
-       console.log('updating'); 
-    }, [state]);
-
-    console.log(props);
+        _populateWithStyle();
+    }, [props.styleSettings]);
 
     /**
      * 
      * @param {String} styleSelected - name of the style selected from the list 
      */
-    const _populateWithStyle = (styleSelected) => {
-        if (props.styleList) {
-            const currentStyle = props.styleList.find(option => option.value == styleSelected);
+    const _populateWithStyle = () => {
+        setState({
+            ...state,
+            ...props.styleSettings
+        });
 
-            setState({
-                ...currentStyle
-            });
-
-            
-            form.setFieldsValue(currentStyle); // Populate fields -- FIX ME
-
-            for (let single of currentStyle) {
-                console.log(single);
-            }
+       for (const single in state) {
+           const targetToSet = typeof state[single] !== 'object' ? '' : state[single];
+           const valueToSet = typeof state[single] === 'object' ? null : state[single]; //set value if it is on the first level
+           _composeTargetString(targetToSet, single, valueToSet);
         }
     }
 
-    const _composeCallerString = () => {
-        
+
+    /**
+     * @method _composeTargetString
+     * @description Loop through provided target with recursive loop if target contains child objects and compose target string to set field values correctly
+     *
+     * @param {Object|String} target             - target to loop through
+     * @param {String} container                 - containing object key as String to use as a base for name
+     * @param {Object|Boolean|String} valueToSet - value to set in the end. If object provided we go through it recursively.
+     */
+    const _composeTargetString = (target, container, valueToSet) => {
+        if (typeof valueToSet !== 'object' && typeof target !== 'object') {
+            console.log(container);
+            console.log(valueToSet);
+            form.setFieldsValue({ [container]: valueToSet });
+        } else {
+            for (const singleTarget in target) {
+                _composeTargetString(target[singleTarget], (container + '.' + singleTarget), target[singleTarget]);
+            }
+        }
     }
 
     const changeTab = (event) => setState({ ...state, [event.target.name]: event.target.value });
@@ -225,6 +237,7 @@ export const StyleEditor = (props) => {
                                 formLayout={ formLayout }
                                 onChangeCallback={ (key, value) => updateState(key, value) }
                                 markers={ props.markers }
+                                locSettings={ props.locSettings }
                             />
                         }
                         { state.format === 'line' &&
@@ -233,6 +246,7 @@ export const StyleEditor = (props) => {
                                 formLayout={ formLayout }
                                 onChangeCallback={ (key, value) => updateState(key, value) }
                                 lineIcons={ lineIcons }
+                                locSettings={ props.locSettings }
                             />
                         }
                         { state.format === 'area' &&
@@ -241,6 +255,7 @@ export const StyleEditor = (props) => {
                                 formLayout={ formLayout }
                                 onChangeCallback={ (key, value) => updateState(key, value) }
                                 lineIcons={ lineIcons.lineDash }
+                                locSettings={ props.locSettings }
                             />
                         }
                     </Card>

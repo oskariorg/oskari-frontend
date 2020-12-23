@@ -44,8 +44,6 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
         message = getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs);
     }
 
-    console.log(message);
-
     // If we didn't find localization AND we have default value -> use it
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;

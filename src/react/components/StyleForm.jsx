@@ -21,15 +21,23 @@ const locSettings = {
 export const StyleForm = (props) => {
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const [state, setState] = useState({
-        ...props.styleSettings,
-        format: 'point'
+        ...props.styleSettings
     });
 
+    
+    let style = props.styleSettings;
+    // STATE EI MENE OIKEIN
+
+    useEffect(() => {
+        console.log(state);
+        //setState({ ...style })
+     });
+     
     return (
         <Card>
             <StyleSelector
                 styleList={ props.styleList }
-                onChange={ (selected) => setState({ ...selected }) }
+                onChange={ (selected) => style = selected }
                 locSettings={ locSettings }
             />
             <StyleEditor
@@ -38,6 +46,7 @@ export const StyleForm = (props) => {
                 markers={ props.markers }
                 styleSettings={ state }
                 lineIcons={ props.lineIcons }
+                locSettings={ locSettings }
             />
         </Card>
     );

@@ -1,15 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, ColorPicker, Preview } from 'oskari-ui';
-import { Form, Card, Space, Input, Row, Radio, InputNumber } from 'antd';
-import styled from 'styled-components';
+import { Message } from 'oskari-ui';
+import { Form, Row, InputNumber } from 'antd';
 
 const sizeFormatter = (number) => Math.abs(number); 
 
+
 export const SizeControl = (props) => {
+    const locKey =
+        props.format === 'point' ? 'VisualizationForm.point.size.label'
+        : props.format === 'line' ? 'VisualizationForm.line.width.label'
+        : 'VisualizationForm.area.linewidth.label'
+
     return (
         <Row>
-            <Form.Item name='size' label='Size' initialValue={ 3 } { ...props.formLayout }>
+            <Form.Item
+                name='size'
+                label={
+                    <Message
+                        bundleKey={ props.locSettings.localeKey }
+                        messageKey={ locKey }
+                    />
+                }
+                initialValue={ 3 }
+                { ...props.formLayout }
+            >
                 <InputNumber
                     min={ 1 }
                     max={ 5 }
@@ -19,9 +34,6 @@ export const SizeControl = (props) => {
                         props.onChangeCallback('stroke.width', value);
                         props.onChangeCallback('stroke.area.width', value);
                         props.onChangeCallback('image.size', value);
-                        //updateState('stroke.width', value);
-                        //updateState('stroke.area.width', value);
-                        //updateState('image.size', value);
                     } } />
             </Form.Item>
         </Row>
