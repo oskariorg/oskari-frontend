@@ -14,7 +14,7 @@ class UIHandler extends StateHandler {
             title: this._layer.getName(),
             start,
             end,
-            value: [start, end],
+            value: [start, start],
             dataYears
         };
         this.addStateListener(stateListener);
@@ -40,8 +40,13 @@ class UIHandler extends StateHandler {
         const newTime = `${startTime}/${endTime}`;
         this._delegate.requestNewTime(newTime);
     }
+
+    updateDataYears (dataYears) {
+        this.updateState({ dataYears });
+    }
 }
 
 export const TimeSeriesRangeControlHandler = controllerMixin(UIHandler, [
-    'updateValue'
+    'updateValue',
+    'updateDataYears'
 ]);
