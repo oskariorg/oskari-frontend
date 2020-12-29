@@ -6,6 +6,7 @@ import { Style } from './Style';
 import { StyleJson } from './StyleJson';
 import { ExternalStyleJson } from './ExternalStyleJson';
 import { Hover } from './Hover';
+import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
@@ -50,6 +51,9 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(CESIUM_ION) &&
+                <DynamicScreensPaceErrorOptions layer={layer} controller={controller} />
             }
         </StyledColumn.Left>
         <StyledColumn.Right>
