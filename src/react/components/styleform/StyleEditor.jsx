@@ -92,25 +92,25 @@ export const StyleEditor = (props) => {
 
     useEffect(() => {
         _populateWithStyle();
+        setState({
+            ...state,
+            ...props.styleSettings
+        });
     }, [props.styleSettings]);
+
 
     /**
      * 
      * @param {String} styleSelected - name of the style selected from the list 
      */
     const _populateWithStyle = () => {
-        setState({
-            ...state,
-            ...props.styleSettings
-        });
-
-       for (const single in state) {
-           const targetToSet = typeof state[single] !== 'object' ? '' : state[single];
-           const valueToSet = typeof state[single] === 'object' ? null : state[single]; //set value if it is on the first level
+        const currentStyle = props.styleSettings; // use props instead of state to avoid async problems
+       for (const single in currentStyle) {
+           const targetToSet = typeof currentStyle[single] !== 'object' ? '' : currentStyle[single];
+           const valueToSet = typeof currentStyle[single] === 'object' ? null : currentStyle[single]; //set value if it is on the first level
            _composeTargetString(targetToSet, single, valueToSet);
         }
     }
-
 
     /**
      * @method _composeTargetString
@@ -122,8 +122,6 @@ export const StyleEditor = (props) => {
      */
     const _composeTargetString = (target, container, valueToSet) => {
         if (typeof valueToSet !== 'object' && typeof target !== 'object') {
-            console.log(container);
-            console.log(valueToSet);
             form.setFieldsValue({ [container]: valueToSet });
         } else {
             for (const singleTarget in target) {
@@ -132,6 +130,13 @@ export const StyleEditor = (props) => {
         }
     }
 
+    /**
+     * @method changeTab
+     * @description Set selected tab in to state
+     * 
+     * @param {Event} event - DOM event reference triggered by onChange
+     *
+     */
     const changeTab = (event) => setState({ ...state, [event.target.name]: event.target.value });
 
     /**
@@ -172,50 +177,6 @@ export const StyleEditor = (props) => {
         } else {
             return setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
         }
-    }
-
-    /**
-     * @method _createPreview
-     * @description Compose Preview -component
-     * @returns {React.Component} Preview component with provided style
-     */
-    const _createPreview = () => {
-        return (
-            <Row>
-                <Preview
-                    markers={ props.markers }
-                    styleSettings={ state }
-                />
-            </Row>
-        );
-    }
-
-    /**
-     * @method _getColorPickers
-     * @description Compose fill and stroke color picker elements for style form
-     * 
-     * @returns {React.Component} Only stroke color picker or both stroke and fill 
-     */
-    const _getColorPickers = () => {
-        return (
-            <Row>
-                <Form.Item name='stroke' label='Pisteen väri' { ...formLayout }>
-                    <ColorPicker
-                        onChange={ (event) => updateState('stroke.color', event.target.value) }
-                        defaultValue={ state.stroke.color } />
-                </Form.Item>
-
-                { state.format !== 'line' ?
-                    <Form.Item name='fill' label='Pisteen täyttöväri' { ...formLayout }>
-                        <ColorPicker
-                            onChange={ (event) => updateState('fill.color', event.target.value) }
-                            defaultValue={ state.fill.color }
-                        />
-                    </Form.Item>
-                    : false
-                }
-            </Row>
-        );
     }
 
     return (

@@ -24,20 +24,15 @@ export const StyleForm = (props) => {
         ...props.styleSettings
     });
 
-    
-    let style = props.styleSettings;
-    // STATE EI MENE OIKEIN
-
     useEffect(() => {
-        console.log(state);
-        //setState({ ...style })
+
      });
      
     return (
         <Card>
             <StyleSelector
                 styleList={ props.styleList }
-                onChange={ (selected) => style = selected }
+                onChange={ (selected) => setState({ ...selected }) }
                 locSettings={ locSettings }
             />
             <StyleEditor
