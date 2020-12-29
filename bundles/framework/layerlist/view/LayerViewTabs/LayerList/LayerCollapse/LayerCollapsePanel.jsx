@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
+import { Badge, Collapse, CollapsePanel, List, ListItem, Tooltip, Switch } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
@@ -17,12 +17,40 @@ const StyledCollapse = styled(Collapse)`
     };
 `;
 
+const Label = styled('label')`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    > div {
+        margin-left: 8px;
+    }
+`;
+
+const StyledSubCollapse = styled(Collapse)`
+    border-radius: 0 !important;
+    &>div {
+        border-radius: 0 !important;
+        &:last-child {
+            padding-bottom: 2px;
+        }
+    };
+    margin-left: 25px !important ;
+`;
+
 const StyledCollapsePanel = styled(CollapsePanel)`
     & > div:first-child {
         min-height: 22px;
     };
     padding-left: 10px;
 `;
+
+const StyledSubCollapsePanel = styled(CollapsePanel)`
+    & > div:first-child {
+        min-height: 22px;
+    };
+    padding-left: 10px;
+`;
+
 const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
@@ -40,6 +68,8 @@ const StyledEditGroup = styled.span`
 `;
 
 const renderLayer = ({ model, even, selected, controller }) => {
+    
+    console.log(model);
     const itemProps = { model, even, selected, controller };
     return (
         <StyledListItem>
@@ -82,9 +112,15 @@ const SubCollapsePanel = ({ group, selectedLayerIds, controller, propsNeededForP
         ? layerRows.length + ' / ' + group.unfilteredLayerCount
         : layerRows.length;
 
+    const text = `
+        A dog is a type of domesticated animal.
+        Known for its loyalty and faithfulness,
+        it can be found as a welcome guest in many households across the world.
+        `;
+
     return (
-        <StyledCollapse>
-            <StyledCollapsePanel {...propsNeededForPanel}
+        <StyledSubCollapse>
+            <StyledSubCollapsePanel {...propsNeededForPanel}
                 header={group.getTitle()}
                 showArrow
                 //showArrow={group.getLayers().length > 0}
@@ -105,14 +141,14 @@ const SubCollapsePanel = ({ group, selectedLayerIds, controller, propsNeededForP
                 {group.getGroups().map(subgroup => {
                     return <SubCollapsePanel key={subgroup.id} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel} />
                 })}
-            </StyledCollapsePanel>
-        </StyledCollapse>
+            </StyledSubCollapsePanel>
+        </StyledSubCollapse>
     );
 };
 
 
 const LayerCollapsePanel = (props) => {
-    const { group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
+    const { group, subgroup, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     //console.log(group);
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
