@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SvgRadioButton, Preview, SizeControl, ColorPicker } from 'oskari-ui';
+import { SvgRadioButton, Preview, SizeControl, ColorPicker, Message } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
 const areaFills = [
@@ -30,13 +30,22 @@ export const AreaTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item name='stroke.color' label='Pisteen väri' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='stroke.color'
+                    label='Pisteen väri'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linecolor.label' /> }
+                >
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
                 </Form.Item>
 
-                <Form.Item name='fill.color' label='Pisteen täyttöväri' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='fill.color'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.color.label' /> }
+                >
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('fill.color', event.target.value) }
                         defaultValue={ props.styleSettings.fill.color }
@@ -45,7 +54,11 @@ export const AreaTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item name='stroke.lineDash' label='Line dash' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='stroke.lineDash'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linestyle.label' /> }
+                >
                     <SvgRadioButton
                         name='stroke.lineDash-radio'
                         options={ props.lineIcons }
@@ -56,7 +69,11 @@ export const AreaTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item name='fill.area.pattern' label='Fill style' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='fill.area.pattern'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.fill.label' /> }
+                >
                     <SvgRadioButton
                         name='fill.area.pattern-radio'
                         options={ areaFills }
@@ -66,16 +83,18 @@ export const AreaTab = (props) => {
                 </Form.Item>
             </Row>
 
+            <Row>
+                <SizeControl
+                    formLayout={ props.formLayout }
+                    onChangeCallback={ props.onChangeCallback }
+                    format={ props.styleSettings.format }
+                    locSettings={ props.locSettings }
+                />
+            </Row>
+
             <Preview
                 styleSettings={ props.styleSettings }
                 areaFills={ areaFills }
-            />
-
-            <SizeControl
-                formLayout={ props.formLayout }
-                onChangeCallback={ props.onChangeCallback }
-                format={ props.styleSettings.format }
-                locSettings={ props.locSettings }
             />
         </React.Fragment>
     );

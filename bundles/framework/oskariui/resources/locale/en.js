@@ -5,8 +5,9 @@ Oskari.registerLocalization({
         otherLanguages: 'Other languages',
         "VisualizationForm": {
             "subheaders" : {
-                "name" : "Style name",
-                "style" : "Style"
+                styleFormat: 'Style format',
+                name: "Style name",
+                style: "Style"
             },
             "tooltips": {
                 "dot": "Edit point feature style",
@@ -42,6 +43,7 @@ Oskari.registerLocalization({
                 }
             },
             "line": {
+                "tabtitle": "Line",
                 "title": "Line feature style",
                 "tooltip": "Define a style for line features.",
                 "style": {
@@ -70,6 +72,7 @@ Oskari.registerLocalization({
                 }
             },
             "area": {
+                "tabtitle": "Area",
                 "title": "Area feature style",
                 "tooltip": "Define a style for area features.",
                 "linestyle": {

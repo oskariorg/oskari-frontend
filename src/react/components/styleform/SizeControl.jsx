@@ -13,29 +13,34 @@ export const SizeControl = (props) => {
         : 'VisualizationForm.area.linewidth.label'
 
     return (
-        <Row>
-            <Form.Item
-                name='size'
-                label={
-                    <Message
-                        bundleKey={ props.locSettings.localeKey }
-                        messageKey={ locKey }
-                    />
-                }
-                initialValue={ 3 }
-                { ...props.formLayout }
-            >
-                <InputNumber
-                    min={ 1 }
-                    max={ 5 }
-                    formatter={ sizeFormatter }
-                    parser={ sizeFormatter }
-                    onChange={ (value) => {
-                        props.onChangeCallback('stroke.width', value);
-                        props.onChangeCallback('stroke.area.width', value);
-                        props.onChangeCallback('image.size', value);
-                    } } />
-            </Form.Item>
-        </Row>
+        <Form.Item
+            name='size'
+            label={
+                <Message
+                    bundleKey={ props.locSettings.localeKey }
+                    messageKey={ locKey }
+                />
+            }
+            initialValue={ 3 }
+            { ...props.formLayout }
+        >
+            <InputNumber
+                min={ 1 }
+                max={ 5 }
+                formatter={ sizeFormatter }
+                parser={ sizeFormatter }
+                onChange={ (value) => {
+                    props.onChangeCallback('stroke.width', value);
+                    props.onChangeCallback('stroke.area.width', value);
+                    props.onChangeCallback('image.size', value);
+                } } />
+        </Form.Item>
     );
 };
+
+SizeControl.propTypes = {
+    onChangeCallback: PropTypes.func.isRequired,
+    formLayout: PropTypes.object.isRequired,
+    format: PropTypes.string.isRequired,
+    locSettings: PropTypes.object.isRequired
+}

@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SvgRadioButton, Preview, SizeControl, ColorPicker } from 'oskari-ui';
+import { SvgRadioButton, Preview, SizeControl, ColorPicker, Message } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
 export const LineTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item name='stroke' label='Pisteen väri' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='stroke'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.color.label' /> }
+                >
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
@@ -15,7 +19,11 @@ export const LineTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item name='stroke.lineDash' label='Line dash' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='stroke.lineDash'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.style.label' /> }
+                >
                     <SvgRadioButton
                         name='stroke.lineDash-radio'
                         options={ props.lineIcons.lineDash }
@@ -24,7 +32,11 @@ export const LineTab = (props) => {
                     />
                 </Form.Item>
 
-                <Form.Item name='stroke.lineCap' label='Line endings' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='stroke.lineCap'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.cap.label' /> }
+                >
                     <SvgRadioButton
                         name='stroke.lineCap-radio'
                         options={ props.lineIcons.linecaps }
@@ -35,7 +47,11 @@ export const LineTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item name='stroke.area.lineJoin' label='Line corners' { ...props.formLayout }>
+                <Form.Item
+                { ...props.formLayout }
+                name='stroke.area.lineJoin'
+                label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.corner.label' /> }
+                >
                     <SvgRadioButton
                         name='stroke.area.lineJoin-radio'
                         options={ props.lineIcons.corners }
@@ -45,14 +61,17 @@ export const LineTab = (props) => {
                 </Form.Item>
             </Row>
 
+            <Row>
+                <SizeControl
+                    formLayout={ props.formLayout }
+                    onChangeCallback={ props.onChangeCallback }
+                    format={ props.styleSettings.format }
+                    locSettings={ props.locSettings }
+                />
+            </Row>
+
             <Preview styleSettings={ props.styleSettings } />
 
-            <SizeControl
-                formLayout={ props.formLayout }
-                onChangeCallback={ props.onChangeCallback }
-                format={ props.styleSettings.format }
-                locSettings={ props.locSettings }
-            />
         </React.Fragment>
     );
 };

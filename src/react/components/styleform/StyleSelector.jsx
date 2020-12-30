@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
 import { Form, Card} from 'antd';
@@ -10,12 +10,20 @@ const formLayout = {
     wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
 }
 
+const SelectorForm = styled(Form)`
+    width: 400px;
+
+    & > .ant-space {
+        width: 100%;
+    }
+`;
+
 export const StyleSelector = (props) => {
     const getSelectedStyle = (selectedStyleName) => props.styleList.find((style) => style.value === selectedStyleName);
 
     return (
-        <Card>
-            <Form>
+        <SelectorForm>
+            <Card>
                 <Form.Item label={<Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.name' />} { ...formLayout } name={ 'styleListSelector' }>
                     <Select onChange={ (name) => props.onChange(getSelectedStyle(name)) }>
                         { props.styleList.map((singleOption) => {
@@ -30,7 +38,13 @@ export const StyleSelector = (props) => {
                         }) }
                     </Select>
                 </Form.Item>
-            </Form>
-        </Card>
+            </Card>
+        </SelectorForm>
     );
+};
+
+StyleSelector.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    styleList: PropTypes.array.isRequired,
+    locSettings: PropTypes.object.isRequired
 };

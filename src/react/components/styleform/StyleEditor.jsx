@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Message } from 'oskari-ui';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
@@ -184,11 +185,16 @@ export const StyleEditor = (props) => {
         <StaticForm form={ form }>
             <Space direction='vertical'>
                 <Card>
-                    <Form.Item label='Muoto' { ...formLayout } name={ 'format' } initialValue={ state.format }>
+                    <Form.Item
+                        { ...formLayout }
+                        name={ 'format' }
+                        initialValue={ state.format }
+                        label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
+                    >
                         <TabSelector { ...formLayout } onChange={ changeTab } key={ 'formatSelector' } name='format' >
-                            <Radio.Button value='point'>Piste</Radio.Button>
-                            <Radio.Button value='line'>Viiva</Radio.Button>
-                            <Radio.Button value='area'>Alue</Radio.Button>
+                            <Radio.Button value='point'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
+                            <Radio.Button value='line'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
+                            <Radio.Button value='area'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
                         </TabSelector>
                     </Form.Item>
 
