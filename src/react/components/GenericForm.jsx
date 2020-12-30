@@ -79,6 +79,10 @@ const StyledButton = styled(Button)`
 export class GenericForm extends React.Component {
     constructor (props) {
         super(props);
+
+        this.state = {
+            disabledButtons: this.props.formSettings.disabledButtons
+        };
     }
 
     /**

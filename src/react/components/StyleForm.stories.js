@@ -60,21 +60,6 @@ const oskariTestStyle = {
     effect: 'auto normal' // Requires inherit: true. Lightens or darkens original fill color. Values [darken, lighten, auto] and [minor, normal, major].
 };
 
-const testOptions = [
-    {
-        value: 'testi tyyli dd',
-        format: 'area',
-    },
-    {
-        value: 'tyyli 2',
-        format: 'line'
-    },
-    {
-        value: 'storybooktyyli',
-        format: 'area'
-    }
-];
-
 const styleList = [
     {
         value: 'testi tyyli ff',
@@ -161,7 +146,6 @@ let currentStyle = oskariTestStyle;
 storiesOf('StyleForm', module)
     .add('Default', () => (
         <StyleForm
-            icons={ testOptions }
             styleList={ styleList }
             styleSettings={ currentStyle }
         />

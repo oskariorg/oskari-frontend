@@ -36,7 +36,6 @@ export const StyleForm = (props) => {
                 locSettings={ locSettings }
             />
             <StyleEditor
-                icons={ props.icons }
                 styleSettings={ state }
                 locSettings={ locSettings }
             />
@@ -45,6 +44,5 @@ export const StyleForm = (props) => {
 };
 
 StyleForm.propTypes = {
-    styleList: PropTypes.array.isRequired,
-    icons: PropTypes.array.isRequired
+    styleList: PropTypes.array.isRequired
 };
