@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Preview } from 'oskari-ui';
-import { Form, Card, Space, Row, Radio } from 'antd';
+import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
 import { LineTab } from './LineTab';
 import { AreaTab } from './AreaTab';
 import { PointTab } from './PointTab';
-import { io } from 'jsts';
 
 // AntD width settings for grid
 const formLayout = {
@@ -91,7 +89,7 @@ export const StyleEditor = (props) => {
     });
 
     useEffect(() => {
-        _populateWithStyle();
+        _populateWithStyle(); // Populate style with props instead of state to avoid async issues
         setState({
             ...state,
             ...props.styleSettings
@@ -100,7 +98,9 @@ export const StyleEditor = (props) => {
 
 
     /**
-     * 
+     * @method _populateWithStyle
+     * @description Populate form with selected style from the list
+     *
      * @param {String} styleSelected - name of the style selected from the list 
      */
     const _populateWithStyle = () => {
@@ -133,7 +133,7 @@ export const StyleEditor = (props) => {
     /**
      * @method changeTab
      * @description Set selected tab in to state
-     * 
+     *
      * @param {Event} event - DOM event reference triggered by onChange
      *
      */
@@ -161,6 +161,7 @@ export const StyleEditor = (props) => {
     /**
      * @method setStateValue
      * @description Parses through and sets provided value into state based on provided target parameter as dot-notation string
+     *
      * @param {Object} targetObject - state provided as object
      * @param {String} targetString - target parameter in object provided in full dot notation 
      * @param {String|Number} value - value to be set

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { SvgRadioButton, Preview, SizeControl, ColorPicker } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
@@ -29,13 +30,13 @@ export const AreaTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item name='stroke' label='Pisteen väri' { ...props.formLayout }>
+                <Form.Item name='stroke.color' label='Pisteen väri' { ...props.formLayout }>
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
                 </Form.Item>
 
-                <Form.Item name='fill' label='Pisteen täyttöväri' { ...props.formLayout }>
+                <Form.Item name='fill.color' label='Pisteen täyttöväri' { ...props.formLayout }>
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('fill.color', event.target.value) }
                         defaultValue={ props.styleSettings.fill.color }
@@ -44,10 +45,10 @@ export const AreaTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item name='lineStyle' label='Line dash' { ...props.formLayout }>
+                <Form.Item name='stroke.lineDash' label='Line dash' { ...props.formLayout }>
                     <SvgRadioButton
+                        name='stroke.lineDash-radio'
                         options={ props.lineIcons }
-                        onChange={ props.lineDashCallback}
                         defaultValue={ props.styleSettings.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
                         onChange={ (event) => props.onChangeCallback('stroke.lineDash', event.target.value) }
                     />
@@ -55,8 +56,9 @@ export const AreaTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item label='Fill style' { ...props.formLayout }>
+                <Form.Item name='fill.area.pattern' label='Fill style' { ...props.formLayout }>
                     <SvgRadioButton
+                        name='fill.area.pattern-radio'
                         options={ areaFills }
                         defaultValue={ props.styleSettings.fill.area.pattern }
                         onChange={ (event) => props.onChangeCallback('fill.area.pattern', event.target.value) }
@@ -65,7 +67,6 @@ export const AreaTab = (props) => {
             </Row>
 
             <Preview
-                markers={ props.markers }
                 styleSettings={ props.styleSettings }
                 areaFills={ areaFills }
             />
@@ -78,4 +79,12 @@ export const AreaTab = (props) => {
             />
         </React.Fragment>
     );
+};
+
+AreaTab.propTypes = {
+    onChangeCallback: PropTypes.func.isRequired,
+    styleSettings: PropTypes.object.isRequired,
+    formLayout: PropTypes.object.isRequired,
+    locSettings: PropTypes.object.isRequired,
+    lineIcons: PropTypes.array.isRequired
 };

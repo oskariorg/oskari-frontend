@@ -37,12 +37,16 @@ export const StyleForm = (props) => {
             />
             <StyleEditor
                 icons={ props.icons }
-                styleList={ props.styleList }
                 markers={ props.markers }
                 styleSettings={ state }
-                lineIcons={ props.lineIcons }
                 locSettings={ locSettings }
             />
         </Card>
     );
+};
+
+StyleForm.propTypes = {
+    styleList: PropTypes.array.isRequired,
+    icons: PropTypes.array.isRequired,
+    markers: PropTypes.array.isRequired
 };

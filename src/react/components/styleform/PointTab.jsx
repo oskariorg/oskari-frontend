@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { SvgRadioButton, Preview, SizeControl, ColorPicker } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
@@ -6,13 +7,13 @@ export const PointTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item name='stroke' label='Pisteen väri' { ...props.formLayout }>
+                <Form.Item name='stroke.color' label='Pisteen väri' { ...props.formLayout }>
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
                 </Form.Item>
 
-                <Form.Item name='fill' label='Pisteen täyttöväri' { ...props.formLayout }>
+                <Form.Item name='fill.color' label='Pisteen täyttöväri' { ...props.formLayout }>
                     <ColorPicker
                         onChange={ (event) => props.onChangeCallback('fill.color', event.target.value) }
                         defaultValue={ props.styleSettings.fill.color }
@@ -21,13 +22,13 @@ export const PointTab = (props) => {
             </Row>
 
             <Row>
-                <Form.Item
-                    { ...props.formLayout }
-                    name='image'
-                    label='Ikoni'
-                    onChange={ (event) => props.onChangeCallback('image.shape', event.target.value) }
-                >
-                    <SvgRadioButton options={ props.markers } defaultValue={ props.styleSettings.image.shape } />
+                <Form.Item name='image.shape' label='Ikoni' { ...props.formLayout }>
+                    <SvgRadioButton
+                        name='image.shape-radio'
+                        options={ props.markers }
+                        defaultValue={ props.styleSettings.image.shape }
+                        onChange={ (event) => props.onChangeCallback('image.shape', event.target.value) }
+                    />
                 </Form.Item>
             </Row>
 
@@ -46,4 +47,12 @@ export const PointTab = (props) => {
             />
         </React.Fragment>
     );
+};
+
+PointTab.propTypes = {
+    onChangeCallback: PropTypes.func.isRequired,
+    styleSettings: PropTypes.object.isRequired,
+    formLayout: PropTypes.object.isRequired,
+    locSettings: PropTypes.object.isRequired,
+    markers: PropTypes.array.isRequired
 };

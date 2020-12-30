@@ -1,12 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Radio } from 'antd';
 import styled from 'styled-components';
-
-const formLayout = {
-    labelCol: { span: 24 },
-    wrapperCol: { span: 24 }
-}
 
 const RadioIcon = styled(Radio.Button)`
     height: 34px;    
@@ -31,7 +26,7 @@ export const SvgRadioButton = (props) => {
         <Radio.Group defaultValue={ props.defaultValue } { ...props.formLayout } onChange={ props.onChange }>
             { props.options.map((singleOption, index) => {
                 return(
-                    <RadioIcon value={ singleOption.name || index }>
+                    <RadioIcon key={ props.name + '-' + (singleOption.name || index) } value={ singleOption.name || index }>
                         <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
                     </RadioIcon>
                 );
@@ -40,8 +35,11 @@ export const SvgRadioButton = (props) => {
     );
 };
 
-/*SvgRadioButton.propTypes = {
-    defaultValue: PropTypes.string,
+SvgRadioButton.propTypes = {
+    defaultValue: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]),
     onChange: PropTypes.func.isRequired,
     options: PropTypes.arrayOf(
         PropTypes.shape({
@@ -49,4 +47,4 @@ export const SvgRadioButton = (props) => {
             name: PropTypes.string,
         })
     )
-};*/
+};
