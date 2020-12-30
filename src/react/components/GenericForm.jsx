@@ -302,7 +302,6 @@ export class GenericForm extends React.Component {
 
 GenericForm.propTypes = {
     formName: PropTypes.string,
-    disabledButtons: PropTypes.bool.isRequired,
     fields: PropTypes.arrayOf(
         PropTypes.shape({
             type: PropTypes.string.isRequired,
