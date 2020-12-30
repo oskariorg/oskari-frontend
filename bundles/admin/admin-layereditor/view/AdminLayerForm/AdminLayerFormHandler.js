@@ -538,10 +538,10 @@ class UIHandler extends StateHandler {
         const layer = { ...this.getState().layer };
 
         // If layer options contain default values, remove them.
-        layer.options.hasOwnProperty('dynamicScreenSpaceError') && layer.options.dynamicScreenSpaceError === false && delete layer.options["dynamicScreenSpaceError"];
-        layer.options.hasOwnProperty('dynamicScreenSpaceErrorDensity') && layer.options.dynamicScreenSpaceErrorDensity === 0.00278 && delete layer.options["dynamicScreenSpaceErrorDensity"];
-        layer.options.hasOwnProperty('dynamicScreenSpaceErrorFactor') && layer.options.dynamicScreenSpaceErrorFactor === 4.0 && delete layer.options["dynamicScreenSpaceErrorFactor"];
-        layer.options.hasOwnProperty('dynamicScreenSpaceErrorHeightFalloff') && layer.options.dynamicScreenSpaceErrorHeightFalloff === 0.25 && delete layer.options["dynamicScreenSpaceErrorHeightFalloff"];
+        layer.options.hasOwnProperty('dynamicScreenSpaceError') && layer.options.dynamicScreenSpaceError === false && delete layer.options['dynamicScreenSpaceError'];
+        layer.options.hasOwnProperty('dynamicScreenSpaceErrorDensity') && layer.options.dynamicScreenSpaceErrorDensity === 0.00278 && delete layer.options['dynamicScreenSpaceErrorDensity'];
+        layer.options.hasOwnProperty('dynamicScreenSpaceErrorFactor') && layer.options.dynamicScreenSpaceErrorFactor === 4.0 && delete layer.options['dynamicScreenSpaceErrorFactor'];
+        layer.options.hasOwnProperty('dynamicScreenSpaceErrorHeightFalloff') && layer.options.dynamicScreenSpaceErrorHeightFalloff === 0.25 && delete layer.options['dynamicScreenSpaceErrorHeightFalloff'];
 
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
