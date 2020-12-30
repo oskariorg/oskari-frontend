@@ -31,7 +31,7 @@ const hasSubLayerMetadata = layer => {
 const getBackendStatus = layer => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
-        addTooltip: backendStatus !== 'UNKNOWN',
+        status: backendStatus,
         messageKey: `backendStatus.${backendStatus}`,
         color: getStatusColor(backendStatus)
     };
@@ -62,6 +62,7 @@ const LayerTools = ({ model, controller }) => {
     const map = Oskari.getSandbox().getMap();
     const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
+    const statusOnClick = backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
     return (
         <Tools className="layer-tools">
             {reason &&
@@ -73,7 +74,7 @@ const LayerTools = ({ model, controller }) => {
                 </Tooltip>
             }
             <LayerStatus backendStatus={backendStatus} model={model}
-                onClick={() => controller.showLayerBackendStatus(model.getId())} />
+                onClick={ statusOnClick } />
             <SpriteIcon
                 className={infoIcon.classes.join(' ')}
                 onClick={() => controller.showLayerMetadata(model)} />
@@ -87,20 +88,21 @@ LayerTools.propTypes = {
 };
 
 const LayerStatus = ({ backendStatus, model, onClick }) => {
-    const icon = (<LayerIcon
-        fill={backendStatus.color}
-        type={model.getLayerType()}
-        onClick={() => onClick()} />);
-    if (backendStatus.addTooltip) {
-        return (<Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>);
-    }
-    return icon;
+    const icon = (
+        <LayerIcon
+            fill={backendStatus.color}
+            type={model.getLayerType()}
+            onClick={onClick ? () => onClick() : undefined}
+        />
+    );
+
+    return (<Tooltip title={<Message messageKey={ backendStatus.messageKey } />}>{icon}</Tooltip>);
 };
 
 LayerStatus.propTypes = {
     backendStatus: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func
 };
 
 const wrapped = LocaleConsumer(LayerTools);

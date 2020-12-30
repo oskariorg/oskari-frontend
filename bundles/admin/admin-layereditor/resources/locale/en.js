@@ -100,6 +100,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
             "capabilities": {
+                "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
                 "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
                 "update": "Update now",
@@ -133,6 +134,16 @@ Oskari.registerLocalization(
                 "mvt": "Lots of small objects",
                 "geojson": "Big objects",
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
+            },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Player",
+                "range": "Range slider",
+                "none": "None"
             },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",

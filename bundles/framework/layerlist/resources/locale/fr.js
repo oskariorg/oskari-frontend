@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 'DOWN': 'La couche cartographique n’est pas disponible actuellement.',
                 'ERROR': 'La couche cartographique n’est pas disponible actuellement.',
                 'MAINTENANCE': 'Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.',
-                'UNKNOWN': '',
+                'UNKNOWN': "Les informations d'état de cette couche cartographique ne sont pas disponibles.",
                 'UNSTABLE': ''
             },
             'guidedTour': {

@@ -1331,12 +1331,8 @@ Oskari.clazz.define(
             if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
                 var totalHeight = jQuery('#contentMap').height();
                 if (totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
-                    mapDivHeight -= mobileDiv.outerHeight();
-                }
-                if ((mobileDiv.attr('data-height')) !== mapDivHeight.toString()) {
+                    mapDivHeight = totalHeight - mobileDiv.outerHeight();
                     jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                    this.updateDomain();
-                    mobileDiv.attr('data-height', mapDivHeight);
                 }
             }
             this.updateSize();

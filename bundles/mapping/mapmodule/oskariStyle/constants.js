@@ -63,5 +63,6 @@ export const FILTER = {
     LESS_EQUAL: 'atMost',
     GREATER: 'greaterThan',
     GREATER_EQUAL: 'atLeast',
-    REG_EXP: 'regexp'
+    REG_EXP: 'regexp',
+    WILD_CARD: '*'
 };

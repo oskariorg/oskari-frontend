@@ -48,6 +48,7 @@ Oskari.clazz.define(
                 LayerComposingModel.SELECTED_TIME,
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLE,
+                LayerComposingModel.TIMES,
                 LayerComposingModel.URL,
                 LayerComposingModel.VERSION
             ], ['1.1.1', '1.3.0']);

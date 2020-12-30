@@ -100,6 +100,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
             "capabilities": {
+                "parsed": "Utvald information från kartlagrets capabilities",
                 "show": "Visa getCapabilities svar",
                 "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
                 "update": "Hämta nu",

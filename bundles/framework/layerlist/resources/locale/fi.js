@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 'DOWN': 'Karttataso ei tällä hetkellä käytettävissä.',
                 'ERROR': 'Karttataso ei tällä hetkellä käytettävissä.',
                 'MAINTENANCE': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Tilatietoa ei ole saatavilla tälle karttatasolle.',
                 'UNSTABLE': ''
             },
             'guidedTour': {

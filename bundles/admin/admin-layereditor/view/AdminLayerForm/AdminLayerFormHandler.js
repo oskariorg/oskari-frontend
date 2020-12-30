@@ -90,7 +90,18 @@ class UIHandler extends StateHandler {
         const found = capabilities.layers[name];
         if (found) {
             const typesAndRoles = this.getAdminMetadata();
-            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
+            // current layer values as template, override with values from capabilities
+            const mergedLayerData = {
+                ...layer,
+                ...found
+            };
+            // keep dataProviderId if we have one (remove the -1 we might get from server)
+            if (mergedLayerData.dataprovider_id === -1) {
+                delete mergedLayerData.dataprovider_id;
+                mergedLayerData.dataProviderId = layer.dataProviderId;
+            }
+
+            const updateLayer = this.layerHelper.fromServer(mergedLayerData, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
@@ -167,6 +178,48 @@ class UIHandler extends StateHandler {
         } else {
             delete layer.options.singleTile;
         }
+        this.updateState({ layer });
+    }
+    setTimeSeriesUI (ui) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries, ui };
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataLayer (layerId) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, layer: layerId };
+        if (layerId === '') {
+            delete metadata.attribute;
+            delete metadata.layerAttributes;
+            timeseries.metadata = metadata;
+            layer.options.timeseries = timeseries;
+            this.updateState({ layer });
+        } else {
+            this.fetchWFSLayerAttributes(layerId).then(layerAttributes => {
+                delete metadata.attribute;
+                metadata.layerAttributes = layerAttributes;
+                timeseries.metadata = metadata;
+                layer.options.timeseries = timeseries;
+                this.updateState({ layer });
+            });
+        }
+    }
+    setTimeSeriesMetadataAttribute (attribute) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, attribute };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataToggleLevel (toggleLevel) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, toggleLevel };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
     setRefreshRate (refreshRate) {
@@ -392,6 +445,33 @@ class UIHandler extends StateHandler {
         const { type, version } = layer;
         const composingModel = this.mapLayerService.getComposingModelForType(type);
         return composingModel ? composingModel.getPropertyFields(version) : [];
+    }
+
+    // http://localhost:8080/action?action_route=GetWFSLayerFields&layer_id=888
+    fetchWFSLayerAttributes (layerId) {
+        this.ajaxStarted();
+        return fetch(Oskari.urls.getRoute('GetWFSLayerFields', { layer_id: layerId }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            this.ajaxFinished();
+            if (!response.ok) {
+                Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+            }
+            return response.json();
+        }).then(json => {
+            const { attributes, locale } = json;
+            const attributeIdentifiers = Object.keys(attributes);
+            const currentLocale = Oskari.getLang();
+            const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
+            return attributeIdentifiers.reduce((choices, identifier) => {
+                // use the attribute identifier as the label if no label is provided for current locale
+                choices[identifier] = labelMapping[identifier] || identifier;
+                return choices;
+            }, {});
+        });
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
@@ -878,6 +958,10 @@ const wrapped = controllerMixin(UIHandler, [
     'setPassword',
     'setPermissionForAll',
     'setSingleTile',
+    'setTimeSeriesUI',
+    'setTimeSeriesMetadataLayer',
+    'setTimeSeriesMetadataAttribute',
+    'setTimeSeriesMetadataToggleLevel',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',

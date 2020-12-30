@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Tee linkki karttanäkymään.",
+                "tooltip": "Tee linkki karttanäkymään",
                 "ok": "OK",
                 "copy": "Kopioi linkki leikepöydälle",
                 "title": "Linkki karttanäkymään",
@@ -14,15 +14,16 @@ Oskari.registerLocalization(
                 "skipInfo": "Älä näytä pikaopasta"
             },
             "history": {
-                "reset": "Palaa alkutilaan.",
-                "back": "Siirry edelliseen näkymään.",
-                "next": "Siirry seuraavaan näkymään."
+                "reset": "Palaa alkutilaan",
+                "confirmReset": "Haluatko palata alkutilaan?",
+                "back": "Siirry edelliseen näkymään",
+                "next": "Siirry seuraavaan näkymään"
             },
-            "pan": "Siirrä karttaa hiirellä raahaamalla.",
-            "zoom": "Lähennä karttaa.",
+            "pan": "Siirrä karttaa hiirellä raahaamalla",
+            "zoom": "Lähennä karttaa",
             "measure": {
-                "line": "Mittaa etäisyys pisteiden välillä.",
-                "area": "Mittaa alueen pinta-ala."
+                "line": "Mittaa etäisyys pisteiden välillä",
+                "area": "Mittaa alueen pinta-ala"
             }
         },
         "measure": {

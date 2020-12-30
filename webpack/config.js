@@ -153,14 +153,19 @@ const getModuleRules = (isProd = false, antThemeFile) => {
 
 const RESOLVE = {
     extensions: ['.js', '.jsx'],
-    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
+    // allow use of oskari-frontend node_modules from external projects
+    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'],
     symlinks: false,
     alias: {
-        'oskari-ui': path.resolve(__dirname, '../src/react')
+        'oskari-ui': path.resolve(__dirname, '../src/react'),
+        // Path to Cesium ES6 module so we can do:
+        // import * as Cesium from 'cesium/Cesium';
+        'cesium': path.resolve(__dirname, '../node_modules/cesium/Source')
     }
 };
 const RESOLVE_LOADER = {
-    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'], // allow external projects to use loaders in oskari-frontend node_modules
+    // allow external projects to use loaders in oskari-frontend node_modules
+    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'],
     extensions: ['.js', '.json'],
     mainFields: ['loader', 'main'],
     alias: {
