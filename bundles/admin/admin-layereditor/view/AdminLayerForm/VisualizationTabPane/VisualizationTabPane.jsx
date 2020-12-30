@@ -20,7 +20,8 @@ const {
     STYLES_JSON,
     EXTERNAL_STYLES_JSON,
     HOVER,
-    SCALE
+    SCALE,
+    CESIUM_ION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFields, controller }) => (
