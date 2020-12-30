@@ -1,6 +1,9 @@
 import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import olVectorSource from 'ol/source/Vector';
+import olVectorLayer from 'ol/layer/Vector';
+import olGeoJSON from 'ol/format/GeoJSON';
 import { LocaleProvider } from 'oskari-ui/util';
 import { TimeSeriesRangeControl } from './TimeSeriesRange/TimeSeriesRangeControl';
 import { TimeSeriesRangeControlHandler } from './TimeSeriesRange/TimeSeriesRangeControlHandler';
@@ -19,12 +22,73 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         this._toolOpen = false;
         this._element = null;
         this._isMobile = Oskari.util.isMobile();
+        this._sandbox = Oskari.getSandbox();
         this._delegate = delegate;
-        this.stateHandler = new TimeSeriesRangeControlHandler(delegate, () => this.updateUI());
+        this._layer = delegate.getLayer();
+
+        this._metadata = this._getTimeSeriesMetadata(delegate.getLayer());
+        this._wfsFeatures = null;
+        this._geojson = new olGeoJSON();
+        this._timeseriesWfsLayerStyleName = 'timeseriesStyle';
+        this._defaultWfsStyleDef = {
+            stroke: {
+                width: 1,
+                color: 'rgba(0, 0, 0, 0.8)'
+            },
+            fill: {
+                color: 'rgba(24, 219, 218, 0.5)'
+            }
+        };
+        this._wfsLayer = null;
+        this.stateHandler = new TimeSeriesRangeControlHandler(delegate, () => this.updateUI(), () => this.requestNewTimeRange());
     }
 
     getName () {
         return this._name;
+    }
+
+    _startPluginImpl (sandbox) {
+        super._startPluginImpl(sandbox);
+        if (!this._wfsLayer) {
+            this._wfsLayer = this._createWFSLayer();
+        }
+        this.getMapModule().addLayer(this._wfsLayer);
+    }
+
+    _stopPluginImpl (sandbox) {
+        super._stopPluginImpl(sandbox);
+        this.getMapModule().removeLayer(this._wfsLayer);
+    }
+
+    requestNewTimeRange () {
+        this._updateWMSLayer();
+        this._updateWFSLayer();
+    }
+
+    _updateWMSLayer () {
+        const [startTime, endTime] = this._getTimeRange();
+        const newTime = `${startTime.toISOString()}/${endTime.toISOString()}`;
+        this._delegate.requestNewTime(newTime);
+    }
+
+    _updateWFSLayer () {
+        const [startTime, endTime] = this._getTimeRange();
+        const { attribute } = this._metadata;
+        const features = this._wfsFeatures.filter(feature => {
+            const time = moment(feature.get(attribute));
+            return startTime < time && time < endTime;
+        });
+        const source = this._wfsLayer.getSource();
+        source.clear();
+        source.addFeatures(features);
+    }
+
+    _getTimeRange () {
+        const { value } = this.stateHandler.getState();
+        const [startYear, endYear] = value;
+        const startTime = moment.utc(startYear.toString()).startOf('year');
+        const endTime = moment.utc(endYear.toString()).endOf('year');
+        return [startTime, endTime];
     }
 
     updateUI () {
@@ -116,7 +180,40 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
                 }
             });
             this.stateHandler.updateDataYears(Array.from(yearSet));
+            this._wfsFeatures = this._geojson.readFeatures(json);
+            this._updateWFSLayer();
         });
+    }
+
+    _getTimeSeriesMetadata (layer) {
+        const options = layer.getOptions();
+        const timeseries = options.timeseries || {};
+        return timeseries.metadata || {};
+    }
+
+    _createWFSLayer () {
+        const { layer: layerId, toggleLevel } = this._metadata;
+        if (!layerId || !toggleLevel || toggleLevel < 0) {
+            return;
+        }
+
+        const source = new olVectorSource();
+        const style = this._getWFSLayerStyle(layerId);
+        const layer = new olVectorLayer({
+            source,
+            style,
+            maxZoom: toggleLevel
+        });
+        return layer;
+    }
+
+    _getWFSLayerStyle (layerId) {
+        const service = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        const layer = service.findMapLayer(layerId);
+        const styles = layer.getOptions().styles;
+        const layerStyleDef = styles[this._timeseriesWfsLayerStyleName] || {};
+        const featureStyleDef = layerStyleDef.featureStyle || this._defaultWfsStyleDef;
+        return this.getMapModule().getStyle(featureStyleDef);
     }
 }
 
