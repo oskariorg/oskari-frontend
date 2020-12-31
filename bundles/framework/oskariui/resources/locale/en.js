@@ -34,6 +34,9 @@ Oskari.registerLocalization({
                     "labelOr": "or",
                     "labelCustom": "Custom colour (RGB 0-255)"
                 },
+                "fillcolor": {
+                    "label": "Fill colour"
+                },
                 "preview": {
                     "label": "Preview"
                 },

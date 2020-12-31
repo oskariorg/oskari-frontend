@@ -33,11 +33,9 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...props.formLayout }
                     name='stroke.color'
-                    label='Pisteen väri'
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linecolor.label' /> }
                 >
                     <ColorPicker
-                        onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
                 </Form.Item>
 
@@ -47,7 +45,6 @@ export const AreaTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.color.label' /> }
                 >
                     <ColorPicker
-                        onChange={ (event) => props.onChangeCallback('fill.color', event.target.value) }
                         defaultValue={ props.styleSettings.fill.color }
                     />
                 </Form.Item>
@@ -60,10 +57,8 @@ export const AreaTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linestyle.label' /> }
                 >
                     <SvgRadioButton
-                        name='stroke.lineDash-radio'
                         options={ props.lineIcons }
                         defaultValue={ props.styleSettings.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
-                        onChange={ (event) => props.onChangeCallback('stroke.lineDash', event.target.value) }
                     />
                 </Form.Item>
             </Row>
@@ -75,10 +70,8 @@ export const AreaTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.fill.label' /> }
                 >
                     <SvgRadioButton
-                        name='fill.area.pattern-radio'
                         options={ areaFills }
                         defaultValue={ props.styleSettings.fill.area.pattern }
-                        onChange={ (event) => props.onChangeCallback('fill.area.pattern', event.target.value) }
                     />
                 </Form.Item>
             </Row>
@@ -86,9 +79,9 @@ export const AreaTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    onChangeCallback={ props.onChangeCallback }
                     format={ props.styleSettings.format }
                     locSettings={ props.locSettings }
+                    name='stroke.area.width'
                 />
             </Row>
 
@@ -101,7 +94,6 @@ export const AreaTab = (props) => {
 };
 
 AreaTab.propTypes = {
-    onChangeCallback: PropTypes.func.isRequired,
     styleSettings: PropTypes.object.isRequired,
     formLayout: PropTypes.object.isRequired,
     locSettings: PropTypes.object.isRequired,

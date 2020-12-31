@@ -43,14 +43,16 @@ export const PointTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.color.label' /> }
                 >
                     <ColorPicker
-                        onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color }
                     />
                 </Form.Item>
 
-                <Form.Item name='fill.color' label='Pisteen täyttöväri' { ...props.formLayout }>
+                <Form.Item
+                    { ...props.formLayout }
+                    name='fill.color'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.fillcolor.label' /> }
+                >
                     <ColorPicker
-                        onChange={ (event) => props.onChangeCallback('fill.color', event.target.value) }
                         defaultValue={ props.styleSettings.fill.color }
                     />
                 </Form.Item>
@@ -58,14 +60,13 @@ export const PointTab = (props) => {
 
             <Row>
                 <Form.Item
+                    { ...props.formLayout }
                     name='image.shape'
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.symbol.label' /> }
-                    { ...props.formLayout }>
+                >
                     <SvgRadioButton
-                        name='image.shape-radio'
                         options={ markers }
                         defaultValue={ props.styleSettings.image.shape }
-                        onChange={ (event) => props.onChangeCallback('image.shape', event.target.value) }
                     />
                 </Form.Item>
             </Row>
@@ -73,9 +74,9 @@ export const PointTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    onChangeCallback={ props.onChangeCallback }
                     format={ props.styleSettings.format }
                     locSettings={ props.locSettings }
+                    name='image.size'
                 />
             </Row>
 
@@ -91,7 +92,6 @@ export const PointTab = (props) => {
 };
 
 PointTab.propTypes = {
-    onChangeCallback: PropTypes.func.isRequired,
     styleSettings: PropTypes.object.isRequired,
     formLayout: PropTypes.object.isRequired,
     locSettings: PropTypes.object.isRequired

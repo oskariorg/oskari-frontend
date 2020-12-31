@@ -9,11 +9,10 @@ export const LineTab = (props) => {
             <Row>
                 <Form.Item
                     { ...props.formLayout }
-                    name='stroke'
+                    name='stroke.color'
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.color.label' /> }
                 >
                     <ColorPicker
-                        onChange={ (event) => props.onChangeCallback('stroke.color', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.color } />
                 </Form.Item>
             </Row>
@@ -25,9 +24,7 @@ export const LineTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.style.label' /> }
                 >
                     <SvgRadioButton
-                        name='stroke.lineDash-radio'
                         options={ props.lineIcons.lineDash }
-                        onChange={ (event) => props.onChangeCallback('stroke.lineDash', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.lineDash }
                     />
                 </Form.Item>
@@ -38,9 +35,7 @@ export const LineTab = (props) => {
                     label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.cap.label' /> }
                 >
                     <SvgRadioButton
-                        name='stroke.lineCap-radio'
                         options={ props.lineIcons.linecaps }
-                        onChange={ (event) => props.onChangeCallback('stroke.lineCap', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.lineCap }
                     />
                 </Form.Item>
@@ -48,14 +43,12 @@ export const LineTab = (props) => {
 
             <Row>
                 <Form.Item
-                { ...props.formLayout }
-                name='stroke.area.lineJoin'
-                label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.corner.label' /> }
+                    { ...props.formLayout }
+                    name='stroke.area.lineJoin'
+                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.corner.label' /> }
                 >
                     <SvgRadioButton
-                        name='stroke.area.lineJoin-radio'
                         options={ props.lineIcons.corners }
-                        onChange={ (event) => props.onChangeCallback('stroke.area.lineJoin', event.target.value) }
                         defaultValue={ props.styleSettings.stroke.area.lineJoin }
                     />
                 </Form.Item>
@@ -64,9 +57,9 @@ export const LineTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    onChangeCallback={ props.onChangeCallback }
                     format={ props.styleSettings.format }
                     locSettings={ props.locSettings }
+                    name='stroke.width'
                 />
             </Row>
 
@@ -77,7 +70,6 @@ export const LineTab = (props) => {
 };
 
 LineTab.propTypes = {
-    onChangeCallback: PropTypes.func.isRequired,
     styleSettings: PropTypes.object.isRequired,
     formLayout: PropTypes.object.isRequired,
     locSettings: PropTypes.object.isRequired,

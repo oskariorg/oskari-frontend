@@ -148,7 +148,7 @@ export const StyleEditor = (props) => {
     const updateState = (targetString, value) => {
         const firstTarget = targetString.substr(0, targetString.indexOf('.'));
         let currentTarget = state;
-        currentTarget = setStateValue(currentTarget, targetString, value);
+        currentTarget = _setStateValue(currentTarget, targetString, value);
 
         setState({
             ...state,
@@ -160,7 +160,7 @@ export const StyleEditor = (props) => {
     };
 
     /**
-     * @method setStateValue
+     * @method _setStateValue
      * @description Parses through and sets provided value into state based on provided target parameter as dot-notation string
      *
      * @param {Object} targetObject - state provided as object
@@ -169,29 +169,33 @@ export const StyleEditor = (props) => {
      *
      * @returns {Object} - returns object where new value is set
      */
-    const setStateValue = (targetObject, targetString, value) => {
+    const _setStateValue = (targetObject, targetString, value) => {
         if (typeof targetString === 'string') {
-            return setStateValue(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
+            return _setStateValue(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
         } else if (targetString.length == 1 && value !== undefined) {
             return targetObject[targetString[0]] = value; // We reach end of the recursion
         } else if (targetString.length === 0) {
             return targetObject; // target is already on level 0 so no need for recursion
         } else {
-            return setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
+            return _setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
         }
     }
 
     return (
-        <StaticForm form={ form }>
+        <StaticForm form={ form } onValuesChange={ (values) => {
+            for (const [key, value] of Object.entries(values)) {
+                updateState(key, value);
+            }
+        } }>
             <Space direction='vertical'>
                 <Card>
                     <Form.Item
                         { ...formLayout }
-                        name={ 'format' }
+                        name='format'
                         initialValue={ state.format }
                         label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
                     >
-                        <TabSelector { ...formLayout } onChange={ changeTab } key={ 'formatSelector' } name='format' >
+                        <TabSelector { ...formLayout } onChange={ changeTab } key={ 'formatSelector' } >
                             <Radio.Button value='point'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
                             <Radio.Button value='line'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
                             <Radio.Button value='area'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
@@ -203,7 +207,6 @@ export const StyleEditor = (props) => {
                             <PointTab
                                 styleSettings={ state }
                                 formLayout={ formLayout }
-                                onChangeCallback={ (key, value) => updateState(key, value) }
                                 markers={ props.markers }
                                 locSettings={ props.locSettings }
                             />
@@ -212,7 +215,6 @@ export const StyleEditor = (props) => {
                             <LineTab
                                 styleSettings={ state }
                                 formLayout={ formLayout }
-                                onChangeCallback={ (key, value) => updateState(key, value) }
                                 lineIcons={ lineIcons }
                                 locSettings={ props.locSettings }
                             />
@@ -221,7 +223,6 @@ export const StyleEditor = (props) => {
                             <AreaTab
                                 styleSettings={ state }
                                 formLayout={ formLayout }
-                                onChangeCallback={ (key, value) => updateState(key, value) }
                                 lineIcons={ lineIcons.lineDash }
                                 locSettings={ props.locSettings }
                             />

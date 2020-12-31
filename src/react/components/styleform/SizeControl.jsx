@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { Form, Row, InputNumber } from 'antd';
+import { Form, InputNumber } from 'antd';
 
 const sizeFormatter = (number) => Math.abs(number); 
 
@@ -14,7 +14,7 @@ export const SizeControl = (props) => {
 
     return (
         <Form.Item
-            name='size'
+            name={ props.name }
             label={
                 <Message
                     bundleKey={ props.locSettings.localeKey }
@@ -29,18 +29,14 @@ export const SizeControl = (props) => {
                 max={ 5 }
                 formatter={ sizeFormatter }
                 parser={ sizeFormatter }
-                onChange={ (value) => {
-                    props.onChangeCallback('stroke.width', value);
-                    props.onChangeCallback('stroke.area.width', value);
-                    props.onChangeCallback('image.size', value);
-                } } />
+            />
         </Form.Item>
     );
 };
 
 SizeControl.propTypes = {
-    onChangeCallback: PropTypes.func.isRequired,
     formLayout: PropTypes.object.isRequired,
     format: PropTypes.string.isRequired,
-    locSettings: PropTypes.object.isRequired
+    locSettings: PropTypes.object.isRequired,
+    name: PropTypes.string.isRequired
 }

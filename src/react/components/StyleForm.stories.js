@@ -129,7 +129,7 @@ const styleList = [
             lineCap: 'round',
             area: {
                 color: '#622eff',
-                width: 3,
+                width: 1,
                 lineDash: 'solid',
                 lineJoin: 'round'
             }
