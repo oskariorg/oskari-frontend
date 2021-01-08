@@ -8,6 +8,7 @@ import { LineTab } from './LineTab';
 import { AreaTab } from './AreaTab';
 import { PointTab } from './PointTab';
 
+
 // AntD width settings for grid
 const formLayout = {
     labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
@@ -69,6 +70,7 @@ const StaticForm = styled(Form)`
     }
 `;
 
+
 /**
  * @class StyleEditor
  * @calssdesc <StyleEditor>
@@ -85,108 +87,20 @@ export const StyleEditor = (props) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const [state, setState] = useState({
-        ...props.styleSettings,
-        format: 'point'
+        ...props.styleSettings
     });
 
+    const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet);
+    const stateSetCallback = (newState) => setState({ ...newState}); // callback for 
+
+    props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
+
     useEffect(() => {
-        _populateWithStyle(); // Populate style with props instead of state to avoid async issues
-        setState({
-            ...state,
-            ...props.styleSettings
-        });
+        props.formHandler.populateWithStyle(props.styleSettings);
     }, [props.styleSettings]);
 
-
-    /**
-     * @method _populateWithStyle
-     * @description Populate form with selected style from the list
-     *
-     * @param {String} styleSelected - name of the style selected from the list 
-     */
-    const _populateWithStyle = () => {
-        const currentStyle = props.styleSettings; // use props instead of state to avoid async problems
-       for (const single in currentStyle) {
-           const targetToSet = typeof currentStyle[single] !== 'object' ? '' : currentStyle[single];
-           const valueToSet = typeof currentStyle[single] === 'object' ? null : currentStyle[single]; //set value if it is on the first level
-           _composeTargetString(targetToSet, single, valueToSet);
-        }
-    }
-
-    /**
-     * @method _composeTargetString
-     * @description Loop through provided target with recursive loop if target contains child objects and compose target string to set field values correctly
-     *
-     * @param {Object|String} target             - target to loop through
-     * @param {String} container                 - containing object key as String to use as a base for name
-     * @param {Object|Boolean|String} valueToSet - value to set in the end. If object provided we go through it recursively.
-     */
-    const _composeTargetString = (target, container, valueToSet) => {
-        if (typeof valueToSet !== 'object' && typeof target !== 'object') {
-            form.setFieldsValue({ [container]: valueToSet });
-        } else {
-            for (const singleTarget in target) {
-                _composeTargetString(target[singleTarget], (container + '.' + singleTarget), target[singleTarget]);
-            }
-        }
-    }
-
-    /**
-     * @method changeTab
-     * @description Set selected tab in to state
-     *
-     * @param {Event} event - DOM event reference triggered by onChange
-     *
-     */
-    const changeTab = (event) => setState({ ...state, [event.target.name]: event.target.value });
-
-    /**
-     * 
-     * @param {String} targetString - target parameter in object provided in full dot notation 
-     * @param {String|Number} value - value to be set 
-     */
-    const updateState = (targetString, value) => {
-        const firstTarget = targetString.substr(0, targetString.indexOf('.'));
-        let currentTarget = state;
-        currentTarget = _setStateValue(currentTarget, targetString, value);
-
-        setState({
-            ...state,
-            [firstTarget]: {
-                ...state[firstTarget],
-                currentTarget
-            }
-        });
-    };
-
-    /**
-     * @method _setStateValue
-     * @description Parses through and sets provided value into state based on provided target parameter as dot-notation string
-     *
-     * @param {Object} targetObject - state provided as object
-     * @param {String} targetString - target parameter in object provided in full dot notation 
-     * @param {String|Number} value - value to be set
-     *
-     * @returns {Object} - returns object where new value is set
-     */
-    const _setStateValue = (targetObject, targetString, value) => {
-        if (typeof targetString === 'string') {
-            return _setStateValue(targetObject, targetString.split('.'), value); // first cycle of recursion converts targetString into array
-        } else if (targetString.length == 1 && value !== undefined) {
-            return targetObject[targetString[0]] = value; // We reach end of the recursion
-        } else if (targetString.length === 0) {
-            return targetObject; // target is already on level 0 so no need for recursion
-        } else {
-            return _setStateValue(targetObject[targetString[0]], targetString.slice(1), value); // recursive call and remove first element from array
-        }
-    }
-
     return (
-        <StaticForm form={ form } onValuesChange={ (values) => {
-            for (const [key, value] of Object.entries(values)) {
-                updateState(key, value);
-            }
-        } }>
+        <StaticForm form={ form } onValuesChange={ (values) => props.formHandler.setFormState(values) } >
             <Space direction='vertical'>
                 <Card>
                     <Form.Item
@@ -195,7 +109,7 @@ export const StyleEditor = (props) => {
                         initialValue={ state.format }
                         label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
                     >
-                        <TabSelector { ...formLayout } onChange={ changeTab } key={ 'formatSelector' } >
+                        <TabSelector { ...formLayout } key={ 'formatSelector' }>
                             <Radio.Button value='point'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
                             <Radio.Button value='line'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
                             <Radio.Button value='area'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
@@ -207,7 +121,6 @@ export const StyleEditor = (props) => {
                             <PointTab
                                 styleSettings={ state }
                                 formLayout={ formLayout }
-                                markers={ props.markers }
                                 locSettings={ props.locSettings }
                             />
                         }

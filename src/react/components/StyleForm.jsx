@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { StyleEditor, StyleSelector } from 'oskari-ui';
 import { Card } from 'antd';
 
+import { StyleFormHandler } from '../util/extras/StyleFormHandler';
+
 const locSettings = {
     localeKey: 'oskariui'
 };
@@ -24,10 +26,8 @@ export const StyleForm = (props) => {
         ...props.styleSettings
     });
 
-    useEffect(() => {
+    const formHandler = new StyleFormHandler(props.styleSettings);
 
-     });
-     
     return (
         <Card>
             <StyleSelector
@@ -38,6 +38,7 @@ export const StyleForm = (props) => {
             <StyleEditor
                 styleSettings={ state }
                 locSettings={ locSettings }
+                formHandler={ formHandler }
             />
         </Card>
     );

@@ -10,7 +10,11 @@ import '../../../bundles/framework/oskariui/resources/locale/sv';
 Oskari.setSupportedLocales(['en_US', 'fi_FI', 'sv_SE']);
 Oskari.setLang('en');
 
+console.clear();
+
+
 const oskariTestStyle = {
+    format: 'point', // NOT INCLUDED IN DEVELOPMENT JSON !!!!!!
     fill: { // fill styles
         color: '#b5b5b5', // fill color
         area: {
