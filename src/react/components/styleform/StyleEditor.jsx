@@ -90,8 +90,8 @@ export const StyleEditor = (props) => {
         ...props.styleSettings
     });
 
-    const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet);
-    const stateSetCallback = (newState) => setState({ ...newState}); // callback for 
+    const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet); // callback for populating form with provided values
+    const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form
 
     props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
 

@@ -10,23 +10,34 @@ export class StyleFormHandler extends StateHandler {
         this.state = {
             ...styleSettings
         }
-        console.log('initializing');
-        console.log(styleSettings);
-
         this.stateSetCallback = null;
         this.formSetCallback = null;
-        //this.stateSetCallback = stateSetCallback;
     }
 
+    /**
+     * @method setCallbacks
+     * @description set handler callbacks
+     *
+     * @param {Function} stateSetCallback 
+     * @param {Function} formSetCallback 
+     */
     setCallbacks (stateSetCallback, formSetCallback) {
         this.stateSetCallback = stateSetCallback;
         this.formSetCallback = formSetCallback;
     }
 
+    /**
+     * @method getCurrentStyle
+     * @returns {Object} current state of handler containing style 
+     */
     getCurrentStyle () {
         return this.state;
     }
 
+    /**
+     * @method getCurrentFormat
+     * @returns {String} current format of state
+     */
     getCurrentFormat () {
         return this.state.format;
     }
@@ -34,7 +45,6 @@ export class StyleFormHandler extends StateHandler {
     /**
      * @method _populateWithStyle
      * @description Populate form with selected style from the list
-     *
      * @param {String} styleSelected - name of the style selected from the list 
      */
     populateWithStyle (currentStyle) {
@@ -69,6 +79,7 @@ export class StyleFormHandler extends StateHandler {
     /**
      * @method setFormState
      * @description Updates state of handler and sets form state via callback
+     * 
      * @param {String} targetString - target parameter in object provided in full dot notation 
      * @param {String|Number} value - value to be set 
      */
