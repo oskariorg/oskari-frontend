@@ -62,8 +62,7 @@ const DynamicScreenSpaceError = ({ layer, controller }) => {
     </StyledDynamicScreenSpaceErrorOption>
 };
 
-const DynamicScreenSpaceErrorDensity = ({ layer, controller }) => {
-    const defaultValue = 0.00278;
+const DynamicScreenSpaceErrorDensity = ({ layer, controller, defaultValue }) => {
     const stepValue = 0.00001;
     const value = layer.options.dynamicScreenSpaceErrorDensity === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorDensity;
     return <StyledDynamicScreenSpaceErrorOption>
@@ -88,8 +87,7 @@ const DynamicScreenSpaceErrorDensity = ({ layer, controller }) => {
     </StyledDynamicScreenSpaceErrorOption>
 };
 
-const DynamicScreenSpaceErrorFactor = ({ layer, controller }) => {
-    const defaultValue = 4.0;
+const DynamicScreenSpaceErrorFactor = ({ layer, controller, defaultValue }) => {
     const stepValue = 0.1;
     const value = layer.options.dynamicScreenSpaceErrorFactor === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorFactor;
     return <StyledDynamicScreenSpaceErrorOption>
@@ -110,8 +108,7 @@ const DynamicScreenSpaceErrorFactor = ({ layer, controller }) => {
     </StyledDynamicScreenSpaceErrorOption>
 };
 
-const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller }) => {
-    const defaultValue = 0.25;
+const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue }) => {
     const stepValue = 0.01;
     const value = layer.options.dynamicScreenSpaceErrorHeightFalloff === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorHeightFalloff;
     return <StyledDynamicScreenSpaceErrorOption>
@@ -133,12 +130,24 @@ const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller }) => {
 };
 
 export const DynamicScreensPaceErrorOptions = ({ layer, controller }) => {
+
+    const defaultDynamicScreenSpaceError = false;
+    const defaultDynamicScreenSpaceErrorDensity = 0.00278;
+    const defaultDynamicScreenSpaceErrorFactor = 4.0;
+    const defaultDynamicScreenSpaceErrorHeightFalloff = 0.25;    
+
+    // If layer options contain default values, remove them.
+    layer.options.hasOwnProperty('dynamicScreenSpaceError') && layer.options.dynamicScreenSpaceError === defaultDynamicScreenSpaceError && delete layer.options['dynamicScreenSpaceError'];
+    layer.options.hasOwnProperty('dynamicScreenSpaceErrorDensity') && layer.options.dynamicScreenSpaceErrorDensity === defaultDynamicScreenSpaceErrorDensity && delete layer.options['dynamicScreenSpaceErrorDensity'];
+    layer.options.hasOwnProperty('dynamicScreenSpaceErrorFactor') && layer.options.dynamicScreenSpaceErrorFactor === defaultDynamicScreenSpaceErrorFactor && delete layer.options['dynamicScreenSpaceErrorFactor'];
+    layer.options.hasOwnProperty('dynamicScreenSpaceErrorHeightFalloff') && layer.options.dynamicScreenSpaceErrorHeightFalloff === defaultDynamicScreenSpaceErrorHeightFalloff && delete layer.options['dynamicScreenSpaceErrorHeightFalloff'];
+
     return <StyledFormField>
         <StyledDynamicScreenSpaceErrorOptionsContainer>
-            <DynamicScreenSpaceError layer={layer} controller={controller} />
-            <DynamicScreenSpaceErrorDensity layer={layer} controller={controller} />
-            <DynamicScreenSpaceErrorFactor layer={layer} controller={controller} />
-            <DynamicScreenSpaceErrorHeightFalloff layer={layer} controller={controller} />
+            <DynamicScreenSpaceError layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceError}/>
+            <DynamicScreenSpaceErrorDensity layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorDensity}/>
+            <DynamicScreenSpaceErrorFactor layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorFactor}/>
+            <DynamicScreenSpaceErrorHeightFalloff layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorHeightFalloff}/>
         </StyledDynamicScreenSpaceErrorOptionsContainer>
     </StyledFormField>
 };
