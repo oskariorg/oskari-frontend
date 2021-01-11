@@ -1,5 +1,16 @@
 import moment from 'moment';
 
+const VECTOR_LAYER_PREFIX = 'TimeSeriesMetadata_';
+const DEFAULT_STYLE = {
+    stroke: {
+        width: 1,
+        color: 'rgba(0, 0, 0, 0.8)'
+    },
+    fill: {
+        color: 'rgba(24, 219, 218, 0.5)'
+    }
+};
+
 export class TimeseriesMetadataService {
     constructor (layerId, attributeName, toggleLevel) {
         this._layerId = layerId;
@@ -19,6 +30,9 @@ export class TimeseriesMetadataService {
      */
     setBbox (bbox = [], success, error) {
         const sandbox = Oskari.getSandbox();
+        // clear previous features from map
+        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, VECTOR_LAYER_PREFIX + this._layerId]);
         const attribute = this._attributeName;
         if (Object.keys(bbox).length !== 4) {
             error('Invalid bbox');
@@ -42,15 +56,14 @@ export class TimeseriesMetadataService {
             }
             return response.json();
         }).then(json => {
-            const { features } = json;
-            this._wfsFeatures = features;
+            this._geojson = json;
             this._updateYears(attribute);
-            // this._updateWFSLayer();
             success(this.getCurrentYears());
         }).catch(e => {
             error(e);
         });
     }
+    
     _updateYears (attribute) {
         const yearSet = new Set();
         this.getCurrentFeatures().forEach(feature => {
@@ -62,17 +75,24 @@ export class TimeseriesMetadataService {
         });
         this._currentYears = Array.from(yearSet);
     }
+
     getCurrentYears () {
         return this._currentYears || [];
     }
-    getCurrentFeatures () {
-        return this._wfsFeatures || [];
+
+    getCurrentFeatures (asGeoJson) {
+        if (asGeoJson) {
+            return this._geojson;
+        }
+        return this._geojson.features || [];
     }
+
     showFeaturesForRange (startTime, endTime) {
         const sandbox = Oskari.getSandbox();
         console.log(this._toggleLevel, sandbox.getMap().getZoom())
         if (this._toggleLevel === -1 || this._toggleLevel < sandbox.getMap().getZoom()) {
             // don't show features but the wms
+            console.log('Not showing features, WMS should be shown');
             return;
         }
         const attribute = this._attributeName;
@@ -81,57 +101,22 @@ export class TimeseriesMetadataService {
             const time = moment(feature.properties[attribute]);
             return startTime < time && time < endTime;
         });
-        console.log('Features count for time range: ' + features.length + '/' + allFeatures.length) ;
-        // TODO: push to map with addfeaturestomap
+        console.log('Features count for time range: ' + features.length + '/' + allFeatures.length);
         
-        /*
-        const source = this._wfsLayer.getSource();
-        source.clear();
-        source.addFeatures(features);
-        */
-    }
-    /*
-    // try using vectorlayerrequest & addfeaturestomap instead
-    
-import olVectorSource from 'ol/source/Vector';
-import olVectorLayer from 'ol/layer/Vector';
-
-        // TODO: init layer with VectorLayerRequest
-        this._timeseriesWfsLayerStyleName = 'timeseriesStyle';
-        this._defaultWfsStyleDef = {
-            stroke: {
-                width: 1,
-                color: 'rgba(0, 0, 0, 0.8)'
-            },
-            fill: {
-                color: 'rgba(24, 219, 218, 0.5)'
-            }
-        };
-        this._wfsLayer = null;
-
-    _createWFSLayer () {
-        const { layer: layerId, toggleLevel } = this._metadata;
-        if (!layerId || !toggleLevel || toggleLevel < 0) {
-            return;
-        }
-
-        const source = new olVectorSource();
-        const style = this._getWFSLayerStyle(layerId);
-        const layer = new olVectorLayer({
-            source,
-            style,
-            maxZoom: toggleLevel
-        });
-        return layer;
+        // TODO: push to map with addfeaturestomap/ styling/optimizing
+        sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [this.getCurrentFeatures(true), {
+            layerId: VECTOR_LAYER_PREFIX + this._layerId,
+            featureStyle: this._getWFSLayerStyle(this._layerId)
+        }]);
     }
 
     _getWFSLayerStyle (layerId) {
-        const service = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        const sandbox = Oskari.getSandbox();
+        const service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         const layer = service.findMapLayer(layerId);
         const styles = layer.getOptions().styles;
-        const layerStyleDef = styles[this._timeseriesWfsLayerStyleName] || {};
-        const featureStyleDef = layerStyleDef.featureStyle || this._defaultWfsStyleDef;
-        return this.getMapModule().getStyle(featureStyleDef);
+        const layerStyleDef = styles.timeseriesStyle || {};
+        const featureStyleDef = layerStyleDef.featureStyle || DEFAULT_STYLE;
+        return featureStyleDef;
     }
-    */
 };
