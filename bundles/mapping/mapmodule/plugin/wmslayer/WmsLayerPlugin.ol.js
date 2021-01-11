@@ -13,24 +13,12 @@ const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerCo
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
  */
-Oskari.clazz.define(
-    'Oskari.mapframework.mapmodule.WmsLayerPlugin',
-
+Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
     /**
      * @static @method create called automatically on construction
      */
     function () {
         this._log = Oskari.log(this.getName());
-        this._timeSeriesMetadataLayer = null;
-        this._timeSeriesMetadataLayerStyleName = 'timeseriesStyle';
-        this._defaultMetadataLayerStyleDef = {
-            stroke: {
-                width: 1
-            },
-            fill: {
-                color: 'rgba(24, 219, 218, 0.5)'
-            }
-        };
     },
     {
         __name: 'WmsLayerPlugin',
