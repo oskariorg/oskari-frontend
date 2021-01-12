@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 }
             }
             const destroyCbs = this._onDestroyCallbacks;
-            while(destroyCbs.length) {
+            while (destroyCbs.length) {
                 const callbackFn = destroyCbs.shift();
                 if (typeof callbackFn === 'function') {
                     callbackFn();

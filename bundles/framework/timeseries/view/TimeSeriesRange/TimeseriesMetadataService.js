@@ -15,7 +15,6 @@ export class TimeseriesMetadataService {
     constructor (layerId, attributeName, toggleLevel) {
         this._layerId = layerId;
         this._attributeName = attributeName;
-        
         if (typeof toggleLevel === 'number' && toggleLevel > -1) {
             this._toggleLevel = toggleLevel;
         } else {
@@ -61,7 +60,7 @@ export class TimeseriesMetadataService {
             error(e);
         });
     }
-    
+
     _updateYears (attribute) {
         const yearSet = new Set();
         this.getCurrentFeatures().forEach(feature => {
@@ -85,7 +84,10 @@ export class TimeseriesMetadataService {
         if (asGeoJson) {
             return { ...this._geojson };
         }
-        return this._geojson.features && this._geojson.features.slice(0) || [];
+        if (!Array.isArray(this._geojson.features)) {
+            return [];
+        }
+        return this._geojson.features.slice(0);
     }
 
     clearPreviousFeatures () {
@@ -99,7 +101,7 @@ export class TimeseriesMetadataService {
         const sandbox = Oskari.getSandbox();
         this.clearPreviousFeatures();
         const log = Oskari.log('TimeSeries');
-        log.info('Toggle at: ' + this._toggleLevel, 'Current zoom is: '  +sandbox.getMap().getZoom())
+        log.info('Toggle at: ' + this._toggleLevel, 'Current zoom is: ' + sandbox.getMap().getZoom());
         if (this._toggleLevel === -1 || this._toggleLevel < sandbox.getMap().getZoom()) {
             // don't show features but the wms
             log.info('Not showing features, WMS should be shown');
@@ -113,7 +115,7 @@ export class TimeseriesMetadataService {
         });
         log.info('Features count for time range: ' + features.length + '/' + geojson.features.length);
         geojson.features = features;
-        
+
         // TODO: push to map with addfeaturestomap/ styling/optimizing
         sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [geojson, {
             layerId: VECTOR_LAYER_PREFIX + this._layerId,

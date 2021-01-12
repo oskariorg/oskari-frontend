@@ -96,7 +96,7 @@ class UIHandler extends StateHandler {
         this._delegate.requestNewTime(newTime);
         this._updateFeaturesByTime(startTime, endTime);
     }
-    
+
     _updateFeaturesByTime (start, end) {
         if (!this._metadataHandler) {
             return;
