@@ -34,8 +34,6 @@ const markers = [
 ];
 
 export const PointTab = (props) => {
-    console.log('point props');
-    console.log(props);
     return (
         <React.Fragment>
             <Row>

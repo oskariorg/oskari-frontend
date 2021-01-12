@@ -86,12 +86,10 @@ export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const [state, setState] = useState({
-        ...props.styleSettings
-    });
+    const [state, setState] = useState({ ...props.styleSettings });
 
     const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet); // callback for populating form with provided values
-    const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form
+    const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form - with this we force re-render even though state is handled in handler
 
     props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
 
@@ -106,7 +104,7 @@ export const StyleEditor = (props) => {
                     <Form.Item
                         { ...formLayout }
                         name='format'
-                        initialValue={ state.format }
+                        initialValue={ props.styleSettings.format }
                         label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
                     >
                         <TabSelector { ...formLayout } key={ 'formatSelector' }>
@@ -117,24 +115,24 @@ export const StyleEditor = (props) => {
                     </Form.Item>
 
                     <Card>
-                        { state.format === 'point' &&
+                        { props.formHandler.getCurrentFormat() === 'point' &&
                             <PointTab
-                                styleSettings={ state }
+                                styleSettings={ props.formHandler.getCurrentStyle() }
                                 formLayout={ formLayout }
                                 locSettings={ props.locSettings }
                             />
                         }
-                        { state.format === 'line' &&
+                        { props.formHandler.getCurrentFormat() === 'line' &&
                             <LineTab
-                                styleSettings={ state }
+                                styleSettings={ props.formHandler.getCurrentStyle() }
                                 formLayout={ formLayout }
                                 lineIcons={ lineIcons }
                                 locSettings={ props.locSettings }
                             />
                         }
-                        { state.format === 'area' &&
+                        { props.formHandler.getCurrentFormat() === 'area' &&
                             <AreaTab
-                                styleSettings={ state }
+                                styleSettings={ props.formHandler.getCurrentStyle() }
                                 formLayout={ formLayout }
                                 lineIcons={ lineIcons.lineDash }
                                 locSettings={ props.locSettings }

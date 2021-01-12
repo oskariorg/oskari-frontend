@@ -27,9 +27,6 @@ const areaFills = [
 ];
 
 export const AreaTab = (props) => {
-
-    console.log('propsit');
-    console.log(props);
     return (
         <React.Fragment>
             <Row>
