@@ -1,14 +1,27 @@
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Spin } from 'oskari-ui';
 import { Background, Header, Col, ColFixed, Row, YearInput } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 
-export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile }) => {
+const getHeaderContent = (title, loading = false, error = false) => {
+    let content = title;
+    if (loading) {
+        content = (<span>{content} <Spin /></span>);
+    }
+    if (error) {
+        // TODO: give an icon with tooltip or something cleaner
+        content = (<span style={{ color: 'red' }}>{content}</span>);
+    }
+    return content;
+}
+
+export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile, loading, error }) => {
     const [startValue, endValue] = value;
     return (
         <Background isMobile={isMobile}>
-            <Header className="timeseries-range-drag-handle">{title}</Header>
+            <Header className="timeseries-range-drag-handle">{ getHeaderContent(title, loading, error) }</Header>
             <Row>
                 <Col>
                     <YearInput
@@ -48,4 +61,6 @@ TimeSeriesRangeControl.propTypes = {
     value: PropTypes.arrayOf(PropTypes.number).isRequired,
     dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
     isMobile: PropTypes.bool.isRequired,
+    error: PropTypes.bool,
+    loading: PropTypes.bool
 };
