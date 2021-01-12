@@ -32,6 +32,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
+                    const subgroup = group;
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
@@ -40,6 +41,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                             trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
+                            subgroup={subgroup}
                             controller={controller}
                         />
                     );

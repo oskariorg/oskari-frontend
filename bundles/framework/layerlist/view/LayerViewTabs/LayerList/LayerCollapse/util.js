@@ -44,6 +44,55 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
         return typeof groupId === 'number' ? groupId : -Math.random();
     };
+    
+    const findObjectByLabel = function(obj, groupId) {
+        for(var i in obj) {
+            if(obj.hasOwnProperty(i)){
+                if (obj[i].id === groupId) { return obj[i]; }
+                else { var foundLabel = findObjectByLabel(obj[i].groups, groupId);}
+                if(foundLabel) {
+                    return foundLabel; }
+            }
+        }
+        return null;
+    };
+    
+    const recursive = function(group) {
+        console.log(group);
+        if (group.hasSubgroups()) {
+            const lang = Oskari.getLang();
+            const name = group.getName();
+            let newGroup = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                group.id, method, name[lang]
+            );
+            newGroup.setParentId(group.parentId);
+            newGroup.setTools(tools);
+            console.log(group.getGroups());
+            let array = [];
+            const testt = group.getGroups().map(subgroup => {
+                //newGroup.setGroups(recursive(subgroup));
+                return recursive(subgroup);
+            });
+            console.log(testt);
+            testt && newGroup.setGroups(testt)
+            return newGroup;
+            
+        } else {
+            const lang2 = Oskari.getLang();
+            const name2 = group.getName();
+            let newGroup = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                group.id, method, name2[lang2]
+            );
+            newGroup.setParentId(group.parentId);
+            newGroup.setTools(tools);
+            return newGroup;
+        }
+    };
+
+
+    let test = [];
 
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
@@ -51,6 +100,9 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         .forEach(layer => {
             let groupAttr = layer[method]();
             let groupId = determineGroupId(layer.getGroups(), layer.getAdmin());
+            //console.log(layer);
+            //console.log(groupId);
+            //test.push(findObjectByLabel(allGroups, groupId));
 
             // If grouping can be determined, create group if already not created
             if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {
@@ -60,45 +112,13 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                 );
 
                 allGroups.map(parentGroup => {
-                    console.log(parentGroup);
                     if (parentGroup.id === group.id && parentGroup.hasSubgroups()) {
-                        const newSubgroups = parentGroup.getGroups().map(subgroup => {
-                            //console.log(parentGroup.getChildren());
-                            const lang = Oskari.getLang();
-                            const name = subgroup.getName();
-                            let newSubgroup = Oskari.clazz.create(
-                                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                                subgroup.id, method, name[lang]
-                            );
-                            newSubgroup.setParentId(parentGroup.getId());
-                            newSubgroup.setTools(tools);
-
-                            // if(subgroup.hasOwnProperty('layers')){
-                            //     subgroup.layers.forEach(layer => {
-                            //         newSubgroup.addLayer(layer);
-                            //     });
-                            // };
-
-                            const newSubsubgroups = subgroup.hasSubgroups() && subgroup.getGroups().map(subsubgroup => {
-                                //console.log(subsubgroup.getChildren());
-                                const lang = Oskari.getLang();
-                                const name = subsubgroup.getName();
-                                let newSubsubgroup = Oskari.clazz.create(
-                                    'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                                    subsubgroup.id, method, name[lang]
-                                );
-                                newSubsubgroup.setParentId(parentGroup.getId());
-                                newSubsubgroup.setTools(tools);
-                                return newSubsubgroup;
-                            });
-                            newSubsubgroups && newSubgroup.setGroups(newSubsubgroups);
-                            return newSubgroup
-                        });
-                        group.setGroups(newSubgroups);
+                        group = recursive(parentGroup);
                     }
                 });
                 console.log(group);
                 groupList.push(group);
+                console.log(groupList);
             }
             // Add layer and tools to group if grouping can be determined
             if (groupAttr) {
@@ -118,8 +138,10 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         });
 
     let groupsWithoutLayers;
+    console.log(groupList);
     const lang = Oskari.getLang();
     if (method === 'getInspireName') {
+        //ei tule tänne hhhhh subgroup
         groupsWithoutLayers = allGroups.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(t => {
             const group = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
@@ -138,6 +160,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
             return group;
         });
     }
+    //subgroup hhh ei tule groupswithoutlayers
     groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
     return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
 };

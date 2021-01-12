@@ -126,6 +126,7 @@ const SubCollapsePanel = ({ group, selectedLayerIds, controller, propsNeededForP
                 //showArrow={group.getLayers().length > 0}
                 extra={
                     <React.Fragment>
+                        <Switch size="small" />
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -169,6 +170,7 @@ const LayerCollapsePanel = (props) => {
             showArrow={layerRows.length > 0}
             extra={
                 <React.Fragment>
+                    <Switch size="small" />
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -178,6 +180,7 @@ const LayerCollapsePanel = (props) => {
                         )
                     }
                     <Badge inversed={true} count={badgeText} />
+
                 </React.Fragment>
             }>
             {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
