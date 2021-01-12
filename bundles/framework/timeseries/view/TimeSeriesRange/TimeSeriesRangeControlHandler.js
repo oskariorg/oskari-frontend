@@ -24,6 +24,46 @@ class UIHandler extends StateHandler {
             dataYears
         };
         this.addStateListener(stateListener);
+        delegate.onDestroy(() => this._teardown());
+    }
+
+    updateValue (value) {
+        this.updateState({ value });
+        if (this._timer) {
+            clearTimeout(this._timer);
+        }
+        this._timer = setTimeout(() => this._requestNewTime(value), this._debounceTime);
+    }
+
+    setCurrentViewportBbox (bbox) {
+        if (!this._metadataHandler) {
+            return;
+        }
+        this.updateState({
+            error: false,
+            loading: true
+        });
+        this._metadataHandler.setBbox(bbox, (data) => {
+            this.updateState({
+                dataYears: data,
+                loading: false
+            });
+            const [start, end] = this._getTimeRange();
+            this._updateFeaturesByTime(start, end);
+        }, (error) => {
+            this.updateState({
+                error: true,
+                loading: false
+            });
+            Oskari.log('TimeSeries').warn('Error updating features', error);
+        });
+    }
+
+    _teardown () {
+        if (!this._metadataHandler) {
+            return;
+        }
+        this._metadataHandler.clearPreviousFeatures();
     }
 
     _initMetadataLayer (layer) {
@@ -48,41 +88,20 @@ class UIHandler extends StateHandler {
         return times.map(time => moment(time).year());
     }
 
-    updateValue (value) {
-        this.updateState({ value });
-        if (this._timer) {
-            clearTimeout(this._timer);
-        }
-        this._timer = setTimeout(() => this._requestNewTime(value), this._debounceTime);
-    }
-
     _requestNewTime (value) {
         const [startYear, endYear] = value;
         const startTime = _getTimeFromYear(startYear);
         const endTime = _getTimeFromYear(endYear);
         const newTime = `${startTime.toISOString()}/${endTime.toISOString()}`;
         this._delegate.requestNewTime(newTime);
-        this.updateFeaturesByTime(startTime, endTime);
+        this._updateFeaturesByTime(startTime, endTime);
     }
     
-    updateFeaturesByTime (start, end) {
+    _updateFeaturesByTime (start, end) {
         if (!this._metadataHandler) {
             return;
         }
         this._metadataHandler.showFeaturesForRange(start, end);
-    }
-
-    setCurrentViewportBbox (bbox) {
-        if (!this._metadataHandler) {
-            return;
-        }
-        this._metadataHandler.setBbox(bbox, (data) => {
-            this.updateDataYears(data);
-            const [start, end] = this._getTimeRange();
-            this.updateFeaturesByTime(start, end);
-        }, (error) => {
-            console.log('Error updating features', error);
-        });
     }
 
     _getTimeRange () {
@@ -90,13 +109,9 @@ class UIHandler extends StateHandler {
         const [startYear, endYear] = value;
         return [_getTimeFromYear(startYear), _getTimeFromYear(endYear)];
     }
-
-    updateDataYears (dataYears) {
-        this.updateState({ dataYears });
-    }
 }
 
 export const TimeSeriesRangeControlHandler = controllerMixin(UIHandler, [
     'updateValue',
-    'updateDataYears'
+    'setCurrentViewportBbox'
 ]);

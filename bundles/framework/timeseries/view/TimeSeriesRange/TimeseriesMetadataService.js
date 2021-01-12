@@ -30,15 +30,13 @@ export class TimeseriesMetadataService {
      */
     setBbox (bbox = [], success, error) {
         const sandbox = Oskari.getSandbox();
-        // clear previous features from map
-        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',
-            [null, null, VECTOR_LAYER_PREFIX + this._layerId]);
-        const attribute = this._attributeName;
         if (Object.keys(bbox).length !== 4) {
+            this.clearPreviousFeatures();
             error('Invalid bbox');
             return;
         }
         const bboxStr = [bbox.left, bbox.bottom, bbox.right, bbox.top].join(',');
+        const attribute = this._attributeName;
         const url = Oskari.urls.getRoute('GetWFSFeatures', {
             id: this._layerId,
             bbox: bboxStr,
@@ -81,30 +79,43 @@ export class TimeseriesMetadataService {
     }
 
     getCurrentFeatures (asGeoJson) {
-        if (asGeoJson) {
-            return this._geojson;
+        if (!this._geojson) {
+            return asGeoJson ? null : [];
         }
-        return this._geojson.features || [];
+        if (asGeoJson) {
+            return { ...this._geojson };
+        }
+        return this._geojson.features && this._geojson.features.slice(0) || [];
+    }
+
+    clearPreviousFeatures () {
+        const sandbox = Oskari.getSandbox();
+        // clear previous features from map
+        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest',
+            [null, null, VECTOR_LAYER_PREFIX + this._layerId]);
     }
 
     showFeaturesForRange (startTime, endTime) {
         const sandbox = Oskari.getSandbox();
-        console.log(this._toggleLevel, sandbox.getMap().getZoom())
+        this.clearPreviousFeatures();
+        const log = Oskari.log('TimeSeries');
+        log.info('Toggle at: ' + this._toggleLevel, 'Current zoom is: '  +sandbox.getMap().getZoom())
         if (this._toggleLevel === -1 || this._toggleLevel < sandbox.getMap().getZoom()) {
             // don't show features but the wms
-            console.log('Not showing features, WMS should be shown');
+            log.info('Not showing features, WMS should be shown');
             return;
         }
         const attribute = this._attributeName;
-        const allFeatures = this.getCurrentFeatures();
-        const features = allFeatures.filter(feature => {
+        const geojson = this.getCurrentFeatures(true);
+        const features = geojson.features.filter(feature => {
             const time = moment(feature.properties[attribute]);
             return startTime < time && time < endTime;
         });
-        console.log('Features count for time range: ' + features.length + '/' + allFeatures.length);
+        log.info('Features count for time range: ' + features.length + '/' + geojson.features.length);
+        geojson.features = features;
         
         // TODO: push to map with addfeaturestomap/ styling/optimizing
-        sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [this.getCurrentFeatures(true), {
+        sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [geojson, {
             layerId: VECTOR_LAYER_PREFIX + this._layerId,
             featureStyle: this._getWFSLayerStyle(this._layerId)
         }]);
@@ -114,9 +125,11 @@ export class TimeseriesMetadataService {
         const sandbox = Oskari.getSandbox();
         const service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         const layer = service.findMapLayer(layerId);
-        const styles = layer.getOptions().styles;
+        if (!layer) {
+            return DEFAULT_STYLE;
+        }
+        const styles = layer.getOptions().styles || {};
         const layerStyleDef = styles.timeseriesStyle || {};
-        const featureStyleDef = layerStyleDef.featureStyle || DEFAULT_STYLE;
-        return featureStyleDef;
+        return layerStyleDef.featureStyle || DEFAULT_STYLE;
     }
 };
