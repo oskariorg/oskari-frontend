@@ -536,6 +536,7 @@ class UIHandler extends StateHandler {
         }
         // Take a copy
         const layer = { ...this.getState().layer };
+
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
