@@ -22,6 +22,8 @@ const StyledInputContainer = styled.div`
     padding-left: 10px;
 `;
 
+// Descriptions from CesiumJS docs: https://cesium.com/docs/cesiumjs-ref-doc/Cesium3DTileset.html
+// Not translated since technical docs:
 const dynamicScreenSpaceErrorTemplate = `Optimization option.
 Reduce the screen space error
 for tiles that are further
