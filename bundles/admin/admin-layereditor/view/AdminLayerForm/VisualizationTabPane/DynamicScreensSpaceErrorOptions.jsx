@@ -2,12 +2,9 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components'
 import PropTypes from 'prop-types';
 import { Message, Checkbox, NumberInput } from 'oskari-ui';
-import { Numeric } from '../Numeric';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from './styled';
-import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
-
 
 const StyledDynamicScreenSpaceErrorOptionsContainer = styled.div`
     display: flex;
@@ -42,17 +39,19 @@ const dynamicScreenSpaceErrorHeightFalloffTemplate = `A ratio of the tileset's
 height at which the density
 starts to falloff.`;
 
-
-const DynamicScreenSpaceError = ({ layer, controller }) => {
-    return <StyledDynamicScreenSpaceErrorOption>
+const DynamicScreenSpaceError = ({ layer, controller }) => (
+    <StyledDynamicScreenSpaceErrorOption>
         <Message messageKey='dynamicScreenSpaceError' />
         <StyledInputContainer>
             <Checkbox
                 checked={layer.options.dynamicScreenSpaceError}
-                onChange={event => {
-                    controller.setOptions({ ...layer.options, dynamicScreenSpaceError: event.target.checked })
+                onChange={event => 
+                        controller.setOptions({
+                            ...layer.options,
+                            dynamicScreenSpaceError: event.target.checked
+                        })
                 }
-                } />
+            />
         </StyledInputContainer>
         <InfoTooltip message={
             <Fragment>
@@ -60,44 +59,44 @@ const DynamicScreenSpaceError = ({ layer, controller }) => {
             </Fragment>
         } />
     </StyledDynamicScreenSpaceErrorOption>
-};
+);
 
-const DynamicScreenSpaceErrorDensity = ({ layer, controller, defaultValue }) => {
-    const stepValue = 0.00001;
-    const value = layer.options.dynamicScreenSpaceErrorDensity === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorDensity;
-    return <StyledDynamicScreenSpaceErrorOption>
+const DynamicScreenSpaceErrorDensity = ({ layer, controller, defaultValue }) => (
+    <StyledDynamicScreenSpaceErrorOption>
         <Message messageKey='dynamicScreenSpaceErrorDensity' />
         <StyledInputContainer>
             <NumberInput
-                defaultValue={defaultValue}
-                step={stepValue}
-                value={value}
-                onChange={eventValue => {
-                    controller.setOptions({ ...layer.options, dynamicScreenSpaceErrorDensity: eventValue })
-                }
+                step={0.00001}
+                value={layer.options.dynamicScreenSpaceErrorDensity || defaultValue}
+                onChange={eventValue => 
+                    controller.setOptions({
+                        ...layer.options,
+                        dynamicScreenSpaceErrorDensity: eventValue
+                    })
                 }
             />
         </StyledInputContainer>
-
         <InfoTooltip message={
             <Fragment>
                 <pre>{dynamicScreenSpaceErrorDensityTemplate}</pre>
             </Fragment>
         } />
     </StyledDynamicScreenSpaceErrorOption>
-};
+);
 
-const DynamicScreenSpaceErrorFactor = ({ layer, controller, defaultValue }) => {
-    const stepValue = 0.1;
-    const value = layer.options.dynamicScreenSpaceErrorFactor === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorFactor;
-    return <StyledDynamicScreenSpaceErrorOption>
+const DynamicScreenSpaceErrorFactor = ({ layer, controller, defaultValue }) => (
+    <StyledDynamicScreenSpaceErrorOption>
         <Message messageKey='dynamicScreenSpaceErrorFactor' />
         <StyledInputContainer>
             <NumberInput
-                defaultValue={defaultValue}
-                step={stepValue}
-                value={value}
-                onChange={eventValue => controller.setOptions({ ...layer.options, dynamicScreenSpaceErrorFactor: eventValue })}
+                step={0.1}
+                value={layer.options.dynamicScreenSpaceErrorFactor || defaultValue}
+                onChange={eventValue =>
+                    controller.setOptions({
+                        ...layer.options,
+                        dynamicScreenSpaceErrorFactor: eventValue
+                    })
+                }
             />
         </StyledInputContainer>
         <InfoTooltip message={
@@ -106,19 +105,21 @@ const DynamicScreenSpaceErrorFactor = ({ layer, controller, defaultValue }) => {
             </Fragment>
         } />
     </StyledDynamicScreenSpaceErrorOption>
-};
+);
 
-const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue }) => {
-    const stepValue = 0.01;
-    const value = layer.options.dynamicScreenSpaceErrorHeightFalloff === undefined ? defaultValue : layer.options.dynamicScreenSpaceErrorHeightFalloff;
-    return <StyledDynamicScreenSpaceErrorOption>
+const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue }) => (
+    <StyledDynamicScreenSpaceErrorOption>
         <Message messageKey='dynamicScreenSpaceErrorHeightFalloff' />
         <StyledInputContainer>
             <NumberInput
-                defaultValue={defaultValue}
-                step={stepValue}
-                value={value}
-                onChange={eventValue => controller.setOptions({ ...layer.options, dynamicScreenSpaceErrorHeightFalloff: eventValue })}
+                step={0.01}
+                value={layer.options.dynamicScreenSpaceErrorHeightFalloff || defaultValue}
+                onChange={eventValue =>
+                    controller.setOptions({
+                        ...layer.options,
+                        dynamicScreenSpaceErrorHeightFalloff: eventValue
+                    })
+                }
             />
         </StyledInputContainer>
         <InfoTooltip message={
@@ -127,30 +128,47 @@ const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue 
             </Fragment>
         } />
     </StyledDynamicScreenSpaceErrorOption>
+);
+
+const defaults = {
+    dynamicScreenSpaceError: false,
+    dynamicScreenSpaceErrorDensity: 0.00278,
+    dynamicScreenSpaceErrorFactor: 4.0,
+    dynamicScreenSpaceErrorHeightFalloff: 0.25
 };
 
 export const DynamicScreensPaceErrorOptions = ({ layer, controller }) => {
 
-    const defaultDynamicScreenSpaceError = false;
-    const defaultDynamicScreenSpaceErrorDensity = 0.00278;
-    const defaultDynamicScreenSpaceErrorFactor = 4.0;
-    const defaultDynamicScreenSpaceErrorHeightFalloff = 0.25;    
-
-    // If layer options contain default values, remove them.
-    layer.options.hasOwnProperty('dynamicScreenSpaceError') && layer.options.dynamicScreenSpaceError === defaultDynamicScreenSpaceError && delete layer.options['dynamicScreenSpaceError'];
-    layer.options.hasOwnProperty('dynamicScreenSpaceErrorDensity') && layer.options.dynamicScreenSpaceErrorDensity === defaultDynamicScreenSpaceErrorDensity && delete layer.options['dynamicScreenSpaceErrorDensity'];
-    layer.options.hasOwnProperty('dynamicScreenSpaceErrorFactor') && layer.options.dynamicScreenSpaceErrorFactor === defaultDynamicScreenSpaceErrorFactor && delete layer.options['dynamicScreenSpaceErrorFactor'];
-    layer.options.hasOwnProperty('dynamicScreenSpaceErrorHeightFalloff') && layer.options.dynamicScreenSpaceErrorHeightFalloff === defaultDynamicScreenSpaceErrorHeightFalloff && delete layer.options['dynamicScreenSpaceErrorHeightFalloff'];
+    const getDefaultRemovingController = (key) => {
+        return {
+            setOptions: (opts) => {
+                if (defaults[key] === opts[key]) {
+                    // setting default value -> remove it
+                    delete opts[key];
+                }
+                controller.setOptions(opts);
+            }
+        };
+    };
+    
+    const getAttributes = (fieldName) => {
+        return {
+            layer,
+            controller: getDefaultRemovingController(fieldName),
+            defaultValue: defaults[fieldName]
+        }
+    };
 
     return <StyledFormField>
-        <StyledDynamicScreenSpaceErrorOptionsContainer>
-            <DynamicScreenSpaceError layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceError}/>
-            <DynamicScreenSpaceErrorDensity layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorDensity}/>
-            <DynamicScreenSpaceErrorFactor layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorFactor}/>
-            <DynamicScreenSpaceErrorHeightFalloff layer={layer} controller={controller} defaultValue={defaultDynamicScreenSpaceErrorHeightFalloff}/>
-        </StyledDynamicScreenSpaceErrorOptionsContainer>
-    </StyledFormField>
+                <StyledDynamicScreenSpaceErrorOptionsContainer>
+                    <DynamicScreenSpaceError {...getAttributes('dynamicScreenSpaceError')}/>
+                    <DynamicScreenSpaceErrorDensity {...getAttributes('dynamicScreenSpaceErrorDensity')}/>
+                    <DynamicScreenSpaceErrorFactor {...getAttributes('dynamicScreenSpaceErrorFactor')}/>
+                    <DynamicScreenSpaceErrorHeightFalloff {...getAttributes('dynamicScreenSpaceErrorHeightFalloff')}/>
+                </StyledDynamicScreenSpaceErrorOptionsContainer>
+            </StyledFormField>
 };
+
 DynamicScreensPaceErrorOptions.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
