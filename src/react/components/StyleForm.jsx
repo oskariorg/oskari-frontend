@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleEditor, StyleSelector } from 'oskari-ui';
 import { Card } from 'antd';
 
-import { StyleFormHandler } from '../util/extras/StyleFormHandler';
+import { StyleFormHandler } from './styleform/StyleFormHandler';
 
 const locSettings = {
     localeKey: 'oskariui'
@@ -21,24 +21,23 @@ const locSettings = {
  */
 
 export const StyleForm = (props) => {
-    // initialize state with propvided style settings to show preview correctly and set default format as point
-    const [state, setState] = useState({
-        ...props.styleSettings
-    });
 
     const formHandler = new StyleFormHandler(props.styleSettings);
+    console.log('rendering whole form');
 
     return (
         <Card>
             <StyleSelector
                 styleList={ props.styleList }
-                onChange={ (selected) => setState({ ...selected }) }
+                onChange={ (selected) => formHandler.setFormState({ ...selected }) }
                 locSettings={ locSettings }
             />
             <StyleEditor
-                styleSettings={ state }
+                styleSettings={ formHandler.getCurrentStyle() }
+                format={ formHandler.getCurrentFormat() }
                 locSettings={ locSettings }
                 formHandler={ formHandler }
+                onChange={ (values) => formHandler.setFormState(values) }
             />
         </Card>
     );

@@ -79,7 +79,7 @@ export const AreaTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    format={ props.styleSettings.format }
+                    format={ props.format }
                     locSettings={ props.locSettings }
                     name='stroke.area.width'
                 />
@@ -87,6 +87,7 @@ export const AreaTab = (props) => {
 
             <Preview
                 styleSettings={ props.styleSettings }
+                format={ props.format }
                 areaFills={ areaFills }
             />
         </React.Fragment>

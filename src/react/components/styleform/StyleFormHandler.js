@@ -12,6 +12,7 @@ export class StyleFormHandler extends StateHandler {
         }
         this.stateSetCallback = null;
         this.formSetCallback = null;
+        console.log('initing handler');
     }
 
     /**
@@ -31,6 +32,7 @@ export class StyleFormHandler extends StateHandler {
      * @returns {Object} current state of handler containing style 
      */
     getCurrentStyle () {
+        console.log(this.state);
         return this.state;
     }
 
@@ -54,8 +56,8 @@ export class StyleFormHandler extends StateHandler {
            this._composeTargetString(targetToSet, single, valueToSet);
         }
 
-        this.setState({ ...this.state, ...currentStyle});
-        this.stateSetCallback(this.state);
+        this.setState({...currentStyle});
+        //sthis.stateSetCallback(this.state);
     }
 
     /**
@@ -98,7 +100,9 @@ export class StyleFormHandler extends StateHandler {
             });
         }
 
-        this.stateSetCallback( this.state );
+        //console.log(this.state);
+
+        //this.stateSetCallback( this.state );
     };
 
     /**

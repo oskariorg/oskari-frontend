@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { SvgRadioButton, Preview, SizeControl, ColorPicker, Message } from 'oskari-ui';
 import { Form, Row } from 'antd';
 
+//import * as markerImport from './lineIcons.json';
+
 export const LineTab = (props) => {
+    console.log(markerImport);
     return (
         <React.Fragment>
             <Row>
@@ -57,13 +60,16 @@ export const LineTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    format={ props.styleSettings.format }
+                    format={ props.format }
                     locSettings={ props.locSettings }
                     name='stroke.width'
                 />
             </Row>
 
-            <Preview styleSettings={ props.styleSettings } />
+            <Preview
+                styleSettings={ props.styleSettings }
+                format={ props.format }
+            />
 
         </React.Fragment>
     );

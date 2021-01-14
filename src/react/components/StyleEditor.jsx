@@ -4,9 +4,9 @@ import { Message } from 'oskari-ui';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { LineTab } from './LineTab';
-import { AreaTab } from './AreaTab';
-import { PointTab } from './PointTab';
+import { LineTab } from './styleform/LineTab';
+import { AreaTab } from './styleform/AreaTab';
+import { PointTab } from './styleform/PointTab';
 
 
 // AntD width settings for grid
@@ -92,19 +92,17 @@ export const StyleEditor = (props) => {
     const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form - with this we force re-render even though state is handled in handler
 
     props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
-
-    useEffect(() => {
-        props.formHandler.populateWithStyle(props.styleSettings);
-    }, [props.styleSettings]);
+    props.formHandler.populateWithStyle(props.styleSettings);  
+    //props.formHandler.populateWithStyle(props.formHandler.getCurrentStyle());
 
     return (
-        <StaticForm form={ form } onValuesChange={ (values) => props.formHandler.setFormState(values) } >
+        <StaticForm form={ form } onValuesChange={ (values) => props.onChange(values) } >
             <Space direction='vertical'>
                 <Card>
                     <Form.Item
                         { ...formLayout }
                         name='format'
-                        initialValue={ props.styleSettings.format }
+                        initialValue={ props.format }
                         label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
                     >
                         <TabSelector { ...formLayout } key={ 'formatSelector' }>
@@ -115,24 +113,27 @@ export const StyleEditor = (props) => {
                     </Form.Item>
 
                     <Card>
-                        { props.formHandler.getCurrentFormat() === 'point' &&
+                        { props.format === 'point' &&
                             <PointTab
-                                styleSettings={ props.formHandler.getCurrentStyle() }
+                                styleSettings={ props.styleSettings }
+                                format={ props.format }
                                 formLayout={ formLayout }
                                 locSettings={ props.locSettings }
                             />
                         }
-                        { props.formHandler.getCurrentFormat() === 'line' &&
+                        { props.format === 'line' &&
                             <LineTab
                                 styleSettings={ props.formHandler.getCurrentStyle() }
+                                format={ props.formHandler.getCurrentFormat() }
                                 formLayout={ formLayout }
                                 lineIcons={ lineIcons }
                                 locSettings={ props.locSettings }
                             />
                         }
-                        { props.formHandler.getCurrentFormat() === 'area' &&
+                        { props.format === 'area' &&
                             <AreaTab
                                 styleSettings={ props.formHandler.getCurrentStyle() }
+                                format={ props.formHandler.getCurrentFormat() }
                                 formLayout={ formLayout }
                                 lineIcons={ lineIcons.lineDash }
                                 locSettings={ props.locSettings }

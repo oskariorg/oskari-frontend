@@ -32,4 +32,4 @@ export { SvgRadioButton } from './components/styleform/SvgRadioButton';
 export { Preview } from './components/styleform/Preview';
 export { StyleSelector } from './components/styleform/StyleSelector'
 export { SizeControl } from './components/styleform/SizeControl'
-export { StyleEditor } from './components/styleform/StyleEditor'
+export { StyleEditor } from './components/StyleEditor'

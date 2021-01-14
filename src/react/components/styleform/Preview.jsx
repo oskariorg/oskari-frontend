@@ -68,7 +68,7 @@ const defaults = {
  * @description Wrap provided svg-icon into base svg of preview
  * 
  * @example <caption>Basic usage</caption>
- * <Preview previewIcon={ svgIconCallback }}/>
+ * <Preview }/>
  */
 
 export class Preview extends React.Component {
@@ -89,9 +89,9 @@ export class Preview extends React.Component {
     }
     
     _fillSvgWithStyle () {
-        const format = this.props.styleSettings.format;
-        const path = this._parsePath(format);
-        
+        const format = this.props.format;
+        const path = this._parsePath(format);        
+
         this.previewAttributes.strokeColor = this.props.styleSettings.stroke.color;
         this.previewAttributes.fillColor = this.props.styleSettings.fill.color;
 
@@ -217,6 +217,7 @@ export class Preview extends React.Component {
 
 Preview.propTypes = {
     styleSettings: PropTypes.object.isRequired,
+    format: PropTypes.string.isRequired,
     markers: PropTypes.array,
     areaFills: PropTypes.array
 };

@@ -74,7 +74,7 @@ export const PointTab = (props) => {
             <Row>
                 <SizeControl
                     formLayout={ props.formLayout }
-                    format={ props.styleSettings.format }
+                    format={ props.format }
                     locSettings={ props.locSettings }
                     name='image.size'
                 />
@@ -82,8 +82,9 @@ export const PointTab = (props) => {
 
             <Row>
                 <Preview
-                    markers={ markers }
                     styleSettings={ props.styleSettings }
+                    format={ props.format }
+                    markers={ markers }
                 />
             </Row>
 
