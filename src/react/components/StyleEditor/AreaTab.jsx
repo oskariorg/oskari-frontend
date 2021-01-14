@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl } from './index';
+import { SvgRadioButton, Preview, SizeControl, constants } from './index';
 import { Form, Row } from 'antd';
 
 const areaFills = [
@@ -32,63 +32,61 @@ export const AreaTab = (props) => {
         <React.Fragment>
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linecolor.label' /> }
+                    label={ <Message messageKey='VisualizationForm.area.linecolor.label' /> }
                 >
                     <ColorPicker
-                        defaultValue={ props.styleSettings.stroke.color } />
+                        defaultValue={ props.oskariStyle.stroke.color } />
                 </Form.Item>
 
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='fill.color'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.color.label' /> }
+                    label={ <Message messageKey='VisualizationForm.area.color.label' /> }
                 >
                     <ColorPicker
-                        defaultValue={ props.styleSettings.fill.color }
+                        defaultValue={ props.oskariStyle.fill.color }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.linestyle.label' /> }
+                    label={ <Message messageKey='VisualizationForm.area.linestyle.label' /> }
                 >
                     <SvgRadioButton
-                        options={ props.lineIcons }
-                        defaultValue={ props.styleSettings.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
+                        options={ constants.LINE_STYLES.lineDash }
+                        defaultValue={ props.oskariStyle.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.fill.label' /> }
+                    label={ <Message messageKey='VisualizationForm.area.fill.label' /> }
                 >
                     <SvgRadioButton
                         options={ areaFills }
-                        defaultValue={ props.styleSettings.fill.area.pattern }
+                        defaultValue={ props.oskariStyle.fill.area.pattern }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <SizeControl
-                    formLayout={ props.formLayout }
-                    format={ props.format }
-                    locSettings={ props.locSettings }
+                    format={ 'area' }
                     name='stroke.area.width'
                 />
             </Row>
 
             <Preview
-                styleSettings={ props.styleSettings }
-                format={ props.format }
+                styleSettings={ props.oskariStyle }
+                format={ 'area' }
                 areaFills={ areaFills }
             />
         </React.Fragment>
@@ -96,8 +94,5 @@ export const AreaTab = (props) => {
 };
 
 AreaTab.propTypes = {
-    styleSettings: PropTypes.object.isRequired,
-    formLayout: PropTypes.object.isRequired,
-    locSettings: PropTypes.object.isRequired,
-    lineIcons: PropTypes.array.isRequired
+    oskariStyle: PropTypes.object.isRequired
 };

@@ -73,11 +73,9 @@ export const StyleEditor = (props) => {
                     </TabSelector>
                     <Card>
                         <StaticForm form={ form } onValuesChange={ samiTest } >
-                        { selectedTab === 'point' && <PointTab oskariStyle={ props.styleSettings } /> }
-                        { selectedTab === 'line' && <LineTab oskariStyle={ props.styleSettings } /> }
-                        { selectedTab === 'area' &&
-                            <p>area</p>
-                        }
+                            { selectedTab === 'point' && <PointTab oskariStyle={ props.styleSettings } /> }
+                            { selectedTab === 'line' && <LineTab oskariStyle={ props.styleSettings } /> }
+                            { selectedTab === 'area' && <AreaTab oskariStyle={  props.styleSettings } /> }
                         </StaticForm>
                     </Card>
                 </Card>
