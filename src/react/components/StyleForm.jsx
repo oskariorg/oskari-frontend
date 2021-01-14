@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { StyleEditor, StyleSelector } from 'oskari-ui';
 import { Card } from 'antd';
 
-import { StyleFormHandler } from './styleform/StyleFormHandler';
+import { StyleEditor } from './StyleEditor';
+import { StyleSelector } from './StyleEditor/StyleSelector';
+import { StyleFormHandler } from './StyleEditor/StyleFormHandler';
 
 const locSettings = {
     localeKey: 'oskariui'
