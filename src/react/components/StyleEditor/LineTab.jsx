@@ -1,75 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl } from './index';
+import { SvgRadioButton, Preview, SizeControl, constants } from './index';
 import { Form, Row } from 'antd';
 
-//import * as markerImport from './lineIcons.json';
-
 export const LineTab = (props) => {
-    console.log(markerImport);
     return (
         <React.Fragment>
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.color.label' /> }
+                    label={ <Message messageKey='VisualizationForm.line.color.label' /> }
                 >
                     <ColorPicker
-                        defaultValue={ props.styleSettings.stroke.color } />
+                        defaultValue={ props.oskariStyle.stroke.color } />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.style.label' /> }
+                    label={ <Message messageKey='VisualizationForm.line.style.label' /> }
                 >
                     <SvgRadioButton
-                        options={ props.lineIcons.lineDash }
-                        defaultValue={ props.styleSettings.stroke.lineDash }
+                        options={ constants.LINE_STYLES.lineDash }
+                        defaultValue={ props.oskariStyle.stroke.lineDash }
                     />
                 </Form.Item>
 
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineCap'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.cap.label' /> }
+                    label={ <Message messageKey='VisualizationForm.line.cap.label' /> }
                 >
                     <SvgRadioButton
-                        options={ props.lineIcons.linecaps }
-                        defaultValue={ props.styleSettings.stroke.lineCap }
+                        options={ constants.LINE_STYLES.linecaps }
+                        defaultValue={ props.oskariStyle.stroke.lineCap }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineJoin'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.corner.label' /> }
+                    label={ <Message messageKey='VisualizationForm.line.corner.label' /> }
                 >
                     <SvgRadioButton
-                        options={ props.lineIcons.corners }
-                        defaultValue={ props.styleSettings.stroke.area.lineJoin }
+                        options={ constants.LINE_STYLES.corners }
+                        defaultValue={ props.oskariStyle.stroke.area.lineJoin }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <SizeControl
-                    formLayout={ props.formLayout }
-                    format={ props.format }
-                    locSettings={ props.locSettings }
+                    format={ 'line' }
                     name='stroke.width'
                 />
             </Row>
 
             <Preview
-                styleSettings={ props.styleSettings }
-                format={ props.format }
+                styleSettings={ props.oskariStyle }
+                format={ 'line' }
             />
 
         </React.Fragment>
@@ -77,8 +72,5 @@ export const LineTab = (props) => {
 };
 
 LineTab.propTypes = {
-    styleSettings: PropTypes.object.isRequired,
-    formLayout: PropTypes.object.isRequired,
-    locSettings: PropTypes.object.isRequired,
-    lineIcons: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired
 };

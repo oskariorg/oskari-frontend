@@ -8,11 +8,6 @@ import styled from 'styled-components';
 import { constants, PointTab, LineTab, AreaTab } from './StyleEditor/';
 
 
-// AntD width settings for grid
-const formLayout = {
-    labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
-    wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
-}
 
 const TabSelector = styled(Radio.Group)`
     &&& {
@@ -71,19 +66,15 @@ export const StyleEditor = (props) => {
             <Space direction='vertical'>
                 <Card>
                     <Message messageKey='VisualizationForm.subheaders.styleFormat' />
-                    <TabSelector { ...formLayout } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                    <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
                         <Radio.Button value='point'><Message messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
                         <Radio.Button value='line'><Message messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
                         <Radio.Button value='area'><Message messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
                     </TabSelector>
                     <Card>
                         <StaticForm form={ form } onValuesChange={ samiTest } >
-                        { selectedTab === 'point' &&
-                            <p>point</p>
-                        }
-                        { selectedTab === 'line' &&
-                            <p>line</p>
-                        }
+                        { selectedTab === 'point' && <PointTab oskariStyle={ props.styleSettings } /> }
+                        { selectedTab === 'line' && <LineTab oskariStyle={ props.styleSettings } /> }
                         { selectedTab === 'area' &&
                             <p>area</p>
                         }
