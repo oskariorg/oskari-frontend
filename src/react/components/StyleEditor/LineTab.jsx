@@ -63,7 +63,7 @@ export const LineTab = (props) => {
             </Row>
 
             <Preview
-                styleSettings={ props.oskariStyle }
+                oskariStyle={ props.oskariStyle }
                 format={ 'line' }
             />
 

@@ -81,7 +81,7 @@ export const PointTab = (props) => {
 
             <Row>
                 <Preview
-                    styleSettings={ props.oskariStyle }
+                    oskariStyle={ props.oskariStyle }
                     format={ 'point' }
                     markers={ markers }
                 />

@@ -34,7 +34,7 @@ export const StyleForm = (props) => {
                 locSettings={ locSettings }
             />
             <StyleEditor
-                styleSettings={ formHandler.getCurrentStyle() }
+                oskariStyle={ formHandler.getCurrentStyle() }
                 format={ formHandler.getCurrentFormat() }
                 locSettings={ locSettings }
                 formHandler={ formHandler }

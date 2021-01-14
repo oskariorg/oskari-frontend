@@ -85,7 +85,7 @@ export const AreaTab = (props) => {
             </Row>
 
             <Preview
-                styleSettings={ props.oskariStyle }
+                oskariStyle={ props.oskariStyle }
                 format={ 'area' }
                 areaFills={ areaFills }
             />
