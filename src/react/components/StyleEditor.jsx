@@ -6,8 +6,7 @@ import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
 import { constants, PointTab, LineTab, AreaTab } from './StyleEditor/';
-
-
+import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
     &&& {
@@ -42,48 +41,13 @@ const StaticForm = styled(Form)`
  * <StyleEditor props={{ ...exampleProps }}/>
  */
 
- /**
-  * Takes original oskariStyle as param and returns a function. 
-  * The returned function takes param like {image.shape: 3}, updates oskariStyle.image.shape to 3 and returns the modified style
-  * @param {Object} originalStyle 
-  */
- const createStyleAdjuster = (originalStyle) => {
-    const style = JSON.parse(JSON.stringify(originalStyle));
-    return (changes) => {
-        // changes is like: {image.shape: 3}
-        Object.keys(changes).forEach(key => {
-            const keyParts = key.split('.');
-            let partialStyle = style;
-            while (keyParts.length) {
-                const partialKey = keyParts.shift();
-                if (keyParts.length > 0) {
-                    // recurse deeper
-                    // TODO: make sure part
-                    const nextStep = partialStyle[partialKey];
-                    if (typeof nextStep !== 'undefined') {
-                        partialStyle = nextStep;
-                    } else {
-                        // create missing structure
-                        partialStyle[partialKey] = {};
-                        partialStyle = partialStyle[partialKey];
-                    }
-                } else {
-                    // last key part, set value
-                    partialStyle[partialKey] = changes[key];
-                }
-            }
-        });
-        // return modified style
-        return style;
-    };
- };
 
 export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const [state, setState] = useState({ ...props.oskariStyle });
-    const updateStyle = createStyleAdjuster(props.oskariStyle);
+    const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
     
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
 
