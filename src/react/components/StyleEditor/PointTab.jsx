@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SvgRadioButton, Preview, SizeControl, ColorPicker, Message } from 'oskari-ui';
+import { ColorPicker, Message } from 'oskari-ui';
+import { SvgRadioButton, Preview, SizeControl, constants } from './index';
 import { Form, Row } from 'antd';
 
 const markers = [
@@ -38,52 +39,50 @@ export const PointTab = (props) => {
         <React.Fragment>
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.color.label' /> }
+                    label={ <Message messageKey='VisualizationForm.point.color.label' /> }
                 >
                     <ColorPicker
-                        defaultValue={ props.styleSettings.stroke.color }
+                        defaultValue={ props.oskariStyle.stroke.color }
                     />
                 </Form.Item>
 
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='fill.color'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.fillcolor.label' /> }
+                    label={ <Message messageKey='VisualizationForm.point.fillcolor.label' /> }
                 >
                     <ColorPicker
-                        defaultValue={ props.styleSettings.fill.color }
+                        defaultValue={ props.oskariStyle.fill.color }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
-                    { ...props.formLayout }
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='image.shape'
-                    label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.symbol.label' /> }
+                    label={ <Message messageKey='VisualizationForm.point.symbol.label' /> }
                 >
                     <SvgRadioButton
                         options={ markers }
-                        defaultValue={ props.styleSettings.image.shape }
+                        defaultValue={ props.oskariStyle.image.shape }
                     />
                 </Form.Item>
             </Row>
 
             <Row>
                 <SizeControl
-                    formLayout={ props.formLayout }
-                    format={ props.format }
-                    locSettings={ props.locSettings }
+                    format={ 'point' }
                     name='image.size'
                 />
             </Row>
 
             <Row>
                 <Preview
-                    styleSettings={ props.styleSettings }
-                    format={ props.format }
+                    oskariStyle={ props.oskariStyle }
+                    format={ 'point' }
                     markers={ markers }
                 />
             </Row>
@@ -93,7 +92,5 @@ export const PointTab = (props) => {
 };
 
 PointTab.propTypes = {
-    styleSettings: PropTypes.object.isRequired,
-    formLayout: PropTypes.object.isRequired,
-    locSettings: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired
 };

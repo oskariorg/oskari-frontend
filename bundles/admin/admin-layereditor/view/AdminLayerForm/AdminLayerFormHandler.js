@@ -190,9 +190,21 @@ class UIHandler extends StateHandler {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries };
         const metadata = { ...timeseries.metadata, layer: layerId };
-        timeseries.metadata = metadata;
-        layer.options.timeseries = timeseries;
-        this.updateState({ layer });
+        if (layerId === '') {
+            delete metadata.attribute;
+            delete metadata.layerAttributes;
+            timeseries.metadata = metadata;
+            layer.options.timeseries = timeseries;
+            this.updateState({ layer });
+        } else {
+            this.fetchWFSLayerAttributes(layerId).then(layerAttributes => {
+                delete metadata.attribute;
+                metadata.layerAttributes = layerAttributes;
+                timeseries.metadata = metadata;
+                layer.options.timeseries = timeseries;
+                this.updateState({ layer });
+            });
+        }
     }
     setTimeSeriesMetadataAttribute (attribute) {
         const layer = { ...this.getState().layer };
@@ -435,6 +447,33 @@ class UIHandler extends StateHandler {
         return composingModel ? composingModel.getPropertyFields(version) : [];
     }
 
+    // http://localhost:8080/action?action_route=GetWFSLayerFields&layer_id=888
+    fetchWFSLayerAttributes (layerId) {
+        this.ajaxStarted();
+        return fetch(Oskari.urls.getRoute('GetWFSLayerFields', { layer_id: layerId }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            this.ajaxFinished();
+            if (!response.ok) {
+                Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+            }
+            return response.json();
+        }).then(json => {
+            const { attributes, locale } = json;
+            const attributeIdentifiers = Object.keys(attributes);
+            const currentLocale = Oskari.getLang();
+            const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
+            return attributeIdentifiers.reduce((choices, identifier) => {
+                // use the attribute identifier as the label if no label is provided for current locale
+                choices[identifier] = labelMapping[identifier] || identifier;
+                return choices;
+            }, {});
+        });
+    }
+
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
     fetchLayer (id, keepCapabilities = false) {
         this.clearMessages();
@@ -497,6 +536,7 @@ class UIHandler extends StateHandler {
         }
         // Take a copy
         const layer = { ...this.getState().layer };
+
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 

@@ -1,53 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
+import { LocaleProvider } from '../util';
+import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { LineTab } from './styleform/LineTab';
-import { AreaTab } from './styleform/AreaTab';
-import { PointTab } from './styleform/PointTab';
+import { constants, PointTab, LineTab, AreaTab } from './StyleEditor/';
 
 
-// AntD width settings for grid
-const formLayout = {
-    labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
-    wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
-}
-
-const lineIcons = {
-    lineDash: [
-        {
-            name: 'solid',
-            data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M0,32 l32,-32" stroke="#000000" stroke-width="3"/></svg>'
-        },
-        {
-            name: 'dash',
-            data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M0,32 l32,-32" stroke="#000000" stroke-dasharray="4, 4" stroke-width="3"/></svg>'
-        }
-    ],
-    corners: [
-        {
-            name: 'miter',
-            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><polygon points="32 9 9 9 9 16 9 23 9 32 23 32 23 23 32 23 32 9"/><path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>'
-        },
-        {
-            name: 'round',
-            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path d="M32,9H19.5A10.5,10.5,0,0,0,9,19.5V32H23V23h9Z"/><path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>'
-        }
-    ],
-    linecaps: [
-        {
-            name: 'round',
-            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><polygon points="9 32 23 32 23 21 18.17 16 13.94 16 9 21 9 32"/></svg>',
-        },
-
-        {
-            name: 'square',
-            data: '<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect x="9" y="21.04" width="14" height="10.96"/></svg>'
-        }
-    ]
-};
 
 const TabSelector = styled(Radio.Group)`
     &&& {
@@ -82,66 +42,86 @@ const StaticForm = styled(Form)`
  * <StyleEditor props={{ ...exampleProps }}/>
  */
 
+ /**
+  * Takes original oskariStyle as param and returns a function. 
+  * The returned function takes param like {image.shape: 3}, updates oskariStyle.image.shape to 3 and returns the modified style
+  * @param {Object} originalStyle 
+  */
+ const createStyleAdjuster = (originalStyle) => {
+    const style = JSON.parse(JSON.stringify(originalStyle));
+    return (changes) => {
+        // changes is like: {image.shape: 3}
+        Object.keys(changes).forEach(key => {
+            const keyParts = key.split('.');
+            let partialStyle = style;
+            while (keyParts.length) {
+                const partialKey = keyParts.shift();
+                if (keyParts.length > 0) {
+                    // recurse deeper
+                    // TODO: make sure part
+                    const nextStep = partialStyle[partialKey];
+                    if (typeof nextStep !== 'undefined') {
+                        partialStyle = nextStep;
+                    } else {
+                        // create missing structure
+                        partialStyle[partialKey] = {};
+                        partialStyle = partialStyle[partialKey];
+                    }
+                } else {
+                    // last key part, set value
+                    partialStyle[partialKey] = changes[key];
+                }
+            }
+        });
+        // return modified style
+        return style;
+    };
+ };
+
 export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const [state, setState] = useState({ ...props.styleSettings });
+    const [state, setState] = useState({ ...props.oskariStyle });
+    const updateStyle = createStyleAdjuster(props.oskariStyle);
+    
+    const [selectedTab, setSelectedTab] = useState(props.format || 'point');
 
     const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet); // callback for populating form with provided values
     const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form - with this we force re-render even though state is handled in handler
 
     props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
-    props.formHandler.populateWithStyle(props.styleSettings);  
+    props.formHandler.populateWithStyle(props.oskariStyle);  
     //props.formHandler.populateWithStyle(props.formHandler.getCurrentStyle());
+    const onUpdate = (values) => {
+        // {image.shape: 3}
+        console.log('Form triggered update:', values);
+        console.log('Original style:', props.oskariStyle);
+        const newStyle = updateStyle(values);
+        console.log('Modified style:', newStyle);
+        // TODO: trigger onChange(newStyle) instead
+        props.onChange(values)
+    };
 
     return (
-        <StaticForm form={ form } onValuesChange={ (values) => props.onChange(values) } >
+        <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <Space direction='vertical'>
                 <Card>
-                    <Form.Item
-                        { ...formLayout }
-                        name='format'
-                        initialValue={ props.format }
-                        label={ <Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.styleFormat' /> }
-                    >
-                        <TabSelector { ...formLayout } key={ 'formatSelector' }>
-                            <Radio.Button value='point'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
-                            <Radio.Button value='line'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
-                            <Radio.Button value='area'><Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
-                        </TabSelector>
-                    </Form.Item>
-
+                    <Message messageKey='VisualizationForm.subheaders.styleFormat' />
+                    <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                        <Radio.Button value='point'><Message messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
+                        <Radio.Button value='line'><Message messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
+                        <Radio.Button value='area'><Message messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
+                    </TabSelector>
                     <Card>
-                        { props.format === 'point' &&
-                            <PointTab
-                                styleSettings={ props.styleSettings }
-                                format={ props.format }
-                                formLayout={ formLayout }
-                                locSettings={ props.locSettings }
-                            />
-                        }
-                        { props.format === 'line' &&
-                            <LineTab
-                                styleSettings={ props.formHandler.getCurrentStyle() }
-                                format={ props.formHandler.getCurrentFormat() }
-                                formLayout={ formLayout }
-                                lineIcons={ lineIcons }
-                                locSettings={ props.locSettings }
-                            />
-                        }
-                        { props.format === 'area' &&
-                            <AreaTab
-                                styleSettings={ props.formHandler.getCurrentStyle() }
-                                format={ props.formHandler.getCurrentFormat() }
-                                formLayout={ formLayout }
-                                lineIcons={ lineIcons.lineDash }
-                                locSettings={ props.locSettings }
-                            />
-                        }
+                        <StaticForm form={ form } onValuesChange={ onUpdate } >
+                            { selectedTab === 'point' && <PointTab oskariStyle={ props.oskariStyle } /> }
+                            { selectedTab === 'line' && <LineTab oskariStyle={ props.oskariStyle } /> }
+                            { selectedTab === 'area' && <AreaTab oskariStyle={  props.oskariStyle } /> }
+                        </StaticForm>
                     </Card>
                 </Card>
             </Space>
-        </StaticForm>
+        </LocaleProvider>
     );
 };

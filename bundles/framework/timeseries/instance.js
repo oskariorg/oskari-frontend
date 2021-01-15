@@ -1,3 +1,5 @@
+import './view/TimeSeriesRangeControlPlugin';
+
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance
  *
@@ -103,23 +105,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             if (active) {
                 var conf = jQuery.extend(true, {}, this._controlPluginConf || {}, active.conf);
                 if (typeof conf.showControl === 'undefined' || conf.showControl) {
-                    this._createControlPlugin(active.delegate, conf);
-                    return;
+                    const controlClass = this._getControlPluginClazz(active.delegate);
+                    if (controlClass !== null) {
+                        this._createControlPlugin(controlClass, active.delegate, conf);
+                        return;
+                    }
                 }
             }
             this._removeControlPlugin();
         },
         /**
+         * @method _getControlPluginClazz
+         * Get UI control plugin class for given delegate
+         * @private
+         * @param {Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol} delegate object that connects UI to timeseries implementation
+         * @return {String} the name of UI control plugin class
+         * @throws {Error} when timeseries layer has an invalid ui type configured
+         */
+        _getControlPluginClazz (delegate) {
+            const layer = delegate.getLayer();
+            const options = layer.getOptions();
+            const timeseries = options.timeseries || {};
+            const ui = timeseries.ui || 'player'; // defaults to 'player'
+            switch (ui) {
+            case 'player':
+                return 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin';
+            case 'range':
+                return 'Oskari.mapframework.bundle.timeseries.TimeSeriesRangeControlPlugin';
+            case 'none':
+                return null;
+            default:
+                throw new Error('Invalid UI type');
+            }
+        },
+        /**
          * @method _createControlPlugin
          * Creates UI control using given delegate & conf
          * @private
-         * @param  {Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol} delegate object that connects UI to timeseries implementation
-         * @param  {Object} conf configuration object for TimeseriesControlPlugin
+         * @param {String} controlClass The name of UI control plugin class
+         * @param {Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol} delegate object that connects UI to timeseries implementation
+         * @param {Object} conf configuration object for TimeseriesControlPlugin
          */
-        _createControlPlugin: function (delegate, conf) {
+        _createControlPlugin: function (controlClass, delegate, conf) {
             this._removeControlPlugin();
-            var mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
-            var controlPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin', delegate, conf);
+            const mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+            const controlPlugin = Oskari.clazz.create(controlClass, delegate, conf);
             mapModule.registerPlugin(controlPlugin);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;

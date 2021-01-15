@@ -92,27 +92,27 @@ export class Preview extends React.Component {
         const format = this.props.format;
         const path = this._parsePath(format);        
 
-        this.previewAttributes.strokeColor = this.props.styleSettings.stroke.color;
-        this.previewAttributes.fillColor = this.props.styleSettings.fill.color;
+        this.previewAttributes.strokeColor = this.props.oskariStyle.stroke.color;
+        this.previewAttributes.fillColor = this.props.oskariStyle.fill.color;
 
         this.previewAttributes.fill = format === 'area'
             ? ('url(#' + defaultPatternId + ')') : format !== 'line' 
-            ? this.props.styleSettings.fill.color : defaults.fill.color;
+            ? this.props.oskariStyle.fill.color : defaults.fill.color;
 
-        if (format === 'area' && ~this.props.styleSettings.fill.area.pattern) {
-            const patternPath = this._parsePattern(this.props.areaFills.find(pattern => pattern.name === this.props.styleSettings.fill.area.pattern));
+        if (format === 'area' && ~this.props.oskariStyle.fill.area.pattern) {
+            const patternPath = this._parsePattern(this.props.areaFills.find(pattern => pattern.name === this.props.oskariStyle.fill.area.pattern));
             this.previewAttributes.pattern = this._composeSvgPattern(patternPath);
         }
 
         this.previewAttributes.strokeWidth = format === 'point'
             ? defaults.defaultStrokeWidth : format === 'area'
-            ? this.props.styleSettings.stroke.area.width : this.props.styleSettings.stroke.width;
+            ? this.props.oskariStyle.stroke.area.width : this.props.oskariStyle.stroke.width;
         
-        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.styleSettings.stroke.lineCap : defaults.stroke.lineCap;
+        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.oskariStyle.stroke.lineCap : defaults.stroke.lineCap;
 
-        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.styleSettings.stroke.lineDash === 'dash' ? '4, 4' : '';
+        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.oskariStyle.stroke.lineDash === 'dash' ? '4, 4' : '';
 
-        this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.styleSettings.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
+        this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.oskariStyle.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
 
         path.setAttribute('stroke', this.previewAttributes.strokeColor);
         path.setAttribute('stroke-width', this.previewAttributes.strokeWidth);
@@ -123,7 +123,7 @@ export class Preview extends React.Component {
             path.setAttribute('fill', this.previewAttributes.fill);
         }
         
-        this.size = format === 'point' ? this.props.styleSettings.image.size : defaults.image.size;
+        this.size = format === 'point' ? this.props.oskariStyle.image.size : defaults.image.size;
 
         return path.outerHTML;
     }
@@ -137,7 +137,7 @@ export class Preview extends React.Component {
      */
     _parsePath (format) {
         let baseSvg =
-              format === 'point' ? this.props.markers[this.props.styleSettings.image.shape].data
+              format === 'point' ? this.props.markers[this.props.oskariStyle.image.shape].data
             : format === 'line' ? baseSvg = linePreviewSVG
             : format === 'area' ? baseSvg = areaPreviewSVG
             : false;
@@ -216,7 +216,7 @@ export class Preview extends React.Component {
 };
 
 Preview.propTypes = {
-    styleSettings: PropTypes.object.isRequired,
+    oskariStyle: PropTypes.object.isRequired,
     format: PropTypes.string.isRequired,
     markers: PropTypes.array,
     areaFills: PropTypes.array

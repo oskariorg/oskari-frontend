@@ -1,4 +1,12 @@
-{
+export const LOCALIZATION_BUNDLE = 'oskariui';
+
+// AntD width settings for grid
+export const ANTD_FORMLAYOUT = {
+    labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
+    wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
+};
+
+export const LINE_STYLES = {
     "lineDash": [
         {
             "name": "solid",
@@ -30,4 +38,4 @@
             "data": "<svg id=\"Layer_1\" data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 32 32\" width=\"32\" height=\"32\"><rect x=\"9\" y=\"21.04\" width=\"14\" height=\"10.96\"/></svg>"
         }
     ]
-}
+};

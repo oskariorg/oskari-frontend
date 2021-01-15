@@ -11,7 +11,7 @@ import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
 import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
-import { CapabilitiesUpdate } from './CapabilitiesUpdate';
+import { Capabilities } from './Capabilities';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const {
@@ -33,7 +33,7 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
     return (
         <Fragment>
             { propertyFields.includes(CAPABILITIES) &&
-                <CapabilitiesUpdate layer={layer} controller={controller} />
+                <Capabilities layer={layer} controller={controller} />
             }
             { propertyFields.includes(ATTRIBUTIONS) &&
                 <Attributions layer={layer} controller={controller} />
