@@ -46,25 +46,29 @@ export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const [state, setState] = useState({ ...props.oskariStyle });
-    const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
-    
+    //const [state, setState] = useState({ ...props.oskariStyle });
+    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(props.oskariStyle);
+    form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
+/*
+      const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet); // callback for populating form with provided values
+      const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form - with this we force re-render even though state is handled in handler
 
-    const formSetCallback = (valueToSet) => form.setFieldsValue(valueToSet); // callback for populating form with provided values
-    const stateSetCallback = (newState) => setState({ ...newState}); // callback for setting state of form - with this we force re-render even though state is handled in handler
-
-    props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
-    props.formHandler.populateWithStyle(props.oskariStyle);  
-    //props.formHandler.populateWithStyle(props.formHandler.getCurrentStyle());
+      props.formHandler.setCallbacks(stateSetCallback, formSetCallback);
+      props.formHandler.populateWithStyle(props.oskariStyle);
+      props.formHandler.populateWithStyle(props.formHandler.getCurrentStyle());
+*/
+    const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
     const onUpdate = (values) => {
         // {image.shape: 3}
+        const newStyle = updateStyle(values);
+        /*
         console.log('Form triggered update:', values);
         console.log('Original style:', props.oskariStyle);
-        const newStyle = updateStyle(values);
         console.log('Modified style:', newStyle);
         // TODO: trigger onChange(newStyle) instead
-        props.onChange(values)
+        */
+        props.onChange(newStyle)
     };
 
     return (
