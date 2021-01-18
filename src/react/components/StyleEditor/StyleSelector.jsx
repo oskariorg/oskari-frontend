@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
-import { Form, Card} from 'antd';
+import { Form, Card } from 'antd';
+import { ANTD_FORMLAYOUT, LOCALIZATION_BUNDLE } from './constants';
 import styled from 'styled-components';
-
-// AntD width settings for grid
-const formLayout = {
-    labelCol: { span: 24 }, // width of label column in AntD grid settings -> full width = own row inside element
-    wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
-}
 
 const SelectorForm = styled(Form)`
     width: 400px;
@@ -19,20 +14,19 @@ const SelectorForm = styled(Form)`
 `;
 
 export const StyleSelector = (props) => {
-    const getSelectedStyle = (selectedStyleName) => props.styleList.find((style) => style.value === selectedStyleName);
 
     return (
         <SelectorForm>
             <Card>
-                <Form.Item label={<Message bundleKey={ props.locSettings.localeKey } messageKey='VisualizationForm.subheaders.name' />} { ...formLayout } name={ 'styleListSelector' }>
-                    <Select onChange={ (name) => props.onChange(getSelectedStyle(name)) }>
+                <Form.Item label={<Message bundleKey={ LOCALIZATION_BUNDLE } messageKey='VisualizationForm.subheaders.name' />} { ...ANTD_FORMLAYOUT } name={ 'styleListSelector' }>
+                    <Select onChange={ (name) => props.onChange(name) }>
                         { props.styleList.map((singleOption) => {
                             return (
                                 <Select.Option
-                                    value={ singleOption.value}
-                                    key={ singleOption.value }
+                                    value={ singleOption }
+                                    key={ singleOption }
                                 >
-                                    { singleOption.value }
+                                    { singleOption }
                                 </Select.Option>
                             );
                         }) }
@@ -45,6 +39,5 @@ export const StyleSelector = (props) => {
 
 StyleSelector.propTypes = {
     onChange: PropTypes.func.isRequired,
-    styleList: PropTypes.array.isRequired,
-    locSettings: PropTypes.object.isRequired
+    styleList: PropTypes.array.isRequired
 };
