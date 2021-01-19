@@ -18,7 +18,7 @@ export const StyleSelector = (props) => {
     return (
         <SelectorForm>
             <Card>
-                <Form.Item label={<Message bundleKey={ LOCALIZATION_BUNDLE } messageKey='VisualizationForm.subheaders.name' />} { ...ANTD_FORMLAYOUT } name={ 'styleListSelector' }>
+                <Form.Item label={<Message bundleKey={ LOCALIZATION_BUNDLE } messageKey='StyleEditor.subheaders.name' />} { ...ANTD_FORMLAYOUT } name={ 'styleListSelector' }>
                     <Select onChange={ (name) => props.onChange(name) }>
                         { props.styleList.map((singleOption) => {
                             return (

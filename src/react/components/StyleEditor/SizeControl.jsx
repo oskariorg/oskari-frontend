@@ -9,9 +9,9 @@ const sizeFormatter = (number) => Math.abs(number);
 
 export const SizeControl = (props) => {
     const locKey =
-        props.format === 'point' ? 'VisualizationForm.point.size.label'
-        : props.format === 'line' ? 'VisualizationForm.line.width.label'
-        : 'VisualizationForm.area.linewidth.label'
+        props.format === 'point' ? 'StyleEditor.point.size.label'
+        : props.format === 'line' ? 'StyleEditor.line.width.label'
+        : 'StyleEditor.area.linewidth.label'
 
     return (
         <Form.Item

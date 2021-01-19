@@ -60,11 +60,11 @@ export const StyleEditor = (props) => {
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <Space direction='vertical'>
                 <Card>
-                    <Message messageKey='VisualizationForm.subheaders.styleFormat' />
+                    <Message messageKey='StyleEditor.subheaders.styleFormat' />
                     <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                        <Radio.Button value='point'><Message messageKey='VisualizationForm.point.tabtitle' /></Radio.Button>
-                        <Radio.Button value='line'><Message messageKey='VisualizationForm.line.tabtitle' /></Radio.Button>
-                        <Radio.Button value='area'><Message messageKey='VisualizationForm.area.tabtitle' /></Radio.Button>
+                        <Radio.Button value='point'><Message messageKey='StyleEditor.point.tabtitle' /></Radio.Button>
+                        <Radio.Button value='line'><Message messageKey='StyleEditor.line.tabtitle' /></Radio.Button>
+                        <Radio.Button value='area'><Message messageKey='StyleEditor.area.tabtitle' /></Radio.Button>
                     </TabSelector>
                     <Card>
                         <StaticForm form={ form } onValuesChange={ onUpdate } >

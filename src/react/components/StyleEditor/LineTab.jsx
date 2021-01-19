@@ -11,7 +11,7 @@ export const LineTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message messageKey='VisualizationForm.line.color.label' /> }
+                    label={ <Message messageKey='StyleEditor.line.color.label' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.stroke.color } />
@@ -22,7 +22,7 @@ export const LineTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
-                    label={ <Message messageKey='VisualizationForm.line.style.label' /> }
+                    label={ <Message messageKey='StyleEditor.line.style.label' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.lineDash }
@@ -33,7 +33,7 @@ export const LineTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineCap'
-                    label={ <Message messageKey='VisualizationForm.line.cap.label' /> }
+                    label={ <Message messageKey='StyleEditor.line.cap.label' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.linecaps }
@@ -46,7 +46,7 @@ export const LineTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineJoin'
-                    label={ <Message messageKey='VisualizationForm.line.corner.label' /> }
+                    label={ <Message messageKey='StyleEditor.line.corner.label' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.corners }

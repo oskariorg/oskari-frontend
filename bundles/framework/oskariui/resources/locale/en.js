@@ -3,7 +3,7 @@ Oskari.registerLocalization({
     key: 'oskariui',
     value: {
         otherLanguages: 'Other languages',
-        "VisualizationForm": {
+        "StyleEditor": {
             "subheaders" : {
                 styleFormat: 'Style format',
                 name: "Style name",

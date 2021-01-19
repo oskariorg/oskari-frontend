@@ -34,7 +34,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message messageKey='VisualizationForm.area.linecolor.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.linecolor.label' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.stroke.color } />
@@ -43,7 +43,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.color'
-                    label={ <Message messageKey='VisualizationForm.area.color.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.color.label' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.fill.color }
@@ -55,7 +55,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
-                    label={ <Message messageKey='VisualizationForm.area.linestyle.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.linestyle.label' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.lineDash }
@@ -68,7 +68,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
-                    label={ <Message messageKey='VisualizationForm.area.fill.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.fill.label' /> }
                 >
                     <SvgRadioButton
                         options={ areaFills }
