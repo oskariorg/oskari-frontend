@@ -41,7 +41,7 @@ export const PointTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.point.color' /> }
+                    label={ <Message messageKey='StyleEditor.stroke.color' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.stroke.color }
@@ -51,7 +51,7 @@ export const PointTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.color'
-                    label={ <Message messageKey='StyleEditor.point.fillcolor' /> }
+                    label={ <Message messageKey='StyleEditor.fill.color' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.fill.color }
@@ -63,7 +63,7 @@ export const PointTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='image.shape'
-                    label={ <Message messageKey='StyleEditor.point.symbol' /> }
+                    label={ <Message messageKey='StyleEditor.image.shape' /> }
                 >
                     <SvgRadioButton
                         options={ markers }
@@ -76,7 +76,7 @@ export const PointTab = (props) => {
                 <SizeControl
                     format={ 'point' }
                     name='image.size'
-                    localeKey={ 'StyleEditor.point.size' }
+                    localeKey={ 'StyleEditor.image.size' }
                 />
             </Row>
 

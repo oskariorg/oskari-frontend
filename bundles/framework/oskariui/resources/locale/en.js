@@ -7,37 +7,30 @@ Oskari.registerLocalization({
             "subheaders" : {
                 "styleFormat": 'Style format',
                 "name": "Style name",
-                "style": "Style"
+                "style": "Style",
+                "pointTab": "Point",
+                "lineTab": "Line",
+                "areaTab": "Area"
             },
-            "point": {
-                "tabtitle": "Point",
-                "symbol": "Icon",
-                "size":"Size",
-                "color": "Colour",
-                "fillcolor": "Fill colour",
-                "preview": "Preview"
-            },
-            "line": {
-                "tabtitle": "Line",
-                "title": "Line feature style",
-                "style": "Dash",
-                "cap": "Endings",
-                "corner": "Corners",
-                "width": "Width",
-                "color": "Colour",
-            },
-            "area": {
-                "tabtitle": "Area",
-                "title": "Area feature style",
-                "tooltip": "Define a style for area features.",
-                "linestyle": "Line dash",
-                "linecap": "Line endings",
-                "linecorner": "Line corners",
-                "linewidth": "Line width",
-                "linecolor": "Line colour",
+            "fill": {
                 "color": "Fill colour",
-                "fill": "Fill pattern",
-                "fillRemove": "Remove fill colour and pattern",
+                "area": {
+                    "pattern": "Fill pattern"
+                }
+            },
+            "image": {
+                "shape": "Icon",
+                "size":"Size",
+            },
+            "stroke": {
+                "color": "Colour",
+                "lineCap": "Endings",
+                "lineDash": "Dash",
+                "width": "Width",
+                "area": {
+                    "lineJoin": "Corners",
+                    "width": "Line width"
+                }
             }
         }        
     }

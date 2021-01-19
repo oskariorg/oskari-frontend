@@ -62,9 +62,9 @@ export const StyleEditor = (props) => {
                 <Card>
                     <Message messageKey='StyleEditor.subheaders.styleFormat' />
                     <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                        <Radio.Button value='point'><Message messageKey='StyleEditor.point.tabtitle' /></Radio.Button>
-                        <Radio.Button value='line'><Message messageKey='StyleEditor.line.tabtitle' /></Radio.Button>
-                        <Radio.Button value='area'><Message messageKey='StyleEditor.area.tabtitle' /></Radio.Button>
+                        <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
+                        <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>
+                        <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
                     </TabSelector>
                     <Card>
                         <StaticForm form={ form } onValuesChange={ onUpdate } >
