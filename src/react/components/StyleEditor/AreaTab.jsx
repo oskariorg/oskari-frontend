@@ -34,7 +34,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.area.linecolor.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.linecolor' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.stroke.color } />
@@ -43,7 +43,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.color'
-                    label={ <Message messageKey='StyleEditor.area.color.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.color' /> }
                 >
                     <ColorPicker
                         defaultValue={ props.oskariStyle.fill.color }
@@ -55,7 +55,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.lineDash'
-                    label={ <Message messageKey='StyleEditor.area.linestyle.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.linestyle' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.lineDash }
@@ -68,7 +68,7 @@ export const AreaTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
-                    label={ <Message messageKey='StyleEditor.area.fill.label' /> }
+                    label={ <Message messageKey='StyleEditor.area.fill' /> }
                 >
                     <SvgRadioButton
                         options={ areaFills }
@@ -81,6 +81,7 @@ export const AreaTab = (props) => {
                 <SizeControl
                     format={ 'area' }
                     name='stroke.area.width'
+                    localeKey={ 'StyleEditor.area.linewidth' }
                 />
             </Row>
 
