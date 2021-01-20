@@ -1,34 +1,34 @@
 Oskari.registerLocalization({
-    lang: "fi",
-    key: "oskariui",
+    lang: 'fi',
+    key: 'oskariui',
     value: {
         StyleEditor: {
             subheaders: {
-                styleFormat: "Geometria tyyppi",
-                name: "Tyylin nimi",
-                style: "Style",
-                pointTab: "Piste",
-                lineTab: "Viiva",
-                areaTab: "Alue"
+                styleFormat: 'Geometria tyyppi',
+                name: 'Tyylin nimi',
+                style: 'Style',
+                pointTab: 'Piste',
+                lineTab: 'Viiva',
+                areaTab: 'Alue'
             },
             fill: {
-                color: "Täyttöväri",
+                color: 'Täyttöväri',
                 area: {
-                    pattern: "Täyttökuvio"
+                    pattern: 'Täyttökuvio'
                 }
             },
             image: {
-                shape: "Symboli",
-                size: "Koko",
+                shape: 'Symboli',
+                size: 'Koko',
             },
             stroke: {
-                color: "Väri",
-                lineCap: "Päädyt",
-                lineDash: "Tyyli",
-                width: "Leveys",
+                color: 'Väri',
+                lineCap: 'Päädyt',
+                lineDash: 'Tyyli',
+                width: 'Leveys',
                 area: {
-                    lineJoin: "Kulmat",
-                    width: "Viivan paksuus"
+                    lineJoin: 'Kulmat',
+                    width: 'Viivan paksuus'
                 }
             }
         }        
