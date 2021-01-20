@@ -2,6 +2,35 @@ Oskari.registerLocalization({
     lang: 'sv',
     key: 'oskariui',
     value: {
-        otherLanguages: 'Andra språk'
+        StyleEditor: {
+            subheaders: {
+                styleFormat: 'Style format',
+                name: 'Namnet på stilen',
+                style: 'Stil',
+                pointTab: 'Punkten',
+                lineTab: 'Linje',
+                areaTab: 'Området'
+            },
+            fill: {
+                color: 'Ifyllnadsfärg för område',
+                area: {
+                    pattern: 'Ifyllnandsmönster för område'
+                }
+            },
+            image: {
+                shape: 'Ikon',
+                size: 'Storlek',
+            },
+            stroke: {
+                color: 'Linjens färg',
+                lineCap: 'Linjens ändpunkter',
+                lineDash: 'Linjens stil',
+                width: 'Bredd',
+                area: {
+                    lineJoin: 'Hörn',
+                    width: 'Linjens bredd'
+                }
+            }
+        }        
     }
 });

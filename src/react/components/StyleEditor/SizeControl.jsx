@@ -8,17 +8,11 @@ const sizeFormatter = (number) => Math.abs(number);
 
 
 export const SizeControl = (props) => {
-    const locKey =
-        props.format === 'point' ? 'VisualizationForm.point.size.label'
-        : props.format === 'line' ? 'VisualizationForm.line.width.label'
-        : 'VisualizationForm.area.linewidth.label'
-
     return (
         <Form.Item
             name={ props.name }
             label={
-                <Message messageKey={ locKey }
-                />
+                <Message messageKey={ props.localeKey }/>
             }
             initialValue={ 3 }
             { ...ANTD_FORMLAYOUT }
@@ -35,5 +29,6 @@ export const SizeControl = (props) => {
 
 SizeControl.propTypes = {
     format: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired
+    name: PropTypes.string.isRequired,
+    localeKey: PropTypes.string.isReqquired
 }
