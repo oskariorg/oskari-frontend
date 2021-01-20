@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     value: {
         StyleEditor: {
             subheaders: {
-                styleFormat: 'Style format',
+                styleFormat: 'Typ av geometri',
                 name: 'Namnet på stilen',
                 style: 'Stil',
                 pointTab: 'Punkten',
