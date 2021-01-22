@@ -45,7 +45,7 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
             { propertyFields.includes(STYLE) &&
                 <Style layer={layer} capabilities={capabilities} controller={controller} propertyFields={propertyFields} />
             }
-            { propertyFields.includes(STYLE) &&
+            { propertyFields.includes(STYLES_JSON) &&
                 <AdminStyleForm layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&

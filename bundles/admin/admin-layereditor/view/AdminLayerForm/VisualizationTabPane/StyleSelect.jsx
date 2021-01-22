@@ -19,7 +19,7 @@ export const StyleSelect = (props) => {
             renderItem={ (name) => {
                 return (
                     <StyledItem>
-                        <Checkbox checked={ name === props.layer.style }>{ name }</Checkbox>
+                        <Checkbox checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
                     </StyledItem>
                 );
             }}

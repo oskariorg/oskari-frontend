@@ -10,7 +10,6 @@ export const AdminStyleForm = (props) => {
 };
 
 AdminStyleForm.propTypes = {
-    oskariStyle: PropTypes.object,
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
