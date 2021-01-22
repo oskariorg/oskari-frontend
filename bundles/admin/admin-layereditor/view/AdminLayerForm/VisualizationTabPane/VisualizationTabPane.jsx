@@ -12,6 +12,7 @@ import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { TimeSeries } from './TimeSeries';
+import { AdminStyleForm } from './AdminStyleForm';
 
 const {
     OPACITY,
@@ -43,6 +44,9 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
             }
             { propertyFields.includes(STYLE) &&
                 <Style layer={layer} capabilities={capabilities} controller={controller} propertyFields={propertyFields} />
+            }
+            { propertyFields.includes(STYLES_JSON) &&
+                <AdminStyleForm layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
