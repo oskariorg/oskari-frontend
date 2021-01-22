@@ -996,8 +996,8 @@ class UIHandler extends StateHandler {
         const layerStyles = [];
         for (const style in layer.options.styles) {
             layerStyles.push({
-                name: style === 'default' ? Object.keys(layer.options.styles.default) : style,
-                isDefault: style === 'default'
+                name: style,
+                isSelected: style === 'default'
             });
         }
 
