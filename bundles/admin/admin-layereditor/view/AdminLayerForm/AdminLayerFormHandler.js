@@ -990,19 +990,6 @@ class UIHandler extends StateHandler {
 
         this.updateState({ layer });
     }
-
-    composeStyleList () {
-        const layer = this.getState().layer;
-        const layerStyles = [];
-        for (const style in layer.options.styles) {
-            layerStyles.push({
-                name: style,
-                isSelected: style === 'default'
-            });
-        }
-
-        return layerStyles;
-    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -1050,7 +1037,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setTab',
     'skipCapabilities',
     'togglePermission',
-    'composeStyleList',
     'updateCapabilities',
     'versionSelected'
 ]);

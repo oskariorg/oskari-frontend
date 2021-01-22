@@ -5,11 +5,12 @@ import { Controller } from 'oskari-ui/util';
 
 export const AdminStyleForm = (props) => {
     return (
-        <StyleSelect styleList={ props.controller.composeStyleList() } />
+        <StyleSelect layer={ props.layer } controller={ props.controller } />
     );
 };
 
 AdminStyleForm.propTypes = {
     oskariStyle: PropTypes.object,
+    layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

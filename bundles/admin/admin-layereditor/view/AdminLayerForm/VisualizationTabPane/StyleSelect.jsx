@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Checkbox } from 'antd';
+import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const StyledItem = styled(List.Item)`
@@ -14,11 +15,11 @@ const StyledItem = styled(List.Item)`
 export const StyleSelect = (props) => {
     return (
         <List
-            dataSource={ props.styleList }
-            renderItem={ (item) => {
+            dataSource={ Object.keys(props.layer.options.styles) }
+            renderItem={ (name) => {
                 return (
                     <StyledItem>
-                        <Checkbox checked={ item.isSelected }>{ item.name }</Checkbox>
+                        <Checkbox checked={ name === 'default' }>{ name }</Checkbox>
                     </StyledItem>
                 );
             }}
@@ -27,5 +28,6 @@ export const StyleSelect = (props) => {
 };
 
 StyleSelect.propTypes = {
-    styleList: PropTypes.array
+    layer: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
