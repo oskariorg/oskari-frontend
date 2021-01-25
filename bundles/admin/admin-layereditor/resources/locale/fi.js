@@ -110,6 +110,16 @@ Oskari.registerLocalization(
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
+            "legend": {
+                "title": "Karttaselitteet",
+                "legendImage": "Oletuskarttaselite",
+                "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
+                "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
+                "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
+                "service": "Palvelussa määritelty",
+                "serviceNotAvailable": "Ei saatavilla",
+                "overridden": "Korvaava karttaselite"
+            },
             "layerStatus": {
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
@@ -121,9 +131,6 @@ Oskari.registerLocalization(
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
             "attributes": "Attribuutit",
             "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
-            "legendImage": "Oletuskarttaselite",
-            "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
-            "legendImagePlaceholder": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
             "forcedSRS": "Pakotetut projektiot",
             "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
             "supportedSRS": "Tuetut projektiot",

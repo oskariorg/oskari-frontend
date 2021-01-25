@@ -109,6 +109,16 @@ Oskari.registerLocalization(
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
             },
+            "legend": {
+                "title": "Map legends",
+                "legendImage": "Default legend URL",
+                "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
+                "legendImagePlaceholder": "Give the URL address of the map legend.",
+                "overrideTooltip": "",
+                "service": "Defined in service",
+                "serviceNotAvailable": "Not available",
+                "overridden": "Replaced legend URL"
+            },
             "layerStatus": {
                 "existing": "The map layer is already registered to this service. By selecting this you will be adding a duplicate layer.",
                 "problematic": "There were some issues parsing the capabilities for this layer. This layer might not work properly if added.",
@@ -120,9 +130,6 @@ Oskari.registerLocalization(
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
-            "legendImage": "Default legend URL",
-            "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
-            "legendImagePlaceholder": "Give the URL address of the map legend.",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
             "supportedSRS": "Supported SRS",

@@ -109,6 +109,16 @@ Oskari.registerLocalization(
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
             },
+            "legend": {
+                "title": "Kartförklaringar",
+                "legendImage": "URL adress för kartförklaringar",
+                "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
+                "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+                "overrideTooltip": "",
+                "service": "Definierad i tjänsten",
+                "serviceNotAvailable": "Inte tillgänglig",
+                "overridden": "Adress för kartförklaring"
+            },
             "layerStatus": {
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
@@ -120,9 +130,6 @@ Oskari.registerLocalization(
             "gfiStyleDesc": "GFI stil (XSLT)",
             "attributes": "Attribut",
             "clusteringDistance": "Punktavstånd i kluster",
-            "legendImage": "URL adress för kartförklaringar",
-            "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
-            "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
             "forcedSRS": "Tvingade SRS",
             "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
             "supportedSRS": "Stödda SRS",
