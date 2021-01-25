@@ -11,13 +11,15 @@ const {
     EXTERNAL_STYLES_JSON
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const Style = ({ layer, capabilities = {}, propertyFields, controller }) => {
+export const Style = ({ layer, propertyFields, controller }) => {
     const styleInfoKeys = ['styleDesc'];
     let styleOptions = [];
 
     if (propertyFields.includes(CAPABILITIES_STYLES)) {
         styleInfoKeys.push('capabilities.styleDesc');
-        styleOptions = capabilities.styles;
+        if (Oskari.util.keyExists(layer, 'capabilities.styles')) {
+            styleOptions = layer.capabilities.styles;
+        }
     } else {
         if (propertyFields.includes(STYLES_JSON) && layer.options.styles) {
             styleOptions = Object.keys(layer.options.styles);
@@ -52,7 +54,6 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
 };
 Style.propTypes = {
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
