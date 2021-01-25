@@ -24,11 +24,11 @@ const {
     VERSION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
+const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, propertyFields, controller }) => (
     <Fragment>
         { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
-        { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller, capabilities)) }
+        { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'options.tileGrid', getTileGridField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'name', getNameField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, `locale.${Oskari.getSupportedLanguages()[0]}.name`, getLocaleField(layer, propertyFields, controller)) }
@@ -113,7 +113,6 @@ GeneralTabPane.propTypes = {
     versions: PropTypes.array.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object,
     bundleKey: PropTypes.string.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

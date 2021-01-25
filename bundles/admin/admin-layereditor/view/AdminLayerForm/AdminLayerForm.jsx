@@ -45,7 +45,6 @@ const AdminLayerForm = ({
     dataProviders,
     versions,
     layer,
-    capabilities,
     propertyFields,
     messages = [],
     tab,
@@ -80,13 +79,11 @@ const AdminLayerForm = ({
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
                     versions={versions}
-                    validators={validators}
-                    capabilities={capabilities} />
+                    validators={validators} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
                 <VisualizationTabPane
                     layer={layer}
-                    capabilities={capabilities}
                     scales={scales}
                     propertyFields={propertyFields}
                     controller={controller}/>
@@ -95,8 +92,7 @@ const AdminLayerForm = ({
                 <AdditionalTabPane
                     layer={layer}
                     propertyFields={propertyFields}
-                    controller={controller}
-                    capabilities={capabilities} />
+                    controller={controller} />
             </TabPane>
             <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/>&nbsp;<MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
@@ -140,7 +136,6 @@ AdminLayerForm.propTypes = {
     dataProviders: PropTypes.array.isRequired,
     versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     messages: PropTypes.array,
     onCancel: PropTypes.func,
