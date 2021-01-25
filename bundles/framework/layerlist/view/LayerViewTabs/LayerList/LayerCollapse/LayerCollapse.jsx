@@ -21,7 +21,6 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
 `;
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGroupIds, showWarn, controller }) => {
-    console.log(selectedGroupIds);
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
@@ -33,10 +32,13 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-                    console.log("==============");
-                    console.log(group);
-                    console.log(selectedGroupIds);
-                    const active = selectedGroupIds.includes(group.id);
+                    
+                    let active = false;
+                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
+                        active = true;
+                        console.log(active);
+                    }
+                    const warnActive = showWarn.includes(group.id);
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
@@ -48,6 +50,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                             controller={controller}
                             selectedGroupIds={selectedGroupIds}
                             active={active}
+                            warnActive={warnActive}
                             showWarn={showWarn}
                         />
                     );

@@ -68,7 +68,6 @@ const StyledEditGroup = styled.span`
 `;
 
 const renderLayer = ({ model, even, selected, controller }) => {
-    
     const itemProps = { model, even, selected, controller };
     return (
         <StyledListItem>
@@ -96,21 +95,32 @@ const onToolClick = (event, tool, group) => {
     event.stopPropagation();
 };
 
-const selectGroup = (checked, group) => {
+const selectGroup = (event, checked, group, controller) => {
     !checked ? controller.addGroup(group) : controller.removeGroup(group);
+    event.stopPropagation();
 
 }
 
-const onSelect = (event, checked, group, controller) => {
-    if (controller.showWarn(group)) {
-        return;
-    } else {
-        selectGroup(!checked, group, controller);
-    }
+const deactivateGroup = (event, group, controller) => {
+    controller.deactivateGroup(group);
     event.stopPropagation();
+
+}
+
+const onSelect = (event, checked, group, controller) => { 
+    if(checked) {
+        if (!controller.showWarn(group)) {
+           event.stopPropagation();
+           return;
+        } else {
+            selectGroup(event, !checked, group, controller);
+        }
+    } else {
+        selectGroup(event, !checked, group, controller);
+    }
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, propsNeededForPanel }) => {
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -140,17 +150,19 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                 //showArrow={group.getLayers().length > 0}
                 extra={
                     <React.Fragment>
-                            <Switch size="small" checked={active}
-                            onChange={(checked, event) => onSelect(event, checked, group, controller)} />
                             <Confirm
                                 title={<Message messageKey='deleteAnnouncementConfirm'/>}
-                                visible={showWarn}
-                                onConfirm={() => selectGroup(active, group, controller)}
+                                visible={warnActive}
+                                onConfirm={(event) => selectGroup(event, active, group, controller)}
+                                onCancel={(event) => deactivateGroup(event, group, controller)}
                                 okText={<Message messageKey='yes'/>}
                                 cancelText={<Message messageKey='cancel'/>}
                                 placement='top'
                                 popupStyle={{zIndex: '999999'}}
-                            />
+                            >
+                                <Switch size="small" checked={active}
+                                onChange={(checked, event) => onSelect(event, checked, group, controller)} />
+                            </Confirm>
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -164,11 +176,17 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                 }>
                 {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
                 {group.getGroups().map(subgroup => {
-                    console.log(selectedGroupIds);
-                    console.log(subgroup.id);
-                const active = selectedGroupIds.includes(subgroup.id);
+                    const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
+                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
+                    
+                    let activeGroup = false;
+                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
+                        activeGroup = true;
+                        console.log(active);
+                    }
+                    const warnActive = showWarn.includes(subgroup.id);
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={active} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} showWarn={showWarn} warnActive={warnActive} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}
@@ -179,8 +197,8 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
 
 
 const LayerCollapsePanel = (props) => {
-    const { active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, ...propsNeededForPanel } = props;
-    console.log(selectedGroupIds);
+    const { active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, ...propsNeededForPanel } = props;
+
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -201,17 +219,19 @@ const LayerCollapsePanel = (props) => {
             showArrow={layerRows.length > 0}
             extra={
                 <React.Fragment>
-                <Switch size="small" checked={active}
-                onChange={(checked, event) => onSelect(event, checked, group, controller)} />
                 <Confirm
                     title={<Message messageKey='deleteAnnouncementConfirm'/>}
-                    visible={showWarn}
-                    onConfirm={() => selectGroup(active, group, controller)}
+                    visible={warnActive}
+                    onConfirm={(event) => selectGroup(event, active, group, controller)}
+                    onCancel={(event) => deactivateGroup(event, group, controller)}
                     okText={<Message messageKey='yes'/>}
                     cancelText={<Message messageKey='cancel'/>}
                     placement='top'
                     popupStyle={{zIndex: '999999'}}
-                />
+                >
+                    <Switch size="small" checked={active}
+                    onChange={(checked, event) => onSelect(event, checked, group, controller)} />
+                </Confirm>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -226,9 +246,17 @@ const LayerCollapsePanel = (props) => {
             }>
             {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
             {group.getGroups().map(subgroup => {
-                const active = selectedGroupIds.includes(subgroup.id);
+                    const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
+                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
+                    
+                    let activeGroup = false;
+                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
+                        activeGroup = true;
+                        console.log(active);
+                    }
+                const warnActive = showWarn.includes(subgroup.id);
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={active} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} showWarn={showWarn} warnActive={warnActive} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}

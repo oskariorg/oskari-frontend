@@ -30,7 +30,7 @@ class ViewHandler extends StateHandler {
             openGroupTitles: [],
             selectedLayerIds: this._getSelectedLayerIds(),
             selectedGroupIds: [],
-            showWarn: false
+            showWarn: []
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -91,13 +91,31 @@ class ViewHandler extends StateHandler {
     }
 
     showWarn(group) {
-        console.log("WTF");
         if (group.layers.length >= 1) {
-            const showWarn = true;
+            if (!group.id || this.state.showWarn.includes(group.id)) {
+                console.log("IGNORE");
+                return;
+            }
+            const showWarn = [...this.state.showWarn, group.id];
             this.updateState({ showWarn });
-            return true;
         } else {
             return false;
+        }
+    }
+
+    deactivateGroup(group) {
+
+        if (this.state.showWarn.includes(group.id)) {
+                const index = this.state.showWarn.indexOf(group.id);
+                if (index === -1) {
+                    return;
+                }
+                const showWarn = [...this.state.showWarn];
+                showWarn.splice(index, 1);
+                this.updateState({ showWarn });
+            
+        } else {
+            return;
         }
     }
 
@@ -112,13 +130,13 @@ class ViewHandler extends StateHandler {
             this.updateState({ selectedLayerIds });
             setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
         }
-
-        if (!group.id || this.state.selectedGroupIds.includes(group.id)) {
-            console.log("IGNORE");
+        const index = this.state.showWarn.indexOf(group.id);
+        if (index === -1) {
             return;
         }
-        const selectedGroupIds = [...this.state.selectedGroupIds, group.id];
-        this.updateState({ selectedGroupIds });
+        const showWarn = [...this.state.showWarn];
+        showWarn.splice(index, 1);
+        this.updateState({ showWarn });
 
     }
 
@@ -133,14 +151,13 @@ class ViewHandler extends StateHandler {
             this.updateState({ selectedLayerIds });
             setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
         }
-
-        const index = this.state.selectedGroupIds.indexOf(group.id);
+        const index = this.state.showWarn.indexOf(group.id);
         if (index === -1) {
             return;
         }
-        const selectedGroupIds = [...this.state.selectedGroupIds];
-        selectedGroupIds.splice(index, 1);
-        this.updateState({ selectedGroupIds });
+        const showWarn = [...this.state.showWarn];
+        showWarn.splice(index, 1);
+        this.updateState({ showWarn });
     }
 
     updateLayerGroups() {
@@ -295,5 +312,6 @@ export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'showLayerBackendStatus',
     'addGroup',
     'removeGroup',
-    'showWarn'
+    'showWarn',
+    'deactivateGroup'
 ]);
