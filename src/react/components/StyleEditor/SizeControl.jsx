@@ -30,5 +30,5 @@ export const SizeControl = (props) => {
 SizeControl.propTypes = {
     format: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    localeKey: PropTypes.string.isReqquired
+    localeKey: PropTypes.string.isRequired
 }
