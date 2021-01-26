@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const getStyleFileRules = (isProd, antThemeFile) => {
@@ -92,7 +93,7 @@ const BABEL_LOADER_RULE = {
         // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
         // Exclude all but named dependencies (containing es6+)
         // FIXME: olcs is problematic - adding it takes reeeeaaaally long for build
-        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', 'mapbox-gl-style-spec'])
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', '@mapbox'])
     ],
     use: {
         loader: 'babel-loader',
@@ -151,6 +152,18 @@ const getModuleRules = (isProd = false, antThemeFile) => {
     return rules;
 };
 
+const getCesiumPath = () => {
+    const devmodePath = path.resolve(__dirname, '../node_modules/cesium/Source');
+    if (fs.existsSync(devmodePath)) {
+        return devmodePath;
+    }
+    const appPath = path.resolve(__dirname, '../../cesium/Source');
+    if (!fs.existsSync(appPath)) {
+        throw new Error(`Can't find cesium from node_modules`);
+    }
+    return appPath;
+};
+
 const RESOLVE = {
     extensions: ['.js', '.jsx'],
     // allow use of oskari-frontend node_modules from external projects
@@ -160,7 +173,7 @@ const RESOLVE = {
         'oskari-ui': path.resolve(__dirname, '../src/react'),
         // Path to Cesium ES6 module so we can do:
         // import * as Cesium from 'cesium/Cesium';
-        'cesium': path.resolve(__dirname, '../node_modules/cesium/Source')
+        'cesium': getCesiumPath()
     }
 };
 const RESOLVE_LOADER = {

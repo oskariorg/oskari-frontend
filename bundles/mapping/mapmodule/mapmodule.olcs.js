@@ -4,6 +4,7 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
+// see oskari-frontend/webpack/config.js for how this maps to node_modules
 import * as Cesium from 'cesium/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
