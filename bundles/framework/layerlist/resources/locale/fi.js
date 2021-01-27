@@ -37,7 +37,7 @@ Oskari.registerLocalization(
                 'inspire': 'Aiheittain',
                 'organization': 'Tiedontuottajittain',
                 'noGroup' : 'Ei ryhmää',
-                'manyLayersWarn': 'Olet lisäämässä kartalle 10 tai enemmän karttasoa. Jos jatkat, saattaa karttatason lisääminen aiheuttaa suorituskykyongelmia. Jatketaanko?'
+                'manyLayersWarn': 'Olet lisäämässä kartalle 10 tai enemmän karttasoa. Jatketaanko?'
             },
             'layer': {
                 'tooltip': {

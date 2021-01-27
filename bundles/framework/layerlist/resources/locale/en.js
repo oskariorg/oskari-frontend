@@ -37,7 +37,7 @@ Oskari.registerLocalization(
                 'inspire': 'By Theme',
                 'organization': 'By Data Provider',
                 'noGroup' : 'No group',
-                'manyLayersWarn': 'You are adding 10 or more layers to the map. If you continue, increasing the map layers will cause performance problems. Continue?'
+                'manyLayersWarn': 'Warning, you are adding 10 or more layers to the map. Continue?'
             },
             'layer': {
                 'tooltip': {
