@@ -36,7 +36,8 @@ Oskari.registerLocalization(
                 'title': 'Grouping',
                 'inspire': 'By Theme',
                 'organization': 'By Data Provider',
-                'noGroup' : 'No group'
+                'noGroup' : 'No group',
+                'manyLayersWarn': 'You are adding 10 or more layers to the map. If you continue, increasing the map layers will cause performance problems. Continue?'
             },
             'layer': {
                 'tooltip': {
@@ -64,6 +65,8 @@ Oskari.registerLocalization(
                 'openLink': 'Show Map Layers',
                 'closeLink': 'Hide Map Layers',
                 'tileText': 'Map layers'
-            }
+            },
+            'yes': 'yes',
+            'cancel': 'cancel'
         }
     });
