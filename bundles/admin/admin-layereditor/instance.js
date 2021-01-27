@@ -274,18 +274,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
         getGroups() {
             const groups = this._getLayerService().getAllLayerGroups();
-            var flatLayerGroups = [];
-            var gatherFlatGroups = function (groups) {
-                groups.forEach(function (group) {
-                    flatLayerGroups.push(group);
-                    gatherFlatGroups(group.getGroups());
-                    });
-            };
-            gatherFlatGroups(groups);
-            flatLayerGroups.sort(function (a, b) {
-                return Oskari.util.naturalSort(Oskari.getLocalized(a.name), Oskari.getLocalized(b.name));
-            });
-            return flatLayerGroups;
+            return groups;
         }
 
         /**
