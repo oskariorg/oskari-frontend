@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         this._isLoading = false;
 
         this._sandbox.register(this);
+        this._onDestroyCallbacks = [];
         var p;
         for (p in this.__eventHandlers) {
             if (this.__eventHandlers.hasOwnProperty(p)) {
@@ -185,6 +186,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 cb();
             }
         },
+        onDestroy: function (callbackFn) {
+            this._onDestroyCallbacks.push(callbackFn);
+        },
         /**
          * @method destroy
          * Releases any event handlers and any other resources
@@ -193,6 +197,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
             for (var p in this.__eventHandlers) {
                 if (this.__eventHandlers.hasOwnProperty(p)) {
                     this._sandbox.unregisterFromEventByName(this, p);
+                }
+            }
+            const destroyCbs = this._onDestroyCallbacks;
+            while (destroyCbs.length) {
+                const callbackFn = destroyCbs.shift();
+                if (typeof callbackFn === 'function') {
+                    callbackFn();
                 }
             }
         }

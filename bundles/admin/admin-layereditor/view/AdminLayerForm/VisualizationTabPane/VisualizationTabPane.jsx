@@ -6,11 +6,13 @@ import { Style } from './Style';
 import { StyleJson } from './StyleJson';
 import { ExternalStyleJson } from './ExternalStyleJson';
 import { Hover } from './Hover';
+import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { TimeSeries } from './TimeSeries';
+import { AdminStyleForm } from './AdminStyleForm';
 
 const {
     OPACITY,
@@ -21,7 +23,8 @@ const {
     EXTERNAL_STYLES_JSON,
     HOVER,
     SCALE,
-    TIMES
+    TIMES,
+    CESIUM_ION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFields, controller }) => (
@@ -43,6 +46,9 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
                 <Style layer={layer} capabilities={capabilities} controller={controller} propertyFields={propertyFields} />
             }
             { propertyFields.includes(STYLES_JSON) &&
+                <AdminStyleForm layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
             }
             { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
@@ -50,6 +56,9 @@ export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFiel
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(CESIUM_ION) &&
+                <DynamicScreensPaceErrorOptions layer={layer} controller={controller} />
             }
         </StyledColumn.Left>
         <StyledColumn.Right>

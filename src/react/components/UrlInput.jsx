@@ -64,7 +64,7 @@ export class UrlInput extends React.Component {
         });
     }
     render () {
-        const { credentials, ...other } = this.props;
+        const { credentials = {}, ...other } = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -83,7 +83,7 @@ export class UrlInput extends React.Component {
 
         let collapseProps = {}
 
-        if (this.props.credentials && this.props.credentials.defaultOpen) {
+        if (credentials.defaultOpen) {
             // Panel with this key is open as default
             collapseProps.activeKey = 'usernameAndPassword';
         }

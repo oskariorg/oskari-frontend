@@ -43,6 +43,7 @@ class UIHandler extends StateHandler {
             versions: this.mapLayerService.getVersionsForType(layer.type)
         });
     }
+
     setType (type) {
         const layer = { ...this.getState().layer, type };
         this.updateState({
@@ -51,11 +52,13 @@ class UIHandler extends StateHandler {
             propertyFields: this.getPropertyFields(layer)
         });
     }
+
     setLayerUrl (url) {
         this.updateState({
             layer: { ...this.getState().layer, url }
         });
     }
+
     versionSelected (version) {
         const layer = { ...this.getState().layer, version };
         if (typeof version === 'undefined') {
@@ -76,11 +79,13 @@ class UIHandler extends StateHandler {
         };
         this.fetchCapabilities(layer);
     }
+
     setVersion (version) {
         const layer = { ...this.getState().layer, version };
         const propertyFields = this.getPropertyFields(layer);
         this.updateState({ layer, propertyFields });
     }
+
     layerSelected (name) {
         const { capabilities, layer } = this.getState();
         if (!capabilities || !capabilities.layers) {
@@ -113,6 +118,7 @@ class UIHandler extends StateHandler {
             this.log.error('Layer not in capabilities: ' + name);
         }
     }
+
     skipCapabilities () {
         // force an OGC service to skip the capabilities phase of the wizard since some services are not standard compliant
         // This is a last ditch effort to support such services.
@@ -123,6 +129,7 @@ class UIHandler extends StateHandler {
         };
         this.updateState({ layer });
     }
+
     addNewFromSameService () {
         // initialize state for adding a new layer from the same OGC service (service having capabilities)
         const state = this.getState();
@@ -143,21 +150,25 @@ class UIHandler extends StateHandler {
             this.updateState({ layer, capabilities });
         }
     }
+
     setUsername (username) {
         this.updateState({
             layer: { ...this.getState().layer, username }
         });
     }
+
     setPassword (password) {
         this.updateState({
             layer: { ...this.getState().layer, password }
         });
     }
+
     setLayerName (name) {
         this.updateState({
             layer: { ...this.getState().layer, name }
         });
     }
+
     setSelectedTime (selectedTime) {
         const layer = { ...this.getState().layer };
         if (!layer.params) {
@@ -166,11 +177,13 @@ class UIHandler extends StateHandler {
         layer.params.selectedTime = selectedTime;
         this.updateState({ layer });
     }
+
     setRealtime (realtime) {
         this.updateState({
             layer: { ...this.getState().layer, realtime }
         });
     }
+
     setSingleTile (singleTile) {
         const layer = { ...this.getState().layer };
         if (singleTile) {
@@ -180,12 +193,14 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+
     setTimeSeriesUI (ui) {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries, ui };
         layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
+
     setTimeSeriesMetadataLayer (layerId) {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries };
@@ -206,6 +221,7 @@ class UIHandler extends StateHandler {
             });
         }
     }
+
     setTimeSeriesMetadataAttribute (attribute) {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries };
@@ -214,6 +230,7 @@ class UIHandler extends StateHandler {
         layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
+
     setTimeSeriesMetadataToggleLevel (toggleLevel) {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries };
@@ -222,16 +239,19 @@ class UIHandler extends StateHandler {
         layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
+
     setRefreshRate (refreshRate) {
         this.updateState({
             layer: { ...this.getState().layer, refreshRate }
         });
     }
+
     setCapabilitiesUpdateRate (capabilitiesUpdateRate) {
         this.updateState({
             layer: { ...this.getState().layer, capabilitiesUpdateRate }
         });
     }
+
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
         let attributes = layer.attributes || {};
@@ -242,16 +262,19 @@ class UIHandler extends StateHandler {
         }
         this.updateLayerAttributes(attributes, layer);
     }
+
     setLocalizedNames (locale) {
         this.updateState({
             layer: { ...this.getState().layer, locale }
         });
     }
+
     setDataProviderId (dataProviderId) {
         this.updateState({
             layer: { ...this.getState().layer, dataProviderId }
         });
     }
+
     setGroup (checked, group) {
         const layer = { ...this.getState().layer };
         if (checked) {
@@ -265,24 +288,29 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+
     setOpacity (opacity) {
         this.updateState({
             layer: { ...this.getState().layer, opacity }
         });
     }
+
     setClusteringDistance (clusteringDistance) {
         const layer = { ...this.getState().layer };
         layer.options.clusteringDistance = clusteringDistance;
         this.updateState({ layer });
     }
+
     setRenderMode (renderMode) {
         const layer = { ...this.getState().layer };
         layer.options.renderMode = renderMode;
         this.updateState({ layer });
     }
+
     getResolutionArray () {
         return [...this.mapmodule.getResolutionArray()];
     }
+
     setMinAndMaxScale ([minscale, maxscale]) {
         this.updateState({
             layer: {
@@ -292,26 +320,33 @@ class UIHandler extends StateHandler {
             }
         });
     }
+
     setStyle (style) {
         this.updateState({
             layer: { ...this.getState().layer, style }
         });
     }
+
     setStyleJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
     }
+
     setExternalStyleJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempExternalStylesJSON', 'externalStyles');
     }
+
     setHoverJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
+
     setTileGridJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempTileGridJSON', 'tileGrid');
     }
+
     setAttributionsJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempAttributionsJSON', 'attributions');
     }
+
     updateOptionsJsonProperty (json, jsonPropKey, dataPropKey) {
         const layer = { ...this.getState().layer };
         layer[jsonPropKey] = json;
@@ -327,36 +362,43 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+
     setOptions (options) {
         this.updateState({
             layer: { ...this.getState().layer, options }
         });
     }
+
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
         });
     }
+
     setLegendImage (legendImage) {
         this.updateState({
             layer: { ...this.getState().layer, legendImage }
         });
     }
+
     setGfiContent (gfiContent) {
         this.updateState({
             layer: { ...this.getState().layer, gfiContent }
         });
     }
+
     setGfiType (gfiType) {
         this.updateState({
             layer: { ...this.getState().layer, gfiType }
         });
     }
+
     setGfiXslt (gfiXslt) {
         this.updateState({
             layer: { ...this.getState().layer, gfiXslt }
         });
     }
+
     setQueryFormat (value) {
         const layer = { ...this.getState().layer };
         if (!layer.format) {
@@ -365,6 +407,7 @@ class UIHandler extends StateHandler {
         layer.format.value = value;
         this.updateState({ layer });
     }
+
     setAttributes (tempAttributesJSON) {
         const layer = { ...this.getState().layer, tempAttributesJSON };
         let tempAttributes = {};
@@ -390,6 +433,7 @@ class UIHandler extends StateHandler {
 
         this.updateLayerAttributes({ ...layer.attributes, ...tempAttributes }, layer);
     }
+
     updateLayerAttributes (attributes, layer = { ...this.getState().layer }) {
         layer.attributes = attributes;
         // Update text input
@@ -404,17 +448,21 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+
     setMessage (key, type, args) {
         this.updateState({
             messages: [{ key, type, args }]
         });
     }
+
     setMessages (messages) {
         this.updateState({ messages });
     }
+
     setTab (tab) {
         this.updateState({ tab });
     }
+
     resetLayer () {
         const typesAndRoles = this.getAdminMetadata();
         this.updateState({
@@ -425,12 +473,15 @@ class UIHandler extends StateHandler {
             tab: DEFAULT_TAB
         });
     }
+
     ajaxStarted () {
         this.updateLoadingState(true);
     }
+
     ajaxFinished () {
         this.updateLoadingState(false);
     }
+
     updateLoadingState (loadingStarted) {
         if (loadingStarted) {
             this.loadingCount++;
@@ -441,6 +492,7 @@ class UIHandler extends StateHandler {
             loading: this.isLoading()
         });
     }
+
     getPropertyFields (layer) {
         const { type, version } = layer;
         const composingModel = this.mapLayerService.getComposingModelForType(type);
@@ -536,6 +588,7 @@ class UIHandler extends StateHandler {
         }
         // Take a copy
         const layer = { ...this.getState().layer };
+
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
@@ -606,6 +659,7 @@ class UIHandler extends StateHandler {
             this.refreshEndUserLayer(layerId, layer);
         });
     }
+
     refreshEndUserLayer (layerId, layerData = {}) {
         if (typeof layerId === 'undefined') {
             // can't refresh without id
@@ -620,6 +674,7 @@ class UIHandler extends StateHandler {
             Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
         }
     }
+
     createlayer (layerData) {
         const mapLayer = this.mapLayerService.createMapLayer(layerData);
 
@@ -631,6 +686,7 @@ class UIHandler extends StateHandler {
             // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
+
     getValidatorFunctions (layerType) {
         if (__VALIDATOR_CACHE[layerType]) {
             return __VALIDATOR_CACHE[layerType];
@@ -687,6 +743,7 @@ class UIHandler extends StateHandler {
         __VALIDATOR_CACHE[layerType] = wrappers;
         return wrappers;
     }
+
     getValidatorFor (key) {
         if (!key) {
             return null;
@@ -861,6 +918,7 @@ class UIHandler extends StateHandler {
             this.log.error(error);
         });
     }
+
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
     }
@@ -890,6 +948,7 @@ class UIHandler extends StateHandler {
                 Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
             });
     }
+
     /**
      * Object with roles and permissionTypes objects that are needed to create the UI that
      * matches the configuration of the system
@@ -908,6 +967,7 @@ class UIHandler extends StateHandler {
     isLoading () {
         return this.loadingCount > 0;
     }
+
     clearMessages () {
         this.updateState({
             messages: []
@@ -917,11 +977,13 @@ class UIHandler extends StateHandler {
     clearCredentialsCollapse () {
         this.updateState({ credentialsCollapseOpen: false });
     }
+
     setPermissionForAll (permission, enabled) {
         const layer = this.getState().layer;
         handlePermissionForAllRoles(enabled, layer.role_permissions, permission);
         this.updateState({ layer });
     }
+
     togglePermission (role, permission) {
         const layer = this.getState().layer;
         handlePermissionForSingleRole(layer.role_permissions, permission, role);

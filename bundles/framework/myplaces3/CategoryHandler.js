@@ -65,7 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         getAllCategories: function () {
             return this.mapLayerService.getAllLayersByMetaType(this.metaType)
-                .map(layer => this._parseLayerToCategory(layer));
+                .map(layer => this._parseLayerToCategory(layer))
+                .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
         },
         getDefaultCategory: function () {
             const layer = this.mapLayerService.getAllLayersByMetaType(this.metaType)

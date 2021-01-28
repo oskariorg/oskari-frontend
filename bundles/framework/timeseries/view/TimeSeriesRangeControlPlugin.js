@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -19,8 +18,11 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         this._toolOpen = false;
         this._element = null;
         this._isMobile = Oskari.util.isMobile();
+        this._sandbox = Oskari.getSandbox();
         this._delegate = delegate;
+
         this.stateHandler = new TimeSeriesRangeControlHandler(delegate, () => this.updateUI());
+        this._updateCurrentViewportBbox();
     }
 
     getName () {
@@ -52,7 +54,6 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
     redrawUI (mapInMobileMode, forced) {
         super.redrawUI(mapInMobileMode, forced);
         this.updateUI();
-        this.updateDataYears();
         this.makeDraggable();
     }
 
@@ -63,7 +64,8 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         }
         element.draggable({
             scroll: false,
-            handle: '.timeseries-range-drag-handle' // the drag handle class is defined in react component
+            // the drag handle class is defined in react component
+            handle: '.timeseries-range-drag-handle'
         });
     }
 
@@ -73,50 +75,14 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
     _createEventHandlers () {
         return {
-            AfterMapMoveEvent: (event) => this.updateDataYears()
+            AfterMapMoveEvent: () => this._updateCurrentViewportBbox()
         };
     }
 
-    updateDataYears () {
+    _updateCurrentViewportBbox () {
         const sandbox = this.getSandbox();
-        const layer = this._delegate.getLayer();
-        const options = layer.getOptions();
-        const timeseries = options.timeseries || {};
-        const metadata = timeseries.metadata || {};
-        const attribute = metadata.attribute || 'time';
-        const layerId = metadata.layer;
-        if (!layerId) {
-            return;
-        }
-
-        const url = Oskari.urls.getRoute('GetWFSFeatures', {
-            id: layerId,
-            bbox: sandbox.getMap().getBboxAsString(),
-            srs: sandbox.getMap().getSrsName()
-        });
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => {
-            if (!response.ok) {
-                // TODO: add error handling
-                return Promise.reject(new Error('GetWFSFeatures error'));
-            }
-            return response.json();
-        }).then(json => {
-            const yearSet = new Set();
-            const { features } = json;
-            features.forEach(feature => {
-                const time = feature.properties[attribute];
-                if (time) {
-                    const year = moment(time).year();
-                    yearSet.add(year);
-                }
-            });
-            this.stateHandler.updateDataYears(Array.from(yearSet));
-        });
+        const currentBbox = sandbox.getMap().getBbox();
+        this.stateHandler.setCurrentViewportBbox(currentBbox);
     }
 }
 
