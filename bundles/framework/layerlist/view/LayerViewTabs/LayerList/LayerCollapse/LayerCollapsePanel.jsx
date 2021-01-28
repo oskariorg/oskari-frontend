@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
+import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import Style from 'ol/style/Style';
 
@@ -67,15 +68,17 @@ const StyledEditGroup = styled.span`
     padding-bottom: 1px;
 `;
 
-const renderLayer = ({ model, even, selected, controller }) => {
+const RenderLayer = ({ model, even, selected, controller, innerRef, draggableProps, dragHandleProps }) => {
     const itemProps = { model, even, selected, controller };
     return (
-        <StyledListItem>
-            <Layer key={model.getId()} {...itemProps} />
-        </StyledListItem>
+            <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
+                <StyledListItem>
+                    <Layer key={model.getId()}  {...itemProps} />
+                </StyledListItem>
+            </div>
     );
 };
-renderLayer.propTypes = {
+RenderLayer.propTypes = {
     model: PropTypes.any,
     even: PropTypes.any,
     selected: PropTypes.any,
@@ -120,7 +123,14 @@ const onSelect = (event, checked, group, controller) => {
     }
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
+
+const onDragEnd = result => {/*
+    
+}
+
+
+
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel, innerRef, draggableProps, dragHandleProps }) => {
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -136,12 +146,6 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
         ? layerRows.length + ' / ' + group.unfilteredLayerCount
         : layerRows.length;
 
-    const text = `
-        A dog is a type of domesticated animal.
-        Known for its loyalty and faithfulness,
-        it can be found as a welcome guest in many households across the world.
-        `;
-
     return (
         <StyledSubCollapse>
             <StyledSubCollapsePanel {...propsNeededForPanel}
@@ -151,7 +155,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                 extra={
                     <React.Fragment>
                             <Confirm
-                                title={<Message messageKey='deleteAnnouncementConfirm'/>}
+                                title={<Message messageKey='grouping.manyLayersWarn'/>}
                                 visible={warnActive}
                                 onConfirm={(event) => selectGroup(event, active, group, controller)}
                                 onCancel={(event) => deactivateGroup(event, group, controller)}
@@ -174,7 +178,46 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                         <Badge inversed={true} count={badgeText} />
                     </React.Fragment>
                 }>
-                {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
+                
+                <DragDropContext onDragEnd={onDragEnd()}>
+
+                {layerRows.length > 0 && 
+                    <Droppable droppableId="layers">
+                        {(provided) => (
+
+                        <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        >
+                            <List 
+                            bordered={false} 
+                            dataSource={layerRows} 
+                            renderItem={(item, index) => (
+                                <Draggable
+                                key={item.id}
+                                draggableId={`${item.id}`}
+                                index={index}
+                                >
+                                    {(provided) => (
+                                    <RenderLayer 
+                                    innerRef={provided.innerRef}
+                                    model={item.model} 
+                                    even={item.even} 
+                                    selected={item.selected} 
+                                    controller={item.controller}
+                                    draggableProps={provided.draggableProps}
+                                    dragHandleProps={provided.dragHandleProps}/>
+                                )}
+
+                                </Draggable>
+                            )} >
+                            </List>
+                            {provided.placeholder}
+                        </div>
+                    )}
+                    </Droppable>
+                }
+                </DragDropContext>
                 {group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
@@ -214,13 +257,13 @@ const LayerCollapsePanel = (props) => {
         : layerRows.length;
 
     return (
-        <StyledCollapsePanel {...propsNeededForPanel}
+        <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
             showArrow={layerRows.length > 0}
             extra={
                 <React.Fragment>
                 <Confirm
-                    title={<Message messageKey='deleteAnnouncementConfirm'/>}
+                    title={<Message messageKey='grouping.manyLayersWarn'/>}
                     visible={warnActive}
                     onConfirm={(event) => selectGroup(event, active, group, controller)}
                     onCancel={(event) => deactivateGroup(event, group, controller)}
@@ -244,7 +287,46 @@ const LayerCollapsePanel = (props) => {
 
                 </React.Fragment>
             }>
-            {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
+            <DragDropContext onDragEnd={onDragEnd()}>
+
+                {layerRows.length > 0 && 
+                    <Droppable droppableId="layers">
+                        {(provided) => (
+
+                        <div
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                        >
+                            <List 
+                            bordered={false} 
+                            dataSource={layerRows} 
+                            renderItem={(item, index) => (
+                                <Draggable
+                                key={item.id}
+                                draggableId={`${item.id}`}
+                                index={index}
+                                >
+                                    {(provided) => (
+                                    <RenderLayer 
+                                    innerRef={provided.innerRef}
+                                    model={item.model} 
+                                    even={item.even} 
+                                    selected={item.selected} 
+                                    controller={item.controller}
+                                    draggableProps={provided.draggableProps}
+                                    dragHandleProps={provided.dragHandleProps}/>
+                                  )}
+
+                                </Draggable>
+                            )} >
+                            </List>
+                            {provided.placeholder}
+                        </div>
+                    )}
+                    </Droppable>
+                }
+            </DragDropContext>
+ 
             {group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
@@ -263,6 +345,7 @@ const LayerCollapsePanel = (props) => {
         </StyledCollapsePanel>
     );
 };
+
 
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,

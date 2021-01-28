@@ -650,11 +650,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
     },
 
     addSublayerGroup: function (parentId, subgroup) {
-        console.log("ADDING NEW SUBGROUP");
         this._layerGroups.forEach((layerGroup, index) => {
             layerGroup.id === parentId && this._layerGroups[index].groups.push(subgroup);
         });
         // this._layerGroups.push(group);
+        // TODO: Doesn't seem to actually update
         this.trigger('theme.update');
     },
     /**
@@ -746,7 +746,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
      */
     _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
         var me = this;
-
         me._layerGroups = [];
 
         pResp.groups.forEach(function (group) {
@@ -778,7 +777,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layersInGroup.forEach(function (layer) {
                     layer.getGroups().push({
                         id: group.getId(),
-                        name: Oskari.getLocalized(group.getName())
+                        name: Oskari.getLocalized(group.getName()),
+                        parentId: group.parentId
                     });
                 });
             });
