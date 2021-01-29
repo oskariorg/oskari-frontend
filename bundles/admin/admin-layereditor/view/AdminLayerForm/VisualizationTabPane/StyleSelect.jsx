@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Checkbox } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
@@ -19,7 +21,13 @@ export const StyleSelect = (props) => {
             renderItem={ (name) => {
                 return (
                     <StyledItem>
-                        <Checkbox checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
+                        <Checkbox onClick={ () => props.controller.setLayerStyle(name) } checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
+                        <Button onClick={ () => props.editStyleCallback(name) } >
+                            <EditOutlined />
+                        </Button>
+                        <Button onClick={ () => props.controller.removeStyleFromLayer(name) }>
+                            <DeleteOutlined />
+                        </Button>
                     </StyledItem>
                 );
             }}
@@ -29,5 +37,6 @@ export const StyleSelect = (props) => {
 
 StyleSelect.propTypes = {
     layer: PropTypes.object.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    editStyleCallback: PropTypes.func
 };

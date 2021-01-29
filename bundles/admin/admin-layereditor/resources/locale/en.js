@@ -197,6 +197,9 @@ Oskari.registerLocalization(
                 "DOWNLOAD": "Download",
                 "VIEW_PUBLISHED": "View in Embedded map",
                 "role": "Role"
+            },
+            "styles": {
+                "addStyle": "Add style"
             }
         }
     }

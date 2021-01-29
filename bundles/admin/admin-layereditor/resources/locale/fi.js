@@ -188,6 +188,9 @@ Oskari.registerLocalization(
                 "DOWNLOAD": "Latausoikeus",
                 "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
                 "role": "Rooli"
+            },
+            "styles": {
+                "addStyle": "Lisää tyyli"
             }
         }
     }
