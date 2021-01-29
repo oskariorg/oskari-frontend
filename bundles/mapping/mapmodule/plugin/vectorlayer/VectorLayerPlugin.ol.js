@@ -1186,7 +1186,7 @@ Oskari.clazz.define(
          * @param {Object} featureFilter
          */
         zoomToFeatures: function (opts = {}, featureFilter) {
-            const layers = this._getLayerIds(opts.layer);
+            const layers = this.getLayerIds(opts.layer);
             const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
                 const tmpLayer = new olSourceVector({
@@ -1198,12 +1198,12 @@ Oskari.clazz.define(
             this.sendZoomFeatureEvent(features);
         },
         /**
-         * @method _getLayerIds
-         * @private
+         * @method getLayerIds
          * @param {Array|String|Number} layer id or array of layer ids (optional)
          * @return {Array} array of layer ids that was requested and we recognized
+         * @see RPC getFeatures
          */
-        _getLayerIds: function (layer = []) {
+        getLayerIds: function (layer = []) {
             if (!Array.isArray(layer)) {
                 // the value for "layer" needs to be an array so wrap it in one if it isn't
                 layer = [layer];
@@ -1308,6 +1308,7 @@ Oskari.clazz.define(
          *  - gets layer's features as geojson object
          * @param {String} id
          * @return {Object} geojson
+         * @see RPC getFeatures
          */
         getLayerFeatures: function (id) {
             var me = this;
