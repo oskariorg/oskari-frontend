@@ -1,6 +1,6 @@
 
+import { Select, Checkbox } from 'oskari-ui';
 import styled from 'styled-components';
-
 export { StyledFormField } from '../styled';
 
 const Column = styled('div')`
@@ -13,17 +13,27 @@ export const StyledColumn = {
     Right: styled(Column)`width: 25%;`
 };
 
-export const Link = styled('a')`
+export const StyledLink = styled('a')`
     margin-left: 10px;
 `;
 
-export const LegendLink = styled('a')`
-    clear: both;
-    line-break: anywhere;
-`;
-
 export const Border = styled('div')`
-    border:1px solid #d9d9d9;
+    border: 1px solid #d9d9d9;
     padding: 10px 10px 5px;
     margin: 5px 0px 15px
+`;
+
+export const StyleField = styled('div')`
+    padding-top: 5px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+`;
+
+export const DefaultStyle = styled(Checkbox)`
+    margin-left: 10px;
+`;
+
+export const StyleSelect = styled(Select)`
+    flex: 1;
 `;
