@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
-import { LegendImage } from './LegendImage';
 import { Realtime } from './Realtime';
 import { SingleTile } from './SingleTile';
 import { SelectedTime } from './SelectedTime';
@@ -18,7 +17,6 @@ const {
     CAPABILITIES,
     SELECTED_TIME,
     METADATAID,
-    LEGEND_IMAGE,
     REALTIME,
     SINGLE_TILE,
     GFI_CONTENT,
@@ -43,9 +41,6 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
             }
             { propertyFields.includes(METADATAID) &&
                 <MetadataId layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LEGEND_IMAGE) &&
-                <LegendImage layer={layer} controller={controller} />
             }
             { propertyFields.includes(SINGLE_TILE) &&
                 <SingleTile layer={layer} controller={controller} />
