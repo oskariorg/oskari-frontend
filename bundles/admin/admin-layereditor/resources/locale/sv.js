@@ -54,7 +54,6 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Opacitet",
-                "style": "Förvald utseende",
                 "params": {
                     "selectedTime": "Vald tid"
                 },
@@ -96,12 +95,10 @@ Oskari.registerLocalization(
             "skipCapabilities": "Tillägg manuellt",
             "addNewFromSameService": "Lägg till ett nytt lager från samma tjänst",
             "delete": "Ta bort",
-            "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
             "capabilities": {
                 "show": "Visa getCapabilities svar",
-                "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
                 "updateRateDesc": "Uppdateringsfrekvens i sekunder",
@@ -109,15 +106,20 @@ Oskari.registerLocalization(
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
             },
+            "styles": {
+                "default": "Förvald utseende",
+                "desc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'."
+            },
             "legend": {
-                "title": "Kartförklaringar",
+                "title": "Stilar och kartförklaringar",
+                "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
                 "legendImage": "URL adress för kartförklaringar",
                 "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
                 "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
-                "overrideTooltip": "",
-                "service": "Definierad i tjänsten",
-                "serviceNotAvailable": "Inte tillgänglig",
-                "overridden": "Adress för kartförklaring"
+                "serviceLegend": "Definierad i tjänsten",
+                "overriddenLegend": "Adress för kartförklaring",
+                "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
+                "serviceNotAvailable": "Inte tillgänglig"
             },
             "layerStatus": {
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",

@@ -54,7 +54,6 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Peittävyys",
-                "style": "Oletustyyli",
                 "params": {
                     "selectedTime": "Valittu aika"
                 },
@@ -97,12 +96,10 @@ Oskari.registerLocalization(
             "skipCapabilities": "Manuaalinen lisäys",
             "addNewFromSameService": "Lisää uusi taso samasta palvelusta",
             "delete": "Poista",
-            "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
             "capabilities": {
                 "show": "Näytä palvelun GetCapabilities-vastaus",
-                "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
                 "updateRate": "Capabilities päivitystiheys",
                 "updateRateDesc": "Päivitystiheys sekunteina",
@@ -110,15 +107,20 @@ Oskari.registerLocalization(
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
+            "styles": {
+                "default": "Oletustyyli",
+                "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta."
+            },
             "legend": {
-                "title": "Karttaselitteet",
+                "title": "Esitystyylit ja karttaselitteet",
+                "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
                 "legendImage": "Oletuskarttaselite",
                 "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
                 "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
+                "serviceLegend": "Palvelussa määritelty karttaselite",
+                "overriddenLegend": "Korvaava karttaselite",
                 "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
-                "service": "Palvelussa määritelty",
-                "serviceNotAvailable": "Ei saatavilla",
-                "overridden": "Korvaava karttaselite"
+                "serviceNotAvailable": "Ei saatavilla"
             },
             "layerStatus": {
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
