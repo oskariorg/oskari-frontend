@@ -2,6 +2,7 @@ import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { announcementsHelper } from './AnnouncementsHelper';
 import { Message } from 'oskari-ui';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../framework/announcements/view/Constants';
 
 /*
 Handler for admin-announcements forms.
@@ -33,26 +34,26 @@ class ViewHandler extends StateHandler {
     constructor () {
         super();
         this.announcementsHelper = announcementsHelper();
-        this.newTitle = 'Uusi ilmoitus';
+        this.fetchAdminAnnouncements();
+        this.newTitle = Oskari.getMsg('admin-announcements', 'addNewForm');
         this.state = {
-            update: false,
             announcements: [],
-            title: 'Uusi Ilmoitus',
-            updated: false,
+            title: this.newTitle,
             active: true,
             activeKey: []
-
         };
     }
 
-    getAdminAnnouncements (callback) {
+    fetchAdminAnnouncements () {
         this.announcementsHelper.getAdminAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
-                return;
+            } else {
+                this.updateState({
+                    announcements: data.data
+                });
             }
-            callback(data);
-        });
+        }.bind(this));
     }
 
     saveAnnouncement (data) {
@@ -62,9 +63,9 @@ class ViewHandler extends StateHandler {
             } else {
                 Messaging.success(getMessage('messages.saveSuccess'));
                 this.updateState({
-                    activeKey: [],
-                    updated: false
+                    activeKey: []
                 });
+                this.fetchAdminAnnouncements();
             }
         }.bind(this));
     }
@@ -77,11 +78,11 @@ class ViewHandler extends StateHandler {
                 return false;
             } else {
                 Messaging.success(getMessage('messages.updateSuccess'));
-                removeFromLocalStorageArray('oskari-announcements', data.id);
+                removeFromLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, data.id);
                 this.updateState({
-                    activeKey: [],
-                    updated: false
+                    activeKey: []
                 });
+                this.fetchAdminAnnouncements();
             }
         }.bind(this));
     }
@@ -101,6 +102,7 @@ class ViewHandler extends StateHandler {
                     activeKey: [],
                     updated: false
                 });
+                this.fetchAdminAnnouncements();
             }
         }.bind(this));
     }
@@ -128,13 +130,6 @@ class ViewHandler extends StateHandler {
         this.updateState({
             announcements: newList,
             title: this.newTitle
-        });
-    }
-
-    pushAnnouncements (data) {
-        this.updateState({
-            announcements: data,
-            updated: true
         });
     }
 

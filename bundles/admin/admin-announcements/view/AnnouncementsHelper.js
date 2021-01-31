@@ -7,6 +7,7 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
+            data: {all : true},
             url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
@@ -63,8 +64,7 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'DELETE',
             dataType: 'json',
-            data: JSON.stringify(data),
-            url: Oskari.urls.getRoute('Announcements'),
+            url: Oskari.urls.getRoute('Announcements', { id: data.id }),
             success: function (pResp) {
                 handler(null, pResp);
             },

@@ -19,8 +19,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.AnnouncementsListHandler = new AnnouncementsListHandler(this.instance);
-        this.AnnouncementsListHandler.addStateListener(() => this.render());
+        this.announcementsListHandler = new AnnouncementsListHandler();
+        this.announcementsListHandler.addStateListener(() => this.render());
     }, {
         /**
          * @method setEl
@@ -56,8 +56,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.Flyout',
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <AnnouncementsList
-                        {...this.AnnouncementsListHandler.getState()}
-                        controller={this.AnnouncementsListHandler.getController()}
+                        {...this.announcementsListHandler.getState()}
+                        controller={this.announcementsListHandler.getController()}
                     />
                 </LocaleProvider>
             );

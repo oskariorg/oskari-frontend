@@ -4,6 +4,7 @@ export { Button } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
 export { Confirm } from './components/Confirm';
+export { Divider } from './components/Divider';
 export { Dropdown } from './components/Dropdown';
 export { List, ListItem } from './components/List';
 export { NumberInput } from './components/NumberInput';

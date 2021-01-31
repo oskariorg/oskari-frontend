@@ -1,6 +1,7 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
+import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
 
 // Handler for announcements. Handles state and service calls.
 
@@ -9,26 +10,24 @@ const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} b
 class ViewHandler extends StateHandler {
     constructor () {
         super();
+        this.fetchAnnouncements();
         this.state = {
-            panels: [],
             modals: [],
-            updated: false,
             announcements: [],
             checked: false
         };
     }
 
-    getAnnouncements (callback) {
-        if (typeof callback !== 'function') {
-            return;
-        }
-
+    fetchAnnouncements () {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
             url: Oskari.urls.getRoute('Announcements'),
-            success: function (pResp) {
-                callback(pResp);
+            success: (pResp) => {
+                this.updateState({
+                    announcements: pResp.data
+                });
+                this.updateModals();
             },
             error: function (jqXHR, textStatus) {
                 Messaging.error(getMessage('messages.getFailed'));
@@ -36,17 +35,22 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    updatePanelsModals (panels, modals) {
+    updateModals () {
+        var modals = [];
+        this.state.announcements.forEach((announcement) => {
+            if (announcement.active && this.showModal(announcement.id)) {
+                // if announcement is active, then show pop-up of the content
+                modals.push(announcement);
+            }
+        });
         this.updateState({
-            panels: panels,
-            modals: modals,
-            updated: true
+            modals: modals
         });
     }
 
     setAnnouncementAsSeen (index, checked, id) {
         if (checked) {
-            this.addToLocalStorageArray('oskari-announcements', id);
+            this.addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
             this.updateState({
                 checked: false
             });
@@ -59,7 +63,7 @@ class ViewHandler extends StateHandler {
     }
 
     showModal (id) {
-        var announcements = localStorage.getItem('oskari-announcements');
+        var announcements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
         // is the modal stored in the localstorage aka has it been set to not show again
         if (announcements && announcements.includes(id)) {
             return false;

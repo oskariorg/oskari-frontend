@@ -16,25 +16,11 @@ const { Panel } = Collapse;
 const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
-const AnnouncementsList = ({controller,  announcements, updated, title, activeKey }) => {
-
-  // TODO(?) Create maybe a better way to handle updating the collapse panels
-  if (!updated) {
-    controller.getAdminAnnouncements(function(ann){
-      var announcements = [];
-
-        ann.data.forEach((announcement) => {
-          announcements.push(announcement);
-        });
-        controller.pushAnnouncements(announcements);
-      });
-  }
+const AnnouncementsList = ({controller,  announcements, title, activeKey }) => {
 
   const callback = (key) => {
     controller.updateActiveKey(key);
   }
-
-
   return (
     <div>
         <div>
