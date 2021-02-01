@@ -84,7 +84,7 @@ Oskari.registerLocalization(
             "editDataProvider": "Edit dataprovider",
             "themeName": "Theme name",
             "addTheme": "Add theme",
-            "editTheme" : "Edit theme",
+            "editTheme": "Edit theme",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
             "close": "Close",
@@ -98,6 +98,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
             "capabilities": {
+                "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
@@ -143,14 +144,24 @@ Oskari.registerLocalization(
                 "geojson": "Big objects",
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Player",
+                "range": "Range slider",
+                "none": "None"
+            },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
-                "styles" : "Invalid JSON syntax in Style definitions.",
-                "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
-                "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
-                "attributes" : "Invalid Attribute JSON syntax.",
-                "attributions" : "Invalid Attributions JSON syntax.",
-                "tileGrid" : "Invalid Tile grid JSON syntax."
+                "styles": "Invalid JSON syntax in Style definitions.",
+                "externalStyles": "Invalid JSON syntax in 3rd party style definitions.",
+                "hover": "Invalid JSON syntax in Feature highlighting and tooltip.",
+                "attributes": "Invalid Attribute JSON syntax.",
+                "attributions": "Invalid Attributions JSON syntax.",
+                "tileGrid": "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
@@ -166,8 +177,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Request timed out before getting response from service. Check the interface URL.",
                 "connectionErrorFetchCapabilities": "Connection could not be established to the service. Check the interface URL.",
                 "parsingErrorFetchCapabilities": "The response from the service didn't match the requested standard. Check the map layer type and/or version.",
-                "deleteSuccess" : "Deleted",
-                "deleteFailed" : "Delete failed",
+                "deleteSuccess": "Deleted",
+                "deleteFailed": "Delete failed",
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?"
@@ -176,7 +187,12 @@ Oskari.registerLocalization(
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Delete the map layers in the group",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "deleteGroupLayers": "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

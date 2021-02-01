@@ -6,11 +6,14 @@ import { Style } from './Style';
 import { StyleJson } from './StyleJson';
 import { ExternalStyleJson } from './ExternalStyleJson';
 import { Hover } from './Hover';
+import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { RasterStyle } from './RasterStyle';
+import { TimeSeries } from './TimeSeries';
+import { AdminStyleForm } from './AdminStyleForm';
 
 const {
     OPACITY,
@@ -21,7 +24,9 @@ const {
     STYLES_JSON,
     EXTERNAL_STYLES_JSON,
     HOVER,
-    SCALE
+    SCALE,
+    TIMES,
+    CESIUM_ION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, scales, propertyFields, controller }) => (
@@ -29,6 +34,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(TIMES) && layer.capabilities.times &&
+                <TimeSeries layer={layer} scales={scales} controller={controller} />
             }
             { propertyFields.includes(CLUSTERING_DISTANCE) &&
                 <ClusteringDistance layer={layer} controller={controller} />
@@ -43,6 +51,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <RasterStyle layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&
+                <AdminStyleForm layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
             }
             { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
@@ -50,6 +61,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(CESIUM_ION) &&
+                <DynamicScreensPaceErrorOptions layer={layer} controller={controller} />
             }
         </StyledColumn.Left>
         <StyledColumn.Right>

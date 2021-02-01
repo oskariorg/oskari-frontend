@@ -90,9 +90,9 @@ const BABEL_LOADER_RULE = {
         /\.min\.js$/,
         // https://github.com/zloirock/core-js/issues/514 core-js shouldn't be run through babel
         // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
-        // Exclude all but named dependencies (containing es6+)
-        // FIXME: olcs is the problem - adding it takes reeeeaaaally long for build
-        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs'])
+        // Exclude all but named dependencies (named deps contain es6+ modules that require transpiling)
+        // FIXME: olcs seems problematic - adding it makes the build take reeeeaaaally long compared to not having it
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', '@mapbox'])
     ],
     use: {
         loader: 'babel-loader',
@@ -157,10 +157,7 @@ const RESOLVE = {
     modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'],
     symlinks: false,
     alias: {
-        'oskari-ui': path.resolve(__dirname, '../src/react'),
-        // Path to Cesium ES6 module so we can do:
-        // import * as Cesium from 'cesium/Cesium';
-        'cesium': path.resolve(__dirname, '../node_modules/cesium/Source')
+        'oskari-ui': path.resolve(__dirname, '../src/react')
     }
 };
 const RESOLVE_LOADER = {

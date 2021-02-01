@@ -12,6 +12,7 @@ import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
+import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
 
 import './vectorlayer';
 import './request/AddFeaturesToMapRequest';
@@ -450,6 +451,10 @@ Oskari.clazz.define(
                 olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
                 olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
                 me._olLayers[layer.getId()] = olLayer;
+
+                const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+                // Set min max zoom levels that layer should be visible in
+                zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
             }
@@ -527,6 +532,13 @@ Oskari.clazz.define(
                     }
                 }
                 layer.setHoverOptions(options.hover);
+
+                // scale limits
+                const mapModule = this.getMapModule();
+                const scales = getScalesFromOptions(
+                    mapModule.getScaleArray(), mapModule.getResolutionArray(), options);
+                layer.setMinScale(scales.min);
+                layer.setMaxScale(scales.max);
 
                 if (options.layerPermissions) {
                     for (var permission in options.layerPermissions) {
@@ -1174,7 +1186,7 @@ Oskari.clazz.define(
          * @param {Object} featureFilter
          */
         zoomToFeatures: function (opts = {}, featureFilter) {
-            const layers = this._getLayerIds(opts.layer);
+            const layers = this.getLayerIds(opts.layer);
             const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
                 const tmpLayer = new olSourceVector({
@@ -1186,12 +1198,12 @@ Oskari.clazz.define(
             this.sendZoomFeatureEvent(features);
         },
         /**
-         * @method _getLayerIds
-         * @private
+         * @method getLayerIds
          * @param {Array|String|Number} layer id or array of layer ids (optional)
          * @return {Array} array of layer ids that was requested and we recognized
+         * @see RPC getFeatures
          */
-        _getLayerIds: function (layer = []) {
+        getLayerIds: function (layer = []) {
             if (!Array.isArray(layer)) {
                 // the value for "layer" needs to be an array so wrap it in one if it isn't
                 layer = [layer];
@@ -1296,6 +1308,7 @@ Oskari.clazz.define(
          *  - gets layer's features as geojson object
          * @param {String} id
          * @return {Object} geojson
+         * @see RPC getFeatures
          */
         getLayerFeatures: function (id) {
             var me = this;
