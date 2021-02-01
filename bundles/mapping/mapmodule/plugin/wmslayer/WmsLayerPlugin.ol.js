@@ -41,13 +41,11 @@ Oskari.clazz.define(
                 LayerComposingModel.GFI_CONTENT,
                 LayerComposingModel.GFI_TYPE,
                 LayerComposingModel.GFI_XSLT,
-                LayerComposingModel.LEGEND_IMAGE,
                 LayerComposingModel.REALTIME,
                 LayerComposingModel.REFRESH_RATE,
                 LayerComposingModel.SINGLE_TILE,
                 LayerComposingModel.SELECTED_TIME,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLE,
                 LayerComposingModel.URL,
                 LayerComposingModel.VERSION
             ], ['1.1.1', '1.3.0']);
