@@ -109,18 +109,18 @@ Oskari.registerLocalization(
             },
             "styles": {
                 "default": "Oletustyyli",
-                "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta."
-            },
-            "legend": {
-                "title": "Esitystyylit ja karttaselitteet",
-                "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
-                "legendImage": "Oletuskarttaselite",
-                "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
-                "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
-                "serviceLegend": "Palvelussa määritelty karttaselite",
-                "overriddenLegend": "Korvaava karttaselite",
-                "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
-                "serviceNotAvailable": "Ei saatavilla"
+                "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
+                "raster": {
+                    "title": "Esitystyylit ja karttaselitteet",
+                    "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
+                    "legendImage": "Oletuskarttaselite",
+                    "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
+                    "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
+                    "serviceLegend": "Palvelussa määritelty karttaselite",
+                    "overriddenLegend": "Korvaava karttaselite",
+                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
+                    "serviceNotAvailable": "Ei saatavilla"
+                }
             },
             "layerStatus": {
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",

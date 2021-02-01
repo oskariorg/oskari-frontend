@@ -108,18 +108,18 @@ Oskari.registerLocalization(
             },
             "styles": {
                 "default": "Default style",
-                "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu."
-            },
-            "legend": {
-                "title": "Styles and map legends",
-                "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
-                "legendImage": "Default legend URL",
-                "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
-                "legendImagePlaceholder": "Give the URL address of the map legend.",
-                "serviceLegend": "Map legend defined in the service",
-                "overriddenLegend": "Replaced legend URL",
-                "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
-                "serviceNotAvailable": "Not available"
+                "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
+                "raster": {
+                    "title": "Styles and map legends",
+                    "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
+                    "legendImage": "Default legend URL",
+                    "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
+                    "legendImagePlaceholder": "Give the URL address of the map legend.",
+                    "serviceLegend": "Map legend defined in the service",
+                    "overriddenLegend": "Replaced legend URL",
+                    "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
+                    "serviceNotAvailable": "Not available"
+                }
             },
             "layerStatus": {
                 "existing": "The map layer is already registered to this service. By selecting this you will be adding a duplicate layer.",

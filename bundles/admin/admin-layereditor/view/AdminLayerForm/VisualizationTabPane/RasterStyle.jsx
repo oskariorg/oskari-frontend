@@ -10,15 +10,15 @@ const ServiceLegend = ({ url }) => {
     if (!url) {
         return (
             <Fragment>
-                <Message messageKey='legend.serviceLegend' />
+                <Message messageKey='styles.raster.serviceLegend' />
                 <span>:&nbsp;</span>
-                <Message messageKey='legend.serviceNotAvailable' />
+                <Message messageKey='styles.raster.serviceNotAvailable' />
             </Fragment>
         );
     }
     return (
         <Tooltip title={url}>
-            <Message messageKey='legend.serviceLegend' />
+            <Message messageKey='styles.raster.serviceLegend' />
             <Link url={url}/>
         </Tooltip>
     );
@@ -39,11 +39,11 @@ Link.propTypes = {
 
 const LegendImage = LocaleConsumer(({ legendImage = '', controller, getMessage }) => (
     <Fragment>
-        <Message messageKey='legend.legendImage'/>
-        <InfoTooltip messageKeys='legend.legendImageDesc'/>
+        <Message messageKey='styles.raster.legendImage'/>
+        <InfoTooltip messageKeys='styles.raster.legendImageDesc'/>
         <StyledFormField>
             <TextInput
-                placeholder={getMessage('legend.legendImagePlaceholder')}
+                placeholder={getMessage('styles.raster.legendImagePlaceholder')}
                 value={legendImage}
                 onChange={(evt) => controller.setLegendImage(evt.target.value)} />
         </StyledFormField>
@@ -54,7 +54,7 @@ LegendImage.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-class Legend extends React.Component {
+class RasterStyle extends React.Component {
     constructor (props) {
         super(props);
         this.state = { selected: props.layer.style };
@@ -96,8 +96,8 @@ class Legend extends React.Component {
         const isDefault = name === layer.style;
         return (
             <Fragment>
-                <Message messageKey='legend.title'/>
-                <InfoTooltip messageKeys={['legend.styleDesc', 'styles.desc']} />
+                <Message messageKey='styles.raster.title'/>
+                <InfoTooltip messageKeys={['styles.raster.styleDesc', 'styles.desc']} />
                 <Border>
                     <Fragment>
                         <StyleField>
@@ -123,8 +123,8 @@ class Legend extends React.Component {
                         </StyledFormField>
                         <StyledFormField>
                             <Fragment>
-                                <Message messageKey='legend.overriddenLegend' />
-                                <InfoTooltip messageKeys='legend.overrideTooltip' />
+                                <Message messageKey='styles.raster.overriddenLegend' />
+                                <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
                                 { legendUrl && <Link url = {legendUrl} /> }
                                 <TextInput
                                     value = {legendUrl}
@@ -139,11 +139,11 @@ class Legend extends React.Component {
     }
 };
 
-Legend.propTypes = {
+RasterStyle.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
     getMessage: PropTypes.func.isRequired
 };
 
-const contextWrap = LocaleConsumer(Legend);
-export { contextWrap as Legend };
+const contextWrap = LocaleConsumer(RasterStyle);
+export { contextWrap as RasterStyle };

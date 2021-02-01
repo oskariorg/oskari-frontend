@@ -108,18 +108,18 @@ Oskari.registerLocalization(
             },
             "styles": {
                 "default": "Förvald utseende",
-                "desc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'."
-            },
-            "legend": {
-                "title": "Stilar och kartförklaringar",
-                "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
-                "legendImage": "URL adress för kartförklaringar",
-                "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
-                "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
-                "serviceLegend": "Definierad i tjänsten",
-                "overriddenLegend": "Adress för kartförklaring",
-                "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
-                "serviceNotAvailable": "Inte tillgänglig"
+                "desc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
+                "raster": {
+                    "title": "Stilar och kartförklaringar",
+                    "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
+                    "legendImage": "URL adress för kartförklaringar",
+                    "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
+                    "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+                    "serviceLegend": "Definierad i tjänsten",
+                    "overriddenLegend": "Adress för kartförklaring",
+                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
+                    "serviceNotAvailable": "Inte tillgänglig"
+                }
             },
             "layerStatus": {
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",

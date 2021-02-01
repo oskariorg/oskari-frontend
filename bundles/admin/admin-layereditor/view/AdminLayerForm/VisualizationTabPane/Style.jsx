@@ -12,11 +12,11 @@ const {
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const Style = ({ layer, propertyFields, controller }) => {
-    const styleInfoKeys = ['styleDesc'];
+    const styleInfoKeys = ['styles.desc'];
     let styleOptions = [];
 
     if (propertyFields.includes(CAPABILITIES_STYLES)) {
-        styleInfoKeys.push('capabilities.styleDesc');
+        styleInfoKeys.push('styles.raster.styleDesc');
         if (Oskari.util.keyExists(layer, 'capabilities.styles')) {
             styleOptions = layer.capabilities.styles;
         }
@@ -35,7 +35,7 @@ export const Style = ({ layer, propertyFields, controller }) => {
     styleOptions = [...new Set(styleOptions)];
     return (
         <Fragment>
-            <Message messageKey='fields.style'/>
+            <Message messageKey='styles.default'/>
             <InfoTooltip messageKeys={styleInfoKeys} />
             <StyledFormField>
                 <Select
