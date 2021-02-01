@@ -10,7 +10,7 @@ import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
-import { Legend } from './Legend';
+import { RasterStyle } from './RasterStyle';
 
 const {
     OPACITY,
@@ -40,7 +40,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <Style layer={layer} controller={controller} propertyFields={propertyFields} />
             }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
-                <Legend layer={layer} controller={controller} />
+                <RasterStyle layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
