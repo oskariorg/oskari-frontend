@@ -38,7 +38,7 @@ class ViewHandler extends StateHandler {
     updateModals () {
         var modals = [];
         this.state.announcements.forEach((announcement) => {
-            if (announcement.active && this.showModal(announcement.id)) {
+            if (this.isAnnouncementShown(announcement)) {
                 // if announcement is active, then show pop-up of the content
                 modals.push(announcement);
             }
@@ -48,31 +48,31 @@ class ViewHandler extends StateHandler {
         });
     }
 
-    setAnnouncementAsSeen (index, checked, id) {
-        if (checked) {
+    setAnnouncementAsSeen (dontShowAgain, id) {
+        if (dontShowAgain) {
             this.addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
             this.updateState({
                 checked: false
             });
         }
         const newList = [...this.state.modals];
-        newList.splice(index, 1);
+        newList.splice(newList.findIndex(a => a.id === id), 1);
         this.updateState({
             modals: newList
         });
     }
 
-    showModal (id) {
-        var announcements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
+    isAnnouncementShown (announcement) {
+        var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
         // is the modal stored in the localstorage aka has it been set to not show again
-        if (announcements && announcements.includes(id)) {
+        if ((announcement.active && localStorageAnnouncements && localStorageAnnouncements.includes(announcement.id)) || !announcement.active) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
+    // Is modal's checkbox checked
     onCheckboxChange (checked) {
         this.updateState({
             checked: checked
@@ -101,5 +101,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'getAnnouncements', 'updatePanelsModals', 'setAnnouncementAsSeen', 'onCheckboxChange', 'showModal'
+    'setAnnouncementAsSeen', 'onCheckboxChange'
 ]);

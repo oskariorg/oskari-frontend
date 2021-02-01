@@ -35,10 +35,8 @@ class ViewHandler extends StateHandler {
         super();
         this.announcementsHelper = announcementsHelper();
         this.fetchAdminAnnouncements();
-        this.newTitle = Oskari.getMsg('admin-announcements', 'addNewForm');
         this.state = {
             announcements: [],
-            title: this.newTitle,
             active: true,
             activeKey: []
         };
@@ -87,34 +85,29 @@ class ViewHandler extends StateHandler {
         }.bind(this));
     }
 
-    deleteAnnouncement (index, id) {
-        this.id = { id };
-        this.announcementsHelper.deleteAnnouncement(this.id, function (err) {
+    deleteAnnouncement (id) {
+        this.announcementsHelper.deleteAnnouncement(id, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {
                 Messaging.success(getMessage('messages.deleteSuccess'));
-                const newList = [...this.state.announcements];
-                newList.splice(index, 1);
                 // Update accordion with announcements and keep all closed
                 this.updateState({
-                    announcements: newList,
-                    activeKey: [],
-                    updated: false
+                    activeKey: []
                 });
                 this.fetchAdminAnnouncements();
             }
         }.bind(this));
     }
     // Cancel creating a new announcement or editing one. Close all panels.
-    cancel (index, id) {
+    cancel (id) {
         if (id !== undefined) {
             this.updateState({
                 activeKey: []
             });
         } else {
             const newList = [...this.state.announcements];
-            newList.splice(index, 1);
+            newList.splice(-1, 1);
             this.updateState({
                 announcements: newList,
                 activeKey: []
@@ -125,26 +118,14 @@ class ViewHandler extends StateHandler {
     addForm () {
         const newList = [...this.state.announcements];
         newList.push({
-            title: this.newTitle
+            title: Oskari.getMsg('admin-announcements', 'addNewForm')
         });
         this.updateState({
-            announcements: newList,
-            title: this.newTitle
+            announcements: newList
         });
     }
 
-    updateTitle (value) {
-        this.updateState({
-            title: value
-        });
-    }
-    toggleActive () {
-        this.updateState({
-            active: !this.state.active
-        });
-    }
-
-    updateActiveKey (key) {
+    openCollapse (key) {
         this.updateState({
             activeKey: key
         });
@@ -152,5 +133,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsListHandler = controllerMixin(ViewHandler, [
-    'pushAnnouncements', 'getAdminAnnouncements', 'addForm', 'deleteAnnouncement', 'updateTitle', 'toggleActive', 'saveAnnouncement', 'updateAnnouncement', 'cancel', 'updateActiveKey'
+    'addForm', 'deleteAnnouncement', 'saveAnnouncement', 'updateAnnouncement', 'cancel', 'openCollapse'
 ]);

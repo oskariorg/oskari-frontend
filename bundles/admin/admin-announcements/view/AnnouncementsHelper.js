@@ -56,7 +56,7 @@ export const announcementsHelper = () => {
         });
     };
 
-    const deleteAnnouncement = (data, handler) => {
+    const deleteAnnouncement = (id, handler) => {
         if (typeof handler !== 'function') {
             return;
         }
@@ -64,7 +64,7 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'DELETE',
             dataType: 'json',
-            url: Oskari.urls.getRoute('Announcements', { id: data.id }),
+            url: Oskari.urls.getRoute('Announcements', { id: id }),
             success: function (pResp) {
                 handler(null, pResp);
             },

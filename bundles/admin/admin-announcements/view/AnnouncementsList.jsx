@@ -19,7 +19,7 @@ const StyledButton = styled(Button)`
 const AnnouncementsList = ({controller,  announcements, title, activeKey }) => {
 
   const callback = (key) => {
-    controller.updateActiveKey(key);
+    controller.openCollapse(key);
   }
   return (
     <div>
@@ -27,7 +27,7 @@ const AnnouncementsList = ({controller,  announcements, title, activeKey }) => {
         <Collapse accordion activeKey={activeKey} onChange={callback}>
           {announcements.map((form, index) => {
             return (
-              <Panel header={form.title} key={index} >
+              <Panel header={form.title ? form.title : Oskari.getMsg('admin-announcements', 'addNewForm')} key={index} >
               <AnnouncementsForm
                 controller={controller}
                 form={form}

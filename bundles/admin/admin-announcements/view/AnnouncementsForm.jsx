@@ -69,7 +69,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
             <Form layout="vertical" 
               onFinish={onFinish} 
               initialValues={{
-                title: form.title !== undefined ? form.title : title,
+                title: form.title !== undefined ? form.title : Oskari.getMsg('admin-announcements', 'addNewForm'),
                 content: form.content,
                 range_picker: rangeInitial(),
                 active: activeInitial(),
@@ -84,8 +84,6 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                     whitespace: true
                   }
                 ]}
-                value={title}
-                onChange={ evt => controller.updateTitle(evt.target.value)}
               >
                 <Input />
               </Form.Item>
@@ -110,7 +108,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 <DateRange popupStyle={{zIndex: '999999'}} />
               </Form.Item>
               <Form.Item name="active" label={<Message messageKey='newAnnouncement.show-popup' />} valuePropName="checked">
-                <Switch onClick={() => controller.toggleActive()}/>
+                <Switch/>
               </Form.Item>
               <Row>
                 <Form.Item>
@@ -121,14 +119,13 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 <Form.Item>
                   <Confirm
                       title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
-                      onConfirm={() => controller.deleteAnnouncement(index, form.id, form.title)}
+                      onConfirm={() => controller.deleteAnnouncement(form.id, form.title)}
                       okText={<Message messageKey='yes'/>}
                       cancelText={<Message messageKey='cancel'/>}
                       placement='top'
                       popupStyle={{zIndex: '999999'}}
                   >
-                      <Button
-                    key={key}>
+                      <Button key={key}>
                           <Message messageKey='delete'/>
                       </Button>
                   </Confirm>
@@ -136,7 +133,7 @@ const AnnouncementsForm = ({controller,  title, key, form, index}) => {
                 <Form.Item>
                   <Confirm
                         title={<Message messageKey='messages.cancelAnnouncementConfirm'/>}
-                        onConfirm={() => controller.cancel(index,form.id)}
+                        onConfirm={() => controller.cancel(form.id)}
                         okText={<Message messageKey='yes'/>}
                         cancelText={<Message messageKey='cancel'/>}
                         placement='top'

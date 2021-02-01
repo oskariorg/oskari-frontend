@@ -15,8 +15,8 @@ const StyledCheckbox = styled(Checkbox)`
 
 const AnnouncementsModal = ({ id, title, content, controller, index, checked }) => {
 
-    const handleOk = (index, checked, id) => {
-        controller.setAnnouncementAsSeen(index, checked, id);
+    const handleOk = (checked, id) => {
+        controller.setAnnouncementAsSeen(checked, id);
     }
 
     const onCheckboxChange = (e) => {
@@ -32,7 +32,7 @@ const AnnouncementsModal = ({ id, title, content, controller, index, checked }) 
               onCancel={() => handleOk(index)}
               footer={[
                 <StyledCheckbox key="checkbox" onChange={onCheckboxChange} ><Message messageKey={'dontShow'}/></StyledCheckbox>,
-                <Button key="ok" type="primary" onClick={() => handleOk(index, checked, id)}>
+                <Button key="ok" type="primary" onClick={() => handleOk(checked, id)}>
                 OK
                 </Button>,
               ]}
@@ -50,3 +50,4 @@ AnnouncementsModal.propTypes = {
 
 const contextWrap = LocaleConsumer(AnnouncementsModal);
 export { contextWrap as AnnouncementsModal };
+
