@@ -653,7 +653,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._layerGroups.forEach((layerGroup, index) => {
             layerGroup.id === parentId && this._layerGroups[index].groups.push(subgroup);
         });
-        // this._layerGroups.push(group);
         // TODO: Doesn't seem to actually update
         this.trigger('theme.update');
     },
@@ -777,8 +776,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layersInGroup.forEach(function (layer) {
                     layer.getGroups().push({
                         id: group.getId(),
-                        name: Oskari.getLocalized(group.getName()),
-                        parentId: group.parentId
+                        name: Oskari.getLocalized(group.getName())
                     });
                 });
             });

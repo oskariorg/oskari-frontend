@@ -34,10 +34,12 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
                     
                     let active = false;
+                    // set group switch active if all layers in group are selected
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         active = true;
-                        console.log(active);
                     }
+                    // show the confirm dialog if group is included in showWarn
+                    // also pass showWarn forward for recursive rendering of groups
                     const warnActive = showWarn.includes(group.id);
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.

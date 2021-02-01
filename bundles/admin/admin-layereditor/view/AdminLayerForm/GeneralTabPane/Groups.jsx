@@ -12,8 +12,8 @@ const StyledListItem = styled(ListItem)`
     border-bottom: 1px solid #f0f0f0 !important ;
 `;
 
+// add subgroups on the list recursively and hierarchically
 const SubGroupsListItem = ({ group, layer, controller }) => {
-    console.log(group);
     return (
         <List dataSource={group.getGroups().map(subgroup => 
             <StyledDiv>

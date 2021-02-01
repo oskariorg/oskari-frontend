@@ -1,5 +1,5 @@
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { groupLayers,groupLayersAdmin  } from './util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { groupLayers, groupLayersAdmin } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 
 const ANIMATION_TIMEOUT = 400;
@@ -10,7 +10,7 @@ const LAYER_REFRESH_THROTTLE = 2000;
  * Handles events related to layer listing.
  */
 class ViewHandler extends StateHandler {
-    constructor(instance, groupingMethod = 'getInspireName') {
+    constructor (instance, groupingMethod = 'getInspireName') {
         super();
         this.sandbox = instance.getSandbox();
         this.loc = instance._localization;
@@ -34,14 +34,14 @@ class ViewHandler extends StateHandler {
         };
         this.eventHandlers = this._createEventHandlers();
     }
-    setGroupingMethod(groupingMethod) {
+    setGroupingMethod (groupingMethod) {
         if (this.groupingMethod === groupingMethod) {
             return;
         }
         this.groupingMethod = groupingMethod;
         this.updateLayerGroups();
     }
-    setFilter(activeId, searchText) {
+    setFilter (activeId, searchText) {
         const previousSearchText = this.filter.searchText;
         this.filter = { activeId, searchText };
         this.updateLayerGroups();
@@ -59,16 +59,11 @@ class ViewHandler extends StateHandler {
         }
     }
 
-    _getSelectedLayerIds() {
+    _getSelectedLayerIds () {
         return this.map.getLayers().map(layer => layer.getId());
     }
 
-    // TODO how do we make groups stay selected when refreshing?
-    _getSelectedGroupIds() {
-        //return this.map.getGroups().map(group => group.getId());
-    }
-
-    addLayer(id) {
+    addLayer (id) {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
         }
@@ -79,7 +74,7 @@ class ViewHandler extends StateHandler {
         setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
-    removeLayer(id) {
+    removeLayer (id) {
         const index = this.state.selectedLayerIds.indexOf(id);
         if (index === -1) {
             return;
@@ -90,40 +85,38 @@ class ViewHandler extends StateHandler {
         setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
-    showWarn(group) {
-        if (group.layers.length >= 1) {
+    // Check if we need to show confirm dialog when activating a whole group
+    showWarn (group) {
+        if (group.layers.length > 9) {
             if (!group.id || this.state.showWarn.includes(group.id)) {
-                console.log("IGNORE");
                 return;
             }
             const showWarn = [...this.state.showWarn, group.id];
+            // set groups id to showWarn array so we show the confirm dialog
             this.updateState({ showWarn });
         } else {
             return false;
         }
     }
 
-    deactivateGroup(group) {
-
+    deactivateGroup (group) {
         if (this.state.showWarn.includes(group.id)) {
-                const index = this.state.showWarn.indexOf(group.id);
-                if (index === -1) {
-                    return;
-                }
-                const showWarn = [...this.state.showWarn];
-                showWarn.splice(index, 1);
-                this.updateState({ showWarn });
-            
+            const index = this.state.showWarn.indexOf(group.id);
+            if (index === -1) {
+                return;
+            }
+            const showWarn = [...this.state.showWarn];
+            showWarn.splice(index, 1);
+            this.updateState({ showWarn });
         } else {
             return;
         }
     }
 
-    addGroup(group) {
+    // active all layers in selected group
+    addGroup (group) {
         for (var i in group.layers) {
-            console.log(group.layers[i]);
             if (!group.layers[i]._id || this.state.selectedLayerIds.includes(group.layers[i]._id)) {
-                console.log("return");
                 continue;
             }
             const selectedLayerIds = [...this.state.selectedLayerIds, group.layers[i]._id];
@@ -137,10 +130,10 @@ class ViewHandler extends StateHandler {
         const showWarn = [...this.state.showWarn];
         showWarn.splice(index, 1);
         this.updateState({ showWarn });
-
     }
 
-    removeGroup(group) {
+    // deactivate all layers in group
+    removeGroup (group) {
         for (var i in group.layers) {
             const index = this.state.selectedLayerIds.indexOf(group.layers[i]._id);
             if (index === -1) {
@@ -160,7 +153,7 @@ class ViewHandler extends StateHandler {
         this.updateState({ showWarn });
     }
 
-    updateLayerGroups() {
+    updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId === FILTER_ALL_LAYERS ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
@@ -183,15 +176,15 @@ class ViewHandler extends StateHandler {
         this.updateState({ groups });
     }
 
-    updateOpenGroupTitles(openGroupTitles) {
+    updateOpenGroupTitles (openGroupTitles) {
         this.updateState({ openGroupTitles });
     }
 
-    updateSelectedLayerIds(selectedLayerIds = this._getSelectedLayerIds()) {
+    updateSelectedLayerIds (selectedLayerIds = this._getSelectedLayerIds()) {
         this.updateState({ selectedLayerIds });
     }
 
-    showLayerMetadata(layer) {
+    showLayerMetadata (layer) {
         const uuid = layer.getMetadataIdentifier();
         const subUuids = [];
         if (layer.getSubLayers()) {
@@ -208,7 +201,7 @@ class ViewHandler extends StateHandler {
         ]);
     }
 
-    showLayerBackendStatus(layerId) {
+    showLayerBackendStatus (layerId) {
         this.sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
     }
 
@@ -217,7 +210,7 @@ class ViewHandler extends StateHandler {
     /**
      * "Module" name for event handling
      */
-    getName() {
+    getName () {
         return 'LayerCollapse.CollapseService.' + this.groupingMethod;
     }
 
@@ -226,7 +219,7 @@ class ViewHandler extends StateHandler {
     * @param {Oskari.mapframework.event.Event} event a Oskari event object
     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
     */
-    onEvent(event) {
+    onEvent (event) {
         const handler = this.eventHandlers[event.getName()];
         if (!handler) {
             return;
@@ -234,7 +227,7 @@ class ViewHandler extends StateHandler {
         return handler.apply(this, [event]);
     }
 
-    _createEventHandlers() {
+    _createEventHandlers () {
         const sandbox = Oskari.getSandbox();
         const throttleRefreshAll = Oskari.util.throttle(
             this._refreshAllLayers.bind(this),
@@ -279,7 +272,7 @@ class ViewHandler extends StateHandler {
         return handlers;
     }
 
-    _refreshLayer(id) {
+    _refreshLayer (id) {
         if (!id || this.state.groups.length === 0) {
             return;
         }
@@ -292,7 +285,7 @@ class ViewHandler extends StateHandler {
         });
         this.updateState({ groups });
     }
-    _refreshAllLayers() {
+    _refreshAllLayers () {
         if (this.state.groups.length === 0) {
             return;
         }

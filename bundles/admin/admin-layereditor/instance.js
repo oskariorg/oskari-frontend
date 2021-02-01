@@ -86,7 +86,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 y: -200
             };
 
-            const createPopupCallback = (flyoutKey, position, id) => {
+            const createPopupCallback = (flyoutKey) => {
                 return evt => {
                     const position = {
                         left: evt.pageX + offset.x,
@@ -96,7 +96,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 };
             };
 
-            const subthemeCallback = (evt, id, groupMethod, layerCountInGroup) => {
+            const subthemeCallback = (evt, id, layerCountInGroup) => {
                 let flyoutKey = FLYOUT.SUBTHEME;
 
                 const position = {
@@ -104,7 +104,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     top: evt.pageY + offset.y
                 };
                 this.showFormPopup(flyoutKey, position, id, layerCountInGroup);
-
             };
 
             const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');

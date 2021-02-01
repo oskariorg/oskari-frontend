@@ -4,28 +4,7 @@ import PropTypes from 'prop-types';
 import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
-import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import Style from 'ol/style/Style';
-
-const StyledCollapse = styled(Collapse)`
-    border-radius: 0 !important;
-    &>div {
-        border-radius: 0 !important;
-        &:last-child {
-            padding-bottom: 2px;
-        }
-    };
-`;
-
-const Label = styled('label')`
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    > div {
-        margin-left: 8px;
-    }
-`;
 
 const StyledSubCollapse = styled(Collapse)`
     border-radius: 0 !important;
@@ -68,17 +47,16 @@ const StyledEditGroup = styled.span`
     padding-bottom: 1px;
 `;
 
-const RenderLayer = ({ model, even, selected, controller, innerRef, draggableProps, dragHandleProps }) => {
+const renderLayer = ({ model, even, selected, controller }) => {
     const itemProps = { model, even, selected, controller };
     return (
-            <div ref={innerRef} {...draggableProps} {...dragHandleProps}>
-                <StyledListItem>
-                    <Layer key={model.getId()}  {...itemProps} />
-                </StyledListItem>
-            </div>
+            <StyledListItem>
+                <Layer key={model.getId()}  {...itemProps} />
+            </StyledListItem>
     );
 };
-RenderLayer.propTypes = {
+
+renderLayer.propTypes = {
     model: PropTypes.any,
     even: PropTypes.any,
     selected: PropTypes.any,
@@ -99,18 +77,19 @@ const onToolClick = (event, tool, group) => {
 };
 
 const selectGroup = (event, checked, group, controller) => {
+    // if switch is checked, we add the groups layers to selected layers, if not, we remove all the layers from checked layers
     !checked ? controller.addGroup(group) : controller.removeGroup(group);
     event.stopPropagation();
-
 }
 
+// Confirm dialog hit cancel
 const deactivateGroup = (event, group, controller) => {
     controller.deactivateGroup(group);
     event.stopPropagation();
-
 }
 
-const onSelect = (event, checked, group, controller) => { 
+const onGroupSelect = (event, checked, group, controller) => { 
+    // check if we need to show warning (over 10 layers inside the group)
     if(checked) {
         if (!controller.showWarn(group)) {
            event.stopPropagation();
@@ -123,14 +102,7 @@ const onSelect = (event, checked, group, controller) => {
     }
 };
 
-
-const onDragEnd = result => {/*
-    
-}
-
-
-
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel, innerRef, draggableProps, dragHandleProps }) => {
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -151,7 +123,6 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
             <StyledSubCollapsePanel {...propsNeededForPanel}
                 header={group.getTitle()}
                 showArrow
-                //showArrow={group.getLayers().length > 0}
                 extra={
                     <React.Fragment>
                             <Confirm
@@ -165,7 +136,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                                 popupStyle={{zIndex: '999999'}}
                             >
                                 <Switch size="small" checked={active}
-                                onChange={(checked, event) => onSelect(event, checked, group, controller)} />
+                                    onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
                             </Confirm>
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
@@ -178,46 +149,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                         <Badge inversed={true} count={badgeText} />
                     </React.Fragment>
                 }>
-                
-                <DragDropContext onDragEnd={onDragEnd()}>
-
-                {layerRows.length > 0 && 
-                    <Droppable droppableId="layers">
-                        {(provided) => (
-
-                        <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        >
-                            <List 
-                            bordered={false} 
-                            dataSource={layerRows} 
-                            renderItem={(item, index) => (
-                                <Draggable
-                                key={item.id}
-                                draggableId={`${item.id}`}
-                                index={index}
-                                >
-                                    {(provided) => (
-                                    <RenderLayer 
-                                    innerRef={provided.innerRef}
-                                    model={item.model} 
-                                    even={item.even} 
-                                    selected={item.selected} 
-                                    controller={item.controller}
-                                    draggableProps={provided.draggableProps}
-                                    dragHandleProps={provided.dragHandleProps}/>
-                                )}
-
-                                </Draggable>
-                            )} >
-                            </List>
-                            {provided.placeholder}
-                        </div>
-                    )}
-                    </Droppable>
-                }
-                </DragDropContext>
+                {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
                 {group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
@@ -225,7 +157,6 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                     let activeGroup = false;
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
-                        console.log(active);
                     }
                     const warnActive = showWarn.includes(subgroup.id);
                 return(
@@ -287,45 +218,7 @@ const LayerCollapsePanel = (props) => {
 
                 </React.Fragment>
             }>
-            <DragDropContext onDragEnd={onDragEnd()}>
-
-                {layerRows.length > 0 && 
-                    <Droppable droppableId="layers">
-                        {(provided) => (
-
-                        <div
-                        ref={provided.innerRef}
-                        {...provided.droppableProps}
-                        >
-                            <List 
-                            bordered={false} 
-                            dataSource={layerRows} 
-                            renderItem={(item, index) => (
-                                <Draggable
-                                key={item.id}
-                                draggableId={`${item.id}`}
-                                index={index}
-                                >
-                                    {(provided) => (
-                                    <RenderLayer 
-                                    innerRef={provided.innerRef}
-                                    model={item.model} 
-                                    even={item.even} 
-                                    selected={item.selected} 
-                                    controller={item.controller}
-                                    draggableProps={provided.draggableProps}
-                                    dragHandleProps={provided.dragHandleProps}/>
-                                  )}
-
-                                </Draggable>
-                            )} >
-                            </List>
-                            {provided.placeholder}
-                        </div>
-                    )}
-                    </Droppable>
-                }
-            </DragDropContext>
+                {layerRows.length > 0 &&  <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
  
             {group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
@@ -334,7 +227,6 @@ const LayerCollapsePanel = (props) => {
                     let activeGroup = false;
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
-                        console.log(active);
                     }
                 const warnActive = showWarn.includes(subgroup.id);
                 return(
