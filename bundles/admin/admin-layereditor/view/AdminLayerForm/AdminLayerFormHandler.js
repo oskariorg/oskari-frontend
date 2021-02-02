@@ -1,8 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
-import { Message, StyleEditor } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 import { OSKARI_BLANK_STYLE } from './VisualizationTabPane/OskariDefaultStyle';
 
