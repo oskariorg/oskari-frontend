@@ -27,6 +27,7 @@ Oskari.registerLocalization({
                 lineDash: 'Linjens stil',
                 width: 'Bredd',
                 area: {
+                    lineDash: 'Linjens stil',
                     lineJoin: 'Hörn',
                     width: 'Linjens bredd'
                 }

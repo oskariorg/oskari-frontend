@@ -27,6 +27,7 @@ Oskari.registerLocalization({
                 lineDash: 'Tyyli',
                 width: 'Leveys',
                 area: {
+                    lineDash: 'Tyyli',
                     lineJoin: 'Kulmat',
                     width: 'Viivan paksuus'
                 }
