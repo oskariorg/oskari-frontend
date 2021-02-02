@@ -45,7 +45,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         return typeof groupId === 'number' ? groupId : -Math.random();
     };
 
-    const recursive = function(group) {
+    const mapGroupsAndLayers = function(group) {
         // group has subgroups
         if (group.hasSubgroups()) {
             // check that group has layers
@@ -69,7 +69,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                 }
                 // check possible subgroups
                 const mappedSubgroups = group.getGroups().map(subgroup => {
-                    return recursive(subgroup);
+                    return mapGroupsAndLayers(subgroup);
                 });
                 // filter out subgroups that don't have a layer nor a subgroup with a layer
                 const filteredSubGroups = mappedSubgroups.filter(g => g !== undefined)
@@ -122,7 +122,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     });
     // recursively map groups and layers together
     allGroups.map(parentGroup => {
-            group = recursive(parentGroup);
+            group = mapGroupsAndLayers(parentGroup);
             if (group != undefined) {
                 groupList.push(group);
             }
@@ -174,7 +174,7 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
         return typeof groupId === 'number' ? groupId : -Math.random();
     };
     
-    const recursive = function(group) {
+    const mapGroupsAndLayers = function(group) {
         if (group.hasSubgroups()) {
             const lang = Oskari.getLang();
             const name = group.getName();
@@ -196,7 +196,7 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
                 });
             }
             const mappedSubgroups = group.getGroups().map(subgroup => {
-                return recursive(subgroup);
+                return mapGroupsAndLayers(subgroup);
             });
             mappedSubgroups && newGroup.setGroups(mappedSubgroups)
             return newGroup;
@@ -244,7 +244,7 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
     });
 
     allGroups.map(parentGroup => {
-            group = recursive(parentGroup);
+            group = mapGroupsAndLayers(parentGroup);
             groupList.push(group);
     });
     
