@@ -392,7 +392,7 @@ Oskari.clazz.define(
                         tableBody.append(row);
                     });
                     if (hasMore) {
-                        tableBody.append(
+                        tableBody.prepend(
                             '<tr>' +
                             '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
                             '</tr>'

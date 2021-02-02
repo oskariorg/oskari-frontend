@@ -1,6 +1,6 @@
 import { FILTER } from './constants';
 
-const { GREATER, LESS, LESS_EQUAL, GREATER_EQUAL, NOT_IN, IN, EQUAL, NOT_LIKE, LIKE, REG_EXP } = FILTER;
+const { GREATER, LESS, LESS_EQUAL, GREATER_EQUAL, NOT_IN, IN, EQUAL, NOT_LIKE, LIKE, REG_EXP, WILD_CARD } = FILTER;
 
 export const getOptionalStyleFilter = style => {
     const options = {};
@@ -16,9 +16,9 @@ export const getOptionalStyleFilter = style => {
     return options;
 };
 
-export const filterOptionalStyle = (style, feature) => {
+export const filterOptionalStyle = (filter, feature) => {
     const featProps = feature.getProperties();
-    const { AND, OR, property } = style;
+    const { AND, OR, property } = filter;
     if (AND) {
         return AND.every(filter => filterProperty(filter, featProps[filter.key]));
     }
@@ -33,11 +33,11 @@ export const filterOptionalStyle = (style, feature) => {
 
 const filterProperty = (property, featValue) => {
     if (!property.hasOwnProperty('key') || featValue === undefined) return false;
-    const ignoreCase = property.caseSensitive === false;
+    const ignoreCase = property.caseSensitive !== true;
 
     if (property.hasOwnProperty(GREATER)) {
         // check if range
-        if (property.hasOwnProperty(FILTER.LESS)) {
+        if (property.hasOwnProperty(LESS)) {
             return featValue < property[LESS] && featValue > property[GREATER];
         } else if (property.hasOwnProperty(LESS_EQUAL)) {
             return featValue <= property[LESS_EQUAL] && featValue > property[GREATER];
@@ -47,7 +47,7 @@ const filterProperty = (property, featValue) => {
     if (property.hasOwnProperty(GREATER_EQUAL)) {
         // check if range
         if (property.hasOwnProperty(LESS)) {
-            return featValue < property[FILTER.LESS] && featValue >= property[GREATER_EQUAL];
+            return featValue < property[LESS] && featValue >= property[GREATER_EQUAL];
         } else if (property.hasOwnProperty(LESS_EQUAL)) {
             return featValue <= property[LESS_EQUAL] && featValue >= property[GREATER_EQUAL];
         }
@@ -73,7 +73,7 @@ const filterProperty = (property, featValue) => {
         if (Array.isArray(styleValue)) {
             if (ignoreCase) {
                 const strFeat = String(featValue).toLowerCase();
-                match = styleValue.map(v => String(v).toLowerCase).includes(strFeat);
+                match = styleValue.map(v => String(v).toLowerCase()).includes(strFeat);
             } else {
                 match = styleValue.includes(featValue);
             }
@@ -91,17 +91,11 @@ const filterProperty = (property, featValue) => {
         const strValue = ignoreCase ? String(featValue).toLowerCase() : String(featValue);
         const styleValue = not ? property[NOT_LIKE] : property[LIKE];
         let match;
-        if (Array.isArray(styleValue)) {
-            if (ignoreCase) {
-                match = !!styleValue.map(v => String(v).toLowerCase()).find(v => strValue.includes(v));
-            } else {
-                match = !!styleValue.find(v => strValue.includes(v));
-            }
+        if (ignoreCase) {
+            match = likeMatcher(strValue, String(styleValue).toLowerCase());
         } else {
-            match = strValue.includes(styleValue);
+            match = likeMatcher(strValue, String(styleValue));
         }
-
-        if (match === undefined) return false;
         return not ? !match : match;
     }
     if (property.hasOwnProperty(REG_EXP)) {
@@ -112,4 +106,21 @@ const filterProperty = (property, featValue) => {
     if (ignoredOperators.length === 0) return false;
     Oskari.log('Oskari.mapping.mapmodule.oskariStyle').debug('Optional style has redundant keys: ' + ignoredOperators);
     return false;
+};
+
+const likeMatcher = (featValue, like) => {
+    const endsWildCard = like.charAt(like.length - 1) === WILD_CARD;
+    const startsWildCard = like.charAt(0) === WILD_CARD;
+    let val;
+    if (endsWildCard && startsWildCard) {
+        val = like.substr(1, like.length - 2);
+    } else if (endsWildCard) {
+        val = like.substr(0, like.length - 2);
+    } else if (startsWildCard) {
+        val = like.substr(1);
+    } else {
+        Oskari.log('Oskari.mapping.mapmodule.oskariStyle').info('Optional style\'s filter like operator does not have wild card, use value operator instead');
+        return false;
+    }
+    return featValue.includes(val);
 };

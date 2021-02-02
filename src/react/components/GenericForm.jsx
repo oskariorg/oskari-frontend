@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Select } from 'oskari-ui'
+import { Button, Select, Tooltip } from 'oskari-ui'
 import { Form, Card, Space, Input, Row } from 'antd';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ const { TextArea } = Input;
 
 // If the form is shown on popup the Select dropdown opens behind popup without this
 // FIXME: this will probably not work with modal popups (dropdown might be over the modal overlay)
-const zIndexValue = 999999;
+const zIndexValue = 99998;
 
 const StyledFormItem = styled(Form.Item)`
     display:flex;
@@ -26,9 +26,13 @@ const StyledFormItem = styled(Form.Item)`
 
         label {
             color: #6d6d6d;
-            font-size: 12px;
+            font-size: 14px;
             height: 24px;
         }
+    }
+
+    .ant-input {
+        font-family: Arial;
     }
 
     input {
@@ -41,6 +45,10 @@ const StyledFormItem = styled(Form.Item)`
         & > div {
             margin: 5px 0 0; 
         }
+    }
+
+    .ant-card-body {
+        padding: 12px 24px;
     }
 `;
 
@@ -78,38 +86,96 @@ export class GenericForm extends React.Component {
     }
 
     /**
+     * @method _addTooltip
+     * @private
      * 
-     * @param {Object} fields - array containing all fields
+     * Adds tooltip around provided form component
+     * 
+     * @param {React.Component} formItem - provided form item to wrap with tooltip
+     * @param {String} tooltipTitle      - title text for tooltip
+     * 
+     * @returns {React.Component}        - field wrapped with Tooltip
+     */
+    _addTooltip (formItem, tooltipTitle) {
+        if (!tooltipTitle) {
+            return formItem;
+        }
+
+        const tooltipKey = tooltipTitle + '_tooltip';
+
+        // FIX ME: Because of bug in AntD we're adding empty div-wrapper around formItem to avoid ref warning
+        // https://github.com/ant-design/ant-design/issues/21892
+        return (
+            <Tooltip key={ tooltipKey } title={ tooltipTitle } trigger={ ['focus', 'hover'] }>
+                <div>
+                    { formItem }
+                </div>
+            </Tooltip>  
+        );
+    }
+
+    /**
+     * @method _createFormComponents
+     * @private
+     * 
+     * Create all form components
+     * 
+     * @param {Object[]} fields - array containing all fields
+     * 
      * @returns {React.Component} 
      */
-    createFormItems (fields, formSettings) {
+    _createFormComponents (fields) {
         return fields.map((field) => {
-            return (
-                <StyledFormItem
-                    key={ field.name }
-                    name={ field.type !== 'buttongroup' ? field.name : '' }
-                    label={ formSettings.showLabels ? field.label : '' }
-                    rules={ field.rules }
-                    initialValue={ this._getFieldInitialValue(field) }
-                >
-                    { this.createFormInput( field ) }
-                </StyledFormItem>
-            );
+            const formItem = this._createFormItem(field);
+
+            if (field.tooltip) {
+                return this._addTooltip(formItem, field.tooltip);
+            }
+
+            return formItem;
         });
     }
 
     /**
-     * Create single Form.Item content with provided field properties
+     * @method _createFormItem
+     * @private
      * 
-     * @param {Object} field              - object containing information for single field
-     * @param {String} field.type         - field type as string {text / textarea / info / dropdown}
-     * @param {String} field.placeholder  - placeholder text for the current field
-     * @param {String|Number} field.value - value for current field used in info card / drowdown / submit button
+     * Creates single form item with provided field values
+     * 
+     * @param {Object} field - single field
+     * 
+     * @returns {React.Component} - component with Tooltip or not 
+     */
+    _createFormItem (field) {
+        return (
+            <StyledFormItem
+                key={ field.name }
+                name={ field.type !== 'buttongroup' ? field.name : '' }
+                label={ this.props.formSettings.showLabels ? field.label : '' }
+                rules={ field.rules }
+                initialValue={ this._getFieldInitialValue(field) }
+            >
+                { this._createFormInput( field ) }
+            </StyledFormItem>
+        );
+    }
+
+    /**
+     * @method _createFormInput
+     * @private
+     * Create single input content with provided field values
+     * 
+     * @param {Object} field                      - object containing information for single field
+     * @param {String} field.name                 - unique name for the field
+     * @param {String|Object} field.type          - field type as string {text / textarea / info / dropdown}
+     * @param {String} field.placeholder          - placeholder text for the current field
+     * @param {Number} field.maxLength            - input field max length
+     * @param {String} field.optionalClass        - class name for the field
+     * @param {String|Number} field.value         - value for current field used in info card / drowdown / submit button
      * 
      * @returns {Component} React component for the provided field
      */
-
-    createFormInput (field) {
+    _createFormInput (field) {
         if (!field) {
             return null;
         }
@@ -121,19 +187,25 @@ export class GenericForm extends React.Component {
                 return (
                     <Input
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
+                        maxLength={ field.maxLength }
                     />
                 );
             case 'textarea':
                 return (
                     <TextArea
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                     />
                 );
             case 'info':
                 return (
-                    <Card key={ fieldKey }>
+                    <Card
+                        key={ fieldKey }
+                        className={ field.optionalClass }
+                    >
                         { field.value }
                     </Card>
                 );
@@ -141,6 +213,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Select
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         placeholder={ field.placeholder }
                         dropdownStyle={{ zIndex: zIndexValue }}
 
@@ -161,6 +234,7 @@ export class GenericForm extends React.Component {
                 return (
                     <Button
                         key={ fieldKey }
+                        className={ field.optionalClass }
                         type={ field.style }
                         htmlType={ field.buttonType }
                         onClick={ field.onClick }
@@ -175,6 +249,7 @@ export class GenericForm extends React.Component {
                         { field.buttons.map((singleItem) => {
                             return (
                                 <StyledButton
+                                    className={ singleItem.optionalClass }
                                     key={ singleItem.name }
                                     type={ singleItem.style }
                                     disabled={ this.props.formSettings.disabledButtons }
@@ -194,13 +269,15 @@ export class GenericForm extends React.Component {
 
     /**
      * @method _getFieldInitialValue
+     * @private
+     * 
      * Get initial value for each field
+     * 
      * @param {Object} currentField - current field to find value from
      * 
      * @return {String} fieldValue - return initial value for current field
-     * @private
      */
-    _getFieldInitialValue(currentField) {
+    _getFieldInitialValue (currentField) {
         if (currentField.type === 'dropdown') {
             const currentValue = typeof currentField.value.find(option => option.isDefault) !== 'undefined' ? currentField.value.find(option => option.isDefault).value : null;
             return currentValue;
@@ -216,7 +293,7 @@ export class GenericForm extends React.Component {
                 onFinish={ this.props.formSettings.onFinish }
             >
                 <Space direction="vertical">
-                    { this.createFormItems( this.props.fields, this.props.formSettings) }
+                    { this._createFormComponents( this.props.fields, this.props.formSettings) }
                 </Space>     
             </Form>
         );

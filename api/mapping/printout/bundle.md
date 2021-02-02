@@ -10,7 +10,7 @@ Manages settings panel when user has entered to the print mode.
 
 ## Bundle configuration
 
-No configuration is required. Optional configuration is available for print customized scale selection.
+No configuration is required. Optional configuration is available for customized scale selection.
 
 ```javascript
 {

@@ -82,3 +82,8 @@ var sb = Oskari.getSandbox();
 sb.postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', []);
 ```
 After the zooming is completed a 'FeatureEvent' is triggered with operation 'zoom' and array of the features that was zoomed to.
+
+## Related api
+
+- AddFeaturesToMapRequest
+- RemoveFeaturesFromMapRequest

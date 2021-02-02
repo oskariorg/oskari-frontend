@@ -45,7 +45,7 @@ Oskari.registerLocalization(
             "name": {
                 "label": "Kartans namn",
                 "placeholder": "Obligatorisk uppgift",
-                "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan."
+                "tooltip": "Ge namn åt kartan. Välj språket med hänsyn till webbsidans språk."
             },
             "language": {
                 "label": "Språk",
@@ -54,11 +54,12 @@ Oskari.registerLocalization(
                     "sv": "Svenska",
                     "en": "Engelska"
                 },
-                "tooltip": "Välj språk för kartmaterial och användargränssnitt."
+                "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan.",
+                "languageChangedDisclaimer": "Obs! Valt språk visas inte på förhandsvisningskartan."
             },
             "size": {
                 "label": "Kartstorlek",
-                "tooltip": "Välj en kart storlek. Bredd måste vara minst 20 pixel och höjd minst 30 pixel. Skilj av decimal med ett komma. Du ka se uppdateringar på förvisningskartan."
+                "tooltip": "Välj kartans storlek. Vi rekommenderar den skalbara funktionen \"Skalbar / Fyll utrymmet\". Annars skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel."
             },
             "maptools": {
                 "label": "Verktyg",
@@ -191,7 +192,7 @@ Oskari.registerLocalization(
                 "small": "Liten",
                 "medium": "Medelstor",
                 "large": "Stor",
-                "fill": "Fyll utrymmet",
+                "fill": "Skalbar / Fyll utrymmet",
                 "custom": "Anpassad storlek",
                 "width": "bredd",
                 "height": "höjd",
@@ -208,7 +209,7 @@ Oskari.registerLocalization(
             "confirm": {
                 "replace": {
                     "title": "Vill du ersätta den inbäddade kartan?",
-                    "msg": "Förändringarna i den tidigare inbäddade kartan kommer att visas utan dröjsmål på kartan. Du behöver inte lägga till HTML-kod till din webbplats igen."
+                    "msg": "Vill du uppdatera den inbäddade kartan? Förändringarna till den tidigare inbäddade kartan kommer att visas utan dröjsmål på kartan. Du behöver inte ändra html-koden på din webbplats om du inte ändrat kartans storlek."
                 }
             },
             "layerselection": {
@@ -223,7 +224,7 @@ Oskari.registerLocalization(
             "help": "Hjälp",
             "error": {
                 "title": "Fel!",
-                "size": "Fel i storleksdefinitionerna.",
+                "size": "Fel i storleksdefinitionerna. Skall bredden vara minst {minWidth} och högst {maxWidth} pixel, och bredden mellan {minHeight} och {maxHeight} pixel.",
                 "domain": "Webbplatsen är en nödvändig uppgift.",
                 "domainStart": "Skriv webbplatsens adress utan prefixerna http och www",
                 "name": "Kartans namn krävs",

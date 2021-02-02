@@ -122,7 +122,8 @@ Oskari.registerLocalization(
             },
             "PanButtonsPlugin": {
                 "center" : {
-                    "tooltip": "Gå tillbaka till standardvyn för kartvyn"
+                    "tooltip": "Gå tillbaka till standardvyn för kartvyn",
+                    "confirmReset": "Vill du gå tillbaka till standardvyn för kartvyn?"
                 }
             },
             "Tiles3DLayerPlugin": {
