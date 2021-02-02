@@ -54,8 +54,8 @@ export const AreaTab = (props) => {
             <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.lineDash'
-                    label={ <Message messageKey='StyleEditor.stroke.lineDash' /> }
+                    name='stroke.area.lineDash'
+                    label={ <Message messageKey='StyleEditor.stroke.area.lineDash' /> }
                 >
                     <SvgRadioButton
                         options={ constants.LINE_STYLES.lineDash }
