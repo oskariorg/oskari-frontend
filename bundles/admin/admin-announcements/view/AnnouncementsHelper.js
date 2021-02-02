@@ -7,7 +7,7 @@ export const announcementsHelper = () => {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
-            data: {all : true},
+            data: { all: true },
             url: Oskari.urls.getRoute('Announcements'),
             success: function (pResp) {
                 handler(null, pResp);
