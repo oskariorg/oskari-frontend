@@ -13,9 +13,7 @@ const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerCo
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
  */
-Oskari.clazz.define(
-    'Oskari.mapframework.mapmodule.WmsLayerPlugin',
-
+Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
     /**
      * @static @method create called automatically on construction
      */
@@ -34,23 +32,27 @@ Oskari.clazz.define(
         _initImpl () {
             const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             const layerClass = 'Oskari.mapframework.domain.WmsLayer';
-            const composingModel = new LayerComposingModel([
-                LayerComposingModel.CAPABILITIES,
-                LayerComposingModel.CAPABILITIES_STYLES,
-                LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.GFI_TYPE,
-                LayerComposingModel.GFI_XSLT,
-                LayerComposingModel.LEGEND_IMAGE,
-                LayerComposingModel.REALTIME,
-                LayerComposingModel.REFRESH_RATE,
-                LayerComposingModel.SINGLE_TILE,
-                LayerComposingModel.SELECTED_TIME,
-                LayerComposingModel.SRS,
-                LayerComposingModel.STYLE,
-                LayerComposingModel.URL,
-                LayerComposingModel.VERSION
-            ], ['1.1.1', '1.3.0']);
+            const composingModel = new LayerComposingModel(
+                [
+                    LayerComposingModel.CAPABILITIES,
+                    LayerComposingModel.CAPABILITIES_STYLES,
+                    LayerComposingModel.CREDENTIALS,
+                    LayerComposingModel.GFI_CONTENT,
+                    LayerComposingModel.GFI_TYPE,
+                    LayerComposingModel.GFI_XSLT,
+                    LayerComposingModel.LEGEND_IMAGE,
+                    LayerComposingModel.REALTIME,
+                    LayerComposingModel.REFRESH_RATE,
+                    LayerComposingModel.SINGLE_TILE,
+                    LayerComposingModel.SELECTED_TIME,
+                    LayerComposingModel.SRS,
+                    LayerComposingModel.STYLE,
+                    LayerComposingModel.TIMES,
+                    LayerComposingModel.URL,
+                    LayerComposingModel.VERSION
+                ],
+                ['1.1.1', '1.3.0']
+            );
             const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
             mapLayerService.registerLayerModel(type, layerClass, composingModel);
         },
@@ -79,7 +81,10 @@ Oskari.clazz.define(
             var layers = [],
                 olLayers = [];
             // insert layer or sublayers into array to handle them identically
-            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
+            if (
+                (layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) &&
+                layer.getSubLayers().length > 0
+            ) {
                 // replace layers with sublayers
                 layers = layer.getSubLayers();
             } else {
@@ -91,12 +96,12 @@ Oskari.clazz.define(
             for (var i = 0, ilen = layers.length; i < ilen; i++) {
                 var _layer = layers[i];
                 var defaultParams = {
-                        'LAYERS': _layer.getLayerName(),
-                        'TRANSPARENT': true,
-                        'ID': _layer.getId(),
-                        'STYLES': _layer.getCurrentStyle().getName(),
-                        'FORMAT': 'image/png',
-                        'VERSION': _layer.getVersion() || '1.3.0'
+                        LAYERS: _layer.getLayerName(),
+                        TRANSPARENT: true,
+                        ID: _layer.getId(),
+                        STYLES: _layer.getCurrentStyle().getName(),
+                        FORMAT: 'image/png',
+                        VERSION: _layer.getVersion() || '1.3.0'
                     },
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {},
@@ -119,7 +124,7 @@ Oskari.clazz.define(
                 var layerImpl = null;
 
                 var reverseProjection;
-                if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
+                if (layerAttributes && layerAttributes.reverseXY && typeof layerAttributes.reverseXY === 'object') {
                     var projectionCode = this.getMapModule().getProjection();
                     // use reverse coordinate order for this layer!
                     if (layerAttributes.reverseXY[projectionCode]) {
@@ -152,6 +157,11 @@ Oskari.clazz.define(
                 }
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(layerImpl, _layer.getMinScale(), _layer.getMaxScale());
+                // Adjust min zoom level based on timeseries metadata toggle level
+                const metadata = this._getTimeSeriesMetadata(layer);
+                if (metadata.toggleLevel > -1) {
+                    layerImpl.setMinZoom(metadata.toggleLevel);
+                }
                 this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
                 // gather references to layers
                 olLayers.push(layerImpl);
@@ -160,6 +170,12 @@ Oskari.clazz.define(
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
+        },
+
+        _getTimeSeriesMetadata: function (layer) {
+            const options = layer.getOptions();
+            const timeseries = options.timeseries || {};
+            return timeseries.metadata || {};
         },
 
         _registerLayerEvents: function (layer, oskariLayer, prefix) {
@@ -191,14 +207,14 @@ Oskari.clazz.define(
             }
 
             var reverseProjection = new olProjProjection({
-                'code': projectionCode,
-                'units': originalProjection.getUnits(),
-                'extent': originalProjection.getExtent(),
-                'axisOrientation': 'neu',
-                'global': originalProjection.isGlobal(),
-                'metersPerUnit': originalProjection.getMetersPerUnit(),
-                'worldExtent': originalProjection.getWorldExtent(),
-                'getPointResolution': originalProjection.getPointResolution
+                code: projectionCode,
+                units: originalProjection.getUnits(),
+                extent: originalProjection.getExtent(),
+                axisOrientation: 'neu',
+                global: originalProjection.isGlobal(),
+                metersPerUnit: originalProjection.getMetersPerUnit(),
+                worldExtent: originalProjection.getWorldExtent(),
+                getPointResolution: originalProjection.getPointResolution
             });
             return reverseProjection;
         },
@@ -229,7 +245,7 @@ Oskari.clazz.define(
             var olLayerList = this.mapModule.getOLMapLayers(layer.getId()) || [];
             const proxyUrl = Oskari.urls.getRoute('GetLayerTile', { id: layer.getId() });
 
-            olLayerList.forEach(olLayer => {
+            olLayerList.forEach((olLayer) => {
                 var layerSource = olLayer.getSource();
                 // TileWMS -> original is olSourceTileWMS.getTileLoadFunction
                 if (typeof layerSource.getTileLoadFunction === 'function') {
@@ -307,17 +323,18 @@ Oskari.clazz.define(
             }
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
             const layersImpls = this.getOLMapLayers(layer.getId()) || [];
-            layersImpls.forEach(olLayer => {
+            layersImpls.forEach((olLayer) => {
                 // Update min max Resolutions
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
             });
         }
-    }, {
+    },
+    {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
+        protocol: ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
+        extend: ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
     }
 );

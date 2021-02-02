@@ -55,7 +55,7 @@ Oskari.registerLocalization(
                 },
                 "opacity": "Peittävyys",
                 "style": "Oletustyyli",
-                "params": {
+                "params": {
                     "selectedTime": "Valittu aika"
                 },
                 "singleTile": "Single Tile",
@@ -84,7 +84,7 @@ Oskari.registerLocalization(
             "addDataProvider": "Lisää tiedontuottaja",
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
-            "editTheme" : "Muokkaa teemaa",
+            "editTheme": "Muokkaa teemaa",
             "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
@@ -101,6 +101,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
             "capabilities": {
+                "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
@@ -137,12 +138,12 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
-                "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
-                "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
-                "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
-                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
-                "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
-                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
+                "styles": "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                "externalStyles": "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
+                "hover": "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
+                "attributes": "Attribuutit kentän JSON-syntaksi on virheellinen.",
+                "attributions": "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
+                "tileGrid": "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
             },
             "messages": {
                 "saveSuccess": "Tallennettu",
@@ -158,8 +159,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Pyyntö aikakatkaistiin ennen kuin palvelusta saatiin tietoja. Tarkista rajapinnan osoite.",
                 "connectionErrorFetchCapabilities": "Pyynnön lähettäminen palveluun ei onnistunut. Tarkista rajapinnan osoite.",
                 "parsingErrorFetchCapabilities": "Palvelusta saatua vastausta ei saatu tulkittua. Tarkista rajapinnan tyyppi ja versio.",
-                "deleteSuccess" : "Poistettu",
-                "deleteFailed" : "Poisto epäonnistui",
+                "deleteSuccess": "Poistettu",
+                "deleteFailed": "Poisto epäonnistui",
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?"
@@ -168,7 +169,12 @@ Oskari.registerLocalization(
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "deleteGroupLayers": "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

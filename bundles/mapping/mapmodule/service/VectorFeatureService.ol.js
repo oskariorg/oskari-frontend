@@ -221,30 +221,29 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          * @return {String} html content for tooltip or null
          */
         _getTooltipContent (contentOptions, feature) {
-            if (contentOptions) {
-                if (Array.isArray(contentOptions)) {
-                    let content = '';
-                    contentOptions.forEach(function (entry) {
-                        let key = entry.key;
-                        if (typeof key === 'undefined' && entry.keyProperty) {
-                            key = feature.get(entry.keyProperty);
-                        }
-                        if (typeof key !== 'undefined') {
-                            content += '<div>' + key;
-                            if (entry.valueProperty) {
-                                content += ': ';
-                                const value = feature.get(entry.valueProperty);
-                                if (typeof value !== 'undefined') {
-                                    content += value;
-                                }
-                            }
-                            content += '</div>';
-                        }
-                    });
-                    if (content) {
-                        return content;
-                    }
+            if (!contentOptions || !Array.isArray(contentOptions)) {
+                return null;
+            }
+            let content = '';
+            contentOptions.forEach(function (entry) {
+                let key = entry.key;
+                if (typeof key === 'undefined' && entry.keyProperty) {
+                    key = feature.get(entry.keyProperty);
                 }
+                if (typeof key !== 'undefined') {
+                    content += '<div>' + key;
+                    if (entry.valueProperty) {
+                        content += ': ';
+                        const value = feature.get(entry.valueProperty);
+                        if (typeof value !== 'undefined') {
+                            content += value;
+                        }
+                    }
+                    content += '</div>';
+                }
+            });
+            if (content) {
+                return content;
             }
             return null;
         }

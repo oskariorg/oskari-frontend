@@ -1,7 +1,7 @@
 import { Select, Alert, Button } from 'oskari-ui';
 import styled from 'styled-components';
 
-export const StyledAlert = styled(Alert)`;
+export const StyledAlert = styled(Alert)`
     margin-bottom: 5px;
 `;
 

@@ -4,7 +4,8 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
-import * as Cesium from 'cesium/Cesium';
+// see oskari-frontend/webpack/config.js for additional config required by Cesium
+import * as Cesium from 'cesium/Source/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
@@ -443,6 +444,31 @@ class MapModuleOlCesium extends MapModuleOl {
         return super.getLayerIndex(layerImpl);
     }
 
+    /**
+     * Returns if the layer is currently being shown to the user
+     * @param {String|Number|Cesium.Cesium3DTileset|ol.layer} layer id in Oskari or the layer implementation
+     */
+    isLayerVisible (layer) {
+        if (typeof layer === 'undefined') {
+            return false;
+        }
+        if (layer instanceof Cesium.Cesium3DTileset) {
+            // probably passed the layer impl directly
+            return layer.show || false;
+        }
+        if (Array.isArray(layer)) {
+            // getOLMapLayers() returns an array -> check that atleast one of them is visible
+            // group layers can have multiple layers with only some visible
+            return layer.some(l => this.isLayerVisible(l));
+        }
+        if (typeof layer === 'object') {
+            // probably passed the ol layer impl directly
+            return super.isLayerVisible(layer);
+        }
+        // layer is probably id
+        const layerImpl = this.getOLMapLayers(layer);
+        return this.isLayerVisible(layerImpl);
+    }
     /**
      * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
      */

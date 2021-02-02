@@ -26,7 +26,7 @@ div.oskariTabs {
                 border-color: #999;
                 border-width: 1px 1px 0 1px;
                 margin: 0;
-                padding: 0;
+                padding: 0 10px;
 
                 @include box-shadow(0 -3px 3px rgba(0, 0, 0, 0.1) inset);
 
@@ -96,9 +96,7 @@ div.oskariTabs {
     }
 
     div.tab-content {
-        padding-top: 10px;
-        padding-left: 10px;
-        padding-right: 10px;
+        padding: 10px;
         overflow: auto;
         clear: both;
     }

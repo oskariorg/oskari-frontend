@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                     callback: function () {
                         me.setRotation(0);
                     },
-                    sticky: true,
+                    sticky: false,
                     toggleChangeIcon: false
                 }
             },
