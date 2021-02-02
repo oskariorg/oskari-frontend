@@ -127,7 +127,7 @@ table.oskari-grid {
     }
 
     th {
-        padding: 0px;
+        padding: 0px 8px 0px 0px;
         background-color: #F3F3F3;
         position: relative;
 
@@ -140,13 +140,13 @@ table.oskari-grid {
         &.asc {
             background-image: url("../images/asc_arrow.png");
             background-repeat: no-repeat;
-            background-position: right center;
+            background-position: right 5px center;
         }
 
         &.desc {
             background-image: url("../images/desc_arrow.png");
             background-repeat: no-repeat;
-            background-position: right center;
+            background-position: right 5px center;
         }
 
         &.closedSubTable {

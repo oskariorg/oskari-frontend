@@ -1,5 +1,52 @@
 # Release Notes
 
+## 2.1.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/28?closed=1
+
+Additions:
+- ZoomToFeaturesRequest now supports an additional flag that can be used to limit how "close" the map should be zoomed to/usable when theres a single point feature to be zoomed to or features close to each other.
+- VectorLayerRequest now allows vector layers to be cleaned out (previosly you could just remove features from the layers but not the layer itself via RPC)
+- Vector features now support progress bar as well (features added with AddFeaturesToMapRequest)
+- Added localizations for the new layerlist bundle for french and russian
+- Added initial implementation for a generic React-based form component (used in the new my places form)
+
+Functional changes:
+- Printing no longer opens a new window for the result. Instead it opens a file download for the pdf/png. This fixes an issue where saving the pdf from the preview window failed on some browsers.
+- Added a confirmation when user clicks the "reset map state" button
+- Added a tooltip for layers that have "unknown" availability status on the layer listing (previously a popup was shown with the same info).
+- The search description is now more generic and no longer mentions things that are specific for each Oskari instance like real estate identifiers. See linked PRs for https://github.com/oskariorg/oskari-frontend/pull/1350 on how to override this in an instance.
+- My places form has been refactored. The form is no longer tied to the map location so it can be moved out of the way when editing the geometry. Previously the form could block some parts of the feature geometry making it impossible to modify the geometry on some cases.
+
+Fixes:
+- Fixed an issue where adding a my place to an existing layer before opening the layer in my data failed to load the existing places on the layer for listing
+- Search in embedded maps now shows a message if the search limit was reached (too many results handling)
+- Improved performance of layer listing/adding vector features to the map with vector layer changes. Most visible change in the geoportal performance regarding this is on thematic maps.
+- Fixed an issue where metadata search removed all vector features from map when it was closed (for example removed thematic maps)
+- Fixed an issue where getting feature attributes from MVT-layers wasn't working as intended
+- Changed the way MVT-layers are handled if not supported by the map-implementation (wrong projection/not supported in 3d etc). These layers are now referenced in links if they are in selected layers even when they are not actually shown. Fixes an issue where changing between 2D and 3D appsetups removed MVT-layers from selected layers.
+
+UI-issues fixed:
+- Long style names are now handled better in selected layers listing
+- Fixed a style bleeding issue with printout bundle/fixed language select width on publisher-bundle when printout-bundle was not part of the appsetup
+- Fixed an issue with icons in statistical indicator listing
+- Fixed an issue with the mobile toolbar on the map where the map height was not properly calculated on mobile mode.
+
+Updates for libraries:
+- Update OpenLayers: 6.3.1 -> 6.4.3
+- Update CesiumJS: 1.62 -> 1.74
+- Removed special Cesium handling from 3D mapmodule usage. Manual changes required for Oskari-based 3D-applications. See required changes in sample-application: https://github.com/oskariorg/sample-application/pull/15
+- Continued replacing lodash usage with native functions
+
+Documentation:
+- Printout bundle documentation updated
+- Improved ZoomToFeaturesRequest documentation
+- Improved VectorLayerRequest documentation
+- Improved vector feature styling documentation
+- Separated feature attribute based selector documentation to it's own page since it's now used with both styling and filtering vector features
+- StartUserLocationTrackingRequest/StopUserLocationTrackingRequest have been marked for RPC usage on documentation so they are easier to find since they have been available with RPC since they were added
+
 ## 2.0.0
 
 For a full list of changes see:

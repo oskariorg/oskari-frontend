@@ -529,7 +529,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const srs = sandbox.getMap().getSrsName();
             const customStyles = this._getSelectedCustomStyles();
             // printMap has been called outside so keep this separation for mapLinkArgs and selections
-            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText });
+            // ask for optimized link with non-visible layers excluded
+            const optimized = true;
+            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText }, optimized);
             var selections = {};
 
             container.find('.printout_option_cont input').each(function () {

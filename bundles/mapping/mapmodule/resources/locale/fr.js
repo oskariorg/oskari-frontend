@@ -111,7 +111,13 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Centrer la carte sur votre position"
-            }
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Revenir à la vue cartographique par défaut",
+                    "confirmReset": "Souhaitez-vous revenir à l’étendue précédente?"
+                }
+            },
         },
         "guidedTour": {
             "help1": {

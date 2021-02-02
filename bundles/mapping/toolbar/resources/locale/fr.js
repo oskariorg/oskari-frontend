@@ -12,6 +12,7 @@ Oskari.registerLocalization(
             },
             "history": {
                 "reset": "Revenir à la vue cartographique par défaut",
+                "confirmReset": "Souhaitez-vous revenir à l’étendue précédente?",
                 "back": "Revenir à la vue cartographique précédente.",
                 "next": "Aller à la vue cartographique suivante."
             },
