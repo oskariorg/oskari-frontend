@@ -4,6 +4,7 @@ export { Button } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
 export { Confirm } from './components/Confirm';
+export { Divider } from './components/Divider';
 export { Dropdown } from './components/Dropdown';
 export { List, ListItem } from './components/List';
 export { NumberInput } from './components/NumberInput';
@@ -27,6 +28,7 @@ export { Tooltip } from './components/Tooltip';
 export { LocalizationComponent } from './components/LocalizationComponent';
 export { Message } from './components/Message';
 export { GenericForm } from './components/GenericForm';
+export { DateRange } from './components/DateRange';
 export { ColorPicker } from './components/ColorPicker';
 export { StyleEditor } from './components/StyleEditor'
 export { Modal } from './components/Modal';
