@@ -17,7 +17,7 @@ const StyledItem = styled(List.Item)`
 export const StyleSelect = (props) => {
     return (
         <List
-            dataSource={ Object.keys(props.layer.options.styles) }
+            dataSource={ Object.keys(props.layer.options.styles).sort((a, b) => Oskari.util.naturalSort(a, b)) }
             renderItem={ (name) => {
                 return (
                     <StyledItem>
