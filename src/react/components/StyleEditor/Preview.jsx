@@ -110,7 +110,9 @@ export class Preview extends React.Component {
         
         this.previewAttributes.strokeLineCap = format === 'line' ? this.props.oskariStyle.stroke.lineCap : defaults.stroke.lineCap;
 
-        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.oskariStyle.stroke.lineDash === 'dash' ? '4, 4' : '';
+        this.previewAttributes.strokeDashArray = format === 'line' && this.props.oskariStyle.stroke.lineDash === 'dash' ? '4, 4' // line tab
+            : format === 'area' && this.props.oskariStyle.stroke.area.lineDash === 'dash' ? '4, 4' // area tab
+            : ''; // point tab
 
         this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.oskariStyle.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
 
