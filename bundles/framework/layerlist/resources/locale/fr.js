@@ -16,27 +16,27 @@ Oskari.registerLocalization(
             'filter': {
                 'title': 'Afficher',
                 'all': {
-                    'title': 'All layers',
+                    'title': 'Toutes les couches',
                     'tooltip': ''
                 },
                 'search': {
-                    'placeholder': 'Search map layers by name, data producer or keyword',
-                    'tooltip': 'Search map layers by name, data producer or keyword. You can type a whole term or a part of it.'
+                    'placeholder': 'Effectuez une recherche de couches cartographiques par nom, producteur de données ou mot-clé',
+                    'tooltip': 'Effectuez une recherche de couches cartographiques par nom, producteur de données ou mot-clé. Vous pouvez entrer un terme en entier ou une partie de celui-ci.'
                 },
                 'newest': {
                     'title': 'Plus récent',
                     'tooltip': 'Montrer les ## couches cartographiques les plus récentes'
                 },
                 'raster': {
-                    'title': 'Raster layers',
-                    'tooltip': 'Show only raster layers'
+                    'title': 'Les couches de données matricielles',
+                    'tooltip': 'Afficher uniquement les couches de données matricielles'
                 }
             },
             'grouping': {
-                'title': 'Grouping',
+                'title': 'Regroupement',
                 'inspire': 'Par thème',
                 'organization': 'Par fournisseur de données',
-                'noGroup' : 'No group'
+                'noGroup' : 'Aucun groupe'
             },
             'layer': {
                 'tooltip': {
@@ -55,12 +55,12 @@ Oskari.registerLocalization(
                 'DOWN': 'La couche cartographique n’est pas disponible actuellement.',
                 'ERROR': 'La couche cartographique n’est pas disponible actuellement.',
                 'MAINTENANCE': 'Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.',
-                'UNKNOWN': '',
+                'UNKNOWN': "Les informations d'état de cette couche cartographique ne sont pas disponibles.",
                 'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Couches cartographiques',
-                'message': 'In the Map Layers menu you can find all the map layers in the map service.<br/><br/>Sort map layers by theme or data provider.<br/><br/>Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/>You can check currently open map layers in the Selected Layers tab. You can rearrange the layers by dragging, adjust their opacity and change the styling of some layers.',
+                'message': 'Dans le menu Couches cartographiques, vous pouvez trouver toutes les couches disponibles via le service de carte. <br/> <br/> Trier les couches cartographiques par thème ou fournisseur de données. <br/> <br/> Effectuez une recherche de couches cartographiques par nom, fournisseur de données ou mot-clé. Les couches cartographiques les plus récentes se trouvent dans les listes prédéfinies. <br/> <br/> Vous pouvez voir dans l\'onglet Couches sélectionnées si les couches cartographiques sont ouvertes. Vous pouvez réorganiser les couches en les faisant glisser, ajustant leur opacité et modifiant leur style',
                 'openLink': 'Afficher les couches cartographiques',
                 'closeLink': 'Masquer les couches cartographiques',
                 'tileText': 'Couches cartographiques'

@@ -65,15 +65,7 @@ Oskari.clazz.category(
                         iconCls: 'tool-reset',
                         tooltip: loc.history.reset,
                         sticky: false,
-                        callback: function () {
-                            // statehandler reset state
-                            var rb = Oskari.requestBuilder(
-                                'StateHandler.SetStateRequest'
-                            );
-                            if (rb) {
-                                me.getSandbox().request(me, rb());
-                            }
-                        }
+                        callback: () => me._resetClicked()
                     },
                     'history_back': {
                         iconCls: 'tool-history-back',
@@ -193,6 +185,21 @@ Oskari.clazz.category(
                     }
                 }
             }
+        },
+        _resetClicked: function () {
+            const loc = this.getLocalization('buttons');
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const cb = () => {
+                // statehandler reset state
+                const rb = Oskari.requestBuilder(
+                    'StateHandler.SetStateRequest'
+                );
+                if (rb) {
+                    this.getSandbox().request(this, rb());
+                }
+            };
+            popup.show(null, loc.history.confirmReset, popup.createConfirmButtons(cb));
+            popup.makeModal();
         },
         _createMapLinkPopup: function () {
             var sandbox = Oskari.getSandbox();

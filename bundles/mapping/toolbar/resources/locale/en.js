@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "buttons": {
             "link": {
-                "tooltip": "Make a link to the map view.",
+                "tooltip": "Make a link to the map view",
                 "ok": "OK",
                 "copy": "Copy the link to the clipboard",
                 "title": "Link to Map View",
@@ -14,15 +14,16 @@ Oskari.registerLocalization(
                 "skipInfo": "Do not show quick guide"
             },
             "history": {
-                "reset": "Move to the original map view.",
-                "back": "Move to the previous map view.",
-                "next": "Move to the next map view."
+                "reset": "Move to the original map view",
+                "confirmReset": "Do you wish to return to the original view?",
+                "back": "Move to the previous map view",
+                "next": "Move to the next map view"
             },
-            "pan": "Pan the map by dragging it with a mouse.",
-            "zoom": "Zoom in the map view.",
+            "pan": "Pan the map by dragging it with a mouse",
+            "zoom": "Zoom in the map view",
             "measure": {
-                "line": "Measure a line on the map.",
-                "area": "Measure an area on the map."
+                "line": "Measure a line on the map",
+                "area": "Measure an area on the map"
             }
         },
         "measure": {

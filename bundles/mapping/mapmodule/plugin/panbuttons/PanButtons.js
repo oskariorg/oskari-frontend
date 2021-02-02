@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._defaultLocation = 'top right';
         this._index = 20;
         this._name = 'PanButtons';
+        this._panPxs = 100;
 
         me._mobileDefs = {
             buttons: {
@@ -27,17 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     tooltip: '',
                     sticky: false,
                     show: true,
-                    callback: function (el) {
-                        if (!me.inLayerToolsEditMode()) {
-                            var requestBuilder = Oskari.requestBuilder(
-                                'StateHandler.SetStateRequest'
-                            );
-                            if (requestBuilder) {
-                                me.getSandbox().request(me, requestBuilder());
-                            } else {
-                                me.getSandbox().resetState();
-                            }
-                        }
+                    callback: function () {
+                        me._resetClicked();
                     }
                 }
             },
@@ -87,16 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('root');
             });
             center.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    var requestBuilder = Oskari.requestBuilder(
-                        'StateHandler.SetStateRequest'
-                    );
-                    if (requestBuilder) {
-                        me.getSandbox().request(me, requestBuilder());
-                    } else {
-                        me.getSandbox().resetState();
-                    }
-                }
+                me._resetClicked();
             });
 
             left.on('mouseover', function (event) {
@@ -106,9 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('left');
             });
             left.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    me.getMapModule().panMapByPixels(-100, 0, true);
-                }
+                me._panClicked(-1, 0);
             });
 
             right.on('mouseover', function (event) {
@@ -118,9 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('right');
             });
             right.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    me.getMapModule().panMapByPixels(100, 0, true);
-                }
+                me._panClicked(1, 0);
             });
 
             top.on('mouseover', function (event) {
@@ -129,10 +108,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             top.on('mouseout', function (event) {
                 panbuttonDivImg.removeClass('up');
             });
-            top.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    me.getMapModule().panMapByPixels(0, -100, true);
-                }
+            top.on('click', function () {
+                me._panClicked(0, -1);
             });
 
             bottom.on('mouseover', function (event) {
@@ -142,9 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 panbuttonDivImg.removeClass('down');
             });
             bottom.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    me.getMapModule().panMapByPixels(0, 100, true);
-                }
+                me._panClicked(0, 1);
             });
             el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
@@ -160,7 +135,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             return el;
         },
-
+        _resetClicked: function () {
+            if (this.inLayerToolsEditMode()) {
+                return;
+            }
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const cb = () => {
+                const requestBuilder = Oskari.requestBuilder(
+                    'StateHandler.SetStateRequest'
+                );
+                if (requestBuilder) {
+                    this.getSandbox().request(this, requestBuilder());
+                } else {
+                    this.getSandbox().resetState();
+                }
+            };
+            popup.show(null, Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.confirmReset'), popup.createConfirmButtons(cb));
+            popup.makeModal();
+        },
+        _panClicked: function (x, y) {
+            if (this.inLayerToolsEditMode()) {
+                return;
+            }
+            const pxX = this._panPxs * x;
+            const pxY = this._panPxs * y;
+            this.getMapModule().panMapByPixels(pxX, pxY, true);
+        },
         /**
          * @public  @method _refresh
          * Called after a configuration change.

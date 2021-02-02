@@ -103,6 +103,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
             "capabilities": {
+                "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
@@ -170,6 +171,11 @@ Oskari.registerLocalization(
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
             "deleteGroupLayers": "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {

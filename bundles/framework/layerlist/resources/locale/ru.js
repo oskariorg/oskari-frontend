@@ -16,7 +16,7 @@ Oskari.registerLocalization(
             'filter': {
                 'title': 'Показать',
                 'all': {
-                    'title': 'All layers',
+                    'title': 'Все слои',
                     'tooltip': ''
                 },
                 'search': {
@@ -28,15 +28,15 @@ Oskari.registerLocalization(
                     'tooltip': 'Показать ## новейших слоев карт'
                 },
                 'raster': {
-                    'title': 'Raster layers',
-                    'tooltip': 'Show only raster layers'
+                    'title': 'Растровые слои',
+                    'tooltip': 'Показать только растровые слои'
                 }
             },
             'grouping': {
-                'title': 'Grouping',
+                'title': 'Сформировать по группам',
                 'inspire': 'По теме',
                 'organization': 'По поставщику данных',
-                'noGroup' : 'No group'
+                'noGroup' : 'Отменить формирование по группам'
             },
             'layer': {
                 'tooltip': {
@@ -55,12 +55,12 @@ Oskari.registerLocalization(
                 'DOWN': 'Слой карты в настоящее время недоступен.',
                 'ERROR': 'Слой карты в настоящее время недоступен.',
                 'MAINTENANCE': 'Слой карты может быть иногда недоступен в течение нескольких следующих дней.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Информация о состоянии этого слоя карты недоступна.',
                 'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Слои карты',
-                'message': 'In the Map Layers menu you can find all the map layers in the map service.<br/><br/>Sort map layers by theme or data provider.<br/><br/>Search map layers by a map layer name, a data provider name or a keyword. Newest map layers, vector layers and publishable layers you can find in pre-defined lists.<br/><br/>You can check currently open map layers in the Selected Layers tab. You can rearrange the layers by dragging, adjust their opacity and change the styling of some layers.',
+                'message': 'В меню "Слои карты" вы можете найти все слои карты, содержащиеся в картографическом сервисе.<br/><br/>Сортировать слои карты по теме или поставщику данных.<br/><br/>Искать слои карты по названию слоя карты, поставщику данных или ключевому слову. Самые последние слои карты, векторные слои и публикуемые слои вы можете найти в предварительно сформированных списках.<br/><br/>Вы можете проверить текущие открытые слои карты во вкладке "Выбранные слои". Вы можете переставлять слои перетаскиванием, регулировать их прозрачность и изменять стиль некоторых слоев.',
                 'openLink': 'Показать Слои карты',
                 'closeLink': 'Скрыть Слои карты',
                 'tileText': 'Слои карты'

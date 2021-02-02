@@ -6,6 +6,8 @@ class LayersPluginOlcs extends LayersPlugin {
      * @param {Cesium.Cesium3DTileset | olLayer} layer
      */
     _isLayerImplVisible (layer) {
+        // NOTE! mapmodule has isLayerVisible() that is the same thing but uses layer id as param
+        // OL version doesn't have this method at all
         if (layer instanceof Cesium.Cesium3DTileset) {
             return layer.show;
         } else {

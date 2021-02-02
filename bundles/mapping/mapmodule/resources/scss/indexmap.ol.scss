@@ -108,6 +108,9 @@ div.mapplugin.indexmap {
 div.ol-overviewmap.ol-control {
     /* reset positioning that is set in ol/ol.css so the indexmap isn't opened outside the browser window */ 
     position: inherit;
+    &.ol-collapsed {
+        background: none;
+    }
 }
 .ol-overviewmap .ol-overviewmap-map {
     border: 1px solid #3c3c3c;
