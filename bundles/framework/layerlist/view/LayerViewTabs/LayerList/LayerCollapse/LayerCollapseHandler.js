@@ -108,8 +108,6 @@ class ViewHandler extends StateHandler {
             const showWarn = [...this.state.showWarn];
             showWarn.splice(index, 1);
             this.updateState({ showWarn });
-        } else {
-            return;
         }
     }
 

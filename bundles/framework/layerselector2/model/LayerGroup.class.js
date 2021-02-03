@@ -1,5 +1,5 @@
 export class LayerGroup {
-    constructor(id, groupMethod, title, rootId, parentId, groups) {
+    constructor (id, groupMethod, title, rootId, parentId, groups) {
         this.id = id;
         this.groupMethod = groupMethod;
         this.name = title;
@@ -11,63 +11,63 @@ export class LayerGroup {
         this.tools = [];
     }
 
-    getRootId() {
+    getRootId () {
         return this.rootId;
     }
-    setRootId(rootId) {
+    setRootId (rootId) {
         this.rootId = rootId;
     }
-    getParentId() {
+    getParentId () {
         return this.parentId;
     }
-    setParentId(parentId) {
+    setParentId (parentId) {
         this.parentId = parentId;
     }
-    getGroups() {
+    getGroups () {
         return this.groups;
     }
-    setGroups(newGroups) {
+    setGroups (newGroups) {
         this.groups = newGroups;
     }
     /**
      * @method getId
      * @return {String}
      */
-    getId() {
+    getId () {
         return this.id;
     }
     /**
      * @return {Boolean}
      */
-    isEditable() {
+    isEditable () {
         return this.id > 0;
     }
     /**
      * @method getGroupMethod
      * @return {String}
      */
-    getGroupMethod() {
+    getGroupMethod () {
         return this.groupMethod;
     }
     /**
      * @method setTitle
      * @param {String} name
      */
-    setTitle(name) {
+    setTitle (name) {
         this.name = name;
     }
     /**
      * @method getTitle
      * @return {String}
      */
-    getTitle() {
+    getTitle () {
         return this.name || '';
     }
     /**
      * @method addLayer
      * @param {Layer} layer
      */
-    addLayer(layer) {
+    addLayer (layer) {
         if (this.searchIndex[layer.getId()]) {
             // Tried adding the same layer again
             return;
@@ -79,34 +79,35 @@ export class LayerGroup {
      * @method addTool
      * @param {Oskari.mapframework.domain.Tool} tool
      */
-    setTools(tools) {
+    setTools (tools) {
         this.tools = tools;
     }
-    getTools() {
+
+    getTools () {
         return this.tools;
     }
     /**
      * @method getLayers
      * @return {Layer[]}
      */
-    getLayers() {
+    getLayers () {
         return this.layers;
     }
-    setLayers(newLayers = []) {
+    setLayers (newLayers = []) {
         this.layers = newLayers;
     }
-    _getSearchIndex(layer) {
+    _getSearchIndex (layer) {
         var val = layer.getName() + ' ' +
             layer.getInspireName() + ' ' +
             layer.getOrganizationName();
         // TODO: maybe filter out undefined texts
         return val.toLowerCase();
     }
-    matchesKeyword(layerId, keyword) {
+    matchesKeyword (layerId, keyword) {
         var searchableIndex = this.searchIndex[layerId];
         return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
     }
-    clone() {
+    clone () {
         const clone = new LayerGroup(this.id, this.groupMethod, this.name);
         clone.layers = [...this.layers];
         clone.searchIndex = { ...this.searchIndex };

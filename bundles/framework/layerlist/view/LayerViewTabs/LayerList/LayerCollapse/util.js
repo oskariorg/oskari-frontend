@@ -45,7 +45,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         return typeof groupId === 'number' ? groupId : -Math.random();
     };
 
-    const mapGroupsAndLayers = function(group) {
+    const mapGroupsAndLayers = function (group) {
         // group has subgroups
         if (group.hasSubgroups()) {
             // check that group has layers
@@ -60,24 +60,22 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                 // add layer(s) to group
                 for (var i in group.layers) {
                     layers.sort((a, b) => comparator(a, b, method))
-                    .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
-                    .forEach(layer => {
-                        if (group.layers[i].id == layer._id) {
-                            newGroup.addLayer(layer);
-                        }
-                    });
+                        .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
+                        .forEach(layer => {
+                            if (group.layers[i].id == layer._id) {
+                                newGroup.addLayer(layer);
+                            }
+                        });
                 }
                 // check possible subgroups
                 const mappedSubgroups = group.getGroups().map(subgroup => {
                     return mapGroupsAndLayers(subgroup);
                 });
                 // filter out subgroups that don't have a layer nor a subgroup with a layer
-                const filteredSubGroups = mappedSubgroups.filter(g => g !== undefined)
-                filteredSubGroups.length > 0 && newGroup.setGroups(filteredSubGroups)
+                const filteredSubGroups = mappedSubgroups.filter(g => g !== undefined);
+                filteredSubGroups.length > 0 && newGroup.setGroups(filteredSubGroups);
                 return newGroup;
-            } else {
-                    return;
-                }
+            }
         } else {
             if (group.layers && group.layers.length > 0) {
                 const subLang = Oskari.getLang();
@@ -87,18 +85,16 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                     group.id, method, subName[subLang]
                 );
                 newGroup.setTools(tools);
-                for (var i in group.layers) {
+                for (var j in group.layers) {
                     layers.sort((a, b) => comparator(a, b, method))
-                    .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
-                    .forEach(layer => {
-                        if (group.layers[i].id == layer._id) {
-                            newGroup.addLayer(layer);
-                        }
-                    });
+                        .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
+                        .forEach(layer => {
+                            if (group.layers[j].id == layer._id) {
+                                newGroup.addLayer(layer);
+                            }
+                        });
                 }
                 return newGroup;
-            } else {
-                return;
             }
         }
     };
@@ -118,14 +114,14 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                     );
                 }
                 groupForOrphans.addLayer(layer);
-            } 
-    });
+            }
+        });
     // recursively map groups and layers together
     allGroups.map(parentGroup => {
-            group = mapGroupsAndLayers(parentGroup);
-            if (group != undefined) {
-                groupList.push(group);
-            }
+        group = mapGroupsAndLayers(parentGroup);
+        if (group != undefined) {
+            groupList.push(group);
+        }
     });
 
     let groupsWithoutLayers = [];
@@ -173,8 +169,8 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
         // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
         return typeof groupId === 'number' ? groupId : -Math.random();
     };
-    
-    const mapGroupsAndLayers = function(group) {
+
+    const mapGroupsAndLayers = function (group) {
         if (group.hasSubgroups()) {
             const lang = Oskari.getLang();
             const name = group.getName();
@@ -185,43 +181,37 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
             newGroup.setTools(tools);
 
             for (var i in group.layers) {
-
                 layers.sort((a, b) => comparator(a, b, method))
-                .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
-                .forEach(layer => {
-                    
-                    if (group.layers[i].id == layer._id) {
-                        newGroup.addLayer(layer);
-                    }
-                });
-            }
-            const mappedSubgroups = group.getGroups().map(subgroup => {
-                return mapGroupsAndLayers(subgroup);
-            });
-            mappedSubgroups && newGroup.setGroups(mappedSubgroups)
-            return newGroup;
-            
-        } else {
-                const subLang = Oskari.getLang();
-                const subName = group.getName();
-                let newGroup = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                    group.id, method, subName[subLang]
-                );
-                newGroup.setTools(tools);
-                for (var i in group.layers) {
-    
-                    layers.sort((a, b) => comparator(a, b, method))
                     .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
                     .forEach(layer => {
-                        
                         if (group.layers[i].id == layer._id) {
                             newGroup.addLayer(layer);
                         }
                     });
-                }
-                return newGroup;
-            
+            }
+            const mappedSubgroups = group.getGroups().map(subgroup => {
+                return mapGroupsAndLayers(subgroup);
+            });
+            mappedSubgroups && newGroup.setGroups(mappedSubgroups);
+            return newGroup;
+        } else {
+            const subLang = Oskari.getLang();
+            const subName = group.getName();
+            let newGroup = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                group.id, method, subName[subLang]
+            );
+            newGroup.setTools(tools);
+            for (var j in group.layers) {
+                layers.sort((a, b) => comparator(a, b, method))
+                    .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
+                    .forEach(layer => {
+                        if (group.layers[j].id == layer._id) {
+                            newGroup.addLayer(layer);
+                        }
+                    });
+            }
+            return newGroup;
         }
     };
 
@@ -240,16 +230,15 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
                     );
                 }
                 groupForOrphans.addLayer(layer);
-            } 
-    });
+            }
+        });
 
     allGroups.map(parentGroup => {
-            group = mapGroupsAndLayers(parentGroup);
-            groupList.push(group);
+        group = mapGroupsAndLayers(parentGroup);
+        groupList.push(group);
     });
-    
+
     let groupsWithoutLayers = [];
-    const lang = Oskari.getLang();
     if (method !== 'getInspireName') {
         groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
             const group = Oskari.clazz.create(

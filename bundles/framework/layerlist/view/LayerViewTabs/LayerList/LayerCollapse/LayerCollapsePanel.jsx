@@ -204,7 +204,7 @@ const LayerCollapsePanel = (props) => {
                     popupStyle={{zIndex: '999999'}}
                 >
                     <Switch size="small" checked={active}
-                    onChange={(checked, event) => onSelect(event, checked, group, controller)} />
+                    onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
                 </Confirm>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
