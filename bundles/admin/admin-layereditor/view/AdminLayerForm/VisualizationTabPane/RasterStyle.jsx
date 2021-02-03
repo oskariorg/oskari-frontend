@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip, Message, Option, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
@@ -54,89 +54,77 @@ LegendImage.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-class RasterStyle extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = { selected: props.layer.style };
-    }
+const RasterStyle = ({ layer, controller, getMessage }) => {
+    const [selected, setSelected] = useState(layer.style);
 
-    getStyleLabel (style) {
+    const isDefaultStyle = name => name === layer.style;
+    const getStyleLabel = style => {
         const { name, title } = style;
         const label = title || name;
-        if (name === this.props.layer.style) {
-            return label + ' (' + this.props.getMessage('styles.default') + ')';
+        if (isDefaultStyle(name)) {
+            return label + ' (' + getMessage('styles.default') + ')';
         }
         return label;
     }
-
-    onStyleChange (selected) {
-        this.setState({
-            selected
-        });
-    }
-
-    onDefaultStyleChange (styleName, selected) {
+    const onDefaultStyleChange = (styleName, selected) => {
         const defaultStyle = selected ? styleName : '';
-        this.props.controller.setStyle(defaultStyle);
+        controller.setStyle(defaultStyle);
     }
 
-    render () {
-        const { layer, controller } = this.props;
-        const { options = {}, capabilities = {}, legendImage } = layer;
-        const styleOptions = capabilities.styles || [];
-        const legends = options.legends || {};
-        if (styleOptions.length === 0) {
-            return (
-                <LegendImage legendImage={legendImage} controller = {controller}/>
-            );
-        }
-        const style = styleOptions.find(s => s.name === this.state.selected) || styleOptions[0];
-        const { name, legend } = style;
-        const legendUrl = legends[name] || legendImage || '';
-        const isDefault = name === layer.style;
+    const { options = {}, capabilities = {}, legendImage } = layer;
+    const styleOptions = capabilities.styles || [];
+    const legends = options.legends || {};
+    if (styleOptions.length === 0) {
         return (
-            <Fragment>
-                <Message messageKey='styles.raster.title'/>
-                <InfoTooltip messageKeys={['styles.raster.styleDesc', 'styles.desc']} />
-                <Border>
-                    <Fragment>
-                        <StyleField>
-                            <StyleSelect
-                                value={name}
-                                onChange={value => this.onStyleChange(value)}
-                            >
-                                { styleOptions.map(option => (
-                                    <Option key={option.name} value={option.name}>
-                                        {this.getStyleLabel(option)}
-                                    </Option>
-                                )) }
-                            </StyleSelect>
-                            <DefaultStyle
-                                checked={isDefault}
-                                onChange={(evt) => this.onDefaultStyleChange(name, evt.target.checked)}
-                            >
-                                <Message messageKey='styles.default'/>
-                            </DefaultStyle>
-                        </StyleField>
-                        <StyledFormField>
-                            <ServiceLegend url = {legend} />
-                        </StyledFormField>
-                        <StyledFormField>
-                            <Fragment>
-                                <Message messageKey='styles.raster.overriddenLegend' />
-                                <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
-                                { legendUrl && <Link url = {legendUrl} /> }
-                                <TextInput
-                                    value = {legendUrl}
-                                    onChange={evt => controller.setLegendUrl(name, evt.target.value)}
-                                />
-                            </Fragment>
-                        </StyledFormField>
-                    </Fragment>
-                </Border>
-            </Fragment>
+            <LegendImage legendImage={legendImage} controller = {controller}/>
         );
     }
+    const style = styleOptions.find(s => s.name === selected) || styleOptions[0];
+    const { name, legend } = style;
+    const legendUrl = legends[name] || legendImage || '';
+    return (
+        <Fragment>
+            <Message messageKey='styles.raster.title'/>
+            <InfoTooltip messageKeys={['styles.raster.styleDesc', 'styles.desc']} />
+            <Border>
+                <Fragment>
+                    <StyleField>
+                        <StyleSelect
+                            value={name}
+                            onChange={setSelected}
+                        >
+                            { styleOptions.map(option => (
+                                <Option key={option.name} value={option.name}>
+                                    {getStyleLabel(option)}
+                                </Option>
+                            )) }
+                        </StyleSelect>
+                        <DefaultStyle
+                            checked={isDefaultStyle(name)}
+                            onClick={evt => onDefaultStyleChange(name, evt.target.checked)}
+                        >
+                            <Message messageKey='styles.default'/>
+                        </DefaultStyle>
+                    </StyleField>
+                    <StyledFormField>
+                        <ServiceLegend url = {legend} />
+                    </StyledFormField>
+                    <StyledFormField>
+                        <Fragment>
+                            <Message messageKey='styles.raster.overriddenLegend' />
+                            <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
+                            { legendUrl && <Link url = {legendUrl} /> }
+                            <TextInput
+                                value = {legendUrl}
+                                onChange={evt => controller.setLegendUrl(name, evt.target.value)}
+                                allowClear = {true}
+                            />
+                        </Fragment>
+                    </StyledFormField>
+                </Fragment>
+            </Border>
+        </Fragment>
+    );
 };
 
 RasterStyle.propTypes = {
