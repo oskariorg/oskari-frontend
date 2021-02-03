@@ -1,42 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Message, Option, TextInput } from 'oskari-ui';
+import { Message, Option, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { LegendImage } from './LegendImage';
-import { StyledFormField, StyledLink, Border, DefaultStyle, StyleField, StyleSelect } from './styled';
-import { SelectOutlined } from '@ant-design/icons';
-
-const ServiceLegend = ({ url }) => {
-    if (!url) {
-        return (
-            <Fragment>
-                <Message messageKey='styles.raster.serviceLegend' />
-                <span>:&nbsp;</span>
-                <Message messageKey='styles.raster.serviceNotAvailable' />
-            </Fragment>
-        );
-    }
-    return (
-        <Tooltip title={url}>
-            <Message messageKey='styles.raster.serviceLegend' />
-            <Link url={url}/>
-        </Tooltip>
-    );
-};
-
-ServiceLegend.propTypes = {
-    url: PropTypes.string
-};
-
-const Link = ({ url }) => (
-    <StyledLink href={url} rel="noreferrer noopener" target="_blank" >
-        <SelectOutlined/>
-    </StyledLink>
-);
-Link.propTypes = {
-    url: PropTypes.string.isRequired
-};
+import { ServiceLegend } from './ServiceLegend';
+import { Link } from './Link';
+import { StyledFormField, Border, DefaultStyle, StyleField, StyleSelect, InlineBlock } from './styled';
 
 const RasterStyle = ({ layer, controller, getMessage }) => {
     const [selected, setSelected] = useState(layer.style);
@@ -97,7 +67,11 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
                         <Fragment>
                             <Message messageKey='styles.raster.overriddenLegend' />
                             <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
-                            { legendUrl && <Link url = {legendUrl} /> }
+                            { legendUrl &&
+                                <InlineBlock>
+                                    <Link url = {legendUrl} />
+                                </InlineBlock>
+                            }
                             <TextInput
                                 value = {legendUrl}
                                 onChange={evt => controller.setLegendUrl(name, evt.target.value)}

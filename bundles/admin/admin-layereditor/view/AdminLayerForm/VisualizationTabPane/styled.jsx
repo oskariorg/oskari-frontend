@@ -13,8 +13,9 @@ export const StyledColumn = {
     Right: styled(Column)`width: 25%;`
 };
 
-export const StyledLink = styled('a')`
-    margin-left: 10px;
+export const InlineBlock = styled('div')`
+    padding-left: 10px;
+    display: inline-block;
 `;
 
 export const Border = styled('div')`
