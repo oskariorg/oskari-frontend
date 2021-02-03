@@ -511,7 +511,11 @@ Oskari.clazz.define(
                 options.layerId = 'VECTOR';
             }
             var layer = this._findOskariLayer(options.layerId);
-            if (!layer && options.remove !== true) {
+            if (!layer) {
+                if (options.remove === true) {
+                    // removal was requested for unrecognized layer id -> don't need to do anything
+                    return;
+                }
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
                 layer.setId(options.layerId);
                 layer.setName(options.layerName || 'VECTOR');
