@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Tooltip, Message, Option, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
+import { LegendImage } from './LegendImage';
 import { StyledFormField, StyledLink, Border, DefaultStyle, StyleField, StyleSelect } from './styled';
 import { SelectOutlined } from '@ant-design/icons';
 
@@ -35,23 +36,6 @@ const Link = ({ url }) => (
 );
 Link.propTypes = {
     url: PropTypes.string.isRequired
-};
-
-const LegendImage = LocaleConsumer(({ legendImage = '', controller, getMessage }) => (
-    <Fragment>
-        <Message messageKey='styles.raster.legendImage'/>
-        <InfoTooltip messageKeys='styles.raster.legendImageDesc'/>
-        <StyledFormField>
-            <TextInput
-                placeholder={getMessage('styles.raster.legendImagePlaceholder')}
-                value={legendImage}
-                onChange={(evt) => controller.setLegendImage(evt.target.value)} />
-        </StyledFormField>
-    </Fragment>
-));
-LegendImage.propTypes = {
-    legendImage: PropTypes.string.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
 const RasterStyle = ({ layer, controller, getMessage }) => {
