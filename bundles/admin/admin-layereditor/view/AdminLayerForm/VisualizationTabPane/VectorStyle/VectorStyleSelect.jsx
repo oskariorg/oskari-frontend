@@ -21,7 +21,7 @@ export const StyleSelect = (props) => {
             renderItem={ (name) => {
                 return (
                     <StyledItem>
-                        <Checkbox onClick={ () => props.controller.setLayerStyle(name) } checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
+                        <Checkbox onClick={ () => props.controller.setStyle(name) } checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
                         <Button onClick={ () => props.editStyleCallback(name) } >
                             <EditOutlined />
                         </Button>

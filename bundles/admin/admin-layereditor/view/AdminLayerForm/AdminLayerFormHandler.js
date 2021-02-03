@@ -3,7 +3,6 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
-import { OSKARI_BLANK_STYLE } from './VisualizationTabPane/OskariDefaultStyle';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -31,8 +30,7 @@ class UIHandler extends StateHandler {
             loading: false,
             tab: DEFAULT_TAB,
             credentialsCollapseOpen: false,
-            scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value),
-            tempStyle: OSKARI_BLANK_STYLE
+            scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
         this.fetchLayerAdminMetadata();
@@ -993,26 +991,6 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    getStyleByName (selectedStyleName) {
-        const layer = this.getState().layer;
-        return layer.options.styles.find((style) => style.name === selectedStyleName).oskariStyle;
-    };
-
-    getStateStyle () {
-        return this.getState().tempStyle;
-    }
-
-    getStyleFromLayer (styleName) {
-        const layer = this.getState().layer;
-        return layer.options.styles[styleName];
-    }
-
-    setLayerStyle (style) {
-        const layer = this.getState().layer;
-        layer.style = style;
-        this.updateState({ layer: layer });
-    }
-
     saveStyleToLayer (style, styleName, originalName) {
         const layer = this.getState().layer;
         if (originalName !== '') {
@@ -1035,17 +1013,11 @@ class UIHandler extends StateHandler {
         delete layer.options.styles[styleName];
         this.updateState({ layer: layer });
     }
-
-    resetStateStyle () {
-        this.updateState({ tempStyle: {} });
-    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
     'addNewFromSameService',
     'layerSelected',
-    'getStateStyle',
-    'getStyleFromLayer',
     'removeStyleFromLayer',
     'saveStyleToLayer',
     'setAttributes',
@@ -1062,7 +1034,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setHoverJSON',
     'setLayerName',
     'setLayerUrl',
-    'setLayerStyle',
     'setLegendImage',
     'setLocalizedNames',
     'setMessage',

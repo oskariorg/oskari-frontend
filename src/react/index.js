@@ -28,5 +28,4 @@ export { LocalizationComponent } from './components/LocalizationComponent';
 export { Message } from './components/Message';
 export { GenericForm } from './components/GenericForm';
 export { ColorPicker } from './components/ColorPicker';
-export { StyleEditor } from './components/StyleEditor'
 export { Modal } from './components/Modal';

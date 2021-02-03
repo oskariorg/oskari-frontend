@@ -1,10 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSelect } from './StyleSelect';
+import { StyleSelect } from './VectorStyle/VectorStyleSelect';
 import { Controller } from 'oskari-ui/util';
-import { Button, Message, Modal, StyleEditor, TextInput } from 'oskari-ui';
+import { Button, Message, Modal, TextInput } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
-import { OSKARI_BLANK_STYLE } from './OskariDefaultStyle';
+import { OSKARI_BLANK_STYLE, StyleEditor } from 'oskari-ui/components/StyleEditor';
 
 export const VectorStyle = (props) => {
     const [editorState, setEditorState] = useState({
@@ -45,10 +45,10 @@ export const VectorStyle = (props) => {
                         modalVisibility: true,
                         styleName: styleName,
                         originalName: styleName,
-                        currentStyle: props.controller.getStyleFromLayer(styleName)
+                        currentStyle: props.layer.options.styles[styleName]
                     });
                 } }
-            />-
+            />
         </Fragment>
     );
 };
