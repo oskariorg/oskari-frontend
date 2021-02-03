@@ -6,6 +6,7 @@ import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
 import { constants, PointTab, LineTab, AreaTab } from './StyleEditor/';
+import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
@@ -46,7 +47,7 @@ export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(props.oskariStyle);
+    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle({ ...OSKARI_BLANK_STYLE, ...props.oskariStyle });
     form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
