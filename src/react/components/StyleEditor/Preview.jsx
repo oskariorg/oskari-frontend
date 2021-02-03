@@ -110,7 +110,7 @@ export class Preview extends React.Component {
         
         this.previewAttributes.strokeLineCap = format === 'line' ? this.props.oskariStyle.stroke.lineCap : defaults.stroke.lineCap;
 
-        this.previewAttributes.strokeDashArray = format !== 'point' && this.props.oskariStyle.stroke.lineDash === 'dash' ? '4, 4' : '';
+        this.previewAttributes.strokeDashArray = this._getPreviewLineDash(format, this.props.oskariStyle);
 
         this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.oskariStyle.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
 
@@ -127,6 +127,24 @@ export class Preview extends React.Component {
 
         return path.outerHTML;
     }
+
+    /**
+     * @method _getPreviewLineDash
+     * @param {String} format - format of the current preview
+     * @param {Object} oskariStyle - current Oskari style
+     * @description Parses current Oskari style on outputs correct linedash value for preview
+     * @returns {String} value of the preview linedash or empty string for point tab
+     */
+    _getPreviewLineDash (format, oskariStyle) {
+        if (format === 'line' && oskariStyle.stroke.lineDash === 'dash') {
+            return '4, 4';
+        } else if (format === 'area' && oskariStyle.stroke.area.lineDash === 'dash') {
+            return '4, 4';
+        }
+
+        return '';
+    }
+
 
     /**
      * @method _parsePath
