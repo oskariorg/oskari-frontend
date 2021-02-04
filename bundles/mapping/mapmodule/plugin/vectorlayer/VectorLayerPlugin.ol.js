@@ -778,10 +778,17 @@ Oskari.clazz.define(
                 me.getMapModule().zoomToExtent(extent);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
-                if (options.minScale) {
+                if (typeof options.minScale === 'number') {
                     var currentScale = this.getMapModule().getMapScale();
                     if (currentScale < options.minScale) {
                         this.getMapModule().zoomToScale(options.minScale, true);
+                    }
+                }
+                // Check max zoom if defined so. Zoom increases when the map is zoomed in. Zoom decreases when the map is zoomed out.
+                if (typeof options.maxZoomLevel === 'number') {
+                    var currentZoom = this.getMapModule().getMapZoom();
+                    if (currentZoom > options.maxZoomLevel) {
+                        this.getMapModule().setZoomLevel(options.maxZoomLevel);
                     }
                 }
             }
