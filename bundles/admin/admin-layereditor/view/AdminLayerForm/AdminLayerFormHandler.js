@@ -1062,7 +1062,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setTab',
     'skipCapabilities',
     'togglePermission',
-    'toggleStyleForm',
     'updateCapabilities',
     'versionSelected'
 ]);

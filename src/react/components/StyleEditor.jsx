@@ -48,7 +48,6 @@ export const StyleEditor = (props) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle({ ...OSKARI_BLANK_STYLE, ...props.oskariStyle });
-    console.log(fieldValuesForForm);
     form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);

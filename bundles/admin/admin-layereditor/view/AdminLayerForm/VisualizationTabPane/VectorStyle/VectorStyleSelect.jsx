@@ -17,7 +17,7 @@ const StyledItem = styled(List.Item)`
 export const StyleSelect = (props) => {
     const styles = props.layer.options.styles;
 
-    if (!styles) {
+    if (!styles && typeof styles === 'undefined') {
         return null;
     }
 

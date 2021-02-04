@@ -4,19 +4,19 @@ import { StyleSelect } from './VectorStyle/VectorStyleSelect';
 import { Controller } from 'oskari-ui/util';
 import { Button, Message, Modal, TextInput } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
-import { OSKARI_BLANK_STYLE, StyleEditor } from 'oskari-ui/components/StyleEditor';
+import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
 export const VectorStyle = (props) => {
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
-        currentStyle: OSKARI_BLANK_STYLE,
+        currentStyle: {},
         styleName: '',
         originalName: ''
     });
 
     const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.originalName);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
-    const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: OSKARI_BLANK_STYLE, modalVisibility: true });
+    const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
         saveStyle();
         setEditorState({ ...editorState, modalVisibility: false });
