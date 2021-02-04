@@ -43,9 +43,7 @@ export const PointTab = (props) => {
                     name='stroke.color'
                     label={ <Message messageKey='StyleEditor.stroke.color' /> }
                 >
-                    <ColorPicker
-                        defaultValue={ props.oskariStyle.stroke.color }
-                    />
+                    <ColorPicker />
                 </Form.Item>
 
                 <Form.Item
@@ -53,9 +51,7 @@ export const PointTab = (props) => {
                     name='fill.color'
                     label={ <Message messageKey='StyleEditor.fill.color' /> }
                 >
-                    <ColorPicker
-                        defaultValue={ props.oskariStyle.fill.color }
-                    />
+                    <ColorPicker />
                 </Form.Item>
             </Row>
 
@@ -65,10 +61,7 @@ export const PointTab = (props) => {
                     name='image.shape'
                     label={ <Message messageKey='StyleEditor.image.shape' /> }
                 >
-                    <SvgRadioButton
-                        options={ markers }
-                        defaultValue={ props.oskariStyle.image.shape }
-                    />
+                    <SvgRadioButton options={ markers } />
                 </Form.Item>
             </Row>
 

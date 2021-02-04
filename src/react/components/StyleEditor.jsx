@@ -48,6 +48,7 @@ export const StyleEditor = (props) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle({ ...OSKARI_BLANK_STYLE, ...props.oskariStyle });
+    console.log(fieldValuesForForm);
     form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
@@ -68,7 +69,7 @@ export const StyleEditor = (props) => {
                         <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
                     </TabSelector>
                     <Card>
-                        <StaticForm form={ form } onValuesChange={ onUpdate } >
+                        <StaticForm form={ form } onValuesChange={ onUpdate } initialValues={ fieldValuesForForm } >
                             { selectedTab === 'point' && <PointTab oskariStyle={ props.oskariStyle } /> }
                             { selectedTab === 'line' && <LineTab oskariStyle={ props.oskariStyle } /> }
                             { selectedTab === 'area' && <AreaTab oskariStyle={  props.oskariStyle } /> }
