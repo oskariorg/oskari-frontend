@@ -97,7 +97,7 @@ export class Preview extends React.Component {
 
         this.previewAttributes.fill = format === 'area'
             ? ('url(#' + defaultPatternId + ')') : format !== 'line' 
-            ? this.props.oskariStyle.fill.color : defaults.fill.color;
+            ? this.props.oskariStyle.image.fill.color : defaults.fill.color;
 
         if (format === 'area' && ~this.props.oskariStyle.fill.area.pattern) {
             const patternPath = this._parsePattern(this.props.areaFills.find(pattern => pattern.name === this.props.oskariStyle.fill.area.pattern));

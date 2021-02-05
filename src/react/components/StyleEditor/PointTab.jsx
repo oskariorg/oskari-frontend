@@ -49,7 +49,7 @@ export const PointTab = (props) => {
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='image.fill.color'
-                    label={ <Message messageKey='StyleEditor.fill.color' /> }
+                    label={ <Message messageKey='StyleEditor.image.fill.color' /> }
                 >
                     <ColorPicker />
                 </Form.Item>

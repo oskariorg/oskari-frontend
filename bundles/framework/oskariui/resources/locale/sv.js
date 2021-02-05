@@ -20,6 +20,9 @@ Oskari.registerLocalization({
             image: {
                 shape: 'Ikon',
                 size: 'Storlek',
+                fill: {
+                    color: 'Ifyllnadsfärg för ikon'
+                }
             },
             stroke: {
                 color: 'Linjens färg',
