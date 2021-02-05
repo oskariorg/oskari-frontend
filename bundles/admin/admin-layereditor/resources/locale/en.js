@@ -208,7 +208,10 @@ Oskari.registerLocalization(
                 "role": "Role"
             },
             "styles": {
-                "addStyle": "Add style"
+                "addStyle": "Add style",
+                "validation": {
+                    "name": "Style name missing"
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ export const VectorStyle = (props) => {
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
-        if (editorState.validates) {
+        if (editorState.styleName !== '') {
             saveStyle();
             setEditorState({ ...editorState, modalVisibility: false });
         }

@@ -11,17 +11,14 @@ export const VectorNameInput = (props) => {
         <Form
             form={ vectorNameForm }
             onChange={ () => {
-                console.log('validating');
                 vectorNameForm.validateFields(['styleName']).catch(err => {
-                    console.log('doesnt validate');
                     nameErrors.current = err.errorFields.length > 0;
                 });
 
                 if (nameErrors.current && vectorNameForm.getFieldError('styleName').length === 0) {
-                    console.log('validates');
                     props.stateSetCallback({ ...props.editorState, validates: true });
                 }
-            } }
+            }}
         >
             <Form.Item
                 name='styleName'
@@ -30,9 +27,7 @@ export const VectorNameInput = (props) => {
                 value={ props.styleName }
                 onChange={ (event) => props.stateSetCallback({ ...props.editorState, styleName: event.target.value })}
             >
-                <TextInput
-
-                />
+                <TextInput />
             </Form.Item>
         </Form>
     );
