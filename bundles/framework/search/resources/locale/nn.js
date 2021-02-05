@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Søk ved hjelp av stadnamn, adresse eller eigedomsinformasjon",
         "searchAssistance": "Skriv søkjeord",
         "searchResultCount": "Søket ditt resulterte i {count} resultat.",
+        "searchMoreResults": "Over {count} resultat funne. Ver grei og endre søket.",
         "searchResultDescriptionMoreResults": "Juster søket for å få færre resultat",
         "searchResultDescriptionOrdering": "Du kan sortere resultata ved å klikke på kolonneoverskriftene.",
         "searchResults": "Søkjeresultat",

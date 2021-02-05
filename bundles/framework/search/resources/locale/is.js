@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Leita eftir örnefni.",
         "searchAssistance": "Skrifaðu leitarorð.",
         "searchResultCount": "Leitin skilaði {count} niðurstöður.",
+        "searchMoreResults": "Yfir {count} niðurstöður fundust. Vinsamlegast skerptu á leitinni.",
         "searchResultDescriptionMoreResults": "Skilgreindu leitina til að fækka niðurstöðum.",
         "searchResultDescriptionOrdering": "Þú getur einnig raðað niðurstöðum í töflunni hér að neðan með því að smella á fyrirsagnir dálkanna.",
         "searchResults": "Leitarniðurstöður:",

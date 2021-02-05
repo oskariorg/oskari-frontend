@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "Search term contains illegal characters.",
         "searchDescription": "vyhledávání podle jména místa, adresy nebo identifikátoru budovy.",
         "searchResultCount": "Vyhledávání vrátilo {count} výsledky.",
+        "searchMoreResults": "Nalezeno více než {count} výsledků. Specifikujte dotaz podrobněji.",
         "searchResultDescriptionMoreResults": "Specifikujte podrobněji dotaz, abyste snížili počet výsledků.",
         "searchResultDescriptionOrdering": "Kliknutím na hlavičku sloupce můžete výsledky vyhledávání seřadit.",
         "searchResults": "Výsledky: ",

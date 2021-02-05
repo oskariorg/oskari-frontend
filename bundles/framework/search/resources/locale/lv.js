@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Meklēt pēc vietas nosaukuma, adreses vai nekustamā īpašuma vienības identifikatora",
         "searchResultCount": "Atrastie ieraksti {count} rezultāti.",
+        "searchMoreResults": "Atrasti vairāk kā {count} rezultāti. Lūdzu precizējiet meklēšanas kritērijus",
         "searchResultDescriptionMoreResults": "Precizējiet meklēšanas kritērijus, lai samazinātu rezultātu skaitu",
         "searchResultDescriptionOrdering": "Jūs varat arī sakārtot rezultātus zemāk esošajā tabulā klikšķinot uz kolonnas virsrakstiem",
         "searchResults": "Rezultāti:",

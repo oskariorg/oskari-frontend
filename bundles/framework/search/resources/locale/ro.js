@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Căutare după nume, adresă sau identificator al imobilului",
         "searchResultCount": "Căutarea a returnat {count} rezultate.",
+        "searchMoreResults": "Peste {count} de rezultate găsite. Vă rugăm revizuiţi căutarea",
         "searchResultDescriptionMoreResults": "Definire căutare pentru a micşora numărul de rezultate",
         "searchResultDescriptionOrdering": "Rezultatele se pot ordona în tabelul de mai jos dacă se face click pe capul de coloană",
         "searchResults": "Rezultate:",

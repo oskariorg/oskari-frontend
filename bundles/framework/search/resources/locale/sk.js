@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Vyhľadať podľa názvu miesta, adresy alebo identifikátora jednotiek nehnuteľností",
         "searchAssistance": "Write the search term.",
         "searchResultCount": "Vyhľadávanie vrátilo {count} výsledky.",
+        "searchMoreResults": "Našlo sa vyše {count} výsledkov. Spresnite vyhľadávanie, prosím a skúste znova.",
         "searchResultDescriptionMoreResults": "Zadefinovať vyhľadávanie na zníženie počtu výsledkov",
         "searchResultDescriptionOrdering": "Takisto si môžete objednať výsledky v tabuľke kliknutím na záhlavia stĺpca",
         "searchResults": "Výsledky:",

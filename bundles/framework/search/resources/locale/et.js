@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Otsi kohanime, aadressi või katastritunnuse järgi.",
         "searchAssistance": "Kirjuta otsisõna",
         "searchResultCount": "Otsing tagastas {count} tulemust.",
+        "searchMoreResults": "Otsing andis rohkem kui {count} vastet. Muuda otsing detailsemaks.",
         "searchResultDescriptionMoreResults": "Otsingutulemuste arvu vähendamiseks täpsusta otsingut.",
         "searchResultDescriptionOrdering": "Otsingutulemusi võib tabelis järjestada klikkides veeru päisel.",
         "searchResults": "Tulemused:",

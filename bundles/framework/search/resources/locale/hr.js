@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Pretraživanje po nazivu mjesta, adresi ili oznaci nekretnine..",
         "searchResultCount": "Pretraživanje je dalo {count} rezultati.",
+        "searchMoreResults": "Pronađeno je preko {count} rezultata. Precizirajte pretraživanje.",
         "searchResultDescriptionMoreResults": "Definiraj pretragu kako bi se smanjio broj rezultata.",
         "searchResultDescriptionOrdering": "Rezultate u tablici možete poredati i klikom na naziv stupca.",
         "searchResults": "Rezultati: ",

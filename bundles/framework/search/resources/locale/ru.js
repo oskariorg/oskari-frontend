@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Поиск местоположения по имени места, адресу или идентификатору объекта недвижимости.",
         "searchAssistance": "Введите поисковый запрос",
         "searchResultCount": "Ваш поиск вернулся {count} результаты.",
+        "searchMoreResults": "Более {count} результатов. Уточните поисковый запрос и повторите попытку.",
         "searchResultDescriptionMoreResults": "Уменьшение результатов поиска путем определения условия поиска.",
         "searchResultDescriptionOrdering": "Отсортируйте результаты поиска, щелкнув заголовок столбца в таблице ниже.",
         "searchResults": "Результат поиска",

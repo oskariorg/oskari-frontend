@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Išči po imenu kraja, naslovu ali po identifikatorju nepremičnine.",
         "searchAssistance": "Vpiši iskani izraz.",
         "searchResultCount": "Rezultati iskanja {count} rezultati.",
+        "searchMoreResults": "Najdenih je bilo več kot {count} rezultatov. Prosimo, da omejiš iskalni niz.",
         "searchResultDescriptionMoreResults": "Opredeli iskalne pojme za omejitev rezultatov iskanja.",
         "searchResultDescriptionOrdering": "Rezultate iskanja lahko razvrstiš s klikom na vrh stolpca.",
         "searchResults": "Rezultati:",

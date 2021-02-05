@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Suche nach Ortsname, Adresse oder Kennzahl.",
         "searchAssistance": "Suchbegriff eingeben.",
         "searchResultCount": "Die Suche ergab {count} treffer.",
+        "searchMoreResults": "Über {count} Ergebnisse gefunden. Bitte verfeinern Sie Ihre Suche.",
         "searchResultDescriptionMoreResults": "Verfeinern Sie die Suche, um die Anzahl der Treffer zu verringern.",
         "searchResultDescriptionOrdering": "Sie können die Suchergebnisse in der Tabelle durch Anklicken der Spaltenüberschriften sortieren.",
         "searchResults": "Ergebnisse:",

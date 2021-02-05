@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Keresés a hely neve, címe vagy ingatlan-nyílvántartási azonosítója alapján.",
         "searchResultCount": "A keresés {count} eredményt adott",
+        "searchMoreResults": "Több mint {count} találat. Kérem pontosítsa a keresést.",
         "searchResultDescriptionMoreResults": "Finomítsa a keresést a találatok számának csökkentéséhez.",
         "searchResultDescriptionOrdering": "A táblázat oszlopainak fejlécére kattintva is rendezheti az eredményeket.",
         "searchResults": "Erdmények:",

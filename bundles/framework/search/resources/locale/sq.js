@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Kërko sipas emrit të vendit, adresës apo identifikuesit të njësisë së pronës së paluajtshme",
         "searchResultCount": "Kërkimi është kthyer {count} rezultatet.",
+        "searchMoreResults": "Mbi {count} rezultate të gjetura. Ju lutem përmirësojeni kërkimin tuaj",
         "searchResultDescriptionMoreResults": "Përcakto kërkimin për të ulur numrin e rezultateve",
         "searchResultDescriptionOrdering": "Ju gjithashtu mund të kërkoni rezultate në tabelën më poshtë duke klikuar në titujt e kolonave",
         "searchResults": "Rezultatet:",

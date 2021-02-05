@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Zoek op plaatsnaam, adres of vastgoedobject ID",
         "searchAssistance": "Schrijf de zoekterm.",
         "searchResultCount": "De zoekopdracht is klaar {count} resultaten.",
+        "searchMoreResults": "Meer dan {count} resultaten gevonden. Verfijn uw zoekopdracht.",
         "searchResultDescriptionMoreResults": "Verfijn de zoekopdracht om het aantal resultaten te verlagen.",
         "searchResultDescriptionOrdering": "U kunt ook de resultaten in de tabel hieronder sorteren door te klikken op de kolomkoppen.",
         "searchResults": "Resultaten:",

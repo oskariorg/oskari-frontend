@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Cerca posizione dal nome del luogo, indirizzo o unità immobiliare identificativa",
         "searchAssistance": "Scrivi il testo da cercare",
         "searchResultCount": "I risultati della tua ricerca sono {count} risultati.",
+        "searchMoreResults": "Più di {count} risultati trovati. Affina la ricerca.",
         "searchResultDescriptionMoreResults": "Affina la ricerca per diminuire il numero di risultati",
         "searchResultDescriptionOrdering": "Puoi ordinare i risultati nella tabella di seguito facendo clic sulle intestazioni delle colonne",
         "searchResults": "Risultati della ricerca:",

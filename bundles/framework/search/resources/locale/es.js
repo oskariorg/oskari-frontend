@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         "searchDescription": "Búsqueda de una ubicación por nombre, dirección o identificador de parcela catastral",
         "searchAssistance": "Escriba el término de búsqueda.",
         "searchResultCount": "La búsqueda devolvió {count} resultados",
+        "searchMoreResults": "Más de {count} resultados encontrados. Por favor, afine su búsqueda",
         "searchResultDescriptionMoreResults": "Defina la búsqueda para reducir el número de resultados",
         "searchResultDescriptionOrdering": "Puede ordenar los resultados de la tabla, haciendo clic en las cabeceras de la columna",
         "searchResults": "Resultados de la búsqueda:",

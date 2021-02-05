@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Søg efter navn, adresse eller matrikelnummer",
         "searchResultCount": "Søgningen gav følgende {count} resultater",
+        "searchMoreResults": "Over {count} resultater blev fundet, specificer din søgning yderligere",
         "searchResultDescriptionMoreResults": "Uddyb søgning for at reducere antallet af resultater",
         "searchResultDescriptionOrdering": "Du kan også bestille resultater i tabellen herunder ved at klikke på kolonneoverskrifterne",
         "searchResults": "Resultater:",

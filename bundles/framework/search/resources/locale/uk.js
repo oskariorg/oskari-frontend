@@ -8,6 +8,7 @@ Oskari.registerLocalization(
         "invalid_characters": "",
         "searchDescription": "Пошук за власною назвою, адресою чи ідентифікатором об'єкта нерухомості.",
         "searchResultCount": "Отримано {count} результати пошуку.",
+        "searchMoreResults": "Знайдено більше {count} результатів. Будь ласка, уточніть пошук",
         "searchResultDescriptionMoreResults": "Уточніть параметри пошуку для зменшення кількості результатів",
         "searchResultDescriptionOrdering": "Ви можете впорядкувати результати пошуку клацнувши на заголовок колонки",
         "searchResults": "Результати:",
