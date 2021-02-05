@@ -21,7 +21,7 @@ Oskari.registerLocalization({
                 shape: 'Symboli',
                 size: 'Koko',
                 fill: {
-                    color: 'Väri'
+                    color: 'Täyttöväri'
                 }
             },
             stroke: {

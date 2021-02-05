@@ -21,7 +21,7 @@ Oskari.registerLocalization({
                 shape: 'Icon',
                 size: 'Size',
                 fill: {
-                    color: 'Colour'
+                    color: 'Fill colour'
                 }
             },
             stroke: {
