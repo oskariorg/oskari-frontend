@@ -682,8 +682,16 @@ Oskari.clazz.define(
             if (!me._features[layerId]) {
                 me._features[layerId] = [];
             }
+            // Remove scale limit options that are only meant to be used to limit zooming with AddFeaturesToMapRequest
+            // but if they are passed to prepareVectorLayer() they also limit visibility of layers.
+            // The same prepareVectorLayer() function is used for VectorLayerRequest where we DO want to limit visibility
+            // Note! Only centerTo, minScale and maxZoomLevel are used. The others are just removed from layerOptions
+            // so we don't accidentally limit visibility when passing them in AddFeaturesToMapRequest
+            // Disable ESLint since it otherwise complains about unused vars
+            // eslint-disable-next-line no-unused-vars
+            const { centerTo, minScale, maxScale, maxZoomLevel, minZoomLevel, minResolution, maxResolution, ...layerOptions } = options;
 
-            layer = me.prepareVectorLayer(options);
+            layer = me.prepareVectorLayer(layerOptions);
             olLayer = me._getOlLayer(layer);
             vectorSource = olLayer.getSource();
 
@@ -693,10 +701,10 @@ Oskari.clazz.define(
                 me.getMapModule().loadingState(layerId, true);
                 for (var key in geometry) {
                     me.getMapModule().loadingState(layerId, true);
-                    me._updateFeature(options, key, geometry[key]);
+                    me._updateFeature(layerOptions, key, geometry[key]);
                     me.getMapModule().loadingState(layerId, false);
                 }
-                me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+                me._applyPrioOnSource(layerOptions.layerId, vectorSource, layerOptions.prio);
                 me.getMapModule().loadingState(layerId, false);
                 return;
             }
@@ -712,13 +720,13 @@ Oskari.clazz.define(
             this.getMapModule().loadingState(layerId, true);
             var features = format.readFeatures(geometry);
             // add cursor if defined so
-            if (options.cursor) {
-                options.attributes['oskari-cursor'] = options.cursor;
+            if (layerOptions.cursor) {
+                layerOptions.attributes['oskari-cursor'] = layerOptions.cursor;
             }
 
-            if (options.attributes && options.attributes !== null && features instanceof Array && features.length) {
+            if (layerOptions.attributes !== null && features instanceof Array && features.length) {
                 features.forEach(function (ftr) {
-                    ftr.setProperties(options.attributes);
+                    ftr.setProperties(layerOptions.attributes);
                 });
             }
             features.forEach(function (feature) {
@@ -730,21 +738,21 @@ Oskari.clazz.define(
                     // setting id using set(key, value) to make id-property asking by get('id') possible
                     feature.set(FTR_PROPERTY_ID, id);
                 }
-                me.setFeatureStyle(options, feature, false);
+                me.setFeatureStyle(layerOptions, feature, false);
             });
             // clear old features if defined so
-            if (options.clearPrevious === true) {
+            if (layerOptions.clearPrevious === true) {
                 vectorSource.clear();
                 me._features[layerId] = [];
             }
             // prio handling
-            var prio = options.prio || 0;
+            var prio = layerOptions.prio || 0;
             me._features[layerId].push({
                 data: features,
                 prio: prio
             });
 
-            me._applyPrioOnSource(layerId, vectorSource, options.prio);
+            me._applyPrioOnSource(layerId, vectorSource, layerOptions.prio);
             vectorSource.addFeatures(features);
 
             // notify other components that features have been added
@@ -773,15 +781,22 @@ Oskari.clazz.define(
                 sandbox.notifyAll(addEvent);
             }
             // re-position map when opted
-            if (options.centerTo === true) {
+            if (centerTo === true) {
                 var extent = vectorSource.getExtent();
                 me.getMapModule().zoomToExtent(extent);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
-                if (options.minScale) {
+                if (typeof minScale === 'number') {
                     var currentScale = this.getMapModule().getMapScale();
-                    if (currentScale < options.minScale) {
-                        this.getMapModule().zoomToScale(options.minScale, true);
+                    if (currentScale < minScale) {
+                        this.getMapModule().zoomToScale(minScale, true);
+                    }
+                }
+                // Check max zoom if defined so. Zoom increases when the map is zoomed in. Zoom decreases when the map is zoomed out.
+                if (typeof maxZoomLevel === 'number') {
+                    var currentZoom = this.getMapModule().getMapZoom();
+                    if (currentZoom > maxZoomLevel) {
+                        this.getMapModule().setZoomLevel(maxZoomLevel);
                     }
                 }
             }

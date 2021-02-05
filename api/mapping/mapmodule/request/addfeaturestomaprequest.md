@@ -89,7 +89,9 @@ The second parameter is options.
 | animationDuration | number | On update requests it's possible to animate fill color change. Specify animation duration in ms.|
 | attributes | object | Feature's attributes, especially handy when the geometry is a WKT-string.|
 | clearPrevious | boolean | when true, the previous features will be cleared|
-| centerTo | boolean | Whether to zoom to the added features.|
+| centerTo | boolean | Whether to zoom to the added features. |
+| maxZoomLevel | number | Limits zooming when using "centerTo" (only functions with centerTo). This is useful with for example zooming to a single point the map is usually zoomed "too close" without any restriction. |
+| minScale | number | Same as maxZoomLevel, but instead of zoom level this restricts by scale. |
 | cursor | string | Mouse cursor when cursor is over the feature.|
 | prio | number | Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.|
 | featureStyle | object | Defines a generic style used for all the features.|
