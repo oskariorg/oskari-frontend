@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSelect } from './VectorStyle/VectorStyleSelect';
+import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { Controller } from 'oskari-ui/util';
 import { Button, Message, Modal, TextInput } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
@@ -18,8 +18,10 @@ export const VectorStyle = (props) => {
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
-        saveStyle();
-        setEditorState({ ...editorState, modalVisibility: false });
+        if (editorState.styleName !== '') {
+            saveStyle();
+            setEditorState({ ...editorState, modalVisibility: false });
+        }
     };
 
     return (
@@ -37,7 +39,7 @@ export const VectorStyle = (props) => {
                 />
             </Modal>
 
-            <StyleSelect
+            <VectorStyleSelect
                 layer={ props.layer }
                 controller={ props.controller }
                 editStyleCallback={ (styleName) => {
