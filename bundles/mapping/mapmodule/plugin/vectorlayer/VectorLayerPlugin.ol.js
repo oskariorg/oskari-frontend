@@ -683,10 +683,12 @@ Oskari.clazz.define(
                 me._features[layerId] = [];
             }
             // Remove scale limit options that are only meant to be used to limit zooming with AddFeaturesToMapRequest
-            // but if they are passed to prepareVectorLayer() they also limit visibility of layers.  
+            // but if they are passed to prepareVectorLayer() they also limit visibility of layers.
             // The same prepareVectorLayer() function is used for VectorLayerRequest where we DO want to limit visibility
             // Note! Only centerTo, minScale and maxZoomLevel are used. The others are just removed from layerOptions
             // so we don't accidentally limit visibility when passing them in AddFeaturesToMapRequest
+            // Disable ESLint since it otherwise complains about unused vars
+            // eslint-disable-next-line no-unused-vars
             const { centerTo, minScale, maxScale, maxZoomLevel, minZoomLevel, minResolution, maxResolution, ...layerOptions } = options;
 
             layer = me.prepareVectorLayer(layerOptions);
