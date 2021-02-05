@@ -199,7 +199,10 @@ Oskari.registerLocalization(
                 "role": "Rooli"
             },
             "styles": {
-                "addStyle": "Lisää tyyli"
+                "addStyle": "Lisää tyyli",
+                "validation": {
+                    "name": "Täytä nimi tyylille"
+                }
             }
         }
     }

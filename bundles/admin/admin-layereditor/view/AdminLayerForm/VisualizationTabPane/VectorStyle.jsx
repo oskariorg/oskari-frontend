@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSelect } from './VectorStyle/VectorStyleSelect';
+import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
+import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { Controller } from 'oskari-ui/util';
-import { Button, Message, Modal, TextInput } from 'oskari-ui';
+import { Button, Message, Modal } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
@@ -11,15 +12,18 @@ export const VectorStyle = (props) => {
         modalVisibility: false,
         currentStyle: {},
         styleName: '',
-        originalName: ''
+        originalName: '',
+        validates: false
     });
 
     const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.originalName);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
-        saveStyle();
-        setEditorState({ ...editorState, modalVisibility: false });
+        if (editorState.validates) {
+            saveStyle();
+            setEditorState({ ...editorState, modalVisibility: false });
+        }
     };
 
     return (
@@ -29,15 +33,16 @@ export const VectorStyle = (props) => {
                 <Message messageKey="styles.addStyle" />
             </Button>
 
-            <Modal visible={ editorState.modalVisibility } onOk={ onModalOk } onCancel={ onModalCancel }>
-                <TextInput value={ editorState.styleName } onChange={ (event) => setEditorState({ ...editorState, styleName: event.target.value }) } />
+            <Modal visible={ editorState.modalVisibility } okButtonPros={ 'disabled' } onOk={ onModalOk } onCancel={ onModalCancel }>
+                <VectorNameInput editorState={ editorState } styleName={ editorState.styleName } stateSetCallback={ setEditorState } />
+
                 <StyleEditor
                     oskariStyle={ editorState.currentStyle }
                     onChange={ (style) => setEditorState({ ...editorState, currentStyle: style })}
                 />
             </Modal>
 
-            <StyleSelect
+            <VectorStyleSelect
                 layer={ props.layer }
                 controller={ props.controller }
                 editStyleCallback={ (styleName) => {

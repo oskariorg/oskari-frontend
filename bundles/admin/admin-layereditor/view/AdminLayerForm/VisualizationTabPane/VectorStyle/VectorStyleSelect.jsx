@@ -14,7 +14,7 @@ const StyledItem = styled(List.Item)`
     }
 `;
 
-export const StyleSelect = (props) => {
+export const VectorStyleSelect = (props) => {
     const styles = props.layer.options.styles;
 
     if (!styles && typeof styles === 'undefined') {
@@ -41,7 +41,7 @@ export const StyleSelect = (props) => {
     );
 };
 
-StyleSelect.propTypes = {
+VectorStyleSelect.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
     editStyleCallback: PropTypes.func
