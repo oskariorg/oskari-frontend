@@ -68,10 +68,12 @@ Oskari.clazz.define(
                 '  </div>' +
                 '</div>'
             );
-
             me.templateResultsTable = jQuery(
                 '<table class="search-results">' +
                 '  <thead>' +
+                '    <tr>' +
+                '      <th class="search-results-count" colspan="3"/>' +
+                '    </tr>' +
                 '    <tr>' +
                 '      <th>' + me._loc.column_name + '</th>' +
                 '      <th>' + me._loc.column_region + '</th>' +
@@ -375,6 +377,9 @@ Oskari.clazz.define(
                     // many results, show all
                     const table = me.templateResultsTable.clone();
                     const tableBody = table.find('tbody');
+                    const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
+                    const resultMsg = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + msgKey, { count: totalCount });
+                    table.find('.search-results-count').html(resultMsg);
 
                     locations.forEach((result, i) => {
                         const { type, region, name } = result;
@@ -391,13 +396,6 @@ Oskari.clazz.define(
 
                         tableBody.append(row);
                     });
-                    if (hasMore) {
-                        tableBody.prepend(
-                            '<tr>' +
-                            '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
-                            '</tr>'
-                        );
-                    }
 
                     if (!(me.getConfig() && me.getConfig().toolStyle)) {
                         tableBody.find(':odd').addClass('odd');

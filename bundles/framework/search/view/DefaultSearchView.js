@@ -285,13 +285,8 @@ Oskari.clazz.define(
             );
         },
         __getSearchResultHeader: function (count, hasMore) {
-            var msg = this.loc('searchResultCount', { hasMore, count });
-
-            if (hasMore) {
-                // more results available
-                msg = msg + ' ' + this.loc('searchResultDescriptionMoreResults');
-            }
-            return msg + '<br/>' + this.loc('searchResultDescriptionOrdering');
+            const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
+            return this.loc(msgKey, { count }) + '<br/>' + this.loc('searchResultDescriptionOrdering');
         },
 
         _renderResults: function (result, searchKey) {
