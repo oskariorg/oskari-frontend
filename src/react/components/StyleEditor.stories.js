@@ -61,7 +61,7 @@ const oskariTestStyle = {
             color: '#000000' // fill color
         },
         stroke: { // text stroke style
-            color: '#ffffff', // stroke color
+            color: '#cc89dd', // stroke color
             width: 1 // stroke width
         },
         font: 'bold 12px Arial', // font

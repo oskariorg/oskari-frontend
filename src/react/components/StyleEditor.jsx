@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
 import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { constants, PointTab, LineTab, AreaTab } from './StyleEditor/';
-import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor';
+import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
@@ -46,16 +45,24 @@ const StaticForm = styled(Form)`
 export const StyleEditor = (props) => {
     let [form] = Form.useForm();
 
+    const style = {
+        ... OSKARI_BLANK_STYLE,
+        ...props.oskariStyle
+    };
+
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle({ ...OSKARI_BLANK_STYLE, ...props.oskariStyle });
-    form.setFieldsValue(fieldValuesForForm);
+    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
-    const updateStyle = FormToOskariMapper.createStyleAdjuster(props.oskariStyle);
+    const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
     const onUpdate = (values) => {
         // {image.shape: 3}
         const newStyle = updateStyle(values);
         props.onChange(newStyle)
     };
+
+    useEffect(() => {
+        form.setFieldsValue(fieldValuesForForm);
+    }, [props.oskariStyle]);
 
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
@@ -68,10 +75,10 @@ export const StyleEditor = (props) => {
                         <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
                     </TabSelector>
                     <Card>
-                        <StaticForm form={ form } onValuesChange={ onUpdate } initialValues={ fieldValuesForForm } >
-                            { selectedTab === 'point' && <PointTab oskariStyle={ props.oskariStyle } /> }
-                            { selectedTab === 'line' && <LineTab oskariStyle={ props.oskariStyle } /> }
-                            { selectedTab === 'area' && <AreaTab oskariStyle={  props.oskariStyle } /> }
+                        <StaticForm form={ form } onValuesChange={ onUpdate }>
+                            { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
+                            { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
+                            { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
                         </StaticForm>
                     </Card>
                 </Card>

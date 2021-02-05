@@ -327,6 +327,15 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setLegendUrl (styleName, url) {
+        const options = { ...this.getState().layer.options };
+        if (!options.legends) {
+            options.legends = {};
+        }
+        options.legends[styleName] = url;
+        this.setOptions(options);
+    }
+
     setStyleJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
     }
@@ -1035,6 +1044,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setLayerName',
     'setLayerUrl',
     'setLegendImage',
+    'setLegendUrl',
     'setLocalizedNames',
     'setMessage',
     'setMessages',

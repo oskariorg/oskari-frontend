@@ -54,8 +54,7 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Opacity",
-                "style": "Default Style",
-                "params": {
+                "params": {
                     "selectedTime": "Selected time"
                 },
                 "singleTile": "Single Tile",
@@ -96,19 +95,32 @@ Oskari.registerLocalization(
             "skipCapabilities": "Add manually",
             "addNewFromSameService": "Add a new layer from same service",
             "delete": "Remove",
-            "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
-                "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
                 "updateRateDesc": "Update rate in seconds",
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
+            },
+            "styles": {
+                "default": "Default style",
+                "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
+                "raster": {
+                    "title": "Styles and map legends",
+                    "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
+                    "legendImage": "Default legend URL",
+                    "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
+                    "legendImagePlaceholder": "Give the URL address of the map legend.",
+                    "serviceLegend": "Map legend defined in the service",
+                    "overriddenLegend": "Replaced legend URL",
+                    "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
+                    "serviceNotAvailable": "Not available"
+                }
             },
             "layerStatus": {
                 "existing": "The map layer is already registered to this service. By selecting this you will be adding a duplicate layer.",
@@ -121,9 +133,6 @@ Oskari.registerLocalization(
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
-            "legendImage": "Default legend URL",
-            "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
-            "legendImagePlaceholder": "Give the URL address of the map legend.",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
             "supportedSRS": "Supported SRS",
