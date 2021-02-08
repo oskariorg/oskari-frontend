@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Որոնման արդյունքներ",
                 "close": "Փակել որոնման արդյունքները",
                 "noresults": "Ոչ մի արդյուք չի գտնվել",
-                "toomanyresults": "Գտնվել է 100-ից ավել արդյունք: խնդրում ենք մանրամասնել Ձեր որոնումը",
+                "searchResultCount": "Որոնման արդյունքներ {count} Արդյունքներ.",
+                "searchMoreResults": "Գտնվել է {count}-ից ավել արդյունք: խնդրում ենք մանրամասնել Ձեր որոնումը",
                 "column_name": "Անվանում",
                 "column_village": "Համայնք",
                 "column_type": "Տեսակ"

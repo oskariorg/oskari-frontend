@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Резултати от търсенето",
                 "close": "Затваряне на резултатите от търсенето",
                 "noresults": "Не са намерени резултати",
-                "toomanyresults": "Намерени са повече от 100 резултата. Моля, прецизирайте търсенето си",
+                "searchResultCount": "Връщане на търсенето {count} резултати",
+                "searchMoreResults": "Намерени са повече от {count} резултата. Моля, прецизирайте търсенето си",
                 "column_name": "Име",
                 "column_village": "Община",
                 "column_type": "Тип"
