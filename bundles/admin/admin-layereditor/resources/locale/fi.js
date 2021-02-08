@@ -121,6 +121,13 @@ Oskari.registerLocalization(
                     "overriddenLegend": "Korvaava karttaselite",
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
                     "serviceNotAvailable": "Ei saatavilla"
+                },
+                "vector": {
+                    "addStyle": "Lisää tyyli",
+                    "newStyleName": "Uusi tyyli",
+                    "validation": {
+                        "name": "Täytä nimi tyylille"
+                    }
                 }
             },
             "layerStatus": {
@@ -197,12 +204,6 @@ Oskari.registerLocalization(
                 "DOWNLOAD": "Latausoikeus",
                 "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
                 "role": "Rooli"
-            },
-            "styles": {
-                "addStyle": "Lisää tyyli",
-                "validation": {
-                    "name": "Täytä nimi tyylille"
-                }
             }
         }
     }

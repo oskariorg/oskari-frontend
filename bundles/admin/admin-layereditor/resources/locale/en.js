@@ -120,6 +120,13 @@ Oskari.registerLocalization(
                     "overriddenLegend": "Replaced legend URL",
                     "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
                     "serviceNotAvailable": "Not available"
+                },
+                "vector": {
+                    "newStyleName": "New style",
+                    "addStyle": "Add style",
+                    "validation": {
+                        "name": "Style name missing"
+                    }
                 }
             },
             "layerStatus": {
@@ -206,12 +213,6 @@ Oskari.registerLocalization(
                 "DOWNLOAD": "Download",
                 "VIEW_PUBLISHED": "View in Embedded map",
                 "role": "Role"
-            },
-            "styles": {
-                "addStyle": "Add style",
-                "validation": {
-                    "name": "Style name missing"
-                }
             }
         }
     }
