@@ -13,7 +13,7 @@ const hasValidName = (name) => {
 };
 
 export const VectorStyle = LocaleConsumer((props) => {
-    const newStyleName = props.getMessage('styles.newStyleName');
+    const newStyleName = props.getMessage('styles.vector.newStyleName');
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
         currentStyle: {},
