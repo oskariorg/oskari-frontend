@@ -23,10 +23,10 @@ const RadioIcon = styled(Radio.Button)`
 
 export const SvgRadioButton = (props) => {
     return (
-        <Radio.Group defaultValue={ props.defaultValue } { ...props.formLayout } onChange={ props.onChange }>
+        <Radio.Group name={ props.id + '.radio' } { ...props.formLayout } onChange={ props.onChange } value={ props.value }>
             { props.options.map((singleOption, index) => {
                 return(
-                    <RadioIcon key={ props.name + '-' + (singleOption.name || index) } value={ singleOption.name || index }>
+                    <RadioIcon key={ props.id + '-' + (singleOption.name || index) } value={ (singleOption.name || index) }>
                         <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
                     </RadioIcon>
                 );

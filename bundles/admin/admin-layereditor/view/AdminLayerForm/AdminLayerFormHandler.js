@@ -999,11 +999,36 @@ class UIHandler extends StateHandler {
 
         this.updateState({ layer });
     }
+
+    saveStyleToLayer (style, styleName, originalName) {
+        const layer = this.getState().layer;
+        if (originalName !== '') {
+            delete layer.options.styles[originalName];
+        }
+
+        layer.options.styles = {
+            ...layer.options.styles,
+            [styleName]: style
+        };
+
+        if (layer.style === originalName) {
+            layer.style = styleName;
+        }
+        this.updateState({ layer: layer });
+    }
+
+    removeStyleFromLayer (styleName) {
+        const layer = this.getState().layer;
+        delete layer.options.styles[styleName];
+        this.updateState({ layer: layer });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
     'addNewFromSameService',
     'layerSelected',
+    'removeStyleFromLayer',
+    'saveStyleToLayer',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',

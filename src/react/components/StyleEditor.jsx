@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
 import { Message } from './Message';
@@ -52,7 +52,6 @@ export const StyleEditor = (props) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
-    form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
     const onUpdate = (values) => {
@@ -60,6 +59,10 @@ export const StyleEditor = (props) => {
         const newStyle = updateStyle(values);
         props.onChange(newStyle)
     };
+
+    useEffect(() => {
+        form.setFieldsValue(fieldValuesForForm);
+    }, [props.oskariStyle]);
 
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
@@ -72,7 +75,7 @@ export const StyleEditor = (props) => {
                         <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
                     </TabSelector>
                     <Card>
-                        <StaticForm form={ form } onValuesChange={ onUpdate } initialValues={ fieldValuesForForm } >
+                        <StaticForm form={ form } onValuesChange={ onUpdate }>
                             { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
                             { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
                             { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }

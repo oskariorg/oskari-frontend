@@ -13,7 +13,7 @@ import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
 import { RasterStyle } from './RasterStyle';
 import { TimeSeries } from './TimeSeries';
-import { AdminStyleForm } from './AdminStyleForm';
+import { VectorStyle } from './VectorStyle';
 
 const {
     OPACITY,
@@ -51,7 +51,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <RasterStyle layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&
-                <AdminStyleForm layer={layer} controller={controller} />
+                <VectorStyle layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
