@@ -448,11 +448,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             even = !even;
 
             row = this.template.tableRow.clone();
-            // FIXME this is unnecessary, we can do this with a css selector.
-            if (!even) {
+            const skipLabel = key.startsWith(ID_SKIP_LABEL);
+            if (!skipLabel && !even) {
                 row.addClass('odd');
             }
-            const skipLabel = key.startsWith(ID_SKIP_LABEL);
             if (!skipLabel) {
                 keyColumn = this.template.tableCell.clone();
                 keyColumn.append(key);
