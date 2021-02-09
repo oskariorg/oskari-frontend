@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Option, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { LegendImage } from './LegendImage';
+import { LegendImage, GLOBAL_LEGEND } from './LegendImage';
 import { ServiceLegend } from './ServiceLegend';
 import { Link } from './Link';
 import { StyledFormField, Border, DefaultStyle, StyleField, StyleSelect, InlineBlock } from './styled';
@@ -25,17 +25,18 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
         controller.setStyle(defaultStyle);
     }
 
-    const { options = {}, capabilities = {}, legendImage } = layer;
+    const { options = {}, capabilities = {} } = layer;
     const styleOptions = capabilities.styles || [];
     const legends = options.legends || {};
+    const globalLegend = legends[GLOBAL_LEGEND];
     if (styleOptions.length === 0) {
         return (
-            <LegendImage legendImage={legendImage} controller = {controller}/>
+            <LegendImage url={globalLegend} controller = {controller}/>
         );
     }
     const style = styleOptions.find(s => s.name === selected) || styleOptions[0];
     const { name, legend } = style;
-    const legendUrl = legends[name] || legendImage || '';
+    const legendUrl = legends[name] || globalLegend || '';
     return (
         <Fragment>
             <Message messageKey='styles.raster.title'/>
