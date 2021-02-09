@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Resultados da pesquisa",
                 "close": "Fechar resultados da pesquisa",
                 "noresults": "Sem resultados",
-                "toomanyresults": "Mais de 100 resultados. Restrinja a pesquisa",
+                "searchResultCount": "Resultado da pesquisa {count} resultados.",
+                "searchMoreResults": "Mais de {count} resultados. Restrinja a pesquisa",
                 "column_name": "Nome",
                 "column_village": "Concelho",
                 "column_type": "Tipo"

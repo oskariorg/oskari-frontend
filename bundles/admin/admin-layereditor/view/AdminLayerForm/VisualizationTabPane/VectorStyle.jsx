@@ -2,39 +2,52 @@ import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { VectorNameInput } from './VectorStyle/VectorNameInput';
-import { Controller } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Button, Message, Modal } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
-export const VectorStyle = (props) => {
+
+const hasValidName = (name) => {
+    return name.length > 0;
+};
+
+export const VectorStyle = LocaleConsumer((props) => {
+    const newStyleName = props.getMessage('styles.vector.newStyleName');
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
         currentStyle: {},
-        styleName: '',
+        styleName: newStyleName,
         originalName: '',
         validates: false
     });
 
     const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.originalName);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
-    const resetNewStyle = () => setEditorState({ ...editorState, styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
+    const resetNewStyle = () => setEditorState({ ...editorState, styleName: newStyleName, originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
-        if (editorState.styleName !== '') {
+        if (hasValidName(editorState.styleName)) {
             saveStyle();
             setEditorState({ ...editorState, modalVisibility: false });
         }
+    };
+
+    const setName = (name) => {
+        setEditorState({ ...editorState, styleName: name });
     };
 
     return (
         <Fragment>
             <Button onClick={ resetNewStyle }>
                 <PlusOutlined />
-                <Message messageKey="styles.addStyle" />
+                <Message messageKey="styles.vector.addStyle" />
             </Button>
 
             <Modal visible={ editorState.modalVisibility } okButtonPros={ 'disabled' } onOk={ onModalOk } onCancel={ onModalCancel }>
-                <VectorNameInput editorState={ editorState } styleName={ editorState.styleName } stateSetCallback={ setEditorState } />
+                <VectorNameInput
+                    styleName={ editorState.styleName }
+                    isValid={ hasValidName(editorState.styleName) }
+                    onChange={ setName } />
 
                 <StyleEditor
                     oskariStyle={ editorState.currentStyle }
@@ -56,7 +69,7 @@ export const VectorStyle = (props) => {
             />
         </Fragment>
     );
-};
+});
 
 VectorStyle.propTypes = {
     layer: PropTypes.object.isRequired,

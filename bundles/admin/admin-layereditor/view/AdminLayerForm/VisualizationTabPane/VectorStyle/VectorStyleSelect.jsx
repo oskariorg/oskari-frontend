@@ -14,24 +14,29 @@ const StyledItem = styled(List.Item)`
     }
 `;
 
-export const VectorStyleSelect = (props) => {
-    const styles = props.layer.options.styles;
+export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
+    const { styles } = layer.options;
 
-    if (!styles && typeof styles === 'undefined') {
+    if (typeof styles !== 'object') {
         return null;
     }
+    const sortedStyleIds = Object.keys(styles).slice()
+        .sort((a, b) => Oskari.util.naturalSort(a, b));
+
+    const canEdit = typeof editStyleCallback === 'function';
+    const selectedStyle = layer.style || 'default';
 
     return (
         <List
-            dataSource={ Object.keys(props.layer.options.styles).sort((a, b) => Oskari.util.naturalSort(a, b)) }
+            dataSource={ sortedStyleIds }
             renderItem={ (name) => {
                 return (
                     <StyledItem>
-                        <Checkbox onClick={ () => props.controller.setStyle(name) } checked={ name === (props.layer.style || 'default') }>{ name }</Checkbox>
-                        <Button onClick={ () => props.editStyleCallback(name) } >
+                        <Checkbox onClick={ () => controller.setStyle(name) } checked={ name === selectedStyle }>{ name }</Checkbox>
+                        { canEdit && <Button onClick={ () => editStyleCallback(name) } >
                             <EditOutlined />
-                        </Button>
-                        <Button onClick={ () => props.controller.removeStyleFromLayer(name) }>
+                        </Button> }
+                        <Button onClick={ () => controller.removeStyleFromLayer(name) }>
                             <DeleteOutlined />
                         </Button>
                     </StyledItem>

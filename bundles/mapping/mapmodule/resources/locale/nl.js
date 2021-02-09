@@ -45,7 +45,8 @@ Oskari.registerLocalization(
                 "title": "Zoekresultaten",
                 "close": "Sluit zoekresultaten",
                 "noresults": "Geen resultaten gevonden",
-                "toomanyresults": "Meer dan 100 resultaten gevonden. Verfijn uw zoekopdracht.",
+                "searchResultCount": "De zoekopdracht is klaar {count} resultaten.",
+                "searchMoreResults": "Meer dan {count} resultaten gevonden. Verfijn uw zoekopdracht.",
                 "column_name": "Naam",
                 "column_village": "Gemeente",
                 "column_type": "Type"

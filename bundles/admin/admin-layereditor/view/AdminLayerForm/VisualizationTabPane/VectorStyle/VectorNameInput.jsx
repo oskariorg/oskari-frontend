@@ -1,40 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
-import { Form } from 'antd';
 
-export const VectorNameInput = (props) => {
-    const [vectorNameForm] = Form.useForm();
-    const nameErrors = useState(false);
-    vectorNameForm.setFieldsValue({ styleName: props.styleName });
+export const VectorNameInput = ({ styleName = '', onChange, isValid = true }) => {
     return (
-        <Form
-            form={ vectorNameForm }
-            onChange={ () => {
-                vectorNameForm.validateFields(['styleName']).catch(err => {
-                    nameErrors.current = err.errorFields.length > 0;
-                });
-
-                if (nameErrors.current && vectorNameForm.getFieldError('styleName').length === 0) {
-                    props.stateSetCallback({ ...props.editorState, validates: true });
-                }
-            }}
-        >
-            <Form.Item
-                name='styleName'
-                key='styleName'
-                rules={[{ required: true, message: <Message messageKey="styles.validation.name" /> }]}
-                value={ props.styleName }
-                onChange={ (event) => props.stateSetCallback({ ...props.editorState, styleName: event.target.value })}
-            >
-                <TextInput />
-            </Form.Item>
-        </Form>
+        <React.Fragment>
+            <TextInput value={ styleName }
+                onChange={ (event) => onChange(event.target.value) } />
+            { !isValid && <Message messageKey="styles.vector.validation.name" /> }
+        </React.Fragment>
     );
 };
 
 VectorNameInput.propTypes = {
-    stateSetCallback: PropTypes.func,
-    editorState: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
+    isValid: PropTypes.bool,
     styleName: PropTypes.string
 };

@@ -10,7 +10,7 @@ Adds a new feature layer to map or updates an existing layer.
 
 ## Description
 
-Prepares a layer for later use or updates an existing layer. 
+Prepares a layer for later use or updates an existing layer for vector features.
 
 The request takes one parameter, options.
 
@@ -24,10 +24,12 @@ The request takes one parameter, options.
 | layerName | string | Name | `'Layer name'` |
 | layerDescription | string | Description | `'Description text'` | 
 | layerPermissions | object | Permissions | `{ publish: 'publication_permission_ok' }` |
-| minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1451336` |
-| maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1` |
+| minResolution | number | Features are not shown if map resolution isn't below this. | `128` |
+| maxResolution | number | Features are not shown if map resolution isn't above this. | `0.25` |
 | hover | object | Describes how to visualize features on hover and what kind of tooltip should be shown. | See Hover Settings below |
 | remove | boolean | If the key is present with "truthy" value the layer referenced with layerId is removed from the map. Defaults to undefined. | `true` |
+
+Note! You can use minZoomLevel / maxZoomLevel or minScale / maxScale instead of minResolution / maxResolution.
 
 ### Hover Settings
 

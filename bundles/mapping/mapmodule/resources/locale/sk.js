@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Vyhľadať Výsledky",
                 "close": "Zavrieť výsledky vyhľadávania",
                 "noresults": "Nenašli sa žiadne výsledky. Prosím skontrolujte hľadaný názov a skúste znova.",
-                "toomanyresults": "Našlo sa vyše 100 výsledkov. Spresnite vyhľadávanie, prosím a skúste znova.",
+                "searchResultCount": "Vyhľadávanie vrátilo {count} výsledky.",
+                "searchMoreResults": "Našlo sa vyše {count} výsledkov. Spresnite vyhľadávanie, prosím a skúste znova.",
                 "column_name": "Názov",
                 "column_village": "Obec",
                 "column_type": "Typ"

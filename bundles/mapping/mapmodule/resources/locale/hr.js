@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Rezultati pretraživanja",
                 "close": "Zatvori rezultate pretraživanja",
                 "noresults": "Nisu pronađeni rezultati",
-                "toomanyresults": "Pronađeno je preko 100 rezultata. Precizirajte pretraživanje.",
+                "searchResultCount": "Pretraživanje je dalo {count} rezultati.",
+                "searchMoreResults": "Pronađeno je preko {count} rezultata. Precizirajte pretraživanje.",
                 "column_name": "Ime",
                 "column_village": "Općina",
                 "column_type": "Tip"
