@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TextInput, Message } from 'oskari-ui';
 
-const NameInput = styled(TextInput)`
+const InputGroup = styled(React.Fragment)`
     & {
         margin: 0 0 20px;
     }
@@ -11,14 +11,14 @@ const NameInput = styled(TextInput)`
 
 export const VectorNameInput = ({ styleName = '', onChange, isValid = true }) => {
     return (
-        <React.Fragment>
+        <InputGroup>
             <Message messageKey='styles.vector.name' />
-            <NameInput
+            <TextInput
                 value={ styleName }
                 onChange={ (event) => onChange(event.target.value) }
             />
             { !isValid && <Message messageKey='styles.vector.validation.name' /> }
-        </React.Fragment>
+        </InputGroup>
     );
 };
 

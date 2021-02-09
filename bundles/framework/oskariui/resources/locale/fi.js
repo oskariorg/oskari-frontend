@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     value: {
         StyleEditor: {
             subheaders: {
-                styleFormat: 'Geometria tyyppi',
+                styleFormat: 'Geometriatyyppi',
                 name: 'Tyylin nimi',
                 style: 'Style',
                 pointTab: 'Piste',

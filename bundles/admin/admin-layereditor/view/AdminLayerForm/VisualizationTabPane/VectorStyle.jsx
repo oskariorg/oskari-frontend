@@ -4,9 +4,16 @@ import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Button, Message, Modal } from 'oskari-ui';
+import { Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
+import styled from 'styled-components';
 
+const FullWidthSpace = styled(Space)`
+    & {
+        width: 100%;
+    }
+`;
 
 const hasValidName = (name) => {
     return name.length > 0;
@@ -38,35 +45,44 @@ export const VectorStyle = LocaleConsumer((props) => {
 
     return (
         <Fragment>
-            <Button onClick={ resetNewStyle }>
-                <PlusOutlined />
-                <Message messageKey="styles.vector.addStyle" />
-            </Button>
+            <FullWidthSpace direction='vertical'>
+                <Button onClick={ resetNewStyle }>
+                    <PlusOutlined />
+                    <Message messageKey="styles.vector.addStyle" />
+                </Button>
 
-            <Modal visible={ editorState.modalVisibility } okButtonPros={ 'disabled' } onOk={ onModalOk } onCancel={ onModalCancel }>
-                <VectorNameInput
-                    styleName={ editorState.styleName }
-                    isValid={ hasValidName(editorState.styleName) }
-                    onChange={ setName } />
+                <Modal
+                    visible={ editorState.modalVisibility }
+                    okButtonPros={ 'disabled' }
+                    onOk={ onModalOk }
+                    onCancel={ onModalCancel }
+                    cancelText={ <Message messageKey="cancel" /> }
+                    okText={ <Message messageKey="save" /> }
+                >
+                    <VectorNameInput
+                        styleName={ editorState.styleName }
+                        isValid={ hasValidName(editorState.styleName) }
+                        onChange={ setName } />
 
-                <StyleEditor
-                    oskariStyle={ editorState.currentStyle }
-                    onChange={ (style) => setEditorState({ ...editorState, currentStyle: style })}
+                    <StyleEditor
+                        oskariStyle={ editorState.currentStyle }
+                        onChange={ (style) => setEditorState({ ...editorState, currentStyle: style })}
+                    />
+                </Modal>
+
+                <VectorStyleSelect
+                    layer={ props.layer }
+                    controller={ props.controller }
+                    editStyleCallback={ (styleName) => {
+                        setEditorState({
+                            modalVisibility: true,
+                            styleName: styleName,
+                            originalName: styleName,
+                            currentStyle: props.layer.options.styles[styleName]
+                        });
+                    } }
                 />
-            </Modal>
-
-            <VectorStyleSelect
-                layer={ props.layer }
-                controller={ props.controller }
-                editStyleCallback={ (styleName) => {
-                    setEditorState({
-                        modalVisibility: true,
-                        styleName: styleName,
-                        originalName: styleName,
-                        currentStyle: props.layer.options.styles[styleName]
-                    });
-                } }
-            />
+            </FullWidthSpace>
         </Fragment>
     );
 });
