@@ -122,10 +122,10 @@ Oskari.registerLocalization(
                     "serviceNotAvailable": "Inte tillgänglig"
                 },
                 "vector": {
-                    "newStyleName": "Ny stil",
-                    "addStyle": "Add style",
+                    "addStyle": "Tillsätt stil",
+                    "name": "Stilnamn",
                     "validation": {
-                        "name": "Style name missing"
+                        "name": "Täytä nimi tyylille"
                     }
                 }
             },

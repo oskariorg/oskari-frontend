@@ -10,7 +10,13 @@ const StyledItem = styled(List.Item)`
     & {
         background: #ffffff;
         line-height: 30px;
-        padding: 0 11px;
+        padding: 4px 11px;
+    }
+`;
+
+const EditButton = styled(Button)`
+    & {
+        margin: auto 10px auto auto;
     }
 `;
 
@@ -33,9 +39,9 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
                 return (
                     <StyledItem>
                         <Checkbox onClick={ () => controller.setStyle(name) } checked={ name === selectedStyle }>{ name }</Checkbox>
-                        { canEdit && <Button onClick={ () => editStyleCallback(name) } >
+                        { canEdit && <EditButton onClick={ () => editStyleCallback(name) } >
                             <EditOutlined />
-                        </Button> }
+                        </EditButton> }
                         <Button onClick={ () => controller.removeStyleFromLayer(name) }>
                             <DeleteOutlined />
                         </Button>

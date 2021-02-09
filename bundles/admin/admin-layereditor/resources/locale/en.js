@@ -124,6 +124,7 @@ Oskari.registerLocalization(
                 "vector": {
                     "newStyleName": "New style",
                     "addStyle": "Add style",
+                    "name": "Style name",
                     "validation": {
                         "name": "Style name missing"
                     }

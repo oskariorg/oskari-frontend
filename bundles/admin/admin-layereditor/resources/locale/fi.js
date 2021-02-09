@@ -125,6 +125,7 @@ Oskari.registerLocalization(
                 "vector": {
                     "addStyle": "Lisää tyyli",
                     "newStyleName": "Uusi tyyli",
+                    "name": "Tyylin nimi",
                     "validation": {
                         "name": "Täytä nimi tyylille"
                     }
