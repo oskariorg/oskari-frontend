@@ -1006,8 +1006,10 @@ class UIHandler extends StateHandler {
             delete layer.options.styles[originalName];
         }
 
+        const currentStyles = layer.options.styles || null;
+
         layer.options.styles = {
-            ...layer.options.styles,
+            ...currentStyles,
             [styleName]: style
         };
 

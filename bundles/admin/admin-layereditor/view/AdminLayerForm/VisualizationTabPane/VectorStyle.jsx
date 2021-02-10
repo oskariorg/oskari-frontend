@@ -6,7 +6,7 @@ import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Button, Message, Modal } from 'oskari-ui';
 import { Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { StyleEditor, OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor';
+import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
 
 const FullWidthSpace = styled(Space)`
