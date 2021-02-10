@@ -121,6 +121,15 @@ Oskari.registerLocalization(
                     "overriddenLegend": "Korvaava karttaselite",
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
                     "serviceNotAvailable": "Ei saatavilla"
+                },
+                "vector": {
+                    "addStyle": "Lisää tyyli",
+                    "newStyleName": "Uusi tyyli",
+                    "name": "Tyylin nimi",
+                    "validation": {
+                        "name": "Täytä nimi tyylille",
+                        "noStyles": "Ei tallennettuja tyylejä"
+                    }
                 }
             },
             "layerStatus": {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
 import { Message } from './Message';
@@ -29,6 +29,10 @@ const StaticForm = styled(Form)`
     }
 `;
 
+const FormSpace = styled(Space)`
+    width: 100%;
+`;
+
 
 /**
  * @class StyleEditor
@@ -52,7 +56,6 @@ export const StyleEditor = (props) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
-    form.setFieldsValue(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
     const onUpdate = (values) => {
@@ -61,25 +64,27 @@ export const StyleEditor = (props) => {
         props.onChange(newStyle)
     };
 
+    useEffect(() => {
+        form.setFieldsValue(fieldValuesForForm);
+    }, [props.oskariStyle]);
+
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
-            <Space direction='vertical'>
+            <FormSpace direction='vertical'>
+                <Message messageKey='StyleEditor.subheaders.styleFormat' />
+                <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                    <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
+                    <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>
+                    <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
+                </TabSelector>
                 <Card>
-                    <Message messageKey='StyleEditor.subheaders.styleFormat' />
-                    <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                        <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
-                        <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>
-                        <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
-                    </TabSelector>
-                    <Card>
-                        <StaticForm form={ form } onValuesChange={ onUpdate } initialValues={ fieldValuesForForm } >
-                            { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
-                            { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
-                            { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
-                        </StaticForm>
-                    </Card>
+                    <StaticForm form={ form } onValuesChange={ onUpdate }>
+                        { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
+                        { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
+                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
+                    </StaticForm>
                 </Card>
-            </Space>
+            </FormSpace>
         </LocaleProvider>
     );
 };

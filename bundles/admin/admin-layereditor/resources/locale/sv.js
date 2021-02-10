@@ -120,6 +120,14 @@ Oskari.registerLocalization(
                     "overriddenLegend": "Adress för kartförklaring",
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
                     "serviceNotAvailable": "Inte tillgänglig"
+                },
+                "vector": {
+                    "addStyle": "Tillsätt stil",
+                    "name": "Stilnamn",
+                    "validation": {
+                        "name": "Fyll i namnet på stilen",
+                        "noStyles": "Inga sparade stilar"
+                    }
                 }
             },
             "layerStatus": {

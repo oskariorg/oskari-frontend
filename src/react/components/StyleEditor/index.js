@@ -1,6 +1,7 @@
 
 import * as constants from './constants';
 export { constants };
+export { OSKARI_BLANK_STYLE } from './OskariDefaultStyle';
 export { AreaTab } from './AreaTab';
 export { LineTab } from './LineTab';
 export { PointTab } from './PointTab';

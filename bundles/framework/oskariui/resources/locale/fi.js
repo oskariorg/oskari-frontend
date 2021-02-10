@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     value: {
         StyleEditor: {
             subheaders: {
-                styleFormat: 'Geometria tyyppi',
+                styleFormat: 'Geometriatyyppi',
                 name: 'Tyylin nimi',
                 style: 'Style',
                 pointTab: 'Piste',
@@ -20,6 +20,9 @@ Oskari.registerLocalization({
             image: {
                 shape: 'Symboli',
                 size: 'Koko',
+                fill: {
+                    color: 'Täyttöväri'
+                }
             },
             stroke: {
                 color: 'Väri',

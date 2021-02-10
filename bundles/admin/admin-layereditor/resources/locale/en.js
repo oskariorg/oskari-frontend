@@ -120,6 +120,15 @@ Oskari.registerLocalization(
                     "overriddenLegend": "Replaced legend URL",
                     "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
                     "serviceNotAvailable": "Not available"
+                },
+                "vector": {
+                    "newStyleName": "New style",
+                    "addStyle": "Add style",
+                    "name": "Style name",
+                    "validation": {
+                        "name": "Please enter a name for the style",
+                        "noStyles": "No saved styles"
+                    }
                 }
             },
             "layerStatus": {
