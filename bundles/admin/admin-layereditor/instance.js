@@ -139,7 +139,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addSubthemeTool.setTooltip(this.loc('addSubtheme'));
             addSubthemeTool.setIconCls('add-sub-theme');
             addSubthemeTool.setTypes(['layergroup', 'getInspireName']);
-            addSubthemeTool.setCallback(editGroupCallBack);
             addSubthemeTool.setCallback(subthemeCallback);
             toolingService.addTool(addSubthemeTool);
 
