@@ -126,7 +126,8 @@ Oskari.registerLocalization(
                     "addStyle": "Add style",
                     "name": "Style name",
                     "validation": {
-                        "name": "Style name missing"
+                        "name": "Please enter a name for the style",
+                        "noStyles": "No saved styles"
                     }
                 }
             },

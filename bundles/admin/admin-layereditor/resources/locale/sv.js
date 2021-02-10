@@ -125,7 +125,8 @@ Oskari.registerLocalization(
                     "addStyle": "Tillsätt stil",
                     "name": "Stilnamn",
                     "validation": {
-                        "name": "Täytä nimi tyylille"
+                        "name": "Fyll i namnet på stilen",
+                        "noStyles": "Inga sparade stilar"
                     }
                 }
             },

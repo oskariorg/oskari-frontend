@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Checkbox } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button } from 'oskari-ui';
+import { Button, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
@@ -20,11 +20,22 @@ const EditButton = styled(Button)`
     }
 `;
 
+const EmptySelect = styled.div`
+    background: #ffffff;
+    line-height: 30px;
+    padding: 4px 11px;
+    width: 100%;
+`;
+
 export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
     const { styles } = layer.options;
 
-    if (typeof styles !== 'object') {
-        return null;
+    if (typeof styles !== 'object' || Object.keys(styles).length === 0) {
+        return (
+            <EmptySelect>
+                <Message messageKey='styles.vector.validation.noStyles' />
+            </EmptySelect>
+        );
     }
     const sortedStyleIds = Object.keys(styles).slice()
         .sort((a, b) => Oskari.util.naturalSort(a, b));
