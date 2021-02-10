@@ -4,10 +4,55 @@
 // TODO: add params handling for formatters
 // ----------------------------------------------------------------------
 const linkFormatter = (value, params = {}) => {
-    return `<a href="${value}" rel="noreferrer noopener" target="_blank">${params.label || value}</a>`;
+    let label = params.label;
+    if (!label) {
+        if (params.fullUrl === true) {
+            label = value;
+        } else {
+            // defaults to shortened url (max 50 chars for default)
+            label = shortenUrl(value);
+        }
+    }
+    return `<a href="${value}" rel="noreferrer noopener" target="_blank" title="${value}">${label}</a>`;
+};
+
+const shortenUrl = (url = '', maxLength = 50) => {
+    if (url.length <= maxLength) {
+        return url;
+    }
+    const urlWithoutProto = url.replace('http://', '').replace('https://', '');
+    if (urlWithoutProto.length <= maxLength) {
+        return urlWithoutProto;
+    }
+    const partLength = maxLength / 2;
+    const start = shortenString(urlWithoutProto, partLength);
+    const end = reverseString(shortenString(reverseString(urlWithoutProto), partLength));
+    return start + '...' + end;
+};
+
+const reverseString = (input = '') => input.split('').reverse().join('');
+
+const SHORTEN_STOP_CHARS = [' ', '/', '&', '?'];
+const shortenString = (input = '', maxLength = 25) => {
+    if (input.length < maxLength) {
+        return input;
+    }
+    const threshold = maxLength * 0.8;
+    let candidate = input.substring(0, threshold);
+    let restOfInput = input.substring(threshold).split('');
+    while (restOfInput.length && candidate.length < maxLength) {
+        const character = restOfInput.shift();
+        if (SHORTEN_STOP_CHARS.includes(character)) {
+            // encountered char that is natural shorten point
+            break;
+        }
+        candidate += character;
+    }
+    return candidate;
 };
 
 const imgFormatter = (value, params = {}) => {
+    // TODO: onError=replace with nicer placeholder? Maybe when refactoring to React?
     const img = `<img class="oskari_gfi_img" src="${value}"></img>`;
     if (params.link === true) {
         return linkFormatter(value, { label: img });
