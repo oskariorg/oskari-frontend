@@ -1,13 +1,23 @@
-
+import { shortenUrl } from './ValueFormattersUrlHelpers';
 // ----------------------------------------------------------------------
 // Built-in formatters
 // TODO: add params handling for formatters
 // ----------------------------------------------------------------------
 const linkFormatter = (value, params = {}) => {
-    return `<a href="${value}" rel="noreferrer noopener" target="_blank">${params.label || value}</a>`;
+    let label = params.label;
+    if (!label) {
+        if (params.fullUrl === true) {
+            label = value;
+        } else {
+            // defaults to shortened url (max 50 chars for default)
+            label = shortenUrl(value);
+        }
+    }
+    return `<a href="${value}" rel="noreferrer noopener" target="_blank" title="${value}">${label}</a>`;
 };
 
 const imgFormatter = (value, params = {}) => {
+    // TODO: onError=replace with nicer placeholder? Maybe when refactoring to React?
     const img = `<img class="oskari_gfi_img" src="${value}"></img>`;
     if (params.link === true) {
         return linkFormatter(value, { label: img });
