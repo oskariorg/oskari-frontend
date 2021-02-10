@@ -30,7 +30,7 @@ export const VectorStyle = LocaleConsumer((props) => {
         validates: false
     });
 
-    const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.originalName);
+    const saveStyle = () => props.controller.saveStyleToLayer({ featureStyle: editorState.currentStyle }, editorState.styleName, editorState.originalName);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const resetNewStyle = () => setEditorState({ ...editorState, styleName: newStyleName, originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
