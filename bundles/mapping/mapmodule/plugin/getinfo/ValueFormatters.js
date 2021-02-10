@@ -16,17 +16,31 @@ const linkFormatter = (value, params = {}) => {
     return `<a href="${value}" rel="noreferrer noopener" target="_blank" title="${value}">${label}</a>`;
 };
 
+const WELL_KNOWN_PROTO = ['http://', 'https://'];
+const removeWellknownProtocolFromUrl = (url = '') => {
+    // this function is just to handle url in case-insensitive way
+    if (!url) {
+        return url;
+    }
+    const input = url.toLowerCase();
+    const foundProto = WELL_KNOWN_PROTO.findIndex(proto => input.startsWith(proto));
+    if (foundProto === -1) {
+        return url;
+    }
+    return url.substring(WELL_KNOWN_PROTO[foundProto].length);
+};
+
 const shortenUrl = (url = '', maxLength = 50) => {
     if (url.length <= maxLength) {
         return url;
     }
-    const urlWithoutProto = url.replace('http://', '').replace('https://', '');
-    if (urlWithoutProto.length <= maxLength) {
-        return urlWithoutProto;
+    const urlValue = removeWellknownProtocolFromUrl(url);
+    if (urlValue.length <= maxLength) {
+        return urlValue;
     }
     const partLength = maxLength / 2;
-    const start = shortenString(urlWithoutProto, partLength);
-    const end = reverseString(shortenString(reverseString(urlWithoutProto), partLength));
+    const start = shortenString(urlValue, partLength);
+    const end = reverseString(shortenString(reverseString(urlValue), partLength));
     return start + '...' + end;
 };
 
