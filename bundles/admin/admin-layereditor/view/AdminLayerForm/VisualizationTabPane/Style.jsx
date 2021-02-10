@@ -31,7 +31,7 @@ export const Style = ({ layer, propertyFields, controller }) => {
             <InfoTooltip messageKeys={styleInfoKeys} />
             <StyledFormField>
                 <Select
-                    defaultValue={layer.style}
+                    value={layer.style}
                     onChange={value => controller.setStyle(value)}
                 >
                     { styleOptions.map(option => (
