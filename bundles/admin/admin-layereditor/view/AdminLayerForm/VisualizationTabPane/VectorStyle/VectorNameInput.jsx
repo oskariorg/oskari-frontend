@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { TextInput, Message } from 'oskari-ui';
 
-const InputGroup = styled(React.Fragment)`
+const InputGroup = styled.div`
     & {
         margin: 0 0 20px;
     }
