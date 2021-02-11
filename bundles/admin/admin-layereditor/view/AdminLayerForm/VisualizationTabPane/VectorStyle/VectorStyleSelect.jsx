@@ -27,6 +27,11 @@ const EmptySelect = styled.div`
     width: 100%;
 `;
 
+const DefaultStyleText = styled.span`
+    font-style: italic;
+    font-size: 0.875em;
+`;
+
 export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
     const { styles } = layer.options;
 
@@ -50,9 +55,17 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
                 return (
                     <StyledItem>
                         <Checkbox onClick={ () => controller.setStyle(name) } checked={ name === selectedStyle }>{ name }</Checkbox>
+
+                        { name === selectedStyle &&
+                            <DefaultStyleText>
+                                (<Message messageKey='styles.default' />)
+                            </DefaultStyleText>
+                        }
+
                         { canEdit && <EditButton onClick={ () => editStyleCallback(name) } >
                             <EditOutlined />
                         </EditButton> }
+
                         <Button onClick={ () => controller.removeStyleFromLayer(name) }>
                             <DeleteOutlined />
                         </Button>
