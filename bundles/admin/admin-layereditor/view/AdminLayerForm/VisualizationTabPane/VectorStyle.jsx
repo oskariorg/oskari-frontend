@@ -45,8 +45,6 @@ export const VectorStyle = LocaleConsumer((props) => {
         setEditorState({ ...editorState, styleName: name });
     };
 
-    console.log(props.layer.options.styles);
-
     return (
         <FullWidthSpace direction='vertical'>
             <Button onClick={ resetNewStyle }>
