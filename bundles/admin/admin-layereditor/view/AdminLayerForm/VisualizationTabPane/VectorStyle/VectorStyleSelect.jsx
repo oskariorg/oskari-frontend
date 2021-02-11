@@ -57,7 +57,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
                     <StyledItem>
                         <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle }>{ styles[styleId].title }</Checkbox>
 
-                        { styles[styleId].title === selectedStyle &&
+                        { styleId === selectedStyle &&
                             <DefaultStyleText>
                                 (<Message messageKey='styles.default' />)
                             </DefaultStyleText>
