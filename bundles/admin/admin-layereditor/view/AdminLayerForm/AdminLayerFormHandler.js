@@ -332,7 +332,11 @@ class UIHandler extends StateHandler {
         if (!options.legends) {
             options.legends = {};
         }
-        options.legends[styleName] = url;
+        if (url === '') {
+            delete options.legends[styleName];
+        } else {
+            options.legends[styleName] = url;
+        }
         this.setOptions(options);
     }
 
@@ -381,12 +385,6 @@ class UIHandler extends StateHandler {
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
-        });
-    }
-
-    setLegendImage (legendImage) {
-        this.updateState({
-            layer: { ...this.getState().layer, legendImage }
         });
     }
 
@@ -1045,7 +1043,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setHoverJSON',
     'setLayerName',
     'setLayerUrl',
-    'setLegendImage',
     'setLegendUrl',
     'setLocalizedNames',
     'setMessage',

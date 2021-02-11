@@ -5,21 +5,23 @@ import { InfoTooltip } from '../InfoTooltip';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { StyledFormField } from './styled';
 
-export const LegendImage = LocaleConsumer(({ legendImage = '', controller, getMessage }) => (
+export const GLOBAL_LEGEND = 'legendImage';
+
+export const LegendImage = LocaleConsumer(({ url = '', controller, getMessage }) => (
     <Fragment>
         <Message messageKey='styles.raster.legendImage'/>
         <InfoTooltip messageKeys='styles.raster.legendImageDesc'/>
         <StyledFormField>
             <TextInput
                 placeholder={getMessage('styles.raster.legendImagePlaceholder')}
-                value={legendImage}
-                onChange={(evt) => controller.setLegendImage(evt.target.value)} />
+                value={url}
+                onChange={(evt) => controller.setLegendUrl(GLOBAL_LEGEND, evt.target.value)} />
         </StyledFormField>
     </Fragment>
 ));
 
 LegendImage.propTypes = {
-    legendImage: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
     getMessage: PropTypes.func.isRequired
 };

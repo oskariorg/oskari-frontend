@@ -62,7 +62,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             descriptionLink: '',
             orgName: 'Metadata',
             inspire: 'Metadata',
-            legendImage: '',
             info: '',
             isQueryable: true,
             formats: {
