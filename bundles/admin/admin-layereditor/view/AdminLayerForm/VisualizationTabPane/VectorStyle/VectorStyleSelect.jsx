@@ -43,7 +43,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
         );
     }
 
-    const sortedIds = Object.keys(styles).slice()
+    const sortedStyleIds = Object.keys(styles).slice()
         .sort((a, b) => Oskari.util.naturalSort(styles[a].title, styles[b].title));
 
     const canEdit = typeof editStyleCallback === 'function';
@@ -51,7 +51,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
 
     return (
         <List
-            dataSource={ sortedIds }
+            dataSource={ sortedStyleIds }
             renderItem={ (styleId) => {
                 return (
                     <StyledItem>
