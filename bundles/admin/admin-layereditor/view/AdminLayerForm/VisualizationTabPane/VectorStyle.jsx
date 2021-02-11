@@ -79,7 +79,7 @@ export const VectorStyle = LocaleConsumer((props) => {
                         modalVisibility: true,
                         styleName: props.layer.options.styles[styleId].title,
                         styleId: styleId,
-                        currentStyle: props.layer.options.styles[styleId]
+                        currentStyle: props.layer.options.styles[styleId].featureStyle
                     });
                 } }
             />
