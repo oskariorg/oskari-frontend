@@ -1000,7 +1000,7 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    saveStyleToLayer (style, styleName, originalName) {
+    ssaveStyleToLayer (style, styleName, originalName) {
         const layer = this.getState().layer;
         if (originalName !== '') {
             delete layer.options.styles[originalName];
@@ -1019,9 +1019,25 @@ class UIHandler extends StateHandler {
         this.updateState({ layer: layer });
     }
 
-    removeStyleFromLayer (styleName) {
+    saveStyleToLayer (style, styleLabel, styleId) {
         const layer = this.getState().layer;
-        delete layer.options.styles[styleName];
+        const currentStyles = layer.options.styles || null;
+        const layerStyleId = styleId || 's_' + new Date().getTime();
+
+        layer.options.styles = {
+            ...currentStyles,
+            [layerStyleId]: {
+                title: styleLabel,
+                featureStyle: style
+            }
+        };
+
+        this.updateState({ layer: layer });
+    }
+
+    removeStyleFromLayer (styleId) {
+        const layer = this.getState().layer;
+        delete layer.options.styles[styleId];
         this.updateState({ layer: layer });
     }
 }
