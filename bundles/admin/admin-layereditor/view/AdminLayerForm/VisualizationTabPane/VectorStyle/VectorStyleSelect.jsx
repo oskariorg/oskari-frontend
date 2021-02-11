@@ -29,7 +29,7 @@ const EmptySelect = styled.div`
 
 const DefaultStyleText = styled.span`
     font-style: italic;
-    font-size: 12px;
+    font-size: 0.875em;
 `;
 
 export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
