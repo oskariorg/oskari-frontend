@@ -1000,25 +1000,6 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    ssaveStyleToLayer (style, styleName, originalName) {
-        const layer = this.getState().layer;
-        if (originalName !== '') {
-            delete layer.options.styles[originalName];
-        }
-
-        const currentStyles = layer.options.styles || null;
-
-        layer.options.styles = {
-            ...currentStyles,
-            [styleName]: style
-        };
-
-        if (layer.style === originalName) {
-            layer.style = styleName;
-        }
-        this.updateState({ layer: layer });
-    }
-
     saveStyleToLayer (style, styleLabel, styleId) {
         const layer = this.getState().layer;
         const currentStyles = layer.options.styles || null;
