@@ -126,6 +126,9 @@ Oskari.registerLocalization(
                     "addStyle": "Lisää tyyli",
                     "newStyleName": "Uusi tyyli",
                     "name": "Tyylin nimi",
+                    "selectDefault": "Valitse oletustyyli",
+                    "editStyle": "Muokkaa tyyliä",
+                    "deleteStyle": "Poista tyyli",
                     "validation": {
                         "name": "Täytä nimi tyylille",
                         "noStyles": "Ei tallennettuja tyylejä"

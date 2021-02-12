@@ -5,8 +5,8 @@ Oskari.registerLocalization({
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',
-                name: 'Namnet på stilen',
-                style: 'Stil',
+                name: 'Stilets namn',
+                style: 'Stilet',
                 pointTab: 'Punkten',
                 lineTab: 'Linje',
                 areaTab: 'Området'
