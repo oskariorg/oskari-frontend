@@ -165,6 +165,7 @@ export const getLayerHelper = () => {
         const layer = {
             opacity: 100,
             groups: [],
+            capabilities: {},
             options: {},
             attributes: {}
         };
