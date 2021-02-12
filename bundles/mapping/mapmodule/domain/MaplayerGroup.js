@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         me.layers = json.layers ? json.layers : null;
         me.name = json.name;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
-        me.rootId = (typeof json.rootId !== 'undefined') ? json.rootId : null;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
         me.selectable = (typeof json.selectable === 'boolean') ? json.selectable : true;
         me.toolsVisible = (typeof json.toolsVisible === 'boolean') ? json.toolsVisible : true;
@@ -115,12 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         },
         setOrderNumber: function (orderNumber) {
             this.orderNumber = orderNumber;
-        },
-        getRootId: function () {
-            return this.rootId;
-        },
-        setRootId: function (rootId) {
-            this.rootId = rootId;
         },
         getParentId: function () {
             return this.parentId;

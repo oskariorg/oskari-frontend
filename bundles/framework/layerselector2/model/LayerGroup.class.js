@@ -1,22 +1,15 @@
 export class LayerGroup {
-    constructor (id, groupMethod, title, rootId, parentId, groups) {
+    constructor (id, groupMethod, title, parentId, groups) {
         this.id = id;
         this.groupMethod = groupMethod;
         this.name = title;
         this.layers = [];
-        this.rootId = rootId || null;
         this.parentId = parentId || null;
         this.groups = groups || [];
         this.searchIndex = {};
         this.tools = [];
     }
 
-    getRootId () {
-        return this.rootId;
-    }
-    setRootId (rootId) {
-        this.rootId = rootId;
-    }
     getParentId () {
         return this.parentId;
     }
