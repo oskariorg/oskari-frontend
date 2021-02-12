@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, Checkbox } from 'antd';
+import { List, Checkbox, Tooltip } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
@@ -55,7 +55,9 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
             renderItem={ (styleId) => {
                 return (
                     <StyledItem>
-                        <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle }>{ styles[styleId].title }</Checkbox>
+                        <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
+                            <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle }>{ styles[styleId].title || styleId }</Checkbox>
+                        </Tooltip>
 
                         { styleId === selectedStyle &&
                             <DefaultStyleText>
@@ -67,9 +69,11 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
                             <EditOutlined />
                         </EditButton> }
 
-                        <Button onClick={ () => controller.removeStyleFromLayer(styleId) }>
-                            <DeleteOutlined />
-                        </Button>
+                        <Tooltip title={ <Message messageKey='styles.vector.deleteStyle' /> }>
+                            <Button onClick={ () => controller.removeStyleFromLayer(styleId) }>
+                                <DeleteOutlined />
+                            </Button>
+                        </Tooltip>
                     </StyledItem>
                 );
             }}

@@ -125,6 +125,8 @@ Oskari.registerLocalization(
                     "newStyleName": "New style",
                     "addStyle": "Add style",
                     "name": "Style name",
+                    "selectDefault": "Select default style",
+                    "deleteStyle": "Delete style",
                     "validation": {
                         "name": "Please enter a name for the style",
                         "noStyles": "No saved styles"
