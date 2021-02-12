@@ -42,8 +42,9 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
             </EmptySelect>
         );
     }
+
     const sortedStyleIds = Object.keys(styles).slice()
-        .sort((a, b) => Oskari.util.naturalSort(a, b));
+        .sort((a, b) => Oskari.util.naturalSort(styles[a].title, styles[b].title));
 
     const canEdit = typeof editStyleCallback === 'function';
     const selectedStyle = layer.style || 'default';
@@ -51,22 +52,22 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
     return (
         <List
             dataSource={ sortedStyleIds }
-            renderItem={ (name) => {
+            renderItem={ (styleId) => {
                 return (
                     <StyledItem>
-                        <Checkbox onClick={ () => controller.setStyle(name) } checked={ name === selectedStyle }>{ name }</Checkbox>
+                        <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle }>{ styles[styleId].title }</Checkbox>
 
-                        { name === selectedStyle &&
+                        { styleId === selectedStyle &&
                             <DefaultStyleText>
                                 (<Message messageKey='styles.default' />)
                             </DefaultStyleText>
                         }
 
-                        { canEdit && <EditButton onClick={ () => editStyleCallback(name) } >
+                        { canEdit && <EditButton onClick={ () => editStyleCallback(styleId) } >
                             <EditOutlined />
                         </EditButton> }
 
-                        <Button onClick={ () => controller.removeStyleFromLayer(name) }>
+                        <Button onClick={ () => controller.removeStyleFromLayer(styleId) }>
                             <DeleteOutlined />
                         </Button>
                     </StyledItem>
