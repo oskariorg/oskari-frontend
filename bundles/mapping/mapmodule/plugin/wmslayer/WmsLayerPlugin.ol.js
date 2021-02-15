@@ -177,19 +177,20 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
         },
 
         _registerLayerEvents: function (layer, oskariLayer, prefix) {
-            var me = this;
-            var source = layer.getSource();
+            const me = this;
+            const source = layer.getSource();
+            const layerId = oskariLayer.getId();
 
             source.on(prefix + 'loadstart', function () {
-                me.getMapModule().loadingState(oskariLayer._id, true);
+                me.getMapModule().loadingState(layerId, true);
             });
 
             source.on(prefix + 'loadend', function () {
-                me.getMapModule().loadingState(oskariLayer._id, false);
+                me.getMapModule().loadingState(layerId, false);
             });
 
             source.on(prefix + 'loaderror', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+                me.getMapModule().loadingState(layerId, null, true);
             });
         },
         /**
