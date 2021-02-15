@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             var width = 20 + (current / goal * 80);
             this._element.css({ width: width.toFixed(1) + '%' });
             if (width >= 100.0) {
-                this.hide(containsErrors ? 2500: 400);
+                this.hide(containsErrors ? 2500 : 400);
             }
             return width;
         },

@@ -1059,12 +1059,12 @@ Oskari.clazz.define(
                 layers.forEach(function (layer) {
                     tilesLoaded += layer.loaded;
                     pendingTiles += layer.tilesToLoad;
-                    errorCount += layer.errors
+                    errorCount += layer.errors;
                 });
                 const progressPercentage = this.progBar.updateProgressBar(pendingTiles, tilesLoaded, errorCount > 0);
                 if (this.__PROGRESS_DEBUGGING === true) {
                     // for debugging purposes
-                    console.log(`${tilesLoaded} / ${pendingTiles} = ${progressPercentage}`)
+                    console.log(`${tilesLoaded} / ${pendingTiles} = ${progressPercentage}`);
                 }
             }
             this.loadtimer = setTimeout(function () {
