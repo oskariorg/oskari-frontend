@@ -5,6 +5,7 @@ import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Toolt
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const StyledSubCollapse = styled(Collapse)`
     border-radius: 0 !important;
@@ -43,8 +44,7 @@ const StyledListItem = styled(ListItem)`
 `;
 
 const StyledEditGroup = styled.span`
-    padding-right: 20px;
-    padding-bottom: 1px;
+    padding-right: 5px;
 `;
 
 const renderLayer = ({ model, even, selected, controller }) => {
@@ -55,6 +55,18 @@ const renderLayer = ({ model, even, selected, controller }) => {
             </StyledListItem>
     );
 };
+
+const ToolButton = ({ tool }) => {
+    let toolButton;
+    if (tool.getName() === 'editTheme') {
+        toolButton = <EditOutlined/>;
+    } else if (tool.getName() === 'addSubtheme') {
+        toolButton = <PlusCircleOutlined />;
+    }
+    return (
+        toolButton
+    );
+}
 
 renderLayer.propTypes = {
     model: PropTypes.any,
@@ -78,7 +90,7 @@ const onToolClick = (event, tool, group) => {
 
 const selectGroup = (event, checked, group, controller) => {
     // if switch is checked, we add the groups layers to selected layers, if not, we remove all the layers from checked layers
-    !checked ? controller.addGroup(group) : controller.removeGroup(group);
+    !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group);
     event.stopPropagation();
 }
 
@@ -102,7 +114,7 @@ const onGroupSelect = (event, checked, group, controller) => {
     }
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, ...propsNeededForPanel }) => {
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -122,7 +134,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
         <StyledSubCollapse>
             <StyledSubCollapsePanel {...propsNeededForPanel}
                 header={group.getTitle()}
-                showArrow
+                showArrow={layerRows.length > 0 || group.getGroups().length !== 0}
                 extra={
                     <React.Fragment>
                             <Confirm
@@ -135,14 +147,16 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                                 placement='top'
                                 popupStyle={{zIndex: '999999'}}
                             >
-                                <Switch size="small" checked={active}
+                                <Switch size="small" checked={active} style={{ marginRight: 5 }}
                                     onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
                             </Confirm>
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
-                                    <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
-                                        onToolClick(event, tool, group)} />
+                                <StyledEditGroup onClick={(event) =>
+                                    onToolClick(event, tool, group)} >
+                                    <ToolButton tool={tool}/>
+                                </StyledEditGroup>
                                 </Tooltip>
                             )
                         }
@@ -190,7 +204,7 @@ const LayerCollapsePanel = (props) => {
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
-            showArrow={layerRows.length > 0}
+            showArrow={layerRows.length > 0 || group.getGroups().length !== 0}
             extra={
                 <React.Fragment>
                 <Confirm
@@ -203,14 +217,16 @@ const LayerCollapsePanel = (props) => {
                     placement='top'
                     popupStyle={{zIndex: '999999'}}
                 >
-                    <Switch size="small" checked={active}
+                    <Switch size="small" checked={active} style={{ marginRight: 5 }}
                     onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
                 </Confirm>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
-                                <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
-                                    onToolClick(event, tool, group)} />
+                            <StyledEditGroup onClick={(event) =>
+                                onToolClick(event, tool, group)} >
+                                <ToolButton tool={tool}/>
+                            </StyledEditGroup>
                             </Tooltip>
                         )
                     }
