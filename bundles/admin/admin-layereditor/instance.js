@@ -351,11 +351,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             };
-
+            
             const loc = newSubgroup ? this.loc('addTheme') : id ? this.loc('editTheme') : this.loc('addTheme');
             this.themeFlyout = new LocalizingFlyout(this, loc, {
                 headerMessageKey: 'themeName',
-                id: id || newSubgroup && id,
+                id: id,
                 fetch: fetchTheme,
                 layerCountInGroup: layerCountInGroup
             }, this.loc('deleteGroupLayers'));
@@ -366,7 +366,13 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this.themeFlyout.setSaveAction((value, id) => {
                 const httpMethod = newSubgroup ? 'PUT' : id ? 'POST' : 'PUT';
 
-                const payload = newSubgroup ? { locales: value, parentId: id } : id ? { locales: value, id: id, parentId: parentId } : { locales: value };
+                const payload = newSubgroup ? {
+                    locales: value, parentId: id
+                } : id ? {
+                    locales: value, id: id, parentId: parentId
+                } : {
+                    locales: value
+                };
 
                 jQuery.ajax({
                     type: httpMethod,
@@ -381,7 +387,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         if (httpMethod === 'POST') {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
-                            newSubgroup ? this._getLayerService().addLayerGroup(group, id) : this._getLayerService().addLayerGroup(group) ;
+                            newSubgroup ? this._getLayerService().addLayerGroup(group, id) : this._getLayerService().addLayerGroup(group);
                         }
                         
                         // Inform user with popup
