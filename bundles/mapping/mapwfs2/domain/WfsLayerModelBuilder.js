@@ -70,16 +70,20 @@ Oskari.clazz.define(
             const wfsPlugin = mapModule.getLayerPlugins(layerType);
 
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
-                layer.addStyle(defaultStyle);
                 // Read options object for styles and hover options
                 const { options } = mapLayerJson;
+                if (Object.keys(options.styles).length === 0) {
+                    layer.addStyle(defaultStyle);
+                }
+
                 if (options) {
                     if (options.styles) {
+                        console.log(options.styles);
                         Object.keys(options.styles).forEach(styleName => {
                             if (styleName !== 'default') {
                                 const style = new Style();
                                 style.setName(styleName);
-                                style.setTitle(styleName);
+                                style.setTitle(options.styles[styleName].title || styleName);
                                 layer.addStyle(style);
                             }
                         });
