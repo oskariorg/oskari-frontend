@@ -56,7 +56,7 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
                 return (
                     <StyledItem>
                         <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
-                            <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle }>{ styles[styleId].title || styleId }</Checkbox>
+                            <Checkbox onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle || sortedStyleIds.length === 1 }>{ styles[styleId].title || styleId }</Checkbox>
                         </Tooltip>
 
                         { styleId === selectedStyle &&
