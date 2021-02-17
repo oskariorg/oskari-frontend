@@ -78,12 +78,11 @@ Oskari.clazz.define(
 
                 if (options) {
                     if (options.styles) {
-                        console.log(options.styles);
-                        Object.keys(options.styles).forEach(styleName => {
-                            if (styleName !== 'default') {
+                        Object.keys(options.styles).forEach(styleId => {
+                            if (styleId !== 'default') {
                                 const style = new Style();
-                                style.setName(styleName);
-                                style.setTitle(options.styles[styleName].title || styleName);
+                                style.setName(styleId);
+                                style.setTitle(options.styles[styleId].title || styleId);
                                 layer.addStyle(style);
                             }
                         });
