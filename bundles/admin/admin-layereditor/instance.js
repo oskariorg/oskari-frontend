@@ -218,12 +218,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          */
         showFormPopup (flyoutKey, position, id, layerCountInGroup) {
             let flyout = null;
+            let newSubgroup = true;
             switch (flyoutKey) {
             case FLYOUT.THEME:
                 flyout = this._getThemeFlyout(id, layerCountInGroup);
                 break;
             case FLYOUT.SUBTHEME:
-                let newSubgroup = true;
                 flyout = this._getThemeFlyout(id, layerCountInGroup, newSubgroup);
                 break;
             case FLYOUT.DATA_PROVIDER:
@@ -392,14 +392,14 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveSuccess'));
+                        dialog.show('', me.loc('messages.saveSuccess'));
                         dialog.fadeout();
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.themeFlyout.setLoading(false);
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveFailed'));
+                        dialog.show('', me.loc('messages.saveFailed'));
                         dialog.fadeout();
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);

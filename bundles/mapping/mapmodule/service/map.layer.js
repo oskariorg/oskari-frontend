@@ -659,7 +659,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         pushSubLayerGroup: function (group, parentId, newGroup) {
-            if (group.id + '' === parentId + '') {
+            if (group.id === parentId) {
                 group.groups.push(newGroup);
                 return group;
             }
@@ -675,7 +675,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
         
         updateGroupRecursively: function (group, newGroup) {
-            if (group.id + '' === newGroup.id + '') {
+            if (group.id === newGroup.id) {
                 group.setName(newGroup.getName());
                 return group;
             }
