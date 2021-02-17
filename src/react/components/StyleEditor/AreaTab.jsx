@@ -33,8 +33,8 @@ export const AreaTab = (props) => {
             <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.stroke.color' /> }
+                    name='stroke.area.color'
+                    label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
                 >
                     <ColorPicker />
                 </Form.Item>

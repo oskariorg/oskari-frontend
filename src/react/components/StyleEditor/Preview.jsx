@@ -92,7 +92,7 @@ export class Preview extends React.Component {
         const format = this.props.format;
         const path = this._parsePath(format);        
 
-        this.previewAttributes.strokeColor = this.props.oskariStyle.stroke.color;
+        this.previewAttributes.strokeColor = format === 'area' ? this.props.oskariStyle.stroke.area.color : this.props.oskariStyle.stroke.color;
         this.previewAttributes.fillColor = this.props.oskariStyle.fill.color;
 
         this.previewAttributes.fill = format === 'area'
