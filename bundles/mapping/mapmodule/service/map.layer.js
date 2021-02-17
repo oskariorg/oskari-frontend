@@ -644,17 +644,49 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @method addLayerGroup
          * @param {Oskari.mapframework.domain.MaplayerGroup} group map layer group to add.
          */
-        addLayerGroup: function (group) {
-            this._layerGroups.push(group);
+        addLayerGroup: function (newGroup, parentId) {
+            if (parentId) {
+                let temp = [];
+                for (var group of this._layerGroups) {
+                    const subgroups = this.pushSubLayerGroup(group, parentId, newGroup);
+                    temp.push(subgroups);
+                }
+                this._layerGroups = temp;
+            } else {
+                this._layerGroups.push(newGroup);
+            }
             this.trigger('theme.update');
         },
 
-        addSublayerGroup: function (parentId, subgroup) {
-            this._layerGroups.forEach((layerGroup, index) => {
-                layerGroup.id === parentId && this._layerGroups[index].groups.push(subgroup);
-            });
-            // TODO: Doesn't seem to actually update
-            this.trigger('theme.update');
+        pushSubLayerGroup: function (group, parentId, newGroup) {
+            if (group.id === parentId) {
+                group.groups.push(newGroup);
+                return group;
+            }
+            if (group.groups.length !== 0) {
+                let temp = [];
+                for (var g of group.groups) {
+                    const subgroups = this.pushSubLayerGroup(g, parentId, newGroup);
+                    temp.push(subgroups);
+                }
+                group.setGroups(temp);
+            }
+            return group;
+        },
+        updateGroupRecursively: function (group, newGroup) {
+            if (group.id === newGroup.id) {
+                group.setName(newGroup.getName());
+                return group;
+            }
+            if (group.groups.length !== 0) {
+                let temp = [];
+                for (var g of group.groups) {
+                    const subgroups = this.updateGroupRecursively(g, newGroup);
+                    temp.push(subgroups);
+                }
+                group.setGroups(temp);
+            }
+            return group;
         },
 
         /**
@@ -665,24 +697,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // Update group to layerGroups
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
-                this._layerGroups[index] = group;
+                this._layerGroups[index].setName(group.getName());
             } else {
-                this._layerGroups.forEach((layerGroup, index) => {
-                    if (layerGroup.hasOwnProperty('groups')) {
-                        layerGroup.groups.forEach((subgroup, subgroupIndex) => {
-                            if (subgroup.id === group.getId()) {
-                                this._layerGroups[index].groups[subgroupIndex] = group;
-                            };
-                        });
-                    };
-                });
-            };
+                let temp = [];
+                for (var g of this._layerGroups) {
+                    const subgroups = this.updateGroupRecursively(g, group);
+                    temp.push(subgroups);
+                }
+                this._layerGroups = temp;
+            }
             // Update group to needed layers. Groups under layer only contains group name with current localization
             const lang = Oskari.getLang();
             this.getAllLayers().filter(l =>
                 l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
             this.trigger('theme.update');
         },
+
         /**
          * @method updateDataProvider
          * @param dataProvider object with structure like {id: 1, name "Provider name"}
