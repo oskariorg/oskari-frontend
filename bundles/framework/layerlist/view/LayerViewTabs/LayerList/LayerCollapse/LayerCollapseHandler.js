@@ -87,7 +87,7 @@ class ViewHandler extends StateHandler {
 
     // Check if we need to show confirm dialog when activating a whole group
     showWarn (group) {
-        if (group.layers.length > 9) {
+        if (group.layers.length > 1) {
             if (!group.id || this.state.showWarn.includes(group.id)) {
                 return;
             }
@@ -112,8 +112,8 @@ class ViewHandler extends StateHandler {
     }
 
     // active all layers in selected group
-    addGroup (group) {
-        for (var i in group.layers) {
+    addGroupLayersToMap (group) {
+        for (let i in group.layers) {
             if (!group.layers[i]._id || this.state.selectedLayerIds.includes(group.layers[i]._id)) {
                 continue;
             }
@@ -131,8 +131,8 @@ class ViewHandler extends StateHandler {
     }
 
     // deactivate all layers in group
-    removeGroup (group) {
-        for (var i in group.layers) {
+    removeGroupLayersFromMap (group) {
+        for (let i in group.layers) {
             const index = this.state.selectedLayerIds.indexOf(group.layers[i]._id);
             if (index === -1) {
                 continue;
@@ -160,7 +160,12 @@ class ViewHandler extends StateHandler {
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
         const allGroups = this.mapLayerService.getAllLayerGroups();
         const allDataProviders = this.mapLayerService.getDataProviders();
-        let groups = isUserAdmin ? groupLayersAdmin([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup) : groupLayers([...layers], this.groupingMethod, tools, allGroups, [], this.loc.grouping.noGroup);
+        let groups;
+        if (isUserAdmin) {
+            groups = groupLayersAdmin([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
+        } else {
+            groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, [], this.loc.grouping.noGroup);
+        }
         if (!searchText) {
             this.updateState({ groups });
             return;
@@ -301,8 +306,8 @@ export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'updateSelectedLayerIds',
     'showLayerMetadata',
     'showLayerBackendStatus',
-    'addGroup',
-    'removeGroup',
+    'addGroupLayersToMap',
+    'removeGroupLayersFromMap',
     'showWarn',
     'deactivateGroup'
 ]);
