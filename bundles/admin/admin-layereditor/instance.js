@@ -351,7 +351,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             };
-            
             const loc = newSubgroup ? this.loc('addTheme') : id ? this.loc('editTheme') : this.loc('addTheme');
             this.themeFlyout = new LocalizingFlyout(this, loc, {
                 headerMessageKey: 'themeName',
@@ -389,7 +388,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         } else {
                             newSubgroup ? this._getLayerService().addLayerGroup(group, id) : this._getLayerService().addLayerGroup(group);
                         }
-                        
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show('', me.loc('messages.saveSuccess'));

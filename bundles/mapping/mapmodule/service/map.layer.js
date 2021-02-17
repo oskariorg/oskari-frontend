@@ -673,7 +673,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             return group;
         },
-        
         updateGroupRecursively: function (group, newGroup) {
             if (group.id === newGroup.id) {
                 group.setName(newGroup.getName());
