@@ -114,7 +114,7 @@ const onGroupSelect = (event, checked, group, controller) => {
     }
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, ...propsNeededForPanel }) => {
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
