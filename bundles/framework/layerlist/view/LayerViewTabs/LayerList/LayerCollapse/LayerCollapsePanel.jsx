@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
@@ -88,33 +88,32 @@ const onToolClick = (event, tool, group) => {
     event.stopPropagation();
 };
 
-const selectGroup = (event, checked, group, controller) => {
+const selectGroup = (event, setVisible, checked, group, controller) => {
+    setVisible(false);
     // if switch is checked, we add the groups layers to selected layers, if not, we remove all the layers from checked layers
-    !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group);
+    !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group); 
     event.stopPropagation();
 }
 
-// Confirm dialog hit cancel
-const deactivateGroup = (event, group, controller) => {
-    controller.deactivateGroup(group);
-    event.stopPropagation();
-}
-
-const onGroupSelect = (event, checked, group, controller) => { 
+const onGroupSelect = (event, setVisible, checked, group, controller) => { 
     // check if we need to show warning (over 10 layers inside the group)
-    if(checked) {
-        if (!controller.showWarn(group)) {
-           event.stopPropagation();
-           return;
-        } else {
-            selectGroup(event, !checked, group, controller);
-        }
+    if(checked && group.layers.length > 1) {
+        setVisible(true);
     } else {
-        selectGroup(event, !checked, group, controller);
+        selectGroup(event, setVisible, !checked, group, controller);
     }
+    event.stopPropagation();
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, propsNeededForPanel }) => {
+const onCancel = (event, setVisible) => {
+    setVisible(false);
+    event.stopPropagation();
+}
+
+
+const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, propsNeededForPanel }) => {
+
+    const [visible, setVisible] = useState(false);
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             id: layer._id,
@@ -125,7 +124,6 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
         };
         return layerProps;
     });
-
     const badgeText = group.unfilteredLayerCount
         ? layerRows.length + ' / ' + group.unfilteredLayerCount
         : layerRows.length;
@@ -139,16 +137,16 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                     <React.Fragment>
                             <Confirm
                                 title={<Message messageKey='grouping.manyLayersWarn'/>}
-                                visible={warnActive}
-                                onConfirm={(event) => selectGroup(event, active, group, controller)}
-                                onCancel={(event) => deactivateGroup(event, group, controller)}
+                                visible={visible}
+                                onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
+                                onCancel={(event) => onCancel(event, setVisible)}
                                 okText={<Message messageKey='yes'/>}
                                 cancelText={<Message messageKey='cancel'/>}
                                 placement='top'
                                 popupStyle={{zIndex: '999999'}}
                             >
                                 <Switch size="small" checked={active} style={{ marginRight: 5 }}
-                                    onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
+                                    onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
                             </Confirm>
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
@@ -172,9 +170,8 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
                     }
-                    const warnActive = showWarn.includes(subgroup.id);
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} showWarn={showWarn} warnActive={warnActive} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}
@@ -185,7 +182,8 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
 
 
 const LayerCollapsePanel = (props) => {
-    const { active, group, selectedLayerIds, selectedGroupIds, controller, showWarn, warnActive, ...propsNeededForPanel } = props;
+    const { active, group, selectedLayerIds, selectedGroupIds, controller, ...propsNeededForPanel } = props;
+    const [visible, setVisible] = useState(false);
 
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
@@ -197,6 +195,7 @@ const LayerCollapsePanel = (props) => {
         };
         return layerProps;
     });
+    
     const badgeText = group.unfilteredLayerCount
         ? layerRows.length + ' / ' + group.unfilteredLayerCount
         : layerRows.length;
@@ -209,16 +208,16 @@ const LayerCollapsePanel = (props) => {
                 <React.Fragment>
                 <Confirm
                     title={<Message messageKey='grouping.manyLayersWarn'/>}
-                    visible={warnActive}
-                    onConfirm={(event) => selectGroup(event, active, group, controller)}
-                    onCancel={(event) => deactivateGroup(event, group, controller)}
+                    visible={visible}
+                    onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
+                    onCancel={(event) => onCancel(event, setVisible)}
                     okText={<Message messageKey='yes'/>}
                     cancelText={<Message messageKey='cancel'/>}
                     placement='top'
                     popupStyle={{zIndex: '999999'}}
                 >
                     <Switch size="small" checked={active} style={{ marginRight: 5 }}
-                    onChange={(checked, event) => onGroupSelect(event, checked, group, controller)} />
+                    onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
                 </Confirm>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
@@ -244,9 +243,8 @@ const LayerCollapsePanel = (props) => {
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
                     }
-                const warnActive = showWarn.includes(subgroup.id);
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} showWarn={showWarn} warnActive={warnActive} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}

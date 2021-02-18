@@ -30,7 +30,6 @@ class ViewHandler extends StateHandler {
             openGroupTitles: [],
             selectedLayerIds: this._getSelectedLayerIds(),
             selectedGroupIds: [],
-            showWarn: []
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -85,32 +84,6 @@ class ViewHandler extends StateHandler {
         setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
-    // Check if we need to show confirm dialog when activating a whole group
-    showWarn (group) {
-        if (group.layers.length > 1) {
-            if (!group.id || this.state.showWarn.includes(group.id)) {
-                return;
-            }
-            const showWarn = [...this.state.showWarn, group.id];
-            // set groups id to showWarn array so we show the confirm dialog
-            this.updateState({ showWarn });
-        } else {
-            return false;
-        }
-    }
-
-    deactivateGroup (group) {
-        if (this.state.showWarn.includes(group.id)) {
-            const index = this.state.showWarn.indexOf(group.id);
-            if (index === -1) {
-                return;
-            }
-            const showWarn = [...this.state.showWarn];
-            showWarn.splice(index, 1);
-            this.updateState({ showWarn });
-        }
-    }
-
     // active all layers in selected group
     addGroupLayersToMap (group) {
         for (let i in group.layers) {
@@ -121,13 +94,6 @@ class ViewHandler extends StateHandler {
             this.updateState({ selectedLayerIds });
             setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
         }
-        const index = this.state.showWarn.indexOf(group.id);
-        if (index === -1) {
-            return;
-        }
-        const showWarn = [...this.state.showWarn];
-        showWarn.splice(index, 1);
-        this.updateState({ showWarn });
     }
 
     // deactivate all layers in group
@@ -142,13 +108,6 @@ class ViewHandler extends StateHandler {
             this.updateState({ selectedLayerIds });
             setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
         }
-        const index = this.state.showWarn.indexOf(group.id);
-        if (index === -1) {
-            return;
-        }
-        const showWarn = [...this.state.showWarn];
-        showWarn.splice(index, 1);
-        this.updateState({ showWarn });
     }
 
     updateLayerGroups () {

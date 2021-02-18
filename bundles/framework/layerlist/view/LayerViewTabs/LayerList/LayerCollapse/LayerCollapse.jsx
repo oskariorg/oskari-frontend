@@ -38,9 +38,6 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         active = true;
                     }
-                    // show the confirm dialog if group is included in showWarn
-                    // also pass showWarn forward for recursive rendering of groups
-                    const warnActive = showWarn.includes(group.id);
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
@@ -52,8 +49,6 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                             controller={controller}
                             selectedGroupIds={selectedGroupIds}
                             active={active}
-                            warnActive={warnActive}
-                            showWarn={showWarn}
                         />
                     );
                 })
