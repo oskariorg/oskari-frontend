@@ -71,59 +71,55 @@ const defaults = {
  * <Preview }/>
  */
 
-export class Preview extends React.Component {
-    constructor (props) {
-        super(props);
+export const Preview = (props) => {
+    const markers = props.markers;
+    const format = props.format;
+    let size = 3;
 
-        this.markers = this.props.markers;
-        this.size = 3;
-
-        this.previewAttributes = {
-            strokeColor: defaults.stroke.color,
-            strokeWidth: defaults.stroke.width,
-            strokeLineCap: defaults.stroke.lineCap,
-            fill: defaults.defaultFill, // tyhjä stringi tähän?
-            fillColor: defaults.fill.color,
-            pattern: defaults.fill.area.pattern
-        };
-    }
+    let previewAttributes = {
+        strokeColor: defaults.stroke.color,
+        strokeWidth: defaults.stroke.width,
+        strokeLineCap: defaults.stroke.lineCap,
+        fill: defaults.defaultFill, // empty string here?
+        fillColor: defaults.fill.color,
+        pattern: defaults.fill.area.pattern
+    };
     
-    _fillSvgWithStyle () {
-        const format = this.props.format;
-        const path = this._parsePath(format);        
+    const _fillSvgWithStyle = () => {
+        const path = _parsePath(format);        
 
-        this.previewAttributes.strokeColor = format === 'area' ? this.props.oskariStyle.stroke.area.color : this.props.oskariStyle.stroke.color;
-        this.previewAttributes.fillColor = this.props.oskariStyle.fill.color;
+        previewAttributes.strokeColor = format === 'area' ? props.oskariStyle.stroke.area.color : props.oskariStyle.stroke.color;
+        previewAttributes.fillColor = props.oskariStyle.fill.color;
 
-        this.previewAttributes.fill = format === 'area'
+        previewAttributes.fill = format === 'area'
             ? ('url(#' + defaultPatternId + ')') : format !== 'line' 
-            ? this.props.oskariStyle.image.fill.color : defaults.fill.color;
+            ? props.oskariStyle.image.fill.color : defaults.fill.color;
 
-        if (format === 'area' && ~this.props.oskariStyle.fill.area.pattern) {
-            const patternPath = this._parsePattern(this.props.areaFills.find(pattern => pattern.name === this.props.oskariStyle.fill.area.pattern));
-            this.previewAttributes.pattern = this._composeSvgPattern(patternPath);
+        if (format === 'area' && ~props.oskariStyle.fill.area.pattern) {
+            const patternPath = _parsePattern(props.areaFills.find(pattern => pattern.name === props.oskariStyle.fill.area.pattern));
+            previewAttributes.pattern = _composeSvgPattern(patternPath);
         }
 
-        this.previewAttributes.strokeWidth = format === 'point'
+        previewAttributes.strokeWidth = format === 'point'
             ? defaults.defaultStrokeWidth : format === 'area'
-            ? this.props.oskariStyle.stroke.area.width : this.props.oskariStyle.stroke.width;
+            ? props.oskariStyle.stroke.area.width : props.oskariStyle.stroke.width;
         
-        this.previewAttributes.strokeLineCap = format === 'line' ? this.props.oskariStyle.stroke.lineCap : defaults.stroke.lineCap;
+        previewAttributes.strokeLineCap = format === 'line' ? props.oskariStyle.stroke.lineCap : defaults.stroke.lineCap;
 
-        this.previewAttributes.strokeDashArray = this._getPreviewLineDash(format, this.props.oskariStyle);
+        previewAttributes.strokeDashArray = _getPreviewLineDash(format, props.oskariStyle);
 
-        this.previewAttributes.strokeLineJoin = format === 'line' ? this.props.oskariStyle.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
+        previewAttributes.strokeLineJoin = format === 'line' ? props.oskariStyle.stroke.area.lineJoin : defaults.stroke.area.lineJoin;
 
-        path.setAttribute('stroke', this.previewAttributes.strokeColor);
-        path.setAttribute('stroke-width', this.previewAttributes.strokeWidth);
-        path.setAttribute('stroke-linecap', this.previewAttributes.strokeLineCap);
-        path.setAttribute('stroke-dasharray', this.previewAttributes.strokeDashArray);
-        path.setAttribute('stroke-linejoin', this.previewAttributes.strokeLineJoin);
+        path.setAttribute('stroke', previewAttributes.strokeColor);
+        path.setAttribute('stroke-width', previewAttributes.strokeWidth);
+        path.setAttribute('stroke-linecap', previewAttributes.strokeLineCap);
+        path.setAttribute('stroke-dasharray', previewAttributes.strokeDashArray);
+        path.setAttribute('stroke-linejoin', previewAttributes.strokeLineJoin);
         if (format !== 'line') {
-            path.setAttribute('fill', this.previewAttributes.fill);
+            path.setAttribute('fill', previewAttributes.fill);
         }
         
-        this.size = format === 'point' ? this.props.oskariStyle.image.size : defaults.image.size;
+        size = format === 'point' ? props.oskariStyle.image.size : defaults.image.size;
 
         return path.outerHTML;
     }
@@ -135,7 +131,7 @@ export class Preview extends React.Component {
      * @description Parses current Oskari style on outputs correct linedash value for preview
      * @returns {String} value of the preview linedash or empty string for point tab
      */
-    _getPreviewLineDash (format, oskariStyle) {
+    const _getPreviewLineDash = (format, oskariStyle) => {
         if (format === 'line' && oskariStyle.stroke.lineDash === 'dash') {
             return '4, 4';
         } else if (format === 'area' && oskariStyle.stroke.area.lineDash === 'dash') {
@@ -153,9 +149,9 @@ export class Preview extends React.Component {
      *
      * @returns rawHtmlPath - DOM object of parsed SVG
      */
-    _parsePath (format) {
+    const _parsePath = (format) => {
         let baseSvg =
-              format === 'point' ? this.props.markers[this.props.oskariStyle.image.shape].data
+              format === 'point' ? props.markers[props.oskariStyle.image.shape].data
             : format === 'line' ? baseSvg = linePreviewSVG
             : format === 'area' ? baseSvg = areaPreviewSVG
             : false;
@@ -174,12 +170,12 @@ export class Preview extends React.Component {
      *
      * @returns rawHtmlPath - DOM object of current SVG
      */
-    _parsePattern (pattern) {
+    const _parsePattern = (pattern) => {
         const domParser = new DOMParser();
         const parsed = domParser.parseFromString(pattern.data, 'image/svg+xml');
         const rawHtmlPath = parsed.getElementsByTagName('path')[0];
 
-        rawHtmlPath.setAttribute('stroke', this.previewAttributes.fillColor);
+        rawHtmlPath.setAttribute('stroke', previewAttributes.fillColor);
 
         return rawHtmlPath;
     }
@@ -190,14 +186,14 @@ export class Preview extends React.Component {
      * @description Combine provided plain pattern path with definitive svg base
      * @returns {String} full pattern as string
      */
-    _composeSvgPattern (patternPath) {
+    const _composeSvgPattern = (patternPath) => {
         return '<defs><pattern id="' + defaultPatternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
     }
 
-    _composePreviewViewbox () {
+    const _composePreviewViewbox = () => {
         let viewboxString = ''
-        const widthV = previewViewbox.width - (5 * this.size); // multiply by negative to shrink viewbox
-        const heightV = previewViewbox.height - (5 * this.size); // multiply by negative to shrink viewbox
+        const widthV = previewViewbox.width - (5 * size); // multiply by negative to shrink viewbox
+        const heightV = previewViewbox.height - (5 * size); // multiply by negative to shrink viewbox
         viewboxString = previewViewbox.minX + ' ' + previewViewbox.minY + ' ' +  widthV + ' ' + heightV;
         return viewboxString;
     }
@@ -208,13 +204,12 @@ export class Preview extends React.Component {
      * @returns {Component} - combined svg icon with preview base wrapping around provided icon
      *
      */
-    _addBaseSvg () {
-        const svgIcon = this._fillSvgWithStyle(); // Get svg icon
-        const combinedSvg = this.previewAttributes.pattern + svgIcon; // Add pattern to svg icon
+    const _addBaseSvg = () => {
+        const combinedSvg = previewAttributes.pattern + _fillSvgWithStyle(); // Combine pattern and svg icon
 
         return (
             <svg
-                viewBox={ this._composePreviewViewbox() }
+                viewBox={ _composePreviewViewbox() }
                 width={ previewSize }
                 height={ previewSize }
                 xmlns="http://www.w3.org/2000/svg"
@@ -224,13 +219,11 @@ export class Preview extends React.Component {
         );
     }
 
-    render () {
-        return (
-            <div style={ previewWrapperStyle }>
-                { this._addBaseSvg(this.props.previewIcon) }
-            </div>
-        );
-    }
+    return (
+        <div style={ previewWrapperStyle }>
+            { _addBaseSvg(props.previewIcon) }
+        </div>
+    );
 };
 
 Preview.propTypes = {
