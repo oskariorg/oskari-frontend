@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PREVIEW_DEFAULTS } from './constants';
 
 // Size for preview svg
 const previewSize = '80px';
@@ -24,39 +25,6 @@ const areaPreviewSVG = '<svg viewBox="0 0 80 80" width="80" height="80" xmlns="h
 
 const defaultPatternId = 'patternPreview'; // Static pattern id filled into svg - with this we identify pattern made solely for preview from other dom-elements
 
-// Default values for every style settings value
-const defaults = {
-    fill: {
-        color: '#b5b5b5',
-        area: {
-            pattern: -1
-        }
-    },
-    stroke: {
-        color: '#000000',
-        width: 1,
-        lineDash: 'solid',
-        lineCap: 'round',
-        area: {
-            color: '#000000',
-            width: 3,
-            lineDash: 'dot',
-            lineJoin: 'miter'
-        }
-    },
-    image: {
-        shape: 5,
-        size: 3,
-        sizePx: 20,
-        offsetX: 0,
-        offsetY: 0,
-        opacity: 0.7,
-        radius: 2,
-        fill: {
-            color: '#ff00ff'
-        }
-    }
-};
 
 /**
  * @class Preview
@@ -81,12 +49,12 @@ export const Preview = (props) => {
     let size = 3;
 
     let previewAttributes = {
-        strokeColor: defaults.stroke.color,
-        strokeWidth: defaults.stroke.width,
-        strokeLineCap: defaults.stroke.lineCap,
-        fill: defaults.defaultFill, // empty string here?
-        fillColor: defaults.fill.color,
-        pattern: defaults.fill.area.pattern
+        strokeColor: PREVIEW_DEFAULTS.stroke.color,
+        strokeWidth: PREVIEW_DEFAULTS.stroke.width,
+        strokeLineCap: PREVIEW_DEFAULTS.stroke.lineCap,
+        fill: PREVIEW_DEFAULTS.defaultFill, // empty string here?
+        fillColor: PREVIEW_DEFAULTS.fill.color,
+        pattern: PREVIEW_DEFAULTS.fill.area.pattern
     };
 
     /**
@@ -170,10 +138,10 @@ export const Preview = (props) => {
         previewAttributes.strokeColor = oskariStyle.stroke.color;
         previewAttributes.fillColor = oskariStyle.fill.color;
         previewAttributes.fill = oskariStyle.image.fill.color;
-        previewAttributes.strokeWidth = defaults.defaultStrokeWidth;
-        previewAttributes.strokeLineCap = defaults.stroke.lineCap;
+        previewAttributes.strokeWidth = PREVIEW_DEFAULTS.defaultStrokeWidth;
+        previewAttributes.strokeLineCap = PREVIEW_DEFAULTS.stroke.lineCap;
         previewAttributes.strokeDashArray = _getPreviewLineDash();
-        previewAttributes.strokeLineJoin = defaults.stroke.area.lineJoin;
+        previewAttributes.strokeLineJoin = PREVIEW_DEFAULTS.stroke.area.lineJoin;
 
         path.setAttribute('stroke', previewAttributes.strokeColor);
         path.setAttribute('stroke-width', previewAttributes.strokeWidth);
@@ -197,7 +165,7 @@ export const Preview = (props) => {
 
         previewAttributes.strokeColor = oskariStyle.stroke.color;
         previewAttributes.fillColor = oskariStyle.fill.color;
-        previewAttributes.fill = defaults.fill.color;
+        previewAttributes.fill = PREVIEW_DEFAULTS.fill.color;
 
         previewAttributes.strokeWidth = oskariStyle.stroke.width;
         previewAttributes.strokeLineCap = oskariStyle.stroke.lineCap;
@@ -210,7 +178,7 @@ export const Preview = (props) => {
         path.setAttribute('stroke-dasharray', previewAttributes.strokeDashArray);
         path.setAttribute('stroke-linejoin', previewAttributes.strokeLineJoin);
 
-        size = defaults.image.size;
+        size = PREVIEW_DEFAULTS.image.size;
 
         return path.outerHTML;
     }
@@ -231,9 +199,9 @@ export const Preview = (props) => {
         previewAttributes.pattern = _composeSvgPattern(patternPath); // this has to be set after fillColor
 
         previewAttributes.strokeWidth = oskariStyle.stroke.area.width;
-        previewAttributes.strokeLineCap = defaults.stroke.lineCap;
+        previewAttributes.strokeLineCap = PREVIEW_DEFAULTS.stroke.lineCap;
         previewAttributes.strokeDashArray = _getPreviewLineDash();
-        previewAttributes.strokeLineJoin = defaults.stroke.area.lineJoin;
+        previewAttributes.strokeLineJoin = PREVIEW_DEFAULTS.stroke.area.lineJoin;
 
         path.setAttribute('stroke', previewAttributes.strokeColor);
         path.setAttribute('stroke-width', previewAttributes.strokeWidth);
@@ -242,7 +210,7 @@ export const Preview = (props) => {
         path.setAttribute('stroke-linejoin', previewAttributes.strokeLineJoin);
         path.setAttribute('fill', previewAttributes.fill);
 
-        size = defaults.image.size;
+        size = PREVIEW_DEFAULTS.image.size;
 
         return path.outerHTML;
     }
