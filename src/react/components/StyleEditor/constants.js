@@ -39,38 +39,3 @@ export const LINE_STYLES = {
         }
     ]
 };
-
-
-// Default values for every style settings value
-export const PREVIEW_DEFAULTS = {
-    fill: {
-        color: '#b5b5b5',
-        area: {
-            pattern: -1
-        }
-    },
-    stroke: {
-        color: '#000000',
-        width: 1,
-        lineDash: 'solid',
-        lineCap: 'round',
-        area: {
-            color: '#000000',
-            width: 3,
-            lineDash: 'dot',
-            lineJoin: 'miter'
-        }
-    },
-    image: {
-        shape: 5,
-        size: 3,
-        sizePx: 20,
-        offsetX: 0,
-        offsetY: 0,
-        opacity: 0.7,
-        radius: 2,
-        fill: {
-            color: '#ff00ff'
-        }
-    }
-};
