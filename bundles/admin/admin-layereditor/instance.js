@@ -1,7 +1,9 @@
+import React from 'react';
 import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 import { LocalizingFlyout } from './view/LocalizingFlyout';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -135,6 +137,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
             const addSubthemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             addSubthemeTool.setName('addSubtheme');
+            addSubthemeTool.setIconComponent(<PlusCircleOutlined/>);
             addSubthemeTool.setTooltip(this.loc('addSubtheme'));
             addSubthemeTool.setIconCls('add-sub-theme');
             addSubthemeTool.setTypes(['layergroup', 'getInspireName']);
@@ -143,6 +146,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
             const editThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             editThemeTool.setName('editTheme');
+            editThemeTool.setIconComponent(<EditOutlined/>);
             editThemeTool.setTooltip(this.loc('editTheme'));
             editThemeTool.setIconCls('edit-layer');
             editThemeTool.setTypes(['layergroup', 'getInspireName']);
@@ -352,9 +356,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 });
             };
             const loc = newSubgroup ? this.loc('addTheme') : id ? this.loc('editTheme') : this.loc('addTheme');
+            const hasSubgroups = this._getLayerService().getAllLayerGroups(id).hasSubgroups();
             this.themeFlyout = new LocalizingFlyout(this, loc, {
                 headerMessageKey: 'themeName',
                 id: id,
+                hasSubgroups: hasSubgroups,
                 fetch: fetchTheme,
                 layerCountInGroup: layerCountInGroup
             }, this.loc('deleteGroupLayers'));

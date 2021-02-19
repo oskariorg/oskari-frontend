@@ -29,7 +29,7 @@ class ViewHandler extends StateHandler {
             groups: [],
             openGroupTitles: [],
             selectedLayerIds: this._getSelectedLayerIds(),
-            selectedGroupIds: [],
+            selectedGroupIds: []
         };
         this.eventHandlers = this._createEventHandlers();
     }

@@ -5,7 +5,6 @@ import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Toolt
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
-import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const StyledSubCollapse = styled(Collapse)`
     border-radius: 0 !important;
@@ -55,18 +54,6 @@ const renderLayer = ({ model, even, selected, controller }) => {
             </StyledListItem>
     );
 };
-
-const ToolButton = ({ tool }) => {
-    let toolButton;
-    if (tool.getName() === 'editTheme') {
-        toolButton = <EditOutlined/>;
-    } else if (tool.getName() === 'addSubtheme') {
-        toolButton = <PlusCircleOutlined />;
-    }
-    return (
-        toolButton
-    );
-}
 
 renderLayer.propTypes = {
     model: PropTypes.any,
@@ -153,7 +140,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
                                 <StyledEditGroup onClick={(event) =>
                                     onToolClick(event, tool, group)} >
-                                    <ToolButton tool={tool}/>
+                                    {tool.getIconComponent()}
                                 </StyledEditGroup>
                                 </Tooltip>
                             )
@@ -224,7 +211,7 @@ const LayerCollapsePanel = (props) => {
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
                             <StyledEditGroup onClick={(event) =>
                                 onToolClick(event, tool, group)} >
-                                <ToolButton tool={tool}/>
+                                {tool.getIconComponent()}
                             </StyledEditGroup>
                             </Tooltip>
                         )
