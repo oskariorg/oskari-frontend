@@ -71,7 +71,7 @@ Oskari.clazz.define(
 
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
                 // Read options object for styles and hover options
-                const { styles } = mapLayerJson.options;
+                const { styles = {} } = mapLayerJson.options;
                 if (Object.keys(styles).length === 0) {
                     layer.addStyle(defaultStyle);
                 } else {
