@@ -33,11 +33,10 @@ export const AreaTab = (props) => {
             <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.stroke.color' /> }
+                    name='stroke.area.color'
+                    label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
                 >
-                    <ColorPicker
-                        defaultValue={ props.oskariStyle.stroke.color } />
+                    <ColorPicker />
                 </Form.Item>
 
                 <Form.Item
@@ -45,22 +44,17 @@ export const AreaTab = (props) => {
                     name='fill.color'
                     label={ <Message messageKey='StyleEditor.fill.color' /> }
                 >
-                    <ColorPicker
-                        defaultValue={ props.oskariStyle.fill.color }
-                    />
+                    <ColorPicker />
                 </Form.Item>
             </Row>
 
             <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.lineDash'
-                    label={ <Message messageKey='StyleEditor.stroke.lineDash' /> }
+                    name='stroke.area.lineDash'
+                    label={ <Message messageKey='StyleEditor.stroke.area.lineDash' /> }
                 >
-                    <SvgRadioButton
-                        options={ constants.LINE_STYLES.lineDash }
-                        defaultValue={ props.oskariStyle.stroke.area.lineDash } // TO-DO: support for: dash, dashdot, dot, longdash, longdashdot and solid
-                    />
+                    <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
                 </Form.Item>
             </Row>
 
@@ -70,10 +64,7 @@ export const AreaTab = (props) => {
                     name='fill.area.pattern'
                     label={ <Message messageKey='StyleEditor.fill.area.pattern' /> }
                 >
-                    <SvgRadioButton
-                        options={ areaFills }
-                        defaultValue={ props.oskariStyle.fill.area.pattern }
-                    />
+                    <SvgRadioButton options={ areaFills } />
                 </Form.Item>
             </Row>
 

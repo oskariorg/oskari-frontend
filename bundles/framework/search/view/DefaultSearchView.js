@@ -40,6 +40,7 @@ Oskari.clazz.define(
             }
         ];
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __templates: {
             main: _.template(
@@ -284,16 +285,8 @@ Oskari.clazz.define(
             );
         },
         __getSearchResultHeader: function (count, hasMore) {
-            var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-            var msg = intro({ count: count });
-            msg = msg + '<br/>';
-
-            if (hasMore) {
-                // more results available
-                msg = msg + this.instance.getLocalization('searchResultDescriptionMoreResults');
-                msg = msg + '<br/>';
-            }
-            return msg + this.instance.getLocalization('searchResultDescriptionOrdering');
+            const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
+            return this.loc(msgKey, { count }) + '<br/>' + this.loc('searchResultDescriptionOrdering');
         },
 
         _renderResults: function (result, searchKey) {

@@ -309,9 +309,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
 
-            if (newLayerConf.legendImage) {
-                layer.setLegendImage(newLayerConf.legendImage);
-            }
             // Scales need to be set always so they can be cleared with the admin.
             // The server doesn't return scale if not set -> these will not get updated if only updated when value exists
             layer.setMinScale(newLayerConf.minScale);
@@ -1218,7 +1215,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOrganizationName('');
             }
 
-            baseLayer.setLegendImage(baseMapJson.legendImage);
             baseLayer.setDescription(baseMapJson.info);
             baseLayer.setQueryable(false);
 
@@ -1390,8 +1386,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (mapLayerJson.url) {
                 layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
-
-            layer.setLegendImage(mapLayerJson.legendImage);
 
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!

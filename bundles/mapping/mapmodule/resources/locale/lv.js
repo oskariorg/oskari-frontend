@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Meklēšanas rezultāti",
                 "close": "Aizvērt meklēšanas rezultātus",
                 "noresults": "Rezultāti nav atrasti",
-                "toomanyresults": "Atrasti vairāk kā 100 rezultāti. Lūdzu precizējiet meklēšanas kritērijus",
+                "searchResultCount": "Atrastie ieraksti {count} rezultāti.",
+                "searchMoreResults": "Atrasti vairāk kā {count} rezultāti. Lūdzu precizējiet meklēšanas kritērijus",
                 "column_name": "Nosaukums",
                 "column_village": "Pašvaldība",
                 "column_type": "Tips"

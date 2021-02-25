@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Otsingutulemused",
                 "close": "Sulge otsingutulemused",
                 "noresults": "Otsing ei andnud tulemusi. Proovi teise otsisõnaga.",
-                "toomanyresults": "Otsing andis rohkem kui 100 vastet. Muuda otsing detailsemaks.",
+                "searchResultCount": "Otsing tagastas {count} tulemust.",
+                "searchMoreResults": "Otsing andis rohkem kui {count} vastet. Muuda otsing detailsemaks.",
                 "column_name": "Nimi",
                 "column_village": "Omavalitsus",
                 "column_type": "Tüüp"

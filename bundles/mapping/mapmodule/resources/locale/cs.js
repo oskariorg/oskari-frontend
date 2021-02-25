@@ -43,7 +43,8 @@ Oskari.registerLocalization(
                 "title": "Výsledky vyhledávání",
                 "close": "Zavřít výsledky hledání",
                 "noresults": "Žádné výsledky nenalezeny",
-                "toomanyresults": "Nalezeno více než 100 výsledků. Specifikujte dotaz podrobněji.",
+                "searchResultCount": "Vyhledávání vrátilo {count} výsledky.",
+                "searchMoreResults": "Nalezeno více než {count} výsledků. Specifikujte dotaz podrobněji.",
                 "column_name": "Jméno",
                 "column_village": "Obec",
                 "column_type": "Typ"

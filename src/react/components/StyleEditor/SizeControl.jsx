@@ -14,7 +14,6 @@ export const SizeControl = (props) => {
             label={
                 <Message messageKey={ props.localeKey }/>
             }
-            initialValue={ 3 }
             { ...ANTD_FORMLAYOUT }
         >
             <InputNumber

@@ -13,7 +13,6 @@ const PROPERTY_FIELDS = [
     'GFI_XSLT',
     'GROUPS',
     'HOVER',
-    'LEGEND_IMAGE',
     'LOCALIZED_NAMES',
     'METADATAID',
     'NAME',
