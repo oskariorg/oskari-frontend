@@ -82,8 +82,7 @@ Oskari.clazz.define(
                         layer.addStyle(style);
                     });
                 }
-
-                layer.setHoverOptions(styles.hover);
+                layer.setHoverOptions(mapLayerJson.options.hover);
             } else {
                 // check if default style comes and give localization for it if found
                 if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
