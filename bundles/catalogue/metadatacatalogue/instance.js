@@ -55,6 +55,7 @@ Oskari.clazz.define(
         this.state = this.state || {};
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this._vectorLayerId = 'METADATACATALOGUE_VECTORLAYER';
+        this.id = 'oskari_metadatacatalogue_tabpanel_header';
     }, {
         /**
          * @static
@@ -379,6 +380,23 @@ Oskari.clazz.define(
                 if (event.getViewState() === 'close') {
                     me._removeFeaturesFromMap();
                 }
+            },
+            'Search.TabChangedEvent': function (event) {
+                const me = this;
+
+                if (event.getNewTabId() !== this.id) {
+                    me._stopCoverage();
+                    if (me.coverageButton) {
+                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                    }
+                    me.drawCoverage = true;
+
+                    if (me.coverageButton) {
+                        me.coverageButton[0].data = '';
+                    }
+
+                    me._removeFeaturesFromMap();
+                }
             }
         },
         /**
@@ -560,9 +578,9 @@ Oskari.clazz.define(
             var title = me.getLocalization('tabTitle'),
                 content = metadataCatalogueContainer,
                 priority = this.tabPriority,
-                id = 'oskari_metadatacatalogue_tabpanel_header',
-                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest'),
-                req = reqBuilder(title, content, priority, id);
+                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+
+            const req = reqBuilder(title, content, priority, this.id);
 
             me.sandbox.request(me, req);
 
