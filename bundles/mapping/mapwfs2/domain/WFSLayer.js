@@ -259,8 +259,8 @@ export class WFSLayer extends VectorTileLayer {
         return this._customStyle;
     }
 
-    setStyles (layerStyles) {
-        this._styles = layerStyles || [];
+    setStyles (layerStyles = []) {
+        this._styles = layerStyles;
     }
 
     /**

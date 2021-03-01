@@ -39,7 +39,7 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData: function (layer, mapLayerJson, maplayerService) {
+        parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
             var me = this;
 
             if (layer.isLayerOfType('WFS')) {
@@ -71,7 +71,7 @@ Oskari.clazz.define(
 
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
                 // Read options object for styles and hover options
-                const { styles = {} } = mapLayerJson.options;
+                const { styles = {} } = mapLayerJson.options || {};
                 const layerStyles = [];
                 Object.keys(styles).forEach(styleId => {
                     const style = new Style();
@@ -89,7 +89,7 @@ Oskari.clazz.define(
                 layer.setHoverOptions(mapLayerJson.options.hover);
             } else {
                 // check if default style comes and give localization for it if found
-                if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
+                if (Array.isArray(mapLayerJson.styles)) {
                     const definedDefaultStyle = mapLayerJson.styles.find(style => style.name === 'default');
                     if (definedDefaultStyle) {
                         definedDefaultStyle.title = locDefaultStyle;
