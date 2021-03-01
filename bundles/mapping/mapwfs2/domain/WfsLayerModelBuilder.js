@@ -71,25 +71,18 @@ Oskari.clazz.define(
 
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
                 // Read options object for styles and hover options
-                const { options } = mapLayerJson;
-                if (Object.keys(options.styles).length === 0) {
+                const { styles = {} } = mapLayerJson.options;
+                if (Object.keys(styles).length === 0) {
                     layer.addStyle(defaultStyle);
+                } else {
+                    Object.keys(styles).forEach(styleId => {
+                        const style = new Style();
+                        style.setName(styleId);
+                        style.setTitle(styleId === 'default' ? locDefaultStyle : styles[styleId].title || styleId);
+                        layer.addStyle(style);
+                    });
                 }
-
-                if (options) {
-                    if (options.styles) {
-                        Object.keys(options.styles).forEach(styleId => {
-                            if (styleId !== 'default') {
-                                const style = new Style();
-                                style.setName(styleId);
-                                style.setTitle(options.styles[styleId].title || styleId);
-                                layer.addStyle(style);
-                            }
-                        });
-                    }
-                    layer.setHoverOptions(options.hover);
-                    layer.selectStyle(defaultStyle.getName());
-                }
+                layer.setHoverOptions(mapLayerJson.options.hover);
             } else {
                 // check if default style comes and give localization for it if found
                 if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
