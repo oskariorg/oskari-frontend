@@ -259,6 +259,10 @@ export class WFSLayer extends VectorTileLayer {
         return this._customStyle;
     }
 
+    setStyles (layerStyles) {
+        this._styles = layerStyles || [];
+    }
+
     /**
      * @method getStyles
      * @return {Oskari.mapframework.domain.Style[]}
