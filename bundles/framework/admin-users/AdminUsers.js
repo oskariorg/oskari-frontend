@@ -89,7 +89,7 @@ Oskari.clazz.define(
                 '    </label>' +
                 '    <label>' +
                 '        <span></span>' +
-                '        <input type="text" name="email" />' +
+                '        <input type="text" name="email" required="required" />' +
                 '    </label>' +
                 // Make these two required if we're creating a new user
                 '    <label>' +
