@@ -27,7 +27,7 @@ Oskari.registerLocalization(
                 "delete_failed": "Käyttäjän poistaminen epäonnistui.",
                 "fetch_failed": "Käyttäjien tietoja ei voitu hakea.",
                 "save_failed": "Tallennus epäonnistui.",
-                "save_failed_message": "Tarkista, että nimimerkki on yksilöllinen. Kokeile tämän jälkeen uudelleen.",
+                "save_failed_message": "Valitsemasi nimimerkki on jo käytössä, yritä eri nimimerkkiä.",
                 "noMatch": "Ei hakutuloksia.",
                 "selectRole": "Valitse rooli"
             },
