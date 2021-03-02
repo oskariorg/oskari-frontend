@@ -98,7 +98,7 @@ const onCancel = (event, setVisible) => {
 }
 
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, controller, propsNeededForPanel }) => {
+const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
 
     const [visible, setVisible] = useState(false);
     const layerRows = group.getLayers().map((layer, index) => {
@@ -158,7 +158,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
                         activeGroup = true;
                     }
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}
@@ -169,7 +169,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, selectedGroupIds, c
 
 
 const LayerCollapsePanel = (props) => {
-    const { active, group, selectedLayerIds, selectedGroupIds, controller, ...propsNeededForPanel } = props;
+    const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const [visible, setVisible] = useState(false);
 
     const layerRows = group.getLayers().map((layer, index) => {
@@ -231,7 +231,7 @@ const LayerCollapsePanel = (props) => {
                         activeGroup = true;
                     }
                 return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} selectedGroupIds={selectedGroupIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
+                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
 
             }
             )}

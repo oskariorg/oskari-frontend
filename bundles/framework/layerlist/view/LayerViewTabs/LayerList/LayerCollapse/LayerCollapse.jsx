@@ -20,7 +20,7 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
     padding-left: ${props => props.group.layers.length === 0 ? '27px' : '0px'};
 `;
 
-const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGroupIds, showWarn, controller }) => {
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
@@ -32,7 +32,6 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-                    
                     let active = false;
                     // set group switch active if all layers in group are selected
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
@@ -47,7 +46,6 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, selectedGrou
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
                             controller={controller}
-                            selectedGroupIds={selectedGroupIds}
                             active={active}
                         />
                     );

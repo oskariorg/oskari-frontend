@@ -57,7 +57,7 @@ const Layer = ({ model, even, selected, controller }) => {
                         .map((tool, i) =>
                             <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
                                 <div onClick={() => onToolClick(tool)}>
-                                    <EditFilled />
+                                    {tool.getIconComponent()}
                                 </div>
                             </Tooltip>
                         )
