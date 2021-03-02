@@ -360,44 +360,33 @@ Oskari.clazz.define(
                     return;
                 }
 
-                if (!isShown && me.drawCoverage === false) {
-                    me._stopCoverage();
-                    if (me.coverageButton) {
-                        me.coverageButton.val(me.getLocalization('delimitArea'));
-                    }
-                    me.drawCoverage = true;
-
-                    var input = document.getElementById('oskari_metadatacatalogue_forminput_searchassistance');
-                    if (input) {
-                        input.focus();
-                    }
-
-                    if (me.coverageButton) {
-                        me.coverageButton[0].data = '';
-                    }
-                }
-
-                if (event.getViewState() === 'close') {
-                    me._removeFeaturesFromMap();
+                if ((!isShown && me.drawCoverage === false) || event.getViewState() === 'close') {
+                    this._teardownMetaSearch();
                 }
             },
             'Search.TabChangedEvent': function (event) {
-                const me = this;
-
                 if (event.getNewTabId() !== this.id) {
-                    me._stopCoverage();
-                    if (me.coverageButton) {
-                        me.coverageButton.val(me.getLocalization('delimitArea'));
-                    }
-                    me.drawCoverage = true;
-
-                    if (me.coverageButton) {
-                        me.coverageButton[0].data = '';
-                    }
-
-                    me._removeFeaturesFromMap();
+                    this._teardownMetaSearch();
+                } else {
+                    this._removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
                 }
             }
+        },
+        /**
+         * @method _teardownMetaSearch
+         * @private
+         * Tears down meta data search when changing tab or closing flyout
+         */
+        _teardownMetaSearch: function () {
+            this._stopCoverage();
+
+            if (this.coverageButton) {
+                this.coverageButton.val(this.getLocalization('delimitArea'));
+                this.coverageButton[0].data = '';
+            }
+
+            this.drawCoverage = true;
+            this._removeFeaturesFromMap();
         },
         /**
          * @method _removeFeaturesFromMap
