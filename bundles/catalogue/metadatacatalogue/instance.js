@@ -55,6 +55,7 @@ Oskari.clazz.define(
         this.state = this.state || {};
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this._vectorLayerId = 'METADATACATALOGUE_VECTORLAYER';
+        this.id = 'oskari_metadatacatalogue_tabpanel_header';
     }, {
         /**
          * @static
@@ -359,27 +360,33 @@ Oskari.clazz.define(
                     return;
                 }
 
-                if (!isShown && me.drawCoverage === false) {
-                    me._stopCoverage();
-                    if (me.coverageButton) {
-                        me.coverageButton.val(me.getLocalization('delimitArea'));
-                    }
-                    me.drawCoverage = true;
-
-                    var input = document.getElementById('oskari_metadatacatalogue_forminput_searchassistance');
-                    if (input) {
-                        input.focus();
-                    }
-
-                    if (me.coverageButton) {
-                        me.coverageButton[0].data = '';
-                    }
+                if ((!isShown && me.drawCoverage === false) || event.getViewState() === 'close') {
+                    this._teardownMetaSearch();
                 }
-
-                if (event.getViewState() === 'close') {
-                    me._removeFeaturesFromMap();
+            },
+            'Search.TabChangedEvent': function (event) {
+                if (event.getNewTabId() !== this.id) {
+                    this._teardownMetaSearch();
+                } else {
+                    this._removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
                 }
             }
+        },
+        /**
+         * @method _teardownMetaSearch
+         * @private
+         * Tears down meta data search when changing tab or closing flyout
+         */
+        _teardownMetaSearch: function () {
+            this._stopCoverage();
+
+            if (this.coverageButton) {
+                this.coverageButton.val(this.getLocalization('delimitArea'));
+                this.coverageButton[0].data = '';
+            }
+
+            this.drawCoverage = true;
+            this._removeFeaturesFromMap();
         },
         /**
          * @method _removeFeaturesFromMap
@@ -560,9 +567,9 @@ Oskari.clazz.define(
             var title = me.getLocalization('tabTitle'),
                 content = metadataCatalogueContainer,
                 priority = this.tabPriority,
-                id = 'oskari_metadatacatalogue_tabpanel_header',
-                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest'),
-                req = reqBuilder(title, content, priority, id);
+                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+
+            const req = reqBuilder(title, content, priority, this.id);
 
             me.sandbox.request(me, req);
 
