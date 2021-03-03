@@ -109,5 +109,25 @@ Oskari.clazz.define(
             if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
             }
+            this.parseLayerAttributes(layer);
+        },
+        parseLayerAttributes: function (layer) {
+            const { data = {} } = layer.getAttributes();
+            const { filter, locale = {}, types } = data;
+            const lang = Oskari.getLang();
+
+            if (Array.isArray(filter)) {
+                layer.setPropertyFilter(filter);
+            } else if (typeof filter === 'object') {
+                const filterArray = filter[lang] || filter.default || [];
+                layer.setPropertyFilter(filterArray);
+            }
+            const localized = locale[lang];
+            if (localized) {
+                layer.setPropertyNames(localized);
+            }
+            if (types) {
+                layer.setPropertyTypes(types);
+            }
         }
     });
