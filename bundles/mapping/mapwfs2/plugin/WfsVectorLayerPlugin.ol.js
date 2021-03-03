@@ -362,33 +362,26 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer) {
             return;
         }
-        const onSuccess = localized => {
-            if (Array.isArray(localized) && localized.length) {
-                if (localized[0].name !== WFS_FTR_ID_KEY) {
-                    localized.unshift({
-                        name: WFS_FTR_ID_KEY,
-                        locale: WFS_FTR_ID_LOCALE
-                    });
-                }
-                layer.setFields(localized.map(prop => prop.name));
-                layer.setLocales(localized.map(prop => prop.locale));
-            } else {
-                layer.setFields(fields);
-                layer.setLocales([]);
-            }
+        const onSuccess = response => {
+            const lang = Oskari.getLang();
+            const { attributes = {}, locale = {}, filter = {} } = response;
+            const filterArray = filter[lang] || filter.default || fields;
+            layer.setPropertyFilter(filterArray);
+            const names = locale[lang] || locale.default || {};
+            layer.setPropertyNames(names);
+            layer.setPropertyTypes(attributes);
             this.updateLayerProperties(layer);
         };
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
             data: {
-                id: layer.getId(),
-                lang: Oskari.getLang()
+                layer_id: layer.getId()
             },
-            url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
+            url: Oskari.urls.getRoute('GetWFSLayerFields'),
             success: onSuccess,
             error: () => {
-                this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
+                this._log.warn('Error getting fields for wfs layer ' + layer.getId());
             }
         });
     }
