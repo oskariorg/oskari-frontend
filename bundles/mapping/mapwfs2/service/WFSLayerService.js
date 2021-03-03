@@ -140,9 +140,7 @@ Oskari.clazz.define(
          */
         setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
             let selectedFeatureIds = featureIds;
-            if (makeNewSelection) {
-                selectedFeatureIds = featureIds;
-            } else {
+            if (!makeNewSelection) {
                 const previousSelectedFeatureIds = this.getSelectedFeatureIds(layerId);
                 // Either add all featureIds or remove all feature Ids from selection. Don't mix.
                 const shouldRemoveFeaturesFromSelection = previousSelectedFeatureIds.some(selected => featureIds.includes(selected));
