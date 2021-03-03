@@ -9,7 +9,7 @@ export const GfiType = ({ layer, controller }) => {
     const { capabilities, gfiType } = layer;
     const { formats = {} } = capabilities;
     const options = formats.available || [];
-    const value = gfiType || formats.value || '';
+    const value = gfiType || '';
     if (options.length === 0) {
         return null;
     }
@@ -19,7 +19,7 @@ export const GfiType = ({ layer, controller }) => {
             <InfoTooltip messageKeys='gfiTypeDesc'/>
             <StyledFormField>
                 <Select
-                    defaultValue={value}
+                    value={value}
                     onChange={value => controller.setGfiType(value)}
                 >
                     { options.map(option => (
