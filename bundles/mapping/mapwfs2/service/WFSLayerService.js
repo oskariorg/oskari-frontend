@@ -139,23 +139,23 @@ Oskari.clazz.define(
          * Handles status of selected features
          */
         setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
-            let updatedIds;
+            let selectedFeatureIds = featureIds;
             if (makeNewSelection) {
-                updatedIds = featureIds;
+                selectedFeatureIds = featureIds;
             } else {
-                const existingIds = this.getSelectedFeatureIds(layerId);
+                const previousSelectedFeatureIds = this.getSelectedFeatureIds(layerId);
                 // Either add all featureIds or remove all feature Ids from selection. Don't mix.
-                const someSelected = existingIds.some(selected => featureIds.includes(selected));
-                if (someSelected) {
-                    updatedIds = existingIds.filter(id => !featureIds.includes(id));
+                const shouldRemoveFeaturesFromSelection = previousSelectedFeatureIds.some(selected => featureIds.includes(selected));
+                if (shouldRemoveFeaturesFromSelection) {
+                    selectedFeatureIds = previousSelectedFeatureIds.filter(id => !featureIds.includes(id));
                 } else {
-                    updatedIds = [...existingIds, ...featureIds];
+                    selectedFeatureIds = [...previousSelectedFeatureIds, ...featureIds];
                 }
             }
             // clear old selection
             this.__removeFeatureSelectionForLayer(layerId);
             // add the updated selection
-            this.getWFSSelections().push({ layerId, featureIds: updatedIds });
+            this.getWFSSelections().push({ layerId, featureIds: selectedFeatureIds });
         },
 
         /**
