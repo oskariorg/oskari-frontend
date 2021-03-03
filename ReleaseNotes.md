@@ -1,5 +1,58 @@
 # Release Notes
 
+## 2.2.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/29?closed=1
+
+- Fixed build issues that were caused by updates on dependency libraries after 2.1.0: https://github.com/oskariorg/oskari-docs/issues/241
+- Added a new bundle `announcements` (and corresponding `admin-announcements`) that can be used to show messages/service announcements for end-users when the page is loaded.
+- Optimize printing to drop references for hidden (or fully transparent) layers
+- VectorLayerRequest now supports min/max zoom levels to limit visibility of features on the layer.
+- Fixed an issue where sending a VectorLayerRequest with `remove: true` and an unrecognized layerId added a layer instead of ignoring the request. If the layerId was recognized the layer was removed correctly. Now the request is ignored for unknown layers.
+- Added a "Modal" component wrapper for AntD modal in oskariui.
+- Tuned end-user messages when search returns more results than we are shown on both embedded map and geoportal.
+- Fixed an issue with layer list filters.
+- Tuned the map loading indicator/progress bar.
+- Fixed an issue with selecting/unselecting vector features with clicks
+
+### Time series layers (WMS-T)
+
+Added new options for time series layers configuration. Admins using the admin-layereditor bundle can now configure what controls to show the end-user for time series layer:
+- the previously implemented "player" UI
+- a new "range selection" UI
+- set the layer to ignore time series data (not show any additional controls for the end-users for time series).
+
+The "range selection" is a new UI that helps showing data that is scattered in time and location. An example of this can be orthophotos where the photos are not taken periodically (~yearly) for the whole area (~country) and the data could be from only one region on current year and the next region has data for the following year or a couple years from that. The end-user is allowed to select a range of years that are used as a WMS-T time-parameter giving the end-user view of the data of selected year range. The admin can also link a WFS-layer that will be used as index metadata for the scattered data. The linked WFS-layer is queried for features on the current viewport and based on the attribute data of the features the range selection is enhanced by only highlighting years that have data for the current viewport instead of based on the whole WMS-T time series data.
+
+Image from admin UI: https://user-images.githubusercontent.com/1997039/102089581-1a3f4c00-3e25-11eb-8d8b-052f7b0e9845.gif
+
+Note! This will be further developed for the next version.
+
+### Vector style UI for admin-layereditor
+
+This version adds a new React-based component that can be used to define styles for vector layers. This component has been added to the map layer admin UI in addition to the current JSON-field so we can test it more before migrating the end-user style editors from the current jQuery-based ones to the new implementation. The JSON-field for styles works like before and using the visual editor changes the content of the JSON-field. Having both enables using fancy things like conditional styles (using the JSON field) and helps us make sure that the visual editor works properly and only modifies parts of the style JSON that the visual editor recognizes, ignoring and keeping the JSON-keys that it does NOT recognize.
+
+Also fixes some issues with selecting a default style for a WFS-layer.
+
+### Other changes for admin-layereditor
+
+- Legend image urls can now be configured/overridden for each style a layer has.
+- Parsed capabilities JSON is now available for viewing on the admin UI (helps debugging potential problems)
+- Fixed an issue where adding a duplicate layer from a service was not possible because confirmation was shown "behind" the UI window preventing admin from seeing it and proceeding.
+- Added UI toggles for 3D tileset layers to allow more control on how Cesium renders the tilesets
+
+- Update libraries:
+  - AntD 4.3.3 -> 4.8.5
+  - OpenLayers 6.4.3 -> 6.5.0
+  - Cesium 1.74 -> 1.77
+  - olcs 2.11.3 -> 2.12
+  - ol-mapbox-style 6.1.4 -> 6.3.1
+
+## Upcoming changes!
+
+We currently have multiple implementations for map layer listing and admin functionalities. We are planning on removing some of the unmaintained ones after 2.2.0 and I'll send an email for this on the mailing list so we everyone following it is aware of this and can affect the decision.
+
 ## 2.1.0
 
 For a full list of changes see:
