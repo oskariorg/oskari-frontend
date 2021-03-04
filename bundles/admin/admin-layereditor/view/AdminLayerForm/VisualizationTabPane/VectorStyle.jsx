@@ -60,7 +60,6 @@ export const VectorStyle = LocaleConsumer((props) => {
                 cancelText={ <Message messageKey="cancel" /> }
                 okText={ <Message messageKey="save" /> }
             >
-                { console.log(editorState) }
                 <VectorNameInput
                     styleName={ editorState.styleName }
                     isValid={ hasValidName(editorState.styleName) }
