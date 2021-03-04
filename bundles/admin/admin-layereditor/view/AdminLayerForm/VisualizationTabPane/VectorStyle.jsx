@@ -75,7 +75,6 @@ export const VectorStyle = LocaleConsumer((props) => {
                 layer={ props.layer }
                 controller={ props.controller }
                 editStyleCallback={ (styleId) => {
-                    console.log(styleId);
                     setEditorState({
                         modalVisibility: true,
                         styleName: props.layer.options.styles[styleId].title || styleId,
