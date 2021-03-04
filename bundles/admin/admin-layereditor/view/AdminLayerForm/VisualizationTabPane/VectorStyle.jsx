@@ -33,7 +33,7 @@ export const VectorStyle = LocaleConsumer((props) => {
 
     const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.styleId);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
-    const resetNewStyle = () => setEditorState({ ...editorState, styleName: newStyleName, originalName: '', currentStyle: {}, modalVisibility: true });
+    const resetNewStyle = () => setEditorState({ ...editorState, styleId: '', styleName: newStyleName, originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
         if (hasValidName(editorState.styleName)) {
             saveStyle();
@@ -60,6 +60,7 @@ export const VectorStyle = LocaleConsumer((props) => {
                 cancelText={ <Message messageKey="cancel" /> }
                 okText={ <Message messageKey="save" /> }
             >
+                { console.log(editorState) }
                 <VectorNameInput
                     styleName={ editorState.styleName }
                     isValid={ hasValidName(editorState.styleName) }
@@ -75,9 +76,10 @@ export const VectorStyle = LocaleConsumer((props) => {
                 layer={ props.layer }
                 controller={ props.controller }
                 editStyleCallback={ (styleId) => {
+                    console.log(styleId);
                     setEditorState({
                         modalVisibility: true,
-                        styleName: props.layer.options.styles[styleId].title,
+                        styleName: props.layer.options.styles[styleId].title || styleId,
                         styleId: styleId,
                         currentStyle: props.layer.options.styles[styleId].featureStyle
                     });
