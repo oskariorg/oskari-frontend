@@ -308,7 +308,7 @@ div.hierarchical-layerlist {
                     float:right;
 
                     .toggle {
-                        background-image:url("../images/glyphicons/chevron-forward.svg");
+                        background-image:url("../images/chevron-forward.svg");
                         background-repeat: no-repeat;
                         background-position: right center;
                         width: 18px;
@@ -394,51 +394,51 @@ div.hierarchical-layerlist {
                             background-size: $bottomToolsIconSize;
 
                             &.zoom-to-extent-tool {
-                                background-image:url("../images/glyphicons/expand.svg");
+                                background-image:url("../images/expand.svg");
                                 &:hover {
                                     background-size: 21px ;
                                 }
                             }
 
                             &.show-featuredata-tool {
-                                background-image:url("../images/glyphicons/list-outline.svg");
+                                background-image:url("../images/list-outline.svg");
                                 &:hover {
-                                    background-image:url("../images/glyphicons/list.svg");
+                                    background-image:url("../images/list.svg");
                                 }
                             }
 
                             &.show-own-style-tool {
-                                background-image: url("../images/glyphicons/eyedrop-outline.svg");
+                                background-image: url("../images/eyedrop-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/eyedrop.svg");
+                                    background-image: url("../images/eyedrop.svg");
                                 }
                             }
 
                             &.show-metadata-tool {
-                                background-image: url("../images/glyphicons/information-circle-outline.svg");
+                                background-image: url("../images/information-circle-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/information-circle.svg");
+                                    background-image: url("../images/information-circle.svg");
                                 }
                             }
 
                             &.show-filter-tool {
-                                background-image: url("../images/glyphicons/filter-circle-outline.svg");
+                                background-image: url("../images/filter-circle-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/filter-circle.svg");
+                                    background-image: url("../images/filter-circle.svg");
                                 }
                             }
 
                             &.show-layer-legend-tool {
-                                background-image: url("../images/glyphicons/document-outline.svg");
+                                background-image: url("../images/document-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/document.svg");
+                                    background-image: url("../images/document.svg");
                                 }
                             }
 
                             &.show-content-editor-tool {
-                                background-image: url("../images/glyphicons/pencil-outline.svg");
+                                background-image: url("../images/pencil-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/pencil.svg");
+                                    background-image: url("../images/pencil.svg");
                                 }
                             }
 
