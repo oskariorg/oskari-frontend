@@ -1,0 +1,1 @@
+SVG-icons from MIT-licensed ionicons: https://github.com/ionic-team/ionicons/blob/master/LICENSE

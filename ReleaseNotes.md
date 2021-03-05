@@ -7,14 +7,15 @@ https://github.com/oskariorg/oskari-frontend/milestone/29?closed=1
 
 - Fixed build issues that were caused by updates on dependency libraries after 2.1.0: https://github.com/oskariorg/oskari-docs/issues/241
 - Added a new bundle `announcements` (and corresponding `admin-announcements`) that can be used to show messages/service announcements for end-users when the page is loaded.
-- Optimize printing to drop references for hidden (or fully transparent) layers
+- Optimize printing to drop references for hidden (or fully transparent) layers.
 - VectorLayerRequest now supports min/max zoom levels to limit visibility of features on the layer.
 - Fixed an issue where sending a VectorLayerRequest with `remove: true` and an unrecognized layerId added a layer instead of ignoring the request. If the layerId was recognized the layer was removed correctly. Now the request is ignored for unknown layers.
 - Added a "Modal" component wrapper for AntD modal in oskariui.
 - Tuned end-user messages when search returns more results than we are shown on both embedded map and geoportal.
 - Fixed an issue with layer list filters.
 - Tuned the map loading indicator/progress bar.
-- Fixed an issue with selecting/unselecting vector features with clicks
+- Fixed an issue with selecting/unselecting vector features with clicks.
+- Replaced icons on hierarchical-layerlist and corresponding layer admin functionality.
 
 ### Time series layers (WMS-T)
 
@@ -44,10 +45,10 @@ Also fixes some issues with selecting a default style for a WFS-layer.
 
 - Update libraries:
   - AntD 4.3.3 -> 4.8.5
-  - OpenLayers 6.4.3 -> 6.5.0
   - Cesium 1.74 -> 1.77
   - olcs 2.11.3 -> 2.12
   - ol-mapbox-style 6.1.4 -> 6.3.1
+- Tested updating OpenLayers 6.4.3 -> 6.5.0 but due to point symbol clipping on vectortiles we needed to rollback. The issue has been fixed for the next OpenLayers version but a version including the fix hasn't been released yet.
 
 ## Upcoming changes!
 
