@@ -74,7 +74,7 @@
     "mobile-detect": "1.4.4",
     "moment": "2.24.0",
     "node-sass": "4.14.1",
-    "ol": "6.5.0",
+    "ol": "6.4.3",
     "ol-mapbox-style": "6.3.1",
     "olcs": "2.12.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
