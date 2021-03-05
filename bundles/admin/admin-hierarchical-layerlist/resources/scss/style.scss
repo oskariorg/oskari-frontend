@@ -12,10 +12,10 @@ $cancelTextColor: #000;
 
 $errorColor: lighten(#ff0000, 20%);
 
-$editIcon: url("../images/glyphicons-151-edit.png");
-$addLayerIcon: url("../images/glyphicons-191-plus-sign.png");
-$addGroupIcon: url("../images/glyphicons-433-plus.png");
-$updateCapabilitiesIcon: url("../images/glyphicons-82-refresh.png");
+$editIcon: url("../images/create-outline.svg");
+$addLayerIcon: url("../images/add-circle-outline.svg");
+$addGroupIcon: url("../images/add-outline.svg");
+$updateCapabilitiesIcon: url("../images/refresh.svg");
 
 @mixin gradient-button($startColor, $endColor, $textColor)
 {
