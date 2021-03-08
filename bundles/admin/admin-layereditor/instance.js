@@ -155,6 +155,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
             const editDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             editDataProviderTool.setName('editDataProvider');
+            editDataProviderTool.setIconComponent(<EditOutlined/>);
             editDataProviderTool.setTooltip(this.loc('editDataProvider'));
             editDataProviderTool.setIconCls('edit-layer');
             editDataProviderTool.setTypes(['layergroup', 'getOrganizationName']);
