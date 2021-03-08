@@ -10,7 +10,6 @@ const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 const FLYOUT = {
     EDITOR: 'editor',
     THEME: 'theme',
-    SUBTHEME: 'subtheme',
     DATA_PROVIDER: 'dataProvider'
 };
 
@@ -97,13 +96,13 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 };
             };
 
-            const subthemeCallback = (evt, id, groupMethod, layerCountInGroup) => {
-                let flyoutKey = FLYOUT.SUBTHEME;
+            const addSubthemeCallback = (evt, parentId) => {
+                let flyoutKey = FLYOUT.THEME;
                 const position = {
                     left: evt.pageX + offset.x,
                     top: evt.pageY + offset.y
                 };
-                this.showFormPopup(flyoutKey, position, id, layerCountInGroup);
+                this.showFormPopup(flyoutKey, position, undefined, layerCountInGroup, parentId);
             };
 
             const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -141,7 +140,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addSubthemeTool.setTooltip(this.loc('addSubtheme'));
             addSubthemeTool.setIconCls('add-sub-theme');
             addSubthemeTool.setTypes(['layergroup', 'getInspireName']);
-            addSubthemeTool.setCallback(subthemeCallback);
+            addSubthemeTool.setCallback(addSubthemeCallback);
             toolingService.addTool(addSubthemeTool);
 
             const editThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -222,15 +221,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * @param {string} flyoutKey FLYOUT.THEME or FLYOUT.DATA_PROVIDER
          * @param {object} position where to place the popup
          */
-        showFormPopup (flyoutKey, position, id, layerCountInGroup) {
+        showFormPopup (flyoutKey, position, id, layerCountInGroup, parentId) {
             let flyout = null;
-            let newSubgroup = true;
             switch (flyoutKey) {
             case FLYOUT.THEME:
-                flyout = this._getThemeFlyout(id, layerCountInGroup);
-                break;
-            case FLYOUT.SUBTHEME:
-                flyout = this._getThemeFlyout(id, layerCountInGroup, newSubgroup);
+                flyout = this._getThemeFlyout(id, layerCountInGroup, parentId);
                 break;
             case FLYOUT.DATA_PROVIDER:
                 flyout = this._getDataProviderFlyout(id, layerCountInGroup);
@@ -336,8 +331,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * Ensures theme flyout exists and returns it.
          * @return {LocalizingFlyout}
          */
-        _getThemeFlyout (id, layerCountInGroup, newSubgroup) {
-            let parentId = null;
+        _getThemeFlyout (id, layerCountInGroup, parentId) {
             const me = this;
             const fetchTheme = (id, setLoading, setValue) => {
                 setLoading(true);
@@ -352,33 +346,31 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        !newSubgroup && setValue(response.name);
-                        parentId = response.parentId;
+                        setValue(response.name);
                     }
                 });
             };
-            const loc = newSubgroup ? this.loc('addTheme') : id ? this.loc('editTheme') : this.loc('addTheme');
-            const hasSubgroups = this._getLayerService().getAllLayerGroups(id).hasSubgroups();
-            this.themeFlyout = new LocalizingFlyout(this, loc, {
+            const popupTitle = id ? this.loc('editTheme') : this.loc('addTheme');
+            const hasSubgroups = id ? this._getLayerService().getAllLayerGroups(id).hasSubgroups() : false;
+            this.themeFlyout = new LocalizingFlyout(this, popupTitle, {
                 headerMessageKey: 'themeName',
-                id: id,
-                hasSubgroups: hasSubgroups,
+                id,
+                parentId,
+                hasSubgroups,
                 fetch: fetchTheme,
-                layerCountInGroup: layerCountInGroup
+                layerCountInGroup
             }, this.loc('deleteGroupLayers'));
             this.themeFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
-            this.themeFlyout.setSaveAction((value, id) => {
-                const httpMethod = newSubgroup ? 'PUT' : id ? 'POST' : 'PUT';
+            this.themeFlyout.setSaveAction((locales, id, parentId) => {
+                const httpMethod = id ? 'POST' : 'PUT';
 
-                const payload = newSubgroup ? {
-                    locales: value, parentId: id
-                } : id ? {
-                    locales: value, id: id, parentId: parentId
-                } : {
-                    locales: value
+                const payload = {
+                    id,
+                    parentId,
+                    locales
                 };
 
                 jQuery.ajax({
@@ -391,10 +383,10 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
                         group.setName(response.name);
-                        if (httpMethod === 'POST') {
+                        if (id) {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
-                            newSubgroup ? this._getLayerService().addLayerGroup(group, id) : this._getLayerService().addLayerGroup(group);
+                            this._getLayerService().addLayerGroup(group, parentId);
                         }
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
