@@ -31,6 +31,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this._registerEventHandlers();
+            this._handleHover = this._handleHover.bind(this);
         }
 
         /**
@@ -215,6 +216,31 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
 
         /**
+         * Less accurate than _getTopmostFeatureAndLayer. Optimized for performance.
+         * @method _getHoveredFeatureAndLayer
+         *
+         * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
+         * @return {Promise} Promise resolving to an object containing the topmost feature and it's layer on the mouse location.
+         */
+        async _getHoveredFeatureAndLayer (event) {
+            let feature, layer;
+            const pixel = [event.getPageX(), event.getPageY()];
+            const layers = this._map.getLayers().getArray()
+                .filter(layer => this._onlyRegisteredTypesFilter(layer) && layer.getVisible())
+                .reverse();
+
+            for (const lyr of layers) {
+                const features = await lyr.getFeatures(pixel);
+                if (features.length > 0) {
+                    layer = lyr;
+                    feature = features[0];
+                    break;
+                }
+            };
+            return { feature, layer };
+        }
+
+        /**
          * @method _getTooltipContent
          * @param {Array} contentOptions
          * @param {olFeature | olRenderFeature} feature
@@ -334,8 +360,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (this._sandbox.getMap().isMoving()) {
                 return;
             }
-            let { feature, layer } = this._getTopmostFeatureAndLayer(event);
+            this._getHoveredFeatureAndLayer(event).then(this._handleHover);
+        }
 
+        _handleHover ({ feature, layer }) {
             // No feature hits for these layer types. Call hover handlers without feature or layer.
             Object.keys(this.layerTypeHandlers).forEach(layerType => {
                 const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
