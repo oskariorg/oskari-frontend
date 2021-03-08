@@ -15,3 +15,21 @@ div.layerlist {
         opacity: 1;
     }
 }
+
+.edit-layer {
+    /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+    background-image: $editIcon !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+    margin-right: 5px !important;
+}
+
+.add-sub-theme {
+    /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+    background-image: $addSubThemeIcon !important;
+    background-repeat: no-repeat !important;
+    background-position: center center !important;
+    background-size: contain !important;
+    margin-right: 5px !important;
+}

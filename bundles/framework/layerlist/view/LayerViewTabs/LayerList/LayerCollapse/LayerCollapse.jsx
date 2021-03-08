@@ -22,7 +22,7 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
-        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
+        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
@@ -32,6 +32,11 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
+                    let active = false;
+                    // set group switch active if all layers in group are selected
+                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
+                        active = true;
+                    }
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
@@ -41,6 +46,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
                             controller={controller}
+                            active={active}
                         />
                     );
                 })

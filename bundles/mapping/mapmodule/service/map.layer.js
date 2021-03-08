@@ -641,10 +641,51 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @method addLayerGroup
          * @param {Oskari.mapframework.domain.MaplayerGroup} group map layer group to add.
          */
-        addLayerGroup: function (group) {
-            this._layerGroups.push(group);
+        addLayerGroup: function (newGroup, parentId) {
+            if (parentId) {
+                let temp = [];
+                for (var group of this._layerGroups) {
+                    const subgroups = this.pushSubLayerGroup(group, parentId, newGroup);
+                    temp.push(subgroups);
+                }
+                this._layerGroups = temp;
+            } else {
+                this._layerGroups.push(newGroup);
+            }
             this.trigger('theme.update');
         },
+
+        pushSubLayerGroup: function (group, parentId, newGroup) {
+            if (group.id === parentId) {
+                group.groups.push(newGroup);
+                return group;
+            }
+            if (group.groups.length !== 0) {
+                let temp = [];
+                for (var g of group.groups) {
+                    const subgroups = this.pushSubLayerGroup(g, parentId, newGroup);
+                    temp.push(subgroups);
+                }
+                group.setGroups(temp);
+            }
+            return group;
+        },
+        updateGroupRecursively: function (group, newGroup) {
+            if (group.id === newGroup.id) {
+                group.setName(newGroup.getName());
+                return group;
+            }
+            if (group.groups.length !== 0) {
+                let temp = [];
+                for (var g of group.groups) {
+                    const subgroups = this.updateGroupRecursively(g, newGroup);
+                    temp.push(subgroups);
+                }
+                group.setGroups(temp);
+            }
+            return group;
+        },
+
         /**
          * @method updateLayerGroup
          * @param {Oskari.mapframework.domain.MaplayerGroup} group map layer group to update.
@@ -653,7 +694,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // Update group to layerGroups
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
-                this._layerGroups[index] = group;
+                this._layerGroups[index].setName(group.getName());
+            } else {
+                let temp = [];
+                for (var g of this._layerGroups) {
+                    const subgroups = this.updateGroupRecursively(g, group);
+                    temp.push(subgroups);
+                }
+                this._layerGroups = temp;
             }
             // Update group to needed layers. Groups under layer only contains group name with current localization
             const lang = Oskari.getLang();
@@ -661,6 +709,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
             this.trigger('theme.update');
         },
+
         /**
          * @method updateDataProvider
          * @param dataProvider object with structure like {id: 1, name "Provider name"}
@@ -823,37 +872,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
+         * @method getLayerGroup
+         * Returns a group that matches given id
+         * @param {String|Integer} id if defined and not equal -1 return only wanted group
+         * @param {String|Integer} id if defined and not equal -1 return only wanted group
+         * @return {Oskari.clazz.define.getGroups}
+         */
+        getLayerGroup: function (group, id) {
+            if (group.id + '' === id + '') {
+                return group;
+            }
+            if (group.groups) {
+                for (let g of group.groups) {
+                    let foundGroup = this.getLayerGroup(g, id);
+                    if (foundGroup) {
+                        return foundGroup;
+                    }
+                }
+            }
+            return null;
+        },
+
+        /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
          * @param {String|Integer} id if defined and not equal -1 return only wanted group
-         * @return {Oskari.mapframework.domain.AbstractLayer[]}
+         * @return {Oskari.clazz.define.getGroups[]}
          */
         getAllLayerGroups: function (id) {
             var layerGroups = null;
             if (id && id !== -1) {
-                var findFunction = function (group) {
-                    return group.id + '' === id + '';
-                };
-                var group = this._layerGroups.find(findFunction);
-                // group not found
-                // try to get subgroup
-                if (!group) {
-                    this._layerGroups.forEach(function (g) {
-                        var subgroup = g.groups.find(findFunction);
-                        if (subgroup) {
-                            layerGroups = subgroup;
-                        }
-
-                        // Try to get subgroup subgroup
-                        g.groups.forEach(function (sg) {
-                            var subgroupSubgroup = sg.groups.find(findFunction);
-                            if (subgroupSubgroup) {
-                                layerGroups = subgroupSubgroup;
-                            }
-                        });
-                    });
-                } else {
-                    layerGroups = group;
+                for (let group of this._layerGroups) {
+                    layerGroups = this.getLayerGroup(group, id);
+                    if (layerGroups) {
+                        break;
+                    }
                 }
             }
             return (id && id !== -1) ? layerGroups : this._layerGroups;
