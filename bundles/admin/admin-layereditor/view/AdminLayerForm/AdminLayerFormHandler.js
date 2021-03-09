@@ -3,6 +3,7 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
+import { TileCache } from 'ol';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -14,7 +15,8 @@ const __VALIDATOR_CACHE = {};
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
-        const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        this.sandbox = Oskari.getSandbox();
+        this.mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
@@ -30,7 +32,7 @@ class UIHandler extends StateHandler {
             loading: false,
             tab: DEFAULT_TAB,
             credentialsCollapseOpen: false,
-            scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
+            scales: this.mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
         this.fetchLayerAdminMetadata();
@@ -667,14 +669,37 @@ class UIHandler extends StateHandler {
         });
     }
 
+    /**
+     *
+     * @param {Number} layerId id for layer affected
+     * @param {Object} layer affected layer as WFSlayer object
+     * @param {Object} layerData new fetched layer data
+     */
+    refreshLayerOnMap (layerId, layer, layerData) {
+        if (!layerId || !layer || !layerData) {
+            return;
+        }
+
+        const originalLayerIndex = this.sandbox.getMap().getLayerIndex(layerId); // Save index for the new layer
+        const modifiedLayer = this.mapLayerService.createMapLayer(layerData);
+
+        this.mapLayerService.removeLayer(layerId, true); // remove existing layer and supress event
+        this.sandbox.postRequestByName('RemoveMapLayerRequest', [modifiedLayer]);
+
+        this.mapLayerService.addLayer(modifiedLayer); // add layer but dont supress event
+        this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+        this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+    }
+
     refreshEndUserLayer (layerId, layerData = {}) {
         if (typeof layerId === 'undefined') {
             // can't refresh without id
             return;
         }
         const existingLayer = this.mapLayerService.findMapLayer(layerId);
+
         if (existingLayer) {
-            this.mapLayerService.updateLayer(layerId, layerData);
+            this.refreshLayerOnMap(layerId, existingLayer, layerData);
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
