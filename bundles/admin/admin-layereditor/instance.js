@@ -96,7 +96,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 };
             };
 
-            const addSubthemeCallback = (evt, parentId) => {
+            const addSubthemeCallback = (evt, parentId, groupMethod, layerCountInGroup) => {
                 let flyoutKey = FLYOUT.THEME;
                 const position = {
                     left: evt.pageX + offset.x,
