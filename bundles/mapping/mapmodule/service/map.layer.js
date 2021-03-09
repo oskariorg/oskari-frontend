@@ -260,6 +260,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layerList.splice(indexToRemove, 1);
             }
 
+            this._reservedLayerIds[layerId] = false;
+
             // also update layer groups
             this.updateLayersInGroups(layerId, null, true);
 
