@@ -5,8 +5,8 @@ Oskari.registerLocalization({
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',
-                name: 'Namnet på stilen',
-                style: 'Stil',
+                name: 'Stilets namn',
+                style: 'Stilet',
                 pointTab: 'Punkten',
                 lineTab: 'Linje',
                 areaTab: 'Området'
@@ -20,6 +20,9 @@ Oskari.registerLocalization({
             image: {
                 shape: 'Ikon',
                 size: 'Storlek',
+                fill: {
+                    color: 'Ifyllnadsfärg för ikon'
+                }
             },
             stroke: {
                 color: 'Linjens färg',
@@ -27,6 +30,8 @@ Oskari.registerLocalization({
                 lineDash: 'Linjens stil',
                 width: 'Bredd',
                 area: {
+                    color: 'Linjens färg',
+                    lineDash: 'Linjens stil',
                     lineJoin: 'Hörn',
                     width: 'Linjens bredd'
                 }

@@ -327,6 +327,19 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setLegendUrl (styleName, url) {
+        const options = { ...this.getState().layer.options };
+        if (!options.legends) {
+            options.legends = {};
+        }
+        if (url === '') {
+            delete options.legends[styleName];
+        } else {
+            options.legends[styleName] = url;
+        }
+        this.setOptions(options);
+    }
+
     setStyleJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
     }
@@ -372,12 +385,6 @@ class UIHandler extends StateHandler {
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
-        });
-    }
-
-    setLegendImage (legendImage) {
-        this.updateState({
-            layer: { ...this.getState().layer, legendImage }
         });
     }
 
@@ -990,11 +997,35 @@ class UIHandler extends StateHandler {
 
         this.updateState({ layer });
     }
+
+    saveStyleToLayer (style, styleLabel, styleId) {
+        const layer = this.getState().layer;
+        const currentStyles = layer.options.styles || null;
+        const layerStyleId = styleId || 's_' + new Date().getTime();
+
+        layer.options.styles = {
+            ...currentStyles,
+            [layerStyleId]: {
+                title: styleLabel,
+                featureStyle: style
+            }
+        };
+
+        this.updateState({ layer: layer });
+    }
+
+    removeStyleFromLayer (styleId) {
+        const layer = this.getState().layer;
+        delete layer.options.styles[styleId];
+        this.updateState({ layer: layer });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
     'addNewFromSameService',
     'layerSelected',
+    'removeStyleFromLayer',
+    'saveStyleToLayer',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
@@ -1009,7 +1040,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setHoverJSON',
     'setLayerName',
     'setLayerUrl',
-    'setLegendImage',
+    'setLegendUrl',
     'setLocalizedNames',
     'setMessage',
     'setMessages',

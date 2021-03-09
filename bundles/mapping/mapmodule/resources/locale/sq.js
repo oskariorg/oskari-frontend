@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Rezultatet e kërkimit",
                 "close": "Mbyll rezultatet e kërkimit",
                 "noresults": "Asnjë rezultat i gjetur",
-                "toomanyresults": "Mbi 100 rezultate të gjetura. Ju lutem përmirësojeni kërkimin tuaj",
+                "searchResultCount": "Kërkimi është kthyer {count} rezultatet.",
+                "searchMoreResults": "Mbi {count} rezultate të gjetura. Ju lutem përmirësojeni kërkimin tuaj",
                 "column_name": "Emri",
                 "column_village": "Komuna",
                 "column_type": "Lloji"

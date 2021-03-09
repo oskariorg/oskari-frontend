@@ -3,7 +3,7 @@ $selectedLayersTabTextColor: #fff;
 $selectedLayersTabLayerPadding: 6px;
 $selectedLayersTabLayerFontSize: 12px;
 $selectedLayersTabLabelWidth: 50px;
-$bottomToolsIconSize: 16px;
+$bottomToolsIconSize: 20px;
 
 .hierarchical-layerlist-flyout
 {
@@ -308,18 +308,16 @@ div.hierarchical-layerlist {
                     float:right;
 
                     .toggle {
-                        background-image:url("../images/glyphicons/glyphicons-174-play.png");
+                        background-image:url("../images/chevron-forward.svg");
                         background-repeat: no-repeat;
                         background-position: right center;
                         width: 18px;
                         height:20px;
                         float:left;
-                        margin: 2px;
+                        margin: 4px;
                         cursor: default;
-                        background-size: 12px;
 
                         &.open {
-                            background-image:url("../images/glyphicons/glyphicons-224-chevron-right.png");
                             -webkit-transform: rotate(90deg);
                             -moz-transform: rotate(90deg);
                             -ms-transform: rotate(90deg);
@@ -396,51 +394,51 @@ div.hierarchical-layerlist {
                             background-size: $bottomToolsIconSize;
 
                             &.zoom-to-extent-tool {
-                                background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame.png");
+                                background-image:url("../images/expand.svg");
                                 &:hover {
-                                    background-image:url("../images/glyphicons/glyphicons-488-fit-image-to-frame-hover.png");
+                                    background-size: 21px ;
                                 }
                             }
 
                             &.show-featuredata-tool {
-                                background-image:url("../images/glyphicons/glyphicons-115-list.png");
+                                background-image:url("../images/list-outline.svg");
                                 &:hover {
-                                    background-image:url("../images/glyphicons/glyphicons-115-list-hover.png");
+                                    background-image:url("../images/list.svg");
                                 }
                             }
 
                             &.show-own-style-tool {
-                                background-image: url("../images/glyphicons/glyphicons-91-eyedropper.png");
+                                background-image: url("../images/eyedrop-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/glyphicons-91-eyedropper-hover.png");
+                                    background-image: url("../images/eyedrop.svg");
                                 }
                             }
 
                             &.show-metadata-tool {
-                                background-image: url("../images/glyphicons/glyphicons-196-info-sign.png");
+                                background-image: url("../images/information-circle-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/glyphicons-196-info-sign-hover.png");
+                                    background-image: url("../images/information-circle.svg");
                                 }
                             }
 
                             &.show-filter-tool {
-                                background-image: url("../images/glyphicons/glyphicons-321-filter.png");
+                                background-image: url("../images/filter-circle-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/glyphicons-321-filter-hover.png");
+                                    background-image: url("../images/filter-circle.svg");
                                 }
                             }
 
                             &.show-layer-legend-tool {
-                                background-image: url("../images/glyphicons/glyphicons-37-file.png");
+                                background-image: url("../images/document-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/glyphicons-37-file-hover.png");
+                                    background-image: url("../images/document.svg");
                                 }
                             }
 
                             &.show-content-editor-tool {
-                                background-image: url("../images/glyphicons/glyphicons-31-pencil.png");
+                                background-image: url("../images/pencil-outline.svg");
                                 &:hover {
-                                    background-image: url("../images/glyphicons/glyphicons-31-pencil-hover.png");
+                                    background-image: url("../images/pencil.svg");
                                 }
                             }
 
@@ -517,7 +515,6 @@ div.hierarchical-layerlist {
                     height:26px;
                     float:left;
                     margin-left:4px;
-                    margin-top: 4px;
                     background-repeat: no-repeat;
                     background-position: center center;
                     cursor: pointer;

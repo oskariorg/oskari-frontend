@@ -2,23 +2,22 @@
 
 	tr {
 		padding: 5px;
-		
+
 		&.odd {
 			background-color: #EEEEEE;
 		}
-
 	}
-	
+
 	td {
-		padding: 2px;
+		padding: 3px;
+		/* Overriding global styling for "table td"... */
+		border-bottom: 0px;
 
 		.oskari_gfi_img {
-			padding-bottom: 15px;
 			max-height: 350px;
 			max-width: 350px;
 		}
 	}
-
 }
 
 .getinforesult_header {

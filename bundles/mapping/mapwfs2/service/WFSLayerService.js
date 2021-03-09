@@ -139,35 +139,21 @@ Oskari.clazz.define(
          * Handles status of selected features
          */
         setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
-            var me = this;
-
-            if (makeNewSelection) {
-                this.__removeFeatureSelectionForLayer(layerId);
-                me.getWFSSelections().push({ 'layerId': layerId, 'featureIds': featureIds });
-            } else {
-                const existingFeatureSelections = this.getSelectedFeatureIds(layerId);
-                // no existing selections -> add all
-                if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
-                    existingFeatureSelections.push(featureIds);
+            let selectedFeatureIds = featureIds;
+            if (!makeNewSelection) {
+                const previousSelectedFeatureIds = this.getSelectedFeatureIds(layerId);
+                // Either add all featureIds or remove all feature Ids from selection. Don't mix.
+                const shouldRemoveFeaturesFromSelection = previousSelectedFeatureIds.some(selected => featureIds.includes(selected));
+                if (shouldRemoveFeaturesFromSelection) {
+                    selectedFeatureIds = previousSelectedFeatureIds.filter(id => !featureIds.includes(id));
                 } else {
-                    // Either add all featureIds or remove all feature Ids from selection. Don't mix.
-                    const selectionArray = existingFeatureSelections[0];
-                    const someSelected = selectionArray.some(selected => featureIds.includes(selected));
-                    if (someSelected) {
-                        featureIds.forEach(id => {
-                            if (selectionArray.includes(id)) {
-                                selectionArray.splice(selectionArray.indexOf(id), 1);
-                            }
-                        });
-                        return;
-                    }
-                    featureIds.forEach(id => selectionArray.push(id));
+                    selectedFeatureIds = [...previousSelectedFeatureIds, ...featureIds];
                 }
-                // clear old selection
-                this.__removeFeatureSelectionForLayer(layerId);
-                // add the updated selection
-                me.getWFSSelections().push({ 'layerId': layerId, 'featureIds': existingFeatureSelections[0] });
             }
+            // clear old selection
+            this.__removeFeatureSelectionForLayer(layerId);
+            // add the updated selection
+            this.getWFSSelections().push({ layerId, featureIds: selectedFeatureIds });
         },
 
         /**

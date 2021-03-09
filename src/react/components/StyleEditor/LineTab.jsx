@@ -13,8 +13,7 @@ export const LineTab = (props) => {
                     name='stroke.color'
                     label={ <Message messageKey='StyleEditor.stroke.color' /> }
                 >
-                    <ColorPicker
-                        defaultValue={ props.oskariStyle.stroke.color } />
+                    <ColorPicker />
                 </Form.Item>
             </Row>
 
@@ -24,10 +23,7 @@ export const LineTab = (props) => {
                     name='stroke.lineDash'
                     label={ <Message messageKey='StyleEditor.stroke.lineDash' /> }
                 >
-                    <SvgRadioButton
-                        options={ constants.LINE_STYLES.lineDash }
-                        defaultValue={ props.oskariStyle.stroke.lineDash }
-                    />
+                    <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
                 </Form.Item>
 
                 <Form.Item
@@ -35,10 +31,7 @@ export const LineTab = (props) => {
                     name='stroke.lineCap'
                     label={ <Message messageKey='StyleEditor.stroke.lineCap' /> }
                 >
-                    <SvgRadioButton
-                        options={ constants.LINE_STYLES.linecaps }
-                        defaultValue={ props.oskariStyle.stroke.lineCap }
-                    />
+                    <SvgRadioButton options={ constants.LINE_STYLES.linecaps } />
                 </Form.Item>
             </Row>
 
@@ -48,10 +41,7 @@ export const LineTab = (props) => {
                     name='stroke.area.lineJoin'
                     label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
                 >
-                    <SvgRadioButton
-                        options={ constants.LINE_STYLES.corners }
-                        defaultValue={ props.oskariStyle.stroke.area.lineJoin }
-                    />
+                    <SvgRadioButton options={ constants.LINE_STYLES.corners } />
                 </Form.Item>
             </Row>
 
