@@ -2,8 +2,8 @@ import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Spin } from 'oskari-ui';
-import { Background, Header, Col, ColFixed, Row, YearInput } from './styled';
-import { YearRangeSlider } from './YearRangeSlider';
+import { Background, Header } from './styled';
+import { TimeSeriesRange } from './TimeSeriesRange';
 
 const getHeaderContent = (title, loading = false, error = false) => {
     let content = title;
@@ -15,40 +15,20 @@ const getHeaderContent = (title, loading = false, error = false) => {
         content = (<span style={{ color: 'red' }}>{content}</span>);
     }
     return content;
-}
+};
 
 export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile, loading, error }) => {
-    const [startValue, endValue] = value;
     return (
         <Background isMobile={isMobile}>
             <Header className="timeseries-range-drag-handle">{ getHeaderContent(title, loading, error) }</Header>
-            <Row>
-                <Col>
-                    <YearInput
-                        value={startValue}
-                        onChange={(val) => controller.updateValue([val, endValue])}
-                    ></YearInput>
-                </Col>
-                {!isMobile && (
-                    <ColFixed>
-                        <YearRangeSlider
-                            range
-                            step={1}
-                            start={start}
-                            end={end}
-                            dataYears={dataYears}
-                            value={value}
-                            onChange={(val) => controller.updateValue(val)}
-                        />
-                    </ColFixed>
-                )}
-                <Col>
-                    <YearInput
-                        value={endValue}
-                        onChange={(val) => controller.updateValue([startValue, val])}
-                    ></YearInput>
-                </Col>
-            </Row>
+            <TimeSeriesRange
+                onChange={(val) => controller.updateValue(val)}
+                start={start}
+                end={end}
+                value={value}
+                dataYears={dataYears}
+                isMobile={isMobile}
+            />
         </Background>
     );
 };
