@@ -1,4 +1,4 @@
-import { Slider, NumberInput } from 'oskari-ui';
+import { Button, NumberInput, Slider } from 'oskari-ui';
 import styled from 'styled-components';
 
 const primaryColor = '#ecb900';
@@ -16,6 +16,27 @@ export const Header = styled.h3`
     padding: 10px 20px;
     cursor: grab;
     cursor: move;
+    display: flex;
+    align-items: center;
+
+    .header-mid-spacer {
+        flex: 1;
+    }
+`;
+
+export const IconButton = styled(Button)`
+    padding: 10px;
+    color: ${primaryColor};
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: ${primaryColor};
+    }
+
+    .anticon {
+        font-size: 20px;
+    }
 `;
 
 export const Row = styled.div`
@@ -50,9 +71,11 @@ const getDataYearStyles = (props) => {
     if (dataYears.length === 0) {
         return '';
     }
-    const markYears = Object.keys(marks).map(year => parseInt(year, 10)).sort((a, b) => a - b);
-    const dataYearIndices = dataYears.map(year => markYears.indexOf(year) + 1);
-    const selectors = dataYearIndices.map(index => `&:nth-child(${index})`).join(",");
+    const markYears = Object.keys(marks)
+        .map((year) => parseInt(year, 10))
+        .sort((a, b) => a - b);
+    const dataYearIndices = dataYears.map((year) => markYears.indexOf(year) + 1);
+    const selectors = dataYearIndices.map((index) => `&:nth-child(${index})`).join(',');
     const styles = `
         ${selectors} {
             border-radius: 50%;
@@ -86,7 +109,7 @@ export const StyledRangeSlider = styled(Slider)`
         width: 2px;
         top: 0px;
         height: 4px;
-        ${props => getDataYearStyles(props)}
+        ${(props) => getDataYearStyles(props)}
     }
     .ant-slider-dot:last-child {
         margin-left: 0px;

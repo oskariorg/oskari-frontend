@@ -1,34 +1,49 @@
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Spin } from 'oskari-ui';
-import { Background, Header } from './styled';
+import React, { useState } from 'react';
+import { Background } from './styled';
+import { TimeSeriesHeader } from './TimeSeriesHeader';
 import { TimeSeriesRange } from './TimeSeriesRange';
 
-const getHeaderContent = (title, loading = false, error = false) => {
-    let content = title;
-    if (loading) {
-        content = (<span>{content} <Spin /></span>);
-    }
-    if (error) {
-        // TODO: give an icon with tooltip or something cleaner
-        content = (<span style={{ color: 'red' }}>{content}</span>);
-    }
-    return content;
-};
-
-export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile, loading, error }) => {
+export const TimeSeriesRangeControl = ({
+    controller,
+    title,
+    start,
+    end,
+    value,
+    dataYears,
+    isMobile,
+    loading,
+    error
+}) => {
+    const [mode, setMode] = useState('year');
+    const toggleMode = () => {
+        if (mode === 'year') {
+            setMode('range');
+        } else {
+            setMode('year');
+        }
+    };
     return (
         <Background isMobile={isMobile}>
-            <Header className="timeseries-range-drag-handle">{ getHeaderContent(title, loading, error) }</Header>
-            <TimeSeriesRange
-                onChange={(val) => controller.updateValue(val)}
-                start={start}
-                end={end}
-                value={value}
-                dataYears={dataYears}
-                isMobile={isMobile}
+            <TimeSeriesHeader
+                toggleMode={() => toggleMode()}
+                title={title}
+                mode={mode}
+                loading={loading}
+                error={error}
             />
+            {mode === 'year' && <div>year placeholder</div>}
+            {mode === 'range' && (
+                <TimeSeriesRange
+                    onChange={(val) => controller.updateValue(val)}
+                    start={start}
+                    end={end}
+                    value={value}
+                    dataYears={dataYears}
+                    isMobile={isMobile}
+                />
+            )}
         </Background>
     );
 };
