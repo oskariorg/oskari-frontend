@@ -20,7 +20,7 @@ export class LocalizingFlyout extends ExtraFlyout {
         this.deleteMapLayersText = deleteMapLayersText;
 
         // Create a handler for ui state.
-        this.uiHandler = new UIHandler(instance, options.id, options.hasSubgroups);
+        this.uiHandler = new UIHandler(instance, options.id, options.parentId);
         // Calling updateState will affect only the properties listed.
         this.uiHandler.updateState({ headerMessageKey: options.headerMessageKey });
 
@@ -82,7 +82,7 @@ export class LocalizingFlyout extends ExtraFlyout {
 
 // Create a service responsible of the UI state.
 class UIService extends StateHandler {
-    constructor(instance, id) {
+    constructor(instance, id, parentId) {
         super();
         const getMsg = Oskari.getMsg.bind(null, instance.getName());
         const labels = {};
@@ -106,6 +106,7 @@ class UIService extends StateHandler {
         this.saveAction = null;
         this.cancelAction = null;
         this.id = id;
+        this.parentId = parentId;
     }
     setSaveAction(saveAction) {
         this.saveAction = saveAction;
@@ -128,7 +129,7 @@ class UIService extends StateHandler {
         }
         const { value } = this.getState();
         this.updateState({ loading: true });
-        this.saveAction(value, this.id);
+        this.saveAction(value, this.id, this.parentId);
     }
     cancel() {
         if (typeof this.cancelAction !== 'function') {
