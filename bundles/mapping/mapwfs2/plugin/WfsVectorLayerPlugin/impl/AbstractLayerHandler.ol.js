@@ -85,7 +85,7 @@ export class AbstractLayerHandler {
         const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const propsList = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
         // Update properties only if fields aren't set and there is features in extent
-        if (!layer.getFields().length && source.getFeatures().length) {
+        if (!layer.getFields().length && propsList.length) {
             const fields = getFieldsArray(propsList);
             this.plugin.setWFSProperties(layer, fields);
             return;
