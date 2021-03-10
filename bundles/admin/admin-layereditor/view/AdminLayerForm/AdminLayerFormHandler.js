@@ -682,12 +682,16 @@ class UIHandler extends StateHandler {
         const originalLayerIndex = this.sandbox.getMap().getLayerIndex(layerId); // Save index for the new layer
         const modifiedLayer = this.mapLayerService.createMapLayer(layerData);
 
-        this.mapLayerService.removeLayer(layerId, true); // remove existing layer and supress event
-        this.sandbox.postRequestByName('RemoveMapLayerRequest', [modifiedLayer]);
+        this.mapLayerService.removeLayer(layerId); // remove existing layer and supress event
 
-        this.mapLayerService.addLayer(modifiedLayer); // add layer but dont supress event
-        this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
-        this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+        // if layer was found from the selected layers remove and re-add it
+        if (originalLayerIndex !== -1) {
+            this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+
+            this.mapLayerService.addLayer(modifiedLayer); // add layer but dont supress event
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+            this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+        }
     }
 
     refreshEndUserLayer (layerId, layerData = {}) {
