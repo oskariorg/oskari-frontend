@@ -45,7 +45,9 @@ export const Row = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
+    align-items: flex-start;
     flex-wrap: wrap;
+    text-align: center;
 `;
 
 export const Col = styled.div`
@@ -53,6 +55,18 @@ export const Col = styled.div`
     flex-grow: 1;
     max-width: 100%;
     position: relative;
+
+    button {
+        background-color: ${primaryColor};
+        border-color: ${primaryColor};
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: ${primaryColor};
+            border-color: ${primaryColor};
+        }
+    }
 `;
 
 export const ColFixed = styled.div`
@@ -82,6 +96,7 @@ const getDataYearStyles = (props) => {
             border: 2px solid #ffffff;
             width: 8px;
             height: 8px;
+            margin-left: -4px;
             top: -2px;
             &.ant-slider-dot-active {
                 border: 2px solid ${primaryColor};

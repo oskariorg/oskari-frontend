@@ -2,8 +2,12 @@ import moment from 'moment';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { TimeseriesMetadataService } from './TimeseriesMetadataService';
 
-const _getTimeFromYear = (year) => {
+const _getStartTimeFromYear = (year) => {
     return moment.utc(year.toString()).startOf('year');
+};
+
+const _getEndTimeFromYear = (year) => {
+    return moment.utc(year.toString()).endOf('year');
 };
 
 class UIHandler extends StateHandler {
@@ -20,7 +24,7 @@ class UIHandler extends StateHandler {
             title: this._layer.getName(),
             start,
             end,
-            value: [start, start],
+            value: start,
             dataYears
         };
         this.addStateListener(stateListener);
@@ -89,9 +93,17 @@ class UIHandler extends StateHandler {
     }
 
     _requestNewTime (value) {
-        const [startYear, endYear] = value;
-        const startTime = _getTimeFromYear(startYear);
-        const endTime = _getTimeFromYear(endYear);
+        let startYear = null;
+        let endYear = null;
+        if (value.length === 2) {
+            startYear = value[0];
+            endYear = value[1];
+        } else {
+            startYear = value;
+            endYear = value;
+        }
+        const startTime = _getStartTimeFromYear(startYear);
+        const endTime = _getEndTimeFromYear(endYear);
         const newTime = `${startTime.toISOString()}/${endTime.toISOString()}`;
         this._delegate.requestNewTime(newTime);
         this._updateFeaturesByTime(startTime, endTime);
@@ -106,8 +118,16 @@ class UIHandler extends StateHandler {
 
     _getTimeRange () {
         const { value } = this.getState();
-        const [startYear, endYear] = value;
-        return [_getTimeFromYear(startYear), _getTimeFromYear(endYear)];
+        let startYear = null;
+        let endYear = null;
+        if (value.length === 2) {
+            startYear = value[0];
+            endYear = value[1];
+        } else {
+            startYear = value;
+            endYear = value;
+        }
+        return [_getStartTimeFromYear(startYear), _getEndTimeFromYear(endYear)];
     }
 }
 

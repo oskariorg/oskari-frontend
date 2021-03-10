@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Background } from './styled';
 import { TimeSeriesHeader } from './TimeSeriesHeader';
 import { TimeSeriesRange } from './TimeSeriesRange';
+import { TimeSeriesYear } from './TimeSeriesYear';
 
 export const TimeSeriesRangeControl = ({
     controller,
@@ -20,8 +21,10 @@ export const TimeSeriesRangeControl = ({
     const toggleMode = () => {
         if (mode === 'year') {
             setMode('range');
+            controller.updateValue([value, value]);
         } else {
             setMode('year');
+            controller.updateValue(value[0]);
         }
     };
     return (
@@ -33,7 +36,15 @@ export const TimeSeriesRangeControl = ({
                 loading={loading}
                 error={error}
             />
-            {mode === 'year' && <div>year placeholder</div>}
+            {mode === 'year' && (
+                <TimeSeriesYear
+                    onChange={(val) => controller.updateValue(val)}
+                    start={start}
+                    end={end}
+                    value={value}
+                    dataYears={dataYears}
+                />
+            )}
             {mode === 'range' && (
                 <TimeSeriesRange
                     onChange={(val) => controller.updateValue(val)}
