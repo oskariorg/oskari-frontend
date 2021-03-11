@@ -15,7 +15,7 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.sandbox = Oskari.getSandbox();
-        this.mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
@@ -31,7 +31,7 @@ class UIHandler extends StateHandler {
             loading: false,
             tab: DEFAULT_TAB,
             credentialsCollapseOpen: false,
-            scales: this.mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
+            scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
         this.fetchLayerAdminMetadata();
@@ -674,21 +674,29 @@ class UIHandler extends StateHandler {
      * @param {Object} layer affected layer as WFSlayer object
      * @param {Object} layerData new fetched layer data
      */
-    refreshLayerOnMap (layerId, layer, layerData) {
-        if (!layerId || !layer || !layerData) {
+    refreshLayerOnMap (layerId, layerData) {
+        if (!layerId || !layerData) {
             return;
         }
 
         const originalLayerIndex = this.sandbox.getMap().getLayerIndex(layerId); // Save index for the new layer
         const modifiedLayer = this.mapLayerService.createMapLayer(layerData);
 
-        this.mapLayerService.removeLayer(layerId); // remove existing layer and supress event
-
         // if layer was found from the selected layers remove and re-add it
         if (originalLayerIndex !== -1) {
             this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+        }
 
-            this.mapLayerService.addLayer(modifiedLayer); // add layer but dont supress event
+        // remove the previous version replace with the new layer data without sending events
+        // this is a more secure way of updating all of the layer data for the frontend instead of calling updateLayer that does only partial update
+        this.mapLayerService.removeLayer(layerId);
+        this.mapLayerService.addLayer(modifiedLayer);
+
+        // TODO: send maplayer event with "update" operation here
+
+        // if layer was found from the selected layers remove it from map and re-add it
+        // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
+        if (originalLayerIndex !== -1) {
             this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
             this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
         }
@@ -702,7 +710,7 @@ class UIHandler extends StateHandler {
         const existingLayer = this.mapLayerService.findMapLayer(layerId);
 
         if (existingLayer) {
-            this.refreshLayerOnMap(layerId, existingLayer, layerData);
+            this.refreshLayerOnMap(layerId, layerData);
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
