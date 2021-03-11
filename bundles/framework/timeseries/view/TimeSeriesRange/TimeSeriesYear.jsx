@@ -38,6 +38,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears }) => {
             </Col>
             <ColFixed>
                 <YearRangeSlider
+                    included={false}
                     step={1}
                     start={start}
                     end={end}
