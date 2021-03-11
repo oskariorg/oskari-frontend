@@ -694,7 +694,7 @@ class UIHandler extends StateHandler {
         this.mapLayerService.removeLayer(layerId, true);
         this.mapLayerService.addLayer(modifiedLayer, true);
 
-        // TODO: send maplayer event with "update" operation here
+        this.sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(layerId, 'update'));
 
         // if layer was found from the selected layers remove it from map and re-add it
         // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
