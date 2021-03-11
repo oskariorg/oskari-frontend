@@ -21,10 +21,10 @@ export const TimeSeriesRangeControl = ({
     const toggleMode = () => {
         if (mode === 'year') {
             setMode('range');
-            controller.updateValue([value, value]);
+            controller.updateValue([start, value]);
         } else {
             setMode('year');
-            controller.updateValue(value[0]);
+            controller.updateValue(value[1]);
         }
     };
     return (
