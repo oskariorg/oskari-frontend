@@ -1,54 +1,60 @@
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
-import React from 'react';
-import { Spin } from 'oskari-ui';
-import { Background, Header, Col, ColFixed, Row, YearInput } from './styled';
-import { YearRangeSlider } from './YearRangeSlider';
+import React, { useState } from 'react';
+import { Background } from './styled';
+import { TimeSeriesHeader } from './TimeSeriesHeader';
+import { TimeSeriesRange } from './TimeSeriesRange';
+import { TimeSeriesYear } from './TimeSeriesYear';
 
-const getHeaderContent = (title, loading = false, error = false) => {
-    let content = title;
-    if (loading) {
-        content = (<span>{content} <Spin /></span>);
-    }
-    if (error) {
-        // TODO: give an icon with tooltip or something cleaner
-        content = (<span style={{ color: 'red' }}>{content}</span>);
-    }
-    return content;
-}
-
-export const TimeSeriesRangeControl = ({ controller, title, start, end, value, dataYears, isMobile, loading, error }) => {
-    const [startValue, endValue] = value;
+export const TimeSeriesRangeControl = ({
+    controller,
+    title,
+    start,
+    end,
+    value,
+    dataYears,
+    isMobile,
+    loading,
+    error
+}) => {
+    const [mode, setMode] = useState('year');
+    const toggleMode = () => {
+        if (mode === 'year') {
+            setMode('range');
+            controller.updateValue([value, value]);
+        } else {
+            setMode('year');
+            controller.updateValue(value[0]);
+        }
+    };
     return (
         <Background isMobile={isMobile}>
-            <Header className="timeseries-range-drag-handle">{ getHeaderContent(title, loading, error) }</Header>
-            <Row>
-                <Col>
-                    <YearInput
-                        value={startValue}
-                        onChange={(val) => controller.updateValue([val, endValue])}
-                    ></YearInput>
-                </Col>
-                {!isMobile && (
-                    <ColFixed>
-                        <YearRangeSlider
-                            range
-                            step={1}
-                            start={start}
-                            end={end}
-                            dataYears={dataYears}
-                            value={value}
-                            onChange={(val) => controller.updateValue(val)}
-                        />
-                    </ColFixed>
-                )}
-                <Col>
-                    <YearInput
-                        value={endValue}
-                        onChange={(val) => controller.updateValue([startValue, val])}
-                    ></YearInput>
-                </Col>
-            </Row>
+            <TimeSeriesHeader
+                toggleMode={() => toggleMode()}
+                title={title}
+                mode={mode}
+                loading={loading}
+                error={error}
+            />
+            {mode === 'year' && (
+                <TimeSeriesYear
+                    onChange={(val) => controller.updateValue(val)}
+                    start={start}
+                    end={end}
+                    value={value}
+                    dataYears={dataYears}
+                />
+            )}
+            {mode === 'range' && (
+                <TimeSeriesRange
+                    onChange={(val) => controller.updateValue(val)}
+                    start={start}
+                    end={end}
+                    value={value}
+                    dataYears={dataYears}
+                    isMobile={isMobile}
+                />
+            )}
         </Background>
     );
 };
