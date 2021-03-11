@@ -674,13 +674,15 @@ class UIHandler extends StateHandler {
      * @param {Object} layer affected layer as WFSlayer object
      * @param {Object} layerData new fetched layer data
      */
-    refreshLayerOnMap (layerId, layerData) {
+    refreshLayerOnMap (layerId, layerData, existingLayer) {
         if (!layerId || !layerData) {
             return;
         }
 
         const originalLayerIndex = this.sandbox.getMap().getLayerIndex(layerId); // Save index for the new layer
+        const existingTools = existingLayer.getTools();
         const modifiedLayer = this.mapLayerService.createMapLayer(layerData);
+        modifiedLayer.setTools(existingTools);
 
         // if layer was found from the selected layers remove and re-add it
         if (originalLayerIndex !== -1) {
@@ -689,8 +691,8 @@ class UIHandler extends StateHandler {
 
         // remove the previous version replace with the new layer data without sending events
         // this is a more secure way of updating all of the layer data for the frontend instead of calling updateLayer that does only partial update
-        this.mapLayerService.removeLayer(layerId);
-        this.mapLayerService.addLayer(modifiedLayer);
+        this.mapLayerService.removeLayer(layerId, true);
+        this.mapLayerService.addLayer(modifiedLayer, true);
 
         // TODO: send maplayer event with "update" operation here
 
@@ -710,7 +712,7 @@ class UIHandler extends StateHandler {
         const existingLayer = this.mapLayerService.findMapLayer(layerId);
 
         if (existingLayer) {
-            this.refreshLayerOnMap(layerId, layerData);
+            this.refreshLayerOnMap(layerId, layerData, existingLayer);
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
