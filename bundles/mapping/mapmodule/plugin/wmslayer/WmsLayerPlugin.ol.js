@@ -133,26 +133,23 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                         projection = this._createReverseProjection(projectionCode);
                     }
                 }
-                var sourceImpl = null;
-                let layerImpl = null;
-                var sourceOpts = {
+                const sourceOpts = {
                     url: _layer.getLayerUrl(),
                     params: defaultParams,
                     crossOrigin: _layer.getAttributes('crossOrigin'),
                     projection: projection
                 };
+                let layerImpl = null;
                 if (layerOptions.singleTile === true) {
-                    sourceImpl = new OskariImageWMS(sourceOpts);
                     layerImpl = new olLayerImage({
-                        source: sourceImpl,
+                        source: new OskariImageWMS(sourceOpts),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                     this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
-                    sourceImpl = new OskariTileWMS(sourceOpts);
                     layerImpl = new olLayerTile({
-                        source: sourceImpl,
+                        source: new OskariTileWMS(sourceOpts),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
