@@ -9,6 +9,31 @@ import { getZoomLevelHelper } from '../../util/scale';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
+const getSingleTileOption = (options = {}, layerAttributes = {}) => {
+    if (options.hasOwnProperty('singleTile')) {
+        // if explicitly configured -> always use as configured
+        return !!options.singleTile;
+    }
+    if (!layerAttributes.times) {
+        // always use tiles when not configured and not a timeseries layer
+        return false;
+    }
+    const timeseries = options.timeseries || {};
+    // force singleTile only if a player ui (explicit config or missing config for ui) would be shown for time series
+    return typeof timeseries.ui === 'undefined' || timeseries.ui === 'player';
+};
+
+// get an array of layers regardless if its the actual layer or sublayers that we want to add to map
+const getLayersToAddForMap = (oskariLayer, isBaseMap) => {
+    if (oskariLayer.getSubLayers().length === 0) {
+        return [oskariLayer];
+    }
+    if (oskariLayer.isGroupLayer() || oskariLayer.isBaseLayer() || isBaseMap === true) {
+        return oskariLayer.getSubLayers();
+    }
+    return [oskariLayer];
+};
+
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
@@ -75,66 +100,46 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 return;
             }
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
-
-            var layers = [],
-                olLayers = [];
-            // insert layer or sublayers into array to handle them identically
-            if (
-                (layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) &&
-                layer.getSubLayers().length > 0
-            ) {
-                // replace layers with sublayers
-                layers = layer.getSubLayers();
-            } else {
-                // add layer into layers
-                layers.push(layer);
-            }
-
+            const layers = getLayersToAddForMap(layer, isBaseMap);
             // loop all layers and add these on the map
-            for (var i = 0, ilen = layers.length; i < ilen; i++) {
-                var _layer = layers[i];
-                var defaultParams = {
-                        LAYERS: _layer.getLayerName(),
-                        TRANSPARENT: true,
-                        ID: _layer.getId(),
-                        STYLES: _layer.getCurrentStyle().getName(),
-                        FORMAT: 'image/png',
-                        VERSION: _layer.getVersion() || '1.3.0'
-                    },
-                    layerParams = _layer.getParams() || {},
-                    layerOptions = _layer.getOptions() || {},
-                    layerAttributes = _layer.getAttributes() || undefined;
+            const olLayers = layers.map(_layer => {
+                const defaultParams = {
+                    LAYERS: _layer.getLayerName(),
+                    TRANSPARENT: true,
+                    ID: _layer.getId(),
+                    STYLES: _layer.getCurrentStyle().getName(),
+                    FORMAT: 'image/png',
+                    VERSION: _layer.getVersion() || '1.3.0'
+                };
+                const layerParams = _layer.getParams() || {};
+                const layerOptions = _layer.getOptions() || {};
+                const layerAttributes = _layer.getAttributes() || {};
 
-                if (!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
-                    layerOptions.singleTile = true;
-                }
+                layerOptions.singleTile = getSingleTileOption(layerOptions, layerAttributes);
 
                 if (_layer.isRealtime()) {
-                    var date = new Date();
-                    defaultParams['TIME'] = date.toISOString();
+                    defaultParams['TIME'] = new Date().toISOString();
                 }
-                // override default params and options from layer
-                for (var key in layerParams) {
-                    if (layerParams.hasOwnProperty(key)) {
-                        defaultParams[key.toUpperCase()] = layerParams[key];
-                    }
-                }
-                var layerImpl = null;
+                // override default params
+                Object.keys(layerParams).forEach(param => {
+                    defaultParams[param.toUpperCase()] = layerParams[param];
+                });
 
-                var reverseProjection;
-                if (layerAttributes && layerAttributes.reverseXY && typeof layerAttributes.reverseXY === 'object') {
-                    var projectionCode = this.getMapModule().getProjection();
+                let projection;
+                if (typeof layerAttributes.reverseXY === 'object') {
+                    const projectionCode = this.getMapModule().getProjection();
                     // use reverse coordinate order for this layer!
                     if (layerAttributes.reverseXY[projectionCode]) {
-                        reverseProjection = this._createReverseProjection(projectionCode);
+                        projection = this._createReverseProjection(projectionCode);
                     }
                 }
                 var sourceImpl = null;
+                let layerImpl = null;
                 var sourceOpts = {
                     url: _layer.getLayerUrl(),
                     params: defaultParams,
                     crossOrigin: _layer.getAttributes('crossOrigin'),
-                    projection: reverseProjection || undefined
+                    projection: projection
                 };
                 if (layerOptions.singleTile === true) {
                     sourceImpl = new OskariImageWMS(sourceOpts);
@@ -160,12 +165,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 if (metadata.toggleLevel > -1) {
                     layerImpl.setMinZoom(metadata.toggleLevel);
                 }
-                this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
-                // gather references to layers
-                olLayers.push(layerImpl);
 
                 this._log.debug('#!#! CREATED ol/layer/TileLayer for ' + _layer.getId());
-            }
+                return layerImpl;
+            });
+            // add layers to map
+            olLayers.forEach(layerImpl => {
+                this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
+            });
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
         },
