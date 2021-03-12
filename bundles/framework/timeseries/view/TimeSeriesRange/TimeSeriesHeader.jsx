@@ -21,20 +21,23 @@ const getHeaderContent = (title, loading = false, error = false) => {
 };
 
 export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false }) => {
-    const messageKey = mode === 'year' ? 'timeseriesYearModeHelpMsg' : 'timeseriesRangeModeHelpMsg';
-    const message = <Message messageKey={messageKey} />;
+    const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
+    const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
+    const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     return (
         <Header className="timeseries-range-drag-handle">
             {getHeaderContent(title, loading, error)}
             <div className="header-mid-spacer"></div>
-            <Tooltip title={message}>
+            <Tooltip title={helpMessage}>
                 <IconButton type="text" size="large">
                     <QuestionCircleOutlined />
                 </IconButton>
             </Tooltip>
-            <IconButton type="text" size="large" onClick={() => toggleMode()}>
-                {mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />}
-            </IconButton>
+            <Tooltip title={switchButtonMessage}>
+                <IconButton type="text" size="large" onClick={() => toggleMode()}>
+                    {mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />}
+                </IconButton>
+            </Tooltip>
         </Header>
     );
 };
