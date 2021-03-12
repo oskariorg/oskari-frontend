@@ -102,7 +102,7 @@ export class TimeseriesMetadataService {
         this.clearPreviousFeatures();
         const log = Oskari.log('TimeSeries');
         log.info('Toggle at: ' + this._toggleLevel, 'Current zoom is: ' + sandbox.getMap().getZoom());
-        if (this._toggleLevel === -1 || this._toggleLevel < sandbox.getMap().getZoom()) {
+        if (this._toggleLevel === -1 || this._toggleLevel >= sandbox.getMap().getZoom()) {
             // don't show features but the wms
             log.info('Not showing features, WMS should be shown');
             return;
