@@ -157,11 +157,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 }
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(layerImpl, _layer.getMinScale(), _layer.getMaxScale());
-                // Adjust min zoom level based on timeseries metadata toggle level
-                const metadata = this._getTimeSeriesMetadata(layer);
-                if (metadata.toggleLevel > -1) {
-                    layerImpl.setMinZoom(metadata.toggleLevel);
-                }
 
                 this._log.debug('#!#! CREATED ol/layer/TileLayer for ' + _layer.getId());
                 return layerImpl;
@@ -172,12 +167,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
             });
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
-        },
-
-        _getTimeSeriesMetadata: function (layer) {
-            const options = layer.getOptions();
-            const timeseries = options.timeseries || {};
-            return timeseries.metadata || {};
         },
 
         _registerLayerEvents: function (layer, oskariLayer, prefix) {
