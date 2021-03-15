@@ -12,8 +12,8 @@ export class WFSLayer extends VectorTileLayer {
         /* Layer Type */
         this._layerType = 'WFS';
         this._featureData = true;
-        this._propertyFilter = []; // filtered/ordered property names
-        this._propertyNames = {};
+        this._propertySelection = []; // names to order and limit visible properties
+        this._propertyLabels = {};
         this._propertyTypes = {};
         this._activeFeatures = []; // features on screen
         this._selectedFeatures = []; // filtered features
@@ -38,16 +38,15 @@ export class WFSLayer extends VectorTileLayer {
      */
     getFields () {
         const id = '__fid';
-        if (this._propertyFilter.length) {
-            return [id, ...this._propertyFilter];
+        if (this._propertySelection.length) {
+            return [id, ...this._propertySelection];
         }
-        const fromNames = Object.keys(this._propertyNames);
-        if (fromNames.length) {
-            return [id, ...fromNames];
+        let names = Object.keys(this._propertyLabels);
+        if (names.length) {
+            names = Object.keys(this._propertyTypes);
         }
-        const fromTypes = Object.keys(this._propertyTypes);
-        if (fromTypes.length) {
-            return [id, ...fromTypes];
+        if (names.length) {
+            return [id, ...names];
         }
         return [];
     }
@@ -67,6 +66,10 @@ export class WFSLayer extends VectorTileLayer {
      * @return {String[]} locales
      */
     getLocales () {
+        if (this._propertySelection.length) {
+            const labels = this._propertySelection.map(p => this._propertyNames[p] || p);
+            return ['ID', ...labels];
+        }
         const locales = Object.values(this._propertyNames);
         return locales.length ? ['ID', ...locales] : locales;
     }
@@ -202,35 +205,35 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
-     * @method setPropertyFilter
-     * @param {String[]} propertyFilter
+     * @method setPropertySelection
+     * @param {String[]} propertySelection
      */
-    setPropertyFilter (propertyFilter) {
-        this._propertyFilter = propertyFilter;
+    setPropertySelection (propertySelection) {
+        this._propertySelection = propertySelection;
     }
 
     /**
-     * @method getPropertyFilter
-     * @return {String[]} propertyFilter
+     * @method getPropertySelection
+     * @return {String[]} propertySelection
      */
-    getPropertyFilter () {
-        return this._propertyFilter;
+    getPropertySelection () {
+        return this._propertySelection;
     }
 
     /**
-     * @method setPropertyNames
-     * @param {json} propertyNames
+     * @method setPropertyLabels
+     * @param {json} propertyLabels
      */
-    setPropertyNames (propertyNames) {
-        this._propertyNames = propertyNames;
+    setPropertyLabels (propertyLabels) {
+        this._propertyLabels = propertyLabels;
     }
 
     /**
-     * @method getPropertyNames
-     * @return {json} propertyNames
+     * @method getPropertyLabels
+     * @return {json} propertyLabels
      */
-    getPropertyNames () {
-        return this._propertyNames;
+    getPropertyLabels () {
+        return this._propertyLabels;
     }
 
     /**

@@ -521,8 +521,8 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const { attributes, locale } = json;
-            const attributeIdentifiers = Object.keys(attributes);
+            const { types, locale } = json;
+            const attributeIdentifiers = Object.keys(types);
             const currentLocale = Oskari.getLang();
             const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
             return attributeIdentifiers.reduce((choices, identifier) => {

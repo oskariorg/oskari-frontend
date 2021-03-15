@@ -117,14 +117,14 @@ Oskari.clazz.define(
             const lang = Oskari.getLang();
 
             if (Array.isArray(filter)) {
-                layer.setPropertyFilter(filter);
+                layer.setPropertySelection(filter);
             } else if (typeof filter === 'object') {
                 const filterArray = filter[lang] || filter.default || [];
-                layer.setPropertyFilter(filterArray);
+                layer.setPropertySelection(filterArray);
             }
             const localized = locale[lang];
             if (localized) {
-                layer.setPropertyNames(localized);
+                layer.setPropertyLabels(localized);
             }
             if (types) {
                 layer.setPropertyTypes(types);

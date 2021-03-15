@@ -364,12 +364,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const onSuccess = response => {
             const lang = Oskari.getLang();
-            const { attributes = {}, locale = {}, filter = {} } = response;
-            const filterArray = filter[lang] || filter.default || fields;
-            layer.setPropertyFilter(filterArray);
-            const names = locale[lang] || locale.default || {};
-            layer.setPropertyNames(names);
-            layer.setPropertyTypes(attributes);
+            const { types = {}, locale = {}, selection } = response;
+            if (Array.isArray(selection)) {
+                layer.setPropertyFilter(selection);
+            } else if (selection) {
+                const selectionArray = selection[lang] || selection.default || fields;
+                layer.setPropertySelection(selectionArray);
+            }
+            const labels = locale[lang] || locale.default || {};
+            layer.setPropertyLabels(labels);
+            layer.setPropertyTypes(types);
             this.updateLayerProperties(layer);
         };
         jQuery.ajax({
