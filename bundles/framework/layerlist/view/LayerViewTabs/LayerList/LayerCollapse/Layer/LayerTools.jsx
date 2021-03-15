@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { WarningIcon, Tooltip, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { TimeSerieIcon } from '../../../CustomIcons';
 import { LayerIcon } from '../../../LayerIcon';
 
 const SpriteIcon = styled('div')`
@@ -20,15 +19,15 @@ const Tools = styled('div')`
     }
 `;
 
-const hasSubLayerMetadata = layer => {
+const hasSubLayerMetadata = (layer) => {
     const subLayers = layer.getSubLayers();
     if (!subLayers || subLayers.length === 0) {
         return false;
     }
-    return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
+    return !!subLayers.find((sub) => !!sub.getMetadataIdentifier());
 };
 
-const getBackendStatus = layer => {
+const getBackendStatus = (layer) => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
         status: backendStatus,
@@ -38,7 +37,7 @@ const getBackendStatus = layer => {
     return status;
 };
 
-const getStatusColor = status => {
+const getStatusColor = (status) => {
     switch (status) {
     case 'OK':
         return '#369900';
@@ -61,24 +60,14 @@ const LayerTools = ({ model, controller }) => {
     const map = Oskari.getSandbox().getMap();
     const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
-    let layerIcon;
-    if (model.hasTimeseries()) {
-        layerIcon = (
-            <Tooltip title={<Message messageKey="layer.tooltip.timeseries" />}>
-                <TimeSerieIcon />
-            </Tooltip>
-        );
-    } else {
-        const backendStatus = getBackendStatus(model);
-        const statusOnClick =
-            backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
-        layerIcon = <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />;
-    }
+    const backendStatus = getBackendStatus(model);
+    const statusOnClick =
+        backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
 
     return (
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
-            {layerIcon}
+            <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
         </Tools>
     );
@@ -94,11 +83,12 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
         <LayerIcon
             fill={backendStatus.color}
             type={model.getLayerType()}
+            hasTimeseries={model.hasTimeseries()}
             onClick={onClick ? () => onClick() : undefined}
         />
     );
 
-    return (<Tooltip title={<Message messageKey={ backendStatus.messageKey } />}>{icon}</Tooltip>);
+    return <Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>;
 };
 
 LayerStatus.propTypes = {
