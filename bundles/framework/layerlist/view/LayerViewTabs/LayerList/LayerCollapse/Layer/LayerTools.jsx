@@ -52,7 +52,6 @@ const getStatusColor = status => {
 };
 
 const LayerTools = ({ model, controller }) => {
-    const backendStatus = getBackendStatus(model);
     const infoIcon = {
         classes: ['layer-info']
     };
@@ -62,22 +61,25 @@ const LayerTools = ({ model, controller }) => {
     const map = Oskari.getSandbox().getMap();
     const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
-    const statusOnClick = backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
+    let layerIcon;
+    if (model.hasTimeseries()) {
+        layerIcon = (
+            <Tooltip title={<Message messageKey="layer.tooltip.timeseries" />}>
+                <TimeSerieIcon />
+            </Tooltip>
+        );
+    } else {
+        const backendStatus = getBackendStatus(model);
+        const statusOnClick =
+            backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
+        layerIcon = <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />;
+    }
+
     return (
         <Tools className="layer-tools">
-            {reason &&
-                <WarningIcon tooltip={reason.getDescription()} />
-            }
-            {model.hasTimeseries() &&
-                <Tooltip title={<Message messageKey='layer.tooltip.timeseries' />}>
-                    <TimeSerieIcon />
-                </Tooltip>
-            }
-            <LayerStatus backendStatus={backendStatus} model={model}
-                onClick={ statusOnClick } />
-            <SpriteIcon
-                className={infoIcon.classes.join(' ')}
-                onClick={() => controller.showLayerMetadata(model)} />
+            {reason && <WarningIcon tooltip={reason.getDescription()} />}
+            {layerIcon}
+            <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
         </Tools>
     );
 };
