@@ -1,3 +1,5 @@
+import { ConstantPositionProperty } from "cesium";
+
 /**
  * @class Oskari.mapframework.service.MapLayerService
  *
@@ -1178,12 +1180,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            parsed layer model that can be added with #addLayer(). Only supports WMS layers for now.
          */
         _createGroupMapLayer: function (baseMapJson, isBase) {
-            var baseLayer = this.createLayerTypeInstance('wmslayer'),
-                tempPartsForMetadata,
-                perm,
-                i,
-                subLayer,
-                subLayerOpacity;
+            const baseLayer = this.createLayerTypeInstance('wmslayer');
             if (isBase) {
                 baseLayer.setAsBaseLayer();
             } else {
@@ -1214,7 +1211,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setQueryable(false);
 
             if (baseMapJson.permissions) {
-                for (perm in baseMapJson.permissions) {
+                for (const perm in baseMapJson.permissions) {
                     if (baseMapJson.permissions.hasOwnProperty(perm)) {
                         baseLayer.addPermission(perm, baseMapJson.permissions[perm]);
                     }
@@ -1222,9 +1219,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             if (baseMapJson.subLayer) {
-                for (i = 0; i < baseMapJson.subLayer.length; i++) {
+                for (let i = 0; i < baseMapJson.subLayer.length; i++) {
                     // Notice that we are adding layers to baselayers sublayers array
-                    subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                    const subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
                     subLayer.setParentId(baseMapJson.id);
 
                     // if (baseMapJson.subLayer[i].admin) {
@@ -1238,7 +1235,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (baseMapJson.opacity !== null && baseMapJson.opacity !== undefined) {
                 baseLayer.setOpacity(baseMapJson.opacity);
             } else if (baseLayer.getSubLayers().length > 0) {
-                subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
+                const subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
                 if (subLayerOpacity !== null && subLayerOpacity !== undefined) {
                     baseLayer.setOpacity(subLayerOpacity);
                 } else {
