@@ -157,7 +157,7 @@ Oskari.registerLocalization(
             "timeSeries": {
                 "metadataLayer": "Metadata layer",
                 "metadataAttribute": "Timeline attribute",
-                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "metadataToggleLevel": "Zoomnivåer där vektorformaten är aktiverat",
                 "noToggle": "No toggle",
                 "ui": "Time series UI",
                 "player": "Animering",

@@ -18,12 +18,12 @@ const SliderContainer = styled('div')`
 export const TimeSeriesMetadataToggleLevel = ({ layer, disabled, scales, controller }) => {
     const options = layer.options || {};
     const timeseries = options.timeseries || {};
-    const metadata = timeseries.metadata || { toggleLevel: 8};
+    const metadata = timeseries.metadata || { toggleLevel: -1 };
     const minZoomLevel = -1;
     const maxZoomLevel = scales.length - 1;
     const marks = {
         [minZoomLevel]: <Message messageKey="timeSeries.noToggle" />,
-        [maxZoomLevel]: String(maxZoomLevel),
+        [maxZoomLevel]: String(maxZoomLevel)
     };
     scales.forEach((scale, index) => {
         if (index % 5 === 0) {
@@ -52,5 +52,5 @@ TimeSeriesMetadataToggleLevel.propTypes = {
     layer: PropTypes.object.isRequired,
     disabled: PropTypes.bool.isRequired,
     scales: PropTypes.arrayOf(PropTypes.number).isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
