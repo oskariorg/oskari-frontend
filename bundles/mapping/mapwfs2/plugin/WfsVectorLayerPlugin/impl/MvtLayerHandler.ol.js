@@ -116,7 +116,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             if (tile.getState() === olTileState.ERROR) {
                 return;
             }
-            this.updateLayerProperties(layer, source);
         });
         return source;
     }
