@@ -1202,14 +1202,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
             baseLayer.setAdmin(baseMapJson.admin);
 
-            baseLayer.setDataUrl(baseMapJson.dataUrl);
-            baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
-            if (!baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl()) {
-                tempPartsForMetadata = baseLayer.getDataUrl().split('uuid=');
-                if (tempPartsForMetadata.length === 2) {
-                    baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
-                }
-            }
+            baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
             if (baseMapJson.orgName) {
                 baseLayer.setOrganizationName(baseMapJson.orgName);
@@ -1343,14 +1336,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setSrsList(mapLayerJson.srs);
 
             // metadata
-            layer.setDataUrl(mapLayerJson.dataUrl);
-            layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
-            if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
-                var tempPartsForMetadata = layer.getDataUrl().split('uuid=');
-                if (tempPartsForMetadata.length === 2) {
-                    layer.setMetadataIdentifier(tempPartsForMetadata[1]);
-                }
-            }
+            layer.setMetadataIdentifier(mapLayerJson.metadataUuid);
 
             // backendstatus
             if (mapLayerJson.backendStatus && layer.setBackendStatus) {
