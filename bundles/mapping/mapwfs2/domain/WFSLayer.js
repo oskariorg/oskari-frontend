@@ -11,22 +11,35 @@ export class WFSLayer extends VectorTileLayer {
         super(...arguments);
         /* Layer Type */
         this._layerType = 'WFS';
-        this._featureData = true;
         this._propertySelection = []; // names to order and limit visible properties
         this._propertyLabels = {};
         this._propertyTypes = {};
-        this._activeFeatures = []; // features on screen
-        this._selectedFeatures = []; // filtered features
-        this._clickedFeatureIds = []; // clicked feature ids (map)
-        this._clickedFeatureListIds = []; // clicked feature ids (list)
-        this._clickedGeometries = []; // clicked feature geometries [[id  geom]..]
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
-        this._filterJson = null;
-        this._internalOpened = false;
         this._userStyles = [];
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = Oskari.getSandbox();
+    }
+    /* Overriding methods */
+
+    hasFeatureData () {
+        return true;
+    }
+
+    isFilterSupported () {
+        return true;
+    }
+
+    getLegendImage () {
+        return null;
+    }
+
+    isSupportedSrs () {
+        return true;
+    }
+
+    getLayerUrl () {
+        return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
     }
 
     /* Layer type specific s */
@@ -109,102 +122,6 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
-     * @method getActiveFeatures
-     * @return {Object[]} features
-     */
-    getActiveFeatures () {
-        return this._activeFeatures;
-    }
-
-    /**
-     * @method setActiveFeature
-     * @param {Object} feature
-     */
-    setActiveFeature (feature) {
-        this._activeFeatures.push(feature);
-    }
-
-    /**
-     * @method setActiveFeatures
-     * @param {Object[]} features
-     */
-    setActiveFeatures (features) {
-        this._activeFeatures = features;
-    }
-
-    /**
-     * @method getSelectedFeatures
-     * @return {Object[]} features
-     */
-    getSelectedFeatures () {
-        return this._selectedFeatures;
-    }
-
-    /**
-     * @method setSelectedFeature
-     * @param {Object} feature
-     */
-    setSelectedFeature (feature) {
-        this._selectedFeatures.push(feature);
-    }
-
-    /**
-     * @method setSelectedFeatures
-     * @param {Object[]} features
-     */
-    setSelectedFeatures (features) {
-        this._selectedFeatures = features;
-    }
-
-    /**
-     * @method getClickedFeatureIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureIds () {
-        return this._clickedFeatureIds;
-    }
-
-    /**
-     * @method setClickedFeatureId
-     * @param {String} id
-     */
-    setClickedFeatureId (id) {
-        this._clickedFeatureIds.push(id);
-    }
-
-    /**
-     * @method setClickedFeatureIds
-     * @param {String[]} features
-     */
-    setClickedFeatureIds (ids) {
-        this._clickedFeatureIds = ids;
-    }
-
-    /**
-     * @method getClickedFeatureListIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureListIds () {
-        return this._clickedFeatureListIds;
-    }
-
-    /**
-     * @method setClickedFeatureListId
-     * @param {String} id
-     */
-    setClickedFeatureListId (id) {
-        this._clickedFeatureListIds.push(id);
-    }
-
-    /**
-     * @method setClickedFeatureListIds
-     * @param {String} id
-     */
-    setClickedFeatureListIds (ids) {
-        this._clickedFeatureListIds = ids;
-    }
-
-    /**
      * @method setPropertySelection
      * @param {String[]} propertySelection
      */
@@ -217,7 +134,7 @@ export class WFSLayer extends VectorTileLayer {
      * @return {String[]} propertySelection
      */
     getPropertySelection () {
-        return this._propertySelection;
+        return [...this.propertySelection];
     }
 
     /**
@@ -233,7 +150,7 @@ export class WFSLayer extends VectorTileLayer {
      * @return {json} propertyLabels
      */
     getPropertyLabels () {
-        return this._propertyLabels;
+        return { ...this._propertyLabels };
     }
 
     /**
@@ -249,7 +166,7 @@ export class WFSLayer extends VectorTileLayer {
      * @return {json} propertyTypes
      */
     getPropertyTypes () {
-        return this._propertyTypes;
+        return { ...this._propertyTypes };
     }
 
     /**
@@ -268,32 +185,6 @@ export class WFSLayer extends VectorTileLayer {
     getWpsLayerParams () {
         const { wpsParams = {} } = this.getAttributes();
         return wpsParams;
-    }
-
-    /**
-     * @method getFilterJson
-     * @return {Object[]} filterJson
-     */
-    getFilterJson () {
-        return this._filterJson;
-    }
-
-    /**
-     * @method setFilterJson
-     * @param {Object} filterJson
-     */
-    setFilterJson (filterJson) {
-        this._filterJson = filterJson;
-    }
-
-    /**
-     * Overriding getLegendImage for WFS
-     *
-     * @method getLegendImage
-     * @return {String} URL to a legend image
-     */
-    getLegendImage () {
-        return null;
     }
 
     /**
@@ -362,47 +253,6 @@ export class WFSLayer extends VectorTileLayer {
      */
     setClusteringDistance (distance) {
         this._options.clusteringDistance = distance;
-    }
-
-    /**
-     * @method isSupportedSrs
-     * Wfs layer is always supported
-     */
-    isSupportedSrs () {
-        return true;
-    }
-
-    /**
-     * @method setWMSLayerId
-     * @param {String} id
-     * Unique identifier for map layer used to reference the WMS layer
-     * which is linked to WFS layer for to use for rendering
-     */
-    setWMSLayerId (id) {
-        this._WMSLayerId = id;
-    }
-
-    /**
-     * @method getWMSLayerId
-     * @return {String}
-     * Unique identifier for map layer used to reference the WMS layer
-     * which is linked to WFS layer for to use for rendering
-     * (e.g. MapLayerService)
-     */
-    getWMSLayerId () {
-        return this._WMSLayerId;
-    }
-
-    /**
-     * @method getLayerUrl
-     * Superclass override
-     */
-    getLayerUrl () {
-        return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
-    }
-
-    isFilterSupported () {
-        return true;
     }
 
     saveUserStyle (styleWithMetadata) {
