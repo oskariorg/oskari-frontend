@@ -169,7 +169,8 @@ Oskari.registerLocalization(
                     "player": "Aikasarjadata näkyy animaationa kuva kerrallaan.",
                     "range": "Aikasarjatason näytettävän aineiston yksittäinen ajankohta tai aikaväli valitaan janalta. Metadatan avulla voidaan esittää janalla ne ajankohdat, joista kunkin näkymän kohdalla dataa on. Sopii ajassa ja tilassa hajanaiselle aineistolle.",
                     "none": "Endast standardbildet visas av WMS kartlagret.",
-                }
+                },
+                "selectMetadataLayer": "Valitse metadatataso"
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",

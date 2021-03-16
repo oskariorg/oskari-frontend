@@ -167,7 +167,8 @@ Oskari.registerLocalization(
                     "player": "Tidsserien visas animerad en bild på gång.",
                     "range": "Välj tidsserie-kartlagrets intervall med att justera tidslinjen. Metadata kan tilläggas för att visa ytterligare information på tidslinjen. Funktionen tillämpar sig för visning av tid- och platsvis spridda datamängder.",
                     "none": "Endast standardbildet visas av WMS kartlagret.",
-                }
+                },
+                "selectMetadataLayer": "Välj metadatalager"
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
