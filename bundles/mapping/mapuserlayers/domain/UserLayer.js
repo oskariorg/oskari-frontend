@@ -15,6 +15,10 @@ export class UserLayer extends WFSLayer {
         this.renderingElement = undefined;
     }
 
+    isFilterSupported () {
+        return false;
+    }
+
     setDescription (desc) {
         this.description = desc;
     }
