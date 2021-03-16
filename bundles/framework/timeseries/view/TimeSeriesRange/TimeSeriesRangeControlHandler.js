@@ -3,11 +3,11 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { TimeseriesMetadataService } from './TimeseriesMetadataService';
 
 const _getStartTimeFromYear = (year) => {
-    return moment.utc(year.toString()).startOf('year');
+    return moment.utc(year.toString(), 'YYYY').startOf('year');
 };
 
 const _getEndTimeFromYear = (year) => {
-    return moment.utc(year.toString()).endOf('year');
+    return moment.utc(year.toString(), 'YYYY').endOf('year');
 };
 
 class UIHandler extends StateHandler {
