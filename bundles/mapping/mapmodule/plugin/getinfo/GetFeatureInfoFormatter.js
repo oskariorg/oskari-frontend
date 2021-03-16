@@ -301,31 +301,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
         // TODO: cleanup the my places references where they can be cleaned. Not sure if the boolean isMyPlace is used by the callers of this method
         const isMyPlace = layer.isLayerOfType('myplaces');
-        var fields = layer.getFields().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
-
-        if (!fields.length) {
-            // layer doesn't have fields, "return no data"
-            return [{
-                markup: noDataResult,
-                layerId,
-                layerName: layer.getName(),
-                type: 'wfslayer',
-                isMyPlace
-            }];
-        }
-
-        const locales = layer.getLocales().slice();
-        const hiddenFields = ['__fid', '__centerX', '__centerY'];
-        // use localized labels for properties when available instead of property names
-        // keep property names for my places as it has custom formatter
-        const localeMapping = fields.reduce((result, value, index) => {
-            // return the localized name, fallback to actual property name if localization is missing
-            const label = locales[index] || value;
-            result[value] = label;
-            return result;
-        }, {});
-
         const isEmpty = (value) => {
             if (typeof value === 'string' && value.trim() === '') {
                 return true;
@@ -341,34 +317,40 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             }
             return true;
         };
+        const processEntry = ([prop, value]) => {
+            let uiLabel = localeMapping[prop] || prop;
+            let formatterOpts = {};
+            if (typeof layer.getFieldFormatMetadata === 'function') {
+                formatterOpts = layer.getFieldFormatMetadata(prop);
+            }
+            if (isDataShown(value, formatterOpts)) {
+                const formatter = getFormatter(formatterOpts.type);
+                if (formatterOpts.noLabel === true) {
+                    uiLabel = ID_SKIP_LABEL + uiLabel;
+                }
+                return [uiLabel, formatter(value, formatterOpts.params)];
+            }
+            return null;
+        };
+        // use localized labels for properties when available instead of property names
+        const localeMapping = layer.getPropertyLabels();
+        const selection = layer.getPropertySelection();
 
-        const result = data.features.map(featureValues => {
+        const result = features.map(properties => {
             let markup;
-            // featureValues is an array of values based on fields order
-            const feature = fields
-                // .filter(prop => !hiddenFields.includes(prop))
-                .reduce((result, prop, index) => {
-                    if (hiddenFields.includes(prop)) {
-                        // skip hidden fields for ui presentation but dont filter so the index is not mixed up(?)
-                        return result;
-                    }
-                    // construct object for UI having only selected fields with localized labels
-                    let uiLabel = localeMapping[prop] || prop;
-                    const value = featureValues[index];
-                    let formatterOpts = {};
-                    if (typeof layer.getFieldFormatMetadata === 'function') {
-                        formatterOpts = layer.getFieldFormatMetadata(prop);
-                    }
-                    if (isDataShown(value, formatterOpts)) {
-                        const formatter = getFormatter(formatterOpts.type);
-                        if (formatterOpts.noLabel === true) {
-                            uiLabel = ID_SKIP_LABEL + uiLabel;
-                        }
-                        result[uiLabel] = formatter(value, formatterOpts.params);
+            let feature;
+            if (selection.length) {
+                feature = selection.reduce((result, prop) => {
+                    const processed = processEntry([prop, properties[prop]]);
+                    if (processed) {
+                        result[processed[0]] = processed[1];
                     }
                     return result;
                 }, {});
-
+            } else {
+                feature = Object.fromEntries(Object.entries(properties).map(processEntry));
+            }
+            // TODO noDataResult if features doesn't have properties
             if (Object.keys(feature).length > 0) {
                 markup = me._json2html(feature);
             } else {
