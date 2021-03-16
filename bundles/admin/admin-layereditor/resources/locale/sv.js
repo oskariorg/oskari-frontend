@@ -154,6 +154,21 @@ Oskari.registerLocalization(
                 "geojson": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Animering",
+                "range": "Tidsserie",
+                "none": "Inget val",
+                "tooltip": {
+                    "player": "Tidsserien visas animerad en bild på gång.",
+                    "range": "Välj tidsserie-kartlagrets intervall med att justera tidslinjen. Metadata kan tilläggas för att visa ytterligare information på tidslinjen. Funktionen tillämpar sig för visning av tid- och platsvis spridda datamängder.",
+                    "none": "Endast standardbildet visas av WMS kartlagret.",
+                }
+            },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
                 "styles": "Stildefinitioner JSON-syntaxen är ogiltig.",
