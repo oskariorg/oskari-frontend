@@ -229,7 +229,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     const features = source.getFormat().readFeatures(resp);
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);
-                    this.updateLayerProperties(layer, source);
                     updateLoadingStatus(LOADING_STATUS_VALUE.COMPLETE);
                 },
                 error: () => {

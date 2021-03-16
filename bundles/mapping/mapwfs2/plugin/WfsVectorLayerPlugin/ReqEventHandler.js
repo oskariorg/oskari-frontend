@@ -1,4 +1,4 @@
-import { getPropsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
+import { processFeatureProperties, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
 import { filterByAttribute, getFilterAlternativesAsArray } from './util/filter';
 
 export class ReqEventHandler {
@@ -6,6 +6,7 @@ export class ReqEventHandler {
         this.sandbox = sandbox;
         this.isClickResponsive = true;
     }
+
     createEventHandlers (plugin) {
         const me = this;
         const modifySelection = (layer, featureIds, keepPrevious) => {
@@ -14,10 +15,10 @@ export class ReqEventHandler {
         };
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
         return {
-            'WFSFeaturesSelectedEvent': (event) => {
+            WFSFeaturesSelectedEvent: (event) => {
                 plugin.updateLayerStyle(event.getMapLayer());
             },
-            'MapClickedEvent': (event) => {
+            MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
                     return;
                 }
@@ -43,7 +44,7 @@ export class ReqEventHandler {
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId,
-                            features: getPropsArray([featureProperties], layer.getFields()),
+                            features: [processFeatureProperties(featureProperties, true)],
                             lonlat: event.getLonLat()
                         });
                     }
@@ -53,13 +54,7 @@ export class ReqEventHandler {
                         .forEach(({ layer, features }) => modifySelection(layer, features, keepPrevious));
                 }
             },
-            'AfterMapMoveEvent': () => {
-                plugin.getAllLayerIds().forEach(layerId => {
-                    const layer = getSelectedLayer(layerId);
-                    plugin.updateLayerProperties(layer);
-                });
-            },
-            'WFSSetFilter': (event) => {
+            WFSSetFilter: (event) => {
                 const keepPrevious = Oskari.ctrlKeyDown();
                 const fatureCollection = event.getGeoJson();
                 const filterFeature = fatureCollection.features[0];
@@ -83,33 +78,29 @@ export class ReqEventHandler {
                     modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
                 });
             },
-            'WFSSetPropertyFilter': event => {
+            WFSSetPropertyFilter: event => {
                 if (!event.getFilters() || event.getFilters().filters.length === 0) {
                     return;
                 }
-                const layer = getSelectedLayer(event.getLayerId());
-                if (!layer) {
-                    return;
-                }
-                const records = layer.getActiveFeatures();
+                const layerId = event.getLayerId();
+                const records = plugin.getLayerFeaturePropertiesInViewport(layerId);
                 if (!records || records.length === 0) {
                     return;
                 }
-                const fields = layer.getFields();
-                const idIndex = fields.indexOf(WFS_FTR_ID_KEY);
                 const filteredIds = new Set();
                 const alternatives = getFilterAlternativesAsArray(event);
                 alternatives.forEach(attributeFilters => {
                     let filteredList = records;
                     attributeFilters.forEach(filter => {
-                        filteredList = filterByAttribute(filter, filteredList, fields);
+                        filteredList = filterByAttribute(filter, filteredList);
                     });
-                    filteredList.forEach(props => filteredIds.add(props[idIndex]));
+                    filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                modifySelection(layer, [...filteredIds], false);
+                modifySelection(getSelectedLayer(layerId), [...filteredIds], false);
             }
         };
     }
+
     createRequestHandlers (plugin) {
         return {
             'WfsLayerPlugin.ActivateHighlightRequest': this,

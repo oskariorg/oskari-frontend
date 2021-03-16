@@ -182,6 +182,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
     }
 
+    getLayerFeaturePropertiesInViewport (layerId) {
+        const handler = this._getLayerHandler(layerId);
+        if (handler) {
+            return handler.getLayerFeaturePropertiesInViewport(layerId);
+        }
+    }
+
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -341,24 +348,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
 
     /**
      * @method updateLayerProperties
-     * Notify about changed features in view
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {ol/source/VectorTile} source
-     */
-    updateLayerProperties (layer, source) {
-        const handler = this._getLayerHandler(layer);
-        if (handler) {
-            return handler.updateLayerProperties(layer, source);
-        }
-    }
-
-    /**
-     * @method setLayerLocales
-     * Requests and sets locales for layer's fields.
+     * Requests and sets feature properties
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
      * @param {Array} fields
      */
-    setWFSProperties (layer, fields) {
+    updateLayerProperties (layer) {
         if (!layer) {
             return;
         }
@@ -368,13 +362,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             if (Array.isArray(selection)) {
                 layer.setPropertyFilter(selection);
             } else if (selection) {
-                const selectionArray = selection[lang] || selection.default || fields;
+                const selectionArray = selection[lang] || selection.default || [];
                 layer.setPropertySelection(selectionArray);
             }
             const labels = locale[lang] || locale.default || {};
             layer.setPropertyLabels(labels);
             layer.setPropertyTypes(types);
-            this.updateLayerProperties(layer);
+            // TODO: event should have only locale object not separate arrays
+            this.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
         };
         jQuery.ajax({
             type: 'GET',
