@@ -104,11 +104,6 @@ Oskari.clazz.define(
             if (mapLayerJson.style) {
                 layer.selectStyle(mapLayerJson.style);
             }
-
-            // WMS link layer id for wfs rendering option
-            if (mapLayerJson.WMSLayerId) {
-                layer.setWMSLayerId(mapLayerJson.WMSLayerId);
-            }
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {
