@@ -134,7 +134,7 @@ export class WFSLayer extends VectorTileLayer {
      * @return {String[]} propertySelection
      */
     getPropertySelection () {
-        return [...this.propertySelection];
+        return [...this._propertySelection];
     }
 
     /**
