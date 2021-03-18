@@ -27,7 +27,7 @@ const {
 
 const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, propertyFields, controller }) => (
     <Fragment>
-        { getGeneralInfo(layer) }
+        <LayerGeneralInfo layer={layer} />
         { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
         { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }
@@ -50,10 +50,6 @@ const wrapMandatory = (validators = {}, layer, name, field) => {
         return <Mandatory isValid={validatorFunc(layer)}>{field}</Mandatory>;
     }
     return field;
-};
-
-const getGeneralInfo = (layer) => {
-    return (<LayerGeneralInfo layer={layer} />);
 };
 
 const getEndpointField = (layer, propertyFields, controller) => {
