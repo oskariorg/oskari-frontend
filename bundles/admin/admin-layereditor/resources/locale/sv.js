@@ -66,7 +66,10 @@ Oskari.registerLocalization(
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
                 "dataProviderId": "Dataproducent",
-                "groups": "Grupp av kartlager"
+                "groups": "Grupp av kartlager",
+                "updated": "Taso päivitettiin",
+                "created": "Taso luotiin",
+                "layerId": "Tason uniikki tunniste"
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",

@@ -66,7 +66,10 @@ Oskari.registerLocalization(
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
                 "dataProviderId": "Dataprovider",
-                "groups": "Maplayer groups"
+                "groups": "Maplayer groups",
+                "updated": "This layer was last edited on",
+                "created": "This layer was created on",
+                "layerId": "Layers unique identifier"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
