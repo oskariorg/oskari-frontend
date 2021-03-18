@@ -13,6 +13,7 @@ const TextLine = styled('div')`
 
 const DateText = styled('span')`
     font-weight: bold;
+    margin-right: 8px;
 `;
 
 export const LayerGeneralInfo = ({ layer }) => {
@@ -34,13 +35,13 @@ export const LayerGeneralInfo = ({ layer }) => {
             { layer.created &&
                 <TextLine>
                     <Message messageKey='fields.created' />:
-                    <DateText> { createdDate.toLocaleTimeString(dateLocale) } { createdDate.toLocaleDateString(dateLocale, localeDateOptions) }</DateText>
+                    <DateText> { createdDate.toLocaleTimeString(dateLocale) }</DateText> <DateText>{ createdDate.toLocaleDateString(dateLocale, localeDateOptions) }</DateText>
                 </TextLine>
             }
             { layer.updated &&
                 <TextLine>
                     <Message messageKey='fields.updated' />:
-                    <DateText> { updatedDate.toLocaleTimeString(dateLocale) } { updatedDate.toLocaleDateString(dateLocale, localeDateOptions) }</DateText>
+                    <DateText> { updatedDate.toLocaleTimeString(dateLocale) }</DateText> <DateText>{ updatedDate.toLocaleDateString(dateLocale, localeDateOptions) }</DateText>
                 </TextLine>
             }
             <InfoMargin />
