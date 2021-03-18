@@ -9,11 +9,12 @@ const InfoMargin = styled('div')`
 
 const TextLine = styled('div')`
     display: block;
+    font-style: italic;
 `;
 
 const DateText = styled('span')`
+    margin-left: 8px;
     font-weight: bold;
-    margin-right: 8px;
 `;
 
 export const LayerGeneralInfo = ({ layer }) => {
