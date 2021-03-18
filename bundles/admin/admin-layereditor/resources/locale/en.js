@@ -158,12 +158,18 @@ Oskari.registerLocalization(
             "timeSeries": {
                 "metadataLayer": "Metadata layer",
                 "metadataAttribute": "Timeline attribute",
-                "metadataToggleLevel": "Zoom level to toggle between WMS and WFS layers",
+                "metadataToggleLevel": "Zoom levels at which metadata layer will be active",
                 "noToggle": "No toggle",
                 "ui": "Time series UI",
-                "player": "Player",
-                "range": "Range slider",
-                "none": "None"
+                "player": "Player/animation",
+                "range": "Date and range",
+                "none": "None selected",
+                "tooltip": {
+                    "player": "Time series data can be viewed in an animation.",
+                    "range": "Single date or date range of the time series layer can be selected on a slider. Metadata can be added to give extra information on each image. Suitable for data scattered in time and space.",
+                    "none": "The WMS will show only the default image in map view.",
+                },
+                "selectMetadataLayer": "Select metadata layer"
             },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",

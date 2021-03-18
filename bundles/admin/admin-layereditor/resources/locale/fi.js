@@ -156,6 +156,22 @@ Oskari.registerLocalization(
                 "geojson": "Suuria kohteita",
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Mittakaavatasot, joilla metatietotaso on käytössä",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Animaatio",
+                "range": "Aikajana",
+                "none": "Ei valintaa",
+                "tooltip": {
+                    "player": "Aikasarjadata näkyy animaationa kuva kerrallaan.",
+                    "range": "Aikasarjatason näytettävän aineiston yksittäinen ajankohta tai aikaväli valitaan janalta. Metadatan avulla voidaan esittää janalla ne ajankohdat, joista kunkin näkymän kohdalla dataa on. Sopii ajassa ja tilassa hajanaiselle aineistolle.",
+                    "none": "Endast standardbildet visas av WMS kartlagret.",
+                },
+                "selectMetadataLayer": "Valitse metadatataso"
+            },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
                 "styles": "Tyylimääritysten JSON-syntaksi on virheellinen.",
