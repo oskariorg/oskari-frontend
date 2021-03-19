@@ -10,6 +10,7 @@ import { Groups } from './Groups';
 import { TileGrid } from './TileGrid';
 import { Version } from './Version';
 import { Mandatory } from '../Mandatory';
+import { LayerGeneralInfo } from './LayerGeneralInfo';
 
 const {
     API_KEY,
@@ -26,6 +27,7 @@ const {
 
 const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, propertyFields, controller }) => (
     <Fragment>
+        <LayerGeneralInfo layer={layer} />
         { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
         { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }

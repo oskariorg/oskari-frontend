@@ -66,7 +66,10 @@ Oskari.registerLocalization(
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
                 "dataProviderId": "Dataproducent",
-                "groups": "Grupp av kartlager"
+                "groups": "Grupp av kartlager",
+                "updated": "Detta kartlager var sist uppdaterad",
+                "created": "Detta kartlager skapades den",
+                "layerId": "Kartlagrets unika kännetecken"
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",
