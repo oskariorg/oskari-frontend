@@ -82,7 +82,7 @@ export class TimeseriesMetadataService {
                 yearSet.add(year);
             }
         });
-        this._currentYears = Array.from(yearSet);
+        this._currentYears = Array.from(yearSet).sort();
     }
 
     getCurrentYears () {
