@@ -949,7 +949,7 @@ class UIHandler extends StateHandler {
             if (success.includes(`${layer.id}`)) {
                 const { admin = {} } = layerUpdate;
                 const { capabilities } = admin;
-                layer.capabilities = capabilities
+                layer.capabilities = capabilities;
                 this.updateState({
                     layer,
                     messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
