@@ -21,6 +21,7 @@ export class TimeseriesMetadataService {
             this._toggleLevel = -1;
         }
     }
+
     /**
      * Triggers a fetch for WFS features on the metadata layer
      * @param {Object} bbox usually the current viewport bbox
@@ -34,7 +35,18 @@ export class TimeseriesMetadataService {
             error('Invalid bbox');
             return;
         }
-        const bboxStr = [bbox.left, bbox.bottom, bbox.right, bbox.top].join(',');
+        // shrink query bbox by 10%, this is to remedy the situations
+        // that the images are outside the map view but the bounding
+        // box is inside the map view
+        const bboxWidth = (bbox.right - bbox.left) * 0.9;
+        const bboxHeight = (bbox.top - bbox.bottom) * 0.9;
+        const bboxCenterX = (bbox.left + bbox.right) / 2;
+        const bboxCenterY = (bbox.bottom + bbox.top) / 2;
+        const left = bboxCenterX - bboxWidth / 2;
+        const right = bboxCenterX + bboxWidth / 2;
+        const bottom = bboxCenterY - bboxHeight / 2;
+        const top = bboxCenterY + bboxHeight / 2;
+        const bboxStr = [left, bottom, right, top].join(',');
         const attribute = this._attributeName;
         const url = Oskari.urls.getRoute('GetWFSFeatures', {
             id: this._layerId,
@@ -44,7 +56,7 @@ export class TimeseriesMetadataService {
         fetch(url, {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             if (!response.ok) {
