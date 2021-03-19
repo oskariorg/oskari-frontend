@@ -8,7 +8,12 @@ export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobi
     return (
         <Row>
             <Col>
-                <YearInput value={startValue} onChange={(val) => onChange([val, endValue])}></YearInput>
+                <YearInput
+                    value={startValue}
+                    min={start}
+                    max={endValue}
+                    onChange={(val) => onChange([val, endValue])}
+                ></YearInput>
             </Col>
             {!isMobile && (
                 <ColFixed>
@@ -24,7 +29,12 @@ export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobi
                 </ColFixed>
             )}
             <Col>
-                <YearInput value={endValue} onChange={(val) => onChange([startValue, val])}></YearInput>
+                <YearInput
+                    value={endValue}
+                    min={startValue}
+                    max={end}
+                    onChange={(val) => onChange([startValue, val])}
+                ></YearInput>
             </Col>
         </Row>
     );
