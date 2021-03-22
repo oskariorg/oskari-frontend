@@ -18,6 +18,7 @@ class UIHandler extends StateHandler {
         const hasMetadata = this._initMetadataLayer(this._layer);
         this._timer = null;
         this._debounceTime = 300;
+        this._loadingDataYearsFirstTime = true;
         const [start, end] = delegate.getYearRange();
         const dataYears = hasMetadata ? [] : this._getDataYearsFromWMS();
         this.state = {
@@ -47,20 +48,29 @@ class UIHandler extends StateHandler {
             error: false,
             loading: true
         });
-        this._metadataHandler.setBbox(bbox, (data) => {
-            this.updateState({
-                dataYears: data,
-                loading: false
-            });
-            const [start, end] = this._getTimeRange();
-            this._updateFeaturesByTime(start, end);
-        }, (error) => {
-            this.updateState({
-                error: true,
-                loading: false
-            });
-            Oskari.log('TimeSeries').warn('Error updating features', error);
-        });
+        this._metadataHandler.setBbox(
+            bbox,
+            (data) => {
+                this.updateState({
+                    dataYears: data,
+                    loading: false
+                });
+                if (this._loadingDataYearsFirstTime && data.length > 0) {
+                    this._loadingDataYearsFirstTime = false;
+                    const value = data[Math.ceil(data.length / 2)];
+                    this.updateValue(value);
+                }
+                const [start, end] = this._getTimeRange();
+                this._updateFeaturesByTime(start, end);
+            },
+            (error) => {
+                this.updateState({
+                    error: true,
+                    loading: false
+                });
+                Oskari.log('TimeSeries').warn('Error updating features', error);
+            }
+        );
     }
 
     _teardown () {

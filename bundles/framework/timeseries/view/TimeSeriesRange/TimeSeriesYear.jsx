@@ -6,7 +6,6 @@ import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 
 export const TimeSeriesYear = ({ onChange, start, end, value, dataYears }) => {
-    dataYears.sort();
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
     let nextDataYear = null;
