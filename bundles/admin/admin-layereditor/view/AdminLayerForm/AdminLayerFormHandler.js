@@ -945,10 +945,13 @@ class UIHandler extends StateHandler {
                 return Promise.reject(new Error('Updating capabilities failed'));
             }
         }).then(data => {
-            const { success, error, layerData = {} } = data;
+            const { success, error, layerUpdate = {} } = data;
             if (success.includes(`${layer.id}`)) {
+                const { admin = {} } = layerUpdate;
+                const { capabilities } = admin;
+                layer.capabilities = capabilities;
                 this.updateState({
-                    capabilities: layerData.capabilities,
+                    layer,
                     messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
                 });
             } else {
