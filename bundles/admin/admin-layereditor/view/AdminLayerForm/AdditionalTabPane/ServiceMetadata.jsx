@@ -4,7 +4,7 @@ import { Message, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { MetadataButton } from './styled';
 
-export const ServiceMetadata = ({ capabilities, controller }) => {
+export const ServiceMetadata = ({ capabilities, controller, hasHandler }) => {
     const { metadataUuid } = capabilities;
     if (!metadataUuid) {
         return (
@@ -18,12 +18,15 @@ export const ServiceMetadata = ({ capabilities, controller }) => {
     return (
         <Tooltip title={metadataUuid}>
             <Message messageKey='metadata.service' />
-            <MetadataButton onClick={() => controller.showLayerMetadata(metadataUuid)}/>
+            {hasHandler &&
+                <MetadataButton onClick={() => controller.showLayerMetadata(metadataUuid)}/>
+            }
         </Tooltip>
     );
 };
 
 ServiceMetadata.propTypes = {
+    hasHandler: PropTypes.bool.isRequired,
     capabilities: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
