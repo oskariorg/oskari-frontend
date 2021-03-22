@@ -112,6 +112,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                         return false;
                     });
                     panel.getContainer().append(deleteLink);
+
+                    const exportLink = this.linkTemplate.clone();
+                    exportLink.addClass('categoryOp');
+                    exportLink.addClass('export');
+                    exportLink.append(this.loc('tab.export.title'));
+                    exportLink.attr('title', this.loc('tab.export.tooltip'));
+                    exportLink.on('click', () => {
+                        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
+                        //this.instance.getService().exportCategoryFeatures(categoryId);
+                        return false;
+                    });
+                    panel.getContainer().append(exportLink);
                 });
                 this._removeObsoleteCategories(categories);
 
