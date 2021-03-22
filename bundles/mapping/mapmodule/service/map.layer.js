@@ -1,5 +1,3 @@
-import { ConstantPositionProperty } from "cesium";
-
 /**
  * @class Oskari.mapframework.service.MapLayerService
  *
