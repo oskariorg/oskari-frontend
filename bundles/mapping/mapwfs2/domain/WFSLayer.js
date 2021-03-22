@@ -12,15 +12,14 @@ export class WFSLayer extends VectorTileLayer {
         /* Layer Type */
         this._layerType = 'WFS';
         this._featureData = true;
-        this._fields = []; // property names
-        this._locales = []; // property name locales
+        this._propertySelection = []; // names to order and limit visible properties
+        this._propertyLabels = {};
+        this._propertyTypes = {};
         this._activeFeatures = []; // features on screen
         this._selectedFeatures = []; // filtered features
         this._clickedFeatureIds = []; // clicked feature ids (map)
         this._clickedFeatureListIds = []; // clicked feature ids (list)
         this._clickedGeometries = []; // clicked feature geometries [[id  geom]..]
-        this._propertyTypes = {}; // name and describeFeatureType type (hashmap  json) (Analysis populates)
-        this._wpsLayerParams = {}; // wfs/wps analysis layer params (hashmap  json)    (Analysis populates)
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
         this._filterJson = null;
@@ -34,34 +33,54 @@ export class WFSLayer extends VectorTileLayer {
 
     /**
      * @method getFields
+     * @deprecated
      * @return {String[]} fields
      */
     getFields () {
-        return this._fields;
+        const id = '__fid';
+        if (this._propertySelection.length) {
+            return [id, ...this._propertySelection];
+        }
+        let names = Object.keys(this._propertyLabels);
+        if (!names.length) {
+            names = Object.keys(this._propertyTypes);
+        }
+        if (names.length) {
+            return [id, ...names];
+        }
+        return [];
     }
 
     /**
      * @method setFields
+     * @deprecated
      * @param {String[]} fields
      */
-    setFields (fields) {
-        this._fields = fields;
+    setFields () {
+        Oskari.log('WFSLayer').deprecated('setFields');
     }
 
     /**
      * @method getLocales
+     * @deprecated
      * @return {String[]} locales
      */
     getLocales () {
-        return this._locales;
+        if (this._propertySelection.length) {
+            const labels = this._propertySelection.map(p => this._propertyLabels[p] || p);
+            return ['ID', ...labels];
+        }
+        const locales = Object.values(this._propertyLabels);
+        return locales.length ? ['ID', ...locales] : locales;
     }
 
     /**
      * @method setLocales
+     * @deprecated
      * @param {String[]} locales
      */
-    setLocales (locales) {
-        this._locales = locales;
+    setLocales () {
+        Oskari.log('WFSLayer').deprecated('setLocales');
     }
 
     /**
@@ -186,6 +205,38 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
+     * @method setPropertySelection
+     * @param {String[]} propertySelection
+     */
+    setPropertySelection (propertySelection) {
+        this._propertySelection = propertySelection;
+    }
+
+    /**
+     * @method getPropertySelection
+     * @return {String[]} propertySelection
+     */
+    getPropertySelection () {
+        return this._propertySelection;
+    }
+
+    /**
+     * @method setPropertyLabels
+     * @param {json} propertyLabels
+     */
+    setPropertyLabels (propertyLabels) {
+        this._propertyLabels = propertyLabels;
+    }
+
+    /**
+     * @method getPropertyLabels
+     * @return {json} propertyLabels
+     */
+    getPropertyLabels () {
+        return this._propertyLabels;
+    }
+
+    /**
      * @method setPropertyTypes
      * @param {json} propertyTypes
      */
@@ -203,10 +254,11 @@ export class WFSLayer extends VectorTileLayer {
 
     /**
      * @method setWpsLayerParams
+     * @deprecated
      * @param {json} wpsLayerParams
      */
-    setWpsLayerParams (wpsLayerParams) {
-        this._wpsLayerParams = wpsLayerParams;
+    setWpsLayerParams () {
+        Oskari.log('WFSLayer').deprecated('setWpsLayerParams');
     }
 
     /**
@@ -214,7 +266,8 @@ export class WFSLayer extends VectorTileLayer {
      * @return {json} wpsLayerParams
      */
     getWpsLayerParams () {
-        return this._wpsLayerParams;
+        const { wpsParams = {} } = this.getAttributes();
+        return wpsParams;
     }
 
     /**

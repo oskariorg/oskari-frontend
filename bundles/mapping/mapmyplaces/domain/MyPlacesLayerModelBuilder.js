@@ -20,9 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
 
-            if (mapLayerJson.fields) {
-                layer.setFields(mapLayerJson.fields);
-            }
             if (loclayer.organization) {
                 layer.setOrganizationName(loclayer.organization);
             }
