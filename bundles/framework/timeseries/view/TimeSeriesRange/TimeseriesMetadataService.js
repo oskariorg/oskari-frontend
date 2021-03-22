@@ -7,7 +7,7 @@ const DEFAULT_STYLE = {
         color: 'rgba(0, 0, 0, 0.8)'
     },
     fill: {
-        color: 'rgba(24, 219, 218, 0.5)'
+        color: null
     }
 };
 
