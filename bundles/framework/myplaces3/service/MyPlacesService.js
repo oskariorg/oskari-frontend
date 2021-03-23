@@ -395,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             place.setId(id);
             place.setUuid(properties.uuid);
             place.setName(Oskari.util.sanitize(properties.name));
-            place.setDescription(Oskari.util.sanitize(properties.place_desc));
+            place.setDescription(properties.place_desc);
             place.setAttentionText(Oskari.util.sanitize(properties.attention_text));
             place.setLink(Oskari.util.sanitize(properties.link));
             place.setImageLink(Oskari.util.sanitize(properties.image_url));
