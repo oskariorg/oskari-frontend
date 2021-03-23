@@ -61,22 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             })
         ];
 
-        // Rules for description field
-        this.descriptionRules = [
-            {
-                required: false
-            },
-            () => ({
-                validator: (_, value) => {
-                    if (typeof value !== 'undefined' && value !== '') {
-                        return Oskari.util.sanitize(value) === value ? Promise.resolve(value) : Promise.reject(new Error(this.loc('validation.descIllegal')));
-                    } else {
-                        return Promise.resolve('');
-                    }
-                }
-            })
-        ];
-
         // Default form settings
         this.formProps = {
             formSettings: {
@@ -219,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          * Sets form values from object.
          * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} place
          */
-        setValues: function (place, form) {
+        setValues: function (place) {
             this.place = place;
         },
         setMeasurementResult: function (measurementResult) {
@@ -326,6 +310,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.dialog.moveTo('#toolbar', 'right');
         },
+
+        _decodeFormFieldInput: function (text) {
+            const placeholderElement = new DOMParser().parseFromString(text, 'text/html');
+            return placeholderElement.documentElement.textContent;
+        },
         /**
          * @method _populateForm
          * Populate form with empty values or data got from place -object
@@ -358,7 +347,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     type: 'textarea',
                     label: '',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
-                    rules: this.descriptionRules,
                     value: description !== '' ? description : '',
                     tooltip: this.loc('placeform.placedesc.placeholder')
                 },
