@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Srs } from './Srs';
 import { ServiceEndPoint } from '../../ServiceEndPoint';
-import { Name } from './Name';
 import { LocalizedNames } from './LocalizedNames';
 import { DataProvider } from './DataProvider';
 import { Groups } from './Groups';
@@ -18,7 +17,6 @@ const {
     GROUPS,
     LOCALIZED_NAMES,
     ORGANIZATION_NAME,
-    NAME,
     SRS,
     TILE_GRID,
     URL,
@@ -32,7 +30,6 @@ const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, l
         { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
         { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'options.tileGrid', getTileGridField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, 'name', getNameField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, `locale.${Oskari.getSupportedLanguages()[0]}.name`, getLocaleField(layer, propertyFields, controller)) }
         { wrapMandatory(validators, layer, 'dataProviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
         { wrapMandatory(validators, layer, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
@@ -78,13 +75,6 @@ const getTileGridField = (layer, propertyFields, controller) => {
         return null;
     }
     return (<TileGrid layer={layer} controller={controller} />);
-};
-
-const getNameField = (layer, propertyFields, controller) => {
-    if (!propertyFields.includes(NAME)) {
-        return null;
-    }
-    return (<Name layer={layer} controller={controller} />);
 };
 
 const getLocaleField = (layer, propertyFields, controller) => {
