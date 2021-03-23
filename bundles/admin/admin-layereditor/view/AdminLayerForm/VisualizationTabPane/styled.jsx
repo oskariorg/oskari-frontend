@@ -1,7 +1,7 @@
 
 import { Select, Checkbox } from 'oskari-ui';
 import styled from 'styled-components';
-export { StyledFormField } from '../styled';
+export { StyledFormField, Border } from '../styled';
 
 const Column = styled('div')`
     float: left;
@@ -16,12 +16,6 @@ export const StyledColumn = {
 export const InlineBlock = styled('div')`
     padding-left: 10px;
     display: inline-block;
-`;
-
-export const Border = styled('div')`
-    border: 1px solid #d9d9d9;
-    padding: 10px 10px 5px;
-    margin: 5px 0px 15px
 `;
 
 export const StyleField = styled('div')`

@@ -61,7 +61,6 @@ Oskari.registerLocalization(
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
-                "metadataId": "Metadata file identifier",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
@@ -100,6 +99,13 @@ Oskari.registerLocalization(
             "delete": "Remove",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
+            "serviceNotAvailable": "Not available",
+            "metadata": {
+                "title": "Metadata file identifier",
+                "desc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
+                "service": "File identifier defined in the service",
+                "overridden": "Replaced file identifier"
+            },
             "capabilities": {
                 "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
@@ -121,8 +127,7 @@ Oskari.registerLocalization(
                     "legendImagePlaceholder": "Give the URL address of the map legend.",
                     "serviceLegend": "Map legend defined in the service",
                     "overriddenLegend": "Replaced legend URL",
-                    "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service",
-                    "serviceNotAvailable": "Not available"
+                    "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service"
                 },
                 "vector": {
                     "newStyleName": "New style",
@@ -141,7 +146,6 @@ Oskari.registerLocalization(
                 "problematic": "There were some issues parsing the capabilities for this layer. This layer might not work properly if added.",
                 "unsupported": "According to capabilities this layer doesn't support projections used on this service. This layer might not work properly if added."
             },
-            "metadataIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",

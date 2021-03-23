@@ -61,7 +61,6 @@ Oskari.registerLocalization(
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
-                "metadataId": "Metatiedon tiedostotunniste",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
@@ -101,6 +100,13 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
+            "serviceNotAvailable": "Ei saatavilla",
+            "metadata": {
+                "title": "Metatiedon tiedostotunniste",
+                "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
+                "service": "Palvelussa määritelty",
+                "overridden": "Korvaava tiedostotunniste"
+            },
             "capabilities": {
                 "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
@@ -122,8 +128,7 @@ Oskari.registerLocalization(
                     "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",
-                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
-                    "serviceNotAvailable": "Ei saatavilla"
+                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
                 },
                 "vector": {
                     "addStyle": "Lisää tyyli",
@@ -142,7 +147,6 @@ Oskari.registerLocalization(
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
-            "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",

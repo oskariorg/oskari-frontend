@@ -1060,6 +1060,12 @@ class UIHandler extends StateHandler {
         delete layer.options.styles[styleId];
         this.updateState({ layer: layer });
     }
+
+    showLayerMetadata (uuid) {
+        Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
+            { uuid }
+        ]);
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -1110,6 +1116,7 @@ const wrapped = controllerMixin(UIHandler, [
     'skipCapabilities',
     'togglePermission',
     'updateCapabilities',
-    'versionSelected'
+    'versionSelected',
+    'showLayerMetadata'
 ]);
 export { wrapped as AdminLayerFormHandler };
