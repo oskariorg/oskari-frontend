@@ -17,7 +17,6 @@ function removeComplexPrefix (field) {
 
 export function processFeatureProperties (properties = {}, removeId = false) {
     const remove = removeId ? removePropsWithId : removeProps;
-    console.log(remove);
     return Object.fromEntries(
         Object.entries(properties)
             .filter(([key]) => !remove.has(removeComplexPrefix(key)))
