@@ -18,13 +18,14 @@ class UIHandler extends StateHandler {
         const hasMetadata = this._initMetadataLayer(this._layer);
         this._timer = null;
         this._debounceTime = 300;
-        this._loadingDataYearsFirstTime = true;
+        this._autoSelectMidDataYear = true;
         const [start, end] = delegate.getYearRange();
         const dataYears = hasMetadata ? [] : this._getDataYearsFromWMS();
         this.state = {
             title: this._layer.getName(),
             start,
             end,
+            mode: 'year',
             value: start,
             dataYears
         };
@@ -32,8 +33,19 @@ class UIHandler extends StateHandler {
         delegate.onDestroy(() => this._teardown());
     }
 
-    updateValue (value) {
-        this.updateState({ value });
+    setInitialValue (value, mode) {
+        // no need to auto select mid data year if an initial
+        // value is provided through e.g. map link or map view
+        this._autoSelectMidDataYear = false;
+        this.updateValue(value, mode);
+    }
+
+    updateValue (value, mode) {
+        const state = { value };
+        if (mode) {
+            state.mode = mode;
+        }
+        this.updateState(state);
         if (this._timer) {
             clearTimeout(this._timer);
         }
@@ -55,8 +67,8 @@ class UIHandler extends StateHandler {
                     dataYears: data,
                     loading: false
                 });
-                if (this._loadingDataYearsFirstTime && data.length > 0) {
-                    this._loadingDataYearsFirstTime = false;
+                if (this._autoSelectMidDataYear && data.length > 0) {
+                    this._autoSelectMidDataYear = false;
                     const value = data[Math.ceil(data.length / 2)];
                     this.updateValue(value);
                 }

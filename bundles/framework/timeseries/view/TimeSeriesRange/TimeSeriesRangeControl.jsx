@@ -11,20 +11,18 @@ export const TimeSeriesRangeControl = ({
     title,
     start,
     end,
+    mode,
     value,
     dataYears,
     isMobile,
     loading,
     error
 }) => {
-    const [mode, setMode] = useState('year');
     const toggleMode = () => {
         if (mode === 'year') {
-            setMode('range');
-            controller.updateValue([start, value]);
+            controller.updateValue([start, value], 'range');
         } else {
-            setMode('year');
-            controller.updateValue(value[1]);
+            controller.updateValue(value[1], 'year');
         }
     };
     return (
@@ -64,6 +62,7 @@ TimeSeriesRangeControl.propTypes = {
     title: PropTypes.string.isRequired,
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
+    mode: PropTypes.oneOf(['year', 'range']).isRequired,
     value: PropTypes.arrayOf(PropTypes.number).isRequired,
     dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
     isMobile: PropTypes.bool.isRequired,

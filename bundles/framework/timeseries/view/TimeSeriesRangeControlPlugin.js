@@ -25,6 +25,31 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         this._updateCurrentViewportBbox();
     }
 
+    getControlState () {
+        const { value } = this.stateHandler.getState();
+        let time;
+        if (Array.isArray(value)) {
+            time = value.map(item => item.toString());
+        } else {
+            time = value.toString();
+        }
+        return { time };
+    }
+
+    setControlState (state) {
+        const { time } = state;
+        let mode;
+        let value;
+        if (Array.isArray(time)) {
+            mode = 'range';
+            value = [parseInt(time[0], 10), parseInt(time[1], 10)];
+        } else {
+            mode = 'year';
+            value = parseInt(time);
+        }
+        this.stateHandler.setInitialValue(value, mode);
+    }
+
     getName () {
         return this._name;
     }
