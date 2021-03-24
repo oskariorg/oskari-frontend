@@ -112,6 +112,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             tileSize: [tileSize, tileSize]
         };
     }
+
     /**
      * @method _createDebugLayer Helper for debugging purposes.
      * Use from console. Set breakpoint when new FeatureExposingMVTSource() is called
