@@ -27,7 +27,7 @@ export const TimeSeries = ({ layer, scales, controller }) => {
     const metadata = timeseries.metadata || { layer: '' };
     const playerTooltip = <Message messageKey="timeSeries.tooltip.player" />;
     const rangeTooltip = <Message messageKey="timeSeries.tooltip.range" />;
-    const noneTooltip = <Message messageKey="timeSeries.tooltip.range" />;
+    const noneTooltip = <Message messageKey="timeSeries.tooltip.none" />;
     return (
         <TimeSeriesContainer>
             <Message messageKey="timeSeries.ui" />

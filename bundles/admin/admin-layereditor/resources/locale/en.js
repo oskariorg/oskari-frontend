@@ -173,7 +173,7 @@ Oskari.registerLocalization(
                 "none": "None selected",
                 "tooltip": {
                     "player": "Time series data can be viewed in an animation.",
-                    "range": "Single date or date range of the time series layer can be selected on a slider. Metadata can be added to give extra information on each image. Suitable for data scattered in time and space.",
+                    "range": "Single date or date range can be selected on a slider. Metadata can be added to tell which dates have data. Suitable for data scattered in time and space.",
                     "none": "The WMS will show only the default image in map view.",
                 },
                 "selectMetadataLayer": "Select metadata layer"
