@@ -15,6 +15,9 @@ export class UserLayer extends WFSLayer {
         this.renderingElement = undefined;
     }
 
+    /**
+     * @override
+     */
     isFilterSupported () {
         return false;
     }
@@ -56,15 +59,9 @@ export class UserLayer extends WFSLayer {
     markAsInternalDownloadSource () {
         this.__internalFlagForUsersOwnLayers = true;
     }
+
     isInternalDownloadSource () {
         return this.__internalFlagForUsersOwnLayers;
-    }
-
-    isFilterSupported () {
-        // this defaults to false in AbstractLayer, but WFSLayer returns true.
-        // Not sure if this is something we want, but it's the same behavior as before but NOT having
-        // WFS and analysis referenced in AbstractLayer
-        return false;
     }
 }
 
