@@ -310,11 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.dialog.moveTo('#toolbar', 'right');
         },
-
-        _decodeFormFieldInput: function (text) {
-            const placeholderElement = new DOMParser().parseFromString(text, 'text/html');
-            return placeholderElement.documentElement.textContent;
-        },
         /**
          * @method _populateForm
          * Populate form with empty values or data got from place -object
