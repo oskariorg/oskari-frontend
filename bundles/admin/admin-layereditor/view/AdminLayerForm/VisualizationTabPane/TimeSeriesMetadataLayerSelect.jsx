@@ -12,7 +12,9 @@ export const TimeSeriesMetadataLayerSelect = ({ layer, controller }) => {
     const wfsLayers = mapLayerService.getAllLayers().filter((l) => l.isLayerOfType('WFS'));
     // add an empty option to make it possible to unlink metadata layer (by selecting the empty option)
     const placeholder = <Message messageKey="timeSeries.selectMetadataLayer" />;
-    const metadataOptions = wfsLayers.map((layer) => ({ value: layer.getId(), name: layer.getName() }));
+    const metadataOptions = [{ value: '', name: '--------' }].concat(
+        wfsLayers.map((layer) => ({ value: layer.getId(), name: layer.getName() }))
+    );
     return (
         <Fragment>
             <Message messageKey="timeSeries.metadataLayer" />
