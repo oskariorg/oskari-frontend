@@ -97,7 +97,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 clearButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Updates the filter values
                 updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                layerAttributes,
                 popupTitle,
                 popupContent;
 
@@ -628,18 +627,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         _getLayerAttributes: function (layer) {
-            const localizedNames = layer.getPropertyLabels();
-            if (Object.keys(localizedNames).length) {
-                // map name: locale to array containing localized names
-                return Object.entries(localizedNames)
-                    .map(([id, locale]) => {
-                        return { id, name: locale };
-                    });
-            }
             const selection = layer.getPropertySelection();
             const names = selection.length ? selection : Object.keys(layer.getPropertyTypes());
+            const localizedNames = layer.getPropertyLabels();
             // map to array of objects
-            return names.map(id => { return { id, name: id }; });
+            return names.map(id => { return { id, name: localizedNames[id] || id }; });
         },
 
         /**
