@@ -131,7 +131,7 @@ class UIHandler extends StateHandler {
     _requestNewTime (value) {
         let startYear = null;
         let endYear = null;
-        if (value.length === 2) {
+        if (Array.isArray(value)) {
             startYear = value[0];
             endYear = value[1];
         } else {
