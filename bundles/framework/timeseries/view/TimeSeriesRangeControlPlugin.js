@@ -107,7 +107,8 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
     _updateCurrentViewportBbox () {
         const sandbox = this.getSandbox();
         const currentBbox = sandbox.getMap().getBbox();
-        this.stateHandler.setCurrentViewportBbox(currentBbox);
+        const zoomLevel = sandbox.getMap().getZoom();
+        this.stateHandler.setCurrentViewportBbox(currentBbox, zoomLevel);
     }
 }
 

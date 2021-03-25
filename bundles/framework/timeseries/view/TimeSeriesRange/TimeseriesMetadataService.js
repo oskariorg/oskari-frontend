@@ -22,6 +22,10 @@ export class TimeseriesMetadataService {
         }
     }
 
+    getToggleLevel () {
+        return this._toggleLevel;
+    }
+
     /**
      * Triggers a fetch for WFS features on the metadata layer
      * @param {Object} bbox usually the current viewport bbox
