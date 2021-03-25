@@ -52,8 +52,18 @@ class UIHandler extends StateHandler {
         this._timer = setTimeout(() => this._requestNewTime(value), this._debounceTime);
     }
 
-    setCurrentViewportBbox (bbox) {
+    setCurrentViewportBbox (bbox, zoomLevel) {
         if (!this._metadataHandler) {
+            return;
+        }
+        if (this._metadataHandler.getToggleLevel() > zoomLevel) {
+            const dataYears = this._getDataYearsFromWMS();
+            const state = { dataYears };
+            if (this._autoSelectMidDataYear && dataYears.length > 0) {
+                this._autoSelectMidDataYear = false;
+                state.value = this._getMidWayDataYear(dataYears);
+            }
+            this.updateState(state);
             return;
         }
         this.updateState({
@@ -63,15 +73,15 @@ class UIHandler extends StateHandler {
         this._metadataHandler.setBbox(
             bbox,
             (data) => {
-                this.updateState({
+                const state = {
                     dataYears: data,
                     loading: false
-                });
+                };
                 if (this._autoSelectMidDataYear && data.length > 0) {
                     this._autoSelectMidDataYear = false;
-                    const value = data[Math.ceil(data.length / 2)];
-                    this.updateValue(value);
+                    state.value = this._getMidWayDataYear(data);
                 }
+                this.updateState(state);
                 const [start, end] = this._getTimeRange();
                 this._updateFeaturesByTime(start, end);
             },
@@ -83,6 +93,10 @@ class UIHandler extends StateHandler {
                 Oskari.log('TimeSeries').warn('Error updating features', error);
             }
         );
+    }
+
+    _getMidWayDataYear (dataYears) {
+        return dataYears[Math.ceil(dataYears.length / 2)];
     }
 
     _teardown () {
