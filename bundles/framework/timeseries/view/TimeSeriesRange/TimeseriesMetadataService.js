@@ -39,11 +39,11 @@ export class TimeseriesMetadataService {
             error('Invalid bbox');
             return;
         }
-        // shrink query bbox by 10%, this is to remedy the situations
-        // that the images are outside the map view but the bounding
-        // box is inside the map view
-        const bboxWidth = (bbox.right - bbox.left) * 0.9;
-        const bboxHeight = (bbox.top - bbox.bottom) * 0.9;
+        // shrink query bbox to remedy the situations that the images are outside the
+        // map view but the bounding box is inside the map view
+        const shrinkRatio = 0.8;
+        const bboxWidth = (bbox.right - bbox.left) * shrinkRatio;
+        const bboxHeight = (bbox.top - bbox.bottom) * shrinkRatio;
         const bboxCenterX = (bbox.left + bbox.right) / 2;
         const bboxCenterY = (bbox.bottom + bbox.top) / 2;
         const left = bboxCenterX - bboxWidth / 2;
