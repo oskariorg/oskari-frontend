@@ -69,10 +69,14 @@ class LayerComposingModel {
     /**
      * @param {string[]} fields
      * @param {string[]|string} [versions] Supported layer versions. All versions supported by default.
+     * @param {string[]} [skipFields] Fields to skip in constructor. Some layer types don't use all the common fields.
      */
-    constructor (fields, versions) {
+    constructor (fields, versions, skipFields) {
         this.versions = getValidatedVersions(versions);
-        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions || ALL_VERSIONS]));
+        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS
+            .filter(key => !skipFields ? key : !skipFields.includes(key) ? key : null)
+            .map(key => [key, this.versions || ALL_VERSIONS]));
+
         if (Array.isArray(fields)) {
             fields.forEach(cur => this.setPropertyField(cur, this.versions));
         }
@@ -133,14 +137,6 @@ class LayerComposingModel {
             return [];
         }
         return [...this.versions];
-    }
-
-    /**
-     * Deletes field with provided key
-     * @param {String} fieldToRemove key of the field to remove
-     */
-    removeField (fieldToRemove) {
-        this.propertyFields.delete(fieldToRemove);
     }
 };
 // Assign static property fields
