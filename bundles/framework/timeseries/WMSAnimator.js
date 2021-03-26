@@ -132,6 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                         me._resolveWait();
                     });
                 }
+                const layerParams = this._layer.getParams();
+                layerParams.time = newTime;
                 var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
                 this._sandbox.request(this, request);
                 if (!nextTime && this._doneCallback) {

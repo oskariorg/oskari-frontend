@@ -191,8 +191,7 @@ Oskari.clazz.define(
          */
         _buildLayerIdList: function (layers) {
             var me = this;
-            var selected = layers || me.getSandbox().findAllSelectedMapLayers();
-            var layerIds = selected
+            var layerIds = layers
                 .filter(layer => me._isQualified(layer))
                 .map(layer => layer.getId())
                 .join(',');
@@ -277,11 +276,23 @@ Oskari.clazz.define(
          *            lonlat coordinates
          */
         handleGetInfo: function (lonlat, layers) {
-            var me = this,
-                dteMs = (new Date()).getTime(),
-                layerIds = me._buildLayerIdList(layers || this.getSandbox().findAllSelectedMapLayers()),
-                mapVO = me.getSandbox().getMap(),
-                px = me.getMapModule().getPixelFromCoordinate(lonlat);
+            const me = this;
+            const dteMs = (new Date()).getTime();
+            const requestedLayers = layers || me.getSandbox().findAllSelectedMapLayers();
+            const layerIds = me._buildLayerIdList(requestedLayers);
+            const mapVO = me.getSandbox().getMap();
+            const px = me.getMapModule().getPixelFromCoordinate(lonlat);
+
+            const additionalParams = requestedLayers
+                .filter((layer) => layerIds.includes(layer.getId()))
+                .reduce((result, layer) => {
+                    const params = layer.getParams();
+                    if (typeof params !== 'object' || !Object.keys(params).length) {
+                        return result;
+                    }
+                    result[layer.getId()] = params;
+                    return result;
+                }, {});
 
             if (!layerIds) {
                 return;
@@ -341,7 +352,8 @@ Oskari.clazz.define(
                     height: mapVO.getHeight(),
                     bbox: mapVO.getBboxAsString(),
                     zoom: mapVO.getZoom(),
-                    srs: mapVO.getSrsName()
+                    srs: mapVO.getSrsName(),
+                    params: additionalParams
                 },
                 type: 'POST',
                 dataType: 'json',
