@@ -48,7 +48,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
                 LayerComposingModel.TILE_GRID,
                 LayerComposingModel.URL
             ]);
-            composingModel.removeField('NAME');
+            composingModel.removeField(LayerComposingModel.NAME);
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
         }
