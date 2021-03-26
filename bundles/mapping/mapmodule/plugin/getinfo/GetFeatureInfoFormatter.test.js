@@ -1,12 +1,38 @@
 import './GetInfoPlugin';
 import './GetFeatureInfoFormatter';
+import { processFeatureProperties } from '../../../mapwfs2/plugin/WfsVectorLayerPlugin/util/props';
 
 const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin');
 // simple mock
+const myPlaceProperties = {
+    __fid: 234,
+    image_url: 'http://my.domain/test.png',
+    name: 'TESTING',
+    attention_text: 'Text for Map',
+    place_desc: 'Lorem ipsum',
+    geometry: 'fake'
+};
+const wfsProperties = {
+    __fid: 234,
+    test: 'TESTING',
+    image_url: 'http://test.domain/test.png',
+    geometry: 'fake'
+};
+const getWfsPropertyLabels = () => {
+    return { image_url: 'Image', test: 'Label for test' };
+};
 const myPlacesLayer = {
     isLayerOfType: (type) => type === 'myplaces',
-    getFields: () => ['__fid', 'name', 'place_desc', 'image_url', 'attention_text'],
-    getLocales: () => ['ID', 'Name', 'Description', 'Image', 'Text for Map'],
+    getPropertySelection: () => ['name', 'place_desc', 'image_url', 'attention_text'],
+    getPropertyLabels: () => {
+        return {
+            __fid: 'ID',
+            name: 'Name',
+            place_desc: 'Description',
+            image_url: 'Image',
+            attention_text: 'Text for Map'
+        };
+    },
     getName: () => 'testing_myplaces',
     getFieldFormatMetadata: (prop) => {
         const formatterOpts = { skipEmpty: true };
@@ -31,14 +57,16 @@ const myPlacesLayer = {
 };
 const otherLayer = {
     isLayerOfType: (type) => type === 'wfsplaces',
-    getFields: () => ['__fid', 'test'],
-    getLocales: () => ['ID', 'Label for test'],
+    getPropertySelection: () => ['test'],
+    getPropertyLabels: getWfsPropertyLabels,
     getName: () => 'testing_wfs'
 };
+// try to use without selection, if ordering causes propblems then add selection
+// and remove processFeatureProperties
 const attrConfigLayer = {
     isLayerOfType: (type) => type === 'wfsplaces',
-    getFields: () => ['__fid', 'test', 'image_url'],
-    getLocales: () => ['ID', 'Label for test', 'Image'],
+    getPropertySelection: () => [],
+    getPropertyLabels: getWfsPropertyLabels,
     getFieldFormatMetadata: (field) => {
         if (field === 'image_url') {
             return { type: 'image', noLabel: true };
@@ -100,7 +128,7 @@ describe('GetInfoPlugin', () => {
             const imageLink = 'http://my.domain/test.png';
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 'myplaces_test',
-                features: [[234, 'TESTING', 'Lorem ipsum', imageLink]]
+                features: [myPlaceProperties]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(true);
@@ -116,7 +144,7 @@ describe('GetInfoPlugin', () => {
             // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table><tr><td>NO DATA</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 123,
-                features: [[]]
+                features: [{}]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(false);
@@ -131,7 +159,7 @@ describe('GetInfoPlugin', () => {
             // [{"isMyPlace": false, "layerId": 123, "layerName": "testing_wfs", "markup": "<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr></table>", "type": "wfslayer"}]
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 123,
-                features: [[234, 'TESTING']]
+                features: [wfsProperties]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(false);
@@ -144,9 +172,10 @@ describe('GetInfoPlugin', () => {
         });
 
         test('wfslayer with no label image formatter', () => {
+            // process properties to use same properties than GFI gets without selection
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 468,
-                features: [[468, 'TESTING', 'http://test.domain/test.png']]
+                features: [processFeatureProperties(wfsProperties, true)]
             });
             expect(result[0].layerName).toEqual(attrConfigLayer.getName());
             expect(result[0].type).toEqual('wfslayer');
