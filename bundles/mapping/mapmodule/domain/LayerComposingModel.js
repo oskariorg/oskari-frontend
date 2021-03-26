@@ -69,10 +69,14 @@ class LayerComposingModel {
     /**
      * @param {string[]} fields
      * @param {string[]|string} [versions] Supported layer versions. All versions supported by default.
+     * @param {string[]} [skipFields] Fields to skip in constructor. Some layer types don't use all the common fields.
      */
-    constructor (fields, versions) {
+    constructor (fields, versions, skipFields) {
         this.versions = getValidatedVersions(versions);
-        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions || ALL_VERSIONS]));
+        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS
+            .filter(key => !skipFields ? key : !skipFields.includes(key) ? key : null)
+            .map(key => [key, this.versions || ALL_VERSIONS]));
+
         if (Array.isArray(fields)) {
             fields.forEach(cur => this.setPropertyField(cur, this.versions));
         }
@@ -94,6 +98,7 @@ class LayerComposingModel {
         }
         this.propertyFields.set(field, validVersions);
     }
+
     /**
      * To get layer property fields.
      *
@@ -104,6 +109,7 @@ class LayerComposingModel {
         if (!version) {
             return Array.from(this.propertyFields.keys());
         }
+
         return Array.from(this.propertyFields)
             .filter(entry => {
                 const supportedVersions = entry[1];
@@ -122,6 +128,7 @@ class LayerComposingModel {
             this.propertyFields.set(field, this.versions);
         }
     }
+
     /**
      * @return {string[]} Versions with composing support
      */
