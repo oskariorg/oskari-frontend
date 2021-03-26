@@ -61,12 +61,14 @@ Oskari.registerLocalization(
                 "realtime": "Realtidslager",
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
-                "metadataId": "Metadatans filtagg",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
                 "dataProviderId": "Dataproducent",
-                "groups": "Grupp av kartlager"
+                "groups": "Grupp av kartlager",
+                "updated": "Detta kartlager var sist uppdaterad",
+                "created": "Detta kartlager skapades den",
+                "layerId": "Kartlagrets unika kännetecken"
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",
@@ -97,6 +99,13 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
+            "serviceNotAvailable": "Inte tillgänglig",
+            "metadata": {
+                "title": "Metadatans filtagg",
+                "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
+                "service": "Definierad i tjänsten",
+                "overridden": "Filtagg för metadatans"
+            },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
                 "show": "Visa getCapabilities svar",
@@ -118,8 +127,7 @@ Oskari.registerLocalization(
                     "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
                     "serviceLegend": "Definierad i tjänsten",
                     "overriddenLegend": "Adress för kartförklaring",
-                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
-                    "serviceNotAvailable": "Inte tillgänglig"
+                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
                     "addStyle": "Tillsätt stil",
@@ -137,7 +145,6 @@ Oskari.registerLocalization(
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
                 "unsupported": "Lagret stöder inte de projektioner, som tjänsten använder. Lagret fungerar kanske inte normalt."
             },
-            "metadataIdDesc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "gfiTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
@@ -153,6 +160,22 @@ Oskari.registerLocalization(
                 "mvt": "Massor av små objekt",
                 "geojson": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
+            },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoomnivåer där vektorformaten är aktiverat",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Animering",
+                "range": "Tidsserie",
+                "none": "Inget val",
+                "tooltip": {
+                    "player": "Tidsserien visas animerad en bild på gång.",
+                    "range": "Välj tidsserie-kartlagrets intervall med att justera tidslinjen. Metadata kan tilläggas för att visa ytterligare information på tidslinjen. Funktionen tillämpar sig för visning av tid- och platsvis spridda datamängder.",
+                    "none": "Endast standardbildet visas av WMS kartlagret.",
+                },
+                "selectMetadataLayer": "Välj metadatalager"
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",

@@ -187,12 +187,16 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         if (tileGrid) {
             sourceOpts.tileGrid = new TileGrid(tileGrid);
         }
+        // options is used to store tile grid and all sorts of other flags so only get the
+        //  declutter option here instead of spreading the object to layer directly
+        const { declutter } = layer.getOptions() || {};
         // Properties id, type and hover are being used in VectorFeatureService.
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             renderMode: 'hybrid',
-            source: this.createSource(layer, sourceOpts)
+            source: this.createSource(layer, sourceOpts),
+            declutter
         });
         // Set oskari properties for vector feature service functionalities.
         const silent = true;

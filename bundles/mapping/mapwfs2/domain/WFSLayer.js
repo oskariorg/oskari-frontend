@@ -55,7 +55,7 @@ export class WFSLayer extends VectorTileLayer {
             return [id, ...this._propertySelection];
         }
         let names = Object.keys(this._propertyLabels);
-        if (names.length) {
+        if (!names.length) {
             names = Object.keys(this._propertyTypes);
         }
         if (names.length) {
@@ -80,10 +80,10 @@ export class WFSLayer extends VectorTileLayer {
      */
     getLocales () {
         if (this._propertySelection.length) {
-            const labels = this._propertySelection.map(p => this._propertyNames[p] || p);
+            const labels = this._propertySelection.map(p => this._propertyLabels[p] || p);
             return ['ID', ...labels];
         }
-        const locales = Object.values(this._propertyNames);
+        const locales = Object.values(this._propertyLabels);
         return locales.length ? ['ID', ...locales] : locales;
     }
 
@@ -201,6 +201,10 @@ export class WFSLayer extends VectorTileLayer {
      */
     getCustomStyle () {
         return this._customStyle;
+    }
+
+    setStyles (layerStyles = []) {
+        this._styles = layerStyles;
     }
 
     /**

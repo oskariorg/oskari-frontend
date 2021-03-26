@@ -6,10 +6,10 @@ export const YearRangeSlider = (props) => {
     const { start, end, dataYears } = props;
     const marks = {
         [start]: start,
-        [end]: end,
+        [end]: end
     };
     for (let i = start + 1; i < end; i++) {
-        if (i % 10 === 0) {
+        if (i % 10 === 0 && i - start >= 5 && end - i >= 5) {
             marks[i] = i;
         }
     }
@@ -24,5 +24,5 @@ export const YearRangeSlider = (props) => {
 YearRangeSlider.propTypes = {
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
-    dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
+    dataYears: PropTypes.arrayOf(PropTypes.number).isRequired
 };

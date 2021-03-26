@@ -56,7 +56,7 @@ export const Footer = ({ layer, controller, visibilityInfo }) => {
     return (
         <GrayRow>
             <ColAuto>
-                <LayerIcon type={layerType} />
+                <LayerIcon type={layerType} hasTimeseries={layer.hasTimeseries()} />
             </ColAuto>
             {visibilityInfoProps &&
                 <ColAuto>

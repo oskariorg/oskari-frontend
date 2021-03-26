@@ -743,23 +743,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 links = entry;
             }
 
-            if (!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
-                entry = jQuery('<a /><br/>');
-                entry.html(locale.pdf);
-                entry.attr(
-                    'href',
-                    '/catalogue/portti-metadata-printout-service/' +
-                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
-                    '&title=' + me.locale.metadata_printout_title +
-                    '&metadataresourceuuid=' + me._model.fileIdentifier
-                );
-                entry.attr('target', '_blank');
-                if (links) {
-                    links = links.add(entry);
-                } else {
-                    links = entry;
-                }
-            }
             me.addActions(links);
         },
         /**

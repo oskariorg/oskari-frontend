@@ -488,6 +488,7 @@ Oskari.clazz.define(
             var toBeLoaded = tilesToLoad || 0;
             this.loaded = 0;
             this.errors = 0;
+            this.loading = toBeLoaded;
             this.tilesToLoad = toBeLoaded;
         },
         /**
