@@ -94,6 +94,7 @@ class LayerComposingModel {
         }
         this.propertyFields.set(field, validVersions);
     }
+
     /**
      * To get layer property fields.
      *
@@ -104,6 +105,7 @@ class LayerComposingModel {
         if (!version) {
             return Array.from(this.propertyFields.keys());
         }
+
         return Array.from(this.propertyFields)
             .filter(entry => {
                 const supportedVersions = entry[1];
@@ -122,6 +124,7 @@ class LayerComposingModel {
             this.propertyFields.set(field, this.versions);
         }
     }
+
     /**
      * @return {string[]} Versions with composing support
      */
@@ -130,6 +133,14 @@ class LayerComposingModel {
             return [];
         }
         return [...this.versions];
+    }
+
+    /**
+     * Deletes field with provided key
+     * @param {String} fieldToRemove key of the field to remove
+     */
+    removeField (fieldToRemove) {
+        this.propertyFields.delete(fieldToRemove);
     }
 };
 // Assign static property fields
