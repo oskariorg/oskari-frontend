@@ -353,7 +353,7 @@ Oskari.clazz.define(
                     bbox: mapVO.getBboxAsString(),
                     zoom: mapVO.getZoom(),
                     srs: mapVO.getSrsName(),
-                    params: additionalParams
+                    params: JSON.stringify(additionalParams)
                 },
                 type: 'POST',
                 dataType: 'json',
