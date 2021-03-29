@@ -309,6 +309,13 @@ Oskari.clazz.define(
             me._startAjaxRequest(dteMs);
 
             jQuery.ajax({
+                beforeSend: function (x) {
+                    // save ref to pending request
+                    me._pendingAjaxQuery.jqhr = x;
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json;charset=UTF-8');
+                    }
+                },
                 success: function (resp) {
                     if (me._isAjaxRequestBusy()) {
                         const data = resp.data || [];
