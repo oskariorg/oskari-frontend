@@ -186,17 +186,15 @@ Oskari.clazz.define(
          * @method _buildLayerIdList
          * @private
          * @param {Oskari.Layer[]} layers to build the list from (optional)
-         * @return
-         * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+         * @return {Number[] | String[]} array of qualified layer ids.
          */
-        _buildLayerIdList: function (layers) {
+        _buildLayerIdList: function (layers = []) {
             var me = this;
             var layerIds = layers
                 .filter(layer => me._isQualified(layer))
-                .map(layer => layer.getId())
-                .join(',');
+                .map(layer => layer.getId());
 
-            return layerIds || null;
+            return layerIds || [];
         },
 
         _isQualified: function (layer) {
@@ -283,6 +281,10 @@ Oskari.clazz.define(
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
 
+            if (layerIds.length === 0) {
+                return;
+            }
+
             const additionalParams = requestedLayers
                 .filter((layer) => layerIds.includes(layer.getId()))
                 .reduce((result, layer) => {
@@ -293,10 +295,6 @@ Oskari.clazz.define(
                     result[layer.getId()] = params;
                     return result;
                 }, {});
-
-            if (!layerIds) {
-                return;
-            }
 
             if (me._pendingAjaxQuery.busy &&
                 me._pendingAjaxQuery.timestamp &&
@@ -312,9 +310,10 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 beforeSend: function (x) {
+                    // save ref to pending request
                     me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
+                        x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -342,7 +341,7 @@ Oskari.clazz.define(
                     me._finishAjaxRequest();
                 },
                 data: {
-                    layerIds: layerIds,
+                    layerIds: layerIds.join(','),
                     projection: me.getMapModule().getProjection(),
                     x: Math.round(px.x),
                     y: Math.round(px.y),
