@@ -232,7 +232,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     labelCell.append(localizedAttr || attr);
                     row.append(labelCell);
                     valueCell = me.template.tableCell.clone();
-                    valueCell.append(value);
+                    valueCell.append(Oskari.util.sanitize(value));
                     row.append(valueCell);
                     table.append(row);
                 }
