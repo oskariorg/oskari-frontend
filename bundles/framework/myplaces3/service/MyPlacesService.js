@@ -456,22 +456,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
         },
         getExportCategoryUrl: function (categoryId) {
             return Oskari.urls.getRoute('ExportMyPlacesLayerFeatures') + '&categoryId=' + categoryId + '&srs=' + this.srsName;
-        },
-        exportCategoryFeatures: function (categoryId) {
-            const url = this.getExportCategoryUrl(categoryId);
-            fetch(url, {
-                method: 'GET'
-            })
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'filename.json'; // TODO categoryName_yyyy-MM-dd.json/geojson
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                });
         }
     }, {
         protocol: ['Oskari.mapframework.service.Service']
