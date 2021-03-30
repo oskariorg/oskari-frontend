@@ -28,6 +28,9 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/framework/rpc/instance.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../../bundles/framework/rpc/service/RpcService.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../../bundles/framework/rpc/event/RPCUIEvent.js"
             }]
         },
