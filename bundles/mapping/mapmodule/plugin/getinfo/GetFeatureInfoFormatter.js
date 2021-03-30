@@ -11,6 +11,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         headerTitle: '<div class="getinforesult_header_title"></div>',
         linkOutside: '<a target="_blank" rel="noopener"></a>'
     },
+    layerFormatters: [],
     formatters: {
         html: function (datumContent) {
             // html has to be put inside a container so jquery behaves
@@ -125,6 +126,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             .forEach(frag => baseDiv.append(frag));
         return baseDiv;
     },
+
+    /**
+     * Add a custom formatter
+     *
+     * A custom format should expose two methods:
+     *  enable: takes layer GFI response data and return a boolean value that
+     *      indicates if the formatter is enabled for the given layer
+     *  format: takes layer GFI response data and format it
+     *
+     * @param {Object} formatter A formatter instance
+     */
+    addLayerFormatter: function (formatter) {
+        if (typeof formatter.enabled === 'function' && typeof formatter.format === 'function') {
+            this.layerFormatters.push(formatter);
+        }
+    },
+
     /**
      * Parses and formats a GFI response
      *
@@ -144,7 +162,15 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         const coll = data.features
             .map(function (datum) {
-                const pretty = me._formatGfiDatum(datum);
+                const formats = me.layerFormatters
+                    .filter((formatter) => formatter.enabled(datum))
+                    .map((formatter) => formatter.format(datum));
+                let pretty;
+                if (formats.length > 0) {
+                    pretty = formats.join('');
+                } else {
+                    pretty = me._formatGfiDatum(datum);
+                }
                 if (typeof pretty === 'undefined') {
                     return;
                 }
