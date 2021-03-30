@@ -80,6 +80,7 @@ class UIHandler extends StateHandler {
                 if (this._autoSelectMidDataYear && data.length > 0) {
                     this._autoSelectMidDataYear = false;
                     state.value = this._getMidWayDataYear(data);
+                    this._requestNewTime(state.value);
                 }
                 this.updateState(state);
                 const [start, end] = this._getTimeRange();
