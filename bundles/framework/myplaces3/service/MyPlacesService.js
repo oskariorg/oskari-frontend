@@ -453,6 +453,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     }
                 }
             });
+        },
+        getExportCategoryUrl: function (categoryId) {
+            return Oskari.urls.getRoute('ExportMyPlacesLayerFeatures') + '&categoryId=' + categoryId + '&srs=' + this.srsName;
         }
     }, {
         protocol: ['Oskari.mapframework.service.Service']
