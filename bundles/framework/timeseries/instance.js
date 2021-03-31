@@ -111,6 +111,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 var conf = jQuery.extend(true, {}, this._controlPluginConf || {}, active.conf);
                 if (typeof conf.showControl === 'undefined' || conf.showControl) {
                     const controlClass = this._getControlPluginClazz(active.delegate);
+                    if (
+                        this._controlPluginConf &&
+                        this._controlPlugin.getClazz() === controlClass &&
+                        this._controlPlugin.delegate.getLayer().getId() === active.delegate.getLayer().getId()
+                    ) {
+                        // do not update control ui if there's no changes in ui type and layer
+                        return;
+                    }
                     if (controlClass !== null) {
                         this._createControlPlugin(controlClass, active.delegate, conf);
                         return;
