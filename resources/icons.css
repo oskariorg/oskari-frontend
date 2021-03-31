@@ -1638,6 +1638,14 @@
     background-position: -5092px 0px !important;
 }
 
+.tool-layer-swipe {
+    width: 32px;
+    height: 32px;
+    background-image: url('icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -5060px 0px !important;
+}
+
 .upload-material-dark {
     width: 28px;
     height: 28px;
