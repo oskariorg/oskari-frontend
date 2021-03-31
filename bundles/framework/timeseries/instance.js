@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 if (typeof conf.showControl === 'undefined' || conf.showControl) {
                     const controlClass = this._getControlPluginClazz(active.delegate);
                     if (
-                        this._controlPluginConf &&
+                        this._controlPlugin &&
                         this._controlPlugin.getClazz() === controlClass &&
                         this._controlPlugin.delegate.getLayer().getId() === active.delegate.getLayer().getId()
                     ) {
