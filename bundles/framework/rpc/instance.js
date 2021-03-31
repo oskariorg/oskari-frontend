@@ -43,12 +43,11 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
-            var me = this,
-                channel,
-                conf = this.conf || {},
-                domain = me.conf.domain,
-                sandboxName = conf.sandbox ? conf.sandbox : 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+            const me = this;
+            const conf = me.conf || {};
+            const domain = me.conf.domain;
+            const sandboxName = conf.sandbox ? conf.sandbox : 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
             sandbox.register(this);
@@ -69,7 +68,7 @@ Oskari.clazz.define(
             }
 
             // Domain is set to * as we want to allow subdomains and such...
-            channel = Channel.build({
+            const channel = Channel.build({
                 window: window.parent,
                 origin: '*',
                 scope: 'Oskari'
@@ -112,7 +111,7 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    var builder = Oskari.requestBuilder(params[0]);
+                    const builder = Oskari.requestBuilder(params[0]);
                     if (!me._allowedRequests[params[0]] || !builder) {
                         throw {
                             error: 'request_not_available',
@@ -126,7 +125,7 @@ Oskari.clazz.define(
             me._channel = channel;
 
             // create the RpcService for handling rpc functions functionality
-            var rpcService = Oskari.clazz.create(
+            const rpcService = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.rpc.service.RpcService',
                 me, channel
             );
@@ -135,7 +134,7 @@ Oskari.clazz.define(
 
             // MOVE THESE TO MAPMODULE
             // Special handling for getScreenshot() since it's not always present
-            var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+            const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (typeof mapModule.getScreenshot === 'function') {
                 // this is only available in Openlayers3 implementation of mapmodule
                 me.rpcService.addFunction(function getScreenshot (transaction) {
@@ -146,15 +145,14 @@ Oskari.clazz.define(
             }
 
             me.rpcService.addFunction(function getAllLayers () {
-                var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layers = mapLayerService.getAllLayers();
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var mapResolutions = mapModule.getResolutionArray();
+                const mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                const layers = mapLayerService.getAllLayers();
+                const mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
                     if (layer.getMaxScale() && layer.getMinScale()) {
-                        var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
-                        var minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
-                        var maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
+                        const layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
+                        const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
+                        const maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
                         return {
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
@@ -175,7 +173,6 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function getZoomRange () {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return {
                     min: 0,
                     max: mapModule.getMaxZoomLevel(),
@@ -184,31 +181,27 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function zoomIn () {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var newZoom = mapModule.getNewZoomLevel(1);
+                const newZoom = mapModule.getNewZoomLevel(1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             });
 
             me.rpcService.addFunction(function zoomOut () {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                var newZoom = mapModule.getNewZoomLevel(-1);
+                const newZoom = mapModule.getNewZoomLevel(-1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             });
 
             me.rpcService.addFunction(function zoomTo (transaction, newZoom) {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapModule.setZoomLevel(newZoom);
                 return mapModule.getMapZoom();
             });
 
             me.rpcService.addFunction(function getPixelMeasuresInScal (transaction, mmMeasures, scale) {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                    scalein = scale,
-                    pixelMeasures = [],
-                    zoomLevel = 0,
-                    nextScale;
+                let scalein = scale;
+                let pixelMeasures = [];
+                let zoomLevel = 0;
+                let nextScale;
 
                 if (mmMeasures && mmMeasures.constructor === Array) {
                     if (!scalein) {
@@ -217,7 +210,7 @@ Oskari.clazz.define(
                     pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
                 }
 
-                var scales = mapModule.getScaleArray();
+                const scales = mapModule.getScaleArray();
                 scales.forEach(function (sc, index) {
                     if ((!nextScale || nextScale > sc) && sc > scalein) {
                         nextScale = sc;
@@ -233,7 +226,7 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function getMapBbox () {
-                var bbox = me.sandbox.getMap().getBbox();
+                const bbox = me.sandbox.getMap().getBbox();
                 return {
                     bottom: bbox.bottom,
                     left: bbox.left,
@@ -243,7 +236,7 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function getMapPosition () {
-                var sbMap = me.sandbox.getMap();
+                const sbMap = me.sandbox.getMap();
                 return {
                     centerX: sbMap.getX(),
                     centerY: sbMap.getY(),
@@ -254,19 +247,17 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function setCursorStyle (transaction, cursorStyle) {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return mapModule.setCursorStyle(cursorStyle);
             });
 
             // VectorLayer plugin
             me.rpcService.addFunction(function getFeatures (transaction, includeFeatures) {
-                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                    plugin = mapModule.getLayerPlugins(['vectorlayer']),
-                    features = {};
+                const plugin = mapModule.getLayerPlugins(['vectorlayer']);
+                const features = {};
                 if (!plugin) {
                     return features;
                 }
-                var layers = plugin.getLayerIds();
+                const layers = plugin.getLayerIds();
                 layers.forEach(function (id) {
                     if (includeFeatures === true) {
                         features[id] = plugin.getLayerFeatures(id);
@@ -285,11 +276,11 @@ Oskari.clazz.define(
          * @param  {Object} conf bundle configuration
          */
         init: function () {
-            var me = this;
+            const me = this;
             // sanitize conf to prevent unnecessary errors
-            var conf = this.conf || {};
-            var allowedEvents = conf.allowedEvents;
-            var allowedRequests = conf.allowedRequests;
+            const conf = this.conf || {};
+            let allowedEvents = conf.allowedEvents;
+            let allowedRequests = conf.allowedRequests;
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
@@ -382,17 +373,17 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            var me = this,
-                sandbox = this.sandbox,
-                p;
+            const me = this;
+            const sandbox = this.sandbox;
+            let p;
 
             for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
+                if (Object.prototype.hasOwnProperty.call(me.eventHandlers, p)) {
                     sandbox.unregisterFromEventByName(me, p);
                 }
             }
             for (p in me.requestHandlers) {
-                if (me.requestHandlers.hasOwnProperty(p)) {
+                if (Object.prototype.hasOwnProperty.call(me.requestHandlers, p)) {
                     sandbox.removeRequestHandler(p, this);
                 }
             }
@@ -409,8 +400,8 @@ Oskari.clazz.define(
          *
          */
         onEvent: function (event) {
-            var me = this,
-                handler = me.eventHandlers[event.getName()];
+            const me = this;
+            const handler = me.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -428,16 +419,16 @@ Oskari.clazz.define(
          * @return {Object}       Event params
          */
         _getParams: function (event) {
-            var ret = {},
-                key,
-                allowedTypes = ['string', 'number', 'boolean'];
+            let ret = {};
+            let key;
+            const allowedTypes = ['string', 'number', 'boolean'];
 
             if (event.getParams) {
                 ret = event.getParams();
             } else {
                 for (key in event) {
                     // Skip __name and such
-                    if (!event.hasOwnProperty(key) || key.indexOf('__') === 0) {
+                    if (!Object.prototype.hasOwnProperty.call(event, key) || key.indexOf('__') === 0) {
                         continue;
                     }
                     // check that value is one of allowed types
@@ -459,8 +450,8 @@ Oskari.clazz.define(
          * @return {Boolean}  true if value is part of the list
          */
         __isInList: function (value, list) {
-            var i = 0,
-                len = list.length;
+            let i = 0;
+            const len = list.length;
             for (;i < len; ++i) {
                 if (value === list[i]) {
                     return true;
@@ -532,8 +523,7 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction(function sendUIEvent (transaction, bundleId, payload) {
-                var me = this,
-                    event = Oskari.eventBuilder('RPCUIEvent')(bundleId, payload);
+                const event = Oskari.eventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
                 return true;
             });
