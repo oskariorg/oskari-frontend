@@ -35,19 +35,17 @@ const mapGroupsAndLayers = (group, method, layers, tools, admin) => {
         group.id, method, name[lang]
     );
     newGroup.setTools(tools);
-    
     for (var i in group.layers) {
         layers.find(layer => {
-                if(typeof layer.getId == 'function') { // To make sure layer has getId() method
-                    if(layer.getId() === group.layers[i].id) {
-                        newGroup.addLayer(layer); 
-                        return layer;
-                    }
+            // To make sure layer has getId() method
+            if (typeof layer.getId == 'function') {
+                if (layer.getId() === group.layers[i].id) {
+                    newGroup.addLayer(layer);
+                    return layer;
                 }
+            }
         });
     }
-
-
     // group has subgroups
     if (!group.hasSubgroups()) {
         return newGroup;
