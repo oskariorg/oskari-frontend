@@ -37,10 +37,11 @@ export const LayerGeneralInfo = ({ layer }) => {
         month: '2-digit',
         day: '2-digit'
     };
-    const formattedCreatedTime = createdDate.toLocaleTimeString(dateLocale).replace(/\./g, ':');
-    const formattedCreatedDate = createdDate.toLocaleDateString(dateLocale, localeDateOptions);
-    const formattedUpdatedTime = updatedDate.toLocaleTimeString(dateLocale).replace(/\./g, ':');
-    const formattedUpdatedDate = updatedDate.toLocaleDateString(dateLocale, localeDateOptions);
+
+    const formattedCreatedTime = typeof layer.created !== 'undefined' ? createdDate.toLocaleTimeString(dateLocale).replace(/\./g, ':') : '--:--:--';
+    const formattedCreatedDate = typeof layer.created !== 'undefined' ? createdDate.toLocaleDateString(dateLocale, localeDateOptions) : '--.--.----';
+    const formattedUpdatedTime = typeof layer.updated !== 'undefined' ? updatedDate.toLocaleTimeString(dateLocale).replace(/\./g, ':') : '--:--:--';
+    const formattedUpdatedDate = typeof layer.updated !== 'undefined' ? updatedDate.toLocaleDateString(dateLocale, localeDateOptions) : '--.--.----';
 
     return (
         <InfoRow>
@@ -59,16 +60,12 @@ export const LayerGeneralInfo = ({ layer }) => {
             <Col span={ 12 }>
                 <InfoCard>
                     <span> { layer.id } </span>
-                    { layer.created &&
-                        <TextLine>
-                            <span> { formattedCreatedTime }</span> <span>{ formattedCreatedDate }</span>
-                        </TextLine>
-                    }
-                    { layer.updated &&
-                        <TextLine>
-                            <span> { formattedUpdatedTime }</span> <span>{ formattedUpdatedDate }</span>
-                        </TextLine>
-                    }
+                    <TextLine>
+                        <span> { formattedCreatedTime }</span> <span>{ formattedCreatedDate }</span>
+                    </TextLine>
+                    <TextLine>
+                        <span> { formattedUpdatedTime }</span> <span>{ formattedUpdatedDate }</span>
+                    </TextLine>
                 </InfoCard>
             </Col>
         </InfoRow>
