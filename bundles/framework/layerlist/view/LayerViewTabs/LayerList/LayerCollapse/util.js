@@ -35,15 +35,19 @@ const mapGroupsAndLayers = (group, method, layers, tools, admin) => {
         group.id, method, name[lang]
     );
     newGroup.setTools(tools);
+    
     for (var i in group.layers) {
-        layers.sort((a, b) => comparator(a, b, method))
-            .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
-            .forEach(layer => {
-                if (group.layers[i].id == layer.getId()) {
-                    newGroup.addLayer(layer);
+        layers.find(layer => {
+                if(typeof layer.getId == 'function') { // To make sure layer has getId() method
+                    if(layer.getId() === group.layers[i].id) {
+                        newGroup.addLayer(layer); 
+                        return layer;
+                    }
                 }
-            });
+        });
     }
+
+
     // group has subgroups
     if (!group.hasSubgroups()) {
         return newGroup;

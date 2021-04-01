@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
@@ -21,13 +21,20 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
 `;
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
+
+    const [groupsData, setGroupsData] = useState([]);
+
+    useEffect(() => {
+        setGroupsData(groups);
+    },[groups]);
+
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
             {
-                groups.map(group => {
+                groupsData.map(group => {
                     const layerIds = group.getLayers().map(lyr => lyr.getId());
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
