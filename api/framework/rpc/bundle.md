@@ -13,30 +13,67 @@ Examples of all the RPC functionalities can be found [here](https://www.oskari.o
 No configuration is required, but it can be used to define allowed functions, events and requests.
 By default the [events](https://www.oskari.org/api/events) and [requests](https://www.oskari.org/api/requests) that have the RPC tag in their api documentation are allowed.
 
+### How to add new functions to RPC
+
+Use `RpcService` to add new functions.
+
+```
+// listen to application started event and register new RPC function.
+Oskari.on('app.start', function (details) {
+    const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+    if (!rpcService) {
+        return;
+    }
+
+    rpcService.addFunction(function example () {
+        console.log('New added RPC function');
+        return 'example';
+    });
+});
+
+// now you can call created example function from your published map
+channel.example(function(data) {
+    console.log(data);
+});
+
+```
+
 ### Allowed functions
 
 Allowed functions (config.allowedFunctions) lists all the functions that can be called over rpc.
-Defaults at the moment are all the functions defined in RPC-bundles availableFunctions object which include:
-- getInfo(clientVersion)
-- getAllLayers()
-- getMapPosition()
+
+Defaults at the moment are all the functions what all bundles adds to rpc.
+RPC bundle adds default functions and other additionals are optionals (exists in RPC when bundle is added to published view).
+
+RPC:
 - getSupportedEvents()
 - getSupportedFunctions()
 - getSupportedRequests()
+- getInfo(clientVersion)
+- resetState()
+- getCurrentState()
+- useState(state)
+- sendUIEvent(bundleId, payload)
+
+AbstractMapModule:
+- getAllLayers()
+- getMapBbox()
+- getMapPosition()
 - getZoomRange()
 - zoomIn()
 - zoomOut()
 - zoomTo()
 - getPixelMeasuresInScale(mmMeasures, scale)
-- getMapBbox()
-- resetState()
-- getCurrentState()
-- useState(state)
-- getFeatures(includeFeatures)
 - setCursorStyle(cursorStyle)
-- sendUIEvent(bundleId, payload)
 
-All functions take callbacks as parameters for successhandler and (optional) errorhandler. Most functions are getters and only require the success callback. 
+MapModuleClassOl:
+- getScreenshot
+
+VectorLayerPlugin:
+- getFeatures(includeFeatures)
+
+All functions take callbacks as parameters for successhandler and (optional) errorhandler. Most functions are getters and only require the success callback.
 useState() is the only function currently that takes other type of parameters. However all functions are mapped in a similar fashion and the first parameter for function call can be used to send parameters to the function. The parameters to send should be sent as an array:
 
     channel.useState([stateObject], successCB, errorCB);
@@ -69,18 +106,18 @@ This can be used to detect if the Oskari version has been updated without notifi
         }
        channel.log('GetInfo: ', data);
     });
-    
+
 **getAllLayers()**
 
 Returns all the layers available on map. If layer has minimum zoom level and maximum zoom level defined, returns also those.
-    
+
     {
         id: layerId,
         opacity: layerOpacity,
         visible: layerVisibility,
         name : layerName,
         minZoom: minZoomLevel,
-        maxZoom: maxZoomLevel 
+        maxZoom: maxZoomLevel
     }
 
 **getMapPosition()**
@@ -172,7 +209,7 @@ Returns current zoom level after zooming.
 
     Returns pixel mesurements for mm measurements in requested scale.
     Scale is optional. If scale is not defined, current map scale or fit scale is used.
-    If scale is not defined and there are two measurements, then function computes fit scale so that paper size area covers the whole map. 
+    If scale is not defined and there are two measurements, then function computes fit scale so that paper size area covers the whole map.
     In case of two measurements: if 1st measure is longer than 2nd measure, then the orientation is landscape.
     Pixel values could be used for to plot  e.g. A4 size area on the map.
     input: [[210,297], 100000] returns below data (zoomLevel tells nearest zoom level where pixel measures fit the map viewport)
@@ -232,7 +269,7 @@ Loads a saved map state.
 
 **getFeatures(layerId)**
 
-Function gets features as geojson object grouped by layer if the value of given parameter is true. If parameter is not given, will return array of layerIds. 
+Function gets features as geojson object grouped by layer if the value of given parameter is true. If parameter is not given, will return array of layerIds.
 For example in RPC-client you can:
 
     channel.getFeatures([true], function(data) {
@@ -267,12 +304,12 @@ Access-Control-Allow-Origin:*
 
 ### Allowed events
 
-Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc. 
+Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc.
 List will be modified on startup so events that are not available in the appsetup will be removed from the list.
 
 ### Allowed requests
 
-Allowed requests (config.allowedRequests) lists all the requests that can be sent over rpc. 
+Allowed requests (config.allowedRequests) lists all the requests that can be sent over rpc.
 List will be modified on startup so requests that are not available in the appsetup will be removed from the list.
 
 ## Using the bundle functionality
@@ -320,7 +357,7 @@ channel.onReaady(function() {
         function(error, message) {
             console.log('error', error, message);
         }
-    ); 
+    );
 });
 ```
 
