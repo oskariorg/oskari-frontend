@@ -20,6 +20,17 @@ const InfoCard = styled(Card)`
     .ant-card-body {
         padding: 5px 12px;
     }
+
+    span {
+        display: block;
+        margin: 0 20px 0 0;
+    }
+
+    .ant-col:last-child {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
 `;
 
 const LeftColumn = styled(Col)`
@@ -59,13 +70,18 @@ export const LayerGeneralInfo = ({ layer }) => {
 
             <Col span={ 12 }>
                 <InfoCard>
-                    <span> { layer.id } </span>
-                    <TextLine>
-                        <span> { formattedCreatedTime }</span> <span>{ formattedCreatedDate }</span>
-                    </TextLine>
-                    <TextLine>
-                        <span> { formattedUpdatedTime }</span> <span>{ formattedUpdatedDate }</span>
-                    </TextLine>
+                    <Row>
+                        <Col>
+                            <span> { layer.id } </span>
+                            <span> { formattedCreatedTime }</span>
+                            <span> { formattedUpdatedTime }</span>
+                        </Col>
+                        <Col>
+                            <span> </span>
+                            <span>{ formattedCreatedDate }</span>
+                            <span>{ formattedUpdatedDate }</span>
+                        </Col>
+                    </Row>
                 </InfoCard>
             </Col>
         </InfoRow>
