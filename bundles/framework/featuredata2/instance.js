@@ -106,9 +106,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             // check if preselected layers included wfs layers -> act if they are added now
             const selectedLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.hasFeatureData());
-            selectedLayers.forEach(l => this.plugins['Oskari.userinterface.Flyout'].layerAdded(l));
             if (selectedLayers.length) {
-                this.plugin.refresh(); // TODO is this needed here??
+                this.plugin.refresh();
             }
 
             this.sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
@@ -193,7 +192,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             this.sandbox.notifyAll(event);
         },
-
+        getLayerLoadingStatus: function (layerId) {
+            return this.__loadingStatus[layerId];
+        },
         __refreshLoadingStatus: function () {
             const status = {
                 loading: [],
@@ -235,9 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                     if (layer && layer.isManualRefresh()) {
                         if (event.getNop()) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                        } else if (event.getRequestType() === event.type.image && layer._activeFeatures.length === 0) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
+                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer.getId(), 0.5);
                         }
                     }
                 }
@@ -273,7 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapLayerRemoveEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].layerRemoved(event.getMapLayer());
                     delete this.__loadingStatus['' + event.getMapLayer().getId()];
                     this.__refreshLoadingStatus();
                 }
@@ -288,7 +286,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapLayerAddEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].layerAdded(event.getMapLayer());
                 }
             },
 
@@ -354,7 +351,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             },
             'AfterMapMoveEvent': function () {
                 this.plugin.mapStatusChanged();
-                this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null; // TODO
             },
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (event.getGroupId() === 'selectiontools' || event.getToolId() === 'dialog') {

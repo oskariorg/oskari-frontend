@@ -56,9 +56,7 @@ Oskari.clazz.define(
             }
         }
         this.WFSLayerService = null;
-        this.handler = new FeatureDataHandler(this.instance);
-        this.handler.addStateListener(state => this._renderFeatureData(state));
-        this.handler.addCustomStateListener(({ selectedFeatures }) => this._renderFeatureData(selectedFeatures));
+        this.handler = new FeatureDataHandler((state, updated) => this.update(state, updated));
     }, {
         __templates: {
             wrapper: '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
@@ -168,11 +166,8 @@ Oskari.clazz.define(
         getPanel (layerId) {
             return this.panels[layerId];
         },
-        getPanelIds () {
-            return Object.keys(this.panels);
-        },
-        removePanel (layerId) {
-            delete this.panels[layerId];
+        hasPanel (layerId) {
+            return !!this.panels[layerId];
         },
         /**
          * @method createUi
@@ -205,6 +200,27 @@ Oskari.clazz.define(
             // Check if  tabcontainer is rendered flyout, fix then flyout overflow
             var containerEl = this.tabsContainer.getElement();
             containerEl.parents('.oskari-flyoutcontentcontainer').css('overflow', 'hidden');
+            if (this.resizable) {
+                this._enableResize();
+            }
+        },
+        update: function (state, updated) {
+            // some optimization for jQuery rendering
+            if (updated === 'selectedFeatures') {
+                const { layerId, selectedFeatures } = state;
+                this.selectGridValues(layerId, selectedFeatures);
+                return;
+            }
+            if (updated === 'layerIds') {
+                const { layerIds } = state;
+                layerIds.filter(id => !this.hasPanel(id)).forEach(id => this.createPanel(id));
+                const stringIds = layerIds.map(id => '' + id);
+                Object.keys(this.panels).filter(id => !stringIds.includes(id)).forEach(id => this.removePanel(id));
+                return;
+            }
+            if (state.isActive) {
+                this._renderFeatureData(state);
+            }
         },
         turnOnClickOff: function () {
             var me = this;
@@ -267,12 +283,15 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method layerAdded
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that was added
+         * @method createPanel
+         * @param {number/string} layerId
          * Adds a tab for the layer
          */
-        layerAdded: function (layer) {
+        createPanel: function (layerId) {
+            const layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            if (!layer) {
+                return;
+            }
             const panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.getContainer().append(
                 this.instance.loc('loading')
@@ -290,6 +309,7 @@ Oskari.clazz.define(
                 panel.getHeader().find('.icon-funnel').prop('title', this.instance.loc('filterDialogTooltip'));
             }
             this.updatePanelTitles();
+            return panel;
         },
         updatePanelTitles: function () {
             const panels = this.panels;
@@ -309,24 +329,21 @@ Oskari.clazz.define(
             });
         },
         /**
-         * @method layerRemoved
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         *           WFS layer that was removed
+         * @method removePanel
+         * @param {number/string} layerId
          * Removes the tab for the layer
          */
-        layerRemoved: function (layer) {
-            const layerId = layer.getId();
+        removePanel: function (layerId) {
             const panel = this.getPanel(layerId);
             if (panel) {
                 panel.getContainer().remove();
                 this.tabsContainer.removePanel(panel);
-                this.removePanel(layerId);
+                delete this.panels[layerId];
             }
-            this.updatePanelTitles(true);
+            this.updatePanelTitles();
         },
 
-        selectGridValues: function () {
-            const { selectedFeatures, layerId } = this.handler.getState();
+        selectGridValues: function (layerId, selectedFeatures) {
             const panel = this.getPanel(layerId);
             if (!panel || !panel.grid) {
                 return;
@@ -449,24 +466,24 @@ Oskari.clazz.define(
                 parseInt(tabContent.css('padding-top') || 0) +
                 parseInt(tabContent.css('padding-bottom') || 0) +
                 (flyoutContent.find('.exporter').height() || 0) + 10;
-
-            if (parent.height() === null) {
+            const containerHeight = flyoutContainer.height();
+            if (containerHeight === null) {
                 tabContent.css('max-height', '100%');
             } else {
-                tabContent.css('height', (parent.height() - paddings) + 'px');
+                tabContent.css('height', (containerHeight - paddings) + 'px');
             }
             const mapdiv = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule').getMapEl();
             flyoutContainer.css('max-width', mapdiv.width().toString() + 'px');
         },
-        _renderFeatureData: function ({ layerId, inScale, features, hiddenProperties }) {
-            var panel = this.getPanel(layerId);
+        _renderFeatureData: function ({ layerId, inScale, features, selectedFeatures }) {
+            let panel = this.getPanel(layerId);
+            if (!panel) {
+                panel = this.createPanel(layerId);
+            }
             if (!this.tabsContainer.isSelected(panel)) {
                 return;
             }
             const { layer } = panel;
-            if (!layer) {
-                return;
-            }
             const flyoutContent = jQuery(this.container);
             const panelContent = panel.getContainer();
             panelContent.empty();
@@ -486,36 +503,33 @@ Oskari.clazz.define(
             }
             panelContent.append(this.instance.loc('loading'));
 
-            if (this.instance.__loadingStatus[layer.getId()] === 'error') { // TODO this.instance.setLoadingStatus(id, status);
+            if (this.instance.getLayerLoadingStatus(layerId) === 'error') {
                 return;
             }
 
-            // TODO cleanup only when needed
             flyoutContent.find('.featuredata2-show-selected-first').remove();
             flyoutContent.find('.grid-tools').remove();
             panelContent.empty();
 
-            const grid = this.createGrid(layer);
-            const model = this.createModel(layer, features, hiddenProperties);
+            let { grid } = panel;
+            if (!grid) {
+                grid = this.createGrid(layer);
+                panel.grid = grid;
+            }
+            const model = this.createModel(layer, features);
             this.updateGridProperties(layer, grid, model);
             const gridEl = jQuery('<div class="featuredata2-grid"></div>');
             panelContent.append(gridEl);
             grid.renderTo(gridEl, null, panel.getContainer().parent());
-            panel.grid = grid;
 
             // Grid opacity
-            this.setGridOpacity(layer, 1.0);
+            this.setGridOpacity(layerId, 1.0);
 
-            this.selectGridValues();
+            this.selectGridValues(layerId, selectedFeatures);
 
             // TODO: is resized really needed??
             if (!this.resized) {
                 this.calculateSize();
-            }
-
-            // TODO: move to correct place
-            if (this.resizable) {
-                this._enableResize();
             }
 
             // Extra header message on top of grid
@@ -561,11 +575,15 @@ Oskari.clazz.define(
 
             grid.setColumnSelector(true);
             grid.setResizableColumns(true);
-            const { disableExport } = this.instance.getConfiguration();
+            const { disableExport, allowLocateOnMap } = this.instance.getConfiguration();
             if (!disableExport) {
                 grid.setExcelExporter(
                     layer.getPermission('download') === 'download_permission_ok'
                 );
+            }
+            // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
+            if (layer.isManualRefresh() && allowLocateOnMap) {
+                this.createLocateMapColumn(grid);
             }
             return grid;
         },
@@ -576,7 +594,7 @@ Oskari.clazz.define(
             grid.setMetadataLink(layer.getMetadataIdentifier());
             // localizations
             PROPERTY_NAMES.forEach((key, value) => grid.setColumnUIName(key, value));
-            Object.entries(layer.getPropertyNames()).forEach(([key, value]) => grid.setColumnUIName(key, value));
+            Object.entries(layer.getPropertyLabels()).forEach(([key, value]) => grid.setColumnUIName(key, value));
             // TODO fix hidden fields handling. In createGrid or getState
             // const hidden = this.handler.getState().hiddenProperties[layer.getId()];
             const visibleFields = model.getFields().filter(field => !DEFAULT_HIDDEN_FIELDS.includes(field));
@@ -660,21 +678,18 @@ Oskari.clazz.define(
             return checkbox;
         },
 
-        setGridOpacity: function (layer, opacity) {
-            if (!this.isActive() || !layer || isNaN(opacity)) {
+        setGridOpacity: function (layerId, opacity) {
+            if (!this.isActive() || isNaN(opacity)) {
                 return;
             }
-            var panel = this.panels['' + layer.getId()],
-                tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content'),
-                isOk = this.tabsContainer.isSelected(panel);
-
-            if (isOk && panel.grid) {
-                tabContent.css({ 'opacity': opacity });
+            const panel = this.getPanel(layerId);
+            if (panel && panel.grid && this.tabsContainer.isSelected(panel)) {
+                this.flyout.find('div.tab-content').css({ opacity });
             }
         },
         getWFSLayerService: function () {
             if (!this.WFSLayerService) {
-                this.WFSLayerService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+                this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
             }
             return this.WFSLayerService;
         },
@@ -687,13 +702,6 @@ Oskari.clazz.define(
          * Adds features to the model data
          */
         createModel: function (layer, features) {
-            // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
-            const conf = this.instance.getConfiguration();
-            const isManualRefresh = layer.isManualRefresh();
-            const allowLocateOnMap = isManualRefresh && conf.allowLocateOnMap;
-            if (allowLocateOnMap) {
-                this.createLocateMapColumn(); //TODO: grid? or move 
-            }
             const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             model.setFields(layer.getPropertySelection());
             model.setIdField('__fid');
@@ -769,7 +777,7 @@ Oskari.clazz.define(
             this.handler.setIsActive(!!isEnabled);
             // feature info activation disabled if object data grid flyout active and vice versa
             var gfiReqBuilder = Oskari.requestBuilder(
-                'MapModulePlugin.GetFeatureInfoActivationRequest'
+                'MapModulePlugin.GetFeatureInfoActivationRequest' // TODO: fix
             );
             if (gfiReqBuilder) {
                 this.instance.sandbox.request(

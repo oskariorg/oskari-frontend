@@ -8,41 +8,43 @@ export const PROPERTY_NAMES = new Map([
 ]);
 
 class ViewHandler extends StateHandler {
-    constructor (instance) {
+    constructor (consumer) {
         super();
-        this.instance = instance;
-        this.sandbox = instance.getSandbox();
         this.wfsPlugin = null;
         this.wfsLayerService = null;
-        this.state = {
+        this.setState({
             isActive: false,
-            layerId: null,
+            layerId: this._getFirstLayerId(),
             features: [],
+            inScale: true,
+            layerIds: this._getSelectedLayerIds(),
             selectedFeatures: {},
-            hiddenProperties: {},
-            inScale: true
-        };
+            hiddenProperties: {}
+        });
         this.eventHandlers = this._createEventHandlers();
-        this.customStateListeners = []; // for jQuery optimization
+        this.addStateListener(consumer);
     }
 
     getName () {
         return 'FeatureDataHandler';
     }
 
-    addCustomStateListener (consumer) {
-        this.customStateListeners.push(consumer);
+    _getFirstLayerId () {
+        const layersIds = this._getSelectedLayerIds();
+        return layersIds.length ? layersIds[0] : null;
     }
 
-    // update state without notify() to optimize jQuery rendering
-    updateStateSilently (props) {
+    _getSelectedLayerIds () {
+        return Oskari.getSandbox().findAllSelectedMapLayers().filter(l => l.hasFeatureData()).map(l => l.getId());
+    }
+
+    // override updateState for jQuery optimization
+    updateState (props, updated) {
         this.state = {
             ...this.state,
             ...props
         };
-        const updated = Object.keys(props);
-        // notify custom state listeners that state has changed but no need to render all components
-        this.customStateListeners.forEach(consumer => consumer(this.getState(), updated));
+        this.stateListeners.forEach(consumer => consumer(this.getState(), updated));
     }
 
     onEvent (event) {
@@ -56,7 +58,25 @@ class ViewHandler extends StateHandler {
     _createEventHandlers () {
         const handlers = {
             AfterMapMoveEvent: event => this._updateFeatureProperties(event),
-            AfterMapLayerAddEvent: event => {}, // TODO init hidden fields??, store layerIds??
+            AfterMapLayerAddEvent: event => {
+                const layer = event.getMapLayer();
+                if (!layer.hasFeatureData()) {
+                    return;
+                }
+                this.updateState({ layerIds: [...this.getState().layerIds, layer.getId()] }, 'layerIds'); // jQuery optimization
+            },
+            AfterMapLayerRemoveEvent: event => {
+                const layer = event.getMapLayer();
+                if (!layer.hasFeatureData()) {
+                    return;
+                }
+                const { layerIds, layerId } = this.getState();
+                const removedId = layer.getId();
+                this.updateState({
+                    layerIds: layerIds.filter(id => id !== removedId),
+                    layerId: layerId === removedId ? this._getFirstLayerId() : layerId
+                }, 'layerIds'); // jQuery optimization
+            },
             WFSSetFilter: event => {
 
             },
@@ -65,7 +85,7 @@ class ViewHandler extends StateHandler {
                     return;
                 }
                 const layerId = event.getMapLayer().getId();
-                if (layerId === this.state.layerId) {
+                if (layerId === this.getState().layerId) {
                     this._updateSelectedFeatureIds();
                 }
             },
@@ -74,24 +94,26 @@ class ViewHandler extends StateHandler {
 
             }
         };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        const sb = Oskari.getSandbox();
+        Object.getOwnPropertyNames(handlers).forEach(p => sb.registerForEventByName(this, p));
         return handlers;
     }
 
     _updateSelectedFeatureIds () {
-        const { layerId } = this.state;
+        const { layerId } = this.getState();
         const selectedFeatures = this._getWFSService().getSelectedFeatureIds(layerId);
-        this.updateStateSilently({ selectedFeatures });
+        this.updateState({ selectedFeatures }, 'selectedFeatures');
     }
 
     _updateFeatureProperties (event) {
         // update viewport properties only when flyout is active/open
-        if (!this.state.isActive) {
+        const { isActive, layerId } = this.getState();
+        if (!isActive) {
             return;
         }
         let features = [];
         let inScale = false;
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(this.state.layerId);
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
         if (layer && layer.isInScale(event.getScale())) {
             features = this._getVisibleFeatures();
             inScale = true;
@@ -100,11 +122,11 @@ class ViewHandler extends StateHandler {
     }
 
     _getVisibleFeatures () {
-        return this._getWFSPlugin().getLayerFeaturePropertiesInViewport(this.state.layerId);
+        return this._getWFSPlugin().getLayerFeaturePropertiesInViewport(this.getState().layerId);
     }
 
     setActiveLayer (layerId) {
-        if (layerId === this.state.layerId) {
+        if (layerId === this.getState().layerId) {
             return;
         }
         const features = this._getVisibleFeatures();
@@ -112,7 +134,7 @@ class ViewHandler extends StateHandler {
     }
 
     setIsActive (isActive) {
-        if (isActive === this.state.isActive) {
+        if (isActive === this.getState().isActive) {
             return;
         }
         const features = isActive ? this._getVisibleFeatures() : [];
@@ -126,7 +148,7 @@ class ViewHandler extends StateHandler {
         } else {
             hiddenProperties.push(property);
         }
-        this.updateState({ hiddenProperties }); //
+        this.updateState({ hiddenProperties });
     }
 
     _getWFSPlugin () {

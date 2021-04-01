@@ -130,15 +130,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @method  @public mapStatusChanged map status changed
          * @param  {Boolean} changed is map status changed
          */
-        mapStatusChanged: function (changed) {
-            var me = this,
-                statusChanged = changed;
-            me._mapStatusChanged = statusChanged;
+        mapStatusChanged: function (changed = true) {
+            this._mapStatusChanged = changed;
         },
 
         getMapStatusChanged: function () {
-            var me = this;
-            return me._mapStatusChanged;
+            return this._mapStatusChanged;
         },
 
         _bindLinkClick: function (link) {
@@ -258,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                  * @method AfterMapMoveEvent
                  * Shows map center coordinates after map move
                  */
-                'AfterMapMoveEvent': function (event) {
+                AfterMapMoveEvent: function (event) {
                     this.refresh();
                 }
             };
