@@ -37,6 +37,10 @@ export const LayerGeneralInfo = ({ layer }) => {
         month: '2-digit',
         day: '2-digit'
     };
+    const formattedCreatedTime = createdDate.toLocaleTimeString(dateLocale).replace(/\./g, ':');
+    const formattedCreatedDate = createdDate.toLocaleDateString(dateLocale, localeDateOptions);
+    const formattedUpdatedTime = updatedDate.toLocaleTimeString(dateLocale).replace(/\./g, ':');
+    const formattedUpdatedDate = updatedDate.toLocaleDateString(dateLocale, localeDateOptions);
 
     return (
         <InfoRow>
@@ -57,12 +61,12 @@ export const LayerGeneralInfo = ({ layer }) => {
                     <span> { layer.id } </span>
                     { layer.created &&
                         <TextLine>
-                            <span> { createdDate.toLocaleTimeString(dateLocale) }</span> <span>{ createdDate.toLocaleDateString(dateLocale, localeDateOptions) }</span>
+                            <span> { formattedCreatedTime }</span> <span>{ formattedCreatedDate }</span>
                         </TextLine>
                     }
                     { layer.updated &&
                         <TextLine>
-                            <span> { updatedDate.toLocaleTimeString(dateLocale) }</span> <span>{ updatedDate.toLocaleDateString(dateLocale, localeDateOptions) }</span>
+                            <span> { formattedUpdatedTime }</span> <span>{ formattedUpdatedDate }</span>
                         </TextLine>
                     }
                 </InfoCard>
