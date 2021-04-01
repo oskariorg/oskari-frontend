@@ -1,5 +1,3 @@
-import { arrayToObject, domainMatch } from '../util/RpcUtil';
-
 /**
  * @class Oskari.mapframework.bundle.rpc.service.RpcService
  * Allows extend RPC supported funtions
@@ -71,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
          * @returns {Object} allowed functions
          */
         getAllowedFunctions: function () {
-            return arrayToObject(this._allowedFunctions);
+            return this.instance.__arrayToObject(this._allowedFunctions);
         },
 
         /**
@@ -88,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
             }
 
             me.channel.bind(func.name, function (trans, params) {
-                if (!domainMatch(trans.origin)) {
+                if (!me.instance._domainMatch(trans.origin)) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
                         error: 'invalid_origin',
@@ -97,7 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
                 }
                 params = params || [];
                 params.unshift(trans);
-
                 var value = me._availableFunctions[func.name].apply(me, params);
                 if (typeof value === 'undefined') {
                     trans.delayReturn(true);

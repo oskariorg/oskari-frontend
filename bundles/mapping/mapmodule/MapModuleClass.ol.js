@@ -248,6 +248,26 @@ export class MapModule extends AbstractMapModule {
         );
         sandbox.requestHandler('VectorLayerRequest', this.requestHandlers.vectorLayerRequestHandler);
     }
+
+    /**
+     * @private @method registerRPCFunctionsImpl
+     * Register RPC functions
+     */
+    _registerRPCFunctionsImpl () {
+        const sandbox = this._sandbox;
+        const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+        if (!rpcService) {
+            return;
+        }
+
+        rpcService.addFunction(function getScreenshot (transaction) {
+            getScreenshot(function (image) {
+                transaction.complete(image);
+            });
+        });
+    }
+
     _startImpl () {
         this._registerVectorFeatureService();
         this.getMap().render();

@@ -1,5 +1,3 @@
-import { arrayToObject, domainMatch } from './util/RpcUtil';
-
 /**
  * @class Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance
  *
@@ -79,7 +77,7 @@ Oskari.clazz.define(
             channel.bind(
                 'handleEvent',
                 function (trans, params) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid domain for parent page/origin. Published domain does not match: ' + trans.origin
@@ -105,7 +103,7 @@ Oskari.clazz.define(
             channel.bind(
                 'postRequest',
                 function (trans, params) {
-                    if (!domainMatch(trans.origin)) {
+                    if (!me._domainMatch(trans.origin)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -131,142 +129,6 @@ Oskari.clazz.define(
             );
             sandbox.registerService(rpcService);
             me.rpcService = rpcService;
-
-            // MOVE THESE TO MAPMODULE
-            // Special handling for getScreenshot() since it's not always present
-            const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-            if (typeof mapModule.getScreenshot === 'function') {
-                // this is only available in Openlayers3 implementation of mapmodule
-                me.rpcService.addFunction(function getScreenshot (transaction) {
-                    mapModule.getScreenshot(function (image) {
-                        transaction.complete(image);
-                    });
-                });
-            }
-
-            me.rpcService.addFunction(function getAllLayers () {
-                const mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                const layers = mapLayerService.getAllLayers();
-                const mapResolutions = mapModule.getResolutionArray();
-                return layers.map(function (layer) {
-                    if (layer.getMaxScale() && layer.getMinScale()) {
-                        const layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
-                        const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
-                        const maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
-                        return {
-                            id: layer.getId(),
-                            opacity: layer.getOpacity(),
-                            visible: layer.isVisible(),
-                            name: layer.getName(),
-                            minZoom: minZoomLevel,
-                            maxZoom: maxZoomLevel
-                        };
-                    } else {
-                        return {
-                            id: layer.getId(),
-                            opacity: layer.getOpacity(),
-                            visible: layer.isVisible(),
-                            name: layer.getName()
-                        };
-                    }
-                });
-            });
-
-            me.rpcService.addFunction(function getZoomRange () {
-                return {
-                    min: 0,
-                    max: mapModule.getMaxZoomLevel(),
-                    current: mapModule.getMapZoom()
-                };
-            });
-
-            me.rpcService.addFunction(function zoomIn () {
-                const newZoom = mapModule.getNewZoomLevel(1);
-                mapModule.setZoomLevel(newZoom);
-                return newZoom;
-            });
-
-            me.rpcService.addFunction(function zoomOut () {
-                const newZoom = mapModule.getNewZoomLevel(-1);
-                mapModule.setZoomLevel(newZoom);
-                return newZoom;
-            });
-
-            me.rpcService.addFunction(function zoomTo (transaction, newZoom) {
-                mapModule.setZoomLevel(newZoom);
-                return mapModule.getMapZoom();
-            });
-
-            me.rpcService.addFunction(function getPixelMeasuresInScal (transaction, mmMeasures, scale) {
-                let scalein = scale;
-                let pixelMeasures = [];
-                let zoomLevel = 0;
-                let nextScale;
-
-                if (mmMeasures && mmMeasures.constructor === Array) {
-                    if (!scalein) {
-                        scalein = mapModule.calculateFitScale4Measures(mmMeasures);
-                    }
-                    pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
-                }
-
-                const scales = mapModule.getScaleArray();
-                scales.forEach(function (sc, index) {
-                    if ((!nextScale || nextScale > sc) && sc > scalein) {
-                        nextScale = sc;
-                        zoomLevel = index;
-                    }
-                });
-
-                return {
-                    pixelMeasures: pixelMeasures,
-                    scale: scalein,
-                    zoomLevel: zoomLevel
-                };
-            });
-
-            me.rpcService.addFunction(function getMapBbox () {
-                const bbox = me.sandbox.getMap().getBbox();
-                return {
-                    bottom: bbox.bottom,
-                    left: bbox.left,
-                    right: bbox.right,
-                    top: bbox.top
-                };
-            });
-
-            me.rpcService.addFunction(function getMapPosition () {
-                const sbMap = me.sandbox.getMap();
-                return {
-                    centerX: sbMap.getX(),
-                    centerY: sbMap.getY(),
-                    zoom: sbMap.getZoom(),
-                    scale: sbMap.getScale(),
-                    srsName: sbMap.getSrsName()
-                };
-            });
-
-            me.rpcService.addFunction(function setCursorStyle (transaction, cursorStyle) {
-                return mapModule.setCursorStyle(cursorStyle);
-            });
-
-            // VectorLayer plugin
-            me.rpcService.addFunction(function getFeatures (transaction, includeFeatures) {
-                const plugin = mapModule.getLayerPlugins(['vectorlayer']);
-                const features = {};
-                if (!plugin) {
-                    return features;
-                }
-                const layers = plugin.getLayerIds();
-                layers.forEach(function (id) {
-                    if (includeFeatures === true) {
-                        features[id] = plugin.getLayerFeatures(id);
-                    } else {
-                        features[id] = [];
-                    }
-                });
-                return features;
-            });
 
             me.registerRPCFunctions();
         },
@@ -331,7 +193,7 @@ Oskari.clazz.define(
                     available.push(allowedEvents[i]);
                 }
             }
-            this._allowedEvents = arrayToObject(available);
+            this._allowedEvents = this.__arrayToObject(available);
         },
         __setupAvailableRequests: function (allowedRequests) {
             var available = [];
@@ -340,7 +202,58 @@ Oskari.clazz.define(
                     available.push(allowedRequests[i]);
                 }
             }
-            this._allowedRequests = arrayToObject(available);
+            this._allowedRequests = this.__arrayToObject(available);
+        },
+        /**
+         * Maps a given array to a dictionary format for easier access
+         * @private
+         * @param  {String[]} list will be used as keys in the result object. Values are boolean 'true' for each
+         * @return {Object}   object with list items as keys and bln true as values
+         */
+        __arrayToObject: function (list) {
+            var result = {};
+            for (var i = 0; i < list.length; ++i) {
+                result[list[i]] = true;
+            }
+            return result;
+        },
+
+        /**
+         * @private @method _domainMatch
+         * Used to check message origin, JSChannel only checks for an exact
+         * match where we need subdomain matches as well.
+         *
+         * @param  {string} origin Origin domain
+         *
+         * @return {Boolean} Does origin match config domain
+         */
+        _domainMatch: function (origin) {
+            if (!origin) {
+                this.log.warn('No origin in RPC message');
+                // no origin, always deny
+                return false;
+            }
+            // Allow subdomains and different ports
+            var domain = this.conf.domain;
+            if (domain === null || domain === undefined || !domain.length) {
+                // Publication is not restricted by domain
+                return true;
+            }
+
+            var url = document.createElement('a');
+            url.href = origin;
+            var originDomain = url.hostname;
+
+            var allowed = originDomain.endsWith(domain);
+            if (!allowed) {
+                // always allow from localhost
+                if (originDomain === 'localhost') {
+                    this.log.warn('Origin mismatch, but allowing localhost. Published to: ' + domain);
+                    return true;
+                }
+                this.log.warn('Origin not allowed for RPC: ' + origin);
+            }
+            return allowed;
         },
 
         /**
@@ -481,7 +394,7 @@ Oskari.clazz.define(
             this.sandbox.unregisterFromEventByName(this, eventName);
         },
         /**
-         * @public @method registerRPCFunctions
+         * @method registerRPCFunctions
          * Register RPC functions
          */
         registerRPCFunctions: function () {
@@ -490,7 +403,6 @@ Oskari.clazz.define(
             me.rpcService.addFunction(function getSupportedEvents () {
                 return me._allowedEvents;
             });
-
             me.rpcService.addFunction(function getSupportedFunctions () {
                 return me.rpcService.getAllowedFunctions();
             });
