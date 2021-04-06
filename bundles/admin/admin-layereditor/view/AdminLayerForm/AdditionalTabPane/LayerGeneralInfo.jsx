@@ -39,6 +39,31 @@ const LeftColumn = styled(Col)`
     }
 `;
 
+const formatTimestamp = (timestamp) => {
+    let date;
+    if (typeof timestamp !== 'undefined') {
+        date = new Date(timestamp);
+    }
+    return {
+        date: formatDate(date),
+        time: formatTime(time)
+    };
+};
+
+const formatDate = (date) => {
+    if (typeof date !== 'undefined') {
+        return '--.--.----';
+    }
+    return date.toLocaleDateString(dateLocale, localeDateOptions);
+};
+
+const formatTime = (date) => {
+    if (typeof date !== 'undefined') {
+        return '--:--:--';
+    }
+    return date.toLocaleTimeString(dateLocale).replace(/\./g, ':');
+};
+
 export const LayerGeneralInfo = ({ layer }) => {
     const createdDate = new Date(layer.created);
     const updatedDate = new Date(layer.updated);
@@ -49,10 +74,13 @@ export const LayerGeneralInfo = ({ layer }) => {
         day: '2-digit'
     };
 
-    const formattedCreatedTime = typeof layer.created !== 'undefined' ? createdDate.toLocaleTimeString(dateLocale).replace(/\./g, ':') : '--:--:--';
-    const formattedCreatedDate = typeof layer.created !== 'undefined' ? createdDate.toLocaleDateString(dateLocale, localeDateOptions) : '--.--.----';
-    const formattedUpdatedTime = typeof layer.updated !== 'undefined' ? updatedDate.toLocaleTimeString(dateLocale).replace(/\./g, ':') : '--:--:--';
-    const formattedUpdatedDate = typeof layer.updated !== 'undefined' ? updatedDate.toLocaleDateString(dateLocale, localeDateOptions) : '--.--.----';
+    const created = formatTimestamp(layer.created);
+    const updated = formatTimestamp(layer.updated);
+    // probably get rid of these and just use created/updated on JSX
+    const formattedCreatedTime = created.time;
+    const formattedCreatedDate = created.date
+    const formattedUpdatedTime = updated.time;
+    const formattedUpdatedDate = updated.date;
 
     return (
         <InfoRow>
