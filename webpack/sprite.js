@@ -309,7 +309,6 @@ function runSprite (opts, cb) {
     }
 }
 
-
 const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
