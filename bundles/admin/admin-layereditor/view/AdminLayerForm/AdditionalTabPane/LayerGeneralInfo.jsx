@@ -39,6 +39,13 @@ const LeftColumn = styled(Col)`
     }
 `;
 
+const dateLocale = 'fi-FI'; // we are not using here other locales than Finnish so we can hard core it into constant variable
+const localeDateOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+};
+
 const formatTimestamp = (timestamp) => {
     let date;
     if (typeof timestamp !== 'undefined') {
@@ -46,41 +53,27 @@ const formatTimestamp = (timestamp) => {
     }
     return {
         date: formatDate(date),
-        time: formatTime(time)
+        time: formatTime(date)
     };
 };
 
 const formatDate = (date) => {
-    if (typeof date !== 'undefined') {
+    if (typeof date === 'undefined') {
         return '--.--.----';
     }
     return date.toLocaleDateString(dateLocale, localeDateOptions);
 };
 
 const formatTime = (date) => {
-    if (typeof date !== 'undefined') {
+    if (typeof date === 'undefined') {
         return '--:--:--';
     }
     return date.toLocaleTimeString(dateLocale).replace(/\./g, ':');
 };
 
 export const LayerGeneralInfo = ({ layer }) => {
-    const createdDate = new Date(layer.created);
-    const updatedDate = new Date(layer.updated);
-    const dateLocale = 'fi-FI'; // we are not using here other locales than Finnish so we can hard core it into constant variable
-    const localeDateOptions = {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    };
-
     const created = formatTimestamp(layer.created);
     const updated = formatTimestamp(layer.updated);
-    // probably get rid of these and just use created/updated on JSX
-    const formattedCreatedTime = created.time;
-    const formattedCreatedDate = created.date
-    const formattedUpdatedTime = updated.time;
-    const formattedUpdatedDate = updated.date;
 
     return (
         <InfoRow>
@@ -101,13 +94,13 @@ export const LayerGeneralInfo = ({ layer }) => {
                     <Row>
                         <Col>
                             <span> { layer.id } </span>
-                            <span> { formattedCreatedTime }</span>
-                            <span> { formattedUpdatedTime }</span>
+                            <span> { created.time }</span>
+                            <span> { updated.time }</span>
                         </Col>
                         <Col>
                             <span> </span>
-                            <span>{ formattedCreatedDate }</span>
-                            <span>{ formattedUpdatedDate }</span>
+                            <span>{ created.date }</span>
+                            <span>{ updated.date }</span>
                         </Col>
                     </Row>
                 </InfoCard>
