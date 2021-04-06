@@ -8,6 +8,11 @@ const async = require('async');
 const HOVERPOSTFIX = '_hover';
 const COMBINEDPOSTFIX = '_combined';
 
+/*
+ * *************************************************************************
+ * Helper functions. See the end of the file for the actual script
+ * *************************************************************************
+ */
 function failWarn (msg) {
     console.error(msg);
     process.exit(1);
@@ -304,27 +309,55 @@ function runSprite (opts, cb) {
     }
 }
 
+
 const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
 
+const getTargetsForAppOverride = (param) => {
+    // TODO: get version from package.json like build
+    const [version, appsetupPath] = param.split(':');
+
+    const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {
+        const appName = dirPath.split(path.sep).pop();
+        return {
+            appIconsDir: dirPath + path.sep + 'icons',
+            targetDir: path.resolve(`./dist/${version}/${appName}`)
+        };
+    }).filter((target) => {
+        return existsSync(target.appIconsDir) && isDirectory(target.appIconsDir);
+    });
+    return targets;
+};
+
+const getTargets = (param) => {
+    if (param === 'base') {
+        // generate new base icons
+        return [getConfig({})];
+    }
+    return getTargetsForAppOverride(param);
+};
+/*
+ * *************************************************************************
+ * The actual script
+ * *************************************************************************
+ */
 const param = process.argv[2];
 
 if (!param) {
-    failWarn('Version & appsetup directory must be given as param, eg. 1.48:applications/paikkatietoikkuna.fi');
+    failWarn(`
+    ********
+    Version & appsetup directory must be given as param for generating application specific icons.png:
+
+        npm run sprite 2.0:applications/sample-application
+
+    For creating new base icons.png (after adding/removing icons in oskari-frontend):
+
+       npm run sprite base
+
+    ********
+    `);
 }
-
-// TODO: get version from package.json like build
-const [version, appsetupPath] = param.split(':');
-
-const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {
-    const appName = dirPath.split(path.sep).pop();
-    return {
-        appIconsDir: dirPath + path.sep + 'icons',
-        targetDir: path.resolve(`./dist/${version}/${appName}`)
-    };
-}).filter((target) => {
-    return existsSync(target.appIconsDir) && isDirectory(target.appIconsDir);
-});
+const targets = getTargets(param);
 
 if (targets.length === 0) {
     failWarn('No icons found for app. Make sure your icons are in directory "icons" under appsetup.');
@@ -346,3 +379,7 @@ function processNext (targets) {
 }
 
 processNext(targets);
+
+/*
+ * *************************************************************************
+ */
