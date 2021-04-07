@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     if (
                         this._controlPlugin &&
                         this._controlPlugin.getClazz() === controlClass &&
-                        this._controlPlugin.delegate.getLayer().getId() === active.delegate.getLayer().getId()
+                        this._controlPlugin.isControlling(active.delegate)
                     ) {
                         // do not update control ui if there's no changes in ui type and layer
                         return;

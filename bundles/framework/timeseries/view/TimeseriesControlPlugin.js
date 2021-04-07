@@ -106,6 +106,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             return this._uiState.currentTime;
         },
         /**
+         * Compares delegate to controls own delegate to see if it's being controlled by this plugin
+         * @param {Oskari.mapframework.bundle.timeseries.TimeseriesDelegate} delegate for comparison
+         * @returns {Boolean}
+         */
+        isControlling: function (delegate) {
+            if (!delegate) {
+                return false;
+            }
+            if (!this._delegate) {
+                return false;
+            }
+            if (this._delegate._clazz !== delegate._clazz) {
+                return false;
+            }
+            // we only have the WMSAnimator at this time but check that delegate is it so we can expect to find getLayer()
+            if (this._delegate._clazz !== 'Oskari.mapframework.bundle.timeseries.WMSAnimator') {
+                return false;
+            }
+            // here we can be sure that delegate and this._delegate are both WMSAnimator
+            const myLayer = this._delegate.getLayer();
+            const theirLayer = delegate.getLayer();
+            if (!myLayer || !theirLayer) {
+                return false;
+            }
+
+            return myLayer.getId() === theirLayer.getId();
+        },
+        /**
          * @method _filterSkipOptions Return animation skip options that are longer or as long than the shortest time interval in the series
          * @private
          * @param  {String[]} times time instants in timeseries, ISO-string
