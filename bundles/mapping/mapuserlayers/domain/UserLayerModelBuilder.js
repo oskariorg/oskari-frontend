@@ -25,11 +25,6 @@ Oskari.clazz.define(
             layer.setSource(mapLayerJson.source);
             layer.setRenderingElement(mapLayerJson.renderingElement);
             layer.addLayerUrl(mapLayerJson.renderingUrl);
-            const props = mapLayerJson.propertyNames;
-            if (Array.isArray(props)) {
-                layer.setFields(props.map(p => p.name));
-                layer.setLocales(props.map(p => p.locale));
-            }
         }
     }
 );

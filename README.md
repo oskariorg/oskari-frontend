@@ -55,6 +55,21 @@ You can use [sample-application](https://github.com/oskariorg/sample-application
 
 Run npm `build` and `start` commands in your application repository root.
 
+## Adding icons for generated sprite image (icons.css/icons.png)
+
+1) Install [Graphicsmagick](http://www.graphicsmagick.org/)
+2) Add new icons under resources/icons
+3) Run `npm run sprite base`
+4) Commit changes to resources/icons.css and resources/icons.png
+
+Note! Some of the icons have dark/light versions. This means that different icon is shown when the background is either dark or light for example on the toolbar. Other icons have hover versions that are used for automatically generated hover styles. To use the icon from the sprite it is referenced by the image name as class:
+
+```
+    <div class="icon add-area"></div>
+```
+
+Note! The same script can be used to generate application-specific overrides. See [sample-application](https://github.com/oskariorg/sample-application) for details.
+
 ## Dependencies
 
 Note! All the dependencies (even dev-dependencies like Webpack) are under dependencies for a reason. The reason is that this repository is used as dependency for apps and apps inherit the webpack-dependencies automatically instead of having to install and configure their own versions.

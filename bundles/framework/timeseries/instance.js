@@ -13,7 +13,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
      */
     function () {
         this.started = false;
-    }, {
+        this._initialState = null;
+    },
+    {
         __name: 'timeseries',
         /**
          * @method getName
@@ -69,6 +71,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 me._timeseriesService.on('activeChanged', me._updateControl.bind(me));
             });
             sandbox.requestHandler('Timeseries.ConfigurationRequest', me);
+            sandbox.registerAsStateful(me.mediator.bundleId, me);
+            me.setState(me.state);
         },
         /**
          * @method _registerForLayerFiltering
@@ -81,7 +85,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 var loc = Oskari.getMsg.bind(null, 'timeseries');
                 layerlistService.registerLayerlistFilterButton(
                     loc('layerFilter.timeseries'),
-                    loc('layerFilter.tooltip'), {
+                    loc('layerFilter.tooltip'),
+                    {
                         active: 'layer-timeseries',
                         deactive: 'layer-timeseries-disabled'
                     },
@@ -106,6 +111,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 var conf = jQuery.extend(true, {}, this._controlPluginConf || {}, active.conf);
                 if (typeof conf.showControl === 'undefined' || conf.showControl) {
                     const controlClass = this._getControlPluginClazz(active.delegate);
+                    if (
+                        this._controlPlugin &&
+                        this._controlPlugin.getClazz() === controlClass &&
+                        this._controlPlugin.delegate.getLayer().getId() === active.delegate.getLayer().getId()
+                    ) {
+                        // do not update control ui if there's no changes in ui type and layer
+                        return;
+                    }
                     if (controlClass !== null) {
                         this._createControlPlugin(controlClass, active.delegate, conf);
                         return;
@@ -122,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
          * @return {String} the name of UI control plugin class
          * @throws {Error} when timeseries layer has an invalid ui type configured
          */
-        _getControlPluginClazz (delegate) {
+        _getControlPluginClazz: function (delegate) {
             const layer = delegate.getLayer();
             const options = layer.getOptions();
             const timeseries = options.timeseries || {};
@@ -153,6 +166,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             mapModule.registerPlugin(controlPlugin);
             mapModule.startPlugin(controlPlugin);
             this._controlPlugin = controlPlugin;
+            if (this._initialState) {
+                // TODO: handle player UI control plugin also
+                if (this._controlPlugin.getName() === 'TimeSeriesRangeControlPlugin') {
+                    this._controlPlugin.setControlState(this._initialState);
+                }
+                this._initialState = null;
+            }
         },
         /**
          * @method _removeControlPlugin
@@ -186,11 +206,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             this.started = false;
             this._removeControlPlugin();
             this._sandbox = null;
+        },
+
+        setState: function (state) {
+            // the control plugin may not be created at this time,
+            // setting the _initialState to schedule the control
+            // UI update when it's created
+            this._initialState = state;
+        },
+
+        getState: function () {
+            // TODO: handle player UI control plugin also
+            if (this._controlPlugin && this._controlPlugin.getName() === 'TimeSeriesRangeControlPlugin') {
+                return this._controlPlugin.getControlState();
+            }
+            return null;
+        },
+
+        getStateParameters: function () {
+            const state = this.getState();
+            if (!state) {
+                return '';
+            }
+            const { time } = state;
+            const queryStr = Array.isArray(time) ? `timeseries=${time[0]}/${time[1]}` : `timeseries=${time}`;
+            const mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
+            return queryStr + mapModule.getStateParameters();
         }
-    }, {
+    },
+    {
         /**
          * @property {String[]} protocol
          * @static
          */
         protocol: ['Oskari.bundle.BundleInstance']
-    });
+    }
+);

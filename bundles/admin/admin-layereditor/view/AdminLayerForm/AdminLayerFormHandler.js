@@ -14,6 +14,7 @@ const __VALIDATOR_CACHE = {};
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
+        this.sandbox = Oskari.getSandbox();
         const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
@@ -521,8 +522,8 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const { attributes, locale } = json;
-            const attributeIdentifiers = Object.keys(attributes);
+            const { types, locale } = json;
+            const attributeIdentifiers = Object.keys(types);
             const currentLocale = Oskari.getLang();
             const labelMapping = locale && locale[currentLocale] ? locale[currentLocale] : {};
             return attributeIdentifiers.reduce((choices, identifier) => {
@@ -667,14 +668,51 @@ class UIHandler extends StateHandler {
         });
     }
 
+    /**
+     *
+     * @param {Number} layerId id for layer affected
+     * @param {Object} layer affected layer as WFSlayer object
+     * @param {Object} layerData new fetched layer data
+     */
+    refreshLayerOnMap (layerId, layerData, existingLayer) {
+        if (!layerId || !layerData) {
+            return;
+        }
+
+        const originalLayerIndex = this.sandbox.getMap().getLayerIndex(layerId); // Save index for the new layer
+        const existingTools = existingLayer.getTools();
+        const modifiedLayer = this.mapLayerService.createMapLayer(layerData);
+        modifiedLayer.setTools(existingTools);
+
+        // if layer was found from the selected layers remove and re-add it
+        if (originalLayerIndex !== -1) {
+            this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
+        }
+
+        // remove the previous version replace with the new layer data without sending events
+        // this is a more secure way of updating all of the layer data for the frontend instead of calling updateLayer that does only partial update
+        this.mapLayerService.removeLayer(layerId, true);
+        this.mapLayerService.addLayer(modifiedLayer, true);
+
+        this.sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(layerId, 'update'));
+
+        // if layer was found from the selected layers remove it from map and re-add it
+        // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
+        if (originalLayerIndex !== -1) {
+            this.sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+            this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, originalLayerIndex]);
+        }
+    }
+
     refreshEndUserLayer (layerId, layerData = {}) {
         if (typeof layerId === 'undefined') {
             // can't refresh without id
             return;
         }
         const existingLayer = this.mapLayerService.findMapLayer(layerId);
+
         if (existingLayer) {
-            this.mapLayerService.updateLayer(layerId, layerData);
+            this.refreshLayerOnMap(layerId, layerData, existingLayer);
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
@@ -907,10 +945,13 @@ class UIHandler extends StateHandler {
                 return Promise.reject(new Error('Updating capabilities failed'));
             }
         }).then(data => {
-            const { success, error, layerData = {} } = data;
+            const { success, error, layerUpdate = {} } = data;
             if (success.includes(`${layer.id}`)) {
+                const { admin = {} } = layerUpdate;
+                const { capabilities } = admin;
+                layer.capabilities = capabilities;
                 this.updateState({
-                    capabilities: layerData.capabilities,
+                    layer,
                     messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
                 });
             } else {
@@ -1019,6 +1060,12 @@ class UIHandler extends StateHandler {
         delete layer.options.styles[styleId];
         this.updateState({ layer: layer });
     }
+
+    showLayerMetadata (uuid) {
+        Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
+            { uuid }
+        ]);
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -1069,6 +1116,7 @@ const wrapped = controllerMixin(UIHandler, [
     'skipCapabilities',
     'togglePermission',
     'updateCapabilities',
-    'versionSelected'
+    'versionSelected',
+    'showLayerMetadata'
 ]);
 export { wrapped as AdminLayerFormHandler };

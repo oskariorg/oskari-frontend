@@ -1,4 +1,4 @@
-import { Slider, NumberInput } from 'oskari-ui';
+import { Button, NumberInput, Slider } from 'oskari-ui';
 import styled from 'styled-components';
 
 const primaryColor = '#ecb900';
@@ -16,6 +16,27 @@ export const Header = styled.h3`
     padding: 10px 20px;
     cursor: grab;
     cursor: move;
+    display: flex;
+    align-items: center;
+
+    .header-mid-spacer {
+        flex: 1;
+    }
+`;
+
+export const IconButton = styled(Button)`
+    padding: 10px;
+    color: ${primaryColor};
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: ${primaryColor};
+    }
+
+    .anticon {
+        font-size: 20px;
+    }
 `;
 
 export const Row = styled.div`
@@ -24,7 +45,9 @@ export const Row = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
+    align-items: flex-start;
     flex-wrap: wrap;
+    text-align: center;
 `;
 
 export const Col = styled.div`
@@ -32,6 +55,18 @@ export const Col = styled.div`
     flex-grow: 1;
     max-width: 100%;
     position: relative;
+
+    button {
+        background-color: ${primaryColor};
+        border-color: ${primaryColor};
+
+        &:hover,
+        &:focus,
+        &:active {
+            background-color: ${primaryColor};
+            border-color: ${primaryColor};
+        }
+    }
 `;
 
 export const ColFixed = styled.div`
@@ -43,6 +78,10 @@ export const ColFixed = styled.div`
 
 export const YearInput = styled(NumberInput)`
     margin-left: 18px;
+
+    .ant-input-number-handler-wrap {
+        opacity: 1;
+    }
 `;
 
 const getDataYearStyles = (props) => {
@@ -50,15 +89,18 @@ const getDataYearStyles = (props) => {
     if (dataYears.length === 0) {
         return '';
     }
-    const markYears = Object.keys(marks).map(year => parseInt(year, 10)).sort((a, b) => a - b);
-    const dataYearIndices = dataYears.map(year => markYears.indexOf(year) + 1);
-    const selectors = dataYearIndices.map(index => `&:nth-child(${index})`).join(",");
+    const markYears = Object.keys(marks)
+        .map((year) => parseInt(year, 10))
+        .sort((a, b) => a - b);
+    const dataYearIndices = dataYears.map((year) => markYears.indexOf(year) + 1);
+    const selectors = dataYearIndices.map((index) => `&:nth-child(${index})`).join(',');
     const styles = `
         ${selectors} {
             border-radius: 50%;
             border: 2px solid #ffffff;
             width: 8px;
             height: 8px;
+            margin-left: -4px;
             top: -2px;
             &.ant-slider-dot-active {
                 border: 2px solid ${primaryColor};
@@ -86,7 +128,7 @@ export const StyledRangeSlider = styled(Slider)`
         width: 2px;
         top: 0px;
         height: 4px;
-        ${props => getDataYearStyles(props)}
+        ${(props) => getDataYearStyles(props)}
     }
     .ant-slider-dot:last-child {
         margin-left: 0px;

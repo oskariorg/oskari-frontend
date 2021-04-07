@@ -11,6 +11,7 @@ import { Attributes } from './Attributes';
 import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
 import { Capabilities } from './Capabilities';
+import { LayerGeneralInfo } from './LayerGeneralInfo';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const {
@@ -30,6 +31,7 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
     const isQueryable = layer.attributes.isQueryable || layer.capabilities.isQueryable;
     return (
         <Fragment>
+            <LayerGeneralInfo layer={layer} />
             { propertyFields.includes(CAPABILITIES) &&
                 <Capabilities layer={layer} controller={controller} />
             }

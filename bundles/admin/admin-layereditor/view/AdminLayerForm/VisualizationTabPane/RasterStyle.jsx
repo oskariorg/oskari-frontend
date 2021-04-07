@@ -19,11 +19,11 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
             return label + ' (' + getMessage('styles.default') + ')';
         }
         return label;
-    }
+    };
     const onDefaultStyleChange = (styleName, selected) => {
         const defaultStyle = selected ? styleName : '';
         controller.setStyle(defaultStyle);
-    }
+    };
 
     const { options = {}, capabilities = {} } = layer;
     const styleOptions = capabilities.styles || [];
