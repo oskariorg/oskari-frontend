@@ -22,11 +22,6 @@ const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
 
-    const [groupsData, setGroupsData] = useState([]);
-
-    useEffect(() => {
-        setGroupsData(groups);
-    },[groups]);
 
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
