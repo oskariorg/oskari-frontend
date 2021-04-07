@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
             }
             this._removeControlPlugin();
         },
-        _isCurrentlyControlling: function(controlClass, delegate) {
+        _isCurrentlyControlling: function (controlClass, delegate) {
             if (!this._controlPlugin) {
                 return false;
             }
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 // don't know for sure but isControlling is not implemented on this control
                 return false;
             }
-            return this._controlPlugin.isControlling(delegate)
+            return this._controlPlugin.isControlling(delegate);
         },
         /**
          * @method _getControlPluginClazz
