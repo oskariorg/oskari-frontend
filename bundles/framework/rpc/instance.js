@@ -372,7 +372,7 @@ Oskari.clazz.define(
             });
 
             me.rpcService.addFunction('resetState', function () {
-                this.sandbox.resetState();
+                me.sandbox.resetState();
                 return true;
             });
 
