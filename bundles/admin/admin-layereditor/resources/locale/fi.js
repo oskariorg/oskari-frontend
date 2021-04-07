@@ -86,6 +86,8 @@ Oskari.registerLocalization(
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
             "editTheme": "Muokkaa teemaa",
+            "addSubtheme": "Lisää aliteema",
+            "editSubtheme": "Muokkaa aliteemaa",
             "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
@@ -206,7 +208,8 @@ Oskari.registerLocalization(
                 "deleteFailed": "Poisto epäonnistui",
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
-                "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?"
+                "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
+                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ne aliryhmät ensin."
             },
             "otherLanguages": "Muut kielet",
             "stylesJSON": "Tyylimääritykset (JSON)",

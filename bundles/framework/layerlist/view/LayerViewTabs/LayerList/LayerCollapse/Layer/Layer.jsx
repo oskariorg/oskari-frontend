@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Switch, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { LayerTools } from './LayerTools';
+import { EditFilled  } from '@ant-design/icons';
 
 const Flex = styled('div')`
     display: flex;
@@ -55,7 +56,9 @@ const Layer = ({ model, even, selected, controller }) => {
                         .filter(tool => tool.getTypes().includes('layerList'))
                         .map((tool, i) =>
                             <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
-                                <div className={tool.getIconCls()} onClick={() => onToolClick(tool)}/>
+                                <div onClick={() => onToolClick(tool)}>
+                                    {tool.getIconComponent()}
+                                </div>
                             </Tooltip>
                         )
                 }

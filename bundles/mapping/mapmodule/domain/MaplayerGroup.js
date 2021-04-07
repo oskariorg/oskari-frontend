@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
 
         me.id = json.id;
         me.layersModels = [];
+        me.layers = json.layers ? json.layers : null;
         me.name = json.name;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
@@ -101,6 +102,12 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         },
         setName: function (name) {
             this.name = name;
+        },
+        getLayers: function () {
+            return this.layers;
+        },
+        setLayers: function (layers) {
+            this.layers = layers;
         },
         getOrderNumber: function () {
             return this.orderNumber;

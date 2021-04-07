@@ -36,7 +36,8 @@ Oskari.registerLocalization(
                 'title': 'Ryhmittely',
                 'inspire': 'Aiheittain',
                 'organization': 'Tiedontuottajittain',
-                'noGroup' : 'Ei ryhmää'
+                'noGroup' : 'Ei ryhmää',
+                'manyLayersWarn': 'Olet lisäämässä kartalle 10 tai enemmän karttasoa. Jatketaanko?'
             },
             'layer': {
                 'tooltip': {
@@ -64,6 +65,8 @@ Oskari.registerLocalization(
                 'openLink': 'Näytä Karttatasot',
                 'closeLink': 'Piilota Karttatasot',
                 'tileText': 'Karttatasot'
-            }
+            },
+            'yes': 'kyllä',
+            'cancel': 'peruuta'
         }
     });
