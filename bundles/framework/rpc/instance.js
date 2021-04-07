@@ -1,3 +1,5 @@
+import { arrayToObject, domainMatch } from './util/RPCUtil';
+
 /**
  * @class Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance
  *
@@ -77,7 +79,7 @@ Oskari.clazz.define(
             channel.bind(
                 'handleEvent',
                 function (trans, params) {
-                    if (!me._domainMatch(trans.origin)) {
+                    if (!domainMatch(trans.origin, domain)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid domain for parent page/origin. Published domain does not match: ' + trans.origin
@@ -103,7 +105,7 @@ Oskari.clazz.define(
             channel.bind(
                 'postRequest',
                 function (trans, params) {
-                    if (!me._domainMatch(trans.origin)) {
+                    if (!domainMatch(trans.origin, domain)) {
                         throw {
                             error: 'invalid_origin',
                             message: 'Invalid origin: ' + trans.origin
@@ -193,7 +195,7 @@ Oskari.clazz.define(
                     available.push(allowedEvents[i]);
                 }
             }
-            this._allowedEvents = this.__arrayToObject(available);
+            this._allowedEvents = arrayToObject(available);
         },
         __setupAvailableRequests: function (allowedRequests) {
             var available = [];
@@ -202,58 +204,7 @@ Oskari.clazz.define(
                     available.push(allowedRequests[i]);
                 }
             }
-            this._allowedRequests = this.__arrayToObject(available);
-        },
-        /**
-         * Maps a given array to a dictionary format for easier access
-         * @private
-         * @param  {String[]} list will be used as keys in the result object. Values are boolean 'true' for each
-         * @return {Object}   object with list items as keys and bln true as values
-         */
-        __arrayToObject: function (list) {
-            var result = {};
-            for (var i = 0; i < list.length; ++i) {
-                result[list[i]] = true;
-            }
-            return result;
-        },
-
-        /**
-         * @private @method _domainMatch
-         * Used to check message origin, JSChannel only checks for an exact
-         * match where we need subdomain matches as well.
-         *
-         * @param  {string} origin Origin domain
-         *
-         * @return {Boolean} Does origin match config domain
-         */
-        _domainMatch: function (origin) {
-            if (!origin) {
-                this.log.warn('No origin in RPC message');
-                // no origin, always deny
-                return false;
-            }
-            // Allow subdomains and different ports
-            var domain = this.conf.domain;
-            if (domain === null || domain === undefined || !domain.length) {
-                // Publication is not restricted by domain
-                return true;
-            }
-
-            var url = document.createElement('a');
-            url.href = origin;
-            var originDomain = url.hostname;
-
-            var allowed = originDomain.endsWith(domain);
-            if (!allowed) {
-                // always allow from localhost
-                if (originDomain === 'localhost') {
-                    this.log.warn('Origin mismatch, but allowing localhost. Published to: ' + domain);
-                    return true;
-                }
-                this.log.warn('Origin not allowed for RPC: ' + origin);
-            }
-            return allowed;
+            this._allowedRequests = arrayToObject(available);
         },
 
         /**
