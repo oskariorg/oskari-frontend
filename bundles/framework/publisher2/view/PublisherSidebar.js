@@ -446,6 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 totalWidth = '100%',
                 totalHeight = '100%',
                 errorHandler = function () {
+                    me.progressSpinner.stop();
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
