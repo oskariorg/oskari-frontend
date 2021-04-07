@@ -255,15 +255,16 @@ export class MapModule extends AbstractMapModule {
      */
     _registerRPCFunctionsImpl () {
         const sandbox = this._sandbox;
+        const me = this;
         const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
 
         if (!rpcService) {
             return;
         }
 
-        rpcService.addFunction(function getScreenshot (transaction) {
-            getScreenshot(function (image) {
-                transaction.complete(image);
+        rpcService.addFunction('getScreenshot', function () {
+            return new Promise((resolve, reject) => {
+                me.getScreenshot(image => resolve(image));
             });
         });
     }

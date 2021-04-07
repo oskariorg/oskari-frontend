@@ -26,17 +26,26 @@ Oskari.on('app.start', function (details) {
         return;
     }
 
-    rpcService.addFunction(function example () {
+    rpcService.addFunction('example', function () {
         console.log('New added RPC function');
-        return 'example';
+        return 'my example result';
+    });
+
+    // async functions can return a promise and signal failure through reject
+    rpcService.addFunction('example2', function () {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => resolve('my async example result'), 500);
+              });
     });
 });
-
 // now you can call created example function from your published map
 channel.example(function(data) {
     console.log(data);
 });
 
+channel.example2(function(data) {
+    console.log(data);
+});
 ```
 
 ### Allowed functions

@@ -2581,7 +2581,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            rpcService.addFunction(function getAllLayers () {
+            rpcService.addFunction('getAllLayers', function () {
                 const layers = me._mapLayerService.getAllLayers();
                 const mapResolutions = me.getResolutionArray();
                 return layers.map(function (layer) {
@@ -2608,7 +2608,7 @@ Oskari.clazz.define(
                 });
             });
 
-            rpcService.addFunction(function getZoomRange () {
+            rpcService.addFunction('getZoomRange', function () {
                 return {
                     min: 0,
                     max: me.getMaxZoomLevel(),
@@ -2616,24 +2616,24 @@ Oskari.clazz.define(
                 };
             });
 
-            rpcService.addFunction(function zoomIn () {
+            rpcService.addFunction('zoomIn', function () {
                 const newZoom = me.getNewZoomLevel(1);
                 me.setZoomLevel(newZoom);
                 return newZoom;
             });
 
-            rpcService.addFunction(function zoomOut () {
+            rpcService.addFunction('zoomOut', function () {
                 const newZoom = me.getNewZoomLevel(-1);
                 me.setZoomLevel(newZoom);
                 return newZoom;
             });
 
-            rpcService.addFunction(function zoomTo (transaction, newZoom) {
+            rpcService.addFunction('zoomTo', function (newZoom) {
                 me.setZoomLevel(newZoom);
                 return me.getMapZoom();
             });
 
-            rpcService.addFunction(function getPixelMeasuresInScal (transaction, mmMeasures, scale) {
+            rpcService.addFunction('getPixelMeasuresInScal', function (mmMeasures, scale) {
                 let scalein = scale;
                 let pixelMeasures = [];
                 let zoomLevel = 0;
@@ -2661,7 +2661,7 @@ Oskari.clazz.define(
                 };
             });
 
-            rpcService.addFunction(function getMapBbox () {
+            rpcService.addFunction('getMapBbox', function () {
                 const bbox = sandbox.getMap().getBbox();
                 return {
                     bottom: bbox.bottom,
@@ -2671,7 +2671,7 @@ Oskari.clazz.define(
                 };
             });
 
-            rpcService.addFunction(function getMapPosition () {
+            rpcService.addFunction('getMapPosition', function () {
                 const sbMap = sandbox.getMap();
                 return {
                     centerX: sbMap.getX(),
@@ -2682,7 +2682,7 @@ Oskari.clazz.define(
                 };
             });
 
-            rpcService.addFunction(function setCursorStyle (transaction, cursorStyle) {
+            rpcService.addFunction('setCursorStyle', function (cursorStyle) {
                 return me.setCursorStyle(cursorStyle);
             });
         },

@@ -1356,7 +1356,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            rpcService.addFunction(function getFeatures (transaction, includeFeatures) {
+            rpcService.addFunction('getFeatures', function (includeFeatures) {
                 const features = {};
                 const layers = me.getLayerIds();
                 layers.forEach(function (id) {

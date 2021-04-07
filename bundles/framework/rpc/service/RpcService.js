@@ -42,24 +42,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
          * @method addFunction
          * Add function to RPC
          *
-         * @param func function that should be added
+         * @param {String} name function name
+         * @param {Function} func function that should be added
          */
-        addFunction: function (func) {
+        addFunction: function (name, func) {
             if (!func && typeof func !== 'function') {
                 return;
             }
 
-            const me = this;
-            if (me._availableFunctions[func.name] != null) {
-                me._log.warn('Trying add already defined RPC function (' + func.name + '), skipping.');
+            if (this._availableFunctions[name] != null) {
+                this._log.warn('Trying add already defined RPC function (' + func.name + '), skipping.');
                 return;
             }
 
-            me._availableFunctions[func.name] = func;
+            this._availableFunctions[name] = func;
 
             // bind functions
-            me.__updateAllowedFunctions(func);
-            me.__bindFunction(func);
+            this.__updateAllowedFunctions(name);
+            this.__bindFunction(name);
         },
 
         /**
@@ -76,16 +76,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
          * @private @method __bindFunction
          * Bind allowed function to channel
          *
-         * @param {Function} func
+         * @param {String} name function name
          */
-        __bindFunction: function (func) {
+        __bindFunction: function (name) {
             const me = this;
 
-            if (!me._availableFunctions[func.name]) {
+            if (!me._availableFunctions[name]) {
                 return;
             }
 
-            me.channel.bind(func.name, function (trans, params) {
+            me.channel.bind(name, function (trans, params) {
                 if (!me.instance._domainMatch(trans.origin)) {
                     // eslint-disable-next-line no-throw-literal
                     throw {
@@ -93,14 +93,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
                         message: 'Invalid origin: ' + trans.origin
                     };
                 }
-                params = params || [];
-                params.unshift(trans);
-                var value = me._availableFunctions[func.name].apply(me, params);
-                if (typeof value === 'undefined') {
-                    trans.delayReturn(true);
-                    return;
+
+                const requestedFunction = me._availableFunctions[name];
+                const errorHandler = (err) => trans.error(err, 'Error calling RPC-function: ' + name + 'with params: ' + params);
+                try {
+                    const value = requestedFunction.apply(me, params || []);
+                    if (typeof value === 'undefined') {
+                        // async functions should return promise
+                        trans.error('Error calling RPC-function: ' + name + 'with params: ' + params);
+                        return;
+                    }
+                    // check if we got a promise
+                    if (typeof value.catch === 'function') {
+                        value.catch(errorHandler);
+                    }
+                    if (typeof value.then === 'function') {
+                        trans.delayReturn(true);
+                        value.then(response => trans.complete(response));
+                        return;
+                    }
+                    // if we didn't we got the response synchronously -> return it
+                    return value;
+                } catch (err) {
+                    errorHandler(err);
                 }
-                return value;
             });
         },
 
@@ -108,13 +124,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
          * @private @method __updateAllowedFunctions
          * Update allowed functions list
          *
-         * @param {Function} func
+         * @param {String} name function name
          */
-        __updateAllowedFunctions: function (func) {
+        __updateAllowedFunctions: function (name) {
             if (this._allowedFunctionsFromConf) {
                 return;
             }
-            this._allowedFunctions.push(func.name);
+            this._allowedFunctions.push(name);
         }
 
     }, {

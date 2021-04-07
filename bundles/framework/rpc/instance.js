@@ -400,18 +400,18 @@ Oskari.clazz.define(
         registerRPCFunctions: function () {
             const me = this;
 
-            me.rpcService.addFunction(function getSupportedEvents () {
+            me.rpcService.addFunction('getSupportedEvents', function () {
                 return me._allowedEvents;
             });
-            me.rpcService.addFunction(function getSupportedFunctions () {
+            me.rpcService.addFunction('getSupportedFunctions', function () {
                 return me.rpcService.getAllowedFunctions();
             });
 
-            me.rpcService.addFunction(function getSupportedRequests () {
+            me.rpcService.addFunction('getSupportedRequests', function () {
                 return me._allowedRequests;
             });
 
-            me.rpcService.addFunction(function getInfo (transaction, clientVersion) {
+            me.rpcService.addFunction('getInfo', function (clientVersion) {
                 var sbMap = me.sandbox.getMap();
                 return {
                     version: Oskari.VERSION,
@@ -420,21 +420,21 @@ Oskari.clazz.define(
                 };
             });
 
-            me.rpcService.addFunction(function resetState () {
+            me.rpcService.addFunction('resetState', function () {
                 this.sandbox.resetState();
                 return true;
             });
 
-            me.rpcService.addFunction(function getCurrentState () {
+            me.rpcService.addFunction('getCurrentState', function () {
                 return me.sandbox.getCurrentState();
             });
 
-            me.rpcService.addFunction(function useState (transaction, state) {
+            me.rpcService.addFunction('useState', function (state) {
                 me.sandbox.useState(state);
                 return true;
             });
 
-            me.rpcService.addFunction(function sendUIEvent (transaction, bundleId, payload) {
+            me.rpcService.addFunction('sendUIEvent', function (bundleId, payload) {
                 const event = Oskari.eventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
                 return true;
