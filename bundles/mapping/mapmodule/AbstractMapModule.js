@@ -294,12 +294,18 @@ Oskari.clazz.define(
 
             this.log.debug('Starting ' + this.getName());
 
-            // listen to application started event and trigger a forced update on any remaining lazy plugins
+            // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
             Oskari.on('app.start', function (details) {
                 // force update on lazy plugins
                 // this means tell plugins to render UI with the means available
                 // if toolbar for example isn't present, most plugins should display "desktop-ui" instead of using the "mobile-ui" toolbar
                 me.startLazyPlugins(true);
+
+                // Register RPC functions
+                me.registerRPCFunctions();
+
+                // Register map module specifics RPC functions
+                me._registerRPCFunctionsImpl();
             });
 
             // register events handlers
@@ -491,6 +497,9 @@ Oskari.clazz.define(
         },
         _stopImpl: function () {
             return false;
+        },
+        _registerRPCFunctionsImpl: function () {
+
         },
         _calculateScalesImpl: Oskari.AbstractFunc('_calculateScalesImpl(resolutions)'),
         _updateSizeImpl: Oskari.AbstractFunc('_updateSizeImpl'),
@@ -2558,6 +2567,126 @@ Oskari.clazz.define(
                 Oskari.on('bundle.start', handler);
             }
         },
+
+        /**
+         * @method registerRPCFunctions
+         * Register RPC functions
+         */
+        registerRPCFunctions: function () {
+            const me = this;
+            const sandbox = this._sandbox;
+            const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+            if (!rpcService) {
+                return;
+            }
+
+            rpcService.addFunction('getAllLayers', function () {
+                const layers = me._mapLayerService.getAllLayers();
+                const mapResolutions = me.getResolutionArray();
+                return layers.map(function (layer) {
+                    if (layer.getMaxScale() && layer.getMinScale()) {
+                        const layerResolutions = me.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
+                        const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
+                        const maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name: layer.getName(),
+                            minZoom: minZoomLevel,
+                            maxZoom: maxZoomLevel
+                        };
+                    } else {
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name: layer.getName()
+                        };
+                    }
+                });
+            });
+
+            rpcService.addFunction('getZoomRange', function () {
+                return {
+                    min: 0,
+                    max: me.getMaxZoomLevel(),
+                    current: me.getMapZoom()
+                };
+            });
+
+            rpcService.addFunction('zoomIn', function () {
+                const newZoom = me.getNewZoomLevel(1);
+                me.setZoomLevel(newZoom);
+                return newZoom;
+            });
+
+            rpcService.addFunction('zoomOut', function () {
+                const newZoom = me.getNewZoomLevel(-1);
+                me.setZoomLevel(newZoom);
+                return newZoom;
+            });
+
+            rpcService.addFunction('zoomTo', function (newZoom) {
+                me.setZoomLevel(newZoom);
+                return me.getMapZoom();
+            });
+
+            rpcService.addFunction('getPixelMeasuresInScal', function (mmMeasures, scale) {
+                let scalein = scale;
+                let pixelMeasures = [];
+                let zoomLevel = 0;
+                let nextScale;
+
+                if (mmMeasures && mmMeasures.constructor === Array) {
+                    if (!scalein) {
+                        scalein = me.calculateFitScale4Measures(mmMeasures);
+                    }
+                    pixelMeasures = me.calculatePixelsInScale(mmMeasures, scalein);
+                }
+
+                const scales = me.getScaleArray();
+                scales.forEach(function (sc, index) {
+                    if ((!nextScale || nextScale > sc) && sc > scalein) {
+                        nextScale = sc;
+                        zoomLevel = index;
+                    }
+                });
+
+                return {
+                    pixelMeasures: pixelMeasures,
+                    scale: scalein,
+                    zoomLevel: zoomLevel
+                };
+            });
+
+            rpcService.addFunction('getMapBbox', function () {
+                const bbox = sandbox.getMap().getBbox();
+                return {
+                    bottom: bbox.bottom,
+                    left: bbox.left,
+                    right: bbox.right,
+                    top: bbox.top
+                };
+            });
+
+            rpcService.addFunction('getMapPosition', function () {
+                const sbMap = sandbox.getMap();
+                return {
+                    centerX: sbMap.getX(),
+                    centerY: sbMap.getY(),
+                    zoom: sbMap.getZoom(),
+                    scale: sbMap.getScale(),
+                    srsName: sbMap.getSrsName()
+                };
+            });
+
+            rpcService.addFunction('setCursorStyle', function (cursorStyle) {
+                return me.setCursorStyle(cursorStyle);
+            });
+        },
+
         /**
          * Get 1st visible image layer.
          * fallback to first visible layer

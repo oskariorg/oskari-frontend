@@ -92,10 +92,16 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            var me = this;
+            const me = this;
             me.registerVectorFormats();
             me._createConfiguredLayers();
             me._registerToFeatureService();
+
+            // listen to application started event and register RPC functions.
+            Oskari.on('app.start', function (details) {
+                // Register RPC functions
+                me.registerRPCFunctions();
+            });
         },
         /**
          * @method  @private _createConfiguredLayers Create configured layers an their styles
@@ -1336,6 +1342,32 @@ Oskari.clazz.define(
 
             var geojson = formatter.writeFeaturesObject(features);
             return geojson;
+        },
+        /**
+         * @method registerRPCFunctions
+         * Register RPC functions
+         */
+        registerRPCFunctions () {
+            const me = this;
+            const sandbox = this._sandbox;
+            const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+            if (!rpcService) {
+                return;
+            }
+
+            rpcService.addFunction('getFeatures', function (includeFeatures) {
+                const features = {};
+                const layers = me.getLayerIds();
+                layers.forEach(function (id) {
+                    if (includeFeatures === true) {
+                        features[id] = me.getLayerFeatures(id);
+                    } else {
+                        features[id] = [];
+                    }
+                });
+                return features;
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
