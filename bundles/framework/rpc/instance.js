@@ -239,18 +239,9 @@ Oskari.clazz.define(
         stop: function () {
             const me = this;
             const sandbox = this.sandbox;
-            let p;
 
-            for (p in me.eventHandlers) {
-                if (Object.prototype.hasOwnProperty.call(me.eventHandlers, p)) {
-                    sandbox.unregisterFromEventByName(me, p);
-                }
-            }
-            for (p in me.requestHandlers) {
-                if (Object.prototype.hasOwnProperty.call(me.requestHandlers, p)) {
-                    sandbox.removeRequestHandler(p, this);
-                }
-            }
+            Object.keys(me.eventHandlers).forEach(eventName => sandbox.unregisterFromEventByName(me, eventName));
+            Object.keys(me.requestHandlers).forEach(requestName => sandbox.removeRequestHandler(requestName, me));
             sandbox.unregister(this);
             this.sandbox = null;
         },
