@@ -184,14 +184,15 @@ Oskari.clazz.define(
                     if (previousPanel) {
                         previousPanel.getContainer().hide();
                     }
-                    if (selectedPanel) {
-                        if (selectedPanel.getContainer().css('display') === 'none') {
-                            selectedPanel.getContainer().show();
-                        }
+                    if (!selectedPanel) {
+                        return;
                     }
                     const { layer } = selectedPanel;
                     if (layer) {
                         this.handler.setActiveLayer(layer.getId());
+                    }
+                    if (selectedPanel.getContainer().css('display') === 'none') {
+                        selectedPanel.getContainer().show();
                     }
                 }
             );
