@@ -48,8 +48,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
          * @param {Function} func function that should be added
          */
         addFunction: function (name, func) {
-            if (!func && typeof func !== 'function') {
-                return;
+            if (!name || typeof func !== 'function') {
+                throw new Error('Tried registering function without name or implementation!');
             }
 
             if (this._availableFunctions[name] != null) {
