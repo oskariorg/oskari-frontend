@@ -83,7 +83,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
         __bindFunction: function (name) {
             const me = this;
 
-            if (!me._availableFunctions[name]) {
+            const requestedFunction = me._availableFunctions[name];
+            if (!requestedFunction) {
                 return;
             }
 
@@ -96,7 +97,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.service.RpcService',
                     };
                 }
 
-                const requestedFunction = me._availableFunctions[name];
                 const errorHandler = (err) => trans.error(err, 'Error calling RPC-function: ' + name + 'with params: ' + params);
                 try {
                     const value = requestedFunction.apply(me, params || []);
