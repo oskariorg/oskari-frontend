@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
             }
             layerList.forEach(function (openlayer) {
                 openlayer.getSource().updateParams({
-                    styles: layer.getCurrentStyle().getName()
+                    STYLES: layer.getCurrentStyle().getName()
                 });
             });
         },
