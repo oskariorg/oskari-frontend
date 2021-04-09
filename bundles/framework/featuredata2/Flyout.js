@@ -780,10 +780,11 @@ Oskari.clazz.define(
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest' // TODO: fix
             );
+            const name = this.instance.getName();
             if (gfiReqBuilder) {
                 this.instance.sandbox.request(
-                    this.instance.getName(),
-                    gfiReqBuilder(!isEnabled)
+                    name,
+                    gfiReqBuilder(!isEnabled, name)
                 );
             }
             if (!isEnabled) {

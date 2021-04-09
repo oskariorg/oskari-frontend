@@ -18,7 +18,7 @@ class ViewHandler extends StateHandler {
             features: [],
             inScale: true,
             layerIds: this._getSelectedLayerIds(),
-            selectedFeatures: {},
+            selectedFeatures: [],
             hiddenProperties: {}
         });
         this.eventHandlers = this._createEventHandlers();
@@ -81,9 +81,6 @@ class ViewHandler extends StateHandler {
 
             },
             WFSFeaturesSelectedEvent: event => {
-                if (!this.state.isActive) {
-                    return;
-                }
                 const layerId = event.getMapLayer().getId();
                 if (layerId === this.getState().layerId) {
                     this._updateSelectedFeatureIds();
@@ -121,15 +118,15 @@ class ViewHandler extends StateHandler {
         this.updateState({ features, inScale });
     }
 
-    _getVisibleFeatures () {
-        return this._getWFSPlugin().getLayerFeaturePropertiesInViewport(this.getState().layerId);
+    _getVisibleFeatures (layerId = this.getState().layerId) {
+        return this._getWFSPlugin().getLayerFeaturePropertiesInViewport(layerId);
     }
 
     setActiveLayer (layerId) {
         if (layerId === this.getState().layerId) {
             return;
         }
-        const features = this._getVisibleFeatures();
+        const features = this._getVisibleFeatures(layerId);
         this.updateState({ layerId, features });
     }
 
