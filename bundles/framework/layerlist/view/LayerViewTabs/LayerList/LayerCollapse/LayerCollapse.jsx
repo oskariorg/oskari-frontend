@@ -29,7 +29,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
             {
-                groupsData.map(group => {
+                groups.map(group => {
                     const layerIds = group.getLayers().map(lyr => lyr.getId());
                     // layerNames are used in key so renaming will update the UI
                     const layerNames = group.getLayers().map(lyr => lyr.getName());
