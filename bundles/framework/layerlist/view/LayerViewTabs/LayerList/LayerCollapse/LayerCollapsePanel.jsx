@@ -84,7 +84,7 @@ const selectGroup = (event, setVisible, checked, group, controller) => {
 
 const onGroupSelect = (event, setVisible, checked, group, controller) => { 
     // check if we need to show warning (over 10 layers inside the group)
-    if(checked && group.layers.length > 1) {
+    if(checked && group.layers.length > 10) {
         setVisible(true);
     } else {
         selectGroup(event, setVisible, !checked, group, controller);
