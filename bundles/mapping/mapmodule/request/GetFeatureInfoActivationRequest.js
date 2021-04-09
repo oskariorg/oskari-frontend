@@ -14,8 +14,9 @@ Oskari.clazz.define(
      * @param {Boolean}
      *            blnEnable true to enable, false to disable
      */
-    function (blnEnable) {
+    function (blnEnable, id) {
         this._enable = (blnEnable === true);
+        this._id = id;
     }, {
         /** @static @property __name request name */
         __name: 'MapModulePlugin.GetFeatureInfoActivationRequest',
@@ -33,6 +34,14 @@ Oskari.clazz.define(
          */
         isEnabled: function () {
             return this._enable;
+        },
+        /**
+         * @method getId
+         * Returns request id to identify enable/disable requests
+         * @return {String}
+         */
+        getId: function () {
+            return this._id;
         }
     }, {
         /**
