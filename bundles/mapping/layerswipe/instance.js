@@ -27,7 +27,13 @@ Oskari.clazz.define(
                 iconCls: 'tool-layer-swipe',
                 tooltip: this.loc('toolLayerSwipe'),
                 sticky: true,
-                callback: () => this.setActive(!this.active)
+                callback: () => {
+                    if (this.active) {
+                        this.activateDefaultMapTool();
+                    } else {
+                        this.setActive(true);
+                    }
+                }
             };
             sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
         },
@@ -36,6 +42,7 @@ Oskari.clazz.define(
             if (active) {
                 const layer = this.getTopmostLayer();
                 if (layer === null) {
+                    this.activateDefaultMapTool();
                     this.showAlert();
                     return;
                 }
@@ -57,11 +64,16 @@ Oskari.clazz.define(
             this.unregisterEventListeners();
             const layer = this.getTopmostLayer();
             if (layer === null) {
-                this.setActive(false);
+                this.activateDefaultMapTool();
                 this.showAlert();
                 return;
             }
             this.registerEventListeners(layer);
+        },
+
+        activateDefaultMapTool: function () {
+            // reset toolbar to use the default tool
+            Oskari.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
         },
 
         showAlert: function () {
@@ -71,7 +83,10 @@ Oskari.clazz.define(
         },
 
         getTopmostLayer: function () {
-            const layers = this.map.getLayers().getArray().filter(layer => layer.getVisible() && !(layer instanceof VectorLayer));
+            const layers = this.map
+                .getLayers()
+                .getArray()
+                .filter((layer) => layer.getVisible() && !(layer instanceof VectorLayer));
             return layers.length !== 0 ? layers[layers.length - 1] : null;
         },
 
@@ -106,7 +121,7 @@ Oskari.clazz.define(
         },
 
         unregisterEventListeners: function () {
-            this.eventListenerKeys.forEach(key => unByKey(key));
+            this.eventListenerKeys.forEach((key) => unByKey(key));
             this.eventListenerKeys = [];
         },
 
@@ -148,12 +163,12 @@ Oskari.clazz.define(
                     this.setActive(false);
                 }
             },
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 if (this.active) {
                     this.updateSwipeLayer();
                 }
             },
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 if (this.active) {
                     this.updateSwipeLayer();
                 }
