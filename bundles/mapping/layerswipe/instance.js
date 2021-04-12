@@ -117,14 +117,21 @@ Oskari.clazz.define(
                     containment: '#mapdiv',
                     axis: 'x',
                     drag: () => {
-                        const mapOffset = jQuery('#mapdiv').offset();
-                        const splitterOffset = jQuery('.layer-swipe-splitter').offset();
-                        this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
-                        this.map.render();
+                        this.updateMapCropping();
+                    },
+                    stop: () => {
+                        this.updateMapCropping();
                     }
                 });
             }
             return this.splitter;
+        },
+
+        updateMapCropping: function () {
+            const mapOffset = jQuery('#mapdiv').offset();
+            const splitterOffset = jQuery('.layer-swipe-splitter').offset();
+            this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
+            this.map.render();
         },
 
         showSplitter: function () {
