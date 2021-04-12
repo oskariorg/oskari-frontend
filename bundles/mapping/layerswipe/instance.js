@@ -11,6 +11,7 @@ Oskari.clazz.define(
         this.splitterWidth = 5;
         this.cropSize = null;
         this.map = null;
+        this.popupService = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
     },
@@ -19,13 +20,20 @@ Oskari.clazz.define(
 
         _startImpl: function (sandbox) {
             this.map = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMap();
+            this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             const buttonConf = {
                 iconCls: 'tool-layer-swipe',
                 tooltip: this.loc('toolLayerSwipe'),
                 sticky: true,
-                callback: () => this.setActive(!this.active)
+                callback: () => {
+                    if (this.active) {
+                        this.activateDefaultMapTool();
+                    } else {
+                        this.setActive(true);
+                    }
+                }
             };
             sandbox.request(this, addToolButtonBuilder('LayerSwipe', 'basictools', buttonConf));
         },
@@ -33,9 +41,12 @@ Oskari.clazz.define(
         setActive: function (active) {
             if (active) {
                 const layer = this.getTopmostLayer();
-                if (layer) {
-                    this.registerEventListeners(layer);
+                if (layer === null) {
+                    this.activateDefaultMapTool();
+                    this.showAlert();
+                    return;
                 }
+                this.registerEventListeners(layer);
                 this.showSplitter();
                 if (this.cropSize === null) {
                     const mapSize = this.map.getSize();
@@ -52,13 +63,30 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const layer = this.getTopmostLayer();
-            if (layer) {
-                this.registerEventListeners(layer);
+            if (layer === null) {
+                this.activateDefaultMapTool();
+                this.showAlert();
+                return;
             }
+            this.registerEventListeners(layer);
+        },
+
+        activateDefaultMapTool: function () {
+            // reset toolbar to use the default tool
+            Oskari.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+        },
+
+        showAlert: function () {
+            var popup = this.popupService.createPopup();
+            var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
+            popup.show(this.loc('alert.swipeNoRasterTitle'), this.loc('alert.swipeNoRasterMessage'), [closeBtn]);
         },
 
         getTopmostLayer: function () {
-            const layers = this.map.getLayers().getArray().filter(layer => layer.getVisible() && !(layer instanceof VectorLayer));
+            const layers = this.map
+                .getLayers()
+                .getArray()
+                .filter((layer) => layer.getVisible() && !(layer instanceof VectorLayer));
             return layers.length !== 0 ? layers[layers.length - 1] : null;
         },
 
@@ -93,7 +121,7 @@ Oskari.clazz.define(
         },
 
         unregisterEventListeners: function () {
-            this.eventListenerKeys.forEach(key => unByKey(key));
+            this.eventListenerKeys.forEach((key) => unByKey(key));
             this.eventListenerKeys = [];
         },
 
@@ -104,14 +132,21 @@ Oskari.clazz.define(
                     containment: '#mapdiv',
                     axis: 'x',
                     drag: () => {
-                        const mapOffset = jQuery('#mapdiv').offset();
-                        const splitterOffset = jQuery('.layer-swipe-splitter').offset();
-                        this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
-                        this.map.render();
+                        this.updateMapCropping();
+                    },
+                    stop: () => {
+                        this.updateMapCropping();
                     }
                 });
             }
             return this.splitter;
+        },
+
+        updateMapCropping: function () {
+            const mapOffset = jQuery('#mapdiv').offset();
+            const splitterOffset = jQuery('.layer-swipe-splitter').offset();
+            this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
+            this.map.render();
         },
 
         showSplitter: function () {
@@ -128,11 +163,15 @@ Oskari.clazz.define(
                     this.setActive(false);
                 }
             },
-            'AfterMapLayerAddEvent': function (event) {
-                this.updateSwipeLayer();
+            AfterMapLayerAddEvent: function (event) {
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
             },
-            'AfterMapLayerRemoveEvent': function (event) {
-                this.updateSwipeLayer();
+            AfterMapLayerRemoveEvent: function (event) {
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
             }
         }
     },
