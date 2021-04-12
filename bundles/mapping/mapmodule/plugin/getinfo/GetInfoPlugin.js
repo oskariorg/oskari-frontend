@@ -42,6 +42,7 @@ Oskari.clazz.define(
                 me.template[p] = jQuery(me.__templates[p]);
             }
         }
+        this._requestedDisabled = new Set(); // ids that requested plugin to be disabled
     }, {
 
         /**
@@ -67,6 +68,25 @@ Oskari.clazz.define(
             ignoredLayerTypes.add('MYPLACES');
             ignoredLayerTypes.add('USERLAYER');
             this._config.ignoredLayerTypes = Array.from(ignoredLayerTypes);
+        },
+        // @override
+        setEnabled: function (enabled, id) {
+            const ids = this._requestedDisabled;
+            // if request has id, store/remove it
+            if (id) {
+                if (enabled) {
+                    ids.delete(id);
+                } else {
+                    ids.add(id);
+                }
+            }
+            if (enabled && ids.size > 0) {
+                Oskari.log('GetInfoPlugin').debug('Skipping enable plugin!! Plugin is disabled by: ' + Array.from(ids).join());
+                return;
+            }
+            // toggle controls
+            this._toggleUIControls(enabled);
+            this._enabled = enabled;
         },
 
         _stopPluginImpl: function () {

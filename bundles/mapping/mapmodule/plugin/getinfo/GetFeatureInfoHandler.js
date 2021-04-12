@@ -31,7 +31,7 @@ Oskari.clazz.define(
                 };
                 this.getInfoPlugin.handleGetInfo(lonlat);
             } else if (request.getName() === 'MapModulePlugin.GetFeatureInfoActivationRequest') {
-                this.getInfoPlugin.setEnabled(request.isEnabled());
+                this.getInfoPlugin.setEnabled(request.isEnabled(), request.getId());
             }
         }
     }, {
