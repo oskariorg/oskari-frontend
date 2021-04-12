@@ -11,6 +11,7 @@ Oskari.clazz.define(
         this.splitterWidth = 5;
         this.cropSize = null;
         this.map = null;
+        this.popupService = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
     },
@@ -19,6 +20,7 @@ Oskari.clazz.define(
 
         _startImpl: function (sandbox) {
             this.map = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMap();
+            this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
             const buttonConf = {
@@ -33,9 +35,11 @@ Oskari.clazz.define(
         setActive: function (active) {
             if (active) {
                 const layer = this.getTopmostLayer();
-                if (layer) {
-                    this.registerEventListeners(layer);
+                if (layer === null) {
+                    this.showAlert();
+                    return;
                 }
+                this.registerEventListeners(layer);
                 this.showSplitter();
                 if (this.cropSize === null) {
                     const mapSize = this.map.getSize();
@@ -52,9 +56,18 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             const layer = this.getTopmostLayer();
-            if (layer) {
-                this.registerEventListeners(layer);
+            if (layer === null) {
+                this.setActive(false);
+                this.showAlert();
+                return;
             }
+            this.registerEventListeners(layer);
+        },
+
+        showAlert: function () {
+            var popup = this.popupService.createPopup();
+            var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
+            popup.show(this.loc('alert.swipeNoRasterTitle'), this.loc('alert.swipeNoRasterMessage'), [closeBtn]);
         },
 
         getTopmostLayer: function () {
@@ -129,10 +142,14 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerAddEvent': function (event) {
-                this.updateSwipeLayer();
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                this.updateSwipeLayer();
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
             }
         }
     },
