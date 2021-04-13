@@ -21,11 +21,10 @@ const StyledBadge = styled.div`
     background: #ffd400;
     border-radius: 4px;
     text-align: center;
-    padding: 2px 10px;
     font-size: 12px;
     display: inline;
     line-height: 20px;
-    margin-left: 8px;
+    margin-right: 10px;
     font-weight: 700;
     ${props => props.blink && css`
         animation: ${animation} ${BLINK_DURATION_IN_SECONDS}s;

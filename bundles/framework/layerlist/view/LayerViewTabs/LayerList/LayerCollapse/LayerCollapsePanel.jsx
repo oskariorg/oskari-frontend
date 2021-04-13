@@ -7,39 +7,27 @@ import { Layer } from './Layer/';
 import styled from 'styled-components';
 
 const StyledSubCollapse = styled(Collapse)`
-    border-radius: 0 !important;
-    &>div {
-        border-radius: 0 !important;
-        &:last-child {
-            padding-bottom: 2px;
-        }
-    };
-    margin-left: 25px !important ;
+    border: none;
+    border-top: 1px solid #d9d9d9;
+    padding-left: 15px !important;
 `;
 
 const StyledCollapsePanel = styled(CollapsePanel)`
     & > div:first-child {
         min-height: 22px;
     };
-    padding-left: 10px;
 `;
 
-const StyledSubCollapsePanel = styled(CollapsePanel)`
-    & > div:first-child {
-        min-height: 22px;
-    };
-    padding-left: 10px;
+const StyledCollapsePanelTools = styled.div`
+    min-width: 120px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
-    &:first-child > div {
-        padding-top: 10px;
-    }
-    &:last-child > div {
-        padding-bottom: 10px;
-    }
 `;
 
 const StyledEditGroup = styled.span`
@@ -117,11 +105,10 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
 
     return (
         <StyledSubCollapse>
-            <StyledSubCollapsePanel {...propsNeededForPanel}
+            <StyledCollapsePanel {...propsNeededForPanel}
                 header={group.getTitle()}
-                showArrow={layerRows.length > 0 || group.getGroups().length !== 0}
                 extra={
-                    <React.Fragment>
+                    <StyledCollapsePanelTools>
                             <Confirm
                                 title={<Message messageKey='grouping.manyLayersWarn'/>}
                                 visible={visible}
@@ -132,7 +119,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                                 placement='top'
                                 popupStyle={{zIndex: '999999'}}
                             >
-                                <Switch size="small" checked={active} style={{ marginRight: 5 }}
+                                <Switch size="small" checked={active}
                                     onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
                             </Confirm>
                         {
@@ -146,10 +133,11 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                             )
                         }
                         <Badge inversed={true} count={badgeText} />
-                    </React.Fragment>
+                    </StyledCollapsePanelTools>
                 }>
                 {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
-                {group.getGroups().map(subgroup => {
+                {
+                    group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
                     
@@ -157,16 +145,22 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
                     }
-                return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
-
-            }
-            )}
-            </StyledSubCollapsePanel>
+                    return (
+                        <SubCollapsePanel
+                            key={subgroup.id}
+                            active={activeGroup}
+                            group={subgroup}
+                            selectedLayerIds={selectedLayerIds}
+                            controller={controller}
+                            propsNeededForPanel={propsNeededForPanel}
+                        />
+                    );
+                    }
+                )}
+            </StyledCollapsePanel>
         </StyledSubCollapse>
     );
 };
-
 
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
@@ -190,22 +184,24 @@ const LayerCollapsePanel = (props) => {
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
-            showArrow={layerRows.length > 0 || group.getGroups().length !== 0}
             extra={
-                <React.Fragment>
-                <Confirm
-                    title={<Message messageKey='grouping.manyLayersWarn'/>}
-                    visible={visible}
-                    onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
-                    onCancel={(event) => onCancel(event, setVisible)}
-                    okText={<Message messageKey='yes'/>}
-                    cancelText={<Message messageKey='cancel'/>}
-                    placement='top'
-                    popupStyle={{zIndex: '999999'}}
-                >
-                    <Switch size="small" checked={active} style={{ marginRight: 5 }}
-                    onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
-                </Confirm>
+                <StyledCollapsePanelTools>
+                    <Confirm
+                        title={<Message messageKey='grouping.manyLayersWarn'/>}
+                        visible={visible}
+                        onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
+                        onCancel={(event) => onCancel(event, setVisible)}
+                        okText={<Message messageKey='yes'/>}
+                        cancelText={<Message messageKey='cancel'/>}
+                        placement='top'
+                        popupStyle={{zIndex: '999999'}}
+                    >
+                        <Switch
+                            size="small"
+                            checked={active}
+                            onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)}
+                        />
+                    </Confirm>
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -217,12 +213,11 @@ const LayerCollapsePanel = (props) => {
                         )
                     }
                     <Badge inversed={true} count={badgeText} />
-
-                </React.Fragment>
+                </StyledCollapsePanelTools>
             }>
-                {layerRows.length > 0 &&  <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
- 
-            {group.getGroups().map(subgroup => {
+            {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
+            {
+                group.getGroups().map(subgroup => {
                     const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
                     const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
                     
@@ -230,10 +225,17 @@ const LayerCollapsePanel = (props) => {
                     if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
                         activeGroup = true;
                     }
-                return(
-                    <SubCollapsePanel key={subgroup.id} active={activeGroup} group={subgroup} selectedLayerIds={selectedLayerIds} controller={controller} propsNeededForPanel={propsNeededForPanel}/>);
-
-            }
+                    return (
+                        <SubCollapsePanel
+                            key={subgroup.id}
+                            active={activeGroup}
+                            group={subgroup}
+                            selectedLayerIds={selectedLayerIds}
+                            controller={controller}
+                            propsNeededForPanel={propsNeededForPanel}
+                        />
+                    );
+                }
             )}
         </StyledCollapsePanel>
     );

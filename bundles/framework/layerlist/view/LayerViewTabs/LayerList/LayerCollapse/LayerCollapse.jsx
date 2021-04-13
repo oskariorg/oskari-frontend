@@ -7,18 +7,20 @@ import { Alert } from '../Alert';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
-    border-radius: 0 !important;
-    &>div {
-        border-radius: 0 !important;
+    //border-radius: 0 !important;
+    & > div {
+        //border-radius: 0 !important;
         &:last-child {
-            padding-bottom: 2px;
+            //padding-bottom: 2px;
         }
     }
 `;
 
 const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
-    padding-left: ${props => props.group.layers.length === 0 ? '27px' : '0px'};
+
 `;
+
+//    padding-left: ${props => props.group.layers.length === 0 ? '27px' : '0px'};
 
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
 
