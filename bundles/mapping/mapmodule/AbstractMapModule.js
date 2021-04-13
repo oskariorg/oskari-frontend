@@ -2633,7 +2633,7 @@ Oskari.clazz.define(
                 return me.getMapZoom();
             });
 
-            rpcService.addFunction('getPixelMeasuresInScal', function (mmMeasures, scale) {
+            rpcService.addFunction('getPixelMeasuresInScale', function (mmMeasures, scale) {
                 let scalein = scale;
                 let pixelMeasures = [];
                 let zoomLevel = 0;
