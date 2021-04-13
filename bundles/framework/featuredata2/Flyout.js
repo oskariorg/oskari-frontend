@@ -204,6 +204,9 @@ Oskari.clazz.define(
             if (this.resizable) {
                 this._enableResize();
             }
+            // update panels to add layers that are added before handler and panel container is initialized
+            // handler setState doesn't trigger _updatePanels, only add/remove layer updates panels
+            this._updatePanels(this.handler.getState().layerIds);
         },
         update: function (state, updated) {
             // some optimization for jQuery rendering
@@ -214,14 +217,17 @@ Oskari.clazz.define(
             }
             if (updated === 'layerIds') {
                 const { layerIds } = state;
-                layerIds.filter(id => !this.hasPanel(id)).forEach(id => this.createPanel(id));
-                const stringIds = layerIds.map(id => '' + id);
-                Object.keys(this.panels).filter(id => !stringIds.includes(id)).forEach(id => this.removePanel(id));
+                this._updatePanels(layerIds);
                 return;
             }
             if (state.isActive) {
                 this._renderFeatureData(state);
             }
+        },
+        _updatePanels: function (layerIds) {
+            layerIds.filter(id => !this.hasPanel(id)).forEach(id => this.createPanel(id));
+            const stringIds = layerIds.map(id => '' + id);
+            Object.keys(this.panels).filter(id => !stringIds.includes(id)).forEach(id => this.removePanel(id));
         },
         turnOnClickOff: function () {
             var me = this;
