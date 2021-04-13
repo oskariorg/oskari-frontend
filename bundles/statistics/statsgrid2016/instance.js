@@ -85,6 +85,8 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
 
+            this.addVectorLayer();
+
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
                 // Crete indicators tab to personal data view if personaldata bundle exists
@@ -236,6 +238,27 @@ Oskari.clazz.define(
             var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
             service.removeGroup('indicators');
         },
+        /**
+         * Add vectorlayer to map for features. Layer is empty on module start.
+         */
+        addVectorLayer: function () {
+            const locale = this.getLocalization();
+            this.sandbox.postRequestByName(
+                'VectorLayerRequest',
+                [
+                    {
+                        layerId: this._layerId,
+                        showLayer: true,
+                        layerName: locale.layer.name,
+                        layerInspireName: locale.layer.inspireName,
+                        layerOrganizationName: locale.layer.organizationName,
+                        layerPermissions: {
+                            publish: 'publication_permission_ok'
+                        }
+                    }
+                ]
+            );
+        },
         eventHandlers: {
             'StatsGrid.StateChangedEvent': function (evt) {
                 if (evt.isReset()) {
@@ -298,7 +321,7 @@ Oskari.clazz.define(
                     this.getTile().showExtensions();
                 }
             },
-            AfterMapLayerRemoveEvent: function (event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 var layer = event.getMapLayer();
                 if (!layer || layer.getId() !== this._layerId || event._creator === this.getName()) {
                     return;
@@ -310,7 +333,7 @@ Oskari.clazz.define(
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              *
              */
-            MapLayerEvent: function (event) {
+            'MapLayerEvent': function (event) {
                 if (!this.getTile()) {
                     return;
                 }
@@ -328,7 +351,7 @@ Oskari.clazz.define(
                     this.__setupLayerTools();
                 }
             },
-            MapLayerVisibilityChangedEvent: function (event) {
+            'MapLayerVisibilityChangedEvent': function (event) {
                 var layer = event.getMapLayer();
                 if (!layer || layer.getId() !== this._layerId) {
                     return;
@@ -336,10 +359,10 @@ Oskari.clazz.define(
                 this.updateClassficationViewVisibility();
                 this.updateSeriesControlVisibility();
             },
-            FeatureEvent: function (evt) {
+            'FeatureEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
-            AfterChangeMapLayerOpacityEvent: function (evt) {
+            'AfterChangeMapLayerOpacityEvent': function (evt) {
                 if (evt.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
