@@ -7,29 +7,25 @@ import { Alert } from '../Alert';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
-    //border-radius: 0 !important;
+    border-radius: 0 !important;
     & > div {
-        //border-radius: 0 !important;
+        border-radius: 0 !important;
         &:last-child {
-            //padding-bottom: 2px;
+            padding-bottom: 2px;
         }
     }
 `;
 
-const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
-
-`;
-
-//    padding-left: ${props => props.group.layers.length === 0 ? '27px' : '0px'};
-
 const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
-
 
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
     return (
-        <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
+        <StyledCollapse
+            bordered activeKey={openGroupTitles}
+            onChange={keys => controller.updateOpenGroupTitles(keys)}
+        >
             {
                 groups.map(group => {
                     const layerIds = group.getLayers().map(lyr => lyr.getId());
@@ -45,7 +41,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
                     return (
-                        <StyledLayerCollapsePanel key={group.getId() + layerNames.join()}
+                        <LayerCollapsePanel key={group.getId() + layerNames.join()}
                             trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}

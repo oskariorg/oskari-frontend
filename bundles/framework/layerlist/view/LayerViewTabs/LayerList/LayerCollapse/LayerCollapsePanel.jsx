@@ -19,9 +19,8 @@ const StyledCollapsePanel = styled(CollapsePanel)`
 `;
 
 const StyledCollapsePanelTools = styled.div`
-    min-width: 120px;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
 `;
 
@@ -33,6 +32,12 @@ const StyledListItem = styled(ListItem)`
 const StyledEditGroup = styled.span`
     padding-right: 5px;
 `;
+
+const StyledSwitch = styled(Switch)`
+    margin-left: 5px;
+    margin-right: 5px;
+`;
+
 
 const renderLayer = ({ model, even, selected, controller }) => {
     const itemProps = { model, even, selected, controller };
@@ -109,6 +114,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                 header={group.getTitle()}
                 extra={
                     <StyledCollapsePanelTools>
+                            <Badge inversed={true} count={badgeText} />
                             <Confirm
                                 title={<Message messageKey='grouping.manyLayersWarn'/>}
                                 visible={visible}
@@ -119,7 +125,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                                 placement='top'
                                 popupStyle={{zIndex: '999999'}}
                             >
-                                <Switch size="small" checked={active}
+                                <StyledSwitch size="small" checked={active}
                                     onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
                             </Confirm>
                         {
@@ -132,7 +138,6 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                                 </Tooltip>
                             )
                         }
-                        <Badge inversed={true} count={badgeText} />
                     </StyledCollapsePanelTools>
                 }>
                 {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
@@ -186,6 +191,7 @@ const LayerCollapsePanel = (props) => {
             header={group.getTitle()}
             extra={
                 <StyledCollapsePanelTools>
+                    <Badge inversed={true} count={badgeText} />
                     <Confirm
                         title={<Message messageKey='grouping.manyLayersWarn'/>}
                         visible={visible}
@@ -196,7 +202,7 @@ const LayerCollapsePanel = (props) => {
                         placement='top'
                         popupStyle={{zIndex: '999999'}}
                     >
-                        <Switch
+                        <StyledSwitch
                             size="small"
                             checked={active}
                             onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)}
@@ -212,7 +218,6 @@ const LayerCollapsePanel = (props) => {
                             </Tooltip>
                         )
                     }
-                    <Badge inversed={true} count={badgeText} />
                 </StyledCollapsePanelTools>
             }>
             {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
