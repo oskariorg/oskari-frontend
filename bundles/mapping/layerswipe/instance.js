@@ -2,6 +2,11 @@ import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
 import VectorLayer from 'ol/layer/Vector';
 
+const SwipeAlertTypes = {
+    NO_RASTER: 'noRaster',
+    NOT_VISIBLE: 'notVisible'
+};
+
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.layerswipe.LayerSwipeBundleInstance',
 
@@ -11,9 +16,19 @@ Oskari.clazz.define(
         this.splitterWidth = 5;
         this.cropSize = null;
         this.map = null;
+        this.layer = null;
         this.popupService = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
+
+        this.alertTitles = {
+            [SwipeAlertTypes.NO_RASTER]: this.loc('alert.swipeNoRasterTitle'),
+            [SwipeAlertTypes.NOT_VISIBLE]: this.loc('alert.swipeLayerNotVisibleTitle')
+        };
+        this.alertMessages = {
+            [SwipeAlertTypes.NO_RASTER]: this.loc('alert.swipeNoRasterMessage'),
+            [SwipeAlertTypes.NOT_VISIBLE]: this.loc('alert.swipeLayerNotVisibleMessage')
+        };
     },
     {
         __name: 'LayerSwipe',
@@ -40,13 +55,10 @@ Oskari.clazz.define(
 
         setActive: function (active) {
             if (active) {
-                const layer = this.getTopmostLayer();
-                if (layer === null) {
-                    this.activateDefaultMapTool();
-                    this.showAlert();
+                const foundLayer = this.updateSwipeLayer();
+                if (!foundLayer) {
                     return;
                 }
-                this.registerEventListeners(layer);
                 this.showSplitter();
                 if (this.cropSize === null) {
                     const mapSize = this.map.getSize();
@@ -62,13 +74,17 @@ Oskari.clazz.define(
 
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
-            const layer = this.getTopmostLayer();
-            if (layer === null) {
+            this.layer = this.getTopmostLayer();
+            if (this.layer === null) {
                 this.activateDefaultMapTool();
-                this.showAlert();
-                return;
+                this.showAlert(SwipeAlertTypes.NO_RASTER);
+                return false;
             }
-            this.registerEventListeners(layer);
+            if (!this.layer.getVisible()) {
+                this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+            }
+            this.registerEventListeners();
+            return true;
         },
 
         activateDefaultMapTool: function () {
@@ -76,22 +92,27 @@ Oskari.clazz.define(
             Oskari.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
         },
 
-        showAlert: function () {
-            var popup = this.popupService.createPopup();
-            var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
-            popup.show(this.loc('alert.swipeNoRasterTitle'), this.loc('alert.swipeNoRasterMessage'), [closeBtn]);
+        showAlert: function (alertType) {
+            const title = this.alertTitles[alertType];
+            const message = this.alertMessages[alertType];
+            const popup = this.popupService.createPopup();
+            const closeBtn = popup.createCloseButton(this.loc('alert.ok'));
+            popup.show(title, message, [closeBtn]);
         },
 
         getTopmostLayer: function () {
             const layers = this.map
                 .getLayers()
                 .getArray()
-                .filter((layer) => layer.getVisible() && !(layer instanceof VectorLayer));
+                .filter((layer) => !(layer instanceof VectorLayer));
             return layers.length !== 0 ? layers[layers.length - 1] : null;
         },
 
-        registerEventListeners: function (layer) {
-            const prerenderKey = layer.on('prerender', (event) => {
+        registerEventListeners: function () {
+            if (this.layer === null) {
+                return;
+            }
+            const prerenderKey = this.layer.on('prerender', (event) => {
                 const ctx = event.context;
                 if (!this.active) {
                     ctx.restore();
@@ -114,7 +135,7 @@ Oskari.clazz.define(
                 ctx.clip();
             });
             this.eventListenerKeys.push(prerenderKey);
-            const postrenderKey = layer.on('postrender', (event) => {
+            const postrenderKey = this.layer.on('postrender', (event) => {
                 event.context.restore();
             });
             this.eventListenerKeys.push(postrenderKey);
@@ -163,14 +184,24 @@ Oskari.clazz.define(
                     this.setActive(false);
                 }
             },
-            AfterMapLayerAddEvent: function (event) {
+            'AfterMapLayerAddEvent': function (event) {
                 if (this.active) {
                     this.updateSwipeLayer();
                 }
             },
-            AfterMapLayerRemoveEvent: function (event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 if (this.active) {
                     this.updateSwipeLayer();
+                }
+            },
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
+            },
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (!this.layer.getVisible()) {
+                    this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
                 }
             }
         }
