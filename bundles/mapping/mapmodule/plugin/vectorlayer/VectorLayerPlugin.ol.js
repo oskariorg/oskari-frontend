@@ -568,7 +568,7 @@ Oskari.clazz.define(
                 if (!mapLayerService.findMapLayer(layer.getId())) {
                     mapLayerService.addLayer(layer);
                 }
-                if (!this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId()) || options.showLayer !== 'registerOnly') {
+                if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
                     var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     this._sandbox.request(this, request);
                 }
