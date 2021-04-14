@@ -248,7 +248,7 @@ Oskari.clazz.define(
                 [
                     {
                         layerId: this._layerId,
-                        showLayer: true,
+                        showLayer: 'registerOnly',
                         layerName: locale.layer.name,
                         layerInspireName: locale.layer.inspireName,
                         layerOrganizationName: locale.layer.organizationName,
