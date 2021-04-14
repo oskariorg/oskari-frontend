@@ -129,8 +129,24 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
     _createEventHandlers () {
         return {
-            AfterMapMoveEvent: () => this._updateCurrentViewportBbox()
+            AfterMapMoveEvent: () => this._updateCurrentViewportBbox(),
+            MapSizeChangedEvent: () => {
+                const isMobileCurrent = Oskari.util.isMobile();
+                const isMobilePrevious = this._getMobileMode();
+                if (isMobilePrevious !== isMobileCurrent) {
+                    this._setMobileMode(isMobileCurrent);
+                    this.redrawUI(isMobileCurrent, true);
+                }
+            }
         };
+    }
+
+    _getMobileMode () {
+        return this._isMobile;
+    }
+
+    _setMobileMode (isMobile) {
+        this._isMobile = isMobile;
     }
 
     _updateCurrentViewportBbox () {
