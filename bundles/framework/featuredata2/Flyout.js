@@ -539,9 +539,6 @@ Oskari.clazz.define(
                 this.calculateSize();
             }
 
-            // Extra header message on top of grid
-            // TODO: add header for analysis
-            // this._appendHeaderMessage(panel, locales, layer);
             if (!panel.selectedFirstCheckbox) {
                 panel.selectedFirstCheckbox = this.createShowSelectedFirst(grid);
             }
@@ -556,6 +553,8 @@ Oskari.clazz.define(
                 checkboxEl.css('margin-top', '7px');
                 gridToolsEl.append(checkboxEl);
             }
+            // Extra header message on top of grid
+            this._appendHeaderMessage(panel, layer);
         },
         createGrid: function (layer) {
             const grid = Oskari.clazz.create(
@@ -849,43 +848,37 @@ Oskari.clazz.define(
          * Add message text over tab data grid, if analysislayer
          * @private
          * @param  {Oskari.userinterface.component.TabPanel} panel
-         * @param  {Array} locales localized field names
          * @param  {String} layer  Oskari layer
          */
-        _appendHeaderMessage: function (panel, locales, layer) {
-            var footer = this.template.wrapper.clone();
-            var sandbox = this.instance.getSandbox();
-            var inputid;
-            var inputlayer;
-            const loc = this.instance.getLocalization();
-            var message;
+        _appendHeaderMessage: function (panel, layer) {
             // clean up the old headermessage in case there was one
             jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
-            if (!loc || !layer || !layer.isLayerOfType('analysislayer')) {
+            if (!layer || !layer.isLayerOfType('analysislayer')) {
                 return;
             }
             // Extract analysis input layer id
-            inputid = layer.getId().split('_')[1];
-            inputlayer = sandbox.findMapLayerFromAllAvailable(inputid);
+            const inputid = layer.getId().split('_')[1];
+            const inputlayer = this.instance.getSandbox().findMapLayerFromAllAvailable(inputid);
+            let message;
             if (inputlayer && inputlayer.getLayerType().toUpperCase() === 'WFS') {
-                if (inputlayer.getWpsLayerParams()) {
-                    if (inputlayer.getWpsLayerParams().no_data) {
-                        message = loc('gridFooter.noDataCommonMessage') + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
-                        if (locales) {
-                            // TODO: better management for recognasing private data messages
-                            _.forEach(locales, function (field) {
-                                if (field === loc.aggregateColumnField) {
-                                    message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
-                                } else if (field === 'Muutos_t2-t1') {
-                                    message += ' ' + loc.differenceMessage + ' -111111111.';
-                                }
-                            });
+                const noData = inputlayer.getWpsLayerParams().no_data;
+                if (noData) {
+                    message = this.instance.loc('gridFooter.noDataCommonMessage') + ' (' + noData + ').';
+                    const locales = Object.values(layer.getPropertyLabels());
+                    const aggregateLoc = this.instance.loc('gridFooter.aggregateColumnField');
+                    // TODO: better management for recognasing private data messages
+                    locales.forEach(field => {
+                        if (field === aggregateLoc) {
+                            message = this.instance.loc('gridFooter.noDataMessage') + ' (' + noData + ').';
+                        } else if (field === 'Muutos_t2-t1') {
+                            message += ' ' + this.instance.loc('gridFooter.differenceMessage') + ' -111111111.';
                         }
-                    }
+                    });
                 }
             }
 
             if (message) {
+                var footer = this.template.wrapper.clone();
                 // insert header text into dom before tabcontent (=always visible when content scrolling)
                 jQuery(panel.html).before(footer.html(message));
             }
