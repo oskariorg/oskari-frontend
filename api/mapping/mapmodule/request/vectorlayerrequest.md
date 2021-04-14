@@ -19,7 +19,7 @@ The request takes one parameter, options.
 | layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. | `'MY_VECTOR_LAYER'` |
 | layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). | `'Inspire theme name'` |
 | layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). | `'Organization name'` |
-| showLayer | boolean | Adds layer to layer selector as a selected map layer. | `true` |
+| showLayer | boolean / string | Adds layer to layer selector as a selected map layer or if set to `registerOnly` only adds layer to layer selector list without adding it to the map/selection. | `true` |
 | opacity | number | 0-100 | `80` |
 | layerName | string | Name | `'Layer name'` |
 | layerDescription | string | Description | `'Description text'` | 
