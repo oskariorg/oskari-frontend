@@ -21,6 +21,9 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
 
+        this.alertTimer = null;
+        this.alertDebounceTime = 500;
+
         this.alertTitles = {
             [SwipeAlertTypes.NO_RASTER]: this.loc('alert.swipeNoRasterTitle'),
             [SwipeAlertTypes.NOT_VISIBLE]: this.loc('alert.swipeLayerNotVisibleTitle')
@@ -55,8 +58,8 @@ Oskari.clazz.define(
 
         setActive: function (active) {
             if (active) {
-                const foundLayer = this.updateSwipeLayer();
-                if (!foundLayer) {
+                this.updateSwipeLayer();
+                if (this.layer === null) {
                     return;
                 }
                 this.showSplitter();
@@ -75,16 +78,27 @@ Oskari.clazz.define(
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             this.layer = this.getTopmostLayer();
-            if (this.layer === null) {
-                this.activateDefaultMapTool();
-                this.showAlert(SwipeAlertTypes.NO_RASTER);
-                return false;
+
+            if (this.alertTimer) {
+                clearTimeout(this.alertTimer);
             }
+            if (this.layer === null) {
+                // When switching the background map, multiple events including
+                // remove, add and re-arrange will be triggered in order. The remove
+                // layer event causes the NO_RASTER alert to be shown when the
+                // background map layer itself swipe layer. Using a timer to delay
+                // the swipe tool deactivation and alert.
+                this.alertTimer = setTimeout(() => {
+                    this.activateDefaultMapTool();
+                    this.showAlert(SwipeAlertTypes.NO_RASTER);
+                }, this.alertDebounceTime);
+                return;
+            }
+
             if (!this.layer.getVisible()) {
                 this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
             }
             this.registerEventListeners();
-            return true;
         },
 
         activateDefaultMapTool: function () {
@@ -200,7 +214,7 @@ Oskari.clazz.define(
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                if (!this.layer.getVisible()) {
+                if (this.active && !this.layer.getVisible()) {
                     this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
                 }
             }
