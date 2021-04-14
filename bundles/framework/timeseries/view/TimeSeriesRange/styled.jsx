@@ -77,8 +77,6 @@ export const ColFixed = styled.div`
 `;
 
 export const YearInput = styled(NumberInput)`
-    margin-left: 18px;
-
     .ant-input-number-handler-wrap {
         opacity: 1;
     }
