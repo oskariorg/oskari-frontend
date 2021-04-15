@@ -31,7 +31,9 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
     const isQueryable = layer.attributes.isQueryable || layer.capabilities.isQueryable;
     return (
         <Fragment>
-            <LayerGeneralInfo layer={layer} />
+            { !layer.isNew &&
+                <LayerGeneralInfo layer={layer} />
+            }
             { propertyFields.includes(CAPABILITIES) &&
                 <Capabilities layer={layer} controller={controller} />
             }
