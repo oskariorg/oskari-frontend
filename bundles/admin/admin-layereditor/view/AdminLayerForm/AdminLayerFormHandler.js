@@ -27,7 +27,6 @@ class UIHandler extends StateHandler {
             versions: [],
             propertyFields: [],
             capabilities: {},
-            messages: [],
             loading: false,
             tab: DEFAULT_TAB,
             credentialsCollapseOpen: false,
@@ -457,16 +456,6 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    setMessage (key, type, args) {
-        this.updateState({
-            messages: [{ key, type, args }]
-        });
-    }
-
-    setMessages (messages) {
-        this.updateState({ messages });
-    }
-
     setTab (tab) {
         this.updateState({ tab });
     }
@@ -536,7 +525,6 @@ class UIHandler extends StateHandler {
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
     fetchLayer (id, keepCapabilities = false) {
-        this.clearMessages();
         if (!id) {
             // adding new layer
             this.resetLayer();
@@ -951,9 +939,9 @@ class UIHandler extends StateHandler {
                 const { capabilities } = admin;
                 layer.capabilities = capabilities;
                 this.updateState({
-                    layer,
-                    messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
+                    layer
                 });
+                Messaging.success(getMessage('capabilities.updatedSuccesfully'));
             } else {
                 if (error) {
                     updateFailed(Object.values(error)[0]);
@@ -1014,12 +1002,6 @@ class UIHandler extends StateHandler {
 
     isLoading () {
         return this.loadingCount > 0;
-    }
-
-    clearMessages () {
-        this.updateState({
-            messages: []
-        });
     }
 
     clearCredentialsCollapse () {
@@ -1089,8 +1071,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setLayerUrl',
     'setLegendUrl',
     'setLocalizedNames',
-    'setMessage',
-    'setMessages',
     'setMetadataIdentifier',
     'setMinAndMaxScale',
     'setOpacity',

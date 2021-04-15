@@ -46,7 +46,6 @@ const AdminLayerForm = ({
     versions,
     layer,
     propertyFields,
-    messages = [],
     tab,
     onCancel,
     onDelete,
@@ -65,11 +64,6 @@ const AdminLayerForm = ({
         validPermissions = permissionValidator(layer);
     }
     return (<StyledRoot>
-        { messages.map(({ key, type, args }) =>
-            <StyledAlert key={key} type={type} message={
-                <Message messageKey={key} messageArgs={args}/>
-            }/>
-        )}
         <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
@@ -137,7 +131,6 @@ AdminLayerForm.propTypes = {
     versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
