@@ -1,4 +1,4 @@
-import { FeatureDataHandler, PROPERTY_NAMES, DEFAULT_HIDDEN_FIELDS } from './view/FeatureDataHandler';
+import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS } from './view/FeatureDataHandler';
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
  *
@@ -518,27 +518,21 @@ Oskari.clazz.define(
             flyoutContent.find('.grid-tools').remove();
             panelContent.empty();
 
+            const model = this.createModel(layer, features);
             let { grid } = panel;
             if (!grid) {
-                grid = this.createGrid(layer);
+                grid = this.createGrid(layer, model);
                 panel.grid = grid;
             }
-            const model = this.createModel(layer, features);
-            this.updateGridProperties(layer, grid, model);
+            grid.setDataModel(model);
+
             const gridEl = jQuery('<div class="featuredata2-grid"></div>');
             panelContent.append(gridEl);
             grid.renderTo(gridEl, null, panel.getContainer().parent());
 
             // Grid opacity
             this.setGridOpacity(layerId, 1.0);
-
             this.selectGridValues(layerId, selectedFeatures);
-
-            // TODO: is resized really needed??
-            if (!this.resized) {
-                this.calculateSize();
-            }
-
             if (!panel.selectedFirstCheckbox) {
                 panel.selectedFirstCheckbox = this.createShowSelectedFirst(grid);
             }
@@ -555,8 +549,11 @@ Oskari.clazz.define(
             }
             // Extra header message on top of grid
             this._appendHeaderMessage(panel, layer);
+            if (!this.resized) {
+                this.calculateSize();
+            }
         },
-        createGrid: function (layer) {
+        createGrid: function (layer, model) {
             const grid = Oskari.clazz.create(
                 'Oskari.userinterface.component.Grid',
                 this.instance.loc('columnSelectorTooltip')
@@ -587,26 +584,22 @@ Oskari.clazz.define(
                     layer.getPermission('download') === 'download_permission_ok'
                 );
             }
+            const dataSource = typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
+            // Data source & metadata link
+            grid.setDataSource(dataSource);
+            grid.setMetadataLink(layer.getMetadataIdentifier());
+            // localizations
+            DEFAULT_PROPERTY_LABELS.forEach((value, key) => grid.setColumnUIName(key, value));
+            Object.entries(layer.getPropertyLabels()).forEach(([key, value]) => grid.setColumnUIName(key, value));
+
+            const visibleFields = model.getFields().filter(field => !DEFAULT_HIDDEN_FIELDS.includes(field));
+            visibleFields.forEach(field => grid.setNumericField(field, this._fixedDecimalCount));
+            grid.setVisibleFields(visibleFields);
             // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
             if (layer.isManualRefresh() && allowLocateOnMap) {
                 this.createLocateMapColumn(grid);
             }
             return grid;
-        },
-        updateGridProperties: function (layer, grid, model) {
-            // Data source & metadata link
-            const dataSource = typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
-            grid.setDataSource(dataSource);
-            grid.setMetadataLink(layer.getMetadataIdentifier());
-            // localizations
-            PROPERTY_NAMES.forEach((key, value) => grid.setColumnUIName(key, value));
-            Object.entries(layer.getPropertyLabels()).forEach(([key, value]) => grid.setColumnUIName(key, value));
-            // TODO fix hidden fields handling. In createGrid or getState
-            // const hidden = this.handler.getState().hiddenProperties[layer.getId()];
-            const visibleFields = model.getFields().filter(field => !DEFAULT_HIDDEN_FIELDS.includes(field));
-            visibleFields.forEach(field => grid.setNumericField(field, this._fixedDecimalCount));
-            grid.setVisibleFields(visibleFields);
-            grid.setDataModel(model);
         },
         createLocateMapColumn: function (grid) {
             // custom renderer for locating feature on map

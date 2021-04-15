@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 export const DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
-export const PROPERTY_NAMES = new Map([
+export const DEFAULT_PROPERTY_LABELS = new Map([
     ['__fid', 'ID'],
     ['__centerX', 'X'],
     ['__centerY', 'Y']
