@@ -1,42 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { Row, Col, Card } from 'antd';
+import { Row, Col } from 'antd';
 import styled from 'styled-components';
 
-const InfoRow = styled(Row)`
-    margin-bottom: 20px;
-`;
 
-const TextLine = styled('div')`
-    display: block;
-
-    span:last-child {
-        margin: 0 0 0 20px;
-    }
-`;
-
-const InfoCard = styled(Card)`
-    .ant-card-body {
-        padding: 5px 12px;
-    }
-
-    span {
-        display: block;
-        margin: 0 20px 0 0;
-    }
-
-    .ant-col:last-child {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    }
-`;
-
-const LeftColumn = styled(Col)`
-    &:first-child {
-        padding: 5px 0 0 0;
-    }
+const StyledRoot = styled('div')`
+    padding-bottom: 20px;
 `;
 
 const dateLocale = 'fi-FI'; // we are not using here other locales than Finnish so we can hard core it into constant variable
@@ -76,36 +46,20 @@ export const LayerGeneralInfo = ({ layer }) => {
     const updated = formatTimestamp(layer.updated);
 
     return (
-        <InfoRow>
-            <LeftColumn span={ 12 }>
-                <TextLine>
-                    <Message messageKey='fields.layerId' />
-                </TextLine>
-                <TextLine>
-                    <Message messageKey='fields.created' />
-                </TextLine>
-                <TextLine>
-                    <Message messageKey='fields.updated' />
-                </TextLine>
-            </LeftColumn>
-
-            <Col span={ 12 }>
-                <InfoCard>
-                    <Row>
-                        <Col>
-                            <span> { layer.id } </span>
-                            <span> { created.time }</span>
-                            <span> { updated.time }</span>
-                        </Col>
-                        <Col>
-                            <span> </span>
-                            <span>{ created.date }</span>
-                            <span>{ updated.date }</span>
-                        </Col>
-                    </Row>
-                </InfoCard>
-            </Col>
-        </InfoRow>
+        <StyledRoot>
+            <Row>
+                <Col span={ 12 }><Message messageKey='fields.layerId' /></Col>
+                <Col span={ 12 }>{ layer.id }</Col>
+            </Row>
+            <Row>
+                <Col span={ 12 }><Message messageKey='fields.created' /></Col>
+                <Col span={ 12 }>{ created.date } { created.time }</Col>
+            </Row>
+            <Row>
+                <Col span={ 12 }><Message messageKey='fields.updated' /></Col>
+                <Col span={ 12 }>{ updated.date } { updated.time }</Col>
+            </Row>
+        </StyledRoot>
     );
 };
 
