@@ -951,9 +951,9 @@ class UIHandler extends StateHandler {
                 const { capabilities } = admin;
                 layer.capabilities = capabilities;
                 this.updateState({
-                    layer,
-                    messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
+                    layer
                 });
+                Messaging.success(getMessage('capabilities.updatedSuccesfully'));
             } else {
                 if (error) {
                     updateFailed(Object.values(error)[0]);
