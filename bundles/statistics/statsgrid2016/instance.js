@@ -322,11 +322,8 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== this._layerId || event._creator === this.getName()) {
-                    return;
-                }
-                this.statsService.getStateService().resetState();
+                const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
+                this.getSandbox().notifyAll(eventBuilder(true));
             },
             /**
              * @method MapLayerEvent
