@@ -99,7 +99,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
                         versions={versions}
-                        messages={messages}
                         rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
                         validators={this.uiHandler.getValidatorFunctions(layer.type)}
                         validationErrors={this.uiHandler.validateUserInputValues(layer)}
