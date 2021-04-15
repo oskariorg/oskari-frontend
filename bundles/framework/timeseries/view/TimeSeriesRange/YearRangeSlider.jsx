@@ -23,7 +23,7 @@ export const YearRangeSlider = (props) => {
     // data years are also marks on the range slider but they are represented
     // as small circles on the timeline (via css styling)
     dataYears.filter((year) => !marks[year]).forEach((year) => (marks[year] = ''));
-    return <StyledRangeSlider {...props} marks={marks} min={start} max={end} />;
+    return <StyledRangeSlider {...props} tooltipVisible marks={marks} min={start} max={end} />;
 };
 
 YearRangeSlider.propTypes = {
