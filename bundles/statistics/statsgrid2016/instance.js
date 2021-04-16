@@ -351,6 +351,8 @@ Oskari.clazz.define(
             'AfterMapLayerAddEvent': function (event) {
                 if (event.getMapLayer().getId() === this._layerId) {
                     this.regionsetViewer.render();
+                    this.updateClassficationViewVisibility();
+                    this.updateSeriesControlVisibility();
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
