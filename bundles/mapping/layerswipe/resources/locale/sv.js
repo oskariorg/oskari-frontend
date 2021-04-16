@@ -6,7 +6,9 @@ Oskari.registerLocalization({
         alert: {
             ok: 'OK',
             swipeNoRasterTitle: 'Inget kartlager i rasterformat har valts för jämföring',
-            swipeNoRasterMessage: 'Lägg till raster kartlager i kartvyn.'
+            swipeNoRasterMessage: 'Lägg till raster kartlager i kartvyn.',
+            swipeLayerNotVisibleTitle: 'Jämförelse av kartlager fungerar inte',
+            swipeLayerNotVisibleMessage: 'Den kartlagret högst uppe kan inte ses i vyn.'
         }
     }
 });
