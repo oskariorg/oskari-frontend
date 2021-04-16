@@ -108,13 +108,14 @@ const getDataYearStyles = (props) => {
                 &:hover {
                     :after {
                         content: '${year}';
-                        color: ${primaryColor};
+                        color: #ffffff;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-weight: bold;
-                        font-size: 700;
-                        padding-top: 16px;
+                        font-size: 14px;
+                        font-variant: tabular-nums;
+                        font-feature-settings: 'tnum';
+                        padding-top: 20px;
                     }
                 }
             }
