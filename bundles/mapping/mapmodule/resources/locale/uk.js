@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Результати пошуку",
                 "close": "Закрити результати пошуку",
                 "noresults": "Нічого не знайдено",
-                "toomanyresults": "Знайдено більше 100 результатів. Будь ласка, уточніть пошук",
+                "searchResultCount": "Отримано {count} результати пошуку.",
+                "searchMoreResults": "Знайдено більше {count} результатів. Будь ласка, уточніть пошук",
                 "column_name": "Назва",
                 "column_village": "Муніципалітет",
                 "column_type": "Тип"

@@ -16,6 +16,10 @@ Oskari.registerLocalization(
                 "privateTooltip": "Detta kartlager är privat. Klicka här för att publicera den.",
                 "publicTooltip": "Detta kartlager är offentlig. Klicka här för att avpublicera det."
             },
+            "export": {
+                "title":"Ladda ner",
+                "tooltip": "Ladda ner kartlägret i JSON format"
+            },
             "addCategoryFormButton": "Nytt kartlager",
             "addCategory": "Lägg till kartlagret",
             "editCategory": "Redigera kartlagret",
@@ -122,7 +126,8 @@ Oskari.registerLocalization(
             "category": {
                 "label": "Kartlager",
                 "newLayer": "Skapa ett nytt kartlager",
-                "choose": "eller välja ett av dina befintliga kartlager:"
+                "choose": "Välja ett av dina befintliga kartlager:",
+                "creatingNew": "Skapa ny kartlager från Mina uppgifter",
             },
             "imagelink": {
                 "placeholder": "Länk till bilden",

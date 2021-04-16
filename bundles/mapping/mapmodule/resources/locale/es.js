@@ -45,7 +45,8 @@ Oskari.registerLocalization(
                 "title": "Resultados de la búsqueda",
                 "close": "Cerrar resultados de búsqueda",
                 "noresults": "No se encontraron resultados. Por favor, afine su búsqueda",
-                "toomanyresults": "Más de 100 resultados encontrados. Por favor, afine su búsqueda",
+                "searchResultCount": "La búsqueda devolvió {count} resultados",
+                "searchMoreResults": "Más de {count} resultados encontrados. Por favor, afine su búsqueda",
                 "column_name": "Nombre",
                 "column_village": "Municipio",
                 "column_type": "Tipo"

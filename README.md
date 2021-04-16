@@ -12,7 +12,7 @@ Oskari frontend applications are built using Webpack.
 
 ## Preparations
 
-Make sure you have at least Node 8.x / NPM 5.x. 
+Make sure you have at least Node 10.x / NPM 5.x. 
 
 * Run `npm install` in the frontend framework repository root.
 * Run `npm install` in the frontend application repository root.
@@ -54,6 +54,21 @@ Any customized application should use the [sample-server-extension](https://gith
 You can use [sample-application](https://github.com/oskariorg/sample-application) template to create your custom frontend application. See further instructions from the sample application repository.
 
 Run npm `build` and `start` commands in your application repository root.
+
+## Adding icons for generated sprite image (icons.css/icons.png)
+
+1) Install [Graphicsmagick](http://www.graphicsmagick.org/)
+2) Add new icons under resources/icons
+3) Run `npm run sprite base`
+4) Commit changes to resources/icons.css and resources/icons.png
+
+Note! Some of the icons have dark/light versions. This means that different icon is shown when the background is either dark or light for example on the toolbar. Other icons have hover versions that are used for automatically generated hover styles. To use the icon from the sprite it is referenced by the image name as class:
+
+```
+    <div class="icon add-area"></div>
+```
+
+Note! The same script can be used to generate application-specific overrides. See [sample-application](https://github.com/oskariorg/sample-application) for details.
 
 ## Dependencies
 

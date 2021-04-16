@@ -5,7 +5,6 @@ const APIMapping = {
     gfi_content: 'gfiContent',
     gfi_type: 'gfiType',
     gfi_xslt: 'gfiXslt',
-    legend_image: 'legendImage',
     capabilities_update_rate_sec: 'capabilitiesUpdateRate'
 };
 
@@ -166,6 +165,7 @@ export const getLayerHelper = () => {
         const layer = {
             opacity: 100,
             groups: [],
+            capabilities: {},
             options: {},
             attributes: {}
         };

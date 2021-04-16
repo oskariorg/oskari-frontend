@@ -65,7 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         getAllCategories: function () {
             return this.mapLayerService.getAllLayersByMetaType(this.metaType)
-                .map(layer => this._parseLayerToCategory(layer));
+                .map(layer => this._parseLayerToCategory(layer))
+                .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
         },
         getDefaultCategory: function () {
             const layer = this.mapLayerService.getAllLayersByMetaType(this.metaType)
@@ -76,13 +77,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             }
             return this._parseLayerToCategory(layer);
         },
+        getCategory: function (categoryId) {
+            const layer = this.mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
+            if (!layer) {
+                this.log.error('Could not find layer. Category id: ' + categoryId);
+                return;
+            }
+            return this._parseLayerToCategory(layer);
+        },
         _parseLayerToCategory: function (layer) {
             const layerId = layer.getId();
+            // has only one style default for now
+            const { featureStyle } = layer.getCurrentStyleDef();
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
                 name: layer.getName(),
-                isDefault: !!layer.getOptions().isDefault
+                isDefault: !!layer.getOptions().isDefault,
+                style: featureStyle || {}
             };
         },
         parseCategoryId: function (layerId) {
@@ -168,23 +180,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         editCategory: function (categoryId) {
             var me = this;
-            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
-            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            const layer = mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
-            if (!layer) {
-                this.log.error('Could not find layer for editing. Category id: ' + categoryId);
+            const values = this.getCategory(categoryId);
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (!values) {
+                dialog.show(me.loc('notification.error.title'), me.loc('notification.error.generic'), [dialog.createCloseButton()]);
                 return;
             }
-            // has only one style default for now
-            const { featureStyle } = layer.getCurrentStyleDef();
-            var values = {
-                categoryId,
-                name: layer.getName(),
-                isDefault: !!layer.getOptions().isDefault,
-                style: featureStyle || {}
-            };
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
+            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var buttons = [];
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveBtn.setTitle(me.loc('buttons.save'));
@@ -289,15 +292,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          * If category is empty -> only has delete and cancel
          * The message will also be different for both cases.
          */
-        confirmDeleteCategory: function (categoryId, name) {
+        confirmDeleteCategory: function (categoryId) {
             var me = this;
             var service = this.instance.getService();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var deleteBtn;
-
+            const category = this.getCategory(categoryId);
+            if (!category) {
+                dialog.show(me.loc('notification.error.title'), me.loc('notification.error.deleteCategory'), [dialog.createCloseButton()]);
+                return;
+            }
+            const { name, isDefault } = category;
             dialog.makeModal();
-            const defaultCategory = this.getDefaultCategory();
-            if (defaultCategory.categoryId === categoryId) {
+            if (isDefault) {
                 // cannot delete default category
                 var okBtn = dialog.createCloseButton(me.loc('buttons.ok'));
                 dialog.show(me.loc('notification.error.title'), me.loc('notification.error.deleteDefault'), [okBtn]);
@@ -308,6 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
 
             var content = '';
             if (placesCount > 0) {
+                const defaultCategory = this.getDefaultCategory();
                 deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 deleteBtn.setTitle(me.loc('buttons.deleteCategoryAndPlaces'));
                 deleteBtn.setHandler(function () {

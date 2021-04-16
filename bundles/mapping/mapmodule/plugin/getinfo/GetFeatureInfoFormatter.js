@@ -1,3 +1,6 @@
+import { getFormatter } from './ValueFormatters';
+const ID_SKIP_LABEL = '$SKIP$__';
+
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
         wrapper: '<div></div>',
@@ -6,12 +9,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         tableCell: '<td></td>',
         header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         headerTitle: '<div class="getinforesult_header_title"></div>',
-        myPlacesWrapper: '<div class="myplaces_place">' +
-            '<div class="getinforesult_header"><div class="icon-bubble-left"></div><div class="getinforesult_header_title myplaces_header"></div></div>' +
-            '<p class="myplaces_desc"></p>' +
-            '<a class="myplaces_imglink" target="_blank" rel="noopener"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' + '</div>',
         linkOutside: '<a target="_blank" rel="noopener"></a>'
     },
+    layerFormatters: [],
     formatters: {
         html: function (datumContent) {
             // html has to be put inside a container so jquery behaves
@@ -24,60 +24,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
             return parsedHTML;
-        },
-        /**
-         * Formats the html to show for my places layers' gfi dialog.
-         *
-         * @method myplace
-         * @param {Object} place response data to format
-         * @return {jQuery} formatted html
-         */
-        myplace: function (place) {
-            var content = jQuery('<div class="myplaces_place">' +
-                '<h3 class="myplaces_header"></h3>' +
-                    '<p class="myplaces_desc"></p>' +
-                    '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
-                    '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' +
-                '</div>');
-            var desc = content.find('p.myplaces_desc');
-            var img = content.find('a.myplaces_imglink');
-            var link = content.find('a.myplaces_link');
-
-            content.find('h3.myplaces_header').html(place.name);
-
-            if (place.place_desc) {
-                desc.html(place.place_desc);
-            } else if (place.description) {
-                desc.html(place.description);
-            } else {
-                desc.remove();
-            }
-
-            if (place.image_url && typeof place.image_url === 'string') {
-                img.attr({
-                    'href': place.image_url
-                }).find('img.myplaces_img').attr({
-                    'src': place.image_url
-                });
-            } else if (place.imageUrl && typeof place.imageUrl === 'string') {
-                img.attr({
-                    'href': place.imageUrl
-                }).find('img.myplaces_img').attr({
-                    'src': place.imageUrl
-                });
-            } else {
-                img.remove();
-            }
-
-            if (place.link) {
-                link.attr({
-                    'href': place.link
-                }).html(place.link);
-            } else {
-                link.remove();
-            }
-
-            return content;
         },
         /**
          * @method json
@@ -162,12 +108,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             .map(fragment => {
                 var fragmentTitle = fragment.layerName;
                 var fragmentMarkup = fragment.markup;
-                if (fragment.isMyPlace) {
-                    if (fragmentMarkup) {
-                        return fragmentMarkup;
-                    }
-                    return;
-                }
                 const contentWrapper = me.template.wrapper.clone();
                 var headerWrapper = me.template.header.clone();
                 var titleWrapper = me.template.headerTitle.clone();
@@ -186,6 +126,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             .forEach(frag => baseDiv.append(frag));
         return baseDiv;
     },
+
+    /**
+     * Add a custom formatter
+     *
+     * A custom format should expose two methods:
+     *  enable: takes layer GFI response data and return a boolean value that
+     *      indicates if the formatter is enabled for the given layer
+     *  format: takes layer GFI response data and format it
+     *
+     * @param {Object} formatter A formatter instance
+     */
+    addLayerFormatter: function (formatter) {
+        if (typeof formatter.enabled === 'function' && typeof formatter.format === 'function') {
+            this.layerFormatters.push(formatter);
+        }
+    },
+
     /**
      * Parses and formats a GFI response
      *
@@ -205,7 +162,15 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         const coll = data.features
             .map(function (datum) {
-                const pretty = me._formatGfiDatum(datum);
+                const formats = me.layerFormatters
+                    .filter((formatter) => formatter.enabled(datum))
+                    .map((formatter) => formatter.format(datum));
+                let pretty;
+                if (formats.length > 0) {
+                    pretty = formats.join('');
+                } else {
+                    pretty = me._formatGfiDatum(datum);
+                }
                 if (typeof pretty === 'undefined') {
                     return;
                 }
@@ -245,15 +210,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             response = me.template.wrapper.clone();
 
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
-            // This is for my places info popup
-            if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                const baseDiv = jQuery('<div></div>');
-                datum.content.parsed.places
-                    .map(place => me.formatters.myplace(place))
-                    .forEach(place => baseDiv.append(place));
-                return baseDiv;
-            }
-
             var even = false,
                 rawJsonData = datum.content.parsed,
                 dataArray = [],
@@ -302,7 +258,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     labelCell.append(localizedAttr || attr);
                     row.append(labelCell);
                     valueCell = me.template.tableCell.clone();
-                    valueCell.append(value);
+                    valueCell.append(Oskari.util.sanitize(value));
                     row.append(valueCell);
                     table.append(row);
                 }
@@ -343,6 +299,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (features === 'empty' || !layer) {
             return;
         }
+        // TODO: cleanup the my places references where they can be cleaned. Not sure if the boolean isMyPlace is used by the callers of this method
         const isMyPlace = layer.isLayerOfType('myplaces');
         var fields = layer.getFields().slice();
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
@@ -363,14 +320,27 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         // use localized labels for properties when available instead of property names
         // keep property names for my places as it has custom formatter
         const localeMapping = fields.reduce((result, value, index) => {
-            if (isMyPlace) {
-                return result;
-            }
             // return the localized name, fallback to actual property name if localization is missing
             const label = locales[index] || value;
             result[value] = label;
             return result;
         }, {});
+
+        const isEmpty = (value) => {
+            if (typeof value === 'string' && value.trim() === '') {
+                return true;
+            }
+            return false;
+        };
+        const isDataShown = (value, formatterOpts) => {
+            if (typeof value === 'undefined' || formatterOpts.type === 'hidden') {
+                return false;
+            }
+            if (formatterOpts.skipEmpty === true) {
+                return !isEmpty(value);
+            }
+            return true;
+        };
 
         const result = data.features.map(featureValues => {
             let markup;
@@ -383,17 +353,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                         return result;
                     }
                     // construct object for UI having only selected fields with localized labels
-                    const uiLabel = localeMapping[prop] || prop;
+                    let uiLabel = localeMapping[prop] || prop;
                     const value = featureValues[index];
-                    if (typeof value !== 'undefined') {
-                        result[uiLabel] = value;
+                    let formatterOpts = {};
+                    if (typeof layer.getFieldFormatMetadata === 'function') {
+                        formatterOpts = layer.getFieldFormatMetadata(prop);
+                    }
+                    if (isDataShown(value, formatterOpts)) {
+                        const formatter = getFormatter(formatterOpts.type);
+                        if (formatterOpts.noLabel === true) {
+                            uiLabel = ID_SKIP_LABEL + uiLabel;
+                        }
+                        result[uiLabel] = formatter(value, formatterOpts.params);
                     }
                     return result;
                 }, {});
 
-            if (isMyPlace) {
-                markup = me.formatters.myplace(feature);
-            } else if (Object.keys(feature).length > 0) {
+            if (Object.keys(feature).length > 0) {
                 markup = me._json2html(feature);
             } else {
                 markup = noDataResult;
@@ -498,16 +474,20 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             even = !even;
 
             row = this.template.tableRow.clone();
-            // FIXME this is unnecessary, we can do this with a css selector.
-            if (!even) {
+            const skipLabel = key.startsWith(ID_SKIP_LABEL);
+            if (!skipLabel && !even) {
                 row.addClass('odd');
             }
-
-            keyColumn = this.template.tableCell.clone();
-            keyColumn.append(key);
-            row.append(keyColumn);
+            if (!skipLabel) {
+                keyColumn = this.template.tableCell.clone();
+                keyColumn.append(key);
+                row.append(keyColumn);
+            }
 
             valColumn = this.template.tableCell.clone();
+            if (skipLabel) {
+                valColumn.attr('colspan', 2);
+            }
             valColumn.append(valpres);
             row.append(valColumn);
 

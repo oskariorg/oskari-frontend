@@ -9,6 +9,16 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.1.0
+
+### [mod] [rpc] ZoomToFeaturesRequest
+
+Now supports an optional maxZoomLevel flag to restrict the amount of zooming we are willing to make while showing the features. This is useful for point features or features that are close to each other. Without this the map might zoom "all-in" that might not be what we want to do.
+
+### [mod] [rpc] VectorLayerRequest
+
+Now can be used to remove vector layers that have been added with the same request. Can be used to cleanup etc.
+
 ## 1.55.0
 
 ### [add] [rpc] New SetTimeRequest Request

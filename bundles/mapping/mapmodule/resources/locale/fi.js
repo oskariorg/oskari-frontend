@@ -51,7 +51,8 @@ Oskari.registerLocalization(
                 "title": "Hakutulokset",
                 "close": "Sulje hakutulokset",
                 "noresults": "Antamallasi hakusanalla ei löytynyt yhtään kohdetta.",
-                "toomanyresults": "Hakusi tuotti yli 100 hakutulosta. Tarkenna hakusanaa ja yritä uudelleen.",
+                "searchResultCount": "Hakusanalla löytyi {count, plural, one {# hakutulos} other {# hakutulosta}}.",
+                "searchMoreResults": "Haulla löytyi enemmän tuloksia kuin näytetään ({count}). Tarkenna hakusanaa rajataksesi tulosta.",
                 "column_name": "Nimi",
                 "column_region": "Alue",
                 "column_village": "Kunta",
@@ -67,15 +68,13 @@ Oskari.registerLocalization(
                 "noAttributeData": "Ei näytettäviä ominaisuustietoja. Avaa kohdetiedot nähdäksesi piilotetut ominaisuustiedot."
             },
             "PublisherToolbarPlugin": {
-                "test": "testi",
                 "history": {
-                    "reset": "Palaa alkutilaan.",
-                    "back": "Siirry edelliseen näkymään.",
-                    "next": "Siirry seuraavaan näkymään."
+                    "back": "Siirry edelliseen näkymään",
+                    "next": "Siirry seuraavaan näkymään"
                 },
                 "measure": {
-                    "line": "Mittaa etäisyys.",
-                    "area": "Mittaa pinta-ala."
+                    "line": "Mittaa etäisyys",
+                    "area": "Mittaa pinta-ala"
                 }
             },
             "MarkersPlugin": {
@@ -122,7 +121,8 @@ Oskari.registerLocalization(
             },
             "PanButtonsPlugin": {
                 "center" : {
-                    "tooltip": "Palaa alkutilaan"
+                    "tooltip": "Palaa alkutilaan",
+                    "confirmReset": "Haluatko palata alkutilaan?"
                 }
             },
             "Tiles3DLayerPlugin": {

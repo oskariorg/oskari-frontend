@@ -22,7 +22,7 @@ const StyledNumberInput = styled(NumberInput)`
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
     height: 34px !important;
     .ant-input-number-input {
-        width: calc(100% - 11px);
+        width: calc(100% + 10px);
     }
 `;
 

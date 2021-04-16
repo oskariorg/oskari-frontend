@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         this._isLoading = false;
 
         this._sandbox.register(this);
+        this._onDestroyCallbacks = [];
         var p;
         for (p in this.__eventHandlers) {
             if (this.__eventHandlers.hasOwnProperty(p)) {
@@ -66,7 +67,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
             }
             return times;
         },
+        /**
+         * @method getYearRange
+         * Returns the start and end year of timeseries times
+         * @return {number[]} Start and end year of timeseries times
+         */
+        getYearRange: function () {
+            const times = this._layer.getAttributes().times;
+            const start = moment(times[0]).year();
+            const end = moment(times[times.length - 1]).year();
+            return [start, end];
+        },
         init: function () { },
+        /**
+         * @method getLayer
+         * Returns the layer domain object
+         * @return {Oskari.mapframework.domain.WmsLayer} layer domain object
+         */
+        getLayer: function () {
+            return this._layer;
+        },
         /**
          * @method getCurrentTime
          * Returns current selected time instant
@@ -112,6 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                         me._resolveWait();
                     });
                 }
+                const layerParams = this._layer.getParams();
+                layerParams.time = newTime;
                 var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
                 this._sandbox.request(this, request);
                 if (!nextTime && this._doneCallback) {
@@ -166,6 +188,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 cb();
             }
         },
+        onDestroy: function (callbackFn) {
+            this._onDestroyCallbacks.push(callbackFn);
+        },
         /**
          * @method destroy
          * Releases any event handlers and any other resources
@@ -174,6 +199,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
             for (var p in this.__eventHandlers) {
                 if (this.__eventHandlers.hasOwnProperty(p)) {
                     this._sandbox.unregisterFromEventByName(this, p);
+                }
+            }
+            const destroyCbs = this._onDestroyCallbacks;
+            while (destroyCbs.length) {
+                const callbackFn = destroyCbs.shift();
+                if (typeof callbackFn === 'function') {
+                    callbackFn();
                 }
             }
         }

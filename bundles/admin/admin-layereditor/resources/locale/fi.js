@@ -54,19 +54,21 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Peittävyys",
-                "style": "Oletustyyli",
                 "params": {
                     "selectedTime": "Valittu aika"
                 },
+                "singleTile": "Single Tile",
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
-                "metadataId": "Metatiedon tiedostotunniste",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
                 "dataProviderId": "Tiedontuottaja",
-                "groups": "Tason ryhmät"
+                "groups": "Tason ryhmät",
+                "updated": "Taso päivitettiin",
+                "created": "Taso luotiin",
+                "layerId": "Tason uniikki tunniste"
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
@@ -83,7 +85,7 @@ Oskari.registerLocalization(
             "addDataProvider": "Lisää tiedontuottaja",
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
-            "editTheme" : "Muokkaa teemaa",
+            "editTheme": "Muokkaa teemaa",
             "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
@@ -96,11 +98,18 @@ Oskari.registerLocalization(
             "skipCapabilities": "Manuaalinen lisäys",
             "addNewFromSameService": "Lisää uusi taso samasta palvelusta",
             "delete": "Poista",
-            "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
+            "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
+            "serviceNotAvailable": "Ei saatavilla",
+            "metadata": {
+                "title": "Metatiedon tiedostotunniste",
+                "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
+                "service": "Palvelussa määritelty",
+                "overridden": "Korvaava tiedostotunniste"
+            },
             "capabilities": {
+                "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
-                "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
                 "updateRate": "Capabilities päivitystiheys",
                 "updateRateDesc": "Päivitystiheys sekunteina",
@@ -108,20 +117,41 @@ Oskari.registerLocalization(
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
+            "styles": {
+                "default": "Oletustyyli",
+                "desc": "Taso lisätään kartalle oletustyylillä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
+                "raster": {
+                    "title": "Esitystyylit ja karttaselitteet",
+                    "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
+                    "legendImage": "Oletuskarttaselite",
+                    "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
+                    "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
+                    "serviceLegend": "Palvelussa määritelty karttaselite",
+                    "overriddenLegend": "Korvaava karttaselite",
+                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
+                },
+                "vector": {
+                    "addStyle": "Lisää tyyli",
+                    "newStyleName": "Uusi tyyli",
+                    "name": "Tyylin nimi",
+                    "selectDefault": "Valitse oletustyyli",
+                    "deleteStyle": "Poista tyyli",
+                    "validation": {
+                        "name": "Täytä nimi tyylille",
+                        "noStyles": "Ei tallennettuja tyylejä"
+                    }
+                }
+            },
             "layerStatus": {
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
-            "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
             "attributes": "Attribuutit",
             "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
-            "legendImage": "Oletuskarttaselite",
-            "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
-            "legendImagePlaceholder": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
             "forcedSRS": "Pakotetut projektiot",
             "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
             "supportedSRS": "Tuetut projektiot",
@@ -133,14 +163,30 @@ Oskari.registerLocalization(
                 "geojson": "Suuria kohteita",
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Mittakaavatasot, joilla metatietotaso on käytössä",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Animaatio",
+                "range": "Aikajana",
+                "none": "Ei valintaa",
+                "tooltip": {
+                    "player": "Aikasarjadata näkyy animaationa kuva kerrallaan.",
+                    "range": "Yksittäinen ajankohta tai aikaväli valitaan janalta. Metadatan esitetään janalla ne ajankohdat, joista dataa on olemassa. Sopii ajassa ja tilassa hajanaiselle aineistolle.",
+                    "none": "WMS karttatasosta näkyy karttanäkymässä vain oletuskuva.",
+                },
+                "selectMetadataLayer": "Valitse metadatataso"
+            },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
-                "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
-                "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
-                "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
-                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
-                "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
-                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
+                "styles": "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                "externalStyles": "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
+                "hover": "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
+                "attributes": "Attribuutit kentän JSON-syntaksi on virheellinen.",
+                "attributions": "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
+                "tileGrid": "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
             },
             "messages": {
                 "saveSuccess": "Tallennettu",
@@ -156,8 +202,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Pyyntö aikakatkaistiin ennen kuin palvelusta saatiin tietoja. Tarkista rajapinnan osoite.",
                 "connectionErrorFetchCapabilities": "Pyynnön lähettäminen palveluun ei onnistunut. Tarkista rajapinnan osoite.",
                 "parsingErrorFetchCapabilities": "Palvelusta saatua vastausta ei saatu tulkittua. Tarkista rajapinnan tyyppi ja versio.",
-                "deleteSuccess" : "Poistettu",
-                "deleteFailed" : "Poisto epäonnistui",
+                "deleteSuccess": "Poistettu",
+                "deleteFailed": "Poisto epäonnistui",
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?"
@@ -166,7 +212,12 @@ Oskari.registerLocalization(
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "deleteGroupLayers": "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

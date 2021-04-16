@@ -56,7 +56,6 @@ const LayerWizard = ({
     loading,
     children,
     versions,
-    messages = [],
     credentialsCollapseOpen,
     onCancel
 }) => {
@@ -68,7 +67,6 @@ const LayerWizard = ({
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
         <Fragment>
-            { messages.map(({ key, type }) => <StyledAlert key={key} message={<Message messageKey={key} />} type={type} />) }
             <LoadingIndicator loading={loading}>
                 { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
                     <StyledSteps current={currentStep}>
@@ -132,7 +130,6 @@ LayerWizard.propTypes = {
     layerTypes: PropTypes.array,
     children: PropTypes.any,
     versions: PropTypes.array.isRequired,
-    messages: PropTypes.array,
     credentialsCollapseOpen: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired
 };

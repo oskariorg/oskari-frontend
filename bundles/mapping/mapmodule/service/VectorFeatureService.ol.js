@@ -74,10 +74,14 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         getTooltipOverlay () {
             if (!this._tooltipOverlay) {
+                // FIXME: There is code in VectorLayerPlugin.o.js that creates a tooltip overlay as well
+                // Changing this one seems to take effect so the other one can probably be removed or cleaned out
                 const overlayDiv = document.createElement('div');
                 overlayDiv.className = 'feature-hover-overlay';
                 this._tooltipOverlay = new olOverlay({
-                    element: overlayDiv
+                    element: overlayDiv,
+                    offset: [10, -10],
+                    stopEvent: false
                 });
                 this._map.addOverlay(this._tooltipOverlay);
             }
@@ -217,30 +221,29 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          * @return {String} html content for tooltip or null
          */
         _getTooltipContent (contentOptions, feature) {
-            if (contentOptions) {
-                if (Array.isArray(contentOptions)) {
-                    let content = '';
-                    contentOptions.forEach(function (entry) {
-                        let key = entry.key;
-                        if (typeof key === 'undefined' && entry.keyProperty) {
-                            key = feature.get(entry.keyProperty);
-                        }
-                        if (typeof key !== 'undefined') {
-                            content += '<div>' + key;
-                            if (entry.valueProperty) {
-                                content += ': ';
-                                const value = feature.get(entry.valueProperty);
-                                if (typeof value !== 'undefined') {
-                                    content += value;
-                                }
-                            }
-                            content += '</div>';
-                        }
-                    });
-                    if (content) {
-                        return content;
-                    }
+            if (!contentOptions || !Array.isArray(contentOptions)) {
+                return null;
+            }
+            let content = '';
+            contentOptions.forEach(function (entry) {
+                let key = entry.key;
+                if (typeof key === 'undefined' && entry.keyProperty) {
+                    key = feature.get(entry.keyProperty);
                 }
+                if (typeof key !== 'undefined') {
+                    content += '<div>' + key;
+                    if (entry.valueProperty) {
+                        content += ': ';
+                        const value = feature.get(entry.valueProperty);
+                        if (typeof value !== 'undefined') {
+                            content += value;
+                        }
+                    }
+                    content += '</div>';
+                }
+            });
+            if (content) {
+                return content;
             }
             return null;
         }

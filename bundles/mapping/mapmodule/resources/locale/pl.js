@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Wyniki Wyszukiwania",
                 "close": "Zamknij wyniki wyszukiwania",
                 "noresults": "Brak wyników",
-                "toomanyresults": "Ponad 100 wyników. Proszę doprecyzować zapytanie.",
+                "searchResultCount": "Rezultat wyszukiwania {count} wyniki.",
+                "searchMoreResults": "Ponad {count} wyników. Proszę doprecyzować zapytanie.",
                 "column_name": "Nazwa",
                 "column_village": "Gmina",
                 "column_type": "Typ"

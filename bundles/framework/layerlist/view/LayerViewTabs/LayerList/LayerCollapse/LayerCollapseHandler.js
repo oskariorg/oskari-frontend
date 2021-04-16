@@ -163,6 +163,11 @@ class ViewHandler extends StateHandler {
             LAYER_REFRESH_THROTTLE,
             { leading: false }
         );
+        const throttleGroupUpdate = Oskari.util.throttle(
+            this.updateLayerGroups.bind(this),
+            LAYER_REFRESH_THROTTLE,
+            { leading: false }
+        );
         const handlers = {
             'MapLayerEvent': event => {
                 const layerId = event.getLayerId();
@@ -171,12 +176,14 @@ class ViewHandler extends StateHandler {
                 if (operation === 'sticky') {
                     this._refreshLayer(layerId);
                 } else if (['add', 'remove', 'update'].includes(operation)) {
-                    this.updateLayerGroups();
+                    // heavy op -> throttle
+                    throttleGroupUpdate();
                 } else if (operation === 'tool') {
                     if (layerId) {
                         this._refreshLayer(layerId);
                         return;
                     }
+                    // heavy op -> throttle
                     throttleRefreshAll();
                 }
             },

@@ -15,8 +15,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
             `<li>
                 <div>
                     <span title="\${full}">\${name}</span>
-                    <div class="indicator-list-info icon-info"/>
-                    <div class="indicator-list-remove icon-close" data-ind-hash="\${indHash}"/>
+                    <div class="indicator-list-info icon-info"></div>
+                    <div class="indicator-list-remove icon-close" data-ind-hash="\${indHash}"></div>
                 </div>
             </li>`),
         empty: _.template('<li>${emptyMsg}</li>')

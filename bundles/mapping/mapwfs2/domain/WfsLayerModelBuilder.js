@@ -39,7 +39,7 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData: function (layer, mapLayerJson, maplayerService) {
+        parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
             var me = this;
 
             if (layer.isLayerOfType('WFS')) {
@@ -70,26 +70,26 @@ Oskari.clazz.define(
             const wfsPlugin = mapModule.getLayerPlugins(layerType);
 
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
-                layer.addStyle(defaultStyle);
                 // Read options object for styles and hover options
-                const { options } = mapLayerJson;
-                if (options) {
-                    if (options.styles) {
-                        Object.keys(options.styles).forEach(styleName => {
-                            if (styleName !== 'default') {
-                                const style = new Style();
-                                style.setName(styleName);
-                                style.setTitle(styleName);
-                                layer.addStyle(style);
-                            }
-                        });
-                    }
-                    layer.setHoverOptions(options.hover);
-                    layer.selectStyle(defaultStyle.getName());
+                const { styles = {} } = mapLayerJson.options || {};
+                const layerStyles = [];
+                Object.keys(styles).forEach(styleId => {
+                    const style = new Style();
+                    style.setName(styleId);
+                    style.setTitle(styleId === 'default' ? locDefaultStyle : styles[styleId].title || styleId);
+                    layerStyles.push(style);
+                });
+                if (layerStyles.length === 0) {
+                    // ensure we have at least one style so:
+                    // - things don't break as easily in other parts of the app
+                    // - end-user can switch back to "default" when adding a runtime style of their own
+                    layerStyles.push(defaultStyle);
                 }
+                layer.setStyles(layerStyles);
+                layer.setHoverOptions(mapLayerJson.options.hover);
             } else {
                 // check if default style comes and give localization for it if found
-                if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
+                if (Array.isArray(mapLayerJson.styles)) {
                     const definedDefaultStyle = mapLayerJson.styles.find(style => style.name === 'default');
                     if (definedDefaultStyle) {
                         definedDefaultStyle.title = locDefaultStyle;
@@ -108,6 +108,26 @@ Oskari.clazz.define(
             // WMS link layer id for wfs rendering option
             if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
+            }
+            this.parseLayerAttributes(layer);
+        },
+        parseLayerAttributes: function (layer) {
+            const { data = {} } = layer.getAttributes();
+            const { filter, locale = {}, types } = data;
+            const lang = Oskari.getLang();
+
+            if (Array.isArray(filter)) {
+                layer.setPropertySelection(filter);
+            } else if (typeof filter === 'object') {
+                const filterArray = filter[lang] || filter.default || [];
+                layer.setPropertySelection(filterArray);
+            }
+            const localized = locale[lang];
+            if (localized) {
+                layer.setPropertyLabels(localized);
+            }
+            if (types) {
+                layer.setPropertyTypes(types);
             }
         }
     });

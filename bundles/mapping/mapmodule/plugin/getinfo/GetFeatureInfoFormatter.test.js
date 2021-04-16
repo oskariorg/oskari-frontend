@@ -5,9 +5,29 @@ const plugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.GetInfoPlugin'
 // simple mock
 const myPlacesLayer = {
     isLayerOfType: (type) => type === 'myplaces',
-    getFields: () => ['__fid', 'name', 'desc'],
-    getLocales: () => ['ID', 'Name', 'Description'],
-    getName: () => 'testing_myplaces'
+    getFields: () => ['__fid', 'name', 'place_desc', 'image_url', 'attention_text'],
+    getLocales: () => ['ID', 'Name', 'Description', 'Image', 'Text for Map'],
+    getName: () => 'testing_myplaces',
+    getFieldFormatMetadata: (prop) => {
+        const formatterOpts = { skipEmpty: true };
+        if (prop === 'name') {
+            formatterOpts.noLabel = true;
+            formatterOpts.type = 'h3';
+        }
+        if (prop === 'place_desc') {
+            formatterOpts.noLabel = true;
+            formatterOpts.type = 'p';
+        }
+        if (prop === 'image_url') {
+            formatterOpts.noLabel = true;
+            formatterOpts.type = 'image';
+            formatterOpts.params = { link: true };
+        }
+        if (prop === 'attention_text') {
+            formatterOpts.type = 'hidden';
+        }
+        return formatterOpts;
+    }
 };
 const otherLayer = {
     isLayerOfType: (type) => type === 'wfsplaces',
@@ -15,8 +35,28 @@ const otherLayer = {
     getLocales: () => ['ID', 'Label for test'],
     getName: () => 'testing_wfs'
 };
+const attrConfigLayer = {
+    isLayerOfType: (type) => type === 'wfsplaces',
+    getFields: () => ['__fid', 'test', 'image_url'],
+    getLocales: () => ['ID', 'Label for test', 'Image'],
+    getFieldFormatMetadata: (field) => {
+        if (field === 'image_url') {
+            return { type: 'image', noLabel: true };
+        }
+        return {};
+    },
+    getName: () => 'testing_wfs'
+};
 plugin._sandbox = {
-    findMapLayerFromSelectedMapLayers: (layerId) => `${layerId}`.startsWith('myplaces_') ? myPlacesLayer : otherLayer
+    findMapLayerFromSelectedMapLayers: (layerId) => {
+        if (`${layerId}`.startsWith('myplaces_')) {
+            return myPlacesLayer;
+        }
+        if (layerId === 123) {
+            return otherLayer;
+        }
+        return attrConfigLayer;
+    }
 };
 plugin._loc.noAttributeData = 'NO DATA';
 
@@ -57,9 +97,10 @@ describe('GetInfoPlugin', () => {
         });
         test('myplaces', () => {
             // [{"isMyPlace": true, "layerId": "myplaces_test", "layerName": "testing_myplaces", "markup": {"0": <div class="myplaces_place"><h3 class="myplaces_header">TESTING</h3><br></div>, "length": 1}, "type": "wfslayer"}]
+            const imageLink = 'http://my.domain/test.png';
             const result = plugin._formatWFSFeaturesForInfoBox({
                 layerId: 'myplaces_test',
-                features: [[234, 'TESTING']]
+                features: [[234, 'TESTING', 'Lorem ipsum', imageLink]]
             });
             expect(result.length).toEqual(1);
             expect(result[0].isMyPlace).toEqual(true);
@@ -68,7 +109,7 @@ describe('GetInfoPlugin', () => {
             expect(result[0].type).toEqual('wfslayer');
             expect(result[0].markup instanceof jQuery).toEqual(true);
             const html = result[0].markup.outerHTML();
-            expect(html).toEqual(`<div class="myplaces_place"><h3 class="myplaces_header">TESTING</h3><br></div>`);
+            expect(html).toEqual(`<table class="getinforesult_table"><tr><td colspan="2"><h3>TESTING</h3></td></tr><tr><td colspan="2"><p>Lorem ipsum</p></td></tr><tr><td colspan="2"><a href="${imageLink}" rel="noreferrer noopener" target="_blank" title="${imageLink}"><img class="oskari_gfi_img" src="${imageLink}"></a></td></tr></table>`);
         });
 
         test('wfslayer without values', () => {
@@ -100,6 +141,19 @@ describe('GetInfoPlugin', () => {
             expect(result[0].markup instanceof jQuery).toEqual(true);
             const html = result[0].markup.outerHTML();
             expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr></table>`);
+        });
+
+        test('wfslayer with no label image formatter', () => {
+            const result = plugin._formatWFSFeaturesForInfoBox({
+                layerId: 468,
+                features: [[468, 'TESTING', 'http://test.domain/test.png']]
+            });
+            expect(result[0].layerName).toEqual(attrConfigLayer.getName());
+            expect(result[0].type).toEqual('wfslayer');
+            expect(result[0].markup instanceof jQuery).toEqual(true);
+            const html = result[0].markup.outerHTML();
+            // should skip "Image" label" and write colspan=2. Should have <img></img> but outerHTML() probably messes it up
+            expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr><tr><td colspan="2"><img class="oskari_gfi_img" src="http://test.domain/test.png"></td></tr></table>`);
         });
     });
 });

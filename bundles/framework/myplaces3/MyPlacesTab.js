@@ -11,8 +11,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
      *      reference to component that created the tile
      */
 
-    function (instance) {
+    function (instance, stopDrawingCallback) {
         this.instance = instance;
+        this.stopDrawingCallback = stopDrawingCallback;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.tabsContainer = undefined;
         this.tabPanels = {};
@@ -111,6 +112,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                         return false;
                     });
                     panel.getContainer().append(deleteLink);
+
+                    const exportLink = this.linkTemplate.clone();
+                    exportLink.addClass('categoryOp');
+                    exportLink.addClass('export');
+                    exportLink.append(this.loc('tab.export.title'));
+                    exportLink.attr('title', this.loc('tab.export.tooltip'));
+                    exportLink.on('click', () => {
+                        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
+                        return false;
+                    });
+                    panel.getContainer().append(exportLink);
                 });
                 this._removeObsoleteCategories(categories);
 
@@ -162,7 +174,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          */
         _deletePlace: function (data) {
             var me = this;
-            var sandbox = this.instance.sandbox;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(me.loc('tab.notification.delete.btnDelete'));
@@ -170,21 +181,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
 
             okBtn.setHandler(function () {
                 dialog.close();
-                var service = sandbox.getService('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService');
                 var callback = function (isSuccess) {
-                    var request;
-
+                    const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     if (isSuccess) {
-                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        request = Oskari.requestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
-
-                        me.instance.sandbox.request(me.instance, request);
+                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
+                        popup.fadeout();
                     } else {
-                        dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'));
+                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
                     }
-                    dialog.fadeout();
                 };
-                service.deleteMyPlace(data.id, callback);
+                me.instance.getService().deleteMyPlace(data.id, callback);
             });
             var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel'));
             var confirmMsg = me.loc('tab.notification.delete.confirm', { name: data.name });
@@ -235,21 +241,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 });
                 return link;
             });
+
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('edit', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.on('click', function () {
                     me._editPlace(data);
+                    // FIX ME: Usability of this?
+                    // sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
                     return false;
                 });
                 return link;
             });
+
             // set up the link from edit field
             panel.grid.setColumnValueRenderer('delete', function (name, data) {
                 var link = me.linkTemplate.clone();
                 link.append(name);
                 link.on('click', function () {
+                    me.stopDrawingCallback();
                     me._deletePlace(data);
                     return false;
                 });

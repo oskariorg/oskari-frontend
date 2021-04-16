@@ -68,10 +68,12 @@ Oskari.clazz.define(
                 '  </div>' +
                 '</div>'
             );
-
             me.templateResultsTable = jQuery(
                 '<table class="search-results">' +
                 '  <thead>' +
+                '    <tr>' +
+                '      <th class="search-results-count" colspan="3"/>' +
+                '    </tr>' +
                 '    <tr>' +
                 '      <th>' + me._loc.column_name + '</th>' +
                 '      <th>' + me._loc.column_region + '</th>' +
@@ -312,21 +314,12 @@ Oskari.clazz.define(
             if (this._searchInProgess) {
                 return;
             }
-
-            var me = this;
-            me._hideSearch();
-            me._searchInProgess = true;
-            var inputField = me.getElement().find('input[type=text]');
+            this._hideSearch();
+            this._searchInProgess = true;
+            const inputField = this.getElement().find('input[type=text]');
             inputField.addClass('search-loading');
-            var searchText = inputField.val(),
-                searchCallback = function (msg) {
-                    me._showResults(msg);
-                    me._enableSearch();
-                },
-                onErrorCallback = function () {
-                    me._enableSearch();
-                };
-            me.service.doSearch(searchText, searchCallback, onErrorCallback);
+            const searchText = inputField.val();
+            this.service.doSearch(searchText, results => this._showResults(results), () => this._enableSearch());
         },
 
         _setMarker: function (result) {
@@ -355,99 +348,54 @@ Oskari.clazz.define(
             }
         },
 
-        _showResults: function (msg) {
-            var me = this,
-                errorMsg = msg.error,
-                resultsContainer = me.resultsContainer.clone(),
-                content = resultsContainer.find('div.content'),
-                popupTitle = me._loc.title,
-                mapmodule = me.getMapModule(),
-                themeColours = mapmodule.getThemeColours(),
-                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+        _showResults: function (results) {
+            const me = this;
+            const { totalCount, error, hasMore, locations } = results;
+            const resultsContainer = me.resultsContainer.clone();
+            const content = resultsContainer.find('div.content');
+            const mapmodule = me.getMapModule();
+            const popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
             /* clear the existing search results */
+            this._enableSearch();
             if (me.popup) {
                 me.popup.close();
                 me.popup = null;
             }
             me.popup = popupService.createPopup();
-            if (errorMsg) {
-                content.html(errorMsg);
+            if (error) {
+                content.html(error);
             } else {
                 // success
-                var totalCount = msg.totalCount,
-                    lat,
-                    lon,
-                    zoom;
-
-                me.results = msg.locations;
-
                 if (totalCount === 0) {
                     content.html(this._loc.noresults);
                 } else if (totalCount === 1) {
                     // only one result, show it immediately
-                    lon = msg.locations[0].lon;
-                    lat = msg.locations[0].lat;
-                    zoom = msg.locations[0].zoomLevel;
-                    if (msg.locations[0].zoomScale) {
-                        zoom = { scale: msg.locations[0].zoomScale };
-                    }
-
-                    me.getSandbox().request(
-                        me.getName(),
-                        Oskari.requestBuilder(
-                            'MapMoveRequest'
-                        )(lon, lat, zoom)
-                    );
-                    me._setMarker(msg.locations[0]);
+                    this._resultClicked(locations[0]);
                     return;
                 } else {
                     // many results, show all
-                    var table = me.templateResultsTable.clone(),
-                        tableBody = table.find('tbody'),
-                        i,
-                        clickFunction = function () {
-                            me._resultClicked(
-                                me.results[parseInt(jQuery(this).attr('data-location'), 10)]
-                            );
-                            return false;
-                        };
+                    const table = me.templateResultsTable.clone();
+                    const tableBody = table.find('tbody');
+                    const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
+                    const resultMsg = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + msgKey, { count: totalCount });
+                    table.find('.search-results-count').html(resultMsg);
 
-                    for (i = 0; i < totalCount; i += 1) {
-                        if (i >= 100) {
-                            tableBody.append(
-                                '<tr>' +
-                                '  <td class="search-result-too-many" colspan="3">' + me._loc.toomanyresults + '</td>' +
-                                '</tr>'
-                            );
-                            break;
-                        }
-                        var resultItem = msg.locations[i];
-                        lon = resultItem.lon;
-                        lat = resultItem.lat;
-                        zoom = resultItem.zoomLevel;
-
-                        if (resultItem.zoomScale) {
-                            zoom = { scale: resultItem.zoomScale };
-                        }
-
-                        var row = me.templateResultsRow.clone(),
-                            name = resultItem.name,
-                            region = resultItem.region,
-                            type = resultItem.type,
-                            cells = row.find('td'),
-                            xref = jQuery(cells[0]).find('a');
+                    locations.forEach((result, i) => {
+                        const { type, region, name } = result;
+                        const row = me.templateResultsRow.clone();
+                        const cells = row.find('td');
+                        const xref = jQuery(cells[0]).find('a');
                         row.attr('data-location', i);
                         xref.attr('data-location', i);
                         xref.attr('title', name);
                         xref.append(name);
-                        xref.on('click', clickFunction);
-
+                        xref.on('click', () => this._resultClicked(result));
                         jQuery(cells[1]).attr('title', region).append(region);
                         jQuery(cells[2]).attr('title', type).append(type);
 
                         tableBody.append(row);
-                    }
+                    });
 
                     if (!(me.getConfig() && me.getConfig().toolStyle)) {
                         tableBody.find(':odd').addClass('odd');
@@ -472,19 +420,19 @@ Oskari.clazz.define(
             }
 
             var popupContent = resultsContainer;
-            var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
             if (Oskari.util.isMobile()) {
                 // get the sticky buttons into their initial state and kill all popups
                 me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 popupService.closeAllPopups(true);
             }
 
-            me.popup.show(popupTitle, popupContent);
+            me.popup.show(me._loc.title, popupContent);
             me.popup.createCloseIcon();
-
+            const { backgroundColour, textColour } = mapmodule.getThemeColours();
+            const popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
             me.popup.setColourScheme({
-                'bgColour': themeColours.backgroundColour,
-                'titleColour': themeColours.textColour,
+                'bgColour': backgroundColour,
+                'titleColour': textColour,
                 'iconCls': popupCloseIcon
             });
 

@@ -12,6 +12,7 @@ import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
+import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
 
 import './vectorlayer';
 import './request/AddFeaturesToMapRequest';
@@ -69,6 +70,7 @@ Oskari.clazz.define(
         this._styleCache = {};
         this._animatingFeatures = {};
     }, {
+        __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
          * @method register
          * Interface method for the plugin protocol
@@ -90,10 +92,16 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            var me = this;
+            const me = this;
             me.registerVectorFormats();
             me._createConfiguredLayers();
             me._registerToFeatureService();
+
+            // listen to application started event and register RPC functions.
+            Oskari.on('app.start', function (details) {
+                // Register RPC functions
+                me.registerRPCFunctions();
+            });
         },
         /**
          * @method  @private _createConfiguredLayers Create configured layers an their styles
@@ -128,6 +136,9 @@ Oskari.clazz.define(
         },
 
         _createHoverOverlay: function () {
+            // FIXME: There is code in VectorFeatureService.ol.js that creates a tooltip overlay as well
+            // Changing this one seems doesn't seem to have any effect so this could be removed/cleaned out!!
+            // Not cleaning out now with release coming up but whoever sees this comment can clean this out
             var overlayDiv = document.createElement('div');
             overlayDiv.className = 'feature-hover-overlay';
             this._hoverOverlay = new olOverlay({
@@ -446,6 +457,10 @@ Oskari.clazz.define(
                 olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
                 olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
                 me._olLayers[layer.getId()] = olLayer;
+
+                const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
+                // Set min max zoom levels that layer should be visible in
+                zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
             }
@@ -503,6 +518,10 @@ Oskari.clazz.define(
             }
             var layer = this._findOskariLayer(options.layerId);
             if (!layer) {
+                if (options.remove === true) {
+                    // removal was requested for unrecognized layer id -> don't need to do anything
+                    return;
+                }
                 layer = Oskari.clazz.create('Oskari.mapframework.domain.VectorLayer');
                 layer.setId(options.layerId);
                 layer.setName(options.layerName || 'VECTOR');
@@ -524,6 +543,13 @@ Oskari.clazz.define(
                 }
                 layer.setHoverOptions(options.hover);
 
+                // scale limits
+                const mapModule = this.getMapModule();
+                const scales = getScalesFromOptions(
+                    mapModule.getScaleArray(), mapModule.getResolutionArray(), options);
+                layer.setMinScale(scales.min);
+                layer.setMaxScale(scales.max);
+
                 if (options.layerPermissions) {
                     for (var permission in options.layerPermissions) {
                         if (options.layerPermissions.hasOwnProperty(permission)) {
@@ -542,7 +568,7 @@ Oskari.clazz.define(
                 if (!mapLayerService.findMapLayer(layer.getId())) {
                     mapLayerService.addLayer(layer);
                 }
-                if (!this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
+                if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
                     var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     this._sandbox.request(this, request);
                 }
@@ -561,32 +587,53 @@ Oskari.clazz.define(
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
         _updateVectorLayer: function (layer, options) {
-            if (layer && options) {
-                var mapLayerService = this._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                if (options.layerName) {
-                    layer.setName(options.layerName);
-                }
-                if (options.layerOrganizationName) {
-                    layer.setOrganizationName(options.layerOrganizationName);
-                }
-                if (typeof options.opacity !== 'undefined') {
-                    layer.setOpacity(options.opacity);
-                    // Apply changes to ol layer
-                    this._getOlLayer(layer);
-                }
-                if (options.hover) {
-                    layer.setHoverOptions(options.hover);
-                    this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
-                }
-                if (options.layerDescription) {
-                    layer.setDescription(options.layerDescription);
-                }
-                var lyrInService = mapLayerService.findMapLayer(layer.getId());
-                if (lyrInService) {
-                    // Send layer updated notification
-                    var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
-                    this._sandbox.notifyAll(evt);
-                }
+            if (!layer || !options) {
+                // nothing to do here
+                return layer;
+            }
+            const sandbox = this.getSandbox();
+            const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            let layerUpdate = false;
+
+            if (options.remove) {
+                const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
+                this._sandbox.request(this, request);
+
+                mapLayerService.removeLayer(layer);
+
+                this.removeMapLayerFromMap(layer);
+                delete this._oskariLayers[layer.getId()];
+
+                return layer;
+            }
+            if (options.layerName) {
+                layer.setName(options.layerName);
+                layerUpdate = true;
+            }
+            if (options.layerOrganizationName) {
+                layer.setOrganizationName(options.layerOrganizationName);
+                layerUpdate = true;
+            }
+            if (typeof options.opacity !== 'undefined') {
+                layer.setOpacity(options.opacity);
+                // Apply changes to ol layer
+                this._getOlLayer(layer);
+            }
+            if (options.hover) {
+                layer.setHoverOptions(options.hover);
+                this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
+            }
+            if (options.layerDescription) {
+                layer.setDescription(options.layerDescription);
+                layerUpdate = true;
+            }
+            var lyrInService = mapLayerService.findMapLayer(layer.getId());
+            if (lyrInService && layerUpdate) {
+                // Send layer updated notification
+                var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
+                // this causes performance problems with layer listing when spammed
+                // only send event if name/organization or description was changed
+                sandbox.notifyAll(evt);
             }
             return layer;
         },
@@ -603,45 +650,68 @@ Oskari.clazz.define(
             typeof options.opacity !== 'undefined' ||
             options.hover ||
             options.layerDescription ||
-            typeof options.showLayer !== 'undefined');
+            typeof options.showLayer !== 'undefined' ||
+            typeof options.remove !== 'undefined');
         },
         /**
          * @method addFeaturesToMap
          * @public
          * Add feature on the map
          *
+         * For loading indication:
+            // for each feature at start:
+            me.getMapModule().loadingState(layerId, true);
+            // for each feature after processed:
+            me.getMapModule().loadingState(layerId, false);
+            // for each feature that couldn't be added to map:
+            me.getMapModule().loadingState(layerId, null, true);
+         *
          * @param {Object} geometry the geometry WKT string or GeoJSON object or object containing feature properties for updating
          * @param {Object} options additional options
          */
-        addFeaturesToMap: function (geometry, options) {
+        addFeaturesToMap: function (geometry, options = {}) {
             var me = this;
-            var geometryType = me._getGeometryType(geometry);
-            var format = me._supportedFormats[geometryType];
+            const geometryType = me._getGeometryType(geometry);
+            const format = me._supportedFormats[geometryType];
             var olLayer;
             var layer;
             var vectorSource;
+            const layerId = options.layerId || 'VECTOR';
 
-            options = options || {};
             // if there's no layerId provided -> Just use a generic vector layer for all.
             if (!options.layerId) {
-                options.layerId = 'VECTOR';
+                options.layerId = layerId;
             }
             if (!options.attributes) {
                 options.attributes = {};
             }
-            if (!me._features[options.layerId]) {
-                me._features[options.layerId] = [];
+            if (!me._features[layerId]) {
+                me._features[layerId] = [];
             }
+            // Remove scale limit options that are only meant to be used to limit zooming with AddFeaturesToMapRequest
+            // but if they are passed to prepareVectorLayer() they also limit visibility of layers.
+            // The same prepareVectorLayer() function is used for VectorLayerRequest where we DO want to limit visibility
+            // Note! Only centerTo, minScale and maxZoomLevel are used. The others are just removed from layerOptions
+            // so we don't accidentally limit visibility when passing them in AddFeaturesToMapRequest
+            // Disable ESLint since it otherwise complains about unused vars
+            // eslint-disable-next-line no-unused-vars
+            const { centerTo, minScale, maxScale, maxZoomLevel, minZoomLevel, minResolution, maxResolution, ...layerOptions } = options;
 
-            layer = me.prepareVectorLayer(options);
+            layer = me.prepareVectorLayer(layerOptions);
             olLayer = me._getOlLayer(layer);
             vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
+                // when updating style -> options has new style and "geometry" is used for
+                // selecting feature to update like in thematic maps: { id: regionid }
+                me.getMapModule().loadingState(layerId, true);
                 for (var key in geometry) {
-                    me._updateFeature(options, key, geometry[key]);
+                    me.getMapModule().loadingState(layerId, true);
+                    me._updateFeature(layerOptions, key, geometry[key]);
+                    me.getMapModule().loadingState(layerId, false);
                 }
-                me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+                me._applyPrioOnSource(layerOptions.layerId, vectorSource, layerOptions.prio);
+                me.getMapModule().loadingState(layerId, false);
                 return;
             }
 
@@ -652,39 +722,43 @@ Oskari.clazz.define(
             if (geometryType === 'GeoJSON' && !me.getMapModule().isValidGeoJson(geometry)) {
                 return;
             }
+            // initial loading stopped at end of function
+            this.getMapModule().loadingState(layerId, true);
             var features = format.readFeatures(geometry);
             // add cursor if defined so
-            if (options.cursor) {
-                options.attributes['oskari-cursor'] = options.cursor;
+            if (layerOptions.cursor) {
+                layerOptions.attributes['oskari-cursor'] = layerOptions.cursor;
             }
 
-            if (options.attributes && options.attributes !== null && features instanceof Array && features.length) {
+            if (layerOptions.attributes !== null && features instanceof Array && features.length) {
                 features.forEach(function (ftr) {
-                    ftr.setProperties(options.attributes);
+                    ftr.setProperties(layerOptions.attributes);
                 });
             }
             features.forEach(function (feature) {
+                // start loading/feature
+                me.getMapModule().loadingState(layerId, true);
                 if (typeof feature.getId() === 'undefined' && typeof feature.get(FTR_PROPERTY_ID) === 'undefined') {
                     var id = 'F' + me._nextFeatureId++;
                     feature.setId(id);
                     // setting id using set(key, value) to make id-property asking by get('id') possible
                     feature.set(FTR_PROPERTY_ID, id);
                 }
-                me.setFeatureStyle(options, feature, false);
+                me.setFeatureStyle(layerOptions, feature, false);
             });
             // clear old features if defined so
-            if (options.clearPrevious === true) {
+            if (layerOptions.clearPrevious === true) {
                 vectorSource.clear();
-                me._features[options.layerId] = [];
+                me._features[layerId] = [];
             }
             // prio handling
-            var prio = options.prio || 0;
-            me._features[options.layerId].push({
+            var prio = layerOptions.prio || 0;
+            me._features[layerId].push({
                 data: features,
                 prio: prio
             });
 
-            me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+            me._applyPrioOnSource(layerId, vectorSource, layerOptions.prio);
             vectorSource.addFeatures(features);
 
             // notify other components that features have been added
@@ -698,6 +772,11 @@ Oskari.clazz.define(
                 var event = addEvent;
                 if (!feature.getGeometry()) {
                     event = errorEvent;
+                    // signal error on loading
+                    me.getMapModule().loadingState(layerId, null, true);
+                } else {
+                    // signal end of loading
+                    me.getMapModule().loadingState(layerId, false);
                 }
                 event.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
@@ -708,18 +787,26 @@ Oskari.clazz.define(
                 sandbox.notifyAll(addEvent);
             }
             // re-position map when opted
-            if (options.centerTo === true) {
+            if (centerTo === true) {
                 var extent = vectorSource.getExtent();
                 me.getMapModule().zoomToExtent(extent);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.
-                if (options.minScale) {
+                if (typeof minScale === 'number') {
                     var currentScale = this.getMapModule().getMapScale();
-                    if (currentScale < options.minScale) {
-                        this.getMapModule().zoomToScale(options.minScale, true);
+                    if (currentScale < minScale) {
+                        this.getMapModule().zoomToScale(minScale, true);
+                    }
+                }
+                // Check max zoom if defined so. Zoom increases when the map is zoomed in. Zoom decreases when the map is zoomed out.
+                if (typeof maxZoomLevel === 'number') {
+                    var currentZoom = this.getMapModule().getMapZoom();
+                    if (currentZoom > maxZoomLevel) {
+                        this.getMapModule().setZoomLevel(maxZoomLevel);
                     }
                 }
             }
+            me.getMapModule().loadingState(layerId, false);
         },
         /**
          * @method _applyPrioOnSource
@@ -757,13 +844,12 @@ Oskari.clazz.define(
          */
         _updateFeature: function (options, propertyName, value) {
             const { prio, layerId, featureStyle } = options;
-            var layers = { layer: layerId };
             var values = Array.isArray(value) ? value : [value];
             var searchValues = values.map(cur => typeof cur === 'object' ? cur.value : cur);
             var searchOptions = {
                 [propertyName]: searchValues
             };
-            this.getFeaturesMatchingQuery(layers, searchOptions).forEach(feature => {
+            this.getFeaturesMatchingQuery([layerId], searchOptions).forEach(feature => {
                 const updateValue = values.find(cur => typeof cur === 'object' && feature.get(propertyName) === cur.value);
                 if (updateValue && updateValue.properties) {
                     Object.keys(updateValue.properties).forEach(key => feature.set(key, updateValue.properties[key]));
@@ -1120,23 +1206,41 @@ Oskari.clazz.define(
 
         /**
          * @method zoomToFeatures
-         *  - zooms to features
-         * @param {Object} layer
-         * @param {Object} options
+         *  - moves map to show to features on the viewport
+         * @param {Object} opts
+         * @param {Object} featureFilter
          */
-        zoomToFeatures: function (layer, options) {
-            var me = this;
-            var layers = me.getLayerIds(layer);
-            var features = me.getFeaturesMatchingQuery(layers, options);
+        zoomToFeatures: function (opts = {}, featureFilter) {
+            const layers = this.getLayerIds(opts.layer);
+            const features = this.getFeaturesMatchingQuery(layers, featureFilter);
             if (features.length > 0) {
-                var vector = new olSourceVector({
+                const tmpLayer = new olSourceVector({
                     features: features
                 });
-                var extent = vector.getExtent();
-                extent = me.getBufferedExtent(extent, 35);
-                me.getMapModule().zoomToExtent(extent);
+                const extent = this.getBufferedExtent(tmpLayer.getExtent(), 35);
+                this.getMapModule().zoomToExtent(extent, false, false, opts.maxZoomLevel);
             }
-            me.sendZoomFeatureEvent(features);
+            this.sendZoomFeatureEvent(features);
+        },
+        /**
+         * @method getLayerIds
+         * @param {Array|String|Number} layer id or array of layer ids (optional)
+         * @return {Array} array of layer ids that was requested and we recognized
+         * @see RPC getFeatures
+         */
+        getLayerIds: function (layer = []) {
+            if (!Array.isArray(layer)) {
+                // the value for "layer" needs to be an array so wrap it in one if it isn't
+                layer = [layer];
+            }
+            const allLayers = Object.keys(this._olLayers);
+            if (!layer.length) {
+                // return all layers we know of if layer is not specified
+                return allLayers;
+            }
+
+            // filtering the requested layers by checking that we know of them
+            return layer.filter(id => allLayers.includes(id));
         },
         /**
          * @method getBufferedExtent
@@ -1191,7 +1295,7 @@ Oskari.clazz.define(
         /**
          * @method getFeaturesMatchingQuery
          *  - gets features matching query
-         * @param {Array} layers, object like {layer: ['layer1', 'layer2']}
+         * @param {Array} layers array of layer ids like ['layer1', 'layer2']
          * @param {Object} featureQuery and object like { "id" : [123, "myvalue"] }
          */
         getFeaturesMatchingQuery: function (layers = [], featureQuery) {
@@ -1225,25 +1329,11 @@ Oskari.clazz.define(
             return features;
         },
         /**
-         * @method getLayerIds
-         *  -
-         * @param {Object} optional object with key layer that has an array of layer ids
-         * @return {Array} array of layer ids
-         */
-        getLayerIds: function (layerIds) {
-            if (typeof layerIds !== 'object' || !Object.keys(layerIds).length) {
-                return Object.keys(this._olLayers);
-            }
-            if (layerIds.layer && typeof layerIds.layer.slice === 'function') {
-                return layerIds.layer.slice(0);
-            }
-            return [];
-        },
-        /**
          * @method getLayerFeatures
          *  - gets layer's features as geojson object
          * @param {String} id
          * @return {Object} geojson
+         * @see RPC getFeatures
          */
         getLayerFeatures: function (id) {
             var me = this;
@@ -1252,6 +1342,32 @@ Oskari.clazz.define(
 
             var geojson = formatter.writeFeaturesObject(features);
             return geojson;
+        },
+        /**
+         * @method registerRPCFunctions
+         * Register RPC functions
+         */
+        registerRPCFunctions () {
+            const me = this;
+            const sandbox = this._sandbox;
+            const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+            if (!rpcService) {
+                return;
+            }
+
+            rpcService.addFunction('getFeatures', function (includeFeatures) {
+                const features = {};
+                const layers = me.getLayerIds();
+                layers.forEach(function (id) {
+                    if (includeFeatures === true) {
+                        features[id] = me.getLayerFeatures(id);
+                    } else {
+                        features[id] = [];
+                    }
+                });
+                return features;
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

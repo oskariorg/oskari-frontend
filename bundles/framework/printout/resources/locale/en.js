@@ -63,17 +63,19 @@ Oskari.registerLocalization(
                     "pdf": "PDF document"
                 }
             },
-            "mapTitle": {
-                "label": "Map Title",
-                "tooltip": "Add a title for the map."
-            },
             "content": {
+                "label": "Additional content",
+                "tooltip": "",
+                "pngNote": "PNG-print will not include additional information.",
+                "mapTitle": {
+                    "placeholder": "Title"
+                },
                 "pageLogo": {
                     "label": "Include logo",
                     "tooltip": "You can hide the logo if necessary."
                 },
                 "pageScale": {
-                    "label": "Add a scale to the map printout",
+                    "label": "Include scale bar",
                     "tooltip": "Add a scale to the map, if you want."
                 },
                 "pageDate": {

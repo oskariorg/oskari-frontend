@@ -16,6 +16,10 @@ Oskari.registerLocalization(
                 "privateTooltip": "Karttataso on yksityinen. Muuta karttataso julkiseksi klikkaamalla tästä.",
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
             },
+            "export": {
+                "title":"Lataa",
+                "tooltip": "Voit ladata karttatason JSON-muodossa"
+            },
             "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",
             "editCategory": "Muokkaa karttatasoa",
@@ -122,7 +126,8 @@ Oskari.registerLocalization(
             "category": {
                 "label": "Karttataso",
                 "newLayer": "Luo uusi karttataso",
-                "choose": "tai valitse karttataso olemassa olevista karttatasoistasi:"
+                "choose": "Valitse karttataso olemassa olevista karttatasoistasi:",
+                "creatingNew": "Uusi karttataso luodaan Omat tasot -valikosta",
             },
             "imagelink": {
                 "placeholder": "Linkki kuvaan kohteesta",
@@ -175,7 +180,7 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Karttatason poistaminen",
-                "deleteConfirmMove": "Olet poistamassa karttatasoa \"{0}\". Karttatasolla on {1, plural, one {# kohde} other {# kohdetta}}. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää {1, plural, one {kohteen} other {kohteet}} oletuskarttatasolle ennen karttatason poistoa?",
+                "deleteConfirmMove": "Olet poistamassa karttatasoa \"{0}\". Karttatasolla on {1, plural, one {# kohde} other {# kohdetta}}. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää {1, plural, one {kohteen} other {kohteet}} oletuskarttatasolle \"{2}\" ennen karttatason poistoa?",
                 "deleteConfirm": "Haluatko poistaa karttatason {0}?",
                 "deleted": "Karttataso on poistettu."
             },

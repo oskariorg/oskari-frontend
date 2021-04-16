@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Uusimmat',
                     'tooltip': 'Näytä ## uusinta karttatasoa'
+                },
+                'raster': {
+                    'title': 'Rasteritasot',
+                    'tooltip': 'Näytä vain rasteritasot'
                 }
             },
             'grouping': {
@@ -51,12 +55,12 @@ Oskari.registerLocalization(
                 'DOWN': 'Karttataso ei tällä hetkellä käytettävissä.',
                 'ERROR': 'Karttataso ei tällä hetkellä käytettävissä.',
                 'MAINTENANCE': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Tilatietoa ei ole saatavilla tälle karttatasolle.',
                 'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Karttatasot',
-                'message': 'Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot.<br/><br/>Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan.<br/><br/>Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Löydät uusimmat karttatasot, vektoritasot ja julkaistavissa olevat karttatasot valmiiksi määritellyiltä listoilta.<br/><br/>Avoinna olevat karttatasot voit tarkistaa Valitut tasot -välilehdeltä. Voit raahata karttatasot uuteen järjestykseen, säätää tasojen näkyvyyttä tai vaihtaa esitystyyliä osalla karttatasoista.',
+                'message': 'Karttatasot-valikosta löydät kaikki karttapalvelussa saatavilla olevat karttatasot.<br/><br/>Järjestä karttatasot joko aiheen tai tiedontuottajan mukaan.<br/><br/>Hae karttatasoja karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit selata uusimpia karttatasoja tai suodattaa tasoja löytääksesi helpommin tarvitsemasi.<br/><br/>Avoinna olevat karttatasot voit tarkistaa Valitut tasot -välilehdeltä. Voit raahata karttatasot uuteen järjestykseen, säätää tasojen näkyvyyttä tai vaihtaa esitystyyliä osalla karttatasoista.',
                 'openLink': 'Näytä Karttatasot',
                 'closeLink': 'Piilota Karttatasot',
                 'tileText': 'Karttatasot'

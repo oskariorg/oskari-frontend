@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
          */
         handleRequest: function (core, request) {
             this._log.debug('Zoom to Features');
-            this.vectorLayerPlugin.zoomToFeatures(request.getLayer(), request.getOptions());
+            this.vectorLayerPlugin.zoomToFeatures(request.getOptions(), request.getFeatureFilter());
         }
     }, {
         /**

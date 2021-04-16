@@ -41,46 +41,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             });
             return count;
         },
-
-        /**
-         * @method _addMyPlace
-         * @private
-         * Adds given place to internal data structure. Called when similar backend function
-         * has returned successfully.
-         * @param {Oskari.mapframework.bundle.myplaces3.model.MyPlace} myplaceModel place to add
-         */
-        _addMyPlace: function (myplaceModel) {
-            var categoryId = myplaceModel.getCategoryId();
-            if (!this._placesList[categoryId]) {
-                this._placesList[categoryId] = [];
-            }
-            this._placesList[categoryId].push(myplaceModel);
+        _updatePlaces: function (categoryId) {
+            this._removePlaces(categoryId);
+            this.loadPlaces(categoryId);
         },
-        /**
-         * @method _removeMyPlace
-         * @private
-         * Removes given place from internal data structure. Called when similar backend function
-         * has returned successfully.
-         * @param {Number} placeId id for place to remove
-         */
-        _removeMyPlace: function (id) {
-            var placesList = this._placesList;
-            Object.keys(placesList).forEach(function (category) {
-                var placesInCategory = placesList[category];
-                var indexInCategory = placesInCategory.findIndex(function (place) {
-                    return place.getId() === id;
-                });
-                if (indexInCategory !== -1) {
-                    placesInCategory.splice(indexInCategory, 1);
-                }
-            });
-        },
-        _removePlacesFromCategory: function (categoryId) {
+        _removePlaces: function (categoryId) {
             delete this._placesList[categoryId];
-        },
-        _removePlaceFromCategory: function (id, categoryId) {
-            this._placesList[categoryId] = this.getPlacesInCategory(categoryId)
-                .filter(place => place.getId() !== id);
         },
         findMyPlaceByLonLat: function (lonlat, zoom) {
             this.log.info('findMyPlaceByLonLat() is not implemented');
@@ -139,23 +105,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          */
         movePlacesToCategory: function (oldCategoryId, newCategoryId, callback) {
             var me = this;
-            var placesInDeleteCategory = me.getPlacesInCategory(oldCategoryId);
-            if (placesInDeleteCategory.length === 0) {
+            var places = me.getPlacesInCategory(oldCategoryId);
+            if (places.length === 0) {
                 // no places to move -> callback right away
                 callback(true);
                 return;
             }
-            for (var i = 0; i < placesInDeleteCategory.length; i++) {
-                placesInDeleteCategory[i].setCategoryId(newCategoryId);
-            }
-            const removeCbWrapper = success => {
+            const cbWrapper = success => {
                 if (success) {
-                    // remove from internal store
-                    this._removePlacesFromCategory(oldCategoryId);
+                    this._removePlaces(oldCategoryId);
+                    this._updatePlaces(newCategoryId);
                 }
                 callback(success);
             };
-            this.commitMyPlaces(placesInDeleteCategory, removeCbWrapper, true);
+            places.forEach(place => place.setCategoryId(newCategoryId));
+            this.commitMyPlaces(places, cbWrapper, true);
         },
 
         /**
@@ -165,28 +129,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Number} categoryId category id to delete from
          */
         deletePlacesInCategory: function (categoryId, callback) {
-            var placesInDeleteCategory = this.getPlacesInCategory(categoryId);
-            var idList = placesInDeleteCategory.map(function (place) {
-                return place.getId();
-            });
+            const idList = this.getPlacesInCategory(categoryId).map(place => place.getId());
             if (idList.length === 0) {
-                if (callback) {
-                    callback(true);
-                }
+                // no places to delete -> callback right away
+                this._removePlaces(categoryId);
+                callback(true);
                 return;
             }
-            this.deletePlaces(idList, success => {
+            const cbWrapper = success => {
                 if (success) {
-                    this._removePlacesFromCategory(categoryId);
-                    this._notifyDataChanged();
+                    this._removePlaces(categoryId);
                 }
-                if (callback) {
-                    callback(success);
-                }
-            });
+                callback(success);
+            };
+            this.deletePlaces(idList, cbWrapper);
         },
         /*
-         * @method deleteMyPlaces
+         * @method deletePlaces
          *
          * delete a list of my places from backend
          */
@@ -195,15 +154,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 type: 'DELETE',
                 url: Oskari.urls.getRoute('MyPlacesFeatures') + '&features=' + idList.join(),
                 success: function (response) {
-                    if (response) {
-                        callback(true, idList);
-                    } else {
-                        callback(false, idList);
-                    }
+                    const success = response.deleted > 0;
+                    callback(success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
-                        callback(false, idList);
+                        callback(false);
                     }
                 }
             });
@@ -223,9 +179,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     layerId: categoryId,
                     crs: this.srsName
                 },
-                success: response => {
-                    if (response) {
-                        this._handleLoadPlacesResponse(categoryId, response.features);
+                success: ({ features }) => {
+                    if (features) {
+                        this._handleLoadPlacesResponse(categoryId, features);
                     } else {
                         this.log.error('Failed to load myplaces.');
                     }
@@ -279,14 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param response server response
          */
         _handleLoadPlacesResponse: function (categoryId, features = []) {
-            this._placesList[categoryId] = [];
-            features.forEach(feat => {
-                var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
-                place.setId(feat.id);
-                place.setUuid(feat.properties.uuid);
-                this._setPlaceProperties(place, feat);
-                this._addMyPlace(place);
-            });
+            this._placesList[categoryId] = features.map(feat => this._createPlace(feat));
             this._notifyDataChanged();
         },
         /**
@@ -334,9 +283,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 dataType: 'json',
                 data,
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
-                success: response => {
-                    if (response) {
-                        callback(response.layer);
+                success: ({ layer }) => {
+                    if (layer) {
+                        callback(layer);
                         return;
                     }
                     callback(null);
@@ -359,14 +308,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
          */
         deleteMyPlace: function (placeId, callback) {
-            var me = this;
-            this.deleteMyPlaces([placeId], function (success, list) {
+            const place = this.findMyPlace(placeId);
+            if (!place) {
+                this.log.error('Could not find requested place with id:', placeId);
+                callback(false);
+                return;
+            }
+            const cbWrapper = success => {
                 if (success) {
-                    me._removeMyPlace(list[0]);
-                    me._notifyDataChanged();
+                    this._updatePlaces(place.getCategoryId());
                 }
-                callback(success, list[0]);
-            });
+                callback(success);
+            };
+            this.deletePlaces([placeId], cbWrapper);
         },
         /**
          * @method saveMyPlace
@@ -375,25 +329,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Function} callback function to call when done, receives boolean as
          *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)
          */
-        saveMyPlace: function (myplaceModel, callback) {
-            const id = myplaceModel.getId();
+        saveMyPlace: function (place, callback) {
+            const id = place.getId();
             let oldCategoryId = null;
-            const categoryId = myplaceModel.getCategoryId();
+            const categoryId = place.getCategoryId();
             if (id) {
-                const oldPlace = this.findMyPlace(id);
-                if (oldPlace.getCategoryId() !== categoryId) {
-                    oldCategoryId = oldPlace.getCategoryId();
-                }
+                let oldPlace;
+                Object.keys(this._placesList).forEach(cat => {
+                    oldPlace = this._placesList[cat].find(place => {
+                        return place.getId() === id;
+                    });
+                    if (oldPlace) {
+                        const oldCat = parseInt(cat);
+                        if (categoryId !== oldCat) {
+                            oldCategoryId = oldCat;
+                        }
+                    }
+                });
             }
             const callbackWrapper = success => {
-                if (success && oldCategoryId) {
-                    this._removePlaceFromCategory(id, oldCategoryId);
-                    this._addMyPlace(myplaceModel);
-                }
                 callback(success, categoryId, oldCategoryId);
-                this._notifyDataChanged();
+                this._updatePlaces(categoryId);
+                if (oldCategoryId) {
+                    this._updatePlaces(oldCategoryId);
+                }
             };
-            this.commitMyPlaces([myplaceModel], callbackWrapper, !!id);
+            this.commitMyPlaces([place], callbackWrapper, !!id);
         },
 
         /**
@@ -401,47 +362,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          *
          * handles insert & update (NO delete)
          */
-        commitMyPlaces: function (list, callback, isUpdate) {
-            var me = this;
-            var features = [];
-            list.forEach(function (feat) {
-                // backend formatting
-                var id = feat.getId();
-                var geojson = {
-                    'id': id,
-                    'type': feat.getType(),
-                    'geometry': feat.getGeometry(),
-                    'category_id': feat.getCategoryId(),
-                    'properties': {
-                        'name': feat.getName(),
-                        'place_desc': feat.getDescription(),
-                        'attention_text': feat.getAttentionText(),
-                        'link': feat.getLink(),
-                        'image_url': feat.getImageLink()
-                    }
-                };
-                features.push(geojson);
-            });
+        commitMyPlaces: function (places, callback, isUpdate) {
+            var features = places.map(place => this._createFeature(place));
             jQuery.ajax({
                 type: isUpdate ? 'PUT' : 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    'features': features,
-                    'srsName': this.srsName
+                    features: features,
+                    srsName: this.srsName
                 }),
                 url: Oskari.urls.getRoute('MyPlacesFeatures') + '&crs=' + this.srsName,
                 success: function (response) {
-                    if (response) {
-                        if (me.skipLoading === true) {
-                            callback(true);
-                            return;
-                        }
-                        const success = me._handleCommitMyPlacesResponse(response, isUpdate);
-                        callback(success);
-                    } else {
-                        callback(false);
-                    }
+                    const success = response.totalFeatures > 0;
+                    callback(success);
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
@@ -450,43 +384,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
             });
         },
-
         /**
-         * @method _handleCommitMyPlacesResponse
-         * processes ajax response from backend
-         * @param response server response
-         * @param cb callback to call with the model list as param
+         * @method _createPlace
+         * Creates MyPlace from GeoJSON feature
+         * @param {Object} feature
          */
-        _handleCommitMyPlacesResponse: function (response, isUpdate) {
-            var features = response.features || [];
-            if (features.length === 0) {
-                return false;
-            }
-            features.forEach(feature => {
-                var id = feature.id;
-                var place;
-                if (isUpdate) {
-                    place = this.findMyPlace(id);
-                    if (!place) {
-                        this.log.error('Cannot find place to update');
-                        return false;
-                    }
-                } else {
-                    place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
-                    place.setId(id);
-                    place.setUuid(feature.uuid);
-                }
-                this._setPlaceProperties(place, feature);
-                if (!isUpdate) {
-                    this._addMyPlace(place);
-                }
-            });
-            return true;
-        },
-        _setPlaceProperties: function (place, feature) {
-            const { properties, geometry } = feature;
+        _createPlace: function (feature) {
+            const place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+            const { properties, geometry, id } = feature;
+            place.setId(id);
+            place.setUuid(properties.uuid);
             place.setName(Oskari.util.sanitize(properties.name));
-            place.setDescription(Oskari.util.sanitize(properties.place_desc));
+            place.setDescription(properties.place_desc);
             place.setAttentionText(Oskari.util.sanitize(properties.attention_text));
             place.setLink(Oskari.util.sanitize(properties.link));
             place.setImageLink(Oskari.util.sanitize(properties.image_url));
@@ -497,6 +406,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             const drawMode = this.getDrawModeFromGeometry(geometry);
             const measurement = this.mapmodule.formatMeasurementResult(this.mapmodule.getMeasurementResult(geometry), drawMode);
             place.setMeasurement(measurement);
+            return place;
+        },
+        /**
+         * @method _createFeature
+         * Creates GeoJSON feature from MyPlace
+         * @param {MyPlace} place
+         */
+        _createFeature: function (place) {
+            return {
+                id: place.getId(),
+                type: place.getType(),
+                geometry: place.getGeometry(),
+                category_id: place.getCategoryId(),
+                properties: {
+                    name: place.getName(),
+                    place_desc: place.getDescription(),
+                    attention_text: place.getAttentionText(),
+                    link: place.getLink(),
+                    image_url: place.getImageLink()
+                }
+            };
         },
         /**
          * @method publishCategory
@@ -515,11 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 },
                 url: Oskari.urls.getRoute('PublishMyPlaceLayer'),
                 success: pResp => {
-                    if (pResp) {
-                        callback(true);
-                    } else {
-                        callback(false);
-                    }
+                    callback(pResp);
                 },
                 error: jqXHR => {
                     if (jqXHR.status !== 0) {
@@ -527,7 +453,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     }
                 }
             });
+        },
+        getExportCategoryUrl: function (categoryId) {
+            return Oskari.urls.getRoute('ExportMyPlacesLayerFeatures') + '&categoryId=' + categoryId + '&srs=' + this.srsName;
         }
     }, {
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     });

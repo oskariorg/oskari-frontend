@@ -59,7 +59,7 @@ Oskari.registerLocalization(
             },
             "size": {
                 "label": "Map Size",
-                "tooltip": "Select preview mode."
+                "tooltip": "Determine the size of the map. The recommendation is to use the option \"Scalable/ Responsive\". Otherwise, the width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels."
             },
             "maptools": {
                 "label": "Tools",
@@ -192,7 +192,7 @@ Oskari.registerLocalization(
                 "small": "Small",
                 "medium": "Medium",
                 "large": "Large",
-                "fill": "Space filling",
+                "fill": "Scalable / Responsive",
                 "custom": "Custom size",
                 "width": "width",
                 "height": "height",
@@ -209,7 +209,7 @@ Oskari.registerLocalization(
             "confirm": {
                 "replace": {
                     "title": "Do you want to update this map?",
-                    "msg": "Updates are shown immediately on the map. You do not need to update the html code on your website."
+                    "msg": "Do you want to update this map? Updates are shown immediately on the map. You do not need to update the html code on your website unless you have changed the size of the map."
                 }
             },
             "layerselection": {
@@ -224,7 +224,7 @@ Oskari.registerLocalization(
             "help": "Help",
             "error": {
                 "title": "Error",
-                "size": "The map size is invalid. Width must be at least 30 pixels and height at least 20 pixels. Use a point as a decimal separator.",
+                "size": "The map size is invalid. The width should be from {minWidth} to {maxWidth} pixels and the height from {minHeight} to {maxHeight} pixels.",
                 "domain": "The website is required. Please type an address and try again.",
                 "domainStart": "The website is invalid. Please type an address without http or www prefixes and try again.",
                 "name": "The map name is required. Plese type a name and try again.",
@@ -282,7 +282,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Map Publishing",
-            "message": "In the Map Publishing menu you can publish embedded maps on your own website. <br/><br/> Select map layers, define a website, select tools and desing a layout. Click Save and your map is ready for publishing. Jast copy one line html code to your website. <br/><br/> If you want to update the map, you can find it in the My Data menu. Updates are shown immediately on your map. <br/><br/> Map Publishing is available only for logged-in users.",
+            "message": "In the Map Publishing menu you can publish embedded maps on your own website. <br/><br/> Select map layers, define a website, select tools and desing a layout. Click Save and your map is ready for publishing. Just copy one line html code to your website. <br/><br/> If you want to update the map, you can find it in the My Data menu. Updates are shown immediately on your map. <br/><br/> Map Publishing is available only for logged-in users.",
             "openLink": "Show Map Publishing",
             "closeLink": "Hide Map Publishing",
             "tileText": "Map Publishing"

@@ -63,11 +63,13 @@ Oskari.registerLocalization(
                     "pdf": "PDF-dokumentti"
                 }
             },
-            "mapTitle": {
-                "label": "Näytettävät tiedot",
-                "tooltip": "Valitse tulosteessa näytettävät tiedot."
-            },
             "content": {
+                "label": "Näytettävät tiedot",
+                "tooltip": "Valitse tulosteessa näytettävät tiedot.",
+                "pngNote": "PNG-tulosteelle ei lisätä alla olevia tietoja.",
+                "mapTitle": {
+                    "placeholder": "Otsikko"
+                },
                 "pageLogo": {
                     "label": "Näytä palvelun logo",
                     "tooltip": "Näytä tulosteessa tämän palvelun logo."

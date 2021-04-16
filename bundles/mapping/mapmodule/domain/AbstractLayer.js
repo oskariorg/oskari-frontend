@@ -81,9 +81,6 @@ Oskari.clazz.define(
         /* Currently selected style */
         me._currentStyle = null;
 
-        /* Legend image location */
-        me._legendImage = null;
-
         /* is it possible to ask for feature info */
         me._featureInfoEnabled = null;
 
@@ -491,6 +488,7 @@ Oskari.clazz.define(
             var toBeLoaded = tilesToLoad || 0;
             this.loaded = 0;
             this.errors = 0;
+            this.loading = toBeLoaded;
             this.tilesToLoad = toBeLoaded;
         },
         /**
@@ -839,13 +837,6 @@ Oskari.clazz.define(
             });
         },
         /**
-         * @method setLegendImage
-         * @return {String} legendImage URL to a legend image
-         */
-        setLegendImage: function (legendImage) {
-            this._legendImage = legendImage;
-        },
-        /**
          * @method getLegendImage
          * @return {String} URL to a legend image
          */
@@ -854,16 +845,13 @@ Oskari.clazz.define(
             if (style && style.getLegend()) {
                 return style.getLegend();
             }
-            return this._legendImage;
+            return null;
         },
         /**
          * @method getLegendImage
          * @return {Boolean} true if layer has a legendimage or its styles have legend images
          */
         hasLegendImage: function () {
-            if (this._legendImage) {
-                return true;
-            }
             // find a style with legend
             var styleLegend = this.getStyles().find(function (style) {
                 return !!style.getLegend();

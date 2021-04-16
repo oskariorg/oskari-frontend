@@ -58,6 +58,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 const composingModel = new LayerComposingModel([
                     LayerComposingModel.CESIUM_ION,
                     LayerComposingModel.SRS,
+                    // STYLE combines a list from STYLES_JSON and EXTERNAL_STYLES_JSON
+                    // so it's required for selecting defaults style for 3D...
                     LayerComposingModel.STYLE,
                     LayerComposingModel.STYLES_JSON,
                     LayerComposingModel.EXTERNAL_STYLES_JSON,

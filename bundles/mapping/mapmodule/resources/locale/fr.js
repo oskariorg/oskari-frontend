@@ -50,7 +50,8 @@ Oskari.registerLocalization(
                 "title": "Résultats de la recherche",
                 "close": "Résultats de la recherche à proximité",
                 "noresults": "Pas de résultats. Veuillez affiner votre recherche.",
-                "toomanyresults": "Plus de 100 résultats trouvés. Veuillez affiner votre recherche.",
+                "searchResultCount": "Votre recherche donne {count} résultats.",
+                "searchMoreResults": "Plus de {count} résultats trouvés. Veuillez affiner votre recherche.",
                 "column_name": "Nom",
                 "column_region": "Region",
                 "column_village": "Municipalité",
@@ -111,7 +112,13 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Centrer la carte sur votre position"
-            }
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Revenir à la vue cartographique par défaut",
+                    "confirmReset": "Souhaitez-vous revenir à l’étendue précédente?"
+                }
+            },
         },
         "guidedTour": {
             "help1": {

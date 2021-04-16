@@ -32,7 +32,7 @@ export const Col = styled.div`
 `;
 
 export const StyledInput = styled.input`
-    border-radius: 4px;
+    border-radius: 2px;
     box-shadow: inset 0.5px 0.5px 1.5px 0 rgba(0, 0, 0, 0.5);
     width: 70px;
     border: none;
@@ -128,11 +128,15 @@ export const StyledDateSlider = styled(StyledSlider)`
 
 export const StyledSelect = styled(Select)`
     &&&{
-        color: #ffffff;
+        color: #000000;
+        text-align: center;
     }
     width: 100%;
     .ant-select-selection {
         background-color: #595959;
+    }
+    .ant-select-selection-item {
+        padding-right: 0 !important;
     }
     .ant-select-arrow {
         color: #ffffff;

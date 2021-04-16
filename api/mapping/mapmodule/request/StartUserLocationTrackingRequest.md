@@ -1,4 +1,4 @@
-# StartUserLocationTrackingRequest
+# StartUserLocationTrackingRequest [RPC]
 
 Start tracking user's location.
 

@@ -28,6 +28,7 @@ Oskari.clazz.define(
                 me._sandbox.registerForEventByName(me, p);
             }
         }
+        me._alertPopup = null;
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.mapframework.bundle.timeseries.TimeseriesLayerService',
@@ -88,12 +89,20 @@ Oskari.clazz.define(
          * Show popup if there are more than one selected timeseries layers
          */
         _checkMultipleLayers: function () {
-            if (this._timeseriesService.getCountByType('layer') > 1) {
-                var popup = this._popupService.createPopup();
+            const popup = this._getAlertPopup();
+            if (this._timeseriesService.getCountByType('layer') > 1 && !popup.isVisible()) {
                 var closeBtn = popup.createCloseButton(this.loc('alert.ok'));
                 popup.show(this.loc('alert.title'), this.loc('alert.message'), [closeBtn]);
             }
         },
+
+        _getAlertPopup: function () {
+            if (!this._alertPopup) {
+                this._alertPopup = this._popupService.createPopup();
+            }
+            return this._alertPopup;
+        },
+
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct eventHandlers if found or discarded if not.

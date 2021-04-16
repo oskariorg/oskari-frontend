@@ -29,6 +29,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             property: FTR_PROPERTY_ID
         };
     }
+
     /**
      * @private @method _initImpl
      * Interface method for the module protocol.
@@ -43,16 +44,17 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
                 LayerComposingModel.EXTERNAL_STYLES_JSON,
                 LayerComposingModel.HOVER,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLE,
                 LayerComposingModel.STYLES_JSON,
                 LayerComposingModel.TILE_GRID,
                 LayerComposingModel.URL
-            ]);
+            ], null, [LayerComposingModel.NAME]); // common field name is not used in vectortilelayers so it is skipped on LayerComposingModel
+
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
         }
         this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
     }
+
     /**
      * @private @method _getLayerModelClass
      * Returns class to be used as mapLayerService layer model
@@ -169,6 +171,9 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+        if (!this.getSandbox().getMap().isLayerSupported(layer)) {
+            return;
+        }
         let url = layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection());
         const urlParams = this.getUrlParams(layer);
         if (urlParams) {
@@ -185,23 +190,22 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         if (tileGrid) {
             sourceOpts.tileGrid = new TileGrid(tileGrid);
         }
+        // options is used to store tile grid and all sorts of other flags so only get the
+        //  declutter option here instead of spreading the object to layer directly
+        const { declutter } = layer.getOptions() || {};
         // Properties id, type and hover are being used in VectorFeatureService.
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             renderMode: 'hybrid',
-            source: this.createSource(layer, sourceOpts)
+            source: this.createSource(layer, sourceOpts),
+            declutter
         });
         // Set oskari properties for vector feature service functionalities.
         const silent = true;
         vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
         vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
         vectorTileLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-
-        if (!this.getSandbox().getMap().isLayerSupported(layer)) {
-            layer.setVisible(false);
-            vectorTileLayer.setVisible(false);
-        }
 
         const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
         // Set min max zoom levels that layer should be visible in

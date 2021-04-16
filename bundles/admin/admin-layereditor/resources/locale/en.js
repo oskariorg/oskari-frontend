@@ -54,19 +54,21 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Opacity",
-                "style": "Default Style",
                 "params": {
                     "selectedTime": "Selected time"
                 },
+                "singleTile": "Single Tile",
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
-                "metadataId": "Metadata file identifier",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
                 "dataProviderId": "Dataprovider",
-                "groups": "Maplayer groups"
+                "groups": "Maplayer groups",
+                "updated": "This layer was last edited on",
+                "created": "This layer was created on",
+                "layerId": "Layers unique identifier"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -84,7 +86,7 @@ Oskari.registerLocalization(
             "editDataProvider": "Edit dataprovider",
             "themeName": "Theme name",
             "addTheme": "Add theme",
-            "editTheme" : "Edit theme",
+            "editTheme": "Edit theme",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
             "close": "Close",
@@ -95,11 +97,18 @@ Oskari.registerLocalization(
             "skipCapabilities": "Add manually",
             "addNewFromSameService": "Add a new layer from same service",
             "delete": "Remove",
-            "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
+            "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
+            "serviceNotAvailable": "Not available",
+            "metadata": {
+                "title": "Metadata file identifier",
+                "desc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
+                "service": "File identifier defined in the service",
+                "overridden": "Replaced file identifier"
+            },
             "capabilities": {
+                "parsed": "Capabilities parsed for layer",
                 "show": "Show GetCapabilities response",
-                "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
                 "update": "Update now",
                 "updateRate": "Capabilities update rate",
                 "updateRateDesc": "Update rate in seconds",
@@ -107,20 +116,41 @@ Oskari.registerLocalization(
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
             },
+            "styles": {
+                "default": "Default style",
+                "desc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
+                "raster": {
+                    "title": "Styles and map legends",
+                    "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
+                    "legendImage": "Default legend URL",
+                    "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
+                    "legendImagePlaceholder": "Give the URL address of the map legend.",
+                    "serviceLegend": "Map legend defined in the service",
+                    "overriddenLegend": "Replaced legend URL",
+                    "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service"
+                },
+                "vector": {
+                    "newStyleName": "New style",
+                    "addStyle": "Add style",
+                    "name": "Style name",
+                    "selectDefault": "Select default style",
+                    "deleteStyle": "Delete style",
+                    "validation": {
+                        "name": "Please enter a name for the style",
+                        "noStyles": "No saved styles"
+                    }
+                }
+            },
             "layerStatus": {
                 "existing": "The map layer is already registered to this service. By selecting this you will be adding a duplicate layer.",
                 "problematic": "There were some issues parsing the capabilities for this layer. This layer might not work properly if added.",
                 "unsupported": "According to capabilities this layer doesn't support projections used on this service. This layer might not work properly if added."
             },
-            "metadataIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "attributes": "Attributes",
             "clusteringDistance": "Point distance in cluster",
-            "legendImage": "Default legend URL",
-            "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
-            "legendImagePlaceholder": "Give the URL address of the map legend.",
             "forcedSRS": "Forced SRS",
             "forcedSRSInfo": "View projections override compared to capabilities",
             "supportedSRS": "Supported SRS",
@@ -132,14 +162,30 @@ Oskari.registerLocalization(
                 "geojson": "Big objects",
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
+            "timeSeries": {
+                "metadataLayer": "Metadata layer",
+                "metadataAttribute": "Timeline attribute",
+                "metadataToggleLevel": "Zoom levels at which metadata layer will be active",
+                "noToggle": "No toggle",
+                "ui": "Time series UI",
+                "player": "Player/animation",
+                "range": "Date and range",
+                "none": "None selected",
+                "tooltip": {
+                    "player": "Time series data can be viewed in an animation.",
+                    "range": "Single date or date range can be selected on a slider. Metadata can be added to tell which dates have data. Suitable for data scattered in time and space.",
+                    "none": "The WMS will show only the default image in map view.",
+                },
+                "selectMetadataLayer": "Select metadata layer"
+            },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
-                "styles" : "Invalid JSON syntax in Style definitions.",
-                "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
-                "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
-                "attributes" : "Invalid Attribute JSON syntax.",
-                "attributions" : "Invalid Attributions JSON syntax.",
-                "tileGrid" : "Invalid Tile grid JSON syntax."
+                "styles": "Invalid JSON syntax in Style definitions.",
+                "externalStyles": "Invalid JSON syntax in 3rd party style definitions.",
+                "hover": "Invalid JSON syntax in Feature highlighting and tooltip.",
+                "attributes": "Invalid Attribute JSON syntax.",
+                "attributions": "Invalid Attributions JSON syntax.",
+                "tileGrid": "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
@@ -155,8 +201,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Request timed out before getting response from service. Check the interface URL.",
                 "connectionErrorFetchCapabilities": "Connection could not be established to the service. Check the interface URL.",
                 "parsingErrorFetchCapabilities": "The response from the service didn't match the requested standard. Check the map layer type and/or version.",
-                "deleteSuccess" : "Deleted",
-                "deleteFailed" : "Delete failed",
+                "deleteSuccess": "Deleted",
+                "deleteFailed": "Delete failed",
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?"
@@ -165,7 +211,12 @@ Oskari.registerLocalization(
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Delete the map layers in the group",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "deleteGroupLayers": "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

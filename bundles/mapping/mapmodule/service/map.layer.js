@@ -60,20 +60,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /*
          * Layer filters
          */
+        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93'];
         this.layerFilters = {
-            'featuredata': function (layer) {
+            featuredata: function (layer) {
                 return layer.hasFeatureData();
             },
-            'newest': function (layer) {
+            newest: function (layer) {
                 // kinda heavy, but get a list of 20 newest layers and check if the requested layer is one them
                 // getNewestLayers() caches the result so in practice it's not as heavy as it looks.
                 return !!me.getNewestLayers(20).find(function (newLayer) {
                     return layer.getId() === newLayer.getId();
                 });
             },
-            'timeseries': function (layer) {
+            timeseries: function (layer) {
                 return layer.hasTimeseries();
-            }
+            },
+            raster: layer => rasterLayerTypes.includes(layer.getLayerType())
         };
 
         Oskari.makeObservable(this);
@@ -258,6 +260,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layerList.splice(indexToRemove, 1);
             }
 
+            this._reservedLayerIds[layerId] = false;
+
             // also update layer groups
             this.updateLayersInGroups(layerId, null, true);
 
@@ -307,9 +311,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
 
-            if (newLayerConf.legendImage) {
-                layer.setLegendImage(newLayerConf.legendImage);
-            }
             // Scales need to be set always so they can be cleared with the admin.
             // The server doesn't return scale if not set -> these will not get updated if only updated when value exists
             layer.setMinScale(newLayerConf.minScale);
@@ -1177,12 +1178,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            parsed layer model that can be added with #addLayer(). Only supports WMS layers for now.
          */
         _createGroupMapLayer: function (baseMapJson, isBase) {
-            var baseLayer = this.createLayerTypeInstance('wmslayer'),
-                tempPartsForMetadata,
-                perm,
-                i,
-                subLayer,
-                subLayerOpacity;
+            const baseLayer = this.createLayerTypeInstance('wmslayer');
             if (isBase) {
                 baseLayer.setAsBaseLayer();
             } else {
@@ -1201,14 +1197,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
             baseLayer.setAdmin(baseMapJson.admin);
 
-            baseLayer.setDataUrl(baseMapJson.dataUrl);
-            baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
-            if (!baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl()) {
-                tempPartsForMetadata = baseLayer.getDataUrl().split('uuid=');
-                if (tempPartsForMetadata.length === 2) {
-                    baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
-                }
-            }
+            baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
             if (baseMapJson.orgName) {
                 baseLayer.setOrganizationName(baseMapJson.orgName);
@@ -1216,12 +1205,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOrganizationName('');
             }
 
-            baseLayer.setLegendImage(baseMapJson.legendImage);
             baseLayer.setDescription(baseMapJson.info);
             baseLayer.setQueryable(false);
 
             if (baseMapJson.permissions) {
-                for (perm in baseMapJson.permissions) {
+                for (const perm in baseMapJson.permissions) {
                     if (baseMapJson.permissions.hasOwnProperty(perm)) {
                         baseLayer.addPermission(perm, baseMapJson.permissions[perm]);
                     }
@@ -1229,9 +1217,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             if (baseMapJson.subLayer) {
-                for (i = 0; i < baseMapJson.subLayer.length; i++) {
+                for (let i = 0; i < baseMapJson.subLayer.length; i++) {
                     // Notice that we are adding layers to baselayers sublayers array
-                    subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                    const subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
                     subLayer.setParentId(baseMapJson.id);
 
                     // if (baseMapJson.subLayer[i].admin) {
@@ -1245,7 +1233,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (baseMapJson.opacity !== null && baseMapJson.opacity !== undefined) {
                 baseLayer.setOpacity(baseMapJson.opacity);
             } else if (baseLayer.getSubLayers().length > 0) {
-                subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
+                const subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
                 if (subLayerOpacity !== null && subLayerOpacity !== undefined) {
                     baseLayer.setOpacity(subLayerOpacity);
                 } else {
@@ -1343,14 +1331,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setSrsList(mapLayerJson.srs);
 
             // metadata
-            layer.setDataUrl(mapLayerJson.dataUrl);
-            layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
-            if (!layer.getMetadataIdentifier() && layer.getDataUrl()) {
-                var tempPartsForMetadata = layer.getDataUrl().split('uuid=');
-                if (tempPartsForMetadata.length === 2) {
-                    layer.setMetadataIdentifier(tempPartsForMetadata[1]);
-                }
-            }
+            layer.setMetadataIdentifier(mapLayerJson.metadataUuid);
 
             // backendstatus
             if (mapLayerJson.backendStatus && layer.setBackendStatus) {
@@ -1388,8 +1369,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (mapLayerJson.url) {
                 layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
-
-            layer.setLegendImage(mapLayerJson.legendImage);
 
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!

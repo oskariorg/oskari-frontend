@@ -3,7 +3,7 @@ import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol'
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
-import { WFS_ID_KEY, WFS_FTR_ID_KEY, WFS_FTR_ID_LOCALE } from './WfsVectorLayerPlugin/util/props';
+import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
@@ -57,12 +57,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.vectorFeatureService.registerLayerType(layertype, this);
         this._registerEventHandlers(eventHandlers);
     }
+
     _registerEventHandlers (eventHandlers) {
         if (!eventHandlers) {
             return;
         }
         Object.keys(eventHandlers).forEach(eventName => {
-            if (this._eventHandlers.hasOwnProperty(eventName)) {
+            if (typeof this._eventHandlers[eventName] !== 'undefined') {
                 this._log.warn('Wfs plugin tried to register multiple handlers for event: ' + eventName);
                 return;
             }
@@ -70,6 +71,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             this.getSandbox().registerForEventByName(this, eventName);
         });
     }
+
     _initImpl () {
         super._initImpl();
         const sandbox = this.getSandbox();
@@ -93,7 +95,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             LayerComposingModel.CREDENTIALS,
             LayerComposingModel.HOVER,
             LayerComposingModel.SRS,
-            LayerComposingModel.STYLE,
             LayerComposingModel.STYLES_JSON,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
@@ -107,12 +108,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         sandbox.registerService(this.WFSLayerService);
         this._setupMouseOutOfMapHandler();
     }
+
     _setupMouseOutOfMapHandler () {
         const me = this;
         this.getMapModule().getMap().getViewport().addEventListener('mouseout', (evt) => {
             me.hoverHandler.clearHover();
         }, false);
     }
+
     _createPluginEventHandlers () {
         const vectorHandlers = this.vectorLayerHandler.createEventHandlers(this);
         const mvtHandlers = this.mvtLayerHandler.createEventHandlers(this);
@@ -135,9 +138,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         });
         return handlers;
     }
+
     _createRequestHandlers () {
         return this.reqEventHandler.createRequestHandlers(this);
     }
+
     isLayerSupported (layer) {
         if (!layer) {
             return false;
@@ -147,6 +152,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         return this.layertypes.has(layer.getLayerType());
     }
+
     getRenderMode (layer) {
         let renderMode = this.renderMode;
         if (layer.getOptions()) {
@@ -154,9 +160,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         return renderMode;
     }
+
     isRenderModeSupported (mode) {
         return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
     }
+
     /**
      * @method getPropertiesForIntersectingGeom
      * To get feature properties as a list. Returns features that intersect with given geometry.
@@ -173,6 +181,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const olLayer = this.getOLMapLayers(layer)[0];
         return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
     }
+
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -206,6 +215,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             }
         });
     }
+
     /**
      * @method refreshLayersOfType
      * @param {String} layerType
@@ -228,6 +238,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     onMapHover (event, feature, layer) {
         this.hoverHandler.onMapHover(event, feature, layer);
     }
+
     onLayerRequest (request, layer) {
         this.hoverHandler.onLayerRequest(request, layer);
     }
@@ -248,6 +259,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         return this.visualizationForm.getForm();
     }
+
     /**
      * @method applyEditorStyle Applies custom style editor's style to the layer.
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -258,6 +270,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         layer.setCustomStyle(style);
         layer.selectStyle(styleName);
     }
+
     /**
      * @method findLayerByOLLayer
      * @param {ol/layer/Layer} olLayer OpenLayers layer impl
@@ -267,6 +280,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const layerId = Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
         return this.getSandbox().getMap().getSelectedLayer(layerId);
     }
+
     /**
      * @method getAllLayerIds
      * @return {String[]} All layer ids handled by plugin and selected on map
@@ -286,6 +300,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const id = typeof layer === 'object' ? layer.getId() : layer;
         return this.layerHandlersByLayerId[id];
     }
+
     /**
      * @method getCurrentStyleFunction
      * Returns OL style corresponding to layer currently selected style
@@ -301,6 +316,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
         return handler.getStyleFunction(layer, styleFunction, selectedIds);
     }
+
     /**
      * @method updateLayerStyle
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -322,6 +338,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             }
         });
     }
+
     /**
      * @method updateLayerProperties
      * Notify about changed features in view
@@ -334,6 +351,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             return handler.updateLayerProperties(layer, source);
         }
     }
+
     /**
      * @method setLayerLocales
      * Requests and sets locales for layer's fields.
@@ -344,36 +362,34 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer) {
             return;
         }
-        const onSuccess = localized => {
-            if (Array.isArray(localized) && localized.length) {
-                if (localized[0].name !== WFS_FTR_ID_KEY) {
-                    localized.unshift({
-                        name: WFS_FTR_ID_KEY,
-                        locale: WFS_FTR_ID_LOCALE
-                    });
-                }
-                layer.setFields(localized.map(prop => prop.name));
-                layer.setLocales(localized.map(prop => prop.locale));
-            } else {
-                layer.setFields(fields);
-                layer.setLocales([]);
+        const onSuccess = response => {
+            const lang = Oskari.getLang();
+            const { types = {}, locale = {}, selection } = response;
+            if (Array.isArray(selection)) {
+                layer.setPropertyFilter(selection);
+            } else if (selection) {
+                const selectionArray = selection[lang] || selection.default || fields;
+                layer.setPropertySelection(selectionArray);
             }
+            const labels = locale[lang] || locale.default || {};
+            layer.setPropertyLabels(labels);
+            layer.setPropertyTypes(types);
             this.updateLayerProperties(layer);
         };
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
             data: {
-                id: layer.getId(),
-                lang: Oskari.getLang()
+                layer_id: layer.getId()
             },
-            url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
+            url: Oskari.urls.getRoute('GetWFSLayerFields'),
             success: onSuccess,
             error: () => {
-                this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
+                this._log.warn('Error getting fields for wfs layer ' + layer.getId());
             }
         });
     }
+
     notify (eventName, ...args) {
         var builder = Oskari.eventBuilder(eventName);
         if (!builder) {
@@ -381,6 +397,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
+
     saveUserStyle (layer, name) {
         const style = this.visualizationForm.getOskariStyle();
         const layerId = layer.getId();
@@ -393,6 +410,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         layer.saveUserStyle(styleWithMetadata);
         this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
     }
+
     /**
      * Called when layer details are updated (for example by the admin functionality)
      * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
@@ -418,6 +436,6 @@ Oskari.clazz.defineES('Oskari.wfsvector.WfsVectorLayerPlugin', WfsVectorLayerPlu
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
+        protocol: ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     }
 );

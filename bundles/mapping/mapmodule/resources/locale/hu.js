@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Keresési eredmények",
                 "close": "Keresési eredmények bezárása.",
                 "noresults": "Nincs találat.",
-                "toomanyresults": "Több mint 100 találat. Kérem pontosítsa a keresést.",
+                "searchResultCount": "A keresés {count} eredményt adott",
+                "searchMoreResults": "Több mint {count} találat. Kérem pontosítsa a keresést.",
                 "column_name": "Név",
                 "column_village": "Település",
                 "column_type": "Típus"

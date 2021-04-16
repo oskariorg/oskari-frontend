@@ -90,9 +90,9 @@ const BABEL_LOADER_RULE = {
         /\.min\.js$/,
         // https://github.com/zloirock/core-js/issues/514 core-js shouldn't be run through babel
         // getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
-        // Exclude all but named dependencies (containing es6+)
-        // FIXME: olcs is the problem - adding it takes reeeeaaaally long for build
-        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs'])
+        // Exclude all but named dependencies (named deps contain es6+ modules that require transpiling)
+        // FIXME: olcs seems problematic - adding it makes the build take reeeeaaaally long compared to not having it
+        getWhitelistedModules(['oskari-frontend', 'oskari-frontend-contrib', 'jsts', 'olcs', 'cesium', '@mapbox'])
     ],
     use: {
         loader: 'babel-loader',
@@ -153,14 +153,16 @@ const getModuleRules = (isProd = false, antThemeFile) => {
 
 const RESOLVE = {
     extensions: ['.js', '.jsx'],
-    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
+    // allow use of oskari-frontend node_modules from external projects
+    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'],
     symlinks: false,
     alias: {
         'oskari-ui': path.resolve(__dirname, '../src/react')
     }
 };
 const RESOLVE_LOADER = {
-    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'], // allow external projects to use loaders in oskari-frontend node_modules
+    // allow external projects to use loaders in oskari-frontend node_modules
+    modules: [path.resolve(__dirname, '../node_modules'), 'node_modules'],
     extensions: ['.js', '.json'],
     mainFields: ['loader', 'main'],
     alias: {

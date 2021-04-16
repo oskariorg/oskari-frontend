@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                 'newest': {
                     'title': 'Nyaste',
                     'tooltip': 'Visa de ## nyaste kartlager'
+                },
+                'raster': {
+                    'title': 'Rasterlager',
+                    'tooltip': 'Visa endast kartlager med rastergrafik'
                 }
             },
             'grouping': {
@@ -51,12 +55,12 @@ Oskari.registerLocalization(
                 'DOWN': 'Kartlagret är inte tillgängligt just nu.',
                 'ERROR': 'Kartlagret är inte tillgängligt just nu.',
                 'MAINTENANCE': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
-                'UNKNOWN': '',
+                'UNKNOWN': 'Statusinformationen för det här kartlagret är inte tillgängligt.',
                 'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Kartlager',
-                'message': 'På Kartlager-listan hittar du alla i karttjänsten tillgängliga kartlager.<br/><br/>Sortera kartlager antingen med tema eller med dataproducent.<br/><br/>Sök kartlager med kartlagernamn, dataproducents namn eller sökord. De nyaste kartlager, kartlager med vektorgrafik eller kartlager som kan publiceras hittar du på färdiga listor.<br/><br/>Bladet Valda kartlager visar vilka kartlager är öppet. Du kan dra dessa kartlager i en annan ordning, justera kartlagrens opacitet eller byta stil på en del kartlager.',
+                'message': 'På Kartlager-listan hittar du alla i karttjänsten tillgängliga kartlager.<br/><br/>Sortera kartlager antingen med tema eller med dataproducent.<br/><br/>Sök kartlager med kartlagernamn, dataproducents namn eller sökord. Du kan bläddra i de nyaste kartlager eller filtrera kartlager för att bättre hitta vad du söker.<br/><br/>Bladet Valda kartlager visar vilka kartlager är öppet. Du kan dra dessa kartlager i en annan ordning, justera kartlagrens opacitet eller byta stil på en del kartlager.',
                 'openLink': 'Visa kartlagren',
                 'closeLink': 'Göm kartlagren',
                 'tileText': 'Kartlagren'

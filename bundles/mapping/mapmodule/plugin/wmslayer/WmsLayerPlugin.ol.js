@@ -9,13 +9,36 @@ import { getZoomLevelHelper } from '../../util/scale';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
+const getSingleTileOption = (options = {}, layerAttributes = {}) => {
+    if (options.hasOwnProperty('singleTile')) {
+        // if explicitly configured -> always use as configured
+        return !!options.singleTile;
+    }
+    if (!layerAttributes.times) {
+        // always use tiles when not configured and not a timeseries layer
+        return false;
+    }
+    const timeseries = options.timeseries || {};
+    // force singleTile only if a player ui (explicit config or missing config for ui) would be shown for time series
+    return typeof timeseries.ui === 'undefined' || timeseries.ui === 'player';
+};
+
+// get an array of layers regardless if its the actual layer or sublayers that we want to add to map
+const getLayersToAddForMap = (oskariLayer, isBaseMap) => {
+    if (oskariLayer.getSubLayers().length === 0) {
+        return [oskariLayer];
+    }
+    if (oskariLayer.isGroupLayer() || oskariLayer.isBaseLayer() || isBaseMap === true) {
+        return oskariLayer.getSubLayers();
+    }
+    return [oskariLayer];
+};
+
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
  */
-Oskari.clazz.define(
-    'Oskari.mapframework.mapmodule.WmsLayerPlugin',
-
+Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
     /**
      * @static @method create called automatically on construction
      */
@@ -34,22 +57,25 @@ Oskari.clazz.define(
         _initImpl () {
             const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             const layerClass = 'Oskari.mapframework.domain.WmsLayer';
-            const composingModel = new LayerComposingModel([
-                LayerComposingModel.CAPABILITIES,
-                LayerComposingModel.CAPABILITIES_STYLES,
-                LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.GFI_TYPE,
-                LayerComposingModel.GFI_XSLT,
-                LayerComposingModel.LEGEND_IMAGE,
-                LayerComposingModel.REALTIME,
-                LayerComposingModel.REFRESH_RATE,
-                LayerComposingModel.SELECTED_TIME,
-                LayerComposingModel.SRS,
-                LayerComposingModel.STYLE,
-                LayerComposingModel.URL,
-                LayerComposingModel.VERSION
-            ], ['1.1.1', '1.3.0']);
+            const composingModel = new LayerComposingModel(
+                [
+                    LayerComposingModel.CAPABILITIES,
+                    LayerComposingModel.CAPABILITIES_STYLES,
+                    LayerComposingModel.CREDENTIALS,
+                    LayerComposingModel.GFI_CONTENT,
+                    LayerComposingModel.GFI_TYPE,
+                    LayerComposingModel.GFI_XSLT,
+                    LayerComposingModel.REALTIME,
+                    LayerComposingModel.REFRESH_RATE,
+                    LayerComposingModel.SINGLE_TILE,
+                    LayerComposingModel.SELECTED_TIME,
+                    LayerComposingModel.SRS,
+                    LayerComposingModel.TIMES,
+                    LayerComposingModel.URL,
+                    LayerComposingModel.VERSION
+                ],
+                ['1.1.1', '1.3.0']
+            );
             const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
             mapLayerService.registerLayerModel(type, layerClass, composingModel);
         },
@@ -74,76 +100,56 @@ Oskari.clazz.define(
                 return;
             }
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
-
-            var layers = [],
-                olLayers = [];
-            // insert layer or sublayers into array to handle them identically
-            if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
-                // replace layers with sublayers
-                layers = layer.getSubLayers();
-            } else {
-                // add layer into layers
-                layers.push(layer);
-            }
-
+            const layers = getLayersToAddForMap(layer, isBaseMap);
             // loop all layers and add these on the map
-            for (var i = 0, ilen = layers.length; i < ilen; i++) {
-                var _layer = layers[i];
-                var defaultParams = {
-                        'LAYERS': _layer.getLayerName(),
-                        'TRANSPARENT': true,
-                        'ID': _layer.getId(),
-                        'STYLES': _layer.getCurrentStyle().getName(),
-                        'FORMAT': 'image/png',
-                        'VERSION': _layer.getVersion() || '1.3.0'
-                    },
-                    layerParams = _layer.getParams() || {},
-                    layerOptions = _layer.getOptions() || {},
-                    layerAttributes = _layer.getAttributes() || undefined;
+            const olLayers = layers.map(_layer => {
+                const defaultParams = {
+                    LAYERS: _layer.getLayerName(),
+                    TRANSPARENT: true,
+                    ID: _layer.getId(),
+                    STYLES: _layer.getCurrentStyle().getName(),
+                    FORMAT: 'image/png',
+                    VERSION: _layer.getVersion() || '1.3.0'
+                };
+                const layerParams = _layer.getParams() || {};
+                const layerOptions = _layer.getOptions() || {};
+                const layerAttributes = _layer.getAttributes() || {};
 
-                if (!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
-                    layerOptions.singleTile = true;
-                }
+                layerOptions.singleTile = getSingleTileOption(layerOptions, layerAttributes);
 
                 if (_layer.isRealtime()) {
-                    var date = new Date();
-                    defaultParams['TIME'] = date.toISOString();
+                    defaultParams['TIME'] = new Date().toISOString();
                 }
-                // override default params and options from layer
-                for (var key in layerParams) {
-                    if (layerParams.hasOwnProperty(key)) {
-                        defaultParams[key.toUpperCase()] = layerParams[key];
-                    }
-                }
-                var layerImpl = null;
+                // override default params
+                Object.keys(layerParams).forEach(param => {
+                    defaultParams[param.toUpperCase()] = layerParams[param];
+                });
 
-                var reverseProjection;
-                if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
-                    var projectionCode = this.getMapModule().getProjection();
+                let projection;
+                if (typeof layerAttributes.reverseXY === 'object') {
+                    const projectionCode = this.getMapModule().getProjection();
                     // use reverse coordinate order for this layer!
                     if (layerAttributes.reverseXY[projectionCode]) {
-                        reverseProjection = this._createReverseProjection(projectionCode);
+                        projection = this._createReverseProjection(projectionCode);
                     }
                 }
-                var sourceImpl = null;
-                var sourceOpts = {
+                const sourceOpts = {
                     url: _layer.getLayerUrl(),
                     params: defaultParams,
                     crossOrigin: _layer.getAttributes('crossOrigin'),
-                    projection: reverseProjection || undefined
+                    projection: projection
                 };
+                let layerImpl = null;
                 if (layerOptions.singleTile === true) {
-                    sourceImpl = new OskariImageWMS(sourceOpts);
                     layerImpl = new olLayerImage({
-                        source: sourceImpl,
+                        source: new OskariImageWMS(sourceOpts),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                     this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
-                    sourceImpl = new OskariTileWMS(sourceOpts);
                     layerImpl = new olLayerTile({
-                        source: sourceImpl,
+                        source: new OskariTileWMS(sourceOpts),
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
@@ -151,30 +157,33 @@ Oskari.clazz.define(
                 }
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(layerImpl, _layer.getMinScale(), _layer.getMaxScale());
-                this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
-                // gather references to layers
-                olLayers.push(layerImpl);
 
                 this._log.debug('#!#! CREATED ol/layer/TileLayer for ' + _layer.getId());
-            }
+                return layerImpl;
+            });
+            // add layers to map
+            olLayers.forEach(layerImpl => {
+                this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
+            });
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
         },
 
         _registerLayerEvents: function (layer, oskariLayer, prefix) {
-            var me = this;
-            var source = layer.getSource();
+            const me = this;
+            const source = layer.getSource();
+            const layerId = oskariLayer.getId();
 
             source.on(prefix + 'loadstart', function () {
-                me.getMapModule().loadingState(oskariLayer._id, true);
+                me.getMapModule().loadingState(layerId, true);
             });
 
             source.on(prefix + 'loadend', function () {
-                me.getMapModule().loadingState(oskariLayer._id, false);
+                me.getMapModule().loadingState(layerId, false);
             });
 
             source.on(prefix + 'loaderror', function () {
-                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+                me.getMapModule().loadingState(layerId, null, true);
             });
         },
         /**
@@ -190,14 +199,14 @@ Oskari.clazz.define(
             }
 
             var reverseProjection = new olProjProjection({
-                'code': projectionCode,
-                'units': originalProjection.getUnits(),
-                'extent': originalProjection.getExtent(),
-                'axisOrientation': 'neu',
-                'global': originalProjection.isGlobal(),
-                'metersPerUnit': originalProjection.getMetersPerUnit(),
-                'worldExtent': originalProjection.getWorldExtent(),
-                'getPointResolution': originalProjection.getPointResolution
+                code: projectionCode,
+                units: originalProjection.getUnits(),
+                extent: originalProjection.getExtent(),
+                axisOrientation: 'neu',
+                global: originalProjection.isGlobal(),
+                metersPerUnit: originalProjection.getMetersPerUnit(),
+                worldExtent: originalProjection.getWorldExtent(),
+                getPointResolution: originalProjection.getPointResolution
             });
             return reverseProjection;
         },
@@ -216,7 +225,7 @@ Oskari.clazz.define(
             }
             layerList.forEach(function (openlayer) {
                 openlayer.getSource().updateParams({
-                    styles: layer.getCurrentStyle().getName()
+                    STYLES: layer.getCurrentStyle().getName()
                 });
             });
         },
@@ -228,7 +237,7 @@ Oskari.clazz.define(
             var olLayerList = this.mapModule.getOLMapLayers(layer.getId()) || [];
             const proxyUrl = Oskari.urls.getRoute('GetLayerTile', { id: layer.getId() });
 
-            olLayerList.forEach(olLayer => {
+            olLayerList.forEach((olLayer) => {
                 var layerSource = olLayer.getSource();
                 // TileWMS -> original is olSourceTileWMS.getTileLoadFunction
                 if (typeof layerSource.getTileLoadFunction === 'function') {
@@ -306,17 +315,18 @@ Oskari.clazz.define(
             }
             const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
             const layersImpls = this.getOLMapLayers(layer.getId()) || [];
-            layersImpls.forEach(olLayer => {
+            layersImpls.forEach((olLayer) => {
                 // Update min max Resolutions
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
             });
         }
-    }, {
+    },
+    {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
-        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
+        protocol: ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
+        extend: ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
     }
 );

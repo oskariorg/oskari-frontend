@@ -45,9 +45,7 @@ const AdminLayerForm = ({
     dataProviders,
     versions,
     layer,
-    capabilities,
     propertyFields,
-    messages = [],
     tab,
     onCancel,
     onDelete,
@@ -66,11 +64,6 @@ const AdminLayerForm = ({
         validPermissions = permissionValidator(layer);
     }
     return (<StyledRoot>
-        { messages.map(({ key, type, args }) =>
-            <StyledAlert key={key} type={type} message={
-                <Message messageKey={key} messageArgs={args}/>
-            }/>
-        )}
         <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
@@ -80,13 +73,11 @@ const AdminLayerForm = ({
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
                     versions={versions}
-                    validators={validators}
-                    capabilities={capabilities} />
+                    validators={validators} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
                 <VisualizationTabPane
                     layer={layer}
-                    capabilities={capabilities}
                     scales={scales}
                     propertyFields={propertyFields}
                     controller={controller}/>
@@ -95,8 +86,7 @@ const AdminLayerForm = ({
                 <AdditionalTabPane
                     layer={layer}
                     propertyFields={propertyFields}
-                    controller={controller}
-                    capabilities={capabilities} />
+                    controller={controller} />
             </TabPane>
             <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/>&nbsp;<MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
@@ -140,9 +130,7 @@ AdminLayerForm.propTypes = {
     dataProviders: PropTypes.array.isRequired,
     versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,

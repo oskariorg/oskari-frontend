@@ -65,13 +65,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             buttons: '<div class="buttons"></div>',
             help: '<div class="help icon-info"></div>',
-            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
+            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div></div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
-            mapTitle: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
+            mapTitleInput: '<div class="printout_option_cont printout_settings_cont"><input class="printout_title_field" type="text"></div>',
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
             optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
             scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
-            contentOptions: '<div class=""/>'
+            contentOptions: '<div class="printout_content"><div class="printout_content_title"></div><div class="printout_content_options"></div></div>',
+            pngNote: '<div class="icon-warning-light"/>'
         },
         /**
          * @public @method render
@@ -209,23 +210,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {jQuery} Returns the created panel
          */
         _createSettingsPanel: function () {
-            var me = this;
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             panel.addClass('printsettings');
-            panel.setTitle(me.loc.settings.label);
+            panel.setTitle(this.loc.settings.label);
             var contentPanel = panel.getContainer();
             // tooltip
-            var tooltipCont = me.template.help.clone();
-            tooltipCont.attr('title', me.loc.settings.tooltip);
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', this.loc.settings.tooltip);
             panel.getHeader().append(tooltipCont);
-            var format = me.template.format.clone();
-            format.find('.printout_format_label').html(me.loc.format.label);
-
-            FORMAT_OPTIONS.forEach(function (option, i) {
+            var format = this.template.format.clone();
+            format.find('.printout_format_label').html(this.loc.format.label);
+            const tempValues = {};
+            FORMAT_OPTIONS.forEach((option, i) => {
                 const { name, mime } = option;
-                var toolContainer = me.template.optionTool.clone();
+                var toolContainer = this.template.optionTool.clone();
                 const id = 'printout-format-' + name;
-                const label = me.loc.format.options[name];
+                const label = this.loc.format.options[name];
                 toolContainer.find('label').append(label).attr('for', id);
                 const input = toolContainer.find('input');
                 if (i === 0) {
@@ -238,37 +238,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 });
                 input.on('change', function () {
                     if (name === 'png') {
-                        contentOptions.find('input').prop('disabled', true);
+                        contentOptions.find('input:checkbox').each(function () {
+                            tempValues[this.value] = this.checked;
+                        }).prop('checked', false).prop('disabled', true);
+                        tempValues.mapTitle = mapTitleInput.val();
+                        mapTitleInput.val('');
+                        mapTitleInput.prop('disabled', true);
+                        title.append(pngNote);
                     } else {
-                        contentOptions.find('input').prop('disabled', false);
+                        contentOptions.find('input:checkbox').prop('disabled', false)
+                            .each(function () {
+                                this.checked = !!tempValues[this.value];
+                            });
+                        mapTitleInput.val(tempValues.mapTitle || '');
+                        mapTitleInput.prop('disabled', false);
+                        pngNote.remove();
                     }
                 });
                 format.append(toolContainer);
             });
             contentPanel.append(format);
             /* --- options available for pdf --- */
-            const contentOptions = me.template.contentOptions.clone();
-            var mapTitle = me.template.mapTitle.clone();
-            mapTitle.find('.printout_title_label').html(me.loc.mapTitle.label);
-            mapTitle.find('.printout_title_field').attr('placeholder', me.loc.mapTitle.label);
+            const optionsContainer = this.template.contentOptions.clone();
+            const title = optionsContainer.find('.printout_content_title').html(this.loc.content.label);
+            const contentOptions = optionsContainer.find('.printout_content_options');
+            const pngNote = this.template.pngNote.clone();
+            pngNote.attr('title', this.loc.content.pngNote);
+            var mapTitle = this.template.mapTitleInput.clone();
+            const mapTitleInput = mapTitle.find('input');
+            mapTitleInput.attr('placeholder', this.loc.content.mapTitle.placeholder);
             contentOptions.append(mapTitle);
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
                 options.push(TIME_OPTION);
             }
-            options.forEach(function (value) {
-                var opt = me.template.optionPage.clone();
+            options.forEach(value => {
+                var opt = this.template.optionPage.clone();
                 const id = 'printout-page-' + value;
                 opt.find('input').attr({ id, value }).prop('checked', true);
-                const label = me.loc.content[value].label;
+                const label = this.loc.content[value].label;
                 opt.find('label').html(label).attr('for', id);
                 contentOptions.append(opt);
             });
-            contentPanel.append(contentOptions);
+            contentPanel.append(optionsContainer);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
-            var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+            var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {
-                me.contentOptionDivs.pageScale.css('display', 'none');
+                this.contentOptionDivs.pageScale.css('display', 'none');
             }
             return panel;
         },
@@ -505,7 +521,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
             var scaleText = '';
 
-            if (this.instance.conf.scaleSelection && this.scaleOptionsMap.usedefinedscale.selected) {
+            if (this.instance.conf.scaleSelection && container.find('input[type=radio]#printout-scale-configured').prop('checked')) {
                 resolution = this.mapmodule.getExactResolution(scale);
                 scaleText = '1:' + scale;
             }
@@ -513,7 +529,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const srs = sandbox.getMap().getSrsName();
             const customStyles = this._getSelectedCustomStyles();
             // printMap has been called outside so keep this separation for mapLinkArgs and selections
-            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText });
+            // ask for optimized link with non-visible layers excluded
+            const optimized = true;
+            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText }, optimized);
             var selections = {};
 
             container.find('.printout_option_cont input').each(function () {
@@ -582,36 +600,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         },
 
         /**
-         * @private @method openPostURLinWindow
+         * @private @method openPostPrint
          * Sends the gathered map data to the server to save them/publish the map.
          *
-         * @param {String} printUrl Url to print service action route GetPrint
-         * @param {String} geoJson Stringified GeoJSON
-         * @param {String} tileData Stringified tile data
-         * @param {String} customStyles Stringified styles
+         * @param {String} printUrl
+         * @param {Object} params
+         * @param {Object} customStyles
          *
          */
-        openPostURLinWindow: function (printUrl, geoJson, tileData, tableData, customStyles) {
-            var me = this;
-            var wopParm = this._getWindowSpecs();
-            me.mainPanel.find('#oskari_print_formID').attr('action', printUrl);
-            me.mainPanel.find('input[name=customStyles]').val(customStyles);
-            // Are these used anymore??
-            if (geoJson) {
-                // UTF-8 Base64 encoding
-                var textu8 = unescape(encodeURIComponent(geoJson));
-                me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(textu8));
+        getPostPrint: function (printUrl, params, customStyles) {
+            const payload = { customStyles };
+            let fileName = params.pageTitle || 'print';
+            const format = FORMAT_OPTIONS.find(format => format.mime === params.format);
+            if (format) {
+                fileName += '.' + format.name;
             }
-            if (tileData) {
-                me.mainPanel.find('input[name=tiles]').val(tileData);
-            }
-            if (tableData) {
-                me.mainPanel.find('input[name=tabledata]').val(tableData);
-            }
-
-            window.open('about:blank', 'map_popup_111', wopParm);
-
-            me.mainPanel.find('#oskari_print_formID').submit();
+            const showSpinner = visible => this.instance.getSandbox().postRequestByName('ShowProgressSpinnerRequest', [visible]);
+            showSpinner(true);
+            const successCb = blob => {
+                if (navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveOrOpenBlob(blob, fileName);
+                } else {
+                    const url = window.URL.createObjectURL(blob);
+                    const elem = document.createElement('a');
+                    elem.href = url;
+                    elem.download = fileName;
+                    document.body.appendChild(elem);
+                    elem.click();
+                    document.body.removeChild(elem);
+                    window.URL.revokeObjectURL(url);
+                }
+                showSpinner(false);
+            };
+            const errorCb = error => {
+                Oskari.log('BasicPrintout').error(error);
+                const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                popup.show(this.loc.error.title, this.loc.error.saveFailed, [popup.createCloseButton()]);
+                showSpinner(false);
+            };
+            this.instance.getService().fetchPrint(printUrl, payload, successCb, errorCb);
         },
         /**
          * @method printMap
@@ -630,25 +657,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             }
             const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
-            let url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
+            const url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
 
-            // additional layout params for PDF? is needed??
-            url = url + this._getLayoutParams(params.pageSize);
-            const hasCustomStyles = Object.keys(customStyles).length > 0;
-            const hasTileData = Object.keys(this.instance.tileData).length > 0;
-            // We need to use the POST method if there's GeoJSON or tile data.
-            if (hasTileData || hasCustomStyles || this.instance.tableJson) {
-                var stringifiedJson = this._stringifyGeoJson(null);
-                var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
-                var stringifiedTableData = this._stringifyTableData(this.instance.tableJson);
-                const stringifiedCustomStyles = JSON.stringify(customStyles);
-                Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-                this.openPostURLinWindow(url, stringifiedJson, stringifiedTileData, stringifiedTableData, stringifiedCustomStyles);
-            } else {
-                // Otherwise GET is satisfiable.
-                Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
-                this.openURLinWindow(url);
-            }
+            Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
+            this.getPostPrint(url, params, customStyles);
         },
 
         /**

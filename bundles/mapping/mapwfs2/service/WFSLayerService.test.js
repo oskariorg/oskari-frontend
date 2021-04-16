@@ -9,8 +9,22 @@ const service = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.
 const layerId = 123;
 
 describe('WFSLayerService', () => {
-    test('setWFSFeaturesSelections()', () => {
+    test('click setWFSFeaturesSelections()', () => {
+        service.setWFSFeaturesSelections(layerId, [1, 2], false);
+        expect(service.getSelectedFeatureIds(layerId).length).toBe(2);
+        service.setWFSFeaturesSelections(layerId, [3], false);
+        expect(service.getSelectedFeatureIds(layerId).length).toBe(3);
+        // unselect feature by using existing id
+        service.setWFSFeaturesSelections(layerId, [3], false);
+        const ids = service.getSelectedFeatureIds(layerId);
+        expect(ids.length).toBe(2);
+        expect(ids).toEqual(expect.arrayContaining([1, 2]));
+        expect(ids).not.toContain(3);
+    });
+
+    test('selection tool setWFSFeaturesSelections()', () => {
         expect(service.getSelectedWFSLayerIds().length).toEqual(0);
+        // using true clears old selections and makes new selection
         service.setWFSFeaturesSelections(layerId, [1, 2], true);
         const selections = service.getWFSSelections();
         expect(selections.length).toEqual(1);
