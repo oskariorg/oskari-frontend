@@ -348,6 +348,13 @@ Oskari.clazz.define(
                     this.__setupLayerTools();
                 }
             },
+            'AfterMapLayerAddEvent': function (event) {
+                if (event.getMapLayer().getId() === this._layerId) {
+                    this.regionsetViewer.render();
+                    this.updateClassficationViewVisibility();
+                    this.updateSeriesControlVisibility();
+                }
+            },
             'MapLayerVisibilityChangedEvent': function (event) {
                 var layer = event.getMapLayer();
                 if (!layer || layer.getId() !== this._layerId) {
