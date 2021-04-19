@@ -7,6 +7,7 @@ import { StyledFormField } from './styled';
 import { TimeSeriesMetadataAttribute } from './TimeSeries/TimeSeriesMetadataAttribute';
 import { TimeSeriesMetadataLayerSelect } from './TimeSeries/TimeSeriesMetadataLayerSelect';
 import { TimeSeriesMetadataToggleLevel } from './TimeSeries/TimeSeriesMetadataToggleLevel';
+import { TimeSeriesMetadataVisualization } from './TimeSeries/TimeSeriesMetadataVisualization';
 
 const TIME_SERIES_UI = {
     PLAYER: 'player',
@@ -70,6 +71,11 @@ export const TimeSeries = ({ layer, scales, controller }) => {
                         layer={layer}
                         disabled={metadata.layer === ''}
                         scales={scales}
+                        controller={controller}
+                    />
+                    <TimeSeriesMetadataVisualization
+                        layer={layer}
+                        disabled={metadata.layer === ''}
                         controller={controller}
                     />
                 </Fragment>

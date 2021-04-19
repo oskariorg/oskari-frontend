@@ -239,6 +239,14 @@ class UIHandler extends StateHandler {
         layer.options.timeseries = timeseries;
         this.updateState({ layer });
     }
+    setTimeSeriesMetadataVisualize (visualize) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, visualize };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
 
     setRefreshRate (refreshRate) {
         this.updateState({
@@ -1082,6 +1090,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setTimeSeriesMetadataLayer',
     'setTimeSeriesMetadataAttribute',
     'setTimeSeriesMetadataToggleLevel',
+    'setTimeSeriesMetadataVisualize',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',
