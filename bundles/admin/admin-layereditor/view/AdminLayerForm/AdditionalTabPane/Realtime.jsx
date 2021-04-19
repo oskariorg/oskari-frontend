@@ -4,14 +4,9 @@ import { Switch, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { InlineFlex } from '../InlineFlex';
-import { StyledFormField } from '../styled';
+import { StyledFormField, SpacedLabel } from '../styled';
 import { Numeric } from '../Numeric';
 import styled from 'styled-components';
-
-const SpacedLabel = styled('div')`
-    display: inline-block;
-    margin-left: 10px;
-`;
 
 const Expand = styled('div')`
     transition: max-height 0.3s ease;
