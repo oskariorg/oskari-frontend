@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { StyledFormField } from './styled';
-import { TimeSeriesMetadataAttribute } from './TimeSeriesMetadataAttribute';
-import { TimeSeriesMetadataLayerSelect } from './TimeSeriesMetadataLayerSelect';
-import { TimeSeriesMetadataToggleLevel } from './TimeSeriesMetadataToggleLevel';
+import { TimeSeriesMetadataAttribute } from './TimeSeries/TimeSeriesMetadataAttribute';
+import { TimeSeriesMetadataLayerSelect } from './TimeSeries/TimeSeriesMetadataLayerSelect';
+import { TimeSeriesMetadataToggleLevel } from './TimeSeries/TimeSeriesMetadataToggleLevel';
 
 const TIME_SERIES_UI = {
     PLAYER: 'player',
@@ -60,18 +60,18 @@ export const TimeSeries = ({ layer, scales, controller }) => {
                         layer={layer}
                         value={metadata.layer}
                         controller={controller}
-                    ></TimeSeriesMetadataLayerSelect>
+                    />
                     <TimeSeriesMetadataAttribute
                         layer={layer}
                         disabled={metadata.layer === ''}
                         controller={controller}
-                    ></TimeSeriesMetadataAttribute>
+                    />
                     <TimeSeriesMetadataToggleLevel
                         layer={layer}
                         disabled={metadata.layer === ''}
                         scales={scales}
                         controller={controller}
-                    ></TimeSeriesMetadataToggleLevel>
+                    />
                 </Fragment>
             )}
         </TimeSeriesContainer>
