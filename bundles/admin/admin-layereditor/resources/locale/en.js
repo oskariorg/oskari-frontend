@@ -166,6 +166,7 @@ Oskari.registerLocalization(
                 "metadataLayer": "Metadata layer",
                 "metadataAttribute": "Timeline attribute",
                 "metadataToggleLevel": "Zoom levels at which metadata layer will be active",
+                "metadataVisualize": "Metadata layer visibility",
                 "noToggle": "No toggle",
                 "ui": "Time series UI",
                 "player": "Player/animation",
