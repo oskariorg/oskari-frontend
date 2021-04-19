@@ -119,7 +119,7 @@ class UIHandler extends StateHandler {
             return false;
         }
         const attribute = metadata.attribute || 'time';
-        this._metadataHandler = new TimeseriesMetadataService(layerId, attribute, metadata.toggleLevel);
+        this._metadataHandler = new TimeseriesMetadataService(layerId, attribute, metadata.toggleLevel, !!metadata.visualize);
         return true;
     }
 
