@@ -21,6 +21,7 @@ const StyledBadge = styled.div`
     background: #ffd400;
     border-radius: 4px;
     text-align: center;
+    padding: 2px 10px;
     font-size: 12px;
     display: inline;
     line-height: 20px;
