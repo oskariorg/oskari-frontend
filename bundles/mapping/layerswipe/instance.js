@@ -1,6 +1,5 @@
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
-import VectorLayer from 'ol/layer/Vector';
 
 const SwipeAlertTypes = {
     NO_RASTER: 'noRaster',
@@ -15,8 +14,8 @@ Oskari.clazz.define(
         this.splitter = null;
         this.splitterWidth = 5;
         this.cropSize = null;
-        this.map = null;
-        this.layer = null;
+        this.mapModule = null;
+        this.layer = null; // ol layer
         this.popupService = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
@@ -37,7 +36,7 @@ Oskari.clazz.define(
         __name: 'LayerSwipe',
 
         _startImpl: function (sandbox) {
-            this.map = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMap();
+            this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
@@ -57,6 +56,7 @@ Oskari.clazz.define(
         },
 
         setActive: function (active) {
+            const map = this.mapModule.getMap();
             if (active) {
                 this.updateSwipeLayer();
                 if (this.layer === null) {
@@ -64,7 +64,7 @@ Oskari.clazz.define(
                 }
                 this.showSplitter();
                 if (this.cropSize === null) {
-                    const mapSize = this.map.getSize();
+                    const mapSize = map.getSize();
                     this.cropSize = mapSize[0] / 2;
                 }
             } else {
@@ -72,7 +72,7 @@ Oskari.clazz.define(
                 this.hideSplitter();
             }
             this.active = active;
-            this.map.render();
+            map.render();
         },
 
         updateSwipeLayer: function () {
@@ -94,10 +94,6 @@ Oskari.clazz.define(
                 }, this.alertDebounceTime);
                 return;
             }
-
-            if (!this.layer.getVisible()) {
-                this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
-            }
             this.registerEventListeners();
         },
 
@@ -114,12 +110,30 @@ Oskari.clazz.define(
             popup.show(title, message, [closeBtn]);
         },
 
+        isInGeometry: function (layer) {
+            var geometries = layer.getGeometry();
+            if (!geometries || geometries.length === 0) {
+                // we might not have the coverage geometry so assume all is good if we don't know for sure
+                return true;
+            }
+            var viewBounds = this.mapModule.getCurrentExtent();
+            var olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+            return geometries[0].intersectsExtent(olExtent);
+        },
+
         getTopmostLayer: function () {
-            const layers = this.map
-                .getLayers()
-                .getArray()
-                .filter((layer) => !(layer instanceof VectorLayer));
-            return layers.length !== 0 ? layers[layers.length - 1] : null;
+            const layers = Oskari.getSandbox()
+                .findAllSelectedMapLayers()
+                .filter(l => l.isVisible());
+            if (!layers.length) {
+                return null;
+            }
+            const topLayer = layers[layers.length - 1];
+            if (!topLayer.isInScale(this.mapModule.getMapScale()) || !this.isInGeometry(topLayer)) {
+                this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+            }
+            const olLayers = this.mapModule.getOLMapLayers(topLayer.getId());
+            return olLayers.length !== 0 ? olLayers[0] : null;
         },
 
         registerEventListeners: function () {
@@ -133,7 +147,7 @@ Oskari.clazz.define(
                     return;
                 }
 
-                const mapSize = this.map.getSize();
+                const mapSize = this.mapModule.getMap().getSize();
                 const tl = getRenderPixel(event, [0, 0]);
                 const tr = getRenderPixel(event, [this.cropSize, 0]);
                 const bl = getRenderPixel(event, [0, mapSize[1]]);
@@ -163,6 +177,7 @@ Oskari.clazz.define(
         getSplitterElement: function () {
             if (!this.splitter) {
                 this.splitter = jQuery('<div class="layer-swipe-splitter"></div>');
+                this.splitter.css('cursor', 'grab');
                 this.splitter.draggable({
                     containment: '#mapdiv',
                     axis: 'x',
@@ -181,7 +196,7 @@ Oskari.clazz.define(
             const mapOffset = jQuery('#mapdiv').offset();
             const splitterOffset = jQuery('.layer-swipe-splitter').offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
-            this.map.render();
+            this.mapModule.getMap().render();
         },
 
         showSplitter: function () {
@@ -214,8 +229,8 @@ Oskari.clazz.define(
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                if (this.active && !this.layer.getVisible()) {
-                    this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+                if (this.active) {
+                    this.updateSwipeLayer();
                 }
             }
         }
