@@ -162,12 +162,12 @@ Oskari.registerLocalization(
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "timeSeries": {
-                "metadataLayer": "Metadata layer",
-                "metadataAttribute": "Timeline attribute",
+                "metadataLayer": "Metadatalager",
+                "metadataAttribute": "Metadata tidsattribut",
                 "metadataToggleLevel": "Zoomnivåer där vektorformaten är aktiverat",
-                "metadataVisualize": "Metada lager synlighet ",
-                "noToggle": "No toggle",
-                "ui": "Time series UI",
+                "metadataVisualize": "Metadatalager synlighet ",
+                "noToggle": "Inget val",
+                "ui": "Tidsserie användargränssnitt",
                 "player": "Animering",
                 "range": "Tidsserie",
                 "none": "Inget val",
