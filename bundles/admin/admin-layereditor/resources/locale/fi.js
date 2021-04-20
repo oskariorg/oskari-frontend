@@ -164,12 +164,12 @@ Oskari.registerLocalization(
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "timeSeries": {
-                "metadataLayer": "Metadata layer",
-                "metadataAttribute": "Timeline attribute",
+                "metadataLayer": "Metadatataso",
+                "metadataAttribute": "Metadatan aika-atribuutti",
                 "metadataToggleLevel": "Mittakaavatasot, joilla metatietotaso on käytössä",
                 "metadataVisualize": "Metadatatason näkyminen",
-                "noToggle": "No toggle",
-                "ui": "Time series UI",
+                "noToggle": "Ei valintaa",
+                "ui": "Aikasarjan käyttö",
                 "player": "Animaatio",
                 "range": "Aikajana",
                 "none": "Ei valintaa",
