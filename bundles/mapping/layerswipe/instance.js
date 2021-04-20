@@ -118,10 +118,7 @@ Oskari.clazz.define(
             }
             var viewBounds = this.mapModule.getCurrentExtent();
             var olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
-            if (geometries[0].intersectsExtent(olExtent)) {
-                return true;
-            }
-            return false;
+            return geometries[0].intersectsExtent(olExtent);
         },
 
         getTopmostLayer: function () {
