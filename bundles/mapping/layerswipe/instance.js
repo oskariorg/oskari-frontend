@@ -113,6 +113,7 @@ Oskari.clazz.define(
         isInGeometry: function (layer) {
             var geometries = layer.getGeometry();
             if (!geometries || geometries.length === 0) {
+                // we might not have the coverage geometry so assume all is good if we don't know for sure
                 return true;
             }
             var viewBounds = this.mapModule.getCurrentExtent();
