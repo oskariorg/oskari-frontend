@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { groupLayers } from './util';
+import { groupLayers, groupLayersAdmin } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 
 const ANIMATION_TIMEOUT = 400;
@@ -28,7 +28,8 @@ class ViewHandler extends StateHandler {
         this.state = {
             groups: [],
             openGroupTitles: [],
-            selectedLayerIds: this._getSelectedLayerIds()
+            selectedLayerIds: this._getSelectedLayerIds(),
+            selectedGroupIds: []
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -56,6 +57,7 @@ class ViewHandler extends StateHandler {
             }
         }
     }
+
     _getSelectedLayerIds () {
         return this.map.getLayers().map(layer => layer.getId());
     }
@@ -82,6 +84,32 @@ class ViewHandler extends StateHandler {
         setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
+    // active all layers in selected group
+    addGroupLayersToMap (group) {
+        for (let i in group.layers) {
+            if (!group.layers[i]._id || this.state.selectedLayerIds.includes(group.layers[i]._id)) {
+                continue;
+            }
+            const selectedLayerIds = [...this.state.selectedLayerIds, group.layers[i]._id];
+            this.updateState({ selectedLayerIds });
+            setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
+        }
+    }
+
+    // deactivate all layers in group
+    removeGroupLayersFromMap (group) {
+        for (let i in group.layers) {
+            const index = this.state.selectedLayerIds.indexOf(group.layers[i]._id);
+            if (index === -1) {
+                continue;
+            }
+            const selectedLayerIds = [...this.state.selectedLayerIds];
+            selectedLayerIds.splice(index, 1);
+            this.updateState({ selectedLayerIds });
+            setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [group.layers[i]._id]), ANIMATION_TIMEOUT);
+        }
+    }
+
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId === FILTER_ALL_LAYERS ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
@@ -89,9 +117,14 @@ class ViewHandler extends StateHandler {
         const isUserAdmin = tools.length > 0;
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
-        const allGroups = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
-        const allDataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
-        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
+        const allGroups = this.mapLayerService.getAllLayerGroups();
+        const allDataProviders = this.mapLayerService.getDataProviders();
+        let groups;
+        if (isUserAdmin) {
+            groups = groupLayersAdmin([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
+        } else {
+            groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, [], this.loc.grouping.noGroup);
+        }
         if (!searchText) {
             this.updateState({ groups });
             return;
@@ -231,5 +264,9 @@ export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'updateLayerGroups',
     'updateSelectedLayerIds',
     'showLayerMetadata',
-    'showLayerBackendStatus'
+    'showLayerBackendStatus',
+    'addGroupLayersToMap',
+    'removeGroupLayersFromMap',
+    'showWarn',
+    'deactivateGroup'
 ]);

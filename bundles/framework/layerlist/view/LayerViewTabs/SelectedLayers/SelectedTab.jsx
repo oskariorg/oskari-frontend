@@ -25,7 +25,7 @@ const StyledBadge = styled.div`
     font-size: 12px;
     display: inline;
     line-height: 20px;
-    margin-left: 8px;
+    margin-right: 10px;
     font-weight: 700;
     ${props => props.blink && css`
         animation: ${animation} ${BLINK_DURATION_IN_SECONDS}s;
