@@ -134,28 +134,34 @@ const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue 
     </StyledDynamicScreenSpaceErrorOption>
 );
 
-const MaximumScreenSpaceError = ({ layer, controller, defaultValue }) => (
-    <StyledDynamicScreenSpaceErrorOption>
-        <Message messageKey='maximumScreenSpaceError' />
-        <StyledInputContainer>
-            <NumberInput
-                step={1}
-                value={layer.options.maximumScreenSpaceError || defaultValue}
-                onChange={eventValue =>
-                    controller.setOptions({
-                        ...layer.options,
-                        maximumScreenSpaceError: eventValue
-                    })
-                }
-            />
-        </StyledInputContainer>
-        <InfoTooltip message={
-            <Fragment>
-                <pre>{maximumScreenSpaceErrorTemplate}</pre>
-            </Fragment>
-        } />
-    </StyledDynamicScreenSpaceErrorOption>
-);
+const MaximumScreenSpaceError = ({ layer, controller, defaultValue }) => {
+    let value = layer.options.maximumScreenSpaceError;
+    if (typeof value !== 'number') {
+        value = defaultValue;
+    }
+    return (
+        <StyledDynamicScreenSpaceErrorOption>
+            <Message messageKey='maximumScreenSpaceError' />
+            <StyledInputContainer>
+                <NumberInput
+                    step={1}
+                    value={value}
+                    onChange={eventValue =>
+                        controller.setOptions({
+                            ...layer.options,
+                            maximumScreenSpaceError: eventValue
+                        })
+                    }
+                />
+            </StyledInputContainer>
+            <InfoTooltip message={
+                <Fragment>
+                    <pre>{maximumScreenSpaceErrorTemplate}</pre>
+                </Fragment>
+            } />
+        </StyledDynamicScreenSpaceErrorOption>
+    );
+};
 
 const defaults = {
     dynamicScreenSpaceError: false,
