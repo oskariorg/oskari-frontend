@@ -349,10 +349,10 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerAddEvent': function (event) {
-                if (event.getMapLayer().getId() === this._layerId) {
-                    this.regionsetViewer.render();
+                if (event.getMapLayer().getId() === this._layerId && this.statsService.getStateService().getIndicators().length === 0) {
                     this.updateClassficationViewVisibility();
                     this.updateSeriesControlVisibility();
+                    this.flyoutManager.open('search');
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
