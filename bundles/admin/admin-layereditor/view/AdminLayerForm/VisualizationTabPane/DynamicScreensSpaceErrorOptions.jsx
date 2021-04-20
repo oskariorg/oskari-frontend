@@ -41,6 +41,8 @@ const dynamicScreenSpaceErrorHeightFalloffTemplate = `A ratio of the tileset's
 height at which the density
 starts to falloff.`;
 
+const maximumScreenSpaceErrorTemplate = `The maximum screen space error used to drive level of detail refinement.`;
+
 const DynamicScreenSpaceError = ({ layer, controller }) => (
     <StyledDynamicScreenSpaceErrorOption>
         <Message messageKey='dynamicScreenSpaceError' />
@@ -132,11 +134,35 @@ const DynamicScreenSpaceErrorHeightFalloff = ({ layer, controller, defaultValue 
     </StyledDynamicScreenSpaceErrorOption>
 );
 
+const MaximumScreenSpaceError = ({ layer, controller, defaultValue }) => (
+    <StyledDynamicScreenSpaceErrorOption>
+        <Message messageKey='maximumScreenSpaceError' />
+        <StyledInputContainer>
+            <NumberInput
+                step={1}
+                value={layer.options.maximumScreenSpaceError || defaultValue}
+                onChange={eventValue =>
+                    controller.setOptions({
+                        ...layer.options,
+                        maximumScreenSpaceError: eventValue
+                    })
+                }
+            />
+        </StyledInputContainer>
+        <InfoTooltip message={
+            <Fragment>
+                <pre>{maximumScreenSpaceErrorTemplate}</pre>
+            </Fragment>
+        } />
+    </StyledDynamicScreenSpaceErrorOption>
+);
+
 const defaults = {
     dynamicScreenSpaceError: false,
     dynamicScreenSpaceErrorDensity: 0.00278,
     dynamicScreenSpaceErrorFactor: 4.0,
-    dynamicScreenSpaceErrorHeightFalloff: 0.25
+    dynamicScreenSpaceErrorHeightFalloff: 0.25,
+    maximumScreenSpaceError: 16
 };
 
 export const DynamicScreensPaceErrorOptions = ({ layer, controller }) => {
@@ -167,6 +193,7 @@ export const DynamicScreensPaceErrorOptions = ({ layer, controller }) => {
                     <DynamicScreenSpaceErrorDensity {...getAttributes('dynamicScreenSpaceErrorDensity')}/>
                     <DynamicScreenSpaceErrorFactor {...getAttributes('dynamicScreenSpaceErrorFactor')}/>
                     <DynamicScreenSpaceErrorHeightFalloff {...getAttributes('dynamicScreenSpaceErrorHeightFalloff')}/>
+                    <MaximumScreenSpaceError {...getAttributes('maximumScreenSpaceError')}/>
                 </StyledDynamicScreenSpaceErrorOptionsContainer>
             </StyledFormField>
 };
