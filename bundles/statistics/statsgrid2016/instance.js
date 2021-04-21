@@ -104,6 +104,13 @@ Oskari.clazz.define(
             }
             // setup initial state
             this.setState();
+
+            // listen for search closing to remove stats layer if no indicators was found
+            this.flyoutManager.on('hide', () => {
+                if (this.statsService.getStateService().getIndicators().length === 0) {
+                    this._removeStatsLayer();
+                }
+            });
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
