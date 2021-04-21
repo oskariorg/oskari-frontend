@@ -17,6 +17,7 @@ Oskari.clazz.define(
         this.mapModule = null;
         this.layer = null; // ol layer
         this.popupService = null;
+        this.popup = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
 
@@ -101,15 +102,32 @@ Oskari.clazz.define(
             // reset toolbar to use the default tool
             Oskari.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
         },
-
+        getAlertPopup: function () {
+            if (this.popup) {
+                this.popup.close();
+            }
+            this.popup = this.popupService.createPopup();
+            return this.popup;
+        },
         showAlert: function (alertType) {
+            const popup = this.getAlertPopup();
             const title = this.alertTitles[alertType];
             const message = this.alertMessages[alertType];
-            const popup = this.popupService.createPopup();
-            const closeBtn = popup.createCloseButton(this.loc('alert.ok'));
-            popup.show(title, message, [closeBtn]);
+            popup.show(title, message, [popup.createCloseButton()]);
         },
-
+        showNotVisibleAlert: function (layerId, zoomToExtent) {
+            const popup = this.getAlertPopup();
+            const moveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            moveBtn.setTitle(this.loc('alert.move'));
+            moveBtn.setHandler(() => {
+                Oskari.getSandbox().postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, zoomToExtent]);
+                popup.close();
+            });
+            const title = this.alertTitles[SwipeAlertTypes.NOT_VISIBLE];
+            const message = this.alertMessages[SwipeAlertTypes.NOT_VISIBLE];
+            const buttons = [moveBtn, popup.createCloseButton()];
+            popup.show(title, message, buttons);
+        },
         isInGeometry: function (layer) {
             var geometries = layer.getGeometry();
             if (!geometries || geometries.length === 0) {
@@ -129,10 +147,12 @@ Oskari.clazz.define(
                 return null;
             }
             const topLayer = layers[layers.length - 1];
-            if (!topLayer.isInScale(this.mapModule.getMapScale()) || !this.isInGeometry(topLayer)) {
-                this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+            const layerId = topLayer.getId();
+            const isInGeometry = this.isInGeometry(topLayer);
+            if (!isInGeometry || !topLayer.isInScale(this.mapModule.getMapScale())) {
+                this.showNotVisibleAlert(layerId, !isInGeometry);
             }
-            const olLayers = this.mapModule.getOLMapLayers(topLayer.getId());
+            const olLayers = this.mapModule.getOLMapLayers(layerId);
             return olLayers.length !== 0 ? olLayers[0] : null;
         },
 
