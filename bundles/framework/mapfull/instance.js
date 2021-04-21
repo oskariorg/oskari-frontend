@@ -1,5 +1,6 @@
 import { automagicPlugins } from './automagicPlugins';
 
+const LOG = Oskari.log('MapFullBundleInstance');
 /**
  * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance
  *
@@ -11,9 +12,6 @@ import { automagicPlugins } from './automagicPlugins';
 Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
     /**
      * @static @method create called automatically on construction
-     *
-     *
-     *
      */
     function () {
         this.__name = 'mapfull';
@@ -27,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         this.mapDivId = 'mapdiv';
         this.contentMapDivId = 'contentMap';
         this.resizeTimer = null;
+        this._initialStateInit = true;
     }, {
         getName: function () {
             return this.__name;
@@ -175,12 +174,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             plugins[i].state
                         );
                         module.registerPlugin(plugins[i].instance);
-                    } catch (e) {
+                    } catch (err) {
                         // something wrong with plugin (e.g. implementation not imported) -> log a warning
-                        me.getSandbox().printWarn(
-                            'Unable to register plugin: ' + plugins[i].id + ': ' +
-                            e
-                        );
+                        LOG.warn('Unable to register plugin: ' + plugins[i].id + ': ', err);
                     }
                 }
             }
@@ -226,19 +222,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             const initialLayers = conf.layers || [];
 
-            const log = Oskari.log('MapFullBundleInstance');
             initialLayers.forEach(layer => {
                 const mapLayer = mapLayerService.createMapLayer(layer);
                 if (mapLayer) {
                     mapLayerService.addLayer(mapLayer, true);
                 } else {
-                    log.warn('start(): Undefined mapLayer returned for', layer);
+                    LOG.warn('start(): Undefined mapLayer returned for', layer);
                 }
             });
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             const skipLocation = this.__hasLocationBeenDeterminedAtRuntime();
+            this._initialStateInit = true;
             this.setState(this.state, skipLocation);
+            this._initialStateInit = false;
 
             // create request handlers
             const requestHandlers = {
@@ -251,6 +248,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 sandbox.requestHandler(requestName, handler);
             });
         },
+        /**
+         * Used to detect if we should use the center coordinate from state on initial render or
+         * use the users geolocation instead
+         * @returns {Boolean} true if we are using users geolocation
+         */
         __hasLocationBeenDeterminedAtRuntime: function () {
             const locationChangingPluginName = 'GeoLocationPlugin';
 
@@ -350,133 +352,114 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         setState: function (state = {}, ignoreLocation = false) {
-            var me = this;
-            var mapmodule = me.getMapModule();
-            var mapModuleName = mapmodule.getName();
-            var rbAdd;
-            var len;
-            var i;
-            var layer;
-            var sandbox = me.getSandbox();
-            var rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-            var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            const mapmodule = me.getMapModule();
+            const sandbox = me.getSandbox();
 
-            me._teardownState(mapmodule);
+            this._teardownState(mapmodule);
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
             if (ignoreLocation !== true) {
-                if (state.hasOwnProperty('east')) {
-                    sandbox.getMap().moveTo(
-                        state.east,
-                        state.north,
-                        state.zoom
-                    );
-                }
-                // set 3D camera position
-                if (state.hasOwnProperty('camera')) {
-                    try {
-                        mapmodule.setCamera(state.camera);
-                    } catch (ex) {
-                        Oskari.log(this.getName()).warn('Setting camera failed. Map module does not support 3d.');
-                    }
-                }
-                if (state.hasOwnProperty('timePoint')) {
-                    const { date, time, year } = state.timePoint;
-                    sandbox.postRequestByName('SetTimeRequest', [date, time, year]);
-                }
+                this.__setStateImplLocation(state);
             }
 
-            // mapmodule needed to set also param, because without it max zoomlevel check not working
+            // hack to kickstart mapmodule to correct zoom level
+            // TODO: check if this is still required (it's OL v2 era thing)
             sandbox.syncMapState(true, mapmodule);
 
-            // setting state
-            if (state.selectedLayers) {
-                const layersNotAvailable = [];
-                rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
-                len = state.selectedLayers.length;
-                for (i = 0; i < len; i += 1) {
-                    layer = state.selectedLayers[i];
+            // setting state for layers on map
+            this.__setStateImplLayers(state.selectedLayers);
 
-                    var oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(layer.id);
-                    if (!oskariLayer) {
-                        layersNotAvailable.push(layer);
-                        continue;
-                    }
-                    oskariLayer.setVisible(!layer.hidden);
-                    if (layer.style) {
-                        oskariLayer.selectStyle(layer.style);
-                    }
-                    sandbox.request(
-                        mapModuleName,
-                        rbAdd(layer.id, true)
-                    );
-
-                    sandbox.request(
-                        mapModuleName,
-                        rbVisible(layer.id, !layer.hidden)
-                    );
-
-                    if (layer.opacity || layer.opacity === 0) {
-                        sandbox.request(
-                            mapModuleName,
-                            rbOpacity(layer.id, layer.opacity)
-                        );
-                    }
-                }
-                Oskari.on('app.start', function () {
-                    layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
-                        const oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(id);
-                        if (!oskariLayer) {
-                            return;
-                        }
-                        if (style) {
-                            oskariLayer.selectStyle(style);
-                        }
-                        sandbox.postRequestByName('AddMapLayerRequest', [id]);
-                        sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [id, !hidden]);
-                        if (!isNaN(opacity)) {
-                            sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [id, Number.parseInt(opacity)]);
-                        }
-                    });
-                });
-            }
-
-            /* Change to this once plugins can handle it...
-            var plugins = mapmodule.getPluginInstances(),
-                plugin,
-                pluginName;
-
-            for (pluginName in plugins) {
-                plugin = plugins[pluginName];
-                if (plugin && plugin.setState) {
+            // set plugin states
+            const pluginsOnMap = mapmodule.getPluginInstances();
+            Object.keys(state.plugins || {}).forEach(pluginName => {
+                const plugin = pluginsOnMap[pluginName];
+                if (plugin && typeof plugin.setState === 'function') {
                     plugin.setState(state.plugins[pluginName]);
                 }
-            } */
-
-            // Hackhack
-            if (!state.plugins) {
-                state.plugins = {};
+            });
+        },
+        /**
+         * Internal helper to make setState() more manageable.
+         * Sets map location/camera
+         * @private
+         * @param {Object} bundle state
+         */
+        __setStateImplLocation: function(state = {}) {
+            const sandbox = this.getSandbox();
+            if (state.east) {
+                sandbox.getMap().moveTo(
+                    state.east,
+                    state.north,
+                    state.zoom
+                );
             }
-
-            if (!state.plugins.MainMapModuleMarkersPlugin) {
-                state.plugins.MainMapModuleMarkersPlugin = {};
-            }
-
-            var plugins = mapmodule.getPluginInstances(),
-                plugin,
-                pluginName;
-
-            for (pluginName in state.plugins) {
-                if (state.plugins.hasOwnProperty(pluginName)) {
-                    // Not finding the plugin is not that uncommon, just move on
-                    plugin = plugins[pluginName];
-                    if (plugin && plugin.setState) {
-                        plugin.setState(state.plugins[pluginName]);
-                    }
+            const mapmodule = this.getMapModule();
+            // set 3D camera position
+            if (state.camera && typeof mapmodule.setCamera === 'function') {
+                try {
+                    mapmodule.setCamera(state.camera);
+                } catch (ex) {
+                    LOG.warn('Setting camera failed. Map module does not support 3d.');
                 }
             }
+            if (state.timePoint) {
+                const { date, time, year } = state.timePoint;
+                sandbox.postRequestByName('SetTimeRequest', [date, time, year]);
+            }
         },
+        /**
+         * Internal helper to make setState() more manageable
+         * Sets state for selected layers
+         * @private
+         * @param {Object[]} selectedLayers 
+         */
+        __setStateImplLayers: function(selectedLayers = []) {
+            const sandbox = this.getSandbox();
+            var mapModuleName = mapmodule.getName();
+            var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
+            var rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
+            var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
+            const layersNotAvailable = [];
+            selectedLayers.forEach(layer => {
+                var oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
+                if (!oskariLayer) {
+                    layersNotAvailable.push(layer);
+                    continue;
+                }
+                oskariLayer.setVisible(!layer.hidden);
+                if (layer.style) {
+                    oskariLayer.selectStyle(layer.style);
+                }
+
+                sandbox.request(mapModuleName, rbAdd(layer.id, true));
+                sandbox.request(mapModuleName, rbVisible(layer.id, !layer.hidden));
+                if (layer.opacity || layer.opacity === 0) {
+                    sandbox.request(mapModuleName, rbOpacity(layer.id, layer.opacity));
+                }
+            });
+
+            if (!this._initialStateInit || !layersNotAvailable.length) {
+                return;
+            }
+            // only register this when starting the app to work around timing issues with some dynamically registered layers
+            Oskari.on('app.start', function () {
+                layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
+                    const oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(id);
+                    if (!oskariLayer) {
+                        return;
+                    }
+                    if (style) {
+                        oskariLayer.selectStyle(style);
+                    }
+                    sandbox.postRequestByName('AddMapLayerRequest', [id]);
+                    sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [id, !hidden]);
+                    if (!isNaN(opacity)) {
+                        sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [id, Number.parseInt(opacity)]);
+                    }
+                });
+            });
+        },
         /**
          * @method getState
          * Returns bundle state as JSON. State is bundle specific, check the
@@ -487,7 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var map = this.getSandbox().getMap();
+            const map = this.getSandbox().getMap();
             const state = {
                 north: map.getY(),
                 east: map.getX(),
@@ -608,7 +591,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         getMapEl: function () {
             var mapDiv = this.getMapElDom();
             if (!mapDiv) {
-                Oskari.log('MapFullBundleInstance').warn('mapDiv not found with id ' + this.mapDivId);
+                LOG.warn('mapDiv not found with id ' + this.mapDivId);
             }
             return jQuery(mapDiv);
         },
