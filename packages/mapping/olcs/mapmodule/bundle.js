@@ -88,6 +88,14 @@ Oskari.clazz.define(
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/getinfo.scss'
                 },
+                // testplugin
+                {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/testplugin.js'
+                }, {
+                    'type': 'text/css',
+                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/test.ol.scss'
+                },
 
                 /**
                  * Search plugin
@@ -310,6 +318,12 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mylocation.scss'
+                },
+
+                // Announcements plugin
+                {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/AnnouncementsPlugin.js'
                 },
 
                 {

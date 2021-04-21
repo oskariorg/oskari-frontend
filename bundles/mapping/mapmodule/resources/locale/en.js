@@ -24,6 +24,9 @@ Oskari.registerLocalization(
         "unsupported-layer": "Map Layer cannot be shown.",
         "unsupported-layer-projection": "Map layer cannot be shown in selected map projection.",
         "plugin": {
+            "AnnouncementsPlugin": {
+                "title": "Announcements"
+            },
             "LogoPlugin": {
                 "terms": "Terms of Use",
                 "dataSources": "Data Sources",

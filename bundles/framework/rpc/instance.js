@@ -1,3 +1,5 @@
+
+
 /**
  * @class Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance
  *
@@ -389,6 +391,21 @@ Oskari.clazz.define(
                     event = Oskari.eventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
                 return true;
+            },
+            getAnnouncements: function () {
+                this.data = [];
+                jQuery.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: Oskari.urls.getRoute('Announcements'),
+                    success: (pResp) => {
+                        this.data = pResp.data;
+                    },
+                    error: function (jqXHR, textStatus) {
+                        Messaging.error(getMessage('messages.getFailed'));
+                    }
+                });
+                return this.data;
             }
         },
 
