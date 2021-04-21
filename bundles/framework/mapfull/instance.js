@@ -425,7 +425,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 var oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
                 if (!oskariLayer) {
                     layersNotAvailable.push(layer);
-                    continue;
+                    return;
                 }
                 oskariLayer.setVisible(!layer.hidden);
                 if (layer.style) {
