@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             if (this.getMapModule().isPluginActivated(locationChangingPluginName)) {
                 // get plugin
-                var plugin = me.getMapModule().getPluginInstances(locationChangingPluginName);
+                const plugin = this.getMapModule().getPluginInstances(locationChangingPluginName);
                 return plugin.hasSetLocation();
             }
             return false;
@@ -352,8 +352,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         setState: function (state = {}, ignoreLocation = false) {
-            const mapmodule = me.getMapModule();
-            const sandbox = me.getSandbox();
+            const mapmodule = this.getMapModule();
+            const sandbox = this.getSandbox();
 
             this._teardownState(mapmodule);
             // map location needs to be set before layers are added
@@ -415,14 +415,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         __setStateImplLayers: function(selectedLayers = []) {
             const sandbox = this.getSandbox();
-            var mapModuleName = mapmodule.getName();
-            var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
-            var rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-            var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            const mapModuleName = this.getMapModule().getName();
+            const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
+            const rbOpacity = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
+            const rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             const layersNotAvailable = [];
             selectedLayers.forEach(layer => {
-                var oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
+                const oskariLayer = sandbox.findMapLayerFromAllAvailable(layer.id);
                 if (!oskariLayer) {
                     layersNotAvailable.push(layer);
                     return;
@@ -445,7 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // only register this when starting the app to work around timing issues with some dynamically registered layers
             Oskari.on('app.start', function () {
                 layersNotAvailable.forEach(({ id, style, hidden, opacity }) => {
-                    const oskariLayer = me.getSandbox().findMapLayerFromAllAvailable(id);
+                    const oskariLayer = sandbox.findMapLayerFromAllAvailable(id);
                     if (!oskariLayer) {
                         return;
                     }
