@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Vendet",
         "desc": "",
-        "category": {
-            "defaultName": "Shtresa ime e hartës",
-            "organization": "Vendet e mia",
-            "inspire": "Vendet"
-        },
         "guest": {
             "loginShort": "Kyçuni për përdorim"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Emri",
                 "placeholder": "Jepi shtresës së hartës një emër"
             },
-            "drawing": {
-                "label": "Stili",
-                "point": {
-                    "label": "Pika",
-                    "color": "Ngjyra",
-                    "size": "Madhësia"
-                },
-                "line": {
-                    "label": "Linja (Vija)",
-                    "color": "Ngjyra",
-                    "size": "Trashësia"
-                },
-                "area": {
-                    "label": "Sipërfaqja",
-                    "fillcolor": "Vendos ngjyrën",
-                    "linecolor": "Ngjyra e vijës",
-                    "size": "Trashësia e vijës"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Emri i shtresës së hartës mungon",
             "placeNameIllegal": "Emri i objektit përmban karaktere/shkronja të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse.",
             "descIllegal": "Objekti përmban përshkrim të karaktereve/shkronjave të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse.",
-            "categoryNameIllegal": "Shtresa përmban përshkrim të karaktereve/shkronjave të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse.",
-            "dotSize": "Madhësia e pikës nuk përputhet me limitin e madhësisë (1-5)",
-            "dotColor": "Ngjyrë e gabuar e pikës",
-            "dotShape": "",
-            "lineSize": "Madhësia e vijës nuk përputhet me limitin e madhësisë (1-50)",
-            "lineColor": "Ngjyrë e gabuar e vijës",
-            "areaLineSize": "Madhësia e skajit të sipërfaqes nuk përputhet me limitin (0-50)",
-            "areaLineColor": "Ngjyrë e gabuar e skajit të vijës së sipërfaqes",
-            "areaFillColor": "Mbushje/plotësim i gabuar me ngjyrë"
+            "categoryNameIllegal": "Shtresa përmban përshkrim të karaktereve/shkronjave të ndaluara. Karakteret/shkronjat e lejuara janë a-z, si dhe å, ä dhe ö, numrat, hapësirat dhe vizat lidhëse."
         }
     }
 });

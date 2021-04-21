@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         toolLayerSwipe: 'Vertaa ylintä karttatasoa alempiin karttatasoihin',
         alert: {
             ok: 'OK',
+            move: 'Siirry',
             swipeNoRasterTitle: 'Yhtään karttatasoa ei ole valittuna käytettäväksi vertailutyökalun kanssa',
             swipeNoRasterMessage: 'Aseta karttatasovalikosta taso näkyväksi',
             swipeLayerNotVisibleTitle: 'Karttatasojen vertailu ei toimi tässä näkymässä',
