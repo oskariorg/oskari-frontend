@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Données d’objet",
         "layer": {
+            "defaultName": "Ma couche cartographique",
             "organization": "Mes lieux",
             "inspire": "Mes couches cartographiques"
         }

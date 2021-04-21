@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Podatki o objektu",
         "layer": {
+            "defaultName": "Moj sloj karte",
             "organization": "Moji kraji",
             "inspire": "Moji sloji karte"
         }

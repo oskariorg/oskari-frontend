@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Τοποθεσίες",
         "desc": "",
-        "category": {
-            "defaultName": "Το επίπεδο χάρτη μου",
-            "organization": "Οι τοποθεσίες μου",
-            "inspire": "Οι τοποθεσίες μου"
-        },
         "guest": {
             "loginShort": "Συνδεθείτε για να κάνετε χρήση"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Όνομα",
                 "placeholder": "Δώστε όνομα στο επίπεδο χάρτη"
             },
-            "drawing": {
-                "label": "Μορφή",
-                "point": {
-                    "label": "Σημείο",
-                    "color": "Χρώμα",
-                    "size": "Μέγεθος"
-                },
-                "line": {
-                    "label": "Γραμμή",
-                    "color": "Χρώμα",
-                    "size": "Πάχος"
-                },
-                "area": {
-                    "label": "Επιφάνεια",
-                    "fillcolor": "Χρώμα γεμίσματος",
-                    "linecolor": "Χρώμα γραμμής",
-                    "size": "Πάχος γραμμής"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "Όνομα",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": "Μέγεθος"
-            },
-            "color": {
-                "label": "Χρώμα",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Αποθήκευση",
-                "cancel": "Ακύρωση"
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "Χρώμα",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Αποθήκευση",
-                "cancel": "Ακύρωση"
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "Χρώμα γραμμής",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Αποθήκευση",
-                "cancel": "Ακύρωση"
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Λείπει το όνομα του επιπέδου χάρτη.",
             "placeNameIllegal": "Το όνομα του αντικειμένου περιλαμβάνει μη αποδεκτούς χαρακτήρες. Οι αποδεκτοί χαρακτήρες είναι τα γράμματα α-ω (a-z) , αριθμοί, backspace και παρενθέσεις.",
             "descIllegal": "Η περιγραφή του αντικειμένου περιλαμβάνει μη αποδεκτούς χαρακτήρες. Οι αποδεκτοί χαρακτήρες είναι τα γράμματα α-ω (a-z) , αριθμοί, backspace και παρενθέσεις.",
-            "categoryNameIllegal": "Η περιγραφή του επιπέδου περιλαμβάνει μη αποδεκτούς χαρακτήρες. Οι αποδεκτοί χαρακτήρες είναι τα γράμματα α-ω (a-z) , αριθμοί, backspace και παρενθέσεις.",
-            "dotSize": "Το μέγεθος σημείου (dot) είναι εκτός ορίων (1-5).",
-            "dotColor": "Λάθος χρώμα σημείου(dot).",
-            "dotShape": "",
-            "lineSize": "Το μέγεθος γραμμής είναι εκτός ορίων (1-50).",
-            "lineColor": "Λάθος χρώμα γραμμής.",
-            "areaLineSize": "Το μέγεθος του ορίου της επιφάνειας είναι εκτός ορίων (0-50).",
-            "areaLineColor": "Λάθος χρώμα ορίου επιφάνειας.",
-            "areaFillColor": "Λάθος χρώμα γεμίσματος."
+            "categoryNameIllegal": "Η περιγραφή του επιπέδου περιλαμβάνει μη αποδεκτούς χαρακτήρες. Οι αποδεκτοί χαρακτήρες είναι τα γράμματα α-ω (a-z) , αριθμοί, backspace και παρενθέσεις."
         }
     }
 });

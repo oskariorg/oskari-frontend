@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "ადგილები",
         "desc": "",
-        "category": {
-            "defaultName": "ჩემი რუკის ფენა",
-            "organization": "ჩემი ადგილები",
-            "inspire": "ადგილები"
-        },
         "guest": {
             "loginShort": "დარეგისტრირდით სისტემაში შესასვლელად"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "დასახელება",
                 "placeholder": "მიეცით რუკის ფენას დასახელება"
             },
-            "drawing": {
-                "label": "სტილი",
-                "point": {
-                    "label": "წერტილი",
-                    "color": "ფერი",
-                    "size": "ზომა"
-                },
-                "line": {
-                    "label": "ხაზი",
-                    "color": "ფერი",
-                    "size": "სისქე"
-                },
-                "area": {
-                    "label": "ფართობი",
-                    "fillcolor": "ჩასხმის ფერი",
-                    "linecolor": "ხაზის ფერი",
-                    "size": "ხაზის სისქე"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "აკლია რუკის ფენის დასახელება.",
             "placeNameIllegal": "ობიექტის დასახელება შეიცავს აკრძალულ სიმბოლოებს.დაშვებული სიმბოლოებია ასოები a-z, ასევე å, ä და ö, ციფრები, სასვენი ნიშნები და დეფისი.",
             "descIllegal": "ობიექტის აღწერილობა შეიცავს აკრძალულ სიმბოლოებს.დაშვებული სიმბოლოებია ასოები a-z, ასევე å, ä და ö, ციფრები, სასვენი ნიშნები და დეფისი.",
-            "categoryNameIllegal": "რუკის ფენის აღწერილობა შეიცავს აკრძალულ სიმბოლოებს.დაშვებული სიმბოლოებია ასოები a-z, ასევე å, ä და ö, ციფრები, სასვენი ნიშნები და დეფისი.",
-            "dotSize": "წერტილის ზომა არ შეესაბამება ზომის საზღვრებს (1–50).",
-            "dotColor": "წერტილის აკრძალული ფერი.",
-            "dotShape": "",
-            "lineSize": "ხაზის ზომა არ შეესაბამება ზომის საზღვრებს (1–50).",
-            "lineColor": "ხაზის აკრძალული ფერი.",
-            "areaLineSize": "პოლიგონის კონტურის ზომა არ შეესაბამება საზღვრებს (0–50).",
-            "areaLineColor": "პოლიგინის კონტურის აკრძალული ფერი.",
-            "areaFillColor": "აკრძალული ფერი."
+            "categoryNameIllegal": "რუკის ფენის აღწერილობა შეიცავს აკრძალულ სიმბოლოებს.დაშვებული სიმბოლოებია ასოები a-z, ასევე å, ä და ö, ციფრები, სასვენი ნიშნები და დეფისი."
         }
     }
 });

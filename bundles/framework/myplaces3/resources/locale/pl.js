@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Miejsca",
         "desc": "",
-        "category": {
-            "defaultName": "Moje warstwy mapy",
-            "organization": "Moje miejsca",
-            "inspire": "Moje miejsca"
-        },
         "guest": {
             "loginShort": "Użycie po zalogowaniu"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Nazwa",
                 "placeholder": "Nazwij warstwę mapy"
             },
-            "drawing": {
-                "label": "Styl",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Kolor",
-                    "size": "Rozmiar"
-                },
-                "line": {
-                    "label": "Linia",
-                    "color": "Kolor",
-                    "size": "Grubość"
-                },
-                "area": {
-                    "label": "Powierzchnia",
-                    "fillcolor": "Kolor wypełnienia",
-                    "linecolor": "Kolor linii",
-                    "size": "Grubość linii"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "Nazwa",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": "Rozmiar"
-            },
-            "color": {
-                "label": "Kolor",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": "Podgląd"
-            },
-            "buttons": {
-                "save": "Zapisz",
-                "cancel": "Anuluj"
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "Kolor",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": "Podgląd"
-            },
-            "buttons": {
-                "save": "Zapisz",
-                "cancel": "Anuluj"
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "Kolor linii",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": "Podgląd"
-            },
-            "buttons": {
-                "save": "Zapisz",
-                "cancel": "Anuluj"
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Brak nazwy warstwy mapy.",
             "placeNameIllegal": "Nazwa obiektu zawiera niedozwolone znaki. Dozwolone znaki to litery a-z oraz å, ä i ö, liczby, klawisze Cofnij i myślniki.",
             "descIllegal": "Opis obiektu zawiera niedozwolone znaki. Dozwolone znaki to litery a-z oraz å, ä i ö, liczby, klawisze Cofnij i myślniki.",
-            "categoryNameIllegal": "Warstwa zawiera niedozwolone znaki. Dozwolone znaki to litery a-z oraz å, ä i ö, liczby, klawisze Cofnij i myślniki.",
-            "dotSize": "Rozmiar kropki wykracza poza limit (1-5).",
-            "dotColor": "Zły kolor kropki.",
-            "dotShape": "Invalid dot shape.",
-            "lineSize": "Rozmiar linii wykracza poza limit (1-50).",
-            "lineColor": "Zły kolor linii.",
-            "areaLineSize": "Rozmiar krawędzi obszaru wykracza poza limit (0-50).",
-            "areaLineColor": "Zły kolor krawędzi obszaru.",
-            "areaFillColor": "Zły kolor wypełnienia."
+            "categoryNameIllegal": "Warstwa zawiera niedozwolone znaki. Dozwolone znaki to litery a-z oraz å, ä i ö, liczby, klawisze Cofnij i myślniki."
         }
     }
 });

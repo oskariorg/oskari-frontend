@@ -131,7 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
                 this.sandbox.notifyAll(event);
             }
-            this._processStartupLinkLayers();
             this._notifyUpdate();
         },
         /**
@@ -140,7 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         addLayerToService: function (layerJson, skipEvent) {
             // add maplayer to Oskari
-            const service = this.mapLayerService; // Or getMapLayerService
+            const service = this.mapLayerService;
             var layer = service.createMapLayer(layerJson);
             service.addLayer(layer, skipEvent);
             if (!skipEvent) {
@@ -179,29 +178,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this.mapLayerService.removeLayer(layerId);
             this._notifyUpdate();
         },
-        _processStartupLinkLayers: function () {
-            var mapLayers = Oskari.util.getRequestParam('mapLayers');
-            if (!mapLayers) {
-                // no linked layers
-                return;
-            }
-            var moduleName = this.getName();
-            var layerStrings = mapLayers.split(',');
-            var keepLayersOrder = true;
-            layerStrings.forEach(layerStr => {
-                var splitted = layerStr.split('+');
-                var layerId = splitted[0];
-                var opacity = splitted[1];
-                if (layerId === null || layerId.indexOf(this.instance.idPrefix) === -1) {
-                    return;
-                }
-                var addLayerReq = Oskari.requestBuilder('AddMapLayerRequest');
-                this.sandbox.request(moduleName, addLayerReq(layerId, keepLayersOrder));
-                var opacityReq = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
-                this.sandbox.request(moduleName, opacityReq(layerId, opacity));
-            });
-        },
-
         editCategory: function (categoryId) {
             var me = this;
             const values = this.getCategory(categoryId);
