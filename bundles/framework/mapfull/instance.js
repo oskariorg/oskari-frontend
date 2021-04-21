@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     supportedProjections[projection] = defs[projection];
                 }
             });
-            
+
             // ensure static projections are defined
             Object.keys(supportedProjections).forEach(projection => {
                 window.proj4.defs(projection, supportedProjections[projection]);
@@ -384,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @private
          * @param {Object} bundle state
          */
-        __setStateImplLocation: function(state = {}) {
+        __setStateImplLocation: function (state = {}) {
             const sandbox = this.getSandbox();
             if (state.east) {
                 sandbox.getMap().moveTo(
@@ -411,9 +411,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * Internal helper to make setState() more manageable
          * Sets state for selected layers
          * @private
-         * @param {Object[]} selectedLayers 
+         * @param {Object[]} selectedLayers
          */
-        __setStateImplLayers: function(selectedLayers = []) {
+        __setStateImplLayers: function (selectedLayers = []) {
             const sandbox = this.getSandbox();
             const mapModuleName = this.getMapModule().getName();
             const rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
