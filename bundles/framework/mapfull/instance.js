@@ -58,63 +58,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @method  @public adjustMapSize adjust map size
          */
         adjustMapSize: function () {
-            var me = this;
-
-            if (me.resizeEnabled === false) {
+            if (this.resizeEnabled === false) {
                 // do not resize map if resizeEnabled is false
                 return;
             }
-            var contentMap = jQuery('#' + me.contentMapDivId);
-            var dataContent = jQuery('.oskariui-left');
-            var dataContentHasContent = dataContent.length && !dataContent.is(':empty');
-            var dataContentWidth = dataContent.width();
-            var mapContainer = contentMap.find('.oskariui-center');
-            var mapDiv = jQuery('#' + me.mapDivId);
-            var mapHeight = jQuery(window).height();
-            var mapWidth = contentMap.width();
-            var sidebar = jQuery('#sidebar:visible');
-            // FIXME: this must be done different way in future
-            var statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile):not(.oskari-flyoutcontent)');
-            var maxWidth = jQuery(window).width() - sidebar.width() - statsgrid.width();
-            var mapTools = jQuery('#maptools:visible');
+            const contentMap = jQuery('#' + this.contentMapDivId);
+            const dataContent = jQuery('.oskariui-left');
+            const dataContentHasContent = dataContent.length && !dataContent.is(':empty');
+            const dataContentWidth = dataContent.width();
+            const mapContainer = contentMap.find('.oskariui-center');
+            const mapDiv = jQuery('#' + this.mapDivId);
+            const windowHeight = jQuery(window).height();
+            const sidebar = jQuery('#sidebar:visible');
+            let mapHeight = windowHeight;
+            let mapWidth = contentMap.width();
+            let maxMapWidth = jQuery(window).width() - sidebar.width();
 
-            contentMap.height(mapHeight);
+            contentMap.height(windowHeight);
 
-            var toolbar = contentMap.find(
-                '#menutoolbar:visible'
-            );
+            // adjust map size of there is a toolbar above the map
+            const toolbar = contentMap.find('#menutoolbar:visible');
             if (toolbar.length > 0) {
                 mapHeight -= toolbar.height();
             }
             dataContent.height(mapHeight);
             mapDiv.height(mapHeight);
 
-            if (dataContentHasContent) {
-                if (dataContent.is(':visible') &&
-                        dataContentWidth) {
-                    mapWidth -= dataContentWidth;
-                }
-            } else {
+            if (!dataContentHasContent) {
                 dataContent.addClass('oskari-closed');
+            } else if (dataContent.is(':visible') && dataContentWidth) {
+                mapWidth -= dataContentWidth;
             }
 
             if (contentMap.hasClass('oskari-map-window-fullscreen')) {
-                maxWidth += mapTools.width();
-                maxWidth += sidebar.width();
-                var position = sidebar.position();
+                const mapTools = jQuery('#maptools:visible');
+                maxMapWidth += mapTools.width();
+                maxMapWidth += sidebar.width();
+                const position = sidebar.position();
                 if (position && position.left) {
-                    maxWidth += position;
+                    maxMapWidth += position.left;
                 }
             }
 
-            if (mapWidth > maxWidth) {
-                mapWidth = maxWidth;
+            if (mapWidth > maxMapWidth) {
+                mapWidth = maxMapWidth;
             }
 
             mapContainer.width(mapWidth);
 
             // notify map module that size has changed
-            me.updateSize();
+            this.updateSize();
         },
 
         /**
@@ -128,21 +121,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _createUi: function () {
-            var me = this,
-                module = Oskari.clazz.create(
-                    'Oskari.mapframework.ui.module.common.MapModule',
-                    'Main',
-                    me.conf.imageLocation,
-                    me.conf.mapOptions,
-                    me.mapDivId
-                );
+            const me = this;
+            const module = Oskari.clazz.create(
+                'Oskari.mapframework.ui.module.common.MapModule',
+                'Main',
+                me.conf.imageLocation,
+                me.conf.mapOptions,
+                me.mapDivId
+            );
 
             me.mapmodule = module;
             me.getSandbox().register(module);
-            // oskariui-left holds statsgrid and possibly other data stuff, size in config should include that as well as the map
-            // set map size
-            // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
-            // -> uses published.jsp
             // TODO true path can prolly be removed, we can just set the size on the iframe/container and let the map fill the available space
             if (me.conf.size) {
                 // contentMap holds the total width and height of the document
@@ -400,7 +389,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @param {Boolean} ignoreLocation true to NOT set map location based on state
          *
          */
-        setState: function (state, ignoreLocation) {
+        setState: function (state = {}, ignoreLocation = false) {
             var me = this;
             var mapmodule = me.getMapModule();
             var mapModuleName = mapmodule.getName();
