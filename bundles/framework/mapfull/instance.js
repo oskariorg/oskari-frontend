@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // startup plugins
             if (me.conf.plugins) {
-                let plugins = this.conf.plugins;
+                const plugins = this.conf.plugins;
                 automagicPlugins
                     .filter(plugin => !plugins.find(cur => cur.id === plugin))
                     .forEach(plugin => {
@@ -167,7 +167,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             state: {}
                         });
                     });
-
                 for (let i = 0; i < plugins.length; i += 1) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(
@@ -199,119 +198,96 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         start: function () {
-            var me = this,
-                conf = me.conf || {},
-                sandbox = Oskari.getSandbox(conf.sandbox);
+            const me = this;
+            const conf = me.conf || {};
+            const sandbox = Oskari.getSandbox(conf.sandbox);
 
-            me._handleProjectionDefs(conf.projectionDefs);
-            me.sandbox = sandbox;
+            this._handleProjectionDefs(conf.projectionDefs);
+            this.sandbox = sandbox;
 
             // take map div ID from config if available
             if (conf.mapElement) {
-                me.mapDivId = conf.mapElement;
+                this.mapDivId = conf.mapElement;
             }
             if (conf.mapContainer) {
-                me.contentMapDivId = conf.mapContainer;
+                this.contentMapDivId = conf.mapContainer;
             }
 
             // create services & enhancements
-            var services = me._createServices(conf);
+            var services = this._createServices(conf);
             services.forEach(function (service) {
                 sandbox.registerService(service);
             });
 
             // need to create ui before parsing layers because layerplugins register modelbuilders
-            me._createUi();
+            this._createUi();
 
             // setup initial maplayers
-            var mapLayerService = sandbox.getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                ),
-                initialLayers = conf.layers,
-                i,
-                mapLayer;
+            const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const initialLayers = conf.layers || [];
 
-            if (initialLayers) {
-                for (i = 0; i < initialLayers.length; i += 1) {
-                    mapLayer = mapLayerService.createMapLayer(initialLayers[i]);
-                    if (!mapLayer) {
-                        sandbox.printWarn(
-                            'MapFullBundleInstance.start: Undefined mapLayer returned for',
-                            initialLayers[i]
-                        );
-                    } else {
-                        mapLayerService.addLayer(mapLayer, true);
-                    }
+            const log = Oskari.log('MapFullBundleInstance');
+            initialLayers.forEach(layer => {
+                const mapLayer = mapLayerService.createMapLayer(layer);
+                if (mapLayer) {
+                    mapLayerService.addLayer(mapLayer, true);
+                } else {
+                    log.warn('start(): Undefined mapLayer returned for', layer);
                 }
-            }
+            });
+            sandbox.registerAsStateful(this.mediator.bundleId, this);
 
-            sandbox.registerAsStateful(me.mediator.bundleId, this);
-
-            var skipLocation = false;
-            if (me.getMapModule().isPluginActivated('GeoLocationPlugin')) {
-                // get plugin
-                var plugin = me.getMapModule().getPluginInstances(
-                    'GeoLocationPlugin'
-                );
-                skipLocation = plugin.hasSetLocation();
-            }
-
-            me.setState(me.state, skipLocation);
+            const skipLocation = this.__hasLocationBeenDeterminedAtRuntime();
+            this.setState(this.state, skipLocation);
 
             // create request handlers
-            me.mapResizeEnabledRequestHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler',
-                me
-            );
-            me.mapWindowFullScreenRequestHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
-                me
-            );
-            me.mapSizeUpdateRequestHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapfull.request.MapSizeUpdateRequestHandler',
-                me
-            );
+            const requestHandlers = {
+                'MapFull.MapResizeEnabledRequest': 'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler',
+                'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
+                'MapFull.MapSizeUpdateRequest': 'Oskari.mapframework.bundle.mapfull.request.MapSizeUpdateRequestHandler'
+            };
+            Object.keys(requestHandlers).forEach(requestName => {
+                const handler = Oskari.clazz.create(requestHandlers[requestName], this);
+                sandbox.requestHandler(requestName, handler);
+            });
+        },
+        __hasLocationBeenDeterminedAtRuntime: function () {
+            const locationChangingPluginName = 'GeoLocationPlugin';
 
-            // register request handlers
-            sandbox.requestHandler(
-                'MapFull.MapResizeEnabledRequest',
-                me.mapResizeEnabledRequestHandler
-            );
-            sandbox.requestHandler(
-                'MapFull.MapWindowFullScreenRequest',
-                me.mapWindowFullScreenRequestHandler
-            );
-            sandbox.requestHandler(
-                'MapFull.MapSizeUpdateRequest',
-                me.mapSizeUpdateRequestHandler
-            );
+            if (this.getMapModule().isPluginActivated(locationChangingPluginName)) {
+                // get plugin
+                var plugin = me.getMapModule().getPluginInstances(locationChangingPluginName);
+                return plugin.hasSetLocation();
+            }
+            return false;
         },
 
         /**
          * @private @method _handleProjectionDefs
-         *
          * @param {Object} defs
-         *
          */
-        _handleProjectionDefs: function (defs) {
-            var defaultDefs = {
+        _handleProjectionDefs: function (defs = {}) {
+            // OL uses proj4
+            if (!window.proj4) {
+                // do nothing if proj4 is not available as global variable
+                return;
+            }
+            // supported by default
+            const supportedProjections = {
                 'EPSG:3067': '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
-
-            var epsgConfs = _.keys(defs);
-            _.forEach(epsgConfs, function (conf) {
-                if (!_.has(defaultDefs, conf)) {
-                    defaultDefs[conf] = defs[conf];
+            // shovel in additional projections
+            Object.keys(defs).forEach(projection => {
+                if (!supportedProjections[projection]) {
+                    supportedProjections[projection] = defs[projection];
                 }
             });
-            // OL uses proj4
-            if (window.proj4) {
-                // ensure static projections are defined
-                jQuery.each(defaultDefs, function (srs, defs) {
-                    window.proj4.defs(srs, defs);
-                });
-            }
+            
+            // ensure static projections are defined
+            Object.keys(supportedProjections).forEach(projection => {
+                window.proj4.defs(projection, supportedProjections[projection]);
+            });
         },
 
         /**
@@ -323,19 +299,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         _teardownState: function (module) {
-            var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
-                // remove all current layers
-                rbRemove = Oskari.requestBuilder(
-                    'RemoveMapLayerRequest'
-                ),
-                i;
-
-            for (i = 0; i < selectedLayers.length; i += 1) {
-                this.getSandbox().request(
-                    module.getName(),
-                    rbRemove(selectedLayers[i].getId())
-                );
-            }
+            // remove all current layers from map
+            const selectedLayers = this.getSandbox().findAllSelectedMapLayers();
+            const rbRemove = Oskari.requestBuilder('RemoveMapLayerRequest');
+            const name = module.getName();
+            selectedLayers.forEach(layer => {
+                this.getSandbox().request(name, rbRemove(layer.getId()));
+            });
         },
 
         /**
@@ -347,34 +317,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *    JSON configuration for the application
          *
          */
-        _createServices: function (conf) {
+        _createServices: function () {
             // create initial services that are available in this application
-            var services = [];
-            var sb = this.getSandbox();
-            var searchService = Oskari.clazz.create('Oskari.service.search.SearchService', sb);
-            var popupService = Oskari.clazz.create('Oskari.userinterface.component.PopupService', sb);
-
-            services.push(searchService);
-            services.push(popupService);
-
+            const services = [];
+            const sb = this.getSandbox();
+            services.push(Oskari.clazz.create('Oskari.service.search.SearchService', sb));
+            services.push(Oskari.clazz.create('Oskari.userinterface.component.PopupService', sb));
             return services;
         },
 
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
-         *
-         *
          */
-        update: function () {
-
-        },
+        update: function () {},
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
-         *
-         *
          */
         stop: function () {
             this.getSandbox().unregisterStateful(this.mediator.bundleId);
@@ -647,11 +607,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getMapEl: function () {
             var mapDiv = this.getMapElDom();
-
             if (!mapDiv) {
-                this.getSandbox().printWarn(
-                    'mapDiv not found with id ' + this.mapDivId
-                );
+                Oskari.log('MapFullBundleInstance').warn('mapDiv not found with id ' + this.mapDivId);
             }
             return jQuery(mapDiv);
         },
