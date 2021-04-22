@@ -89,7 +89,8 @@ jQuery.ajaxSetup({ cache: false });
                 config = this.appConfig;
             }
             var loader = Oskari.loader([recData], config);
-            loader.processSequence(callback);
+            // send suppress event flag as true since this is used to trigger single bundle starts for testing mostly (via dev-console etc)
+            loader.processSequence(callback, true);
         },
         /**
          * Convenience function to load appsetup from url with given params and startup the Oskari app.

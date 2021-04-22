@@ -97,14 +97,16 @@
             /** 
              * @param  {Function} done callback
              */
-            processSequence: function (done) {
+            processSequence: function (done, suppressStartEvent = false) {
                 var me = this;
                 if (sequence.length === 0) {
                     // everything has been loaded
                     if (typeof done === 'function') {
                         done(result);
                     }
-                    o.trigger('app.start', result);
+                    if (!suppressStartEvent) {
+                        o.trigger('app.start', result);
+                    }
                     return;
                 }
                 var seqToLoad = sequence.shift();
