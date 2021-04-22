@@ -10,15 +10,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.zeroIndicatorsNotification = null;
     var me = this;
     this.on('show', function () {
-        console.log('show');
         if (!me.getUiElement()) {
             me.createUi();
             me.setContent(me.getUiElement());
         }
 
-        if (me.service.getStateService().getIndicators().length === 0) {
+        if (me.service.getStateService().getIndicators().length === 0 && me.zeroIndicatorsNotification === null) {
             me.createZeroIndicatorsNotification();
-            me.getUiElement().prepend(me.zeroIndicatorsNotification);
+            me.addZeroIndicatorsNotification();
         }
     });
 }, {
@@ -33,6 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.uiElement.empty();
+        console.log('cleaning');
     },
     setSpinner: function (spinner) {
         this.spinner = spinner;
@@ -125,11 +125,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         return container;
     },
     createZeroIndicatorsNotification: function () {
-        this.zeroIndicatorsNotification = jQuery('<div style="padding: 10px 0;"></div>');
+        this.zeroIndicatorsNotification = jQuery('<div class="zero-indicators-notification" style="padding: 10px 0;"></div>');
         this.zeroIndicatorsNotification.append(this.loc('statsgrid.noIndicators'));
+    },
+    addZeroIndicatorsNotification: function () {
+        this.getUiElement().prepend(this.zeroIndicatorsNotification);
     },
     removeZeroIndicatorsNotification: function () {
         this.zeroIndicatorsNotification.remove();
+        this.zeroIndicatorsNotification = null;
     },
     updateSearchButtonEnabled: function () {
         const enabled = !this.searchPending && this.searchParametersSelected;
