@@ -97,11 +97,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             const toolingService = Oskari.clazz.create('Oskari.mapframework.service.LayerListToolingService');
             sandbox.registerService(toolingService);
 
-            for (let p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
+            Object.keys(this.eventHandlers)
+                .forEach(eventName => sandbox.registerForEventByName(this, eventName));
 
             this._registerFilterButtons(layerlistService);
 
