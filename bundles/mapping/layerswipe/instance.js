@@ -57,7 +57,6 @@ Oskari.clazz.define(
         },
 
         setActive: function (active) {
-            const map = this.mapModule.getMap();
             if (active) {
                 this.updateSwipeLayer();
                 if (this.layer === null) {
@@ -65,15 +64,14 @@ Oskari.clazz.define(
                 }
                 this.showSplitter();
                 if (this.cropSize === null) {
-                    const mapSize = map.getSize();
-                    this.cropSize = mapSize[0] / 2;
+                    this.resetMapCropping();
                 }
             } else {
                 this.unregisterEventListeners();
                 this.hideSplitter();
             }
             this.active = active;
-            map.render();
+            this.mapModule.getMap().render();
         },
 
         updateSwipeLayer: function () {
@@ -197,7 +195,6 @@ Oskari.clazz.define(
         getSplitterElement: function () {
             if (!this.splitter) {
                 this.splitter = jQuery('<div class="layer-swipe-splitter"></div>');
-                this.splitter.css('cursor', 'grab');
                 this.splitter.draggable({
                     containment: '#mapdiv',
                     axis: 'x',
@@ -211,16 +208,23 @@ Oskari.clazz.define(
             }
             return this.splitter;
         },
+        resetMapCropping: function () {
+            const { left: mapLeft } = this.mapModule.getMapEl().offset();
+            const mapWidth = this.mapModule.getMap().getSize()[0];
+            const left = (mapWidth - this.splitterWidth) / 2 + mapLeft;
+            this.getSplitterElement().offset({ left });
+            this.updateMapCropping();
+        },
 
         updateMapCropping: function () {
-            const mapOffset = jQuery('#mapdiv').offset();
-            const splitterOffset = jQuery('.layer-swipe-splitter').offset();
+            const mapOffset = this.mapModule.getMapEl().offset();
+            const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
             this.mapModule.getMap().render();
         },
 
         showSplitter: function () {
-            jQuery('#mapdiv').append(this.getSplitterElement());
+            this.mapModule.getMapEl().append(this.getSplitterElement());
         },
 
         hideSplitter: function () {
@@ -251,6 +255,16 @@ Oskari.clazz.define(
             'MapLayerVisibilityChangedEvent': function (event) {
                 if (this.active) {
                     this.updateSwipeLayer();
+                }
+            },
+            'MapSizeChangedEvent': function (event) {
+                if (this.active) {
+                    const { left } = this.getSplitterElement().offset();
+                    const width = jQuery(window).width() - this.splitterWidth;
+                    if (left > width) {
+                        this.getSplitterElement().offset({ left: width });
+                        this.updateMapCropping();
+                    }
                 }
             }
         }
