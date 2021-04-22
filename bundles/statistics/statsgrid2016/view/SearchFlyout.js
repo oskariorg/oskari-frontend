@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.uiElement.empty();
-        console.log('cleaning');
     },
     setSpinner: function (spinner) {
         this.spinner = spinner;
