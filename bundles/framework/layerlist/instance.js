@@ -1,3 +1,5 @@
+import './Tile';
+import './Flyout';
 import './service/LayerListToolingService';
 
 const FILTER_NEWEST_COUNT = 20;
