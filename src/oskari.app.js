@@ -89,7 +89,7 @@ jQuery.ajaxSetup({ cache: false });
                 config = this.appConfig;
             }
             var loader = Oskari.loader([recData], config);
-            // send suppress event flag as ture since this is used to trigger single bundle starts for testing mostly (via dev-console etc)
+            // send suppress event flag as true since this is used to trigger single bundle starts for testing mostly (via dev-console etc)
             loader.processSequence(callback, true);
         },
         /**
