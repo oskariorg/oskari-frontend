@@ -71,7 +71,8 @@ Oskari.registerLocalization({
             'orderBy': 'Sortera',
             'orderByAscending': 'Sortera stigande',
             'orderByDescending': 'Sortera sjunkande',
-            'removeSource': 'Radera datamängd'
+            'removeSource': 'Radera datamängd',
+            'noIndicators': 'Börja användningen av tematiska kartor med att lägga till en indikator på kartan.'
         },
         'legend': {
             'title': 'Klassificering',
