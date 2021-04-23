@@ -71,7 +71,8 @@ Oskari.registerLocalization({
             'orderBy': 'Sort',
             'orderByAscending': 'Sort ascending',
             'orderByDescending': 'Sort descending',
-            'removeSource': 'Remove data'
+            'removeSource': 'Remove data',
+            'noIndicators': 'Start using thematic maps by adding an indicator on the map.'
         },
         'legend': {
             'title': 'Classification',

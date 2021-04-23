@@ -7,11 +7,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.searchBtn = null;
     this.searchPending = false;
     this.searchParametersSelected = false;
+    this.zeroIndicatorsNotification = null;
     var me = this;
     this.on('show', function () {
         if (!me.getUiElement()) {
             me.createUi();
             me.setContent(me.getUiElement());
+        }
+
+        if (me.service.getStateService().getIndicators().length === 0 && me.zeroIndicatorsNotification === null) {
+            me.createZeroIndicatorsNotification();
+            me.addZeroIndicatorsNotification();
         }
     });
 }, {
@@ -116,6 +122,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         indicatorListAccordion.insertTo(container);
 
         return container;
+    },
+    createZeroIndicatorsNotification: function () {
+        this.zeroIndicatorsNotification = jQuery('<div class="zero-indicators-notification" style="padding: 10px 0;"></div>');
+        this.zeroIndicatorsNotification.append(this.loc('statsgrid.noIndicators'));
+    },
+    addZeroIndicatorsNotification: function () {
+        this.getUiElement().prepend(this.zeroIndicatorsNotification);
+    },
+    removeZeroIndicatorsNotification: function () {
+        this.zeroIndicatorsNotification.remove();
+        this.zeroIndicatorsNotification = null;
     },
     updateSearchButtonEnabled: function () {
         const enabled = !this.searchPending && this.searchParametersSelected;
@@ -337,6 +354,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 this._addIndicators(successfullSearches);
                 this.searchPending = false;
                 this.updateSearchButtonEnabled();
+                this.removeZeroIndicatorsNotification();
             }
         };
         const searchSuccessfull = search => {
