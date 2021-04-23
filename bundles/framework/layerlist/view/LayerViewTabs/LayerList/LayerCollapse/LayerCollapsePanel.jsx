@@ -167,31 +167,39 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
     );
 };
 
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
+    return layers.map((oskariLayer, index) => {
+        return {
+            id: oskariLayer.getId(),
+            model: oskariLayer,
+            even: index % 2 === 0,
+            selected: selectedLayerIds.includes(oskariLayer.getId()),
+            controller
+        };
+    });
+};
+
+const LayerCountBadge = ({ layerCount = 0, unfilteredLayerCount }) => {
+    const badgeText = unfilteredLayerCount
+        ? layerCount + ' / ' + unfilteredLayerCount
+        : layerCount;
+    return (<Badge inversed={true} count={badgeText} />);
+}
+
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const [visible, setVisible] = useState(false);
 
-    const layerRows = group.getLayers().map((layer, index) => {
-        const layerProps = {
-            id: layer._id,
-            model: layer,
-            even: index % 2 === 0,
-            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            controller
-        };
-        return layerProps;
-    });
-    
-    const badgeText = group.unfilteredLayerCount
-        ? layerRows.length + ' / ' + group.unfilteredLayerCount
-        : layerRows.length;
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
 
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
             extra={
                 <StyledCollapsePanelTools>
-                    <Badge inversed={true} count={badgeText} />
+                    <LayerCountBadge
+                        layerCount={layerRows.length}
+                        unfilteredLayerCount={group.unfilteredLayerCount} />
                     <Confirm
                         title={<Message messageKey='grouping.manyLayersWarn'/>}
                         visible={visible}
