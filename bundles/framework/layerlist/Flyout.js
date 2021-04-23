@@ -45,6 +45,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          */
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
+            if (!jQuery(this.container).hasClass('layerlist')) {
+                jQuery(this.container).addClass('layerlist');
+            }
+            if (!flyout.hasClass('layerlist')) {
+                flyout.addClass('layerlist');
+            }
         },
 
         /**

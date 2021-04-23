@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
+import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
+import { AllLayersSwitch } from './AllLayersSwitch';
 import styled from 'styled-components';
 
 const StyledSubCollapse = styled(Collapse)`
@@ -34,10 +35,6 @@ const StyledEditGroup = styled.span`
     padding-right: 5px;
 `;
 
-const StyledSwitch = styled(Switch)`
-    margin-left: 5px;
-    margin-right: 5px;
-`;
 
 
 const renderLayer = ({ model, even, selected, controller }) => {
@@ -69,28 +66,6 @@ const onToolClick = (event, tool, group) => {
     event.stopPropagation();
 };
 
-const selectGroup = (event, setVisible, checked, group, controller) => {
-    setVisible(false);
-    // if switch is checked, we add the groups layers to selected layers, if not, we remove all the layers from checked layers
-    !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group); 
-    event.stopPropagation();
-}
-
-const onGroupSelect = (event, setVisible, checked, group, controller) => { 
-    // check if we need to show warning (over 10 layers inside the group)
-    if(checked && group.layers.length > 10) {
-        setVisible(true);
-    } else {
-        selectGroup(event, setVisible, !checked, group, controller);
-    }
-    event.stopPropagation();
-};
-
-const onCancel = (event, setVisible) => {
-    setVisible(false);
-    event.stopPropagation();
-}
-
 
 const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
     return layers.map((oskariLayer, index) => {
@@ -103,10 +78,17 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
         };
     });
 };
+
 const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
 
-    const [visible, setVisible] = useState(false);
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+    const toggleLayersOnMap = (addLayers) => {
+        if (addLayers) {
+            controller.addGroupLayersToMap(group);
+        } else {
+            controller.removeGroupLayersFromMap(group);
+        }
+    };
 
     return (
         <StyledSubCollapse>
@@ -117,19 +99,10 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                         <LayerCountBadge
                             layerCount={layerRows.length}
                             unfilteredLayerCount={group.unfilteredLayerCount} />
-                            <Confirm
-                                title={<Message messageKey='grouping.manyLayersWarn'/>}
-                                visible={visible}
-                                onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
-                                onCancel={(event) => onCancel(event, setVisible)}
-                                okText={<Message messageKey='yes'/>}
-                                cancelText={<Message messageKey='cancel'/>}
-                                placement='top'
-                                popupStyle={{zIndex: '999999'}}
-                            >
-                                <StyledSwitch size="small" checked={active}
-                                    onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)} />
-                            </Confirm>
+                        <AllLayersSwitch
+                            checked={active}
+                            layerCount={layerRows.length}
+                            onToggle={toggleLayersOnMap} />
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -172,10 +145,14 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
 
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
-    const [visible, setVisible] = useState(false);
-
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
-
+    const toggleLayersOnMap = (addLayers) => {
+        if (addLayers) {
+            controller.addGroupLayersToMap(group);
+        } else {
+            controller.removeGroupLayersFromMap(group);
+        }
+    };
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
@@ -184,22 +161,10 @@ const LayerCollapsePanel = (props) => {
                     <LayerCountBadge
                         layerCount={layerRows.length}
                         unfilteredLayerCount={group.unfilteredLayerCount} />
-                    <Confirm
-                        title={<Message messageKey='grouping.manyLayersWarn'/>}
-                        visible={visible}
-                        onConfirm={(event) => selectGroup(event, setVisible, active, group, controller)}
-                        onCancel={(event) => onCancel(event, setVisible)}
-                        okText={<Message messageKey='yes'/>}
-                        cancelText={<Message messageKey='cancel'/>}
-                        placement='top'
-                        popupStyle={{zIndex: '999999'}}
-                    >
-                        <StyledSwitch
-                            size="small"
-                            checked={active}
-                            onChange={(checked, event) => onGroupSelect(event, setVisible, checked, group, controller)}
-                        />
-                    </Confirm>
+                    <AllLayersSwitch
+                        checked={active}
+                        layerCount={layerRows.length}
+                        onToggle={toggleLayersOnMap} />
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
