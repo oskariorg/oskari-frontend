@@ -8,67 +8,50 @@ margin-left: 5px;
 margin-right: 5px;
 `;
 
+const LIMIT_FOR_CONFIRMATION = 10;
 
-
-const selectGroup = (event, setVisible, checked, group, controller) => {
-    setVisible(false);
-    // if switch is checked, we add the groups layers to selected layers, if not, we remove all the layers from checked layers
-    !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group); 
-    event.stopPropagation();
-}
-
-const onGroupSelect = (event, setVisible, checked, group, controller) => { 
-    // check if we need to show warning (over 10 layers inside the group)
-    if(checked && group.layers.length > 10) {
-        setVisible(true);
-    } else {
-        selectGroup(event, setVisible, !checked, group, controller);
-    }
-    event.stopPropagation();
-};
-
-
-const onCancel = (event, setVisible) => {
-    setVisible(false);
-    event.stopPropagation();
-};
-
-const LayerToggle = ({ onToggle, checked = false }) => {
-    return (<StyledSwitch size="small" checked={checked}
-        onChange={(checked, event) => {
-            onToggle(checked);
-            event.stopPropagation();
-        }} />);
-}
-
-/*
-<AllLayersSwitch checked={active} onToggle={(checked) => !checked ? controller.addGroupLayersToMap(group) : controller.removeGroupLayersFromMap(group); }
-*/
+/**
+ * Component to toggle all layers on group to or from map.
+ * Shows a warning if more than 10 layers would be added.
+ */
 export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
-    //const [visible, setVisible] = useState(false);
-    const ToggleComp = (<LayerToggle checked={checked} onToggle={onToggle} />);
-    return ToggleComp;
-    /*
-    if (layerCount < 10) {
-        return ToggleComp;
+    const [confirmOnScreen, showConfirm] = useState(false);
+    if (checked || layerCount < LIMIT_FOR_CONFIRMATION) {
+        return (<StyledSwitch size="small" checked={checked}
+            onChange={(checked) => {
+                onToggle(checked);
+        }} />);
     }
-    return (<Confirm
-        title={<Message messageKey='grouping.manyLayersWarn'/>}
-        visible={visible}
-        onConfirm={(event) => {
-            setVisible(false);
-            onToggle(active);
-            event.stopPropagation();
-        }}
-        onCancel={(event) => onCancel(event, setVisible)}
-        okText={<Message messageKey='yes'/>}
-        cancelText={<Message messageKey='cancel'/>}
-        placement='top'
-        popupStyle={{zIndex: '999999'}}
-    >
-        {ToggleComp}
-    </Confirm>);
-    */
+    return (
+        <Confirm
+            title={<Message messageKey='grouping.manyLayersWarn'/>}
+            visible={confirmOnScreen}
+            onConfirm={(event) => {
+                showConfirm(false);
+                onToggle(true);
+                event.stopPropagation();
+            }}
+            onCancel={(event) => {
+                showConfirm(false);
+                event.stopPropagation();
+            }}
+            okText={<Message messageKey='yes'/>}
+            // TODO: try to link tooltip to the flyout so it's removed if the flyout is closed.
+            // These didn't solve the problem but might be helpful
+            // div.oskari-flyout.layerlist
+            //getPopupContainer={(triggerNode) => document.querySelector('div.oskari-flyout.layerlist')}
+            //destroyTooltipOnHide={true}
+            cancelText={<Message messageKey='cancel'/>}
+            placement='top'
+            popupStyle={{zIndex: '999999'}}
+        >
+            <StyledSwitch
+                size="small"
+                checked={checked} onClickCapture={(event) => {
+                    event.stopPropagation();
+                    showConfirm(true);
+                }} />
+        </Confirm>);
 };
 
 AllLayersSwitch.propTypes = {

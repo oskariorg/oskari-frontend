@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel, List, ListItem, Message, Tooltip } from 'oskari-ui';
+import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
@@ -78,9 +78,17 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
         };
     });
 };
+
 const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
 
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+    const toggleLayersOnMap = (addLayers) => {
+        if (addLayers) {
+            controller.addGroupLayersToMap(group);
+        } else {
+            controller.removeGroupLayersFromMap(group);
+        }
+    };
 
     return (
         <StyledSubCollapse>
@@ -91,14 +99,10 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                         <LayerCountBadge
                             layerCount={layerRows.length}
                             unfilteredLayerCount={group.unfilteredLayerCount} />
-                        <AllLayersSwitch checked={active}
-                            onToggle={(checked) => {
-                                if (checked) {
-                                    controller.addGroupLayersToMap(group);
-                                } else {
-                                    controller.removeGroupLayersFromMap(group);
-                                }
-                            }} />
+                        <AllLayersSwitch
+                            checked={active}
+                            layerCount={layerRows.length}
+                            onToggle={toggleLayersOnMap} />
                         {
                             group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                                 <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
@@ -141,10 +145,14 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
 
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
-    const [visible, setVisible] = useState(false);
-
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
-
+    const toggleLayersOnMap = (addLayers) => {
+        if (addLayers) {
+            controller.addGroupLayersToMap(group);
+        } else {
+            controller.removeGroupLayersFromMap(group);
+        }
+    };
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
@@ -153,14 +161,10 @@ const LayerCollapsePanel = (props) => {
                     <LayerCountBadge
                         layerCount={layerRows.length}
                         unfilteredLayerCount={group.unfilteredLayerCount} />
-                    <AllLayersSwitch checked={active}
-                        onToggle={(checked) => {
-                            if (checked) {
-                                controller.addGroupLayersToMap(group);
-                            } else {
-                                controller.removeGroupLayersFromMap(group);
-                            }
-                        }} />
+                    <AllLayersSwitch
+                        checked={active}
+                        layerCount={layerRows.length}
+                        onToggle={toggleLayersOnMap} />
                     {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
