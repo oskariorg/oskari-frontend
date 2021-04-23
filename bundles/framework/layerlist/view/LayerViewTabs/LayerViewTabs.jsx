@@ -31,6 +31,8 @@ const focus = ref => {
 };
 
 const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, controller }) => {
+    // NOT sure why search would not focus when rendered and the ref/focus code could be inside LayerList-component?
+    // The effect should be that when that tab is shown we focus on the search
     const searchTermInputRef = useRef(null);
     useEffect(() => {
         if (autoFocusSearch) {
