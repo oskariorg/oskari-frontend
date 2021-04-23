@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
+import { Collapse, Confirm, CollapsePanel, List, ListItem, Message, Tooltip, Switch } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
+import { LayerCountBadge } from './LayerCountBadge';
 import styled from 'styled-components';
 
 const StyledSubCollapse = styled(Collapse)`
@@ -91,22 +92,21 @@ const onCancel = (event, setVisible) => {
 }
 
 
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
+    return layers.map((oskariLayer, index) => {
+        return {
+            id: oskariLayer.getId(),
+            model: oskariLayer,
+            even: index % 2 === 0,
+            selected: selectedLayerIds.includes(oskariLayer.getId()),
+            controller
+        };
+    });
+};
 const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
 
     const [visible, setVisible] = useState(false);
-    const layerRows = group.getLayers().map((layer, index) => {
-        const layerProps = {
-            id: layer._id,
-            model: layer,
-            even: index % 2 === 0,
-            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            controller
-        };
-        return layerProps;
-    });
-    const badgeText = group.unfilteredLayerCount
-        ? layerRows.length + ' / ' + group.unfilteredLayerCount
-        : layerRows.length;
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
 
     return (
         <StyledSubCollapse>
@@ -114,7 +114,9 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                 header={group.getTitle()}
                 extra={
                     <StyledCollapsePanelTools>
-                            <Badge inversed={true} count={badgeText} />
+                        <LayerCountBadge
+                            layerCount={layerRows.length}
+                            unfilteredLayerCount={group.unfilteredLayerCount} />
                             <Confirm
                                 title={<Message messageKey='grouping.manyLayersWarn'/>}
                                 visible={visible}
@@ -167,31 +169,21 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
     );
 };
 
+
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const [visible, setVisible] = useState(false);
 
-    const layerRows = group.getLayers().map((layer, index) => {
-        const layerProps = {
-            id: layer._id,
-            model: layer,
-            even: index % 2 === 0,
-            selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            controller
-        };
-        return layerProps;
-    });
-    
-    const badgeText = group.unfilteredLayerCount
-        ? layerRows.length + ' / ' + group.unfilteredLayerCount
-        : layerRows.length;
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
 
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
             extra={
                 <StyledCollapsePanelTools>
-                    <Badge inversed={true} count={badgeText} />
+                    <LayerCountBadge
+                        layerCount={layerRows.length}
+                        unfilteredLayerCount={group.unfilteredLayerCount} />
                     <Confirm
                         title={<Message messageKey='grouping.manyLayersWarn'/>}
                         visible={visible}

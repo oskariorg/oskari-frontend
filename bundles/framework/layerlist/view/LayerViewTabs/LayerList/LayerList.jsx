@@ -51,7 +51,7 @@ const Content = styled(Column)`
     min-width: 500px;
 `;
 
-const Indicator = ({ show, children }) => {
+const UpdateInProgressIndicator = ({ show, children }) => {
     if (show) {
         return <Spin size="large">{ children }</Spin>;
     }
@@ -97,9 +97,9 @@ const LayerList = React.forwardRef((props, ref) => {
             </Row>
             { loading && <Spinner/> }
             { !loading &&
-                <Indicator show={updating}>
+                <UpdateInProgressIndicator show={updating}>
                     <LayerCollapse {...collapse.state} controller={collapse.controller}/>
-                </Indicator>
+                </UpdateInProgressIndicator>
             }
         </Content>
     );
