@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         __setStateImplLocation: function (state = {}) {
             const sandbox = this.getSandbox();
-            if (state.east) {
+            if (typeof state.east !== 'undefined') {
                 sandbox.getMap().moveTo(
                     state.east,
                     state.north,
