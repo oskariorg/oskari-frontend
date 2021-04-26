@@ -329,8 +329,10 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-                this.getSandbox().notifyAll(eventBuilder(true));
+                if (event.getMapLayer().getId() === this._layerId) {
+                    const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
+                    this.getSandbox().notifyAll(eventBuilder(true));
+                }
             },
             /**
              * @method MapLayerEvent
