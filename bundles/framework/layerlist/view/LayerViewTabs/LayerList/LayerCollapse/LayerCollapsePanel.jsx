@@ -1,11 +1,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
+import { Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
 import { AllLayersSwitch } from './AllLayersSwitch';
+import { GroupToolRow } from './GroupToolRow';
 import styled from 'styled-components';
 
 const StyledSubCollapse = styled(Collapse)`
@@ -31,11 +32,6 @@ const StyledListItem = styled(ListItem)`
     display: block !important;
 `;
 
-const StyledEditGroup = styled.span`
-    padding-right: 5px;
-`;
-
-
 
 const renderLayer = ({ model, even, selected, controller }) => {
     const itemProps = { model, even, selected, controller };
@@ -51,19 +47,6 @@ renderLayer.propTypes = {
     even: PropTypes.any,
     selected: PropTypes.any,
     controller: PropTypes.any
-};
-
-const onToolClick = (event, tool, group) => {
-    const id = group.getId();
-    const parentId = group.getParentId();
-    const groupMethod = group.getGroupMethod();
-    const layerCountInGroup = group.getLayers().length;
-    const cb = tool.getCallback();
-    if (cb) {
-        cb(event, id, groupMethod, layerCountInGroup, parentId);
-    }
-    // Prevent collapse open on tool icon click
-    event.stopPropagation();
 };
 
 
@@ -103,16 +86,7 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
                             checked={active}
                             layerCount={layerRows.length}
                             onToggle={toggleLayersOnMap} />
-                        {
-                            group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
-                                <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
-                                <StyledEditGroup onClick={(event) =>
-                                    onToolClick(event, tool, group)} >
-                                    {tool.getIconComponent()}
-                                </StyledEditGroup>
-                                </Tooltip>
-                            )
-                        }
+                        <GroupToolRow group={group} />
                     </StyledCollapsePanelTools>
                 }>
                 {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
@@ -165,16 +139,7 @@ const LayerCollapsePanel = (props) => {
                         checked={active}
                         layerCount={layerRows.length}
                         onToggle={toggleLayersOnMap} />
-                    {
-                        group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
-                            <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
-                            <StyledEditGroup onClick={(event) =>
-                                onToolClick(event, tool, group)} >
-                                {tool.getIconComponent()}
-                            </StyledEditGroup>
-                            </Tooltip>
-                        )
-                    }
+                    <GroupToolRow group={group} />
                 </StyledCollapsePanelTools>
             }>
             {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
