@@ -135,7 +135,8 @@ const LayerCollapsePanel = (props) => {
                     selectedLayerIds={selectedLayerIds}
                     controller={controller}
                     propsNeededForPanel={propsNeededForPanel} />
-                <LayerList layers={layerRows} />
+                <LayerList
+                    layers={layerRows} />
         </StyledCollapsePanel>
     );
 };
