@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
@@ -9,51 +8,12 @@ import { AllLayersSwitch } from './AllLayersSwitch';
 import { GroupToolRow } from './GroupToolRow';
 import styled from 'styled-components';
 
-const StyledSubCollapse = styled(Collapse)`
-    border: none;
-    border-top: 1px solid #d9d9d9;
-    padding-left: 15px !important;
-`;
-
-const StyledCollapsePanel = styled(CollapsePanel)`
-    & > div:first-child {
-        min-height: 22px;
-    };
-`;
-
+/* ----- Group tools ------------- */
 const StyledCollapsePanelTools = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
 `;
-
-const StyledListItem = styled(ListItem)`
-    padding: 0 !important;
-    display: block !important;
-`;
-
-
-const renderLayer = ({ model, even, selected, controller }) => {
-    const itemProps = { model, even, selected, controller };
-    return (
-        <StyledListItem>
-            <Layer key={model.getId()}  {...itemProps} />
-        </StyledListItem>
-    );
-};
-
-const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
-    return layers.map((oskariLayer, index) => {
-        return {
-            id: oskariLayer.getId(),
-            model: oskariLayer,
-            even: index % 2 === 0,
-            selected: selectedLayerIds.includes(oskariLayer.getId()),
-            controller
-        };
-    });
-};
-
 const PanelToolContainer = ({group, layerCount, allLayersOnMap, controller}) => {
     const toggleLayersOnMap = (addLayers) => {
         if (addLayers) {
@@ -75,48 +35,87 @@ const PanelToolContainer = ({group, layerCount, allLayersOnMap, controller}) => 
         </StyledCollapsePanelTools>
     );
 };
+/* ----- /Group tools ------------- */
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
+/* ----- Layer list ------ */
+const StyledListItem = styled(ListItem)`
+    padding: 0 !important;
+    display: block !important;
+`;
 
-    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+const renderLayer = ({ model, even, selected, controller }) => {
+    const itemProps = { model, even, selected, controller };
     return (
-        <StyledSubCollapse>
-            <StyledCollapsePanel {...propsNeededForPanel}
-                header={group.getTitle()}
-                extra={
-                    <PanelToolContainer
-                        group={group}
-                        layerCount={layerRows.length}
-                        controller={controller}
-                        allLayersOnMap={active} />
-                }>
-                {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
-                {
-                    group.getGroups().map(subgroup => {
-                    const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
-                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-                    
-                    let activeGroup = false;
-                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
-                        activeGroup = true;
-                    }
-                    return (
-                        <SubCollapsePanel
-                            key={subgroup.id}
-                            active={activeGroup}
-                            group={subgroup}
-                            selectedLayerIds={selectedLayerIds}
-                            controller={controller}
-                            propsNeededForPanel={propsNeededForPanel}
-                        />
-                    );
-                    }
-                )}
-            </StyledCollapsePanel>
-        </StyledSubCollapse>
+        <StyledListItem>
+            <Layer key={model.getId()}  {...itemProps} />
+        </StyledListItem>
     );
 };
 
+const LayerList = ({ layers }) => {
+    if (!layers.length) {
+        // no layers
+        return null;
+    }
+    return (
+        <List bordered={false} dataSource={layers} renderItem={renderLayer} />
+    );
+};
+/* ----- /Layer list ------ */
+
+/* ----- Subgroup list ------ */
+const StyledSubCollapse = styled(Collapse)`
+    border: none;
+    border-top: 1px solid #d9d9d9;
+    padding-left: 15px !important;
+`;
+const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeededForPanel }) => {
+    if (!subgroups.length) {
+        // no subgroups
+        return null;
+    }
+
+    return subgroups.map(group => {
+        const layerIds = group.getLayers().map(lyr => lyr.getId());
+        const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
+
+        let allLayersOnMap = false;
+        if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
+            allLayersOnMap = true;
+        }
+        return (
+            <StyledSubCollapse key={group.id}>
+                <LayerCollapsePanel
+                    active={allLayersOnMap}
+                    group={group}
+                    selectedLayerIds={selectedLayerIds}
+                    controller={controller}
+                    propsNeededForPanel={propsNeededForPanel}
+                />
+            </StyledSubCollapse>
+        );
+    });
+};
+/* ----- /Subgroup list ------ */
+
+/*  ----- Main component for LayerCollapsePanel ------ */
+const StyledCollapsePanel = styled(CollapsePanel)`
+    & > div:first-child {
+        min-height: 22px;
+    };
+`;
+
+const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
+    return layers.map((oskariLayer, index) => {
+        return {
+            id: oskariLayer.getId(),
+            model: oskariLayer,
+            even: index % 2 === 0,
+            selected: selectedLayerIds.includes(oskariLayer.getId()),
+            controller
+        };
+    });
+};
 
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
@@ -131,28 +130,12 @@ const LayerCollapsePanel = (props) => {
                     controller={controller}
                     allLayersOnMap={active} />
             }>
-            {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
-            {
-                group.getGroups().map(subgroup => {
-                    const layerIds = subgroup.getLayers().map(lyr => lyr.getId());
-                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-                    
-                    let activeGroup = false;
-                    if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
-                        activeGroup = true;
-                    }
-                    return (
-                        <SubCollapsePanel
-                            key={subgroup.id}
-                            active={activeGroup}
-                            group={subgroup}
-                            selectedLayerIds={selectedLayerIds}
-                            controller={controller}
-                            propsNeededForPanel={propsNeededForPanel}
-                        />
-                    );
-                }
-            )}
+                <SubGroupList
+                    subgroups={group.getGroups()}
+                    selectedLayerIds={selectedLayerIds}
+                    controller={controller}
+                    propsNeededForPanel={propsNeededForPanel} />
+                <LayerList layers={layerRows} />
         </StyledCollapsePanel>
     );
 };
