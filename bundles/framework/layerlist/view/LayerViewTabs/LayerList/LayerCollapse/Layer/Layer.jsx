@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { Switch, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { LayerTools } from './LayerTools';
-import { EditFilled  } from '@ant-design/icons';
 
 const Flex = styled('div')`
     display: flex;

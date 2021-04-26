@@ -15,13 +15,19 @@ const LIMIT_FOR_CONFIRMATION = 10;
  * Shows a warning if more than 10 layers would be added.
  */
 export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
-    const [confirmOnScreen, showConfirm] = useState(false);
     if (checked || layerCount < LIMIT_FOR_CONFIRMATION) {
-        return (<StyledSwitch size="small" checked={checked}
-            onChange={(checked) => {
-                onToggle(checked);
-        }} />);
+        // when switch is "on" or when there's not enough
+        //  layers affected for a confirmation to be shown
+        return (
+            <StyledSwitch size="small" checked={checked}
+                onChange={onToggle} />
+        );
     }
+    // Toggling confirmation with a state using hack
+    // It's a workaround for:
+    //  - stop panel from opening when switch is shown
+    //  - re-render components to make confirm visible when switch is turned on
+    const [confirmOnScreen, showConfirm] = useState(false);
     return (
         <Confirm
             title={<Message messageKey='grouping.manyLayersWarn'/>}

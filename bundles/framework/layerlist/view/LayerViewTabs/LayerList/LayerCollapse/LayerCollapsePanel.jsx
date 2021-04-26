@@ -36,19 +36,11 @@ const StyledListItem = styled(ListItem)`
 const renderLayer = ({ model, even, selected, controller }) => {
     const itemProps = { model, even, selected, controller };
     return (
-            <StyledListItem>
-                <Layer key={model.getId()}  {...itemProps} />
-            </StyledListItem>
+        <StyledListItem>
+            <Layer key={model.getId()}  {...itemProps} />
+        </StyledListItem>
     );
 };
-
-renderLayer.propTypes = {
-    model: PropTypes.any,
-    even: PropTypes.any,
-    selected: PropTypes.any,
-    controller: PropTypes.any
-};
-
 
 const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
     return layers.map((oskariLayer, index) => {
@@ -62,9 +54,7 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
     });
 };
 
-const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
-
-    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+const PanelToolContainer = ({group, layerCount, allLayersOnMap, controller}) => {
     const toggleLayersOnMap = (addLayers) => {
         if (addLayers) {
             controller.addGroupLayersToMap(group);
@@ -72,22 +62,33 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
             controller.removeGroupLayersFromMap(group);
         }
     };
+    return (
+        <StyledCollapsePanelTools>
+            <LayerCountBadge
+                layerCount={layerCount}
+                unfilteredLayerCount={group.unfilteredLayerCount} />
+            <AllLayersSwitch
+                checked={allLayersOnMap}
+                layerCount={layerCount}
+                onToggle={toggleLayersOnMap} />
+            <GroupToolRow group={group} />
+        </StyledCollapsePanelTools>
+    );
+};
 
+const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNeededForPanel }) => {
+
+    const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
     return (
         <StyledSubCollapse>
             <StyledCollapsePanel {...propsNeededForPanel}
                 header={group.getTitle()}
                 extra={
-                    <StyledCollapsePanelTools>
-                        <LayerCountBadge
-                            layerCount={layerRows.length}
-                            unfilteredLayerCount={group.unfilteredLayerCount} />
-                        <AllLayersSwitch
-                            checked={active}
-                            layerCount={layerRows.length}
-                            onToggle={toggleLayersOnMap} />
-                        <GroupToolRow group={group} />
-                    </StyledCollapsePanelTools>
+                    <PanelToolContainer
+                        group={group}
+                        layerCount={layerRows.length}
+                        controller={controller}
+                        allLayersOnMap={active} />
                 }>
                 {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} />}
                 {
@@ -120,27 +121,15 @@ const SubCollapsePanel = ({ active, group, selectedLayerIds, controller, propsNe
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
-    const toggleLayersOnMap = (addLayers) => {
-        if (addLayers) {
-            controller.addGroupLayersToMap(group);
-        } else {
-            controller.removeGroupLayersFromMap(group);
-        }
-    };
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
             extra={
-                <StyledCollapsePanelTools>
-                    <LayerCountBadge
-                        layerCount={layerRows.length}
-                        unfilteredLayerCount={group.unfilteredLayerCount} />
-                    <AllLayersSwitch
-                        checked={active}
-                        layerCount={layerRows.length}
-                        onToggle={toggleLayersOnMap} />
-                    <GroupToolRow group={group} />
-                </StyledCollapsePanelTools>
+                <PanelToolContainer
+                    group={group}
+                    layerCount={layerRows.length}
+                    controller={controller}
+                    allLayersOnMap={active} />
             }>
             {layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer} /> }
             {
