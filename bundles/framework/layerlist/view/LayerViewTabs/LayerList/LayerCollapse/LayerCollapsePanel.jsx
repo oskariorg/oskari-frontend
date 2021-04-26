@@ -14,7 +14,8 @@ const StyledCollapsePanelTools = styled.div`
     justify-content: flex-end;
     align-items: center;
 `;
-const PanelToolContainer = ({group, layerCount, allLayersOnMap, controller}) => {
+// Memoed based on layerCount, allLayersOnMap and group.unfilteredLayerCount
+const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, controller}) => {
     const toggleLayersOnMap = (addLayers) => {
         if (addLayers) {
             controller.addGroupLayersToMap(group);
@@ -34,7 +35,16 @@ const PanelToolContainer = ({group, layerCount, allLayersOnMap, controller}) => 
             <GroupToolRow group={group} />
         </StyledCollapsePanelTools>
     );
-};
+}, (prevProps, nextProps) => {
+    const propsToCheck = ['allLayersOnMap', 'layerCount'];
+    const changed = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
+    if (changed) {
+        return false;
+    }
+    const unfilteredTypeChange = typeof prevProps.group.unfilteredLayerCount !== typeof nextProps.group.unfilteredLayerCount;
+    const unfilteredCountChange = prevProps.group.unfilteredLayerCount !== nextProps.group.unfilteredLayerCount;
+    return !unfilteredTypeChange || !unfilteredCountChange;
+});
 /* ----- /Group tools ------------- */
 
 /* ----- Layer list ------ */
@@ -84,8 +94,9 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeede
             allLayersOnMap = true;
         }
         return (
-            <StyledSubCollapse key={group.id}>
+            <StyledSubCollapse>
                 <LayerCollapsePanel
+                    key={group.id}
                     active={allLayersOnMap}
                     group={group}
                     selectedLayerIds={selectedLayerIds}
@@ -99,7 +110,12 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeede
 /* ----- /Subgroup list ------ */
 
 /*  ----- Main component for LayerCollapsePanel ------ */
+// ant-collapse-content-box will have the layer list and subgroup layer list. 
+//  Without padding 0 the subgroups will be padded twice
 const StyledCollapsePanel = styled(CollapsePanel)`
+    > .ant-collapse-content > .ant-collapse-content-box {
+        padding: 0px;
+    }
     & > div:first-child {
         min-height: 22px;
     };
@@ -120,6 +136,11 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
 const LayerCollapsePanel = (props) => {
     const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
+    // set group switch active if all layers in group are selected
+    const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
+    // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
+    //   between render as whole vs render when the panel is opened.
+    const isPanelOpen = propsNeededForPanel.isActive;
     return (
         <StyledCollapsePanel {...propsNeededForPanel} 
             header={group.getTitle()}
@@ -128,15 +149,17 @@ const LayerCollapsePanel = (props) => {
                     group={group}
                     layerCount={layerRows.length}
                     controller={controller}
-                    allLayersOnMap={active} />
+                    allLayersOnMap={allLayersOnMap} />
             }>
-                <SubGroupList
-                    subgroups={group.getGroups()}
-                    selectedLayerIds={selectedLayerIds}
-                    controller={controller}
-                    propsNeededForPanel={propsNeededForPanel} />
-                <LayerList
-                    layers={layerRows} />
+                { isPanelOpen && <React.Fragment>
+                    <SubGroupList
+                        subgroups={group.getGroups()}
+                        selectedLayerIds={selectedLayerIds}
+                        controller={controller}
+                        { ...propsNeededForPanel } />
+                    <LayerList
+                        layers={layerRows} />
+                </React.Fragment>}
         </StyledCollapsePanel>
     );
 };
@@ -147,16 +170,37 @@ LayerCollapsePanel.propTypes = {
     selectedLayerIds: PropTypes.array.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
-
+/*
 const comparisonFn = (prevProps, nextProps) => {
     // expandIcon is something the parent component adds as a context
     const ignored = ['expandIcon'];
     const arrayChildCheck = ['selectedLayerIds'];
     let useMemoized = true;
+
+    if (prevProps.group.getTitle() !== nextProps.group.getTitle()) {
+        // re-render if name changes
+        return false;
+    }
+    // check if layers have changed
+    const prevLayers = prevProps.group.getLayers().map(lyr => lyr.getId());
+    const nextLayers = nextProps.group.getLayers().map(lyr => lyr.getId());
+
+    if (!Oskari.util.arraysEqual(prevLayers, nextLayers)) {
+        return false;
+    }
+    // TODO: check if layer names have changed?
+    // check if group contains selected layers/layers that have been removed from selected layers
+    const prevLayersOnSelected = prevLayers.some(id => selectedLayerIds.includes(id));
+    const nextLayersOnSelected = nextLayers.some(id => selectedLayerIds.includes(id));
+    if (prevLayersOnSelected !== nextLayersOnSelected) {
+        return false;
+    }
+
     Object.getOwnPropertyNames(nextProps).forEach(name => {
         if (ignored.includes(name)) {
             return;
         }
+        // TODO: check if layerids <> selectedlayerids change?
         if (arrayChildCheck.includes(name)) {
             if (!Oskari.util.arraysEqual(nextProps[name], prevProps[name])) {
                 useMemoized = false;
@@ -169,5 +213,8 @@ const comparisonFn = (prevProps, nextProps) => {
     });
     return useMemoized;
 };
+/*
 const memoized = React.memo(LayerCollapsePanel, comparisonFn);
 export { memoized as LayerCollapsePanel };
+*/
+export { LayerCollapsePanel };
