@@ -268,13 +268,13 @@ export class WFSLayer extends VectorTileLayer {
      */
     getWpsLayerParams () {
         const { data = {} } = this.getAttributes();
-        const { commonId, wpsType, noDataValue } = data;
+        const { commonId, wpsInputType, noDataValue } = data;
         const wps = {};
         if (typeof commonId !== 'undefined') {
             wps.join_key = commonId;
         }
-        if (typeof wpsType !== 'undefined') {
-            wps.input_type = wpsType;
+        if (typeof wpsInputType !== 'undefined') {
+            wps.input_type = wpsInputType;
         }
         if (typeof noDataValue !== 'undefined') {
             wps.no_data = noDataValue;
