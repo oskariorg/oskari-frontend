@@ -709,11 +709,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     } else {
                         cell = me.templateCell.clone();
                         renderer = me.valueRenderer[key];
-                        value = Oskari.util.sanitize(value);
+                        const sanitizedValue = Oskari.util.sanitize(value);
 
                         if (renderer) {
-                            value = renderer(value, data);
+                            value = renderer(sanitizedValue, data);
                         } else if (typeof value === 'number') {
+                            value = Number(sanitizedValue);
                             value = me._loc('Grid.cellValue', { value: value });
                         }
                         cell.append(value);
