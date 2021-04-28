@@ -166,6 +166,7 @@ Oskari.registerLocalization(
                 "metadataLayer": "Metadata layer",
                 "metadataAttribute": "Timeline attribute",
                 "metadataToggleLevel": "Zoom levels at which metadata layer will be active",
+                "metadataVisualize": "Metadata layer visibility",
                 "noToggle": "No toggle",
                 "ui": "Time series UI",
                 "player": "Player/animation",
@@ -216,6 +217,7 @@ Oskari.registerLocalization(
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
             "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
             "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "maximumScreenSpaceError": "Maximum screen space error",
             "deleteGroupLayers": "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {

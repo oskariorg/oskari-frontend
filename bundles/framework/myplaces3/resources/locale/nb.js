@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Steder",
         "desc": "",
-        "category": {
-            "defaultName": "Mitt kartlag",
-            "organization": "Mine steder",
-            "inspire": "Mine steder"
-        },
         "guest": {
             "loginShort": "Logg inn for å legge til dine steder på et kart"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Navn",
                 "placeholder": "Navn på kartlag"
             },
-            "drawing": {
-                "label": "Utforming",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Farge",
-                    "size": "Størrelse"
-                },
-                "line": {
-                    "label": "Linje",
-                    "color": "Farge",
-                    "size": "Bredde"
-                },
-                "area": {
-                    "label": "Område",
-                    "fillcolor": "Fyllfarge",
-                    "linecolor": "Kantlinjefarge",
-                    "size": "Kantlinjebredde"
-                }
-            },
             "visibleFields": {
                 "label": "Synlige stedsdata",
                 "placename": "Navn",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Tilpass linjestil"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punktstil",
-            "tooltip": "Definer en punktstil",
-            "symbol": {
-                "label": "Ikon"
-            },
-            "size": {
-                "label": "Størrelse"
-            },
-            "color": {
-                "label": "Farge",
-                "labelOr": "eller",
-                "labelCustom": "Spesialfarge (RGB 0-255)"
-            },
-            "preview": {
-                "label": "Forhåndsvisning"
-            },
-            "buttons": {
-                "save": "Lagre",
-                "cancel": "Avbryt"
-            }
-        },
-        "lineform": {
-            "title": "Linjestil",
-            "tooltip": "Definer en linjestil",
-            "style": {
-                "label": "Utforming"
-            },
-            "cap": {
-                "label": "Endepunkt"
-            },
-            "corner": {
-                "label": "Hjørner"
-            },
-            "width": {
-                "label": "Bredde"
-            },
-            "color": {
-                "label": "Farge",
-                "labelOr": "eller",
-                "labelCustom": "Spesialfarge (RGB 0-255)"
-            },
-            "preview": {
-                "label": "Forhåndsvisning"
-            },
-            "buttons": {
-                "save": "Lagre",
-                "cancel": "Avbryt"
-            }
-        },
-        "areaform": {
-            "title": "Områdestil",
-            "tooltip": "Definer en arealstil",
-            "linestyle": {
-                "label": "Kantlinje stil"
-            },
-            "linecap": {
-                "label": "Kantlinje endepunkt"
-            },
-            "linecorner": {
-                "label": "Kantlinje hjørner"
-            },
-            "linewidth": {
-                "label": "Kantlinje bredde"
-            },
-            "linecolor": {
-                "label": "Kantlinje farge",
-                "labelOr": "eller",
-                "labelCustom": "Spesialfarge (RGB 0-255)"
-            },
-            "color": {
-                "label": "Fyllfarge",
-                "labelOr": "eller",
-                "labelCustom": "Spesialfarge (RGB 0-255)"
-            },
-            "fill": {
-                "label": "Mønster"
-            },
-            "preview": {
-                "label": "Forhåndsvisning"
-            },
-            "buttons": {
-                "save": "Lagre",
-                "cancel": "Avbryt"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Navn på kartlag mangler",
             "placeNameIllegal": "Stedsnavnet inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
             "descIllegal": "Stedsbeskrivelsen inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
-            "categoryNameIllegal": "Navn på kartlag inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker.",
-            "dotSize": "Punktstørrelse er ugyldig. Gyldige verdier er 1-5",
-            "dotColor": "Punktfarge er ugyldig. Verdiene må være mellom 0 og 255",
-            "dotShape": "Punktstil er ugyldig",
-            "lineSize": "Linjebredde er ugyldig. Bredde må være mellom 0 og 50",
-            "lineColor": "Linjefarge er ugyldig. Verdiene må være mellom 0 og 255",
-            "areaLineSize": "Bredde på kantlinje er ugyldig. Bredde må være mellom 0 og 50",
-            "areaLineColor": "Farge på kantlinje er ugyldig. Verdiene må være mellom 0 og 255",
-            "areaFillColor": "Fyllfarge er ugyldig. Verdiene må være mellom 0 og 255"
+            "categoryNameIllegal": "Navn på kartlag inneholder ugyldige tegn. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
         }
     }
 });

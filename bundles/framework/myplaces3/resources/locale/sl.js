@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Lokacije",
         "desc": "",
-        "category": {
-            "defaultName": "Moj sloj karte",
-            "organization": "Moje lokacije",
-            "inspire": "Moje lokacije"
-        },
         "guest": {
             "loginShort": "Za uporabo se prijavi"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Ime",
                 "placeholder": "Ime sloja karte"
             },
-            "drawing": {
-                "label": "Slog",
-                "point": {
-                    "label": "Točka",
-                    "color": "Barva",
-                    "size": "Velikost"
-                },
-                "line": {
-                    "label": "Črta",
-                    "color": "Barva",
-                    "size": "Debelina"
-                },
-                "area": {
-                    "label": "Območje",
-                    "fillcolor": "Polnilo",
-                    "linecolor": "Barva robne črte",
-                    "size": "Debelina robne črte"
-                }
-            },
             "visibleFields": {
                 "label": "Vidni podatki o lokaciji",
                 "placename": "Ime",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Uredi slog črte"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Slog točke",
-            "tooltip": "Določi slog za točkovne elemente.",
-            "symbol": {
-                "label": "Ikona"
-            },
-            "size": {
-                "label": "Velikost"
-            },
-            "color": {
-                "label": "Barva",
-                "labelOr": "ali",
-                "labelCustom": "Splošna barva RGB (0-255)"
-            },
-            "preview": {
-                "label": "Predogled"
-            },
-            "buttons": {
-                "save": "Shrani",
-                "cancel": "Prekliči"
-            }
-        },
-        "lineform": {
-            "title": "Slog črte",
-            "tooltip": "Določi slog za linijske elemente.",
-            "style": {
-                "label": "Slog"
-            },
-            "cap": {
-                "label": "Zaključki"
-            },
-            "corner": {
-                "label": "Koti"
-            },
-            "width": {
-                "label": "Širina"
-            },
-            "color": {
-                "label": "Barva",
-                "labelOr": "ali",
-                "labelCustom": "Splošna barva RGB (0-255)"
-            },
-            "preview": {
-                "label": "Predogled"
-            },
-            "buttons": {
-                "save": "Shrani",
-                "cancel": "Prekliči"
-            }
-        },
-        "areaform": {
-            "title": "Slog območja",
-            "tooltip": "Določi slog za površinske elemente.",
-            "linestyle": {
-                "label": "Slog robne črte"
-            },
-            "linecap": {
-                "label": "Končne točke robne črte"
-            },
-            "linecorner": {
-                "label": "Koti robne črte"
-            },
-            "linewidth": {
-                "label": "Debelina robne črte"
-            },
-            "linecolor": {
-                "label": "barva robne črte",
-                "labelOr": "ali",
-                "labelCustom": "Splošna barva RGB (0-255)"
-            },
-            "color": {
-                "label": "Barva polnila",
-                "labelOr": "ali",
-                "labelCustom": "Splošna barva RGB (0-255)"
-            },
-            "fill": {
-                "label": "Vzorec polnila"
-            },
-            "preview": {
-                "label": "Predogled"
-            },
-            "buttons": {
-                "save": "Shrani",
-                "cancel": "Prekliči"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Manjka ime sloja karte.",
             "placeNameIllegal": "Ime lokacije vsebuje nedovoljene znake.  Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
             "descIllegal": "Opis lokacije vsebuje nedovoljene znake. Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
-            "categoryNameIllegal": "Opis sloja vsebuje nedovoljene znake.  Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji.",
-            "dotSize": "Velikost pike ne ustreza dovoljenim vrednostim med 1 in 5.",
-            "dotColor": "Barva točke ne ustreza dovoljenim vrednostim med 0 in 255.",
-            "dotShape": "Oblika točke je napačna.",
-            "lineSize": "Velikost linije ne ustreza dovoljenim vrednostim med 1 in 50.",
-            "lineColor": "Barva črte ne ustreza dovoljenim vrednostim med 0 in 255.",
-            "areaLineSize": "Velikost robne črte ne ustreza dovoljenim vrednostim med 0 in 50.",
-            "areaLineColor": "Barva robne črte ne ustreza dovoljenim vrednostim med 0 in 255.",
-            "areaFillColor": "Barva polnila ne ustreza dovoljenim vrednostim med 0 in 255."
+            "categoryNameIllegal": "Opis sloja vsebuje nedovoljene znake.  Dovoljeni znaki so velike in male črke a-z, kot tudi å, ä in ö, številke, vračalke in vezaji."
         }
     }
 });

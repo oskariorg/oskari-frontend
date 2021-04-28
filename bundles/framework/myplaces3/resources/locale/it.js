@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Luoghi",
         "desc": "",
-        "category": {
-            "defaultName": "Il Mio Map Layer",
-            "organization": "I Miei Luoghi",
-            "inspire": "I Miei Luoghi"
-        },
         "guest": {
             "loginShort": "Accedi per aggiungere i tuoi luoghi sulla mappa"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Nome del luogo",
                 "placeholder": "Nome layer"
             },
-            "drawing": {
-                "label": "Stile",
-                "point": {
-                    "label": "Punto",
-                    "color": "Colore",
-                    "size": "Dimensione"
-                },
-                "line": {
-                    "label": "Linea",
-                    "color": "Colore",
-                    "size": "Larghezza"
-                },
-                "area": {
-                    "label": "Area",
-                    "fillcolor": "Colore di riempimento",
-                    "linecolor": "Colore lato",
-                    "size": "Spessore lato"
-                }
-            },
             "visibleFields": {
                 "label": "Informazioni sui luoghi visibili",
                 "placename": "Nome",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Modifica lo stile della linea"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Stile punto",
-            "tooltip": "Definisci uno stile per gli elementi puntuali",
-            "symbol": {
-                "label": "Icona"
-            },
-            "size": {
-                "label": "Dimensione"
-            },
-            "color": {
-                "label": "Colore",
-                "labelOr": "o",
-                "labelCustom": "Colore personalizzato RGB (0-255)"
-            },
-            "preview": {
-                "label": "Anteprima"
-            },
-            "buttons": {
-                "save": "Salva",
-                "cancel": "Cancella"
-            }
-        },
-        "lineform": {
-            "title": "Stile linea",
-            "tooltip": "Definisci uno stile per gli elementi lineari",
-            "style": {
-                "label": "Stile"
-            },
-            "cap": {
-                "label": "Estremità della linea"
-            },
-            "corner": {
-                "label": "Spigoli"
-            },
-            "width": {
-                "label": "Larghezza"
-            },
-            "color": {
-                "label": "Colore",
-                "labelOr": "o",
-                "labelCustom": "Colore personalizzato RGB (0-255)"
-            },
-            "preview": {
-                "label": "Anteprima"
-            },
-            "buttons": {
-                "save": "Salva",
-                "cancel": "Cancella"
-            }
-        },
-        "areaform": {
-            "title": "Stile area",
-            "tooltip": "Definisci uno stile per gli elementi areali",
-            "linestyle": {
-                "label": "Stile lato"
-            },
-            "linecap": {
-                "label": "Estremità lato"
-            },
-            "linecorner": {
-                "label": "Spigoli lato"
-            },
-            "linewidth": {
-                "label": "Spessore lato"
-            },
-            "linecolor": {
-                "label": "Colore lato",
-                "labelOr": "o",
-                "labelCustom": "Colore personalizzato RGB (0-255)"
-            },
-            "color": {
-                "label": "Colore di riempimento",
-                "labelOr": "o",
-                "labelCustom": "Colore personalizzato RGB (0-255)"
-            },
-            "fill": {
-                "label": "Campitura"
-            },
-            "preview": {
-                "label": "Anteprima"
-            },
-            "buttons": {
-                "save": "Salva",
-                "cancel": "Cancella"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Il nome del layer non è presente",
             "placeNameIllegal": "Il nome del luogo contiene caratteri non consentiti. I caratteri consentiti sono lettere (a-z, A-Z, å,ä,ö,Å,Ä,Ö), numeri (0-9), barra inversa e trattini (-).",
             "descIllegal": "La descrizione del luogo contiene caratteri non consentiti. I caratteri consentiti sono lettere (a-z, A-Z, å,ä,ö,Å,Ä,Ö), numeri (0-9), barra inversa e trattini (-).",
-            "categoryNameIllegal": "Il nome del layer contiene caratteri non consentiti. I caratteri consentiti sono lettere (a-z, A-Z, å,ä,ö,Å,Ä,Ö), numeri (0-9), barra inversa e trattini (-).",
-            "dotSize": "La dimensione del punto non è valida. La dimensione deve essere compresa tra 1 e 5",
-            "dotColor": "Il colore del punto non è valido. Il valore del colore deve essere compreso tra 0 e 255",
-            "dotShape": "La forma del punto non è valida",
-            "lineSize": "Lo spessore della linea non è valido. La dimensione deve essere compresa tra 0 e 50",
-            "lineColor": "Il colore della linea non è valido.Il valore del colore deve essere compreso tra 0 e 255",
-            "areaLineSize": "Lo spessore del lato non è valido. La dimensione deve essere compresa tra 0 e 50",
-            "areaLineColor": "Il colore della lato non è valido.Il valore del colore deve essere compreso tra 0 e 255",
-            "areaFillColor": "Il colore di riempimento non è valido. Il valore del colore deve essere compreso tra 0 e 255"
+            "categoryNameIllegal": "Il nome del layer contiene caratteri non consentiti. I caratteri consentiti sono lettere (a-z, A-Z, å,ä,ö,Å,Ä,Ö), numeri (0-9), barra inversa e trattini (-)."
         }
     }
 });

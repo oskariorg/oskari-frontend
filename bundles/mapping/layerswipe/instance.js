@@ -1,6 +1,5 @@
 import { getRenderPixel } from 'ol/render';
 import { unByKey } from 'ol/Observable';
-import VectorLayer from 'ol/layer/Vector';
 
 const SwipeAlertTypes = {
     NO_RASTER: 'noRaster',
@@ -15,11 +14,15 @@ Oskari.clazz.define(
         this.splitter = null;
         this.splitterWidth = 5;
         this.cropSize = null;
-        this.map = null;
-        this.layer = null;
+        this.mapModule = null;
+        this.layer = null; // ol layer
         this.popupService = null;
+        this.popup = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
         this.eventListenerKeys = [];
+
+        this.alertTimer = null;
+        this.alertDebounceTime = 500;
 
         this.alertTitles = {
             [SwipeAlertTypes.NO_RASTER]: this.loc('alert.swipeNoRasterTitle'),
@@ -34,7 +37,7 @@ Oskari.clazz.define(
         __name: 'LayerSwipe',
 
         _startImpl: function (sandbox) {
-            this.map = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMap();
+            this.mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
             this.popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
 
             const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
@@ -55,57 +58,100 @@ Oskari.clazz.define(
 
         setActive: function (active) {
             if (active) {
-                const foundLayer = this.updateSwipeLayer();
-                if (!foundLayer) {
+                this.updateSwipeLayer();
+                if (this.layer === null) {
                     return;
                 }
                 this.showSplitter();
                 if (this.cropSize === null) {
-                    const mapSize = this.map.getSize();
-                    this.cropSize = mapSize[0] / 2;
+                    this.resetMapCropping();
                 }
             } else {
                 this.unregisterEventListeners();
                 this.hideSplitter();
             }
             this.active = active;
-            this.map.render();
+            this.mapModule.getMap().render();
         },
 
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
             this.layer = this.getTopmostLayer();
-            if (this.layer === null) {
-                this.activateDefaultMapTool();
-                this.showAlert(SwipeAlertTypes.NO_RASTER);
-                return false;
+
+            if (this.alertTimer) {
+                clearTimeout(this.alertTimer);
             }
-            if (!this.layer.getVisible()) {
-                this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+            if (this.layer === null) {
+                // When switching the background map, multiple events including
+                // remove, add and re-arrange will be triggered in order. The remove
+                // layer event causes the NO_RASTER alert to be shown when the
+                // background map layer itself swipe layer. Using a timer to delay
+                // the swipe tool deactivation and alert.
+                this.alertTimer = setTimeout(() => {
+                    this.activateDefaultMapTool();
+                    this.showAlert(SwipeAlertTypes.NO_RASTER);
+                }, this.alertDebounceTime);
+                return;
             }
             this.registerEventListeners();
-            return true;
         },
 
         activateDefaultMapTool: function () {
             // reset toolbar to use the default tool
             Oskari.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
         },
-
+        getAlertPopup: function () {
+            if (this.popup) {
+                this.popup.close();
+            }
+            this.popup = this.popupService.createPopup();
+            return this.popup;
+        },
         showAlert: function (alertType) {
+            const popup = this.getAlertPopup();
             const title = this.alertTitles[alertType];
             const message = this.alertMessages[alertType];
-            const popup = this.popupService.createPopup();
-            const closeBtn = popup.createCloseButton(this.loc('alert.ok'));
-            popup.show(title, message, [closeBtn]);
+            popup.show(title, message, [popup.createCloseButton()]);
+        },
+        showNotVisibleAlert: function (layerId, zoomToExtent) {
+            const popup = this.getAlertPopup();
+            const moveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            moveBtn.setTitle(this.loc('alert.move'));
+            moveBtn.setHandler(() => {
+                Oskari.getSandbox().postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, zoomToExtent]);
+                popup.close();
+            });
+            const title = this.alertTitles[SwipeAlertTypes.NOT_VISIBLE];
+            const message = this.alertMessages[SwipeAlertTypes.NOT_VISIBLE];
+            const buttons = [moveBtn, popup.createCloseButton()];
+            popup.show(title, message, buttons);
+        },
+        isInGeometry: function (layer) {
+            var geometries = layer.getGeometry();
+            if (!geometries || geometries.length === 0) {
+                // we might not have the coverage geometry so assume all is good if we don't know for sure
+                return true;
+            }
+            var viewBounds = this.mapModule.getCurrentExtent();
+            var olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+            return geometries[0].intersectsExtent(olExtent);
         },
 
         getTopmostLayer: function () {
-            const layers = this.map
-                .getLayers()
-                .getArray()
-                .filter((layer) => !(layer instanceof VectorLayer));
-            return layers.length !== 0 ? layers[layers.length - 1] : null;
+            const layers = Oskari.getSandbox()
+                .findAllSelectedMapLayers()
+                .filter(l => l.isVisible());
+            if (!layers.length) {
+                return null;
+            }
+            const topLayer = layers[layers.length - 1];
+            const layerId = topLayer.getId();
+            const isInGeometry = this.isInGeometry(topLayer);
+            if (!isInGeometry || !topLayer.isInScale(this.mapModule.getMapScale())) {
+                this.showNotVisibleAlert(layerId, !isInGeometry);
+            }
+            const olLayers = this.mapModule.getOLMapLayers(layerId);
+            return olLayers.length !== 0 ? olLayers[0] : null;
         },
 
         registerEventListeners: function () {
@@ -119,7 +165,7 @@ Oskari.clazz.define(
                     return;
                 }
 
-                const mapSize = this.map.getSize();
+                const mapSize = this.mapModule.getMap().getSize();
                 const tl = getRenderPixel(event, [0, 0]);
                 const tr = getRenderPixel(event, [this.cropSize, 0]);
                 const bl = getRenderPixel(event, [0, mapSize[1]]);
@@ -162,16 +208,23 @@ Oskari.clazz.define(
             }
             return this.splitter;
         },
+        resetMapCropping: function () {
+            const { left: mapLeft } = this.mapModule.getMapEl().offset();
+            const mapWidth = this.mapModule.getMap().getSize()[0];
+            const left = (mapWidth - this.splitterWidth) / 2 + mapLeft;
+            this.getSplitterElement().offset({ left });
+            this.updateMapCropping();
+        },
 
         updateMapCropping: function () {
-            const mapOffset = jQuery('#mapdiv').offset();
-            const splitterOffset = jQuery('.layer-swipe-splitter').offset();
+            const mapOffset = this.mapModule.getMapEl().offset();
+            const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
-            this.map.render();
+            this.mapModule.getMap().render();
         },
 
         showSplitter: function () {
-            jQuery('#mapdiv').append(this.getSplitterElement());
+            this.mapModule.getMapEl().append(this.getSplitterElement());
         },
 
         hideSplitter: function () {
@@ -200,8 +253,18 @@ Oskari.clazz.define(
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
-                if (!this.layer.getVisible()) {
-                    this.showAlert(SwipeAlertTypes.NOT_VISIBLE);
+                if (this.active) {
+                    this.updateSwipeLayer();
+                }
+            },
+            'MapSizeChangedEvent': function (event) {
+                if (this.active) {
+                    const { left } = this.getSplitterElement().offset();
+                    const width = jQuery(window).width() - this.splitterWidth;
+                    if (left > width) {
+                        this.getSplitterElement().offset({ left: width });
+                        this.updateMapCropping();
+                    }
                 }
             }
         }

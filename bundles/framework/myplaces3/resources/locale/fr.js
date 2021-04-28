@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Lieux",
         "desc": "",
-        "category": {
-            "defaultName": "Ma couche cartographique",
-            "organization": "Mes lieux",
-            "inspire": "Mes lieux"
-        },
         "guest": {
             "loginShort": "Identifiez-vous pour ajouter des lieux à votre carte"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Nom",
                 "placeholder": "Nom de la couche cartographique"
             },
-            "drawing": {
-                "label": "Style",
-                "point": {
-                    "label": "Point",
-                    "color": "Couleur",
-                    "size": "Taille"
-                },
-                "line": {
-                    "label": "Ligne",
-                    "color": "Couleur",
-                    "size": "Largeur"
-                },
-                "area": {
-                    "label": "zone",
-                    "fillcolor": "Couleur de remplissage",
-                    "linecolor": "Couleur de la bordure de ligne",
-                    "size": "Largeur de la bordure de ligne"
-                }
-            },
             "visibleFields": {
                 "label": "Données du lieu visibles",
                 "placename": "Nom",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Modifier le style de ligne"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Style de point",
-            "tooltip": "Définir un style pour les objets ponctuels",
-            "symbol": {
-                "label": "Icône"
-            },
-            "size": {
-                "label": "Taille"
-            },
-            "color": {
-                "label": "Couleur",
-                "labelOr": "ou",
-                "labelCustom": "Couleur RGB personnalisée (0-255)"
-            },
-            "preview": {
-                "label": "Aperçu"
-            },
-            "buttons": {
-                "save": "Enregistrer",
-                "cancel": "Annuler"
-            }
-        },
-        "lineform": {
-            "title": "Style de ligne",
-            "tooltip": "Définir un style pour les objets linéaires",
-            "style": {
-                "label": "Style"
-            },
-            "cap": {
-                "label": "Extrémités"
-            },
-            "corner": {
-                "label": "Coins"
-            },
-            "width": {
-                "label": "Largeur"
-            },
-            "color": {
-                "label": "Couleur",
-                "labelOr": "ou",
-                "labelCustom": "Couleur RGB personnalisée (0-255)"
-            },
-            "preview": {
-                "label": "Aperçu"
-            },
-            "buttons": {
-                "save": "Enregistrer",
-                "cancel": "Annuler"
-            }
-        },
-        "areaform": {
-            "title": "Style de la zone",
-            "tooltip": "Définir un style pour les objets surfaciques",
-            "linestyle": {
-                "label": "Style de ligne de bordure"
-            },
-            "linecap": {
-                "label": "Extremités de ligne de bordure"
-            },
-            "linecorner": {
-                "label": "Coins de ligne de bordure"
-            },
-            "linewidth": {
-                "label": "Largeur de la ligne de bordure"
-            },
-            "linecolor": {
-                "label": "Coins de ligne de bordure",
-                "labelOr": "ou",
-                "labelCustom": "Couleur RGB personnalisée (0-255)"
-            },
-            "color": {
-                "label": "Couleur de remplissage",
-                "labelOr": "ou",
-                "labelCustom": "Couleur RGB personnalisée (0-255)"
-            },
-            "fill": {
-                "label": "Motif de remplissage"
-            },
-            "preview": {
-                "label": "Aperçu"
-            },
-            "buttons": {
-                "save": "Enregistrer",
-                "cancel": "Annuler"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Le nom de la couche cartographique est manquant.",
             "placeNameIllegal": "Le nom de lieu contient des caractères non autorisés. Les caractères autorisés sont les lettres (a-z, A-Z et å, ä, ö, Å, Ä, Ö), les chiffres (0-9), la touche effacement et le tiret (-).",
             "descIllegal": "La description du lieu contient des caractères non autorisés. Les caractères autorisés sont les lettres (a-z, A-Z et å, ä, ö, Å, Ä, Ö), les chiffres (0-9), la touche effacement et le tiret (-).",
-            "categoryNameIllegal": "Le nom de la couche cartographique contient des caractères non autorisés. Les caractères autorisés sont les lettres (a-z, A-Z et å, ä, ö, Å, Ä, Ö), les chiffres (0-9), la touche effacement et le tiret (-).",
-            "dotSize": "La taille du point n’est pas valide. Sa taille doit se situer entre 1 et 5.",
-            "dotColor": "La couleur du point n’est pas valide. Les valeurs de couleur doivent se situer entre 0 et 255.",
-            "dotShape": "La forme du point n’est pas valide.",
-            "lineSize": "La largeur de ligne n’est pas valide. La taille doit se situer entre 0 et 50.",
-            "lineColor": "La couleur du point n’est pas valide. Les valeurs de couleur doivent se situer entre 0 et 255.",
-            "areaLineSize": "La largeur de la ligne de bordure n’est pas valide. La taille doit se situer entre 0 et 50.",
-            "areaLineColor": "La couleur de la ligne de bordure n’est pas valide. Les valeurs de couleur doivent se situer entre 0 et 255.",
-            "areaFillColor": "La couleur de remplissage n’est pas valide. Les valeurs de couleur doivent se situer entre 0 et 255."
+            "categoryNameIllegal": "Le nom de la couche cartographique contient des caractères non autorisés. Les caractères autorisés sont les lettres (a-z, A-Z et å, ä, ö, Å, Ä, Ö), les chiffres (0-9), la touche effacement et le tiret (-)."
         }
     }
 });

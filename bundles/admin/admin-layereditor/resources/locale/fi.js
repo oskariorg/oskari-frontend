@@ -164,11 +164,12 @@ Oskari.registerLocalization(
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "timeSeries": {
-                "metadataLayer": "Metadata layer",
-                "metadataAttribute": "Timeline attribute",
+                "metadataLayer": "Metadatataso",
+                "metadataAttribute": "Metadatan aika-atribuutti",
                 "metadataToggleLevel": "Mittakaavatasot, joilla metatietotaso on käytössä",
-                "noToggle": "No toggle",
-                "ui": "Time series UI",
+                "metadataVisualize": "Metadatatason näkyminen",
+                "noToggle": "Ei valintaa",
+                "ui": "Aikasarjan käyttö",
                 "player": "Animaatio",
                 "range": "Aikajana",
                 "none": "Ei valintaa",
@@ -217,6 +218,7 @@ Oskari.registerLocalization(
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
             "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
             "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "maximumScreenSpaceError": "Maximum screen space error",
             "deleteGroupLayers": "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {

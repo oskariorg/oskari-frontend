@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Lugares",
         "desc": "",
-        "category": {
-            "defaultName": "A minha camada",
-            "organization": "Os meus lugares",
-            "inspire": "Lugares"
-        },
         "guest": {
             "loginShort": "Ligue-se para utilizar"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Nome",
                 "placeholder": "Dar nome a uma camada"
             },
-            "drawing": {
-                "label": "Estilo",
-                "point": {
-                    "label": "Ponto",
-                    "color": "Cor",
-                    "size": "Dimensão"
-                },
-                "line": {
-                    "label": "Linha",
-                    "color": "Cor",
-                    "size": "Espessura"
-                },
-                "area": {
-                    "label": "Área",
-                    "fillcolor": "Cor de enchimento",
-                    "linecolor": "Cor de linha",
-                    "size": "Espessura de linha"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "Nome",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": "Dimensão"
-            },
-            "color": {
-                "label": "Cor",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Voltar"
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "Cor",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Voltar"
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "Cor de linha",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Guardar",
-                "cancel": "Voltar"
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Nome da camada em falta.",
             "placeNameIllegal": "O nome do objeto contém carateres não permitidos. Os carateres permitidos são as letras a-z bem como as vogais com acentos, números, backspaces e hífens.",
             "descIllegal": "A descrição do objeto contém carateres não permitidos. Os carateres permitidos são as letras a-z bem como as vogais com acentos, números, backspaces e hífens.",
-            "categoryNameIllegal": "A descrição da camada contém carateres não permitidos. Os carateres permitidos são as letras a-z bem como as vogais com acentos, números, backspaces e hífens",
-            "dotSize": "A dimensão do ponto (.) não se enquadra nos limites (1-5).",
-            "dotColor": "Cor de ponto errada",
-            "dotShape": "",
-            "lineSize": "A dimensão da linha não se enquadra nos limites (1-50).",
-            "lineColor": "Cor de linha errada|",
-            "areaLineSize": "A dimensão dos lados da área não se enquadra nos limites (0-50).",
-            "areaLineColor": "Cor dos lados da área errada",
-            "areaFillColor": "Cor de enchimento errada"
+            "categoryNameIllegal": "A descrição da camada contém carateres não permitidos. Os carateres permitidos são as letras a-z bem como as vogais com acentos, números, backspaces e hífens"
         }
     }
 });

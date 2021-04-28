@@ -5,10 +5,11 @@ Oskari.registerLocalization({
         toolLayerSwipe: 'Vertaa ylintä karttatasoa alempiin karttatasoihin',
         alert: {
             ok: 'OK',
-            swipeNoRasterTitle: 'Yhtään rasterikarttatasoa ei ole valittuna käytettäväksi vertailutyökalun kanssa',
-            swipeNoRasterMessage: 'Aseta karttatasovalikosta rasteritaso näkyväksi',
-            swipeLayerNotVisibleTitle: 'Ylin karttataso ei näy tässä näkymässä',
-            swipeLayerNotVisibleMessage: 'Karttatasojen vertailu ei toimi. Siirry näkymässä sijaintiin, jossa ylin karttataso on näkyvissä'
+            move: 'Siirry',
+            swipeNoRasterTitle: 'Yhtään karttatasoa ei ole valittuna käytettäväksi vertailutyökalun kanssa',
+            swipeNoRasterMessage: 'Aseta karttatasovalikosta taso näkyväksi',
+            swipeLayerNotVisibleTitle: 'Karttatasojen vertailu ei toimi tässä näkymässä',
+            swipeLayerNotVisibleMessage: 'Ylin karttataso ei näy tässä näkymässä. Siirry sijaintiin, jossa se näkyy.'
         }
     }
 });

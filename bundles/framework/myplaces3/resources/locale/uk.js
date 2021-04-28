@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Місця",
         "desc": "",
-        "category": {
-            "defaultName": "Мій шар карти",
-            "organization": "Мої місця",
-            "inspire": "Місця"
-        },
         "guest": {
             "loginShort": "Увійдіть в систему для використання"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Назва",
                 "placeholder": "Назвати шар карти"
             },
-            "drawing": {
-                "label": "Стиль",
-                "point": {
-                    "label": "Точка",
-                    "color": "Колір",
-                    "size": "Розмір"
-                },
-                "line": {
-                    "label": "Лінія",
-                    "color": "Колір",
-                    "size": "Товщина"
-                },
-                "area": {
-                    "label": "Полігон",
-                    "fillcolor": "Колір заливки",
-                    "linecolor": "Колір контуру",
-                    "size": "Товщина лінії"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Назва шару карти відсутня.",
             "placeNameIllegal": "Назва об'єкту містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс.",
             "descIllegal": "Опис об'єкту містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс.",
-            "categoryNameIllegal": "Опис шару містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс.",
-            "dotSize": "Розмір точки не вписується в допуски (1-5)",
-            "dotColor": "Неправильний колір точки.",
-            "dotShape": "",
-            "lineSize": "Розмір лінії не вписується в допуски (1-50)",
-            "lineColor": "Неправильний колір лінії.",
-            "areaLineSize": "Розмір точки не вписується в допуски (1-50)",
-            "areaLineColor": "Неправильний колір контуру полігона.",
-            "areaFillColor": "Неправильний колір заливки."
+            "categoryNameIllegal": "Опис шару містить недопустимі символи. Допускаються літери a-z, а також å, ä, ö, цифри та дефіс."
         }
     }
 });

@@ -162,11 +162,12 @@ Oskari.registerLocalization(
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "timeSeries": {
-                "metadataLayer": "Metadata layer",
-                "metadataAttribute": "Timeline attribute",
+                "metadataLayer": "Metadatalager",
+                "metadataAttribute": "Metadata tidsattribut",
                 "metadataToggleLevel": "Zoomnivåer där vektorformaten är aktiverat",
-                "noToggle": "No toggle",
-                "ui": "Time series UI",
+                "metadataVisualize": "Metadatalager synlighet ",
+                "noToggle": "Inget val",
+                "ui": "Tidsserie användargränssnitt",
                 "player": "Animering",
                 "range": "Tidsserie",
                 "none": "Inget val",
@@ -215,6 +216,7 @@ Oskari.registerLocalization(
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
             "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
             "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "maximumScreenSpaceError": "Maximum screen space error",
             "deleteGroupLayers": "Radera kartlagren i gruppen",
             "hover": "Framhävning av objekt och tooltip (JSON)",
             "ion": {

@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Steder",
         "desc": "",
-        "category": {
-            "defaultName": "Mine kortlag",
-            "organization": "Mine steder",
-            "inspire": "Steder"
-        },
         "guest": {
             "loginShort": "Log ind for at bruge"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Navn",
                 "placeholder": "Giv kortlaget et navn"
             },
-            "drawing": {
-                "label": "Form",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Farve",
-                    "size": "Størrelse"
-                },
-                "line": {
-                    "label": "Linje",
-                    "color": "Farve",
-                    "size": "Tykkelse"
-                },
-                "area": {
-                    "label": "Område",
-                    "fillcolor": "Fyldfarve",
-                    "linecolor": "Linjefarve",
-                    "size": "Linjens tykkelse"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Kortlagsnavn mangler",
             "placeNameIllegal": "Objektnavnet indeholder ugyldige tegn. Tilladte tegn er bogstaverne a-z samt å, ä og ö, tal, mellemrum og bindestreg",
             "descIllegal": "Objektbeskrivelsen indeholder ugyldige tegn. Tilladte tegn er bogstaverne a-z samt å, ä og ö, tal, mellemrum og bindestreg",
-            "categoryNameIllegal": "Lagbeskrivelsen indeholder ugyldige tegn. Tilladte tegn er bogstaverne a-z samt å, ä og ö, tal, mellemrum og bindestreg",
-            "dotSize": "Prikstørrelsen ligger uden for størrelsesrammen (1-5)",
-            "dotColor": "Forkert prikfarve.",
-            "dotShape": "",
-            "lineSize": "Linjestørrelsen ligger uden for størrelsesrammen (1-50)",
-            "lineColor": "Forkert linjefarve.",
-            "areaLineSize": "Områdekanten ligger uden for størrelsesrammen (1-50)",
-            "areaLineColor": "Forkert områdekantfarve",
-            "areaFillColor": "Forkert fyldfarve"
+            "categoryNameIllegal": "Lagbeskrivelsen indeholder ugyldige tegn. Tilladte tegn er bogstaverne a-z samt å, ä og ö, tal, mellemrum og bindestreg"
         }
     }
 });

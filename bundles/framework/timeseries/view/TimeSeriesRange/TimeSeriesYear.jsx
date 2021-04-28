@@ -5,7 +5,7 @@ import React from 'react';
 import { Col, ColFixed, Row } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
 
-export const TimeSeriesYear = ({ onChange, start, end, value, dataYears }) => {
+export const TimeSeriesYear = ({ onChange, start, end, value, dataYears, isMobile }) => {
     // when current value is after last data layer
     let prevDataYear = dataYears[dataYears.length - 1] || null;
     let nextDataYear = null;
@@ -37,6 +37,7 @@ export const TimeSeriesYear = ({ onChange, start, end, value, dataYears }) => {
             </Col>
             <ColFixed>
                 <YearRangeSlider
+                    isMobile={isMobile}
                     included={false}
                     step={1}
                     start={start}
@@ -65,5 +66,6 @@ TimeSeriesYear.propTypes = {
     start: PropTypes.number.isRequired,
     end: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
-    dataYears: PropTypes.arrayOf(PropTypes.number).isRequired
+    dataYears: PropTypes.arrayOf(PropTypes.number).isRequired,
+    isMobile: PropTypes.bool.isRequired
 };

@@ -12,3 +12,8 @@ export const Border = styled('div')`
     padding: 10px 10px 5px;
     margin: 5px 0px 15px
 `;
+
+export const SpacedLabel = styled('div')`
+    display: inline-block;
+    margin-left: 10px;
+`;

@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Hlutgögn",
         "layer": {
+            "defaultName": "Kortalagið mitt",
             "organization": "Staðirnir mínir",
             "inspire": "Kortalögin mín"
         }

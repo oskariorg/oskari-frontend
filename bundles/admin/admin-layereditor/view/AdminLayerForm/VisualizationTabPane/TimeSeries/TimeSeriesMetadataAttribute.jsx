@@ -2,7 +2,7 @@ import { Message, Option, Select } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 import React, { Fragment } from 'react';
-import { StyledFormField } from './styled';
+import { StyledFormField } from '../styled';
 
 export const TimeSeriesMetadataAttribute = ({ layer, disabled, controller }) => {
     const options = layer.options || {};

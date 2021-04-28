@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Kohteet",
         "desc": "",
-        "category": {
-            "defaultName": "Oma karttataso",
-            "organization": "Omat kohteet",
-            "inspire": "Omat kohteet"
-        },
         "guest": {
             "loginShort": "Kirjaudu sisään, jotta voit lisätä kohteita."
         },
@@ -150,25 +145,6 @@ Oskari.registerLocalization(
                 "label": "Karttatason nimi",
                 "placeholder": "Karttatason nimi"
             },
-            "drawing": {
-                "label": "Kohteiden esitystavat",
-                "point": {
-                    "label": "Piste",
-                    "color": "Väri",
-                    "size": "Koko"
-                },
-                "line": {
-                    "label": "Viiva",
-                    "color": "Väri",
-                    "size": "Leveys"
-                },
-                "area": {
-                    "label": "Alue",
-                    "fillcolor": "Täyttöväri",
-                    "linecolor": "Reunaviivan väri",
-                    "size": "Reunaviivan leveys"
-                }
-            },
             "visibleFields": {
                 "label": "Näytettävät kohteen tiedot",
                 "placename": "Nimi",
@@ -191,92 +167,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Muokkaa viivojen esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien viivojen esitystapaa."
                 }
-            }
-        },
-        "pointform": {
-            "title": "Pisteen esitystapa",
-            "tooltip": "Määrittele esitystapa pistekohteille.",
-            "symbol": {
-                "label": "Symboli"
-            },
-            "size": {
-                "label": "Koko"
-            },
-            "color": {
-                "label": "Väri",
-                "labelOr": "tai",
-                "labelCustom": "Oma RGB-väri (0-255)"
-            },
-            "preview": {
-                "label": "Esikatselu"
-            },
-            "buttons": {
-                "save": "Tallenna",
-                "cancel": "Peruuta"
-            }
-        },
-        "lineform": {
-            "title": "Viivan esitystapa",
-            "tooltip": "Määrittele esitystapa viivakohteille.",
-            "style": {
-                "label": "Tyyli"
-            },
-            "cap": {
-                "label": "Päädyt"
-            },
-            "corner": {
-                "label": "Kulmat"
-            },
-            "width": {
-                "label": "Leveys"
-            },
-            "color": {
-                "label": "Väri",
-                "labelOr": "tai",
-                "labelCustom": "Oma RGB-väri (0-255)"
-            },
-            "preview": {
-                "label": "Esikatselu"
-            },
-            "buttons": {
-                "save": "Tallenna",
-                "cancel": "Peruuta"
-            }
-        },
-        "areaform": {
-            "title": "Alueen esitystapa",
-            "tooltip": "Määrittele esitystapa aluekohteille.",
-            "linestyle": {
-                "label": "Reunaviivan tyyli"
-            },
-            "linecap": {
-                "label": "Reunaviivan päädyt"
-            },
-            "linecorner": {
-                "label": "Kulmat"
-            },
-            "linewidth": {
-                "label": "Reunaviivan leveys"
-            },
-            "linecolor": {
-                "label": "Reunaviivan väri",
-                "labelOr": "tai",
-                "labelCustom": "Oma RGB-väri (0-255)"
-            },
-            "color": {
-                "label": "Täyttöväri",
-                "labelOr": "tai",
-                "labelCustom": "Oma RGB-väri (0-255)"
-            },
-            "fill": {
-                "label": "Täyttökuvio"
-            },
-            "preview": {
-                "label": "Esikatselu"
-            },
-            "buttons": {
-                "save": "Tallenna",
-                "cancel": "Peruuta"
             }
         },
         "notification": {
@@ -318,15 +208,7 @@ Oskari.registerLocalization(
             "categoryName": "Karttatason nimi puuttuu.",
             "placeNameIllegal": "Kohteen nimessä on kiellettyjä merkkejä.",
             "descIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä.",
-            "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä.",
-            "dotSize": "Pisteen koko on virheellinen. Pisteen koon oltava välillä 1-5.",
-            "dotColor": "Pisteen väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
-            "dotShape": "Pisteen kuvake on virheellinen.",
-            "lineSize": "Viivan leveys on virheellinen. Viivan leveyden on oltava välillä 1-50.",
-            "lineColor": "Viivan väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
-            "areaLineSize": "Reunaviivan leveys on virheellinen. Leveyden on oltava välillä 0-50.",
-            "areaLineColor": "Reunaviivan väri on virheellinen. Väriarvojen on oltava välillä 0-255.",
-            "areaFillColor": "Täyttöväri on virheellinen. Väriarvojen on oltava välillä 0-255."
+            "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä."
         }
     }
 });

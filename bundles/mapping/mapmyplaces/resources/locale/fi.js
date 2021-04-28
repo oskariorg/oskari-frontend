@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Kohdetiedot",
         "layer": {
+            "defaultName": "Oma karttataso",
             "organization": "Omat kohteet",
             "inspire": "Omat karttatasot"
         }
