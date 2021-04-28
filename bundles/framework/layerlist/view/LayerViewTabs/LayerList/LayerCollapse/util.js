@@ -14,13 +14,15 @@ const comparator = (a, b, method) => {
     return Oskari.util.naturalSort(nameA, nameB);
 };
 
-const sortGroupsAlphabetically = (group) => {
-    if (group.getGroups().length !== 0) {
-        group.getGroups().map(subgroup => {
-            return sortGroupsAlphabetically(subgroup);
-        });
+const sortGroupsAlphabetically = (groups= []) => {
+    if (!Array.isArray(groups)) {
+        return null;
     }
-    return group.getGroups().sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    const sorted = [...groups].sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    sorted.forEach(group => {
+        group.setGroups(sortGroupsAlphabetically(group.getGroups()));
+    });
+    return sorted;
 };
 
 const createGroupModel = (group, method, layers, tools, admin) => {
@@ -90,7 +92,7 @@ const determineGroupId = (method, layerGroups = [], layerAdmin) => {
  * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
 export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
-    const groupList = [];
+    
     let groupForOrphans = null;
     const isUserAdmin = tools.length > 0;
 
@@ -112,31 +114,21 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
             }
         });
     // recursively map groups and layers together
-    allGroups.map(parentGroup => {
-        parentGroup.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-        const group = createGroupModel(parentGroup, method, layers, tools, isUserAdmin);
-        if (group) {
-            groupList.push(group);
-        }
-    });
-    // Sort groupList subgroups
-    groupList.map(group => {
-        sortGroupsAlphabetically(group);
-    });
-    // Sort maingroup
-    groupList.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    const groupList = allGroups
+        .map(parentGroup => createGroupModel(parentGroup, method, layers, tools, isUserAdmin))
+        .filter(group => typeof group !== 'undefined');
+    const sortedGroups = sortGroupsAlphabetically(groupList);
 
     let groupsWithoutLayers = [];
     if (method !== 'getInspireName') {
-        groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
-            const group = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                d.id, method, d.name
-            );
-            group.setTools(tools);
-            return group;
-        });
+        groupsWithoutLayers = allDataProviders
+            .filter(t => sortedGroups.filter(g => g.id === t.id).length === 0)
+            .map(d => {
+                const group = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.model.LayerGroup', d.id, method, d.name);
+                group.setTools(tools);
+                return group;
+            });
+        groupsWithoutLayers = sortGroupsAlphabetically(groupsWithoutLayers);
     }
-    groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
+    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...sortedGroups] : [...groupsWithoutLayers, ...sortedGroups];
 };
