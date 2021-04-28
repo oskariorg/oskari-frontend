@@ -245,8 +245,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 if (typeof value !== 'number') {
                     return '';
                 }
-                const sanitizedValue = Number(Oskari.util.sanitize(value));
-                return numberFormatter.format(sanitizedValue);
+                return numberFormatter.format(value);
             });
             me.grid.setColumnUIName(ind.hash, function (content) {
                 var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
