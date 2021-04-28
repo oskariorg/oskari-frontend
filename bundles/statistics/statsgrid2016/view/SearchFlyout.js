@@ -131,7 +131,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         this.getUiElement().prepend(this.zeroIndicatorsNotification);
     },
     removeZeroIndicatorsNotification: function () {
-        this.zeroIndicatorsNotification.remove();
+        if (this.zeroIndicatorsNotification) {
+            this.zeroIndicatorsNotification.remove();
+        }
         this.zeroIndicatorsNotification = null;
     },
     updateSearchButtonEnabled: function () {
