@@ -254,9 +254,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         cell = this.templateCell.clone();
                         cell.addClass(baseKey);
                         if (_.isArray(value[field])) {
-                            cell.append(Oskari.util.sanitize(value[field][0]));
+                            cell.append(value[field][0]);
                         } else {
-                            cell.append(Oskari.util.sanitize(value[field]));
+                            cell.append(value[field]);
                         }
                         if (hidden) {
                             cell.addClass('hidden');
@@ -714,9 +714,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             value = renderer(value, data);
                         } else if (typeof value === 'number') {
                             value = me._loc('Grid.cellValue', { value: value });
+                        } else {
+                            value = Oskari.util.sanitize(value);
                         }
-
-                        value = Oskari.util.sanitize(value);
 
                         cell.append(value);
                         row.append(cell);
