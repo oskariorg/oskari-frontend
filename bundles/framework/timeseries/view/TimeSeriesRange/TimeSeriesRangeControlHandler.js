@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { TimeseriesMetadataService } from './TimeseriesMetadataService';
+import { TimeseriesMetadataService } from '../../service/TimeseriesMetadataService';
 
 const _getStartTimeFromYear = (year) => {
     return moment.utc(year.toString(), 'YYYY').startOf('year');
