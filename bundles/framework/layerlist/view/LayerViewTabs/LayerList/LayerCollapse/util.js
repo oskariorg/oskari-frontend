@@ -55,9 +55,7 @@ const createGroupModel = (group, method, layers, tools, admin) => {
     }
     const mappedSubgroups = group.getGroups()
         // recursion for subgroups
-        .map(subgroup => {
-            return createGroupModel(subgroup, method, layers, tools, admin);
-        })
+        .map(subgroup => createGroupModel(subgroup, method, layers, tools, admin))
         // remove any subgroups that mapped to null:
         //  (groups without layers for non-admins etc)
         .filter(g => typeof g !== 'undefined');
@@ -93,8 +91,8 @@ const determineGroupId = (method, layerGroups = [], layerAdmin) => {
  */
 export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
     const groupList = [];
-    let group = null;
     let groupForOrphans = null;
+    const isUserAdmin = tools.length > 0;
 
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
@@ -116,7 +114,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     // recursively map groups and layers together
     allGroups.map(parentGroup => {
         parentGroup.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-        group = createGroupModel(parentGroup, method, layers, tools, false);
+        const group = createGroupModel(parentGroup, method, layers, tools, isUserAdmin);
         if (group) {
             groupList.push(group);
         }
@@ -128,64 +126,6 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     // Sort maingroup
     groupList.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
 
-    let groupsWithoutLayers = [];
-    if (method !== 'getInspireName') {
-        groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
-            const group = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                d.id, method, d.name
-            );
-            group.setTools(tools);
-            return group;
-        });
-    }
-    groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
-};
-
-/**
- * Function to construct layer groups based on information included in layers and given grouping method.
- * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
- *
- * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
- * @param {String} method layer method name to sort by
- * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
- * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
- * @param {Object[]} allDataProviders all dataproviders available in Oskari
- */
-export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
-    const groupList = [];
-    let group = null;
-    let groupForOrphans = null;
-
-    // sort layers by grouping & name
-    layers.sort((a, b) => comparator(a, b, method))
-        .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
-        .forEach(layer => {
-            let groupAttr = layer[method]();
-            let groupId = determineGroupId(method, layer.getGroups(), layer.getAdmin());
-            // Create group for orphan layers if not already created and add layer to it
-            if (!groupAttr) {
-                if (!groupForOrphans) {
-                    groupForOrphans = Oskari.clazz.create(
-                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupId, method, '(' + noGroupTitle + ')'
-                    );
-                }
-                groupForOrphans.addLayer(layer);
-            }
-        });
-
-    allGroups.map(parentGroup => {
-        group = createGroupModel(parentGroup, method, layers, tools, true);
-        groupList.push(group);
-    });
-    // Sort subgroups
-    groupList.map(group => {
-        sortGroupsAlphabetically(group);
-    });
-    // Sort maingroup
-    groupList.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
     let groupsWithoutLayers = [];
     if (method !== 'getInspireName') {
         groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
