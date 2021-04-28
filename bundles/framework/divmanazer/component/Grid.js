@@ -718,7 +718,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             value = Oskari.util.sanitize(value);
                         }
 
-                        cell.text(value);
+                        cell.append(value);
                         row.append(cell);
                         columnIndex = columnIndex + 1;
                     }
