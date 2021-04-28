@@ -23,42 +23,45 @@ const sortGroupsAlphabetically = (group) => {
     return group.getGroups().sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
 };
 
-const mapGroupsAndLayers = (group, method, layers, tools, admin) => {
-    if (!admin && (!group.layers || group.layers.length === 0)) {
+const createGroupModel = (group, method, layers, tools, admin) => {
+    const groupLayers = group.layers || [];
+    if (groupLayers.length === 0 && !admin) {
+        // non-admin users get only groups with layers
         return;
     }
     // check that group has layers
     const lang = Oskari.getLang();
     const name = group.getName();
-    let newGroup = Oskari.clazz.create(
+    const newGroup = Oskari.clazz.create(
         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
         group.id, method, name[lang]
     );
     newGroup.setTools(tools);
-    for (var i in group.layers) {
-        layers.find(layer => {
-            // To make sure layer has getId() method
-            if (typeof layer.getId == 'function') {
-                if (layer.getId() === group.layers[i].id) {
-                    newGroup.addLayer(layer);
-                    return layer;
-                }
-            }
-        });
-    }
+    // attach layers to group
+    const groupLayerIds = groupLayers.map(l => l.id);
+    newGroup.setLayers(layers.filter(layer => {
+        if (typeof layer.getId !== 'function') {
+            return false;
+        }
+        return groupLayerIds.includes(layer.getId());
+    }));
+    // TODO: should we check if we got the referenced layers?
+    //  or if the group doesn't have layers at this point?
+    //  or sort them based on or groupLayers.orderNumber/alphabetically?
+
     // group has subgroups
     if (!group.hasSubgroups()) {
         return newGroup;
     }
-    const mappedSubgroups = group.getGroups().map(subgroup => {
-        return mapGroupsAndLayers(subgroup, method, layers, tools, admin);
-    });
-    // filter out subgroups that don't have a layer nor a subgroup with a layer
-    if (admin) {
-        mappedSubgroups && newGroup.setGroups(mappedSubgroups);
-    } else {
-        newGroup.setGroups(mappedSubgroups.filter(g => g !== undefined));
-    }
+    const mappedSubgroups = group.getGroups()
+        // recursion for subgroups
+        .map(subgroup => {
+            return createGroupModel(subgroup, method, layers, tools, admin);
+        })
+        // remove any subgroups that mapped to null:
+        //  (groups without layers for non-admins etc)
+        .filter(g => typeof g !== 'undefined');
+    newGroup.setGroups(mappedSubgroups);
     return newGroup;
 };
 
@@ -113,8 +116,8 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     // recursively map groups and layers together
     allGroups.map(parentGroup => {
         parentGroup.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-        group = mapGroupsAndLayers(parentGroup, method, layers, tools, false);
-        if (group != undefined) {
+        group = createGroupModel(parentGroup, method, layers, tools, false);
+        if (group) {
             groupList.push(group);
         }
     });
@@ -174,7 +177,7 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
         });
 
     allGroups.map(parentGroup => {
-        group = mapGroupsAndLayers(parentGroup, method, layers, tools, true);
+        group = createGroupModel(parentGroup, method, layers, tools, true);
         groupList.push(group);
     });
     // Sort subgroups
