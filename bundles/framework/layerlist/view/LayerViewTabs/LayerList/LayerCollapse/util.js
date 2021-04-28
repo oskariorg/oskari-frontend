@@ -62,6 +62,22 @@ const mapGroupsAndLayers = (group, method, layers, tools, admin) => {
     return newGroup;
 };
 
+const determineGroupId = (method, layerGroups = [], layerAdmin) => {
+    let groupId;
+    if (method === 'getInspireName') {
+        if (layerGroups.length) {
+            groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+        } else {
+            groupId = -1;
+        }
+    } else {
+        groupId = layerAdmin ? layerAdmin.organizationId : undefined;
+    }
+    // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
+    // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
+    return typeof groupId === 'number' ? groupId : -Math.random();
+};
+
 /**
  * Function to construct layer groups based on information included in layers and given grouping method.
  * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
@@ -77,28 +93,12 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     let group = null;
     let groupForOrphans = null;
 
-    const determineGroupId = (layerGroups = [], layerAdmin) => {
-        let groupId;
-        if (method === 'getInspireName') {
-            if (layerGroups.length) {
-                groupId = layerGroups[0] ? layerGroups[0].id : undefined;
-            } else {
-                groupId = -1;
-            }
-        } else {
-            groupId = layerAdmin ? layerAdmin.organizationId : undefined;
-        }
-        // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
-        // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
-        return typeof groupId === 'number' ? groupId : -Math.random();
-    };
-
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             let groupAttr = layer[method]();
-            let groupId = determineGroupId(layer.getGroups(), layer.getAdmin());
+            let groupId = determineGroupId(method, layer.getGroups(), layer.getAdmin());
             // Create group for orphan layers if not already created and add layer to it
             if (!groupAttr) {
                 if (!groupForOrphans) {
@@ -155,28 +155,12 @@ export const groupLayersAdmin = (layers, method, tools, allGroups = [], allDataP
     let group = null;
     let groupForOrphans = null;
 
-    const determineGroupId = (layerGroups = [], layerAdmin) => {
-        let groupId;
-        if (method === 'getInspireName') {
-            if (layerGroups.length) {
-                groupId = layerGroups[0] ? layerGroups[0].id : undefined;
-            } else {
-                groupId = -1;
-            }
-        } else {
-            groupId = layerAdmin ? layerAdmin.organizationId : undefined;
-        }
-        // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
-        // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
-        return typeof groupId === 'number' ? groupId : -Math.random();
-    };
-
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             let groupAttr = layer[method]();
-            let groupId = determineGroupId(layer.getGroups(), layer.getAdmin());
+            let groupId = determineGroupId(method, layer.getGroups(), layer.getAdmin());
             // Create group for orphan layers if not already created and add layer to it
             if (!groupAttr) {
                 if (!groupForOrphans) {
