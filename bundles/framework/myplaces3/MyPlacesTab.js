@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 var shape = service.getDrawModeFromGeometry(data.geometry);
                 linkIcon.addClass('myplaces-' + shape);
                 link.append(linkIcon);
-                link.append(name);
+                link.text(name);
                 link.on('click', function () {
                     me._showPlace(data.geometry, data.categoryId);
                     return false;

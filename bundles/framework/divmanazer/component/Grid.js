@@ -714,8 +714,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             value = renderer(value, data);
                         } else if (typeof value === 'number') {
                             value = me._loc('Grid.cellValue', { value: value });
+                        } else {
+                            value = Oskari.util.sanitize(value);
                         }
-                        cell.append(value);
+
+                        cell.text(value);
                         row.append(cell);
                         columnIndex = columnIndex + 1;
                     }
