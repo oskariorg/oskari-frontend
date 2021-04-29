@@ -48,7 +48,10 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, contr
 /* ----- /Group tools ------------- */
 
 /* ----- Layer list ------ */
-const StyledListItem = styled(ListItem)`
+// Without this wrapper used here the "even" prop would be passed to "ListItem" that would generate an error
+// After we update to styled-components version 5.1 we could use "transient" props instead:
+// $-prefixed props are "transient" in styled-comps: https://github.com/styled-components/styled-components/pull/2093
+const StyledListItem = styled(({ even, ...rest }) => <ListItem {...rest}/>)`
     background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     padding: 0 !important;
     display: block !important;
