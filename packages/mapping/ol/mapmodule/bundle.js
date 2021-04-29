@@ -320,12 +320,6 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mylocation.scss'
                 },
 
-                // Announcements plugin
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/AnnouncementsPlugin.js'
-                },
-
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js'

@@ -1,5 +1,3 @@
-
-
 /**
  * @class Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance
  *
@@ -402,7 +400,6 @@ Oskari.clazz.define(
                         this.data = pResp.data;
                     },
                     error: function (jqXHR, textStatus) {
-                        Messaging.error(getMessage('messages.getFailed'));
                     }
                 });
                 return this.data;

@@ -700,7 +700,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
-                console.log("LAYERSELEECTIONPLUGINELSE");
                 var icon = div.find('div.header div.header-icon'),
                     size = mapmodule.getSize();
 

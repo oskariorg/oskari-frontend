@@ -1,6 +1,3 @@
-import olControlScaleLine from 'ol/control/ScaleLine';
-import { closestOnCircle } from 'ol/coordinate';
-
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
  * Provides scalebar functionality for map
@@ -13,6 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
      *
      */
     function (config) {
+        console.log(config);
         var me = this;
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.testplugin';
@@ -20,17 +18,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
         me._config = config || {};
         me._index = 3;
         me._name = 'testplugin';
-        me._scalebar = null;
         me.templates = {};
         me.annRefs = {};
         me.open = false;
-    },{
+    }, {
         /**
          * @private @method _initImpl
          * Interface method for the module protocol. Initializes the request
          * handlers/templates.
-         *
-         *
          */
         _initImpl: function () {
             var me = this;
@@ -41,7 +36,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
                 '    <div class="header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
                 '</div>');
-                
             me.templates.announcementsContent = jQuery(
                 '  <div class="content">' +
                 '    <div class="announcements-content">' +
@@ -67,6 +61,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
+            console.log(this._config.announcements);
+            if (this._config.announcements) {
+                console.log("NOH")
+                this.addAnnouncement(this._config.announcements);
+            }
         },
 
         _createEventHandlers: function () {
@@ -78,53 +77,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
         },
 
         _handleAnnouncementsChangedEvent: function (evt) {
-
             //PÄIVITÄ ILMOITUKSET 
             if (this._config) {
                 this._config.announcements = evt.getAnnouncements();
                 this.addAnnouncement(this._config.announcements);
             } else {
-                this._config = {
-                    announcements: evt.getAnnouncements()
-                };
-                this.addAnnouncement(this._config.announcements);
-            }
+            this._config = {
+                announcements: evt.getAnnouncements()
+            };
+            this.addAnnouncement(this._config.announcements);
+        }
         },
-        
+
         /**
         * @method openSelection
         * Programmatically opens the plugins interface as if user had clicked it open
         */
-       openSelection: function () {
-           var me = this,
-               div = this.getElement(),
-               icon = div.find('div.header div.header-icon');
-               me.open = true;
+        openSelection: function () {
+            var me = this,
+                div = this.getElement(),
+                icon = div.find('div.header div.header-icon');
+            me.open = true;
+            icon.removeClass('icon-arrow-white-right');
+            icon.addClass('icon-arrow-white-down');
+            div.append(me.announcementsContent);
+        },
 
-               icon.removeClass('icon-arrow-white-right');
-               icon.addClass('icon-arrow-white-down');
-               console.log(div);
-               div.append(me.announcementsContent);
-       },
-
-       /**
+        /**
         * @method closeSelection
         * Programmatically closes the plugins interface as if user had clicked it close
         */
-       closeSelection: function (el) {
+        closeSelection: function (el) {
             this.open = false;
-           var element = el || this.getElement();
-           if (!element) {
-               return;
-           }
-           var icon = element.find('div.header div.header-icon');
+            var element = el || this.getElement();
+            if (!element) {
+                return;
+            }
+            var icon = element.find('div.header div.header-icon');
 
-           icon.removeClass('icon-arrow-white-down');
-           icon.addClass('icon-arrow-white-right');
-           if (element.find('.content')[0]) {
-               element.find('.content').detach();
-           }
-       },
+            icon.removeClass('icon-arrow-white-down');
+            icon.addClass('icon-arrow-white-right');
+            if (element.find('.content')[0]) {
+                element.find('.content').detach();
+            }
+        },
 
         /**
          * @private @method _createControlElement
@@ -138,34 +134,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
                 header = el.find('div.header');
 
             header.append(this._loc.title);
-
             me._bindHeader(header);
             return el;
         },
-        
+
         _bindAnnButton: function (ann, content) {
             ann.on('click', function () {
-                this.classList.toggle("active");
-                if (content[0].style.maxHeight){
-                    content[0].style.visibility = "hidden";
+                this.classList.toggle('active');
+                if (content[0].style.maxHeight) {
+                    content[0].style.visibility = 'hidden';
                     content[0].style.padding = null;
                     content[0].style.maxHeight = null;
                 } else {
-                    content[0].style.visibility = "visible";
-                    content[0].style.padding = "5px";
-                    content[0].style.maxHeight = content[0].scrollHeight + "px";
-                } 
+                    content[0].style.visibility = 'visible';
+                    content[0].style.padding = '5px';
+                    content[0].style.maxHeight = content[0].scrollHeight + 'px';
+                }
             });
         },
-        
+
         _bindHeader: function (header) {
             var me = this;
             header.on('click', function () {
                 if (me.open) {
-                    console.log("CLOSE-");
                     me.closeSelection();
                 } else {
-                    console.log("OPEN");
                     me.openSelection();
                 }
             });
@@ -177,40 +170,52 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to add
         */
         addAnnouncement: function (announcements) {
-            if(!this.open) {
+            if (!this.open) {
                 delete this.announcementsContent;
             } else {
                 jQuery('div.announcements-content').children().remove();
             }
             delete this.annRefs;
             this.annRefs = {};
-            
+
             announcements.forEach(announcement => {
                 if (this.annRefs[announcement.id]) {
                     // already added
                     return;
                 }
-     
+
                 var me = this;
-     
+
                 if (!me.announcementsContent) {
                     me.announcementsContent = me.templates.announcementsContent.clone();
-                    if(me.open) {
-                        jQuery("div.mapplugin.announcements").append(me.announcementsContent);
+                    if (me.open) {
+                        jQuery('div.mapplugin.announcements').append(me.announcementsContent);
                     }
                 }
-     
+
                 var announcementsDiv = me.announcementsContent.find('div.announcements-content'),
                     div = this.templates.announcement.clone();
+
                 div.find('button').append(announcement.title);
                 div.find('div.announcement-content').append(announcement.content);
-                me._bindAnnButton(div.find('button'),div.find('div.announcement-content'));
-     
-                //tähän asti done-ish
+                me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
+
                 this.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
-       }
+        },
+
+        /**
+         * @method getSelectedAnnouncements
+         * Returns list of the selected announcements
+         * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and
+         * {String} defaultBase as the selected base layers id
+         */
+        getSelectedAnnouncements: function () {
+            return {
+                announcements: this._config.announcements
+            };
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

@@ -1,0 +1,264 @@
+/* Mixins */
+div.mapplugin.announcements {
+    clear:both;
+    height: 37px;
+    overflow: visible;
+    max-width: 200px;
+    z-index: 15001 !important;
+  
+    div.content {
+      background-color: white;
+      max-height: 95%;
+  
+      div.announcements-content {
+        overflow: auto;
+        width:100%;
+        background-color: #fff;
+  
+      }
+  
+      &.mobile {
+        position:fixed;
+        top:36px;
+        left:0;
+        width:100%;
+      }
+  
+      div.content-header {
+        /* This is some sort of a theme color... leave it be */
+        background-color: #333438;
+        color: #FFFFFF;
+        text-align: left;
+        height: 25px;
+        padding: 5px;
+  
+        .content-close {
+          display: inline-block;
+          float: right;
+          cursor: pointer;
+        }
+  
+        div.content-header-title {
+          display: inline-block;
+          float: left;
+          padding: 5px;
+        }
+      }
+  
+      div.baseLayerHeader, div.layerHeader {
+        background-color: #E6E6E6;
+        padding: 10px;
+        text-align: left;
+      }
+  
+      div.layer {
+        margin: 5px 0;
+        text-align: left;
+        clear: both;
+        input {
+          margin-right: 10px;
+          float: left;
+        }
+  
+        span {
+          display: block;
+          margin-left: 30px;
+          word-break: break-word;
+        }
+  
+        .style-selector select{
+          max-width: 120px;
+          display: inline-block;
+          margin-left: 5px; 
+        }
+      }
+  
+      div.styled-header-arrow {
+        width: 0px;
+        height: 0px;
+        margin-left: 170px;
+        margin-top: -20px;
+        border-top: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #333438;
+      }
+    }
+  
+    div.layers, div.baselayers {
+      padding: 10px;
+    }
+  
+    div.header {
+      background-color: #3c3c3c;
+      color: #FFF;
+      cursor: pointer;
+      padding: 8px;
+      text-align: left;
+      div.header-icon {
+        display: inline-block;
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+  
+      &.mobile {
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+      }
+    }
+
+    .collapsible {
+        background: rgba(0, 0, 0, 0) !important;
+        background-color: #777 !important;
+        cursor: pointer;
+        padding: 5px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        color: #FFFF !important;
+        font-weight: lighter !important;
+        text-shadow: 0px 0px #fff !important;
+    }
+      
+    .active, .collapsible:hover {
+        background-color: #555  !important;
+    }
+      
+    .announcement-content {
+        max-height: 0;
+        //visibility: hidden;
+        overflow: hidden;
+        transition: padding 0.2s ease-out;
+        transition: max-height 0.2s ease-out;
+    }
+  
+    div.header:hover {
+      color: #ff9100;
+    }
+  
+    div.announcements-styled-content {
+        width: 200px;
+        div.styled-header-arrow {
+          margin-left: 10px;
+        }
+    }
+  
+    .oskari-publisher-layers-rounded-dark, .oskari-publisher-layers-rounded-light {
+      -webkit-border-radius: 15px;
+      -moz-border-radius: 15px;
+      -o-border-radius: 15px;
+      -ms-border-radius: 15px;
+      border-radius: 15px;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
+    }
+  
+    .oskari-publisher-layers-sharp-dark, .oskari-publisher-layers-sharp-light {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      -o-border-radius: 0;
+      -ms-border-radius: 0;
+      border-radius: 0;
+    }
+  
+    .oskari-publisher-layers-3d-dark, .oskari-publisher-layers-3d-light {
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      -o-border-radius: 3px;
+      -ms-border-radius: 3px;
+      border-radius: 3px;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
+    }
+  
+    .oskari-publisher-layers-header-rounded-dark, .oskari-publisher-layers-header-rounded-light {
+      -webkit-border-radius: 13px 13px 0 0;
+      -moz-border-radius: 13px 13px 0 0;
+      -o-border-radius: 13px 13px 0 0;
+      -ms-border-radius: 13px 13px 0 0;
+      border-radius: 13px 13px 0 0;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
+    }
+  
+    .oskari-publisher-layers-header-sharp-dark, .oskari-publisher-layers-header-sharp-light {
+      -webkit-border-radius: 0;
+      -moz-border-radius: 0;
+      -o-border-radius: 0;
+      -ms-border-radius: 0;
+      border-radius: 0;
+    }
+  
+    .oskari-publisher-layers-header-3d-dark, .oskari-publisher-layers-header-3d-light {
+      -webkit-border-radius: 1px 1px 0 0;
+      -moz-border-radius: 1px 1px 0 0;
+      -o-border-radius: 1px 1px 0 0;
+      -ms-border-radius: 1px 1px 0 0;
+      border-radius: 1px 1px 0 0;
+      -webkit-background-clip: padding-box;
+      -moz-background-clip: padding-box;
+      background-clip: padding-box;
+    }
+  }
+  
+  .published-styled-layerselector {
+    position: relative !important;
+  }
+  
+  .published-styled-layerselector-header {
+    width: 38px !important;
+    height: 38px !important;
+    padding: 0px !important;
+    background-color: transparent !important;
+    float: right !important;
+  }
+  
+  .published-styled-layerselector-content {
+    position: absolute;
+    top: 44px !important;
+    right: 0px !important;
+    &.mobile {
+      top: 0 !important;
+    }
+  }
+  
+  /* Hacketyhack, we need to keep the popup on screen */
+  .mapplugins.left div.mapplugin.announcements div.published-styled-layerselector-content {
+    left: 0px !important;
+    right: auto !important;
+    &.mobile {
+      top: 0 !important;
+    }
+  }
+  
+  .mapplugins.left div.mapplugin.announcements div.published-styled-layerselector-content div.styled-header-arrow {
+      margin-left: 12px !important;
+  }
+  
+  div.mapplugin {
+    &.announcementspopup  {
+      div.content {
+        div.baseLayerHeader, div.layerHeader {
+          font-weight: bold;
+          padding-bottom: 6px;
+        }
+  
+        .style-selector select{
+          max-width: 120px;
+          display: inline-block;
+          margin-left: 5px; 
+        }
+  
+        div.layerHeader {
+          padding-top: 10px;
+        }
+      }
+    }
+  }
