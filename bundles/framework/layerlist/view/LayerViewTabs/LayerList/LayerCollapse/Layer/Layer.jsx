@@ -89,5 +89,13 @@ Layer.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const memoized = React.memo(Layer);
+const memoized = React.memo(Layer, (prevProps, nextProps) => {
+    const nameChanged = prevProps.model.getName() !== nextProps.model.getName();
+    if (nameChanged) {
+        return false;
+    }
+    const propsToCheck = ['selected', 'even'];
+    const propsChanged = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
+    return !propsChanged;
+});
 export { memoized as Layer };

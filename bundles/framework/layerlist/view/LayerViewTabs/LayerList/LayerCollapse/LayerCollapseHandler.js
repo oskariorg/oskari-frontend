@@ -1,5 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { groupLayers, groupLayersAdmin } from './util';
+import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 
 const ANIMATION_TIMEOUT = 400;
@@ -114,17 +114,13 @@ class ViewHandler extends StateHandler {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId === FILTER_ALL_LAYERS ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
-        const isUserAdmin = tools.length > 0;
+
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
         const allGroups = this.mapLayerService.getAllLayerGroups();
+        // Note! allDataProviders will be an empty array if admin-layereditor is not started on the appsetup
         const allDataProviders = this.mapLayerService.getDataProviders();
-        let groups;
-        if (isUserAdmin) {
-            groups = groupLayersAdmin([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
-        } else {
-            groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, [], this.loc.grouping.noGroup);
-        }
+        const groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
         if (!searchText) {
             this.updateState({ groups });
             return;
@@ -133,9 +129,8 @@ class ViewHandler extends StateHandler {
             group.unfilteredLayerCount = group.layers.length;
             group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
         });
-        groups = groups.filter(group => group.layers.length > 0);
 
-        this.updateState({ groups });
+        this.updateState({ groups: groups.filter(group => group.layers.length > 0) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {
