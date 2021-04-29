@@ -95,10 +95,7 @@ const memoized = React.memo(Layer, (prevProps, nextProps) => {
         return false;
     }
     const propsToCheck = ['selected', 'even'];
-    const changed = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
-    if (changed) {
-        return false;
-    }
-    return true;
+    const propsChanged = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
+    return !propsChanged;
 });
 export { memoized as Layer };
