@@ -10,7 +10,6 @@ const Flex = styled('div')`
     align-items: center;
 `;
 const LayerDiv = styled(Flex)`
-    background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     clear: both;
     padding: 6px;
     min-height: 16px;
@@ -53,9 +52,9 @@ const LayerName = ({ layer }) => {
     return (<div dangerouslySetInnerHTML={{__html: layer.getName()}} />);
 };
 
-const Layer = ({ model, even, selected, controller }) => {
+const Layer = ({ model, selected, controller }) => {
     return (
-        <LayerDiv even={even} className="layer">
+        <LayerDiv className="layer">
             <CustomTools className="custom-tools">
                 {
                     model.getTools()
@@ -84,10 +83,17 @@ const Layer = ({ model, even, selected, controller }) => {
 
 Layer.propTypes = {
     model: PropTypes.any.isRequired,
-    even: PropTypes.bool.isRequired,
     selected: PropTypes.bool.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const memoized = React.memo(Layer);
+const memoized = React.memo(Layer, (prevProps, nextProps) => {
+    const nameChanged = prevProps.model.getName() !== nextProps.model.getName();
+    if (nameChanged) {
+        return false;
+    }
+    const propsToCheck = ['selected'];
+    const propsChanged = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
+    return !propsChanged;
+});
 export { memoized as Layer };

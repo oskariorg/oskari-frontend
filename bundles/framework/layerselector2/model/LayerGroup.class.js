@@ -87,7 +87,9 @@ export class LayerGroup {
         return this.layers;
     }
     setLayers (newLayers = []) {
-        this.layers = newLayers;
+        this.layers = [];
+        this.searchIndex = {};
+        newLayers.forEach(layer => this.addLayer(layer));
     }
     _getSearchIndex (layer) {
         var val = layer.getName() + ' ' +
