@@ -60,8 +60,8 @@ const StyledListItem = styled(({ even, ...rest }) => <ListItem {...rest}/>)`
 const renderLayer = ({ model, selected, controller }, index) => {
     const itemProps = { model, selected, controller };
     return (
-        <StyledListItem even={index % 2 === 0}>
-            <Layer key={model.getId()}  {...itemProps} />
+        <StyledListItem key={model.getId()} even={index % 2 === 0}>
+            <Layer  {...itemProps} />
         </StyledListItem>
     );
 };
@@ -69,6 +69,7 @@ const renderLayer = ({ model, selected, controller }, index) => {
 const LayerList = ({ layers }) => {
     if (!layers.length) {
         // no layers
+        // return <div>No data</div>;
         return null;
     }
     return (
@@ -98,9 +99,8 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeede
             allLayersOnMap = true;
         }
         return (
-            <StyledSubCollapse>
+            <StyledSubCollapse key={group.getId()}>
                 <LayerCollapsePanel
-                    key={group.id}
                     active={allLayersOnMap}
                     group={group}
                     selectedLayerIds={selectedLayerIds}
