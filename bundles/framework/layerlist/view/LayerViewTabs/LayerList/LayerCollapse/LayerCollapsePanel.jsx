@@ -48,15 +48,19 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, contr
 /* ----- /Group tools ------------- */
 
 /* ----- Layer list ------ */
-const StyledListItem = styled(ListItem)`
+// Without this wrapper used here the "even" prop would be passed to "ListItem" that would generate an error
+// After we update to styled-components version 5.1 we could use "transient" props instead:
+// $-prefixed props are "transient" in styled-comps: https://github.com/styled-components/styled-components/pull/2093
+const StyledListItem = styled(({ even, ...rest }) => <ListItem {...rest}/>)`
+    background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     padding: 0 !important;
     display: block !important;
 `;
 
-const renderLayer = ({ model, even, selected, controller }) => {
-    const itemProps = { model, even, selected, controller };
+const renderLayer = ({ model, selected, controller }, index) => {
+    const itemProps = { model, selected, controller };
     return (
-        <StyledListItem>
+        <StyledListItem even={index % 2 === 0}>
             <Layer key={model.getId()}  {...itemProps} />
         </StyledListItem>
     );
@@ -122,11 +126,10 @@ const StyledCollapsePanel = styled(CollapsePanel)`
 `;
 
 const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
-    return layers.map((oskariLayer, index) => {
+    return layers.map(oskariLayer => {
         return {
             id: oskariLayer.getId(),
             model: oskariLayer,
-            even: index % 2 === 0,
             selected: selectedLayerIds.includes(oskariLayer.getId()),
             controller
         };
