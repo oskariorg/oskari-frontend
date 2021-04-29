@@ -14,7 +14,7 @@ const comparator = (a, b, method) => {
     return Oskari.util.naturalSort(nameA, nameB);
 };
 
-const sortGroupsAlphabetically = (groups= []) => {
+const sortGroupsAlphabetically = (groups = []) => {
     if (!Array.isArray(groups)) {
         return null;
     }
@@ -92,7 +92,6 @@ const determineGroupId = (method, layerGroups = [], layerAdmin) => {
  * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
 export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
-    
     let groupForOrphans = null;
     const isUserAdmin = tools.length > 0;
 
