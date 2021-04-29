@@ -27,6 +27,7 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
     // It's a workaround for:
     //  - stop panel from opening when switch is shown
     //  - re-render components to make confirm visible when switch is turned on
+    // Switch is wrapped to an extra-span to get rid of "did you mean forwardRef()" warning.
     const [confirmOnScreen, showConfirm] = useState(false);
     return (
         <Confirm
@@ -51,12 +52,14 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
             placement='top'
             popupStyle={{zIndex: '999999'}}
         >
-            <StyledSwitch
-                size="small"
-                checked={checked} onClickCapture={(event) => {
-                    event.stopPropagation();
-                    showConfirm(true);
-                }} />
+            <span>
+                <StyledSwitch
+                    size="small"
+                    checked={checked} onClickCapture={(event) => {
+                        event.stopPropagation();
+                        showConfirm(true);
+                    }} />
+            </span>
         </Confirm>);
 };
 
