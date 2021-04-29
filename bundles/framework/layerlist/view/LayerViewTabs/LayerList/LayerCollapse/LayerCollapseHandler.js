@@ -5,6 +5,61 @@ import { FILTER_ALL_LAYERS } from '..';
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
 
+/* ------------- Helpers to determine group structure based on layers and groups on maplayerservice ------ */
+const getLayerGroups = (groups = []) => {
+    return groups.map(group => {
+        return {
+            id: group.id,
+            name: Oskari.getLocalized(group.name),
+            layers: group.getLayers() || [],
+            groups: getLayerGroups(group.getGroups())
+        };
+    });
+};
+
+const providerReducer = (accumulator, currentLayer) => {
+    // TODO: once we have id, use it
+    const org = Oskari.getLocalized(currentLayer.getOrganizationName());
+    if (!org) {
+        return accumulator;
+    }
+    let orgLayers = accumulator[org] || [];
+    if (!orgLayers.length) {
+        accumulator[org] = orgLayers;
+    }
+    orgLayers.push({ id: currentLayer.getId() });
+    return accumulator;
+};
+
+const getDataProviders = (fromService = [], layers = []) => {
+    // Note! fromService will be an empty array if admin-layereditor is not started on the appsetup
+    // TODO: determine map provider -> layers list mapping with reduce
+    const providerMapping = layers.reduce(providerReducer, {});
+    if (!fromService.length) {
+        return Object.keys(providerMapping).map(name => {
+            return {
+                // generate an id when we don't have the id (== when admin-layereditor is not on the appsetup)
+                // use negative number just in case to make it "non-editable"
+                id: -Oskari.seq.nextVal('dummyProviders'),
+                name,
+                layers: providerMapping[name] || [],
+                groups: []
+            };
+        });
+    }
+    return fromService.map(dataProvider => {
+        const name = dataProvider.name;
+        return {
+            id: dataProvider.id,
+            name,
+            layers: providerMapping[name] || [],
+            groups: []
+        };
+    });
+};
+
+/* ------------- /Helpers ------ */
+
 /**
  * Holds and mutates layer list state.
  * Handles events related to layer listing.
@@ -117,10 +172,16 @@ class ViewHandler extends StateHandler {
 
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
-        const allGroups = this.mapLayerService.getAllLayerGroups();
-        // Note! allDataProviders will be an empty array if admin-layereditor is not started on the appsetup
-        const allDataProviders = this.mapLayerService.getDataProviders();
-        const groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
+        let groupsToProcess = [];
+        const isDataProviders = (this.groupingMethod !== 'getInspireName');
+        // normalize groups and dataproviders structure
+        if (!isDataProviders) {
+            groupsToProcess = getLayerGroups(this.mapLayerService.getAllLayerGroups());
+        } else {
+            groupsToProcess = getDataProviders(this.mapLayerService.getDataProviders(), layers);
+        }
+
+        const groups = groupLayers([...layers], this.groupingMethod, tools, groupsToProcess, this.loc.grouping.noGroup);
         if (!searchText) {
             this.updateState({ groups });
             return;
