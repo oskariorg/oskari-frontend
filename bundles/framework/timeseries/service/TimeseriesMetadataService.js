@@ -21,6 +21,7 @@ export class TimeseriesMetadataService {
         } else {
             this._toggleLevel = -1;
         }
+        this._geojson = null;
     }
 
     getToggleLevel () {
@@ -33,7 +34,7 @@ export class TimeseriesMetadataService {
      * @param {Function} success called with updated years array based on the loaded features
      * @param {Function} error called if there's a problem loading the features
      */
-    setBbox (bbox = [], success, error) {
+    setBbox (bbox = {}, success, error) {
         const sandbox = Oskari.getSandbox();
         if (Object.keys(bbox).length !== 4) {
             this.clearPreviousFeatures();
@@ -95,16 +96,13 @@ export class TimeseriesMetadataService {
     }
 
     getCurrentFeatures (asGeoJson) {
-        if (!this._geojson) {
-            return asGeoJson ? null : [];
+        let geoJson = this._geojson;
+        if (!geoJson || !Array.isArray(geoJson.features)) {
+            geoJson = {
+                features: []
+            };
         }
-        if (asGeoJson) {
-            return { ...this._geojson };
-        }
-        if (!Array.isArray(this._geojson.features)) {
-            return [];
-        }
-        return this._geojson.features.slice(0);
+        return asGeoJson ? { ...geoJson } : [...geoJson.features];
     }
 
     clearPreviousFeatures () {
