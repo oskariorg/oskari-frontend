@@ -775,9 +775,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
             var me = this;
-
-            me._layerGroups = [];
-
+            // we don't want to reset "this._layerGroups" at the beginning since there groups
+            //  created at runtime like one for statistical regionsets and we don't want to remove those.
             pResp.groups.forEach(function (group) {
                 var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
                 me._layerGroups.push(groupDom);
