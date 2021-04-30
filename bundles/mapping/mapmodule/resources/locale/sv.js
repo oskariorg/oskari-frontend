@@ -51,7 +51,8 @@ Oskari.registerLocalization(
                 "title": "Sökresultat",
                 "close": "Stäng sökresultat.",
                 "noresults": "Inga resultat hittades. Vänligen avgränsa din sökning.",
-                "toomanyresults": "Över 100 träffar hittades. Vänligen avgränsa din sökning.",
+                "searchResultCount": "Din sökning gav {count} resultat.",
+                "searchMoreResults": "Sökordet gav flera träffar än kunde visas ({count}). Specificera sökordet för bättre resultat.",
                 "column_name": "Namn",
                 "column_region": "Region",
                 "column_village": "Kommun",
@@ -122,7 +123,8 @@ Oskari.registerLocalization(
             },
             "PanButtonsPlugin": {
                 "center" : {
-                    "tooltip": "Gå tillbaka till standardvyn för kartvyn"
+                    "tooltip": "Gå tillbaka till standardvyn för kartvyn",
+                    "confirmReset": "Vill du gå tillbaka till standardvyn för kartvyn?"
                 }
             },
             "Tiles3DLayerPlugin": {

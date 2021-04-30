@@ -47,7 +47,8 @@ Oskari.registerLocalization(
                 "title": "Leitarniðurstöður",
                 "close": "Loka leitarniðurstöðum.",
                 "noresults": "Engar niðurstöður fundust. Vinsamlegast skerptu á leitinni.",
-                "toomanyresults": "Yfir 100 niðurstöður fundust. Vinsamlegast skerptu á leitinni.",
+                "searchResultCount": "Leitin skilaði {count} niðurstöður.",
+                "searchMoreResults": "Yfir {count} niðurstöður fundust. Vinsamlegast skerptu á leitinni.",
                 "column_name": "Nafn",
                 "column_village": "Sveitarfélag",
                 "column_type": "Tegund"
@@ -65,6 +66,7 @@ Oskari.registerLocalization(
                 "test": "Prufa",
                 "history": {
                     "reset": "Fara til baka í sjálfgefna sýn",
+                    "confirmReset": "Viltu fara til baka í upphafsskjá?",
                     "back": "Fara til baka í síðustu sýn",
                     "next": "Fara á næstu sýn"
                 },

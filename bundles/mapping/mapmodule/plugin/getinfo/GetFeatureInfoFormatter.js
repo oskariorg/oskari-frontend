@@ -9,10 +9,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         tableCell: '<td></td>',
         header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         headerTitle: '<div class="getinforesult_header_title"></div>',
-        myPlacesWrapper: '<div class="myplaces_place">' +
-            '<div class="getinforesult_header"><div class="icon-bubble-left"></div><div class="getinforesult_header_title myplaces_header"></div></div>' +
-            '<p class="myplaces_desc"></p>' +
-            '<a class="myplaces_imglink" target="_blank" rel="noopener"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' + '</div>',
         linkOutside: '<a target="_blank" rel="noopener"></a>'
     },
     formatters: {
@@ -27,60 +23,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             parsedHTML.find('tr').removeClass('odd');
             parsedHTML.find('tr:even').addClass('odd');
             return parsedHTML;
-        },
-        /**
-         * Formats the html to show for my places layers' gfi dialog.
-         *
-         * @method myplace
-         * @param {Object} place response data to format
-         * @return {jQuery} formatted html
-         */
-        myplace: function (place) {
-            var content = jQuery('<div class="myplaces_place">' +
-                '<h3 class="myplaces_header"></h3>' +
-                    '<p class="myplaces_desc"></p>' +
-                    '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
-                    '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' +
-                '</div>');
-            var desc = content.find('p.myplaces_desc');
-            var img = content.find('a.myplaces_imglink');
-            var link = content.find('a.myplaces_link');
-
-            content.find('h3.myplaces_header').html(place.name);
-
-            if (place.place_desc) {
-                desc.html(place.place_desc);
-            } else if (place.description) {
-                desc.html(place.description);
-            } else {
-                desc.remove();
-            }
-
-            if (place.image_url && typeof place.image_url === 'string') {
-                img.attr({
-                    'href': place.image_url
-                }).find('img.myplaces_img').attr({
-                    'src': place.image_url
-                });
-            } else if (place.imageUrl && typeof place.imageUrl === 'string') {
-                img.attr({
-                    'href': place.imageUrl
-                }).find('img.myplaces_img').attr({
-                    'src': place.imageUrl
-                });
-            } else {
-                img.remove();
-            }
-
-            if (place.link) {
-                link.attr({
-                    'href': place.link
-                }).html(place.link);
-            } else {
-                link.remove();
-            }
-
-            return content;
         },
         /**
          * @method json
@@ -165,12 +107,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             .map(fragment => {
                 var fragmentTitle = fragment.layerName;
                 var fragmentMarkup = fragment.markup;
-                if (fragment.isMyPlace) {
-                    if (fragmentMarkup) {
-                        return fragmentMarkup;
-                    }
-                    return;
-                }
                 const contentWrapper = me.template.wrapper.clone();
                 var headerWrapper = me.template.header.clone();
                 var titleWrapper = me.template.headerTitle.clone();
@@ -248,15 +184,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             response = me.template.wrapper.clone();
 
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
-            // This is for my places info popup
-            if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
-                const baseDiv = jQuery('<div></div>');
-                datum.content.parsed.places
-                    .map(place => me.formatters.myplace(place))
-                    .forEach(place => baseDiv.append(place));
-                return baseDiv;
-            }
-
             var even = false,
                 rawJsonData = datum.content.parsed,
                 dataArray = [],
@@ -521,11 +448,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             even = !even;
 
             row = this.template.tableRow.clone();
-            // FIXME this is unnecessary, we can do this with a css selector.
-            if (!even) {
+            const skipLabel = key.startsWith(ID_SKIP_LABEL);
+            if (!skipLabel && !even) {
                 row.addClass('odd');
             }
-            const skipLabel = key.startsWith(ID_SKIP_LABEL);
             if (!skipLabel) {
                 keyColumn = this.template.tableCell.clone();
                 keyColumn.append(key);

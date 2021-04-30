@@ -4,8 +4,9 @@ import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
 
-export const SelectedTime = ({ layer, capabilities, controller }) => {
+export const SelectedTime = ({ layer, controller }) => {
     const value = layer.params ? layer.params.selectedTime : '';
+    const { capabilities } = layer;
     if (!capabilities.times) {
         return null;
     }
@@ -26,6 +27,5 @@ export const SelectedTime = ({ layer, capabilities, controller }) => {
 };
 SelectedTime.propTypes = {
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

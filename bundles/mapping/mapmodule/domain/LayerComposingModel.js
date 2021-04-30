@@ -13,7 +13,6 @@ const PROPERTY_FIELDS = [
     'GFI_XSLT',
     'GROUPS',
     'HOVER',
-    'LEGEND_IMAGE',
     'LOCALIZED_NAMES',
     'METADATAID',
     'NAME',
@@ -28,6 +27,7 @@ const PROPERTY_FIELDS = [
     'STYLE',
     'STYLES_JSON',
     'TILE_GRID',
+    'TIMES',
     'URL',
     'VERSION',
     'WFS_RENDER_MODE'

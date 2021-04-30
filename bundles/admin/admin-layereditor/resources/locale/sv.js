@@ -54,7 +54,6 @@ Oskari.registerLocalization(
                     }
                 },
                 "opacity": "Opacitet",
-                "style": "Förvald utseende",
                 "params": {
                     "selectedTime": "Vald tid"
                 },
@@ -85,7 +84,7 @@ Oskari.registerLocalization(
             "editDataProvider": "Redigera dataproducent",
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
-            "editTheme" : "Redigera tema",
+            "editTheme": "Redigera tema",
             "selectMapLayerGroupsButton": "Välj grupp",
             "cancel": "Tillbaka",
             "close": "Stäng",
@@ -96,18 +95,42 @@ Oskari.registerLocalization(
             "skipCapabilities": "Tillägg manuellt",
             "addNewFromSameService": "Lägg till ett nytt lager från samma tjänst",
             "delete": "Ta bort",
-            "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
             "capabilities": {
+                "parsed": "Utvald information från kartlagrets capabilities",
                 "show": "Visa getCapabilities svar",
-                "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
                 "update": "Hämta nu",
                 "updateRate": "Capabilities uppdateringsfrekvens",
                 "updateRateDesc": "Uppdateringsfrekvens i sekunder",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
+            },
+            "styles": {
+                "default": "Förvald utseende",
+                "desc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
+                "raster": {
+                    "title": "Stilar och kartförklaringar",
+                    "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
+                    "legendImage": "URL adress för kartförklaringar",
+                    "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
+                    "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+                    "serviceLegend": "Definierad i tjänsten",
+                    "overriddenLegend": "Adress för kartförklaring",
+                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
+                    "serviceNotAvailable": "Inte tillgänglig"
+                },
+                "vector": {
+                    "addStyle": "Tillsätt stil",
+                    "name": "Stilnamn",
+                    "selectDefault": "Välj förvalt stil",
+                    "deleteStyle": "Ta bort stilen",
+                    "validation": {
+                        "name": "Fyll i namnet på stilen",
+                        "noStyles": "Inga sparade stilar"
+                    }
+                }
             },
             "layerStatus": {
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",
@@ -120,9 +143,6 @@ Oskari.registerLocalization(
             "gfiStyleDesc": "GFI stil (XSLT)",
             "attributes": "Attribut",
             "clusteringDistance": "Punktavstånd i kluster",
-            "legendImage": "URL adress för kartförklaringar",
-            "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
-            "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
             "forcedSRS": "Tvingade SRS",
             "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
             "supportedSRS": "Stödda SRS",
@@ -136,12 +156,12 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
-                "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
-                "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
-                "hover" : "Hover JSON-syntaxen är ogiltig.",
-                "attributes" : "Attribut JSON-syntaxen är ogiltig.",
-                "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
-                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
+                "styles": "Stildefinitioner JSON-syntaxen är ogiltig.",
+                "externalStyles": "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
+                "hover": "Hover JSON-syntaxen är ogiltig.",
+                "attributes": "Attribut JSON-syntaxen är ogiltig.",
+                "attributions": "Tillskrivningar JSON-syntaxen är ogiltig.",
+                "tileGrid": "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
                 "saveSuccess": "Sparad",
@@ -157,8 +177,8 @@ Oskari.registerLocalization(
                 "timeoutErrorFetchCapabilities": "Din förfrågan överskred tidsgränsen för anslutning till tjänsten. Kolla gränssnittets URL.",
                 "connectionErrorFetchCapabilities": "Anslutning till tjänsten kunde inte etableras. Kolla gränssnittets URL.",
                 "parsingErrorFetchCapabilities": "Tjänstens svar kan inte tolkas. Kolla kartlagrets typ och/eller version.",
-                "deleteSuccess" : "Utgår",
-                "deleteFailed" : "Borttagningen misslyckades",
+                "deleteSuccess": "Utgår",
+                "deleteFailed": "Borttagningen misslyckades",
                 "updateCapabilitiesFail": "Gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnittstjänsten är för tilfället ur funktion.",
                 "errorFetchLayerFailed": "Kartlagret returnerar ingen data. Kartlagret existerar möjligen inte längre eller du har inte rättigheter att använda det.",
                 "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?"
@@ -167,7 +187,12 @@ Oskari.registerLocalization(
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
-            "deleteGroupLayers" : "Radera kartlagren i gruppen",
+            "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
+            "dynamicScreenSpaceError": "Dynamic screen space error",
+            "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
+            "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
+            "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "deleteGroupLayers": "Radera kartlagren i gruppen",
             "hover": "Framhävning av objekt och tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

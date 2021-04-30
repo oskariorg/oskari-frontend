@@ -244,7 +244,7 @@ Oskari.clazz.define(
 
             this._addRequestHandlers();
 
-            this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesTab', this);
+            this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesTab', this, this.getMainView().sendStopDrawRequest);
 
             this.tab.initContainer();
             // binds tab to events

@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (jQuery(this.dialog).hasClass('mobile-popup')) {
                 var openPopups = jQuery('.mobile-popup');
 
-                _.each(openPopups, function (openPopup) {
+                openPopups.each(function (index, openPopup) {
                     if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
                         zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
                     }
@@ -230,6 +230,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             okBtn.setTitle(label);
             okBtn.setHandler(() => this.close(true));
             return okBtn;
+        },
+        createConfirmButtons: function (callback) {
+            const cancelBtn = this.createCloseButton(Oskari.getMsg('DivManazer', 'buttons.no'));
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(Oskari.getMsg('DivManazer', 'buttons.yes'));
+            okBtn.setPrimary(true);
+            if (typeof callback === 'function') {
+                okBtn.setHandler(() => {
+                    this.close(true);
+                    callback();
+                });
+            }
+            return [cancelBtn, okBtn];
         },
 
         /**
@@ -531,9 +544,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (!this.__listeners[type]) {
                 return;
             }
-            _.each(this.__listeners[type], function (cb) {
-                cb(event);
-            });
+            this.__listeners[type].forEach((cb) => cb(event));
         },
         /**
          * Returns an array of listeners for given type.

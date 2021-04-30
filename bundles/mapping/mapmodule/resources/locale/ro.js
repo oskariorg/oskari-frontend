@@ -46,7 +46,8 @@ Oskari.registerLocalization(
                 "title": "Căutare Rezultate",
                 "close": "Închide rezultatele căutării",
                 "noresults": "Nu au fost găsite rezultate",
-                "toomanyresults": "Peste 100 de rezultate găsite. Vă rugăm revizuiţi căutarea",
+                "searchResultCount": "Căutarea a returnat {count} rezultate.",
+                "searchMoreResults": "Peste {count} de rezultate găsite. Vă rugăm revizuiţi căutarea",
                 "column_name": "Nume",
                 "column_village": "Municipalitate",
                 "column_type": "Tip"

@@ -21,7 +21,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
                 position: 'absolute',
                 top: 0,
                 left: 0,
-                height: '0.5%',
+                height: '7px',
+                opacity: 0.75,
                 background: this.defaultColor,
                 width: 0,
                 transition: 'width 250ms',
@@ -31,27 +32,29 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressBar',
             content.append(this._element);
             return this._element;
         },
-        updateProgressBar: function (goal, current) {
+        updateProgressBar: function (goal, current, containsErrors = false) {
             if (goal === 0) {
                 return;
             }
-            var width = (current / goal * 100).toFixed(1);
-            this._element.css({ width: width + '%' });
+            // 20% + actual progress to make progress more visible to user
+            var width = 20 + (current / goal * 80);
+            this._element.css({ width: width.toFixed(1) + '%' });
             if (width >= 100.0) {
-                this.hide();
+                this.hide(containsErrors ? 2500 : 400);
             }
+            return width;
         },
         setColor: function (color) {
             this._element.css({ background: color });
         },
         show: function () {
-            this._element.css({ visibility: 'visible' });
+            this._element.css({ visibility: 'visible', width: '20%' });
         },
-        hide: function () {
+        hide: function (delay = 400) {
             var me = this;
             setTimeout(function () {
                 me._element.css({ visibility: 'hidden', width: 0, background: me.defaultColor });
-            }, 400);
+            }, delay);
         }
 
     });

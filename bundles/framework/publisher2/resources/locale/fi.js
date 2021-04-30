@@ -59,7 +59,7 @@ Oskari.registerLocalization(
             },
             "size": {
                 "label": "Kartan koko",
-                "tooltip": "Valitse kartan koko. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Erota desimaalit pilkulla. Näet muutokset esikatselukartassa."
+                "tooltip": "Valitse kartan koko. Suositus on käyttää skaalautuvaa vaihtoehtoa \"Skaalautuva / tilan täyttävä\". Muussa tapauksessa leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä."
             },
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
@@ -209,7 +209,7 @@ Oskari.registerLocalization(
             "confirm": {
                 "replace": {
                     "title": "Haluatko päivittää upotetun kartan?",
-                    "msg": "Päivitykset näkyvät välittömästi upotetussa kartassa. Sinun ei tarvitse muuttaa html-koodia."
+                    "msg": "Haluatko päivittää upotetun kartan? Päivitykset näkyvät välittömästi upotetussa kartassa. Sinun ei tarvitse muuttaa html-koodia paitsi jos olet muuttanut kartan kokoa."
                 }
             },
             "layerselection": {
@@ -224,7 +224,7 @@ Oskari.registerLocalization(
             "help": "Ohje",
             "error": {
                 "title": "Virhe",
-                "size": "Kartan koko on virheellinen. Leveyden on oltava vähintään 30 pikseliä ja korkeuden vähintään 20 pikseliä. Desimaalierottimena on piste.",
+                "size": "Kartan koko on virheellinen. Leveyden on oltava välillä {minWidth} ja {maxWidth} pikseliä ja korkeuden {minHeight} ja {maxHeight} pikseliä.",
                 "domain": "Verkkosivuston osoite on pakollinen tieto. Anna sivuston osoite ja yritä uudelleen.",
                 "domainStart": "Verkkosivuston osoite on väärässä muodossa. Anna osoite ilman http- tai www-etuliitteitä ja yritä uudelleen.",
                 "name": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",

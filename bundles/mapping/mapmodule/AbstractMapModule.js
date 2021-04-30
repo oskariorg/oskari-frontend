@@ -191,6 +191,8 @@ Oskari.clazz.define(
                     '<div class="oskari-crosshair-horizontal-bar"></div>' +
                 '</div>')
         };
+        // adds on/off/trigger functions for internal eventing
+        Oskari.makeObservable(this);
     }, {
         /**
          * Moved from core, to be removed
@@ -989,39 +991,25 @@ Oskari.clazz.define(
          * offer that).
          */
         updateCurrentState: function () {
-            var me = this,
-                sandbox = me._sandbox,
-                layers = sandbox.findAllSelectedMapLayers(),
-                lps = this.getLayerPlugins(),
-                layersPlugin,
-                p;
-
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (typeof layersPlugin.preselectLayers !== 'function') {
-                        continue;
-                    }
-                    this.log.debug('preselecting ' + p);
-                    layersPlugin.preselectLayers(layers);
+            const sandbox = this.getSandbox();
+            const layers = sandbox.findAllSelectedMapLayers();
+            const layerPlugins = this.getLayerPlugins();
+            Object.keys(layerPlugins).forEach(pluginName => {
+                const plugin = layerPlugins[pluginName];
+                if (typeof plugin.preselectLayers !== 'function') {
+                    return;
                 }
-            }
+                this.log.debug('preselecting ' + pluginName);
+                plugin.preselectLayers(layers);
+            });
         },
         isLoading: function (id) {
-            var loading = false;
-            if (typeof id === 'undefined') {
-                var oskariLayers = this.getSandbox().getMap().getLayers();
-                oskariLayers.forEach(function (layer) {
-                    if (loading) {
-                        return;
-                    }
-                    loading = layer.getLoadingState().loading > 0;
-                });
-            } else {
-                var oskariLayer = this.getSandbox().getMap().getSelectedLayer(id);
-                loading = oskariLayer.getLoadingState().loading > 0;
+            if (typeof id !== 'undefined') {
+                const oskariLayer = this.getSandbox().getMap().getSelectedLayer(id);
+                return oskariLayer.getLoadingState().loading > 0;
             }
-            return loading;
+            const oskariLayers = this.getSandbox().getMap().getLayers();
+            return oskariLayers.some((layer) => layer.getLoadingState().loading > 0);
         },
         /**
          * @method loadingState
@@ -1029,15 +1017,11 @@ Oskari.clazz.define(
          * @param {Number} layerid, the id number of the abstract layer in loading
          * @param {boolean} started is true if tileloadstart has been called, false if tileloadend
          */
-        loadingState: function (layerId, started, errors) {
-            if (typeof errors === 'undefined') {
-                errors = false;
-            }
-            var done = false;
-            var me = this;
-            var layers = this.getSandbox().findAllSelectedMapLayers();
-            var oskariLayer = this.getSandbox().getMap().getSelectedLayer(layerId);
+        loadingState: function (layerId, started, errors = false) {
+            const sandbox = this.getSandbox();
+            const oskariLayer = sandbox.getMap().getSelectedLayer(layerId);
             if (!oskariLayer) {
+                // layer not on map, this should only be caused by some timing issue
                 return;
             }
 
@@ -1050,41 +1034,49 @@ Oskari.clazz.define(
                 clearTimeout(this.loadtimer);
             }
 
+            let done = false;
             if (started) {
-                var wasFirstTile = oskariLayer.loadingStarted();
-                if (wasFirstTile) {
+                // loading (a tile etc)  started for layer
+                const firstTile = oskariLayer.loadingStarted();
+                if (firstTile) {
+                    // on first tile show progress bar
                     this.progBar.show();
+                    // resets any previous error states etc
                     oskariLayer.resetLoadingState(1);
                 }
             } else {
-                var tilesLoaded = 0;
-                var pendingTiles = 0;
-                if (!errors) {
-                    done = oskariLayer.loadingDone();
-                    layers.forEach(function (layer) {
-                        tilesLoaded += layer.loaded;
-                        pendingTiles += layer.tilesToLoad;
-                    });
-                    this.progBar.updateProgressBar(pendingTiles, tilesLoaded);
-                } else {
+                // loading (a tile etc) ended for layer
+                let tilesLoaded = 0;
+                let pendingTiles = 0;
+                let errorCount = 0;
+                if (errors) {
+                    oskariLayer.loadingError();
                     this.progBar.setColor('rgba( 190, 0, 10, 0.4 )');
-                    oskariLayer.loadingError(oskariLayer.getLoadingState().loading);
-                    errors = oskariLayer.getLoadingState().errors;
-                    oskariLayer.loadingDone(0);
-
-                    setTimeout(function () {
-                        me.progBar.hide();
-                    }, 2000);
-                    tilesLoaded = 0;
-                    pendingTiles = 0;
-                    this.notifyErrors(errors, oskariLayer);
+                    this.notifyErrors(oskariLayer.getLoadingState().errors, oskariLayer);
+                }
+                done = oskariLayer.loadingDone();
+                const layers = sandbox.findAllSelectedMapLayers();
+                layers.forEach(function (layer) {
+                    tilesLoaded += layer.loaded;
+                    pendingTiles += layer.tilesToLoad;
+                    errorCount += layer.errors;
+                });
+                const progressPercentage = this.progBar.updateProgressBar(pendingTiles, tilesLoaded, errorCount > 0);
+                if (this.__PROGRESS_DEBUGGING === true) {
+                    // for debugging purposes
+                    console.log(`${tilesLoaded} / ${pendingTiles} = ${progressPercentage}`);
                 }
             }
             this.loadtimer = setTimeout(function () {
                 var eventBuilder = Oskari.eventBuilder('ProgressEvent');
                 var event = eventBuilder(done, layerId);
-                me._sandbox.notifyAll(event);
+                sandbox.notifyAll(event);
             }, 50);
+            this.trigger('layer.loading', {
+                layer: layerId,
+                started: started,
+                errored: errors
+            });
         },
         notifyErrors: function (errors, oskariLayer) {
             Oskari.log(this.getName()).warn('error loading layer: ' + oskariLayer.getName());
@@ -1331,12 +1323,8 @@ Oskari.clazz.define(
             if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
                 var totalHeight = jQuery('#contentMap').height();
                 if (totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
-                    mapDivHeight -= mobileDiv.outerHeight();
-                }
-                if ((mobileDiv.attr('data-height')) !== mapDivHeight.toString()) {
+                    mapDivHeight = totalHeight - mobileDiv.outerHeight();
                     jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                    this.updateDomain();
-                    mobileDiv.attr('data-height', mapDivHeight);
                 }
             }
             this.updateSize();

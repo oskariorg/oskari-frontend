@@ -277,15 +277,8 @@ div.publisher {
 }
 
 div.basic_publisher div.form div.field input,
-div.field select {
-    width: 100%;
-
-    /*
-    This used to have a defunct CSS hack for IE 10 only:
-    width: 80%\0;
-    It was never functional because SASS compiled it into single character.
-    It was removed.
-    */
+div.basic_publisher div.field select {
+    width: 80%;
     background-color: #FFF;
 }
 

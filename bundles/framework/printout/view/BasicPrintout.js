@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             buttons: '<div class="buttons"></div>',
             help: '<div class="help icon-info"></div>',
-            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
+            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div></div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
             mapTitleInput: '<div class="printout_option_cont printout_settings_cont"><input class="printout_title_field" type="text"></div>',
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
@@ -529,7 +529,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const srs = sandbox.getMap().getSrsName();
             const customStyles = this._getSelectedCustomStyles();
             // printMap has been called outside so keep this separation for mapLinkArgs and selections
-            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText });
+            // ask for optimized link with non-visible layers excluded
+            const optimized = true;
+            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText }, optimized);
             var selections = {};
 
             container.find('.printout_option_cont input').each(function () {
@@ -598,36 +600,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         },
 
         /**
-         * @private @method openPostURLinWindow
+         * @private @method openPostPrint
          * Sends the gathered map data to the server to save them/publish the map.
          *
-         * @param {String} printUrl Url to print service action route GetPrint
-         * @param {String} geoJson Stringified GeoJSON
-         * @param {String} tileData Stringified tile data
-         * @param {String} customStyles Stringified styles
+         * @param {String} printUrl
+         * @param {Object} params
+         * @param {Object} customStyles
          *
          */
-        openPostURLinWindow: function (printUrl, geoJson, tileData, tableData, customStyles) {
-            var me = this;
-            var wopParm = this._getWindowSpecs();
-            me.mainPanel.find('#oskari_print_formID').attr('action', printUrl);
-            me.mainPanel.find('input[name=customStyles]').val(customStyles);
-            // Are these used anymore??
-            if (geoJson) {
-                // UTF-8 Base64 encoding
-                var textu8 = unescape(encodeURIComponent(geoJson));
-                me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(textu8));
+        getPostPrint: function (printUrl, params, customStyles) {
+            const payload = { customStyles };
+            let fileName = params.pageTitle || 'print';
+            const format = FORMAT_OPTIONS.find(format => format.mime === params.format);
+            if (format) {
+                fileName += '.' + format.name;
             }
-            if (tileData) {
-                me.mainPanel.find('input[name=tiles]').val(tileData);
-            }
-            if (tableData) {
-                me.mainPanel.find('input[name=tabledata]').val(tableData);
-            }
-
-            window.open('about:blank', 'map_popup_111', wopParm);
-
-            me.mainPanel.find('#oskari_print_formID').submit();
+            const showSpinner = visible => this.instance.getSandbox().postRequestByName('ShowProgressSpinnerRequest', [visible]);
+            showSpinner(true);
+            const successCb = blob => {
+                if (navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveOrOpenBlob(blob, fileName);
+                } else {
+                    const url = window.URL.createObjectURL(blob);
+                    const elem = document.createElement('a');
+                    elem.href = url;
+                    elem.download = fileName;
+                    document.body.appendChild(elem);
+                    elem.click();
+                    document.body.removeChild(elem);
+                    window.URL.revokeObjectURL(url);
+                }
+                showSpinner(false);
+            };
+            const errorCb = error => {
+                Oskari.log('BasicPrintout').error(error);
+                const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                popup.show(this.loc.error.title, this.loc.error.saveFailed, [popup.createCloseButton()]);
+                showSpinner(false);
+            };
+            this.instance.getService().fetchPrint(printUrl, payload, successCb, errorCb);
         },
         /**
          * @method printMap
@@ -646,25 +657,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             }
             const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
-            let url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
+            const url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
 
-            // additional layout params for PDF? is needed??
-            url = url + this._getLayoutParams(params.pageSize);
-            const hasCustomStyles = Object.keys(customStyles).length > 0;
-            const hasTileData = Object.keys(this.instance.tileData).length > 0;
-            // We need to use the POST method if there's GeoJSON or tile data.
-            if (hasTileData || hasCustomStyles || this.instance.tableJson) {
-                var stringifiedJson = this._stringifyGeoJson(null);
-                var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
-                var stringifiedTableData = this._stringifyTableData(this.instance.tableJson);
-                const stringifiedCustomStyles = JSON.stringify(customStyles);
-                Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-                this.openPostURLinWindow(url, stringifiedJson, stringifiedTileData, stringifiedTableData, stringifiedCustomStyles);
-            } else {
-                // Otherwise GET is satisfiable.
-                Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
-                this.openURLinWindow(url);
-            }
+            Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
+            this.getPostPrint(url, params, customStyles);
         },
 
         /**

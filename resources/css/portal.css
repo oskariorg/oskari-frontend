@@ -490,3 +490,13 @@ select:not([class*="ant-"]) {
   animation-name: backgroundFlash;
   animation-duration: 0.5s;
 }
+
+.ant-tooltip {
+  z-index: 999999 !important;
+}
+/*
+So confirm doesn't open behind flyouts (in admin for example)
+*/
+.ant-popconfirm {
+  z-index: 999998 !important;
+}

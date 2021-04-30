@@ -47,7 +47,8 @@ Oskari.registerLocalization(
                 "title": "Søkjeresultat",
                 "close": "Lukk søkjeresultat",
                 "noresults": "Ingen resultat funn. Ver grei og endre søket.",
-                "toomanyresults": "Over 100 resultat funne. Ver grei og endre søket.",
+                "searchResultCount": "Søket ditt resulterte i {count} resultat.",
+                "searchMoreResults": "Over {count} resultat funne. Ver grei og endre søket.",
                 "column_name": "Namn",
                 "column_village": "Kommune",
                 "column_type": "Type"

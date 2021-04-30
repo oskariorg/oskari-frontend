@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @method getName
          * @return {String} the name for the component
          */
-        'getName': function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @method start
          * Implements BundleInstance protocol start method
          */
-        'start': function () {
+        start: function () {
             var me = this;
 
             if (me.started) {
@@ -157,15 +157,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @method init
          * Implements Module protocol init method - does nothing atm
          */
-        'init': function () {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * Implements BundleInstance protocol update method - does nothing atm
          */
-        'update': function () {
+        update: function () {
 
+        },
+        getService: function () {
+            return this.printService;
         },
         /**
          * @method onEvent
@@ -287,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @method stop
          * Implements BundleInstance protocol stop method
          */
-        'stop': function () {
+        stop: function () {
             if (this.printout) {
                 this.printout.destroy();
                 this.printout = undefined;
@@ -465,5 +468,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
     });

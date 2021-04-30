@@ -60,20 +60,22 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /*
          * Layer filters
          */
+        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93'];
         this.layerFilters = {
-            'featuredata': function (layer) {
+            featuredata: function (layer) {
                 return layer.hasFeatureData();
             },
-            'newest': function (layer) {
+            newest: function (layer) {
                 // kinda heavy, but get a list of 20 newest layers and check if the requested layer is one them
                 // getNewestLayers() caches the result so in practice it's not as heavy as it looks.
                 return !!me.getNewestLayers(20).find(function (newLayer) {
                     return layer.getId() === newLayer.getId();
                 });
             },
-            'timeseries': function (layer) {
+            timeseries: function (layer) {
                 return layer.hasTimeseries();
-            }
+            },
+            raster: layer => rasterLayerTypes.includes(layer.getLayerType())
         };
 
         Oskari.makeObservable(this);
@@ -307,9 +309,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setDataUrl(newLayerConf.dataUrl);
             }
 
-            if (newLayerConf.legendImage) {
-                layer.setLegendImage(newLayerConf.legendImage);
-            }
             // Scales need to be set always so they can be cleared with the admin.
             // The server doesn't return scale if not set -> these will not get updated if only updated when value exists
             layer.setMinScale(newLayerConf.minScale);
@@ -1216,7 +1215,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 baseLayer.setOrganizationName('');
             }
 
-            baseLayer.setLegendImage(baseMapJson.legendImage);
             baseLayer.setDescription(baseMapJson.info);
             baseLayer.setQueryable(false);
 
@@ -1388,8 +1386,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (mapLayerJson.url) {
                 layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
-
-            layer.setLegendImage(mapLayerJson.legendImage);
 
             if (mapLayerJson.localization) {
                 // overrides name/desc/inspire/organization if defined!!

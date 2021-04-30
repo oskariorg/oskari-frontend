@@ -27,7 +27,7 @@ Oskari.registerLocalization(
                 "delete_failed": "The user could not be deleted.",
                 "fetch_failed": "Users could not be fetched.",
                 "save_failed": "User could not be saved.",
-                "save_failed_message": "Please check at username is unique and try again.",
+                "save_failed_message": "This username is already reserved. Please try a different one.",
                 "noMatch": "No results matched",
                 "selectRole": "Select role"
             },
