@@ -3,7 +3,7 @@
  * Provides scalebar functionality for map
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginScaleBar
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -13,11 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
         console.log(config);
         var me = this;
         me._clazz =
-            'Oskari.mapframework.bundle.mapmodule.plugin.testplugin';
+            'Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
         me._index = 3;
-        me._name = 'testplugin';
+        me._name = 'AnnouncementsPlugin';
         me.templates = {};
         me.annRefs = {};
         me.open = false;

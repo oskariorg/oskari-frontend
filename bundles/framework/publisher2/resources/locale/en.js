@@ -64,7 +64,7 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
-                "testplugin": "Announcements",
+                "AnnouncementsPlugin": "Announcements",
                 "ScaleBarPlugin": "Scale bar",
                 "TimeseriesControlPlugin": "Time series player",
                 "IndexMapPlugin": "Index map",

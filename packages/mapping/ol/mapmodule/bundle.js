@@ -144,13 +144,13 @@ Oskari.clazz.define(
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/indexmap.ol.scss'
                 },
-                // testplugin
+                // AnnouncementsPlugin
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/testplugin.js'
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/AnnouncementsPlugin.js'
                 }, {
                     'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/test.ol.scss'
+                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/announcementsplugin.ol.scss'
                 },
                 // ScaleBar
                 {

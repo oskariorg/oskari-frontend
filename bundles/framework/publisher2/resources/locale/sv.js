@@ -64,7 +64,7 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Verktyg",
                 "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-                "testplugin": "Aviseringar",
+                "AnnouncementsPlugin": "Aviseringar",
                 "ScaleBarPlugin": "Skalstock",
                 "TimeseriesControlPlugin": "Tidseriespelare",
                 "IndexMapPlugin": "Indexkarta",

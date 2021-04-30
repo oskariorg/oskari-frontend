@@ -2,7 +2,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
     function () {
     }, {
         index: 8,
-        pluginName: 'testplugin',
+        pluginName: 'AnnouncementsPlugin',
         allowedLocations: [],
         allowedSiblings: [],
         data: [],
@@ -92,8 +92,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         */
         getTool: function () {
             return {
-                id: 'Oskari.mapframework.bundle.mapmodule.plugin.testplugin',
-                title: 'testplugin',
+                id: 'Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin',
+                title: 'AnnouncementsPlugin',
                 config: {}
             };
         },
