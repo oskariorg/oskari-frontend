@@ -58,7 +58,10 @@ class UIHandler extends StateHandler {
         }
         if (this._metadataHandler.getToggleLevel() > zoomLevel) {
             const dataYears = this._getDataYearsFromWMS();
-            const state = { dataYears };
+            const state = {
+                dataYears,
+                error: false
+            };
             if (this._autoSelectMidDataYear && dataYears.length > 0) {
                 this._autoSelectMidDataYear = false;
                 state.value = this._getMidWayDataYear(dataYears);
