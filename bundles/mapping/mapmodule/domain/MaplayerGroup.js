@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
 
         me.id = json.id;
         me.layersModels = [];
-        me.layers = json.layers ? json.layers : null;
+        me.layers = json.layers || [];
         me.name = json.name;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         },
         addChildren: function (children) {
             this.children.push(children);
-            this.sort();
         },
         setChildren: function (json) {
             var me = this;
@@ -103,6 +102,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         setName: function (name) {
             this.name = name;
         },
+        /**
+         * You probably shouldn't be using this but getChildren().filter(c => c.type === 'layer')
+         * @returns probably not the thing you were looking for...
+         */
         getLayers: function () {
             return this.layers;
         },
