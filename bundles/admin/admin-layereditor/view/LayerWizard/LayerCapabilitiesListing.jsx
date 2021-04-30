@@ -115,9 +115,11 @@ const getItem = (onSelect, item, getMessage) => {
             okText={getMessage('ok')}
             cancelText={getMessage('cancel')}
         >
-            <StyledListItem item={item}>
-                {item.layer.name} / {item.title} {getIcon(item)}
-            </StyledListItem>
+            <span>
+                <StyledListItem item={item}>
+                    {item.layer.name} / {item.title} {getIcon(item)}
+                </StyledListItem>
+            </span>
         </Confirm>);
     }
     return (

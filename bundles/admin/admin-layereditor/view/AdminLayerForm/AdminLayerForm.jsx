@@ -105,9 +105,11 @@ const AdminLayerForm = ({
                     cancelText={getMessage('cancel')}
                     placement='bottomLeft'
                 >
-                    <StyledButton>
-                        <Message messageKey='delete'/>
-                    </StyledButton>
+                    <span>
+                        <StyledButton>
+                            <Message messageKey='delete'/>
+                        </StyledButton>
+                    </span>
                 </Confirm>
                 { hasCapabilitiesSupport &&
                     <StyledButton onClick={() => controller.addNewFromSameService() }>
