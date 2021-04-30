@@ -95,7 +95,7 @@ export class TimeseriesMetadataService {
         return this._currentYears || [];
     }
 
-    getCurrentFeatures (asGeoJson = true) {
+    getCurrentFeatures (asGeoJson) {
         let geoJson = this._geojson;
         if (!geoJson || !Array.isArray(geoJson.features)) {
             geoJson = {
