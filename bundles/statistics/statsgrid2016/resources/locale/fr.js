@@ -225,7 +225,7 @@ Oskari.registerLocalization(
             },
             "popup": {
                 "deletetitle": "Supprimer l'indicateur",
-                "deletemsg": "Vous supprimez l'indicateur \"{nom}\". Souhaitez-vous supprimer l'indicateur?",
+                "deletemsg": "Vous supprimez l'indicateur \"{name}\". Souhaitez-vous supprimer l'indicateur?",
                 "deleteSuccess": "Indicateur supprimé"
             },
             "button": {
