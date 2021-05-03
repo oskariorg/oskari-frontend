@@ -30,7 +30,7 @@ const focus = ref => {
     }
 };
 
-const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, controller }) => {
+const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, opts, controller }) => {
     // NOT sure why search would not focus when rendered and the ref/focus code could be inside LayerList-component?
     // The effect should be that when that tab is shown we focus on the search
     const searchTermInputRef = useRef(null);
@@ -53,7 +53,7 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, contro
                 key={TABS_ALL_LAYERS}
                 tab={<Message messageKey='tabs.layerList' />}
             >
-                <LayerList ref={searchTermInputRef} {...layerList.state} controller={layerList.controller} />
+                <LayerList ref={searchTermInputRef} opts={opts} {...layerList.state} controller={layerList.controller} />
             </TabPane>
             <TabPane
                 key={TABS_SELECTED_LAYERS}
@@ -75,6 +75,7 @@ LayerViewTabs.propTypes = {
     layerList: shapes.stateful.isRequired,
     selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
+    opts: PropTypes.object,
     autoFocusSearch: PropTypes.bool,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

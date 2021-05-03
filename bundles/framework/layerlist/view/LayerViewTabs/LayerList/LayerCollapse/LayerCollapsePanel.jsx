@@ -6,6 +6,7 @@ import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
 import { AllLayersSwitch } from './AllLayersSwitch';
 import { GroupToolRow } from './GroupToolRow';
+import { LAYER_GROUP_TOGGLE_LIMIT } from '../../../../constants';
 import styled from 'styled-components';
 
 /* ----- Group tools ------------- */
@@ -15,7 +16,7 @@ const StyledCollapsePanelTools = styled.div`
     align-items: center;
 `;
 // Memoed based on layerCount, allLayersOnMap and group.unfilteredLayerCount
-const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, controller}) => {
+const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts = {}, controller}) => {
     const toggleLayersOnMap = (addLayers) => {
         if (addLayers) {
             controller.addGroupLayersToMap(group);
@@ -26,7 +27,8 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, contr
     // the switch adds ALL the layers in the group to the map so it's misleading if we show it when some layers are not shown in the list
     // TODO: show switch for filtered layers BUT only add the layers that match the filter when toggled
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
-    const showAllLayersToggle = !filtered && layerCount > 0;
+    const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] >= 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
+    const showAllLayersToggle = !toggleLimitExceeded && !filtered && layerCount > 0;
     return (
         <StyledCollapsePanelTools>
             <LayerCountBadge
@@ -89,7 +91,7 @@ const StyledSubCollapse = styled(Collapse)`
     border-top: 1px solid #d9d9d9;
     padding-left: 15px !important;
 `;
-const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeededForPanel }) => {
+const SubGroupList = ({ subgroups = [], selectedLayerIds, opts, controller, propsNeededForPanel }) => {
     if (!subgroups.length) {
         // no subgroups
         return null;
@@ -110,6 +112,7 @@ const SubGroupList = ({ subgroups = [], selectedLayerIds, controller, propsNeede
                     group={group}
                     selectedLayerIds={selectedLayerIds}
                     controller={controller}
+                    opts={opts}
                     propsNeededForPanel={propsNeededForPanel}
                 />
             </StyledSubCollapse>
@@ -142,7 +145,7 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
 };
 
 const LayerCollapsePanel = (props) => {
-    const { active, group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
+    const { active, group, selectedLayerIds, opts, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
     // set group switch active if all layers in group are selected
     const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
@@ -155,6 +158,7 @@ const LayerCollapsePanel = (props) => {
             extra={
                 <PanelToolContainer
                     group={group}
+                    opts={opts}
                     layerCount={layerRows.length}
                     controller={controller}
                     allLayersOnMap={allLayersOnMap} />
@@ -163,6 +167,7 @@ const LayerCollapsePanel = (props) => {
                     <SubGroupList
                         subgroups={group.getGroups()}
                         selectedLayerIds={selectedLayerIds}
+                        opts={opts}
                         controller={controller}
                         { ...propsNeededForPanel } />
                     <LayerList
@@ -176,6 +181,7 @@ const LayerCollapsePanel = (props) => {
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
+    opts: PropTypes.object,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 /*

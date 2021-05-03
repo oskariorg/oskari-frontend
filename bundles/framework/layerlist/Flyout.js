@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
+import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -18,6 +19,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
      */
     function (instance) {
         this.instance = instance;
+        // show "add all layers to map" for groups that have at most 10 layers in the group
+        const defaultOpts = {
+            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE
+        };
+        const instanceConf = this.instance.conf || {};
+        this.optsForUI = {
+            ...defaultOpts,
+            ...instanceConf
+        };
         this.container = null;
         this.tabsHandler = new LayerViewTabsHandler(this.instance);
         this.tabsHandler.getLayerListHandler().loadLayers();
@@ -109,6 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <LayerViewTabs
                         {...this.tabsHandler.getState()}
+                        opts={this.optsForUI}
                         controller={this.tabsHandler.getController()}/>
                 </LocaleProvider>
             );
