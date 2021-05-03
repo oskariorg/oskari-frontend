@@ -263,7 +263,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this._reservedLayerIds[layerId] = false;
 
             // also update layer groups
-            this.updateLayersInGroups(layerId, null, true);
+            layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
+
+            //this.updateLayersInGroups(layerId, null, true);
 
             // flush cache for newest filter when layer is removed
             this._newestLayers = null;
@@ -370,15 +372,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             if (newLayerConf.groups) {
-                var groups = [];
-                newLayerConf.groups.forEach(function (cur) {
-                    var group = me.getAllLayerGroups(cur.id);
-                    groups.push({
-                        id: group.getId(),
-                        name: Oskari.getLocalized(group.getName())
-                    });
-                });
-                layer.setGroups(groups);
+                const newGroups = newLayerConf.groups;
+                // remove layer from groups it's no longer part of
+                const newGroupIds = newGroups.map(g => g.id);
+                const oldGroupIds = layer.getGroups().map(group => group.id);
+                const removeFromGroups = oldGroupIds.filter(id => !newGroupIds.includes(id));
+                removeFromGroups.forEach(groupId => this.removeLayerFromGroup(groupId, layer.getId(), true));
+
+                // add layer to groups it wasn't previously part of
+                const addToGroups = newGroups.filter(g => !oldGroups.includes(g.id));
+                addToGroups.forEach(group => this.addLayerToGroup(group.id, layer.getId(), group.orderNumber, true));
             }
 
             if (newLayerConf.orderNumber) {
@@ -394,11 +397,66 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Also update layer to me._layerGroups
-            this.updateLayersInGroups(layerId, newLayerConf);
+            //this.updateLayersInGroups(layerId, newLayerConf);
 
             // notify components of layer update
             var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * Adds reference to layer for group and reference to group for layer
+         * @param {Number} groupId id of group to add a layer into
+         * @param {Number|String} layerId id of layer to add to a group
+         * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
+         */
+        addLayerToGroup: function (groupId, layerId, orderNumber = 1000000, suppressEvent = false) {
+            const group = this.getAllLayerGroups(groupId);
+            if (!group) {
+                return;
+            }
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                return;
+            }
+            // give layer a note it's on this group
+            layer.addGroup({
+                id: group.getId(),
+                name: Oskari.getLocalized(group.getName())
+            });
+            // give group a note that the layer is on that group
+            group.addChildren({
+                id: layerId,
+                type: 'layer',
+                order: orderNumber
+            });
+
+            if(!suppressEvent) {
+                // TODO: notify group change
+            }
+        },
+        /**
+         * Removes reference to layer from group and reference to group from layer
+         * @param {Number} groupId id of group to remove a layer from
+         * @param {Number|String} layerId id of layer to remove from a group
+         * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
+         */
+        removeLayerFromGroup: function (groupId, layerId, suppressEvent = false) {
+            const group = this.getAllLayerGroups(groupId);
+            if (!group) {
+                return;
+            }
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                return;
+            }
+            // remove group from layer
+            layer.setGroups(layer.getGroups().filter(g => g.id !== groupId));
+            // remove layer from group
+            group.removeChild('layer', layerId);
+
+            if(!suppressEvent) {
+                // TODO: notify group change
+            }
         },
         /**
          * Delete layer group
@@ -500,6 +558,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws Error if missing newLayerConf or newLayerConf.groups for updated layer
          */
         updateLayersInGroups: function (layerId, newLayerConf, deleteLayer, newLayer) {
+            Oskari.log(this.getName()).deprecated('Use addLayerToGroup()/removeLayerFromGroup() instead');
             var me = this;
 
             if (me._layerGroups.length === 0) {
