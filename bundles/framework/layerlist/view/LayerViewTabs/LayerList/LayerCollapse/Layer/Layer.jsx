@@ -54,7 +54,7 @@ const LayerName = ({ layer }) => {
 
 const Layer = ({ model, selected, controller }) => {
     return (
-        <LayerDiv className="layer">
+        <LayerDiv className="t_layer" data-id={model.getId()}>
             <CustomTools className="custom-tools">
                 {
                     model.getTools()
