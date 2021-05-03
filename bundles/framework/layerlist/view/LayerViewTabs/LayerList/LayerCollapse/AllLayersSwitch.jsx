@@ -20,7 +20,9 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
         // when switch is "on" or when there's not enough
         //  layers affected for a confirmation to be shown
         return (
-            <StyledSwitch size="small" checked={layerCount !== 0 && checked}
+            <StyledSwitch size="small"
+                disabled={layerCount === 0}
+                checked={layerCount !== 0 && checked}
                 onChange={onToggle} />
         );
     }
