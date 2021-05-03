@@ -28,7 +28,7 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     // TODO: show switch for filtered layers BUT only add the layers that match the filter when toggled
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
     const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] >= 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
-    const showAllLayersToggle = !toggleLimitExceeded && !filtered && layerCount > 0;
+    const showAllLayersToggle = !toggleLimitExceeded && !filtered;
     return (
         <StyledCollapsePanelTools>
             <LayerCountBadge
