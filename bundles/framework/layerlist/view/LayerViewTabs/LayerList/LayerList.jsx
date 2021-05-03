@@ -59,7 +59,7 @@ const UpdateInProgressIndicator = ({ show, children }) => {
 };
 
 const LayerList = React.forwardRef((props, ref) => {
-    const { error, loading = false, updating = false, controller } = props;
+    const { error, loading = false, updating = false, opts, controller } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
@@ -69,7 +69,6 @@ const LayerList = React.forwardRef((props, ref) => {
     // Clear btn won't clear the value properly without this.
     const filterKey = `${filter.state.activeFilterId}`;
     const { searchText, filters, activeFilterId } = filter.state;
-
     return (
         <Content spacing={'15px'}>
             <Row spacing={'8px'}>
@@ -98,7 +97,7 @@ const LayerList = React.forwardRef((props, ref) => {
             { loading && <Spinner/> }
             { !loading &&
                 <UpdateInProgressIndicator show={updating}>
-                    <LayerCollapse {...collapse.state} controller={collapse.controller}/>
+                    <LayerCollapse opts={opts} {...collapse.state} controller={collapse.controller}/>
                 </UpdateInProgressIndicator>
             }
         </Content>
@@ -117,6 +116,7 @@ LayerList.propTypes = {
     filter: shapes.stateful.isRequired,
     createTools: PropTypes.array,
     grouping: PropTypes.shape(grouping).isRequired,
+    opts: PropTypes.object,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

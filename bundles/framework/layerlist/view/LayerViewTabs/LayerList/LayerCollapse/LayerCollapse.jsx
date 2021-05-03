@@ -16,7 +16,7 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, controller }) => {
 
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
@@ -33,6 +33,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                             trimmed
                             selectedLayerIds={selectedLayerIds}
                             group={group}
+                            opts={opts}
                             controller={controller}
                         />
                     );
@@ -47,6 +48,7 @@ LayerCollapse.propTypes = {
     openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
+    opts: PropTypes.object,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

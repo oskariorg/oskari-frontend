@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Confirm, Message, Switch } from 'oskari-ui';
+import { LAYER_GROUP_TOGGLE_DEFAULTS } from '../../../../constants';
 import styled from 'styled-components';
 
 const StyledSwitch = styled(Switch)`
@@ -8,7 +9,7 @@ margin-left: 5px;
 margin-right: 5px;
 `;
 
-const LIMIT_FOR_CONFIRMATION = 10;
+const LIMIT_FOR_CONFIRMATION = LAYER_GROUP_TOGGLE_DEFAULTS.SANE_LIMIT;
 
 /**
  * Component to toggle all layers on group to or from map.
