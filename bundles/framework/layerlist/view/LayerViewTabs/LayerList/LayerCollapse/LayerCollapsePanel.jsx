@@ -153,7 +153,11 @@ const LayerCollapsePanel = (props) => {
     //   between render as whole vs render when the panel is opened.
     const isPanelOpen = propsNeededForPanel.isActive;
     return (
-        <StyledCollapsePanel {...propsNeededForPanel} 
+        <StyledCollapsePanel {...propsNeededForPanel}
+            // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
+            className={`t_group gid_${group.getId()}`}
+            // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
+            data-gid={group.getId()}
             header={group.getTitle()}
             extra={
                 <PanelToolContainer
