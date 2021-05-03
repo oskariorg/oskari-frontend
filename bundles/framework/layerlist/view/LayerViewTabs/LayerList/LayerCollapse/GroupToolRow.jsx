@@ -6,6 +6,9 @@ import { Tooltip } from 'oskari-ui';
 const StyledGroupTool = styled.span`
     padding-right: 5px;
 `;
+const ToolPanel = styled.div`
+    margin-left: 5px;
+`;
 
 const onToolClick = (event, tool, group) => {
     const id = group.getId();
@@ -41,13 +44,13 @@ export const GroupToolRow = ({ group }) => {
     }
 
     return (
-        <React.Fragment>
+        <ToolPanel>
             { group.getTools()
                 .filter(t => t.getTypes().includes(group.groupMethod))
                 .map((tool) => (
                     <GroupTool key={tool.getName()} group={group} tool={tool} />))
             }
-        </React.Fragment>
+        </ToolPanel>
     );
 };
 
