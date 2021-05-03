@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        // show "add all layers to map" for groups that have at most 10 layers in the group
+        // the show "add all layers to map" control for groups is disabled by default. Use instance conf to enable it.
         const defaultOpts = {
             [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE
         };
