@@ -15,6 +15,13 @@ Oskari.registerLocalization(
             "dontShow" : "Älä näytä uudelleen",
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
+            },
+            "tool": {
+                "buttonLabel": "Valitse Ilmoitukset",
+                "popup": {
+                    "title": "Ilmoitukset",
+                    "close": "Sulje"
+                },
             }
         }
     });

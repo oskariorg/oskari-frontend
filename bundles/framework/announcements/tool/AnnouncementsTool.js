@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
+Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
     function () {
     }, {
         index: 8,
@@ -35,7 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             me.data = data;
             me.selectedAnnouncements = [];
             me.annTitles = [];
-            console.log(data.configuration.mapfull.conf);
 
             if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
                 _.each(data.configuration.mapfull.conf.plugins, function (plugin) {
@@ -43,9 +42,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                         me.setEnabled(true);
                     }
                 });
-                if (data.configuration.mapfull.conf.plugins) {
-                    console.log(data.configuration.mapfull.conf.plugins);
-                }
             }
 
             for (var p in me.eventHandlers) {
@@ -55,7 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             }
             const toolPluginMapfullConf = this._getToolPluginMapfullConf();
             if (toolPluginMapfullConf != null) {
-                console.log(toolPluginMapfullConf.config.announcements)
                 me._sendAnnouncementsChangedEvent(toolPluginMapfullConf.config.announcements);
                 toolPluginMapfullConf.config.announcements.forEach(announcement => {
                     me.annTitles.push(announcement.title);
@@ -68,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         },
 
         getName: function () {
-            return 'Oskari.mapframework.publisher.tool.AnnouncementsTool';
+            return 'Oskari.framework.announcements.tool.AnnouncementsTool';
         },
 
         /**
@@ -134,10 +129,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         },
 
         /**
-         * Creates and opens the dialog from which to choose the colour scheme.
-         * Also handles the creation of the sample gfi popup.
+         * Creates and opens the dialog from which to choose the announcements.
          *
-         * @method _openColourDialog
+         * @method _openAnnouncementsDialog
          */
         _openAnnouncementsDialog: function () {
             var me = this,
@@ -154,14 +148,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                 me.isAnnouncementsDialogOpen = false;
             });
             var aLen = this.announcements.length;
-            console.log(aLen);
-            console.log(this.announcements);
 
-            // ANNOUNCEMENTSIEN MÄÄRÄ
             for (i = 0; i < aLen; ++i) {
                 announcementInput = me.templates.inputCheckbox.clone();
 
-                // TÄHÄN HAETAAN ANNOUNCEMENTS NIMET
                 annName = this.announcements[i].title;
 
                 announcementInput.find('input[type=checkbox]').attr({
@@ -173,7 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                     'for': this.announcements[i].title
                 });
                 if (this.selectedAnnouncements.includes(this.announcements[i]) || me.shouldPreselectAnnouncement(this.announcements[i].id)) {
-                    console.log("TTTRRUUUEEE");
                     announcementInput.find('input[type=checkbox]').prop('checked', true);
                 }
 
@@ -181,12 +170,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             }
 
             // WHAT TO DO WHEN ANNOUNCEMENTS ARE SELECTED
-            // IRROTA ANNTITLES TÄSTÄ ULOS
             content.find('input[name=announcement]').on('change', function () {
                 var announcement = me._getItemByCode(jQuery(this).val(), me.announcements);
                 // check if announcement is already checked, if is, add/remove accordingly
                 if (!this.checked) {
-                    // UPDATE SELECTED ANNS!!! COZ THIS WILL END UP EMPTY
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
                         return ann.title !== announcement.title;
                     });
@@ -206,10 +193,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         },
 
         /**
-         * Should preselt layer.
+         * Should preselect announcement.
          * @method @private shouldPreselectAnnouncement
-         * @param  {Integer} id layer id
-         * @return {Boolean} true if layer must be preselect, other false
+         * @param  {Integer} id announcement id
+         * @return {Boolean} true if announcement must be preselect, other false
          */
          shouldPreselectAnnouncement: function (id) {
             const toolPluginMapfullConf = this._getToolPluginMapfullConf();
@@ -237,7 +224,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
          */
         _getToolPluginMapfullConf: function () {
             var me = this;
-            console.log(me.data);
             var isConfig = !!((me.data && me.data.configuration));
             var isPlugins = !!((isConfig && me.data.configuration.mapfull &&
             me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins));
@@ -261,9 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements'),
                 success: (pResp) => {
-                    console.log(pResp)
                     this.announcements = pResp.data;
-                    console.log(this.announcements)
                 },
                 error: function (jqXHR, textStatus) {
                 }
@@ -274,7 +258,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             var me = this,
                 announcementsSelection = {};
             var pluginValues = me.getPlugin().getSelectedAnnouncements();
-            console.log(pluginValues);
             if (pluginValues.announcements) {
                 announcementsSelection.announcements = pluginValues.announcements;
             }
@@ -330,13 +313,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         },
 
         /**
-        * Sends an event to notify interested parties that the colour scheme has changed.
+        * Sends an event to notify interested parties that the announcements have changed.
         *
         * @method _sendAnnouncementsChangedEvent
-        * @param {Object} colourScheme the changed colour scheme
+        * @param {Object} announcements the changed announcement
         */
         _sendAnnouncementsChangedEvent: function (announcements) {
-            this._sendEvent('Publisher2.AnnouncementsChangedEvent', announcements);
+            this._sendEvent('Announcements.AnnouncementsChangedEvent', announcements);
         },
 
         /**

@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
      *
      */
     function (config) {
-        console.log(config);
         var me = this;
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin';
@@ -61,16 +60,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
-            console.log(this._config.announcements);
             if (this._config.announcements) {
-                console.log("NOH")
-                this.addAnnouncement(this._config.announcements);
+                this.addAnnouncements();
             }
         },
 
         _createEventHandlers: function () {
             return {
-                'Publisher2.AnnouncementsChangedEvent': function (evt) {
+                'Announcements.AnnouncementsChangedEvent': function (evt) {
                     this._handleAnnouncementsChangedEvent(evt);
                 }
             };
@@ -80,12 +77,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
             //PÄIVITÄ ILMOITUKSET 
             if (this._config) {
                 this._config.announcements = evt.getAnnouncements();
-                this.addAnnouncement(this._config.announcements);
+                this.addAnnouncements();
             } else {
             this._config = {
                 announcements: evt.getAnnouncements()
             };
-            this.addAnnouncement(this._config.announcements);
+            this.addAnnouncements();
         }
         },
 
@@ -165,11 +162,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         },
 
         /**
-        * @method addAnnouncement
-        * Adds given announcement to the list
-        * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to add
+        * @method addAnnouncements
+        * Adds announcements to the list from config
+        * @param announcement announcement to add
         */
-        addAnnouncement: function (announcements) {
+        addAnnouncements: function () {
+            var announcements = this._config.announcements;
             if (!this.open) {
                 delete this.announcementsContent;
             } else {
@@ -208,8 +206,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         /**
          * @method getSelectedAnnouncements
          * Returns list of the selected announcements
-         * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and
-         * {String} defaultBase as the selected base layers id
+         * @return {Object} returning object has property announcements, containing a {String[]} json
+         * representation of announcements.
          */
         getSelectedAnnouncements: function () {
             return {

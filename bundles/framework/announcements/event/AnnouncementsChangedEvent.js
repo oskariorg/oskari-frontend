@@ -1,9 +1,9 @@
 /**
- * @class Oskari.admin.admin-announcements.event.AnnouncementsChangedEvent
+ * @class Oskari.framework.announcements.event.AnnouncementsChangedEvent
  *
- * Used to notify getinfo plugin that the colour scheme has changed.
+ * Used to notify getinfo plugin that the announcements have changed.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.event.AnnouncementsChangedEvent',
+Oskari.clazz.define('Oskari.framework.announcements.event.AnnouncementsChangedEvent',
 
     /**
      * @method create called automatically on construction
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.event.AnnouncementsCh
         this._announcements = announcements;
     }, {
         /** @static @property __name event name */
-        __name: 'Publisher2.AnnouncementsChangedEvent',
+        __name: 'Announcements.AnnouncementsChangedEvent',
         /**
          * @method getName
          * Returns event name
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.event.AnnouncementsCh
         },
         /**
          * @method getStyle
-         * Returns the new colour scheme
+         * Returns new announcements
          * @return {Object}
          */
         getAnnouncements: function () {
