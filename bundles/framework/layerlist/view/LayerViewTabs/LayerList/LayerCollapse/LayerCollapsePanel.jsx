@@ -27,8 +27,8 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     // the switch adds ALL the layers in the group to the map so it's misleading if we show it when some layers are not shown in the list
     // TODO: show switch for filtered layers BUT only add the layers that match the filter when toggled
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
-    const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] >= 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
-    const showAllLayersToggle = !toggleLimitExceeded && !filtered;
+    const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] > 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
+    const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
     return (
         <StyledCollapsePanelTools>
             <LayerCountBadge
@@ -152,8 +152,11 @@ const LayerCollapsePanel = (props) => {
     // Note! Not rendering layerlist/subgroups when the panel is closed is a trade-off for performance
     //   between render as whole vs render when the panel is opened.
     const isPanelOpen = propsNeededForPanel.isActive;
+    // after AntD version 4.9.0 we could disable panels without children:
+    // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
     return (
         <StyledCollapsePanel {...propsNeededForPanel}
+            // collapsible={hasChildren ? 'header' : 'disabled'}
             // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
             className={`t_group gid_${group.getId()}`}
             // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
