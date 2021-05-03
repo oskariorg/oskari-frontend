@@ -35,10 +35,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/event/AnnouncementsChangedEvent.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/event/MapPublishedEvent.js"
         },
         {
@@ -100,10 +96,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/view/PanelLayout.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/publisher2/tools/AnnouncementsTool.js"
         },
         {
             "type": "text/javascript",
