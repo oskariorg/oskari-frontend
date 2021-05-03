@@ -23,15 +23,20 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, contr
             controller.removeGroupLayersFromMap(group);
         }
     };
+    // the switch adds ALL the layers in the group to the map so it's misleading if we show it when some layers are not shown in the list
+    // TODO: show switch for filtered layers BUT only add the layers that match the filter when toggled
+    const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
+    const showAllLayersToggle = !filtered && layerCount > 0;
     return (
         <StyledCollapsePanelTools>
             <LayerCountBadge
                 layerCount={layerCount}
                 unfilteredLayerCount={group.unfilteredLayerCount} />
-            <AllLayersSwitch
+            { showAllLayersToggle && <AllLayersSwitch
                 checked={allLayersOnMap}
                 layerCount={layerCount}
                 onToggle={toggleLayersOnMap} />
+            }
             <GroupToolRow group={group} />
         </StyledCollapsePanelTools>
     );
