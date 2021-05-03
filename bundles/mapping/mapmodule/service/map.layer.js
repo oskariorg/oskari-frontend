@@ -840,11 +840,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 me.addLayer(mapLayer, true);
             }
             // process remaining layers
-            if (layers.length % 20 !== 0) {
+            if (layers.length % 100 !== 0) {
                 // do it right a way
                 me._loadLayersRecursive(layers, callbackSuccess);
             } else {
-                // yield cpu time after every 20 layers
+                // yield cpu time after every 100 layers
                 setTimeout(function () {
                     me._loadLayersRecursive(layers, callbackSuccess);
                 }, 0);
