@@ -87,14 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             return this.children;
         },
         getLayerIdList: function () {
-            var me = this;
-            var layers = [];
-            me.getChildren().forEach(function (children) {
-                if (children.type === 'layer') {
-                    layers.push(children.id);
-                }
-            });
-            return layers;
+            return this.getChildren()
+                .filter(c => c.type === 'layer')
+                .map(c => c.id);
         },
         getName: function () {
             return this.name;

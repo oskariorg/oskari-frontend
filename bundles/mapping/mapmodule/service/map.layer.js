@@ -774,45 +774,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
-            var me = this;
             // we don't want to reset "this._layerGroups" at the beginning since there groups
             //  created at runtime like one for statistical regionsets and we don't want to remove those.
-            pResp.groups.forEach(function (group) {
-                var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
-                me._layerGroups.push(groupDom);
-            });
+            const groupModels = pResp.groups
+                .map(group => Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
+            this._layerGroups.push(...groupModels);
 
-            var flatLayerGroups = [];
-            var gatherFlatGroups = function (groups) {
-                groups.forEach(function (group) {
+            const flatLayerGroups = [];
+            const gatherFlatGroups = (groups = []) => {
+                groups.forEach((group) => {
                     flatLayerGroups.push(group);
                     gatherFlatGroups(group.getGroups());
                 });
             };
-            gatherFlatGroups(me._layerGroups);
+            gatherFlatGroups(this._layerGroups);
 
-            this._loadLayersRecursive(pResp.layers, function () {
-                // FIXME: refactor codebase to get rid of these circular references.
-                var allLayers = me.getAllLayers();
+            // FIXME: refactor codebase to get rid of these circular references.
+            const allLayers = this.getAllLayers();
+            const sandbox  = this.getSandbox();
+            this._loadLayersRecursive(pResp.layers, () => {
                 // groups are expected to contain the layer objects -> inject layers to groups based on list of ids the group holds
-                flatLayerGroups.forEach(function (group) {
-                    var layersInGroup = allLayers.filter(function (layer) {
-                        return group.getLayerIdList().findIndex(function (id) {
-                            return id === layer.getId();
-                        }) !== -1;
-                    });
-
+                flatLayerGroups.forEach((group) => {
+                    const layerIdList = group.getLayerIdList();
                     // layers are expected to have reference to groups they are in -> injecting groups to layer
-                    layersInGroup.forEach(function (layer) {
-                        layer.getGroups().push({
-                            id: group.getId(),
-                            name: Oskari.getLocalized(group.getName())
+                    allLayers
+                        .filter((layer) => layerIdList.includes(layer.getId()))
+                        .forEach((layer) => {
+                            layer.getGroups().push({
+                                id: group.getId(),
+                                name: Oskari.getLocalized(group.getName())
+                            });
                         });
-                    });
                 });
 
                 // notify components of added layers
-                me.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+                sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
