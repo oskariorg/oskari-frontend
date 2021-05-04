@@ -265,8 +265,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // also update layer groups
             layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
 
-            //this.updateLayersInGroups(layerId, null, true);
-
             // flush cache for newest filter when layer is removed
             this._newestLayers = null;
 
@@ -297,7 +295,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            json conf for the layer. NOTE! Only updates name for now
          */
         updateLayer: function (layerId, newLayerConf) {
-            var me = this;
             var layer = this.findMapLayer(layerId);
             if (!layer) {
                 // couldn't find layer to update
@@ -380,7 +377,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 removeFromGroups.forEach(groupId => this.removeLayerFromGroup(groupId, layer.getId(), true));
 
                 // add layer to groups it wasn't previously part of
-                const addToGroups = newGroups.filter(g => !oldGroups.includes(g.id));
+                const addToGroups = newGroups.filter(g => !oldGroupIds.includes(g.id));
                 addToGroups.forEach(group => this.addLayerToGroup(group.id, layer.getId(), group.orderNumber, true));
             }
 
@@ -395,9 +392,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: remove styles and wmsurls??
                 this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
             }
-
-            // Also update layer to me._layerGroups
-            //this.updateLayersInGroups(layerId, newLayerConf);
 
             // notify components of layer update
             var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
@@ -430,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 order: orderNumber
             });
 
-            if(!suppressEvent) {
+            if (!suppressEvent) {
                 // TODO: notify group change
             }
         },
@@ -454,7 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // remove layer from group
             group.removeChild('layer', layerId);
 
-            if(!suppressEvent) {
+            if (!suppressEvent) {
                 // TODO: notify group change
             }
         },
@@ -850,7 +844,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // FIXME: refactor codebase to get rid of these circular references.
             const allLayers = this.getAllLayers();
-            const sandbox  = this.getSandbox();
+            const sandbox = this.getSandbox();
             this._loadLayersRecursive(pResp.layers, () => {
                 // groups are expected to contain the layer objects -> inject layers to groups based on list of ids the group holds
                 flatLayerGroups.forEach((group) => {

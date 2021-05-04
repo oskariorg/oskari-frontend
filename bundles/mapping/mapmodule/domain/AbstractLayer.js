@@ -1289,7 +1289,7 @@ Oskari.clazz.define(
         setGroups: function (groups) {
             this._groups = groups || [{ id: -1, name: '' }];
         },
-        addGroup: function(group) {
+        addGroup: function (group) {
             this._groups.push(group);
         },
         /**
