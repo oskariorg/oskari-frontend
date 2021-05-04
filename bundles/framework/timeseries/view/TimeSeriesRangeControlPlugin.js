@@ -38,6 +38,10 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
     setControlState (state) {
         const { time } = state;
+        if (!time) {
+            // don't set initial value if state doesn't have time value
+            return;
+        }
         let mode;
         let value;
         if (Array.isArray(time)) {
