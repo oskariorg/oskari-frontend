@@ -3,7 +3,7 @@ import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 import { LocalizingFlyout } from './view/LocalizingFlyout';
-import { EditOutlined, PlusCircleOutlined, EditFilled } from '@ant-design/icons';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -186,7 +186,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             }
             // add feature data tool for layer
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            tool.setIconComponent(<EditFilled/>);
+            tool.setIconComponent(<EditOutlined/>);
             tool.setName('layer-editor');
             tool.setIconCls('edit-layer');
             tool.setTooltip(this.loc('editor-tool'));
