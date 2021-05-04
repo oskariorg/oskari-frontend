@@ -240,8 +240,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
-            // remove the layer from map state
+            // remove the layer from map state (selected layers)
             sandbox.getMap().removeLayer(layerId);
+
+            // remove layer from groups (needs to be done when the layer can still be found by id)
+            layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
+
             // default to all layers
             var layerList = this._loadedLayersList;
             if (layer.getParentId() !== -1) {
@@ -261,9 +265,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             this._reservedLayerIds[layerId] = false;
-
-            // also update layer groups
-            this.updateLayersInGroups(layerId, null, true);
 
             // flush cache for newest filter when layer is removed
             this._newestLayers = null;
@@ -295,7 +296,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            json conf for the layer. NOTE! Only updates name for now
          */
         updateLayer: function (layerId, newLayerConf) {
-            var me = this;
             var layer = this.findMapLayer(layerId);
             if (!layer) {
                 // couldn't find layer to update
@@ -370,15 +370,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             if (newLayerConf.groups) {
-                var groups = [];
-                newLayerConf.groups.forEach(function (cur) {
-                    var group = me.getAllLayerGroups(cur.id);
-                    groups.push({
-                        id: group.getId(),
-                        name: Oskari.getLocalized(group.getName())
-                    });
-                });
-                layer.setGroups(groups);
+                const newGroups = newLayerConf.groups;
+                // remove layer from groups it's no longer part of
+                const newGroupIds = newGroups.map(g => g.id);
+                const oldGroupIds = layer.getGroups().map(group => group.id);
+                const removeFromGroups = oldGroupIds.filter(id => !newGroupIds.includes(id));
+                removeFromGroups.forEach(groupId => this.removeLayerFromGroup(groupId, layer.getId(), true));
+
+                // add layer to groups it wasn't previously part of
+                const addToGroups = newGroups.filter(g => !oldGroupIds.includes(g.id));
+                addToGroups.forEach(group => this.addLayerToGroup(group.id, layer.getId(), group.orderNumber, true));
             }
 
             if (newLayerConf.orderNumber) {
@@ -393,12 +394,64 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._populateWmsMapLayerAdditionalData(layer, newLayerConf);
             }
 
-            // Also update layer to me._layerGroups
-            this.updateLayersInGroups(layerId, newLayerConf);
-
             // notify components of layer update
             var evt = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this.getSandbox().notifyAll(evt);
+        },
+        /**
+         * Adds reference to layer for group and reference to group for layer
+         * @param {Number} groupId id of group to add a layer into
+         * @param {Number|String} layerId id of layer to add to a group
+         * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
+         */
+        addLayerToGroup: function (groupId, layerId, orderNumber = 1000000, suppressEvent = false) {
+            const group = this.getAllLayerGroups(groupId);
+            if (!group) {
+                return;
+            }
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                return;
+            }
+            // give layer a note it's on this group
+            layer.addGroup({
+                id: group.getId(),
+                name: Oskari.getLocalized(group.getName())
+            });
+            // give group a note that the layer is on that group
+            group.addChildren({
+                id: layerId,
+                type: 'layer',
+                order: orderNumber
+            });
+
+            if (!suppressEvent) {
+                this.trigger('theme.update');
+            }
+        },
+        /**
+         * Removes reference to layer from group and reference to group from layer
+         * @param {Number} groupId id of group to remove a layer from
+         * @param {Number|String} layerId id of layer to remove from a group
+         * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
+         */
+        removeLayerFromGroup: function (groupId, layerId, suppressEvent = false) {
+            const group = this.getAllLayerGroups(groupId);
+            if (!group) {
+                return;
+            }
+            var layer = this.findMapLayer(layerId);
+            if (!layer) {
+                return;
+            }
+            // remove group from layer
+            layer.setGroups(layer.getGroups().filter(g => g.id !== groupId));
+            // remove layer from group
+            group.removeChild('layer', layerId);
+
+            if (!suppressEvent) {
+                this.trigger('theme.update');
+            }
         },
         /**
          * Delete layer group
@@ -486,83 +539,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     type: 'group',
                     id: data.id,
                     order: 100000000
-                });
-            }
-        },
-
-        /**
-         * Update layers in groups
-         * @method updateLayersInGroups
-         * @param  {String}          layerId      layerid
-         * @param  {Object}          newLayerConf new layer JSONObject presentation, used only update/add
-         * @param  {Boolean}         deleteLayer delete layer
-         * @param  {Boolean}         newLayer is new layer
-         * @throws Error if missing newLayerConf or newLayerConf.groups for updated layer
-         */
-        updateLayersInGroups: function (layerId, newLayerConf, deleteLayer, newLayer) {
-            var me = this;
-
-            if (me._layerGroups.length === 0) {
-                return;
-            }
-
-            // check if layer was updated and removed from a group
-            var isLayerUpdatedAndRemovedFromGroup = function (groupId) {
-                if (!deleteLayer && !newLayer) {
-                    if (!newLayerConf) {
-                        throw new Error('Missing layer config for updated layer');
-                    }
-                    if (!newLayerConf.groups) {
-                        throw new Error('Missing groups for updated layer');
-                    }
-                    return newLayerConf.groups.indexOf(groupId) === -1;
-                }
-                return false;
-            };
-
-            // remove layer from group on delete, update layer in group if already exists
-            // recurses the group structure
-            var recurseLayerUpdate = function (group) {
-                // Check if layer is in group
-                var layerIndex = group.getChildren().findIndex(function (children) {
-                    return children.id === layerId && children.type === 'layer';
-                });
-                if (layerIndex !== -1) {
-                    if (deleteLayer || isLayerUpdatedAndRemovedFromGroup(group.id)) {
-                        group.children.splice(layerIndex, 1);
-                    }
-                }
-                // recurse to next level of groups
-                if (group.groups) {
-                    group.groups.forEach(function (subgroup) {
-                        recurseLayerUpdate(subgroup);
-                    });
-                }
-            };
-            // use recurseLayerUpdate to go through the whole group structure to find layers to update or delete
-            me._layerGroups.forEach(function (group) {
-                recurseLayerUpdate(group);
-            });
-
-            // Finally check if layer has new groups
-            if (!deleteLayer && newLayerConf && newLayerConf.groups) {
-                // for each group on the layer
-                newLayerConf.groups.forEach(function (group) {
-                    // find the group details
-                    var groupConf = me.getAllLayerGroups(group.id);
-                    var groupChildren = groupConf.getChildren() || [];
-                    // check if the layer is referenced in the group details
-                    var layer = groupChildren.find(function (children) {
-                        return children.id === newLayerConf.id && children.type === 'layer';
-                    });
-                    // if layer is not part of the groups layers -> add it
-                    if (!layer) {
-                        me.getAllLayerGroups(group.id).addChildren({
-                            type: 'layer',
-                            id: newLayerConf.id,
-                            order: 1000000
-                        });
-                    }
                 });
             }
         },
@@ -774,45 +750,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadAllLayerGroupsAjaxCallBack: function (pResp, callbackSuccess) {
-            var me = this;
             // we don't want to reset "this._layerGroups" at the beginning since there groups
             //  created at runtime like one for statistical regionsets and we don't want to remove those.
-            pResp.groups.forEach(function (group) {
-                var groupDom = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group);
-                me._layerGroups.push(groupDom);
-            });
+            const groupModels = pResp.groups
+                .map(group => Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
+            this._layerGroups.push(...groupModels);
 
-            var flatLayerGroups = [];
-            var gatherFlatGroups = function (groups) {
-                groups.forEach(function (group) {
+            const flatLayerGroups = [];
+            const gatherFlatGroups = (groups = []) => {
+                groups.forEach((group) => {
                     flatLayerGroups.push(group);
                     gatherFlatGroups(group.getGroups());
                 });
             };
-            gatherFlatGroups(me._layerGroups);
+            gatherFlatGroups(this._layerGroups);
 
-            this._loadLayersRecursive(pResp.layers, function () {
-                // FIXME: refactor codebase to get rid of these circular references.
-                var allLayers = me.getAllLayers();
+            // FIXME: refactor codebase to get rid of these circular references.
+            const allLayers = this.getAllLayers();
+            const sandbox = this.getSandbox();
+            this._loadLayersRecursive(pResp.layers, () => {
                 // groups are expected to contain the layer objects -> inject layers to groups based on list of ids the group holds
-                flatLayerGroups.forEach(function (group) {
-                    var layersInGroup = allLayers.filter(function (layer) {
-                        return group.getLayerIdList().findIndex(function (id) {
-                            return id === layer.getId();
-                        }) !== -1;
-                    });
-
+                flatLayerGroups.forEach((group) => {
+                    const layerIdList = group.getLayerIdList();
                     // layers are expected to have reference to groups they are in -> injecting groups to layer
-                    layersInGroup.forEach(function (layer) {
-                        layer.getGroups().push({
-                            id: group.getId(),
-                            name: Oskari.getLocalized(group.getName())
+                    allLayers
+                        .filter((layer) => layerIdList.includes(layer.getId()))
+                        .forEach((layer) => {
+                            layer.getGroups().push({
+                                id: group.getId(),
+                                name: Oskari.getLocalized(group.getName())
+                            });
                         });
-                    });
                 });
 
                 // notify components of added layers
-                me.getSandbox().notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
+                sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(null, 'add'));
                 if (typeof callbackSuccess === 'function') {
                     callbackSuccess();
                 }
@@ -844,11 +816,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 me.addLayer(mapLayer, true);
             }
             // process remaining layers
-            if (layers.length % 20 !== 0) {
+            if (layers.length % 100 !== 0) {
                 // do it right a way
                 me._loadLayersRecursive(layers, callbackSuccess);
             } else {
-                // yield cpu time after every 20 layers
+                // yield cpu time after every 100 layers
                 setTimeout(function () {
                     me._loadLayersRecursive(layers, callbackSuccess);
                 }, 0);

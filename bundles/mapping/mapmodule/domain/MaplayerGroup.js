@@ -33,6 +33,11 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         addChildren: function (children) {
             this.children.push(children);
         },
+        removeChild: function (type, id) {
+            const filteredChildren = this.children
+                .filter(c => !(c.type === type && c.id === id));
+            this.children = filteredChildren;
+        },
         setChildren: function (json) {
             var me = this;
             me.children = [];
@@ -87,14 +92,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             return this.children;
         },
         getLayerIdList: function () {
-            var me = this;
-            var layers = [];
-            me.getChildren().forEach(function (children) {
-                if (children.type === 'layer') {
-                    layers.push(children.id);
-                }
-            });
-            return layers;
+            return this.getChildren()
+                .filter(c => c.type === 'layer')
+                .map(c => c.id);
         },
         getName: function () {
             return this.name;
