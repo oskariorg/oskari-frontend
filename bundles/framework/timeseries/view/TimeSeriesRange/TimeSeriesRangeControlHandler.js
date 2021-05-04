@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { TimeseriesMetadataService } from './TimeseriesMetadataService';
+import { TimeseriesMetadataService } from '../../service/TimeseriesMetadataService';
 
 const _getStartTimeFromYear = (year) => {
     return moment.utc(year.toString(), 'YYYY').startOf('year');
@@ -58,7 +58,10 @@ class UIHandler extends StateHandler {
         }
         if (this._metadataHandler.getToggleLevel() > zoomLevel) {
             const dataYears = this._getDataYearsFromWMS();
-            const state = { dataYears };
+            const state = {
+                dataYears,
+                error: false
+            };
             if (this._autoSelectMidDataYear && dataYears.length > 0) {
                 this._autoSelectMidDataYear = false;
                 state.value = this._getMidWayDataYear(dataYears);
