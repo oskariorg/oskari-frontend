@@ -175,11 +175,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                             return;
                         }
                         me.displayInfo();
+                        me.selectSavedIndicator(indicator, data);
                     });
                 } else {
                     me.displayInfo();
+                    me.selectSavedIndicator(indicator, data);
                 }
-                me.selectSavedIndicator(indicator, data);
             });
         });
         this.setContent(this.uiElement);
