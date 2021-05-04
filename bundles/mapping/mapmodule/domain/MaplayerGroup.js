@@ -33,6 +33,11 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         addChildren: function (children) {
             this.children.push(children);
         },
+        removeChild: function (type, id) {
+            const filteredChildren = this.children
+                .filter(c => !(c.type === type && c.id === id));
+            this.children = filteredChildren;
+        },
         setChildren: function (json) {
             var me = this;
             me.children = [];

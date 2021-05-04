@@ -240,8 +240,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // TODO: should we notify somehow?
                 return;
             }
-            // remove the layer from map state
+            // remove the layer from map state (selected layers)
             sandbox.getMap().removeLayer(layerId);
+
+            // remove layer from groups (needs to be done when the layer can still be found by id)
+            layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
+
             // default to all layers
             var layerList = this._loadedLayersList;
             if (layer.getParentId() !== -1) {
@@ -261,9 +265,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             this._reservedLayerIds[layerId] = false;
-
-            // also update layer groups
-            layer.getGroups().forEach(group => this.removeLayerFromGroup(group.id, layerId, true));
 
             // flush cache for newest filter when layer is removed
             this._newestLayers = null;
@@ -425,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
 
             if (!suppressEvent) {
-                // TODO: notify group change
+                this.trigger('theme.update');
             }
         },
         /**
@@ -449,7 +450,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             group.removeChild('layer', layerId);
 
             if (!suppressEvent) {
-                // TODO: notify group change
+                this.trigger('theme.update');
             }
         },
         /**
