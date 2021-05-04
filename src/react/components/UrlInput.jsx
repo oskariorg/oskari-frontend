@@ -87,21 +87,26 @@ export class UrlInput extends React.Component {
             // Panel with this key is open as default
             collapseProps.activeKey = 'usernameAndPassword';
         }
-
+        // The component is used to register external services so browser autocompleting passwords saved for the Oskari instance url is harmful, not helpful.
+        // Using "one-time-code" for password to prevent autocompleting the users passwords.
+        // Using off in the input doesn't work even when wrapped to a form with autocomplete off.
+        // Since we don't want browser to suggest/save the instance password when registering a layer autoComplete="new-password" isn't used
         return (
             <div>
                 <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />&nbsp;
                 {credentials.allowCredentials &&
                     <Collapse {...collapseProps}>
                         <Panel header={credentials.panelText} key='usernameAndPassword'>
-                            <div>
-                                {credentials.usernameText}
-                                <div><TextInput autoComplete='off' value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
-                            </div>
-                            <div>
-                                {credentials.passwordText}
-                                <div><Input.Password autoComplete='off' value={credentials.passwordValue} onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
-                            </div>
+                            <form autoComplete="off">
+                                <div>
+                                    {credentials.usernameText}
+                                    <div><TextInput autoComplete='off' value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
+                                </div>
+                                <div>
+                                    {credentials.passwordText}
+                                    <div><Input.Password autoComplete='one-time-code' value={credentials.passwordValue} onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
+                                </div>
+                            </form>
                         </Panel>
                     </Collapse>
                 }

@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this.LAYER_ID = 'STATS_LAYER';
 
     this._bindToEvents();
-    this._initLayer();
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
     this._regionsAdded = [];
     this._lastRenderCache = {};
@@ -326,26 +325,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         return geojson;
     },
 
-    /**
-     * Prepare vectorlayer for features.
-     */
-    _initLayer: function () {
-        var locale = this.instance.getLocalization();
-        this.sb.postRequestByName(
-            'VectorLayerRequest',
-            [
-                {
-                    layerId: this.LAYER_ID,
-                    layerName: locale.layer.name,
-                    layerInspireName: locale.layer.inspireName,
-                    layerOrganizationName: locale.layer.organizationName,
-                    layerPermissions: {
-                        'publish': 'publication_permission_ok'
-                    }
-                }
-            ]
-        );
-    },
     _updateLayerProperties: function () {
         var service = this.service;
         var state = service.getStateService();

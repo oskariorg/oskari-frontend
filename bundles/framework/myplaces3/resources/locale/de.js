@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Orte",
         "desc": "",
-        "category": {
-            "defaultName": "Meine Kartenebene",
-            "organization": "Meine Orte",
-            "inspire": "Meine Orte"
-        },
         "guest": {
             "loginShort": "Melden Sie sich an, um den Dienst zu nutzen"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Name",
                 "placeholder": "Name der Kartenebene"
             },
-            "drawing": {
-                "label": "Darstellung",
-                "point": {
-                    "label": "Punkt",
-                    "color": "Farbe",
-                    "size": "Größe"
-                },
-                "line": {
-                    "label": "Linie",
-                    "color": "Farbe",
-                    "size": "Linienstärke"
-                },
-                "area": {
-                    "label": "Fläche",
-                    "fillcolor": "Füllfarbe",
-                    "linecolor": "Linienfarbe",
-                    "size": "Linienstärke"
-                }
-            },
             "visibleFields": {
                 "label": "Sichtbare Ortsdaten",
                 "placename": "Name",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Liniendarstellung bearbeiten"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punktdarstellung",
-            "tooltip": "",
-            "symbol": {
-                "label": "Symbol"
-            },
-            "size": {
-                "label": "Größe"
-            },
-            "color": {
-                "label": "Farbe",
-                "labelOr": "oder",
-                "labelCustom": "RGB-Farbwert anpassen (0-255)"
-            },
-            "preview": {
-                "label": "Vorschau"
-            },
-            "buttons": {
-                "save": "Speichern",
-                "cancel": "Abbrechen"
-            }
-        },
-        "lineform": {
-            "title": "Liniendarstellung",
-            "tooltip": "",
-            "style": {
-                "label": "Darstellung"
-            },
-            "cap": {
-                "label": "Linienabschluss"
-            },
-            "corner": {
-                "label": "Ecken"
-            },
-            "width": {
-                "label": "Breite"
-            },
-            "color": {
-                "label": "Farbe",
-                "labelOr": "oder",
-                "labelCustom": "RGB-Farbwert anpassen (0-255)"
-            },
-            "preview": {
-                "label": "Vorschau"
-            },
-            "buttons": {
-                "save": "Speichern",
-                "cancel": "Abbrechen"
-            }
-        },
-        "areaform": {
-            "title": "Flächendarstellung",
-            "tooltip": "",
-            "linestyle": {
-                "label": "Kantendarstellung"
-            },
-            "linecap": {
-                "label": "Kantenabschluss"
-            },
-            "linecorner": {
-                "label": "Kantenecken"
-            },
-            "linewidth": {
-                "label": "Kantenbreite"
-            },
-            "linecolor": {
-                "label": "Kantenfarbe",
-                "labelOr": "oder",
-                "labelCustom": "RGB-Farbwert anpassen (0-255)"
-            },
-            "color": {
-                "label": "Füllfarbe",
-                "labelOr": "oder",
-                "labelCustom": "RGB-Farbwert anpassen (0-255)"
-            },
-            "fill": {
-                "label": "Füllmuster"
-            },
-            "preview": {
-                "label": "Vorschau"
-            },
-            "buttons": {
-                "save": "Speichern",
-                "cancel": "Abbrechen"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Name der Kartenebene fehlt.",
             "placeNameIllegal": "Der Ortsname enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben (a-z, A-Z and å,ä,ö,Å,Ä,Ö) sowie Zahlen (0-9), Bindestriche (-) und die Backspace-Taste.",
             "descIllegal": "Die Beschreibung enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben (a-z, A-Z and å,ä,ö,Å,Ä,Ö) sowie Zahlen (0-9), Bindestriche (-) und die Backspace-Taste.",
-            "categoryNameIllegal": "Die Ebenenbeschreibung enthält unzulässige Zeichen.Erlaubte Zeichen sind die Buchstaben (a-z, A-Z and å,ä,ö,Å,Ä,Ö) sowie Zahlen (0-9), Bindestriche (-) und die Backspace-Taste.",
-            "dotSize": "Die Punktgröße liegt außerhalb der Größenbeschränkung (1-5).",
-            "dotColor": "Falsche Punktfarbe. Geben Sie einen Wert zwischen 0-255 ein.",
-            "dotShape": "Falsche Punktform.",
-            "lineSize": "Die Linienstärke liegt außerhalb der Größenbeschränkung (0-50).",
-            "lineColor": "Falsche Linienfarbe. Geben Sie einen Wert zwischen 0-255 ein.",
-            "areaLineSize": "Die Linienstärke liegt außerhalb der Größenbeschränkungen (0-50).",
-            "areaLineColor": "Falsche Kantenfarbe. Geben Sie einen Wert zwischen 0-255 ein.",
-            "areaFillColor": "Falsche Füllfarbe. Geben Sie einen Wert zwischen 0-255 ein."
+            "categoryNameIllegal": "Die Ebenenbeschreibung enthält unzulässige Zeichen.Erlaubte Zeichen sind die Buchstaben (a-z, A-Z and å,ä,ö,Å,Ä,Ö) sowie Zahlen (0-9), Bindestriche (-) und die Backspace-Taste."
         }
     }
 });

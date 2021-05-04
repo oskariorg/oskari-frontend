@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Objektuppgifter",
         "layer": {
+            "defaultName": "Mitt kartlager",
             "organization": "Mina objekt",
             "inspire": "Mitt kartlager"
         }

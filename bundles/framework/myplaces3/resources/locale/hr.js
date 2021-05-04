@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mjesta",
         "desc": "",
-        "category": {
-            "defaultName": "Moj sloj karte",
-            "organization": "Moja mjesta",
-            "inspire": "Moja mjesta"
-        },
         "guest": {
             "loginShort": "Prijava za korištenje"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Ime",
                 "placeholder": "Imenuj sloj karte"
             },
-            "drawing": {
-                "label": "Stil",
-                "point": {
-                    "label": "Točka",
-                    "color": "Boja",
-                    "size": "Veličina"
-                },
-                "line": {
-                    "label": "Linija",
-                    "color": "Boja",
-                    "size": "Debljina"
-                },
-                "area": {
-                    "label": "Područje",
-                    "fillcolor": "Boja ispune",
-                    "linecolor": "Boja linije",
-                    "size": "Debljina linije"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "Ime",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": "Veličina"
-            },
-            "color": {
-                "label": "Boja",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Spremi",
-                "cancel": "Poništi"
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "Boja",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Spremi",
-                "cancel": "Poništi"
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "Boja linije",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "Spremi",
-                "cancel": "Poništi"
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Nedostaje ime sloja.",
             "placeNameIllegal": "Ime objekta sadrži nedopuštene znakove. Dopušteni znakovi su slova od a do z,  å, ä i ö, brojevi, tipka Backspace i crtice.",
             "descIllegal": "Opis objekta sadrži nedopuštene znakove. Dopušteni znakovi su slova od a do z,  å, ä i ö, brojevi, tipka Backspace i crtice.",
-            "categoryNameIllegal": "Opis sloja sadrži nedopuštene znakove. Dopušteni znakovi su slova od a do z,  å, ä i ö, brojevi, tipka Backspace i crtice",
-            "dotSize": "Veličina točke ne odgovara ograničenju veličine (1-5).",
-            "dotColor": "Pogrešna boja točke.",
-            "dotShape": "",
-            "lineSize": "Veličina linije ne odgovara ograničenju veličine (1-50).",
-            "lineColor": "Pogrešna boja linije.",
-            "areaLineSize": "Veličina ruba površine ne odgovara ograničenju veličine (0-50).",
-            "areaLineColor": "Pogrešna boja površinske rubne linije.",
-            "areaFillColor": "Pogrešna boja ispune."
+            "categoryNameIllegal": "Opis sloja sadrži nedopuštene znakove. Dopušteni znakovi su slova od a do z,  å, ä i ö, brojevi, tipka Backspace i crtice"
         }
     }
 });

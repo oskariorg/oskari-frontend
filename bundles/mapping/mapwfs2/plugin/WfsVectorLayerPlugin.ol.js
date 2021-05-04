@@ -3,7 +3,7 @@ import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol'
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
-import { WFS_ID_KEY, WFS_FTR_ID_KEY, WFS_FTR_ID_LOCALE } from './WfsVectorLayerPlugin/util/props';
+import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
@@ -362,33 +362,30 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer) {
             return;
         }
-        const onSuccess = localized => {
-            if (Array.isArray(localized) && localized.length) {
-                if (localized[0].name !== WFS_FTR_ID_KEY) {
-                    localized.unshift({
-                        name: WFS_FTR_ID_KEY,
-                        locale: WFS_FTR_ID_LOCALE
-                    });
-                }
-                layer.setFields(localized.map(prop => prop.name));
-                layer.setLocales(localized.map(prop => prop.locale));
-            } else {
-                layer.setFields(fields);
-                layer.setLocales([]);
+        const onSuccess = response => {
+            const lang = Oskari.getLang();
+            const { types = {}, locale = {}, selection } = response;
+            if (Array.isArray(selection)) {
+                layer.setPropertyFilter(selection);
+            } else if (selection) {
+                const selectionArray = selection[lang] || selection.default || fields;
+                layer.setPropertySelection(selectionArray);
             }
+            const labels = locale[lang] || locale.default || {};
+            layer.setPropertyLabels(labels);
+            layer.setPropertyTypes(types);
             this.updateLayerProperties(layer);
         };
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
             data: {
-                id: layer.getId(),
-                lang: Oskari.getLang()
+                layer_id: layer.getId()
             },
-            url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
+            url: Oskari.urls.getRoute('GetWFSLayerFields'),
             success: onSuccess,
             error: () => {
-                this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
+                this._log.warn('Error getting fields for wfs layer ' + layer.getId());
             }
         });
     }

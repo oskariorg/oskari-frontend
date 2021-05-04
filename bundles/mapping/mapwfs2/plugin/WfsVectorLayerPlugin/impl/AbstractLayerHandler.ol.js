@@ -76,17 +76,17 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
+
     _updateLayerProperties (layer, source) {
         if (!layer.isVisible()) {
             layer.setActiveFeatures([]);
-            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
             return;
         }
         const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const propsList = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
-        const fields = getFieldsArray(propsList);
-        // Update fields and locales only if fields is empty
-        if (!layer.getFields().length) {
+        // Update properties only if fields aren't set and there is features in extent
+        if (!layer.getFields().length && propsList.length) {
+            const fields = getFieldsArray(propsList);
             this.plugin.setWFSProperties(layer, fields);
             return;
         }
@@ -98,6 +98,7 @@ export class AbstractLayerHandler {
 
         this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
     }
+
     _getFeaturePropsInExtent (source, extent) {
         if (typeof source.getFeaturePropsInExtent === 'function') {
             return source.getFeaturePropsInExtent(extent);

@@ -71,7 +71,8 @@ Oskari.registerLocalization({
             'orderBy': 'Lajittele',
             'orderByAscending': 'Lajittele nousevasti',
             'orderByDescending': 'Lajittele laskevasti',
-            'removeSource': 'Poista aineisto'
+            'removeSource': 'Poista aineisto',
+            'noIndicators': 'Aloita teemakartan käyttö lisäämällä kartalle indikaattori.'
         },
         'legend': {
             'title': 'Luokittelu',

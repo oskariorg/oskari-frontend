@@ -55,6 +55,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.mainPanel = null;
 
         me.latestGFI = null;
+
+        me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         /**
          * @method render
@@ -66,6 +68,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var me = this,
                 content = me.template.clone();
             me.mainPanel = content;
+
+            me.progressSpinner.insertTo(content);
 
             container.append(content);
             var contentDiv = content.find('div.content'),
@@ -442,6 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 totalWidth = '100%',
                 totalHeight = '100%',
                 errorHandler = function () {
+                    me.progressSpinner.stop();
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                         okBtn = dialog.createCloseButton(me.loc.buttons.ok);
                     dialog.show(me.loc.error.title, me.loc.error.saveFailed, [okBtn]);
@@ -450,6 +455,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 totalWidth = selections.metadata.size.width + 'px';
                 totalHeight = selections.metadata.size.height + 'px';
             }
+
+            me.progressSpinner.start();
+
             // make the ajax call
             jQuery.ajax({
                 url: Oskari.urls.getRoute('AppSetup'),
@@ -461,6 +469,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     pubdata: JSON.stringify(selections)
                 },
                 success: function (response) {
+                    me.progressSpinner.stop();
                     if (response.id > 0) {
                         var event = Oskari.eventBuilder(
                             'Publisher.MapPublishedEvent'

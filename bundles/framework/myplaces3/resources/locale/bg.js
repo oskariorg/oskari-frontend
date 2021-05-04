@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Места",
         "desc": "",
-        "category": {
-            "defaultName": "Моят картен слой",
-            "organization": "Моите места",
-            "inspire": "Места"
-        },
         "guest": {
             "loginShort": "Влезте, за да използвате"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Име",
                 "placeholder": "Кръстете картния слой"
             },
-            "drawing": {
-                "label": "Стил",
-                "point": {
-                    "label": "Точка",
-                    "color": "Цвят",
-                    "size": "Размер"
-                },
-                "line": {
-                    "label": "Линия",
-                    "color": "Цвят",
-                    "size": "Дебелина"
-                },
-                "area": {
-                    "label": "Площ",
-                    "fillcolor": "Оцветяване / Запълване с цвят",
-                    "linecolor": "Цвят на линията",
-                    "size": "Дебелина на линията"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Липсва име на картния лист.",
             "placeNameIllegal": "Името на обекта съдържа неразрешени знаци. Разрешените знаци са букви от a - z, както и ....., цифри, празни полета и тирета.",
             "descIllegal": "Описанието на обекта съдържа неразрешени знаци. Разрешените знаци са букви от a - z, както и ....., цифри, празни полета и тирета.",
-            "categoryNameIllegal": "Описанието на слоя съдържа неразрешени знаци. Разрешените знаци са букви от a - z, както и ..., цифри, празни полета и тирета.",
-            "dotSize": "Размерът на точката не съответства на разрешения размер (1 - 50).",
-            "dotColor": "Грешен цвят на точката.",
-            "dotShape": "",
-            "lineSize": "Размерът на линията не съотвества на разрешения размер (1 - 50).",
-            "lineColor": "Грешен цвят на линията.",
-            "areaLineSize": "Размерът на полигона не съответства на разрешения размер (0 - 50).",
-            "areaLineColor": "Грешен цвят на границата на полигона.",
-            "areaFillColor": "Грешен цвят за запълване."
+            "categoryNameIllegal": "Описанието на слоя съдържа неразрешени знаци. Разрешените знаци са букви от a - z, както и ..., цифри, празни полета и тирета."
         }
     }
 });
