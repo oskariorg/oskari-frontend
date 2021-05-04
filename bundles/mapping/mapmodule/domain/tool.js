@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.Tool',
 
     function () {
         this._name = null;
+        this._iconComponent = null;
         this._title = null;
         this._tooltip = null;
         this._iconCls = null;
@@ -92,6 +93,24 @@ Oskari.clazz.define('Oskari.mapframework.domain.Tool',
          */
         getIconCls: function () {
             return this._iconCls;
+        },
+        /**
+         * @method setIconComponent
+         * Set optional icon component (e.g. <EditOutlined/>)
+         *
+         * @param {ReactComponentElement} iconComponent icon component
+         */
+        setIconComponent: function (iconComponent) {
+            this._iconComponent = iconComponent;
+        },
+        /**
+         * @method getIconComponent
+         * Get optional icon component
+         *
+         * @return {ReactComponentElement} icon component
+         */
+        getIconComponent: function () {
+            return this._iconComponent;
         },
         /**
          * @method setCallback

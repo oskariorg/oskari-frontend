@@ -87,6 +87,8 @@ Oskari.registerLocalization(
             "themeName": "Theme name",
             "addTheme": "Add theme",
             "editTheme": "Edit theme",
+            "addSubtheme": "Add subtheme",
+            "editSubtheme": "Edit subtheme",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
             "close": "Close",
@@ -206,7 +208,8 @@ Oskari.registerLocalization(
                 "deleteFailed": "Delete failed",
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
-                "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?"
+                "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?",
+                "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first."
             },
             "otherLanguages": "Other languages",
             "stylesJSON": "Style definitions (JSON)",

@@ -1,11 +1,26 @@
 export class LayerGroup {
-    constructor (id, groupMethod, title) {
+    constructor (id, groupMethod, title, parentId, groups) {
         this.id = id;
         this.groupMethod = groupMethod;
         this.name = title;
         this.layers = [];
+        this.parentId = parentId || null;
+        this.groups = groups || [];
         this.searchIndex = {};
         this.tools = [];
+    }
+
+    getParentId () {
+        return this.parentId;
+    }
+    setParentId (parentId) {
+        this.parentId = parentId;
+    }
+    getGroups () {
+        return this.groups;
+    }
+    setGroups (newGroups) {
+        this.groups = newGroups;
     }
     /**
      * @method getId
@@ -72,7 +87,9 @@ export class LayerGroup {
         return this.layers;
     }
     setLayers (newLayers = []) {
-        this.layers = newLayers;
+        this.layers = [];
+        this.searchIndex = {};
+        newLayers.forEach(layer => this.addLayer(layer));
     }
     _getSearchIndex (layer) {
         var val = layer.getName() + ' ' +
@@ -88,6 +105,7 @@ export class LayerGroup {
     clone () {
         const clone = new LayerGroup(this.id, this.groupMethod, this.name);
         clone.layers = [...this.layers];
+        clone.groups = [...this.groups];
         clone.searchIndex = { ...this.searchIndex };
         clone.tools = [...this.tools];
         return clone;
