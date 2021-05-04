@@ -184,6 +184,26 @@ const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
 const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups }) => {
+    const RemoveGroupButton = () => {
+        if (isNew) {
+            // we are adding a group so we don't want to show Delete button
+            return null;
+        }
+        if (hasSubgroups) {
+            return (
+                <Button danger type="dashed" onClick={() => controller.subgroupError()}>
+                    <Message messageKey='delete' />
+                </Button>
+            );
+        }
+        return (
+            <DeleteButton
+                controller={controller}
+                deleteMapLayersText={deleteMapLayersText}
+                layerCountInGroup={layerCountInGroup}
+                deleteLayers={deleteLayers} />
+        );
+    };
     const Component = (
         <Container>
             <Header>
@@ -204,17 +224,7 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
                 <Button onClick={() => controller.cancel()}>
                     <Message messageKey='cancel' />
                 </Button>
-                {!isNew && !hasSubgroups ?
-                    <DeleteButton
-                        controller={controller}
-                        deleteMapLayersText={deleteMapLayersText}
-                        layerCountInGroup={layerCountInGroup}
-                        deleteLayers={deleteLayers} />
-                    : 
-                    <Button onClick={() => controller.subgroupError()}>
-                        <Message messageKey='delete' />
-                    </Button>
-                }
+                <RemoveGroupButton />
                 <Button onClick={() => controller.save()} type='primary'>
                     <Message messageKey='save' />
                 </Button>
@@ -252,7 +262,7 @@ const DeleteButton = ({ controller, deleteMapLayersText, layerCountInGroup, dele
         okText={<Message messageKey='ok' />}
         cancelText={<Message messageKey='cancel' />}
         placement='bottomLeft'>
-        <Button>
+        <Button danger>
             <Message messageKey='delete' />
         </Button>
     </Confirm>);
