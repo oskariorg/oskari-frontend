@@ -23,12 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundle', func
             'src': '../../../bundles/framework/layerlist/instance.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/Flyout.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/Tile.js'
-        }, {
-            'type': 'text/javascript',
             'src': '../../../bundles/framework/layerselector2/service/layerlist.js'
         }, {
             'type': 'text/javascript',

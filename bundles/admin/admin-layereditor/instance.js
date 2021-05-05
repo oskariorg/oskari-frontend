@@ -1,7 +1,9 @@
+import React from 'react';
 import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 import { LocalizingFlyout } from './view/LocalizingFlyout';
+import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -94,6 +96,15 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 };
             };
 
+            const addSubthemeCallback = (evt, parentId, groupMethod, layerCountInGroup) => {
+                let flyoutKey = FLYOUT.THEME;
+                const position = {
+                    left: evt.pageX + offset.x,
+                    top: evt.pageY + offset.y
+                };
+                this.showFormPopup(flyoutKey, position, undefined, layerCountInGroup, parentId);
+            };
+
             const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             addDataProviderTool.setName('layer-editor-add-data-provider');
             addDataProviderTool.setTitle(this.loc('addDataProvider'));
@@ -123,8 +134,18 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 this.showFormPopup(flyoutKey, position, id, layerCountInGroup);
             };
 
+            const addSubthemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            addSubthemeTool.setName('addSubtheme');
+            addSubthemeTool.setIconComponent(<PlusCircleOutlined/>);
+            addSubthemeTool.setTooltip(this.loc('addSubtheme'));
+            addSubthemeTool.setIconCls('add-sub-theme');
+            addSubthemeTool.setTypes(['layergroup', 'getInspireName']);
+            addSubthemeTool.setCallback(addSubthemeCallback);
+            toolingService.addTool(addSubthemeTool);
+
             const editThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             editThemeTool.setName('editTheme');
+            editThemeTool.setIconComponent(<EditOutlined/>);
             editThemeTool.setTooltip(this.loc('editTheme'));
             editThemeTool.setIconCls('edit-layer');
             editThemeTool.setTypes(['layergroup', 'getInspireName']);
@@ -133,6 +154,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
             const editDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             editDataProviderTool.setName('editDataProvider');
+            editDataProviderTool.setIconComponent(<EditOutlined/>);
             editDataProviderTool.setTooltip(this.loc('editDataProvider'));
             editDataProviderTool.setIconCls('edit-layer');
             editDataProviderTool.setTypes(['layergroup', 'getOrganizationName']);
@@ -164,6 +186,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             }
             // add feature data tool for layer
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            tool.setIconComponent(<EditOutlined/>);
             tool.setName('layer-editor');
             tool.setIconCls('edit-layer');
             tool.setTooltip(this.loc('editor-tool'));
@@ -198,11 +221,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * @param {string} flyoutKey FLYOUT.THEME or FLYOUT.DATA_PROVIDER
          * @param {object} position where to place the popup
          */
-        showFormPopup (flyoutKey, position, id, layerCountInGroup) {
+        showFormPopup (flyoutKey, position, id, layerCountInGroup, parentId) {
             let flyout = null;
             switch (flyoutKey) {
             case FLYOUT.THEME:
-                flyout = this._getThemeFlyout(id, layerCountInGroup);
+                flyout = this._getThemeFlyout(id, layerCountInGroup, parentId);
                 break;
             case FLYOUT.DATA_PROVIDER:
                 flyout = this._getDataProviderFlyout(id, layerCountInGroup);
@@ -308,7 +331,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * Ensures theme flyout exists and returns it.
          * @return {LocalizingFlyout}
          */
-        _getThemeFlyout (id, layerCountInGroup) {
+        _getThemeFlyout (id, layerCountInGroup, parentId) {
             const me = this;
             const fetchTheme = (id, setLoading, setValue) => {
                 setLoading(true);
@@ -327,21 +350,29 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             };
-
-            const loc = id ? this.loc('editTheme') : this.loc('addTheme');
-            this.themeFlyout = new LocalizingFlyout(this, loc, {
+            const popupTitle = id ? this.loc('editTheme') : this.loc('addTheme');
+            const hasSubgroups = id ? this._getLayerService().getAllLayerGroups(id).hasSubgroups() : false;
+            this.themeFlyout = new LocalizingFlyout(this, popupTitle, {
                 headerMessageKey: 'themeName',
-                id: id,
+                id,
+                parentId,
+                hasSubgroups,
                 fetch: fetchTheme,
-                layerCountInGroup: layerCountInGroup
+                layerCountInGroup
             }, this.loc('deleteGroupLayers'));
             this.themeFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
-            this.themeFlyout.setSaveAction((value, id) => {
+            this.themeFlyout.setSaveAction((locales, id, parentId) => {
                 const httpMethod = id ? 'POST' : 'PUT';
-                const payload = id ? { locales: value, id: id } : { locales: value };
+
+                const payload = {
+                    id,
+                    parentId,
+                    locales
+                };
+
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
@@ -351,19 +382,22 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     success: response => {
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
-                        httpMethod === 'POST'
-                            ? this._getLayerService().updateLayerGroup(group)
-                            : this._getLayerService().addLayerGroup(group);
+                        group.setName(response.name);
+                        if (id) {
+                            this._getLayerService().updateLayerGroup(group);
+                        } else {
+                            this._getLayerService().addLayerGroup(group, parentId);
+                        }
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveSuccess'));
+                        dialog.show('', me.loc('messages.saveSuccess'));
                         dialog.fadeout();
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.themeFlyout.setLoading(false);
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveFailed'));
+                        dialog.show('', me.loc('messages.saveFailed'));
                         dialog.fadeout();
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
