@@ -3,6 +3,13 @@ import { Tooltip as AntTooltip } from 'antd';
 import 'antd/es/tooltip/style/index.js';
 
 /*
+Note! The same span-wrapper is done in Confirm.jsx and it has the same issue.
+AntD confirm extends AntD tooltip but since we have wrappers for both we need to do the extra span in both.
+Children that are NOT created with styled-components wrapper don't need the span but we add it always for now
+so the developer doesn't need to care or know that an extra prop should be used to include the wrapper-span.
+It shouldn't hurt even if it's not always needed:
+https://github.com/oskariorg/oskari-frontend/pull/1550
+
 The children of Tooltip are wrapped in a `span` to prevent JS-errors like this:
 
 Warning: Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?

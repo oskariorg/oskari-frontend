@@ -55,14 +55,12 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
             placement='top'
             popupStyle={{zIndex: '999999'}}
         >
-            <span>
-                <StyledSwitch
-                    size="small"
-                    checked={checked} onClickCapture={(event) => {
-                        event.stopPropagation();
-                        showConfirm(true);
-                    }} />
-            </span>
+            <StyledSwitch
+                size="small"
+                checked={checked} onClickCapture={(event) => {
+                    event.stopPropagation();
+                    showConfirm(true);
+                }} />
         </Confirm>);
 };
 
