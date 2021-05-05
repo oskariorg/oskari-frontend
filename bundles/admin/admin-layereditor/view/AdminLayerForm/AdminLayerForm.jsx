@@ -106,7 +106,7 @@ const AdminLayerForm = ({
                     cancelText={getMessage('cancel')}
                     placement='bottomLeft'
                 >
-                    <StyledButton>
+                    <StyledButton danger>
                         <Message messageKey='delete'/>
                     </StyledButton>
                 </Confirm>
