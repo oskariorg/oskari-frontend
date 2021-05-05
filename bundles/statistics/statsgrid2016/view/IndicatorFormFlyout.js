@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             'float': 'right',
             'clear': 'both'
         });
-        const onSucess = (indicator, data) => {
+        const onSuccess = (indicator, data) => {
             me.genericInfoPanel.close();
             me.dataPanel.open();
             me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
@@ -183,10 +183,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
-                        onSucess(indicator, data);
+                        onSuccess(indicator, data);
                     });
                 } else {
-                    onSucess(indicator, data);
+                    onSuccess(indicator, data);
                 }
             });
         });
