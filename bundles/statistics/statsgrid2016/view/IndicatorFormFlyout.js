@@ -163,7 +163,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         saveBtn.setHandler(function () {
             const dataForm = me.indicatorForm.getValues();
             const valuesForm = me.indicatorDataForm.getValues();
-            const formValidates = me.validateFormValues(dataForm, valuesForm.values);
+
+            // Format and check that raw form data is provided as numbers
+            valuesForm.values = valuesForm.values.map((regionData) => {
+                if (!isNaN(regionData.value)) {
+                    regionData.value = Number(regionData.value);
+                    return regionData.value;
+                } else {
+                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                    return;
+                }
+            });
+
+            const formValidates = me.validateFormValues(dataForm, valuesForm);
 
             if (!formValidates) {
                 me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
@@ -262,15 +274,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             return false;
         }
 
-        if (regionValues.length === 0) {
+        if (regionValues.values.length === 0) {
             return false;
         }
 
-        regionValues.forEach(singleRegion => {
-            if (typeof singleRegion.value !== 'number') {
+        for (const singleRegion of regionValues.values) {
+            if (typeof singleRegion === 'undefined' || !singleRegion || isNaN(singleRegion) || typeof singleRegion !== 'number') {
                 return false;
             }
-        });
+        }
 
         return true;
     },
