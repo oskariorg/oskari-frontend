@@ -56,6 +56,7 @@ const AdminLayerForm = ({
     validationErrors = [],
     scales
 }) => {
+    const isLayerTypeSupported = propertyFields.length > 0;
     // For returning to add multiple layers from service endpoint
     const hasCapabilitiesSupport = propertyFields.includes(LayerComposingModel.CAPABILITIES);
     let validPermissions = true;
@@ -95,7 +96,7 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} />
+        { isLayerTypeSupported && <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} /> }
         { !layer.isNew &&
             <React.Fragment>
                 <Confirm
