@@ -145,6 +145,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerStatus": {
+                "unsupportedType": "Ylläpitotoiminnallisuus ei tue tasotyyppiä",
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."

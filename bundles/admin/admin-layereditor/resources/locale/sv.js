@@ -87,8 +87,8 @@ Oskari.registerLocalization(
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
             "editTheme": "Redigera tema",
-            "addSubtheme": "Lägg subtema", // FIX!? Is this correct translation?
-            "editSubtheme": "Redigera subtema",  // FIX!? Is this correct translation?
+            "addSubtheme": "Lägg undertema",
+            "editSubtheme": "Redigera undertema",
             "selectMapLayerGroupsButton": "Välj grupp",
             "cancel": "Tillbaka",
             "close": "Stäng",
@@ -143,6 +143,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerStatus": {
+                "unsupportedType": "Admin-funktionalitet stöder inte lagertypen",
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
                 "unsupported": "Lagret stöder inte de projektioner, som tjänsten använder. Lagret fungerar kanske inte normalt."
