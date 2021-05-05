@@ -106,8 +106,8 @@ Oskari.clazz.define(
             this.setState();
 
             // listen for search closing to remove stats layer if no indicators was found
-            this.flyoutManager.on('hide', () => {
-                if (this.statsService.getStateService().getIndicators().length === 0) {
+            this.flyoutManager.on('hide', id => {
+                if (id === 'search' && !this.statsService.getStateService().hasIndicators()) {
                     this._removeStatsLayer();
                 }
             });
@@ -131,7 +131,7 @@ Oskari.clazz.define(
                     this[plugin].toggleUI();
                 }
             });
-            let visible = this[plugin] && !!this[plugin].getElement();
+            const visible = this[plugin] && !!this[plugin].getElement();
             this.togglePlugin.toggleTool(tool, visible);
         },
         _addIndicatorsTabToPersonalData: function (sandbox) {
@@ -329,9 +329,12 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                if (event.getMapLayer().getId() === this._layerId) {
-                    const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
-                    this.getSandbox().notifyAll(eventBuilder(true));
+                // listen event only when statsgrid isn't active
+                if (event.getMapLayer().getId() === this._layerId || this.getTile().isAttached()) {
+                    this.clearDataProviderInfo();
+                    this._setClassificationViewVisible(false);
+                    this._setSeriesControlVisible(false);
+                    this.flyoutManager.hideFlyouts();
                 }
             },
             /**
@@ -358,10 +361,16 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerAddEvent': function (event) {
-                if (event.getMapLayer().getId() === this._layerId && this.statsService.getStateService().getIndicators().length === 0) {
-                    this.updateClassficationViewVisibility();
-                    this.updateSeriesControlVisibility();
-                    this.flyoutManager.open('search');
+                // listen event only when statsgrid isn't active
+                if (event.getMapLayer().getId() !== this._layerId || this.getTile().isAttached()) {
+                    return;
+                }
+                if (!this.statsService.getStateService().hasIndicators()) {
+                    this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+                } else {
+                    // layer has added from layerlist and has indicators.
+                    // notify other components with state changed to get full render
+                    this.getSandbox().notifyAll(Oskari.eventBuilder('StatsGrid.StateChangedEvent')());
                 }
             },
             'MapLayerVisibilityChangedEvent': function (event) {
@@ -444,9 +453,16 @@ Oskari.clazz.define(
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
-            const serviceState = this.statsService.getStateService().getState();
+            // State isn't cleared when stats layer is removed
+            // return full state only if stats layer is selected
+            if (this.sandbox.isLayerAlreadySelected(this._layerId)) {
+                const serviceState = this.statsService.getStateService().getState();
+                return {
+                    ...serviceState,
+                    view: this.visible
+                };
+            }
             return {
-                ...serviceState,
                 view: this.visible
             };
         },
