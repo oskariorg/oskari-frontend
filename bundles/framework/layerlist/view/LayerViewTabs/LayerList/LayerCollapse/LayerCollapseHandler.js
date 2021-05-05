@@ -186,12 +186,19 @@ class ViewHandler extends StateHandler {
             this.updateState({ groups });
             return;
         }
-        groups.forEach(group => {
-            group.unfilteredLayerCount = group.layers.length;
-            group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-        });
-
-        this.updateState({ groups: groups.filter(group => group.layers.length > 0) });
+        const filterGroupLayers = (groups = []) => {
+            return groups.map(group => {
+                group.unfilteredLayerCount = group.layers.length;
+                group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
+                group.groups = filterGroupLayers(group.groups);
+                if (!group.layers.length && !group.groups.length) {
+                    // no layers and no subgroups with layers
+                    return;
+                }
+                return group;
+            }).filter(group => typeof group !== 'undefined');
+        }
+        this.updateState({ groups: filterGroupLayers(groups) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {
