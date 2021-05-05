@@ -203,10 +203,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
-                        onSuccess(indicator, data);
+                        onSuccess(indicator, valuesForm);
                     });
                 } else {
-                    onSuccess(indicator, data);
+                    onSuccess(indicator, valuesForm);
                 }
             });
         });
