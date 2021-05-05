@@ -14,6 +14,7 @@ import { StyledColumn } from './styled';
 import { RasterStyle } from './RasterStyle';
 import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
+import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
 
 const {
     OPACITY,
@@ -29,8 +30,12 @@ const {
     CESIUM_ION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const VisualizationTabPane = ({ layer, scales, propertyFields, controller }) => (
-    <Fragment>
+export const VisualizationTabPane = ({ layer, scales, propertyFields, controller }) => {
+    const isLayerTypeSupported = propertyFields.length > 0;
+    if (!isLayerTypeSupported) {
+        return (<LayerTypeNotSupported type={layer.type} />);
+    }
+    return (<Fragment>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
@@ -71,8 +76,8 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <Scale layer={layer} scales={scales} controller={controller} />
             }
         </StyledColumn.Right>
-    </Fragment>
-);
+    </Fragment>);
+};
 
 VisualizationTabPane.propTypes = {
     layer: PropTypes.object.isRequired,

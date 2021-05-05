@@ -160,6 +160,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             'float': 'right',
             'clear': 'both'
         });
+        const onSuccess = (indicator, data) => {
+            me.genericInfoPanel.close();
+            me.dataPanel.open();
+            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
+            me.indicatorDataForm.clearUi();
+            me.updateDatasetList();
+            me.selectSavedIndicator(indicator, data);
+            me.showSuccessPopup();
+        };
         saveBtn.setHandler(function () {
             const dataForm = me.indicatorForm.getValues();
             const valuesForm = me.indicatorDataForm.getValues();
@@ -194,12 +203,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
-                        me.displayInfo();
-                        me.selectSavedIndicator(indicator, valuesForm);
+                        onSuccess(indicator, data);
                     });
                 } else {
-                    me.displayInfo();
-                    me.selectSavedIndicator(indicator, valuesForm);
+                    onSuccess(indicator, data);
                 }
             });
         });
@@ -216,6 +223,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         stateService.setRegionset(selectors.regionset);
         delete selectors.regionset;
         stateService.addIndicator(ds, id, selectors);
+        const hash = stateService.getHash(ds, id, selectors);
+        stateService.setActiveIndicator(hash);
     },
     /**
      * Opens a form for user to add or edit data for indicators year/regionset
@@ -337,24 +346,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             callback(null, someData);
         });
     },
-    displayInfo: function () {
-        var me = this;
+    showSuccessPopup: function () {
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-        // TODO: add a button to show the added indicator on map or just show it right away?
         // TODO: add the name of the indicator and/or year/regionset that was added/modified?
         var title = this.locale('userIndicators.dialog.successTitle');
         var content = this.locale('userIndicators.dialog.successMsg');
-        okBtn.setPrimary(true);
-        okBtn.setHandler(function () {
-            dialog.close(true);
-            me.genericInfoPanel.close();
-            me.dataPanel.open();
-            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
-            me.indicatorDataForm.clearUi();
-            me.updateDatasetList();
-        });
-        dialog.show(title, content, [okBtn]);
+        dialog.show(title, content, [dialog.createCloseButton()]);
+        dialog.fadeout();
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
