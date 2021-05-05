@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
     this.template = null;
     this._tileExtensions = {};
     this.flyoutManager = null;
+    this._attached = false;
     this._templates = {
         extraSelection: _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div></div>')
     };
@@ -135,6 +136,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].addClass('hidden');
         });
+        this._attached = false;
         this.flyoutManager.tileClosed();
     },
     /**
@@ -146,7 +148,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].removeClass('hidden');
         });
+        this._attached = true;
         this.flyoutManager.tileAttached();
+    },
+    isAttached: function () {
+        return this._attached;
     },
     /**
      * [getExtensions description]
