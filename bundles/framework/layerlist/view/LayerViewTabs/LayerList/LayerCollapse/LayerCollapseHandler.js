@@ -58,6 +58,29 @@ const getDataProviders = (fromService = [], layers = []) => {
     });
 };
 
+/**
+ * Filters an array of groups and checks if layers in them match the input for "searchText".
+ * Also recurses into subgroups to check layers in them.
+ * @param {Oskari.mapframework.bundle.layerselector2.model.LayerGroup[]} groups an array of groups to filter by searchText
+ * @param {String} searchText input to filter by. If empty or "falsy" the groups param is returned as-is.
+ * @returns Removes any groups/subgroups that don't have layers matching the searchText.
+ */
+const filterGroups = (groups = [], searchText) => {
+    if (!searchText || !searchText.trim()) {
+        return groups;
+    }
+    return groups.map(group => {
+        group.unfilteredLayerCount = group.layers.length;
+        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
+        group.groups = filterGroups(group.groups, searchText);
+        if (!group.layers.length && !group.groups.length) {
+            // no layers and no subgroups with layers
+            return;
+        }
+        return group;
+    }).filter(group => typeof group !== 'undefined');
+};
+
 /* ------------- /Helpers ------ */
 
 /**
@@ -182,23 +205,7 @@ class ViewHandler extends StateHandler {
         }
 
         const groups = groupLayers([...layers], this.groupingMethod, tools, groupsToProcess, this.loc.grouping.noGroup);
-        if (!searchText) {
-            this.updateState({ groups });
-            return;
-        }
-        const filterGroupLayers = (groups = []) => {
-            return groups.map(group => {
-                group.unfilteredLayerCount = group.layers.length;
-                group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-                group.groups = filterGroupLayers(group.groups);
-                if (!group.layers.length && !group.groups.length) {
-                    // no layers and no subgroups with layers
-                    return;
-                }
-                return group;
-            }).filter(group => typeof group !== 'undefined');
-        }
-        this.updateState({ groups: filterGroupLayers(groups) });
+        this.updateState({ groups: filterGroups(groups, searchText) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {
