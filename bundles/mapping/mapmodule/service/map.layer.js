@@ -156,6 +156,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // for each group on the layer
                 groups.forEach(function (group) {
                     // find the group details
+                    if (group.id === -1) {
+                        return;
+                    }
                     var groupConf = me.getAllLayerGroups(group.id);
                     if (!groupConf) {
                         return;
