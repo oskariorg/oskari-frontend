@@ -143,7 +143,7 @@ Oskari.registerLocalization(
                 }
             },
             "layerStatus": {
-                "unsupportedType": "Admin-funktionalitet stöder inte lagertypen",
+                "unsupportedType": "Admin-funktionaliteten stöder inte denna lagertyp",
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
                 "unsupported": "Lagret stöder inte de projektioner, som tjänsten använder. Lagret fungerar kanske inte normalt."
