@@ -161,25 +161,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             'clear': 'both'
         });
         saveBtn.setHandler(function () {
-            me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
+            const dataForm = me.indicatorForm.getValues();
+            const valuesForm = me.indicatorDataForm.getValues();
+
+            me.saveIndicator(dataForm, valuesForm.values, function (err, indicator) {
                 if (err) {
                     me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
-                var data = me.indicatorDataForm.getValues();
-                if (data.values.length) {
-                    me.saveIndicatorData(data, function (err, someData) {
+                if (valuesForm.values.length) {
+                    me.saveIndicatorData(valuesForm, function (err, someData) {
                         if (err) {
                             me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
                         me.displayInfo();
-                        me.selectSavedIndicator(indicator, data);
+                        me.selectSavedIndicator(indicator, valuesForm);
                     });
                 } else {
                     me.displayInfo();
-                    me.selectSavedIndicator(indicator, data);
+                    me.selectSavedIndicator(indicator, valuesForm);
                 }
             });
         });
@@ -252,11 +254,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     /**
      * Saves the indicator name, description etc
      */
-    saveIndicator: function (data, callback) {
+    saveIndicator: function (data, values, callback) {
         var me = this;
         // TODO: validate values
         var isValid = function (data) {
-            if (typeof (data.name) !== 'string' || data.name.length === 0) {
+            if (typeof (data.name) !== 'string' || data.name.length === 0 || values.length === 0) {
                 return false;
             }
             return true;
