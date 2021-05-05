@@ -163,8 +163,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         saveBtn.setHandler(function () {
             const dataForm = me.indicatorForm.getValues();
             const valuesForm = me.indicatorDataForm.getValues();
+            const formValidates = me.validateFormValues(dataForm, valuesForm.values);
 
-            me.saveIndicator(dataForm, valuesForm.values, function (err, indicator) {
+            if (!formValidates) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                return;
+            }
+
+            me.saveIndicator(dataForm, function (err, indicator) {
                 if (err) {
                     me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
@@ -251,23 +257,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
     },
+    validateFormValues: function (data, regionValues) {
+        if (typeof (data.name) !== 'string' || data.name.length === 0) {
+            return false;
+        }
+
+        if (regionValues.length === 0) {
+            return false;
+        }
+
+        regionValues.forEach(singleRegion => {
+            console.log(singleRegion);
+            if (typeof singleRegion.value !== 'number') {
+                return false;
+            }
+        });
+
+        return true;
+    },
     /**
      * Saves the indicator name, description etc
      */
-    saveIndicator: function (data, values, callback) {
+    saveIndicator: function (data, callback) {
         var me = this;
-        // TODO: validate values
-        var isValid = function (data) {
-            if (typeof (data.name) !== 'string' || data.name.length === 0 || values.length === 0) {
-                return false;
-            }
-            return true;
-        };
 
-        if (!isValid(data)) {
-            callback('Input not valid');
-            return;
-        }
         // inject possible id for indicator
         data.id = me.indicatorId;
         me.service.saveIndicator(me.datasourceId, data, function (err, indicator) {
@@ -296,13 +309,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 // call self again now that we have an indicator we can attach the dataset to
                 me.saveIndicatorData(data, callback);
             });
-            return;
-        }
-
-        // TODO: validate values
-        var isValid = true;
-        if (!isValid) {
-            callback('Input not valid');
             return;
         }
 
