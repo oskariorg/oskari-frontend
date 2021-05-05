@@ -267,7 +267,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         }
 
         regionValues.forEach(singleRegion => {
-            console.log(singleRegion);
             if (typeof singleRegion.value !== 'number') {
                 return false;
             }
