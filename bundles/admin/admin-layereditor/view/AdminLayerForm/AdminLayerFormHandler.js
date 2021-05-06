@@ -653,8 +653,9 @@ class UIHandler extends StateHandler {
                 const item = {
                     id
                 };
-                const group = this.mapLayerGroups.find(g => g.id === id);
+                const group = this.findMapLayerGroupById(id);
                 if (!group) {
+                    // this means the layer will go to "ungrouped" group
                     return item;
                 }
                 item.name = Oskari.getLocalized(group.name);
@@ -662,6 +663,24 @@ class UIHandler extends StateHandler {
             });
             this.refreshEndUserLayer(layerId, layer);
         });
+    }
+
+    /**
+     * Search through known groups for group
+     * @param {Number} groupId group to search for
+     * @param {Oskari.mapframework.bundle.layerselector2.model.LayerGroup[]} groupList optional list for recursion, default to root groups list
+     * @returns an instance of Oskari.mapframework.bundle.layerselector2.model.LayerGroup or undefined if group was not found
+     */
+    findMapLayerGroupById (groupId, groupList) {
+        const groups = groupList || this.mapLayerGroups;
+        if (!groups.length) {
+            return;
+        }
+        const result = groups.find(g => g.id === groupId);
+        if (result) {
+            return result;
+        }
+        return this.findMapLayerGroupById(groupId, groups.flatMap(g => g.getGroups()));
     }
 
     /**

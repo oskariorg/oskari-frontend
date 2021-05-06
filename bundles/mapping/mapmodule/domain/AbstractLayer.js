@@ -378,7 +378,11 @@ Oskari.clazz.define(
          * @return {String} inspire theme name under which the layer is listed in UI
          */
         getInspireName: function () {
-            return (this._groups[0]) ? this._groups[0].name : '';
+            const groups = this.getGroups();
+            if (!groups.length) {
+                return '';
+            }
+            return groups[0].name;
         },
         /**
          * @method setFeatureInfoEnabled
@@ -1286,11 +1290,18 @@ Oskari.clazz.define(
          * @method @public setGroups
          * @param {Array} groups groups array [{id:1,name:"name"}]
          */
-        setGroups: function (groups) {
-            this._groups = groups || [{ id: -1, name: '' }];
+        setGroups: function (groups = []) {
+            this._groups = groups;
+            if (!this._groups.length) {
+                // FIXME: other parts of code should handle missing groups
+                this.setGroups([{ id: -1, name: '' }]);
+            }
         },
         addGroup: function (group) {
-            this._groups.push(group);
+            // FIXME: get rid of the default group...
+            const newGroups = this.getGroups().filter(g => g.id !== -1);
+            newGroups.push(group);
+            this.setGroups(newGroups);
         },
         /**
          * @method @public getGroups get groups
