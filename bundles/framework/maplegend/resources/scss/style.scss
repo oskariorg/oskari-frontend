@@ -4,6 +4,19 @@ $iconShadow: 1px 1px 2px rgba(0,0,0,0.6);
 $darkIcon: url("../images/Question-mark-dark.png");
 $lightIcon: url("../images/Question-mark-light.png");
 
+.maplegend .maplegend {
+  .accordion .accordion_panel.open {
+    background-color: #ffffff;
+
+    .maplegend-legend {
+      margin: 0 0 0 12px;
+
+      img {
+        margin: 8px 0;
+      }
+    }    
+  }
+}
 
 .mapplugin.maplegend {
   border-radius: 50%;
