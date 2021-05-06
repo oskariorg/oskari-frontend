@@ -170,23 +170,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             me.showSuccessPopup();
         };
         saveBtn.setHandler(function () {
-            me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
+            const dataForm = me.indicatorForm.getValues();
+            const valuesForm = me.indicatorDataForm.getValues();
+
+            // Format raw form data so that it is provided as numbers
+            valuesForm.values.forEach((regionData, index) => {
+                if (!isNaN(regionData.value)) {
+                    valuesForm.values[index].value = Number(regionData.value);
+                }
+            });
+
+            const formValidates = me.validateFormValues(dataForm, valuesForm);
+
+            if (!formValidates) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                return;
+            }
+
+            me.saveIndicator(dataForm, function (err, indicator) {
                 if (err) {
                     me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
-                var data = me.indicatorDataForm.getValues();
-                if (data.values.length) {
-                    me.saveIndicatorData(data, function (err, someData) {
+                if (valuesForm.values.length) {
+                    me.saveIndicatorData(valuesForm, function (err, someData) {
                         if (err) {
                             me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
-                        onSuccess(indicator, data);
+                        onSuccess(indicator, valuesForm);
                     });
                 } else {
-                    onSuccess(indicator, data);
+                    onSuccess(indicator, valuesForm);
                 }
             });
         });
@@ -258,23 +274,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
     },
+    validateFormValues: function (data, regionValues) {
+        if (typeof (data.name) !== 'string' || data.name.length === 0) {
+            return false;
+        }
+
+        if (typeof regionValues.values === 'undefined' || regionValues.values.length === 0) {
+            return false;
+        }
+
+        for (const singleRegion of regionValues.values) {
+            if (typeof singleRegion.value === 'undefined' || !singleRegion.value || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
+                return false;
+            }
+        }
+
+        return true;
+    },
     /**
      * Saves the indicator name, description etc
      */
     saveIndicator: function (data, callback) {
         var me = this;
-        // TODO: validate values
-        var isValid = function (data) {
-            if (typeof (data.name) !== 'string' || data.name.length === 0) {
-                return false;
-            }
-            return true;
-        };
 
-        if (!isValid(data)) {
-            callback('Input not valid');
-            return;
-        }
         // inject possible id for indicator
         data.id = me.indicatorId;
         me.service.saveIndicator(me.datasourceId, data, function (err, indicator) {
@@ -306,19 +328,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             return;
         }
 
-        // TODO: validate values
-        var isValid = true;
-        if (!isValid) {
-            callback('Input not valid');
-            return;
-        }
-
         // save dataset
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.indicatorId);
         var values = {};
         data.values.forEach(function (regionData) {
             values[regionData.id] = regionData.value;
         });
+
         me.service.saveIndicatorData(me.datasourceId, this.indicatorId, data.selectors, values, function (err, someData) {
             if (err) {
                 callback(err);
