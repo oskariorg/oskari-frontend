@@ -82,6 +82,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             me.__notifyListeners('show');
         },
+        // React components doesn't have own Popup implementation
+        // Implement it instead of using this
+        renderReactContainer: function (title) {
+            this.setTitle(title);
+            this._isVisible = true;
+            jQuery('body').append(this.dialog);
+            this.dialog.find('div.actions').remove();
+            this._bringMobilePopupToTop();
+            this.__notifyListeners('show');
+            return this.dialog.find('div.content')[0];
+        },
 
         /**
          * @method _setReasonableHeight

@@ -301,11 +301,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'); // Create popup dialog
             this.dialog.makeDraggable();
+            this.dialog.addClass('places-edit-dialog');
 
             // add new dialog to ui
-            this.dialog.show(this.loc('placeform.title'), '<div class="places-edit-dialog"></div>');
-            this.container = this.dialog.getJqueryContent().find('.places-edit-dialog')[0];
-
+            this.container = this.dialog.renderReactContainer(this.loc('placeform.title'));
             this._renderForm();
 
             this.dialog.moveTo('#toolbar', 'right');
