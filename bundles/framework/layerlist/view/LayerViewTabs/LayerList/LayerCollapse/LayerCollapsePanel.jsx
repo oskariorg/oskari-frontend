@@ -91,26 +91,22 @@ const StyledSubCollapse = styled(Collapse)`
     border-top: 1px solid #d9d9d9;
     padding-left: 15px !important;
 `;
-const SubGroupList = ({ subgroups = [], selectedLayerIds, opts, controller, propsNeededForPanel }) => {
+const SubGroupList = ({ subgroups = [], selectedLayerIds, openGroupTitles, opts, controller, propsNeededForPanel }) => {
     if (!subgroups.length) {
         // no subgroups
         return null;
     }
 
     return subgroups.map(group => {
-        const layerIds = group.getLayers().map(lyr => lyr.getId());
-        const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-
-        let allLayersOnMap = false;
-        if (layerIds.length > 0 && selectedLayersInGroup.length == layerIds.length) {
-            allLayersOnMap = true;
-        }
         return (
-            <StyledSubCollapse key={group.getId()}>
+            <StyledSubCollapse key={group.getId()}
+                activeKey={openGroupTitles}
+                onChange={keys => controller.updateOpenGroupTitles(keys)}>
                 <LayerCollapsePanel
-                    active={allLayersOnMap}
+                    key={group.getId()}
                     group={group}
                     selectedLayerIds={selectedLayerIds}
+                    openGroupTitles={openGroupTitles}
                     controller={controller}
                     opts={opts}
                     propsNeededForPanel={propsNeededForPanel}
@@ -145,7 +141,7 @@ const getLayerRowModels = (layers = [], selectedLayerIds = [], controller) => {
 };
 
 const LayerCollapsePanel = (props) => {
-    const { active, group, selectedLayerIds, opts, controller, ...propsNeededForPanel } = props;
+    const { group, selectedLayerIds, openGroupTitles, opts, controller, ...propsNeededForPanel } = props;
     const layerRows = getLayerRowModels(group.getLayers(), selectedLayerIds, controller);
     // set group switch active if all layers in group are selected
     const allLayersOnMap = layerRows.every(layer => selectedLayerIds.includes(layer.id));
@@ -175,6 +171,7 @@ const LayerCollapsePanel = (props) => {
                         subgroups={group.getGroups()}
                         selectedLayerIds={selectedLayerIds}
                         opts={opts}
+                        openGroupTitles={openGroupTitles}
                         controller={controller}
                         { ...propsNeededForPanel } />
                     <LayerList
@@ -188,6 +185,7 @@ const LayerCollapsePanel = (props) => {
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
+    openGroupTitles: PropTypes.array.isRequired,
     opts: PropTypes.object,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

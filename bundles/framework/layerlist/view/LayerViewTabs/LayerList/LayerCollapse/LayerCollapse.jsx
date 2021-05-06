@@ -33,6 +33,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, contro
                             trimmed
                             selectedLayerIds={selectedLayerIds}
                             group={group}
+                            openGroupTitles={openGroupTitles}
                             opts={opts}
                             controller={controller}
                         />
