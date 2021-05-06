@@ -126,8 +126,10 @@ class ViewHandler extends StateHandler {
         if (searchText !== previousSearchText) {
             if (searchText) {
                 // open all groups
+                const flatten = (groups) => groups.flatMap(g => [g, ...flatten(g.getGroups())]);
+                const allGroupsIds = flatten(this.state.groups).map(g => g.getId());
                 this.updateState({
-                    openGroupTitles: this.state.groups.map(group => group.getId())
+                    openGroupTitles: allGroupsIds
                 });
             } else {
                 // close all groups
