@@ -44,15 +44,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             actionDiv.empty();
             if (buttons.length) {
                 buttons.forEach(btn => btn.insertTo(actionDiv));
-            } else if (!this.dialog.find('.close-icon').length) {
-                // if no actions, the user can click on popup to close it
-                this.dialog.on('click', function () {
-                    me.close(true);
-                });
-                this.fadeout(5000);
             } else {
                 actionDiv.remove();
-                this.fadeout();
             }
             jQuery('body').append(this.dialog);
             const focusedIndex = buttons.lastIndexOf(btn => btn.isFocused());

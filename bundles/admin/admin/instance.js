@@ -26,6 +26,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
             if (location) {
                 this._dialog.moveTo(location.target, location.align);
             }
+            if (!buttons || !buttons.length) {
+                this._dialog.fadeout();
+            }
         },
         afterStart: function () {
             // register request handler
