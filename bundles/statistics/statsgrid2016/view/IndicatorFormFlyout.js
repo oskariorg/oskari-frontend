@@ -173,14 +173,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             const dataForm = me.indicatorForm.getValues();
             const valuesForm = me.indicatorDataForm.getValues();
 
-            // Format and check that raw form data is provided as numbers
-            valuesForm.values = valuesForm.values.map((regionData) => {
+            // Format raw form data so that it is provided as numbers
+            valuesForm.values.forEach((regionData, index) => {
                 if (!isNaN(regionData.value)) {
-                    regionData.value = Number(regionData.value);
-                    return regionData.value;
-                } else {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                    return;
+                    valuesForm.values[index].value = Number(regionData.value);
                 }
             });
 
@@ -283,12 +279,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             return false;
         }
 
-        if (regionValues.values.length === 0) {
+        if (typeof regionValues.values === 'undefined' || regionValues.values.length === 0) {
             return false;
         }
 
         for (const singleRegion of regionValues.values) {
-            if (typeof singleRegion === 'undefined' || !singleRegion || isNaN(singleRegion) || typeof singleRegion !== 'number') {
+            if (typeof singleRegion.value === 'undefined' || !singleRegion.value || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
                 return false;
             }
         }
@@ -338,6 +334,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         data.values.forEach(function (regionData) {
             values[regionData.id] = regionData.value;
         });
+
         me.service.saveIndicatorData(me.datasourceId, this.indicatorId, data.selectors, values, function (err, someData) {
             if (err) {
                 callback(err);
