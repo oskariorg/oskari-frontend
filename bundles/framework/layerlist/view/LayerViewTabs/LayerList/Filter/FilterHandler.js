@@ -7,13 +7,49 @@ class ViewHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.layerlistService = this.sandbox.getService('Oskari.mapframework.service.LayerlistService');
+        this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
         this.state = {
             activeFilterId: FILTER_ALL_LAYERS,
             searchText: null,
-            filters: this.initFilters()
+            filters: this.getFiltersProvidingResults(this.initFilters())
         };
         this.layerlistService.on('Layerlist.Filter.Button.Add',
             ({ properties }) => this.addFilter(properties));
+
+        const throttledUpdate = Oskari.util.throttle(
+            this.refreshActiveFilters.bind(this),
+                1000,
+                { leading: false }
+         );
+        this.eventHandlers = {
+            'MapLayerEvent': event => {
+                if (['add', 'remove'].includes(event.getOperation())) {
+                    // heavy op -> throttle
+                    throttledUpdate();
+                }
+            }
+        };
+        Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+    }
+
+    /**
+     * "Module" name for event handling
+     */
+     getName () {
+        return 'LayerList.FilterHandler';
+    }
+    /**
+    * @method onEvent
+    * @param {Oskari.mapframework.event.Event} event a Oskari event object
+    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+    */
+    onEvent (event) {
+        const handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
     }
 
     initFilters () {
@@ -34,8 +70,17 @@ class ViewHandler extends StateHandler {
         this.updateState({ searchText });
     }
 
+    getFiltersProvidingResults (filters) {
+        const layerService = this.mapLayerService;
+        return filters.filter(filter => filter.id === FILTER_ALL_LAYERS || layerService.filterHasLayers(filter.id));
+    }
+
+    refreshActiveFilters () {
+        this.updateState({ filters: this.getFiltersProvidingResults(this.initFilters()) });
+    }
+
     addFilter (filter) {
-        this.updateState({ filters: [...this.state.filters, filter] });
+        this.updateState({ filters: this.getFiltersProvidingResults([...this.state.filters, filter]) });
     }
 }
 
