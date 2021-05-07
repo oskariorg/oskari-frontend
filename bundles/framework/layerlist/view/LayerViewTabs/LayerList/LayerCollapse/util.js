@@ -60,8 +60,9 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
 
     // group has subgroups
     if (!group.groups.length) {
-        if (!layerModels.length) {
+        if (!layerModels.length && !admin) {
             // no layers AND no subgroups -> remove group from list
+            //  for non-admins, we want to retain empty groups for admins
             return;
         }
         // has layers but no subgroups
@@ -82,7 +83,7 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
 // This is required since previous processing only filters out groups that don't have
 //  neither layers or subgroups. Without this we might still end up with groups without
 //  layers that have with subgroups without layers
-const filterOutEmptyGroups = (groups = []) => {
+export const filterOutEmptyGroups = (groups = []) => {
     return groups.map(group => {
         group.groups = filterOutEmptyGroups(group.groups);
         if (!group.layers.length && !group.groups.length) {
@@ -100,8 +101,10 @@ const filterOutEmptyGroups = (groups = []) => {
  * @param {String} method layer method name to sort by
  * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
  * @param {Object[]} allGroups all layer groups or all dataproviders available in Oskari
+ * @param {String} noGroupTitle title on UI for group that has layers without a group
+ * @param {Boolean} isPresetFiltered if filtered -> remove empty groups even for admin
  */
-export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle) => {
+export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle, isPresetFiltered) => {
     let groupForOrphans = null;
     const isUserAdmin = tools.length > 0;
     // generate a group for layers without "natural" grouping if needed
@@ -130,7 +133,8 @@ export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle)
     const groupList = allGroups
         .map(rootGroup => createGroupModel(rootGroup, method, layers, tools, isUserAdmin))
         .filter(group => typeof group !== 'undefined');
-    const sortedGroups = sortGroupsAlphabetically(filterOutEmptyGroups(groupList));
+    const emptyGroupsShouldBeListed = isUserAdmin && !isPresetFiltered;
+    const sortedGroups = sortGroupsAlphabetically(emptyGroupsShouldBeListed ? groupList : filterOutEmptyGroups(groupList));
 
     const result = [...sortedGroups];
     if (groupForOrphans) {
