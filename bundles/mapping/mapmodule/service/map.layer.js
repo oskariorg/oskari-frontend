@@ -410,7 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         addLayerToGroup: function (groupId, layerId, orderNumber = 1000000, suppressEvent = false) {
             if (groupId === -1) {
                 // group of -1 is "ungrouped"
-                return
+                return;
             }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {
@@ -445,7 +445,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         removeLayerFromGroup: function (groupId, layerId, suppressEvent = false) {
             if (groupId === -1) {
                 // group of -1 is "ungrouped"
-                return
+                return;
             }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {

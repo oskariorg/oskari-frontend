@@ -18,10 +18,7 @@ class ViewHandler extends StateHandler {
             ({ properties }) => this.addFilter(properties));
 
         const throttledUpdate = Oskari.util.throttle(
-            this.refreshActiveFilters.bind(this),
-                1000,
-                { leading: false }
-         );
+            this.refreshActiveFilters.bind(this), 1000, { leading: false });
         this.eventHandlers = {
             'MapLayerEvent': event => {
                 if (['add', 'remove'].includes(event.getOperation())) {
@@ -36,7 +33,7 @@ class ViewHandler extends StateHandler {
     /**
      * "Module" name for event handling
      */
-     getName () {
+    getName () {
         return 'LayerList.FilterHandler';
     }
     /**
