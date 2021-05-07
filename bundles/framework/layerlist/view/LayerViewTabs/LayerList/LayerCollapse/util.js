@@ -57,12 +57,15 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
     });
     layerModels.sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
     newGroup.setLayers(layerModels);
-    // TODO: should we check if we got the referenced layers?
-    //  or if the group doesn't have layers at this point?
-    //  or sort them based on or groupLayers.orderNumber/alphabetically?
 
     // group has subgroups
     if (!group.groups.length) {
+        if (!layerModels.length && !admin) {
+            // no layers AND no subgroups -> remove group from list
+            //  for non-admins, we want to retain empty groups for admins
+            return;
+        }
+        // has layers but no subgroups
         return newGroup;
     }
     const mappedSubgroups = group.groups
@@ -71,10 +74,25 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
         // remove any subgroups that mapped to null:
         //  (groups without layers for non-admins etc)
         .filter(g => typeof g !== 'undefined');
+
     newGroup.setGroups(mappedSubgroups);
     return newGroup;
 };
 
+// If a group has no layers and no subgroups with layers -> group needs to gets filtered out
+// This is required since previous processing only filters out groups that don't have
+//  neither layers or subgroups. Without this we might still end up with groups without
+//  layers that have with subgroups without layers
+const filterOutEmptyGroups = (groups = []) => {
+    return groups.map(group => {
+        group.groups = filterOutEmptyGroups(group.groups);
+        if (!group.layers.length && !group.groups.length) {
+            // no layers and no subgroups with layers
+            return;
+        }
+        return group;
+    }).filter(group => typeof group !== 'undefined');
+};
 /**
  * Function to construct layer groups based on information included in layers and given grouping method.
  * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
@@ -83,8 +101,10 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
  * @param {String} method layer method name to sort by
  * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
  * @param {Object[]} allGroups all layer groups or all dataproviders available in Oskari
+ * @param {String} noGroupTitle title on UI for group that has layers without a group
+ * @param {Boolean} isPresetFiltered if filtered -> remove empty groups even for admin
  */
-export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle) => {
+export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle, isPresetFiltered) => {
     let groupForOrphans = null;
     const isUserAdmin = tools.length > 0;
     // generate a group for layers without "natural" grouping if needed
@@ -113,7 +133,8 @@ export const groupLayers = (layers, method, tools, allGroups = [], noGroupTitle)
     const groupList = allGroups
         .map(rootGroup => createGroupModel(rootGroup, method, layers, tools, isUserAdmin))
         .filter(group => typeof group !== 'undefined');
-    const sortedGroups = sortGroupsAlphabetically(groupList);
+    const emptyGroupsShouldBeListed = isUserAdmin && !isPresetFiltered;
+    const sortedGroups = sortGroupsAlphabetically(emptyGroupsShouldBeListed ? groupList : filterOutEmptyGroups(groupList));
 
     const result = [...sortedGroups];
     if (groupForOrphans) {

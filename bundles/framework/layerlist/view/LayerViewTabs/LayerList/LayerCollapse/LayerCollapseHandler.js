@@ -192,7 +192,8 @@ class ViewHandler extends StateHandler {
 
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
-        const layers = filterId === FILTER_ALL_LAYERS ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
+        const isPresetFiltered = filterId !== FILTER_ALL_LAYERS;
+        const layers = !isPresetFiltered ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
 
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
@@ -206,7 +207,7 @@ class ViewHandler extends StateHandler {
             groupsToProcess = getDataProviders(this.mapLayerService.getDataProviders(), layers);
         }
 
-        const groups = groupLayers([...layers], this.groupingMethod, tools, groupsToProcess, this.loc.grouping.noGroup);
+        const groups = groupLayers([...layers], this.groupingMethod, tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
         this.updateState({ groups: filterGroups(groups, searchText) });
     }
 
