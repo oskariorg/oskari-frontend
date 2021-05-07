@@ -128,16 +128,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 layerContainer = this._createLayerContainer(layer);
 
                 const layerTitle = jQuery('<div class="maplegend-layer-title">' + layer.getName() + '</div>');
-                layerTitle.append(me.templateTools.clone());
-
                 const uuid = layer.getMetadataIdentifier();
-
-                if (!uuid) {
-                    layerTitle.find('div.layer-description').hide(); // no functionality -> hide
-                } else {
+                if (uuid) {
+                    layerTitle.append(me.templateTools.clone());
                     layerTitle.find('div.icon-info').on('click', function (event) {
                         event.stopPropagation();
-
                         sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
                             uuid: uuid
                         }]);
