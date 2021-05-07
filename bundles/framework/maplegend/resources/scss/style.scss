@@ -5,6 +5,14 @@ $darkIcon: url("../images/Question-mark-dark.png");
 $lightIcon: url("../images/Question-mark-light.png");
 
 .maplegend .maplegend {
+  .maplegend-layer-title {
+    display: flex;
+
+    .maplegend-tools {
+      margin: 1px 0 0 7px;
+    }
+  }
+
   .accordion .accordion_panel.open {
     background-color: #ffffff;
 
@@ -14,7 +22,7 @@ $lightIcon: url("../images/Question-mark-light.png");
       img {
         margin: 8px 0;
       }
-    }    
+    }
   }
 }
 

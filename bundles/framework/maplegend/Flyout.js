@@ -52,8 +52,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         startPlugin: function () {
             var me = this;
-            me.templateLayer =
-                jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
+            me.templateLayer = jQuery('<div class="maplegend-layer"></div>');
+            me.templateTools = jQuery('<div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div>');
             me.templateLayerLegend = jQuery('<div class="maplegend-legend"><img /></div>');
         },
         /**
@@ -127,10 +127,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 layer = layers[n];
                 layerContainer = this._createLayerContainer(layer);
 
+                const layerTitle = jQuery('<div class="maplegend-layer-title">' + layer.getName() + '</div>');
+                layerTitle.append(me.templateTools.clone());
+
+                const uuid = layer.getMetadataIdentifier();
+
+                if (!uuid) {
+                    layerTitle.find('div.layer-description').hide(); // no functionality -> hide
+                } else {
+                    layerTitle.find('div.icon-info').on('click', function (event) {
+                        event.stopPropagation();
+
+                        sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
+                            uuid: uuid
+                        }]);
+                    });
+                }
+
                 if (layerContainer !== null) {
                     accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     accordionPanel.open();
-                    accordionPanel.setTitle(layer.getName());
+                    accordionPanel.setTitle(layerTitle);
                     accordionPanel.getContainer().append(layerContainer);
                     accordion.addPanel(accordionPanel);
                 }
@@ -173,22 +190,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         }
                         layerDiv.append(subLayerlegendDiv);
                     }
-                }
-
-                /* metadata link */
-                var uuid = layer.getMetadataIdentifier(),
-                    tools = layerDiv.find('.maplegend-tools');
-                if (!uuid) {
-                    // no functionality -> hide
-                    tools.find('div.layer-description').hide();
-                } else {
-                    tools.find('div.icon-info').on('click', function () {
-                        var rn = 'catalogue.ShowMetadataRequest';
-
-                        sandbox.postRequestByName(rn, [{
-                            uuid: uuid
-                        }]);
-                    });
                 }
 
                 return layerDiv;
