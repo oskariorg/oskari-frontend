@@ -83,7 +83,7 @@ const createGroupModel = (group, method, allLayers, tools, admin) => {
 // This is required since previous processing only filters out groups that don't have
 //  neither layers or subgroups. Without this we might still end up with groups without
 //  layers that have with subgroups without layers
-export const filterOutEmptyGroups = (groups = []) => {
+const filterOutEmptyGroups = (groups = []) => {
     return groups.map(group => {
         group.groups = filterOutEmptyGroups(group.groups);
         if (!group.layers.length && !group.groups.length) {
