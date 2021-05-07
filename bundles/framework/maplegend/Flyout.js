@@ -165,7 +165,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         _createLayerContainer: function (layer) {
             var me = this,
-                sandbox = me.instance.getSandbox(),
                 layerDiv = this.templateLayer.clone();
 
             /* let's not show same image multiple times */
