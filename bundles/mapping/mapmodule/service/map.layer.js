@@ -408,6 +408,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
          */
         addLayerToGroup: function (groupId, layerId, orderNumber = 1000000, suppressEvent = false) {
+            if (groupId === -1) {
+                // group of -1 is "ungrouped"
+                return
+            }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {
                 return;
@@ -439,6 +443,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
          */
         removeLayerFromGroup: function (groupId, layerId, suppressEvent = false) {
+            if (groupId === -1) {
+                // group of -1 is "ungrouped"
+                return
+            }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {
                 return;
