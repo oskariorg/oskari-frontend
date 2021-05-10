@@ -459,11 +459,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             me.render(state.getRegion());
         });
         me.service.on('StatsGrid.StateChangedEvent', function (event) {
-            me._clearRegions();
             if (event.isReset()) {
                 return;
             }
+            me._clearRegions();
             me.render(state.getRegion());
+        });
+        me.service.on('AfterMapLayerRemoveEvent', function () {
+            me._clearRegions();
         });
 
         me.service.on('FeatureEvent', function (event) {
