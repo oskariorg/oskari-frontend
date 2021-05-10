@@ -58,7 +58,10 @@ export const addLayer = (type) => {
 export const addFilter = (id, text, tooltip) => {
     // TODO: if mapLayerService doesn't recognize the filter it returns unfiltered list.
     //  This feels like a bug but lets register the filter to both since that what the code _should_ be doing.
-    mapLayerService.registerLayerFilter(id, (layer) => !!layer);
+    if (id !== 'newest') {
+        // newest is built-in filter on maplayerservice, overriding it here creates side-effects for other tests
+        mapLayerService.registerLayerFilter(id, (layer) => !!layer);
+    }
     layerlistService.registerLayerlistFilterButton(text, tooltip, '', id);
     // TODO: unregister these on teardown()
 };
