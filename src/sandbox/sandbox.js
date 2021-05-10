@@ -84,6 +84,15 @@
             registerService: function (service) {
                 services[service.getQName()] = service;
             },
+            /**
+             * @method unregisterService
+             * Removes the service from Oskari system registry
+             *
+             * @param {String} serviceQName qname of service to register (service.getQName())
+             */
+            unregisterService: function (serviceQName) {
+                delete services[serviceQName];
+            },
 
             /**
              * Method for asking a registered service
