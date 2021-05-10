@@ -329,13 +329,17 @@ Oskari.clazz.define(
                 }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                // listen event only when statsgrid isn't active
-                if (event.getMapLayer().getId() === this._layerId || this.getTile().isAttached()) {
+                if (event.getMapLayer().getId() !== this._layerId) {
+                    return;
+                }
+                if (!this.getTile().isAttached()) {
+                    // clear ui if statsgrid isn't active
                     this.clearDataProviderInfo();
                     this._setClassificationViewVisible(false);
                     this._setSeriesControlVisible(false);
                     this.flyoutManager.hideFlyouts();
                 }
+                this.statsService.notifyOskariEvent(event);
             },
             /**
              * @method MapLayerEvent
