@@ -1022,13 +1022,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layers.');
                 return allLayers;
             }
-            var filteredLayers = [];
-            allLayers.forEach(function (layer) {
-                if (filterFunction(layer)) {
-                    filteredLayers.push(layer);
-                }
-            });
-            return filteredLayers;
+            return allLayers.filter(filterFunction);
         },
         /**
          * @method  @public getFilteredLayers  Get filtered layer groups
