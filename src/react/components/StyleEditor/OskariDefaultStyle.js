@@ -17,31 +17,11 @@ export const OSKARI_BLANK_STYLE = {
             lineJoin: 'miter' // area line corner
         }
     },
-    text: { // text style
-        fill: { // text fill style
-            color: '#000000' // fill color
-        },
-        stroke: { // text stroke style
-            color: '#ffffff', // stroke color
-            width: 1 // stroke width
-        },
-        font: 'bold 12px Arial', // font
-        textAlign: 'top', // text align
-        offsetX: 12, // text offset x
-        offsetY: 12, // text offset y
-        labelText: 'example', // label text
-        labelProperty: 'propertyName' // read label from feature property
-    },
     image: { // image style
         shape: 5, // 0-6 for default markers. svg or external icon path
         size: 3, // Oskari icon size.
-        offsetX: 0, // image offset x
-        offsetY: 0, // image offset y
-        opacity: 0.7, // image opacity
         fill: {
             color: '#ff00ff' // image fill color
         }
-    },
-    inherit: false, // For hover. Set true if you wan't to extend original feature style.
-    effect: 'auto normal' // Requires inherit: true. Lightens or darkens original fill color. Values [darken, lighten, auto] and [minor, normal, major].
+    }
 };
