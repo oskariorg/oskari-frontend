@@ -1,11 +1,17 @@
+import { afterAll } from '@jest/globals';
 import { FilterHandler } from '.';
 import { testFilters } from './Filter.test.util';
-import { initServices, getBundleInstance } from '../../test.util';
+import { initServices, getBundleInstance, addLayer, addFilter, teardown } from '../../test.util';
 import { FILTER_ALL_LAYERS } from '..';
+
+// filters are updated using timers so we need to fake them on jest
+jest.useFakeTimers();
 
 describe('FilterHandler', () => {
     initServices();
     const handler = new FilterHandler(getBundleInstance());
+    // remove things added to globals so we don't break other tests
+    afterAll(() => teardown());
 
     test('ui state initializes correctly', () => {
         expect.assertions(3);
@@ -21,8 +27,17 @@ describe('FilterHandler', () => {
     });
 
     test('adding filters', () => {
-        expect.assertions(1);
-        testFilters.forEach(cur => handler.addFilter(cur));
+        expect.assertions(3);
+        // without any layers there should only be the "all layers" option
+        expect(handler.getState().filters.length).toBe(1);
+        // after registering the filters there should still be only 1 filter since no layers match them
+        testFilters.forEach(cur => addFilter(cur.id, cur.text, cur.tooltip));
+        jest.runAllTimers();
+        expect(handler.getState().filters.length).toBe(1);
+        // add a layer -> should trigger an update for filters that are shown to user
+        addLayer('wmslayer');
+        jest.runAllTimers();
+        // there should now be "all", "newest" and "oldest" filters
         expect(handler.getState().filters.length).toBe(3);
     });
 

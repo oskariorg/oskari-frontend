@@ -408,6 +408,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
          */
         addLayerToGroup: function (groupId, layerId, orderNumber = 1000000, suppressEvent = false) {
+            if (groupId === -1) {
+                // group of -1 is "ungrouped"
+                return;
+            }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {
                 return;
@@ -439,6 +443,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean} suppressEvent defaults to false, true to NOT send an event (for mass updates)
          */
         removeLayerFromGroup: function (groupId, layerId, suppressEvent = false) {
+            if (groupId === -1) {
+                // group of -1 is "ungrouped"
+                return;
+            }
             const group = this.getAllLayerGroups(groupId);
             if (!group) {
                 return;
@@ -1014,13 +1022,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 Oskari.log(this.getName()).warn('[MapLayerService] not found layer filter "' + filterId + '". Returning all layers.');
                 return allLayers;
             }
-            var filteredLayers = [];
-            allLayers.forEach(function (layer) {
-                if (filterFunction(layer)) {
-                    filteredLayers.push(layer);
-                }
-            });
-            return filteredLayers;
+            return allLayers.filter(filterFunction);
         },
         /**
          * @method  @public getFilteredLayers  Get filtered layer groups
