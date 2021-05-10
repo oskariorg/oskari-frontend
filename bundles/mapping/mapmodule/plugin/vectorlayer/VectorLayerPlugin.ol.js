@@ -584,6 +584,10 @@ Oskari.clazz.define(
                 if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
                     var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     this._sandbox.request(this, request);
+                } else if (options.showLayer === 'registerOnly') {
+                    // remove maplayer from map because _getOlLayer adds it to map and this is only for registering layer
+                    // FIXME: refactor _getOlLayer -> handle get, update and add separately
+                    this.removeMapLayerFromMap(layer);
                 }
             }
 
