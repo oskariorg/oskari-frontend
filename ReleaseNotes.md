@@ -19,16 +19,18 @@ New tool for geoportals to allow users to compare two layers. The tool adds a ve
 - WMS layer legend improvements: legend can now be defined per style instead of one per layer and admin is shown the url from capabilities in addition to the one that has been overridden by the admin tools.
 - Unique name is no longer required or asked by the admin UI for MVT layers.
 - Credentials fields should no longer autocomplete saved passwords when registering layers.
-- Added error handling for unsupported layer types.
-- Fixed an issue where the visual vector feature style editor resulted in different color for features that was selected on the editor.
-- Added maximumScreenSpaceError field for 3D-tiles layers
+- Improved error handling for unsupported layer types.
+- Fixed an issue where the visual vector feature style editor resulted in different color for features compared to the one that was selected on the editor.
+- Added maximumScreenSpaceError field for 3D-tiles layers.
 
 ### Scattered timeseries data improvements
-- Add a mode to see single year in addition to range of years
-- Single year UI is the default for end-users
+- Added a new mode called "single year" which enables the user to select one year at a time using the timeseries slider.
+- The user can now switch between "single year" and "time range" modes when admin selects "range" type UI for end-users.
+- Single year UI is the default for end-users.
 - Timeseries map tiles are only loaded as singleTile for "player" UI (for buffering) making the scattered timeseries more slick to use with tiled maps (making them cacheable etc).
 - Changed how WFS-based metadata is visualized. The features are no longer drawn on the screen if admin doesn't specifically enable them. When zoomed out of range for WFS-metadata the timeseries data "dots" on the UI control used from the WMS timeseries data which is not as accurate. The WFS features are no longer used as an index map.
-- Other visual and usability fixes
+- The selected time can now be saved as part of appsetup state and requested with a control parameter in URL i.e. a view can be now shared as a link with selected time or range of time.
+- Other visual and usability fixes.
 
 ### Hierarchy support for layer listing
 
@@ -58,8 +60,8 @@ Added support for application specific formatters for GFI response: https://gith
 - Vectorlayertile now supports options.declutter flag that is passed to OpenLayers if configured.
 - GFI requests can now have layer specific additional parameters. For example "time" parameter is now sent to GFI requests for timeseries layers.
 - My places descriptions now allow more characters (for example `&`).
-- Added a button for end-users to download my places features as GeoJSON
-- Layer names with special characters are now shown correctly
+- Added a button for end-users to download my places features as GeoJSON.
+- Layer names with special characters are now shown correctly.
 - 3D tiles layers now support the same "Oskari style" definition structure as WFS layers. Previously the extra featureStyle key was not supported.
 - Tooltip and Confirm components in 'oskari-ui' import should no longer give warnings when they have a styled-component as direct child.
 - Trying to set application state with "null" or empty object will now be ignored and triggers a warning to dev-console to use resetState() instead.
