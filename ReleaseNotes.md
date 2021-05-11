@@ -23,7 +23,7 @@ New tool for geoportals to allow users to compare two layers. The tool adds a ve
 - Fixed an issue where the visual vector feature style editor resulted in different color for features compared to the one that was selected on the editor.
 - Added maximumScreenSpaceError field for 3D-tiles layers.
 
-### Scattered timeseries data improvements
+### Scattered timeseries user interface improvements
 - Added a new mode called "single year" which enables the user to select one year at a time using the timeseries slider.
 - The user can now switch between "single year" and "time range" modes when admin selects "range" type UI for end-users.
 - Single year UI is the default for end-users.
