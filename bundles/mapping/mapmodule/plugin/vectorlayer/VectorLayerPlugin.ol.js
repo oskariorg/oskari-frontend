@@ -1044,7 +1044,11 @@ Oskari.clazz.define(
             return this._olLayers[id];
         },
         setVisibleByLayerId: function (id, visible) {
-            var layer = this.getLayerById(id);
+            const olLayer = this.getLayerById(id);
+            if (olLayer) {
+                olLayer.setVisible(visible);
+            }
+            const layer = this._oskariLayers[id];
             if (layer) {
                 layer.setVisible(visible);
             }
