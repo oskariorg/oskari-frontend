@@ -340,11 +340,7 @@ class UIHandler extends StateHandler {
         if (!options.legends) {
             options.legends = {};
         }
-        if (url === '') {
-            delete options.legends[styleName];
-        } else {
-            options.legends[styleName] = url;
-        }
+        options.legends[styleName] = url;
         this.setOptions(options);
     }
 

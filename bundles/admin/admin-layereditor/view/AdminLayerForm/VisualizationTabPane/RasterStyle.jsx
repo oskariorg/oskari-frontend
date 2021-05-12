@@ -28,7 +28,7 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
     const { options = {}, capabilities = {} } = layer;
     const styleOptions = capabilities.styles || [];
     const legends = options.legends || {};
-    const globalLegend = legends[GLOBAL_LEGEND];
+    const globalLegend = legends[GLOBAL_LEGEND] || '';
     if (styleOptions.length === 0) {
         return (
             <LegendImage url={globalLegend} controller = {controller}/>
@@ -36,7 +36,7 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
     }
     const style = styleOptions.find(s => s.name === selected) || styleOptions[0];
     const { name, legend } = style;
-    const legendUrl = legends[name] || globalLegend || '';
+    const legendUrl = typeof legends[name] === 'undefined' ? globalLegend : legends[name];
     return (
         <Fragment>
             <Message messageKey='styles.raster.title'/>
