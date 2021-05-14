@@ -85,7 +85,7 @@ export class TimeseriesMetadataService {
             const time = feature.properties[attribute];
             if (typeof time === 'number' && time < 10000) {
                 // handle as year value
-                yearSet.add(year);
+                yearSet.add(time);
             } else if (time) {
                 const year = moment(time).year();
                 yearSet.add(year);
