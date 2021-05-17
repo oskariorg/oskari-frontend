@@ -130,6 +130,10 @@ class ViewHandler extends StateHandler {
     }
 
     getCollapseHandler (grouping = this.state.grouping.selected) {
+        if (typeof GROUPING_PRESET.find(p => p.key === grouping) === 'undefined') {
+            // grouping not recognized -> ignore
+            return null;
+        }
         this.collapseHandler.setGroupingType(grouping);
         return this.collapseHandler;
     }
