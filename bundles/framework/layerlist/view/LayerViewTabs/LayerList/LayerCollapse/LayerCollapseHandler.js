@@ -96,7 +96,7 @@ class ViewHandler extends StateHandler {
     constructor (instance, groupingType = GROUPING_PRESET[0].key) {
         super();
         this.sandbox = instance.getSandbox();
-        this.loc = instance._localization;
+        this.loc = instance.getLocalization();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('theme.update', () => this.updateLayerGroups());
         this.mapLayerService.on('dataProvider.update', () => this.updateLayerGroups());
