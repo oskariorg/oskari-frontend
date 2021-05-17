@@ -1,9 +1,14 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
+import { GROUPING_PRESET, GROUPING_DATAPROVIDER } from '../preset';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
+const GROUPING_METHODS = {};
+GROUPING_PRESET.forEach(preset => {
+    GROUPING_METHODS[preset.key] = preset.method;
+});
 
 /* ------------- Helpers to determine group structure based on layers and groups on maplayerservice ------ */
 const getLayerGroups = (groups = []) => {
@@ -88,7 +93,7 @@ const filterGroups = (groups = [], searchText) => {
  * Handles events related to layer listing.
  */
 class ViewHandler extends StateHandler {
-    constructor (instance, groupingMethod = 'getInspireName') {
+    constructor (instance, groupingType = GROUPING_PRESET[0].key) {
         super();
         this.sandbox = instance.getSandbox();
         this.loc = instance._localization;
@@ -98,7 +103,7 @@ class ViewHandler extends StateHandler {
         this.toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
         this.toolingService.on('add', () => this.updateLayerGroups());
         this.map = this.sandbox.getMap();
-        this.groupingMethod = groupingMethod;
+        this.groupingType = groupingType;
         this.filter = {
             activeId: FILTER_ALL_LAYERS,
             text: null
@@ -111,11 +116,12 @@ class ViewHandler extends StateHandler {
         };
         this.eventHandlers = this._createEventHandlers();
     }
-    setGroupingMethod (groupingMethod) {
-        if (this.groupingMethod === groupingMethod) {
+    setGroupingType (groupingType = GROUPING_PRESET[0].key) {
+        if (this.groupingType === groupingType) {
+            // grouping stays the same
             return;
         }
-        this.groupingMethod = groupingMethod;
+        this.groupingType = groupingType;
         this.updateLayerGroups();
     }
     setFilter (activeId, searchText) {
@@ -199,7 +205,7 @@ class ViewHandler extends StateHandler {
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
         let groupsToProcess = [];
-        const isDataProviders = (this.groupingMethod !== 'getInspireName');
+        const isDataProviders = (this.groupingType === GROUPING_DATAPROVIDER);
         // normalize groups and dataproviders structure
         if (!isDataProviders) {
             groupsToProcess = getLayerGroups(this.mapLayerService.getAllLayerGroups());
@@ -207,7 +213,7 @@ class ViewHandler extends StateHandler {
             groupsToProcess = getDataProviders(this.mapLayerService.getDataProviders(), layers);
         }
 
-        const groups = groupLayers([...layers], this.groupingMethod, tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
+        const groups = groupLayers([...layers], GROUPING_METHODS[this.groupingType], tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
         this.updateState({ groups: filterGroups(groups, searchText) });
     }
 
@@ -246,7 +252,7 @@ class ViewHandler extends StateHandler {
      * "Module" name for event handling
      */
     getName () {
-        return 'LayerCollapse.CollapseService.' + this.groupingMethod;
+        return 'LayerCollapse.CollapseService';
     }
 
     /**
