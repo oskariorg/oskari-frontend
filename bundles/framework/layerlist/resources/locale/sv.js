@@ -58,6 +58,10 @@ Oskari.registerLocalization(
                 'UNKNOWN': 'Statusinformationen för det här kartlagret är inte tillgängligt.',
                 'UNSTABLE': ''
             },
+            'layerTooltipTitle': {
+                'raster': 'Kartlager i rasterformat.',
+                'vector': 'Kartlager i vektorformat.'
+            },
             'guidedTour': {
                 'title': 'Kartlager',
                 'message': 'På Kartlager-listan hittar du alla i karttjänsten tillgängliga kartlager.<br/><br/>Sortera kartlager antingen med tema eller med dataproducent.<br/><br/>Sök kartlager med kartlagernamn, dataproducents namn eller sökord. Du kan bläddra i de nyaste kartlager eller filtrera kartlager för att bättre hitta vad du söker.<br/><br/>Bladet Valda kartlager visar vilka kartlager är öppet. Du kan dra dessa kartlager i en annan ordning, justera kartlagrens opacitet eller byta stil på en del kartlager.',

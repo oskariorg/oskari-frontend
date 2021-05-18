@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { WarningIcon, Tooltip, Message } from 'oskari-ui';
@@ -37,6 +37,15 @@ const getBackendStatus = (layer) => {
     return status;
 };
 
+const getLayerTitleType = (layerType) => {
+    if (['wmts', 'wms', 'arcgis93', 'arcgis'].includes(layerType)) {
+        return 'raster';
+    }
+    if (['wfs'].includes(layerType)) {
+        return 'vector';
+    }
+};
+
 const getStatusColor = (status) => {
     switch (status) {
     case 'OK':
@@ -67,7 +76,7 @@ const LayerTools = ({ model, controller }) => {
     return (
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
-            <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
+            <LayerStatus layerType={ getLayerTitleType(model.getLayerType()) } backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
         </Tools>
     );
@@ -78,7 +87,7 @@ LayerTools.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const LayerStatus = ({ backendStatus, model, onClick }) => {
+const LayerStatus = ({ layerType, backendStatus, model, onClick }) => {
     const icon = (
         <LayerIcon
             fill={backendStatus.color}
@@ -88,10 +97,17 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
         />
     );
 
-    return <Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>;
+    const statusTitle = (
+        <Fragment>
+            { layerType && <Message messageKey={`layerTooltipTitle.${layerType}` } /> } <Message messageKey={backendStatus.messageKey} />
+        </Fragment>
+    );
+
+    return <Tooltip title={ statusTitle }>{icon}</Tooltip>;
 };
 
 LayerStatus.propTypes = {
+    layerType: PropTypes.string,
     backendStatus: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
     onClick: PropTypes.func
