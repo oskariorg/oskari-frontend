@@ -83,7 +83,10 @@ export class TimeseriesMetadataService {
         const yearSet = new Set();
         this.getCurrentFeatures().forEach(feature => {
             const time = feature.properties[attribute];
-            if (time) {
+            if (typeof time === 'number' && time < 10000) {
+                // handle as year value
+                yearSet.add(time);
+            } else if (time) {
                 const year = moment(time).year();
                 yearSet.add(year);
             }
