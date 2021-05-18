@@ -30,16 +30,15 @@ class ViewHandler extends StateHandler {
 
         this.toolingService = this._createToolingService();
         this.filterHandler = this._createFilterHandler();
-        this.layerCollapseHandlers = this._createLayerCollapseHandlers(groupingOptions);
-        const selectedGrouping = groupingOptions[0].getKey();
-        const collapseHandler = this.getCollapseHandler(selectedGrouping);
+        const initialGrouping = groupingOptions[0].getKey();
+        this.collapseHandler = this._createLayerCollapseHandler(initialGrouping);
 
         this.state = {
             loading: false,
             updating: false,
             createTools: this._getCreateTools(),
             grouping: {
-                selected: selectedGrouping,
+                selected: initialGrouping,
                 options: groupingOptions
             },
             filter: {
@@ -47,8 +46,8 @@ class ViewHandler extends StateHandler {
                 controller: this.filterHandler.getController()
             },
             collapse: {
-                state: collapseHandler.getState(),
-                controller: collapseHandler.getController()
+                state: this.collapseHandler.getState(),
+                controller: this.collapseHandler.getController()
             }
         };
     }
@@ -69,26 +68,18 @@ class ViewHandler extends StateHandler {
         return createTools;
     }
 
-    _createLayerCollapseHandlers (groupingOptions) {
-        const handlers = {};
-        groupingOptions.forEach(option => {
-            const handler = new LayerCollapseHandler(this.instance, option.getMethod());
-            handler.addStateListener(collapseState => {
-                if (option.getKey() !== this.state.grouping.selected) {
-                    // Not the active grouping, ignore.
-                    return;
-                }
-                this.updateState({
-                    collapse: {
-                        state: collapseState,
-                        controller: handler.getController()
-                    },
-                    updating: false
-                });
+    _createLayerCollapseHandler (initialGrouping) {
+        const handler = new LayerCollapseHandler(this.instance, initialGrouping);
+        handler.addStateListener(collapseState => {
+            this.updateState({
+                collapse: {
+                    state: collapseState,
+                    controller: handler.getController()
+                },
+                updating: false
             });
-            handlers[option.getKey()] = handler;
         });
-        return handlers;
+        return handler;
     }
 
     _createFilterHandler () {
@@ -139,7 +130,12 @@ class ViewHandler extends StateHandler {
     }
 
     getCollapseHandler (grouping = this.state.grouping.selected) {
-        return this.layerCollapseHandlers[grouping];
+        if (typeof GROUPING_PRESET.find(p => p.key === grouping) === 'undefined') {
+            // grouping not recognized -> ignore
+            return null;
+        }
+        this.collapseHandler.setGroupingType(grouping);
+        return this.collapseHandler;
     }
 
     loadLayers () {
