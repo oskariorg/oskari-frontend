@@ -1,5 +1,12 @@
 # Release Notes
 
+## 2.3.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/32?closed=1
+
+Added support to get timeseries metadata from feature property as year (typed number) in addition to parsing year from date.
+
 ## 2.3.0
 
 For a full list of changes see:
