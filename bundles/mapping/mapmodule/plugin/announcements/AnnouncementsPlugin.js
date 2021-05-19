@@ -34,20 +34,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
                 if (!rpcService) {
                     return;
                 }
-                console.log(rpcService);
+                
                 rpcService.addFunction('getAnnouncements', function () {
-                    var data = [];
-                    jQuery.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: Oskari.urls.getRoute('Announcements'),
-                        success: (pResp) => {
-                            data = pResp;
-                        },
-                        error: function (jqXHR, textStatus) {
-                        }
+                    return new Promise((resolve) => {
+                        me._getAnnouncements(announcements => resolve(announcements));
                     });
-                    return data;
                 });
             });
 
@@ -88,6 +79,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
             }
         },
 
+        _getAnnouncements: function(callback) {
+            if (typeof callback !== 'function') {
+                return;
+            }
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: Oskari.urls.getRoute('Announcements'),
+                success: (pResp) => {
+                    callback(pResp.data);
+                },
+                error: function (jqXHR, textStatus) {
+                    callback([]);
+                }
+            });
+        },
         _createEventHandlers: function () {
             return {
                 'Announcements.AnnouncementsChangedEvent': function (evt) {
