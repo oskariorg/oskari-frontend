@@ -28,6 +28,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
          */
         _initImpl: function () {
             var me = this;
+            
+            Oskari.on('app.start', function (details) {
+                const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+                if (!rpcService) {
+                    return;
+                }
+                console.log(rpcService);
+                rpcService.addFunction('getAnnouncements', function () {
+                    var data = [];
+                    jQuery.ajax({
+                        type: 'GET',
+                        dataType: 'json',
+                        url: Oskari.urls.getRoute('Announcements'),
+                        success: (pResp) => {
+                            data = pResp;
+                        },
+                        error: function (jqXHR, textStatus) {
+                        }
+                    });
+                    return data;
+                });
+            });
+
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.AnnouncementsPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin announcements">' +
