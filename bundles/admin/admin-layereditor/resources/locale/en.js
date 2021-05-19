@@ -131,9 +131,7 @@ Oskari.registerLocalization(
                     "title": "Styles and map legends",
                     "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
                     "inavailable": "Style defined in the service: not available",
-                    "legendImage": "Default legend URL",
-                    "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
-                    "legendImagePlaceholder": "Give the URL address of the map legend.",
+                    "legendImage": "Default legend",
                     "serviceLegend": "Map legend defined in the service",
                     "overriddenLegend": "Replaced legend URL",
                     "overrideTooltip": "The URL address of the map legend which overrides the legend defined in the service"

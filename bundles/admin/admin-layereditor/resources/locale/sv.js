@@ -125,9 +125,7 @@ Oskari.registerLocalization(
                     "title": "Stilar och kartförklaringar",
                     "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
                     "inavailable": "Definierad i tjänsten: inte tillgänglig",
-                    "legendImage": "URL adress för kartförklaringar",
-                    "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
-                    "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+                    "legendImage": "Generella kartförklaringar",
                     "serviceLegend": "Definierad i tjänsten",
                     "overriddenLegend": "Adress för kartförklaring",
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"

@@ -133,8 +133,6 @@ Oskari.registerLocalization(
                     "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
                     "inavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
                     "legendImage": "Oletuskarttaselite",
-                    "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
-                    "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
