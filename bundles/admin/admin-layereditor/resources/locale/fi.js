@@ -102,7 +102,7 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
-            "serviceNotAvailable": "Ei saatavilla",
+            "serviceNotAvailable": "ei saatavilla",
             "metadata": {
                 "title": "Metatiedon tiedostotunniste",
                 "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
@@ -117,7 +117,13 @@ Oskari.registerLocalization(
                 "updateRateDesc": "Päivitystiheys sekunteina",
                 "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
-                "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
+                "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}",
+                "validate": "Tason tiedot eivät vastaa rajapinnan määrityksiä",
+                "rasterStyle" : {
+                    "defaultStyle" : "Oletustyyliä ei löydy tason tyyleistä. Päivitä tason oletustyyli.",
+                    "additionalLegend": "Tasolla on karttaselite, jolle ei löydy tyyliä. Päivitä karttaselitteet. Ylimääräisen karttaselitteen nimessä on *-merkki.",
+                    "globalWithStyles": "Tasolle on määritetty oletuskarttaselite, vaikka sillä on tyylejä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
+                }
             },
             "styles": {
                 "default": "Oletustyyli",
@@ -125,6 +131,7 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Esitystyylit ja karttaselitteet",
                     "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
+                    "inavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
                     "legendImage": "Oletuskarttaselite",
                     "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
                     "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",

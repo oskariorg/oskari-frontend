@@ -101,7 +101,7 @@ Oskari.registerLocalization(
             "delete": "Remove",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "singleTileDesc": "Single Tile -setting controls whether the GetMap-requests are sent to the service tiled or as a single tile for the whole view.",
-            "serviceNotAvailable": "Not available",
+            "serviceNotAvailable": "not available",
             "metadata": {
                 "title": "Metadata file identifier",
                 "desc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
@@ -116,7 +116,13 @@ Oskari.registerLocalization(
                 "updateRateDesc": "Update rate in seconds",
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
-                "updateFailedWithReason": "Capablities re-check failed: {reason}"
+                "updateFailedWithReason": "Capablities re-check failed: {reason}",
+                "validate": "Layer definitions doesn't respond to service's capabilities",
+                "rasterStyle" : {
+                    "defaultStyle" : "Selected default style doesn\'t exist anymore. Please update default style.",
+                    "additionalLegend": "Layer has legend that doesn\'t have related style anymore. Please update layer legends. Additional legend is marked with *",
+                    "globalWithStyles": "Layer has default legend even it has styles. Remove default legend and define style based legends if needed."
+                }
             },
             "styles": {
                 "default": "Default style",
@@ -124,6 +130,7 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Styles and map legends",
                     "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
+                    "inavailable": "Style defined in the service: not available",
                     "legendImage": "Default legend URL",
                     "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
                     "legendImagePlaceholder": "Give the URL address of the map legend.",
