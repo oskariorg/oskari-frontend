@@ -570,16 +570,16 @@ Oskari.clazz.define(
                 'background-image': 'url("' + bgRight + '")',
                 'width': style.widthRight + 'px'
             });
-
+            const searchArea = div.find('.search-area-div');
             // calculate the width for the middle container of the search
-            var middleWidth = parseInt(jQuery('.search-area-div').css('width')) - style.widthLeft - style.widthRight;
+            var middleWidth = parseInt(searchArea.css('width')) - style.widthLeft - style.widthRight;
             middle.css({
                 'background-image': 'url("' + bgMiddle + '")',
                 'background-repeat': 'repeat-x',
                 'width': middleWidth + 'px'
             });
 
-            jQuery('.search-area-div').css('width', parseInt(left.outerWidth() + middleWidth + right.outerWidth()) + 'px');
+            searchArea.css('width', left.outerWidth(true) + middle.outerWidth(true) + right.outerWidth(true) + 'px');
             closeResults.removeClass('icon-close icon-close-white');
 
             // Change the font colour to whitish and the close icon to white
