@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Message, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { ServiceLegend } from './ServiceLegend';
 import { Link } from './Link';
 import { StyledFormField, Border, InlineBlock } from './styled';
 import { RasterStyleSelect } from './RasterStyle/RasterStyleSelect';
+import { ServiceLegend } from './RasterStyle/ServiceLegend';
 
 const GLOBAL_LEGEND = 'legendImage';
 
