@@ -130,7 +130,7 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Styles and map legends",
                     "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
-                    "inavailable": "Style defined in the service: not available",
+                    "unavailable": "Style defined in the service: not available",
                     "legendImage": "Default legend",
                     "serviceLegend": "Map legend defined in the service",
                     "overriddenLegend": "Replaced legend URL",

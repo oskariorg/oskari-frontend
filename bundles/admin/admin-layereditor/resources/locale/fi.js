@@ -131,7 +131,7 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Esitystyylit ja karttaselitteet",
                     "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
-                    "inavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
+                    "unavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
                     "legendImage": "Oletuskarttaselite",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",

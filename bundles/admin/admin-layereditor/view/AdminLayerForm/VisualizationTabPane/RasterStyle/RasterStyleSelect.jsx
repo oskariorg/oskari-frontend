@@ -31,7 +31,7 @@ const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, control
     if (showInvailable) {
         return (
             <StyledFormField>
-                <Message messageKey='styles.raster.inavailable'/>
+                <Message messageKey='styles.raster.unavailable'/>
             </StyledFormField>
         );
     }

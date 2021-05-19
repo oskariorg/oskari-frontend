@@ -124,7 +124,7 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Stilar och kartförklaringar",
                     "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
-                    "inavailable": "Definierad i tjänsten: inte tillgänglig",
+                    "unavailable": "Definierad i tjänsten: inte tillgänglig",
                     "legendImage": "Generella kartförklaringar",
                     "serviceLegend": "Definierad i tjänsten",
                     "overriddenLegend": "Adress för kartförklaring",
