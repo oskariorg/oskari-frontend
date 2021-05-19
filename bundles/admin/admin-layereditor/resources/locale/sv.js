@@ -101,7 +101,7 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
-            "serviceNotAvailable": "inte tillgänglig",
+            "serviceNotAvailable": "ej tillgänglig",
             "metadata": {
                 "title": "Metadatans filtagg",
                 "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
@@ -124,9 +124,9 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Stilar och kartförklaringar",
                     "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
-                    "unavailable": "Definierad i tjänsten: inte tillgänglig",
+                    "unavailable": "I tjänsten definierad stil: ej tillgänglig",
                     "legendImage": "Generella kartförklaringar",
-                    "serviceLegend": "Definierad i tjänsten",
+                    "serviceLegend": "I tjänsten definierad kartförklaring",
                     "overriddenLegend": "Adress för kartförklaring",
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
