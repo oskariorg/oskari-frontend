@@ -3,6 +3,7 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
+import { rasterStyleCapabilities } from './VisualizationTabPane/RasterStyle';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -340,7 +341,11 @@ class UIHandler extends StateHandler {
         if (!options.legends) {
             options.legends = {};
         }
-        options.legends[styleName] = url;
+        if (url === '') {
+            delete options.legends[styleName];
+        } else {
+            options.legends[styleName] = url;
+        }
         this.setOptions(options);
     }
 
@@ -571,6 +576,7 @@ class UIHandler extends StateHandler {
                 newState.capabilities = {};
             }
             this.updateState(newState);
+            this.validateCapabilities();
         });
     }
 
@@ -827,6 +833,20 @@ class UIHandler extends StateHandler {
         return validationErrors;
     }
 
+    validateCapabilities () {
+        const { layer, propertyFields } = this.getState();
+        if (propertyFields.includes(LayerComposingModel.CAPABILITIES_STYLES)) {
+            rasterStyleCapabilities(layer).forEach(field => {
+                const options = {
+                    duration: null,
+                    title: getMessage('capabilities.validate'),
+                    content: getMessage(`capabilities.rasterStyle.${field}`)
+                };
+                Messaging.warn(options);
+            });
+        }
+    }
+
     hasAnyPermissions (permissions = {}) {
         return Object.keys(permissions).filter(role => {
             return (permissions[role] || []).length > 0;
@@ -927,6 +947,7 @@ class UIHandler extends StateHandler {
                 layer: updateLayer,
                 propertyFields: this.getPropertyFields(updateLayer)
             });
+            this.validateCapabilities();
         }).catch(error => {
             this.log.error(error);
         });
@@ -964,6 +985,7 @@ class UIHandler extends StateHandler {
                 this.updateState({
                     layer
                 });
+                this.validateCapabilities();
                 Messaging.success(getMessage('capabilities.updatedSuccesfully'));
             } else {
                 if (error) {
