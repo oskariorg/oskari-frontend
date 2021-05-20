@@ -776,7 +776,7 @@ Oskari.clazz.define(
             this.handler.setIsActive(!!isEnabled);
             // feature info activation disabled if object data grid flyout active and vice versa
             var gfiReqBuilder = Oskari.requestBuilder(
-                'MapModulePlugin.GetFeatureInfoActivationRequest' // TODO: fix
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             const name = this.instance.getName();
             if (gfiReqBuilder) {

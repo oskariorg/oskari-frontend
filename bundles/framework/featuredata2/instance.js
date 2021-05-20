@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
                 const id = event.getLayerId();
                 if (id) {
-                    const layer = this.getLayerService.findMapLayer(id);
+                    const layer = this.getLayerService().findMapLayer(id);
                     this.__addTool(layer);
                 } else {
                     // ajax call for all layers
