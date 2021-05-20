@@ -57,7 +57,7 @@ class ViewHandler extends StateHandler {
 
     _createEventHandlers () {
         const handlers = {
-            AfterMapMoveEvent: event => this._updateFeatureProperties(event),
+            AfterMapMoveEvent: () => this._updateFeatureProperties(),
             AfterMapLayerAddEvent: event => {
                 const layer = event.getMapLayer();
                 if (!layer.hasFeatureData()) {
@@ -77,18 +77,11 @@ class ViewHandler extends StateHandler {
                     layerId: layerId === removedId ? this._getFirstLayerId() : layerId
                 }, 'layerIds'); // jQuery optimization
             },
-            WFSSetFilter: event => {
-
-            },
             WFSFeaturesSelectedEvent: event => {
                 const layerId = event.getMapLayer().getId();
                 if (layerId === this.getState().layerId) {
                     this._updateSelectedFeatureIds();
                 }
-            },
-            WFSPropertiesEvent: event => {},
-            WFSFeatureEvent: event => {
-
             }
         };
         const sb = Oskari.getSandbox();
@@ -102,7 +95,7 @@ class ViewHandler extends StateHandler {
         this.updateState({ selectedFeatures }, 'selectedFeatures');
     }
 
-    _updateFeatureProperties (event) {
+    _updateFeatureProperties () {
         // update viewport properties only when flyout is active/open
         const { isActive, layerId } = this.getState();
         if (!isActive) {
@@ -111,7 +104,7 @@ class ViewHandler extends StateHandler {
         let features = [];
         let inScale = false;
         const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        if (layer && layer.isInScale(event.getScale())) {
+        if (layer && layer.isInScale()) {
             features = this._getVisibleFeatures();
             inScale = true;
         }
@@ -127,7 +120,8 @@ class ViewHandler extends StateHandler {
             return;
         }
         const features = this._getVisibleFeatures(layerId);
-        this.updateState({ layerId, features });
+        const selectedFeatures = this._getWFSService().getSelectedFeatureIds(layerId);
+        this.updateState({ layerId, features, selectedFeatures });
     }
 
     setIsActive (isActive) {
