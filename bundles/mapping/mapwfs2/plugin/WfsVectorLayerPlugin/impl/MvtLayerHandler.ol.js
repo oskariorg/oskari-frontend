@@ -112,10 +112,10 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             tileSize: [tileSize, tileSize]
         };
     }
-
     /**
      * @method _createDebugLayer Helper for debugging purposes.
-     * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
+     * Use from console. Set breakpoint when new FeatureExposingMVTSource() is called
+     *  and add desired layer to map.
      *
      * Like so:
      * Set breakpoint on "const source = new FeatureExposingMVTSource(options);"
