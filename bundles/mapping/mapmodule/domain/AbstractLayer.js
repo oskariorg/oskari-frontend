@@ -671,6 +671,28 @@ Oskari.clazz.define(
             return this._permissions[action];
         },
         /**
+         * Returns boolean value if user is permitted the action of type (param)
+         * @param {String} type permission type like 'publish' or 'download'
+         * @returns boolean true if permitted
+         */
+        hasPermission: function (type) {
+            const permission = this._permissions[type];
+            if (typeof permission === 'undefined') {
+                // if not declared it's not permitted
+                return false;
+            }
+            if (permission === true) {
+                // TODO: we should just be able to return permission as boolean in the future
+                return true;
+            }
+            // handling for legacy values
+            const permissionOk = {
+                "download": "download_permission_ok",
+                "publish": "publication_permission_ok"
+            };
+            return permission === permissionOk[type];
+        },
+        /**
          * @method getMetadataIdentifier
          * Gets the identifier (uuid style) for getting layers metadata
          * @return {String}
