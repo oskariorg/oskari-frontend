@@ -77,6 +77,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
         });
 
         // Use array join to make sure the values are always separated with '&', but not the first or last
-        return bundleStates.concat(additionalParams).join('&');
+        // return null if there are no params
+        return bundleStates.concat(additionalParams).join('&') || null;
     }
 });
