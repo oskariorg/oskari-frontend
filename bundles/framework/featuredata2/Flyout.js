@@ -617,14 +617,6 @@ Oskari.clazz.define(
                     x: 0,
                     y: 0
                 });
-                /*
-                const activeIcon = jQuery(iconData);
-                activeIcon.find('path').attr('fill', this.colors.locateOnMap.active);
-                activeIcon.attr({
-                    x: 0,
-                    y: 0
-                });
-                */
                 div.html(icon.outerHTML());
 
                 div.on('click', event => {
@@ -762,7 +754,6 @@ Oskari.clazz.define(
             var event = builder(service.getSelectedFeatureIds(layerId), layer, true);
             this.instance.sandbox.notifyAll(event);
         },
-
 
         /**
          * @method setEnabled
