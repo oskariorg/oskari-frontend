@@ -14,9 +14,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
      */
     function () {
         this.sandbox = null;
+        this.mapModule = null;
         this.started = false;
         this.plugins = {};
         this.localization = null;
+        this.loc = Oskari.getMsg.bind(null, this.getName());
         this.popupHandler = null;
         this.selectionPlugin = null;
         this.conf = {};
@@ -32,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method getName
          * @return {String} the name for the component
          */
-        'getName': function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -53,85 +55,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             return this.sandbox;
         },
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
-
-        /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        'start': function () {
+        start: function () {
             if (this.started) {
                 return;
             }
+            this.started = true;
 
-            var me = this,
-                sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                p,
-                localization,
-                layers = sandbox.findAllSelectedMapLayers(),
-                i;
-
-            me.started = true;
-            me.sandbox = sandbox;
-
-            this.localization = Oskari.getLocalization(this.getName());
-            sandbox.register(me);
-
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
+            const sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox';
+            this.sandbox = Oskari.getSandbox(sandboxName);
+            this.sandbox.register(this);
+            this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
 
             // Let's extend UI
             var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
                 var request = requestBuilder(this);
-                sandbox.request(this, request);
+                this.sandbox.request(this, request);
             }
 
             // draw ui
-            me.createUi();
-
-            localization = this.getLocalization('selectionTools');
+            this.createUi();
 
             // sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
                 this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', this);
-                var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
-                    btn = {
-                        iconCls: 'tool-feature-selection',
-                        tooltip: localization.tools.select.tooltip,
-                        sticky: true,
-                        callback: function () {
-                            me.popupHandler.showSelectionTools();
-                        }
-                    };
-                sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
+                const addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+                const btn = {
+                    iconCls: 'tool-feature-selection',
+                    tooltip: this.loc('selectionTools.tools.select.tooltip'),
+                    sticky: true,
+                    callback: () => this.popupHandler.showSelectionTools()
+                };
+                this.sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
 
                 this.selectionPlugin = this.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
 
                 if (!this.selectionPlugin) {
                     var config = {
-                        id: 'FeatureData'
+                        id: this.getName()
                     };
                     this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
                     this.mapModule.registerPlugin(this.selectionPlugin);
@@ -140,14 +105,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             }
 
             // check if preselected layers included wfs layers -> act if they are added now
-            for (i = 0; i < layers.length; ++i) {
-                if (layers[i].hasFeatureData()) {
-                    this.plugin.refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].layerAdded(layers[i]);
-                }
+            const selectedLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.hasFeatureData());
+            if (selectedLayers.length) {
+                this.plugin.refresh();
             }
 
-            sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
+            this.sandbox.requestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
             this.__setupLayerTools();
         },
 
@@ -155,10 +118,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        'init': function () {
-            var me = this;
+        init: function () {
             this.requestHandlers = {
-                showFeatureHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequestHandler', me)
+                showFeatureHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequestHandler', this)
             };
             return null;
         },
@@ -175,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        'update': function () {
+        update: function () {
 
         },
 
@@ -202,50 +164,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
         /**
          * Adds the Feature data tool for layer
-         * @param  {String| Number} layerId layer to process
+         * @param  {Object} layer layer to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        __addTool: function (layerModel, suppressEvent) {
-            var me = this;
-            var service = this.getLayerService();
-            if (typeof layerModel !== 'object') {
-                // detect layerId and replace with the corresponding layerModel
-                layerModel = service.findMapLayer(layerModel);
-            }
-            if (!layerModel || !layerModel.hasFeatureData()) {
+        __addTool: function (layer, suppressEvent) {
+            if (!layer || !layer.hasFeatureData()) {
                 return;
             }
-
             // add feature data tool for layer
-            var layerLoc = this.getLocalization('layer') || {},
-                label = layerLoc['object-data'] || 'Feature data',
-                tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            const label = this.loc('layer.object-data');
             tool.setName('objectData');
             tool.setIconCls('show-featuredata-tool');
             tool.setTitle(label);
             tool.setTooltip(label);
-            tool.setCallback(function () {
-                me.sandbox.postRequestByName('ShowFeatureDataRequest', [layerModel.getId()]);
-            });
+            tool.setCallback(() => this.sandbox.postRequestByName('ShowFeatureDataRequest', [layer.getId()]));
 
-            service.addToolForLayer(layerModel, tool, suppressEvent);
+            this.getLayerService().addToolForLayer(layer, tool, suppressEvent);
         },
         /**
          * Adds tools for all layers
          */
         __setupLayerTools: function () {
-            var me = this;
             // add tools for feature data layers
-            var service = this.getLayerService();
-            var layers = service.getAllLayers();
-            _.each(layers, function (layer) {
-                me.__addTool(layer, true);
-            });
+            this.getLayerService().getAllLayers().forEach(layer => this.__addTool(layer, true));
             // update all layers at once since we suppressed individual events
             var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
-            me.sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
         },
-
+        getLayerLoadingStatus: function (layerId) {
+            return this.__loadingStatus[layerId];
+        },
         __refreshLoadingStatus: function () {
             const status = {
                 loading: [],
@@ -287,9 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                     if (layer && layer.isManualRefresh()) {
                         if (event.getNop()) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
-                        } else if (event.getRequestType() === event.type.image && layer._activeFeatures.length === 0) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer, 0.5);
+                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer.getId(), 0.5);
                         }
                     }
                 }
@@ -307,9 +254,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // only handle add layer
                     return;
                 }
-
-                if (event.getLayerId()) {
-                    this.__addTool(event.getLayerId());
+                const id = event.getLayerId();
+                if (id) {
+                    const layer = this.getLayerService().findMapLayer(id);
+                    this.__addTool(layer);
                 } else {
                     // ajax call for all layers
                     this.__setupLayerTools();
@@ -324,7 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapLayerRemoveEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].layerRemoved(event.getMapLayer());
                     delete this.__loadingStatus['' + event.getMapLayer().getId()];
                     this.__refreshLoadingStatus();
                 }
@@ -339,41 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             'AfterMapLayerAddEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].layerAdded(event.getMapLayer());
                 }
-            },
-
-            /**
-             * @method WFSPropertiesEvent
-             * Update grid headers
-             */
-            'WFSPropertiesEvent': function (event) {
-                // update grid information [don't update the grid if not active]
-                const flyout = this.plugins['Oskari.userinterface.Flyout'];
-                if (flyout.isActive()) {
-                    flyout.updateData(event.getLayer());
-                }
-            },
-
-            /**
-             * @method WFSFeatureEvent
-             * Update grid data
-             */
-            'WFSFeatureEvent': function (event) {
-                // update grid information [don't update the grid if not active]
-                const flyout = this.plugins['Oskari.userinterface.Flyout'];
-                if (flyout.isActive()) {
-                    flyout.updateData(event.getLayer());
-                }
-            },
-
-            /**
-             * @method WFSFeaturesSelectedEvent
-             * Highlight the feature on flyout
-             */
-            'WFSFeaturesSelectedEvent': function (event) {
-                var layer = event.getMapLayer();
-                this.plugins['Oskari.userinterface.Flyout'].featureSelected(layer);
             },
 
             /**
@@ -381,19 +294,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * Disable grid updates on close, otherwise enable updates
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var plugin = this.plugins['Oskari.userinterface.Flyout'];
-
                 // ExtensionUpdateEvents are fired a lot, only let featuredata2 extension event to be handled when enabled
                 if (event.getExtension().getName() !== this.getName()) {
-                    // wasn't me or disabled -> do nothing
-
-                } else if (event.getViewState() === 'close') {
-                    plugin.setEnabled(false);
+                    // wasn't me -> do nothing
+                    return;
+                }
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (event.getViewState() === 'close') {
+                    flyout.setEnabled(false);
                     if (this.plugin) {
                         this.plugin.handleCloseFlyout();
                     }
                 } else {
-                    plugin.setEnabled(true, true);
+                    flyout.setEnabled(true);
                 }
             },
 
@@ -401,55 +314,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              * @method FeatureData.FinishedDrawingEvent
              */
             'FeatureData.FinishedDrawingEvent': function () {
-                var me = this;
-
-                if (!me.selectionPlugin) {
-                    me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
+                if (!this.selectionPlugin) {
+                    return;
                 }
+                const features = this.selectionPlugin.getFeaturesAsGeoJSON();
+                this.selectionPlugin.clearDrawing();
 
-                var features = me.selectionPlugin.getFeaturesAsGeoJSON();
-
-                me.selectionPlugin.clearDrawing();
-
-                var evt = Oskari.eventBuilder('WFSSetFilter')(features);
-                me.sandbox.notifyAll(evt);
+                const evt = Oskari.eventBuilder('WFSSetFilter')(features);
+                this.sandbox.notifyAll(evt);
             },
             'DrawingEvent': function (evt) {
-                var me = this;
-                if (!evt.getIsFinished()) {
+                if (!evt.getIsFinished() || !this.selectionPlugin) {
                     // only interested in finished drawings
                     return;
                 }
-
-                if (!me.selectionPlugin) {
-                    me.selectionPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleMapSelectionPlugin');
-                }
-                // published maps won't have selection plugin always
-                if (!me.selectionPlugin || me.selectionPlugin.DRAW_REQUEST_ID !== evt.getId()) {
+                if (this.selectionPlugin.DRAW_REQUEST_ID !== evt.getId()) {
                     // event is from some other functionality
                     return;
                 }
                 var geojson = evt.getGeoJson();
                 var pixelTolerance = 15;
                 if (geojson.features.length > 0) {
-                    geojson.features[0].properties.buffer_radius = me.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
+                    geojson.features[0].properties.buffer_radius = this.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
                 } else {
                     // no features
                     return;
                 }
 
-                me.selectionPlugin.setFeatures(geojson.features);
-                me.selectionPlugin.stopDrawing();
+                this.selectionPlugin.setFeatures(geojson.features);
+                this.selectionPlugin.stopDrawing();
 
-                var event = Oskari.eventBuilder('WFSSetFilter')(geojson);
-                me.sandbox.notifyAll(event);
+                const event = Oskari.eventBuilder('WFSSetFilter')(geojson);
+                this.sandbox.notifyAll(event);
 
-                me.popupHandler.removeButtonSelection();
+                this.popupHandler.removeButtonSelection();
             },
             'AfterMapMoveEvent': function () {
-                var me = this;
-                me.plugin.mapStatusChanged();
-                this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
+                this.plugin.mapStatusChanged();
             },
             'Toolbar.ToolSelectedEvent': function (event) {
                 if (event.getGroupId() === 'selectiontools' || event.getToolId() === 'dialog') {
@@ -461,27 +362,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (this.popupHandler) {
                     this.popupHandler.close();
                 }
-            },
-
-            WFSFeatureGeometriesEvent: null
+            }
         },
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        'stop': function () {
-            var sandbox = this.sandbox(),
-                p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+        stop: function () {
+            Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.unregisterFromEventByName(this, p));
 
-            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-
-            sandbox.request(this, request);
+            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+            this.sandbox.request(this, request);
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -521,7 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return this.loc('title');
         },
 
         /**
@@ -529,34 +421,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return this.loc('desc');
         },
-
+        getConfiguration: function () {
+            return this.conf || {};
+        },
         /**
          * @method createUi
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-            var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
-                    instance: this
-                });
-            mapModule.registerPlugin(plugin);
-            mapModule.startPlugin(plugin);
-            this.plugin = plugin;
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
+                instance: this
+            });
+            this.mapModule.registerPlugin(this.plugin);
+            this.mapModule.startPlugin(this.plugin);
 
             // get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile()) {
-                mapModule.redrawPluginUIs(true);
+                this.mapModule.redrawPluginUIs(true);
             }
-
-            this.mapModule = mapModule;
         }
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });
