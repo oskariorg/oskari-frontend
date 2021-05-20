@@ -70,13 +70,13 @@ Oskari.clazz.category('Oskari.Sandbox', 'map-methods', {
                 }
                 return bundle.getStateParameters(optimized);
             })
-            .filter(value => typeof value !== 'undefined');
+            .filter(value => typeof value !== 'undefined' && !!value);
 
         const additionalParams = Object.keys(extraParams).map(function (param) {
             return param + '=' + extraParams[param];
         });
 
         // Use array join to make sure the values are always separated with '&', but not the first or last
-        return bundleStates.concat(additionalParams).join('&') || null;
+        return bundleStates.concat(additionalParams).join('&');
     }
 });
