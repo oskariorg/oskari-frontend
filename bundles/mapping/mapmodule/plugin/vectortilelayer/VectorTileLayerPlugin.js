@@ -29,6 +29,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             property: FTR_PROPERTY_ID
         };
     }
+
     /**
      * @private @method _initImpl
      * Interface method for the module protocol.
@@ -46,12 +47,14 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
                 LayerComposingModel.STYLES_JSON,
                 LayerComposingModel.TILE_GRID,
                 LayerComposingModel.URL
-            ]);
+            ], null, [LayerComposingModel.NAME]); // common field name is not used in vectortilelayers so it is skipped on LayerComposingModel
+
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
         }
         this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
     }
+
     /**
      * @private @method _getLayerModelClass
      * Returns class to be used as mapLayerService layer model

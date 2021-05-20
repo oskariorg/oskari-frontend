@@ -97,14 +97,16 @@
             /** 
              * @param  {Function} done callback
              */
-            processSequence: function (done) {
+            processSequence: function (done, suppressStartEvent = false) {
                 var me = this;
                 if (sequence.length === 0) {
                     // everything has been loaded
                     if (typeof done === 'function') {
                         done(result);
                     }
-                    o.trigger('app.start', result);
+                    if (!suppressStartEvent) {
+                        o.trigger('app.start', result);
+                    }
                     return;
                 }
                 var seqToLoad = sequence.shift();
@@ -112,7 +114,7 @@
                     // log warning: block not object
                     log.warn('StartupSequence item is a ' + typeof seqToLoad + ' instead of object. Skipping');
                     // iterate to next
-                    this.processSequence(done);
+                    this.processSequence(done, suppressStartEvent);
                     return;
                 }
 
@@ -120,7 +122,7 @@
                 if (!bundleToStart) {
                     log.warn('StartupSequence item doesn\'t contain bundlename. Skipping ', seqToLoad);
                     // iterate to next
-                    this.processSequence(done);
+                    this.processSequence(done, suppressStartEvent);
                     return;
                 }
                 // if bundleinstancename is missing, use bundlename for config key.
@@ -130,23 +132,23 @@
                 if (Oskari.bundle(bundleToStart)) {
                     log.debug('Bundle preloaded ' + bundleToStart);
                     me.startBundle(bundleToStart, config, configId);
-                    this.processSequence(done);
+                    this.processSequence(done, suppressStartEvent);
                     return;
                 }
                 let bundlePromise = Oskari.bundle_manager.loadDynamic(bundleToStart);
                 if (!bundlePromise) {
                     log.warn('Bundle wasn\'t preloaded nor registered as dynamic. Skipping ', bundleToStart);
-                    this.processSequence(done);
+                    this.processSequence(done, suppressStartEvent);
                     return;
                 }
                 bundlePromise
                     .then(() => {
                         me.startBundle(bundleToStart, config, configId);
-                        this.processSequence(done);
+                        this.processSequence(done, suppressStartEvent);
                     })
                     .catch((err) => {
                         log.error('Error loading bundle ' + bundleToStart, err);
-                        me.processSequence(done);
+                        me.processSequence(done, suppressStartEvent);
                     });
             },
             startBundle: function (bundleId, config, instanceId) {

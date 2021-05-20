@@ -38,6 +38,10 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
 
     setControlState (state) {
         const { time } = state;
+        if (!time) {
+            // don't set initial value if state doesn't have time value
+            return;
+        }
         let mode;
         let value;
         if (Array.isArray(time)) {
@@ -94,14 +98,59 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
         });
     }
 
+    /**
+     * Compares delegate to controls own delegate to see if it's being controlled by this plugin
+     * @param {Oskari.mapframework.bundle.timeseries.TimeseriesDelegate} delegate for comparison
+     * @returns {Boolean}
+     */
+    isControlling (delegate) {
+        if (!delegate) {
+            return false;
+        }
+        if (!this._delegate) {
+            return false;
+        }
+        if (this._delegate._clazz !== delegate._clazz) {
+            return false;
+        }
+        // we only have the WMSAnimator at this time but check that delegate is it so we can expect to find getLayer()
+        if (this._delegate._clazz !== 'Oskari.mapframework.bundle.timeseries.WMSAnimator') {
+            return false;
+        }
+        // here we can be sure that delegate and this._delegate are both WMSAnimator
+        const myLayer = this._delegate.getLayer();
+        const theirLayer = delegate.getLayer();
+        if (!myLayer || !theirLayer) {
+            return false;
+        }
+
+        return myLayer.getId() === theirLayer.getId();
+    }
+
     _createControlElement () {
         return jQuery('<div class="mapplugin timeseriesrangecontrolplugin"></div>');
     }
 
     _createEventHandlers () {
         return {
-            AfterMapMoveEvent: () => this._updateCurrentViewportBbox()
+            AfterMapMoveEvent: () => this._updateCurrentViewportBbox(),
+            MapSizeChangedEvent: () => {
+                const isMobileCurrent = Oskari.util.isMobile();
+                const isMobilePrevious = this._getMobileMode();
+                if (isMobilePrevious !== isMobileCurrent) {
+                    this._setMobileMode(isMobileCurrent);
+                    this.redrawUI(isMobileCurrent, true);
+                }
+            }
         };
+    }
+
+    _getMobileMode () {
+        return this._isMobile;
+    }
+
+    _setMobileMode (isMobile) {
+        this._isMobile = isMobile;
     }
 
     _updateCurrentViewportBbox () {

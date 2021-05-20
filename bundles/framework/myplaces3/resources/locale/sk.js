@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Miesta",
         "desc": "",
-        "category": {
-            "defaultName": "Moja mapová vrstva",
-            "organization": "Moje miesta",
-            "inspire": "Moje miesta"
-        },
         "guest": {
             "loginShort": "Na pridanie vašich vlastných miest na mapu sa prihláste."
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Názov",
                 "placeholder": "Názov mapovej vrstvy"
             },
-            "drawing": {
-                "label": "Štýl",
-                "point": {
-                    "label": "Bod",
-                    "color": "Farba",
-                    "size": "Veľkosť"
-                },
-                "line": {
-                    "label": "Línia",
-                    "color": "Farba",
-                    "size": "Hrúbka"
-                },
-                "area": {
-                    "label": "Plocha",
-                    "fillcolor": "Farba výplne",
-                    "linecolor": "Farba obvodovej línie",
-                    "size": "Hrúbka obvodovej línie"
-                }
-            },
             "visibleFields": {
                 "label": "Viditeľné údaje o mieste",
                 "placename": "Názov",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Editovať štýl línie. Upozornenie! Výber ovplyvní všetky líniové objekty v tejto mapovej vrstve."
                 }
-            }
-        },
-        "pointform": {
-            "title": "Štýl bodu",
-            "tooltip": "Definovať štýl pre bodové objekty.",
-            "symbol": {
-                "label": "Ikona"
-            },
-            "size": {
-                "label": "Veľkosť"
-            },
-            "color": {
-                "label": "Farba",
-                "labelOr": "alebo",
-                "labelCustom": "Valstná RGB farba (0-255)"
-            },
-            "preview": {
-                "label": "Náhľad"
-            },
-            "buttons": {
-                "save": "Uložiť",
-                "cancel": "Zrušiť"
-            }
-        },
-        "lineform": {
-            "title": "Štýl línie",
-            "tooltip": "Definovať štýl pre líniové objekty.",
-            "style": {
-                "label": "Štýl"
-            },
-            "cap": {
-                "label": "Konce"
-            },
-            "corner": {
-                "label": "Rohy"
-            },
-            "width": {
-                "label": "Hrúbka"
-            },
-            "color": {
-                "label": "Farba",
-                "labelOr": "alebo",
-                "labelCustom": "Valstná RGB farba (0-255)"
-            },
-            "preview": {
-                "label": "Náhľad"
-            },
-            "buttons": {
-                "save": "Uložiť",
-                "cancel": "Zrušiť"
-            }
-        },
-        "areaform": {
-            "title": "Štýl plochy",
-            "tooltip": "Definovať štýl pre plošné objekty.",
-            "linestyle": {
-                "label": "Štýl obvodovej línie"
-            },
-            "linecap": {
-                "label": "Konce obvodovej línie"
-            },
-            "linecorner": {
-                "label": "Rohy obvodovej línie"
-            },
-            "linewidth": {
-                "label": "Hrúbka obvodovej línie"
-            },
-            "linecolor": {
-                "label": "Farba obvodovej línie",
-                "labelOr": "alebo",
-                "labelCustom": "Valstná RGB farba (0-255)"
-            },
-            "color": {
-                "label": "Farba výplne",
-                "labelOr": "alebo",
-                "labelCustom": "Valstná RGB farba (0-255)"
-            },
-            "fill": {
-                "label": "Vzor výplne"
-            },
-            "preview": {
-                "label": "Náhľad"
-            },
-            "buttons": {
-                "save": "Uložiť",
-                "cancel": "Zrušiť"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Chýba názov mapovej vrstvy.",
             "placeNameIllegal": "Názov miesta obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
             "descIllegal": "Popis miesta obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
-            "categoryNameIllegal": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-).",
-            "dotSize": "Veľkosť bodky je neplatná. Musí byť v rozmedzí 1 a 5.",
-            "dotColor": "Nesprávna farba bodky. Všetky RGB hodnoty musia byť medzi 0 a 255.",
-            "dotShape": "Neplatná ikona bodu.",
-            "lineSize": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50.",
-            "lineColor": "Nesprávna farba línie. Všetky RGB hodnoty musia byť medzi 0 a 255.",
-            "areaLineSize": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50.",
-            "areaLineColor": "Nesprávna farba obvodovej línie. Všetky RGB hodnoty musia byť medzi 0 a 255.",
-            "areaFillColor": "Nesprávna farba výplne. Všetky RGB hodnoty musia byť medzi 0 a 255."
+            "categoryNameIllegal": "Názov mapovej vrstvy obsahuje nepovolené znaky. Povolené znaky sú písmená (a-z, A-Z and å,ä,ö,Å,Ä,Ö), čísla (0-9), medzery a spojovníky (-)."
         }
     }
 });

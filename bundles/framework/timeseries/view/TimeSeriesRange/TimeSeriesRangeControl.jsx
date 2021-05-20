@@ -1,6 +1,6 @@
 import { Controller } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { Background } from './styled';
 import { TimeSeriesHeader } from './TimeSeriesHeader';
 import { TimeSeriesRange } from './TimeSeriesRange';
@@ -41,6 +41,7 @@ export const TimeSeriesRangeControl = ({
                     end={end}
                     value={value}
                     dataYears={dataYears}
+                    isMobile={isMobile}
                 />
             )}
             {mode === 'range' && (

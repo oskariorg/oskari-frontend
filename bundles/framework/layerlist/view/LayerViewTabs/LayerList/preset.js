@@ -11,6 +11,8 @@ export const GROUPING_PRESET = [
     }
 ];
 
+export const GROUPING_DATAPROVIDER = GROUPING_PRESET[1].key;
+
 export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS = {
     MIN_CHAR_COUNT: 1,
     MAX_CHAR_COUNT: 8,

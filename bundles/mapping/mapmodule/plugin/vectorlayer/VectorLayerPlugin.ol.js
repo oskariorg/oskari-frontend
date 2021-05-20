@@ -92,10 +92,16 @@ Oskari.clazz.define(
          *
          */
         _startPluginImpl: function () {
-            var me = this;
+            const me = this;
             me.registerVectorFormats();
             me._createConfiguredLayers();
             me._registerToFeatureService();
+
+            // listen to application started event and register RPC functions.
+            Oskari.on('app.start', function (details) {
+                // Register RPC functions
+                me.registerRPCFunctions();
+            });
         },
         /**
          * @method  @private _createConfiguredLayers Create configured layers an their styles
@@ -560,11 +566,28 @@ Oskari.clazz.define(
             if (options.showLayer) {
                 // Show layer in layer selector
                 if (!mapLayerService.findMapLayer(layer.getId())) {
+                    // check if we have a group for this layer in maplayer service
+                    const groupForLayer = layer.getGroups()[0];
+                    const mapLayerGroup = mapLayerService.getAllLayerGroups(groupForLayer.id);
+                    if (!mapLayerGroup) {
+                        const group = {
+                            id: groupForLayer.id,
+                            name: {
+                                [Oskari.getLang()]: groupForLayer.name
+                            }
+                        };
+                        mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
+                    }
+
                     mapLayerService.addLayer(layer);
                 }
-                if (!this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
+                if (options.showLayer !== 'registerOnly' && !this._sandbox.findMapLayerFromSelectedMapLayers(layer.getId())) {
                     var request = Oskari.requestBuilder('AddMapLayerRequest')(layer.getId());
                     this._sandbox.request(this, request);
+                } else if (options.showLayer === 'registerOnly') {
+                    // remove maplayer from map because _getOlLayer adds it to map and this is only for registering layer
+                    // FIXME: refactor _getOlLayer -> handle get, update and add separately
+                    this.removeMapLayerFromMap(layer);
                 }
             }
 
@@ -1021,7 +1044,11 @@ Oskari.clazz.define(
             return this._olLayers[id];
         },
         setVisibleByLayerId: function (id, visible) {
-            var layer = this.getLayerById(id);
+            const olLayer = this.getLayerById(id);
+            if (olLayer) {
+                olLayer.setVisible(visible);
+            }
+            const layer = this._oskariLayers[id];
             if (layer) {
                 layer.setVisible(visible);
             }
@@ -1336,6 +1363,32 @@ Oskari.clazz.define(
 
             var geojson = formatter.writeFeaturesObject(features);
             return geojson;
+        },
+        /**
+         * @method registerRPCFunctions
+         * Register RPC functions
+         */
+        registerRPCFunctions () {
+            const me = this;
+            const sandbox = this._sandbox;
+            const rpcService = sandbox.getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+
+            if (!rpcService) {
+                return;
+            }
+
+            rpcService.addFunction('getFeatures', function (includeFeatures) {
+                const features = {};
+                const layers = me.getLayerIds();
+                layers.forEach(function (id) {
+                    if (includeFeatures === true) {
+                        features[id] = me.getLayerFeatures(id);
+                    } else {
+                        features[id] = [];
+                    }
+                });
+                return features;
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

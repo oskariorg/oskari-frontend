@@ -111,6 +111,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 var conf = jQuery.extend(true, {}, this._controlPluginConf || {}, active.conf);
                 if (typeof conf.showControl === 'undefined' || conf.showControl) {
                     const controlClass = this._getControlPluginClazz(active.delegate);
+                    if (this._isCurrentlyControlling(controlClass, active.delegate)) {
+                        // do not update control ui if there's no changes in ui type and layer
+                        return;
+                    }
                     if (controlClass !== null) {
                         this._createControlPlugin(controlClass, active.delegate, conf);
                         return;
@@ -118,6 +122,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                 }
             }
             this._removeControlPlugin();
+        },
+        _isCurrentlyControlling: function (controlClass, delegate) {
+            if (!this._controlPlugin) {
+                return false;
+            }
+            if (this._controlPlugin.getClazz() !== controlClass) {
+                return false;
+            }
+            if (typeof this._controlPlugin.isControlling === 'function') {
+                // don't know for sure but isControlling is not implemented on this control
+                return false;
+            }
+            return this._controlPlugin.isControlling(delegate);
         },
         /**
          * @method _getControlPluginClazz

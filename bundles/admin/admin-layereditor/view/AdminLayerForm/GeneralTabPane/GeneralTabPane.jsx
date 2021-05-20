@@ -10,7 +10,7 @@ import { Groups } from './Groups';
 import { TileGrid } from './TileGrid';
 import { Version } from './Version';
 import { Mandatory } from '../Mandatory';
-import { LayerGeneralInfo } from './LayerGeneralInfo';
+import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
 
 const {
     API_KEY,
@@ -25,19 +25,24 @@ const {
     VERSION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, propertyFields, controller }) => (
-    <Fragment>
-        <LayerGeneralInfo layer={layer} />
-        { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
-        { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, 'options.tileGrid', getTileGridField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, 'name', getNameField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, `locale.${Oskari.getSupportedLanguages()[0]}.name`, getLocaleField(layer, propertyFields, controller)) }
-        { wrapMandatory(validators, layer, 'dataProviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
-        { wrapMandatory(validators, layer, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
-    </Fragment>
-);
+const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, propertyFields, controller }) => {
+    const isLayerTypeSupported = propertyFields.length > 0;
+    if (!isLayerTypeSupported) {
+        return (<LayerTypeNotSupported type={layer.type} />);
+    }
+    return (
+        <Fragment>
+            { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
+            { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
+            { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller)) }
+            { wrapMandatory(validators, layer, 'options.tileGrid', getTileGridField(layer, propertyFields, controller)) }
+            { wrapMandatory(validators, layer, 'name', getNameField(layer, propertyFields, controller)) }
+            { wrapMandatory(validators, layer, `locale.${Oskari.getSupportedLanguages()[0]}.name`, getLocaleField(layer, propertyFields, controller)) }
+            { wrapMandatory(validators, layer, 'dataProviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
+            { wrapMandatory(validators, layer, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
+        </Fragment>
+    );
+};
 
 // TODO: this isn't as elegant as it could. Maybe refactor so we can loop the field names and get Fields and
 // validators/Mandatory based on that

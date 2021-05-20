@@ -9,6 +9,24 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.3.0
+
+### [add] layerlist
+
+Added initial bundle documentation.
+
+### [add] admin-layereditor
+
+Added initial bundle documentation.
+
+### [rem] mapwfs2
+
+Documentation removed as the code has been removed earlier. The WFS-layer implementation has been replaced with wfsvector bundle.
+
+### [rem] publisher
+
+Removed as the code has been replaced with publisher2 earlier.
+
 ## 2.1.0
 
 ### [mod] [rpc] ZoomToFeaturesRequest

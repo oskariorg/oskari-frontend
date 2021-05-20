@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Locaţii",
         "desc": "",
-        "category": {
-            "defaultName": "Stratul meu de hartă",
-            "organization": "Locaţiile mele",
-            "inspire": "Locaţii"
-        },
         "guest": {
             "loginShort": "Autentificare pentru utilizare"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Nume",
                 "placeholder": "Denumire strat de hartă"
             },
-            "drawing": {
-                "label": "Stil",
-                "point": {
-                    "label": "Punct",
-                    "color": "Culoare",
-                    "size": "Dimensiune"
-                },
-                "line": {
-                    "label": "Linie",
-                    "color": "Culoare",
-                    "size": "Grosime"
-                },
-                "area": {
-                    "label": "Suprafaţă",
-                    "fillcolor": "Culoare de fond",
-                    "linecolor": "Culoare linie",
-                    "size": "Grosime linie"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Numele stratului de hartă lipseşte:",
             "placeNameIllegal": "Numele obiectului conţine caractere nepermise. Caractere permise sunt litere de la a la z, numere, spaţii şi liniuţe de despărţire",
             "descIllegal": "Descrierea obiectului conţine caractere nepermise. Caractere permise sunt litere de la a la z, numere, spaţii şi liniuţe de despărţire",
-            "categoryNameIllegal": "Descrierea stratului conţine caractere nepermise. Caractere permise sunt litere de la a la z, numere, spaţii şi liniuţe de despărţire",
-            "dotSize": "Dimensiunea punctului nu se încadrează în limite (1-50)",
-            "dotColor": "Culoare greşită a punctului",
-            "dotShape": "",
-            "lineSize": "Dimensiunea liniei nu se încadrează în limite (1-50)",
-            "lineColor": "Culoare greşită a liniei",
-            "areaLineSize": "Dimensiunea suprafeţei nu se încadrează în limite (0 - 50)",
-            "areaLineColor": "Culoare greşită a liniei de contur a suprafeţei",
-            "areaFillColor": "Culoare de fond greşită"
+            "categoryNameIllegal": "Descrierea stratului conţine caractere nepermise. Caractere permise sunt litere de la a la z, numere, spaţii şi liniuţe de despărţire"
         }
     }
 });

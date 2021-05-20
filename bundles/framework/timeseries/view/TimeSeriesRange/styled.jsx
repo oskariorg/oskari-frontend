@@ -77,8 +77,6 @@ export const ColFixed = styled.div`
 `;
 
 export const YearInput = styled(NumberInput)`
-    margin-left: 18px;
-
     .ant-input-number-handler-wrap {
         opacity: 1;
     }
@@ -92,22 +90,37 @@ const getDataYearStyles = (props) => {
     const markYears = Object.keys(marks)
         .map((year) => parseInt(year, 10))
         .sort((a, b) => a - b);
-    const dataYearIndices = dataYears.map((year) => markYears.indexOf(year) + 1);
-    const selectors = dataYearIndices.map((index) => `&:nth-child(${index})`).join(',');
-    const styles = `
-        ${selectors} {
-            border-radius: 50%;
-            border: 2px solid #ffffff;
-            width: 8px;
-            height: 8px;
-            margin-left: -4px;
-            top: -2px;
-            &.ant-slider-dot-active {
-                border: 2px solid ${primaryColor};
+
+    return dataYears.map((year) => {
+        const index = markYears.indexOf(year) + 1;
+        return `
+            &:nth-child(${index}) {
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                width: 8px;
+                height: 8px;
+                margin-left: -4px;
+                top: -2px;
+                &.ant-slider-dot-active {
+                    border: 2px solid ${primaryColor};
+                }
+
+                &:hover {
+                    :after {
+                        content: '${year}';
+                        color: #ffffff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 14px;
+                        font-variant: tabular-nums;
+                        font-feature-settings: 'tnum';
+                        padding-top: 20px;
+                    }
+                }
             }
-        }
-    `;
-    return styles;
+        `;
+    }).join('');
 };
 
 export const StyledRangeSlider = styled(Slider)`

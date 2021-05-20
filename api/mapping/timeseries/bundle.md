@@ -14,6 +14,24 @@ Bundles that handle timeseries data/functionality can register with TimeseriesSe
 
 Bundles that define a new layer type, and which want to support animation, must register a class that will be instantiated for each timeseries enabled layer to implement the animation. This bundle itself registers a animator for "WMS" layers.
 
+Admin can choose different control UI for timeseries enabled layers, and it's saved in layer options under `timeseries` entry as:
+
+```json
+{
+  "timeseries": {
+    "ui": "player|range|none",
+    "metadata": {
+      "layer": "<metadata layer id>",
+      "attribute": "<time attribute used to filter metadata layer>",
+      "toggleLevel": "<map toggle level at which the metadata layer will be shown>"
+    }
+  }
+}
+
+```
+
+The metadata is in use when `range` ui is selected
+
 ## Example - general case
 
 Bundle that wants to show timeseries control UI can register with TimeseriesService:
@@ -61,6 +79,14 @@ After registering the new type, TimeseriesLayerService will create delegates aut
 
 No configuration is required.
 
+
+## Bundle state
+
+```json
+{"time": ["start time", "end time"] }
+```
+
+Currently the bundle state is only recognized by range UI.
 
 ## Requests the bundle sends out
 

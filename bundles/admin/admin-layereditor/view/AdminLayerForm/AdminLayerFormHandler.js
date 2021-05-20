@@ -27,7 +27,6 @@ class UIHandler extends StateHandler {
             versions: [],
             propertyFields: [],
             capabilities: {},
-            messages: [],
             loading: false,
             tab: DEFAULT_TAB,
             credentialsCollapseOpen: false,
@@ -236,6 +235,14 @@ class UIHandler extends StateHandler {
         const layer = { ...this.getState().layer };
         const timeseries = { ...layer.options.timeseries };
         const metadata = { ...timeseries.metadata, toggleLevel };
+        timeseries.metadata = metadata;
+        layer.options.timeseries = timeseries;
+        this.updateState({ layer });
+    }
+    setTimeSeriesMetadataVisualize (visualize) {
+        const layer = { ...this.getState().layer };
+        const timeseries = { ...layer.options.timeseries };
+        const metadata = { ...timeseries.metadata, visualize };
         timeseries.metadata = metadata;
         layer.options.timeseries = timeseries;
         this.updateState({ layer });
@@ -457,16 +464,6 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    setMessage (key, type, args) {
-        this.updateState({
-            messages: [{ key, type, args }]
-        });
-    }
-
-    setMessages (messages) {
-        this.updateState({ messages });
-    }
-
     setTab (tab) {
         this.updateState({ tab });
     }
@@ -536,7 +533,6 @@ class UIHandler extends StateHandler {
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
     fetchLayer (id, keepCapabilities = false) {
-        this.clearMessages();
         if (!id) {
             // adding new layer
             this.resetLayer();
@@ -657,8 +653,9 @@ class UIHandler extends StateHandler {
                 const item = {
                     id
                 };
-                const group = this.mapLayerGroups.find(g => g.id === id);
+                const group = this.findMapLayerGroupById(id);
                 if (!group) {
+                    // this means the layer will go to "ungrouped" group
                     return item;
                 }
                 item.name = Oskari.getLocalized(group.name);
@@ -666,6 +663,24 @@ class UIHandler extends StateHandler {
             });
             this.refreshEndUserLayer(layerId, layer);
         });
+    }
+
+    /**
+     * Search through known groups for group
+     * @param {Number} groupId group to search for
+     * @param {Oskari.mapframework.bundle.layerselector2.model.LayerGroup[]} groupList optional list for recursion, default to root groups list
+     * @returns an instance of Oskari.mapframework.bundle.layerselector2.model.LayerGroup or undefined if group was not found
+     */
+    findMapLayerGroupById (groupId, groupList) {
+        const groups = groupList || this.mapLayerGroups;
+        if (!groups.length) {
+            return;
+        }
+        const result = groups.find(g => g.id === groupId);
+        if (result) {
+            return result;
+        }
+        return this.findMapLayerGroupById(groupId, groups.flatMap(g => g.getGroups()));
     }
 
     /**
@@ -951,9 +966,9 @@ class UIHandler extends StateHandler {
                 const { capabilities } = admin;
                 layer.capabilities = capabilities;
                 this.updateState({
-                    layer,
-                    messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
+                    layer
                 });
+                Messaging.success(getMessage('capabilities.updatedSuccesfully'));
             } else {
                 if (error) {
                     updateFailed(Object.values(error)[0]);
@@ -1014,12 +1029,6 @@ class UIHandler extends StateHandler {
 
     isLoading () {
         return this.loadingCount > 0;
-    }
-
-    clearMessages () {
-        this.updateState({
-            messages: []
-        });
     }
 
     clearCredentialsCollapse () {
@@ -1089,8 +1098,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setLayerUrl',
     'setLegendUrl',
     'setLocalizedNames',
-    'setMessage',
-    'setMessages',
     'setMetadataIdentifier',
     'setMinAndMaxScale',
     'setOpacity',
@@ -1102,6 +1109,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setTimeSeriesMetadataLayer',
     'setTimeSeriesMetadataAttribute',
     'setTimeSeriesMetadataToggleLevel',
+    'setTimeSeriesMetadataVisualize',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',

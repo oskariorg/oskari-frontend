@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
     border-radius: 0 !important;
-    &>div {
+    & > div {
         border-radius: 0 !important;
         &:last-child {
             padding-bottom: 2px;
@@ -16,30 +16,25 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-const StyledLayerCollapsePanel = styled(LayerCollapsePanel)`
-    padding-left: ${props => props.group.layers.length === 0 ? '27px' : '0px'};
-`;
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, opts, controller }) => {
 
-const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
-        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
+        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults' />} />;
     }
     return (
-        <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
+        <StyledCollapse
+            bordered activeKey={openGroupTitles}
+            onChange={keys => controller.updateOpenGroupTitles(keys)}
+        >
             {
                 groups.map(group => {
-                    const layerIds = group.getLayers().map(lyr => lyr.getId());
-                    // layerNames are used in key so renaming will update the UI
-                    const layerNames = group.getLayers().map(lyr => lyr.getName());
-                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
-                    // Passes only ids the component is interested in.
-                    // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
-                    // When the properties remain unchanged, we can benefit from memoization.
                     return (
-                        <StyledLayerCollapsePanel key={group.getId() + layerNames.join()}
+                        <LayerCollapsePanel key={group.getId()}
                             trimmed
-                            selectedLayerIds={selectedLayersInGroup}
+                            selectedLayerIds={selectedLayerIds}
                             group={group}
+                            openGroupTitles={openGroupTitles}
+                            opts={opts}
                             controller={controller}
                         />
                     );
@@ -54,6 +49,7 @@ LayerCollapse.propTypes = {
     openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
+    opts: PropTypes.object,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

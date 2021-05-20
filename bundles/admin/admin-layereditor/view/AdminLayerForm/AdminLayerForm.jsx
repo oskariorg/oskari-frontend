@@ -46,7 +46,6 @@ const AdminLayerForm = ({
     versions,
     layer,
     propertyFields,
-    messages = [],
     tab,
     onCancel,
     onDelete,
@@ -57,6 +56,7 @@ const AdminLayerForm = ({
     validationErrors = [],
     scales
 }) => {
+    const isLayerTypeSupported = propertyFields.length > 0;
     // For returning to add multiple layers from service endpoint
     const hasCapabilitiesSupport = propertyFields.includes(LayerComposingModel.CAPABILITIES);
     let validPermissions = true;
@@ -65,11 +65,6 @@ const AdminLayerForm = ({
         validPermissions = permissionValidator(layer);
     }
     return (<StyledRoot>
-        { messages.map(({ key, type, args }) =>
-            <StyledAlert key={key} type={type} message={
-                <Message messageKey={key} messageArgs={args}/>
-            }/>
-        )}
         <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
@@ -101,7 +96,7 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} />
+        { isLayerTypeSupported && <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} /> }
         { !layer.isNew &&
             <React.Fragment>
                 <Confirm
@@ -111,7 +106,7 @@ const AdminLayerForm = ({
                     cancelText={getMessage('cancel')}
                     placement='bottomLeft'
                 >
-                    <StyledButton>
+                    <StyledButton danger>
                         <Message messageKey='delete'/>
                     </StyledButton>
                 </Confirm>
@@ -137,7 +132,6 @@ AdminLayerForm.propTypes = {
     versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,

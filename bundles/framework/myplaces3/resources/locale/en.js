@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Places",
         "desc": "",
-        "category": {
-            "defaultName": "My map layer",
-            "organization": "My Places",
-            "inspire": "My Places"
-        },
         "guest": {
             "loginShort": "Log in to add your own places on a map."
         },
@@ -20,6 +15,10 @@ Oskari.registerLocalization(
             "publishCategory": {
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
+            },
+            "export": {
+                "title":"Download",
+                "tooltip": "Download map layer in JSON format"
             },
             "addCategoryFormButton": "New map layer",
             "addCategory": "Add map layer",
@@ -146,25 +145,6 @@ Oskari.registerLocalization(
                 "label": "Name",
                 "placeholder": "Map layer name"
             },
-            "drawing": {
-                "label": "Style",
-                "point": {
-                    "label": "Point",
-                    "color": "Colour",
-                    "size": "Size"
-                },
-                "line": {
-                    "label": "Line",
-                    "color": "Colour",
-                    "size": "Width"
-                },
-                "area": {
-                    "label": "Area",
-                    "fillcolor": "Fill colour",
-                    "linecolor": "Edge line colour",
-                    "size": "Edge line width"
-                }
-            },
             "visibleFields": {
                 "label": "Visible place data",
                 "placename": "Name",
@@ -187,92 +167,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Edit the line style. Note! The selection affects all the line features at this map layer."
                 }
-            }
-        },
-        "pointform": {
-            "title": "Point style",
-            "tooltip": "Define a style for point features.",
-            "symbol": {
-                "label": "Icon"
-            },
-            "size": {
-                "label": "Size"
-            },
-            "color": {
-                "label": "Colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
-            },
-            "preview": {
-                "label": "Preview"
-            },
-            "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
-            }
-        },
-        "lineform": {
-            "title": "Line style",
-            "tooltip": "Define a style for line features.",
-            "style": {
-                "label": "Style"
-            },
-            "cap": {
-                "label": "Endings"
-            },
-            "corner": {
-                "label": "Corners"
-            },
-            "width": {
-                "label": "Width"
-            },
-            "color": {
-                "label": "Colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
-            },
-            "preview": {
-                "label": "Preview"
-            },
-            "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
-            }
-        },
-        "areaform": {
-            "title": "Area Style",
-            "tooltip": "Define a style for area features.",
-            "linestyle": {
-                "label": "Edge line style"
-            },
-            "linecap": {
-                "label": "Edge line endings"
-            },
-            "linecorner": {
-                "label": "Edge line corners"
-            },
-            "linewidth": {
-                "label": "Edge line width"
-            },
-            "linecolor": {
-                "label": "Edge line color",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
-            },
-            "color": {
-                "label": "Fill colour",
-                "labelOr": "or",
-                "labelCustom": "Custom RGB color (0-255)"
-            },
-            "fill": {
-                "label": "Fill pattern"
-            },
-            "preview": {
-                "label": "Preview"
-            },
-            "buttons": {
-                "save": "Save",
-                "cancel": "Cancel"
             }
         },
         "notification": {
@@ -314,15 +208,7 @@ Oskari.registerLocalization(
             "categoryName": "A map layer name is missing.",
             "placeNameIllegal": "The place name contains illegal characters.",
             "descIllegal": "The place description contains illegal characters.",
-            "categoryNameIllegal": "The map layer name contains illegal characters.",
-            "dotSize": "The point size is invalid. It must be between 1 and 5.",
-            "dotColor": "The point colour is invalid. All the RGB values must be between 0 and 255.",
-            "dotShape": "The point icon is invalid.",
-            "lineSize": "The line width is invalid. It must be between 1 and 50.",
-            "lineColor": "The line colour is invalid. All the RGB values must be between 0 and 255.",
-            "areaLineSize": "The line width is invalid. It must be between 1 and 50.",
-            "areaLineColor": "The edge line colour is invalid. All the RGB values must be between 0 and 255.",
-            "areaFillColor": "The fill colour is invalid. All the RGB values must be between 0 and 255."
+            "categoryNameIllegal": "The map layer name contains illegal characters."
         }
     }
 });

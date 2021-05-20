@@ -43,7 +43,10 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
         controller.removeLayer(layer);
     };
     const getName = () => {
-        const field = <b>{layer.getName()}</b>;
+        // The layer model has entity-references for < > etc (&gt; &lt;)
+        // FIXME: after 2.4.0 when we remove the older layerlisting bundles we can
+        //  have the name in the model without encoding and NOT use dangerouslySetInnerHTML
+        const field = <b dangerouslySetInnerHTML={{__html: layer.getName()}} />;
         const description = layer.getDescription();
         if (!description) {
             return field;

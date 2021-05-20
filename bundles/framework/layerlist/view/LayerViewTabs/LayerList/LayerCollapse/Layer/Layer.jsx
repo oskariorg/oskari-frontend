@@ -10,7 +10,6 @@ const Flex = styled('div')`
     align-items: center;
 `;
 const LayerDiv = styled(Flex)`
-    background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     clear: both;
     padding: 6px;
     min-height: 16px;
@@ -46,16 +45,25 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, even, selected, controller }) => {
+// The layer model has entity-references for < > etc (&gt; &lt;)
+// FIXME: after 2.4.0 when we remove the older layerlisting bundles we can
+//  have the name in the model without encoding and NOT use dangerouslySetInnerHTML
+const LayerName = ({ layer }) => {
+    return (<div dangerouslySetInnerHTML={{__html: layer.getName()}} />);
+};
+
+const Layer = ({ model, selected, controller }) => {
     return (
-        <LayerDiv even={even} className="layer">
+        <LayerDiv className="t_layer" data-id={model.getId()}>
             <CustomTools className="custom-tools">
                 {
                     model.getTools()
                         .filter(tool => tool.getTypes().includes('layerList'))
                         .map((tool, i) =>
                             <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
-                                <div className={tool.getIconCls()} onClick={() => onToolClick(tool)}/>
+                                <div onClick={() => onToolClick(tool)}>
+                                    {tool.getIconComponent()}
+                                </div>
                             </Tooltip>
                         )
                 }
@@ -65,7 +73,7 @@ const Layer = ({ model, even, selected, controller }) => {
                     <Switch size="small" checked={selected}
                         onChange={checked => onSelect(checked, model.getId(), controller)}
                         disabled={model.isSticky()} />
-                    <div>{model.getName()}</div>
+                    <LayerName layer={ model } />
                 </Label>
             </Body>
             <LayerTools model={model} controller={controller}/>
@@ -75,10 +83,17 @@ const Layer = ({ model, even, selected, controller }) => {
 
 Layer.propTypes = {
     model: PropTypes.any.isRequired,
-    even: PropTypes.bool.isRequired,
     selected: PropTypes.bool.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const memoized = React.memo(Layer);
+const memoized = React.memo(Layer, (prevProps, nextProps) => {
+    const nameChanged = prevProps.model.getName() !== nextProps.model.getName();
+    if (nameChanged) {
+        return false;
+    }
+    const propsToCheck = ['selected'];
+    const propsChanged = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
+    return !propsChanged;
+});
 export { memoized as Layer };
