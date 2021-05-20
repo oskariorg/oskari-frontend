@@ -60,8 +60,15 @@ Oskari.registerLocalization(
                 'UNSTABLE': ''
             },
             'layerTooltipTitle': {
-                'raster': 'Raster layer.',
-                'vector': 'Vector layer.'
+                'wms': 'Raster layer',
+                'wmts': 'Raster layer',
+                'arcgis93': 'Raster layer',
+                'arcgis': 'Raster layer',
+                'wfs': 'Vector layer',
+                'userlayer': '',
+                'myplaces': '',
+                'analysislayer': '',
+                'tiles3d': ''
             },
             'guidedTour': {
                 'title': 'Map layers',

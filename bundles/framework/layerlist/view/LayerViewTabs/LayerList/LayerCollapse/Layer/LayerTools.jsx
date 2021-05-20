@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { WarningIcon, Tooltip, Message } from 'oskari-ui';
+import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerIcon } from '../../../LayerIcon';
 
@@ -37,15 +37,6 @@ const getBackendStatus = (layer) => {
     return status;
 };
 
-const getLayerTitleType = (layerType) => {
-    if (['wmts', 'wms', 'arcgis93', 'arcgis'].includes(layerType)) {
-        return 'raster';
-    }
-    if (['wfs'].includes(layerType)) {
-        return 'vector';
-    }
-};
-
 const getStatusColor = (status) => {
     switch (status) {
     case 'OK':
@@ -76,7 +67,7 @@ const LayerTools = ({ model, controller }) => {
     return (
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
-            <LayerStatus layerType={ getLayerTitleType(model.getLayerType()) } backendStatus={backendStatus} model={model} onClick={statusOnClick} />
+            <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
         </Tools>
     );
@@ -87,23 +78,14 @@ LayerTools.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const LayerStatus = ({ layerType, backendStatus, model, onClick }) => {
-    const icon = (
-        <LayerIcon
-            fill={backendStatus.color}
-            type={model.getLayerType()}
-            hasTimeseries={model.hasTimeseries()}
-            onClick={onClick ? () => onClick() : undefined}
-        />
-    );
-
-    const statusTitle = (
-        <Fragment>
-            { layerType && <Message messageKey={`layerTooltipTitle.${layerType}` } /> } <Message messageKey={backendStatus.messageKey} />
-        </Fragment>
-    );
-
-    return <Tooltip title={ statusTitle }>{icon}</Tooltip>;
+const LayerStatus = ({ backendStatus, model, onClick }) => {
+    return <LayerIcon
+        fill={ backendStatus.color }
+        type={ model.getLayerType() }
+        hasTimeseries={ model.hasTimeseries() }
+        onClick={ onClick ? () => onClick() : undefined }
+        backendStatus={ backendStatus.messageKey }
+    />;
 };
 
 LayerStatus.propTypes = {

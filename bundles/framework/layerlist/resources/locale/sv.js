@@ -59,8 +59,15 @@ Oskari.registerLocalization(
                 'UNSTABLE': ''
             },
             'layerTooltipTitle': {
-                'raster': 'Kartlager i rasterformat.',
-                'vector': 'Kartlager i vektorformat.'
+                'wms': 'Kartlager i rasterformat',
+                'wmts': 'Kartlager i rasterformat',
+                'arcgis93': 'Kartlager i rasterformat',
+                'arcgis': 'Kartlager i rasterformat',
+                'wfs': 'Kartlager i vektorformat',
+                'userlayer': '',
+                'myplaces': '',
+                'analysislayer': '',
+                'tiles3d': ''
             },
             'guidedTour': {
                 'title': 'Kartlager',

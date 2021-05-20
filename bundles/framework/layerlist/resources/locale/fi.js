@@ -60,8 +60,15 @@ Oskari.registerLocalization(
                 'UNSTABLE': ''
             },
             'layerTooltipTitle': {
-                'raster': 'Rasteritaso.',
-                'vector': 'Vektoritaso.'
+                'wms': 'Rasteritaso',
+                'wmts': 'Rasteritaso',
+                'arcgis93': 'Rasteritaso',
+                'arcgis': 'Rasteritaso',
+                'wfs': 'Vektoritaso',
+                'userlayer': '',
+                'myplaces': '',
+                'analysislayer': '',
+                'tiles3d': ''
             },
             'guidedTour': {
                 'title': 'Karttatasot',
