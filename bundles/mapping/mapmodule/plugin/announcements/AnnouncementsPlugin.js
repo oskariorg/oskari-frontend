@@ -1,6 +1,6 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
- * Provides scalebar functionality for map
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin
+ * Provides selected announcements on the map
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginScaleBar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin',
@@ -28,13 +28,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
          */
         _initImpl: function () {
             var me = this;
-            
             Oskari.on('app.start', function (details) {
                 const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
                 if (!rpcService) {
                     return;
                 }
-                
                 rpcService.addFunction('getAnnouncements', function () {
                     return new Promise((resolve) => {
                         me._getAnnouncements(announcements => resolve(announcements));
@@ -79,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
             }
         },
 
-        _getAnnouncements: function(callback) {
+        _getAnnouncements: function (callback) {
             if (typeof callback !== 'function') {
                 return;
             }
@@ -90,11 +88,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
                 success: (pResp) => {
                     callback(pResp.data);
                 },
-                error: function (jqXHR, textStatus) {
-                    callback([]);
+                error: function () {
+                    callback([{ error: this.locale.announcementsError }]);
                 }
             });
         },
+
         _createEventHandlers: function () {
             return {
                 'Announcements.AnnouncementsChangedEvent': function (evt) {
@@ -104,16 +103,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         },
 
         _handleAnnouncementsChangedEvent: function (evt) {
-            //PÄIVITÄ ILMOITUKSET 
             if (this._config) {
                 this._config.announcements = evt.getAnnouncements();
                 this.addAnnouncements();
             } else {
-            this._config = {
-                announcements: evt.getAnnouncements()
-            };
-            this.addAnnouncements();
-        }
+                this._config = {
+                    announcements: evt.getAnnouncements()
+                };
+                this.addAnnouncements();
+            }
         },
 
         /**
