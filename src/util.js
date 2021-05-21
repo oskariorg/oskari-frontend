@@ -1,6 +1,5 @@
 import DOMPurify from 'dompurify';
 
-const MobileDetect = require('mobile-detect');
 /*
 * @class Oskari.util
 * Util class instance for static methods what may be used to for checks values.
