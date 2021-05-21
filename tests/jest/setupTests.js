@@ -6,6 +6,7 @@ import '../../src/global';
 
 // --- setup global jQuery --
 import jQuery from 'jquery';
+global.MobileDetect = require('mobile-detect');
 global.jQuery = jQuery;
 
 // for jQuery.outerHTML() from import 'oskari-frontend/src/polyfills';
