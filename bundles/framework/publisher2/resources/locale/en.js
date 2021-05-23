@@ -281,10 +281,10 @@ Oskari.registerLocalization(
                 "publishable": "Show only publishable map layers."
             }
         },
-        "tool": {
-            "buttonLabel": "Valitse Ilmoitukset",
+        "announcementsTool": {
+            "buttonLabel": "Select announcements",
             "popup": {
-                "title": "Ilmoitukset",
+                "title": "Announcements",
                 "close": "Sulje"
             },
         },

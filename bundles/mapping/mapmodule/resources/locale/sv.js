@@ -24,6 +24,9 @@ Oskari.registerLocalization(
         "unsupported-layer": "Denna kartlager kan inte visas.",
         "unsupported-layer-projection": "Denna kartlager kan inte visas med den valda kartprojektionen.",
         "plugin": {
+            "AnnouncementsPlugin": {
+                "title": "Aviseringar"
+            },
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",

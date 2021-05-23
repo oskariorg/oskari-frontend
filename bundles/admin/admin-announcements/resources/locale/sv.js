@@ -33,13 +33,6 @@ Oskari.registerLocalization(
                 "deleteAnnouncementConfirm": "Radera avisering?",
                 "cancelAnnouncementConfirm": "Är du säker?"
             },
-            "tool": {
-                "buttonLabel": "Valitse Ilmoitukset",
-                "popup": {
-                    "title": "Ilmoitukset",
-                    "close": "Sulje"
-                },
-            },
             "titleError": "Lägg till en titel!",
             "contentError": "Lägg till innehåll!",
             "dateError": "Lägg till intervall!"

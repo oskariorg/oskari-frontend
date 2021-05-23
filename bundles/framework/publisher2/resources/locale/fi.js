@@ -281,7 +281,7 @@ Oskari.registerLocalization(
                 "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
         },
-        "tool": {
+        "AnnouncementsTool": {
             "buttonLabel": "Valitse Ilmoitukset",
             "popup": {
                 "title": "Ilmoitukset",

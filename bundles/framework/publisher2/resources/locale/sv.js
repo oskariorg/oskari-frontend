@@ -281,6 +281,13 @@ Oskari.registerLocalization(
                 "publishable": "Visa endast kartlager som kan publiceras med kart publicering funktion"
             }
         },
+        "announcementsTool": {
+            "buttonLabel": "Välja aviseringar",
+            "popup": {
+                "title": "Aviseringar",
+                "close": "Stäng"
+            },
+        },
         "guidedTour": {
             "title": "Skapa karta",
             "message": "I \"Skapa Karta\"-menyn kan du skapa din egen karta och publicera den på din hemsida. Du behöver bara välja kartlagret, ge några uppgifter om kartan för publicering, ange kartans storlek, välja lämpliga kartverktyg och utforma layouten. Efter alla dessa val får du en rad html-kod. Lägg den till din kod och nu har du en karta på din webbplats. Kom ihåg att kontrollera att alla valda kartlager är publicerbara.",

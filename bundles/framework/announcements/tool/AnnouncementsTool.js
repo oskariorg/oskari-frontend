@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
         */
         getExtraOptions: function () {
             var me = this;
-            var buttonLabel = me.__instance._localization.tool.buttonLabel,
+            var buttonLabel = me.__instance._localization.announcementsTool.buttonLabel,
                 template = me.templates.announcements.clone();
 
             // Set the button handler
@@ -136,12 +136,12 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                title = me.__instance._localization.tool.popup.title,
+                title = me.__instance._localization.announcementsTool.popup.title,
                 content = me.templates.announcementsPopup.clone(),
                 announcementInput,
                 annName,
                 i;
-            closeButton.setTitle(me.__instance._localization.tool.popup.close);
+            closeButton.setTitle(me.__instance._localization.announcementsTool.popup.close);
             closeButton.setHandler(function () {
                 popup.close(true);
                 me.isAnnouncementsDialogOpen = false;
