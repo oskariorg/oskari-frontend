@@ -1,7 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
- * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginScaleBar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin',
     /**
@@ -192,7 +191,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         /**
         * @method addAnnouncements
         * Adds announcements to the list from config
-        * @param announcement announcement to add
         */
         addAnnouncements: function () {
             var announcements = this._config.announcements;
