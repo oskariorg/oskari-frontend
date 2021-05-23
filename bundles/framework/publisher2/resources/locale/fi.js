@@ -64,6 +64,7 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
+                "AnnouncementsPlugin": "Ilmoitukset",
                 "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
@@ -279,6 +280,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
+        },
+        "tool": {
+            "buttonLabel": "Valitse Ilmoitukset",
+            "popup": {
+                "title": "Ilmoitukset",
+                "close": "Sulje"
+            },
         },
         "guidedTour": {
             "title": "Karttajulkaisu",

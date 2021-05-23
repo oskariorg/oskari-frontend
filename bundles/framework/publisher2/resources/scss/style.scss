@@ -23,6 +23,10 @@
         }
     }
 }
+      
+#publisher-announcements {
+    width: 125px;
+}
 
 div.codesnippet {
     word-wrap: break-word;
@@ -51,11 +55,19 @@ div.basic_publisher {
         width: 125px;
     }
 
+    div#publisher-layout-announcements input[name=publisher-announcements] {
+        width: 125px;
+    }
+
     p#publisher-selected-colour {
         display: inline;
     }
 
     button#publisher-colours {
+        float: right;
+    }
+
+    button#publisher-announcements-button {
         float: right;
     }
 
@@ -360,5 +372,9 @@ div#publisher-custom-colours {
 }
 
 #publisher-layout-colours {
+    padding-left: 28px;
+}
+
+#publisher-layout-announcements {
     padding-left: 28px;
 }

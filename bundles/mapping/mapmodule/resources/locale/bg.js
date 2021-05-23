@@ -20,6 +20,12 @@ Oskari.registerLocalization(
             "zoomLvl-12": ""
         },
         "plugin": {
+            "AnnouncementsPlugin": {
+                "terms": "Условия на ползване",
+                "dataSources": "",
+                "layersHeader": "",
+                "indicatorsHeader": ""
+            },
             "LogoPlugin": {
                 "terms": "Условия на ползване",
                 "dataSources": "",
