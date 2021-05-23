@@ -2,8 +2,8 @@
 // libraries
 
 import 'expose-loader?jQuery!jquery';
-import 'script-loader!../libraries/requirejs/require-2.2.0.min.js';
-import 'script-loader!../libraries/requirejs/text-plugin-2.0.14.min.js';
+// registers global variable "MobileDetect" used in src/util.js:
+import 'expose-loader?MobileDetect!mobile-detect';
 import 'imports-loader?this=>window!../libraries/intl-messageformat/intl-messageformat-with-locales-2.1.0.js';
 import '../src/polyfills.js';
 

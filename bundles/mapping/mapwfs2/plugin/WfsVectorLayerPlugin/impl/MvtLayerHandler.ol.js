@@ -4,7 +4,6 @@ import olLayerTile from 'ol/layer/Tile';
 import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
-import olTileState from 'ol/TileState';
 import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
 import { WFS_ID_KEY } from '../util/props';
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
@@ -26,6 +25,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.minZoomLevel = this._getMinZoom(config);
         this._setupTileGrid(config);
     }
+
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
             return styleFunction;
@@ -35,12 +35,14 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             return styleFunction(feature, resolution, isSelected);
         };
     }
+
     getPropertiesForIntersectingGeom (geometry, layer) {
         if (!geometry || !layer) {
             return;
         }
         return layer.getSource().getPropsIntersectingGeom(geometry);
     }
+
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {
@@ -56,7 +58,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         if (mvtMinScale && (!layerMinScale || layerMinScale > mvtMinScale)) {
             layer.setMinScale(mvtMinScale);
         }
-        const source = this._createLayerSource(layer, sourceOpts);
+        const source = new FeatureExposingMVTSource(sourceOpts);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
@@ -110,19 +112,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             tileSize: [tileSize, tileSize]
         };
     }
-    _createLayerSource (layer, options) {
-        const source = new FeatureExposingMVTSource(options);
-        source.on('tileloadend', ({ tile }) => {
-            if (tile.getState() === olTileState.ERROR) {
-                return;
-            }
-            this.updateLayerProperties(layer, source);
-        });
-        return source;
-    }
+
     /**
      * @method _createDebugLayer Helper for debugging purposes.
-     * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
+     * Use from console. Set breakpoint when new FeatureExposingMVTSource() is called
+     *  and add desired layer to map.
      *
      * Like so:
      * Set breakpoint on "const source = new FeatureExposingMVTSource(options);"

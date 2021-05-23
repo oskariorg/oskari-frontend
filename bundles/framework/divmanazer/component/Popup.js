@@ -19,6 +19,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this._isVisible = false;
         // for preventing things going infinity with onClose() handlers. show() and close() use this.
         this._closingInProgress = false;
+        this._fadeoutTime = 3000;
+        this._fadeoutTimer = null;
     }, {
         /**
          * @method show
@@ -32,34 +34,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             var me = this;
             var contentDiv = this.dialog.find('div.content');
             var actionDiv = this.dialog.find('div.actions');
-            var i;
-            var focusedButton = -1;
             var screenWidth = window.innerWidth;
             var screenHeight = window.innerHeight;
-
             this.setTitle(title);
             this.setContent(message);
+            buttons = Array.isArray(buttons) ? buttons : [];
 
             // Remove previous buttons
             actionDiv.empty();
-            if (buttons && buttons.length > 0) {
-                for (i = 0; i < buttons.length; i += 1) {
-                    buttons[i].insertTo(actionDiv);
-                    if (buttons[i].isFocus()) {
-                        focusedButton = i;
-                    }
-                }
-            } else if (!this.dialog.find('.close-icon')) {
-                // if no actions, the user can click on popup to close it
-                this.dialog.on('click', function () {
-                    me.close(true);
-                });
+            if (buttons.length) {
+                buttons.forEach(btn => btn.insertTo(actionDiv));
             } else {
                 actionDiv.remove();
             }
             jQuery('body').append(this.dialog);
-            if (focusedButton >= 0) {
-                buttons[focusedButton].focus();
+            const focusedIndex = buttons.lastIndexOf(btn => btn.isFocused());
+            if (focusedIndex > 0) {
+                buttons[focusedIndex].focus();
             }
 
             this._setReasonableHeight();
@@ -157,15 +148,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Removes the popup after given time has passed
          * @param {Number} timeout milliseconds
          */
-        fadeout: function (timeout) {
-            var me = this,
-                timer = 3000;
-            if (timeout) {
-                timer = timeout;
-            }
-            setTimeout(function () {
-                me.close();
-            }, timer);
+        fadeout: function (timeout = this._fadeoutTime) {
+            clearTimeout(this._fadeoutTimer);
+            this._fadeoutTimer = setTimeout(() => {
+                this.close();
+            }, timeout);
         },
         /**
          * @method addClass

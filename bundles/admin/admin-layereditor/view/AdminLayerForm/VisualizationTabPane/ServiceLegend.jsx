@@ -10,7 +10,7 @@ export const ServiceLegend = ({ url }) => {
             <Fragment>
                 <Message messageKey='styles.raster.serviceLegend' />
                 <span>:&nbsp;</span>
-                <Message messageKey='styles.raster.serviceNotAvailable' />
+                <Message messageKey='serviceNotAvailable' />
             </Fragment>
         );
     }

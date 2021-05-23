@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // published maps or saved views may contain dublicate indicators => filter dublicates
             }).filter((ind, i, inds) => inds.findIndex(find => (find.hash === ind.hash)) === i);
 
-            let active = this.indicators.find(ind => ind.hash === activeHash);
+            const active = this.indicators.find(ind => ind.hash === activeHash);
             if (active) {
                 const { classification, series, selections } = active;
                 if (classification) {
@@ -164,15 +164,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         getState: function () {
             // map to keep stored states work properly
-            const indicators = this.indicators.map(ind => {
-                return {
-                    ds: ind.datasource,
-                    id: ind.indicator,
-                    selections: ind.selections,
-                    series: ind.series,
-                    classification: ind.classification || this.getClassificationOpts(ind.hash)
-                };
-            });
+            const indicators = this.indicators
+                .filter(ind => !ind.indicator.startsWith('RuntimeIndicator'))
+                .map(ind => {
+                    return {
+                        ds: ind.datasource,
+                        id: ind.indicator,
+                        selections: ind.selections,
+                        series: ind.series,
+                        classification: ind.classification || this.getClassificationOpts(ind.hash)
+                    };
+                });
             const activeInd = this.getActiveIndicator();
             return {
                 indicators,

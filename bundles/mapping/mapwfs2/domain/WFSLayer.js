@@ -11,57 +11,89 @@ export class WFSLayer extends VectorTileLayer {
         super(...arguments);
         /* Layer Type */
         this._layerType = 'WFS';
-        this._featureData = true;
-        this._fields = []; // property names
-        this._locales = []; // property name locales
-        this._activeFeatures = []; // features on screen
-        this._selectedFeatures = []; // filtered features
-        this._clickedFeatureIds = []; // clicked feature ids (map)
-        this._clickedFeatureListIds = []; // clicked feature ids (list)
-        this._clickedGeometries = []; // clicked feature geometries [[id  geom]..]
-        this._propertyTypes = {}; // name and describeFeatureType type (hashmap  json) (Analysis populates)
-        this._wpsLayerParams = {}; // wfs/wps analysis layer params (hashmap  json)    (Analysis populates)
+        this._propertySelection = []; // names to order and limit visible properties
+        this._propertyLabels = {};
+        this._propertyTypes = {};
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
-        this._filterJson = null;
-        this._internalOpened = false;
         this._userStyles = [];
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = Oskari.getSandbox();
+    }
+    /* Overriding methods */
+
+    hasFeatureData () {
+        return true;
+    }
+
+    isFilterSupported () {
+        return true;
+    }
+
+    getLegendImage () {
+        return null;
+    }
+
+    isSupportedSrs () {
+        return true;
+    }
+
+    getLayerUrl () {
+        return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
     }
 
     /* Layer type specific s */
 
     /**
      * @method getFields
+     * @deprecated
      * @return {String[]} fields
      */
     getFields () {
-        return this._fields;
+        const id = '__fid';
+        if (this._propertySelection.length) {
+            return [id, ...this._propertySelection];
+        }
+        let names = Object.keys(this._propertyLabels);
+        if (!names.length) {
+            names = Object.keys(this._propertyTypes);
+        }
+        if (names.length) {
+            return [id, ...names];
+        }
+        return [];
     }
 
     /**
      * @method setFields
+     * @deprecated
      * @param {String[]} fields
      */
-    setFields (fields) {
-        this._fields = fields;
+    setFields () {
+        Oskari.log('WFSLayer').deprecated('setFields');
     }
 
     /**
      * @method getLocales
+     * @deprecated
      * @return {String[]} locales
      */
     getLocales () {
-        return this._locales;
+        if (this._propertySelection.length) {
+            const labels = this._propertySelection.map(p => this._propertyLabels[p] || p);
+            return ['ID', ...labels];
+        }
+        const locales = Object.values(this._propertyLabels);
+        return locales.length ? ['ID', ...locales] : locales;
     }
 
     /**
      * @method setLocales
+     * @deprecated
      * @param {String[]} locales
      */
-    setLocales (locales) {
-        this._locales = locales;
+    setLocales () {
+        Oskari.log('WFSLayer').deprecated('setLocales');
     }
 
     /**
@@ -90,99 +122,35 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
-     * @method getActiveFeatures
-     * @return {Object[]} features
+     * @method setPropertySelection
+     * @param {String[]} propertySelection
      */
-    getActiveFeatures () {
-        return this._activeFeatures;
+    setPropertySelection (propertySelection) {
+        this._propertySelection = propertySelection;
     }
 
     /**
-     * @method setActiveFeature
-     * @param {Object} feature
+     * @method getPropertySelection
+     * @return {String[]} propertySelection
      */
-    setActiveFeature (feature) {
-        this._activeFeatures.push(feature);
+    getPropertySelection () {
+        return [...this._propertySelection];
     }
 
     /**
-     * @method setActiveFeatures
-     * @param {Object[]} features
+     * @method setPropertyLabels
+     * @param {json} propertyLabels
      */
-    setActiveFeatures (features) {
-        this._activeFeatures = features;
+    setPropertyLabels (propertyLabels) {
+        this._propertyLabels = propertyLabels;
     }
 
     /**
-     * @method getSelectedFeatures
-     * @return {Object[]} features
+     * @method getPropertyLabels
+     * @return {json} propertyLabels
      */
-    getSelectedFeatures () {
-        return this._selectedFeatures;
-    }
-
-    /**
-     * @method setSelectedFeature
-     * @param {Object} feature
-     */
-    setSelectedFeature (feature) {
-        this._selectedFeatures.push(feature);
-    }
-
-    /**
-     * @method setSelectedFeatures
-     * @param {Object[]} features
-     */
-    setSelectedFeatures (features) {
-        this._selectedFeatures = features;
-    }
-
-    /**
-     * @method getClickedFeatureIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureIds () {
-        return this._clickedFeatureIds;
-    }
-
-    /**
-     * @method setClickedFeatureId
-     * @param {String} id
-     */
-    setClickedFeatureId (id) {
-        this._clickedFeatureIds.push(id);
-    }
-
-    /**
-     * @method setClickedFeatureIds
-     * @param {String[]} features
-     */
-    setClickedFeatureIds (ids) {
-        this._clickedFeatureIds = ids;
-    }
-
-    /**
-     * @method getClickedFeatureListIds
-     * @return {String[]} featureIds
-     */
-    getClickedFeatureListIds () {
-        return this._clickedFeatureListIds;
-    }
-
-    /**
-     * @method setClickedFeatureListId
-     * @param {String} id
-     */
-    setClickedFeatureListId (id) {
-        this._clickedFeatureListIds.push(id);
-    }
-
-    /**
-     * @method setClickedFeatureListIds
-     * @param {String} id
-     */
-    setClickedFeatureListIds (ids) {
-        this._clickedFeatureListIds = ids;
+    getPropertyLabels () {
+        return { ...this._propertyLabels };
     }
 
     /**
@@ -198,49 +166,37 @@ export class WFSLayer extends VectorTileLayer {
      * @return {json} propertyTypes
      */
     getPropertyTypes () {
-        return this._propertyTypes;
+        return { ...this._propertyTypes };
     }
 
     /**
      * @method setWpsLayerParams
+     * @deprecated
      * @param {json} wpsLayerParams
      */
-    setWpsLayerParams (wpsLayerParams) {
-        this._wpsLayerParams = wpsLayerParams;
+    setWpsLayerParams () {
+        Oskari.log('WFSLayer').deprecated('setWpsLayerParams');
     }
 
     /**
      * @method getWpsLayerParams
+     * @deprecated
      * @return {json} wpsLayerParams
      */
     getWpsLayerParams () {
-        return this._wpsLayerParams;
-    }
-
-    /**
-     * @method getFilterJson
-     * @return {Object[]} filterJson
-     */
-    getFilterJson () {
-        return this._filterJson;
-    }
-
-    /**
-     * @method setFilterJson
-     * @param {Object} filterJson
-     */
-    setFilterJson (filterJson) {
-        this._filterJson = filterJson;
-    }
-
-    /**
-     * Overriding getLegendImage for WFS
-     *
-     * @method getLegendImage
-     * @return {String} URL to a legend image
-     */
-    getLegendImage () {
-        return null;
+        const { data = {} } = this.getAttributes();
+        const { commonId, wpsInputType, noDataValue } = data;
+        const wps = {};
+        if (typeof commonId !== 'undefined') {
+            wps.join_key = commonId;
+        }
+        if (typeof wpsInputType !== 'undefined') {
+            wps.input_type = wpsInputType;
+        }
+        if (typeof noDataValue !== 'undefined') {
+            wps.no_data = noDataValue;
+        }
+        return wps;
     }
 
     /**
@@ -313,47 +269,6 @@ export class WFSLayer extends VectorTileLayer {
      */
     setClusteringDistance (distance) {
         this._options.clusteringDistance = distance;
-    }
-
-    /**
-     * @method isSupportedSrs
-     * Wfs layer is always supported
-     */
-    isSupportedSrs () {
-        return true;
-    }
-
-    /**
-     * @method setWMSLayerId
-     * @param {String} id
-     * Unique identifier for map layer used to reference the WMS layer
-     * which is linked to WFS layer for to use for rendering
-     */
-    setWMSLayerId (id) {
-        this._WMSLayerId = id;
-    }
-
-    /**
-     * @method getWMSLayerId
-     * @return {String}
-     * Unique identifier for map layer used to reference the WMS layer
-     * which is linked to WFS layer for to use for rendering
-     * (e.g. MapLayerService)
-     */
-    getWMSLayerId () {
-        return this._WMSLayerId;
-    }
-
-    /**
-     * @method getLayerUrl
-     * Superclass override
-     */
-    getLayerUrl () {
-        return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
-    }
-
-    isFilterSupported () {
-        return true;
     }
 
     saveUserStyle (styleWithMetadata) {

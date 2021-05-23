@@ -1,8 +1,8 @@
 export const WFS_ID_KEY = '_oid';
 export const WFS_FTR_ID_KEY = '__fid';
-export const WFS_FTR_ID_LOCALE = 'ID';
 
-const hiddenProps = new Set(['layer', 'geometry', 'bbox', WFS_ID_KEY]);
+const removeProps = new Set(['layer', 'geometry', 'bbox']);
+const removePropsWithId = new Set([WFS_ID_KEY, WFS_FTR_ID_KEY, ...removeProps]);
 
 function destructComplex (value) {
     if (typeof value === 'undefined') {
@@ -15,36 +15,20 @@ function removeComplexPrefix (field) {
     return field.startsWith('$') ? field.substring(1) : field;
 }
 
-function fieldsFromProps (properties) {
-    return Object.keys(properties).filter(key => !hiddenProps.has(removeComplexPrefix(key)));
+export function processFeatureProperties (properties = {}, removeId = false) {
+    const remove = removeId ? removePropsWithId : removeProps;
+    return Object.fromEntries(
+        Object.entries(properties)
+            .filter(([key]) => !remove.has(removeComplexPrefix(key)))
+            .map(entry => _processValue(entry)));
 }
 
-function propsArrayFrom (properties, fields) {
-    return fields.map(key => {
-        if (key === WFS_FTR_ID_KEY) {
-            return properties[WFS_ID_KEY];
-        }
-        const value = properties[key];
-        if (key.startsWith('$')) {
-            return destructComplex(value);
-        }
-        return value;
-    });
-}
-
-export function getFieldsArray (propsList) {
-    if (!propsList.length) {
-        return [];
+function _processValue ([key, value]) {
+    if (key === WFS_ID_KEY) {
+        return [WFS_FTR_ID_KEY, value];
     }
-    let fields = fieldsFromProps(propsList[0]);
-    fields = fields.map(removeComplexPrefix);
-    fields.unshift(WFS_FTR_ID_KEY);
-    return fields;
-}
-
-export function getPropsArray (propsList, fields) {
-    if (!propsList.length) {
-        return [];
+    if (key.startsWith('$')) {
+        return [removeComplexPrefix(key), destructComplex(value)]; // TODO remove '$' from key??
     }
-    return propsList.map(properties => propsArrayFrom(properties, fields));
+    return [key, value];
 }

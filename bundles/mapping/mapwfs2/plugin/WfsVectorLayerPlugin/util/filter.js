@@ -12,17 +12,12 @@ const operators = {
 /**
  * @method filterByAttribute Filters the given record list.
  * @param {Object} filter a filter from WFSSetPropertyFilter event
- * @param {Array} recordList array of feature records (arrays) to filter
- * @param {Array} fields array of field names for the feature records
+ * @param {Array} featurePropertyList array of feature properties (object) to filter
  * @return {Array} filtered array or the original recordList if the filter was invalid.
  */
-export const filterByAttribute = (filter, recordList, fields) => {
-    const filterIndex = fields.indexOf(filter.attribute);
-    if (filterIndex === -1) {
-        return recordList;
-    }
-    const filteredList = recordList.filter(ftrData => {
-        let val = ftrData[filterIndex];
+export const filterByAttribute = (filter, featurePropertyList) => {
+    const filteredList = featurePropertyList.filter(props => {
+        let val = props[filter.attribute];
         if (typeof val === 'undefined' || val === null) {
             return false;
         }

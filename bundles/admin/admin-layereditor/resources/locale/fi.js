@@ -61,12 +61,14 @@ Oskari.registerLocalization(
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
-                "metadataId": "Metatiedon tiedostotunniste",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
                 "dataProviderId": "Tiedontuottaja",
-                "groups": "Tason ryhmät"
+                "groups": "Tason ryhmät",
+                "updated": "Taso päivitettiin",
+                "created": "Taso luotiin",
+                "layerId": "Tason uniikki tunniste"
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
@@ -84,6 +86,8 @@ Oskari.registerLocalization(
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
             "editTheme": "Muokkaa teemaa",
+            "addSubtheme": "Lisää aliteema",
+            "editSubtheme": "Muokkaa aliteemaa",
             "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
@@ -98,6 +102,13 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
+            "serviceNotAvailable": "Ei saatavilla",
+            "metadata": {
+                "title": "Metatiedon tiedostotunniste",
+                "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
+                "service": "Palvelussa määritelty",
+                "overridden": "Korvaava tiedostotunniste"
+            },
             "capabilities": {
                 "parsed": "Tasolle parsitut Capabilities-tiedot",
                 "show": "Näytä palvelun GetCapabilities-vastaus",
@@ -119,8 +130,7 @@ Oskari.registerLocalization(
                     "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",
-                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite.",
-                    "serviceNotAvailable": "Ei saatavilla"
+                    "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."
                 },
                 "vector": {
                     "addStyle": "Lisää tyyli",
@@ -135,11 +145,11 @@ Oskari.registerLocalization(
                 }
             },
             "layerStatus": {
+                "unsupportedType": "Ylläpitotoiminnallisuus ei tue tasotyyppiä",
                 "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
-            "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
@@ -155,6 +165,23 @@ Oskari.registerLocalization(
                 "mvt": "Paljon pieniä kohteita",
                 "geojson": "Suuria kohteita",
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
+            },
+            "timeSeries": {
+                "metadataLayer": "Metadatataso",
+                "metadataAttribute": "Metadatan aika-atribuutti",
+                "metadataToggleLevel": "Mittakaavatasot, joilla metatietotaso on käytössä",
+                "metadataVisualize": "Metadatatason näkyminen",
+                "noToggle": "Ei valintaa",
+                "ui": "Aikasarjan käyttö",
+                "player": "Animaatio",
+                "range": "Aikajana",
+                "none": "Ei valintaa",
+                "tooltip": {
+                    "player": "Aikasarjadata näkyy animaationa kuva kerrallaan.",
+                    "range": "Yksittäinen ajankohta tai aikaväli valitaan janalta. Metadatan esitetään janalla ne ajankohdat, joista dataa on olemassa. Sopii ajassa ja tilassa hajanaiselle aineistolle.",
+                    "none": "WMS karttatasosta näkyy karttanäkymässä vain oletuskuva.",
+                },
+                "selectMetadataLayer": "Valitse metadatataso"
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
@@ -183,7 +210,8 @@ Oskari.registerLocalization(
                 "deleteFailed": "Poisto epäonnistui",
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
-                "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?"
+                "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
+                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät."
             },
             "otherLanguages": "Muut kielet",
             "stylesJSON": "Tyylimääritykset (JSON)",
@@ -194,6 +222,7 @@ Oskari.registerLocalization(
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
             "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
             "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "maximumScreenSpaceError": "Maximum screen space error",
             "deleteGroupLayers": "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {

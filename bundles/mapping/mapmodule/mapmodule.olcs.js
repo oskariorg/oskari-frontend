@@ -968,7 +968,17 @@ class MapModuleOlCesium extends MapModuleOl {
         const oskariStyle = {};
         const extStyle = {};
         if (styleDefs) {
-            jQuery.extend(true, oskariStyle, styleDefs.oskari);
+            let oskariStyleFromLayer = styleDefs.oskari;
+            // WFS-layers have "featureStyle" object for the actual style
+            // 3D-layers have not required it since there hasn't been hover styles implemented yet
+            // for consistency, dig the style from under the "featureStyle" so we can have both:
+            //  - backwards compatibility == featureStyle is NOT REQUIRED as part of the style
+            //  - consistency == featureStyle IS RECOGNIZED so we can use the visual style editor for WFS and 3D
+            if (oskariStyleFromLayer && oskariStyleFromLayer.featureStyle) {
+                oskariStyleFromLayer = oskariStyleFromLayer.featureStyle;
+            }
+
+            jQuery.extend(true, oskariStyle, oskariStyleFromLayer);
             jQuery.extend(true, extStyle, styleDefs.external);
         }
 

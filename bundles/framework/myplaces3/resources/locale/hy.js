@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Տեղանք",
         "desc": "",
-        "category": {
-            "defaultName": "Իմ քարտեզի շերտը",
-            "organization": "Իմ տեղանքը",
-            "inspire": "Տեղանք"
-        },
         "guest": {
             "loginShort": "մուտք գործել օգտագործելու համար"
         },
@@ -143,25 +138,6 @@ Oskari.registerLocalization(
                 "label": "Անվանում",
                 "placeholder": "Քարտեզի շերտին տալ անվանում"
             },
-            "drawing": {
-                "label": "Ոճ",
-                "point": {
-                    "label": "Կետ",
-                    "color": "Գույն",
-                    "size": "Չափ"
-                },
-                "line": {
-                    "label": "Գիծ",
-                    "color": "Գույն",
-                    "size": "Հաստություն"
-                },
-                "area": {
-                    "label": "Տարածք",
-                    "fillcolor": "Գունավորում",
-                    "linecolor": "Գծի գույն",
-                    "size": "Գծի հաստություն"
-                }
-            },
             "visibleFields": {
                 "label": "",
                 "placename": "",
@@ -184,92 +160,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": ""
                 }
-            }
-        },
-        "pointform": {
-            "title": "",
-            "tooltip": "",
-            "symbol": {
-                "label": ""
-            },
-            "size": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "lineform": {
-            "title": "",
-            "tooltip": "",
-            "style": {
-                "label": ""
-            },
-            "cap": {
-                "label": ""
-            },
-            "corner": {
-                "label": ""
-            },
-            "width": {
-                "label": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
-            }
-        },
-        "areaform": {
-            "title": "",
-            "tooltip": "",
-            "linestyle": {
-                "label": ""
-            },
-            "linecap": {
-                "label": ""
-            },
-            "linecorner": {
-                "label": ""
-            },
-            "linewidth": {
-                "label": ""
-            },
-            "linecolor": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "color": {
-                "label": "",
-                "labelOr": "",
-                "labelCustom": ""
-            },
-            "fill": {
-                "label": ""
-            },
-            "preview": {
-                "label": ""
-            },
-            "buttons": {
-                "save": "",
-                "cancel": ""
             }
         },
         "notification": {
@@ -311,15 +201,7 @@ Oskari.registerLocalization(
             "categoryName": "Քարտեզի շերտի անվանումը բաց է թողնված",
             "placeNameIllegal": "Օբյեկտի անվանումը պարունակում է անթույլատրելի նշաններ:Թույլատրելի նշաններն են ա-ֆ տառերը,ինչպես նաև å, ä և ö տառերը, թվերը, վերադարձ նախկին դիրք ստեղնը,գծիկներ",
             "descIllegal": "Առարկայի նկարագրությունը պարունակում է անթույլատրելի նշաններ:Թույլատրելի նշաններն են ա-ֆ,ինչպես նաև å,ä և ö տառերը, թվերը,վերադարձ նախկին դիրք ստեղնը և գծիկները",
-            "categoryNameIllegal": "Շերտի նկարագրությունը պարունակում է անթույլատրելի նշաններ:Թույլատրելի նշաններն են ա-ֆ,ինչպես նաև å,ä և ö տառերը, թվերը,վերադարձ նախկին դիրք ստեղնը և գծիկները",
-            "dotSize": "Կետի չափը չի համապատասխանում չափի սահմանափակումներին(1-50)",
-            "dotColor": "Սխալ կետի գույն",
-            "dotShape": "",
-            "lineSize": "Գծի չափը չի համապատասխանում չափի սահմանափակումներին(1-50)",
-            "lineColor": "Սխալ գծի գույն",
-            "areaLineSize": "Տարածքի ծայրամասերի չափը չի համապատասխանում սահմանափակումներին(0-50)",
-            "areaLineColor": "Սխալ տարածքի ծայրամասային գծի գույն",
-            "areaFillColor": "Սխալ գունավորում"
+            "categoryNameIllegal": "Շերտի նկարագրությունը պարունակում է անթույլատրելի նշաններ:Թույլատրելի նշաններն են ա-ֆ,ինչպես նաև å,ä և ö տառերը, թվերը,վերադարձ նախկին դիրք ստեղնը և գծիկները"
         }
     }
 });

@@ -68,7 +68,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             versions,
             capabilities,
             loading,
-            messages,
             propertyFields,
             credentialsCollapseOpen,
             tab,
@@ -85,10 +84,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     loading={loading}
                     layerTypes={layerTypes}
                     versions={versions}
-                    messages={messages}
                     credentialsCollapseOpen={credentialsCollapseOpen}
                     onCancel={() => {
-                        this.uiHandler.clearMessages();
                         this.uiHandler.clearCredentialsCollapse();
                     }}>
                     <AdminLayerForm
@@ -99,7 +96,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
                         versions={versions}
-                        messages={messages}
                         rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
                         validators={this.uiHandler.getValidatorFunctions(layer.type)}
                         validationErrors={this.uiHandler.validateUserInputValues(layer)}
@@ -108,7 +104,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         onDelete={() => this.uiHandler.deleteLayer()}
                         onSave={() => this.uiHandler.saveLayer()}
                         onCancel={() => {
-                            this.uiHandler.clearMessages();
                             this.hide();
                         }} />
                 </LayerWizard>
@@ -121,6 +116,5 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
-        this.uiHandler.clearMessages();
     }
 }

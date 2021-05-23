@@ -7,6 +7,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
         this.localization = Oskari.getLocalization('MapMyPlaces');
         this.sandbox = sandbox;
         this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
+        // created in parseLayer so it can be used to detect if we have already done it
+        this.groupId = null;
     }, {
         /**
          * parses any additional fields to model
@@ -20,15 +22,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
 
-            if (mapLayerJson.fields) {
-                layer.setFields(mapLayerJson.fields);
-            }
             if (loclayer.organization) {
                 layer.setOrganizationName(loclayer.organization);
             }
+            if (!this.groupId) {
+                // negative value for group id means that admin isn't presented with tools for it
+                this.groupId = -1 * Oskari.seq.nextVal('usergeneratedGroup');
+                const mapLayerGroup = maplayerService.getAllLayerGroups(this.groupId);
+                if (!mapLayerGroup) {
+                    const group = {
+                        id: this.groupId,
+                        name: {
+                            [Oskari.getLang()]: loclayer.inspire
+                        }
+                    };
+                    maplayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
+                }
+            }
             if (loclayer.inspire) {
                 layer.setGroups([{
-                    id: layer.getId(),
+                    id: this.groupId,
                     name: loclayer.inspire
                 }]);
             }

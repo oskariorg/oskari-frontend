@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Staðir",
         "desc": "",
-        "category": {
-            "defaultName": "Kortalagið mitt",
-            "organization": "Staðirnir mínir",
-            "inspire": "Staðirnir mínir"
-        },
         "guest": {
             "loginShort": "Skráðu þig inn til að bæta þínum stöðum á kort."
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Nafn",
                 "placeholder": "Nafn á kortalagi"
             },
-            "drawing": {
-                "label": "Gerð",
-                "point": {
-                    "label": "Punktur",
-                    "color": "Litur",
-                    "size": "Stærð"
-                },
-                "line": {
-                    "label": "Lína",
-                    "color": "Litur",
-                    "size": "Þykkt"
-                },
-                "area": {
-                    "label": "Svæði",
-                    "fillcolor": "Uppfyllingarlitur",
-                    "linecolor": "Litur á línu",
-                    "size": "Línuþykkt"
-                }
-            },
             "visibleFields": {
                 "label": "Sýnileg staðgögn",
                 "placename": "Nafn",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Breyta línumáti"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punktamát",
-            "tooltip": "Skilgreina stíl fyrir punkta.",
-            "symbol": {
-                "label": "Vémynd"
-            },
-            "size": {
-                "label": "Stærð"
-            },
-            "color": {
-                "label": "Litur",
-                "labelOr": "eða velja eitt af tiltækum kortalögum:",
-                "labelCustom": "Sér RGB litur (0-255)"
-            },
-            "preview": {
-                "label": "Forskoðun"
-            },
-            "buttons": {
-                "save": "Vista",
-                "cancel": "Hætta við"
-            }
-        },
-        "lineform": {
-            "title": "Línumát",
-            "tooltip": "Skilgreina stíl fyrir línur.",
-            "style": {
-                "label": "Gerð"
-            },
-            "cap": {
-                "label": "Endingar"
-            },
-            "corner": {
-                "label": "Horn"
-            },
-            "width": {
-                "label": "Breidd"
-            },
-            "color": {
-                "label": "Litur",
-                "labelOr": "eða",
-                "labelCustom": "Sér RGB litur (0-255)"
-            },
-            "preview": {
-                "label": "Forskoðun"
-            },
-            "buttons": {
-                "save": "Vista",
-                "cancel": "Hætta við"
-            }
-        },
-        "areaform": {
-            "title": "Svæðismát",
-            "tooltip": "Skilgreina stíl fyrir fláka.",
-            "linestyle": {
-                "label": "Línugerð"
-            },
-            "linecap": {
-                "label": "Línuendingar"
-            },
-            "linecorner": {
-                "label": "Línuhorn"
-            },
-            "linewidth": {
-                "label": "Línubreidd"
-            },
-            "linecolor": {
-                "label": "Línulitur",
-                "labelOr": "eða",
-                "labelCustom": "Sér RGB litur (0-255)"
-            },
-            "color": {
-                "label": "Uppfyllingarlitur",
-                "labelOr": "eða",
-                "labelCustom": "Sér RGB litur (0-255)"
-            },
-            "fill": {
-                "label": "Fyllt mynstur"
-            },
-            "preview": {
-                "label": "Forskoðun"
-            },
-            "buttons": {
-                "save": "Vista",
-                "cancel": "Hætta við"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Nafn á kortalagi vantar.",
             "placeNameIllegal": "Nafn viðfangs inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-z eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö.",
             "descIllegal": "Lýsing viðfangs inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-z eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö.",
-            "categoryNameIllegal": "Lýsing á lögum inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-z eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö.",
-            "dotSize": "Punktastærð er ekki innan stærðarmarka (1-5).",
-            "dotColor": "Litur punktsins er ógildur. Litagildið á að vera á bilinu 0 og 255.",
-            "dotShape": "Punktalögunin er ógild.",
-            "lineSize": "Línubreiddin er ógild. Stærð á að vera á bilinu 0 til 50.",
-            "lineColor": "Litur línu er ógildur. Litagildið á að vera á bilinu 0 og 255.",
-            "areaLineSize": "Þykkt á brún línu er ógild. Stærð á að vera á bilinu 0 til 50.",
-            "areaLineColor": "Litur á brún línu er ógildur. Litagildið á að vera á bilinu 0 og 255.",
-            "areaFillColor": "Fylltur litur er ógildur. Litagildið á að vera á bilinu 0 og 255."
+            "categoryNameIllegal": "Lýsing á lögum inniheldur stafi sem ekki eru leyfðir. Bókstafir frá a-z eru leyfðir, einnig tölustafir, bandstrik og undirstrik. Ekki eru leyfðir séríslenskir stafir fyrir utan ö."
         }
     }
 });

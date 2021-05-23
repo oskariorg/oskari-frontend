@@ -61,12 +61,14 @@ Oskari.registerLocalization(
                 "realtime": "Realtidslager",
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
-                "metadataId": "Metadatans filtagg",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
                 "dataProviderId": "Dataproducent",
-                "groups": "Grupp av kartlager"
+                "groups": "Grupp av kartlager",
+                "updated": "Detta kartlager var sist uppdaterad",
+                "created": "Detta kartlager skapades den",
+                "layerId": "Kartlagrets unika kännetecken"
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",
@@ -85,6 +87,8 @@ Oskari.registerLocalization(
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
             "editTheme": "Redigera tema",
+            "addSubtheme": "Lägg undertema",
+            "editSubtheme": "Redigera undertema",
             "selectMapLayerGroupsButton": "Välj grupp",
             "cancel": "Tillbaka",
             "close": "Stäng",
@@ -97,6 +101,13 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
+            "serviceNotAvailable": "Inte tillgänglig",
+            "metadata": {
+                "title": "Metadatans filtagg",
+                "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
+                "service": "Definierad i tjänsten",
+                "overridden": "Filtagg för metadatans"
+            },
             "capabilities": {
                 "parsed": "Utvald information från kartlagrets capabilities",
                 "show": "Visa getCapabilities svar",
@@ -118,8 +129,7 @@ Oskari.registerLocalization(
                     "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
                     "serviceLegend": "Definierad i tjänsten",
                     "overriddenLegend": "Adress för kartförklaring",
-                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten",
-                    "serviceNotAvailable": "Inte tillgänglig"
+                    "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },
                 "vector": {
                     "addStyle": "Tillsätt stil",
@@ -133,11 +143,11 @@ Oskari.registerLocalization(
                 }
             },
             "layerStatus": {
+                "unsupportedType": "Admin-funktionaliteten stöder inte denna lagertyp",
                 "existing": "Lagret är redan registrerat i tjänsten. Genom att välja det lägger du till samma lager flera gånger.",
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
                 "unsupported": "Lagret stöder inte de projektioner, som tjänsten använder. Lagret fungerar kanske inte normalt."
             },
-            "metadataIdDesc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "gfiTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
@@ -153,6 +163,23 @@ Oskari.registerLocalization(
                 "mvt": "Massor av små objekt",
                 "geojson": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
+            },
+            "timeSeries": {
+                "metadataLayer": "Metadatalager",
+                "metadataAttribute": "Metadata tidsattribut",
+                "metadataToggleLevel": "Zoomnivåer där vektorformaten är aktiverat",
+                "metadataVisualize": "Metadatalager synlighet ",
+                "noToggle": "Inget val",
+                "ui": "Tidsserie användargränssnitt",
+                "player": "Animering",
+                "range": "Tidsserie",
+                "none": "Inget val",
+                "tooltip": {
+                    "player": "Tidsserien visas animerad en bild på gång.",
+                    "range": "Välj tidsserie-kartlagrets intervall med att justera tidslinjen. Metadata kan tilläggas för att visa ytterligare information på tidslinjen. Funktionen tillämpar sig för visning av tid- och platsvis spridda datamängder.",
+                    "none": "Endast standardbildet visas av WMS kartlagret.",
+                },
+                "selectMetadataLayer": "Välj metadatalager"
             },
             "validation": {
                 "mandatoryMsg": "Obligatorisk information saknas:",
@@ -181,7 +208,8 @@ Oskari.registerLocalization(
                 "deleteFailed": "Borttagningen misslyckades",
                 "updateCapabilitiesFail": "Gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnittstjänsten är för tilfället ur funktion.",
                 "errorFetchLayerFailed": "Kartlagret returnerar ingen data. Kartlagret existerar möjligen inte längre eller du har inte rättigheter att använda det.",
-                "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?"
+                "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?",
+                "deleteErrorGroupHasSubgroups": "Gruppen du försöker ta bort innehåller undergrupper. Ta bort undergrupperna först."
             },
             "otherLanguages": "Andra språk",
             "stylesJSON": "Stildefinitioner (JSON)",
@@ -192,6 +220,7 @@ Oskari.registerLocalization(
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
             "dynamicScreenSpaceErrorFactor": "Dynamic screen space error factor",
             "dynamicScreenSpaceErrorHeightFalloff": "Dynamic screen space error height falloff",
+            "maximumScreenSpaceError": "Maximum screen space error",
             "deleteGroupLayers": "Radera kartlagren i gruppen",
             "hover": "Framhävning av objekt och tooltip (JSON)",
             "ion": {

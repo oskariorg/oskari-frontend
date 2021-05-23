@@ -28,7 +28,7 @@ describe('LayerListHandler', () => {
         const mockFn = jest.fn();
         handler.addStateListener(mockFn);
 
-        const existingGrouping = GROUPING_PRESET[1].key;
+        const existingGrouping = GROUPING_PRESET[0].key;
         handler.getController().setGrouping(existingGrouping);
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
 

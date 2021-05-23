@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
 
         this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
         this.iconTemplate = jQuery('<div class="icon"></div>');
+        this.descriptionTemplate = jQuery('<div></div>');
     }, {
         /**
          * @method getName
@@ -112,6 +113,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                         return false;
                     });
                     panel.getContainer().append(deleteLink);
+
+                    const exportLink = this.linkTemplate.clone();
+                    exportLink.addClass('categoryOp');
+                    exportLink.addClass('export');
+                    exportLink.append(this.loc('tab.export.title'));
+                    exportLink.attr('title', this.loc('tab.export.tooltip'));
+                    exportLink.on('click', () => {
+                        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
+                        return false;
+                    });
+                    panel.getContainer().append(exportLink);
                 });
                 this._removeObsoleteCategories(categories);
 
@@ -216,6 +228,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             visibleFields.forEach(function (field) {
                 panel.grid.setColumnUIName(field, me.loc('tab.grid.' + field));
             });
+
+            // set up the description field
+            panel.grid.setColumnValueRenderer('desc', function (name, data) {
+                const description = me.descriptionTemplate.clone();
+                description.text(name);
+                return description;
+            });
+
             // set up the link from name field
             panel.grid.setColumnValueRenderer('name', function (name, data) {
                 var link = me.linkTemplate.clone();

@@ -97,7 +97,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 clearButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 // Updates the filter values
                 updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                layerAttributes,
                 popupTitle,
                 popupContent;
 
@@ -109,8 +108,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 return;
             }
             // Create filter dialog content
-            layerAttributes = me._layer.getFilterJson();
-            if (layerAttributes === null) {
+            const hasPropertyTypes = Object.keys(layer.getPropertyTypes()).length !== 0;
+            if (!hasPropertyTypes) {
+                // TODO could use wfs2 plugin updateLayerProperties(layer)
                 me._loadWFSLayerPropertiesAndTypes(me._layer.getId(), prevJson, cb, clickedFeatures, selectedTemporaryFeatures);
                 return;
             }
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
 
             // Make the popup draggable
             me.popup.makeDraggable();
-            if (_.isArray(layerAttributes) && _.isFunction(cb)) {
+            if (hasPropertyTypes && typeof cb === 'function') {
                 cb();
             }
         },
@@ -627,24 +627,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
          */
         _getLayerAttributes: function (layer) {
-            // Make copies of fields and locales
-            var fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0) : [],
-                locales = (layer.getLocales && layer.getLocales()) ? layer.getLocales().slice(0) : [],
-                attributes = [],
-                i;
-
-            for (i = 0; i < fields.length; i += 1) {
-                // Get only the fields which originate from the service,
-                // that is, exclude those which are added by Oskari (starts with '__').
-                if (!fields[i].match(/^__/)) {
-                    attributes.push({
-                        id: fields[i],
-                        name: (locales[i] || fields[i])
-                    });
-                }
-            }
-
-            return attributes;
+            const selection = layer.getPropertySelection();
+            const names = selection.length ? selection : Object.keys(layer.getPropertyTypes());
+            const localizedNames = layer.getPropertyLabels();
+            // map to array of objects
+            return names.map(id => { return { id, name: localizedNames[id] || id }; });
         },
 
         /**
@@ -884,7 +871,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Function} failure the failure callback
          */
         _getWFSLayerPropertiesAndTypes: function (layerId, success, failure) {
-            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layerId;
+            var url = Oskari.urls.getRoute('GetWFSLayerFields') + '&layer_id=' + layerId;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -907,18 +894,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
         _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            var fields = propertyJson.propertyTypes;
-            var layerAttributes = [];
-            for (var key in fields) {
-                if (fields.hasOwnProperty(key)) {
-                    layerAttributes.push({
-                        id: key,
-                        name: key,
-                        type: fields[key]
-                    });
-                }
+            const { types = {} } = propertyJson;
+            if (Object.keys(types).length === 0) {
+                Oskari.log('FilterDialog').error('Failed to load layer properties and types for layer:', this._layer.getId());
             }
-            this._layer.setFilterJson(layerAttributes);
+            this._layer.setPropertyTypes(types);
             this.createFilterDialog(this._layer, prevJson, cb, clickedFeatures, selectedTemporaryFeatures);
         },
 

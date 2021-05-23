@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
 
         me.id = json.id;
         me.layersModels = [];
+        me.layers = json.layers || [];
         me.name = json.name;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
@@ -31,7 +32,11 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         },
         addChildren: function (children) {
             this.children.push(children);
-            this.sort();
+        },
+        removeChild: function (type, id) {
+            const filteredChildren = this.children
+                .filter(c => !(c.type === type && c.id === id));
+            this.children = filteredChildren;
         },
         setChildren: function (json) {
             var me = this;
@@ -87,20 +92,25 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             return this.children;
         },
         getLayerIdList: function () {
-            var me = this;
-            var layers = [];
-            me.getChildren().forEach(function (children) {
-                if (children.type === 'layer') {
-                    layers.push(children.id);
-                }
-            });
-            return layers;
+            return this.getChildren()
+                .filter(c => c.type === 'layer')
+                .map(c => c.id);
         },
         getName: function () {
             return this.name;
         },
         setName: function (name) {
             this.name = name;
+        },
+        /**
+         * You probably shouldn't be using this but getChildren().filter(c => c.type === 'layer')
+         * @returns probably not the thing you were looking for...
+         */
+        getLayers: function () {
+            return this.layers;
+        },
+        setLayers: function (layers) {
+            this.layers = layers;
         },
         getOrderNumber: function () {
             return this.orderNumber;

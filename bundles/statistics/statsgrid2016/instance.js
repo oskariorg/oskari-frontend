@@ -85,6 +85,8 @@ Oskari.clazz.define(
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
 
+            this.addVectorLayer();
+
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
                 // Crete indicators tab to personal data view if personaldata bundle exists
@@ -102,6 +104,13 @@ Oskari.clazz.define(
             }
             // setup initial state
             this.setState();
+
+            // listen for search closing to remove stats layer if no indicators was found
+            this.flyoutManager.on('hide', id => {
+                if (id === 'search' && !this.statsService.getStateService().hasIndicators()) {
+                    this._removeStatsLayer();
+                }
+            });
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
@@ -122,7 +131,7 @@ Oskari.clazz.define(
                     this[plugin].toggleUI();
                 }
             });
-            let visible = this[plugin] && !!this[plugin].getElement();
+            const visible = this[plugin] && !!this[plugin].getElement();
             this.togglePlugin.toggleTool(tool, visible);
         },
         _addIndicatorsTabToPersonalData: function (sandbox) {
@@ -236,6 +245,27 @@ Oskari.clazz.define(
             var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
             service.removeGroup('indicators');
         },
+        /**
+         * Add vectorlayer to map for features. Layer is empty on module start.
+         */
+        addVectorLayer: function () {
+            const locale = this.getLocalization();
+            this.sandbox.postRequestByName(
+                'VectorLayerRequest',
+                [
+                    {
+                        layerId: this._layerId,
+                        showLayer: 'registerOnly',
+                        layerName: locale.layer.name,
+                        layerInspireName: locale.layer.inspireName,
+                        layerOrganizationName: locale.layer.organizationName,
+                        layerPermissions: {
+                            publish: 'publication_permission_ok'
+                        }
+                    }
+                ]
+            );
+        },
         eventHandlers: {
             'StatsGrid.StateChangedEvent': function (evt) {
                 if (evt.isReset()) {
@@ -298,19 +328,25 @@ Oskari.clazz.define(
                     this.getTile().showExtensions();
                 }
             },
-            AfterMapLayerRemoveEvent: function (event) {
-                var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== this._layerId || event._creator === this.getName()) {
+            'AfterMapLayerRemoveEvent': function (event) {
+                if (event.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
-                this.statsService.getStateService().resetState();
+                if (!this.getTile().isAttached()) {
+                    // clear ui if statsgrid isn't active
+                    this.clearDataProviderInfo();
+                    this._setClassificationViewVisible(false);
+                    this._setSeriesControlVisible(false);
+                    this.flyoutManager.hideFlyouts();
+                }
+                this.statsService.notifyOskariEvent(event);
             },
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              *
              */
-            MapLayerEvent: function (event) {
+            'MapLayerEvent': function (event) {
                 if (!this.getTile()) {
                     return;
                 }
@@ -328,7 +364,20 @@ Oskari.clazz.define(
                     this.__setupLayerTools();
                 }
             },
-            MapLayerVisibilityChangedEvent: function (event) {
+            'AfterMapLayerAddEvent': function (event) {
+                // listen event only when statsgrid isn't active
+                if (event.getMapLayer().getId() !== this._layerId || this.getTile().isAttached()) {
+                    return;
+                }
+                if (!this.statsService.getStateService().hasIndicators()) {
+                    this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+                } else {
+                    // layer has added from layerlist and has indicators.
+                    // notify other components with state changed to get full render
+                    this.getSandbox().notifyAll(Oskari.eventBuilder('StatsGrid.StateChangedEvent')());
+                }
+            },
+            'MapLayerVisibilityChangedEvent': function (event) {
                 var layer = event.getMapLayer();
                 if (!layer || layer.getId() !== this._layerId) {
                     return;
@@ -336,10 +385,10 @@ Oskari.clazz.define(
                 this.updateClassficationViewVisibility();
                 this.updateSeriesControlVisibility();
             },
-            FeatureEvent: function (evt) {
+            'FeatureEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
-            AfterChangeMapLayerOpacityEvent: function (evt) {
+            'AfterChangeMapLayerOpacityEvent': function (evt) {
                 if (evt.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
@@ -408,9 +457,16 @@ Oskari.clazz.define(
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
-            const serviceState = this.statsService.getStateService().getState();
+            // State isn't cleared when stats layer is removed
+            // return full state only if stats layer is selected
+            if (this.sandbox.isLayerAlreadySelected(this._layerId)) {
+                const serviceState = this.statsService.getStateService().getState();
+                return {
+                    ...serviceState,
+                    view: this.visible
+                };
+            }
             return {
-                ...serviceState,
                 view: this.visible
             };
         },

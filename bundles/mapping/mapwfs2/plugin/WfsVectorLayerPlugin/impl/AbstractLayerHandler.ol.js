@@ -1,7 +1,5 @@
-import { getFieldsArray, getPropsArray } from '../util/props';
+import { processFeatureProperties } from '../util/props';
 import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
-
-const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
 const LOADING_STATUS_VALUE = {
     COMPLETE: 'complete',
@@ -21,6 +19,7 @@ export class AbstractLayerHandler {
         this.loadingTimers = new Map();
         this.timerDelayInMillis = 60000;
     }
+
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * Implementing classes should call this function by super.addMapLayerToMap()
@@ -31,6 +30,7 @@ export class AbstractLayerHandler {
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         this.layerIds.push(layer.getId());
     }
+
     /**
      * @method createEventHandlers Creates layer handler specific event handlers
      */
@@ -41,6 +41,7 @@ export class AbstractLayerHandler {
             MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer())
         };
     }
+
     /**
      * @method getLayerStyleFunction
      * Returns OL style corresponding to the layer's selected style
@@ -52,23 +53,7 @@ export class AbstractLayerHandler {
     getStyleFunction (layer, styleFunction, selectedIds) {
         this._log.debug('TODO: getStyleFunction() not implemented on LayerHandler');
     }
-    /**
-     * @method updateLayerProperties
-     * Notify about changed features in view
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {ol/source} source
-     */
-    updateLayerProperties (layer, source = this._getLayerSource(layer)) {
-        if (this.throttledUpdates.has(layer.getId())) {
-            const throttledUpdate = this.throttledUpdates.get(layer.getId());
-            throttledUpdate();
-            return;
-        }
-        const update = () => this._updateLayerProperties(layer, source);
-        const throttledUpdate = Oskari.util.throttle(update, FEATURE_DATA_UPDATE_THROTTLE, { leading: false });
-        this.throttledUpdates.set(layer.getId(), throttledUpdate);
-        throttledUpdate();
-    }
+
     /**
      * @method refreshLayer forces feature update on layer
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -76,28 +61,14 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
-    _updateLayerProperties (layer, source) {
-        if (!layer.isVisible()) {
-            layer.setActiveFeatures([]);
-            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
-            return;
-        }
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
-        const propsList = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
-        const fields = getFieldsArray(propsList);
-        // Update fields and locales only if fields is empty
-        if (!layer.getFields().length) {
-            this.plugin.setWFSProperties(layer, fields);
-            return;
-        }
-        const properties = getPropsArray(propsList, layer.getFields());
-        layer.setActiveFeatures(properties);
-        if (layer.getActiveFeatures() && layer.getActiveFeatures().length > 0) {
-            this.sendWFSStatusChangedEvent(layer.getId(), LOADING_STATUS_VALUE.COMPLETE);
-        }
 
-        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
+    getLayerFeaturePropertiesInViewport (layerId) {
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
+        const source = this._getLayerSource(layerId);
+        const features = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
+        return features.map(f => processFeatureProperties(f));
     }
+
     _getFeaturePropsInExtent (source, extent) {
         if (typeof source.getFeaturePropsInExtent === 'function') {
             return source.getFeaturePropsInExtent(extent);
@@ -107,17 +78,19 @@ export class AbstractLayerHandler {
         }
         return [];
     }
+
     /**
      * Returns source corresponding to given layer
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer or layerId
      * @return {ol/source/VectorTile}
      */
-    _getLayerSource (oskariLayer) {
-        const olLayers = this.plugin.getOLMapLayers(oskariLayer);
+    _getLayerSource (layer) {
+        const olLayers = this.plugin.getOLMapLayers(layer);
         if (olLayers && olLayers.length > 0) {
             return olLayers[0].getSource();
         }
     }
+
     /**
      * @private @method _updateLayerStyle
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -128,6 +101,7 @@ export class AbstractLayerHandler {
         }
         this.plugin.updateLayerStyle(layer);
     }
+
     /**
      * @private @method _updateLayerOpacity
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer

@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "object-data": "Object gegevens",
         "layer": {
+            "defaultName": "Mijn kaartlagen",
             "organization": "Mijn Plaatsen",
             "inspire": "Mijn Kaart lagen"
         }

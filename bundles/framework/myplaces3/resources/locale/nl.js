@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Plaatsen",
         "desc": "",
-        "category": {
-            "defaultName": "Mijn kaartlagen",
-            "organization": "Mijn plaatsen",
-            "inspire": "Mijn plaatsen"
-        },
         "guest": {
             "loginShort": "Log in om te gebruiken"
         },
@@ -145,25 +140,6 @@ Oskari.registerLocalization(
                 "label": "Naam",
                 "placeholder": "Geef de kaartlaag een naam"
             },
-            "drawing": {
-                "label": "Stijl",
-                "point": {
-                    "label": "Punt",
-                    "color": "Kleur",
-                    "size": "Grootte"
-                },
-                "line": {
-                    "label": "Line",
-                    "color": "Kleur",
-                    "size": "Dikte"
-                },
-                "area": {
-                    "label": "Gebied",
-                    "fillcolor": "Invul kleur",
-                    "linecolor": "Lijnkleur",
-                    "size": "Lijndikte"
-                }
-            },
             "visibleFields": {
                 "label": "Zichtbare plaats gegevens",
                 "placename": "Naam",
@@ -186,92 +162,6 @@ Oskari.registerLocalization(
                 "line": {
                     "tooltip": "Bewerk de lijn stijl"
                 }
-            }
-        },
-        "pointform": {
-            "title": "Punt stijl",
-            "tooltip": "Define a style for point features.",
-            "symbol": {
-                "label": "Icoon"
-            },
-            "size": {
-                "label": "Grootte"
-            },
-            "color": {
-                "label": "Kleur",
-                "labelOr": "of",
-                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
-            },
-            "preview": {
-                "label": "Voorbeeld"
-            },
-            "buttons": {
-                "save": "Opslaan",
-                "cancel": "Terug"
-            }
-        },
-        "lineform": {
-            "title": "Lijn stijl",
-            "tooltip": "Define a style for line features.",
-            "style": {
-                "label": "Stijl"
-            },
-            "cap": {
-                "label": "Endings"
-            },
-            "corner": {
-                "label": "Hoeken"
-            },
-            "width": {
-                "label": "Dikte"
-            },
-            "color": {
-                "label": "Kleur",
-                "labelOr": "of",
-                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
-            },
-            "preview": {
-                "label": "Voorbeeld"
-            },
-            "buttons": {
-                "save": "Opslaan",
-                "cancel": "Terug"
-            }
-        },
-        "areaform": {
-            "title": "Gebied stijl",
-            "tooltip": "Define a style for area features.",
-            "linestyle": {
-                "label": "Edge lijnstijl"
-            },
-            "linecap": {
-                "label": "Edge lijneinden"
-            },
-            "linecorner": {
-                "label": "Edge lijnhoeken"
-            },
-            "linewidth": {
-                "label": "Edge lijndikte"
-            },
-            "linecolor": {
-                "label": "Edge Lijnkleur",
-                "labelOr": "of",
-                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
-            },
-            "color": {
-                "label": "Vul kleur",
-                "labelOr": "of",
-                "labelCustom": "Aangepaste RGB-kleuren (0-255)"
-            },
-            "fill": {
-                "label": "Vul patroon"
-            },
-            "preview": {
-                "label": "Voorbeeld"
-            },
-            "buttons": {
-                "save": "Opslaan",
-                "cancel": "Terug"
             }
         },
         "notification": {
@@ -313,15 +203,7 @@ Oskari.registerLocalization(
             "categoryName": "Naam van de kaartlaag ontbreekt.",
             "placeNameIllegal": "De naam van het object bevat niet-toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, aantallen, backspaces en koppeltekens.",
             "descIllegal": "De beschrijving van het object bevat niet-toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, aantallen, backspaces en koppeltekens.",
-            "categoryNameIllegal": "De beschrijving van de kaartlaag bevat niet-toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, aantallen, backspaces en koppeltekens.",
-            "dotSize": "De dikte van de stip past niet binnen de maximale afmetingen (1-5).",
-            "dotColor": "Verkeerde stip kleur.",
-            "dotShape": "De point shape is ongeldig.",
-            "lineSize": "De lijndikte past niet binnen de maximale afmetingen (1-50).",
-            "lineColor": "De lijn heeft de verkeerde kleur.",
-            "areaLineSize": "De dikte van de gebiedsgrens past niet binnen de afmetingen (0-50).",
-            "areaLineColor": "De lijn van de rand van het gebied heeft de verkeerde kleur.",
-            "areaFillColor": "Verkeerde invulkleur."
+            "categoryNameIllegal": "De beschrijving van de kaartlaag bevat niet-toegestane tekens. Toegestane tekens zijn de letters a t/m z, evenals å, ä en ö, aantallen, backspaces en koppeltekens."
         }
     }
 });

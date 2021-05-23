@@ -95,6 +95,10 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
      * @param  {Object} initialConf state configuration object including data for all bundles
      */
     useState: function (initialConf) {
+        if (!initialConf || !Object.keys(initialConf).length) {
+            Oskari.log('sandbox-state-methods').warn('useState() called with empty state, skipping. Use resetState() instead to restore initial state.');
+            return;
+        }
         var newStateConfig = jQuery.extend(true, {}, initialConf);
         var components = this.getStatefulComponents();
         var bundleState;

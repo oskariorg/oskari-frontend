@@ -160,26 +160,50 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             'float': 'right',
             'clear': 'both'
         });
+        const onSuccess = (indicator, data) => {
+            me.genericInfoPanel.close();
+            me.dataPanel.open();
+            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
+            me.indicatorDataForm.clearUi();
+            me.updateDatasetList();
+            me.selectSavedIndicator(indicator, data);
+            me.showSuccessPopup();
+        };
         saveBtn.setHandler(function () {
-            me.saveIndicator(me.indicatorForm.getValues(), function (err, indicator) {
+            const dataForm = me.indicatorForm.getValues();
+            const valuesForm = me.indicatorDataForm.getValues();
+
+            // Format raw form data so that it is provided as numbers
+            valuesForm.values.forEach((regionData, index) => {
+                if (!isNaN(regionData.value)) {
+                    valuesForm.values[index].value = Number(regionData.value);
+                }
+            });
+
+            const formValidates = me.validateFormValues(dataForm, valuesForm);
+
+            if (!formValidates) {
+                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                return;
+            }
+
+            me.saveIndicator(dataForm, function (err, indicator) {
                 if (err) {
                     me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                     return;
                 }
-                var data = me.indicatorDataForm.getValues();
-                if (data.values.length) {
-                    me.saveIndicatorData(data, function (err, someData) {
+                if (valuesForm.values.length) {
+                    me.saveIndicatorData(valuesForm, function (err, someData) {
                         if (err) {
                             me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
                             Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
-                        me.displayInfo();
+                        onSuccess(indicator, valuesForm);
                     });
                 } else {
-                    me.displayInfo();
+                    onSuccess(indicator, valuesForm);
                 }
-                me.selectSavedIndicator(indicator, data);
             });
         });
         this.setContent(this.uiElement);
@@ -195,6 +219,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         stateService.setRegionset(selectors.regionset);
         delete selectors.regionset;
         stateService.addIndicator(ds, id, selectors);
+        const hash = stateService.getHash(ds, id, selectors);
+        stateService.setActiveIndicator(hash);
     },
     /**
      * Opens a form for user to add or edit data for indicators year/regionset
@@ -248,23 +274,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
     },
+    validateFormValues: function (data, regionValues) {
+        if (typeof (data.name) !== 'string' || data.name.length === 0) {
+            return false;
+        }
+
+        if (typeof regionValues.values === 'undefined' || regionValues.values.length === 0) {
+            return false;
+        }
+
+        for (const singleRegion of regionValues.values) {
+            if (typeof singleRegion.value === 'undefined' || !singleRegion.value || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
+                return false;
+            }
+        }
+
+        return true;
+    },
     /**
      * Saves the indicator name, description etc
      */
     saveIndicator: function (data, callback) {
         var me = this;
-        // TODO: validate values
-        var isValid = function (data) {
-            if (typeof (data.name) !== 'string' || data.name.length === 0) {
-                return false;
-            }
-            return true;
-        };
 
-        if (!isValid(data)) {
-            callback('Input not valid');
-            return;
-        }
         // inject possible id for indicator
         data.id = me.indicatorId;
         me.service.saveIndicator(me.datasourceId, data, function (err, indicator) {
@@ -296,19 +328,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             return;
         }
 
-        // TODO: validate values
-        var isValid = true;
-        if (!isValid) {
-            callback('Input not valid');
-            return;
-        }
-
         // save dataset
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.indicatorId);
         var values = {};
         data.values.forEach(function (regionData) {
             values[regionData.id] = regionData.value;
         });
+
         me.service.saveIndicatorData(me.datasourceId, this.indicatorId, data.selectors, values, function (err, someData) {
             if (err) {
                 callback(err);
@@ -317,24 +343,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             callback(null, someData);
         });
     },
-    displayInfo: function () {
-        var me = this;
+    showSuccessPopup: function () {
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-        // TODO: add a button to show the added indicator on map or just show it right away?
         // TODO: add the name of the indicator and/or year/regionset that was added/modified?
         var title = this.locale('userIndicators.dialog.successTitle');
         var content = this.locale('userIndicators.dialog.successMsg');
-        okBtn.setPrimary(true);
-        okBtn.setHandler(function () {
-            dialog.close(true);
-            me.genericInfoPanel.close();
-            me.dataPanel.open();
-            me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
-            me.indicatorDataForm.clearUi();
-            me.updateDatasetList();
-        });
-        dialog.show(title, content, [okBtn]);
+        dialog.show(title, content, [dialog.createCloseButton()]);
+        dialog.fadeout();
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

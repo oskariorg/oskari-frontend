@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "graph": {
             "noValue": "Недоступно",
-            "tick": "{значение, число}"
+            "tick": "{value, number}"
         },
         "buttons": {
             "add": "Добавить",
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
             }
         },
         "Grid": {
-            "cellValue": "{значение, число}",
+            "cellValue": "{value, number}",
             "columnSelector": {
                 "title": "Свойства",
                 "tooltip": "Показать столбцы"

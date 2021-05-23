@@ -134,10 +134,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             }
             // replace commas and cast value to number as legend expects it to be a number
             dataItem.value = dataItem.value.replace(/,/g, '.');
-            if (!isNaN(dataItem.value)) {
-                dataItem.value = Number(dataItem.value);
-                data.values.push(dataItem);
-            }
+            data.values.push(dataItem);
         });
         return data;
     },

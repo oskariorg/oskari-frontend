@@ -52,8 +52,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         startPlugin: function () {
             var me = this;
-            me.templateLayer =
-                jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
+            me.templateLayer = jQuery('<div class="maplegend-layer"></div>');
+            me.templateTools = jQuery('<div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div>');
             me.templateLayerLegend = jQuery('<div class="maplegend-legend"><img /></div>');
         },
         /**
@@ -127,10 +127,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 layer = layers[n];
                 layerContainer = this._createLayerContainer(layer);
 
+                const layerTitle = jQuery('<div class="maplegend-layer-title">' + layer.getName() + '</div>');
+                const uuid = layer.getMetadataIdentifier();
+                if (uuid) {
+                    layerTitle.append(me.templateTools.clone());
+                    layerTitle.find('div.icon-info').on('click', function (event) {
+                        event.stopPropagation();
+                        sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
+                            uuid: uuid
+                        }]);
+                    });
+                }
+
                 if (layerContainer !== null) {
                     accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     accordionPanel.open();
-                    accordionPanel.setTitle(layer.getName());
+                    accordionPanel.setTitle(layerTitle);
                     accordionPanel.getContainer().append(layerContainer);
                     accordion.addPanel(accordionPanel);
                 }
@@ -148,7 +160,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         _createLayerContainer: function (layer) {
             var me = this,
-                sandbox = me.instance.getSandbox(),
                 layerDiv = this.templateLayer.clone();
 
             /* let's not show same image multiple times */
@@ -173,22 +184,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         }
                         layerDiv.append(subLayerlegendDiv);
                     }
-                }
-
-                /* metadata link */
-                var uuid = layer.getMetadataIdentifier(),
-                    tools = layerDiv.find('.maplegend-tools');
-                if (!uuid) {
-                    // no functionality -> hide
-                    tools.find('div.layer-description').hide();
-                } else {
-                    tools.find('div.icon-info').on('click', function () {
-                        var rn = 'catalogue.ShowMetadataRequest';
-
-                        sandbox.postRequestByName(rn, [{
-                            uuid: uuid
-                        }]);
-                    });
                 }
 
                 return layerDiv;
