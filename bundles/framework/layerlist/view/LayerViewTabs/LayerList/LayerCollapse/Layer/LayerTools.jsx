@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { WarningIcon, Tooltip, Message } from 'oskari-ui';
+import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerIcon } from '../../../LayerIcon';
 
@@ -79,16 +79,13 @@ LayerTools.propTypes = {
 };
 
 const LayerStatus = ({ backendStatus, model, onClick }) => {
-    const icon = (
-        <LayerIcon
-            fill={backendStatus.color}
-            type={model.getLayerType()}
-            hasTimeseries={model.hasTimeseries()}
-            onClick={onClick ? () => onClick() : undefined}
-        />
-    );
-
-    return <Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>;
+    return <LayerIcon
+        fill={ backendStatus.color }
+        type={ model.getLayerType() }
+        hasTimeseries={ model.hasTimeseries() }
+        onClick={ onClick ? () => onClick() : undefined }
+        additionalTooltipKey={ backendStatus.messageKey }
+    />;
 };
 
 LayerStatus.propTypes = {
