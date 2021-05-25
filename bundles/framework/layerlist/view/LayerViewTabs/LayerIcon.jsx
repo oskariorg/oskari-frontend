@@ -24,11 +24,12 @@ export const LayerIcon = ({ type, hasTimeseries = false, backendStatus, ...rest 
         return <DataLayerIcon {...rest} />;
     };
 
-    const tooltipTitle = (
-        <Fragment>
-            <Message messageKey={ `layerTooltipTitle.${type}` } />{ backendStatus && '. ' } { backendStatus && <Message messageKey={ backendStatus } /> }
-        </Fragment>
-    );
+    let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}` } />);
+    if (backendStatus) {
+        tooltipTitle = (<Fragment>
+            { tooltipTitle }. <Message messageKey={ backendStatus } />
+        </Fragment>);
+    }
 
     return (
         <Tooltip title={ tooltipTitle }>
