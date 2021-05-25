@@ -39,7 +39,7 @@ export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltipKey, .
 };
 
 LayerIcon.propTypes = {
-    type: PropTypes.string,
+    type: PropTypes.string.isRequired,
     additionalTooltipKey: PropTypes.string,
     hasTimeseries: PropTypes.bool
 };
