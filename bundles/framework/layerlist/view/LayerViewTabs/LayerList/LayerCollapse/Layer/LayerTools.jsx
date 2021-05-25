@@ -84,12 +84,11 @@ const LayerStatus = ({ backendStatus, model, onClick }) => {
         type={ model.getLayerType() }
         hasTimeseries={ model.hasTimeseries() }
         onClick={ onClick ? () => onClick() : undefined }
-        backendStatus={ backendStatus.messageKey }
+        additionalTooltipKey={ backendStatus.messageKey }
     />;
 };
 
 LayerStatus.propTypes = {
-    layerType: PropTypes.string,
     backendStatus: PropTypes.object.isRequired,
     model: PropTypes.object.isRequired,
     onClick: PropTypes.func

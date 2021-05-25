@@ -4,7 +4,7 @@ import { Tooltip, Message } from 'oskari-ui';
 import { DataLayerIcon, ImageLayerIcon, ThreeDIcon, TimeSerieIcon, UserDataIcon } from './CustomIcons';
 
 // TODO replace logic with layer plugins registering their icons.
-export const LayerIcon = ({ type, hasTimeseries = false, backendStatus, ...rest }) => {
+export const LayerIcon = ({ type, hasTimeseries = false, additionalTooltipKey, ...rest }) => {
     const getIcon = (type, rest) => {
         if (hasTimeseries) {
             return <TimeSerieIcon {...rest} />;
@@ -25,9 +25,9 @@ export const LayerIcon = ({ type, hasTimeseries = false, backendStatus, ...rest 
     };
 
     let tooltipTitle = (<Message messageKey={ `layerTooltipTitle.${type}` } />);
-    if (backendStatus) {
+    if (additionalTooltipKey) {
         tooltipTitle = (<Fragment>
-            { tooltipTitle }. <Message messageKey={ backendStatus } />
+            { tooltipTitle }. <Message messageKey={ additionalTooltipKey } />
         </Fragment>);
     }
 
@@ -40,6 +40,6 @@ export const LayerIcon = ({ type, hasTimeseries = false, backendStatus, ...rest 
 
 LayerIcon.propTypes = {
     type: PropTypes.string,
-    backendStatus: PropTypes.string,
+    additionalTooltipKey: PropTypes.string,
     hasTimeseries: PropTypes.bool
 };
