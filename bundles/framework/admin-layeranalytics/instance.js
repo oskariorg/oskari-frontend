@@ -12,17 +12,16 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
     function () {
         var conf = this.getConfiguration();
         conf.name = 'admin-layeranalytics';
-        conf.flyoutClazz = 'Oskari.admin.bundle.admin-layeranalytics.Flyout';
+        console.log('initializing');
     }, {
-        __name: 'layeranalytics',
+        __name: 'admin-layeranalytics',
         afterStart: function () {
-            this.createUi();
+            console.log('starting up');
         },
         getName: function () {
             return this.__name;
         },
         createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createContent();
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultExtension']

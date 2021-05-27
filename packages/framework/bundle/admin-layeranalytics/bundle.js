@@ -1,9 +1,9 @@
 /**
- * @class Oskari.framework.bundle.admin-layerrights.AdminLayerRightsBundle
+ * @class Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerAnalyticsBundle",
+Oskari.clazz.define("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -12,7 +12,7 @@ function() {
 
 }, {
 "create" : function() {
-    return Oskari.clazz.create("Oskari.framework.bundle.admin-layerrights.AdminLayerAnalyticsBundleInstance");
+    return Oskari.clazz.create("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");
 },
 "update" : function(manager, bundle, bi, info) {}
 }, {
@@ -25,12 +25,8 @@ function() {
             "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-layeranalytics/Flyout.js"
-        },{
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layeranalytics/Tile.js"
         }],
-
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
@@ -42,7 +38,7 @@ function() {
             "Bundle-Identifier" : "admin-layeranalytics",
             "Bundle-Name" : "admin-layeranalytics",
             "Bundle-Author" : [{
-                "Name" : "ev",
+                "Name" : "MML",
                 "Organisation" : "nls.fi",
                 "Temporal" : {
                     "Start" : "2013",
