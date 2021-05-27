@@ -10,13 +10,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
     * @static
     */
     function () {
-        var conf = this.getConfiguration();
-        conf.name = 'admin-layeranalytics';
         console.log('initializing');
     }, {
         __name: 'admin-layeranalytics',
         afterStart: function () {
-            console.log('starting up');
+            console.log('starting up' + this.getName());
         },
         getName: function () {
             return this.__name;
@@ -24,6 +22,10 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         createUi: function () {
         }
     }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
     }
 );

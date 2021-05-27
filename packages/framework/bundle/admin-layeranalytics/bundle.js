@@ -17,7 +17,7 @@ function() {
 "update" : function(manager, bundle, bi, info) {}
 }, {
 
-    "protocol" : ["Oskari.bundle.Bundle"],
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
 
         "scripts" : [{
