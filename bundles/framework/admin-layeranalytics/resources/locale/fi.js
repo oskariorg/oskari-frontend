@@ -7,9 +7,6 @@ Oskari.registerLocalization(
             "desc": "",
             "tile": {
                 "title": "A: Tasoanalytiikka"
-            },
-            "flyout": {
-                "title": "Käyttäjien ylläpito"
             }
         }
     });

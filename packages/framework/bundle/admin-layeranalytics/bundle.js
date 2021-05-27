@@ -23,11 +23,6 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
-        }],
-        "locales" : [{
-            "lang" : "fi",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-layeranalytics/resources/locale/fi.js"
         }]
     },
     "bundle" : {
@@ -39,7 +34,7 @@ function() {
                 "Organisation" : "nls.fi",
                 "Temporal" : {
                     "Start" : "2013",
-                    "End" : "2013"
+                    "End" : "2021"
                 },
                 "Copyleft" : {
                     "License" : {
@@ -62,5 +57,5 @@ function() {
     "dependencies" : ["jquery"]
 
 });
-
+console.log('defining bundle');
 Oskari.bundle_manager.installBundleClass("admin-layeranalytics", "Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");

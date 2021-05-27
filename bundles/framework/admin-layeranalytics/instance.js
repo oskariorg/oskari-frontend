@@ -13,6 +13,27 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         console.log('initializing');
     }, {
         __name: 'admin-layeranalytics',
+        /**
+         * @method start
+         * implements BundleInstance protocol start method
+         */
+        start: function () {
+            console.log('kukkuu');
+        },
+        /**
+         * @method init
+         * implements Module protocol init method - does nothing atm
+         */
+        init: function () {
+            return null;
+        },
+        /**
+         * @method update
+         * implements BundleInstance protocol update method - does nothing atm
+         */
+        update: function () {
+
+        },
         afterStart: function () {
             console.log('starting up' + this.getName());
         },
