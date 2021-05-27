@@ -17,15 +17,12 @@ function() {
 "update" : function(manager, bundle, bi, info) {}
 }, {
 
-    "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol" : ["Oskari.userinterface.extension.DefaultExtension"],
     "source" : {
 
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-layeranalytics/Tile.js"
         }],
         "locales" : [{
             "lang" : "fi",

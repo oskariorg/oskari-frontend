@@ -22,10 +22,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         createUi: function () {
         }
     }, {
-        protocol: [
-            'Oskari.bundle.BundleInstance',
-            'Oskari.mapframework.module.Module',
-            'Oskari.userinterface.Extension'
-        ]
+        extend: ['Oskari.userinterface.extension.DefaultExtension']
     }
 );
