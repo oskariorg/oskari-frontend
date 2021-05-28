@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "fi",
-        "key": "LayerAnalytics",
+        "key": "admin-layeranalytics",
         "value": {
             "title": "A: Tasoanalytiikka",
             "desc": "",

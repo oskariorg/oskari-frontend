@@ -1,7 +1,7 @@
 /**
  * Definition for bundle. See source for details.
  *
- * @class Oskari.<mynamespace>.<bundle-identifier>.MyBundle
+ * @class Oskari.framework.admin-layeranalytics.AdminLayerAnalyticsBundle
  */
 Oskari.clazz.define("Oskari.framework.admin-layeranalytics.AdminLayerAnalyticsBundle",
 
@@ -21,8 +21,9 @@ function() {
     * @method create
     */
     "create" : function() {
-        console.log('creating instance');
-        return Oskari.clazz.create("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");
+        return Oskari.clazz.create(
+            "Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance"
+        );
     },
     /**
      * Called by Bundle Manager to provide state information to
@@ -38,12 +39,18 @@ function() {
  * metadata
  */
 {
-    "protocol" : ["Oskari.bundle.Bundle"],
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
+
         "scripts" : [{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
-        }],
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
+            },
+            {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/framework/admin-layeranalytics/Tile.js"
+            }
+        ],
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
