@@ -1,61 +1,56 @@
 /**
- * @class Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundle
- *
  * Definition for bundle. See source for details.
+ *
+ * @class Oskari.<mynamespace>.<bundle-identifier>.MyBundle
  */
-Oskari.clazz.define("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundle",
+Oskari.clazz.define("Oskari.framework.admin-layeranalytics.AdminLayerAnalyticsBundle",
+
 /**
- * @method create called automatically on construction
+ * Called automatically on construction. At this stage bundle sources have been
+ * loaded, if bundle is loaded dynamically.
+ *
+ * @contructor
  * @static
- */ 
+ */
 function() {
 
 }, {
-"create" : function() {
-    return Oskari.clazz.create("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");
+    /*
+    * called when a bundle instance will be created
+    *
+    * @method create
+    */
+    "create" : function() {
+        console.log('creating instance');
+        return Oskari.clazz.create("Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");
+    },
+    /**
+     * Called by Bundle Manager to provide state information to
+     *
+     * @method update
+     * bundle
+     */
+    "update" : function(manager, bundle, bi, info) {
+    }
 },
-"update" : function(manager, bundle, bi, info) {}
-}, {
 
-    "protocol" : ["Oskari.userinterface.extension.DefaultExtension"],
+/**
+ * metadata
+ */
+{
+    "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
-
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layeranalytics/instance.js"
+        }],
+        "locales": [{
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/admin-layeranalytics/resources/locale/fi.js"
         }]
-    },
-    "bundle" : {
-        "manifest" : {
-            "Bundle-Identifier" : "admin-layeranalytics",
-            "Bundle-Name" : "admin-layeranalytics",
-            "Bundle-Author" : [{
-                "Name" : "MML",
-                "Organisation" : "nls.fi",
-                "Temporal" : {
-                    "Start" : "2013",
-                    "End" : "2021"
-                },
-                "Copyleft" : {
-                    "License" : {
-                        "License-Name" : "EUPL",
-                        "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
-                    }
-                }
-            }],        
-            "Bundle-Version" : "1.0.0",
-            "Import-Namespace" : ["Oskari"],
-            "Import-Bundle" : {}
-
-        }
-    },
-
-    /**
-     * @static
-     * @property dependencies
-     */
-    "dependencies" : ["jquery"]
-
+    }
 });
-console.log('defining bundle');
-Oskari.bundle_manager.installBundleClass("admin-layeranalytics", "Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance");
+
+// Install this bundle by instantating the Bundle Class
+Oskari.bundle_manager.installBundleClass("admin-layeranalytics", "Oskari.framework.admin-layeranalytics.AdminLayerAnalyticsBundle");
