@@ -49,6 +49,10 @@ function() {
             {
                 "type" : "text/javascript",
                 "src" : "../../../../bundles/framework/admin-layeranalytics/Tile.js"
+            },
+            {
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/framework/admin-layeranalytics/Flyout.js"
             }
         ],
         "locales": [{

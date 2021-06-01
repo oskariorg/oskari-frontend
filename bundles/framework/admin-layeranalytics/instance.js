@@ -10,8 +10,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
     * @static
     */
     function () {
-        console.log(this);
-        console.log('initializing');
         this.localization = null;
         this.plugins = {};
         this.sandbox = null;
@@ -60,7 +58,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
          * implements BundleInstance protocol start method
          */
         start: function () {
-            console.log('kukkuu');
             const me = this;
 
             const sandboxName = 'sandbox';
@@ -76,8 +73,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
             const reqBuilder = Oskari.requestBuilder(reqName);
             const request = reqBuilder(this);
             sandbox.request(this, request);
-
-            console.log(sandbox);
 
             me.createUi();
         },
@@ -95,9 +90,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         update: function () {
 
         },
-        afterStart: function () {
-            console.log('starting up' + this.getName());
-        },
         getName: function () {
             return this.__name;
         },
@@ -110,9 +102,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
          * Oskari.mapframework.bundle.publisher.Tile
          */
         startExtension: function () {
-            console.log('starting extension');
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.framework.bundle.admin-layeranalytics.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.framework.bundle.admin-layeranalytics.Tile', this);
-            console.log('couldnt create class');
         },
 
         /**
@@ -136,9 +127,27 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         },
 
         createUi: function () {
-            console.log('creating ui');
             const me = this;
             me.plugins['Oskari.userinterface.Tile'].refresh();
+            this.fetchLayerAnalytics();
+        },
+
+        fetchLayerAnalytics: function (layerId) {
+            console.log('fetching');
+            return fetch(Oskari.urls.getRoute('LayerStatus'), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (!response.ok) {
+                    // Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+                }
+                console.log(response.json());
+                return response.json();
+            }).then(json => {
+                // return json;
+            });
         }
     }, {
         protocol: [

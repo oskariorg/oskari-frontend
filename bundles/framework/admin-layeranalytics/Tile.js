@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Tile',
         this.instance = instance;
         this.container = null;
         this.template = null;
-        console.log('initiating tile');
     }, {
         /**
          * @method getName
