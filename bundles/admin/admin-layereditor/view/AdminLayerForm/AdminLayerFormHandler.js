@@ -1008,7 +1008,7 @@ class UIHandler extends StateHandler {
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
-                Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
+                Messaging.error(getMessage('messages.errorFetchUserRolesAndPermissionTypes'));
             });
     }
 
