@@ -1,10 +1,14 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { LayerAnalyticsContent } from './LayerAnalyticsContent';
+
 Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
     function (instance) {
         this.instance = instance;
-        // this.loc = Oskari.getMsg.bind(null, 'inspire');
         this.container = null;
         this.flyout = null;
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         __name: 'Oskari.framework.bundle.admin-layeranalytics.Flyout',
         getName: function () {
@@ -16,6 +20,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
             this.flyout = flyout;
+            console.log(this.container);
             // this.container.classList.add('inspire');
             // this.flyout.addClass('inspire');
         },
@@ -28,8 +33,20 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
             if (!root) {
                 return;
             }
-            // ReactDOM.render(<Message messageKey="flyoutContent.content" allowHTML={true} />, root);
+            console.log(root);
+            this.progressSpinner.insertTo(root);
+            this.updateListing();
         },
-        startPlugin: function () {}
+        updateListing: function () {
+            ReactDOM.render(<LayerAnalyticsContent analyticsData={ this.instance.getAnalyticsData() } />, this.container);
+        },
+        startPlugin: function () {},
+        setSpinnerState: function (spinnerState) {
+            if (!spinnerState) {
+                this.progressSpinner.stop();
+            } else {
+                this.progressSpinner.start();
+            }
+        }
     }
 );

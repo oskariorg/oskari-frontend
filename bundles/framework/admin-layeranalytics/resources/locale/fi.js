@@ -10,6 +10,9 @@ Oskari.registerLocalization(
             },
             "flyout": {
                 "title": "Tasoseuranta"
+            },
+            "messages": {
+                "errorFetchingLayerAnalytics": "Tason analytiikka tietoja ei voitu hakea."
             }
         }
     });

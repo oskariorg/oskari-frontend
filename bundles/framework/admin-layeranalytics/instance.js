@@ -1,3 +1,9 @@
+import { Messaging } from 'oskari-ui/util';
+import { Message } from 'oskari-ui';
+import React from 'react';
+
+const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layeranalytics' />;
+
 /**
  * @class Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnalyticsBundleInstance
  *
@@ -13,6 +19,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         this.localization = null;
         this.plugins = {};
         this.sandbox = null;
+        this.isLoading = true;
+        this.analyticsData = {};
     }, {
         __name: 'admin-layeranalytics',
         /**
@@ -74,6 +82,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
             const request = reqBuilder(this);
             sandbox.request(this, request);
 
+            me.fetchLayerAnalytics();
             me.createUi();
         },
         /**
@@ -127,13 +136,12 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         },
 
         createUi: function () {
-            const me = this;
-            me.plugins['Oskari.userinterface.Tile'].refresh();
-            this.fetchLayerAnalytics();
+            this.plugins['Oskari.userinterface.Tile'].refresh();
+            this.plugins['Oskari.userinterface.Flyout'].createContent();
         },
 
         fetchLayerAnalytics: function (layerId) {
-            console.log('fetching');
+            this.updateLoadingState(true);
             return fetch(Oskari.urls.getRoute('LayerStatus'), {
                 method: 'GET',
                 headers: {
@@ -141,13 +149,28 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
                 }
             }).then(response => {
                 if (!response.ok) {
-                    // Messaging.error(getMessage('messages.errorFetchWFSLayerAttributes'));
+                    Messaging.error(getMessage('messages.errorFetchingLayerAnalytics'));
                 }
-                console.log(response.json());
                 return response.json();
             }).then(json => {
-                // return json;
+                this.analyticsData = json;
+                // this.updateLoadingState();
+                this.plugins['Oskari.userinterface.Flyout'].updateListing();
+                return json;
             });
+        },
+
+        getAnalyticsData: function () {
+            return this.analyticsData;
+        },
+
+        /**
+         * @method updateLoadingState
+         * Updates loading state of bundle for progress spinner usage
+         */
+        updateLoadingState (loadingState = false) {
+            this.isLoading = loadingState;
+            this.plugins['Oskari.userinterface.Flyout'].setSpinnerState(loadingState);
         }
     }, {
         protocol: [
