@@ -22,25 +22,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundle', func
             'type': 'text/javascript',
             'src': '../../../bundles/framework/layerlist/instance.js'
         }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/service/layerlist.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/model/LayerGroup.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/request/ShowFilteredLayerListRequest.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/request/ShowFilteredLayerListRequestHandler.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/request/AddLayerListFilterRequest.js'
-        }, {
-            'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerlist/request/AddLayerListFilterRequestHandler.js'
-        },
-        {
             'type': 'text/css',
             'src': '../../../bundles/framework/layerlist/resources/scss/style.scss'
         }],

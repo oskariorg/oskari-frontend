@@ -1,6 +1,12 @@
 import './Tile';
 import './Flyout';
+import './model/LayerGroup';
+import './service/layerlist';
 import './service/LayerListToolingService';
+import './request/ShowFilteredLayerListRequest'
+import './request/ShowFilteredLayerListRequestHandler'
+import './request/AddLayerListFilterRequest'
+import './request/AddLayerListFilterRequestHandler'
 
 const FILTER_NEWEST_COUNT = 20;
 
