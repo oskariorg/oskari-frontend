@@ -35,7 +35,7 @@ createGroupModel(group, ...)
 const createGroupModel = (group, method, allLayers, tools, admin) => {
     const groupLayers = group.layers || [];
     // TODO: check if subgroups have layers?
-    if (groupLayers.length === 0 && !admin) {
+    if (group.groups.length === 0 && groupLayers.length === 0 && !admin) {
         // non-admin users get only groups with layers
         return;
     }
@@ -98,7 +98,7 @@ const filterOutEmptyGroups = (groups = []) => {
  * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
  *
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
- * @param {String} method layer method name to sort by
+ * @param {String} method layer method name to sort by like "getInspireTheme"
  * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
  * @param {Object[]} allGroups all layer groups or all dataproviders available in Oskari
  * @param {String} noGroupTitle title on UI for group that has layers without a group
