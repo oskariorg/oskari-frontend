@@ -1,9 +1,10 @@
-import { LAYER_HOVER, FTR_PROPERTY_ID } from '../../../mapmodule/domain/constants';
+import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../../../mapmodule/domain/constants';
+import { hoverStyleGenerator } from './util/style';
 
 export class HoverHandler {
     constructor (ftrIdPropertyKey) {
-        this.layer = null;
-        this.feature = null;
+        this.hoverLayers = {};
+        this.state = {};
         this.property = ftrIdPropertyKey || FTR_PROPERTY_ID;
         // The same handler instance manages myplaces, userlayers and wfslayers
         // The handler is notified when user hovers the map and doesn't hit a layer of managed type.
@@ -12,12 +13,7 @@ export class HoverHandler {
         this.clearHoverThreshold = 10;
         this.noHitsCounter = 0;
     }
-    isHovered (feature) {
-        if (!feature || !this.feature) {
-            return false;
-        }
-        return feature.get(this.property) === this.feature.get(this.property);
-    }
+
     /**
      * @method onMapHover VectorFeatureService handler impl method
      * Handles feature highlighting on map hover.
@@ -39,26 +35,30 @@ export class HoverHandler {
         if (this._featureOrIdEqualsCurrent(feature)) {
             return;
         }
-        const previousLayer = this.layer;
-        this.feature = feature;
-        this.layer = layer;
-        // update previously hovered layer
-        if (previousLayer) {
-            previousLayer.changed();
+        if (this.state.feature && this.state.layer) {
+            this.state.layer.getSource().removeFeature(this.state.feature);
         }
-        // update currently hovered layer
-        if (this.layer && this.layer !== previousLayer) {
-            this.layer.changed();
+        if (feature && layer) {
+            const hoverLayer = this.hoverLayers[layer.get(LAYER_ID)];
+            if (!hoverLayer) {
+                return;
+            }
+            hoverLayer.getSource().addFeature(feature);
+            this.state = {
+                feature,
+                layer
+            };
         }
     }
 
+    addHoverLayer (styleFactory, layer, olLayer) {
+        olLayer.setStyle(hoverStyleGenerator(styleFactory, layer));
+        this.hoverLayers[layer.getId()] = olLayer;
+    }
+
     clearHover () {
-        if (!this.layer) {
-            return;
-        }
-        this.feature = null;
-        this.layer.changed();
-        this.layer = null;
+        Object.values(this.hoverLayers).forEach(l => l.getSource().clear());
+        this.state = {};
         this.noHitsCounter = 0;
     }
 
@@ -82,12 +82,9 @@ export class HoverHandler {
         const options = request.getOptions();
         if (options.hover) {
             layer.setHoverOptions(options.hover);
-            const olLayers = this.getOLMapLayers(layer.getId());
-            if (olLayers) {
-                olLayers.forEach(lyr => {
-                    lyr.set(LAYER_HOVER, layer.getHoverOptions());
-                    lyr.setStyle(this._getLayerCurrentStyleFunction(layer));
-                });
+            const olLayer = this.hoverLayers(layer.getId());
+            if (olLayer) {
+                olLayer.setStyle(hoverStyleGenerator(styleFactory, layer));
             }
         }
     }

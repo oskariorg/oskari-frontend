@@ -1,7 +1,8 @@
 // Layer constants
 export const LAYER_ID = 'oskariLayerId';
 export const LAYER_TYPE = 'oskariLayerType';
-export const LAYER_HOVER = 'oskariHoverOptions';
+export const LAYER_HOVER = 'oskariHoverLayer';
+export const LAYER_CLUSTER = 'oskariClusterLayer';
 // Feature constants
 export const FTR_PROPERTY_ID = 'id';
 // Service constants

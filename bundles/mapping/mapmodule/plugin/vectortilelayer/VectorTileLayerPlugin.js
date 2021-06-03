@@ -62,6 +62,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     _getLayerModelClass () {
         return 'Oskari.mapframework.mapmodule.VectorTileLayer';
     }
+
     /**
      * @private @method _getModelBuilder
      * Returns object to be used as mapLayerService layer model builder
@@ -69,6 +70,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     _getModelBuilder () {
         return new VectorTileModelBuilder();
     }
+
     /**
      * @private @method _createPluginEventHandlers
      * Called by superclass to create event handlers
@@ -81,6 +83,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             }
         };
     }
+
     /**
      * @private @method _updateLayerStyle
      * @param {Oskari.mapframework.mapmodule.VectorTileLayer} oskariLayer
@@ -92,6 +95,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
         }
     }
+
     /**
      * @private @method _getLayerCurrentStyleFunction
      * Returns OL style corresponding to layer currently selected style
@@ -110,6 +114,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const factory = this.mapModule.getStyle.bind(this.mapModule);
         return styleDef ? styleGenerator(factory, styleDef, hoverOptions, this.hoverState) : this._createDefaultStyle();
     }
+
     /**
      * @private @method _createDefaultStyle
      * Creates OL style or style function for default style
@@ -118,6 +123,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     _createDefaultStyle () {
         return createDefaultStyle;
     }
+
     /**
      * Checks if the layer can be handled by this plugin
      * @method  isLayerSupported
@@ -130,6 +136,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         }
         return layer.isLayerOfType(this.layertype);
     }
+
     /**
      * @method getAttributions
      * @param  {Oskari.mapframework.domain.AbstractLayer} layer
@@ -154,6 +161,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             return link ? `<a href="${link}">${label}</a>` : label;
         });
     }
+
     getUrlParams (layer) {
         if (!layer.getParams()) {
             return null;
@@ -162,6 +170,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         return Object.keys(params)
             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
     }
+
     /**
      * @method addMapLayerToMap
      * @private
@@ -215,9 +224,11 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
     }
+
     createSource (layer, options) {
         return new olSourceVectorTile(options);
     }
+
     /**
      * @method onMapHover VectorFeatureService handler impl method
      * Handles feature highlighting on map hover.
@@ -271,6 +282,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             }
         }
     }
+
     /**
      * Called when layer details are updated (for example by the admin functionality)
      * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details

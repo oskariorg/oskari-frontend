@@ -22,6 +22,8 @@ import olGeometryCollection from 'ol/geom/GeometryCollection';
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
+
+import { LAYER_CLUSTER, LAYER_HOVER } from '../../../../mapmodule/domain/constants';
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
 olParser.inject(olPoint, olLineString, olLinearRing, olPolygon, olMultiPoint, olMultiLineString, olMultiPolygon, olGeometryCollection);
@@ -38,6 +40,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         super(layerPlugin);
         this.loadingStrategies = {};
     }
+
     createEventHandlers () {
         const handlers = super.createEventHandlers();
         if (this.plugin.getMapModule().getSupports3D()) {
@@ -48,6 +51,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         }
         return handlers;
     }
+
     getStyleFunction (layer, styleFunction, selectedIds) {
         const clustering = this._isClusteringSupported() && typeof layer.getClusteringDistance() !== 'undefined';
         return (feature, resolution) => {
@@ -76,6 +80,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return applyOpacity(style, layer.getOpacity());
         };
     }
+
     getPropertiesForIntersectingGeom (geometry, layer) {
         if (!geometry || !layer) {
             return;
@@ -97,15 +102,19 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         });
         return Array.from(featuresById.values());
     }
+
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const opacity = this.plugin.getMapModule().getSupports3D() ? 1 : layer.getOpacity() / 100;
+        const renderMode = 'hybrid';
+        const visible = layer.isVisible();
         const source = this._createLayerSource(layer);
+        const silent = true;
         const vectorLayer = new olLayerVector({
             opacity,
-            visible: layer.isVisible(),
-            renderMode: 'hybrid',
-            source: source
+            visible,
+            renderMode,
+            source
         });
         const olLayers = [vectorLayer];
 
@@ -127,11 +136,27 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             });
             const clusterLayer = new olLayerVector({
                 opacity,
-                visible: layer.isVisible(),
+                visible,
                 source: clusterSource
             });
             vectorLayer.on('change:opacity', () => clusterLayer.setOpacity(vectorLayer.getOpacity()));
+            clusterLayer.set(LAYER_CLUSTER, true, silent);
             olLayers.push(clusterLayer);
+        }
+        const hoverOptions = layer.getHoverOptions();
+        if (hoverOptions && hoverOptions.featureStyle) {
+            const hoverLayer = new olLayerVector({
+                opacity,
+                visible,
+                renderMode,
+                source: new olSourceVector()
+            });
+            hoverLayer.set(LAYER_HOVER, true, silent);
+            if (visible) {
+                const factory = this.plugin.mapModule.getStyle.bind(this.plugin.mapModule);
+                this.plugin.hoverHandler.addHoverLayer(factory, layer, hoverLayer);
+            }
+            olLayers.push(hoverLayer);
         }
 
         olLayers.forEach(olLayer => {
@@ -145,6 +170,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         }
         return olLayers;
     }
+
     refreshLayer (layer) {
         if (!layer) {
             return;
@@ -159,6 +185,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         });
         this._loadFeaturesForLayer(layer);
     }
+
     /**
      * @private
      * @method _createLayerSource To get an ol vector source for the layer.
@@ -184,6 +211,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;
     }
+
     /**
      * @method _createDebugLayer Helper for debugging purposes.
      * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
@@ -201,6 +229,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             })
         }));
     }
+
     /**
      * @private
      * @method _getFeatureLoader To get an ol loader impl for the layer.
@@ -239,6 +268,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             });
         };
     }
+
     /**
      * @private
      * @method _loadFeaturesForAllLayers Load features to all wfs layers.
@@ -253,6 +283,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             .filter(lyr => this.layerIds.includes(lyr.getId()))
             .forEach(lyr => this._loadFeaturesForLayer(lyr, extent, resolution, projection));
     }
+
     /**
      * @private
      * @method _loadFeaturesForLayer Loads features to the layer.
@@ -294,6 +325,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         }
         return resolution <= olLayer.getMaxResolution() && resolution >= olLayer.getMinResolution();
     }
+
     _isClusteringSupported () {
         return !this.plugin.getMapModule().getSupports3D();
     }

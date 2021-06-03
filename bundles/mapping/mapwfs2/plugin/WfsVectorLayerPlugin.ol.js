@@ -4,7 +4,7 @@ import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
 import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
-import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
+import { LAYER_ID, RENDER_MODE_MVT, RENDER_MODE_VECTOR, LAYER_TYPE, LAYER_HOVER } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
@@ -202,20 +202,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const handler = renderMode === RENDER_MODE_MVT ? this.mvtLayerHandler : this.vectorLayerHandler;
         this.layerHandlersByLayerId[layer.getId()] = handler;
-        let added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        if (!added) {
-            return;
-        }
-        if (!Array.isArray(added)) {
-            added = [added];
-        }
+        const added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         // Set oskari properties for vector feature service functionalities.
         added.forEach(lyr => {
             const silent = true;
             lyr.set(LAYER_ID, layer.getId(), silent);
             lyr.set(LAYER_TYPE, layer.getLayerType(), silent);
-            lyr.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-            if (layer.isVisible()) {
+            if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
                 lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
@@ -319,7 +312,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             return;
         }
         const factory = this.mapModule.getStyle.bind(this.mapModule);
-        const styleFunction = styleGenerator(factory, layer, this.hoverHandler);
+        const styleFunction = styleGenerator(factory, layer);
         const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
         return handler.getStyleFunction(layer, styleFunction, selectedIds);
     }

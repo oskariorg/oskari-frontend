@@ -143,34 +143,26 @@ const getStyleForGeometry = (geometry, styleTypes) => {
     return style;
 };
 
-const getStyleFunction = (styleValues, hoverHandler) => {
-    const getTypedStyles = (styles, isHovered, isSelected) => {
+const getStyleFunction = styleValues => {
+    const getStyleTypes = (styles, isSelected) => {
         if (!styles) {
             return;
         }
-        if (isHovered && isSelected) {
-            return styles.selectedHover || styles.hover || styles.customized || styles.default;
-        }
-        if (isHovered) {
-            return styles.hover || styles.customized || styles.default;
-        }
         if (isSelected) {
-            return styles.selected || styles.customized || styles.default;
+            return styles.selected || styles.default;
         }
-        return styles.customized || styles.default;
+        return styles.default;
     };
     return (feature, resolution, isSelected) => {
-        const isHovered = hoverHandler.isHovered(feature, hoverHandler);
-
         let styleTypes = null;
         if (styleValues.optional) {
             const found = styleValues.optional.find(op => filterOptionalStyle(op.filter, feature));
             if (found) {
-                styleTypes = getTypedStyles(found, isHovered, isSelected);
+                styleTypes = getStyleTypes(found, isSelected);
             }
         }
         if (!styleTypes) {
-            styleTypes = getTypedStyles(styleValues, isHovered, isSelected);
+            styleTypes = getStyleTypes(styleValues, isSelected);
         }
         const style = getStyleForGeometry(feature.getGeometry(), styleTypes);
         const textStyle = style ? style.getText() : undefined;
@@ -195,19 +187,27 @@ const getGeomTypedStyles = (styleDef, factory) => {
 
 const merge = (...styles) => jQuery.extend(true, {}, ...styles);
 
-export const styleGenerator = (styleFactory, layer, hoverHandler) => {
-    let styles = {
+let defaultStyleFunction;
+const getDefaultStyleFunction = styleFactory => {
+    console.log(defaultStyleFunction);
+    if (defaultStyleFunction) {
+        return defaultStyleFunction;
+    }
+    const styles = {
         default: getGeomTypedStyles(defaults.style, styleFactory),
-        selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory),
-        hover: getGeomTypedStyles(merge(defaults.style, defaults.hover), styleFactory),
-        selectedHover: getGeomTypedStyles(merge(defaults.style, defaults.hover, defaults.selected), styleFactory)
+        selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory)
     };
+    defaultStyleFunction = getStyleFunction(styles);
+    return defaultStyleFunction;
+};
+// featureStyleGenerator, defaultStyleGenerator,...
+export const styleGenerator = (styleFactory, layer) => {
     if (!layer) {
-        return getStyleFunction(styles, hoverHandler);
+        return getDefaultStyleFunction(styleFactory);
     }
     let styleDef = layer.getCurrentStyleDef();
     if (!styleDef) {
-        return getStyleFunction(styles, hoverHandler);
+        return getDefaultStyleFunction(styleFactory);
     }
     if (!styleDef.featureStyle) {
         // Bypass possible layer definitions
@@ -218,35 +218,45 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             }
         });
     }
-    const featureStyle = styleDef.featureStyle || defaults.style;
-    let hoverStyle = defaults.hover;
-    if (layer.getHoverOptions() && layer.getHoverOptions().featureStyle) {
-        hoverStyle = layer.getHoverOptions().featureStyle;
+    const { featureStyle, optionalStyles } = styleDef;
+    if (!featureStyle && !optionalStyles) {
+        return getDefaultStyleFunction(styleFactory);
     }
-    let hoverDef = hoverStyle.inherit === true ? merge(featureStyle, hoverStyle) : hoverStyle;
+    const styles = {};
     if (featureStyle) {
-        styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
+        styles.default = getGeomTypedStyles(featureStyle, styleFactory);
         styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
-        styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
-        styles.selectedHover = getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory);
+    } else {
+        styles.default = getGeomTypedStyles(defaults.style, styleFactory);
+        styles.selected = getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory);
     }
-    const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
-            if (hoverStyle.inherit) {
-                hoverDef = merge(featureStyle, optionalDef, hoverStyle);
-            }
             const optional = {
                 filter: getOptionalStyleFilter(optionalDef),
-                customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
-                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
-                hover: getGeomTypedStyles(hoverDef, styleFactory),
-                selectedHover: getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory)
+                default: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
+                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory)
             };
             return optional;
         });
     }
-    return getStyleFunction(styles, hoverHandler);
+    return getStyleFunction(styles);
+};
+
+export const hoverStyleGenerator = (styleFactory, layer) => {
+    const opts = layer.getHoverOptions();
+    if (opts && opts.featureStyle) {
+        let hoverDef = opts.featureStyle;
+        if (hoverDef.inherit === true) {
+            const { featureStyle = {} } = layer.getCurrentStyleDef();
+            hoverDef = merge(featureStyle, hoverDef);
+        }
+        const styles = {
+            default: getGeomTypedStyles(hoverDef, styleFactory)
+        };
+        return getStyleFunction(styles);
+    }
+    return null;
 };
 
 // Style for cluster circles
