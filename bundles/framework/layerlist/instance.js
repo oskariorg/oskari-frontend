@@ -113,10 +113,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             sandbox.request(this, request);
 
             // create and register request handlers
-            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
+            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequestHandler', sandbox, this);
             sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
-            const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
+            const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             this._registerForGuidedTour();
