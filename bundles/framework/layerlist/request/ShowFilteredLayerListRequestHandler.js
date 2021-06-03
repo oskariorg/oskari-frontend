@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler
- * Handles Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest to filter layerlist by some condition.
+ * @class Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequestHandler
+ * Handles Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequest to filter layerlist by some condition.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequestHandler',
     /**
      * @method create called automatically on construction
      * @static
@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * Shows WFS feature data with requested properties
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} request
+         * @param {Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequest} request
          *      request to handle
          */
         handleRequest: function (core, request) {
