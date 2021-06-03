@@ -23,22 +23,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundle', func
             'src': '../../../bundles/framework/layerlist/instance.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/service/layerlist.js'
+            'src': '../../../bundles/framework/layerlist/service/layerlist.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/model/LayerGroup.js'
+            'src': '../../../bundles/framework/layerlist/model/LayerGroup.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequest.js'
+            'src': '../../../bundles/framework/layerlist/request/ShowFilteredLayerListRequest.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequestHandler.js'
+            'src': '../../../bundles/framework/layerlist/request/ShowFilteredLayerListRequestHandler.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/request/AddLayerListFilterRequest.js'
+            'src': '../../../bundles/framework/layerlist/request/AddLayerListFilterRequest.js'
         }, {
             'type': 'text/javascript',
-            'src': '../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js'
+            'src': '../../../bundles/framework/layerlist/request/AddLayerListFilterRequestHandler.js'
         },
         {
             'type': 'text/css',
@@ -99,11 +99,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundle', func
             'Bundle-Version': '1.0.0',
             'Import-Namespace': ['Oskari', 'jquery'],
             'Import-Bundle': {}
-
-            /**
-             *
-             */
-
         }
     },
 
