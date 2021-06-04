@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
             this.flyout = flyout;
-            console.log(this.container);
             // this.container.classList.add('inspire');
             // this.flyout.addClass('inspire');
         },
@@ -33,12 +32,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
             if (!root) {
                 return;
             }
-            console.log(root);
+
             this.progressSpinner.insertTo(root);
+
             this.updateListing();
         },
-        updateListing: function () {
-            ReactDOM.render(<LayerAnalyticsContent analyticsData={ this.instance.getAnalyticsData() } />, this.container);
+        updateListing: function (shit) {
+            ReactDOM.render(<LayerAnalyticsContent analyticsData={[...this.instance.getAnalyticsData()]} />, this.container);
         },
         startPlugin: function () {},
         setSpinnerState: function (spinnerState) {

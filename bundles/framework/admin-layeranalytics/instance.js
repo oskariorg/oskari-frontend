@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
         this.plugins = {};
         this.sandbox = null;
         this.isLoading = true;
-        this.analyticsData = {};
+        this.analyticsData = [];
     }, {
         __name: 'admin-layeranalytics',
         /**
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
             const request = reqBuilder(this);
             sandbox.request(this, request);
 
-            me.fetchLayerAnalytics();
+            me.produceAnalyticsData();
             me.createUi();
         },
         /**
@@ -140,9 +140,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
             this.plugins['Oskari.userinterface.Flyout'].createContent();
         },
 
-        fetchLayerAnalytics: function (layerId) {
+        fetchLayerAnalytics: function (layerId, callback) {
             this.updateLoadingState(true);
-            return fetch(Oskari.urls.getRoute('LayerStatus'), {
+            const route = layerId ? Oskari.urls.getRoute('LayerStatus', { id: layerId }) : Oskari.urls.getRoute('LayerStatus');
+
+            return fetch(route, {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -153,10 +155,23 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
                 }
                 return response.json();
             }).then(json => {
-                this.analyticsData = json;
-                // this.updateLoadingState();
-                this.plugins['Oskari.userinterface.Flyout'].updateListing();
+                if (callback) {
+                    callback(json);
+                }
+
+                this.updateLoadingState();
                 return json;
+            });
+        },
+
+        produceAnalyticsData: function () {
+            this.fetchLayerAnalytics(null, (result) => {
+                for (const item in result) {
+                    this.fetchLayerAnalytics(item, (itemData) => {
+                        this.analyticsData.push(itemData);
+                        this.plugins['Oskari.userinterface.Flyout'].updateListing();
+                    });
+                }
             });
         },
 

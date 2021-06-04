@@ -1,25 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem } from 'oskari-ui';
+import { Table } from 'antd';
+
+const columnSettings = [
+    {
+        title: 'Id',
+        dataIndex: 'id',
+        key: 'id',
+        // eslint-disable-this-line react/display-name
+        render: text => <a>{text}</a>
+    },
+    {
+        title: 'Success',
+        dataIndex: 'success',
+        key: 'success'
+    },
+    {
+        title: 'Errors',
+        dataIndex: 'errors',
+        key: 'errors'
+    }
+];
 
 export const LayerAnalyticsContent = ({ analyticsData }) => {
-    console.log(analyticsData);
-    console.log(analyticsData.errorsTop);
     return (
-        <List
-            bordered
-            header={<div>Header</div>}
-            footer={<div>Footer</div>}
-            dataSource={ analyticsData.errorsTop }
-            renderItem={ (item) => (
-                <ListItem>
-                    { item.success } { item.id }
-                </ListItem>
-            )}
+        <Table
+            columns={ columnSettings }
+            dataSource={ analyticsData }
+            pagination={{ position: 'none' }}
         />
     );
 };
 
 LayerAnalyticsContent.propTypes = {
-    analyticsData: PropTypes.array
+    analyticsData: PropTypes.array.isRequired
 };
