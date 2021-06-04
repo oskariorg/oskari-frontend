@@ -37,7 +37,7 @@
     "@babel/preset-react": "7.9.4",
     "@babel/runtime-corejs3": "7.9.2",
     "@storybook/react": "5.3.18",
-    "antd": "4.8.5",
+    "antd": "4.16.1",
     "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "1.10.7",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
