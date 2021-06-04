@@ -4,6 +4,7 @@ import { Table } from 'antd';
 
 const columnSettings = [
     {
+        align: 'left',
         title: 'Id',
         dataIndex: 'id',
         key: 'id',
@@ -11,11 +12,13 @@ const columnSettings = [
         render: text => <a>{text}</a>
     },
     {
+        align: 'left',
         title: 'Success',
         dataIndex: 'success',
         key: 'success'
     },
     {
+        align: 'left',
         title: 'Errors',
         dataIndex: 'errors',
         key: 'errors'
@@ -27,7 +30,7 @@ export const LayerAnalyticsContent = ({ analyticsData }) => {
         <Table
             columns={ columnSettings }
             dataSource={ analyticsData }
-            pagination={{ position: 'none' }}
+            pagination={{ position: ['none', 'none'] }}
         />
     );
 };
