@@ -116,7 +116,12 @@ Oskari.registerLocalization(
                 "updateRateDesc": "Uppdateringsfrekvens i sekunder",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
-                "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
+                "updateFailedWithReason": "Uppdatering misslyckades: {reason}",
+                "rasterStyle" : {
+                    "defaultStyle" : "Den valda standardstilen finns inte längre i tjänsten. Vänligen välj en ny standardstil.",
+                    "additionalLegend": "För kartlagret finns en teckenförklaring utan giltig stil. Vänligen uppdatera förklaringen. Den icke fungerande stilen är markerad med ( ! ) ",
+                    "globalWithStyles": "Till kartlagret har endast en standard teckenförklaring fastställts, men det finns ytterliga stilar med förklaringar tillgängliga på gränssnittet. Du kan ta bort standardvalet för att kunna utnyttja dessa."
+                }
             },
             "styles": {
                 "default": "Förvald utseende",

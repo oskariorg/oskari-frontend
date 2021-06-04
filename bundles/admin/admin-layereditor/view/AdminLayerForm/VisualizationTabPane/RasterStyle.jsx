@@ -45,7 +45,7 @@ const additionalLegendsToStyles = (styles, legends, globalTitle) => {
                 legend: legends[name]
             };
             const title = GLOBAL_LEGEND === name ? globalTitle : name;
-            style.title = title + ' *';
+            style.title = title + ' ( ! )';
             return style;
         });
 };
