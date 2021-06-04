@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
      * @method create called automatically on construction
      * @static
      * @param
-     * {Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance}
+     * {Oskari.mapframework.bundle.admin-users.LayerSelectionBundleInstance}
      * instance
      *      reference to component that created the tile
      */
