@@ -41,14 +41,18 @@ const createGroupModel = (group, method, allLayers, tools) => {
     // attach layers to group
     const groupLayers = group.layers || [];
     const groupLayerIds = groupLayers.map(l => l.id);
-    const layerModels = allLayers.filter(layer => {
-        if (typeof layer.getId !== 'function') {
-            return false;
-        }
-        return groupLayerIds.includes(layer.getId());
-    });
-    layerModels.sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
-    newGroup.setLayers(layerModels);
+    if (groupLayerIds.length) {
+        // since allLayers can be long we don't need to filter it if there
+        // isn't any layers to be added
+        const layerModels = allLayers.filter(layer => {
+            if (typeof layer.getId !== 'function') {
+                return false;
+            }
+            return groupLayerIds.includes(layer.getId());
+        });
+        layerModels.sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+        newGroup.setLayers(layerModels);
+    }
 
     // group has subgroups
     if (!group.groups.length) {
