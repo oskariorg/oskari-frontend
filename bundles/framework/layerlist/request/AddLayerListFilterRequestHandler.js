@@ -1,9 +1,9 @@
 
 /**
- * @class Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler
- * Handles Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest to show filter.
+ * @class Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequestHandler
+ * Handles Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequest to show filter.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequestHandler',
     /**
      * @method create called automatically on construction
      * @static
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          * Adds layerlist filter button
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest} request
+         * @param {Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequest} request
          *      request to handle
          */
         handleRequest: function (core, request) {
