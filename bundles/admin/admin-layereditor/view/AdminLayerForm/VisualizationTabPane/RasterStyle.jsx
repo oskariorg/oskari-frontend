@@ -22,7 +22,7 @@ export const rasterStyleCapabilities = layer => {
     const additionals = legendsWithoutStyle(styles, legends);
     const hasGlobal = additionals.find(name => name === GLOBAL_LEGEND);
     // don't notify if global is only additional legend
-    if (additionals.length > 1 || (additionals.lenth === 1 && !hasGlobal)) {
+    if (additionals.length > 1 || (additionals.length === 1 && !hasGlobal)) {
         warnings.push('additionalLegend');
     }
     if (styles.length > 0 && hasGlobal) {
@@ -54,6 +54,9 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
     const { options = {}, capabilities = {}, style: defaultName } = layer;
     const { styles = [] } = capabilities;
     const { legends = {} } = options;
+    // Used to generate style-objects for styles that have been removed from the service
+    // so we can show the override legends urls that we have saved for the layer
+    // and notify admin that such styles don't exist any more on the service
     const additionalLegends = additionalLegendsToStyles(styles, legends, getMessage('styles.raster.legendImage'));
     const styleOptions = [...styles, ...additionalLegends];
 
