@@ -1442,9 +1442,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.WmsLayer} returns the same layer object with populated values for convenience
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
-            if (jsonLayer.wmsName) {
-                layer.setWmsName(jsonLayer.wmsName);
-            }
             layer.setGfiContent(jsonLayer.gfiContent);
 
             /* prefer url - param, fall back to wmsUrl if not available */

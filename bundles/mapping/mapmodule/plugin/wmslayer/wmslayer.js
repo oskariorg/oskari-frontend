@@ -41,20 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
             this.setLayerUrls(wmsUrls);
         },
         /**
-         * @method setWmsName
-         * @param {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
-         */
-        setWmsName: function (wmsName) {
-            this.setLayerName(wmsName);
-        },
-        /**
-         * @method getWmsName
-         * @return {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
-         */
-        getWmsName: function () {
-            return this.getLayerName();
-        },
-        /**
          * @method setVersion
          * @param {String} version 1.3.0 or 1.1.1.
          */
