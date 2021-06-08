@@ -1,68 +1,61 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Option, TextInput } from 'oskari-ui';
+import { Message, TextInput } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { LegendImage, GLOBAL_LEGEND } from './LegendImage';
-import { ServiceLegend } from './ServiceLegend';
 import { Link } from './Link';
-import { StyledFormField, Border, DefaultStyle, StyleField, StyleSelect, InlineBlock } from './styled';
+import { StyledFormField, Border, InlineBlock } from './styled';
+import { RasterStyleSelect } from './RasterStyle/RasterStyleSelect';
+import { ServiceLegend } from './RasterStyle/ServiceLegend';
+import { legendsWithoutStyle, GLOBAL_LEGEND } from './RasterStyle/helper';
+
+const additionalLegendsToStyles = (styles, legends, globalTitle) => {
+    return legendsWithoutStyle(styles, legends)
+        .map(name => {
+            const style = {
+                name,
+                legend: legends[name]
+            };
+            const title = GLOBAL_LEGEND === name ? globalTitle : name;
+            style.title = title + ' ( ! )';
+            return style;
+        });
+};
 
 const RasterStyle = ({ layer, controller, getMessage }) => {
-    const [selected, setSelected] = useState(layer.style);
+    const { options = {}, capabilities = {}, style: defaultName } = layer;
+    const { styles = [] } = capabilities;
+    const { legends = {} } = options;
+    // Used to generate style-objects for styles that have been removed from the service
+    // so we can show the override legends urls that we have saved for the layer
+    // and notify admin that such styles don't exist any more on the service
+    const additionalLegends = additionalLegendsToStyles(styles, legends, getMessage('styles.raster.legendImage'));
+    const styleOptions = [...styles, ...additionalLegends];
 
-    const isDefaultStyle = name => name === layer.style;
-    const getStyleLabel = style => {
-        const { name, title } = style;
-        const label = title || name;
-        if (isDefaultStyle(name)) {
-            return label + ' (' + getMessage('styles.default') + ')';
-        }
-        return label;
-    };
-    const onDefaultStyleChange = (styleName, selected) => {
-        const defaultStyle = selected ? styleName : '';
-        controller.setStyle(defaultStyle);
-    };
+    const firstOption = styleOptions.length > 0 ? styleOptions[0].name : '';
+    const [selected, setSelected] = useState(defaultName || firstOption);
 
-    const { options = {}, capabilities = {} } = layer;
-    const styleOptions = capabilities.styles || [];
-    const legends = options.legends || {};
-    const globalLegend = legends[GLOBAL_LEGEND];
-    if (styleOptions.length === 0) {
-        return (
-            <LegendImage url={globalLegend} controller = {controller}/>
-        );
-    }
-    const style = styleOptions.find(s => s.name === selected) || styleOptions[0];
-    const { name, legend } = style;
-    const legendUrl = legends[name] || globalLegend || '';
+    const style = styles.find(s => s.name === selected);
+    const name = style ? style.name : GLOBAL_LEGEND;
+    const styleLegend = style ? style.legend : '';
+    // user/layer gets legend in following order: named override, global override, defined in service/capabilities/style
+    const legendUrl = legends[name] || legends[GLOBAL_LEGEND] || '';
+
     return (
         <Fragment>
             <Message messageKey='styles.raster.title'/>
             <InfoTooltip messageKeys={['styles.raster.styleDesc', 'styles.desc']} />
             <Border>
                 <Fragment>
-                    <StyleField>
-                        <StyleSelect
-                            value={name}
-                            onChange={setSelected}
-                        >
-                            { styleOptions.map(option => (
-                                <Option key={option.name} value={option.name}>
-                                    {getStyleLabel(option)}
-                                </Option>
-                            )) }
-                        </StyleSelect>
-                        <DefaultStyle
-                            checked={isDefaultStyle(name)}
-                            onClick={evt => onDefaultStyleChange(name, evt.target.checked)}
-                        >
-                            <Message messageKey='styles.default'/>
-                        </DefaultStyle>
-                    </StyleField>
+                    <RasterStyleSelect
+                        selected = {selected}
+                        styles = {styleOptions}
+                        defaultName = {defaultName}
+                        setSelected = {setSelected}
+                        controller = {controller}>
+                    </RasterStyleSelect>
                     <StyledFormField>
-                        <ServiceLegend url = {legend} />
+                        <ServiceLegend url = {styleLegend} />
                     </StyledFormField>
                     <StyledFormField>
                         <Fragment>

@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Tooltip } from 'oskari-ui';
-import { InlineBlock } from './styled';
-import { Link } from './Link';
+import { InlineBlock } from '../styled';
+import { Link } from '../Link';
 
 export const ServiceLegend = ({ url }) => {
     if (!url) {
