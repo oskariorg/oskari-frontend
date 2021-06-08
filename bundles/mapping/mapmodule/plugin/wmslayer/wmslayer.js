@@ -67,22 +67,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
          */
         getVersion: function () {
             return this._version;
-        },
-        /**
-         * Possible options for #setQueryFormat()
-         * @method setAvailableQueryFormats
-         * @param {String[]} options for GFI output
-         */
-        setAvailableQueryFormats: function (options) {
-            this._availableQueryFormats = options || [];
-        },
-        /**
-         * Possible options for #setQueryFormat()
-         * @method getAvailableQueryFormats
-         * @return {String[]} options for GFI output
-         */
-        getAvailableQueryFormats: function () {
-            return this._availableQueryFormats || [];
         }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']

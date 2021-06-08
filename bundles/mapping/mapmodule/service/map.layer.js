@@ -1458,10 +1458,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
             layer.setVersion(jsonLayer.version);
 
-            if (jsonLayer.formats) {
-                layer.setQueryFormat(jsonLayer.formats.value);
-                layer.setAvailableQueryFormats(jsonLayer.formats.available);
-            }
             return this.populateStyles(layer, jsonLayer);
         },
         /**

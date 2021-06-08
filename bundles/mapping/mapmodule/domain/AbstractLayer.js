@@ -239,22 +239,6 @@ Oskari.clazz.define(
             return this._baseLayerId;
         },
         /**
-         * @method setQueryFormat
-         * @param {String} queryFormat
-         *          f.ex. 'text/html'
-         */
-        setQueryFormat: function (queryFormat) {
-            this._queryFormat = queryFormat;
-        },
-        /**
-         * @method getQueryFormat
-         * f.ex. 'text/html'
-         * @return {String}
-         */
-        getQueryFormat: function () {
-            return this._queryFormat;
-        },
-        /**
          * @method setName
          * @param {String/Object} name
          *          name for the maplayer that is shown in UI
