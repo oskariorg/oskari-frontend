@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerAnalyticsContent } from './LayerAnalyticsContent';
 
 Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
@@ -37,8 +38,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
 
             this.updateListing();
         },
-        updateListing: function (shit) {
-            ReactDOM.render(<LayerAnalyticsContent analyticsData={[...this.instance.getAnalyticsData()]} />, this.container);
+        updateListing: function () {
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
+                    <LayerAnalyticsContent analyticsData={[...this.instance.getAnalyticsData()]} />
+                </LocaleProvider>,
+                this.container
+            );
         },
         startPlugin: function () {},
         setSpinnerState: function (spinnerState) {

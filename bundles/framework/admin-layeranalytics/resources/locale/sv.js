@@ -3,20 +3,20 @@ Oskari.registerLocalization(
         "lang": "fi",
         "key": "admin-layeranalytics",
         "value": {
-            "title": "A: Tasoseuranta",
+            "title": "A: Lager monitor",
             "desc": "",
             "tile": {
-                "title": "A: Tasoseuranta"
+                "title": "A: Lager monitor"
             },
             "flyout": {
-                "title": "Tasoseuranta",
+                "title": "Lager monitor",
                 "successTitle": "Successes",
                 "failureTitle": "Failures",
                 "idTitle": "Id"
 
             },
             "messages": {
-                "errorFetchingLayerAnalytics": "Tason analytiikka tietoja ei voitu hakea."
+                "errorFetchingLayerAnalytics": "Layer analytics couldn't be fetched."
             }
         }
     });

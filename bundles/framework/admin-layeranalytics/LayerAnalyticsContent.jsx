@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'antd';
+import { LocaleConsumer } from 'oskari-ui/util';
+import { Message } from 'oskari-ui';
 
 const columnSettings = [
     {
         align: 'left',
-        title: 'Id',
+        title: <Message messageKey='flyout.idTitle' />,
         dataIndex: 'id',
         key: 'id',
         // eslint-disable-this-line react/display-name
@@ -13,19 +15,19 @@ const columnSettings = [
     },
     {
         align: 'left',
-        title: 'Success',
+        title: <Message messageKey='flyout.successTitle' />,
         dataIndex: 'success',
         key: 'success'
     },
     {
         align: 'left',
-        title: 'Errors',
+        title: <Message messageKey='flyout.failureTitle' />,
         dataIndex: 'errors',
         key: 'errors'
     }
 ];
 
-export const LayerAnalyticsContent = ({ analyticsData }) => {
+const LayerAnalyticsContent = ({ analyticsData }) => {
     return (
         <Table
             columns={ columnSettings }
@@ -38,3 +40,6 @@ export const LayerAnalyticsContent = ({ analyticsData }) => {
 LayerAnalyticsContent.propTypes = {
     analyticsData: PropTypes.array.isRequired
 };
+
+const contextWrap = LocaleConsumer(LayerAnalyticsContent);
+export { contextWrap as LayerAnalyticsContent };
