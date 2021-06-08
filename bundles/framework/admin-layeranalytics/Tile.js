@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Tile',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.template = null;
     }, {
         /**
          * @method getName
@@ -33,7 +32,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Tile',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = jQuery(el);
         },
         /**
@@ -95,7 +94,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Tile',
         },
         /**
          * @method refresh
-         * Creates the UI for a fresh start
+         * Refresh UI. Does nothing atm
          */
         refresh: function () {
 
