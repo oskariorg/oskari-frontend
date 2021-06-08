@@ -143,59 +143,6 @@ Oskari.clazz.define(
         me._unsupportedReason = null;
     }, {
         /**
-         * Populates name, description, inspire and organization fields with a localization JSON object
-         * @method setLocalization
-         * @param {Object} loc
-         *          object containing localization for name/desc/inspire/organization
-         * (e.g. MapLayerService)
-         */
-        setLocalization: function (loc) {
-            var name = {},
-                desc = {},
-                inspire = {},
-                organization = {},
-                lang,
-                singleLang;
-
-            for (lang in loc) {
-                if (loc.hasOwnProperty(lang)) {
-                    singleLang = loc[lang];
-                    if (singleLang.name) {
-                        name[lang] = singleLang.name;
-                    }
-                    if (singleLang.subtitle) {
-                        desc[lang] = singleLang.subtitle;
-                    }
-                    if (singleLang.inspire) {
-                        inspire[lang] = singleLang.inspire;
-                    }
-                    if (singleLang.orgName) {
-                        organization[lang] = singleLang.orgName;
-                    }
-                }
-            }
-            // set objects if we had any localizations
-            for (lang in name) {
-                if (name.hasOwnProperty(lang)) {
-                    this.setName(name);
-                    break;
-                }
-            }
-            for (lang in desc) {
-                if (desc.hasOwnProperty(lang)) {
-                    this.setDescription(desc);
-                    break;
-                }
-            }
-
-            for (lang in organization) {
-                if (organization.hasOwnProperty(lang)) {
-                    this.setOrganizationName(organization);
-                    break;
-                }
-            }
-        },
-        /**
          * @method setId
          * @param {String} id
          * Unique identifier for map layer used to reference the layer

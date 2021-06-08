@@ -1399,11 +1399,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
 
-            if (mapLayerJson.localization) {
-                // overrides name/desc/inspire/organization if defined!!
-                layer.setLocalization(mapLayerJson.localization);
-            }
-
             var builder = this.modelBuilderMapping[mapLayerJson.type];
             if (builder) {
                 builder.parseLayerData(layer, mapLayerJson, this);
