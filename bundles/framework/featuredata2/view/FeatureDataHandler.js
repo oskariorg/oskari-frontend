@@ -58,7 +58,7 @@ class ViewHandler extends StateHandler {
 
     _createEventHandlers () {
         const handlers = {
-            AfterMapMoveEvent: () => this._updateFeatureProperties(),
+            AfterMapMoveEvent: () => this._afterMapMove(),
             AfterMapLayerAddEvent: event => {
                 const layer = event.getMapLayer();
                 if (!layer.hasFeatureData()) {
@@ -96,41 +96,39 @@ class ViewHandler extends StateHandler {
         this.updateState({ selectedFeatures }, 'selectedFeatures');
     }
 
-    _updateFeatureProperties () {
+    _afterMapMove () {
         // update viewport properties only when flyout is active/open
-        const { isActive, layerId } = this.getState();
-        if (!isActive) {
+        if (!this.getState().isActive) {
             return;
         }
-        let features = [];
-        let inScale = false;
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        if (layer && layer.isInScale()) {
-            features = this._getVisibleFeatures();
-            inScale = true;
-        }
-        this.updateState({ features, inScale });
-    }
-
-    _getVisibleFeatures (layerId = this.getState().layerId) {
-        return this._getWFSPlugin().getLayerFeaturePropertiesInViewport(layerId);
+        this.updateState(this.getLayerState());
     }
 
     setActiveLayer (layerId) {
         if (layerId === this.getState().layerId) {
             return;
         }
-        const features = this._getVisibleFeatures(layerId);
         const selectedFeatures = this._getWFSService().getSelectedFeatureIds(layerId);
-        this.updateState({ layerId, features, selectedFeatures });
+        const layerState = this.getLayerState(layerId);
+        this.updateState({ layerId, selectedFeatures, ...layerState });
     }
 
     setIsActive (isActive) {
         if (isActive === this.getState().isActive) {
             return;
         }
-        const features = isActive ? this._getVisibleFeatures() : [];
-        this.updateState({ isActive, features });
+        const layerState = isActive ? this.getLayerState() : {};
+        this.updateState({ isActive, ...layerState });
+    }
+
+    getLayerState (layerId = this.getState().layerId) {
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        const features = this._getWFSPlugin().getLayerFeaturePropertiesInViewport(layerId);
+        const inScale = !!layer && layer.isInScale();
+        return {
+            inScale,
+            features
+        };
     }
 
     setHiddenProperty (property) {
