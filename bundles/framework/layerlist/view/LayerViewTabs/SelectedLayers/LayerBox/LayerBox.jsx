@@ -28,7 +28,7 @@ const Publishable = styled.span`
 
 const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const organizationName = layer.getOrganizationName();
-    const publishable = layer.getPermission('publish');
+    const publishable = layer.hasPermission('publish');
 
     const [visible, setVisible] = useState(visibilityInfo.visible);
     useEffect(() => {

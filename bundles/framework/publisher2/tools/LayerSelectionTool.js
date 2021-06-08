@@ -141,7 +141,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         hasPublishRight: function (layer) {
         // permission might be "no_publication_permission"
         // or nothing at all
-            return (layer.getPermission('publish') === 'publication_permission_ok');
+            return layer.hasPermission('publish');
         },
         /**
      * Returns the published map layer selection
