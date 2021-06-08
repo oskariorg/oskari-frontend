@@ -140,6 +140,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
             this.plugins['Oskari.userinterface.Flyout'].createContent();
         },
 
+        /**
+         * @method fetchLayerAnalytics
+         * Fetches data for layer analytics
+         * @param {*} layerId null or layerId as a number. If null only overall list will be fetched
+         * @param {*} callback
+         * @returns
+         */
         fetchLayerAnalytics: function (layerId, callback) {
             this.updateLoadingState(true);
             const route = layerId ? Oskari.urls.getRoute('LayerStatus', { id: layerId }) : Oskari.urls.getRoute('LayerStatus');
@@ -160,10 +167,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
                 }
 
                 this.updateLoadingState();
-                return json;
             });
         },
 
+        /**
+         * @method produceAnalyticsData
+         * Produce analytics by fetching data for all layers and layer specific data
+         */
         produceAnalyticsData: function () {
             this.fetchLayerAnalytics(null, (result) => {
                 for (const item in result) {

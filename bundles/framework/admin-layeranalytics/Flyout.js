@@ -20,8 +20,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.Flyout',
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
             this.flyout = flyout;
-            // this.container.classList.add('inspire');
-            // this.flyout.addClass('inspire');
+            this.container.classList.add('admin-layeranalyitcs');
+            this.flyout.addClass('admin-layeranalyitcs');
         },
         /**
          * Renders content for flyout UI
