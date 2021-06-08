@@ -1,12 +1,12 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest
- * Adds filterin button to layerlist.
+ * @class Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequest
+ * Adds filtering button to layerlist.
  *
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz
-    .define('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest',
+    .define('Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -15,7 +15,7 @@ Oskari.clazz
      * @param {String} tooltip tool tooltip
      * @param {String} iconClassActive filter tool icon class when filter is active
      * @param {String} iconClass filter tool icon class when filter is deactive
-     * @param {String} filterName filter name, used on {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} if wanted acivate selected filter
+     * @param {String} filterName filter name, used on {Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequest} if wanted acivate selected filter
      */
         function (toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
             this._toolText = toolText;

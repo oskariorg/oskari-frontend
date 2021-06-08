@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance} instance
+     * @param {Oskari.mapframework.bundle.admin-users.LayerSelectorBundleInstance} instance
      *     reference to component that created the tile
      */
     function (instance) {

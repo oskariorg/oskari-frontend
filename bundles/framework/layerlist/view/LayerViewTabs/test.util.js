@@ -1,5 +1,5 @@
-import '../../../layerselector2/service/layerlist';
-import '../../../layerlist/resources/locale/en';
+import '../../service/layerlist';
+import '../../resources/locale/en';
 import '../../../../mapping/mapmodule/service/map.state';
 import '../../service/LayerListToolingService';
 import '../../../../mapping/mapmodule/service/map.layer';

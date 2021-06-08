@@ -208,8 +208,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * @method startExtension
          * implements Oskari.userinterface.Extension protocol startExtension method
          * Creates a flyout and a tile:
-         * Oskari.mapframework.bundle.layerselection2.Flyout
-         * Oskari.mapframework.bundle.layerselection2.Tile
+         * Oskari.mapframework.bundle.admin-users.Flyout
+         * Oskari.mapframework.bundle.admin-users.Tile
          */
         startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.admin-users.Flyout', this);
