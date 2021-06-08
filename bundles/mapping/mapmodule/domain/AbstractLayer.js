@@ -84,8 +84,6 @@ Oskari.clazz.define(
         /* is this layer queryable (GetFeatureInfo) boolean */
         me._queryable = null;
 
-        me._queryFormat = null;
-
         // f.ex. permissions.publish
         me._permissions = {};
 
@@ -123,9 +121,6 @@ Oskari.clazz.define(
         me._srs_name = null;
 
         me._srsList = null;
-
-        // Admin params, applicable only for admin users
-        me._admin = null;
 
         this._gfiContent = null;
 
@@ -1187,22 +1182,6 @@ Oskari.clazz.define(
          */
         getGfiContent: function () {
             return this._gfiContent;
-        },
-
-        /**
-         * Sets an admin block
-         * @param {Object} admin
-         */
-        setAdmin: function (admin) {
-            this._admin = admin;
-        },
-
-        /**
-         * Returns an admin block
-         * @return {Object} admin
-         */
-        getAdmin: function () {
-            return this._admin;
         },
 
         /**

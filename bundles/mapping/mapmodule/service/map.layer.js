@@ -355,10 +355,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setSrsList(newLayerConf.srs);
             }
 
-            if (newLayerConf.admin) {
-                layer.setAdmin(newLayerConf.admin);
-            }
-
             // optional attributes
             if (newLayerConf.attributes) {
                 layer.setAttributes(newLayerConf.attributes);
@@ -1224,7 +1220,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setRealtime(baseMapJson.realtime);
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
-            baseLayer.setAdmin(baseMapJson.admin);
 
             baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
@@ -1353,7 +1348,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setRealtime(mapLayerJson.realtime);
             layer.setRefreshRate(mapLayerJson.refreshRate);
-            layer.setAdmin(mapLayerJson.admin);
 
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
