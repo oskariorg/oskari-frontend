@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Option } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { DefaultStyle, StyleField, StyleSelect, StyledFormField } from '../styled';
-
-const GLOBAL_LEGEND = 'legendImage';
+import { GLOBAL_LEGEND } from './helper';
 
 const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, controller, getMessage }) => {
     const isDefaultStyle = name => name === defaultName;

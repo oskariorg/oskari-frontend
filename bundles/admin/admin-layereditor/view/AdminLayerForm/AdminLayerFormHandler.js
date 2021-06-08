@@ -3,7 +3,7 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
-import { rasterStyleCapabilities } from './VisualizationTabPane/RasterStyle';
+import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -833,18 +833,25 @@ class UIHandler extends StateHandler {
         return validationErrors;
     }
 
+    // Validate service provided capabilities for single layer.
+    // Can be used to show warning message for example:
+    // - layer has selection that isn't supported or provided by service
+    // - layer has selection that doesn't make sense
+    // - service provide information that may lead to badly functioning layer
     validateCapabilities () {
         const { layer, propertyFields } = this.getState();
+        const messages = [];
         if (propertyFields.includes(LayerComposingModel.CAPABILITIES_STYLES)) {
-            rasterStyleCapabilities(layer).forEach(field => {
-                const options = {
+            getWarningsForStyles(layer).forEach(key => {
+                const msg = {
                     duration: null,
                     title: getMessage('capabilities.validate'),
-                    content: getMessage(`capabilities.rasterStyle.${field}`)
+                    content: getMessage(`capabilities.rasterStyle.${key}`)
                 };
-                Messaging.warn(options);
+                messages.push(msg);
             });
         }
+        messages.forEach(msg => Messaging.warn(msg));
     }
 
     hasAnyPermissions (permissions = {}) {
