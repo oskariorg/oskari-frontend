@@ -1444,13 +1444,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            /* prefer url - param, fall back to wmsUrl if not available */
-            if (jsonLayer.url) {
-                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
-            } else if (jsonLayer.wmsUrl) {
-                layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
-            }
-
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
 
