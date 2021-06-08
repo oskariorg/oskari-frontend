@@ -1443,10 +1443,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
             layer.setGfiContent(jsonLayer.gfiContent);
-
-            // default to enabled, only check if it is disabled
-            layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-
             return this.populateStyles(layer, jsonLayer);
         },
         /**

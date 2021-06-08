@@ -81,9 +81,6 @@ Oskari.clazz.define(
         /* Currently selected style */
         me._currentStyle = null;
 
-        /* is it possible to ask for feature info */
-        me._featureInfoEnabled = null;
-
         /* is this layer queryable (GetFeatureInfo) boolean */
         me._queryable = null;
 
@@ -368,23 +365,7 @@ Oskari.clazz.define(
             }
             return groups[0].name;
         },
-        /**
-         * @method setFeatureInfoEnabled
-         * @return {Boolean} featureInfoEnabled true to enable feature info functionality
-         */
-        setFeatureInfoEnabled: function (featureInfoEnabled) {
-            this._featureInfoEnabled = featureInfoEnabled;
-        },
-        /**
-         * @method isFeatureInfoEnabled
-         * @return {Boolean} true if feature info functionality should be enabled
-         */
-        isFeatureInfoEnabled: function () {
-            if (this._featureInfoEnabled === true) {
-                return true;
-            }
-            return false;
-        },
+
         /**
          * @method setDescription
          * @param {String} description

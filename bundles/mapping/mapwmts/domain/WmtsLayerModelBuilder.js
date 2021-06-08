@@ -11,6 +11,5 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
         maplayerService.populateStyles(layer, mapLayerJson);
         layer.setTileUrl(mapLayerJson.tileUrl);
         layer.setWmtsMatrixSetId(mapLayerJson.tileMatrixSetId);
-        layer.setFeatureInfoEnabled(true);
     }
 });
