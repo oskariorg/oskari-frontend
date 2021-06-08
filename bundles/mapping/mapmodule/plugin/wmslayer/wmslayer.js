@@ -11,35 +11,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
      */
 
     function () {
-        this._availableQueryFormats = [];
-
-        /* Layer Type */
         this._layerType = 'WMS';
     }, {
-        /**
-         * @method addWmsUrl
-         * @param {String} wmsUrl
-         * Apppends the url to layer array of wms image urls
-         */
-        addWmsUrl: function (wmsUrl) {
-            this.addLayerUrl(wmsUrl);
-        },
-        /**
-         * @method getWmsUrls
-         * @return {String[]}
-         * Gets array of layer wms image urls
-         */
-        getWmsUrls: function () {
-            return this.getLayerUrls();
-        },
-        /**
-         * @method setWmsUrls
-         * @param {String[]} wmsUrls
-         * Gets array of layer wms image urls
-         */
-        setWmsUrls: function (wmsUrls) {
-            this.setLayerUrls(wmsUrls);
-        }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']
     });
