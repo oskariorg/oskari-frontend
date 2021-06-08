@@ -1456,7 +1456,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             // default to enabled, only check if it is disabled
             layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-            layer.setVersion(jsonLayer.version);
 
             return this.populateStyles(layer, jsonLayer);
         },
