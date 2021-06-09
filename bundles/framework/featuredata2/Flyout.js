@@ -696,7 +696,8 @@ Oskari.clazz.define(
             const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
             const selection = layer.getPropertySelection();
             if (selection.length) {
-                model.setFields([ID_FIELD, ...selection]);
+                const fields = selection.includes(ID_FIELD) ? selection : [ID_FIELD, ...selection];
+                model.setFields(fields);
             }
             model.setIdField(ID_FIELD);
             // if layer doesn't have filtered fields then fields is set from first feature
