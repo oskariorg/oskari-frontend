@@ -540,7 +540,7 @@ Oskari.clazz.define(
             gridToolsEl.find('.featuredata2-show-selected-first').remove();
             const checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
             const { disableExport } = this.instance.getConfiguration();
-            if (!disableExport && layer.getPermission('download') === 'download_permission_ok') {
+            if (!disableExport && layer.hasPermission('download')) {
                 checkboxEl.insertAfter(gridToolsEl);
                 jQuery('<div class="featuredata2-show-selected-first" style="clear:both;"></div>').insertAfter(gridToolsEl);
             } else {
@@ -580,9 +580,7 @@ Oskari.clazz.define(
             grid.setResizableColumns(true);
             const { disableExport, allowLocateOnMap } = this.instance.getConfiguration();
             if (!disableExport) {
-                grid.setExcelExporter(
-                    layer.getPermission('download') === 'download_permission_ok'
-                );
+                grid.setExcelExporter(layer.hasPermission('download'));
             }
             const dataSource = typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
             // Data source & metadata link

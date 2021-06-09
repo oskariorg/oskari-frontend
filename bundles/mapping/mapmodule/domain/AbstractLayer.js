@@ -81,13 +81,8 @@ Oskari.clazz.define(
         /* Currently selected style */
         me._currentStyle = null;
 
-        /* is it possible to ask for feature info */
-        me._featureInfoEnabled = null;
-
         /* is this layer queryable (GetFeatureInfo) boolean */
         me._queryable = null;
-
-        me._queryFormat = null;
 
         // f.ex. permissions.publish
         me._permissions = {};
@@ -127,9 +122,6 @@ Oskari.clazz.define(
 
         me._srsList = null;
 
-        // Admin params, applicable only for admin users
-        me._admin = null;
-
         this._gfiContent = null;
 
         me._created = null;
@@ -145,59 +137,6 @@ Oskari.clazz.define(
 
         me._unsupportedReason = null;
     }, {
-        /**
-         * Populates name, description, inspire and organization fields with a localization JSON object
-         * @method setLocalization
-         * @param {Object} loc
-         *          object containing localization for name/desc/inspire/organization
-         * (e.g. MapLayerService)
-         */
-        setLocalization: function (loc) {
-            var name = {},
-                desc = {},
-                inspire = {},
-                organization = {},
-                lang,
-                singleLang;
-
-            for (lang in loc) {
-                if (loc.hasOwnProperty(lang)) {
-                    singleLang = loc[lang];
-                    if (singleLang.name) {
-                        name[lang] = singleLang.name;
-                    }
-                    if (singleLang.subtitle) {
-                        desc[lang] = singleLang.subtitle;
-                    }
-                    if (singleLang.inspire) {
-                        inspire[lang] = singleLang.inspire;
-                    }
-                    if (singleLang.orgName) {
-                        organization[lang] = singleLang.orgName;
-                    }
-                }
-            }
-            // set objects if we had any localizations
-            for (lang in name) {
-                if (name.hasOwnProperty(lang)) {
-                    this.setName(name);
-                    break;
-                }
-            }
-            for (lang in desc) {
-                if (desc.hasOwnProperty(lang)) {
-                    this.setDescription(desc);
-                    break;
-                }
-            }
-
-            for (lang in organization) {
-                if (organization.hasOwnProperty(lang)) {
-                    this.setOrganizationName(organization);
-                    break;
-                }
-            }
-        },
         /**
          * @method setId
          * @param {String} id
@@ -237,22 +176,6 @@ Oskari.clazz.define(
                 return -1;
             }
             return this._baseLayerId;
-        },
-        /**
-         * @method setQueryFormat
-         * @param {String} queryFormat
-         *          f.ex. 'text/html'
-         */
-        setQueryFormat: function (queryFormat) {
-            this._queryFormat = queryFormat;
-        },
-        /**
-         * @method getQueryFormat
-         * f.ex. 'text/html'
-         * @return {String}
-         */
-        getQueryFormat: function () {
-            return this._queryFormat;
         },
         /**
          * @method setName
@@ -384,23 +307,7 @@ Oskari.clazz.define(
             }
             return groups[0].name;
         },
-        /**
-         * @method setFeatureInfoEnabled
-         * @return {Boolean} featureInfoEnabled true to enable feature info functionality
-         */
-        setFeatureInfoEnabled: function (featureInfoEnabled) {
-            this._featureInfoEnabled = featureInfoEnabled;
-        },
-        /**
-         * @method isFeatureInfoEnabled
-         * @return {Boolean} true if feature info functionality should be enabled
-         */
-        isFeatureInfoEnabled: function () {
-            if (this._featureInfoEnabled === true) {
-                return true;
-            }
-            return false;
-        },
+
         /**
          * @method setDescription
          * @param {String} description
@@ -669,6 +576,28 @@ Oskari.clazz.define(
          */
         getPermission: function (action) {
             return this._permissions[action];
+        },
+        /**
+         * Returns boolean value if user is permitted the action of type (param)
+         * @param {String} type permission type like 'publish' or 'download'
+         * @returns boolean true if permitted
+         */
+        hasPermission: function (type) {
+            const permission = this._permissions[type];
+            if (typeof permission === 'undefined') {
+                // if not declared it's not permitted
+                return false;
+            }
+            if (permission === true) {
+                // TODO: we should just be able to return permission as boolean in the future
+                return true;
+            }
+            // handling for legacy values
+            const permissionOk = {
+                'download': 'download_permission_ok',
+                'publish': 'publication_permission_ok'
+            };
+            return permission === permissionOk[type];
         },
         /**
          * @method getMetadataIdentifier
@@ -1253,22 +1182,6 @@ Oskari.clazz.define(
          */
         getGfiContent: function () {
             return this._gfiContent;
-        },
-
-        /**
-         * Sets an admin block
-         * @param {Object} admin
-         */
-        setAdmin: function (admin) {
-            this._admin = admin;
-        },
-
-        /**
-         * Returns an admin block
-         * @return {Object} admin
-         */
-        getAdmin: function () {
-            return this._admin;
         },
 
         /**
