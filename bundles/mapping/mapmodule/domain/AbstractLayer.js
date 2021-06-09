@@ -594,8 +594,8 @@ Oskari.clazz.define(
             }
             // handling for legacy values
             const permissionOk = {
-                "download": "download_permission_ok",
-                "publish": "publication_permission_ok"
+                'download': 'download_permission_ok',
+                'publish': 'publication_permission_ok'
             };
             return permission === permissionOk[type];
         },
