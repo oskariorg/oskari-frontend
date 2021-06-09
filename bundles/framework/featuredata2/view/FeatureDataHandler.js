@@ -36,7 +36,9 @@ class ViewHandler extends StateHandler {
     }
 
     _getSelectedLayerIds () {
-        return Oskari.getSandbox().findAllSelectedMapLayers().filter(l => l.hasFeatureData()).map(l => l.getId());
+        return Oskari.getSandbox().findAllSelectedMapLayers()
+            .filter(l => l.hasFeatureData() && l.isVisible())
+            .map(l => l.getId());
     }
 
     // override updateState for jQuery optimization
@@ -60,34 +62,59 @@ class ViewHandler extends StateHandler {
         const handlers = {
             AfterMapMoveEvent: () => this._afterMapMove(),
             AfterMapLayerAddEvent: event => {
-                const layer = event.getMapLayer();
-                if (!layer.hasFeatureData()) {
-                    return;
-                }
-                this.updateState({ layerIds: [...this.getState().layerIds, layer.getId()] }, 'layerIds'); // jQuery optimization
+                this._addLayer(event.getMapLayer());
             },
             AfterMapLayerRemoveEvent: event => {
-                const layer = event.getMapLayer();
-                if (!layer.hasFeatureData()) {
-                    return;
-                }
-                const { layerIds, layerId } = this.getState();
-                const removedId = layer.getId();
-                this.updateState({
-                    layerIds: layerIds.filter(id => id !== removedId),
-                    layerId: layerId === removedId ? this._getFirstLayerId() : layerId
-                }, 'layerIds'); // jQuery optimization
+                this._removeLayer(event.getMapLayer());
             },
             WFSFeaturesSelectedEvent: event => {
                 const layerId = event.getMapLayer().getId();
                 if (layerId === this.getState().layerId) {
                     this._updateSelectedFeatureIds();
                 }
+            },
+            MapLayerVisibilityChangedEvent: event => {
+                const layer = event.getMapLayer();
+                if (layer.isVisible()) {
+                    this._addLayer(layer);
+                } else {
+                    this._removeLayer(layer);
+                }
             }
         };
         const sb = Oskari.getSandbox();
         Object.getOwnPropertyNames(handlers).forEach(p => sb.registerForEventByName(this, p));
         return handlers;
+    }
+
+    _addLayer (layer) {
+        if (!layer.hasFeatureData() || !layer.isVisible()) {
+            return;
+        }
+        const addedId = layer.getId();
+        const { layerIds, layerId } = this.getState();
+        if (layerIds.includes(addedId)) {
+            return;
+        }
+        this.updateState({ layerIds: [...layerIds, addedId] }, 'layerIds'); // jQuery optimization
+        if (!layerId) {
+            this.setActiveLayer(addedId);
+        }
+    }
+
+    _removeLayer (layer) {
+        if (!layer.hasFeatureData()) {
+            return;
+        }
+        const { layerIds, layerId } = this.getState();
+        const removedId = layer.getId();
+        if (!layerIds.includes(removedId)) {
+            return;
+        }
+        this.updateState({ layerIds: layerIds.filter(id => id !== removedId) }, 'layerIds'); // jQuery optimization
+        if (layerId === removedId) {
+            this.setActiveLayer(this._getFirstLayerId());
+        }
     }
 
     _updateSelectedFeatureIds () {
