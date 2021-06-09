@@ -1,4 +1,4 @@
-import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS } from './view/FeatureDataHandler';
+import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS, ID_FIELD } from './view/FeatureDataHandler';
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
  *
@@ -692,13 +692,17 @@ Oskari.clazz.define(
          */
         createModel: function (layer, features) {
             const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-            model.setFields(layer.getPropertySelection());
-            model.setIdField('__fid');
+            const selection = layer.getPropertySelection();
+            if (selection.length) {
+                const fields = selection.includes(ID_FIELD) ? selection : [ID_FIELD, ...selection];
+                model.setFields(fields);
+            }
+            model.setIdField(ID_FIELD);
             // if layer doesn't have filtered fields then fields is set from first feature
             features.forEach(feat => {
                 model.addData(feat);
             });
-            model.setFirstField('__fid');
+            model.setFirstField(ID_FIELD);
             return model;
         },
         _processPropertyValue: function (value) {

@@ -177,8 +177,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 'Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 this.options,
                 categories,
-                (place) => this.savePlace(place),
-                () => this.cancelDrawing()
+                (place) => {
+                    this.savePlace(place);
+                    sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                },
+                () => {
+                    this.cancelDrawing();
+                    sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                }
             );
 
             this.form.setDrawing(this.drawing);
