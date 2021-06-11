@@ -1,11 +1,10 @@
-import olOverlay from 'ol/Overlay';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
 import {
-    WFS_ID_KEY, LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID,
+    WFS_ID_KEY, LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
@@ -22,13 +21,9 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.__qname = 'Oskari.mapframework.service.VectorFeatureService';
             this._log = Oskari.log('VectorFeatureService');
             this._sandbox = sandbox;
-            this._tooltipOverlay = null;
             this._map = mapmodule.getMap();
             this._mapmodule = mapmodule;
             this._featureFormatter = new olFormatGeoJSON();
-            this._tooltipState = {
-                feature: null
-            };
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(WFS_ID_KEY);
@@ -66,28 +61,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         getSandbox () {
             return this._sandbox;
-        }
-
-        /**
-         * @method getTooltipOverlay
-         * Get common tooltip overlay.
-         *
-         * @return {olOverlay}
-         */
-        getTooltipOverlay () {
-            if (!this._tooltipOverlay) {
-                // FIXME: There is code in VectorLayerPlugin.o.js that creates a tooltip overlay as well
-                // Changing this one seems to take effect so the other one can probably be removed or cleaned out
-                const overlayDiv = document.createElement('div');
-                overlayDiv.className = 'feature-hover-overlay';
-                this._tooltipOverlay = new olOverlay({
-                    element: overlayDiv,
-                    offset: [10, -10],
-                    stopEvent: false
-                });
-                this._map.addOverlay(this._tooltipOverlay);
-            }
-            return this._tooltipOverlay;
         }
 
         /**
@@ -218,116 +191,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             return ftrAndLyr || {};
         }
 
-        /**
-         * @method _getTooltipContent
-         * @param {Array} contentOptions
-         * @param {olFeature | olRenderFeature} feature
-         * @return {String} html content for tooltip or null
-         */
-        _getTooltipContent (contentOptions, feature) {
-            if (!contentOptions || !Array.isArray(contentOptions)) {
-                return null;
-            }
-            let content = '';
-            contentOptions.forEach(function (entry) {
-                let key = entry.key;
-                if (typeof key === 'undefined' && entry.keyProperty) {
-                    key = feature.get(entry.keyProperty);
-                }
-                if (typeof key !== 'undefined') {
-                    content += '<div>' + key;
-                    if (entry.valueProperty) {
-                        content += ': ';
-                        const value = feature.get(entry.valueProperty);
-                        if (typeof value !== 'undefined') {
-                            content += value;
-                        }
-                    }
-                    content += '</div>';
-                }
-            });
-            if (content) {
-                return content;
-            }
-            return null;
-        }
-
-        /**
-         * @method _updateTooltipPosition
-         * Updates tooltip overlay's position.
-         *
-         * @param {Number} pageX
-         * @param {Number} pageY
-         * @param {Number} lon
-         * @param {Number} lat
-         */
-        _updateTooltipPosition (pageX, pageY, lon, lat) {
-            let mapDiv = this._map.getTarget();
-            mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
-            const tooltip = jQuery(this.getTooltipOverlay().getElement());
-            const margin = 20;
-            const positioningY = pageY > (tooltip.outerHeight() || 100) + margin ? 'bottom' : 'top';
-            const positioningX = pageX + (tooltip.outerWidth() || 200) + margin < mapDiv.width() ? 'left' : 'right';
-            const positioning = positioningY + '-' + positioningX;
-            this.getTooltipOverlay().setPositioning(positioning);
-            this.getTooltipOverlay().setPosition([lon, lat]);
-        }
-
-        /**
-         * @method updateTooltipContent
-         * Updates tooltip with feature's data or hides it if content is empty.
-         *
-         * @param {String} contentOptions
-         * @param {olFeature | olRenderFeature} feature
-         */
-        updateTooltipContent (contentOptions, feature) {
-            const tooltip = jQuery(this.getTooltipOverlay().getElement());
-            const content = this._getTooltipContent(contentOptions, feature);
-            if (content) {
-                tooltip.html(content);
-                tooltip.css('display', '');
-            } else {
-                tooltip.empty();
-                tooltip.css('display', 'none');
-            }
-        }
-
-        /**
-         * @method _clearTooltip
-         * Clears tooltip's content and hides it.
-         */
-        _clearTooltip () {
-            const tooltip = jQuery(this.getTooltipOverlay().getElement());
-            tooltip.empty();
-            tooltip.css('display', 'none');
-        }
-
-        /**
-         * @method _updateTooltip
-         * Updates tooltip's content and position
-         *
-         * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
-         * @param {Object} contentOptions
-         * @param {olFeature | olRenderFeature} feature
-         */
-        _updateTooltip (event, contentOptions, feature) {
-            const tooltip = jQuery(this.getTooltipOverlay().getElement());
-            if (contentOptions) {
-                if (this._tooltipState.feature !== feature) {
-                    this.updateTooltipContent(contentOptions, feature);
-                }
-                if (!tooltip.is(':empty')) {
-                    this._updateTooltipPosition(event.getPageX(), event.getPageY(), event.getLon(), event.getLat());
-                }
-            } else {
-                this._clearTooltip();
-            }
-        }
-
+ 
         /**
          * @method _onMapHover
          * Finds the topmost feature from the layers controlled by the service and handles hover tooltip for the feature.
-         * Calls registered hover handlers for further styling of the layers.
          *
          * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
          */
@@ -350,11 +217,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     // Single feature
                     feature = feature.get('features')[0];
                 }
-                const hoverOptions = layer.get(LAYER_HOVER);
-                const contentOptions = hoverOptions ? hoverOptions.content : null;
-                this._updateTooltip(event, contentOptions, feature);
-            } else {
-                this._clearTooltip();
             }
             this.hoverHandler.onMapHover(event, feature, layer);
         }
