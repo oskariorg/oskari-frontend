@@ -286,6 +286,18 @@ export class MapModule extends AbstractMapModule {
         return getOlStyle(this, styleDef, geomType, requestedStyle);
     }
 
+    getGeomTypedStyles (styleDef) {
+        const styles = {
+            area: this.getStyle(styleDef, 'area'),
+            line: this.getStyle(styleDef, 'line'),
+            dot: this.getStyle(styleDef, 'dot')
+        };
+        if (styleDef.text) {
+            styles.labelProperty = styleDef.text.labelProperty;
+        }
+        return styles;
+    };
+
     getDefaultMarkerSize () {
         return this._defaultMarker.size;
     }

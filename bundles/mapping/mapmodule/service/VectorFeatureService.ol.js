@@ -3,8 +3,9 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
+import { HoverHandler } from './HoverHandler';
 import {
-    LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID,
+    WFS_ID_KEY, LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
@@ -30,6 +31,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             };
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
+            this.hoverHandler = new HoverHandler(WFS_ID_KEY);
             this._registerEventHandlers();
         }
 
@@ -141,6 +143,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 }
             }
         }
+
         /**
          * @method _getDefaultHandler
          * @param {String} handlerType
@@ -154,6 +157,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 }
             }
         }
+
         /**
          * @method handleVectorLayerRequest
          * Passes the request to a proper layer handler
@@ -319,6 +323,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 this._clearTooltip();
             }
         }
+
         /**
          * @method _onMapHover
          * Finds the topmost feature from the layers controlled by the service and handles hover tooltip for the feature.
@@ -336,15 +341,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             }
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
 
-            // No feature hits for these layer types. Call hover handlers without feature or layer.
-            Object.keys(this.layerTypeHandlers).forEach(layerType => {
-                const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
-                const featureHit = feature && layer && layer.get(LAYER_TYPE) === layerType;
-                if (!featureHit && handler) {
-                    handler(event);
-                }
-            });
-
             if (feature && layer) {
                 if (feature && feature.get('features')) {
                     // Cluster source
@@ -354,17 +350,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     // Single feature
                     feature = feature.get('features')[0];
                 }
-                const layerType = layer.get(LAYER_TYPE);
                 const hoverOptions = layer.get(LAYER_HOVER);
                 const contentOptions = hoverOptions ? hoverOptions.content : null;
                 this._updateTooltip(event, contentOptions, feature);
-                const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
-                if (handler) {
-                    handler(event, feature, layer);
-                }
             } else {
                 this._clearTooltip();
             }
+            this.hoverHandler.onMapHover(event, feature, layer);
         }
 
         /**

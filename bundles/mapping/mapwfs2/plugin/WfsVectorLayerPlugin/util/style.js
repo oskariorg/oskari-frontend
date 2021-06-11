@@ -36,21 +36,9 @@ const defaults = {
             },
             width: 3
         }
-    },
-    hover: {
-        inherit: true,
-        effect: 'auto minor',
-        stroke: {
-            area: {
-                effect: 'none',
-                color: '#000000',
-                width: 2
-            },
-            width: 2
-        }
     }
 };
-
+// TODO: move
 const applyAlphaToColorable = (colorable, alpha) => {
     if (!colorable || !colorable.getColor()) {
         return;
@@ -85,6 +73,7 @@ const applyAlphaToColorable = (colorable, alpha) => {
     colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
 };
 
+// TODO: move
 export const applyOpacity = (olStyle, opacity) => {
     if (!olStyle || isNaN(opacity)) {
         return;
@@ -110,8 +99,8 @@ const _setFeatureLabel = (feature, textStyle, labelProperty) => {
     }
     textStyle.setText(feature.get(prop));
 };
-
-const getStyleForGeometry = (geometry, styleTypes) => {
+// TODO: move
+export const getStyleForGeometry = (geometry, styleTypes) => {
     if (!geometry || !styleTypes) {
         return;
     }
@@ -143,8 +132,8 @@ const getStyleForGeometry = (geometry, styleTypes) => {
     return style;
 };
 
-const getStyleFunction = styleValues => {
-    const getStyleTypes = (styles, isSelected) => {
+const getStyleFunction = styles => {
+    const getStyle = (styles, isSelected) => {
         if (!styles) {
             return;
         }
@@ -154,48 +143,36 @@ const getStyleFunction = styleValues => {
         return styles.default;
     };
     return (feature, resolution, isSelected) => {
-        let styleTypes = null;
-        if (styleValues.optional) {
-            const found = styleValues.optional.find(op => filterOptionalStyle(op.filter, feature));
+        let style = null;
+        if (styles.optional) {
+            const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
             if (found) {
-                styleTypes = getStyleTypes(found, isSelected);
+                style = getStyle(found, isSelected);
             }
         }
-        if (!styleTypes) {
-            styleTypes = getStyleTypes(styleValues, isSelected);
+        if (!style) {
+            style = getStyle(styles, isSelected);
         }
-        const style = getStyleForGeometry(feature.getGeometry(), styleTypes);
+        const { labelProperty } = style;
+        style = getStyleForGeometry(feature.getGeometry(), style);
         const textStyle = style ? style.getText() : undefined;
-        if (styleTypes.labelProperty && textStyle) {
-            _setFeatureLabel(feature, textStyle, styleTypes.labelProperty);
+        if (labelProperty && textStyle) {
+            _setFeatureLabel(feature, textStyle, labelProperty);
         }
         return style;
     };
-};
-
-const getGeomTypedStyles = (styleDef, factory) => {
-    const styles = {
-        area: factory(styleDef, 'area'),
-        line: factory(styleDef, 'line'),
-        dot: factory(styleDef, 'dot')
-    };
-    if (styleDef.text) {
-        styles.labelProperty = styleDef.text.labelProperty;
-    }
-    return styles;
 };
 
 const merge = (...styles) => jQuery.extend(true, {}, ...styles);
 
 let defaultStyleFunction;
 const getDefaultStyleFunction = styleFactory => {
-    console.log(defaultStyleFunction);
     if (defaultStyleFunction) {
         return defaultStyleFunction;
     }
     const styles = {
-        default: getGeomTypedStyles(defaults.style, styleFactory),
-        selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory)
+        default: styleFactory(defaults.style),
+        selected: styleFactory(merge(defaults.style, defaults.selected))
     };
     defaultStyleFunction = getStyleFunction(styles);
     return defaultStyleFunction;
@@ -224,39 +201,23 @@ export const styleGenerator = (styleFactory, layer) => {
     }
     const styles = {};
     if (featureStyle) {
-        styles.default = getGeomTypedStyles(featureStyle, styleFactory);
-        styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
+        styles.default = styleFactory(featureStyle);
+        styles.selected = styleFactory(merge(featureStyle, defaults.selected));
     } else {
-        styles.default = getGeomTypedStyles(defaults.style, styleFactory);
-        styles.selected = getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory);
+        styles.default = styleFactory(defaults.style);
+        styles.selected = styleFactory(merge(defaults.style, defaults.selected));
     }
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
             const optional = {
                 filter: getOptionalStyleFilter(optionalDef),
-                default: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
-                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory)
+                default: styleFactory(merge(featureStyle, optionalDef)),
+                selected: styleFactory(merge(featureStyle, optionalDef, defaults.selected))
             };
             return optional;
         });
     }
     return getStyleFunction(styles);
-};
-
-export const hoverStyleGenerator = (styleFactory, layer) => {
-    const opts = layer.getHoverOptions();
-    if (opts && opts.featureStyle) {
-        let hoverDef = opts.featureStyle;
-        if (hoverDef.inherit === true) {
-            const { featureStyle = {} } = layer.getCurrentStyleDef();
-            hoverDef = merge(featureStyle, hoverDef);
-        }
-        const styles = {
-            default: getGeomTypedStyles(hoverDef, styleFactory)
-        };
-        return getStyleFunction(styles);
-    }
-    return null;
 };
 
 // Style for cluster circles

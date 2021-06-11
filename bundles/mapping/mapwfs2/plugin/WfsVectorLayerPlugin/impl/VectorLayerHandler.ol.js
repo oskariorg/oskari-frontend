@@ -7,7 +7,6 @@ import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { applyOpacity, clusterStyleFunc } from '../util/style';
-import { WFS_ID_KEY } from '../util/props';
 import { RequestCounter } from './RequestCounter';
 
 import olPoint from 'ol/geom/Point';
@@ -23,7 +22,7 @@ import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
-import { LAYER_CLUSTER, LAYER_HOVER } from '../../../../mapmodule/domain/constants';
+import { LAYER_CLUSTER, LAYER_HOVER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
 olParser.inject(olPoint, olLineString, olLinearRing, olPolygon, olMultiPoint, olMultiLineString, olMultiPolygon, olGeometryCollection);
@@ -144,6 +143,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             olLayers.push(clusterLayer);
         }
         const hoverOptions = layer.getHoverOptions();
+        // TODO: should this be created in vect feat service or hover handler
         if (hoverOptions && hoverOptions.featureStyle) {
             const hoverLayer = new olLayerVector({
                 opacity,
@@ -152,9 +152,9 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 source: new olSourceVector()
             });
             hoverLayer.set(LAYER_HOVER, true, silent);
+            // TODO: move or handler with layer request
             if (visible) {
-                const factory = this.plugin.mapModule.getStyle.bind(this.plugin.mapModule);
-                this.plugin.hoverHandler.addHoverLayer(factory, layer, hoverLayer);
+                this.plugin.vectorFeatureService.hoverHandler.addLayer(layer, hoverLayer);
             }
             olLayers.push(hoverLayer);
         }

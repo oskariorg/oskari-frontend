@@ -5,7 +5,7 @@ import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
-import { WFS_ID_KEY } from '../util/props';
+import { WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
 

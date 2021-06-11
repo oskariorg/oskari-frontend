@@ -1,17 +1,27 @@
-import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../../../mapmodule/domain/constants';
-import { hoverStyleGenerator } from './util/style';
+import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
+import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style';
 
 export class HoverHandler {
     constructor (ftrIdPropertyKey) {
-        this.hoverLayers = {};
+        this.olLayers = {};
         this.state = {};
         this.property = ftrIdPropertyKey || FTR_PROPERTY_ID;
+        this.styleFactory = null;
         // The same handler instance manages myplaces, userlayers and wfslayers
         // The handler is notified when user hovers the map and doesn't hit a layer of managed type.
         // Hence, the handler is called several times on map hover.
         // Clear hover after there is no hit on any of the managed layer types.
         this.clearHoverThreshold = 10;
         this.noHitsCounter = 0;
+        this._initBindings();
+    }
+
+    _initBindings () {
+        const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        mapmodule.getMap().getViewport().addEventListener('mouseout', evt => {
+            this.clearHover();
+        }, false);
+        this.styleFactory = mapmodule.getGeomTypedStyles.bind(mapmodule);
     }
 
     /**
@@ -22,7 +32,8 @@ export class HoverHandler {
      * @param { olRenderFeature } feature
      * @param { olVectorTileLayer } layer
      */
-    onMapHover (event, feature, layer) {
+    onMapHover (event, feature, vectorLayer) {
+        // const contentOptions = hoverOptions ? hoverOptions.content : null;
         if (!feature) {
             if (this.noHitsCounter > this.clearHoverThreshold) {
                 this.clearHover();
@@ -38,12 +49,12 @@ export class HoverHandler {
         if (this.state.feature && this.state.layer) {
             this.state.layer.getSource().removeFeature(this.state.feature);
         }
-        if (feature && layer) {
-            const hoverLayer = this.hoverLayers[layer.get(LAYER_ID)];
-            if (!hoverLayer) {
+        if (feature && vectorLayer) {
+            const layer = this.olLayers[vectorLayer.get(LAYER_ID)];
+            if (!layer) {
                 return;
             }
-            hoverLayer.getSource().addFeature(feature);
+            layer.getSource().addFeature(feature);
             this.state = {
                 feature,
                 layer
@@ -51,13 +62,31 @@ export class HoverHandler {
         }
     }
 
-    addHoverLayer (styleFactory, layer, olLayer) {
-        olLayer.setStyle(hoverStyleGenerator(styleFactory, layer));
-        this.hoverLayers[layer.getId()] = olLayer;
+    addLayer (layer, olLayer) {
+        olLayer.setStyle(this.styleGenerator(layer));
+        this.olLayers[layer.getId()] = olLayer;
     }
 
+    styleGenerator (layer) {
+        const opts = layer.getHoverOptions();
+        if (opts && opts.featureStyle) {
+            let hoverDef = opts.featureStyle;
+            if (hoverDef.inherit === true) {
+                const { featureStyle = {} } = layer.getCurrentStyleDef();
+                // TODO: does featureStyle contain default style or only overriding definitions
+                hoverDef = jQuery.extend(true, {}, featureStyle, hoverDef);
+            }
+            // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
+            const styleDef = this.styleFactory(hoverDef);
+            return feature => {
+                return getStyleForGeometry(feature.getGeometry(), styleDef);
+            };
+        }
+        return null;
+    };
+
     clearHover () {
-        Object.values(this.hoverLayers).forEach(l => l.getSource().clear());
+        Object.values(this.olLayers).forEach(l => l.getSource().clear());
         this.state = {};
         this.noHitsCounter = 0;
     }
@@ -82,9 +111,9 @@ export class HoverHandler {
         const options = request.getOptions();
         if (options.hover) {
             layer.setHoverOptions(options.hover);
-            const olLayer = this.hoverLayers(layer.getId());
+            const olLayer = this.olLayers(layer.getId());
             if (olLayer) {
-                olLayer.setStyle(hoverStyleGenerator(styleFactory, layer));
+                olLayer.setStyle(this.styleGenerator(layer));
             }
         }
     }

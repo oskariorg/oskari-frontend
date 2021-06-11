@@ -66,3 +66,16 @@ export const FILTER = {
     REG_EXP: 'regexp',
     WILD_CARD: '*'
 };
+
+export const DEFAULT_HOVER_STYLE = {
+    inherit: true,
+    effect: 'auto minor',
+    stroke: {
+        area: {
+            effect: 'none',
+            color: '#000000',
+            width: 2
+        },
+        width: 2
+    }
+};

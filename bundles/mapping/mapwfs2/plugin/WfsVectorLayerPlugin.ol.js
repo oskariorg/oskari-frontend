@@ -1,9 +1,8 @@
 import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandler.ol';
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
-import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
+
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
-import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, RENDER_MODE_MVT, RENDER_MODE_VECTOR, LAYER_TYPE, LAYER_HOVER } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
@@ -24,7 +23,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.oskariStyleSupport = true;
         this.layertype = 'wfs';
         this.layertypes = new Set([this.layertype]);
-        this.hoverHandler = new HoverHandler(WFS_ID_KEY);
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
         this.layerHandlersByLayerId = {};
@@ -106,14 +104,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);
-        this._setupMouseOutOfMapHandler();
-    }
-
-    _setupMouseOutOfMapHandler () {
-        const me = this;
-        this.getMapModule().getMap().getViewport().addEventListener('mouseout', (evt) => {
-            me.hoverHandler.clearHover();
-        }, false);
     }
 
     _createPluginEventHandlers () {
@@ -233,15 +223,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
                 }
             });
     }
-    /* ----- VectorFeatureService interface functions ----- */
-
-    onMapHover (event, feature, layer) {
-        this.hoverHandler.onMapHover(event, feature, layer);
-    }
-
-    onLayerRequest (request, layer) {
-        this.hoverHandler.onLayerRequest(request, layer);
-    }
 
     /* ---- Impl specific functions ---- */
 
@@ -311,7 +292,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!handler) {
             return;
         }
-        const factory = this.mapModule.getStyle.bind(this.mapModule);
+        const factory = this.mapModule.getGeomTypedStyles.bind(this.mapModule);
         const styleFunction = styleGenerator(factory, layer);
         const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
         return handler.getStyleFunction(layer, styleFunction, selectedIds);

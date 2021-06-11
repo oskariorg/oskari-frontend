@@ -5,6 +5,8 @@ export const LAYER_HOVER = 'oskariHoverLayer';
 export const LAYER_CLUSTER = 'oskariClusterLayer';
 // Feature constants
 export const FTR_PROPERTY_ID = 'id';
+export const WFS_ID_KEY = '_oid'; // TODO: rename
+export const WFS_FTR_ID_KEY = '__fid'; // TODO: rename
 // Service constants
 export const SERVICE_LAYER_REQUEST = 'layerRequest';
 export const SERVICE_HOVER = 'hover';
