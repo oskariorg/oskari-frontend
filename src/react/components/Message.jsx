@@ -65,7 +65,7 @@ Message.propTypes = {
     bundleKey: PropTypes.string.isRequired,
     messageKey: PropTypes.string,
     defaultMsg: PropTypes.string,
-    messageArgs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+    messageArgs: PropTypes.object,
     getMessage: PropTypes.func,
     children: PropTypes.node,
     LabelComponent: PropTypes.elementType,
