@@ -986,9 +986,7 @@ class UIHandler extends StateHandler {
         }).then(data => {
             const { success, error, layerUpdate = {} } = data;
             if (success.includes(`${layer.id}`)) {
-                const { admin = {} } = layerUpdate;
-                const { capabilities } = admin;
-                layer.capabilities = capabilities;
+                layer.capabilities = layerUpdate;
                 this.updateState({
                     layer
                 });
