@@ -23,11 +23,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.__name = 'VectorTileLayerPlugin';
         this._clazz = 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin';
         this.layertype = 'vectortile';
-        this.hoverState = {
-            layer: null,
-            feature: null,
-            property: FTR_PROPERTY_ID
-        };
     }
 
     /**
@@ -110,9 +105,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
         }
         const styleDef = layer.getCurrentStyleDef();
-        const hoverOptions = layer.getHoverOptions();
         const factory = this.mapModule.getStyle.bind(this.mapModule);
-        return styleDef ? styleGenerator(factory, styleDef, hoverOptions, this.hoverState) : this._createDefaultStyle();
+        return styleDef ? styleGenerator(factory, styleDef) : this._createDefaultStyle();
     }
 
     /**
@@ -214,7 +208,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const silent = true;
         vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
         vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
-        vectorTileLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
 
         const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
         // Set min max zoom levels that layer should be visible in
@@ -223,6 +216,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
+        // TODO: add hover layer
     }
 
     createSource (layer, options) {
@@ -237,6 +231,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param { olRenderFeature } feature
      * @param { olVectorTileLayer } layer
      */
+    // TODO: ***
     onMapHover (event, feature, layer) {
         const { feature: hoverFeature, layer: hoverLayer, property } = this.hoverState;
         if (feature === hoverFeature) {
@@ -276,7 +271,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             const olLayers = this.getOLMapLayers(layer.getId());
             if (olLayers) {
                 olLayers.forEach(lyr => {
-                    lyr.set(LAYER_HOVER, layer.getHoverOptions());
+                    // TODO: sync
+                    // lyr.set(LAYER_HOVER, layer.getHoverOptions());
                     lyr.setStyle(this._getLayerCurrentStyleFunction(layer));
                 });
             }
