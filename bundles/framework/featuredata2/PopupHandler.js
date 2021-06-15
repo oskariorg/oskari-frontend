@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
     function (instance) {
         this.instance = instance;
         this.btnContainer = null;
-
+        this.loc = Oskari.getMsg.bind(null, 'FeatureData2');
         var me = this,
             sandbox = me.instance.getSandbox(),
             mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
@@ -32,35 +32,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             mapModule.startPlugin(me.selectionPlugin);
         }
 
-        this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+        this.WFSLayerService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this.buttons = {
             point: {
                 iconCls: 'selection-point',
-                tooltip: this.instance.loc('selectionTools.tools.point.tooltip'),
+                tooltip: this.loc('selectionTools.tools.point.tooltip'),
                 sticky: false,
                 callback: start => this.selectToolHandler('point', start)
             },
             line: {
                 iconCls: 'selection-line',
-                tooltip: this.instance.loc('selectionTools.tools.line.tooltip'),
+                tooltip: this.loc('selectionTools.tools.line.tooltip'),
                 sticky: false,
                 callback: start => this.selectToolHandler('line', start)
             },
             polygon: {
                 iconCls: 'selection-area',
-                tooltip: this.instance.loc('selectionTools.tools.polygon.tooltip'),
+                tooltip: this.loc('selectionTools.tools.polygon.tooltip'),
                 sticky: false,
                 callback: start => this.selectToolHandler('polygon', start)
             },
             square: {
                 iconCls: 'selection-square',
-                tooltip: this.instance.loc('selectionTools.tools.square.tooltip'),
+                tooltip: this.loc('selectionTools.tools.square.tooltip'),
                 sticky: false,
                 callback: start => this.selectToolHandler('square', start)
             },
             circle: {
                 iconCls: 'selection-circle',
-                tooltip: this.instance.loc('selectionTools.tools.circle.tooltip'),
+                tooltip: this.loc('selectionTools.tools.circle.tooltip'),
                 sticky: false,
                 callback: start => this.selectToolHandler('circle', start)
             }
@@ -115,15 +115,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             // renders selections tools to the content
             this.renderSelectionToolButtons(content);
             const instructions = this.template.instructions.clone();
-            instructions.append(this.instance.loc('selectionTools.instructions'));
+            instructions.append(this.loc('selectionTools.instructions'));
             content.append(instructions);
 
             const selectOptions = this.template.selectOptions.clone();
             const selectFromTop = selectOptions.find('#select-from-top-layer');
             const selectFromAll = selectOptions.find('#select-from-all-layers');
 
-            selectFromTop.find('span').html(this.instance.loc('selectionTools.selectFromTop'));
-            selectFromAll.find('span').html(this.instance.loc('selectionTools.selectAll'));
+            selectFromTop.find('span').html(this.loc('selectionTools.selectFromTop'));
+            selectFromAll.find('span').html(this.loc('selectionTools.selectAll'));
             if (this.WFSLayerService.isSelectFromAllLayers()) {
                 selectFromAll.find('input').prop('checked', true);
             } else {
@@ -135,17 +135,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
 
             const controlButtons = [];
             const emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            emptyBtn.setTitle(this.instance.loc('selectionTools.button.empty'));
+            emptyBtn.setTitle(this.loc('selectionTools.button.empty'));
             emptyBtn.setHandler(() => {
                 // Remove selections
-                const layers = this.instance.getSandbox().findAllSelectedMapLayers().filter(l => l.hasFeatureData());
+                const layers = Oskari.getSandbox().findAllSelectedMapLayers().filter(l => l.hasFeatureData());
                 layers.forEach(l => this.WFSLayerService.emptyWFSFeatureSelections(l));
             });
             controlButtons.push(emptyBtn);
             controlButtons.push(dialog.createCloseButton());
 
             dialog.addClass('tools_selection');
-            dialog.show(this.instance.loc('selectionTools.title'), content, controlButtons);
+            dialog.show(this.loc('selectionTools.title'), content, controlButtons);
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
             this.dialog = dialog;
         },
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             // ask toolbar to select default tool if available
             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             if (toolbarRequest) {
-                this.instance.getSandbox().request(this.instance, toolbarRequest());
+                Oskari.getSandbox().request(this.instance, toolbarRequest());
             }
         },
 
