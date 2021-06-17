@@ -1,6 +1,8 @@
 import olFormatWKT from 'ol/format/WKT';
 
+const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
+const LAYER_WKT_STATUS = {};
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
@@ -84,21 +86,52 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      *
      */
     _parseGeometryForLayer (layer) {
-    // parse geometry if available
-        if (layer.getGeometry && layer.getGeometry().length === 0) {
-            var layerWKTGeom = layer.getGeometryWKT();
-            if (!layerWKTGeom) {
-            // no wkt, dont parse
+        // parse geometry if available
+        const layerId = layer.getId();
+        if (LAYER_WKT_STATUS[layerId] === true) {
+            // already loading or loaded
+            return;
+        }
+        // set a flag to notify the layer WKT is loading/loaded/handled and we don't need to try again
+        LAYER_WKT_STATUS[layerId] = true;
+        if (isNaN(layerId)) {
+            // only layers that have numeric ids can have reasonable coverage WKT
+            return;
+        }
+        if (typeof layer.getGeometry !== 'function') {
+            // layer type doesn't support this
+            return;
+        }
+        if (layer.getGeometry().length > 0) {
+            // already parsed, no need to parse again
+            return;
+        }
+        const url = Oskari.urls.getRoute('DescribeLayer', {
+            id: layerId,
+            lang: Oskari.getLang(),
+            srs: this.getMapModule().getProjection()
+        });
+
+        fetch(url).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        }).then(json => {
+            const coverageWKT = json.coverage;
+            if (!coverageWKT) {
+                // no wkt, skip
                 return;
             }
-
-            var wkt = new olFormatWKT();
-            var geometry = wkt.readGeometry(layerWKTGeom);
-
+            const geometry = WKT_READER.readGeometry(coverageWKT);
             if (geometry) {
+                layer.setGeometryWKT(coverageWKT);
                 layer.setGeometry([geometry]);
             }
-        }
+        }).catch(error => {
+            // reset flag to try again later
+            LAYER_WKT_STATUS[layerId] = false;
+            Oskari.log('WKT download').warn(error);
+        });
     }
 
     /**

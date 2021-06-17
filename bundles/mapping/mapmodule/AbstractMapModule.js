@@ -593,7 +593,7 @@ Oskari.clazz.define(
         /**
          * @method getProjection
          * Returns the SRS projection code for the map.
-         * Currently always 'EPSG:3067'
+         * Currently defaults to 'EPSG:3067'
          * @return {String}
          */
         getProjection: function () {
