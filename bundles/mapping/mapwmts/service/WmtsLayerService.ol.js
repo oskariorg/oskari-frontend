@@ -129,6 +129,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             // override capabilities url with the configured one
             options.urls = [config.url];
         }
+        // allows layer.options.wrapX to be passed to source. For some reason optionsFromCapabilities() overrides it.
+        options.wrapX = !!config.wrapX;
         var wmtsLayer = new olLayerTile({
             source: new olSourceWMTS(options),
             opacity: layer.getOpacity() / 100.0,
