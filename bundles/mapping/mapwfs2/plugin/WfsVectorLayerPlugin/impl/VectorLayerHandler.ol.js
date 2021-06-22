@@ -22,7 +22,7 @@ import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
-import { LAYER_CLUSTER, LAYER_HOVER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
+import { LAYER_CLUSTER, WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
 olParser.inject(olPoint, olLineString, olLinearRing, olPolygon, olMultiPoint, olMultiLineString, olMultiPolygon, olGeometryCollection);
@@ -142,22 +142,9 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             clusterLayer.set(LAYER_CLUSTER, true, silent);
             olLayers.push(clusterLayer);
         }
-        const hoverOptions = layer.getHoverOptions();
-        // TODO: should this be created in vect feat service or hover handler
-        if (hoverOptions && hoverOptions.featureStyle) {
-            const hoverLayer = new olLayerVector({
-                opacity,
-                visible,
-                renderMode,
-                source: new olSourceVector()
-            });
-            hoverLayer.set(LAYER_HOVER, true, silent);
-            // TODO: move or handler with layer request
-            if (visible) {
-                this.plugin.vectorFeatureService.hoverHandler.addLayer(layer, hoverLayer);
-            }
-            olLayers.push(hoverLayer);
-        }
+
+        const hoverLayer = this.plugin.vectorFeatureService.createHoverLayer(layer);
+        olLayers.push(hoverLayer);
 
         olLayers.forEach(olLayer => {
             this.applyZoomBounds(layer, olLayer);

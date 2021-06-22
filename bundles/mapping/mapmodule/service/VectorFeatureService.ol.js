@@ -221,6 +221,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.hoverHandler.onMapHover(event, feature, layer);
         }
 
+        createHoverLayer (layer) {
+            return this.hoverHandler.createHoverLayer(layer);
+        }
+
         /**
          * @method _getGeojson
          *

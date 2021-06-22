@@ -1,6 +1,8 @@
-import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
-import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style';
+import { LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
+import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
 import olOverlay from 'ol/Overlay';
+import { Vector as olLayerVector } from 'ol/layer';
+import { Vector as olSourceVector } from 'ol/source';
 
 export class HoverHandler {
     constructor (ftrIdPropertyKey) {
@@ -8,6 +10,7 @@ export class HoverHandler {
         this.state = {};
         this.property = ftrIdPropertyKey || FTR_PROPERTY_ID;
         this.styleFactory = null;
+        this._tooltipContents = {};
         this._tooltipOverlay = null;
         // The same handler instance manages myplaces, userlayers and wfslayers
         // The handler is notified when user hovers the map and doesn't hit a layer of managed type.
@@ -32,9 +35,9 @@ export class HoverHandler {
      *
      * @param { Oskari.mapframework.event.common.MouseHoverEvent } event
      * @param { olRenderFeature } feature
-     * @param { olVectorTileLayer } layer
+     * @param { olVectorTileLayer } olLayer
      */
-    onMapHover (event, feature, vectorLayer) {
+    onMapHover (event, feature, olLayer) {
         if (!feature) {
             if (this.noHitsCounter > this.clearHoverThreshold) {
                 this.clearHover();
@@ -49,17 +52,17 @@ export class HoverHandler {
             return;
         }
         if (this.state.feature && this.state.layer) {
+            console.log(this.state.layer.getSource());
             this.state.layer.getSource().removeFeature(this.state.feature);
         }
-        if (feature && vectorLayer) {
-            const layer = this.olLayers[vectorLayer.get(LAYER_ID)];
+        if (feature && olLayer) {
+            const layerId = olLayer.get(LAYER_ID);
+            const layer = this.olLayers[layerId];
             if (!layer) {
                 return;
             }
             layer.getSource().addFeature(feature);
-            // TODO where to store hoveroptions
-            const contentOptions = {}; // = hoverOptions ? hoverOptions.content : null;
-            this.updateTooltipContent(contentOptions, feature);
+            this.updateTooltipContent(layerId, feature);
             this.state = {
                 feature,
                 layer
@@ -67,17 +70,35 @@ export class HoverHandler {
         }
     }
 
-    addLayer (layer, olLayer) {
-        olLayer.setStyle(this.styleGenerator(layer));
+    createHoverLayer (layer) {
+        const olLayer = new olLayerVector({
+            opacity: layer.getOpacity(),
+            visible: layer.isVisible(),
+            source: new olSourceVector()
+        });
+        olLayer.set(LAYER_HOVER, true, true);
+        olLayer.setStyle(this._styleGenerator(layer));
         this.olLayers[layer.getId()] = olLayer;
+        this._setTooltipContent(layer);
+        return olLayer;
     }
 
-    styleGenerator (layer) {
+    _setTooltipContent (layer) {
+        const options = layer.getHoverOptions();
+        if (!options || !Array.isArray(options.content)) {
+            return;
+        }
+        this._tooltipContents[layer.getId()] = options.content;
+    }
+
+    _styleGenerator (layer) {
         const opts = layer.getHoverOptions();
+        // TODO: register layer type default styles to inherit
         if (opts && opts.featureStyle) {
             let hoverDef = opts.featureStyle;
             if (hoverDef.inherit === true) {
-                const { featureStyle = {} } = layer.getCurrentStyleDef();
+                const styleDef = layer.getCurrentStyleDef();
+                const featureStyle = styleDef ? styleDef.featureStyle : {};
                 // TODO: does featureStyle contain default style or only overriding definitions
                 hoverDef = jQuery.extend(true, {}, featureStyle, hoverDef);
             }
@@ -88,7 +109,7 @@ export class HoverHandler {
             };
         }
         return null;
-    };
+    }
 
     clearHover () {
         Object.values(this.olLayers).forEach(l => l.getSource().clear());
@@ -98,11 +119,12 @@ export class HoverHandler {
     }
 
     _featureOrIdEqualsCurrent (feature) {
-        if (!this.feature) {
+        const { feature: current } = this.state;
+        if (!current) {
             return false;
         }
         const idProp = this.property;
-        return this.feature === feature || this.feature.get(idProp) === feature.get(idProp);
+        return current === feature || current.get(idProp) === feature.get(idProp);
     }
 
     /**
@@ -147,12 +169,13 @@ export class HoverHandler {
 
     /**
      * @method _getTooltipContent
-     * @param {Array} contentOptions
+     * @param {Number | } contentOptions
      * @param {olFeature | olRenderFeature} feature
      * @return {String} html content for tooltip or null
      */
-    _getTooltipContent (contentOptions, feature) {
-        if (!contentOptions || !Array.isArray(contentOptions)) {
+    _getTooltipContent (layerId, feature) {
+        const contentOptions = this._tooltipContents[layerId];
+        if (!contentOptions) {
             return null;
         }
         let content = '';
@@ -199,13 +222,12 @@ export class HoverHandler {
      * @method updateTooltipContent
      * Updates tooltip with feature's data or hides it if content is empty.
      *
-     * @param {String} contentOptions
+     * @param {Numbed | String} layerId
      * @param {olFeature | olRenderFeature} feature
      */
-    updateTooltipContent (contentOptions, feature) {
+    updateTooltipContent (layerId, feature) {
         const tooltip = jQuery(this.getTooltipOverlay().getElement());
-        //const content = this._getTooltipContent(contentOptions, feature);
-        const content = 'testing';
+        const content = this._getTooltipContent(layerId, feature);
         if (content) {
             tooltip.html(content);
             tooltip.css('display', '');
