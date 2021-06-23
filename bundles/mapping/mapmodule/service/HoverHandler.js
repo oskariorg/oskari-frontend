@@ -1,4 +1,4 @@
-import { LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
+import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
 import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
 import olOverlay from 'ol/Overlay';
 import { Vector as olLayerVector } from 'ol/layer';
@@ -37,8 +37,9 @@ export class HoverHandler {
      * @param { olRenderFeature } feature
      * @param { olVectorTileLayer } olLayer
      */
-    onMapHover (event, feature, olLayer) {
+    onFeatureHover (event, feature, olLayer) {
         if (!feature) {
+            // TODO: is this needed?
             if (this.noHitsCounter > this.clearHoverThreshold) {
                 this.clearHover();
                 return;
@@ -47,12 +48,10 @@ export class HoverHandler {
             return;
         }
         this.noHitsCounter = 0;
-        this._updateTooltipPosition(event);
         if (this._featureOrIdEqualsCurrent(feature)) {
             return;
         }
         if (this.state.feature && this.state.layer) {
-            console.log(this.state.layer.getSource());
             this.state.layer.getSource().removeFeature(this.state.feature);
         }
         if (feature && olLayer) {
@@ -70,6 +69,10 @@ export class HoverHandler {
         }
     }
 
+    onMapHover (event) {
+        this._updateTooltipPosition(event);
+    }
+
     createHoverLayer (layer) {
         const olLayer = new olLayerVector({
             opacity: layer.getOpacity(),
@@ -79,11 +82,11 @@ export class HoverHandler {
         olLayer.set(LAYER_HOVER, true, true);
         olLayer.setStyle(this._styleGenerator(layer));
         this.olLayers[layer.getId()] = olLayer;
-        this._setTooltipContent(layer);
+        this.setTooltipContent(layer);
         return olLayer;
     }
 
-    _setTooltipContent (layer) {
+    setTooltipContent (layer) {
         const options = layer.getHoverOptions();
         if (!options || !Array.isArray(options.content)) {
             return;
@@ -113,7 +116,7 @@ export class HoverHandler {
 
     clearHover () {
         Object.values(this.olLayers).forEach(l => l.getSource().clear());
-        this._clearTooltip();
+        // this._clearTooltip(); TODO: how to handle vector & others
         this.state = {};
         this.noHitsCounter = 0;
     }

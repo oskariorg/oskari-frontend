@@ -8,6 +8,7 @@ import {
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
+const VECTOR_TYPE = 'vector';
 /**
  * @class Oskari.mapframework.service.VectorFeatureService
  *
@@ -27,6 +28,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(WFS_ID_KEY);
+            // this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
 
@@ -191,7 +193,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             return ftrAndLyr || {};
         }
 
- 
         /**
          * @method _onMapHover
          * Finds the topmost feature from the layers controlled by the service and handles hover tooltip for the feature.
@@ -206,6 +207,12 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (this._sandbox.getMap().isMoving()) {
                 return;
             }
+            this.hoverHandler.onMapHover(event);
+            // TODO: try throttle or threshold (subsequent events might be triggered < 10ms and even twice to same px)
+            this._hoverFeature(event);
+        }
+
+        _hoverFeature (event) {
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
 
             if (feature && layer) {
@@ -218,11 +225,23 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     feature = feature.get('features')[0];
                 }
             }
-            this.hoverHandler.onMapHover(event, feature, layer);
+            const vectorHandler = this._getRegisteredHandler(VECTOR_TYPE, SERVICE_HOVER);
+            if (layer && layer.get(LAYER_TYPE) === VECTOR_TYPE) {
+                vectorHandler(event, feature, layer);
+                this.hoverHandler.updateTooltipContent(layer.get(LAYER_ID), feature);
+                this.hoverHandler.onFeatureHover(event);
+            } else {
+                vectorHandler(event);
+                this.hoverHandler.onFeatureHover(event, feature, layer);
+            }
         }
 
         createHoverLayer (layer) {
             return this.hoverHandler.createHoverLayer(layer);
+        }
+
+        setVectorLayerHoverTooltip (layer) {
+            this.hoverHandler.setTooltipContent(layer);
         }
 
         /**
