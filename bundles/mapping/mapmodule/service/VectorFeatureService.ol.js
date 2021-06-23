@@ -4,7 +4,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
 import {
-    WFS_ID_KEY, LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
+    , LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
@@ -27,7 +27,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._featureFormatter = new olFormatGeoJSON();
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
-            this.hoverHandler = new HoverHandler(WFS_ID_KEY);
+            this.hoverHandler = new HoverHandler();
             // this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }

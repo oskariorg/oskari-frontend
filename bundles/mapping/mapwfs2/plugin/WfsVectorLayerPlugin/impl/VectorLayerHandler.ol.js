@@ -189,7 +189,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         });
         const strategy = tileStrategyFactory(tileGrid);
         this.loadingStrategies['' + layer.getId()] = strategy;
-        let source = new olSourceVector({
+        const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
             projection: projection,

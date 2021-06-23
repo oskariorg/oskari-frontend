@@ -131,6 +131,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             })
         }));
     }
+
     _getMinScale () {
         if (!this.minZoomLevel) {
             return;

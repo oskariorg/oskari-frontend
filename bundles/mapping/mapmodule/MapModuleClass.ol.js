@@ -234,6 +234,7 @@ export class MapModule extends AbstractMapModule {
             sandbox.notifyAll(hoverEvent);
         });
     }
+
     _registerVectorFeatureService () {
         const sandbox = this._sandbox;
         let ftrService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');

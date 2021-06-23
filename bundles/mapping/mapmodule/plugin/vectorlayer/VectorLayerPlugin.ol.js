@@ -644,6 +644,7 @@ Oskari.clazz.define(
                         hover.filter = [hover.filter];
                     }
                 }
+                // tooltip overlay is handled by VectorFeatureService
                 if (Array.isArray(hover.content)) {
                     const vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
                     vectorFeatureService.setVectorLayerHoverTooltip(layer);

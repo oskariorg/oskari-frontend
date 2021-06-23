@@ -1,14 +1,14 @@
-import { LAYER_HOVER, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
+import { LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
 import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
 import olOverlay from 'ol/Overlay';
 import { Vector as olLayerVector } from 'ol/layer';
 import { Vector as olSourceVector } from 'ol/source';
 
 export class HoverHandler {
-    constructor (ftrIdPropertyKey) {
+    constructor () {
         this.olLayers = {};
         this.state = {};
-        this.property = ftrIdPropertyKey || FTR_PROPERTY_ID;
+        this.property = WFS_ID_KEY || FTR_PROPERTY_ID; // TODO: why wfs uses _oid and others id, fix property check
         this.styleFactory = null;
         this._tooltipContents = {};
         this._tooltipOverlay = null;
