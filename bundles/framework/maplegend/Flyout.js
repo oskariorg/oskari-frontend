@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 layer = layers[n];
                 layerContainer = this._createLayerContainer(layer);
 
-                const layerTitle = jQuery('<div class="maplegend-layer-title">' + layer.getName() + '</div>');
+                const layerTitle = jQuery('<div class="maplegend-layer-title">' + Oskari.util.sanitize(layer.getName()) + '</div>');
                 const uuid = layer.getMetadataIdentifier();
                 if (uuid) {
                     layerTitle.append(me.templateTools.clone());

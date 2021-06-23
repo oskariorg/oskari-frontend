@@ -357,7 +357,7 @@ Oskari.clazz.define(
                     ).attr(
                         'title',
                         layer.getName()
-                    ).html(
+                    ).text(
                         layer.getName()
                     );
                     list.append(listItem);

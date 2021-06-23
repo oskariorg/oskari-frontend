@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 }
                 var layerObject = {
                     id: layer.getId(),
-                    title: layer.getName()
+                    title: Oskari.util.sanitize(layer.getName())
                 };
                 legendLayers.push(layerObject);
             });

@@ -279,10 +279,10 @@ Oskari.clazz.define(
             groups.forEach(function (group) {
                 var tpl = me.templates.dataSourceGroup.clone();
                 tpl.addClass(group.id);
-                tpl.find('h4').html(group.name);
+                tpl.find('h4').text(group.name);
                 group.items.forEach(function (item) {
                     var itemTpl = jQuery('<div></div>');
-                    itemTpl.append(item.name);
+                    itemTpl.text(item.name);
                     itemTpl.append(me.__formatItemSources(item.source));
                     tpl.append(itemTpl);
                 });
@@ -309,7 +309,7 @@ Oskari.clazz.define(
                 }
                 var link = jQuery('<a target="_blank"></a>');
                 link.attr('href', item.url);
-                link.append(item.name);
+                link.text(item.name);
                 return link;
             };
             var tpl = jQuery('<span></span>');

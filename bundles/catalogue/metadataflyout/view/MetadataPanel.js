@@ -541,7 +541,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             ),
             'layerItem': _.template(
                 '<li>' +
-                '   <%=layer.getName()%>&nbsp;&nbsp;' +
+                '   <%=Oskari.util.sanitize(layer.getName())%>&nbsp;&nbsp;' +
                 '   <a href="JavaScript:void(0);" class="layerLink">' +
                 '       <%=hidden ? locale.layerList.show : locale.layerList.hide%>' +
                 '   </a>' +
