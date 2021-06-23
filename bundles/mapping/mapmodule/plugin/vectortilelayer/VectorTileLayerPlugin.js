@@ -7,7 +7,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import { styleGenerator } from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
-import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
@@ -196,7 +196,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         // options is used to store tile grid and all sorts of other flags so only get the
         //  declutter option here instead of spreading the object to layer directly
         const { declutter } = layer.getOptions() || {};
-        // Properties id, type and hover are being used in VectorFeatureService.
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
@@ -204,6 +203,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             source: this.createSource(layer, sourceOpts),
             declutter
         });
+        // Properties id and type are being used in VectorFeatureService.
         // Set oskari properties for vector feature service functionalities.
         const silent = true;
         vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
@@ -214,46 +214,14 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         zoomLevelHelper.setOLZoomLimits(vectorTileLayer, layer.getMinScale(), layer.getMaxScale());
 
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
-        this.setOLMapLayers(layer.getId(), vectorTileLayer);
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
-        // TODO: add hover layer
+        const vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
+        const hoverLayer = vectorFeatureService.createHoverLayer(layer);
+        this.setOLMapLayers(layer.getId(), [vectorTileLayer, hoverLayer]);
     }
 
     createSource (layer, options) {
         return new olSourceVectorTile(options);
-    }
-
-    /**
-     * @method onMapHover VectorFeatureService handler impl method
-     * Handles feature highlighting on map hover.
-     *
-     * @param { Oskari.mapframework.event.common.MouseHoverEvent } event
-     * @param { olRenderFeature } feature
-     * @param { olVectorTileLayer } layer
-     */
-    // TODO: ***
-    onMapHover (event, feature, layer) {
-        const { feature: hoverFeature, layer: hoverLayer, property } = this.hoverState;
-        if (feature === hoverFeature) {
-            return;
-        }
-        if (feature && hoverFeature && feature.get(property) === hoverFeature.get(property)) {
-            return;
-        }
-        this.hoverState.feature = feature;
-        this.hoverState.layer = layer;
-        if (hoverLayer) {
-            const style = (hoverLayer.get(LAYER_HOVER) || {}).featureStyle;
-            if (style) {
-                hoverLayer.changed();
-            }
-        }
-        if (layer && layer !== hoverLayer) {
-            const style = (layer.get(LAYER_HOVER) || {}).featureStyle;
-            if (style) {
-                layer.changed();
-            }
-        }
     }
 
     /**
@@ -267,12 +235,14 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     onLayerRequest (request, layer) {
         const options = request.getOptions();
         if (options.hover) {
+            // TODO: update service hover style & content
             layer.setHoverOptions(options.hover);
             const olLayers = this.getOLMapLayers(layer.getId());
             if (olLayers) {
                 olLayers.forEach(lyr => {
-                    // TODO: sync
-                    // lyr.set(LAYER_HOVER, layer.getHoverOptions());
+                    if (lyr.get(LAYER_HOVER === true)) {
+                        return;
+                    }
                     lyr.setStyle(this._getLayerCurrentStyleFunction(layer));
                 });
             }
