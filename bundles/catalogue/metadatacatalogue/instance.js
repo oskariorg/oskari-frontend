@@ -217,7 +217,7 @@ Oskari.clazz.define(
             if (key && this._localization[key]) {
                 return this._localization[key];
             }
-            if (!this.localization) {
+            if (!this._localization) {
                 return {};
             }
             return this._localization;
@@ -240,7 +240,7 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
-
+            // FIXME: there's also getLocalization() that uses this._localization. Get rid of one or the other.
             me.localization = Oskari.getLocalization(me.getName());
 
             var optionAjaxUrl = null;
