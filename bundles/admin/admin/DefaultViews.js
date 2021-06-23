@@ -174,13 +174,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
     __showGenericErrorSave: function (id) {
         this.instance.showMessage(
             this.locale.notifications.errorTitle,
-            _.template(this.locale.notifications.errorUpdating)({ id: id }));
+            this.locale.notifications.errorUpdating.replace('${id}', id));
     },
 
     __viewSaved: function (id, data) {
         this.instance.showMessage(
             this.locale.notifications.successTitle,
-            _.template(this.locale.notifications.viewUpdated)({ id: id }));
+            this.locale.notifications.viewUpdated.replace('${id}', id));
     },
 
     /**
