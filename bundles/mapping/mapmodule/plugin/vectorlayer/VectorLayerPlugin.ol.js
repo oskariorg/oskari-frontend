@@ -637,7 +637,6 @@ Oskari.clazz.define(
         },
         _setHoverOptions: function (layer, options) {
             const { hover } = options;
-            console.log('s', hover);
             if (hover) {
                 layer.setHoverOptions(hover);
                 if (hover.filter) {
