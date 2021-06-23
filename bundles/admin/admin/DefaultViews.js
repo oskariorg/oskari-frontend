@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
     this.setContent(this.createUI());
 }, {
     templates: {
-        'main': _.template('<div>${ msg }<div class="grid-placeholder"></div></div>'),
-        'link': _.template('<a href="javascript:void(0);" onClick="return false;">${ msg }</a>'),
-        'errorGuest': _.template('<div>${listTitle}<ul>${list}</ul></div>'),
-        'listItem': _.template('<li>${ msg }</li>')
+        'main': ({ msg }) => `<div>${ msg }<div class="grid-placeholder"></div></div>`,
+        'link': ({ msg }) => `<a href="javascript:void(0);" onClick="return false;">${ msg }</a>`,
+        'errorGuest': ({ listTitle, list }) => `<div>${listTitle}<ul>${list}</ul></div>`,
+        'listItem': ({ msg }) => `<li>${ msg }</li>`
     },
     /**
      * Create the UI for this tab panel
