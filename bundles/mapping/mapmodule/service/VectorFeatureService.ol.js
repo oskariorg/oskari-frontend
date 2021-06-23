@@ -4,7 +4,7 @@ import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
 import {
-    , LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
+    LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
