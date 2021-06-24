@@ -39,3 +39,26 @@ export const LINE_STYLES = {
         }
     ]
 };
+
+export const PRE_DEFINED_COLORS = [
+        {
+            "name": "#f8931f",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0,16 l32,0\" stroke=\"#f8931f\" stroke-width=\"32\"/></svg>"
+        },
+        {
+            "name": "#ff0000",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0,16 l32,0\" stroke=\"#ff0000\" stroke-width=\"32\"/></svg>"
+        },
+        {
+            "name": "#3233ff",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0,16 l32,0\" stroke=\"#3233ff\" stroke-width=\"32\"/></svg>"
+        },
+        {
+            "name": "#00ff00",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0,16 l32,0\" stroke=\"#00ff00\" stroke-width=\"32\"/></svg>"
+        },
+        {
+            "name": "#ffff00",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M0,16 l32,0\" stroke=\"#ffff00\" stroke-width=\"32\"/></svg>"
+        }
+    ];

@@ -5,7 +5,7 @@ import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE } from './StyleEditor/';
+import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PRE_DEFINED_COLORS } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
@@ -60,6 +60,7 @@ export const StyleEditor = (props) => {
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
     const onUpdate = (values) => {
         // {image.shape: 3}
+        console.log(values);
         const newStyle = updateStyle(values);
         props.onChange(newStyle)
     };

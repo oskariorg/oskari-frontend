@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
 import { Form, Row } from 'antd';
+import styled from 'styled-components';
 
 const markers = [
     {
@@ -34,25 +35,50 @@ const markers = [
     }
 ];
 
+const ColorPickerGroup = styled.div`
+`;
+
 export const PointTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.stroke.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                <ColorPickerGroup>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.color'
+                        label={ <Message messageKey='StyleEditor.stroke.color' /> }
+                    >
+                        <ColorPicker />
+                    </Form.Item>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.color'
+                    >
+                        { constants.PRE_DEFINED_COLORS &&
+                            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                        }
+                    </Form.Item>
+                </ColorPickerGroup>
 
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='image.fill.color'
-                    label={ <Message messageKey='StyleEditor.image.fill.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+
+                <ColorPickerGroup>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='image.fill.color'
+                        label={ <Message messageKey='StyleEditor.image.fill.color' /> }
+                    >
+                        <ColorPicker />
+                    </Form.Item>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='image.fill.color'
+                    >
+                        { constants.PRE_DEFINED_COLORS &&
+                            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                        }
+                    </Form.Item>
+                </ColorPickerGroup>
+
             </Row>
 
             <Row>
