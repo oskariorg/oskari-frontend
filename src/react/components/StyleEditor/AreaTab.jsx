@@ -6,6 +6,10 @@ import { Form, Row } from 'antd';
 
 const areaFills = [
     {
+        name: 'null',
+        data: '<svg viewBox="0 0 0 0" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="null" viewBox="0, 0, 0, 0" width="0%" height="0%"><path d="M0,0 l0,0" stroke="#000000" stroke-width="0"/></pattern></defs><rect width="0" height="0" fill="url(#null)"/></svg>' 
+    },
+    {
         name: 'solid',
         data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="solid" viewBox="0, 0, 4, 4" width="100%" height="100%"><path d="M-1,2 l6,0" stroke="#000000" stroke-width="4"/></pattern></defs><rect width="32" height="32" fill="url(#solid)"/></svg>' 
     },
