@@ -488,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             for (i = 0; i < myplaces.length; i++) {
                 layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
-                layerSelectOption.attr('value', myplaces[i].getId()).append(myplaces[i].getName());
+                layerSelectOption.attr('value', myplaces[i].getId()).text(myplaces[i].getName());
                 // select correct layer
                 if (me.publishedmyplaces2Config.layer !== null && me.publishedmyplaces2Config.layer !== undefined &&
                     myplaces[i].getId() === me.publishedmyplaces2Config.layer) {

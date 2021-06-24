@@ -112,7 +112,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 var headerWrapper = me.template.header.clone();
                 var titleWrapper = me.template.headerTitle.clone();
 
-                titleWrapper.append(fragmentTitle);
+                titleWrapper.text(fragmentTitle);
                 titleWrapper.attr('title', fragmentTitle);
                 headerWrapper.append(titleWrapper);
                 contentWrapper.append(headerWrapper);

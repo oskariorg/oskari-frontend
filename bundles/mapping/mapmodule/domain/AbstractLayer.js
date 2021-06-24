@@ -186,11 +186,11 @@ Oskari.clazz.define(
             if (name && typeof name === 'object') {
                 var values = {};
                 Object.keys(name).forEach(function (key) {
-                    values[key] = Oskari.util.sanitize(name[key]);
+                    values[key] = name[key];
                 });
                 this._name = values;
             } else {
-                this._name = Oskari.util.sanitize(name);
+                this._name = name;
             }
         },
         /**

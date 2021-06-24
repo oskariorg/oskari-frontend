@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 return;
             }
 
-            layerDiv.find('label').append(layer.getName());
+            layerDiv.find('label').append(Oskari.util.sanitize(layer.getName()));
             layerDiv.attr('data-id', layer.getId());
             var input = layerDiv.find('input');
             input.attr('id', 'checkbox' + layer.getId());

@@ -284,7 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 layerContainer.attr('data-id', layer.getId());
 
                 // setup id
-                layerContainer.find('div.layer-title h4').append(layer.getName());
+                layerContainer.find('div.layer-title h4').append(Oskari.util.sanitize(layer.getName()));
                 layerContainer.find('div.layer-title').append(layer.getDescription());
 
                 // remove layer from selected tool
@@ -391,12 +391,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     contentPanel.append(promotion.text);
                     for (j = 0; j < promoLayerList.length; j += 1) {
                         layer = promoLayerList[j];
+                        // FIXME: there isn't any templateTool available. This code should be removed
                         layerContainer = this.templateTool.clone();
                         layerContainer.attr('data-id', layer.getId());
                         layerContainer.find('label').attr(
                             'for',
                             'checkbox' + layer.getId()
-                        ).append(layer.getName());
+                        ).append(Oskari.util.sanitize(layer.getName()));
                         input = layerContainer.find('input');
                         input.attr('id', 'checkbox' + layer.getId());
                         input.on('change', closureMagic(layer));

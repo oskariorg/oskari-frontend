@@ -92,6 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
+                // TODO: check if we need to sanitize name here or somewhere down the line
                 name: layer.getName(),
                 isDefault: !!layer.getOptions().isDefault,
                 style: featureStyle || {}
@@ -403,7 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 dialog.close();
             });
             buttons.push(operationalBtn);
-            var locParams = [mapLayer.getName()];
+            var locParams = [Oskari.util.sanitize(mapLayer.getName())];
 
             if (makePublic) {
                 operationalBtn.setTitle(this.loc('buttons.changeToPublic'));

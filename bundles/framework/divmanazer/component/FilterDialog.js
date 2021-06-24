@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 return;
             }
             popupContent = this.getFilterDialogContent(me._layer, clickedFeatures, selectedTemporaryFeatures);
-            popupTitle = this.loc.description + ' ' + me._layer.getName();
+            popupTitle = this.loc.description + ' ' + Oskari.util.sanitize(me._layer.getName());
 
             // Create the actual popup dialog
             me.popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');

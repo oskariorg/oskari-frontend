@@ -273,7 +273,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 div = this.templates.layer.clone(),
                 input = this.templates.checkbox.clone();
 
-            div.find('span').append(layer.getName());
+            div.find('span').text(layer.getName());
 
             input.attr('value', layer.getId());
 
