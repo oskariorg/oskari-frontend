@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
             var tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-            _.each(this.tabs, function (tabDef) {
+            this.tabs.forEach((tabDef) => {
                 tabsContainer.addPanel(me.__createTab(tabDef));
             });
             tabsContainer.insertTo(this.getEl());

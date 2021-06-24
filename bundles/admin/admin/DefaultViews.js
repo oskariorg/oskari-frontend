@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
     this.setContent(this.createUI());
 }, {
     templates: {
-        'main': _.template('<div>${ msg }<div class="grid-placeholder"></div></div>'),
-        'link': _.template('<a href="javascript:void(0);" onClick="return false;">${ msg }</a>'),
-        'errorGuest': _.template('<div>${listTitle}<ul>${list}</ul></div>'),
-        'listItem': _.template('<li>${ msg }</li>')
+        'main': ({ msg }) => `<div>${ msg }<div class="grid-placeholder"></div></div>`,
+        'link': ({ msg }) => `<a href="javascript:void(0);" onClick="return false;">${ msg }</a>`,
+        'errorGuest': ({ listTitle, list }) => `<div>${listTitle}<ul>${list}</ul></div>`,
+        'listItem': ({ msg }) => `<li>${ msg }</li>`
     },
     /**
      * Create the UI for this tab panel
@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
         var me = this,
             sb = me.instance.getSandbox();
         // setup route and location
-        var selectedLayers = [];
         var data = {
             id: id,
             north: sb.getMap().getY(),
@@ -90,10 +89,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
             force: !!force
         };
         // setup layers
-        var layers = sb.findAllSelectedMapLayers();
-        _.each(layers, function (layer) {
-            // backend assumes id is in string format
-            selectedLayers.push({ id: '' + layer.getId() });
+        const selectedLayers = sb.findAllSelectedMapLayers().map((layer) => {
+            return {
+                // backend assumes id is in string format
+                id: '' + layer.getId()
+            };
         });
         // backend assumes selectedLayers is stringified JSON
         data.selectedLayers = JSON.stringify(selectedLayers);
@@ -138,49 +138,49 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
             var me = this,
                 sb = me.instance.getSandbox(),
                 problemLayers = data.selectedLayers;
-            if (problemLayers && problemLayers.length > 0) {
-                // construct a list of problematic layers to show
-                var list = [];
-                _.each(problemLayers, function (layerId) {
-                    var layer = sb.findMapLayerFromAllAvailable(layerId),
-                        msg = 'Layer ID ' + layerId;
-                    if (layer) {
-                        msg = layer.getName();
-                    }
-                    list.push(me.templates.listItem({ msg: msg }));
-                });
-
-                var msg = this.templates.errorGuest({
-                    listTitle: this.locale.notifications.listTitle,
-                    list: list.join(' ')
-                });
-                // buttons
-                var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-                okButton.setPrimary(true);
-                okButton.setHandler(function () {
-                    me.instance.closeDialog();
-                });
-                var forceButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                forceButton.setTitle(this.locale.forceButton);
-                forceButton.setHandler(function () {
-                    me.__modifyView(id, true);
-                    me.instance.closeDialog();
-                });
-                this.instance.showMessage(this.locale.notifications.warningTitle, msg, [okButton, forceButton]);
+            if (!problemLayers || problemLayers.length === 0) {
+                return;
             }
+            // construct a list of problematic layers to show
+            var list = problemLayers.map((layerId) => {
+                const layer = sb.findMapLayerFromAllAvailable(layerId);
+                let msg = 'Layer ID ' + layerId;
+                if (layer) {
+                    msg = Oskari.util.sanitize(layer.getName());
+                }
+                return me.templates.listItem({ msg: msg });
+            });
+
+            var msg = this.templates.errorGuest({
+                listTitle: this.locale.notifications.listTitle,
+                list: list.join(' ')
+            });
+            // buttons
+            var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            okButton.setPrimary(true);
+            okButton.setHandler(function () {
+                me.instance.closeDialog();
+            });
+            var forceButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            forceButton.setTitle(this.locale.forceButton);
+            forceButton.setHandler(function () {
+                me.__modifyView(id, true);
+                me.instance.closeDialog();
+            });
+            this.instance.showMessage(this.locale.notifications.warningTitle, msg, [okButton, forceButton]);
         }
     },
 
     __showGenericErrorSave: function (id) {
         this.instance.showMessage(
             this.locale.notifications.errorTitle,
-            _.template(this.locale.notifications.errorUpdating)({ id: id }));
+            this.locale.notifications.errorUpdating.replace('${id}', id));
     },
 
     __viewSaved: function (id, data) {
         this.instance.showMessage(
             this.locale.notifications.successTitle,
-            _.template(this.locale.notifications.viewUpdated)({ id: id }));
+            this.locale.notifications.viewUpdated.replace('${id}', id));
     },
 
     /**
@@ -189,15 +189,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
      * @return {Oskari.userinterface.component.GridModel}      model
      */
     __getGridModel: function (data) {
-        var me = this,
-            model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+        const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
         model.addData({
             id: data.viewId,
-            name: me.locale.globalViewTitle,
-            action: me.locale.setButton
+            name: this.locale.globalViewTitle,
+            action: this.locale.setButton
         });
 
-        _.each(data.roles, function (role) {
+        data.roles.forEach((role) => {
             if (!role.viewId) {
                 return;
             }
@@ -205,7 +204,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
                 id: role.viewId,
                 roleid: role.id,
                 name: role.name,
-                action: me.locale.setButton
+                action: this.locale.setButton
             });
         });
         return model;
