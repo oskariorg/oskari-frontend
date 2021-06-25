@@ -36,8 +36,21 @@ const defaults = {
             },
             width: 3
         }
+    },
+    hover: {
+        inherit: true,
+        effect: 'auto minor',
+        stroke: {
+            area: {
+                effect: 'none',
+                color: '#000000',
+                width: 2
+            },
+            width: 2
+        }
     }
 };
+export const DEFAULT_STYLES = { ...defaults };
 // TODO: move
 const applyAlphaToColorable = (colorable, alpha) => {
     if (!colorable || !colorable.getColor()) {
