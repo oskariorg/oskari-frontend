@@ -2,7 +2,7 @@ import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandl
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 
-import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
+import { styleGenerator, DEFAULT_STYLES } from './WfsVectorLayerPlugin/util/style';
 import { LAYER_ID, RENDER_MODE_MVT, RENDER_MODE_VECTOR, LAYER_TYPE, LAYER_HOVER } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
@@ -103,6 +103,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), layerClass, composingModel);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
+        this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
         sandbox.registerService(this.WFSLayerService);
     }
 

@@ -103,6 +103,19 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             }
         }
 
+        registerDefaultStyles (layerType, styles = {}) {
+            if (!layerType) {
+                return;
+            }
+            const { style, hover } = styles;
+            if (style) {
+                this.hoverHandler.setDefaultStyle(layerType, 'featureStyle', style);
+            }
+            if (hover) {
+                this.hoverHandler.setDefaultStyle(layerType, 'hover', hover);
+            }
+        }
+
         /**
          * @method _getRegisteredHandler
          * @param {String} layerType

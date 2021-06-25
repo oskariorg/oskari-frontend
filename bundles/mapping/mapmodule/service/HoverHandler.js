@@ -11,6 +11,7 @@ export class HoverHandler {
         this.styleFactory = null;
         this._tooltipContents = {};
         this._tooltipOverlay = null;
+        this._defaultStyles = {};
         this._initBindings();
     }
 
@@ -92,6 +93,12 @@ export class HoverHandler {
             return;
         }
         this._tooltipContents[layer.getId()] = options.content;
+    }
+
+    setDefaultStyle (layerType, styleType, styleDef) {
+        const styles = this._defaultStyles[layerType] || {};
+        styles[styleType] = styleDef;
+        this._defaultStyles[layerType] = styles;
     }
 
     _styleGenerator (layer) {
