@@ -102,36 +102,34 @@ export class HoverHandler {
     }
 
     _styleGenerator (layer) {
-        const opts = layer.getHoverOptions();
-        // TODO: register layer type default styles to inherit
-        if (opts && opts.featureStyle) {
-            let hoverDef = opts.featureStyle;
+        const { featureStyle: layerHoverDef } = layer.getHoverOptions() || {};
+        const { featureStyle: defaultFeatureStyle, hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
+        let hoverDef = layerHoverDef || defaultHoverDef;
+        if (hoverDef) {
             if (hoverDef.inherit === true) {
-                let styleDef = layer.getCurrentStyleDef();
-                if (!styleDef.featureStyle) {
+                let layerStyleDef = layer.getCurrentStyleDef() || {};
+                if (!layerStyleDef.featureStyle) {
                     // Bypass possible layer definitions
-                    Object.values(styleDef).find(obj => {
+                    Object.values(layerStyleDef).find(obj => {
                         if (obj.hasOwnProperty('featureStyle')) {
-                            styleDef = obj;
+                            layerStyleDef = obj;
                             return true;
                         }
                     });
                 }
-                const { featureStyle = {} } = styleDef;
-                // TODO: does featureStyle contain default style or only overriding definitions
-                hoverDef = jQuery.extend(true, {}, featureStyle, hoverDef);
+                hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, layerStyleDef.featureStyle, hoverDef);
             }
             // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
-            const styleDef = this.styleFactory(hoverDef);
+            const olStyles = this.styleFactory(hoverDef);
             if (layer.getLayerType() === VECTOR_TILE_TYPE) {
                 return feature => {
                     if (this.state.renderFeatureId === feature.get(FTR_PROPERTY_ID)) {
-                        return getStyleForGeometry(feature.getType(), styleDef);
+                        return getStyleForGeometry(feature.getType(), olStyles);
                     }
                 };
             }
             return feature => {
-                return getStyleForGeometry(feature.getGeometry(), styleDef);
+                return getStyleForGeometry(feature.getGeometry(), olStyles);
             };
         }
         return null;
