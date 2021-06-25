@@ -1,23 +1,16 @@
-import { LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID } from '../domain/constants';
+import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, WFS_TYPE, VECTOR_TILE_TYPE, VECTOR_TYPE } from '../domain/constants';
 import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
 import olOverlay from 'ol/Overlay';
-import { Vector as olLayerVector } from 'ol/layer';
+import { Vector as olLayerVector, VectorTile as olLayerVectorTile } from 'ol/layer';
 import { Vector as olSourceVector } from 'ol/source';
 
 export class HoverHandler {
     constructor () {
         this.olLayers = {};
         this.state = {};
-        this.property = WFS_ID_KEY || FTR_PROPERTY_ID; // TODO: why wfs uses _oid and others id, fix property check
         this.styleFactory = null;
         this._tooltipContents = {};
         this._tooltipOverlay = null;
-        // The same handler instance manages myplaces, userlayers and wfslayers
-        // The handler is notified when user hovers the map and doesn't hit a layer of managed type.
-        // Hence, the handler is called several times on map hover.
-        // Clear hover after there is no hit on any of the managed layer types.
-        this.clearHoverThreshold = 10;
-        this.noHitsCounter = 0;
         this._initBindings();
     }
 
@@ -38,34 +31,36 @@ export class HoverHandler {
      * @param { olVectorTileLayer } olLayer
      */
     onFeatureHover (event, feature, olLayer) {
-        if (!feature) {
-            // TODO: is this needed?
-            if (this.noHitsCounter > this.clearHoverThreshold) {
-                this.clearHover();
-                return;
-            }
-            this.noHitsCounter++;
+        if (!feature || !olLayer) {
+            this.clearHover();
             return;
         }
-        this.noHitsCounter = 0;
-        if (this._featureOrIdEqualsCurrent(feature)) {
+        const layerType = olLayer.get(LAYER_TYPE);
+        if (this._featureOrIdEqualsCurrent(feature, layerType)) {
             return;
         }
-        if (this.state.feature && this.state.layer) {
-            this.state.layer.getSource().removeFeature(this.state.feature);
+        this._clearPrevious();
+        const layerId = olLayer.get(LAYER_ID);
+        this.updateTooltipContent(layerId, feature);
+
+        // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
+        if (layerType === VECTOR_TYPE) {
+            return;
         }
-        if (feature && olLayer) {
-            const layerId = olLayer.get(LAYER_ID);
-            const layer = this.olLayers[layerId];
-            if (!layer) {
-                return;
-            }
+        const layer = this.olLayers[layerId];
+        if (!layer) {
+            return;
+        }
+        this.state = {
+            feature,
+            layer,
+            layerType
+        };
+        if (layerType === VECTOR_TILE_TYPE) {
+            this.state.renderFeatureId = feature.get(FTR_PROPERTY_ID);
+            layer.changed();
+        } else {
             layer.getSource().addFeature(feature);
-            this.updateTooltipContent(layerId, feature);
-            this.state = {
-                feature,
-                layer
-            };
         }
     }
 
@@ -73,17 +68,22 @@ export class HoverHandler {
         this._updateTooltipPosition(event);
     }
 
-    createHoverLayer (layer) {
-        const olLayer = new olLayerVector({
-            opacity: layer.getOpacity(),
-            visible: layer.isVisible(),
-            source: new olSourceVector()
-        });
+    createHoverLayer (layer, source) {
+        const olLayer = this._getLayer(layer, source);
+        olLayer.setOpacity(layer.getOpacity());
+        olLayer.setVisible(layer.isVisible());
         olLayer.set(LAYER_HOVER, true, true);
         olLayer.setStyle(this._styleGenerator(layer));
         this.olLayers[layer.getId()] = olLayer;
         this.setTooltipContent(layer);
         return olLayer;
+    }
+
+    _getLayer (layer, source) {
+        if (layer.getLayerType() === VECTOR_TILE_TYPE) {
+            return new olLayerVectorTile({ source });
+        }
+        return new olLayerVector({ source: new olSourceVector() });
     }
 
     setTooltipContent (layer) {
@@ -100,13 +100,29 @@ export class HoverHandler {
         if (opts && opts.featureStyle) {
             let hoverDef = opts.featureStyle;
             if (hoverDef.inherit === true) {
-                const styleDef = layer.getCurrentStyleDef();
-                const featureStyle = styleDef ? styleDef.featureStyle : {};
+                let styleDef = layer.getCurrentStyleDef();
+                if (!styleDef.featureStyle) {
+                    // Bypass possible layer definitions
+                    Object.values(styleDef).find(obj => {
+                        if (obj.hasOwnProperty('featureStyle')) {
+                            styleDef = obj;
+                            return true;
+                        }
+                    });
+                }
+                const { featureStyle = {} } = styleDef;
                 // TODO: does featureStyle contain default style or only overriding definitions
                 hoverDef = jQuery.extend(true, {}, featureStyle, hoverDef);
             }
             // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
             const styleDef = this.styleFactory(hoverDef);
+            if (layer.getLayerType() === VECTOR_TILE_TYPE) {
+                return feature => {
+                    if (this.state.renderFeatureId === feature.get(FTR_PROPERTY_ID)) {
+                        return getStyleForGeometry(feature.getType(), styleDef);
+                    }
+                };
+            }
             return feature => {
                 return getStyleForGeometry(feature.getGeometry(), styleDef);
             };
@@ -114,19 +130,30 @@ export class HoverHandler {
         return null;
     }
 
-    clearHover () {
-        Object.values(this.olLayers).forEach(l => l.getSource().clear());
-        // this._clearTooltip(); TODO: how to handle vector & others
-        this.state = {};
-        this.noHitsCounter = 0;
+    _clearPrevious () {
+        const { feature, layer, layerType } = this.state;
+        if (feature && layer) {
+            if (layerType === VECTOR_TILE_TYPE) {
+                delete this.state.renderFeatureId;
+                layer.changed();
+            } else {
+                this.state.layer.getSource().removeFeature(feature);
+            }
+            this.state = {};
+        }
     }
 
-    _featureOrIdEqualsCurrent (feature) {
+    clearHover () {
+        this._clearPrevious();
+        this._clearTooltip();
+    }
+
+    _featureOrIdEqualsCurrent (feature, layerType) {
         const { feature: current } = this.state;
         if (!current) {
             return false;
         }
-        const idProp = this.property;
+        const idProp = WFS_TYPE === layerType ? WFS_ID_KEY : FTR_PROPERTY_ID;
         return current === feature || current.get(idProp) === feature.get(idProp);
     }
 

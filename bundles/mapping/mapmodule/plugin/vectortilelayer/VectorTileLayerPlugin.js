@@ -203,21 +203,24 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             source: this.createSource(layer, sourceOpts),
             declutter
         });
-        // Properties id and type are being used in VectorFeatureService.
-        // Set oskari properties for vector feature service functionalities.
-        const silent = true;
-        vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
-        vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
 
         const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
         // Set min max zoom levels that layer should be visible in
         zoomLevelHelper.setOLZoomLimits(vectorTileLayer, layer.getMinScale(), layer.getMaxScale());
 
-        this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
-        vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
         const vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
-        const hoverLayer = vectorFeatureService.createHoverLayer(layer);
-        this.setOLMapLayers(layer.getId(), [vectorTileLayer, hoverLayer]);
+        const hoverLayer = vectorFeatureService.createHoverLayer(layer, vectorTileLayer.getSource());
+        const olLayers = [vectorTileLayer, hoverLayer];
+        olLayers.forEach(olLayer => {
+            // Properties id and type are being used in VectorFeatureService.
+            // Set oskari properties for vector feature service functionalities.
+            const silent = true;
+            olLayer.set(LAYER_ID, layer.getId(), silent);
+            olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
+            this.mapModule.addLayer(olLayer, !keepLayerOnTop);
+        });
+        vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
+        this.setOLMapLayers(layer.getId(), olLayers);
     }
 
     createSource (layer, options) {

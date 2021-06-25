@@ -4,11 +4,11 @@ import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
 import {
-    LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID,
+    LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
-const VECTOR_TYPE = 'vector';
+
 /**
  * @class Oskari.mapframework.service.VectorFeatureService
  *
@@ -151,6 +151,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 const layer = mapLayerService.findMapLayer(layerId);
+                // TODO: set hover options
+                // hoverHandler setStyle
                 const handler = layer ? this._getRegisteredHandler(layer.getLayerType(), SERVICE_LAYER_REQUEST) : defaultHandler;
                 if (handler) {
                     handler(request, layer);
@@ -225,19 +227,14 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     feature = feature.get('features')[0];
                 }
             }
+            // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
             const vectorHandler = this._getRegisteredHandler(VECTOR_TYPE, SERVICE_HOVER);
-            if (layer && layer.get(LAYER_TYPE) === VECTOR_TYPE) {
-                vectorHandler(event, feature, layer);
-                this.hoverHandler.updateTooltipContent(layer.get(LAYER_ID), feature);
-                this.hoverHandler.onFeatureHover(event);
-            } else {
-                vectorHandler(event);
-                this.hoverHandler.onFeatureHover(event, feature, layer);
-            }
+            vectorHandler(event, feature, layer);
+            this.hoverHandler.onFeatureHover(event, feature, layer);
         }
 
-        createHoverLayer (layer) {
-            return this.hoverHandler.createHoverLayer(layer);
+        createHoverLayer (layer, source) {
+            return this.hoverHandler.createHoverLayer(layer, source);
         }
 
         setVectorLayerHoverTooltip (layer) {
