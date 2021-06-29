@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row } from 'antd';
+import { Form, Row, Col } from 'antd';
 import styled from 'styled-components';
 
 const markers = [
@@ -42,7 +42,7 @@ export const PointTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <ColorPickerGroup>
+                <Col span={ 12 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
@@ -58,10 +58,10 @@ export const PointTab = (props) => {
                             <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                         }
                     </Form.Item>
-                </ColorPickerGroup>
+                </Col>
 
 
-                <ColorPickerGroup>
+                <Col span={12}>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='image.fill.color'
@@ -77,7 +77,7 @@ export const PointTab = (props) => {
                             <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                         }
                     </Form.Item>
-                </ColorPickerGroup>
+                </Col>
 
             </Row>
 

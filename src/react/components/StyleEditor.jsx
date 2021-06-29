@@ -22,7 +22,7 @@ const TabSelector = styled(Radio.Group)`
 `;
 
 const StaticForm = styled(Form)`
-    width: 400px;
+    width: 640px;
 
     & > .ant-space {
         width: 100%;
