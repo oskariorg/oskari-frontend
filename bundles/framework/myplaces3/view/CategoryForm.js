@@ -24,7 +24,6 @@ Oskari.clazz.define(
             '    <input type="text" data-name="categoryname" placeholder="' + this.loc('categoryform.name.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field drawing">' +
-            '    <label>' + this.loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
             // Currently visible fields are not saved or used in any way so commenting out the UI for now

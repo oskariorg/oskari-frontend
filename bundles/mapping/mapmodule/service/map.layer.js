@@ -355,10 +355,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setSrsList(newLayerConf.srs);
             }
 
-            if (newLayerConf.admin) {
-                layer.setAdmin(newLayerConf.admin);
-            }
-
             // optional attributes
             if (newLayerConf.attributes) {
                 layer.setAttributes(newLayerConf.attributes);
@@ -1224,7 +1220,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setRealtime(baseMapJson.realtime);
             baseLayer.setRefreshRate(baseMapJson.refreshRate);
-            baseLayer.setAdmin(baseMapJson.admin);
 
             baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
@@ -1353,7 +1348,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setRealtime(mapLayerJson.realtime);
             layer.setRefreshRate(mapLayerJson.refreshRate);
-            layer.setAdmin(mapLayerJson.admin);
 
             layer.setVersion(mapLayerJson.version);
             layer.setSrs_name(mapLayerJson.srs_name);
@@ -1399,11 +1393,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setLayerUrls(this.parseUrls(mapLayerJson.url));
             }
 
-            if (mapLayerJson.localization) {
-                // overrides name/desc/inspire/organization if defined!!
-                layer.setLocalization(mapLayerJson.localization);
-            }
-
             var builder = this.modelBuilderMapping[mapLayerJson.type];
             if (builder) {
                 builder.parseLayerData(layer, mapLayerJson, this);
@@ -1442,26 +1431,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.WmsLayer} returns the same layer object with populated values for convenience
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
-            if (jsonLayer.wmsName) {
-                layer.setWmsName(jsonLayer.wmsName);
-            }
             layer.setGfiContent(jsonLayer.gfiContent);
-
-            /* prefer url - param, fall back to wmsUrl if not available */
-            if (jsonLayer.url) {
-                layer.setLayerUrls(this.parseUrls(jsonLayer.url));
-            } else if (jsonLayer.wmsUrl) {
-                layer.setLayerUrls(this.parseUrls(jsonLayer.wmsUrl));
-            }
-
-            // default to enabled, only check if it is disabled
-            layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-            layer.setVersion(jsonLayer.version);
-
-            if (jsonLayer.formats) {
-                layer.setQueryFormat(jsonLayer.formats.value);
-                layer.setAvailableQueryFormats(jsonLayer.formats.available);
-            }
             return this.populateStyles(layer, jsonLayer);
         },
         /**
