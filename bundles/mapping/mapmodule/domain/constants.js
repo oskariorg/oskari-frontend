@@ -8,8 +8,8 @@ export const VECTOR_TYPE = 'vector';
 export const VECTOR_TILE_TYPE = 'vectortile';
 // Feature constants
 export const FTR_PROPERTY_ID = 'id';
-export const WFS_ID_KEY = '_oid'; // TODO: rename
-export const WFS_FTR_ID_KEY = '__fid'; // TODO: rename
+export const WFS_ID_KEY = '_oid';
+export const WFS_FTR_ID_KEY = '__fid';
 // Service constants
 export const SERVICE_LAYER_REQUEST = 'layerRequest';
 export const SERVICE_HOVER = 'hover';

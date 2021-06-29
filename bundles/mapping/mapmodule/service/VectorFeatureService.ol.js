@@ -8,7 +8,6 @@ import {
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
 } from '../domain/constants';
 
-
 /**
  * @class Oskari.mapframework.service.VectorFeatureService
  *

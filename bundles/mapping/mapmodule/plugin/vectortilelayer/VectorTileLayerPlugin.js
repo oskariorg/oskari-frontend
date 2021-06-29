@@ -228,31 +228,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
-     * @method onLayerRequest VectorFeatureService handler impl method
-     * Handles VectorLayerRequest to update hover tooltip and feature style.
-     * Other request options are not currently supported.
-     *
-     * @param { Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest } request
-     * @param { Oskari.mapframework.domain.AbstractLayer|VectorTileLayer } layer
-     */
-    onLayerRequest (request, layer) {
-        const options = request.getOptions();
-        if (options.hover) {
-            // TODO: update service hover style & content
-            layer.setHoverOptions(options.hover);
-            const olLayers = this.getOLMapLayers(layer.getId());
-            if (olLayers) {
-                olLayers.forEach(lyr => {
-                    if (lyr.get(LAYER_HOVER === true)) {
-                        return;
-                    }
-                    lyr.setStyle(this._getLayerCurrentStyleFunction(layer));
-                });
-            }
-        }
-    }
-
-    /**
      * Called when layer details are updated (for example by the admin functionality)
      * @param {Oskari.mapframework.domain.AbstractLayer} layer new layer details
      */

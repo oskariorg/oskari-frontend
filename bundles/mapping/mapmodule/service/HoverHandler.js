@@ -163,25 +163,6 @@ export class HoverHandler {
     }
 
     /**
-     * @method onLayerRequest VectorFeatureService handler impl method
-     * Handles VectorLayerRequest to update hover tooltip and feature style.
-     * Other request options are not currently supported.
-     *
-     * @param { Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest } request
-     * @param { Oskari.mapframework.domain.AbstractLayer|VectorTileLayer } layer
-     */
-    onLayerRequest (request, layer) {
-        const options = request.getOptions();
-        if (options.hover) {
-            layer.setHoverOptions(options.hover);
-            const olLayer = this.olLayers(layer.getId());
-            if (olLayer) {
-                olLayer.setStyle(this.styleGenerator(layer));
-            }
-        }
-    }
-
-    /**
     * @method getTooltipOverlay
     * Get common tooltip overlay.
     *
