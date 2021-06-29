@@ -27,7 +27,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler();
-            // this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
+            this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
 
@@ -163,8 +163,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 const layer = mapLayerService.findMapLayer(layerId);
-                // TODO: set hover options
-                // hoverHandler setStyle
                 const handler = layer ? this._getRegisteredHandler(layer.getLayerType(), SERVICE_LAYER_REQUEST) : defaultHandler;
                 if (handler) {
                     handler(request, layer);
@@ -222,8 +220,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 return;
             }
             this.hoverHandler.onMapHover(event);
-            // TODO: try throttle or threshold (subsequent events might be triggered < 10ms and even twice to same px)
-            this._hoverFeature(event);
+            this._throttledHoverFeature(event);
         }
 
         _hoverFeature (event) {
