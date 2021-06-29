@@ -7,7 +7,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import { styleGenerator } from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
-import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../domain/constants';
+import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
