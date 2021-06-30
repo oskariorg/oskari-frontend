@@ -42,7 +42,7 @@ export const PointTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 12 }>
+                <Col span={ 10 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
@@ -61,7 +61,7 @@ export const PointTab = (props) => {
                 </Col>
 
 
-                <Col span={12}>
+                <Col span={ 10 } offset={ 2 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='image.fill.color'

@@ -59,6 +59,7 @@ export const VectorStyle = LocaleConsumer((props) => {
                 onCancel={ onModalCancel }
                 cancelText={ <Message messageKey="cancel" /> }
                 okText={ <Message messageKey="save" /> }
+                width={ 620 }
             >
                 <VectorNameInput
                     styleName={ editorState.styleName }

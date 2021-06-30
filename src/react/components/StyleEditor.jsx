@@ -5,7 +5,7 @@ import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PRE_DEFINED_COLORS } from './StyleEditor/';
+import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
@@ -22,7 +22,7 @@ const TabSelector = styled(Radio.Group)`
 `;
 
 const StaticForm = styled(Form)`
-    width: 640px;
+    width: 522px;
 
     & > .ant-space {
         width: 100%;
