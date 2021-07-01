@@ -50,16 +50,14 @@ export const PointTab = (props) => {
                     >
                         <ColorPicker />
                     </Form.Item>
+
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
                     >
-                        { constants.PRE_DEFINED_COLORS &&
-                            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                        }
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                     </Form.Item>
                 </Col>
-
 
                 <Col span={ 10 } offset={ 2 }>
                     <Form.Item
@@ -69,13 +67,12 @@ export const PointTab = (props) => {
                     >
                         <ColorPicker />
                     </Form.Item>
+
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='image.fill.color'
                     >
-                        { constants.PRE_DEFINED_COLORS &&
-                            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                        }
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                     </Form.Item>
                 </Col>
 
