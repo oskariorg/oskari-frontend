@@ -86,6 +86,10 @@ export const PRE_DEFINED_COLORS = [
             "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"32\" height=\"32\" fill=\"#3233ff\"/></svg>"
         },
         {
+            "name": "#2ba7ff",
+            "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"32\" height=\"32\" fill=\"#2ba7ff\"/></svg>"
+        },
+        {
             "name": "#26bf4b",
             "data": "<svg viewBox=\"0 0 32 32\" width=\"32\" height=\"32\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"0\" width=\"32\" height=\"32\" fill=\"#26bf4b\"/></svg>"
         },
