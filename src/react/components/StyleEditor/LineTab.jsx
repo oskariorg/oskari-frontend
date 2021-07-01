@@ -8,7 +8,7 @@ export const LineTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 24 }>
+                <Col span={ 10 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
@@ -16,13 +16,12 @@ export const LineTab = (props) => {
                     >
                         <ColorPicker />
                     </Form.Item>
+
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
                     >
-                        { constants.PRE_DEFINED_COLORS &&
-                            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                        }
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                     </Form.Item>
                 </Col>
             </Row>
@@ -43,9 +42,7 @@ export const LineTab = (props) => {
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.linecaps } />
                 </Form.Item>
-            </Row>
 
-            <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineJoin'
