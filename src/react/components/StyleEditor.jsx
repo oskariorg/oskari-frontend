@@ -58,10 +58,26 @@ export const StyleEditor = (props) => {
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
+
+    const styleExceptionHandler = (style) => {
+        // if fill pattern is set to null, set color as empty
+        if (typeof style.fill.area.pattern !== 'undefined') {
+            if (style.fill.area.pattern === 'null') {
+                style.fill.color = '';
+            } else if (style.fill.area.pattern !== 'null' && style.fill.color === '') {
+                style.fill.color = OSKARI_BLANK_STYLE.fill.color;
+            }
+        }
+
+
+        return style;
+    };
+
     const onUpdate = (values) => {
-        // ex: {image.shape: 3}
+        // values ex: {image.shape: 3}
         const newStyle = updateStyle(values);
-        props.onChange(newStyle)
+
+        props.onChange(styleExceptionHandler(newStyle))
     };
 
     useEffect(() => {
