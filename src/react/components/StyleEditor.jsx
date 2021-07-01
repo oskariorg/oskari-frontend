@@ -59,8 +59,7 @@ export const StyleEditor = (props) => {
     const [selectedTab, setSelectedTab] = useState(props.format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
     const onUpdate = (values) => {
-        // {image.shape: 3}
-        console.log(values);
+        // ex: {image.shape: 3}
         const newStyle = updateStyle(values);
         props.onChange(newStyle)
     };
