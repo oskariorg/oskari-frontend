@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapLegendList } from './MapLegendList';
+
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
  *
@@ -123,6 +127,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 layerContainer,
                 accordionPanel;
 
+            const titles = [];
+
             for (n = layers.length - 1; n >= 0; n -= 1) {
                 layer = layers[n];
                 layerContainer = this._createLayerContainer(layer);
@@ -138,6 +144,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         }]);
                     });
                 }
+                titles.push({
+                    title: Oskari.util.sanitize(layer.getName()),
+                    legendImageURL: layer.getLegendImage ? layer.getLegendImage() : null
+                });
 
                 if (layerContainer !== null) {
                     accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -148,8 +158,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 }
             }
 
+            ReactDOM.render(<MapLegendList list={ titles } />, this.container);
+
             // If no legend images at all, inform the user
-            me._informNoLegendImages();
+            //me._informNoLegendImages();
         },
 
         /**
