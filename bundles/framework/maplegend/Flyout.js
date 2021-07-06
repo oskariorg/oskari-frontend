@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
+        this.sandbox = this.instance.getSandbox();
         this.templateLayer = null;
         this.templateLayerLegend = null;
         this.state = null;
@@ -104,6 +105,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         refresh: function () {
             this._populateLayerList();
         },
+        showMetadata: function (event, uuid) {
+            event.stopPropagation();
+            console.log(uuid);
+            this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
+                uuid: uuid
+            }]);
+        },
         /**
          * @method _populateLayerList
          * @private
@@ -135,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
                 const layerTitle = jQuery('<div class="maplegend-layer-title">' + Oskari.util.sanitize(layer.getName()) + '</div>');
                 const uuid = layer.getMetadataIdentifier();
-                if (uuid) {
+                /* if (uuid) {
                     layerTitle.append(me.templateTools.clone());
                     layerTitle.find('div.icon-info').on('click', function (event) {
                         event.stopPropagation();
@@ -143,10 +151,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                             uuid: uuid
                         }]);
                     });
-                }
+                } */
+                sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
+                    uuid: uuid
+                }]);
+                console.log(uuid);
+
                 titles.push({
                     title: Oskari.util.sanitize(layer.getName()),
-                    legendImageURL: layer.getLegendImage ? layer.getLegendImage() : null
+                    uuid: uuid,
+                    legendImageURL: layer.getLegendImage ? layer.getLegendImage() : null,
+                    showMetadataCallback: (event, layerUuid) => this.showMetadata(event, layerUuid)
                 });
 
                 if (layerContainer !== null) {
