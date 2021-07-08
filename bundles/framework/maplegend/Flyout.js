@@ -105,9 +105,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         refresh: function () {
             this._populateLayerList();
         },
-        showMetadata: function (event, uuid) {
+        showMetadataFlyout: function (event, uuid) {
             event.stopPropagation();
-            console.log(uuid);
             this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
                 uuid: uuid
             }]);
@@ -119,13 +118,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Renders legend images as an accordion for the selected layers.
          */
         _populateLayerList: function () {
-            var me = this;
-            var cel = jQuery(this.container);
-            cel.empty();
-
-            var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-            accordion.insertTo(cel);
-
             var sandbox = this.instance.getSandbox();
 
             // populate selected layer list
@@ -152,24 +144,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         }]);
                     });
                 } */
-                sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                    uuid: uuid
-                }]);
-                console.log(uuid);
 
-                titles.push({
-                    title: Oskari.util.sanitize(layer.getName()),
-                    uuid: uuid,
-                    legendImageURL: layer.getLegendImage ? layer.getLegendImage() : null,
-                    showMetadataCallback: (event, layerUuid) => this.showMetadata(event, layerUuid)
-                });
+                const layerLegendImage = layer.getLegendImage ? layer.getLegendImage() : null;
+
+                if (layerLegendImage) {
+                    titles.push({
+                        title: Oskari.util.sanitize(layer.getName()),
+                        uuid: uuid,
+                        legendImageURL: layerLegendImage,
+                        showMetadataCallback: (event, layerUuid) => this.showMetadataFlyout(event, layerUuid)
+                    });
+                }
 
                 if (layerContainer !== null) {
                     accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     accordionPanel.open();
                     accordionPanel.setTitle(layerTitle);
                     accordionPanel.getContainer().append(layerContainer);
-                    accordion.addPanel(accordionPanel);
                 }
             }
 
