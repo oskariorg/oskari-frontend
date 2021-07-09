@@ -118,33 +118,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Renders legend images as an accordion for the selected layers.
          */
         _populateLayerList: function () {
-            var sandbox = this.instance.getSandbox();
-
             // populate selected layer list
-            var layers = sandbox.findAllSelectedMapLayers().slice(0),
-                n,
-                layer,
-                layerContainer,
-                accordionPanel;
+            const layers = this.sandbox.findAllSelectedMapLayers().slice(0);
 
             const titles = [];
 
-            for (n = layers.length - 1; n >= 0; n -= 1) {
-                layer = layers[n];
-                layerContainer = this._createLayerContainer(layer);
-
-                const layerTitle = jQuery('<div class="maplegend-layer-title">' + Oskari.util.sanitize(layer.getName()) + '</div>');
+            for (const layer of layers) {
                 const uuid = layer.getMetadataIdentifier();
-                /* if (uuid) {
-                    layerTitle.append(me.templateTools.clone());
-                    layerTitle.find('div.icon-info').on('click', function (event) {
-                        event.stopPropagation();
-                        sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                            uuid: uuid
-                        }]);
-                    });
-                } */
-
                 const layerLegendImage = layer.getLegendImage ? layer.getLegendImage() : null;
 
                 if (layerLegendImage) {
@@ -154,13 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         legendImageURL: layerLegendImage,
                         showMetadataCallback: (event, layerUuid) => this.showMetadataFlyout(event, layerUuid)
                     });
-                }
-
-                if (layerContainer !== null) {
-                    accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                    accordionPanel.open();
-                    accordionPanel.setTitle(layerTitle);
-                    accordionPanel.getContainer().append(layerContainer);
                 }
             }
 
