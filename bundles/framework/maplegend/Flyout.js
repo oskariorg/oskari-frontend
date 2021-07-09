@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Message } from 'oskari-ui';
+import { LocaleProvider } from 'oskari-ui/util';
 import { MapLegendList } from './MapLegendList';
 
 /**
@@ -137,7 +139,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 }
             }
 
-            ReactDOM.render(<MapLegendList list={ titles } />, this.container);
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: 'maplegend' }}>
+                    { titles.length === 0
+                        ? <Message messageKey='noLegendsText' />
+                        : <MapLegendList list={ titles } />
+                    }
+                </LocaleProvider>,
+                this.container
+            );
 
             // If no legend images at all, inform the user
             //me._informNoLegendImages();

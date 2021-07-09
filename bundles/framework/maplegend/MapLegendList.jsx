@@ -32,7 +32,7 @@ const composeHeader = (title, uuid, callback) => {
 export const MapLegendList = ({ list }) => {
     return (
         <Collapse>
-            { list.map((item) => (
+            { list.length > 0 && list.map((item) => (
                 <Panel key={ item.title } header={ composeHeader(item.title, item.uuid, item.showMetadataCallback) }>
                     <p>{ item.title }</p>
                     { composeLegendImage(item.legendImageURL) }
@@ -43,5 +43,5 @@ export const MapLegendList = ({ list }) => {
 };
 
 MapLegendList.propTypes = {
-    list: PropTypes.arrayOf(PropTypes.object).isRequired
+    list: PropTypes.arrayOf(PropTypes.object)
 };
