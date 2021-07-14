@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Standardstil",
-        "own-style": "Eigen stil",
         "none-style": "Ingen",
         "refresh": "Oppfrisk",
         "refresh_title": "Oppfrisk dataprodukt som ikkje blir gjengitt automatisk på kartet",
@@ -40,13 +39,6 @@ Oskari.registerLocalization(
             "show": "Vis stader",
             "close": "Lukk",
             "edit": "Tilpass"
-        },
-        "popup": {
-            "title": "Eigen stil",
-            "button": {
-                "cancel": "Avbryt",
-                "save": "Lagre"
-            }
         }
     }
 });

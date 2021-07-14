@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Standaard stijl",
-        "own-style": "Eigen stijl",
         "refresh": "Refresh",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
         "tile": {
@@ -34,13 +33,6 @@ Oskari.registerLocalization(
             "show": "Toon plaatsen",
             "close": "Sluiten",
             "edit": "Wijzig"
-        },
-        "popup": {
-            "title": "Eigen stijl",
-            "button": {
-                "cancel": "Annuleren",
-                "save": "Opslaan"
-            }
         }
     }
 });

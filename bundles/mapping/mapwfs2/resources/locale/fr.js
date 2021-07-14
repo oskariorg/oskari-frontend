@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Style par défaut",
-        "own-style": "Style personnel",
         "none-style": "Aucun",
         "refresh": "Rafraîchir",
         "refresh_title": "Rafraîchir les produits de données n'ayant pas un rendu automatique sur la carte.",
@@ -41,13 +40,6 @@ Oskari.registerLocalization(
             "show": "Afficher les lieux",
             "close": "Fermer",
             "edit": "Modifier"
-        },
-        "popup": {
-            "title": "Style personnel",
-            "button": {
-                "cancel": "Annuler",
-                "save": "Enregistrer"
-            }
         },
         "scale_dialog": {
             "title": "Échelle actualisée",

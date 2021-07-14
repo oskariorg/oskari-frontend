@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Стиль по умолчанию",
-        "own-style": "Свой стиль",
         "none-style": "Нет",
         "refresh": "Обновить",
         "refresh_title": "Обновить продукты данных, не отображаемых автоматически на карте.",
@@ -41,13 +40,6 @@ Oskari.registerLocalization(
             "show": "Показать места",
             "close": "Закрыть",
             "edit": "Редактировать"
-        },
-        "popup": {
-            "title": "Свой стиль",
-            "button": {
-                "cancel": "Отменить",
-                "save": "Сохранить"
-            }
         },
         "scale_dialog": {
             "title": "Обновленный масштаб",

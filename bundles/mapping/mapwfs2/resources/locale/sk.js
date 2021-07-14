@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapovéWfs2",
         "desc": "",
         "default-style": "Predvolený štýl",
-        "own-style": "Vlastný štýl",
         "none-style": "Nič",
         "refresh": "Obnoviť",
         "refresh_title": "Obnovené produktové údaje sa nevykresľujú na mape automaticky.",
@@ -40,13 +39,6 @@ Oskari.registerLocalization(
             "show": "Zobraziť miesta",
             "close": "Zatvoriť",
             "edit": "Editovať"
-        },
-        "popup": {
-            "title": "Vlastný štýl",
-            "button": {
-                "cancel": "Zrušiť",
-                "save": "Uložiť"
-            }
         }
     }
 });

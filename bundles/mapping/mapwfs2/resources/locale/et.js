@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Stiil vaikimisi",
-        "own-style": "Oma kujundus",
         "none-style": "Tühi",
         "refresh": "Värskenda",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
@@ -40,13 +39,6 @@ Oskari.registerLocalization(
             "show": "Näita kohti",
             "close": "Sulge",
             "edit": "Muuda"
-        },
-        "popup": {
-            "title": "Oma kujundus",
-            "button": {
-                "cancel": "Tühista",
-                "save": "Salvesta"
-            }
         }
     }
 });
