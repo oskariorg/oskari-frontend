@@ -1,7 +1,8 @@
 import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, WFS_TYPE, VECTOR_TILE_TYPE, VECTOR_TYPE } from '../domain/constants';
 import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
 import olOverlay from 'ol/Overlay';
-import { Vector as olLayerVector, VectorTile as olLayerVectorTile } from 'ol/layer';
+import olLayerVector from 'ol/layer/Vector';
+import olLayerVectorTile from 'ol/layer/VectorTile';
 import { Vector as olSourceVector } from 'ol/source';
 
 export class HoverHandler {
@@ -105,34 +106,34 @@ export class HoverHandler {
         const { featureStyle: layerHoverDef } = layer.getHoverOptions() || {};
         const { featureStyle: defaultFeatureStyle, hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
         let hoverDef = layerHoverDef || defaultHoverDef;
-        if (hoverDef) {
-            if (hoverDef.inherit === true) {
-                let layerStyleDef = layer.getCurrentStyleDef() || {};
-                if (!layerStyleDef.featureStyle) {
-                    // Bypass possible layer definitions
-                    Object.values(layerStyleDef).find(obj => {
-                        if (obj.hasOwnProperty('featureStyle')) {
-                            layerStyleDef = obj;
-                            return true;
-                        }
-                    });
-                }
-                hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, layerStyleDef.featureStyle, hoverDef);
-            }
-            // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
-            const olStyles = this.styleFactory(hoverDef);
-            if (layer.getLayerType() === VECTOR_TILE_TYPE) {
-                return feature => {
-                    if (this.state.renderFeatureId === feature.get(FTR_PROPERTY_ID)) {
-                        return getStyleForGeometry(feature.getType(), olStyles);
+        if (!hoverDef) {
+            return null;
+        }
+        if (hoverDef.inherit === true) {
+            let layerStyleDef = layer.getCurrentStyleDef() || {};
+            if (!layerStyleDef.featureStyle) {
+                // Bypass possible layer definitions
+                Object.values(layerStyleDef).find(obj => {
+                    if (obj.hasOwnProperty('featureStyle')) {
+                        layerStyleDef = obj;
+                        return true;
                     }
-                };
+                });
             }
+            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, layerStyleDef.featureStyle, hoverDef);
+        }
+        // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
+        const olStyles = this.styleFactory(hoverDef);
+        if (layer.getLayerType() === VECTOR_TILE_TYPE) {
             return feature => {
-                return getStyleForGeometry(feature.getGeometry(), olStyles);
+                if (this.state.renderFeatureId === feature.get(FTR_PROPERTY_ID)) {
+                    return getStyleForGeometry(feature.getType(), olStyles);
+                }
             };
         }
-        return null;
+        return feature => {
+            return getStyleForGeometry(feature.getGeometry(), olStyles);
+        };
     }
 
     _clearPrevious () {
