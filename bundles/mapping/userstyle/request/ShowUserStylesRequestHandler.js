@@ -1,10 +1,10 @@
 import { UserStylesFlyout } from '../UserStylesFlyout';
 /**
- * @class Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler
+ * @class Oskari.mapframework.userstyle.request.ShowUserStylesRequestHandler
  *
- * Handles map selection popup functionality.
+ * Handles user style functionality.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler',
+Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequestHandler',
 
     /**
      * @method create called automatically on construction
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
 
     function (plugin) {
         this.plugin = plugin;
-        this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
+        this.localization = Oskari.getMsg.bind(null, 'userstyle');
         /* templates */
         this.template = {};
         var p;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             }
         }
         this.service = Oskari.getSandbox().getService(
-            'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService');
+            'Oskari.mapframework.userstyle.service.UserStyleService');
     }, {
         __templates: {
             'wrapper': '<div></div>',
@@ -34,7 +34,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
 
         /**
          * @method handleRequest
-         * Shows WFS feature data with requested properties
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
          * @param {Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequest} request
@@ -88,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             });
 
             // show popup
-            dialog.addClass('wfs_own_style');
+            dialog.addClass('user_style');
             dialog.show(title, content, [cancelBtn, saveOwnStyleBtn]);
         },
         _showUserStylesList (layerId) {
@@ -106,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
                 const xPosition = jQuery('#mapdiv').position().left;
                 const offset = 150;
 
-                this.flyout = new UserStylesFlyout(this.localization('own-styles-flyout-title'));
+                this.flyout = new UserStylesFlyout(this.localization('title'));
                 this.flyout.move(xPosition + offset, 15, true);
                 this.flyout.makeDraggable({
                     handle: '.oskari-flyouttoolbar',

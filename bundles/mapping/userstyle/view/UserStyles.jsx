@@ -61,16 +61,16 @@ const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
                 <Message messageKey='styles' LabelComponent={HeaderText} />
                 <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
                     <AddStyleIcon />
-                    <Message messageKey='add-style' LabelComponent={AddStyleText}/>
+                    <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
             { styles && styles.length > 0 &&
-            <List bordered={false} dataSource={styles} renderItem={styleWithMetadata => {
+            <List bordered={false} dataSource={styles} renderItem={style => {
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleTitle={styleWithMetadata.title}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, styleWithMetadata.name, false)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, styleWithMetadata.name)}/>
+                        <UserStyleRow styleTitle={style.title}
+                            editUserStyleHandler={() => showVisualizationForm(layerId, style.name, false)}
+                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, style.name)}/>
                     </StyledListItem>
                 );
             }}/>

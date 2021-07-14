@@ -9,9 +9,9 @@ export class UserStylesFlyout extends ExtraFlyout {
     constructor (title, options) {
         super(title, options);
         this.element = null;
-        this.loc = Oskari.getMsg.bind(null, 'MapWfs2');
+        this.loc = Oskari.getMsg.bind(null, 'userstyle');
         this.service = Oskari.getSandbox().getService(
-            'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService');
+            'Oskari.mapframework.userstyle.service.UserStyleService');
         this.removeUserStyleHandler = this.service.removeStyle.bind(this.service);
 
         this.on('show', () => {
@@ -63,7 +63,7 @@ export class UserStylesFlyout extends ExtraFlyout {
     getEditorUI () {
         const styles = this.service.getUserStylesForLayer(this.layerId);
         return (
-            <LocaleProvider value={{ bundleKey: 'MapWfs2' }}>
+            <LocaleProvider value={{ bundleKey: 'userstyle' }}>
                 <UserStyles layerId={this.layerId} styles={styles} removeUserStyleHandler={this.removeUserStyleHandler}></UserStyles>
             </LocaleProvider>
         );

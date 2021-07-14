@@ -1,12 +1,12 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequest
- * Requests a WFS own style to be shown
+ * @class Oskari.mapframework.userstyle.request.ShowUserStylesRequest
+ * Requests a user own style to be shown
  *
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz
-    .define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequest',
+    .define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest',
     /**
      * @method create called automatically on construction
      * @static
@@ -21,7 +21,7 @@ Oskari.clazz
             this._isCreateNew = isCreateNew;
         }, {
             /** @static @property __name request name */
-            __name: 'ShowOwnStyleRequest',
+            __name: 'ShowUserStylesRequest',
 
             /**
             * @method getName

@@ -4,17 +4,17 @@ export class UserStyleService {
         Oskari.makeObservable(this);
     }
 
-    saveUserStyle (layerId, styleWithMetadata) {
-        if (!layerId || !styleWithMetadata) {
+    saveUserStyle (layerId, style) {
+        if (!layerId || !style) {
             return;
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === styleWithMetadata.name);
+        const index = layerStyles.findIndex(s => s.name === style.name);
 
         if (index !== -1) {
-            layerStyles[index] = styleWithMetadata;
+            layerStyles[index] = style;
         } else {
-            layerStyles.push(styleWithMetadata);
+            layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
         this.trigger('update');
@@ -45,8 +45,9 @@ export class UserStyleService {
         }
         layer.removeStyle(styleName);
     }
+
     getQName () {
-        return 'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService';
+        return 'Oskari.mapframework.userstyle.service.UserStyleService';
     }
 
     getUserStylesForLayer (layerId) {
