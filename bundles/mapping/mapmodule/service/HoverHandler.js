@@ -6,7 +6,8 @@ import olLayerVectorTile from 'ol/layer/VectorTile';
 import { Vector as olSourceVector } from 'ol/source';
 
 export class HoverHandler {
-    constructor () {
+    constructor (mapmodule) {
+        this._mapmodule = mapmodule;
         this.olLayers = {};
         this.state = {};
         this.styleFactory = null;
@@ -17,11 +18,10 @@ export class HoverHandler {
     }
 
     _initBindings () {
-        const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        mapmodule.getMap().getViewport().addEventListener('mouseout', evt => {
+        this._mapmodule.getMap().getViewport().addEventListener('mouseout', evt => {
             this.clearHover();
         }, false);
-        this.styleFactory = mapmodule.getGeomTypedStyles.bind(mapmodule);
+        this.styleFactory = this._mapmodule.getGeomTypedStyles.bind(this._mapmodule);
     }
 
     /**
@@ -178,8 +178,7 @@ export class HoverHandler {
                 offset: [10, -10],
                 stopEvent: false
             });
-            const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            mapmodule.getMap().addOverlay(this._tooltipOverlay);
+            this._mapmodule.getMap().addOverlay(this._tooltipOverlay);
         }
         return this._tooltipOverlay;
     }

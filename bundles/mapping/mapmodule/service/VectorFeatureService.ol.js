@@ -26,7 +26,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._featureFormatter = new olFormatGeoJSON();
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
-            this.hoverHandler = new HoverHandler();
+            this.hoverHandler = new HoverHandler(mapmodule);
             this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
