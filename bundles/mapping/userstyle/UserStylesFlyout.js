@@ -26,24 +26,30 @@ export class UserStylesFlyout extends ExtraFlyout {
             this.update();
         });
     }
+
     setElement (el) {
         this.element = el;
     }
+
     getElement () {
         return this.element;
     }
+
     setLocale (loc) {
         this.loc = loc;
     }
+
     createUi () {
         this.setElement(jQuery('<div></div>'));
-        this.addClass('user-own-styles-list-flyout');
+        this.addClass('user-styles-list-flyout');
         this.setContent(this.getElement());
         this.update();
     }
+
     setLayerId (layerId) {
         this.layerId = layerId;
     }
+
     update () {
         const el = this.getElement();
         if (!el) {
@@ -53,6 +59,7 @@ export class UserStylesFlyout extends ExtraFlyout {
 
         ReactDOM.render(uiCode, el.get(0));
     }
+
     getEditorUI () {
         const styles = this.service.getUserStylesForLayer(this.layerId);
         return (
@@ -61,6 +68,7 @@ export class UserStylesFlyout extends ExtraFlyout {
             </LocaleProvider>
         );
     }
+
     cleanUp () {
         const el = this.getElement();
         if (!el) {
