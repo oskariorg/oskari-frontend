@@ -102,7 +102,7 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "singleTileDesc": "Single Tile -asetuksen ollessa päällä palvelusta pyydetään koko näkymän kokoinen karttakuva tiilien sijaan.",
-            "serviceNotAvailable": "Ei saatavilla",
+            "serviceNotAvailable": "ei saatavilla",
             "metadata": {
                 "title": "Metatiedon tiedostotunniste",
                 "desc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
@@ -117,7 +117,13 @@ Oskari.registerLocalization(
                 "updateRateDesc": "Päivitystiheys sekunteina",
                 "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
-                "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
+                "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}",
+                "validate": "Tason tiedot eivät vastaa rajapinnan määrityksiä",
+                "rasterStyle" : {
+                    "defaultStyle" : "Nyt valittua oletustyyliä ei löydy palvelusta. Valitse uusi oletustyyli.",
+                    "additionalLegend": "Tasolle on tallennettu erikseen rajapintapalvelun oman karttaselitteen yliajava karttaselite, jolle ei löydy tyyliä. Päivitä karttaselitteen tiedot. Poistuneen/ei-toimivan karttaselitteen nimessä on ( ! )-merkki.",
+                    "globalWithStyles": "Tasolle on määritetty vain yksi yleinen oletuskarttaselite, vaikka sillä olisi rajapintapalvelusta useita tyylejä käytettävissä. Poista oletuskarttaselite ja määritä mahdolliset tyylikohtaiset karttaselitteet."
+                }
             },
             "styles": {
                 "default": "Oletustyyli",
@@ -125,9 +131,8 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Esitystyylit ja karttaselitteet",
                     "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestissä, josta ne haetaan valintalistalle.",
+                    "unavailable": "Palvelussa määritelty esitystyyli: ei saatavilla",
                     "legendImage": "Oletuskarttaselite",
-                    "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä.",
-                    "legendImagePlaceholder": "Anna URL-osoite karttaselitteelle",
                     "serviceLegend": "Palvelussa määritelty karttaselite",
                     "overriddenLegend": "Korvaava karttaselite",
                     "overrideTooltip": "URL-osoite karttaselitteelle, jolla korvataan palvelusta saatavilla oleva karttaselite."

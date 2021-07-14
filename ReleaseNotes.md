@@ -1,5 +1,18 @@
 # Release Notes
 
+## 2.4.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/31?closed=1
+
+- Refactored feature data handling to clean up some solutions that were necessary for the old (1.x) WFS-backend but could be improved with the current one
+- Improved performance on layer list UI
+- Groups without layers are now shown in layer listing if they have subgroups that have layers
+- Link function now provides a bit cleaner URLs
+- Removed deprecated bundles so we can make better solutions for layer handling without worrying backwards compatibility with older UI implementations. Details: https://github.com/oskariorg/oskari-docs/issues/245
+- Improved WMS-layer legends handling for admin UI
+- Other smaller fixes
+
 ## 2.3.1
 
 For a full list of changes see:

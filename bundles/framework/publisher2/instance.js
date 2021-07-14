@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             if (Oskari.user().isLoggedIn()) {
                 var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
                 mapLayerService.registerLayerFilter('publishable', function (layer) {
-                    return (layer.getPermission('publish') === 'publication_permission_ok');
+                    return layer.hasPermission('publish');
                 });
 
                 // Add layerlist filter button

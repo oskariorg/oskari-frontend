@@ -3,6 +3,7 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
+import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -575,6 +576,7 @@ class UIHandler extends StateHandler {
                 newState.capabilities = {};
             }
             this.updateState(newState);
+            this.validateCapabilities();
         });
     }
 
@@ -831,6 +833,27 @@ class UIHandler extends StateHandler {
         return validationErrors;
     }
 
+    // Validate service provided capabilities for single layer.
+    // Can be used to show warning message for example:
+    // - layer has selection that isn't supported or provided by service
+    // - layer has selection that doesn't make sense
+    // - service provide information that may lead to badly functioning layer
+    validateCapabilities () {
+        const { layer, propertyFields } = this.getState();
+        const messages = [];
+        if (propertyFields.includes(LayerComposingModel.CAPABILITIES_STYLES)) {
+            getWarningsForStyles(layer).forEach(key => {
+                const msg = {
+                    duration: null,
+                    title: getMessage('capabilities.validate'),
+                    content: getMessage(`capabilities.rasterStyle.${key}`)
+                };
+                messages.push(msg);
+            });
+        }
+        messages.forEach(msg => Messaging.warn(msg));
+    }
+
     hasAnyPermissions (permissions = {}) {
         return Object.keys(permissions).filter(role => {
             return (permissions[role] || []).length > 0;
@@ -931,6 +954,7 @@ class UIHandler extends StateHandler {
                 layer: updateLayer,
                 propertyFields: this.getPropertyFields(updateLayer)
             });
+            this.validateCapabilities();
         }).catch(error => {
             this.log.error(error);
         });
@@ -962,12 +986,11 @@ class UIHandler extends StateHandler {
         }).then(data => {
             const { success, error, layerUpdate = {} } = data;
             if (success.includes(`${layer.id}`)) {
-                const { admin = {} } = layerUpdate;
-                const { capabilities } = admin;
-                layer.capabilities = capabilities;
+                layer.capabilities = layerUpdate;
                 this.updateState({
                     layer
                 });
+                this.validateCapabilities();
                 Messaging.success(getMessage('capabilities.updatedSuccesfully'));
             } else {
                 if (error) {
@@ -1008,7 +1031,7 @@ class UIHandler extends StateHandler {
                 Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
-                Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
+                Messaging.error(getMessage('messages.errorFetchUserRolesAndPermissionTypes'));
             });
     }
 

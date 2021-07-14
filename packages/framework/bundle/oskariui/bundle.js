@@ -50,13 +50,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
             "expose" : "_",
             "src" : "../../../../libraries/lodash/2.3.0/lodash.js"
         },{
-            "type" : "text/css",
-            "src" : "../../../../libraries/Clusterize.js-0.12.0/clusterize.css"
-        },{
-            "type" : "text/javascript",
-            "expose" : "clusterize",
-            "src" : "../../../../libraries/Clusterize.js-0.12.0/clusterize.js"
-		},{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/oskariui/DomManager.js"
 		}, {

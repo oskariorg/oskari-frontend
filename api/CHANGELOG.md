@@ -9,6 +9,15 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.4.0
+
+### [rem] Removed unmaintained bundles
+
+Bundles layerselection2, layerselector2 and hierarchical-layerlist have been removed. Current replacement is the bundle: layerlist.
+Bundles admin-layerselector and admin-hierarchical-layerlist have been removed. Current replacement is: admin-layereditor.
+
+See https://github.com/oskariorg/oskari-docs/issues/245 for details.
+
 ## 2.3.0
 
 ### [add] layerlist

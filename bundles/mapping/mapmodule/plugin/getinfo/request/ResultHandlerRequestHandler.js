@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.getinfoplugin.request.ResultH
          * Shows WFS feature data with requested properties
          * @param {Oskari.mapframework.core.Core} core
          *      reference to the application core (reference sandbox core.getSandbox())
-         * @param {Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest} request
+         * @param {Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequest} request
          *      request to handle
          */
         handleRequest: function (core, request) {

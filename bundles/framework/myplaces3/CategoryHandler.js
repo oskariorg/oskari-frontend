@@ -423,11 +423,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 this._showMessage(this.loc('notification.error.title'), this.loc('notification.error.generic'));
                 return;
             }
-            if (makePublic) {
-                mapLayer.addPermission('publish', 'publication_permission_ok');
-            } else {
-                mapLayer.addPermission('publish', 'no_publication_permission');
-            }
+            mapLayer.addPermission('publish', !!makePublic);
             // send an event to notify other bundles of updated permissions
             var evt = Oskari.eventBuilder('MapLayerEvent')(mapLayer.getId(), 'update');
             this.sandbox.notifyAll(evt);

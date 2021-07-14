@@ -10,8 +10,7 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
         new IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CopyWebpackPlugin(
             [
-                { from: 'resources', to: 'resources', context },
-                { from: 'bundles/integration/admin-layerselector', to: 'assets/admin-layerselector', context }
+                { from: 'resources', to: 'resources', context }
             ]
         )
     ];

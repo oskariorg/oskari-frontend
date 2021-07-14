@@ -1,4 +1,4 @@
-import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS } from './view/FeatureDataHandler';
+import { FeatureDataHandler, DEFAULT_PROPERTY_LABELS, DEFAULT_HIDDEN_FIELDS, ID_FIELD } from './view/FeatureDataHandler';
 /**
  * @class Oskari.mapframework.bundle.featuredata2.Flyout
  *
@@ -540,7 +540,7 @@ Oskari.clazz.define(
             gridToolsEl.find('.featuredata2-show-selected-first').remove();
             const checkboxEl = jQuery(panel.selectedFirstCheckbox.getElement());
             const { disableExport } = this.instance.getConfiguration();
-            if (!disableExport && layer.getPermission('download') === 'download_permission_ok') {
+            if (!disableExport && layer.hasPermission('download')) {
                 checkboxEl.insertAfter(gridToolsEl);
                 jQuery('<div class="featuredata2-show-selected-first" style="clear:both;"></div>').insertAfter(gridToolsEl);
             } else {
@@ -580,9 +580,7 @@ Oskari.clazz.define(
             grid.setResizableColumns(true);
             const { disableExport, allowLocateOnMap } = this.instance.getConfiguration();
             if (!disableExport) {
-                grid.setExcelExporter(
-                    layer.getPermission('download') === 'download_permission_ok'
-                );
+                grid.setExcelExporter(layer.hasPermission('download'));
             }
             const dataSource = typeof layer.getSource === 'function' && layer.getSource() ? layer.getSource() : layer.getOrganizationName();
             // Data source & metadata link
@@ -694,13 +692,17 @@ Oskari.clazz.define(
          */
         createModel: function (layer, features) {
             const model = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-            model.setFields(layer.getPropertySelection());
-            model.setIdField('__fid');
+            const selection = layer.getPropertySelection();
+            if (selection.length) {
+                const fields = selection.includes(ID_FIELD) ? selection : [ID_FIELD, ...selection];
+                model.setFields(fields);
+            }
+            model.setIdField(ID_FIELD);
             // if layer doesn't have filtered fields then fields is set from first feature
             features.forEach(feat => {
                 model.addData(feat);
             });
-            model.setFirstField('__fid');
+            model.setFirstField(ID_FIELD);
             return model;
         },
         _processPropertyValue: function (value) {
