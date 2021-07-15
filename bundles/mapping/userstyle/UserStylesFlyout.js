@@ -59,9 +59,7 @@ export class UserStylesFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        const uiCode = this.getEditorUI();
-
-        ReactDOM.render(uiCode, el.get(0));
+        ReactDOM.render(this.getEditorUI(), el.get(0));
     }
 
     getEditorUI () {

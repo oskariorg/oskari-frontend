@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -54,7 +53,7 @@ const showVisualizationForm = (layerId, styleId, isCreateNew) => {
     Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, styleId, isCreateNew]);
 };
 
-const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
+export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
     return (
         <div>
             <Header>
@@ -66,7 +65,7 @@ const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
             </Header>
             { styles && styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
-                const {title, name } = style;
+                const { title, name } = style;
                 return (
                     <StyledListItem>
                         <UserStyleRow styleTitle={title}
@@ -85,6 +84,3 @@ UserStyles.propTypes = {
     styles: PropTypes.array.isRequired,
     removeUserStyleHandler: PropTypes.func.isRequired
 };
-
-const contextWrap = LocaleConsumer(UserStyles);
-export { contextWrap as UserStyles };
