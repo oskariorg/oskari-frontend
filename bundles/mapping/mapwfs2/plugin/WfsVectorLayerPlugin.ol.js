@@ -5,7 +5,6 @@ import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
 import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
-import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -28,8 +27,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
         this.layerHandlersByLayerId = {};
-        this.userStyleService = new UserStyleService();
-        Oskari.getSandbox().registerService(this.userStyleService);
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -392,7 +389,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
-
+    // TODO remove
     saveUserStyle (layer, name) {
         const style = this.visualizationForm.getOskariStyle();
         const layerId = layer.getId();
