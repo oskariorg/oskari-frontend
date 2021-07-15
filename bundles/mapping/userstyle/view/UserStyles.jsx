@@ -51,7 +51,7 @@ const AddStyleIcon = styled(PlusOutlined)`
 `;
 
 const showVisualizationForm = (layerId, styleId, isCreateNew) => {
-    Oskari.getSandbox().postRequestByName('ShowOwnStyleRequest', [layerId, styleId, isCreateNew]);
+    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, styleId, isCreateNew]);
 };
 
 const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
