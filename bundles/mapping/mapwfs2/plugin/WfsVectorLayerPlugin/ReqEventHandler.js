@@ -101,13 +101,9 @@ export class ReqEventHandler {
         };
     }
 
-    createRequestHandlers (plugin) {
+    createRequestHandlers () {
         return {
-            'WfsLayerPlugin.ActivateHighlightRequest': this,
-            'ShowOwnStyleRequest': Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler',
-                plugin
-            )
+            'WfsLayerPlugin.ActivateHighlightRequest': this
         };
     }
     // handle WfsLayerPlugin.ActivateHighlightRequest
