@@ -22,9 +22,6 @@ Oskari.clazz.define("Oskari.mapframework.userstyle.UserStyleBundle", function ()
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/userstyle/request/ShowUserStylesRequestHandler.js"
                 }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/userstyle/UserStylesFlyout.js"
-                }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/userstyle/instance.js"
                 }
