@@ -6,19 +6,27 @@ export class UserStyleService {
         Oskari.makeObservable(this);
     }
 
-    saveUserStyle (layer, name) {
-        const styleDef = this.visualizationForm.getOskariStyle();
-        const layerId = layer.getId();
+    saveUserStyle (layerId, name) {
+        if (!name) {
+            // styles are stored only for runtime, use time to get unique name
+            name = 's_' + Date.now().toString();
+        }
         let title = this.visualizationForm.getOskariStyleName();
         if (!title) {
             const existing = this.getUserStylesForLayer(layerId);
             title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
         }
+        const styleDef = this.visualizationForm.getOskariStyle();
         const style = { name, style: styleDef, title };
-        layer.saveUserStyle(style);
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (layer) {
+            layer.saveUserStyle(style);
+            layer.setCustomStyle(styleDef);
+            layer.selectStyle(name);
+        }
 
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === style.name);
+        const index = layerStyles.findIndex(s => s.name === name);
 
         if (index !== -1) {
             layerStyles[index] = style;
@@ -26,33 +34,30 @@ export class UserStyleService {
             layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
-        this.trigger('update');
-    }
-
-    removeStyle (layerId, styleName) {
-        this.removeUserStyle(layerId, styleName);
-        this.removeUserStyleFromLayer(layerId, styleName);
+        this.notifyUpdate();
     }
 
     removeUserStyle (layerId, styleName) {
         if (!layerId || !styleName) {
             return;
         }
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (layer) {
+            layer.removeStyle(styleName);
+        }
         const layerStyles = this.getUserStylesForLayer(layerId);
         const index = layerStyles.findIndex(s => s.name === styleName);
         if (index !== -1) {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
-            this.trigger('update');
         }
+        this.notifyUpdate();
     }
 
-    removeUserStyleFromLayer (layerId, styleName) {
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        if (!layer) {
-            return;
-        }
-        layer.removeStyle(styleName);
+    notifyUpdate (layerId) {
+        const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
+        Oskari.getSandbox().notifyAll(event);
+        this.trigger('update');
     }
 
     getQName () {
@@ -81,16 +86,5 @@ export class UserStyleService {
             this.visualizationForm.setOskariStyleValues(style, title);
         }
         return this.visualizationForm.getForm();
-    }
-
-    /**
-     * @method applyEditorStyle Applies custom style editor's style to the layer.
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {String} styleName
-     */
-    applyEditorStyle (layer, styleName) {
-        const style = this.visualizationForm.getOskariStyle();
-        layer.setCustomStyle(style);
-        layer.selectStyle(styleName);
     }
 }

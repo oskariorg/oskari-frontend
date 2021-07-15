@@ -1,4 +1,5 @@
 import { UserStyleService } from './service/UserStyleService';
+import { UserStylesFlyout } from './UserStylesFlyout';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
  */
@@ -17,8 +18,14 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     },
     getService: function () {
         return this.service;
+    },
+    getFlyout () {
+        if (!this.flyout) {
+            this.flyout = new UserStylesFlyout(this);
+        }
+        return this.flyout;
     }
 }, {
-    'extend': ['Oskari.BasicBundle'],
-    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+    extend: ['Oskari.BasicBundle'],
+    protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

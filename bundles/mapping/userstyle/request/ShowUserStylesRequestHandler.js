@@ -1,4 +1,3 @@
-import { UserStylesFlyout } from '../UserStylesFlyout';
 /**
  * @class Oskari.mapframework.userstyle.request.ShowUserStylesRequestHandler
  *
@@ -50,12 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
         },
         _showVisualizationForm (layerId, styleName, createNew) {
             const service = this.instance.getService();
-            const sb = this.instance.sandbox;
             // init popup
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var title = this.localization('popup.title');
             var content = this.template.wrapper.clone();
-            const layer = sb.findMapLayerFromSelectedMapLayers(layerId);
             var style;
             if (styleName) {
                 style = service.getUserStyle(layerId, styleName);
@@ -66,16 +63,9 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
             // buttons
             var saveOwnStyleBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveOwnStyleBtn.setTitle(this.localization('popup.button.save'));
-            saveOwnStyleBtn.addClass('primary saveOwnStyle');
+            saveOwnStyleBtn.addClass('primary save-user-style');
             saveOwnStyleBtn.setHandler(() => {
-                if (!styleName) {
-                    // styles are stored only for runtime, use time to get unique name
-                    styleName = Date.now().toString();
-                }
-                service.applyEditorStyle(layer, styleName);
-                service.saveUserStyle(layer, styleName);
-                var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
-                sb.notifyAll(event);
+                service.saveUserStyle(layerId, styleName);
                 dialog.close();
             });
 
@@ -90,30 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
             dialog.show(title, content, [cancelBtn, saveOwnStyleBtn]);
         },
         _showUserStylesList (layerId) {
-            const flyout = this._getFlyout();
+            const flyout = this.instance.getFlyout();
             flyout.setLayerId(layerId);
             flyout.show();
-        },
-        /**
-         * @private @method _getFlyout
-         * Ensure flyout exists and return it
-         * @return {LayerEditorFlyout}
-         */
-        _getFlyout () {
-            if (!this.flyout) {
-                const xPosition = jQuery('#mapdiv').position().left;
-                const offset = 150;
-                const options = {
-                    width: 500
-                };
-                this.flyout = new UserStylesFlyout(this.localization('title'), options);
-                this.flyout.move(xPosition + offset, 15, true);
-                this.flyout.makeDraggable({
-                    handle: '.oskari-flyouttoolbar',
-                    scroll: false
-                });
-            }
-            return this.flyout;
         }
     }, {
         /**

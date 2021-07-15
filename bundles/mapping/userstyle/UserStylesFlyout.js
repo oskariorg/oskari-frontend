@@ -4,16 +4,16 @@ import { UserStyles } from './view/UserStyles';
 import { LocaleProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
-
+const options = {
+    width: 500,
+    cls: 'user-styles-flyout'
+};
 export class UserStylesFlyout extends ExtraFlyout {
-    constructor (title, options) {
-        super(title, options);
+    constructor (instance) {
+        super(null, options);
+        this.instance = instance;
         this.element = null;
         this.loc = Oskari.getMsg.bind(null, 'userstyle');
-        this.service = Oskari.getSandbox().getService(
-            'Oskari.mapframework.userstyle.service.UserStyleService');
-        this.removeUserStyleHandler = this.service.removeStyle.bind(this.service);
-
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -22,7 +22,7 @@ export class UserStylesFlyout extends ExtraFlyout {
         this.on('hide', () => {
             this.cleanUp();
         });
-        this.service.on('update', () => {
+        this.instance.getService().on('update', () => {
             this.update();
         });
     }
@@ -35,14 +35,18 @@ export class UserStylesFlyout extends ExtraFlyout {
         return this.element;
     }
 
-    setLocale (loc) {
-        this.loc = loc;
-    }
-
     createUi () {
+        const xPosition = jQuery('#mapdiv').position().left;
+        const offset = 150;
+
         this.setElement(jQuery('<div></div>'));
-        this.addClass('user-styles-list-flyout');
+        this.setTitle(this.loc('title'));
         this.setContent(this.getElement());
+        this.move(xPosition + offset, 15, true);
+        this.makeDraggable({
+            handle: '.oskari-flyouttoolbar',
+            scroll: false
+        });
         this.update();
     }
 
@@ -61,10 +65,12 @@ export class UserStylesFlyout extends ExtraFlyout {
     }
 
     getEditorUI () {
-        const styles = this.service.getUserStylesForLayer(this.layerId);
+        const service = this.instance.getService();
+        const styles = service.getUserStylesForLayer(this.layerId);
+        const removeUserStyleHandler = service.removeUserStyle.bind(service);
         return (
             <LocaleProvider value={{ bundleKey: 'userstyle' }}>
-                <UserStyles layerId={this.layerId} styles={styles} removeUserStyleHandler={this.removeUserStyleHandler}></UserStyles>
+                <UserStyles layerId={this.layerId} styles={styles} removeUserStyleHandler={removeUserStyleHandler}></UserStyles>
             </LocaleProvider>
         );
     }
