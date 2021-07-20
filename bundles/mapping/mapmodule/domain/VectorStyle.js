@@ -12,9 +12,10 @@ export class VectorStyle extends Style {
         this._type = type; // normal, user, external
         this._featureStyle = {};
         this._optionalStyles = [];
+        this._externalDef = null;
         this.setName(name);
         this.setTitle(title);
-        this.initDefinition(styleDef);
+        this.parseStyleDef(styleDef);
     }
 
     getLegend () {
@@ -37,32 +38,25 @@ export class VectorStyle extends Style {
         return this.isUserStyle();
     }
 
-    hasDefinition () {
+    hasDefinitions () {
         return Object.keys(this.getFeatureStyle()).length > 0 ||
             this.getOptionalStyles().length > 0 ||
-            Object.keys(this.getDefinition()).length > 0;
+            !!this.getExternalDef();
     }
 
-    getDefinition () {
-        return this.definition || {};
-    }
-
-    setDefinition (styleDef) {
-        this.definition = styleDef;
-    }
-
-    initDefinition (styleDef) {
+    parseStyleDef (styleDef) {
         if (!styleDef) {
             return;
         }
         if (this.isExternalStyle()) {
-            this.definition = styleDef;
+            this.setExternalDef({ ...styleDef });
             return;
         }
         // Parse Oskari style to fetureStyle and optionalStyles
         let { featureStyle = {}, optionalStyles = [], title } = styleDef;
         // Bypass possible layer definitions
-        Object.values(styleDef).forEach(val => {
+        Object.keys(styleDef).forEach(key => {
+            const val = styleDef[key];
             if (val.hasOwnProperty('featureStyle')) {
                 featureStyle = val.featureStyle;
             }
@@ -71,6 +65,23 @@ export class VectorStyle extends Style {
             }
             if (val.hasOwnProperty('title')) {
                 title = val.title;
+            }
+            // 3D-layers have not required featureStyle it since there hasn't been hover styles implemented yet
+            //  - backwards compatibility == featureStyle is NOT REQUIRED as part of the style
+            //  - consistency == style definitions ARE STORED/USED to/from featureStyle so we can use the visual style editor for WFS and 3D
+            switch (key) {
+            case 'fill':
+                featureStyle.fill = val;
+                break;
+            case 'stroke':
+                featureStyle.stroke = val;
+                break;
+            case 'image':
+                featureStyle.image = val;
+                break;
+            case 'text':
+                featureStyle.text = val;
+                break;
             }
         });
 
@@ -104,5 +115,13 @@ export class VectorStyle extends Style {
 
     setOptionalStyles (optionalStyles = []) {
         this._optionalStyles = optionalStyles;
+    }
+
+    getExternalDef () {
+        return this._externalDef;
+    }
+
+    setExternalDef (styleDef) {
+        this._externalDef = styleDef;
     }
 }
