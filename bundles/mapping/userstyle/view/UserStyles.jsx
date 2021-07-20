@@ -65,7 +65,8 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
             </Header>
             { styles && styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
-                const { title, name } = style;
+                const name = style.getName();
+                const title = style.getTitle();
                 return (
                     <StyledListItem>
                         <UserStyleRow styleTitle={title}

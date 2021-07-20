@@ -1,3 +1,4 @@
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
 
 export class UserStyleService {
@@ -7,6 +8,7 @@ export class UserStyleService {
     }
 
     saveUserStyle (layerId, name) {
+        const sb = Oskari.getSandbox();
         if (!name) {
             // styles are stored only for runtime, use time to get unique name
             name = 's_' + Date.now().toString();
@@ -16,37 +18,40 @@ export class UserStyleService {
             const existing = this.getUserStylesForLayer(layerId);
             title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
         }
-        const styleDef = this.visualizationForm.getOskariStyle();
-        const style = { name, style: styleDef, title };
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        if (layer) {
-            layer.saveUserStyle(style);
-            layer.setCustomStyle(styleDef);
-            layer.selectStyle(name);
-        }
 
+        let style;
+        const featureStyle = this.visualizationForm.getOskariStyle();
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === name);
-
+        const index = layerStyles.findIndex(s => s.getName() === name);
         if (index !== -1) {
-            layerStyles[index] = style;
+            style = layerStyles[index];
+            style.setTitle(title);
+            style.setFeatureStyle(featureStyle);
         } else {
+            style = new VectorStyle(name, title, 'user', { featureStyle });
             layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
+
+        const layer = sb.findMapLayerFromAllAvailable(layerId);
+        if (layer) {
+            layer.addStyle(style);
+            layer.selectStyle(name);
+            sb.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
+        }
         this.notifyUpdate();
     }
 
-    removeUserStyle (layerId, styleName) {
-        if (!layerId || !styleName) {
+    removeUserStyle (layerId, name) {
+        if (!layerId || !name) {
             return;
         }
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        const layer = Oskari.getSandbox().findMapLayerFromAllAvailable(layerId);
         if (layer) {
-            layer.removeStyle(styleName);
+            layer.removeStyle(name);
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === styleName);
+        const index = layerStyles.findIndex(s => s.getName() === name);
         if (index !== -1) {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
@@ -70,20 +75,19 @@ export class UserStyleService {
 
     getUserStyle (layerId, styleName) {
         const layerStyles = this.getUserStylesForLayer(layerId);
-        return layerStyles.find(s => s.name === styleName);
+        return layerStyles.find(s => s.getName() === styleName);
     }
 
     /**
      * @method getCustomStyleEditorForm To get editor ui element for custom style.
-     * @param {Object} styleWithMetadata
+     * @param {VectorStyle} style
      * @return VisualizationForm's form element
      */
-    getCustomStyleEditorForm (styleWithMetadata = {}) {
-        const { style, title } = styleWithMetadata;
-        if (!style || !title) {
+    getCustomStyleEditorForm (style) {
+        if (!style) {
             this.visualizationForm = new VisualizationForm({ name: '' });
         } else {
-            this.visualizationForm.setOskariStyleValues(style, title);
+            this.visualizationForm.setOskariStyleValues(style.getFeatureStyle(), style.getTitle());
         }
         return this.visualizationForm.getForm();
     }
