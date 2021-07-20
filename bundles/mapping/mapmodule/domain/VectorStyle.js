@@ -37,7 +37,7 @@ export class VectorStyle extends Style {
         return this.isUserStyle();
     }
 
-    hasDefinitions () {
+    hasDefinition () {
         return Object.keys(this.getFeatureStyle()).length > 0 ||
             this.getOptionalStyles().length > 0 ||
             Object.keys(this.getDefinition()).length > 0;
@@ -55,7 +55,7 @@ export class VectorStyle extends Style {
         if (!styleDef) {
             return;
         }
-        if (this.isExternal()) {
+        if (this.isExternalStyle()) {
             this.definition = styleDef;
             return;
         }
