@@ -163,11 +163,9 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         const isHovered = hoverHandler.isHovered(feature, hoverHandler);
 
         let styleTypes = null;
-        if (styleValues.optional) {
-            const found = styleValues.optional.find(op => filterOptionalStyle(op.filter, feature));
-            if (found) {
-                styleTypes = getTypedStyles(found, isHovered, isSelected);
-            }
+        const found = styleValues.optional.find(op => filterOptionalStyle(op.filter, feature));
+        if (found) {
+            styleTypes = getTypedStyles(found, isHovered, isSelected);
         }
         if (!styleTypes) {
             styleTypes = getTypedStyles(styleValues, isHovered, isSelected);
@@ -196,7 +194,7 @@ const getGeomTypedStyles = (styleDef, factory) => {
 const merge = (...styles) => jQuery.extend(true, {}, ...styles);
 
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
-    let styles = {
+    const styles = {
         default: getGeomTypedStyles(defaults.style, styleFactory),
         selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory),
         hover: getGeomTypedStyles(merge(defaults.style, defaults.hover), styleFactory),
@@ -205,47 +203,35 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     if (!layer) {
         return getStyleFunction(styles, hoverHandler);
     }
-    let styleDef = layer.getCurrentStyleDef();
-    if (!styleDef) {
+    const style = layer.getCurrentStyle();
+    if (!style) {
         return getStyleFunction(styles, hoverHandler);
     }
-    if (!styleDef.featureStyle) {
-        // Bypass possible layer definitions
-        Object.values(styleDef).find(obj => {
-            if (obj.hasOwnProperty('featureStyle')) {
-                styleDef = obj;
-                return true;
-            }
-        });
-    }
-    const featureStyle = styleDef.featureStyle || defaults.style;
+    const featureStyle = Object.keys(style.getFeatureStyle()).length ? style.getFeatureStyle() : defaults.style;
     let hoverStyle = defaults.hover;
     if (layer.getHoverOptions() && layer.getHoverOptions().featureStyle) {
         hoverStyle = layer.getHoverOptions().featureStyle;
     }
     let hoverDef = hoverStyle.inherit === true ? merge(featureStyle, hoverStyle) : hoverStyle;
-    if (featureStyle) {
-        styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
-        styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
-        styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
-        styles.selectedHover = getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory);
-    }
-    const optionalStyles = styleDef.optionalStyles;
-    if (optionalStyles) {
-        styles.optional = optionalStyles.map((optionalDef) => {
-            if (hoverStyle.inherit) {
-                hoverDef = merge(featureStyle, optionalDef, hoverStyle);
-            }
-            const optional = {
-                filter: getOptionalStyleFilter(optionalDef),
-                customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
-                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
-                hover: getGeomTypedStyles(hoverDef, styleFactory),
-                selectedHover: getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory)
-            };
-            return optional;
-        });
-    }
+
+    styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
+    styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
+    styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
+    styles.selectedHover = getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory);
+
+    styles.optional = style.getOptionalStyles().map((optionalDef) => {
+        if (hoverStyle.inherit) {
+            hoverDef = merge(featureStyle, optionalDef, hoverStyle);
+        }
+        const optional = {
+            filter: getOptionalStyleFilter(optionalDef),
+            customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
+            selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
+            hover: getGeomTypedStyles(hoverDef, styleFactory),
+            selectedHover: getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory)
+        };
+        return optional;
+    });
     return getStyleFunction(styles, hoverHandler);
 };
 

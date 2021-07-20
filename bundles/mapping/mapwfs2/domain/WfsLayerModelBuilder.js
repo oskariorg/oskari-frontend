@@ -1,4 +1,4 @@
-const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
+import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -55,55 +55,26 @@ Oskari.clazz.define(
                 layer.addTool(toolOwnStyle);
             }
 
-            // create a default style
-            const locDefaultStyle = this.localization['default-style'];
-            const defaultStyle = new Style();
-            defaultStyle.setName('default');
-            defaultStyle.setTitle(locDefaultStyle);
-            defaultStyle.setLegend('');
-
-            const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            let layerType = layer.getLayerType();
-            if (layerType === 'userlayer' || layerType === 'myplaces') {
-                layerType = 'wfs';
+            // Read options object for styles and hover options
+            const options = mapLayerJson.options || {};
+            const { styles = {} } = options;
+            Object.keys(styles).forEach(styleId => {
+                const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
+                layer.addStyle(style);
+            });
+            // Remove styles from options to be sure that VectorStyle is used
+            delete options.styles;
+            if (layer.getStyles().length === 0) {
+                // ensure we have at least one style so:
+                // - things don't break as easily in other parts of the app
+                // - end-user can switch back to "default" when adding a runtime style of their own
+                // add default style
+                layer.addStyle(createDefaultStyle());
             }
-            const wfsPlugin = mapModule.getLayerPlugins(layerType);
-
-            if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
-                // Read options object for styles and hover options
-                const { styles = {} } = mapLayerJson.options || {};
-                const layerStyles = [];
-                Object.keys(styles).forEach(styleId => {
-                    const style = new Style();
-                    style.setName(styleId);
-                    style.setTitle(styleId === 'default' ? locDefaultStyle : styles[styleId].title || styleId);
-                    layerStyles.push(style);
-                });
-                if (layerStyles.length === 0) {
-                    // ensure we have at least one style so:
-                    // - things don't break as easily in other parts of the app
-                    // - end-user can switch back to "default" when adding a runtime style of their own
-                    layerStyles.push(defaultStyle);
-                }
-                layer.setStyles(layerStyles);
-                layer.setHoverOptions(mapLayerJson.options.hover);
-            } else {
-                // check if default style comes and give localization for it if found
-                if (Array.isArray(mapLayerJson.styles)) {
-                    const definedDefaultStyle = mapLayerJson.styles.find(style => style.name === 'default');
-                    if (definedDefaultStyle) {
-                        definedDefaultStyle.title = locDefaultStyle;
-                    }
-                }
-
-                // default style for WFS is given as last parameter
-                maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
-            }
+            layer.setHoverOptions(mapLayerJson.options.hover);
 
             // Set current Style
-            if (mapLayerJson.style) {
-                layer.selectStyle(mapLayerJson.style);
-            }
+            layer.selectStyle(mapLayerJson.style || DEFAULT_STYLE_NAME);
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {

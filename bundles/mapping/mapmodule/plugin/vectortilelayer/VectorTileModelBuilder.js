@@ -1,27 +1,28 @@
-const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
-
+import { VectorStyle } from '../../domain/VectorStyle';
 export class VectorTileModelBuilder {
     parseLayerData (layer, mapLayerJson, maplayerService) {
-        const { options } = mapLayerJson;
+        const { options, style } = mapLayerJson;
         if (!options) {
             return;
         }
-        let styles = [];
         if (options.styles) {
-            styles = Object.keys(options.styles);
+            Object.entries(options.styles).forEach(([name, styleDef]) => {
+                const style = new VectorStyle(name, null, 'normal', styleDef, true);
+                layer.addStyle(style);
+            });
+            // Remove styles from options to be sure that VectorStyle is used
+            delete options.styles;
         }
         if (options.externalStyles) {
-            const externalStyles = Object.keys(options.externalStyles);
-            styles = styles.concat(externalStyles.filter(style => !styles.includes(style)));
+            Object.entries(options.externalStyles).forEach(([name, styleDef]) => {
+                const style = new VectorStyle(name, null, 'external', styleDef);
+                layer.addStyle(style);
+            });
+            // Remove externalStyles from options to be sure that VectorStyle is used
+            delete options.externalStyles;
         }
-        styles.forEach(styleName => {
-            const style = new Style();
-            style.setName(styleName);
-            style.setTitle(styleName);
-            layer.addStyle(style);
-        });
-        if (styles.length > 0) {
-            layer.selectStyle(styles.includes('default') ? 'default' : styles[0]);
+        if (style) {
+            layer.selectStyle(style);
         }
         if (options.hover) {
             layer.setHoverOptions(mapLayerJson.options.hover);
