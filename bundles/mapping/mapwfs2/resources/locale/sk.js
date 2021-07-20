@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapovéWfs2",
         "desc": "",
-        "default-style": "Predvolený štýl",
         "none-style": "Nič",
         "refresh": "Obnoviť",
         "refresh_title": "Obnovené produktové údaje sa nevykresľujú na mape automaticky.",

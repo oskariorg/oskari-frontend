@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "KartaWfs2",
         "desc": "",
-        "default-style": "Privzeti stil",
         "refresh": "Osveži",
         "refresh_title": "Posodobljeni podatkovni izdelki niso samodejno prikazani na karti",
         "tile": {

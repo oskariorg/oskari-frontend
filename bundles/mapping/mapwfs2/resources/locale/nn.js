@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Standardstil",
         "none-style": "Ingen",
         "refresh": "Oppfrisk",
         "refresh_title": "Oppfrisk dataprodukt som ikkje blir gjengitt automatisk på kartet",

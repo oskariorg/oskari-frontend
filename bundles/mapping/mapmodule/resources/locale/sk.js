@@ -19,6 +19,9 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
+        "styles": {
+            "defaultTitle": "Predvolený štýl"
+        },
         "plugin": {
             "LogoPlugin": {
                 "terms": "Podmienky používania",

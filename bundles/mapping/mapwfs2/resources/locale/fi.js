@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Vektoritasojen ylläpito",
         "desc": "",
-        "default-style": "Oletustyyli",
         "refresh": "Päivitä",
         "refresh_title": "Päivitä vektoritasot, jotka eivät päivity automaattisesti kartalla.",
         "tile": {

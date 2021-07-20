@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Estilo por defecto",
         "refresh": "refrescar",
         "refresh_title": "el refresco de los productos de datos no se realiza automaticamente en el mapa",
         "tile": {
