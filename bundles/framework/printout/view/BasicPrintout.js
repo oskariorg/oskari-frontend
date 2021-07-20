@@ -578,11 +578,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
 
             selectedLayers.forEach(l => {
-                if (typeof l.getCustomStyle === 'function') {
-                    const custom = l.getCustomStyle();
-                    if (custom && custom.style) {
-                        customStyles[l.getId()] = custom.style;
-                    }
+                const style = l.getCurrentStyle();
+                if (typeof style.isRuntimeStyle === 'function' && style.isRuntimeStyle()) {
+                    customStyles[l.getId()] = style.getFeatureStyle();
                 }
             });
             return customStyles;
