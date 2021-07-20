@@ -103,13 +103,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const olLayers = this.getOLMapLayers(layer.getId());
         const style = layer.getCurrentStyle();
         if (style.isExternalStyle() && olLayers.length !== 0) {
-            const externalStyleDef = style.getDefinition();
+            const externalStyleDef = style.getExternalDef() || {};
             const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
             return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
         }
         const hoverOptions = layer.getHoverOptions();
         const factory = this.mapModule.getStyle.bind(this.mapModule);
-        return hoverOptions || style.hasDefinition() ? styleGenerator(factory, style, hoverOptions, this.hoverState) : this._createDefaultStyle();
+        return hoverOptions || style.hasDefinitions() ? styleGenerator(factory, style, hoverOptions, this.hoverState) : this._createDefaultStyle();
     }
     /**
      * @private @method _createDefaultStyle
