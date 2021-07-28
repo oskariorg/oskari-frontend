@@ -246,8 +246,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
 
     /* ---- Impl specific functions ---- */
 
-
-
     /**
      * @method findLayerByOLLayer
      * @param {ol/layer/Layer} olLayer OpenLayers layer impl
