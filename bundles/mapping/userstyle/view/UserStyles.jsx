@@ -49,8 +49,8 @@ const AddStyleIcon = styled(PlusOutlined)`
     margin-right: 10px;
 `;
 
-const showVisualizationForm = (layerId, styleId, isCreateNew) => {
-    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, styleId, isCreateNew]);
+const showVisualizationForm = (layerId, styleName) => {
+    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, true, styleName]);
 };
 
 export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
@@ -58,7 +58,7 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
         <div>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
-                <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
+                <AddStyle onClick={() => showVisualizationForm(layerId)}>
                     <AddStyleIcon />
                     <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
@@ -69,7 +69,7 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
                 return (
                     <StyledListItem>
                         <UserStyleRow styleTitle={title}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, name, false)}
+                            editUserStyleHandler={() => showVisualizationForm(layerId, name)}
                             removeUserStyleHandler={() => removeUserStyleHandler(layerId, name)}/>
                     </StyledListItem>
                 );
