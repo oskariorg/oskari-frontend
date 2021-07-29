@@ -1,28 +1,26 @@
 import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
-const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
 
 export class UserStyleService {
-    constructor () {
+    constructor (sandbox) {
         this.styles = new Map();
+        this.sandbox = sandbox;
         Oskari.makeObservable(this);
     }
 
-    saveUserStyle (layerId, name) {
-        const sb = Oskari.getSandbox();
-        if (!name) {
+    saveUserStyle (layerId, style) {
+        if (!style.name) {
             // styles are stored only for runtime, use time to get unique name
-            name = 's_' + Date.now().toString();
+            style.name = 's_' + Date.now().toString();
         }
-        let title = this.visualizationForm.getOskariStyleName();
-        if (!title) {
+        if (!style.title) {
             const existing = this.getUserStylesForLayer(layerId);
-            title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
+            style.title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
         }
 
-        let style;
-        const featureStyle = this.visualizationForm.getOskariStyle();
+        const { style: featureStyle, title, name } = style;
         const layerStyles = this.getUserStylesForLayer(layerId);
         const index = layerStyles.findIndex(s => s.getName() === name);
+
         if (index !== -1) {
             style = layerStyles[index];
             style.setTitle(title);
@@ -33,22 +31,24 @@ export class UserStyleService {
         }
         this.styles.set(layerId, layerStyles);
 
-        const layer = sb.findMapLayerFromAllAvailable(layerId);
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.addStyle(style);
             layer.selectStyle(name);
-            sb.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
+            this.notifyLayerUpdate();
         }
-        this.notifyUpdate();
+        this.trigger('update');
     }
 
     removeUserStyle (layerId, name) {
         if (!layerId || !name) {
             return;
         }
-        const layer = Oskari.getSandbox().findMapLayerFromAllAvailable(layerId);
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.removeStyle(name);
+            this.notifyLayerUpdate();
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
         const index = layerStyles.findIndex(s => s.getName() === name);
@@ -56,13 +56,12 @@ export class UserStyleService {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
         }
-        this.notifyUpdate();
+        this.trigger('update');
     }
 
-    notifyUpdate (layerId) {
+    notifyLayerUpdate (layerId) {
         const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
-        Oskari.getSandbox().notifyAll(event);
-        this.trigger('update');
+        this.sandbox.notifyAll(event);
     }
 
     getQName () {
@@ -73,22 +72,8 @@ export class UserStyleService {
         return this.styles.get(layerId) || [];
     }
 
-    getUserStyle (layerId, styleName) {
+    getUserStyle (layerId, name) {
         const layerStyles = this.getUserStylesForLayer(layerId);
-        return layerStyles.find(s => s.getName() === styleName);
-    }
-
-    /**
-     * @method getCustomStyleEditorForm To get editor ui element for custom style.
-     * @param {VectorStyle} style
-     * @return VisualizationForm's form element
-     */
-    getCustomStyleEditorForm (style) {
-        if (!style) {
-            this.visualizationForm = new VisualizationForm({ name: '' });
-        } else {
-            this.visualizationForm.setOskariStyleValues(style.getFeatureStyle(), style.getTitle());
-        }
-        return this.visualizationForm.getForm();
+        return layerStyles.find(s => s.getName() === name);
     }
 }

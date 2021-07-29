@@ -12,13 +12,13 @@ Oskari.clazz
      * @static
      *
      * @param {Number} layerId layer identifier so we can select correct tab
-     * @param {String} styleName style identifier so we can initialize visualization form with correct style
-     * @param {Boolean} isCreateNew flag indicating that visualization form should be opened to create new style
+     * @param {Boolean} showStyle flag indicating that visualization form should be opened to create/edit style
+     * @param {String} styleName style identifier so we can initialize visualization form with correct style, if undefined new style is created
      */
-        function (layerId, styleName, isCreateNew) {
+        function (layerId, showStyle, styleName) {
             this._layerId = layerId;
+            this._showStyle = showStyle;
             this._styleName = styleName;
-            this._isCreateNew = isCreateNew;
         }, {
             /** @static @property __name request name */
             __name: 'ShowUserStylesRequest',
@@ -45,11 +45,11 @@ Oskari.clazz
                 return this._styleName;
             },
             /**
-            * @method isCreateNew
-            * @return {Boolean} flag indicating that visualization form should be opened to create new style
+            * @method showStyle
+            * @return {Boolean} flag indicating that visualization form should be opened to create/edit style
             */
-            isCreateNew: function () {
-                return this._isCreateNew;
+            showStyle: function () {
+                return this._showStyle;
             }
         }, {
         /**

@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
     function (instance) {
         this.instance = instance;
         this.localization = Oskari.getMsg.bind(null, 'userstyle');
+        this.visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
         /* templates */
         this.template = {};
         var p;
@@ -38,34 +39,42 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
          */
         handleRequest: function (core, request) {
             const layerId = request.getLayerId();
-            const styleName = request.getStyleName();
-            const createNew = request.isCreateNew();
             const userStylesForLayer = this.instance.getService().getUserStylesForLayer(layerId);
-            if (userStylesForLayer.length > 0 && !styleName && !createNew) {
-                this._showUserStylesList(layerId);
-            } else {
+            if (userStylesForLayer.length === 0 || request.showStyle()) {
+                const styleName = request.getStyleName();
                 this._showVisualizationForm(layerId, styleName);
+            } else {
+                this._showUserStylesList(layerId);
             }
         },
-        _showVisualizationForm (layerId, styleName, createNew) {
+        _showVisualizationForm (layerId, styleName) {
             const service = this.instance.getService();
             // init popup
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var title = this.localization('popup.title');
             var content = this.template.wrapper.clone();
-            var style;
+            let style;
             if (styleName) {
                 style = service.getUserStyle(layerId, styleName);
             }
+            const { style: styleDef = {}, title = '' } = style || {};
+            // visuform will be replaced by react implementation
+            // for now hook name to _options to get empty style name input
+            this.visualizationForm._options.name = title;
+            this.visualizationForm.setOskariStyleValues(styleDef);
             // add form
-            content.append(service.getCustomStyleEditorForm(style));
+            content.append(this.visualizationForm.getForm());
 
             // buttons
             var saveOwnStyleBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveOwnStyleBtn.setTitle(this.localization('popup.button.save'));
             saveOwnStyleBtn.addClass('primary save-user-style');
             saveOwnStyleBtn.setHandler(() => {
-                service.saveUserStyle(layerId, styleName);
+                const style = {
+                    name: styleName,
+                    style: this.visualizationForm.getOskariStyle(),
+                    title: this.visualizationForm.getOskariStyleName()
+                };
+                service.saveUserStyle(layerId, style);
                 dialog.close();
             });
 
@@ -77,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
 
             // show popup
             dialog.addClass('user_style');
-            dialog.show(title, content, [cancelBtn, saveOwnStyleBtn]);
+            dialog.show(this.localization('popup.title'), content, [cancelBtn, saveOwnStyleBtn]);
         },
         _showUserStylesList (layerId) {
             const flyout = this.instance.getFlyout();
