@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
         }
     },
     _startImpl: function (sandbox) {
-        this.service = new UserStyleService();
+        this.service = new UserStyleService(sandbox);
         sandbox.registerService(this.service);
     },
     getService: function () {

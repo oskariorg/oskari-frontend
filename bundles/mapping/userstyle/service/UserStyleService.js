@@ -1,32 +1,30 @@
-const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
-
 export class UserStyleService {
-    constructor () {
+    constructor (sandbox) {
         this.styles = new Map();
+        this.sandbox = sandbox;
         Oskari.makeObservable(this);
     }
 
-    saveUserStyle (layerId, name) {
-        if (!name) {
+    saveUserStyle (layerId, style) {
+        if (!style.name) {
             // styles are stored only for runtime, use time to get unique name
-            name = 's_' + Date.now().toString();
+            style.name = 's_' + Date.now().toString();
         }
-        let title = this.visualizationForm.getOskariStyleName();
-        if (!title) {
+        if (!style.title) {
             const existing = this.getUserStylesForLayer(layerId);
-            title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
+            style.title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
         }
-        const styleDef = this.visualizationForm.getOskariStyle();
-        const style = { name, style: styleDef, title };
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        let { style: styleDef } = style;
+        const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if (layer) {
             layer.saveUserStyle(style);
             layer.setCustomStyle(styleDef);
-            layer.selectStyle(name);
+            layer.selectStyle(style.name);
+            this.notifyLayerUpdate();
         }
 
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === name);
+        const index = layerStyles.findIndex(s => s.name === style.name);
 
         if (index !== -1) {
             layerStyles[index] = style;
@@ -34,16 +32,17 @@ export class UserStyleService {
             layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
-        this.notifyUpdate();
+        this.trigger('update');
     }
 
     removeUserStyle (layerId, styleName) {
         if (!layerId || !styleName) {
             return;
         }
-        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if (layer) {
             layer.removeStyle(styleName);
+            this.notifyLayerUpdate();
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
         const index = layerStyles.findIndex(s => s.name === styleName);
@@ -51,13 +50,12 @@ export class UserStyleService {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
         }
-        this.notifyUpdate();
+        this.trigger('update');
     }
 
-    notifyUpdate (layerId) {
+    notifyLayerUpdate (layerId) {
         const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
-        Oskari.getSandbox().notifyAll(event);
-        this.trigger('update');
+        this.sandbox.notifyAll(event);
     }
 
     getQName () {
@@ -71,20 +69,5 @@ export class UserStyleService {
     getUserStyle (layerId, styleName) {
         const layerStyles = this.getUserStylesForLayer(layerId);
         return layerStyles.find(s => s.name === styleName);
-    }
-
-    /**
-     * @method getCustomStyleEditorForm To get editor ui element for custom style.
-     * @param {Object} styleWithMetadata
-     * @return VisualizationForm's form element
-     */
-    getCustomStyleEditorForm (styleWithMetadata = {}) {
-        const { style, title } = styleWithMetadata;
-        if (!style || !title) {
-            this.visualizationForm = new VisualizationForm({ name: '' });
-        } else {
-            this.visualizationForm.setOskariStyleValues(style, title);
-        }
-        return this.visualizationForm.getForm();
     }
 }
