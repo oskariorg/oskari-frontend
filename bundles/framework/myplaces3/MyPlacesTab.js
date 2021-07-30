@@ -1,3 +1,9 @@
+import ReactDOM from 'react-dom';
+import React, { Fragment } from 'react';
+import { Button } from 'oskari-ui';
+// import { VectorStyleModal } from 'oskari-ui/components/VectorStyle';
+import { MyPlacesStyleForm } from './MyPlacesStyleForm';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
  * Renders the "personal data" myplaces tab.
@@ -93,6 +99,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     this._populatePlaces(categoryId);
                     panel.getContainer().empty();
                     panel.grid.renderTo(panel.getContainer());
+
+                    const modalWrapper = jQuery('<div class="myplaces-modal-wrapper"></div>');
+                    panel.getContainer().append(modalWrapper);
+
+                    const values = categoryHandler.getCategory(categoryId);
+                    const container = jQuery(modalWrapper)[0];
+
+                    ReactDOM.render(
+                        <MyPlacesStyleForm
+                            layer={{ ...values, categoryId: categoryId }}
+                            visibility={ true }
+                            saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
+                            deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
+                        />,
+                        container
+                    );
 
                     var editLink = this.linkTemplate.clone();
                     editLink.addClass('categoryOp');
