@@ -153,6 +153,7 @@ Oskari.registerLocalization(
             },
             "edit": {
                 "title": "Muokkaa karttatasoa",
+                "newtitle": "Karttatason nimi",
                 "save": "Tallenna",
                 "cancel": "Peruuta"
             },

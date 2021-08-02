@@ -1,3 +1,9 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+import { Button } from 'oskari-ui';
+// import { VectorStyleModal } from 'oskari-ui/components/VectorStyle';
+import { MyPlacesStyleForm } from './MyPlacesStyleForm';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -212,10 +218,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
             form.getForm(values);
-            dialog.show(me.loc('categoryform.edit.title'), form.getForm(values), buttons);
-            dialog.moveTo('div.personaldata ul li select', 'right');
+            // dialog.show(me.loc('categoryform.edit.title'), form.getForm(values), buttons);
+            // dialog.moveTo('div.personaldata ul li select', 'right');
             // bind listeners etc. for category form
-            form.start();
+            // form.start();
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
