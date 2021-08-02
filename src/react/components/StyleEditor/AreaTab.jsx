@@ -31,7 +31,7 @@ const areaFills = [
     }
 ];
 
-export const AreaTab = (props) => {
+export const AreaTab = ({oskariStyle}) => {
     return (
         <React.Fragment>
             <Row>
@@ -81,7 +81,7 @@ export const AreaTab = (props) => {
             </Row>
 
             <Preview
-                oskariStyle={ props.oskariStyle }
+                oskariStyle={ oskariStyle }
                 format={ 'area' }
                 areaFills={ areaFills }
             />
