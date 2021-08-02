@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider, Controller } from 'oskari-ui/util';
-import { Message, Button } from 'oskari-ui';
+import { Message, Button, Tooltip } from 'oskari-ui';
 import { VectorStyleModal } from 'oskari-ui/components/VectorStyle';
+import styled from 'styled-components';
+
+const CategoryButton = styled(Button)`
+    margin: 0 10px 0 0;
+`;
 
 const hasValidName = (name) => {
     return name.length > 0;
@@ -10,7 +15,7 @@ const hasValidName = (name) => {
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='MyPlaces3' />;
 
-export const MyPlacesStyleForm = ({layer, saveCategory, deleteCategory}) => {
+export const MyPlacesStyleForm = ({layer, saveCategory, deleteCategory, exportCategory}) => {
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
         currentStyle: layer.style,
@@ -36,12 +41,18 @@ export const MyPlacesStyleForm = ({layer, saveCategory, deleteCategory}) => {
 
     return (
         <LocaleProvider value={{ bundleKey: 'MyPlaces3' }}>
-            <Button onClick={ () => setEditorState({ ...editorState, modalVisibility: true }) }>
+            <CategoryButton onClick={ () => setEditorState({ ...editorState, modalVisibility: true }) }>
                 { getMessage('tab.editCategory') }
-            </Button>
-            <Button onClick={ () => deleteCategory(layer.categoryId) }>
+            </CategoryButton>
+            <CategoryButton onClick={ () => deleteCategory(layer.categoryId) }>
                 { getMessage('tab.deleteCategory') }
-            </Button>
+            </CategoryButton>
+            <Tooltip placement='topLeft' title={ getMessage('tab.export.tooltip') }>
+                <CategoryButton onClick={ () => exportCategory(layer.categoryId) }>
+                    { getMessage('tab.export.title') }
+                </CategoryButton>
+            </Tooltip>
+
             <VectorStyleModal
                 editorState={ editorState }
                 okButtonPros={ 'disabled' }
