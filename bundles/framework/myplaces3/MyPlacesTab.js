@@ -112,40 +112,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                             visibility={ true }
                             saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
                             deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
+                            exportCategory={ (categoryId) => window.location.href = this.instance.getService().getExportCategoryUrl(categoryId) }
                         />,
                         container
                     );
-
-                    var editLink = this.linkTemplate.clone();
-                    editLink.addClass('categoryOp');
-                    editLink.addClass('edit');
-                    editLink.append(this.loc('tab.editCategory'));
-                    editLink.on('click', () => {
-                        sandbox.request(this.instance, editReqBuilder(categoryId));
-                        return false;
-                    });
-                    panel.getContainer().append(editLink);
-
-                    var deleteLink = this.linkTemplate.clone();
-                    deleteLink.addClass('categoryOp');
-                    deleteLink.addClass('delete');
-                    deleteLink.append(this.loc('tab.deleteCategory'));
-                    deleteLink.on('click', () => {
-                        sandbox.request(this.instance, deleteReqBuilder(categoryId));
-                        return false;
-                    });
-                    panel.getContainer().append(deleteLink);
-
-                    const exportLink = this.linkTemplate.clone();
-                    exportLink.addClass('categoryOp');
-                    exportLink.addClass('export');
-                    exportLink.append(this.loc('tab.export.title'));
-                    exportLink.attr('title', this.loc('tab.export.tooltip'));
-                    exportLink.on('click', () => {
-                        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
-                        return false;
-                    });
-                    panel.getContainer().append(exportLink);
                 });
                 this._removeObsoleteCategories(categories);
 
