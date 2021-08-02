@@ -1,9 +1,3 @@
-import ReactDOM from 'react-dom';
-import React from 'react';
-import { Button } from 'oskari-ui';
-// import { VectorStyleModal } from 'oskari-ui/components/VectorStyle';
-import { MyPlacesStyleForm } from './MyPlacesStyleForm';
-
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
