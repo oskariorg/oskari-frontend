@@ -1,5 +1,3 @@
-import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
-
 export class UserStyleService {
     constructor (sandbox) {
         this.styles = new Map();
@@ -8,25 +6,19 @@ export class UserStyleService {
     }
 
     saveUserStyle (layerId, style) {
-        if (!style.name) {
+        if (!style.getName()) {
             // styles are stored only for runtime, use time to get unique name
-            style.name = 's_' + Date.now().toString();
+            style.setName('s_' + Date.now().toString());
         }
-        if (!style.title) {
-            const existing = this.getUserStylesForLayer(layerId);
-            style.title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
-        }
-
-        const { style: featureStyle, title, name } = style;
         const layerStyles = this.getUserStylesForLayer(layerId);
+        if (!style.getTitle()) {
+            style.setTitle(Oskari.getMsg('userstyle', 'defaultName') + ' ' + (layerStyles.length + 1));
+        }
+        const name = style.getName();
         const index = layerStyles.findIndex(s => s.getName() === name);
-
         if (index !== -1) {
-            style = layerStyles[index];
-            style.setTitle(title);
-            style.setFeatureStyle(featureStyle);
+            layerStyles[index] = style;
         } else {
-            style = new VectorStyle(name, title, 'user', { featureStyle });
             layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
@@ -36,7 +28,7 @@ export class UserStyleService {
             layer.addStyle(style);
             layer.selectStyle(name);
             this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
-            this.notifyLayerUpdate();
+            this.notifyLayerUpdate(layerId);
         }
         this.trigger('update');
     }
@@ -48,7 +40,7 @@ export class UserStyleService {
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.removeStyle(name);
-            this.notifyLayerUpdate();
+            this.notifyLayerUpdate(layerId);
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
         const index = layerStyles.findIndex(s => s.getName() === name);
