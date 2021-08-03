@@ -1,4 +1,4 @@
-const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
+import { Style } from './style';
 
 export const DEFAULT_STYLE_NAME = 'default';
 
@@ -8,13 +8,11 @@ export const createDefaultStyle = () => {
 
 export class VectorStyle extends Style {
     constructor (name, title, type = 'normal', styleDef) {
-        super();
+        super(name, title);
         this._type = type; // normal, user, external
         this._featureStyle = {};
         this._optionalStyles = [];
         this._externalDef = null;
-        this.setName(name);
-        this.setTitle(title);
         this.parseStyleDef(styleDef);
     }
 
