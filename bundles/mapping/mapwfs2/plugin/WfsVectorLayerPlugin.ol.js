@@ -196,14 +196,17 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         // Set oskari properties for vector feature service functionalities.
         added.forEach(lyr => {
+            handler.applyZoomBounds(layer, lyr);
             const silent = true;
             lyr.set(LAYER_ID, layer.getId(), silent);
             lyr.set(LAYER_TYPE, layer.getLayerType(), silent);
+            // don't add style for hover layer
             if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
                 lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
             }
+            this.getMapModule().addLayer(lyr, !keepLayerOnTop);
         });
     }
 
@@ -313,6 +316,10 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const style = this.getCurrentStyleFunction(layer);
         olLayers.forEach(lyr => {
+            if (lyr.get(LAYER_HOVER)) {
+                // don't add style for hover layer
+                return;
+            }
             lyr.setStyle(style);
             if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
                 // Trigger features changed to synchronize 3D view

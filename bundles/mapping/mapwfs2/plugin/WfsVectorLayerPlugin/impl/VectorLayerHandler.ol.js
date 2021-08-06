@@ -142,15 +142,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             clusterLayer.set(LAYER_CLUSTER, true, silent);
             olLayers.push(clusterLayer);
         }
-
-        const hoverLayer = this.plugin.vectorFeatureService.createHoverLayer(layer);
-        olLayers.push(hoverLayer);
-
-        olLayers.forEach(olLayer => {
-            this.applyZoomBounds(layer, olLayer);
-            this.plugin.getMapModule().addLayer(olLayer, !keepLayerOnTop);
-        });
-
+        this.plugin.vectorFeatureService.registerHoverLayer(layer);
         this.plugin.setOLMapLayers(layer.getId(), olLayers);
         if (this.plugin.getMapModule().getSupports3D()) {
             this._loadFeaturesForLayer(layer);

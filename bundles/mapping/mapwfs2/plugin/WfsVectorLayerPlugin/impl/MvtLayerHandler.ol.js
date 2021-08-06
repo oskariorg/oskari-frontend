@@ -65,13 +65,13 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             renderMode: 'hybrid',
             source
         });
-        this.applyZoomBounds(layer, vectorTileLayer);
-        this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
-        this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
 
         this._registerLayerEvents(layer.getId(), source);
-
-        return vectorTileLayer;
+        const hoverLayer = this.plugin.vectorFeatureService.registerHoverLayer(layer, source);
+        const olLayers = [vectorTileLayer, hoverLayer];
+        this.plugin.setOLMapLayers(layer.getId(), olLayers);
+        return olLayers;
+        // TODO: fix layer opacity
     }
 
     _getMinZoom (config) {

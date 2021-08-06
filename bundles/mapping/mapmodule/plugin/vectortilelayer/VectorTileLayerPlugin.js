@@ -209,7 +209,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         zoomLevelHelper.setOLZoomLimits(vectorTileLayer, layer.getMinScale(), layer.getMaxScale());
 
         const vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
-        const hoverLayer = vectorFeatureService.createHoverLayer(layer, vectorTileLayer.getSource());
+        const hoverLayer = vectorFeatureService.registerHoverLayer(layer, vectorTileLayer.getSource());
         const olLayers = [vectorTileLayer, hoverLayer];
         olLayers.forEach(olLayer => {
             // Properties id and type are being used in VectorFeatureService.
