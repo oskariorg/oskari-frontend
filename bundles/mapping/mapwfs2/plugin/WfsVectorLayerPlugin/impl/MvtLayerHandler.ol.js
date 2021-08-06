@@ -5,7 +5,7 @@ import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
-import { WFS_ID_KEY } from '../util/props';
+import { WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
 
@@ -65,13 +65,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             renderMode: 'hybrid',
             source
         });
-        this.applyZoomBounds(layer, vectorTileLayer);
-        this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
-        this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
 
         this._registerLayerEvents(layer.getId(), source);
-
-        return vectorTileLayer;
+        const hoverLayer = this.plugin.vectorFeatureService.registerHoverLayer(layer, source);
+        const olLayers = [vectorTileLayer, hoverLayer];
+        this.plugin.setOLMapLayers(layer.getId(), olLayers);
+        return olLayers;
     }
 
     _getMinZoom (config) {
@@ -131,6 +130,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             })
         }));
     }
+
     _getMinScale () {
         if (!this.minZoomLevel) {
             return;
