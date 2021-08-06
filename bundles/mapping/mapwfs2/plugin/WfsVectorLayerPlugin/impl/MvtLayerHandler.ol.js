@@ -71,7 +71,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         const olLayers = [vectorTileLayer, hoverLayer];
         this.plugin.setOLMapLayers(layer.getId(), olLayers);
         return olLayers;
-        // TODO: fix layer opacity
     }
 
     _getMinZoom (config) {
