@@ -62,13 +62,12 @@ export const StyleEditor = (props) => {
     const styleExceptionHandler = (style) => {
         // if fill pattern is set to null, set color as empty
         if (typeof style.fill.area.pattern !== 'undefined') {
-            if (style.fill.area.pattern === 'null') {
+            if (style.fill.area.pattern === 'transparent') {
                 style.fill.color = '';
-            } else if (style.fill.area.pattern !== 'null' && style.fill.color === '') {
+            } else if (style.fill.area.pattern !== 'transparent' && style.fill.color === '') {
                 style.fill.color = OSKARI_BLANK_STYLE.fill.color;
             }
         }
-
 
         return style;
     };
