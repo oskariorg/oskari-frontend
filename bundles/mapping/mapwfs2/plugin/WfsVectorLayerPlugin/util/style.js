@@ -208,7 +208,7 @@ export const styleGenerator = (styleFactory, layer) => {
         styles.default = styleFactory(defaults.style);
         styles.selected = styleFactory(merge(defaults.style, defaults.selected));
     }
-    const optionalStyles = style.getOptionalStyle();
+    const optionalStyles = style.getOptionalStyles();
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
             const optional = {
