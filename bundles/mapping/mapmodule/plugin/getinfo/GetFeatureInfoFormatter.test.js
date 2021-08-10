@@ -154,6 +154,21 @@ describe('GetInfoPlugin', () => {
                     <span>data</span><br class="innerValueBr">
                 </span>`));
             });
+            test('renders object arrays', () => {
+                const result = plugin.formatters.json([{
+                    test: 'testing',
+                    one: 1,
+                    two: 2,
+                    data: 'data'}], dummyLocale);
+                expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
+                    <span>
+                        test:<span>testing</span><brclass="innerValueBr">
+                        one:<span>1</span><brclass="innerValueBr">
+                        two:<span>2</span><brclass="innerValueBr">
+                        data:<span>data</span><brclass="innerValueBr">
+                    </span><brclass="innerValueBr">
+                </span>`));
+            });
             
         });
     });

@@ -19,7 +19,7 @@ const jsonFormatter =  (pValue, pluginLocale = {}) => {
             const innerValue = jsonFormatter(pValue[subAttrName], pluginLocale);
             if (innerValue) {
                 value.append(pluginLocale[subAttrName] || subAttrName + ': ');
-                value.append(Oskari.util.sanitize(innerValue));
+                value.append(innerValue);
                 value.append('<br class="innerValueBr" />');
             }
         });
