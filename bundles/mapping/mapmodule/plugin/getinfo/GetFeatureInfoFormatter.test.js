@@ -144,12 +144,17 @@ describe('GetInfoPlugin', () => {
                 const scriptTags = result.find('script');
                 expect(scriptTags.length).toEqual(0);
             });
-            /*
-            test('renders arrays', () => {
+            
+            test('renders value arrays', () => {
                 const result = plugin.formatters.json(['testing', 1, 2, 'data'], dummyLocale);
-                expect(result.outerHTML()).toEqual('<span>tadaa</span>');
+                expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
+                    <span>testing</span><br class="innerValueBr">
+                    <span>1</span><br class="innerValueBr">
+                    <span>2</span><br class="innerValueBr">
+                    <span>data</span><br class="innerValueBr">
+                </span>`));
             });
-            */
+            
         });
     });
     describe('_formatWFSFeaturesForInfoBox', () => {

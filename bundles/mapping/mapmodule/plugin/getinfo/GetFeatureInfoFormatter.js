@@ -1,6 +1,39 @@
 import { getFormatter } from './ValueFormatters';
 const ID_SKIP_LABEL = '$SKIP$__';
 
+const jsonFormatter =  (pValue, pluginLocale = {}) => {
+    if (!pValue) {
+        return;
+    }
+    const value = jQuery('<span></span>');
+    // if value is an array -> format it first
+    // TODO: maybe some nicer formatting?
+    if (Array.isArray(pValue)) {
+        const innerValues = pValue.map(arrayItem => jsonFormatter(arrayItem, pluginLocale));
+        innerValues.forEach(itemValue => {
+            value.append(itemValue);
+            value.append('<br class="innerValueBr" />');
+        });
+    } else if (typeof pValue === 'object') {
+        Object.keys(pValue).forEach(subAttrName => {
+            const innerValue = jsonFormatter(pValue[subAttrName], pluginLocale);
+            if (innerValue) {
+                value.append(pluginLocale[subAttrName] || subAttrName + ': ');
+                value.append(Oskari.util.sanitize(innerValue));
+                value.append('<br class="innerValueBr" />');
+            }
+        });
+    } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
+        var link = jQuery('<a target="_blank" rel="noopener"></a>');
+        link.attr('href', pValue);
+        link.text(pValue);
+        value.append(link);
+    } else {
+        value.text(pValue);
+    }
+    return value;
+}
+
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
         wrapper: '<div></div>',
@@ -33,10 +66,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @return {jQuery} formatted HMTL
          */
         json: function (pValue, pluginLocale) {
-            if (!pValue) {
-                return;
-            }
-            var value = jQuery('<span></span>');
             let myLoc = pluginLocale;
             if (!myLoc) {
                 // Get localized name for attribute
@@ -44,39 +73,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 const pluginLoc = this.getMapModule().getLocalization('plugin', true) || {};
                 myLoc = pluginLoc[this._name] || {};
             }
-            // if value is an array -> format it first
-            // TODO: maybe some nicer formatting?
-            if (Array.isArray(pValue)) {
-                var i,
-                    obj,
-                    objAttr,
-                    innerValue,
-                    localizedAttr;
-
-                for (i = 0; i < pValue.length; i += 1) {
-                    obj = pValue[i];
-                    for (objAttr in obj) {
-                        if (obj.hasOwnProperty(objAttr)) {
-                            innerValue = this.formatters.json(obj[objAttr], myLoc);
-                            if (innerValue) {
-                                localizedAttr = myLoc[objAttr];
-                                value.append(localizedAttr || objAttr);
-                                value.append(': ');
-                                value.append(Oskari.util.sanitize(innerValue));
-                                value.append('<br class="innerValueBr" />');
-                            }
-                        }
-                    }
-                }
-            } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
-                var link = jQuery('<a target="_blank" rel="noopener"></a>');
-                link.attr('href', pValue);
-                link.text(pValue);
-                value.append(link);
-            } else {
-                value.text(pValue);
-            }
-            return value;
+            return jsonFormatter(pValue, myLoc);
         },
         /**
          * Checks if the given string is a html document
