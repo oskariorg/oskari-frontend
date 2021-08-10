@@ -144,7 +144,6 @@ describe('GetInfoPlugin', () => {
                 const scriptTags = result.find('script');
                 expect(scriptTags.length).toEqual(0);
             });
-            
             test('renders value arrays', () => {
                 const result = plugin.formatters.json(['testing', 1, 2, 'data'], dummyLocale);
                 expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
@@ -155,11 +154,13 @@ describe('GetInfoPlugin', () => {
                 </span>`));
             });
             test('renders object arrays', () => {
-                const result = plugin.formatters.json([{
-                    test: 'testing',
-                    one: 1,
-                    two: 2,
-                    data: 'data'}], dummyLocale);
+                const result = plugin.formatters.json([
+                    {
+                        test: 'testing',
+                        one: 1,
+                        two: 2,
+                        data: 'data'
+                    }], dummyLocale);
                 expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
                     <span>
                         test:<span>testing</span><brclass="innerValueBr">
@@ -169,7 +170,6 @@ describe('GetInfoPlugin', () => {
                     </span><brclass="innerValueBr">
                 </span>`));
             });
-            
         });
     });
     describe('_formatWFSFeaturesForInfoBox', () => {
@@ -246,16 +246,16 @@ describe('GetInfoPlugin', () => {
         });
         test('test formatting for JSON response', () => {
             const content = {
-                "layerId": 1888,
-                "type": "arcgis93layer",
-                "presentationType": "JSON",
-                "content": {
-                    "parsed": [{
-                        "Vaesto15Lkm": 1230293,
-                        "VesiPAla_km2": 21.4067,
-                        "TaajNimi": "Helsingin kt.",
-                        "Vaesto00Lkm": 1048039,
-                        "TKTaajTunnus": "0001"
+                layerId: 1888,
+                type: 'arcgis93layer',
+                presentationType: 'JSON',
+                content: {
+                    parsed: [{
+                        Vaesto15Lkm: 1230293,
+                        VesiPAla_km2: 21.4067,
+                        TaajNimi: 'Helsingin kt.',
+                        Vaesto00Lkm: 1048039,
+                        TKTaajTunnus: '0001'
                     }]
                 }
             };

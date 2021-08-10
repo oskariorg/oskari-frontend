@@ -1,7 +1,7 @@
 import { getFormatter } from './ValueFormatters';
 const ID_SKIP_LABEL = '$SKIP$__';
 
-const jsonFormatter =  (pValue, pluginLocale = {}) => {
+const jsonFormatter = (pValue, pluginLocale = {}) => {
     if (!pValue) {
         return;
     }
@@ -32,7 +32,7 @@ const jsonFormatter =  (pValue, pluginLocale = {}) => {
         value.text(pValue);
     }
     return value;
-}
+};
 
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
