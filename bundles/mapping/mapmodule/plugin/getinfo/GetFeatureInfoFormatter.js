@@ -32,11 +32,18 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
          * @param {pValue} datum response data to format
          * @return {jQuery} formatted HMTL
          */
-        json: function (pValue) {
+        json: function (pValue, pluginLocale) {
             if (!pValue) {
                 return;
             }
             var value = jQuery('<span></span>');
+            let myLoc = pluginLocale;
+            if (!myLoc) {
+                // Get localized name for attribute
+                // TODO this should only apply to omat tasot?
+                const pluginLoc = this.getMapModule().getLocalization('plugin', true) || {};
+                myLoc = pluginLoc[this._name] || {};
+            }
             // if value is an array -> format it first
             // TODO: maybe some nicer formatting?
             if (Array.isArray(pValue)) {
@@ -44,20 +51,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     obj,
                     objAttr,
                     innerValue,
-                    pluginLoc,
-                    myLoc,
                     localizedAttr;
 
                 for (i = 0; i < pValue.length; i += 1) {
                     obj = pValue[i];
                     for (objAttr in obj) {
                         if (obj.hasOwnProperty(objAttr)) {
-                            innerValue = this.formatters.json(obj[objAttr]);
+                            innerValue = this.formatters.json(obj[objAttr], myLoc);
                             if (innerValue) {
-                                // Get localized attribute name
-                                // TODO this should only apply to omat tasot?
-                                pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                                myLoc = pluginLoc[this._name];
                                 localizedAttr = myLoc[objAttr];
                                 value.append(localizedAttr || objAttr);
                                 value.append(': ');
@@ -200,14 +201,21 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @param {Object} datum response data to format
      * @return {jQuery} formatted HMTL
      */
-    _formatGfiDatum: function (datum) {
+    _formatGfiDatum: function (datum, pluginLocale) {
         // FIXME this function is too complicated, chop it to pieces
         if (!datum.presentationType) {
             return null;
         }
 
-        var me = this,
-            response = me.template.wrapper.clone();
+        const me = this;
+        let response = me.template.wrapper.clone();
+        let myLoc = pluginLocale;
+        if (!myLoc) {
+            // Get localized name for attribute
+            // TODO this should only apply to omat tasot?
+            const pluginLoc = this.getMapModule().getLocalization('plugin', true) || {};
+            myLoc = pluginLoc[this._name] || {};
+        }
 
         if (datum.presentationType === 'JSON' || (datum.content && datum.content.parsed)) {
             var even = false,
@@ -220,8 +228,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 value,
                 row,
                 labelCell,
-                pluginLoc,
-                myLoc,
                 localizedAttr,
                 valueCell;
 
@@ -238,7 +244,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     if (!jsonData.hasOwnProperty(attr)) {
                         continue;
                     }
-                    value = me.formatters.json(jsonData[attr]);
+                    value = me.formatters.json(jsonData[attr], myLoc);
                     if (!value) {
                         continue;
                     }
@@ -251,9 +257,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
                     labelCell = me.template.tableCell.clone();
                     // Get localized name for attribute
-                    // TODO this should only apply to omat tasot?
-                    pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                    myLoc = pluginLoc[this._name];
                     localizedAttr = myLoc[attr];
                     labelCell.append(localizedAttr || attr);
                     row.append(labelCell);

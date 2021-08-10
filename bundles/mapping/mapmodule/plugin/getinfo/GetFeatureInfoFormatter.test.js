@@ -118,6 +118,38 @@ describe('GetInfoPlugin', () => {
                 expect(scriptTags.length).toEqual(0);
             });
         });
+        describe('json', () => {
+            const dummyLocale = {};
+            test('is function', () => {
+                expect(typeof plugin.formatters.json).toEqual('function');
+            });
+            test('returns jQuery object', () => {
+                const result = plugin.formatters.json(235, dummyLocale);
+                expect(result instanceof jQuery).toEqual(true);
+            });
+            test('wraps content to additional div', () => {
+                const result = plugin.formatters.json(`My data`, dummyLocale);
+                expect(result.outerHTML()).toEqual('<span>My data</span>');
+
+                const result2 = plugin.formatters.json(`<div></div>`, dummyLocale);
+                expect(removeWhitespace(result2.outerHTML())).toEqual('<span><div></div></span>');
+            });
+            /*
+            test('removes script tags', () => {
+                const result = plugin.formatters.json(`
+                    <div>
+                        <script>alert('Bazinga!')</script>
+                    </div>
+                `, dummyLocale);
+                const scriptTags = result.find('script');
+                expect(scriptTags.length).toEqual(0);
+            });
+            test('renders arrays', () => {
+                const result = plugin.formatters.json(['testing', 1, 2, 'data'], dummyLocale);
+                expect(result.outerHTML()).toEqual('<span>tadaa</span>');
+            });
+            */
+        });
     });
     describe('_formatWFSFeaturesForInfoBox', () => {
         test('is function', () => {
@@ -183,6 +215,38 @@ describe('GetInfoPlugin', () => {
             const html = result[0].markup.outerHTML();
             // should skip "Image" label" and write colspan=2. Should have <img></img> but outerHTML() probably messes it up
             expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr><tr><td colspan="2"><img class="oskari_gfi_img" src="http://test.domain/test.png"></td></tr></table>`);
+        });
+    });
+
+    describe('_formatGfiDatum', () => {
+        const dummyLocale = {};
+        test('is function', () => {
+            expect(typeof plugin._formatGfiDatum).toEqual('function');
+        });
+        test('reproduce erronous html escaping', () => {
+            const content = {
+                "layerId": 1888,
+                "type": "arcgis93layer",
+                "presentationType": "JSON",
+                "content": {
+                    "parsed": [{
+                        "Vaesto15Lkm": 1230293,
+                        "VesiPAla_km2": 21.4067,
+                        "TaajNimi": "Helsingin kt.",
+                        "Vaesto00Lkm": 1048039,
+                        "TKTaajTunnus": "0001"
+                    }]
+                }
+            };
+            const result = plugin._formatGfiDatum(content, dummyLocale);
+            expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<div>
+                <table class="getinforesult_table">
+                    <tr class="odd"><td>Vaesto15Lkm</td><td>[object Object]</td></tr>
+                    <tr><td>VesiPAla_km2</td><td>[object Object]</td></tr>
+                    <tr class="odd"><td>TaajNimi</td><td>[object Object]</td></tr>
+                    <tr><td>Vaesto00Lkm</td><td>[object Object]</td></tr>
+                    <tr class="odd"><td>TKTaajTunnus</td><td>[object Object]</td></tr>
+                </table></div>`));
         });
     });
 });
