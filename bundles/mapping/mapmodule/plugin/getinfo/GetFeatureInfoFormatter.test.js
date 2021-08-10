@@ -127,14 +127,14 @@ describe('GetInfoPlugin', () => {
                 const result = plugin.formatters.json(235, dummyLocale);
                 expect(result instanceof jQuery).toEqual(true);
             });
-            test('wraps content to additional div', () => {
+            test('wraps content to additional span', () => {
                 const result = plugin.formatters.json(`My data`, dummyLocale);
                 expect(result.outerHTML()).toEqual('<span>My data</span>');
-
-                const result2 = plugin.formatters.json(`<div></div>`, dummyLocale);
-                expect(removeWhitespace(result2.outerHTML())).toEqual('<span><div></div></span>');
             });
-            /*
+            test('does links', () => {
+                const result = plugin.formatters.json(`https://my.domain`, dummyLocale);
+                expect(result.outerHTML()).toEqual('<span><a target="_blank" rel="noopener" href="https://my.domain">https://my.domain</a></span>');
+            });
             test('removes script tags', () => {
                 const result = plugin.formatters.json(`
                     <div>
@@ -144,6 +144,7 @@ describe('GetInfoPlugin', () => {
                 const scriptTags = result.find('script');
                 expect(scriptTags.length).toEqual(0);
             });
+            /*
             test('renders arrays', () => {
                 const result = plugin.formatters.json(['testing', 1, 2, 'data'], dummyLocale);
                 expect(result.outerHTML()).toEqual('<span>tadaa</span>');
@@ -223,7 +224,7 @@ describe('GetInfoPlugin', () => {
         test('is function', () => {
             expect(typeof plugin._formatGfiDatum).toEqual('function');
         });
-        test('reproduce erronous html escaping', () => {
+        test('test formatting for JSON response', () => {
             const content = {
                 "layerId": 1888,
                 "type": "arcgis93layer",
@@ -241,11 +242,11 @@ describe('GetInfoPlugin', () => {
             const result = plugin._formatGfiDatum(content, dummyLocale);
             expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<div>
                 <table class="getinforesult_table">
-                    <tr class="odd"><td>Vaesto15Lkm</td><td>[object Object]</td></tr>
-                    <tr><td>VesiPAla_km2</td><td>[object Object]</td></tr>
-                    <tr class="odd"><td>TaajNimi</td><td>[object Object]</td></tr>
-                    <tr><td>Vaesto00Lkm</td><td>[object Object]</td></tr>
-                    <tr class="odd"><td>TKTaajTunnus</td><td>[object Object]</td></tr>
+                    <tr class="odd"><td>Vaesto15Lkm</td><td><span>1230293</span></td></tr>
+                    <tr><td>VesiPAla_km2</td><td><span>21.4067</span></td></tr>
+                    <tr class="odd"><td>TaajNimi</td><td><span>Helsingin kt.</span></td></tr>
+                    <tr><td>Vaesto00Lkm</td><td><span>1048039</span></td></tr>
+                    <tr class="odd"><td>TKTaajTunnus</td><td><span>0001</span></td></tr>
                 </table></div>`));
         });
     });
