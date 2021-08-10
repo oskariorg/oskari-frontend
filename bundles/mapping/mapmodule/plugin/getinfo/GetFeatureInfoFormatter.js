@@ -62,7 +62,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                                 localizedAttr = myLoc[objAttr];
                                 value.append(localizedAttr || objAttr);
                                 value.append(': ');
-                                value.append(innerValue);
+                                value.append(Oskari.util.sanitize(innerValue));
                                 value.append('<br class="innerValueBr" />');
                             }
                         }
@@ -71,10 +71,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
                 var link = jQuery('<a target="_blank" rel="noopener"></a>');
                 link.attr('href', pValue);
-                link.append(pValue);
+                link.text(pValue);
                 value.append(link);
             } else {
-                value.append(pValue);
+                value.text(pValue);
             }
             return value;
         },
@@ -261,7 +261,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     labelCell.append(localizedAttr || attr);
                     row.append(labelCell);
                     valueCell = me.template.tableCell.clone();
-                    valueCell.append(Oskari.util.sanitize(value));
+                    valueCell.append(value);
                     row.append(valueCell);
                     table.append(row);
                 }
