@@ -35,10 +35,8 @@ const markers = [
     }
 ];
 
-const ColorPickerGroup = styled.div`
-`;
 
-export const PointTab = (props) => {
+export const PointTab = ({ oskariStyle }) => {
     return (
         <React.Fragment>
             <Row>
@@ -98,7 +96,7 @@ export const PointTab = (props) => {
 
             <Row>
                 <Preview
-                    oskariStyle={ props.oskariStyle }
+                    oskariStyle={ oskariStyle }
                     format={ 'point' }
                     markers={ markers }
                 />
