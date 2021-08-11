@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OSKARI_BLANK_STYLE } from './OskariDefaultStyle';
+import { FILL_STYLE_FALLBACK } from './constants';
 
 // Size for preview svg
 const previewSize = '80px';
@@ -167,7 +168,10 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
     previewAttributes.fillColor = oskariStyle.fill.color;
     previewAttributes.fill = 'url(#' + defaultPatternId + ')';
 
-    oskariStyle.fill.area.pattern = oskariStyle.fill.area.pattern === -1 ? 'null' : oskariStyle.fill.area.pattern; // fallback to old way if "empty" fill is marked as -1
+    // Fallback for old way of marking fill patterns. -1 was used for no-fill. Replace it with 'transparent' value from FILL_STYLE_FALLBACK constant array.
+    if (!isNaN(oskariStyle.fill.area.pattern)) {
+        oskariStyle.fill.area.pattern = oskariStyle.fill.area.pattern === -1 ? FILL_STYLE_FALLBACK[4] : FILL_STYLE_FALLBACK[oskariStyle.fill.area.pattern];
+    }
 
     const patternPath = _parsePattern(areaFills.find(pattern => pattern.name === oskariStyle.fill.area.pattern));
     previewAttributes.pattern = _composeSvgPattern(patternPath); // this has to be set after fillColor
