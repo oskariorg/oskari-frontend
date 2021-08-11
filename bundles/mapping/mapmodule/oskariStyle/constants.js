@@ -45,12 +45,12 @@ export const EFFECT = {
 };
 
 export const FILL_STYLE = {
-    THIN_DIAGONAL: 0,
-    THICK_DIAGONAL: 1,
-    THIN_HORIZONTAL: 2,
-    THICK_HORIZONTAL: 3,
-    TRANSPAREN: 4,
-    SOLID: 5
+    THIN_DIAGONAL: 'thin_diagonal',
+    THICK_DIAGONAL: 'thick_diagonal',
+    THIN_HORIZONTAL: 'thin_horizontal',
+    THICK_HORIZONTAL: 'thick_horizontal',
+    TRANSPAREN: 'transparent',
+    SOLID: 'solid'
 };
 
 export const FILTER = {
