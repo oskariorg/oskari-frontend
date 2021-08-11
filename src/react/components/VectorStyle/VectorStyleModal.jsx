@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { VectorNameInput } from 'oskari-ui/components/VectorStyle';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
@@ -28,3 +28,12 @@ export const VectorStyleModal = LocaleConsumer(({editorState, onCancel, onModalO
         </Modal>
     );
 });
+
+VectorStyleModal.propTypes = {
+    editorState: PropTypes.object.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onModalOk: PropTypes.func.isRequired,
+    setEditorState: PropTypes.func.isRequired,
+    nameValidation: PropTypes.func.isRequired,
+    setName: PropTypes.func.isRequired,
+};
