@@ -1,7 +1,5 @@
 import ReactDOM from 'react-dom';
-import React, { Fragment } from 'react';
-import { Button } from 'oskari-ui';
-// import { VectorStyleModal } from 'oskari-ui/components/VectorStyle';
+import React from 'react';
 import { MyPlacesStyleForm } from './MyPlacesStyleForm';
 
 /**
@@ -110,9 +108,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                         <MyPlacesStyleForm
                             layer={{ ...values, categoryId: categoryId }}
                             visibility={ true }
-                            saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
+                            saveCategory={ (style) => { categoryHandler.saveCategory({ ...values, ...style }); console.log(style); }}
                             deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
-                            exportCategory={ (categoryId) => window.location.href = this.instance.getService().getExportCategoryUrl(categoryId) }
+                            exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
                         />,
                         container
                     );

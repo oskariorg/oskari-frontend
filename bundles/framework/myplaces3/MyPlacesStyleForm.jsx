@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider, Controller } from 'oskari-ui/util';
 import { Message, Button, Tooltip } from 'oskari-ui';
@@ -15,7 +15,7 @@ const hasValidName = (name) => {
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='MyPlaces3' />;
 
-export const MyPlacesStyleForm = ({layer, saveCategory, deleteCategory, exportCategory}) => {
+export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportCategory }) => {
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
         currentStyle: layer.style,
@@ -27,7 +27,6 @@ export const MyPlacesStyleForm = ({layer, saveCategory, deleteCategory, exportCa
 
     const saveStyle = () => saveCategory({ categoryId: layer.categoryId, style: editorState.currentStyle, name: editorState.styleName });
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
-    const resetNewStyle = () => setEditorState({ ...editorState, styleId: '', styleName: '', originalName: '', currentStyle: {}, modalVisibility: true });
     const onModalOk = () => {
         if (hasValidName(editorState.styleName)) {
             saveStyle();
