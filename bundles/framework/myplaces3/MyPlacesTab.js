@@ -77,7 +77,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
              */
             'MyPlaces.MyPlacesChangedEvent': function () {
                 var sandbox = this.instance.sandbox;
-                var editReqBuilder = Oskari.requestBuilder('MyPlaces.EditCategoryRequest');
                 var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
                 var categoryHandler = this.instance.getCategoryHandler();
                 const categories = categoryHandler.getAllCategories();
