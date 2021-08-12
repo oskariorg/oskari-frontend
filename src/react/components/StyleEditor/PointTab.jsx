@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
 import { Form, Row, Col } from 'antd';
-import styled from 'styled-components';
 
 const markers = [
     {
@@ -34,7 +33,6 @@ const markers = [
         data: '<svg width="32" height="32"><path fill="#000000" stroke="#000000" d="m 19.280933,16.92943 c 0,0 0,-10.8984403 0,-10.8984403 0,0 -6.5625,0 -6.5625,0 0,0 0,10.8984403 0,10.8984403 0,0 -4.5703104,0 -4.5703104,0 0,0 7.8515604,8.78906 7.8515604,8.78906 0,0 7.85156,-8.78906 7.85156,-8.78906 0,0 -4.57031,0 -4.57031,0 0,0 0,0 0,0"/></svg>'
     }
 ];
-
 
 export const PointTab = ({ oskariStyle }) => {
     return (
