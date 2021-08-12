@@ -40,7 +40,7 @@ export const LINE_STYLES = {
     ]
 };
 
-const COLORS = [
+const COLOR_SELECTOR_COLORS = [
     '#ffffff',
     '#cccccc',
     '#818282',
@@ -58,7 +58,8 @@ const COLORS = [
     '#ffff00',
 ];
 
-export const PRE_DEFINED_COLORS = COLORS.map((color) => {
+// Make array of inline SVG for pre-defined color block
+export const PRE_DEFINED_COLORS = COLOR_SELECTOR_COLORS.map((color) => {
     return {
         name: color,
         data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="32" height="32" fill="' + color + '" /></svg>'
