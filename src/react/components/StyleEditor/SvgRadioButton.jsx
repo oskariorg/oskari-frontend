@@ -8,6 +8,18 @@ const RadioIcon = styled(Radio.Button)`
     margin: 0 7px 10px 0;
     padding: 0;
     width: 34px;
+
+    &::before {
+        display: none !important;
+    }
+
+    & {
+        border: 1px solid #d9d9d9
+    }
+
+    .ant-radio-button-wrapper-checked {
+        border-left: 1px solid;
+    }
 `;
 
 /**
