@@ -68,5 +68,8 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
 
 MyPlacesStyleForm.propTypes = {
     layer: PropTypes.object.isRequired,
+    saveCategory: PropTypes.func.isRequired,
+    deleteCategory: PropTypes.func.isRequired,
+    exportCategory: PropTypes.func.isRequired,
     controller: PropTypes.instanceOf(Controller)
 };

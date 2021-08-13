@@ -1,19 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { VectorNameInput } from 'oskari-ui/components/VectorStyle';
-import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Message, Modal } from 'oskari-ui';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
-export const VectorStyleModal = LocaleConsumer(({editorState, onCancel, onModalOk, setEditorState, nameValidation, setName}) => {
+export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorState, nameValidation, setName, okText, cancelText }) => {
     return (
         <Modal
             visible={ editorState.modalVisibility }
             okButtonPros={ 'disabled' }
             onOk={ () => onModalOk() }
             onCancel={ onCancel }
-            cancelText={ <Message messageKey="cancel" /> }
-            okText={ <Message messageKey="save" /> }
+            cancelText={ cancelText }
+            okText={ okText }
         >
             <VectorNameInput
                 styleName={ editorState.styleName }
@@ -27,7 +26,7 @@ export const VectorStyleModal = LocaleConsumer(({editorState, onCancel, onModalO
             />
         </Modal>
     );
-});
+};
 
 VectorStyleModal.propTypes = {
     editorState: PropTypes.object.isRequired,
@@ -36,4 +35,6 @@ VectorStyleModal.propTypes = {
     setEditorState: PropTypes.func.isRequired,
     nameValidation: PropTypes.func.isRequired,
     setName: PropTypes.func.isRequired,
+    okText: PropTypes.instanceOf(Message).isRequired,
+    cancelText: PropTypes.instanceOf(Message).isRequired
 };
