@@ -49,7 +49,7 @@ export const FILL_STYLE = {
     THICK_DIAGONAL: 'thick_diagonal',
     THIN_HORIZONTAL: 'thin_horizontal',
     THICK_HORIZONTAL: 'thick_horizontal',
-    TRANSPAREN: 'transparent',
+    TRANSPARENT: 'transparent',
     SOLID: 'solid'
 };
 
