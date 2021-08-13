@@ -13,8 +13,6 @@ const hasValidName = (name) => {
     return name.length > 0;
 };
 
-const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='MyPlaces3' />;
-
 export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportCategory }) => {
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
@@ -41,14 +39,15 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
     return (
         <LocaleProvider value={{ bundleKey: 'MyPlaces3' }}>
             <CategoryButton onClick={ () => setEditorState({ ...editorState, modalVisibility: true }) }>
-                { getMessage('tab.editCategory') }
+                <Message messageKey='tab.editCategory' />
             </CategoryButton>
             <CategoryButton onClick={ () => deleteCategory(layer.categoryId) }>
-                { getMessage('tab.deleteCategory') }
+                <Message messageKey='tab.deleteCategory' />
+
             </CategoryButton>
-            <Tooltip placement='topLeft' title={ getMessage('tab.export.tooltip') }>
+            <Tooltip placement='topLeft' title={ <Message messageKey='tab.export.tooltip' /> }>
                 <CategoryButton onClick={ () => exportCategory(layer.categoryId) }>
-                    { getMessage('tab.export.title') }
+                    <Message messageKey='tab.export.title' />
                 </CategoryButton>
             </Tooltip>
 
@@ -57,8 +56,8 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
                 okButtonPros={ 'disabled' }
                 onModalOk={ onModalOk }
                 onCancel={ () => onModalCancel() }
-                cancelText={ <Message messageKey="cancel" /> }
-                okText={ <Message messageKey="save" /> }
+                cancelText={ <Message messageKey='buttons.cancel' /> }
+                okText={ <Message messageKey='buttons.save' /> }
                 nameValidation={ hasValidName }
                 setName={ setName }
                 setEditorState={ setEditorState }
