@@ -9,10 +9,10 @@ const InputGroup = styled.div`
     }
 `;
 
-export const VectorNameInput = ({ styleName = '', onChange, isValid = true }) => {
+export const VectorNameInput = ({ styleName = '', onChange, isValid = true, nameFieldHeader }) => {
     return (
         <InputGroup>
-            <Message messageKey='styles.vector.name' />
+            { nameFieldHeader }
             <TextInput
                 value={ styleName }
                 onChange={ (event) => onChange(event.target.value) }
@@ -25,5 +25,6 @@ export const VectorNameInput = ({ styleName = '', onChange, isValid = true }) =>
 VectorNameInput.propTypes = {
     onChange: PropTypes.func.isRequired,
     isValid: PropTypes.bool,
-    styleName: PropTypes.string
+    styleName: PropTypes.string,
+    nameFieldHeader: PropTypes.node
 };

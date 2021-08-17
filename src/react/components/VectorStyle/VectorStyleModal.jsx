@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { VectorNameInput } from 'oskari-ui/components/VectorStyle';
+import { VectorNameInput } from 'oskari-ui/components/VectorStyle/VectorNameInput';
 import { Message, Modal } from 'oskari-ui';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
@@ -18,6 +18,7 @@ export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorSt
                 styleName={ editorState.styleName }
                 isValid={ nameValidation(editorState.styleName) }
                 onChange={ setName }
+                nameFieldHeader={ <Message messageKey={ 'categoryform.name.label' } /> }
             />
 
             <StyleEditor
