@@ -35,6 +35,6 @@ VectorStyleModal.propTypes = {
     setEditorState: PropTypes.func.isRequired,
     nameValidation: PropTypes.func.isRequired,
     setName: PropTypes.func.isRequired,
-    okText: PropTypes.instanceOf(Message).isRequired,
-    cancelText: PropTypes.instanceOf(Message).isRequired
+    okText: PropTypes.node,
+    cancelText: PropTypes.node
 };

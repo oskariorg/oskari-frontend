@@ -43,7 +43,6 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
             </CategoryButton>
             <CategoryButton onClick={ () => deleteCategory(layer.categoryId) }>
                 <Message messageKey='tab.deleteCategory' />
-
             </CategoryButton>
             <Tooltip placement='topLeft' title={ <Message messageKey='tab.export.tooltip' /> }>
                 <CategoryButton onClick={ () => exportCategory(layer.categoryId) }>
