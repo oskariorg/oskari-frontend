@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             // override url to one provided by server since the layer might be proxied
             options.urls = [layer.getLayerUrl()];
         }
-        // allows layer.options.wrapX to be passed to source. 
+        // allows layer.options.wrapX to be passed to source.
         // On OL 6.4.3 it's always false from optionsFromCapabilities()
         // On 6.6.1 it appears to be correct and this line could be removed
         options.wrapX = !!config.wrapX;
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     }],
                     Style: layerCapabilities.styles.map(s => {
                         return {
-                            "Identifier": s.name
+                            Identifier: s.name
                         };
                     }),
                     ResourceURL: layerCapabilities.resourceUrls.map(item => {
@@ -164,13 +164,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     SupportedCRS: tileMatrixSet.projection,
                     TileMatrix: Object.values(tileMatrixSet.matrixIds).map(item => {
                         return {
-                                Identifier: item.identifier,
-                                MatrixWidth: item.matrixWidth,
-                                MatrixHeight: item.matrixHeight,
-                                ScaleDenominator: item.scaleDenominator,
-                                TopLeftCorner: [item.topLeftCorner.lon, item.topLeftCorner.lat],
-                                TileWidth: item.tileWidth,
-                                TileHeight: item.tileHeight
+                            Identifier: item.identifier,
+                            MatrixWidth: item.matrixWidth,
+                            MatrixHeight: item.matrixHeight,
+                            ScaleDenominator: item.scaleDenominator,
+                            TopLeftCorner: [item.topLeftCorner.lon, item.topLeftCorner.lat],
+                            TileWidth: item.tileWidth,
+                            TileHeight: item.tileHeight
                         };
                     })
                 }]
