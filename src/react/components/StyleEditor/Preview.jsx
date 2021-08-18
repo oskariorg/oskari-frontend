@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { OSKARI_BLANK_STYLE } from './OskariDefaultStyle';
-import { FILL_STYLE_FALLBACK } from './constants';
 
 // Size for preview svg
 const previewSize = '80px';

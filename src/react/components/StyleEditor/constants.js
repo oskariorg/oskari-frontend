@@ -6,16 +6,6 @@ export const ANTD_FORMLAYOUT = {
     wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
 };
 
-// index passed to array corresponds straight the old value used for each fill style
-export const FILL_STYLE_FALLBACK = [
-    'thin_diagonal',
-    'thick_diagonal',
-    'thin_horizontal',
-    'thick_horizontal',
-    'transparent',
-    'solid'
-];
-
 export const LINE_STYLES = {
     "lineDash": [
         {
