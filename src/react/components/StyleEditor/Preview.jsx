@@ -168,11 +168,6 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
     previewAttributes.fillColor = oskariStyle.fill.color;
     previewAttributes.fill = 'url(#' + defaultPatternId + ')';
 
-    // Fallback for old way of marking fill patterns. -1 was used for no-fill. Replace it with 'transparent' value from FILL_STYLE_FALLBACK constant array.
-    if (!isNaN(oskariStyle.fill.area.pattern)) {
-        oskariStyle.fill.area.pattern = oskariStyle.fill.area.pattern === -1 ? FILL_STYLE_FALLBACK[4] : FILL_STYLE_FALLBACK[oskariStyle.fill.area.pattern];
-    }
-
     const patternPath = _parsePattern(areaFills.find(pattern => pattern.name === oskariStyle.fill.area.pattern));
     previewAttributes.pattern = _composeSvgPattern(patternPath); // this has to be set after fillColor
 

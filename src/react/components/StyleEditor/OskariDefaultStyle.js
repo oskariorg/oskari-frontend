@@ -2,7 +2,7 @@ export const OSKARI_BLANK_STYLE = {
     fill: { // fill styles
         color: '#b5b5b5', // fill color
         area: {
-            pattern: 'solid' // fill style - original default: -1
+            pattern: 5 // fill style
         }
     },
     stroke: { // stroke styles
