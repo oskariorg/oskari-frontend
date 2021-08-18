@@ -62,6 +62,7 @@ export const VectorStyle = LocaleConsumer((props) => {
                     isValid={ hasValidName(editorState.styleName) }
                     onChange={ setName }
                     nameFieldHeader={ <Message messageKey={ 'styles.vector.name' } /> }
+                    validationErrorMessage={ <Message messageKey='styles.vector.validation.name' /> }
                 />
 
                 <StyleEditor

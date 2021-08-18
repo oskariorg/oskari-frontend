@@ -143,7 +143,8 @@ Oskari.registerLocalization(
         "categoryform": {
             "name": {
                 "label": "Karttatason nimi",
-                "placeholder": "Karttatason nimi"
+                "placeholder": "Karttatason nimi",
+                "error": "Täytä nimi tyylille"
             },
             "visibleFields": {
                 "label": "Näytettävät kohteen tiedot",

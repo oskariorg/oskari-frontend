@@ -9,16 +9,17 @@ export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorSt
         <Modal
             visible={ editorState.modalVisibility }
             okButtonPros={ 'disabled' }
-            onOk={ () => onModalOk() }
+            onOk={ () => editorState.validates && onModalOk() }
             onCancel={ onCancel }
             cancelText={ cancelText }
             okText={ okText }
         >
             <VectorNameInput
                 styleName={ editorState.styleName }
-                isValid={ nameValidation(editorState.styleName) }
+                isValid={ editorState.validates }
                 onChange={ setName }
                 nameFieldHeader={ <Message messageKey={ 'categoryform.name.label' } /> }
+                validationErrorMessage={ <Message messageKey={ 'categoryform.name.error' } /> }
             />
 
             <StyleEditor
@@ -34,7 +35,6 @@ VectorStyleModal.propTypes = {
     onCancel: PropTypes.func.isRequired,
     onModalOk: PropTypes.func.isRequired,
     setEditorState: PropTypes.func.isRequired,
-    nameValidation: PropTypes.func.isRequired,
     setName: PropTypes.func.isRequired,
     okText: PropTypes.node,
     cancelText: PropTypes.node

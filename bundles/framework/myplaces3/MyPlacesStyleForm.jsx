@@ -9,10 +9,6 @@ const CategoryButton = styled(Button)`
     margin: 0 10px 0 0;
 `;
 
-const hasValidName = (name) => {
-    return name.length > 0;
-};
-
 export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportCategory }) => {
     const [editorState, setEditorState] = useState({
         modalVisibility: false,
@@ -20,20 +16,20 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
         styleId: '',
         styleName: layer.name || '',
         originalName: '',
-        validates: false
+        validates: layer.name.length > 0 || false
     });
 
     const saveStyle = () => saveCategory({ categoryId: layer.categoryId, style: editorState.currentStyle, name: editorState.styleName });
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const onModalOk = () => {
-        if (hasValidName(editorState.styleName)) {
+        if (editorState.validates) {
             saveStyle();
             setEditorState({ ...editorState, modalVisibility: false });
         }
     };
 
-    const setName = (name) => {
-        setEditorState({ ...editorState, styleName: name });
+    const setName = (name, validates) => {
+        setEditorState({ ...editorState, validates: validates, styleName: name });
     };
 
     return (
@@ -52,12 +48,10 @@ export const MyPlacesStyleForm = ({ layer, saveCategory, deleteCategory, exportC
 
             <VectorStyleModal
                 editorState={ editorState }
-                okButtonPros={ 'disabled' }
                 onModalOk={ onModalOk }
                 onCancel={ () => onModalCancel() }
                 cancelText={ <Message messageKey='buttons.cancel' /> }
                 okText={ <Message messageKey='buttons.save' /> }
-                nameValidation={ hasValidName }
                 setName={ setName }
                 setEditorState={ setEditorState }
             />

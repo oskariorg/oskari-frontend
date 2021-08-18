@@ -43,7 +43,10 @@ SvgRadioButton.propTypes = {
     options: PropTypes.arrayOf(
         PropTypes.shape({
             data: PropTypes.string.isRequired,
-            name: PropTypes.string,
+            name: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.number
+            ])
         })
     )
 };
