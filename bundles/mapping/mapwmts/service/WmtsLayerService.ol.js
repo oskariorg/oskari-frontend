@@ -1,6 +1,5 @@
 import olLayerTile from 'ol/layer/Tile';
 import olSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
-import olFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 
 /**
  *
@@ -42,9 +41,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      */
     getCapabilitiesForLayer: function (layer, success, failure) {
         var me = this;
-        var url = layer.getLayerUrl();
-        var format = new olFormatWMTSCapabilities();
-        var getCapsUrl = Oskari.urls.getRoute('GetLayerCapabilities');
+        var url = Oskari.urls.getRoute('GetLayerCapabilities', {
+            json: true,
+            id: layer.getId(),
+            srs: Oskari.getSandbox().getMap().getSrsName()
+        });
 
         var caps = this.getCapabilities(url);
         if (caps) {
@@ -63,34 +64,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
 
         if (triggerAjaxBln) {
             jQuery.ajax({
-                data: {
-                    id: layer.getId()
-                },
-                dataType: 'text',
+                dataType: 'json',
                 type: 'GET',
-                url: getCapsUrl,
+                url: url,
                 success: function (response) {
-                    var caps = format.read(response);
-                    // Check if need reverse matrixset top left coordinates.
-                    // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
-                    // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
-                    var isTileMatrixSets = !!((caps && caps.Contents && caps.Contents.TileMatrixSet));
-                    if (isTileMatrixSets) {
-                        var matrixSets = caps.Contents.TileMatrixSet;
-                        for (var index = 0; index < matrixSets.length; index++) {
-                            var key = matrixSets[index].Identifier;
-                            var isReverseAttribute = !!((typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]));
-
-                            if (isReverseAttribute) {
-                                var matrixSet = matrixSets[index];
-                                for (var i = 0; i < matrixSet.TileMatrix.length; i++) {
-                                    var matrix = matrixSet.TileMatrix[i];
-                                    matrix.TopLeftCorner.reverse();
-                                }
-                            }
-                        }
-                    }
-
+                    const caps = me.__formatCapabilitiesForOpenLayers(response);
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },
@@ -123,13 +101,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     __createWMTSLayer: function (caps, layer) {
         var config = this.__getLayerConfig(caps, layer);
         var options = optionsFromCapabilities(caps, config);
-        // this doesn't get merged automatically by ol
-        options.crossOrigin = config.crossOrigin;
-        if (config.url) {
-            // override capabilities url with the configured one
-            options.urls = [config.url];
+        // if requestEncoding is set for layer -> use it since proxied are
+        //  always KVP and openlayers defaults to REST
+        options.requestEncoding = config.requestEncoding || options.requestEncoding;
+        if (options.requestEncoding === 'KVP') {
+            // override url to one provided by server since the layer might be proxied
+            options.urls = [layer.getLayerUrl()];
         }
-        // allows layer.options.wrapX to be passed to source. For some reason optionsFromCapabilities() overrides it.
+        // allows layer.options.wrapX to be passed to source. 
+        // On OL 6.4.3 it's always false from optionsFromCapabilities()
+        // On 6.6.1 it appears to be correct and this line could be removed
         options.wrapX = !!config.wrapX;
         var wmtsLayer = new olLayerTile({
             source: new olSourceWMTS(options),
@@ -142,21 +123,58 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
 
     __getLayerConfig: function (caps, layer) {
         // default params and options
-        // URL is tuned serverside so we use the correct one
+        // URL is tuned serverside so we need to use the one it gives (might be proxy url)
         return {
-            url: layer.getTileUrl(),
             name: 'layer_' + layer.getId(),
             style: layer.getCurrentStyle().getName(),
             layer: layer.getLayerName(),
-            matrixSet: layer.getWmtsMatrixSetId(),
-            params: {
-                ...layer.getParams()
-            },
             buffer: 0,
-            displayInLayerSwitcher: false,
-            isBaseLayer: false,
             crossOrigin: layer.getAttributes('crossOrigin'),
             ...layer.getOptions()
+        };
+    },
+
+    __formatCapabilitiesForOpenLayers: function (layerCapabilities) {
+        // server always just gives one for frontend (one matching the map srs)
+        var tileMatrixSet = layerCapabilities.links[0].tileMatrixSet;
+
+        return {
+            Contents: {
+                Layer: [{
+                    Identifier: layerCapabilities.id,
+                    TileMatrixSetLink: [{
+                        TileMatrixSet: tileMatrixSet.identifier
+                    }],
+                    Style: layerCapabilities.styles.map(s => {
+                        return {
+                            "Identifier": s.name
+                        };
+                    }),
+                    ResourceURL: layerCapabilities.resourceUrls.map(item => {
+                        const { type, ...rest } = item;
+                        return {
+                            ...rest,
+                            resourceType: type
+                        };
+                    }),
+                    Format: layerCapabilities.formats
+                }],
+                TileMatrixSet: [{
+                    Identifier: tileMatrixSet.identifier,
+                    SupportedCRS: tileMatrixSet.projection,
+                    TileMatrix: Object.values(tileMatrixSet.matrixIds).map(item => {
+                        return {
+                                Identifier: item.identifier,
+                                MatrixWidth: item.matrixWidth,
+                                MatrixHeight: item.matrixHeight,
+                                ScaleDenominator: item.scaleDenominator,
+                                TopLeftCorner: [item.topLeftCorner.lon, item.topLeftCorner.lat],
+                                TileWidth: item.tileWidth,
+                                TileHeight: item.tileHeight
+                        };
+                    })
+                }]
+            }
         };
     }
 });
