@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                         const caps = me.__formatCapabilitiesForOpenLayers(response);
                         me.setCapabilities(url, caps);
                         me.__handleCallbacksForLayerUrl(url);
-                    } catch(err) {
+                    } catch (err) {
                         // just to make sure we respond with something even
                         //  when we don't get the JSON we were expecting
                         me.__handleCallbacksForLayerUrl(url, true);
