@@ -40,14 +40,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      *
      */
     getCapabilitiesForLayer: function (layer, success, failure) {
-        var me = this;
-        var url = Oskari.urls.getRoute('GetLayerCapabilities', {
+        const me = this;
+        const url = Oskari.urls.getRoute('GetLayerCapabilities', {
             json: true,
             id: layer.getId(),
             srs: Oskari.getSandbox().getMap().getSrsName()
         });
 
-        var caps = this.getCapabilities(url);
+        const caps = this.getCapabilities(url);
         if (caps) {
             // return with cached capabilities
             success(this.__createWMTSLayer(caps, layer));
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         }
         // gather capabilities requests
         // make ajax call just once and invoke all callbacks once finished
-        var triggerAjaxBln = false;
+        let triggerAjaxBln = false;
         if (!this.requestsMap[url]) {
             this.requestsMap[url] = [];
             triggerAjaxBln = true;
@@ -68,9 +68,15 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 type: 'GET',
                 url: url,
                 success: function (response) {
-                    const caps = me.__formatCapabilitiesForOpenLayers(response);
-                    me.setCapabilities(url, caps);
-                    me.__handleCallbacksForLayerUrl(url);
+                    try {
+                        const caps = me.__formatCapabilitiesForOpenLayers(response);
+                        me.setCapabilities(url, caps);
+                        me.__handleCallbacksForLayerUrl(url);
+                    } catch(err) {
+                        // just to make sure we respond with something even
+                        //  when we don't get the JSON we were expecting
+                        me.__handleCallbacksForLayerUrl(url, true);
+                    }
                 },
                 error: function () {
                     me.__handleCallbacksForLayerUrl(url, true);
@@ -85,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @param  {Boolean} invokeFailure true to call the error callback (optional)
      */
     __handleCallbacksForLayerUrl: function (url, invokeFailure) {
-        var caps = this.getCapabilities(url);
+        const caps = this.getCapabilities(url);
         // requestsMap[url] is an array of "callers" that have attempted to get the url.
         // Each array item will have the layer as first, success callback as second and optional error callback as third param
         this.requestsMap[url].forEach(([layer, successCB, errorCB]) => {
@@ -99,8 +105,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         });
     },
     __createWMTSLayer: function (caps, layer) {
-        var config = this.__getLayerConfig(caps, layer);
-        var options = optionsFromCapabilities(caps, config);
+        const config = this.__getLayerConfig(layer);
+        const options = optionsFromCapabilities(caps, config);
         // if requestEncoding is set for layer -> use it since proxied are
         //  always KVP and openlayers defaults to REST
         options.requestEncoding = config.requestEncoding || options.requestEncoding;
@@ -112,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         // On OL 6.4.3 it's always false from optionsFromCapabilities()
         // On 6.6.1 it appears to be correct and this line could be removed
         options.wrapX = !!config.wrapX;
-        var wmtsLayer = new olLayerTile({
+        const wmtsLayer = new olLayerTile({
             source: new olSourceWMTS(options),
             opacity: layer.getOpacity() / 100.0,
             transparent: true,
@@ -121,7 +127,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         return wmtsLayer;
     },
 
-    __getLayerConfig: function (caps, layer) {
+    __getLayerConfig: function (layer) {
         // default params and options
         // URL is tuned serverside so we need to use the one it gives (might be proxy url)
         return {
