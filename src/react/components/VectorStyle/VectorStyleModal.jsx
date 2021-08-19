@@ -24,7 +24,7 @@ export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorSt
 
             <StyleEditor
                 oskariStyle={ editorState.currentStyle }
-                onChange={ (style) => setEditorState({ ...editorState, currentStyle: style })}
+                onChange={ (style) => setEditorState({ ...editorState, currentStyle: style }) }
             />
         </Modal>
     );
