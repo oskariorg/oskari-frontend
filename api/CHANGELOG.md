@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.5.0
+
+### [add] userstyle
+
+Added initial bundle documentation. Userstyle functionality has been moved from wfsvector to own bundle.
+
 ## 2.4.0
 
 ### [rem] Removed unmaintained bundles

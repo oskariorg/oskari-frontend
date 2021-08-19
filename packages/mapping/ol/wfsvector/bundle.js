@@ -42,38 +42,17 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureGeometriesEvent.js"
                 }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequest.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequestHandler.js"
-                }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
                 }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/DotForm.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/LineForm.js"
-                }, {
-                    "type" : "text/javascript",
-                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
-                }, {
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapwfs2/resources/scss/style.scss"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/plugin/WfsVectorLayerPlugin.ol.js"
-                }, {
-                    "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapwfs2/UserStylesFlyout.js"
                 }
             ],
             "locales" : [{
