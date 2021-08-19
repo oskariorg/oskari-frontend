@@ -55,8 +55,8 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
     };
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
-    const convertedStyle = FormToOskariMapper.convertFillPatternToForm(style);
-    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(convertedStyle);
+    const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
+    const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
 
@@ -93,13 +93,14 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
             values['fill.area.pattern'] = 5;
         }
 
+        
         // values ex: {image.shape: 3}
         const newStyle = updateStyle(values);
         onChange(styleExceptionHandler(newStyle));
     };
 
     useEffect(() => {
-        form.setFieldsValue(fieldValuesForForm);
+        form.setFieldsValue(convertedStyleValues);
     }, [oskariStyle]);
 
     return (

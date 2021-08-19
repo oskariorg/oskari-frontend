@@ -167,6 +167,25 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
     previewAttributes.fillColor = oskariStyle.fill.color;
     previewAttributes.fill = 'url(#' + defaultPatternId + ')';
 
+    if (oskariStyle.fill.area.pattern === 0) {
+        oskariStyle.fill.area.pattern = 'DIAGONAL_THIN';
+    }
+    if (oskariStyle.fill.area.pattern === 1) {
+        oskariStyle.fill.area.pattern = 'DIAGONAL_THICK';
+    }
+    if (oskariStyle.fill.area.pattern === 2) {
+        oskariStyle.fill.area.pattern = 'HORIZONTAL_THIN';
+    }
+    if (oskariStyle.fill.area.pattern === 3) {
+        oskariStyle.fill.area.pattern = 'HORIZONTAL_THICK';
+    }
+    if (oskariStyle.fill.area.pattern === 4) {
+        oskariStyle.fill.area.pattern = 'TRANSPARENT';
+    }
+    if (oskariStyle.fill.area.pattern === 5) {
+        oskariStyle.fill.area.pattern = 'SOLID';
+    }
+
     const patternPath = _parsePattern(areaFills.find(pattern => pattern.name === oskariStyle.fill.area.pattern));
     previewAttributes.pattern = _composeSvgPattern(patternPath); // this has to be set after fillColor
 
@@ -200,14 +219,7 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
  * <Preview }/>
  */
 
-export const Preview = (props) => {
-    const {
-        markers,
-        areaFills,
-        format,
-        oskariStyle
-    } = props;
-
+export const Preview = ({markers, areaFills, format, oskariStyle}) => {
     const svgIcon =
         format === 'area' ? _composeAreaPath(oskariStyle, areaFills) :
         format === 'line' ? _composeLinePath(oskariStyle) :

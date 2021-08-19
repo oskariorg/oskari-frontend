@@ -4,7 +4,7 @@ import { VectorNameInput } from 'oskari-ui/components/VectorStyle/VectorNameInpu
 import { Message, Modal } from 'oskari-ui';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
-export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorState, nameValidation, setName, okText, cancelText }) => {
+export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorState, setName, okText, cancelText }) => {
     return (
         <Modal
             visible={ editorState.modalVisibility }
@@ -24,7 +24,10 @@ export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorSt
 
             <StyleEditor
                 oskariStyle={ editorState.currentStyle }
-                onChange={ (style) => setEditorState({ ...editorState, currentStyle: style }) }
+                onChange={ (style) => {
+                    console.log(style);
+                    setEditorState({ ...editorState, currentStyle: style });
+                 }}
             />
         </Modal>
     );
