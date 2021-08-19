@@ -9,7 +9,5 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
      */
     parseLayerData: function (layer, mapLayerJson, maplayerService) {
         maplayerService.populateStyles(layer, mapLayerJson);
-        layer.setTileUrl(mapLayerJson.tileUrl);
-        layer.setWmtsMatrixSetId(mapLayerJson.tileMatrixSetId);
     }
 });
