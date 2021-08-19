@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row } from 'antd';
+import { Form, Row, Col } from 'antd';
 
 const areaFills = [
     {
@@ -35,21 +35,39 @@ export const AreaTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.area.color'
-                    label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                <Col span={ 10 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.area.color'
+                        label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
+                        >
+                        <ColorPicker />
+                    </Form.Item>
 
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='fill.color'
-                    label={ <Message messageKey='StyleEditor.fill.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.area.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
+
+                <Col span={ 10 } offset={ 2 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='fill.color'
+                        label={ <Message messageKey='StyleEditor.fill.color' /> }
+                        >
+                        <ColorPicker />
+                    </Form.Item>
+
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='fill.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
             </Row>
 
             <Row>
@@ -60,9 +78,7 @@ export const AreaTab = (props) => {
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
                 </Form.Item>
-            </Row>
 
-            <Row>
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'

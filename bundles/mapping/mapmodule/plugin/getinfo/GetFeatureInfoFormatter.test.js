@@ -118,6 +118,59 @@ describe('GetInfoPlugin', () => {
                 expect(scriptTags.length).toEqual(0);
             });
         });
+        describe('json', () => {
+            const dummyLocale = {};
+            test('is function', () => {
+                expect(typeof plugin.formatters.json).toEqual('function');
+            });
+            test('returns jQuery object', () => {
+                const result = plugin.formatters.json(235, dummyLocale);
+                expect(result instanceof jQuery).toEqual(true);
+            });
+            test('wraps content to additional span', () => {
+                const result = plugin.formatters.json(`My data`, dummyLocale);
+                expect(result.outerHTML()).toEqual('<span>My data</span>');
+            });
+            test('does links', () => {
+                const result = plugin.formatters.json(`https://my.domain`, dummyLocale);
+                expect(result.outerHTML()).toEqual('<span><a target="_blank" rel="noopener" href="https://my.domain">https://my.domain</a></span>');
+            });
+            test('removes script tags', () => {
+                const result = plugin.formatters.json(`
+                    <div>
+                        <script>alert('Bazinga!')</script>
+                    </div>
+                `, dummyLocale);
+                const scriptTags = result.find('script');
+                expect(scriptTags.length).toEqual(0);
+            });
+            test('renders value arrays', () => {
+                const result = plugin.formatters.json(['testing', 1, 2, 'data'], dummyLocale);
+                expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
+                    <span>testing</span><br class="innerValueBr">
+                    <span>1</span><br class="innerValueBr">
+                    <span>2</span><br class="innerValueBr">
+                    <span>data</span><br class="innerValueBr">
+                </span>`));
+            });
+            test('renders object arrays', () => {
+                const result = plugin.formatters.json([
+                    {
+                        test: 'testing',
+                        one: 1,
+                        two: 2,
+                        data: 'data'
+                    }], dummyLocale);
+                expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<span>
+                    <span>
+                        test:<span>testing</span><brclass="innerValueBr">
+                        one:<span>1</span><brclass="innerValueBr">
+                        two:<span>2</span><brclass="innerValueBr">
+                        data:<span>data</span><brclass="innerValueBr">
+                    </span><brclass="innerValueBr">
+                </span>`));
+            });
+        });
     });
     describe('_formatWFSFeaturesForInfoBox', () => {
         test('is function', () => {
@@ -183,6 +236,38 @@ describe('GetInfoPlugin', () => {
             const html = result[0].markup.outerHTML();
             // should skip "Image" label" and write colspan=2. Should have <img></img> but outerHTML() probably messes it up
             expect(html).toEqual(`<table class="getinforesult_table"><tr class="odd"><td>Label for test</td><td>TESTING</td></tr><tr><td colspan="2"><img class="oskari_gfi_img" src="http://test.domain/test.png"></td></tr></table>`);
+        });
+    });
+
+    describe('_formatGfiDatum', () => {
+        const dummyLocale = {};
+        test('is function', () => {
+            expect(typeof plugin._formatGfiDatum).toEqual('function');
+        });
+        test('test formatting for JSON response', () => {
+            const content = {
+                layerId: 1888,
+                type: 'arcgis93layer',
+                presentationType: 'JSON',
+                content: {
+                    parsed: [{
+                        Vaesto15Lkm: 1230293,
+                        VesiPAla_km2: 21.4067,
+                        TaajNimi: 'Helsingin kt.',
+                        Vaesto00Lkm: 1048039,
+                        TKTaajTunnus: '0001'
+                    }]
+                }
+            };
+            const result = plugin._formatGfiDatum(content, dummyLocale);
+            expect(removeWhitespace(result.outerHTML())).toEqual(removeWhitespace(`<div>
+                <table class="getinforesult_table">
+                    <tr class="odd"><td>Vaesto15Lkm</td><td><span>1230293</span></td></tr>
+                    <tr><td>VesiPAla_km2</td><td><span>21.4067</span></td></tr>
+                    <tr class="odd"><td>TaajNimi</td><td><span>Helsingin kt.</span></td></tr>
+                    <tr><td>Vaesto00Lkm</td><td><span>1048039</span></td></tr>
+                    <tr class="odd"><td>TKTaajTunnus</td><td><span>0001</span></td></tr>
+                </table></div>`));
         });
     });
 });

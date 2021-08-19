@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row } from 'antd';
+import { Form, Row, Col } from 'antd';
 
 const markers = [
     {
@@ -34,25 +34,44 @@ const markers = [
     }
 ];
 
-export const PointTab = (props) => {
+export const PointTab = ({ oskariStyle }) => {
     return (
         <React.Fragment>
             <Row>
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.color'
-                    label={ <Message messageKey='StyleEditor.stroke.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                <Col span={ 10 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.color'
+                        label={ <Message messageKey='StyleEditor.stroke.color' /> }
+                    >
+                        <ColorPicker />
+                    </Form.Item>
 
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='image.fill.color'
-                    label={ <Message messageKey='StyleEditor.image.fill.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
+
+                <Col span={ 10 } offset={ 2 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='image.fill.color'
+                        label={ <Message messageKey='StyleEditor.image.fill.color' /> }
+                    >
+                        <ColorPicker />
+                    </Form.Item>
+
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='image.fill.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
+
             </Row>
 
             <Row>
@@ -75,7 +94,7 @@ export const PointTab = (props) => {
 
             <Row>
                 <Preview
-                    oskariStyle={ props.oskariStyle }
+                    oskariStyle={ oskariStyle }
                     format={ 'point' }
                     markers={ markers }
                 />
