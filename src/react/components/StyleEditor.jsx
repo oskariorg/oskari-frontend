@@ -74,28 +74,28 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
     };
 
     const onUpdate = (values) => {
-        if (values['fill.area.pattern'] === 'DIAGONAL_THIN') {
-            values['fill.area.pattern'] = 0;
+        const valuesCopy = JSON.parse(JSON.stringify(values));
+        if (valuesCopy['fill.area.pattern'] === 'DIAGONAL_THIN') {
+            valuesCopy['fill.area.pattern'] = 0;
         }
-        if (values['fill.area.pattern'] === 'DIAGONAL_THICK') {
-            values['fill.area.pattern'] = 1;
+        if (valuesCopy['fill.area.pattern'] === 'DIAGONAL_THICK') {
+            valuesCopy['fill.area.pattern'] = 1;
         }
-        if (values['fill.area.pattern'] === 'HORIZONTAL_THIN') {
-            values['fill.area.pattern'] = 2;
+        if (valuesCopy['fill.area.pattern'] === 'HORIZONTAL_THIN') {
+            valuesCopy['fill.area.pattern'] = 2;
         }
-        if (values['fill.area.pattern'] === 'HORIZONTAL_THICK') {
-            values['fill.area.pattern'] = 3;
+        if (valuesCopy['fill.area.pattern'] === 'HORIZONTAL_THICK') {
+            valuesCopy['fill.area.pattern'] = 3;
         }
-        if (values['fill.area.pattern'] === 'TRANSPARENT') {
-            values['fill.area.pattern'] = 4;
+        if (valuesCopy['fill.area.pattern'] === 'TRANSPARENT') {
+            valuesCopy['fill.area.pattern'] = 4;
         }
-        if (values['fill.area.pattern'] === 'SOLID') {
-            values['fill.area.pattern'] = 5;
+        if (valuesCopy['fill.area.pattern'] === 'SOLID') {
+            valuesCopy['fill.area.pattern'] = 5;
         }
 
-        
         // values ex: {image.shape: 3}
-        const newStyle = updateStyle(values);
+        const newStyle = updateStyle(valuesCopy);
         onChange(styleExceptionHandler(newStyle));
     };
 

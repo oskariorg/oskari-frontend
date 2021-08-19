@@ -161,7 +161,7 @@ const _composeLinePath = (oskariStyle) => {
  * @returns {String} area svg path
  */
 const _composeAreaPath = (oskariStyle, areaFills) => {
-    const path = _parsePath(areaPreviewSVG);        
+    const path = _parsePath(areaPreviewSVG);
 
     previewAttributes.strokeColor = oskariStyle.stroke.area.color;
     previewAttributes.fillColor = oskariStyle.fill.color;
@@ -169,20 +169,17 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
 
     if (oskariStyle.fill.area.pattern === 0) {
         oskariStyle.fill.area.pattern = 'DIAGONAL_THIN';
-    }
-    if (oskariStyle.fill.area.pattern === 1) {
+    } else if (oskariStyle.fill.area.pattern === 1) {
         oskariStyle.fill.area.pattern = 'DIAGONAL_THICK';
-    }
-    if (oskariStyle.fill.area.pattern === 2) {
+    } else if (oskariStyle.fill.area.pattern === 2) {
         oskariStyle.fill.area.pattern = 'HORIZONTAL_THIN';
-    }
-    if (oskariStyle.fill.area.pattern === 3) {
+    } else if (oskariStyle.fill.area.pattern === 3) {
         oskariStyle.fill.area.pattern = 'HORIZONTAL_THICK';
-    }
-    if (oskariStyle.fill.area.pattern === 4) {
+    } else if (oskariStyle.fill.area.pattern === 4) {
         oskariStyle.fill.area.pattern = 'TRANSPARENT';
-    }
-    if (oskariStyle.fill.area.pattern === 5) {
+    } else if (oskariStyle.fill.area.pattern === 5) {
+        oskariStyle.fill.area.pattern = 'SOLID';
+    } else {
         oskariStyle.fill.area.pattern = 'SOLID';
     }
 

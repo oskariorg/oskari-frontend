@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     ReactDOM.render(
                         <MyPlacesStyleForm
                             layer={{ ...values, categoryId: categoryId }}
-                            saveCategory={ (style) => { categoryHandler.saveCategory({ ...values, ...style }); console.log(style); }}
+                            saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
                             deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
                             exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
                         />,
