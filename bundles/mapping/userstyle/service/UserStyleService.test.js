@@ -1,8 +1,13 @@
 import { UserStyleService } from './UserStyleService';
 
+// fake sandbox
+const sandbox = {
+    findMapLayerFromSelectedMapLayers: () => {}
+};
+
 describe('saveUserStyle function ', () => {
     test('adds style correctly when styles with given layerId and style id does not exists', () => {
-        const service = new UserStyleService();
+        const service = new UserStyleService(sandbox);
         const layerId = 1;
         const styleWithMetadata = {
             title: 'My own style',
@@ -15,7 +20,7 @@ describe('saveUserStyle function ', () => {
         expect(result[0]).toEqual(styleWithMetadata);
     });
     test('adds style correctly when styles with given layerId exists but not with given style id', () => {
-        const service = new UserStyleService();
+        const service = new UserStyleService(sandbox);
         const layerId = 1;
         const styleWithMetadata1 = {
             title: 'First style',
@@ -35,7 +40,7 @@ describe('saveUserStyle function ', () => {
         expect(result[1]).toEqual(styleWithMetadata2);
     });
     test('saves style correctly when style with given layerId and given style id exists', () => {
-        const service = new UserStyleService();
+        const service = new UserStyleService(sandbox);
         const layerId = 1;
         const originalStyleWithMetadata = {
             title: 'Original name',
@@ -59,7 +64,7 @@ describe('saveUserStyle function ', () => {
 
 describe('removeUserStyle function ', () => {
     test('removes user style correctly when found', () => {
-        const service = new UserStyleService();
+        const service = new UserStyleService(sandbox);
         const layerId = 1;
         const styleName = Date.now().toString();
         const styleWithMetadata = {

@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Sjálfgefinn stíll",
-        "own-style": "Eigin stíll",
         "none-style": "Enginn",
         "refresh": "Uppfæra",
         "refresh_title": "Uppfæra gögn sem flytjast ekki sjálfkrafa á kortið.",
@@ -40,13 +39,6 @@ Oskari.registerLocalization(
             "show": "Sýna staði",
             "close": "Loka",
             "edit": "Lagfæra"
-        },
-        "popup": {
-            "title": "Eigin stíll",
-            "button": {
-                "cancel": "Hætta við",
-                "save": "Vista"
-            }
         }
     }
 });

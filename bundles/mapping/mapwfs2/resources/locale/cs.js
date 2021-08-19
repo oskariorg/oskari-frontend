@@ -6,7 +6,6 @@ Oskari.registerLocalization(
         "title": "MapWfs2",
         "desc": "",
         "default-style": "Default style",
-        "own-style": "Own style",
         "tile": {
             "title": "MapWfs2"
         },
@@ -28,13 +27,6 @@ Oskari.registerLocalization(
             "show": "View places",
             "close": "Close",
             "edit": "Edit"
-        },
-        "popup": {
-            "title": "Own style",
-            "button": {
-                "cancel": "Cancel",
-                "save": "Save"
-            }
         }
     }
 });

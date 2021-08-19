@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -50,27 +49,28 @@ const AddStyleIcon = styled(PlusOutlined)`
     margin-right: 10px;
 `;
 
-const showVisualizationForm = (layerId, styleId, isCreateNew) => {
-    Oskari.getSandbox().postRequestByName('ShowOwnStyleRequest', [layerId, styleId, isCreateNew]);
+const showVisualizationForm = (layerId, styleName) => {
+    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, true, styleName]);
 };
 
-const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
+export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
     return (
         <div>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
-                <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
+                <AddStyle onClick={() => showVisualizationForm(layerId)}>
                     <AddStyleIcon />
-                    <Message messageKey='add-style' LabelComponent={AddStyleText}/>
+                    <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
             { styles && styles.length > 0 &&
-            <List bordered={false} dataSource={styles} renderItem={styleWithMetadata => {
+            <List bordered={false} dataSource={styles} renderItem={style => {
+                const { title, name } = style;
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleTitle={styleWithMetadata.title}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, styleWithMetadata.name, false)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, styleWithMetadata.name)}/>
+                        <UserStyleRow styleTitle={title}
+                            editUserStyleHandler={() => showVisualizationForm(layerId, name)}
+                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, name)}/>
                     </StyledListItem>
                 );
             }}/>
@@ -84,6 +84,3 @@ UserStyles.propTypes = {
     styles: PropTypes.array.isRequired,
     removeUserStyleHandler: PropTypes.func.isRequired
 };
-
-const contextWrap = LocaleConsumer(UserStyles);
-export { contextWrap as UserStyles };
