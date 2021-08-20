@@ -44,43 +44,62 @@ const FormSpace = styled(Space)`
  */
 
 
-export const StyleEditor = (props) => {
+export const StyleEditor = ({ oskariStyle, onChange, format }) => {
     let [form] = Form.useForm();
 
     const style = {
         ... OSKARI_BLANK_STYLE,
-        ...props.oskariStyle
+        ...oskariStyle
     };
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
-    const [selectedTab, setSelectedTab] = useState(props.format || 'point');
+    const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
+    const [selectedTab, setSelectedTab] = useState(format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
 
-    const styleExceptionHandler = (style) => {
+    const styleExceptionHandler = (exceptionStyle) => {
         // if fill pattern is set to null, set color as empty
-        if (typeof style.fill.area.pattern !== 'undefined') {
-            if (style.fill.area.pattern === 'null') {
-                style.fill.color = '';
-            } else if (style.fill.area.pattern !== 'null' && style.fill.color === '') {
-                style.fill.color = OSKARI_BLANK_STYLE.fill.color;
+        if (typeof exceptionStyle.fill.area.pattern !== 'undefined') {
+            if (exceptionStyle.fill.area.pattern === 4) {
+                exceptionStyle.fill.color = '';
+            } else if (exceptionStyle.fill.area.pattern !== 4 && exceptionStyle.fill.color === '') {
+                exceptionStyle.fill.color = OSKARI_BLANK_STYLE.fill.color;
             }
         }
 
-
-        return style;
+        return exceptionStyle;
     };
 
     const onUpdate = (values) => {
-        // values ex: {image.shape: 3}
-        const newStyle = updateStyle(values);
+        const valuesCopy = JSON.parse(JSON.stringify(values));
+        if (valuesCopy['fill.area.pattern'] === 'DIAGONAL_THIN') {
+            valuesCopy['fill.area.pattern'] = 0;
+        }
+        if (valuesCopy['fill.area.pattern'] === 'DIAGONAL_THICK') {
+            valuesCopy['fill.area.pattern'] = 1;
+        }
+        if (valuesCopy['fill.area.pattern'] === 'HORIZONTAL_THIN') {
+            valuesCopy['fill.area.pattern'] = 2;
+        }
+        if (valuesCopy['fill.area.pattern'] === 'HORIZONTAL_THICK') {
+            valuesCopy['fill.area.pattern'] = 3;
+        }
+        if (valuesCopy['fill.area.pattern'] === 'TRANSPARENT') {
+            valuesCopy['fill.area.pattern'] = 4;
+        }
+        if (valuesCopy['fill.area.pattern'] === 'SOLID') {
+            valuesCopy['fill.area.pattern'] = 5;
+        }
 
-        props.onChange(styleExceptionHandler(newStyle))
+        // values ex: {image.shape: 3}
+        const newStyle = updateStyle(valuesCopy);
+        onChange(styleExceptionHandler(newStyle));
     };
 
     useEffect(() => {
-        form.setFieldsValue(fieldValuesForForm);
-    }, [props.oskariStyle]);
+        form.setFieldsValue(convertedStyleValues);
+    }, [oskariStyle]);
 
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>

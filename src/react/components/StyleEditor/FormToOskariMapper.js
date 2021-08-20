@@ -68,7 +68,36 @@ const flattenStyle = (input = {}, result = {}, baseKey = '') => {
     return result;
 };
 
+const convertFillPatternToForm = (style) => {
+    switch (style['fill.area.pattern']) {
+        case 0:
+            style['fill.area.pattern'] = 'DIAGONAL_THIN';
+            break;
+        case 1:
+            style['fill.area.pattern'] = 'DIAGONAL_THICK';
+            break;
+        case 2:
+            style['fill.area.pattern'] = 'HORIZONTAL_THIN';
+            break;
+        case 3:
+            style['fill.area.pattern'] = 'HORIZONTAL_THICK';
+            break;
+        case 4:
+            style['fill.area.pattern'] = 'TRANSPARENT';
+            break;
+        case 5:
+            style['fill.area.pattern'] = 'SOLID';
+            break;
+        default:
+            style['fill.area.pattern'] = 'SOLID';
+            break;
+    }
+
+    return style;
+};
+
 export const FormToOskariMapper = {
     createStyleAdjuster,
-    createFlatFormObjectFromStyle
+    createFlatFormObjectFromStyle,
+    convertFillPatternToForm
 };
