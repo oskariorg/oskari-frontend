@@ -96,9 +96,31 @@ const convertFillPatternToForm = (style) => {
     return style;
 };
 
+const convertFillPatternToStyle = (values) => {
+    if (values['fill.area.pattern'] === 'DIAGONAL_THIN') {
+        values['fill.area.pattern'] = 0;
+    }
+    if (values['fill.area.pattern'] === 'DIAGONAL_THICK') {
+        values['fill.area.pattern'] = 1;
+    }
+    if (values['fill.area.pattern'] === 'HORIZONTAL_THIN') {
+        values['fill.area.pattern'] = 2;
+    }
+    if (values['fill.area.pattern'] === 'HORIZONTAL_THICK') {
+        values['fill.area.pattern'] = 3;
+    }
+    if (values['fill.area.pattern'] === 'TRANSPARENT') {
+        values['fill.area.pattern'] = 4;
+    }
+    if (values['fill.area.pattern'] === 'SOLID') {
+        values['fill.area.pattern'] = 5;
+    }
+};
+
 export const FormToOskariMapper = {
     createStyleAdjuster,
     createFlatFormObjectFromStyle,
     convertFillPatternToForm,
+    convertFillPatternToStyle,
     deepCopy
 };
