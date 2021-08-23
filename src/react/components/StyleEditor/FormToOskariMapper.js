@@ -99,5 +99,6 @@ const convertFillPatternToForm = (style) => {
 export const FormToOskariMapper = {
     createStyleAdjuster,
     createFlatFormObjectFromStyle,
-    convertFillPatternToForm
+    convertFillPatternToForm,
+    deepCopy
 };
