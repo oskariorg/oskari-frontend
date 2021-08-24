@@ -38,6 +38,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _registerEventHandlers () {
             this._sandbox.registerForEventByName(this, 'MouseHoverEvent');
             this._sandbox.registerForEventByName(this, 'MapClickedEvent');
+            this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
+            this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
         }
 
         /**
@@ -242,8 +244,20 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.hoverHandler.onFeatureHover(event, feature, layer);
         }
 
-        createHoverLayer (layer, source) {
-            return this.hoverHandler.createHoverLayer(layer, source);
+        /**
+         * @method registerHoverLayer
+         * Register layer and hover style for ol/layer/Vector
+         * Create and return hover layer for ol/source/VectorTile
+         *
+         * @param {OskariLayer} layer
+         * @param {ol/source/VectorTile} source for VectorTile layers
+         * @return ol/source/VectorTile for VectorTile layers
+         */
+        registerHoverLayer (layer, source) {
+            if (source) {
+                return this.hoverHandler.createVectorTileLayer(layer, source);
+            }
+            this.hoverHandler.registerLayer(layer);
         }
 
         setVectorLayerHoverTooltip (layer) {
@@ -314,6 +328,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 me.getSandbox().notifyAll(clickEvent);
             }
         }
+
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or
@@ -327,6 +342,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 this._onMapHover(event); break;
             case 'MapClickedEvent':
                 this._onMapClicked(event); break;
+            case 'MapLayerVisibilityChangedEvent':
+                this.hoverHandler.updateHoverLayer(
+                    event.getMapLayer(),
+                    (!event.isInScale() || !event.isGeometryMatch()));
+                break;
+            case 'AfterChangeMapLayerOpacityEvent':
+                this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
             }
         }
     }
