@@ -5,13 +5,8 @@ import { Message, Modal } from 'oskari-ui';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 
 export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorState, setName, okText, cancelText }) => {
-    const bodyStyle = {
-        'maxHeight': window.innerHeight-200 + 'px',
-        'overflow': 'auto'
-    };
     return (
         <Modal
-            bodyStyle={ bodyStyle }
             visible={ editorState.modalVisibility }
             onOk={ () => editorState.validates && onModalOk() }
             onCancel={ onCancel }
