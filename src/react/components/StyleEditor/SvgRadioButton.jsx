@@ -32,6 +32,17 @@ const RadioIcon = styled(Radio.Button)`
  * @example <caption>Basic usage</caption>
  * <SvgRadioButton props={{ ...exampleProps }}/>
  */
+const ButtonVisualization = ({ data }) => {
+    let content = data;
+    if (content.$$typeof == Symbol.for('react.element')) {
+        // assume React-component
+        return content;
+    }
+    if (typeof content === 'function') {
+        content = content(uniqueIdCounter++);
+    }
+    return (<span dangerouslySetInnerHTML={ {__html: content }} />);
+};
 
 export const SvgRadioButton = (props) => {
     return (
@@ -39,7 +50,7 @@ export const SvgRadioButton = (props) => {
             { props.options.map((singleOption, index) => {
                 return(
                     <RadioIcon key={ props.id + '-' + (singleOption.name || index) } value={ (singleOption.name || index) }>
-                        <span dangerouslySetInnerHTML={ {__html: singleOption.data }} />
+                        <ButtonVisualization data={singleOption.data} />
                     </RadioIcon>
                 );
             })}
@@ -54,7 +65,10 @@ SvgRadioButton.propTypes = {
     ]),
     options: PropTypes.arrayOf(
         PropTypes.shape({
-            data: PropTypes.string.isRequired,
+            data: PropTypes.oneOfType([
+                PropTypes.string,
+                PropTypes.func
+            ]).isRequired,
             name: PropTypes.oneOfType([
                 PropTypes.string,
                 PropTypes.number
