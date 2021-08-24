@@ -8,7 +8,6 @@ export const VectorStyleModal = ({ editorState, onCancel, onModalOk, setEditorSt
     return (
         <Modal
             visible={ editorState.modalVisibility }
-            okButtonPros={ 'disabled' }
             onOk={ () => editorState.validates && onModalOk() }
             onCancel={ onCancel }
             cancelText={ cancelText }
