@@ -7,11 +7,11 @@ import { LOCALE_KEY } from './constants';
 export const showModal = (name, style, saveLayer) => {
     const element = document.createElement('div');
     document.body.appendChild(element);
-    
+
     const removeModal = () => {
         unmountComponentAtNode(element);
         document.body.removeChild(element);
-    }
+    };
 
     ReactDOM.render(
         <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
@@ -21,7 +21,7 @@ export const showModal = (name, style, saveLayer) => {
                 onSave={ (name, style) => {
                     saveLayer(name, style);
                     removeModal();
-                 } }
+                } }
                 onCancel={ removeModal }
             />
         </LocaleProvider>,
