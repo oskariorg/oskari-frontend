@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
             },
             /**
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
             },
             /**
@@ -168,11 +168,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Rearranges layers
              */
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+            AfterRearrangeSelectedMapLayerEvent: function (event) {
                 if (event._creator !== this.getName()) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Tile'].refresh();
                 }
+            },
+            UIChangeEvent: function () {
+                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             }
         },
         /**
