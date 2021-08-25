@@ -141,6 +141,10 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
+            "title": "Map layer details",
+            "layerName": "Name",
+            "styleTitle": "Styling",
+
             "name": {
                 "label": "Name",
                 "placeholder": "Map layer name"

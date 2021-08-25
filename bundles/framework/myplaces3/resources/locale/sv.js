@@ -141,6 +141,9 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
+            "title": "Uppgifter om kartlagret",
+            "layerName": "Namn",
+            "styleTitle": "Stil",
             "name": {
                 "label": "Namn",
                 "placeholder": "Namnge kartlagret"

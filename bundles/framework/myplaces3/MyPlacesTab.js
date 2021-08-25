@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import { MyPlacesStyleForm } from './MyPlacesStyleForm';
+import { MyPlacesLayerControls } from './MyPlacesLayerControls';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
@@ -104,7 +104,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     const container = jQuery(modalWrapper)[0];
 
                     ReactDOM.render(
-                        <MyPlacesStyleForm
+                        <MyPlacesLayerControls
                             layer={{ ...values, categoryId: categoryId }}
                             saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
                             deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
