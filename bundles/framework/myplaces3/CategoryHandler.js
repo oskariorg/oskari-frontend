@@ -1,3 +1,5 @@
+import { showModal } from './reactModalHelper';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -180,6 +182,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         editCategory: function (categoryId) {
+            const layer = this.getCategory(categoryId);
+            const saveLayer = (name, style) => {
+                this.saveCategory({
+                    ...layer,
+                    name,
+                    style
+                });
+            };
+            showModal(layer.name, layer.style, saveLayer);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');

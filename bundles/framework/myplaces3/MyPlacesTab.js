@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
+import { LocaleProvider } from 'oskari-ui/util';
 import { MyPlacesLayerControls } from './MyPlacesLayerControls';
+import { LOCALE_KEY } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
@@ -18,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
     function (instance, stopDrawingCallback) {
         this.instance = instance;
         this.stopDrawingCallback = stopDrawingCallback;
-        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.loc = Oskari.getMsg.bind(null, LOCALE_KEY);
         this.tabsContainer = undefined;
         this.tabPanels = {};
 
@@ -104,12 +106,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     const container = jQuery(modalWrapper)[0];
 
                     ReactDOM.render(
-                        <MyPlacesLayerControls
-                            layer={{ ...values, categoryId: categoryId }}
-                            saveCategory={ (style) => categoryHandler.saveCategory({ ...values, ...style }) }
-                            deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
-                            exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
-                        />,
+                        <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
+                            <MyPlacesLayerControls
+                                layer={{ ...values, categoryId: categoryId }}
+                                editCategory={ () => categoryHandler.editCategory(categoryId) }
+                                deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
+                                exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
+                            />
+                        </LocaleProvider>,
                         container
                     );
                 });
