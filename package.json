@@ -36,7 +36,7 @@
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
     "@babel/runtime-corejs3": "7.9.2",
-    "@storybook/react": "5.3.18",
+    "@storybook/react": "6.3.7",
     "antd": "4.16.13",
     "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "1.10.7",
