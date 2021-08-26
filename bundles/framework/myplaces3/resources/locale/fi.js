@@ -143,36 +143,7 @@ Oskari.registerLocalization(
         "categoryform": {
             "title": "Tason tiedot",
             "layerName": "Nimi",
-            "styleTitle": "Tyyli",
-            "name": {
-                "label": "Karttatason nimi",
-                "placeholder": "Karttatason nimi",
-                "error": "Täytä nimi tyylille"
-            },
-            "visibleFields": {
-                "label": "Näytettävät kohteen tiedot",
-                "placename": "Nimi",
-                "placedesc": "Kuvaus",
-                "image": "Kuva"
-            },
-            "edit": {
-                "title": "Muokkaa karttatasoa",
-                "newtitle": "Karttatason nimi",
-                "save": "Tallenna",
-                "cancel": "Peruuta"
-            },
-            "rendering": {
-                "label": "Karttatason kohteiden esitystavat",
-                "point": {
-                    "tooltip": "Muokkaa pisteiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien pisteiden esitystapaa."
-                },
-                "area": {
-                    "tooltip": "Muokkaa alueiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien alueiden esitystapaa."
-                },
-                "line": {
-                    "tooltip": "Muokkaa viivojen esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien viivojen esitystapaa."
-                }
-            }
+            "styleTitle": "Tyyli"
         },
         "notification": {
             "placeAdded": {
