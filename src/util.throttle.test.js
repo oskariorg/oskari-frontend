@@ -85,7 +85,7 @@ describe('throttle function executes given function ', () => {
             } else {
                 expect(mockFunction).toHaveBeenCalledTimes(i);
             }
-            jest.advanceTimersByTime(wait);
+            jest.advanceTimersByTime(wait - 5);
             expect(mockFunction).toHaveBeenCalledTimes(i + 1);
         };
     });
