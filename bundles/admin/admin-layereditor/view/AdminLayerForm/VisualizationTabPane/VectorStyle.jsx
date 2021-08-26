@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
-import { VectorNameInput } from 'oskari-ui/components/VectorStyle/VectorNameInput';
+import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Button, Message, Modal } from 'oskari-ui';
-import { Space } from 'antd';
+import { Button, Message, Modal, Space } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
@@ -51,7 +50,6 @@ export const VectorStyle = LocaleConsumer((props) => {
 
             <Modal
                 visible={ editorState.modalVisibility }
-                okButtonPros={ 'disabled' }
                 onOk={ onModalOk }
                 onCancel={ onModalCancel }
                 cancelText={ <Message messageKey="cancel" /> }

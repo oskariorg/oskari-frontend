@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { TextInput, Message } from 'oskari-ui';
+import { TextInput } from 'oskari-ui';
 
 const InputGroup = styled.div`
     & {
