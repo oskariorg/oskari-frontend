@@ -107,7 +107,7 @@ const _composePreviewViewbox = () => {
 const _composePointPath = (oskariStyle, markers) => {
     const path = _parsePath(markers[oskariStyle.image.shape].data);        
 
-    previewAttributes.strokeColor = oskariStyle.stroke.color;
+    previewAttributes.strokeColor = '#000000';
     previewAttributes.fillColor = oskariStyle.fill.color;
     previewAttributes.fill = oskariStyle.image.fill.color;
     previewAttributes.strokeWidth = OSKARI_BLANK_STYLE.defaultStrokeWidth;
