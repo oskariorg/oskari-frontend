@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Select, Tooltip } from 'oskari-ui'
-import { Form, Card, Space, Input, Row } from 'antd';
+import { Form, Input, Row } from 'antd';
+import { Card } from './Card';
+import { Space } from './Space';
 import styled from 'styled-components';
 
 import 'antd/es/form/style/index.js';
-import 'antd/es/card/style/index.js';
-import 'antd/es/space/style/index.js';
 import 'antd/es/input/style/index.js';
 
 const { TextArea } = Input;

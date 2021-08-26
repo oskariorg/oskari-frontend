@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { TextInput, Message } from 'oskari-ui';
+import { TextInput } from 'oskari-ui';
 
 const InputGroup = styled.div`
     & {
@@ -9,21 +9,27 @@ const InputGroup = styled.div`
     }
 `;
 
-export const VectorNameInput = ({ styleName = '', onChange, isValid = true }) => {
+const hasValidName = (name) => {
+    return name.length > 0;
+};
+
+export const VectorNameInput = ({ styleName = '', onChange, isValid = true, nameFieldHeader, validationErrorMessage }) => {
     return (
         <InputGroup>
-            <Message messageKey='styles.vector.name' />
+            { nameFieldHeader }
             <TextInput
                 value={ styleName }
-                onChange={ (event) => onChange(event.target.value) }
+                onChange={ (event) => onChange(event.target.value, hasValidName(event.target.value)) }
             />
-            { !isValid && <Message messageKey='styles.vector.validation.name' /> }
+            { !isValid && validationErrorMessage }
         </InputGroup>
     );
 };
 
 VectorNameInput.propTypes = {
     onChange: PropTypes.func.isRequired,
-    isValid: PropTypes.bool,
-    styleName: PropTypes.string
+    isValid: PropTypes.bool.isRequired,
+    styleName: PropTypes.string,
+    nameFieldHeader: PropTypes.node,
+    validationErrorMessage: PropTypes.node
 };

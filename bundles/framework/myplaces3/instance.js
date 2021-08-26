@@ -1,3 +1,6 @@
+import { LOCALE_KEY } from './constants';
+import { showModal } from './reactModalHelper';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance
  *
@@ -11,7 +14,7 @@ Oskari.clazz.define(
      * @static
      */
     function () {
-        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.loc = Oskari.getMsg.bind(null, LOCALE_KEY);
         this.sandbox = null;
         this.buttons = undefined;
         this.categoryHandler = undefined;
@@ -272,43 +275,16 @@ Oskari.clazz.define(
             this.sandbox = null;
         },
 
-        openAddLayerDialog: function (originator, side) {
+        openAddLayerDialog: function () {
             // create popup
-            // TODO popup doesn't block bg?
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me);
-
-            var buttons = [];
-            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
-            var cancelBtn = dialog.createCloseButton(me.loc('buttons.cancel'));
-
-            saveBtn.setHandler(function () {
-                var values = categoryForm.getValues();
-                if (values.errors) {
-                    me.categoryHandler.showValidationErrorMessage(values.errors);
-                    return;
-                }
-                me.categoryHandler.saveCategory(values);
-
-                dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            buttons.push(cancelBtn);
-            buttons.push(saveBtn);
-
-            var form = categoryForm.getForm();
-            dialog.show(
-                me.loc('tab.addCategory'),
-                form,
-                buttons
-            );
-            form.find('input[data-name=categoryname]').focus();
-            // Move dialog next to layer select
-            if (originator) {
-                dialog.moveTo(originator, side);
-            }
-            categoryForm.start();
+            const handler = this.categoryHandler;
+            const saveLayer = (name, style) => {
+                handler.saveCategory({
+                    name,
+                    style
+                });
+            };
+            showModal(this.loc('tab.addCategoryFormButton'), null, saveLayer);
         }
     }, {
         /**

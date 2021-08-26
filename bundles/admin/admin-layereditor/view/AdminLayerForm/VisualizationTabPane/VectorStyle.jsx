@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Button, Message, Modal } from 'oskari-ui';
-import { Space } from 'antd';
+import { Button, Message, Modal, Space } from 'oskari-ui';
 import { PlusOutlined } from '@ant-design/icons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
@@ -34,15 +33,12 @@ export const VectorStyle = LocaleConsumer((props) => {
     const saveStyle = () => props.controller.saveStyleToLayer(editorState.currentStyle, editorState.styleName, editorState.styleId);
     const onModalCancel = () => setEditorState({ ...editorState, modalVisibility: false });
     const resetNewStyle = () => setEditorState({ ...editorState, styleId: '', styleName: newStyleName, originalName: '', currentStyle: {}, modalVisibility: true });
+    const setName = (name) => setEditorState({ ...editorState, styleName: name });
     const onModalOk = () => {
         if (hasValidName(editorState.styleName)) {
             saveStyle();
             setEditorState({ ...editorState, modalVisibility: false });
         }
-    };
-
-    const setName = (name) => {
-        setEditorState({ ...editorState, styleName: name });
     };
 
     return (
@@ -54,7 +50,6 @@ export const VectorStyle = LocaleConsumer((props) => {
 
             <Modal
                 visible={ editorState.modalVisibility }
-                okButtonPros={ 'disabled' }
                 onOk={ onModalOk }
                 onCancel={ onModalCancel }
                 cancelText={ <Message messageKey="cancel" /> }
@@ -64,7 +59,10 @@ export const VectorStyle = LocaleConsumer((props) => {
                 <VectorNameInput
                     styleName={ editorState.styleName }
                     isValid={ hasValidName(editorState.styleName) }
-                    onChange={ setName } />
+                    onChange={ setName }
+                    nameFieldHeader={ <Message messageKey={ 'styles.vector.name' } /> }
+                    validationErrorMessage={ <Message messageKey='styles.vector.validation.name' /> }
+                />
 
                 <StyleEditor
                     oskariStyle={ editorState.currentStyle }

@@ -141,33 +141,9 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
-            "name": {
-                "label": "Namn",
-                "placeholder": "Namnge kartlagret"
-            },
-            "visibleFields": {
-                "label": "Uppgifter om objektet som visas",
-                "placename": "Namn",
-                "placedesc": "Beskrivning",
-                "image": "Bild"
-            },
-            "edit": {
-                "title": "Redigera kartlagret",
-                "save": "Spara",
-                "cancel": "Avbryt"
-            },
-            "rendering": {
-                "label": "Placera stil",
-                "point": {
-                    "tooltip": "Redigera punktens stil"
-                },
-                "area": {
-                    "tooltip": "Redigera områdets stil"
-                },
-                "line": {
-                    "tooltip": "Redigera linjens stil"
-                }
-            }
+            "title": "Uppgifter om kartlagret",
+            "layerName": "Namn",
+            "styleTitle": "Stil"
         },
         "notification": {
             "placeAdded": {

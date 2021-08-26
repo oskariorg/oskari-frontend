@@ -68,7 +68,59 @@ const flattenStyle = (input = {}, result = {}, baseKey = '') => {
     return result;
 };
 
+const convertFillPatternToForm = (style) => {
+    switch (style['fill.area.pattern']) {
+        case 0:
+            style['fill.area.pattern'] = 'DIAGONAL_THIN';
+            break;
+        case 1:
+            style['fill.area.pattern'] = 'DIAGONAL_THICK';
+            break;
+        case 2:
+            style['fill.area.pattern'] = 'HORIZONTAL_THIN';
+            break;
+        case 3:
+            style['fill.area.pattern'] = 'HORIZONTAL_THICK';
+            break;
+        case 4:
+            style['fill.area.pattern'] = 'TRANSPARENT';
+            break;
+        case 5:
+            style['fill.area.pattern'] = 'SOLID';
+            break;
+        default:
+            style['fill.area.pattern'] = 'SOLID';
+            break;
+    }
+
+    return style;
+};
+
+const convertFillPatternToStyle = (values) => {
+    if (values['fill.area.pattern'] === 'DIAGONAL_THIN') {
+        values['fill.area.pattern'] = 0;
+    }
+    if (values['fill.area.pattern'] === 'DIAGONAL_THICK') {
+        values['fill.area.pattern'] = 1;
+    }
+    if (values['fill.area.pattern'] === 'HORIZONTAL_THIN') {
+        values['fill.area.pattern'] = 2;
+    }
+    if (values['fill.area.pattern'] === 'HORIZONTAL_THICK') {
+        values['fill.area.pattern'] = 3;
+    }
+    if (values['fill.area.pattern'] === 'TRANSPARENT') {
+        values['fill.area.pattern'] = 4;
+    }
+    if (values['fill.area.pattern'] === 'SOLID') {
+        values['fill.area.pattern'] = 5;
+    }
+};
+
 export const FormToOskariMapper = {
     createStyleAdjuster,
-    createFlatFormObjectFromStyle
+    createFlatFormObjectFromStyle,
+    convertFillPatternToForm,
+    convertFillPatternToStyle,
+    deepCopy
 };

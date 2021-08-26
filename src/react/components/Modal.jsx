@@ -3,15 +3,19 @@ import PropTypes from 'prop-types';
 import { Modal as AntModal } from 'antd';
 import 'antd/es/modal/style/index.js';
 
-export const Modal = ({ children, bodyStyle={}, ...other }) => {
+export const Modal = ({ children, title, bodyStyle={}, ...other }) => {
     // try keeping the modal height lower than the usable window height
     // so we don't overflow from the page
+    let spaceLimit = 200;
+    if (title) {
+        spaceLimit +=50;
+    }
     const defaultBodyStyle = {
-        'maxHeight': (window.innerHeight - 200) + 'px',
+        'maxHeight': (window.innerHeight - spaceLimit) + 'px',
         'overflow': 'auto'
     };
     return (
-        <AntModal zIndex={ 55500 } bodyStyle={{
+        <AntModal zIndex={ 55500 } title={title} bodyStyle={{
             ...defaultBodyStyle,
             ...bodyStyle
         }} {...other}>

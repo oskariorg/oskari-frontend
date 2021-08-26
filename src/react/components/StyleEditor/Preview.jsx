@@ -87,8 +87,8 @@ const _parsePattern = (pattern) => {
  * @description Combine provided plain pattern path with definitive svg base
  * @returns {String} full pattern as string
  */
-const _composeSvgPattern = (patternPath) => {
-    return '<defs><pattern id="' + defaultPatternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
+const _composeSvgPattern = (patternPath, patternId) => {
+    return '<defs><pattern id="' + patternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
 }
 
 const _composePreviewViewbox = () => {
@@ -160,15 +160,32 @@ const _composeLinePath = (oskariStyle) => {
  * @description Composes area svg path
  * @returns {String} area svg path
  */
+let patternIdCounter = 0;
 const _composeAreaPath = (oskariStyle, areaFills) => {
-    const path = _parsePath(areaPreviewSVG);        
+    const path = _parsePath(areaPreviewSVG);
+    const patternId = defaultPatternId + patternIdCounter++;
 
     previewAttributes.strokeColor = oskariStyle.stroke.area.color;
     previewAttributes.fillColor = oskariStyle.fill.color;
-    previewAttributes.fill = 'url(#' + defaultPatternId + ')';
+    previewAttributes.fill = 'url(#' + patternId + ')';
 
-    const patternPath = _parsePattern(areaFills.find(pattern => pattern.name === oskariStyle.fill.area.pattern));
-    previewAttributes.pattern = _composeSvgPattern(patternPath); // this has to be set after fillColor
+    let patternName = 'SOLID';
+    if (oskariStyle.fill.area.pattern === 0) {
+        patternName = 'DIAGONAL_THIN';
+    } else if (oskariStyle.fill.area.pattern === 1) {
+        patternName = 'DIAGONAL_THICK';
+    } else if (oskariStyle.fill.area.pattern === 2) {
+        patternName = 'HORIZONTAL_THIN';
+    } else if (oskariStyle.fill.area.pattern === 3) {
+        patternName = 'HORIZONTAL_THICK';
+    } else if (oskariStyle.fill.area.pattern === 4) {
+        patternName = 'TRANSPARENT';
+    } else if (oskariStyle.fill.area.pattern === 5) {
+        patternName = 'SOLID';
+    }
+
+    const patternPath = _parsePattern(areaFills.find(pattern => pattern.name === patternName));
+    previewAttributes.pattern = _composeSvgPattern(patternPath, patternId); // this has to be set after fillColor
 
     previewAttributes.strokeWidth = oskariStyle.stroke.area.width;
     previewAttributes.strokeLineCap = OSKARI_BLANK_STYLE.stroke.lineCap;
@@ -200,14 +217,7 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
  * <Preview }/>
  */
 
-export const Preview = (props) => {
-    const {
-        markers,
-        areaFills,
-        format,
-        oskariStyle
-    } = props;
-
+export const Preview = ({markers, areaFills, format, oskariStyle}) => {
     const svgIcon =
         format === 'area' ? _composeAreaPath(oskariStyle, areaFills) :
         format === 'line' ? _composeLinePath(oskariStyle) :

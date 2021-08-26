@@ -1,3 +1,5 @@
+import { showModal } from './reactModalHelper';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -180,42 +182,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         editCategory: function (categoryId) {
-            var me = this;
-            const values = this.getCategory(categoryId);
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            if (!values) {
-                dialog.show(me.loc('notification.error.title'), me.loc('notification.error.generic'), [dialog.createCloseButton()]);
-                return;
-            }
-            var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
-            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            var buttons = [];
-            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc('buttons.save'));
-            saveBtn.addClass('primary');
-            saveBtn.setHandler(function () {
-                const formValues = form.getValues();
-                if (formValues.errors) {
-                    me.showValidationErrorMessage(formValues.errors);
-                    return;
-                }
-                me.saveCategory({ ...values, ...formValues });
-                dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(me.loc('buttons.cancel'));
-            cancelBtn.setHandler(function () {
-                dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            buttons.push(cancelBtn);
-            buttons.push(saveBtn);
-            form.getForm(values);
-            dialog.show(me.loc('categoryform.edit.title'), form.getForm(values), buttons);
-            dialog.moveTo('div.personaldata ul li select', 'right');
-            // bind listeners etc. for category form
-            form.start();
+            const layer = this.getCategory(categoryId);
+            const saveLayer = (name, style) => {
+                this.saveCategory({
+                    ...layer,
+                    name,
+                    style
+                });
+            };
+            showModal(layer.name, layer.style, saveLayer);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
