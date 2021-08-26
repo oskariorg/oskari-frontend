@@ -61,10 +61,10 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
 
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
-    const style = FormToOskariMapper.deepCopy({
+    const style = {
         ...OSKARI_BLANK_STYLE,
         ...oskariStyle
-    });
+    };
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
@@ -78,7 +78,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
         const newStyle = updateStyle(values);
         // if we don't clone the output here the mappings
         //  between form <> style, the values can get mixed up due to mutability
-        onChange(FormToOskariMapper.deepCopy(styleExceptionHandler(newStyle)));
+        onChange(styleExceptionHandler(newStyle));
     };
 
     useEffect(() => {
