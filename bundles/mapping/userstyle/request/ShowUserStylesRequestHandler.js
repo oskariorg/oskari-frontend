@@ -1,3 +1,4 @@
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 /**
  * @class Oskari.mapframework.userstyle.request.ShowUserStylesRequestHandler
  *
@@ -52,15 +53,14 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
             // init popup
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var content = this.template.wrapper.clone();
-            let style;
-            if (styleName) {
-                style = service.getUserStyle(layerId, styleName);
+            let style = service.getUserStyle(layerId, styleName);
+            if (!style) {
+                style = new VectorStyle('', '', 'user');
             }
-            const { style: styleDef = {}, title = '' } = style || {};
             // visuform will be replaced by react implementation
             // for now hook name to _options to get empty style name input
-            this.visualizationForm._options.name = title;
-            this.visualizationForm.setOskariStyleValues(styleDef);
+            this.visualizationForm._options.name = style.getTitle() || '';
+            this.visualizationForm.setOskariStyleValues(style.getFeatureStyle());
             // add form
             content.append(this.visualizationForm.getForm());
 
@@ -69,11 +69,8 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
             saveOwnStyleBtn.setTitle(this.localization('popup.button.save'));
             saveOwnStyleBtn.addClass('primary save-user-style');
             saveOwnStyleBtn.setHandler(() => {
-                const style = {
-                    name: styleName,
-                    style: this.visualizationForm.getOskariStyle(),
-                    title: this.visualizationForm.getOskariStyleName()
-                };
+                style.setTitle(this.visualizationForm.getOskariStyleName());
+                style.setFeatureStyle(this.visualizationForm.getOskariStyle());
                 service.saveUserStyle(layerId, style);
                 dialog.close();
             });

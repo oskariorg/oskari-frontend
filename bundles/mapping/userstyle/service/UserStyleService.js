@@ -6,46 +6,44 @@ export class UserStyleService {
     }
 
     saveUserStyle (layerId, style) {
-        if (!style.name) {
+        if (!style.getName()) {
             // styles are stored only for runtime, use time to get unique name
-            style.name = 's_' + Date.now().toString();
+            style.setName('s_' + Date.now().toString());
         }
-        if (!style.title) {
-            const existing = this.getUserStylesForLayer(layerId);
-            style.title = Oskari.getMsg('userstyle', 'defaultName') + ' ' + (existing.length + 1);
-        }
-        let { style: styleDef } = style;
-        const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-        if (layer) {
-            layer.saveUserStyle(style);
-            layer.setCustomStyle(styleDef);
-            layer.selectStyle(style.name);
-            this.notifyLayerUpdate();
-        }
-
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === style.name);
-
+        if (!style.getTitle()) {
+            style.setTitle(Oskari.getMsg('userstyle', 'defaultName') + ' ' + (layerStyles.length + 1));
+        }
+        const name = style.getName();
+        const index = layerStyles.findIndex(s => s.getName() === name);
         if (index !== -1) {
             layerStyles[index] = style;
         } else {
             layerStyles.push(style);
         }
         this.styles.set(layerId, layerStyles);
+
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
+        if (layer) {
+            layer.addStyle(style);
+            layer.selectStyle(name);
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
+            this.notifyLayerUpdate(layerId);
+        }
         this.trigger('update');
     }
 
-    removeUserStyle (layerId, styleName) {
-        if (!layerId || !styleName) {
+    removeUserStyle (layerId, name) {
+        if (!layerId || !name) {
             return;
         }
-        const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
-            layer.removeStyle(styleName);
-            this.notifyLayerUpdate();
+            layer.removeStyle(name);
+            this.notifyLayerUpdate(layerId);
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.name === styleName);
+        const index = layerStyles.findIndex(s => s.getName() === name);
         if (index !== -1) {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
@@ -66,8 +64,8 @@ export class UserStyleService {
         return this.styles.get(layerId) || [];
     }
 
-    getUserStyle (layerId, styleName) {
+    getUserStyle (layerId, name) {
         const layerStyles = this.getUserStylesForLayer(layerId);
-        return layerStyles.find(s => s.name === styleName);
+        return layerStyles.find(s => s.getName() === name);
     }
 }

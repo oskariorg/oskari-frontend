@@ -1,3 +1,4 @@
+import { createDefaultStyle, DEFAULT_STYLE_NAME } from '../../domain/VectorStyle';
 Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
     function () {
         // passes params and options to AbstractLayer constructor automatically.
@@ -9,6 +10,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
         /* Layer Type */
         this._layerType = 'VECTORTILE';
     }, {
+        /* override */
+        // AbstractLayer selectStyle creates empty if style isn't found
+        _createEmptyStyle: function () {
+            return createDefaultStyle();
+        },
+
         setHoverOptions (options) {
             this.hoverOptions = options;
         },
@@ -19,45 +26,22 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
         getHoverOptions () {
             return this.hoverOptions;
         },
-        /**
-         * @method getStyleDef
-         * @param {String} styleName
-         * @return {Object}
-         */
-        getStyleDef (styleName) {
-            if (this._options.styles) {
-                return this._options.styles[styleName];
+        removeStyle (name) {
+            const styles = this.getStyles();
+            const index = styles.findIndex(s => s.getName() === name);
+            if (index !== -1) {
+                styles.splice(index, 1);
             }
-        },
-        /**
-         * @method getCurrentStyleDef
-         * @return {Object/null}
-         */
-        getCurrentStyleDef () {
-            if (!this._currentStyle) {
-                return null;
+            // Remove style from layer if active.
+            const current = this.getCurrentStyle().getName();
+            const sb = Oskari.getSandbox();
+            if (current === name) {
+                sb.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), DEFAULT_STYLE_NAME]);
+            } else {
+                // Only notify to update list of styles in selected layers.
+                const event = Oskari.eventBuilder('MapLayerEvent')(this.getId(), 'update');
+                sb.notifyAll(event);
             }
-            return this.getStyleDef(this._currentStyle.getName());
-        },
-        /**
-         * @method getExternalStyleDef
-         * @param {String} styleName
-         * @return {Object}
-         */
-        getExternalStyleDef (styleName) {
-            if (this._options.externalStyles) {
-                return this._options.externalStyles[styleName];
-            }
-        },
-        /**
-         * @method getCurrentExternalStyleDef
-         * @return {Object/null}
-         */
-        getCurrentExternalStyleDef () {
-            if (!this._currentStyle) {
-                return null;
-            }
-            return this.getExternalStyleDef(this._currentStyle.getName());
         },
         /**
          * @method getTileGrid
@@ -78,5 +62,5 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
             return this._srsList.indexOf(srsName) !== -1;
         }
     }, {
-        'extend': ['Oskari.mapframework.domain.AbstractLayer']
+        extend: ['Oskari.mapframework.domain.AbstractLayer']
     });

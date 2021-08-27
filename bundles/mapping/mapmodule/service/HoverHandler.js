@@ -138,17 +138,8 @@ export class HoverHandler {
             return null;
         }
         if (hoverDef.inherit === true) {
-            let layerStyleDef = layer.getCurrentStyleDef() || {};
-            if (!layerStyleDef.featureStyle) {
-                // Bypass possible layer definitions
-                Object.values(layerStyleDef).find(obj => {
-                    if (obj.hasOwnProperty('featureStyle')) {
-                        layerStyleDef = obj;
-                        return true;
-                    }
-                });
-            }
-            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, layerStyleDef.featureStyle, hoverDef);
+            const featureStyle = layer.getCurrentStyle().getFeatureStyle();
+            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle, hoverDef);
         }
         // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
         const olStyles = this._styleFactory(hoverDef);

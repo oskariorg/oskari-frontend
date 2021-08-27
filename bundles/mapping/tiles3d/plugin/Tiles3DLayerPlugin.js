@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             if (!tileset || !layer) {
                 return;
             }
-            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyleDefs(), layer.getOpacity());
+            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyle(), layer.getOpacity());
         },
         /**
          * @private @method _initImpl

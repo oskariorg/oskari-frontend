@@ -14,9 +14,6 @@ export class WFSLayer extends VectorTileLayer {
         this._propertySelection = []; // names to order and limit visible properties
         this._propertyLabels = {};
         this._propertyTypes = {};
-        this._styles = []; /* Array of styles that this layer supports */
-        this._customStyle = null;
-        this._userStyles = [];
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = Oskari.getSandbox();
     }
@@ -200,60 +197,6 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
-     * @method setCustomStyle
-     * @param {json} customStyle
-     */
-    setCustomStyle (customStyle) {
-        this._customStyle = customStyle;
-    }
-
-    /**
-     * @method getCustomStyle
-     * @return {json} customStyle
-     */
-    getCustomStyle () {
-        return this._customStyle;
-    }
-
-    setStyles (layerStyles = []) {
-        this._styles = layerStyles;
-    }
-
-    /**
-     * @method getStyles
-     * @return {Oskari.mapframework.domain.Style[]}
-     * Gets layer styles
-     */
-    getStyles () {
-        if (this._userStyles.length > 0) {
-            const styles = this._userStyles.map(s => {
-                const style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                style.setName(s.name);
-                style.setTitle(s.title);
-                style.setLegend('');
-                return style;
-            });
-            return this._styles.concat(styles);
-        }
-        return this._styles;
-    }
-
-    /**
-     * @method getStyleDef
-     * @param {String} styleName
-     * @return {Object}
-     */
-    getStyleDef (styleName) {
-        const userStyleWithMetadata = this._userStyles.filter(s => s.name === styleName)[0];
-        if (userStyleWithMetadata) {
-            return { [this._layerName]: { featureStyle: userStyleWithMetadata.style } };
-        }
-        if (this._options.styles) {
-            return this._options.styles[styleName];
-        }
-    }
-
-    /**
      * To get distance between features when clustering kicks in.
      *  @method getClusteringDistance
      *  @return {Number} Distance between features in pixels
@@ -269,45 +212,6 @@ export class WFSLayer extends VectorTileLayer {
      */
     setClusteringDistance (distance) {
         this._options.clusteringDistance = distance;
-    }
-
-    saveUserStyle (styleWithMetadata) {
-        if (!styleWithMetadata) {
-            return;
-        }
-        const index = this._userStyles.findIndex(s => s.name === styleWithMetadata.name);
-        if (index !== -1) {
-            this._userStyles[index] = styleWithMetadata;
-        } else {
-            this._userStyles.push(styleWithMetadata);
-        }
-        // Set style to layer
-        this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), styleWithMetadata.name]);
-    }
-
-    removeStyle (name) {
-        const index = this._userStyles.findIndex(s => s.name === name);
-        if (index !== -1) {
-            this._userStyles.splice(index, 1);
-        }
-
-        // Remove style from layer if active.
-        const customStyleWrapper = this.getCustomStyle();
-        if (customStyleWrapper && customStyleWrapper.name === name) {
-            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), 'default']);
-        } else {
-            // Only notify to update list of styles in selected layers.
-            const event = Oskari.eventBuilder('MapLayerEvent')(this.getId(), 'update');
-            this.sandbox.notifyAll(event);
-        }
-    }
-
-    selectStyle (styleName) {
-        // Select style with logic in AbstractLayer
-        super.selectStyle(styleName);
-        // update custom style
-        const style = this._userStyles.filter(style => style.name === styleName)[0];
-        this.setCustomStyle(style);
     }
 }
 
