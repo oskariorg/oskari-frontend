@@ -1,3 +1,9 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+import { LocaleProvider } from 'oskari-ui/util';
+import { MyPlacesLayerControls } from './MyPlacesLayerControls';
+import { LOCALE_KEY } from './constants';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
  * Renders the "personal data" myplaces tab.
@@ -14,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
     function (instance, stopDrawingCallback) {
         this.instance = instance;
         this.stopDrawingCallback = stopDrawingCallback;
-        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.loc = Oskari.getMsg.bind(null, LOCALE_KEY);
         this.tabsContainer = undefined;
         this.tabPanels = {};
 
@@ -73,7 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
              */
             'MyPlaces.MyPlacesChangedEvent': function () {
                 var sandbox = this.instance.sandbox;
-                var editReqBuilder = Oskari.requestBuilder('MyPlaces.EditCategoryRequest');
                 var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
                 var categoryHandler = this.instance.getCategoryHandler();
                 const categories = categoryHandler.getAllCategories();
@@ -94,36 +99,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     panel.getContainer().empty();
                     panel.grid.renderTo(panel.getContainer());
 
-                    var editLink = this.linkTemplate.clone();
-                    editLink.addClass('categoryOp');
-                    editLink.addClass('edit');
-                    editLink.append(this.loc('tab.editCategory'));
-                    editLink.on('click', () => {
-                        sandbox.request(this.instance, editReqBuilder(categoryId));
-                        return false;
-                    });
-                    panel.getContainer().append(editLink);
+                    const modalWrapper = jQuery('<div class="myplaces-modal-wrapper"></div>');
+                    panel.getContainer().append(modalWrapper);
 
-                    var deleteLink = this.linkTemplate.clone();
-                    deleteLink.addClass('categoryOp');
-                    deleteLink.addClass('delete');
-                    deleteLink.append(this.loc('tab.deleteCategory'));
-                    deleteLink.on('click', () => {
-                        sandbox.request(this.instance, deleteReqBuilder(categoryId));
-                        return false;
-                    });
-                    panel.getContainer().append(deleteLink);
+                    const values = categoryHandler.getCategory(categoryId);
+                    const container = jQuery(modalWrapper)[0];
 
-                    const exportLink = this.linkTemplate.clone();
-                    exportLink.addClass('categoryOp');
-                    exportLink.addClass('export');
-                    exportLink.append(this.loc('tab.export.title'));
-                    exportLink.attr('title', this.loc('tab.export.tooltip'));
-                    exportLink.on('click', () => {
-                        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
-                        return false;
-                    });
-                    panel.getContainer().append(exportLink);
+                    ReactDOM.render(
+                        <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
+                            <MyPlacesLayerControls
+                                layer={{ ...values, categoryId: categoryId }}
+                                editCategory={ () => categoryHandler.editCategory(categoryId) }
+                                deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
+                                exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
+                            />
+                        </LocaleProvider>,
+                        container
+                    );
                 });
                 this._removeObsoleteCategories(categories);
 

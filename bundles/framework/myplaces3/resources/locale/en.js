@@ -141,33 +141,9 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
-            "name": {
-                "label": "Name",
-                "placeholder": "Map layer name"
-            },
-            "visibleFields": {
-                "label": "Visible place data",
-                "placename": "Name",
-                "placedesc": "Description",
-                "image": "Image"
-            },
-            "edit": {
-                "title": "Edit map layer",
-                "save": "Save",
-                "cancel": "Cancel"
-            },
-            "rendering": {
-                "label": "Place style",
-                "point": {
-                    "tooltip": "Edit the point style. Note! The selection affects all the point features at this map layer."
-                },
-                "area": {
-                    "tooltip": "Edit the area style. Note! The selection affects all the area features at this map layer."
-                },
-                "line": {
-                    "tooltip": "Edit the line style. Note! The selection affects all the line features at this map layer."
-                }
-            }
+            "title": "Map layer details",
+            "layerName": "Name",
+            "styleTitle": "Styling"
         },
         "notification": {
             "placeAdded": {

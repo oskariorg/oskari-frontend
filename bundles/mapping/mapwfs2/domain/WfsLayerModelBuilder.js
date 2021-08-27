@@ -10,6 +10,7 @@ Oskari.clazz.define(
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
         this.service = null;
+        this._pendingUserStyleTools = [];
         this._registerForLayerFiltering();
     }, {
         /**
@@ -19,6 +20,10 @@ Oskari.clazz.define(
         _registerForLayerFiltering: function () {
             var me = this;
             Oskari.on('app.start', function (details) {
+                if (me.sandbox.hasHandler('ShowUserStylesRequest')) {
+                    me._pendingUserStyleTools.forEach(l => me._addUserStyleTool(l));
+                }
+                me._pendingUserStyleTools = [];
                 var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
                 if (!layerlistService) {
@@ -33,6 +38,16 @@ Oskari.clazz.define(
                     'featuredata');
             });
         },
+        _addUserStyleTool: function (layer) {
+            const locOwnStyle = this.localization['own-style'];
+            const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('ownStyle');
+            toolOwnStyle.setTitle(locOwnStyle);
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(locOwnStyle);
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId(), false]));
+            layer.addTool(toolOwnStyle);
+        },
         /**
          * parses any additional fields to model
          * @param {Oskari.mapframework.domain.WfsLayer} layer partially populated layer
@@ -40,19 +55,12 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
-            var me = this;
-
             if (layer.isLayerOfType('WFS')) {
-                var locOwnStyle = me.localization['own-style'];
-                var toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                toolOwnStyle.setName('ownStyle');
-                toolOwnStyle.setTitle(locOwnStyle);
-                toolOwnStyle.setIconCls('show-own-style-tool');
-                toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(function () {
-                    me.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId(), false]);
-                });
-                layer.addTool(toolOwnStyle);
+                if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
+                    this._addUserStyleTool(layer);
+                } else {
+                    this._pendingUserStyleTools.push(layer);
+                }
             }
 
             // Read options object for styles and hover options

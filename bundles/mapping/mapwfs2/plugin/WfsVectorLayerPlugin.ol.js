@@ -2,7 +2,8 @@ import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandl
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { styleGenerator, DEFAULT_STYLES } from './WfsVectorLayerPlugin/util/style';
-import { LAYER_ID, RENDER_MODE_MVT, RENDER_MODE_VECTOR, LAYER_TYPE, LAYER_HOVER } from '../../mapmodule/domain/constants';
+
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');

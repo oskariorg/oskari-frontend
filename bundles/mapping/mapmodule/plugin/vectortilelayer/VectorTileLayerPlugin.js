@@ -219,8 +219,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
             this.mapModule.addLayer(olLayer, !keepLayerOnTop);
         });
-        vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
         this.setOLMapLayers(layer.getId(), olLayers);
+        vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
     }
 
     createSource (layer, options) {
