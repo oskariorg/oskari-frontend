@@ -1,18 +1,16 @@
 const path = require('path');
 const { IgnorePlugin } = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const LocalizationPlugin = require('./localizationPlugin.js');
+const LocalizationPlugin = require('./localizationPluginFor5.js');
 const { existsSync } = require('fs');
 
 module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
-        new IgnorePlugin(/^\.\/locale$/, /moment$/),
-        new CopyWebpackPlugin(
-            [
-                { from: 'resources', to: 'resources', context }
-            ]
-        )
+        new IgnorePlugin(/^\.\/locale$/),
+        new CopyWebpackPlugin({
+            patterns: [{ from: 'resources', to: 'resources', context }]
+        })
     ];
 
     appsetupPaths.forEach(appDir => {
@@ -42,7 +40,7 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
             path.resolve(context, './webpack/oskari-core.js'),
             targetPath
         ];
-        plugins.push(new CopyWebpackPlugin(copyDef));
+        plugins.push(new CopyWebpackPlugin({ patterns: copyDef }));
         plugins.push(new LocalizationPlugin(appName));
     });
 

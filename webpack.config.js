@@ -36,13 +36,13 @@ module.exports = (env, argv) => {
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
-    plugins.push(new CopywebpackPlugin([
+    plugins.push(new CopywebpackPlugin({ patterns: [
         { from: path.join(__dirname, cesiumSource, '../Build/Cesium/Workers'), to: cesiumTarget + '/Workers' },
         { from: path.join(__dirname, cesiumSource, 'Assets'), to: cesiumTarget + '/Assets' },
         { from: path.join(__dirname, cesiumSource, 'Widgets'), to: cesiumTarget + '/Widgets' },
         // copy Cesium's minified third-party scripts
         { from: path.join(__dirname, cesiumSource, '../Build/Cesium/ThirdParty'), to: cesiumTarget + '/ThirdParty' }
-    ]));
+    ]}));
 
     // Define relative base path in Cesium for loading assets
     plugins.push(new DefinePlugin({
@@ -53,12 +53,12 @@ module.exports = (env, argv) => {
 
     // Common config for both prod & dev
     const config = {
-        node: {
-            fs: 'empty'
-        },
         amd: {
             // Enable webpack-friendly use of require in Cesium
             toUrlUndefined: true
+        },
+        cache: {
+          type: 'filesystem'
         },
         mode: isProd ? 'production' : 'development',
         entry: entries,
@@ -67,6 +67,7 @@ module.exports = (env, argv) => {
             path: path.resolve(`dist/${version}/`),
             publicPath: `${publicPathPrefix}Oskari/dist/${version}/`,
             filename: '[name]/oskari.min.js',
+            assetModuleFilename: 'assets/[hash][ext][query]',
 
             // Needed to compile multiline strings in Cesium
             sourcePrefix: ''

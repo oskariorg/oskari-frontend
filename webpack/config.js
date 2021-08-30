@@ -42,7 +42,9 @@ const getStyleFileRules = (isProd, antThemeFile) => {
                 { loader: 'css-loader' },
                 {
                     loader: 'less-loader',
-                    options: lessLoaderOptions
+                    options: {
+                        lessOptions: lessLoaderOptions
+                    }
                 }
             ]
         }
@@ -123,20 +125,20 @@ const getModuleRules = (isProd = false, antThemeFile) => {
     const rules = [
         {
             test: require.resolve('sumoselect'),
-            use: 'imports-loader?define=>undefined,exports=>undefined'
+            use: [
+                {
+                    loader: 'imports-loader',
+                    options: {
+                        imports: ["default jquery $"]
+                    }
+                }
+            ]
         },
         BABEL_LOADER_RULE,
         ...styleFileRules,
         {
             test: /\.(ttf|png|jpg|gif|svg)$/,
-            use: [
-                {
-                    loader: 'file-loader',
-                    options: {
-                        outputPath: 'assets/'
-                    }
-                }
-            ]
+            type: 'asset/resource'
         },
         {
             type: 'javascript/auto',
@@ -158,6 +160,9 @@ const RESOLVE = {
     symlinks: false,
     alias: {
         'oskari-ui': path.resolve(__dirname, '../src/react')
+    },
+    fallback: {
+        fs: false
     }
 };
 const RESOLVE_LOADER = {

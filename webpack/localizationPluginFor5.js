@@ -1,8 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const merge = require('merge');
+const merge = require('merge');;
+const { sources, Compilation } = require('webpack');
 
 const fileRex = /^(.{2,3})\.js$/;
+const pluginName = 'LocalizationPlugin'
 
 function isLocaleFile (filePath) {
     if (path.basename(path.dirname(filePath)) !== 'locale') {
@@ -23,14 +25,32 @@ class LocalizationPlugin {
         this.prevTimestamps = new Map();
         this.appPath = appName ? appName + '/' : '';
     }
-
+// https://stackoverflow.com/questions/65535038/webpack-processassets-hook-and-asset-source
+// https://github.com/webpack/webpack/issues/11425
+// https://survivejs.com/webpack/extending/plugins/
+// https://webpack.js.org/api/compilation-hooks/#processassets
     apply (compiler) {
-        compiler.hooks.emit.tapAsync('LocalizationPlugin', (compilation, callback) => {
-            const localeFiles = Array.from(compilation.fileDependencies)
-                .filter(isLocaleFile);
+        compiler.hooks.thisCompilation.tap('LocalizationPlugin', (compilation) => {
+            const moi = Array.from(compilation.fileDependencies);
+            console.log('Number of files: ', moi.length);
+            const localeFiles = moi.filter(isLocaleFile);
+            console.log('Number of locales: ', localeFiles.length);
+
+            compilation.hooks.processAssets.tap({
+                name: pluginName,
+                stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+            }, (assets) => {
+
+            console.log('List of assets and their sizes:');
+            let files = [];
+            Object.entries(assets).forEach(([pathname, source]) => {
+                console.log(`— ${pathname}: ${source.size()} bytes`);
+                files.push(pathname);
+            });
+            //const localeFiles = files.filter(isLocaleFile);
+            // Array.from(compilation.fileDependencies).filter(isLocaleFile);
+                
             const changedLanguages = new Set();
-            //console.log(compilation.fileSystemInfo)
-            //console.log(localeFiles)
             localeFiles
             /*
                 .filter(path => {
@@ -98,6 +118,9 @@ class LocalizationPlugin {
                     });
 
                 const fileContent = keyContents.map(content => `Oskari.registerLocalization(${JSON.stringify(content)});`).join('\n');
+                
+                compilation.emitAsset(`${this.appPath}oskari_lang_${lang}.js`, new sources.RawSource(fileContent));
+                /*
                 compilation.assets[`${this.appPath}oskari_lang_${lang}.js`] = {
                     source () {
                         return fileContent;
@@ -106,9 +129,10 @@ class LocalizationPlugin {
                         return fileContent.length;
                     }
                 };
+                */
             }
-
-            callback();
+            });
+            // callback();
         });
     }
 

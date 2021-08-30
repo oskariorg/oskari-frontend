@@ -6,6 +6,11 @@ $simpleColorWidth: 16px;
 $colorSetColorWidth: 6px;
 $colorHeight: 16px;
 
+// for webpack/import
+:export {
+    colorSetColorWidth: $colorSetColorWidth;
+}
+
 .oskari-color-selection-main {
     position: relative;
 
