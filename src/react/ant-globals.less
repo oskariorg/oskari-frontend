@@ -4,7 +4,11 @@
 
 @import '~antd/es/style/mixins/index';
 @import '~antd/es/style/core/base';
-// @import 'global';
+// @import '~antd/es/style/core/global'; // @import 'global';
+// Safe parts from global fixing AntD input styles:
+*, :after, :before {
+    box-sizing: border-box;
+}
 @import '~antd/es/style/core/iconfont';
 @import '~antd/es/style/core/motion';
 
