@@ -8,12 +8,6 @@ function isLocaleFile (filePath) {
     if (path.basename(path.dirname(filePath)) !== 'locale') {
         return false;
     }
-    const parts = filePath.split(path.sep);
-    if (parts[parts.length -2] !== 'resouces') {
-        // this could be: oskari-frontend\node_modules\moment\locale\af.js
-        // for oskari locs we want oskari-frontend\bundles\*\resources\locale\en.js
-        return false;
-    }
     return fileRex.test(path.basename(filePath));
 }
 
@@ -29,14 +23,10 @@ class LocalizationPlugin {
             const localeFiles = Array.from(compilation.fileDependencies)
                 .filter(isLocaleFile);
             const changedLanguages = new Set();
-            //console.log(compilation.fileSystemInfo)
-            //console.log(localeFiles)
             localeFiles
-            /*
                 .filter(path => {
                     return (this.prevTimestamps.get(path) || this.startTime) < (compilation.fileTimestamps.get(path) || Infinity);
                 })
-                */
                 .forEach(path => {
                     const lang = this.langFromPath(path);
                     if (lang) {
@@ -44,7 +34,7 @@ class LocalizationPlugin {
                     }
                 });
 
-            //this.prevTimestamps = compilation.fileTimestamps;
+            this.prevTimestamps = compilation.fileTimestamps;
 
             const langToLoc = new Map();
             const langToOverride = new Map();
