@@ -99,32 +99,85 @@ const readLocalizationContent = (localeFiles) => {
     return result;
 }
 
+/**
+ * 1) Processes oskari-frontend/bundles/[bundle id]/resources/locale/[lang].js,
+ * 2) gathers the localizations to language specific files
+ * 3) and generates new "assets" for the build to write to dist/[version]/appName/oskari_lang_[lang].js
+ */
 class LocalizationPlugin {
     constructor (appName) {
         this.appPath = appName ? appName + '/' : '';
     }
-// https://stackoverflow.com/questions/65535038/webpack-processassets-hook-and-asset-source
-// https://github.com/webpack/webpack/issues/11425
-// https://survivejs.com/webpack/extending/plugins/
-// https://webpack.js.org/api/compilation-hooks/#processassets
     apply (compiler) {
+/*
+This implementation gives deprecation warning:
+        [DEP_WEBPACK_COMPILATION_ASSETS] DeprecationWarning: Compilation.assets will be frozen in future, all modifications are deprecated.
+        BREAKING CHANGE: No more changes should happen to Compilation.assets after sealing the Compilation.
+                Do changes to assets earlier, e. g. in Compilation.hooks.processAssets.
+                Make sure to select an appropriate stage from Compilation.PROCESS_ASSETS_STAGE_*.
+*/
         compiler.hooks.emit.tap(pluginName, (compilation) => {
             const localeFiles = Array.from(compilation.fileDependencies).filter(isLocaleFile);
-            console.log('\n\nNumber of locales: ', localeFiles.length);
                 
             const oskariLangContents = readLocalizationContent(localeFiles)
-            /*
-            [DEP_WEBPACK_COMPILATION_ASSETS] DeprecationWarning: Compilation.assets will be frozen in future, all modifications are deprecated.
-            BREAKING CHANGE: No more changes should happen to Compilation.assets after sealing the Compilation.
-                    Do changes to assets earlier, e. g. in Compilation.hooks.processAssets.
-                    Make sure to select an appropriate stage from Compilation.PROCESS_ASSETS_STAGE_*.
-            */
             Object.keys(oskariLangContents).forEach(lang => {
                 const fileContent = oskariLangContents[lang];
                 compilation.emitAsset(`${this.appPath}oskari_lang_${lang}.js`, new sources.RawSource(fileContent));
             });
         });
+
+// Here's some links that might help updating the impl:
+//  problem so far is that the process assets only get "asset" files like svg/png or files from dependencies (moment/locale etc)
+//  The solution requires processing of the actual source files in the app and oskari-frontend/oskari-frontend-contrib etc
+// https://stackoverflow.com/questions/65535038/webpack-processassets-hook-and-asset-source
+// https://github.com/webpack/webpack/issues/11425
+// https://survivejs.com/webpack/extending/plugins/
+// https://webpack.js.org/api/compilation-hooks/#processassets
+/*
+        compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
+              compilation.hooks.processAssets.tap({
+                name: pluginName,
+                stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+              }, () => {
+                    const localeFiles = getScriptFilesForChunks(compilation);
+                    const oskariLangContents = readLocalizationContent(localeFiles);
+                    Object.keys(oskariLangContents).forEach(lang => {
+                        const fileContent = oskariLangContents[lang];
+                        compilation.emitAsset(`${this.appPath}oskari_lang_${lang}.js`, new sources.RawSource(fileContent));
+                    });
+                },
+              );
+        });
+        */
     }
 }
+// try to get file links when processing assets (so we get rid of deprecation warning)
+const getScriptFilesForChunks = (compilation) => {
+    const { chunks } = compilation.getStats().toJson({ chunks: true });
+    const { publicPath } = compilation.options.output;
+    const scriptFiles = new Set();
+
+    chunks.forEach(chunk => {
+        // seems to only give locales from moment and antd, not ones from "our" bundles
+        const fileNames = chunk.modules.map(mod => mod.issuerName)
+            .filter(name => !!name && name.indexOf('oskari-frontend') > -1 && name.indexOf('locale') > -1);
+        console.log(fileNames);
+        const before = scriptFiles.length;
+        fileNames
+            .filter(name => !!name && isLocaleFile(name))
+            .forEach(name => scriptFiles.add(name));
+        if (scriptFiles.length > before) {
+            const { modules, names, runtime, ...rest} = chunk;
+            console.log('chunk: ', names, runtime);
+        }
+    });
+
+    if (scriptFiles.size === 0) {
+        compilation.warnings.push(`There were no assets matching ` +
+            `importScriptsViaChunks: [meh].`);
+    }
+
+    return Array.from(scriptFiles);
+};
 
 module.exports = LocalizationPlugin;
