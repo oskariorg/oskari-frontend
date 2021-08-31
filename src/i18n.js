@@ -1,3 +1,5 @@
+import IntlMessageFormat from 'intl-messageformat'
+
 /**
  * Adds internalization support for Oskari
  */
