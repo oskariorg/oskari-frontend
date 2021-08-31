@@ -305,7 +305,15 @@ import IntlMessageFormat from 'intl-messageformat'
             formatter = new IntlMessageFormat(message, oskariLang);
             intlCache[cacheKey] = formatter;
         }
-        return formatter.format(values);
+        // FIXME: remove html from localization files to get rid of these!!
+        const htmlValues = {
+            ...values,
+            p: (content) => `<p>${content}</p>`,
+            li: (content) => `<li>${content}</li>`,
+            ul: (content) => `<ul>${content}</ul>`,
+            br: () => `<br />`
+        }
+        return formatter.format(htmlValues);
     };
     O.getNumberFormatter = function (fractionDigits) {
         var opts;
