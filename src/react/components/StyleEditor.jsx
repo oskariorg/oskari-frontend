@@ -88,7 +88,6 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
-                <Message messageKey='StyleEditor.subheaders.styleFormat' />
                 <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
                     <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
                     <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>

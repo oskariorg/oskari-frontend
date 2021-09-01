@@ -5,7 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Sjálfgefinn stíll",
         "none-style": "Enginn",
         "refresh": "Uppfæra",
         "refresh_title": "Uppfæra gögn sem flytjast ekki sjálfkrafa á kortið.",

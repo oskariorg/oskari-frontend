@@ -98,15 +98,15 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @return {ol/style/Style}
      */
     _getLayerCurrentStyleFunction (layer) {
-        const externalStyleDef = layer.getCurrentExternalStyleDef();
         const olLayers = this.getOLMapLayers(layer.getId());
-        if (externalStyleDef && olLayers.length !== 0) {
+        const style = layer.getCurrentStyle();
+        if (style.isExternalStyle() && olLayers.length !== 0) {
+            const externalStyleDef = style.getExternalDef() || {};
             const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
             return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
         }
-        const styleDef = layer.getCurrentStyleDef();
         const factory = this.mapModule.getStyle.bind(this.mapModule);
-        return styleDef ? styleGenerator(factory, styleDef) : this._createDefaultStyle();
+        return style.hasDefinitions() ? styleGenerator(factory, style) : this._createDefaultStyle();
     }
 
     /**

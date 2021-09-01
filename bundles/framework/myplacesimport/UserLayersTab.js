@@ -250,8 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             styleForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.StyleForm', me.instance);
             const layer = this.instance.getMapLayerService().findMapLayer(id);
             // has only one style default for now
-            const { featureStyle } = layer.getCurrentStyleDef();
-            styleForm.setStyleValues(featureStyle || {});
+            styleForm.setStyleValues(layer.getCurrentStyle().getFeatureStyle());
 
             form = styleForm.getForm();
             form.find('input[data-name=userlayername]').val(data.name);

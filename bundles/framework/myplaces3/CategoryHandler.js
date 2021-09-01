@@ -89,15 +89,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         _parseLayerToCategory: function (layer) {
             const layerId = layer.getId();
-            // has only one style default for now
-            const { featureStyle } = layer.getCurrentStyleDef();
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
                 // TODO: check if we need to sanitize name here or somewhere down the line
                 name: layer.getName(),
                 isDefault: !!layer.getOptions().isDefault,
-                style: featureStyle || {}
+                // has only one style default for now
+                style: layer.getCurrentStyle().getFeatureStyle()
             };
         },
         parseCategoryId: function (layerId) {

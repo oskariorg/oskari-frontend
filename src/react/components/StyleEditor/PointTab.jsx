@@ -41,23 +41,6 @@ export const PointTab = ({ oskariStyle }) => {
                 <Col span={ 10 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.color'
-                        label={ <Message messageKey='StyleEditor.stroke.color' /> }
-                    >
-                        <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
-                </Col>
-
-                <Col span={ 10 } offset={ 2 }>
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
                         name='image.fill.color'
                         label={ <Message messageKey='StyleEditor.image.fill.color' /> }
                     >

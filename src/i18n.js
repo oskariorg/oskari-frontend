@@ -1,4 +1,5 @@
 import IntlMessageFormat from 'intl-messageformat'
+
 /**
  * Adds internalization support for Oskari
  */
@@ -7,6 +8,14 @@ import IntlMessageFormat from 'intl-messageformat'
     var localizations = {};
     var supportedLocales = null;
     var log = Oskari.log('Oskari.deprecated');
+    // FIXME: remove html from localization files to get rid of these!!
+    // These are required by intl-messageformat as instructions for handling HTML-tags in locale strings
+    const HTML_CONTEXT_VARIABLE_HANDLERS = {
+        p: (content) => `<p>${content}</p>`,
+        li: (content) => `<li>${content}</li>`,
+        ul: (content) => `<ul>${content}</ul>`,
+        br: () => `<br />`
+    };
 
     // ------------------------------------------------
     // Locales/lang
@@ -304,7 +313,11 @@ import IntlMessageFormat from 'intl-messageformat'
             formatter = new IntlMessageFormat(message, oskariLang);
             intlCache[cacheKey] = formatter;
         }
-        return formatter.format(values);
+        const htmlValues = {
+            ...values,
+            ...HTML_CONTEXT_VARIABLE_HANDLERS
+        }
+        return formatter.format(htmlValues);
     };
     O.getNumberFormatter = function (fractionDigits) {
         var opts;

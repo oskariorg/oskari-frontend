@@ -4,7 +4,6 @@ Oskari.registerLocalization({
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Standard stil",
         "refresh": "Refresh",
         "refresh_title": "Refresh WFS-layers, which are not rendered automatically on a map",
         "tile": {

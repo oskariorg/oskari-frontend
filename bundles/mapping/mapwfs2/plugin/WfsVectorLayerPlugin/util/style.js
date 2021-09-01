@@ -189,28 +189,17 @@ const getDefaultStyleFunction = styleFactory => {
     defaultStyleFunction = getStyleFunction(styles);
     return defaultStyleFunction;
 };
+
 // featureStyleGenerator, defaultStyleGenerator,...
 export const styleGenerator = (styleFactory, layer) => {
     if (!layer) {
         return getDefaultStyleFunction(styleFactory);
     }
-    let styleDef = layer.getCurrentStyleDef();
-    if (!styleDef) {
+    const style = layer.getCurrentStyle();
+    if (!style) {
         return getDefaultStyleFunction(styleFactory);
     }
-    if (!styleDef.featureStyle) {
-        // Bypass possible layer definitions
-        Object.values(styleDef).find(obj => {
-            if (obj.hasOwnProperty('featureStyle')) {
-                styleDef = obj;
-                return true;
-            }
-        });
-    }
-    const { featureStyle, optionalStyles } = styleDef;
-    if (!featureStyle && !optionalStyles) {
-        return getDefaultStyleFunction(styleFactory);
-    }
+    const featureStyle = Object.keys(style.getFeatureStyle()).length ? style.getFeatureStyle() : defaults.style;
     const styles = {};
     if (featureStyle) {
         styles.default = styleFactory(featureStyle);
@@ -219,6 +208,7 @@ export const styleGenerator = (styleFactory, layer) => {
         styles.default = styleFactory(defaults.style);
         styles.selected = styleFactory(merge(defaults.style, defaults.selected));
     }
+    const optionalStyles = style.getOptionalStyles();
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
             const optional = {
