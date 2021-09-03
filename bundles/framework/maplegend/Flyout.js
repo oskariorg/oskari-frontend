@@ -26,8 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         this.instance = instance;
         this.container = null;
         this.sandbox = this.instance.getSandbox();
-        this.templateLayer = null;
-        this.templateLayerLegend = null;
         this.state = null;
         this.templateNoLegend = jQuery('<div class="no-maplegend"></div>');
         this._legendImagesNotLoaded = {};
@@ -61,9 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         startPlugin: function () {
             var me = this;
-            me.templateLayer = jQuery('<div class="maplegend-layer"></div>');
             me.templateTools = jQuery('<div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div>');
-            me.templateLayerLegend = jQuery('<div class="maplegend-legend"><img /></div>');
         },
         /**
          * @method stopPlugin
