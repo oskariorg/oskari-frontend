@@ -10,6 +10,8 @@ import { MapLegendList } from './MapLegendList';
  * Renders any Legend Images (such as returned from WMS GetLegendGraphic)
  * for any selected layers.
  *
+ * TODO: Add support for sublayers
+ *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
@@ -122,7 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         _populateLayerList: function () {
             // populate selected layer list
             const layers = this.sandbox.findAllSelectedMapLayers().slice(0);
-
             const titles = [];
 
             for (const layer of layers) {
@@ -133,8 +134,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                     titles.push({
                         title: Oskari.util.sanitize(layer.getName()),
                         uuid: uuid,
-                        legendImageURL: layerLegendImage,
-                        showMetadataCallback: (event, layerUuid) => this.showMetadataFlyout(event, layerUuid)
+                        legendImageURL: layerLegendImage || null,
+                        loadError: false,
+                        showMetadataCallback: layerLegendImage ? (event, layerUuid) => this.showMetadataFlyout(event, layerUuid) : null
                     });
                 }
             }
@@ -143,119 +145,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 <LocaleProvider value={{ bundleKey: 'maplegend' }}>
                     { titles.length === 0
                         ? <Message messageKey='noLegendsText' />
-                        : <MapLegendList list={ titles } />
+                        : <MapLegendList legendList={ titles } noImageText={ <Message messageKey='invalidLegendUrl' /> } />
                     }
                 </LocaleProvider>,
                 this.container
             );
-        },
-
-        /**
-         * @method _createLayerContainer
-         * @private
-         * Creates the layer containers
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
-         */
-        _createLayerContainer: function (layer) {
-            var me = this,
-                layerDiv = this.templateLayer.clone();
-
-            /* let's not show same image multiple times */
-            var imagesAdded = {};
-            /* main layer div */
-            var legendDiv = me._createLegendDiv(layer, imagesAdded);
-            if (legendDiv && legendDiv !== null) {
-                layerDiv.append(legendDiv);
-
-                /* optional sublayers */
-                var sublayers = layer.getSubLayers ? layer.getSubLayers() : null,
-                    sl,
-                    sublayer,
-                    subLayerlegendDiv;
-
-                if (sublayers) {
-                    for (sl = 0; sl < sublayers.length; sl += 1) {
-                        sublayer = sublayers[sl];
-                        subLayerlegendDiv = me._createLegendDiv(sublayer, imagesAdded);
-                        if (!subLayerlegendDiv && subLayerlegendDiv !== null) {
-                            continue;
-                        }
-                        layerDiv.append(subLayerlegendDiv);
-                    }
-                }
-
-                return layerDiv;
-            } else {
-                return null;
-            }
-        },
-
-        /**
-         * @method _createLegendDiv
-         * creates legend image div for layer
-         */
-        _createLegendDiv: function (layer, imagesAdded) {
-            var me = this,
-                legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-
-            if (imagesAdded[legendUrl]) {
-                me._checkNoLegendText();
-                return null;
-            }
-
-            if (!(legendUrl && legendUrl !== '')) {
-                me._checkNoLegendText();
-                return null;
-            }
-
-            var legendDiv = me.templateLayerLegend.clone(),
-                imgDiv = legendDiv.find('img'),
-                img = new Image();
-
-            legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
-
-            if (me._legendImagesNotLoaded[legendUrl]) {
-                me._checkNoLegendText();
-                // return null;
-            }
-
-            imagesAdded[legendUrl] = true;
-
-            img.onload = function () {
-                imgDiv.attr('src', legendUrl);
-                img.onload = null;
-                me._checkNoLegendText();
-            };
-
-            img.onerror = function () {
-                img.onerror = null;
-                // Show legend invalid info for the layer
-                me._legendImagesNotLoaded[legendUrl] = true;
-                me._checkNoLegendText(legendDiv, layer);
-            };
-
-            img.src = legendUrl;
-
-            return legendDiv;
-        },
-        /**
-        * Check if any legends images not founded. If not founded then inform the user.
-        * @method _checkNoLegendText
-        * @private
-        */
-        _checkNoLegendText: function (legendDiv, layer) {
-            var me = this,
-                invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
-                noLegendContainer = me.templateNoLegend.clone();
-
-            if (legendDiv && layer) {
-                var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-                if (legendUrl) {
-                    noLegendContainer.html(invalidLegendUrl);
-                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ': ' + legendUrl);
-                }
-                legendDiv.append(noLegendContainer);
-            }
         }
     }, {
         /**
