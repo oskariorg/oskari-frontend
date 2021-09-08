@@ -88,7 +88,7 @@ const _parsePattern = (pattern) => {
  * @returns {String} full pattern as string
  */
 const _composeSvgPattern = (patternPath, patternId) => {
-    return '<defs><pattern id="' + patternId +'" viewBox="0, 0, 4, 4" width="50%" height="50%">' + patternPath.outerHTML + '</pattern></defs>';
+    return '<defs><pattern id="' + patternId +'" viewBox="0, 0, 12, 12" width="100%" height="100%">' + patternPath.outerHTML + '</pattern></defs>';
 }
 
 const _composePreviewViewbox = () => {
