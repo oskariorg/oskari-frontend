@@ -10,7 +10,7 @@ const getFillIconTransparent = (id) => {
         <defs>
             <pattern id="${myId}" viewBox="0, 0, 0, 0" width="0%" height="0%"><path d="M0,0 l0,0" stroke="#000000" stroke-width="0"/></pattern>
         </defs>
-        <rect width="0" height="0" fill="url(#${myId})" } />
+        <rect width="0" height="0" fill="url(#${myId})" />
     </svg>`;
 };
 
@@ -23,34 +23,34 @@ const createSVG = (id, pattern) => {
 
 const getFillIconSolid = (id) => {
     const myId = 'solid-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="100%" height="100%"><path d="M-1,2 l6,0" stroke="#000000" stroke-width="4"/></pattern>`);
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%"><path d="M-1,6 l13,0" stroke="#000000" stroke-width="12"/></pattern>`);
 };
 
 const getFillIconHorizontalThin = (id) => {
     const myId = 'thin_horizontal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 32, 32" width="100%" height="100%">
-                <path d="M0,4 l32,0, M0,12 l32,0 M0,20 l32,0 M0,28 l32,0" stroke="#000000" stroke-width="5"/>
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,1 l33,0, M-1,4 l33,0 M-1,7 l33,0 M-1,10 l33,0 M-1,13 l33,1" stroke="#000000" stroke-width="1"/>
             </pattern>`);
 };
 
 const getFillIconHorizontalThick = (id) => {
     const myId = 'thick_horizontal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 32, 32" width="100%" height="100%">
-                <path d="M0,4 l32,0, M0,15 l32,0 M0,26 l32,0" stroke="#000000" stroke-width="5"/>
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,2 l33,0, M-1,7 l33,0 M-1,12 l33,0" stroke="#000000" stroke-width="3" />
             </pattern>`);
 };
 
 const getFillIconDiagonalThin = (id) => {
     const myId = 'thin_diagonal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="50%" height="50%">
-                <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/>
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,2 l2,-2 M-1,7 l6,-7 M-2,13 l11,-13 M2,13 l11,-13 M6,13 l11,-13 M10,13 l11,-13" stroke="#000000" stroke-width="1"/>
             </pattern>`);
 };
 
 const getFillIconDiagonalThick = (id) => {
     const myId = 'thick_diagonal-' + id;
-    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 4, 4" width="80%" height="80%">
-                <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/>
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-2,4 l12,-14 M-2,13 l12,-14 M6,13 l11,-13" stroke="#000000" stroke-width="3"/>
             </pattern>`);
 };
 
