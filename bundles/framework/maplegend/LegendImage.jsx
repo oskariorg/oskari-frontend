@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Message } from 'oskari-ui';
 import PropTypes from 'prop-types';
 
-export const LegendImage = ({ item }) => {
+export const LegendImage = ({ url }) => {
     const [imageState, setImageState] = useState({
         hasError: false
     });
