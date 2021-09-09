@@ -21,5 +21,5 @@ export const LegendImage = ({ url }) => {
 };
 
 LegendImage.propTypes = {
-    item: PropTypes.object.isRequired
+    url: PropTypes.string.isRequired
 };
