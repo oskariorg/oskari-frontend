@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 export const LegendImage = ({ url }) => {
     const [hasError, setError] = useState(false);
     if (hasError) {
-        return (Message messageKey='invalidLegendUrl' />);
+        return (<Message messageKey='invalidLegendUrl' />);
     }
     return (<img src={ url } onError={ () => setError(true) } />);
 };
