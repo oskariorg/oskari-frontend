@@ -26,7 +26,7 @@ export const MapLegendList = ({ legendList }) => {
             { legendList.length > 0 && legendList.map((item) => {
                 return (
                     <CollapsePanel key={ item.title } header={ composeHeader(item.title, item.uuid, item.showMetadataCallback) }>
-                        <LegendImage item={ item } />
+                        <LegendImage url={ item.legendImageURL } />
                     </CollapsePanel>
                 );
             }) }
