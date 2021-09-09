@@ -116,42 +116,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          */
         _populateLayerList: function () {
             // populate selected layer list
-            const layers = this.sandbox.findAllSelectedMapLayers().slice(0);
-            const titles = [];
+            const layers = this.sandbox.findAllSelectedMapLayers();
 
-const showMetadata = (event) => this.showMetadataFlyout(event, uuid);
-const titles = layers
-    .filter(layer => 
-        typeof layer.getLegendImage == 'function' && !!layer.getLegendImage())
-    .map(layer => {
-        const uuid = layer.getMetadataIdentifier();
-        return {
-            title: layer.getName(),
-            uuid: uuid,
-            legendImageURL: layer.getLegendImage(),
-            loadError: false,
-            showMetadataCallback: uuid ? showMetadata : null;
-        };
-    });
-                const uuid = layer.getMetadataIdentifier();
-                const layerLegendImage = layer.getLegendImage ? layer.getLegendImage() : null;
-
-                if (layerLegendImage) {
-                    titles.push({
+            const showMetadata = (event, uuid) => this.showMetadataFlyout(event, uuid);
+            const legends = layers
+                .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
+                .map(layer => {
+                    const uuid = layer.getMetadataIdentifier();
+                    return {
                         title: layer.getName(),
                         uuid: uuid,
-                        legendImageURL: layerLegendImage || null,
+                        legendImageURL: layer.getLegendImage(),
                         loadError: false,
-                        showMetadataCallback: layerLegendImage ? (event, layerUuid) => this.showMetadataFlyout(event, layerUuid) : null
-                    });
-                }
-            }
+                        showMetadataCallback: uuid ? showMetadata : null
+                    };
+                });
 
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'maplegend' }}>
-                    { titles.length === 0
+                    { legends.length === 0
                         ? <Message messageKey='noLegendsText' />
-                        : <MapLegendList legendList={ titles } noImageText={ <Message messageKey='invalidLegendUrl' /> } />
+                        : <MapLegendList legendList={ legends } noImageText={ <Message messageKey='invalidLegendUrl' /> } />
                     }
                 </LocaleProvider>,
                 this.container
