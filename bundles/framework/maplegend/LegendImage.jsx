@@ -3,21 +3,11 @@ import { Message } from 'oskari-ui';
 import PropTypes from 'prop-types';
 
 export const LegendImage = ({ url }) => {
-    const [imageState, setImageState] = useState({
-        hasError: false
-    });
-
-    return (
-        <Fragment>
-            { imageState.hasError
-                ? <Message messageKey='invalidLegendUrl' />
-                : <img
-                    onError={ () => setImageState({ hasError: true }) }
-                    src={ item.legendImageURL }
-                />
-            }
-        </Fragment>
-    );
+    const [hasError, setError] = useState(false);
+    if (hasError) {
+        return (Message messageKey='invalidLegendUrl' />);
+    }
+    return (<img src={ url } onError={ () => setError(true) } />);
 };
 
 LegendImage.propTypes = {
