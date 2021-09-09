@@ -119,7 +119,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             const layers = this.sandbox.findAllSelectedMapLayers().slice(0);
             const titles = [];
 
-            for (const layer of layers) {
+const showMetadata = (event) => this.showMetadataFlyout(event, uuid);
+const titles = layers
+    .filter(layer => 
+        typeof layer.getLegendImage == 'function' && !!layer.getLegendImage())
+    .map(layer => {
+        const uuid = layer.getMetadataIdentifier();
+        return {
+            title: layer.getName(),
+            uuid: uuid,
+            legendImageURL: layer.getLegendImage(),
+            loadError: false,
+            showMetadataCallback: uuid ? showMetadata : null;
+        };
+    });
                 const uuid = layer.getMetadataIdentifier();
                 const layerLegendImage = layer.getLegendImage ? layer.getLegendImage() : null;
 
