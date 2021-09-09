@@ -115,9 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Renders legend images as an accordion for the selected layers.
          */
         _populateLayerList: function () {
-            // populate selected layer list
             const layers = this.sandbox.findAllSelectedMapLayers();
 
+            // populate selected layer list
             const showMetadata = (event, uuid) => this.showMetadataFlyout(event, uuid);
             const legends = layers
                 .filter(layer => typeof layer.getLegendImage === 'function' && !!layer.getLegendImage())
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 <LocaleProvider value={{ bundleKey: 'maplegend' }}>
                     { legends.length === 0
                         ? <Message messageKey='noLegendsText' />
-                        : <MapLegendList legendList={ legends } noImageText={ <Message messageKey='invalidLegendUrl' /> } />
+                        : <MapLegendList legendList={ legends } />
                     }
                 </LocaleProvider>,
                 this.container
