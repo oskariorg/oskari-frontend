@@ -30,7 +30,7 @@ let previewAttributes = {
     strokeLineCap: OSKARI_BLANK_STYLE.stroke.lineCap,
     fill: OSKARI_BLANK_STYLE.defaultFill, // empty string here?
     fillColor: OSKARI_BLANK_STYLE.fill.color,
-    pattern: OSKARI_BLANK_STYLE.fill.area.pattern
+    pattern: '' //OSKARI_BLANK_STYLE.fill.area.pattern <- this will be part of an SVG IF we are doing an area style with fill pattern
 };
 
 let size = 3; // Size of the preview depending on the format - default 3 is for area
@@ -105,7 +105,7 @@ const _composePreviewViewbox = () => {
  * @returns {String} point svg path
  */
 const _composePointPath = (oskariStyle, markers) => {
-    const path = _parsePath(markers[oskariStyle.image.shape].data);        
+    const path = _parsePath(markers[oskariStyle.image.shape].data);
 
     previewAttributes.strokeColor = '#000000';
     previewAttributes.fillColor = oskariStyle.fill.color;
@@ -204,7 +204,35 @@ const _composeAreaPath = (oskariStyle, areaFills) => {
     return path.outerHTML;
 }
 
+const getTestParamsObject = (format, style) => {
 
+    const additionalAttrs = {
+        format,
+        size
+    };
+    if (format === 'point') {
+        additionalAttrs.size = style.image.size;
+        additionalAttrs.color = style.image.fill.color;
+        additionalAttrs.shape = style.image.shape;
+    } else if (format === 'line') {
+        additionalAttrs.color = style.stroke.color;
+        additionalAttrs.size = style.stroke.width;
+        additionalAttrs.linecap = style.stroke.lineCap;
+        additionalAttrs.linedash = style.stroke.lineDash;
+        additionalAttrs.linejoin = style.stroke.area.lineJoin;
+    } else if (format === 'area') {
+        additionalAttrs.color = style.fill.color;
+        additionalAttrs.strokecolor = style.stroke.area.color;
+        additionalAttrs.size = style.stroke.area.width;
+        additionalAttrs.strokestyle = style.stroke.area.lineDash;
+        additionalAttrs.pattern = style.fill.area.pattern;
+    }
+    const testAttrs = {};
+    Object.keys(additionalAttrs).forEach(key => {
+        testAttrs['data-' + key] = additionalAttrs[key];
+    });
+    return testAttrs;
+}
 /**
  * @class Preview
  * @calssdesc <Preview>
@@ -224,9 +252,8 @@ export const Preview = ({markers, areaFills, format, oskariStyle}) => {
         format === 'point' ? _composePointPath(oskariStyle, markers) :
         false;
     const combinedSvg = previewAttributes.pattern + svgIcon; // Add pattern to svg icon
-
     return (
-        <div style={ previewWrapperStyle }>
+        <div style={ previewWrapperStyle } className="t_preview" { ...getTestParamsObject(format, oskariStyle) } >
             <svg
                 viewBox={ _composePreviewViewbox() }
                 width={ previewSize }
