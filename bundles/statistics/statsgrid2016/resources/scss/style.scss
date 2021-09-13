@@ -7,6 +7,12 @@ $inputWidth: 94%;
 $buttonWidth: 86%;
 
 $flyoutPadding: 16px;
+.SumoSelect {
+    .select-all {
+        /* AntD global reset changes default sizing to border-box which breaks SumoSelect */
+        box-sizing: content-box !important;
+    }
+}
 
 /* ********************************************
  * These are for common code in statsgrid
