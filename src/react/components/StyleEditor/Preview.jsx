@@ -43,13 +43,14 @@ export const Preview = ({markers, areaFills, format, oskariStyle}) => {
     const propsForSVG = StyleMapper.getPropsForFormat(format, oskariStyle);
     const flagsForSelenium = StyleMapper.getAsDataAttributes(format, propsForSVG);
     const svgIcon = getSVGContent(format, propsForSVG, markers, areaFills);
+    const size = format === 'point' ? propsForSVG.size : undefined;
     return (
         <div style={ previewWrapperStyle } className="t_preview" { ...flagsForSelenium } >
             <SVGWrapper
                 width={ previewSize }
                 height={ previewSize }
                 content={ svgIcon }
-                iconSize={ format === 'point' ? propsForSVG.size : null} />
+                iconSize={ size } />
         </div>
     );
 };

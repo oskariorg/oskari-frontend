@@ -15,6 +15,11 @@ const maxSize = 5;
 const multiplier = 2.5;
 
 const _composePreviewViewbox = (size) => {
+    if (typeof size === 'undefined') {
+        // for area and line so they are centered
+        return '2.5 2.5 45 45';
+    }
+    // calculate viewbox for centering point symbols
     const minX = previewViewbox.minX - (multiplier * (maxSize-size));
     const minY = previewViewbox.minY - (multiplier * (maxSize-size));
     const widthV = previewViewbox.width - (2 * multiplier * size) - multiplier; // multiply by negative to shrink viewbox
@@ -22,7 +27,7 @@ const _composePreviewViewbox = (size) => {
     return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
 };
 
-export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, iconSize = 3, content = '' }) => {
+export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, iconSize, content = '' }) => {
     return (<svg
         viewBox={ _composePreviewViewbox(iconSize) }
         width={ width }
