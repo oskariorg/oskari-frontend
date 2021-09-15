@@ -11,13 +11,15 @@ const previewViewbox = {
 
 // Size for preview svg
 const defaultPreviewSize = '80px';
+const maxSize = 5;
+const multiplier = 2.5;
 
 const _composePreviewViewbox = (size) => {
-    let viewboxString = ''
-    const widthV = previewViewbox.width - (5 * size); // multiply by negative to shrink viewbox
-    const heightV = previewViewbox.height - (5 * size); // multiply by negative to shrink viewbox
-    viewboxString = previewViewbox.minX + ' ' + previewViewbox.minY + ' ' +  widthV + ' ' + heightV;
-    return viewboxString;
+    const minX = previewViewbox.minX - (multiplier * (maxSize-size));
+    const minY = previewViewbox.minY - (multiplier * (maxSize-size));
+    const widthV = previewViewbox.width - (2 * multiplier * size) - multiplier; // multiply by negative to shrink viewbox
+    const heightV = previewViewbox.height - (2 * multiplier * size) - multiplier; // multiply by negative to shrink viewbox
+    return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
 };
 
 export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, iconSize = 3, content = '' }) => {
