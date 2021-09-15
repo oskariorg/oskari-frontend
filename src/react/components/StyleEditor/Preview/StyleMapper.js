@@ -1,14 +1,25 @@
-
-export const getAsDataAttributes = (format, props) => {
+/**
+ * Prefix object keys with "data-" so we can safely pass them to DOM element
+ * @param {String} format point, line or area
+ * @param {Object} props flags for style selection based on format
+ */
+const getAsDataAttributes = (format, props) => {
     const testAttrs = {
         'data-format': format
     };
     Object.keys(props).forEach(key => {
         testAttrs['data-' + key] = props[key];
     });
+    return testAttrs;
 };
 
-export const getPropsForFormat = (format, style) => {
+/**
+ * Returns a simplified object based on format for generating preview SVG
+ * @param {String} format geometry type: point, line or area
+ * @param {Object} style Oskari style object
+ * @returns simplified style object for SVG generator
+ */
+const getPropsForFormat = (format, style) => {
     if (format === 'point') {
         return getPointPropsFromStyle(style);
     } else if (format === 'line') {
@@ -19,8 +30,7 @@ export const getPropsForFormat = (format, style) => {
     throw new Error("Unrecognized format");
 }
 
-
-export const getAreaPropsFromStyle = (style) => {
+const getAreaPropsFromStyle = (style) => {
     return {
         color: style.fill.color,
         strokecolor: style.stroke.area.color,
@@ -30,7 +40,7 @@ export const getAreaPropsFromStyle = (style) => {
     };
 };
 
-export const getLinePropsFromStyle = (style) => {
+const getLinePropsFromStyle = (style) => {
     return {
         color: style.stroke.color,
         size: style.stroke.width,
@@ -40,7 +50,7 @@ export const getLinePropsFromStyle = (style) => {
     };
 };
 
-export const getPointPropsFromStyle = (style) => {
+const getPointPropsFromStyle = (style) => {
     return {
         color: style.image.fill.color,
         size: style.image.size,
