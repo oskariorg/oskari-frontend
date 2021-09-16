@@ -28,6 +28,7 @@ Oskari.registerLocalization({
                 color: 'Colour',
                 lineCap: 'Endings',
                 lineDash: 'Dash',
+                lineJoin: 'Corners',
                 width: 'Width',
                 area: {
                     color: 'Colour',

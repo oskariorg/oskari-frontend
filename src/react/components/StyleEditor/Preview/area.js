@@ -53,14 +53,14 @@ const getPatternSVG = (areaFills, patternId) => {
 */
 let patternIdCounter = 0;
 export const getAreaSVG = (areaParams, areaFills) => {
-   const { color, strokecolor, size, strokestyle, pattern } = areaParams;
+   const { color, strokecolor, size, linejoin, strokestyle, pattern } = areaParams;
    const path = parsePathFromSVG(areaPreviewSVG);
 
    path.setAttribute('stroke', strokecolor);
    path.setAttribute('stroke-width', size);
    path.setAttribute('stroke-linecap', OSKARI_BLANK_STYLE.stroke.lineCap);
    path.setAttribute('stroke-dasharray', strokestyle === 'dash' ? '4, 4': '');
-   path.setAttribute('stroke-linejoin', OSKARI_BLANK_STYLE.stroke.area.lineJoin);
+   path.setAttribute('stroke-linejoin', linejoin);
 
    const patternId = 'patternPreview' + patternIdCounter++;
    const fillPatternSVG = getPatternSVG(areaFills, pattern);

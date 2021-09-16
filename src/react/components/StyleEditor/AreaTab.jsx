@@ -140,6 +140,14 @@ export const AreaTab = ({oskariStyle}) => {
 
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
+                    name='stroke.area.lineJoin'
+                    label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
+                >
+                    <SvgRadioButton options={ constants.LINE_STYLES.corners } />
+                </Form.Item>
+
+                <Form.Item
+                    { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
                     label={ <Message messageKey='StyleEditor.fill.area.pattern' /> }
                 >

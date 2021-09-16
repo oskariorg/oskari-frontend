@@ -36,6 +36,7 @@ const getAreaPropsFromStyle = (style) => {
         strokecolor: style.stroke.area.color,
         size: style.stroke.area.width,
         strokestyle: style.stroke.area.lineDash,
+        linejoin: style.stroke.area.lineJoin,
         pattern: style.fill.area.pattern
     };
 };
@@ -46,7 +47,7 @@ const getLinePropsFromStyle = (style) => {
         size: style.stroke.width,
         linecap: style.stroke.lineCap,
         linedash: style.stroke.lineDash,
-        linejoin: style.stroke.area.lineJoin
+        linejoin: style.stroke.lineJoin
     };
 };
 

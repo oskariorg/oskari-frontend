@@ -9,12 +9,13 @@ export const OSKARI_BLANK_STYLE = {
         color: '#000000', // stroke color
         width: 3, // stroke width
         lineDash: 'solid', // line dash, supported: dash, dashdot, dot, longdash, longdashdot and solid
-        lineCap: 'square', // line cap, supported: mitre, round and square
+        lineCap: 'square', // line cap, supported: butt, round and square
+        lineJoin: 'round', // line corner, supported: bevel, round and miter
         area: {
             color: '#000000', // area stroke color
             width: 3, // area stroke width
             lineDash: 'solid', // area line dash
-            lineJoin: 'miter' // area line corner
+            lineJoin: 'round' // area line corner, supported: bevel, round and miter
         }
     },
     image: { // image style
