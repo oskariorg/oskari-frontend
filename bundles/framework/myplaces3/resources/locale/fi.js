@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
             },
             "export": {
-                "title":"Lataa",
-                "tooltip": "Voit ladata karttatason JSON-muodossa"
+                "title":"Vie kohteet",
+                "tooltip": "Voit ladata karttatason GeoJSON-muodossa"
             },
             "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",

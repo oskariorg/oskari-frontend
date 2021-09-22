@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
             },
             "export": {
-                "title":"Download",
-                "tooltip": "Download map layer in JSON format"
+                "title":"Export features",
+                "tooltip": "You can download the layer's features as GeoJSON"
             },
             "addCategoryFormButton": "New map layer",
             "addCategory": "Add map layer",
