@@ -321,7 +321,7 @@ Oskari.clazz.define(
             }
             olLayerList.forEach(olLayer => {
                 if (typeof (olLayer.getSource) !== 'function' || typeof (olLayer.getSource().updateParams) !== 'function') {
-                    this._log.warn(`Tried updating layer (${ layer.getId() }), but plugin (${ this.getName() }) doesn't support update operation`);
+                    this._log.warn(`Tried updating layer (${layer.getId()}), but plugin (${this.getName()}) doesn't support update operation`);
                     return;
                 }
                 const updatedParams = jQuery.extend(true, {}, olLayer.getSource().getParams(), params);
