@@ -43,7 +43,7 @@ Oskari.registerLocalization(
             "shortMonths": ["Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"]
         },
         "rangeControl": {
-            "helpMessage": 'Tällä aikasarjatyökalulla voit valita janalta haluamasi vuodet. Janalla näytetään pienillä ympyröillä vuodet, joilta sen hetkisen karttanäkymän alueella on dataa. Oletustilassa valitset janalta yksittäisen vuoden ja näet kartalla kyseisen vuoden aineistot. Oikean yläkulman "Vaihda aikasarjatilaa" napista voit ottaa käyttöön aikavälimoodin, jossa voit valita aikavälin, jolta kuvia haluat katsoa. Klikkaa uudestaan ja palaat oletustilaan.',
+            "helpMessage": 'Tällä aikasarjatyökalulla voit valita janalta haluamasi vuodet. Janalla näytetään pienillä ympyröillä vuodet, joilta sen hetkisen karttanäkymän alueella on dataa. Oletustilassa valitset janalta yksittäisen vuoden ja näet kartalla kyseisen vuoden aineistot. Oikean yläkulman "Vaihda aikavälimoodiin" napista voit ottaa käyttöön aikavälimoodin, jossa voit valita aikavälin, jolta kuvia haluat katsoa. Klikkaa uudestaan ja palaat oletustilaan.',
             "switchToRange": "Vaihda aikavälimoodiin",
             "switchToYear": "Vaihda yksittäisen vuoden valintamoodiin"
         }
