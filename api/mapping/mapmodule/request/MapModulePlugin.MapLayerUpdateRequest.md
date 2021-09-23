@@ -5,7 +5,7 @@ Update the map layer data on map.
 ## Use cases
 
 - Update WMS-layer with additional parameters on GetMap calls
-- Refetches features from vector source from the server
+- Refetches features of a vector source from the server/service
 
 ## Description
 
@@ -23,9 +23,9 @@ Can be used to refresh a WMS-layer by adding parameters to the GetMap requests l
   <td> \* MapLayerId </td><td> String </td><td> id of map/vector layer used in Oskari.mapframework.service.MapLayerService </td><td> </td>
 </tr>
 <tr>
-  <td> forced </td><td> Boolean </td><td> Forces the update (attaches a timestamp variable for WMS etc). Some parameters might not trigger the update automatically so this tries to make sure the content is refetched from the service. </td><td> </td>
+  <td> forced </td><td> Boolean </td><td> Forces the update (attaches a timestamp variable for WMS etc). Some parameters might not trigger the update automatically so this tries to make sure the content is refetched from the service. </td><td> false </td>
 </tr>
 <tr>
-  <td> params </td><td> Object </td><td> For adding parameters to the request you can attach an object where keys are the params with values being the param value. Does not affect WFS layers currently. </td><td> </td>
+  <td> params </td><td> Object </td><td> For adding parameters to the request you can attach an object where keys are the params with values being the param value. Does not affect WFS layers currently. </td><td> {} </td>
 </tr>
 </table>
