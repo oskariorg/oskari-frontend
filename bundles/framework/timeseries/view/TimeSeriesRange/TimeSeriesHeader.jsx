@@ -32,8 +32,7 @@ const getTooltipContent = (mode, modeIcon) => {
     return (
         <TooltipContent>
             <Message messageKey="rangeControl.helpGeneric" LabelComponent={Paragraph} />
-            <Message messageKey={`rangeControl.helpMsg_${mode}`} LabelComponent={Paragraph} />
-            <Message messageKey="rangeControl.helpModeToggle" LabelComponent={Paragraph}> {modeIcon}</Message>
+            <Message messageKey={`rangeControl.helpMsg_${mode}`} LabelComponent={Paragraph}> {modeIcon}</Message>
         </TooltipContent>
     );
 }

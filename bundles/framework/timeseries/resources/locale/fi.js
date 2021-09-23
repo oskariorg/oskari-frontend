@@ -44,9 +44,8 @@ Oskari.registerLocalization(
         },
         "rangeControl": {
             "helpGeneric": 'Tällä aikasarjatyökalulla voit valita janalta haluamasi vuodet. Janalla näytetään pienillä ympyröillä vuodet, joilta sen hetkisen karttanäkymän alueella on dataa.',
-            "helpMsg_year": 'Yksittäisen vuoden moodissa valitset janalta yksittäisen vuoden ja näet kartalla kyseisen vuoden aineistot.',
-            "helpMsg_range": 'Aikavälimoodissa voit valita aikavälin, jolta kuvia haluat katsoa.',
-            "helpModeToggle": "Pääset vaihtamaan moodia klikkaamalla oikean yläkulman ikonia: ",
+            "helpMsg_year": 'Tässä moodissa pääset tarkastelemaan yksittäisen vuoden aineistoja. Kuvausalueiden rajoilla tarkastelua helpottaa aikavälimoodi, johon pääset siirtymään viereisestä ikonista:',
+            "helpMsg_range": 'Tässä moodissa pääset tarkastelemaan valitun aikavälin sisällä tuotettua aineistoa. Huom! Näytettävä kuva on valitusta aikavälistä viimeisin saatavilla oleva. Jos haluat nähdä vain yksittäisen vuoden aineistoa vaihda moodia viereisestä ikonista:',
             "switchToRange": "Vaihda aikavälimoodiin",
             "switchToYear": "Vaihda yksittäisen vuoden valintamoodiin"
         }
