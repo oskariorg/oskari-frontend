@@ -151,6 +151,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
+     * @method updateLayerParams
+     * Force updating features on layer
+     */
+    updateLayerParams (layer, forced, params) {
+        const handler = this._getLayerHandler(layer);
+        if (handler) {
+            handler.refreshLayer(layer);
+        }
+    }
+    /**
      * @method getPropertiesForIntersectingGeom
      * To get feature properties as a list. Returns features that intersect with given geometry.
      *
