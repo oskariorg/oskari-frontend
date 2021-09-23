@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                 "publicTooltip": "Detta kartlager är offentlig. Klicka här för att avpublicera det."
             },
             "export": {
-                "title":"Ladda ner",
-                "tooltip": "Ladda ner kartlägret i JSON format"
+                "title":"Exportera objekt",
+                "tooltip": "Du kan exportera kartlagrets egenskaper i GeoJSON"
             },
             "addCategoryFormButton": "Nytt kartlager",
             "addCategory": "Lägg till kartlagret",
