@@ -15,6 +15,11 @@ Some extra tags:
 
 Added initial bundle documentation. Userstyle functionality has been moved from wfsvector to own bundle.
 
+### [mod] MapModulePlugin.MapLayerUpdateRequest
+
+Added documentation for the request. The request itself has been available from 1.x already but the it wasn't documented. 
+Since 2.5 it can also be used to force reload of features from a service on a vector/WFS-layer.
+
 ## 2.4.0
 
 ### [rem] Removed unmaintained bundles
