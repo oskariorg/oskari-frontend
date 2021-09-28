@@ -22,28 +22,46 @@ export const LINE_STYLES = {
     "corners": [
         {
             "name": "miter",
-            "data": `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="32 9 9 9 9 16 9 23 9 32 23 32 23 23 32 23 32 9"/>
-                    <path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>`
+            "data": `<svg version="1.1" viewBox="0 0 32 32" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg"
+                        style="enable-background:new 0 0 32 32;">
+                    <polygon points="32,9 9,9 9,32 23,32 23,23 32,23 "/>
+                    <polygon fill="#fff" points="18.5,15.8 18.5,14 14,14 14,18.4 15.7,18.4 15.7,32 16.7,32 16.7,18.5 18.4,18.5 18.4,16.8 32,16.8 32,15.8 "/>
+                </svg>`
         },
         {
             "name": "round",
-            "data": `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M32,9H19.5A10.5,10.5,0,0,0,9,19.5V32H23V23h9Z"/>
-                    <path d="M32,15.75H17.25v-1h-2.5v2.5h1V32h.5V17.25h1v-1H32Zm-15.25,1h-1.5v-1.5h1.5Z" fill="#fff"/></svg>`
+            "data": `<svg version="1.1" viewBox="0 0 32 32" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg"
+                        style="enable-background:new 0 0 32 32;">
+               <path d="M32,9H18.3C13.2,9,9,13.2,9,18.3l0,0V32h14v-9h9V9z"/>
+               <polygon fill="#fff" points="18.5,15.8 18.5,14 14,14 14,18.4 15.7,18.4 15.7,32 16.7,32 16.7,18.5 18.4,18.5 18.4,16.8 32,16.8 32,15.8 "/>
+               </svg>`
         }
     ],
     "linecaps": [
         {
+            "name": "butt",
+            "data": `<svg version="1.1" viewBox="0 0 32 32" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg"
+                        style="enable-background:new 0 0 32 32;">
+                <polygon points="19.2,16 19.2,13 12.8,13 12.8,16 9,16 9,32 23,32 23,16 "/>
+                <polygon fill="#fff" points="13.8,14 13.8,18.4 15.5,18.4 15.5,32 16.5,32 16.5,18.5 18.2,18.5 18.2,14 "/>
+            </svg>`
+        },
+        {
             "name": "round",
-            "data": `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-                    <polygon points="9 32 23 32 23 21 18.17 16 13.94 16 9 21 9 32"/></svg>`,
+            "data": `<svg version="1.1" viewBox="0 0 32 32" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg"
+                    style="enable-background:new 0 0 32 32;">
+                <path d="M9,32h14V15.8c0-3.9-3.1-7-7-7l0,0c-3.9,0-7,3.1-7,7V32z"/>
+                <polygon fill="#fff" points="13.8,14 13.8,18.4 15.5,18.4 15.5,32 16.5,32 16.5,18.5 18.2,18.5 18.2,14 "/>
+            </svg>`
         },
 
         {
             "name": "square",
-            "data": `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="9" y="21.04" width="14" height="10.96"/></svg>`
+            "data": `<svg version="1.1" viewBox="0 0 32 32" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg"
+                        style="enable-background:new 0 0 32 32;">
+                <polygon points="9,32 23,32 23,8.8 9,8.8 "/>
+                <polygon fill="#fff" points="13.8,14 13.8,18.4 15.5,18.4 15.5,32 16.5,32 16.5,18.5 18.2,18.5 18.2,14 "/>
+            </svg>`
         }
     ]
 };
