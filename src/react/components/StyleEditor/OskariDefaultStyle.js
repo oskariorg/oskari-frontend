@@ -22,7 +22,7 @@ export const OSKARI_BLANK_STYLE = {
         shape: 5, // 0-6 for default markers. svg or external icon path
         size: 3, // Oskari icon size.
         fill: {
-            color: '#ff00ff' // image fill color
+            color: '#FAEBD7' // image fill color
         }
     }
 };
