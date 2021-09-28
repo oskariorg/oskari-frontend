@@ -76,6 +76,9 @@ Parameters for data-object:
   <td> offsetY </td><td> Integer </td><td> Where external graphic center point y should be. Calculated from bottom to top in pixels. </td><td>16</td>
 </tr>
 
+<tr>
+  <td> transient </td><td> Boolean </td><td> Add marker as transient. If this is set to true, then marker is not saved to state. </td><td>false</td>
+</tr>
 
 </table>
 
