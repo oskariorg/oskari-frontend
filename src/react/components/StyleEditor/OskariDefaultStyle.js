@@ -1,8 +1,10 @@
+// This should match default style on server:
+// https://github.com/oskariorg/oskari-server/blob/develop/service-base/src/main/java/fi/nls/oskari/domain/map/wfs/WFSLayerOptions.java#L136
 export const OSKARI_BLANK_STYLE = {
     fill: { // fill styles
         color: '#b5b5b5', // fill color
         area: {
-            pattern: 5 // fill style
+            pattern: 5 // fill style (5 == solid fill, matches -1 on server)
         }
     },
     stroke: { // stroke styles
