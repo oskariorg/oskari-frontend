@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
         // like in https://github.com/oskariorg/oskari-frontend/pull/1260
         /* style definition for this layer */
         this.hoverOptions = null;
+        this._geometryType = null;
 
         /* Layer Type */
         this._layerType = 'VECTORTILE';
@@ -15,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
         _createEmptyStyle: function () {
             return createDefaultStyle();
         },
+        getClusteringDistance () {},
 
         setHoverOptions (options) {
             this.hoverOptions = options;
@@ -60,6 +62,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
                 return true;
             }
             return this._srsList.indexOf(srsName) !== -1;
+        },
+        setGeometryType (type) {
+            this._geometryType = type;
+        },
+        getGeometryType () {
+            return this._geometryType || this.getAttributes('geometryType');
         }
     }, {
         extend: ['Oskari.mapframework.domain.AbstractLayer']

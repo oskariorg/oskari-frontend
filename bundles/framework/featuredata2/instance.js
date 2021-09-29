@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.selectionPlugin = null;
         this.conf = {};
         this.__loadingStatus = {};
+        this.vectorFeatureService = null;
     }, {
         /**
          * @static
@@ -161,7 +162,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
+        getVectorFeatureService: function () {
+            if (!this.vectorFeatureService) {
+                this.vectorFeatureService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+            }
+            return this.vectorFeatureService;
+        },
+        removeAllFeatureSelections: function () {
+            this.getVectorFeatureService().getSelectedFeatureHandler().removeAllSelections();
+        },
 
+        setFeatureSelections: function (layerId, featureIds, keepPrevious) {
+            this.getVectorFeatureService().getSelectedFeatureHandler().setFeatureSelectionsByIds(layerId, featureIds, keepPrevious);
+        },
         /**
          * Adds the Feature data tool for layer
          * @param  {Object} layer layer to process
@@ -340,11 +353,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // no features
                     return;
                 }
-
+                const allLayers = this.selectionPlugin.isSelectFromAllLayers();
                 this.selectionPlugin.setFeatures(geojson.features);
                 this.selectionPlugin.stopDrawing();
-
-                const event = Oskari.eventBuilder('WFSSetFilter')(geojson);
+                const event = Oskari.eventBuilder('WFSSetFilter')(geojson, null, allLayers);
                 this.sandbox.notifyAll(event);
 
                 this.popupHandler.removeButtonSelection();

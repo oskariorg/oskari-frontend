@@ -10,15 +10,9 @@ export class ReqEventHandler {
 
     createEventHandlers (plugin) {
         const me = this;
-        const modifySelection = (layer, featureIds, keepPrevious) => {
-            plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
-            plugin.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
-        };
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
+        const getSelectedHandler = () => plugin.vectorFeatureService.getSelectedFeatureHandler();
         return {
-            WFSFeaturesSelectedEvent: (event) => {
-                plugin.updateLayerStyle(event.getMapLayer());
-            },
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
                     return;
@@ -34,14 +28,13 @@ export class ReqEventHandler {
                     }
                     return selectionOpts;
                 };
-                hits.forEach(({ featureProperties, layerId }) => {
+                hits.forEach(({ featureProperties, layerId, feature }) => {
                     const layer = getSelectedLayer(layerId);
                     if (!layer || !plugin.isLayerSupported(layer)) {
                         return;
                     }
-                    const wfsFeatureId = featureProperties[WFS_ID_KEY];
                     if (keepPrevious) {
-                        getSelectionOptsForLayer(layer).features.push(wfsFeatureId);
+                        getSelectionOptsForLayer(layer).features.push(feature);
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId,
@@ -52,7 +45,7 @@ export class ReqEventHandler {
                 });
                 if (keepPrevious) {
                     Object.values(modifySelectionOpts)
-                        .forEach(({ layer, features }) => modifySelection(layer, features, keepPrevious));
+                        .forEach(({ layer, features }) => getSelectedHandler().setFeaturesSelections(layer, features, keepPrevious));
                 }
             },
             WFSSetFilter: (event) => {
@@ -66,7 +59,7 @@ export class ReqEventHandler {
                 if (plugin.WFSLayerService.getAnalysisWFSLayerId()) {
                     targetLayers = [plugin.WFSLayerService.getAnalysisWFSLayerId()];
                 } else {
-                    if (plugin.WFSLayerService.isSelectFromAllLayers()) {
+                    if (event.selectFromAllLayers()) {
                         targetLayers = plugin.getAllLayerIds();
                     } else {
                         const layerId = plugin.WFSLayerService.getTopWFSLayer();
@@ -74,9 +67,8 @@ export class ReqEventHandler {
                     }
                 }
                 targetLayers.forEach(layerId => {
-                    const layer = getSelectedLayer(layerId);
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
-                    modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                    getSelectedHandler().setFeatureSelectionsByIds(layerId, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
                 });
             },
             WFSSetPropertyFilter: event => {
@@ -97,7 +89,7 @@ export class ReqEventHandler {
                     });
                     filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                modifySelection(getSelectedLayer(layerId), [...filteredIds], false);
+                getSelectedHandler().setFeatureSelectionsByIds(layerId, [...filteredIds], false);
             }
         };
     }
@@ -107,6 +99,7 @@ export class ReqEventHandler {
             'WfsLayerPlugin.ActivateHighlightRequest': this
         };
     }
+
     // handle WfsLayerPlugin.ActivateHighlightRequest
     handleRequest (oskariCore, request) {
         this.isClickResponsive = request.isEnabled();

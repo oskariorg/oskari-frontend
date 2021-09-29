@@ -6,7 +6,6 @@ import { tile as tileStrategyFactory } from 'ol/loadingstrategy';
 import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
-import { applyOpacity, clusterStyleFunc } from '../util/style';
 import { RequestCounter } from './RequestCounter';
 
 import olPoint from 'ol/geom/Point';
@@ -49,35 +48,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
         return handlers;
-    }
-
-    getStyleFunction (layer, styleFunction, selectedIds) {
-        const clustering = this._isClusteringSupported() && typeof layer.getClusteringDistance() !== 'undefined';
-        return (feature, resolution) => {
-            // Cluster layer feature
-            if (feature.get('features')) {
-                if (feature.get('features').length > 1) {
-                    const isSelected = !!feature.get('features').find(cur => selectedIds.has(cur.get(WFS_ID_KEY)));
-                    return clusterStyleFunc(feature, isSelected);
-                } else {
-                    // Only single point in cluster. Use it in styling.
-                    feature = feature.get('features')[0];
-                }
-            } else if (clustering) {
-                // Vector layer feature, hide single points
-                const geomType = feature.getGeometry().getType();
-                if (geomType === 'Point' ||
-                    (geomType === 'MultiPoint' && feature.getGeometry().getPoints().length === 1)) {
-                    return null;
-                }
-            }
-            const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
-            const style = styleFunction(feature, resolution, isSelected);
-            if (!this.plugin.getMapModule().getSupports3D()) {
-                return style;
-            }
-            return applyOpacity(style, layer.getOpacity());
-        };
     }
 
     getPropertiesForIntersectingGeom (geometry, layer) {

@@ -1,5 +1,5 @@
 import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, WFS_TYPE, VECTOR_TYPE } from '../domain/constants';
-import { getStyleForGeometry } from '../../mapwfs2/plugin/WfsVectorLayerPlugin/util/style'; // TODO
+import { getStyleForGeometry } from '../oskariStyle/generator.ol';
 import olOverlay from 'ol/Overlay';
 import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';

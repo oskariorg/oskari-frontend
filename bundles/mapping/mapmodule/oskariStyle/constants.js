@@ -66,3 +66,10 @@ export const FILTER = {
     REG_EXP: 'regexp',
     WILD_CARD: '*'
 };
+
+export const STYLE_TYPE = {
+    POINT: 'point',
+    LINE: 'line',
+    AREA: 'area',
+    COLLECTION: 'collection'
+};

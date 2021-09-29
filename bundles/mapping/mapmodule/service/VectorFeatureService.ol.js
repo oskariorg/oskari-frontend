@@ -3,6 +3,7 @@ import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
+import { SelectedFeatureHandler } from './SelectedFeatureHandler';
 import {
     LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
@@ -27,6 +28,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
+            this.selectedHandler = new SelectedFeatureHandler(mapmodule);
             this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
@@ -40,6 +42,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._sandbox.registerForEventByName(this, 'MapClickedEvent');
             this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
+            this._sandbox.registerForEventByName(this, 'AfterMapLayerRemoveEvent');
+            this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerStyleEvent');
         }
 
         /**
@@ -264,6 +268,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.hoverHandler.setTooltipContent(layer);
         }
 
+        getSelectedFeatureHandler () {
+            return this.selectedHandler;
+        }
+
         /**
          * @method _getGeojson
          *
@@ -349,6 +357,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 break;
             case 'AfterChangeMapLayerOpacityEvent':
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
+            case 'AfterMapLayerRemoveEvent':
+                if (event.getMapLayer().hasFeatureData()) {
+                    this.getSelectedFeatureHandler().removeLayerSelections(event.getMapLayer());
+                }
+                break;
+            case 'AfterChangeMapLayerStyleEvent':
+                this.getSelectedFeatureHandler().updateLayerStyle(event.getMapLayer());
             }
         }
     }

@@ -1239,7 +1239,9 @@ Oskari.clazz.define(
          */
         isFilterSupported: function () {
             return false;
+        },
+        getGeometryType: function () {
+            return null;
         }
-
     }
 );
