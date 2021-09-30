@@ -1,4 +1,4 @@
-import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from '../../mapmodule/domain/VectorStyle';
+import { createDefaultStyle, DEFAULT_STYLE_NAME } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -62,16 +62,7 @@ Oskari.clazz.define(
                     this._pendingUserStyleTools.push(layer);
                 }
             }
-
-            // Read options object for styles and hover options
-            const options = mapLayerJson.options || {};
-            const { styles = {} } = options;
-            Object.keys(styles).forEach(styleId => {
-                const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
-                layer.addStyle(style);
-            });
-            // Remove styles from options to be sure that VectorStyle is used
-            delete options.styles;
+            layer.createStylesFromOptions();
             if (layer.getStyles().length === 0) {
                 // ensure we have at least one style so:
                 // - things don't break as easily in other parts of the app

@@ -1,3 +1,4 @@
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer
  *
@@ -40,6 +41,21 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /* Layer type specific s */
+
+    createStylesFromOptions (clear) {
+        if (clear === true) {
+            this._styles = [];
+        }
+        // Read options object for styles and hover options
+        const options = this.getOptions() || {};
+        const { styles = {} } = options;
+        Object.keys(styles).forEach(styleId => {
+            const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
+            this.addStyle(style);
+        });
+        // Remove styles from options to be sure that VectorStyle is used
+        delete options.styles;
+    }
 
     /**
      * @method getFields

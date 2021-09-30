@@ -1,3 +1,4 @@
+import LayerRenderer from 'ol/renderer/Layer';
 import { showModal } from './reactModalHelper';
 
 /**
@@ -158,6 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             }
             layer.setName(name);
             layer.setOptions(options);
+            layer.createStylesFromOptions(true);
             const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
             this.sandbox.notifyAll(evt);
             if (this.sandbox.isLayerAlreadySelected(id)) {
