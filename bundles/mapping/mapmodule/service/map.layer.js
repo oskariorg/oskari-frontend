@@ -1310,7 +1310,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // Oskari.log(this.getName()).warn("Trying to create mapLayer without JSON data");
                 return null;
             }
-            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params, mapLayerJson.options);
+            var layer = this.createLayerTypeInstance(mapLayerJson.type, mapLayerJson.params);
             if (!layer) {
                 Oskari.log(this.getName()).warn('Unknown layer type: ' + mapLayerJson.type);
                 return null;
@@ -1378,6 +1378,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // optional attributes
             if (mapLayerJson.attributes) {
                 layer.setAttributes(mapLayerJson.attributes);
+            }
+            // optional options
+            if (mapLayerJson.options) {
+                layer.setOptions(mapLayerJson.options);
             }
 
             // permissions
