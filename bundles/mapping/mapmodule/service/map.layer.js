@@ -287,7 +287,49 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
         },
+        /**
+         * @method refreshLayerOnMap
+         * Removes the previous version from internal layerlist and replaces with the new layer data without sending events
+         * @param {Obejct} layerJson layer configuration
+         * @param {function} modifier (optional) to modify map layer before adding it
+         */
+        refreshLayerOnMap: function (layerJson = {}, modifier) {
+            const { id } = layerJson;
+            const existingLayer = this.findMapLayer(id);
+            if (!existingLayer) {
+                return;
+            }
+            const sandbox = this.getSandbox();
+            const originalLayerIndex = sandbox.getMap().getLayerIndex(id); // Save index for the new layer
+            const existingTools = existingLayer.getTools();
+            const modifiedLayer = this.createMapLayer(layerJson);
+            modifiedLayer.setTools(existingTools);
 
+            if (typeof modifier === 'function') {
+                modifier(modifiedLayer);
+            }
+
+            // if layer was found from the selected layers remove and re-add it
+            if (originalLayerIndex !== -1) {
+                sandbox.postRequestByName('RemoveMapLayerRequest', [id]);
+            }
+
+            // remove the previous version replace with the new layer data without sending events
+            // this is a more secure way of updating all of the layer data for the frontend instead of calling updateLayer that does only partial update
+            this.removeLayer(id, true);
+            this.addLayer(modifiedLayer, true);
+
+            sandbox.notifyAll(Oskari.eventBuilder('MapLayerEvent')(id, 'update'));
+
+            // if layer was found from the selected layers remove it from map and re-add it
+            // this handles everything that needs to be updated on the map without separate code to update and potentially changed data separately
+            if (originalLayerIndex !== -1) {
+                sandbox.postRequestByName('AddMapLayerRequest', [id]);
+                sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [id, originalLayerIndex]);
+                sandbox.postRequestByName('ChangeMapLayerStyleRequest', [id]);
+            }
+            return modifiedLayer;
+        },
         /**
          * @method updateLayer
          * Updates layer in internal layerlist and
