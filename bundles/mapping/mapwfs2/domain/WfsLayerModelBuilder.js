@@ -62,7 +62,6 @@ Oskari.clazz.define(
                     this._pendingUserStyleTools.push(layer);
                 }
             }
-            layer.createStylesFromOptions();
             if (layer.getStyles().length === 0) {
                 // ensure we have at least one style so:
                 // - things don't break as easily in other parts of the app
