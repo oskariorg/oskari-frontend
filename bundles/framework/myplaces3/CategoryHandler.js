@@ -1,4 +1,3 @@
-import LayerRenderer from 'ol/renderer/Layer';
 import { showModal } from './reactModalHelper';
 
 /**
