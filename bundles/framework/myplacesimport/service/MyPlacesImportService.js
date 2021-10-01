@@ -87,20 +87,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {String} id
      * @param {Object} updatedLayer
      */
-    updateLayer: function (id, updatedLayer) {
-        const layer = this.instance.getMapLayerService().findMapLayer(id);
-        layer.setName(updatedLayer.name);
-        layer.setSource(updatedLayer.source);
-        layer.setDescription(updatedLayer.description);
-        layer.setOptions(updatedLayer.options);
-
-        var evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
-        this.sandbox.notifyAll(evt);
-        if (this.sandbox.isLayerAlreadySelected(id)) {
-            // update layer on map
-            this.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
-            this.instance.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
-        }
+    updateLayer: function (layerJson) {
+        this.instance.getMapLayerService().refreshLayerOnMap(layerJson, this.addInfoToMaplayer.bind(this));
     },
     /**
      * Adds the layers to the map layer service.
@@ -149,6 +137,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         const mapLayerService = this.instance.getMapLayerService();
         // Create the layer model
         const mapLayer = mapLayerService.createMapLayer(layerJson);
+        this.addInfoToMaplayer(mapLayer);
+        // Add the layer to the map layer service
+        mapLayerService.addLayer(mapLayer, skipEvent);
+        if (typeof cb === 'function') {
+            cb(mapLayer);
+        }
+        return mapLayer;
+    },
+
+    // adding or updating layer
+    addInfoToMaplayer: function (mapLayer) {
         // mark that this has been added by this bundle.
         // There might be other userlayer typed layers in maplayerservice from link parameters that might NOT be this users layers.
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
@@ -160,13 +159,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             id: this.groupId,
             name: loclayer.inspire
         }]);
-        // Add the layer to the map layer service
-        mapLayerService.addLayer(mapLayer, skipEvent);
-        if (typeof cb === 'function') {
-            cb(mapLayer);
-        }
-        return mapLayer;
     }
+
 }, {
     protocol: ['Oskari.mapframework.service.Service']
 });

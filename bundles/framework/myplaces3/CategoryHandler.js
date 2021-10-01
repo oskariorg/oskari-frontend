@@ -149,24 +149,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             }
             return layer;
         },
-        updateLayer: function (layerJson) {
-            const { id, name, options } = layerJson;
-            const layer = this.mapLayerService.findMapLayer(id);
-            if (!layer) {
-                this.log.warn('tried to update layer which does not exist, id: ' + id);
-                return;
-            }
-            layer.setName(name);
-            layer.setOptions(options);
-            const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
-            this.sandbox.notifyAll(evt);
-            if (this.sandbox.isLayerAlreadySelected(id)) {
-                // update layer on map
-                this.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
-                this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [id]);
-            }
-            this._notifyUpdate();
-        },
         refreshLayerIfSelected: function (categoryId) {
             const id = this.getMapLayerId(categoryId);
             if (this.sandbox.isLayerAlreadySelected(id)) {
@@ -239,7 +221,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     if (isNew) {
                         this.addLayerToService(layerJson);
                     } else {
-                        this.updateLayer(layerJson);
+                        this.mapLayerService.refreshLayerOnMap(layerJson);
+                        this._notifyUpdate();
                     }
                     if (callback) {
                         callback(this.parseCategoryId(layerJson.id));

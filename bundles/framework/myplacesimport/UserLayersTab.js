@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                         if (typeof response === 'object') {
                             msg = me.loc('tab.notification.editedMsg');
                             title = me.loc('tab.title');
-                            me.instance.getService().updateLayer(data.id, response);
+                            me.instance.getService().updateLayer(response);
                             me.refresh();
                             fadeout = true;
                         } else {
