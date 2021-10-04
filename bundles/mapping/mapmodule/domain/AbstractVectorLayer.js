@@ -27,6 +27,7 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     setOptions (options) {
+        super.setOptions(options);
         // Create styles before setting options
         const { styles = {} } = options;
         // use addStyle to avoid duplicate and invalid styles
@@ -37,7 +38,6 @@ export class AbstractVectorLayer extends AbstractLayer {
         });
         // Remove styles from options to be sure that VectorStyle is used
         delete options.styles;
-        super.setOptions(options);
     }
 
     removeStyle (name) {
