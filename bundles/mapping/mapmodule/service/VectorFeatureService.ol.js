@@ -28,7 +28,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
-            this.selectedHandler = new SelectedFeatureHandler(mapmodule);
+            this.selectedHandler = new SelectedFeatureHandler(sandbox, mapmodule);
             this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }

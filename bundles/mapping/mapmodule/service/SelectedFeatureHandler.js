@@ -1,6 +1,5 @@
 import { WFS_ID_KEY } from '../domain/constants';
 import { getOlStyleForLayer } from '../oskariStyle/generator.ol';
-const getSelectedLayer = layerId => Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
 
 const SELECTED_STYLE = {
     inherit: true,
@@ -16,7 +15,8 @@ const SELECTED_STYLE = {
 };
 
 export class SelectedFeatureHandler {
-    constructor (mapmodule) {
+    constructor (sandbox, mapmodule) {
+        this._sandbox = sandbox;
         this._mapmodule = mapmodule;
         // this._styleCache = {};
         this._featureIds = {}; // layerId: [fid]
@@ -74,7 +74,7 @@ export class SelectedFeatureHandler {
             features = featureIds.map(fid => source.getFeatureById(fid))
                 .filter(f => f); // remove null values if feature isn't found
         }
-        const layer = getSelectedLayer(layerId);
+        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
         this.setFeaturesSelections(layer, features, keepPrevious);
     }
 
@@ -95,7 +95,7 @@ export class SelectedFeatureHandler {
     notify (layer, keepPrevious = false) {
         const fids = this.getSelectedFeatureIds(layer.getId());
         const evt = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(fids, layer, keepPrevious);
-        Oskari.getSandbox().notifyAll(evt);
+        this._sandbox.notifyAll(evt);
     }
 
     _setStyleForFeature (style, feature) {
@@ -167,7 +167,7 @@ export class SelectedFeatureHandler {
         const layerIds = Object.keys(this._featureIds);
         // remove and notify for selected layers
         layerIds.forEach(layerId => {
-            const layer = getSelectedLayer(layerId);
+            const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
             this.removeLayerSelections(layer);
         });
         // clear to be sure that everything is cleared (no need to notify non-selected layers)
