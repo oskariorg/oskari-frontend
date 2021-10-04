@@ -36,13 +36,7 @@ Oskari.clazz.define(
             const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             if (typeof wfsPlugin.registerLayerType === 'function') {
                 // Let wfs plugin handle this layertype
-                const me = this;
-                const eventHandlers = {
-                    'MyPlaces.MyPlacesChangedEvent': event => {
-                        wfsPlugin.refreshLayersOfType(me.layertype);
-                    }
-                };
-                wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder, eventHandlers);
+                wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder);
                 this.unregister();
                 return;
             }

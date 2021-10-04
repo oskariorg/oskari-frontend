@@ -284,7 +284,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         }
 
         for (const singleRegion of regionValues.values) {
-            if (typeof singleRegion.value === 'undefined' || !singleRegion.value || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
+            if (typeof singleRegion.value === 'undefined' || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
                 return false;
             }
         }

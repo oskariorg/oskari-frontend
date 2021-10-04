@@ -87,6 +87,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         source.tileCache.clear();
         source.clear();
         source.refresh();
+        this._log.warn('Server caches MVT-rendered tiles, use GeoJSON for layers that need to be updated at runtime or add a way to update cache on server.');
     }
 
     _setupTileGrid (config) {

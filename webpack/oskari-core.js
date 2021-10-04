@@ -4,7 +4,6 @@
 import 'expose-loader?jQuery!jquery';
 // registers global variable "MobileDetect" used in src/util.js:
 import 'expose-loader?MobileDetect!mobile-detect';
-import 'imports-loader?this=>window!../libraries/intl-messageformat/intl-messageformat-with-locales-2.1.0.js';
 import '../src/polyfills.js';
 
 // Oskari global

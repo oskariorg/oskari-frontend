@@ -1,12 +1,11 @@
+import { AbstractVectorLayer } from '../../mapmodule/domain/AbstractVectorLayer';
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer
  *
  * MapLayer of type WFS
  */
 
-const VectorTileLayer = Oskari.clazz.get('Oskari.mapframework.mapmodule.VectorTileLayer');
-
-export class WFSLayer extends VectorTileLayer {
+export class WFSLayer extends AbstractVectorLayer {
     constructor () {
         super(...arguments);
         /* Layer Type */
@@ -25,10 +24,6 @@ export class WFSLayer extends VectorTileLayer {
 
     isFilterSupported () {
         return true;
-    }
-
-    getLegendImage () {
-        return null;
     }
 
     isSupportedSrs () {

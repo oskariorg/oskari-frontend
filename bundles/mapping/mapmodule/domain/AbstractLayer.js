@@ -677,6 +677,9 @@ Oskari.clazz.define(
             }
             return this._styles;
         },
+        setStyles: function (styles) {
+            this._styles = styles;
+        },
         /**
          * @method selectStyle
          * @param {String} styleName

@@ -12,6 +12,7 @@ const TAB_CHANGE_UI_UPDATE_MS = 200;
 
 const StyledTabs = styled(Tabs)`
     max-width: 600px;
+    width: -moz-fit-content; // without this vendor prefix layerlist scrollbar doesn't have enough space and cuts content
 `;
 
 const ControlledTabs = ({ tab, ...rest }) => {

@@ -45,8 +45,8 @@ export const LineTab = (props) => {
 
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.area.lineJoin'
-                    label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
+                    name='stroke.lineJoin'
+                    label={ <Message messageKey='StyleEditor.stroke.lineJoin' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.corners } />
                 </Form.Item>
