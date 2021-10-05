@@ -219,9 +219,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             if (!content) {
                 content = jQuery('.selectionToolsDiv');
             }
-            var me = this,
-                isActive = jQuery(content).find('.tool').hasClass('active');
-
+            const isActive = jQuery(content).find('.tool').hasClass('active');
             if (isActive) {
                 jQuery(content).find('.active').removeClass('active');
             }

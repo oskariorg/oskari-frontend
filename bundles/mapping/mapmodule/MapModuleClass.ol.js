@@ -21,7 +21,7 @@ import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
-import { STYLE_TYPE} from './oskariStyle/constants';
+import { STYLE_TYPE } from './oskariStyle/constants';
 import { LAYER_ID } from '../mapmodule/domain/constants';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
@@ -299,8 +299,8 @@ export class MapModule extends AbstractMapModule {
         return styles;
     };
 
-    getStyleForLayer (layer) {
-        return getOlStyleForLayer(this, layer);
+    getStyleForLayer (layer, extendedDef) {
+        return getOlStyleForLayer(this, layer, extendedDef);
     };
 
     registerDefaultFeatureStyle (layerType, styleDef) {
