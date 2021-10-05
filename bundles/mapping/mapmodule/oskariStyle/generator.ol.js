@@ -103,7 +103,7 @@ export const getStyleForGeometry = (geometry, styleTypes) => {
 const clusterStyleCache = {};
 const clusterStyleFunc = feature => {
     const size = feature.get('features').length;
-    const cacheKey = [`${size}`];
+    const cacheKey = `${size}`;
     let style = clusterStyleCache[cacheKey];
     if (!style) {
         style = new olStyleStyle({
