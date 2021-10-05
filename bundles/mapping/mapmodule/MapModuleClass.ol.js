@@ -302,7 +302,7 @@ export class MapModule extends AbstractMapModule {
     /**
      * @method getStyleForLayer
      * @param layer Oskari layer
-     * @param extendedDef oskari style definition to override layer feature style
+     * @param extendedDef Oskari style definition which overrides layer's featureStyle
      * @return {ol/style/StyleLike}
      **/
     getStyleForLayer (layer, extendedDef) {
