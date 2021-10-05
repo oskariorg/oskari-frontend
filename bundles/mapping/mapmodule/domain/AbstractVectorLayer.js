@@ -57,6 +57,24 @@ export class AbstractVectorLayer extends AbstractLayer {
             sb.notifyAll(event);
         }
     }
+
+    /**
+     * To get distance between features when clustering kicks in.
+     *  @method getClusteringDistance
+     *  @return {Number} Distance between features in pixels
+     */
+    getClusteringDistance () {
+        return this.getOptions().clusteringDistance;
+    }
+
+    /**
+     * To setup clustering. Sets the minimum distance between features before clustering kicks in.
+     *  @method setClusteringDistance
+     *  @return {Number} Distance between features in pixels
+     */
+    setClusteringDistance (distance) {
+        this.getOptions().clusteringDistance = distance;
+    }
 }
 
 Oskari.clazz.defineES('Oskari.mapframework.domain.AbstractVectorLayer', AbstractVectorLayer);

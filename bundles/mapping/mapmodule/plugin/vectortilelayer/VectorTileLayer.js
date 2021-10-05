@@ -7,6 +7,11 @@ export class VectorTileLayer extends AbstractVectorLayer {
         this._layerType = 'VECTORTILE';
     }
 
+    // Clustering isn't supported for VectorTile
+    getClusteringDistance () {
+        return undefined;
+    }
+
     /**
      * @method getTileGrid
      * @return {Object} tile grid configuration
