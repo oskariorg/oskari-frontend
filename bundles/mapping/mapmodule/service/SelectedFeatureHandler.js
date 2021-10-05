@@ -1,5 +1,4 @@
 import { WFS_ID_KEY } from '../domain/constants';
-import { getOlStyleForLayer } from '../oskariStyle/generator.ol';
 
 const SELECTED_STYLE = {
     inherit: true,
@@ -51,8 +50,10 @@ export class SelectedFeatureHandler {
         }
         // update features styles
         featureIdsToRemove.forEach(fid => this._removeStyleFromFeature(fid));
-        const style = getOlStyleForLayer(this._mapmodule, layer, SELECTED_STYLE);
-        featuresToAdd.forEach(ftr => this._setStyleForFeature(style, ftr));
+        if (featuresToAdd.length) {
+            const style = this._mapmodule.getStyleForLayer(layer, SELECTED_STYLE);
+            featuresToAdd.forEach(ftr => this._setStyleForFeature(style, ftr));
+        }
         // update id selection
         this._featureIds[layerId] = selectedFeatureIds;
         this.notify(layer, keepPrevious);
@@ -83,7 +84,7 @@ export class SelectedFeatureHandler {
         if (!fids.length) {
             return;
         }
-        const style = getOlStyleForLayer(this._mapmodule, layer, SELECTED_STYLE);
+        const style = this._mapmodule.getStyleForLayer(layer, SELECTED_STYLE);
         fids.forEach(fid => {
             const feature = this._styledFeatures[fid];
             if (feature) {
@@ -122,8 +123,8 @@ export class SelectedFeatureHandler {
         return Object.keys(this._featureIds)
             .map(layerId => {
                 return {
-                    layerId,
-                    features: this._featureIds[layerId]
+                    layerId: isNaN(layerId) ? layerId : Number(layerId),
+                    featureIds: this._featureIds[layerId]
                 };
             });
     }
