@@ -299,6 +299,12 @@ export class MapModule extends AbstractMapModule {
         return styles;
     };
 
+    /**
+     * @method getStyleForLayer
+     * @param layer Oskari layer
+     * @param extendedDef oskari style definition to override layer feature style
+     * @return {ol/style/StyleLike}
+     **/
     getStyleForLayer (layer, extendedDef) {
         return getOlStyleForLayer(this, layer, extendedDef);
     };

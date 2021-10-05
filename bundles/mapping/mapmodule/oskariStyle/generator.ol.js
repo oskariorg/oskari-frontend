@@ -55,6 +55,13 @@ export const geometryTypeToStyleType = type => {
     return styleType;
 };
 
+/**
+ * @method getStyleForLayer
+ * @param mapmodule
+ * @param layer Oskari layer
+ * @param extendedDef Oskari style definition which overrides layer's featureStyle
+ * @return {ol/style/StyleLike}
+ **/
 export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
     const featureStyle = getFeatureStyle(layer, extendedDef);
     if (!useStyleFunction(layer)) {
