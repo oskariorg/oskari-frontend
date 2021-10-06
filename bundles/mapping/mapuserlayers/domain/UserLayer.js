@@ -12,7 +12,6 @@ export class UserLayer extends WFSLayer {
         this._metaType = 'USERLAYER';
         this.description = undefined;
         this.source = undefined;
-        this.renderingElement = undefined;
     }
 
     /**
@@ -42,14 +41,6 @@ export class UserLayer extends WFSLayer {
             return Oskari.util.sanitize(this.source);
         }
         return this.source;
-    }
-
-    setRenderingElement (element) {
-        this.renderingElement = element;
-    }
-
-    getRenderingElement () {
-        return this.renderingElement;
     }
 
     /**

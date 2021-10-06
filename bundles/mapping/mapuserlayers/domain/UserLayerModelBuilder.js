@@ -23,8 +23,6 @@ Oskari.clazz.define(
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             layer.setDescription(mapLayerJson.description);
             layer.setSource(mapLayerJson.source);
-            layer.setRenderingElement(mapLayerJson.renderingElement);
-            layer.addLayerUrl(mapLayerJson.renderingUrl);
         }
     }
 );
