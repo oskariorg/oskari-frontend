@@ -68,25 +68,13 @@ const prepareData = (capabilities) => {
 };
 
 const sortLayers = (layers) => {
-    return layers.sort((a, b) => {
-        return compare(a.isExisting, !b.isExisting,
-            () => compare(a.isProblematic, !b.isProblematic,
-                () => Oskari.util.naturalSort(a, b)));
-    });
-};
-
-// FIXME: this isn't working properly but first decide how we want to sort existing/problematic etc layers
-const compare = (a, b, next) => {
-    if (a && b) {
-        return 1;
-    }
-    if (!a && !b) {
-        return -1;
-    }
-    if (next) {
-        return next();
-    }
-    return 0;
+    const existing = layers.filter(l => l.isExisting);
+    const problematic = layers.filter(l => !l.isExisting && l.isProblematic);
+    const available = layers.filter(l => !existing.includes(l) && !problematic.includes(l));
+    available.sort((a, b) => Oskari.util.naturalSort(a.title, b.title));
+    problematic.sort((a, b) => Oskari.util.naturalSort(a.title, b.title));
+    existing.sort((a, b) => Oskari.util.naturalSort(a.title, b.title));
+    return [...available, ...problematic, ...existing];
 };
 
 /**
@@ -98,7 +86,7 @@ const filterLayers = (layers, filter) => {
     if (!filter) {
         return layers;
     }
-    let filterLower = filter.toLowerCase().split(' ');
+    const filterLower = filter.toLowerCase().split(' ');
     return layers.filter((layer) => {
         return filterLower.map((item) => {
             return layer.name.toLowerCase().includes(item) ||
