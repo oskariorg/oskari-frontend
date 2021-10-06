@@ -1,4 +1,3 @@
-import { createDefaultStyle, DEFAULT_STYLE_NAME } from '../../mapmodule/domain/VectorStyle';
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -62,17 +61,7 @@ Oskari.clazz.define(
                     this._pendingUserStyleTools.push(layer);
                 }
             }
-            if (layer.getStyles().length === 0) {
-                // ensure we have at least one style so:
-                // - things don't break as easily in other parts of the app
-                // - end-user can switch back to "default" when adding a runtime style of their own
-                // add default style
-                layer.addStyle(createDefaultStyle());
-            }
             layer.setHoverOptions(mapLayerJson.options.hover);
-
-            // Set current Style
-            layer.selectStyle(mapLayerJson.style || DEFAULT_STYLE_NAME);
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {
