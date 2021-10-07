@@ -4,7 +4,8 @@ import { VectorFeatureSelectionService } from './VectorFeatureSelectionService';
 
 // Fake sandbox and mapmodule
 const sandbox = {
-    findMapLayerFromSelectedMapLayers: () => layer
+    findMapLayerFromSelectedMapLayers: () => layer,
+    registerForEventByName: () => 'no-op'
 };
 
 const layer = {
@@ -34,7 +35,7 @@ describe('VectorFeatureSelectionService', () => {
         expect(handler.getSelectedFeatureIdsByLayer(layerId).length).toBe(3);
         expect(previousSelection.length).toBe(2);
         expect(currentSelection.length).toBe(3);
-        
+
         // unselect feature by using existing id
         handler.removeSelection(layerId, 'f_1');
         expect(previousSelection.length).toBe(3);
@@ -45,5 +46,4 @@ describe('VectorFeatureSelectionService', () => {
         expect(ids).toEqual(expect.arrayContaining(['f_0', 'f_2']));
         expect(ids).not.toContain('f_1');
     });
-
 });

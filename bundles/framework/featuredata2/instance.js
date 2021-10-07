@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getSelectionPlugin: function () {
             return this.selectionPlugin;
         },
-        
+
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm

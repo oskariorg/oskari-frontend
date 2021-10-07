@@ -22,10 +22,10 @@ export class SelectionHelper {
         // layerId: { fid: olFeature }
         this._styledFeatures = {};
     }
-    getMapModule() {
+    getMapModule () {
         return this._layerPlugin.getMapModule();
     }
-    updateSelection(oskariLayer, featureIds = []) {
+    updateSelection (oskariLayer, featureIds = []) {
         const layerId = oskariLayer.getId();
         const currentSelection = this._getStyledFeaturesByLayer(layerId);
         Object.keys(currentSelection)
@@ -38,7 +38,6 @@ export class SelectionHelper {
         }
         const style = this.getMapModule().getStyleForLayer(oskariLayer, SELECTED_STYLE);
         newSelection.forEach(feature => this._setStyleForFeature(layerId, feature, style));
-
     }
     // recalculate styles for currently selected features on layer
     updateSelectionStyles (oskariLayer) {
@@ -49,13 +48,13 @@ export class SelectionHelper {
     }
     getFeaturesByIds (layerId, featureIds) {
         const olLayers = this.getMapModule().getOLMapLayers(layerId);
-        let features = [];
         if (!olLayers.length || typeof olLayers[0].getSource !== 'function') {
             return [];
         }
         const source = olLayers[0].getSource();
-        return features = featureIds.map(fid => source.getFeatureById(fid))
-                .filter(f => f); // remove null values if feature isn't found
+        return featureIds
+            .map(fid => source.getFeatureById(fid))
+            .filter(f => !!f); // remove null values if feature isn't found
     }
     _saveFeatureRef (layerId, olFeature) {
         let features = this._styledFeatures[layerId];

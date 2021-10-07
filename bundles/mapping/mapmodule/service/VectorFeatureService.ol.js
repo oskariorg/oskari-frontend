@@ -349,12 +349,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             case 'AfterChangeMapLayerOpacityEvent':
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
             case 'AfterChangeMapLayerStyleEvent':
-                //this.getSelectedFeatureHandler().updateLayerStyle(event.getMapLayer());
                 this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
             }
         }
-    }
-    , {
+    }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

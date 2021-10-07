@@ -10,11 +10,10 @@ Ways of selecting features:
  -> this could be changed so that features that fit the geometry are detected outside this service and selection is made with ids
 */
 
-const LOG = Oskari.log('VectorSourceService');
 /**
  * Compares two arrays to see if the contents match
- * @param {String[]} previous 
- * @param {String[]} current 
+ * @param {String[]} previous previous selection
+ * @param {String[]} current current selection
  * @returns true if the content is the same
  */
 const isSameContent = (previous = [], current = []) => {
@@ -112,7 +111,7 @@ export class VectorFeatureSelectionService {
     }
     getSelectedFeatureIdsByLayer (layerId) {
         if (typeof layerId === 'undefined') {
-           return [];
+            return [];
         }
         const features = this._selectedFeaturesByLayer[layerId];
         if (features) {
@@ -216,7 +215,7 @@ export class VectorFeatureSelectionService {
         }
         this.trigger('change', [layerId, selectedFeatureIds, previousSelection]);
     }
-    getName() {
+    getName () {
         return this.__name;
     }
     getQName () {
