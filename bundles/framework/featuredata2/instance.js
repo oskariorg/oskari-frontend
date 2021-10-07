@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.selectionPlugin = null;
         this.conf = {};
         this.__loadingStatus = {};
-        this.vectorFeatureService = null;
+        this._featureSelectionService = null;
     }, {
         /**
          * @static
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getSelectionPlugin: function () {
             return this.selectionPlugin;
         },
-
+        
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
@@ -162,23 +162,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
-        getVectorFeatureService: function () {
-            if (!this.vectorFeatureService) {
-                this.vectorFeatureService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+        getSelectionService: function () {
+            if (!this._featureSelectionService) {
+                const service = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+                if (service) {
+                    // TODO: will probably register as another service in sandbox directly instead of getter
+                    this._featureSelectionService = service.getSelectionService();
+                }
             }
-            return this.vectorFeatureService;
+            return this._featureSelectionService;
         },
         removeAllFeatureSelections: function () {
-            //this.getVectorFeatureService().getSelectedFeatureHandler().removeAllSelections();
-            this.getVectorFeatureService().getSelectionService().removeSelection();
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            service.removeSelection();
         },
 
-        setFeatureSelections: function (layerId, featureIds, keepPrevious) {
-            // this.getVectorFeatureService().getSelectedFeatureHandler().setFeatureSelectionsByIds(layerId, featureIds, keepPrevious);
-            if (keepPrevious) {
-                featureIds.forEach(id => this.getVectorFeatureService().getSelectionService().toggleFeatureSelection(layerId, id));
+        setFeatureSelections: function (layerId, featureIds, useToggle) {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            if (useToggle) {
+                featureIds.forEach(id => service.toggleFeatureSelection(layerId, id));
             } else {
-                this.getVectorFeatureService().getSelectionService().setSelectedFeatureIds(layerId, featureIds);
+                service.setSelectedFeatureIds(layerId, featureIds);
             }
         },
         /**

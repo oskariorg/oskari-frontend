@@ -55,7 +55,7 @@ Oskari.clazz.define(
                 this.sandbox.registerForEventByName(this, t);
             }
         }
-        this.handler = new FeatureDataHandler((state, updated) => this.update(state, updated));
+        this.handler = new FeatureDataHandler(instance.getSelectionService(), (state, updated) => this.update(state, updated));
     }, {
         __templates: {
             wrapper: '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'

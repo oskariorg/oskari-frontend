@@ -9,10 +9,10 @@ export const DEFAULT_PROPERTY_LABELS = new Map([
 ]);
 
 class ViewHandler extends StateHandler {
-    constructor (consumer) {
+    constructor (selectionService, consumer) {
         super();
         this.wfsPlugin = null;
-        this.selectedHandler = null;
+        this.selectionService = selectionService;
         this.setState({
             isActive: false,
             layerId: this._getFirstLayerId(),
@@ -171,20 +171,8 @@ class ViewHandler extends StateHandler {
     }
 
     _getSelectedFeatureIds (layerId) {
-        if (!this.selectedHandler) {
-            const featureService = Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
-            if (!featureService) {
-                return [];
-            }
-            this.selectedHandler = featureService.getSelectedFeatureHandler();
-        }
-        //return this.selectedHandler.getSelectedFeatureIds(layerId);
         if (!this.selectionService) {
-            const featureService = Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
-            if (!featureService) {
-                return [];
-            }
-            this.selectionService = featureService.getSelectionService();
+            return [];
         }
         return this.selectionService.getSelectedFeatureIdsByLayer(layerId);
     }
