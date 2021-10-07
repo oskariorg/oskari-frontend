@@ -29,7 +29,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
             this.selectedHandler = new SelectedFeatureHandler(sandbox, mapmodule);
-            this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
 
@@ -226,12 +225,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 return;
             }
             this.hoverHandler.onMapHover(event);
-            this._throttledHoverFeature(event);
+            this._hoverFeature(event);
         }
 
         _hoverFeature (event) {
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
-
             if (feature && layer) {
                 if (feature && feature.get('features')) {
                     // Cluster source
@@ -364,6 +362,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 break;
             case 'AfterChangeMapLayerStyleEvent':
                 this.getSelectedFeatureHandler().updateLayerStyle(event.getMapLayer());
+                this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
             }
         }
     }

@@ -112,6 +112,24 @@ export class HoverHandler {
         this._styleCache[layer.getId()] = this._styleGenerator(layer);
     }
 
+    updateLayerStyle (layer) {
+        const layerId = layer.getId();
+        if (this._state.layerId === layerId) {
+            this.clearHover();
+            // clear layer id from state to be sure that onFeatureHover uses updated style
+            this._state.layerId = null;
+        }
+        this.setTooltipContent(layer);
+        const vectorTileLayer = this._vectorTileLayers[layerId];
+        if (vectorTileLayer) {
+            vectorTileLayer.setStyle(this._styleGenerator(layer, true));
+            return;
+        }
+        if (this._styleCache[layerId]) {
+            this._styleCache[layerId] = this._styleGenerator(layer);
+        }
+    }
+
     getCachedStyle (layerId) {
         return this._styleCache[layerId]; // || defaultStyle;
     }
