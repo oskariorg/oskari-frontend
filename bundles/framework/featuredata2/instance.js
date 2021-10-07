@@ -164,11 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         },
         getSelectionService: function () {
             if (!this._featureSelectionService) {
-                const service = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
-                if (service) {
-                    // TODO: will probably register as another service in sandbox directly instead of getter
-                    this._featureSelectionService = service.getSelectionService();
-                }
+                this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
             }
             return this._featureSelectionService;
         },

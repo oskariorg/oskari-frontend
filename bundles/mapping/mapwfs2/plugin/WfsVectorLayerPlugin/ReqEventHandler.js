@@ -11,13 +11,7 @@ export class ReqEventHandler {
     createEventHandlers (plugin) {
         const me = this;
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
-        const getSelectionService = () => {
-            const service = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
-            if (service) {
-                // TODO: will probably register as another service in sandbox directly instead of getter
-                return service.getSelectionService();
-            }
-        };
+        const getSelectionService = () => this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
         return {
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {

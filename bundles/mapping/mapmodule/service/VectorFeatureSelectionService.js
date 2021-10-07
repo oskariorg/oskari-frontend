@@ -28,21 +28,7 @@ const isSameContent = (previous = [], current = []) => {
     return true;
 };
 
-/**
- * Share style for selected features
- */
-export const SELECTED_STYLE = {
-    inherit: true,
-    effect: 'auto major',
-    stroke: {
-        area: {
-            effect: 'none',
-            color: '#000000',
-            width: 4
-        },
-        width: 3
-    }
-};
+export const QNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 
 /**
  * Responsible for tracking selected features that are set by feature id/layer or filter that selected features from layers.
@@ -50,11 +36,11 @@ export const SELECTED_STYLE = {
 export class VectorFeatureSelectionService {
     constructor (sandbox) {
         this.__name = 'VectorFeatureSelectionService';
-        this.__qname = 'Oskari.mapframework.service.VectorFeatureSelectionService';
         this._featureSources = [];
         this._selectedFeaturesByLayer = {};
         this._filtersByLayer = {};
         this._sandbox = sandbox;
+        sandbox.registerForEventByName(this, 'AfterMapLayerRemoveEvent');
         Oskari.makeObservable(this);
     }
     addSelectedFeature (layerId, id) {
@@ -218,7 +204,7 @@ export class VectorFeatureSelectionService {
     }
     */
     /* ****************************************
-     * Notification/events
+     * Notification/events and boilerplate
      * ****************************************
      */
     __notifySelectionChange (layerId, previousSelection) {
@@ -229,5 +215,27 @@ export class VectorFeatureSelectionService {
             this._sandbox.notifyAll(build(selectedFeatureIds, layer, false));
         }
         this.trigger('change', [layerId, selectedFeatureIds, previousSelection]);
+    }
+    getName() {
+        return this.__name;
+    }
+    getQName () {
+        return QNAME;
+    }
+    /**
+     * @public @method onEvent
+     * Event is handled forwarded to correct #eventHandlers if found or
+     * discarded* if not.
+     *
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     */
+    onEvent (event) {
+        switch (event.getName()) {
+        case 'AfterMapLayerRemoveEvent':
+            if (event.getMapLayer().hasFeatureData()) {
+                this.removeSelection(event.getMapLayer().getId());
+            }
+            break;
+        }
     }
 };
