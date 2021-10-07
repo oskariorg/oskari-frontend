@@ -11,8 +11,13 @@ export class ReqEventHandler {
     createEventHandlers (plugin) {
         const me = this;
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
-        const getSelectedHandler = () => plugin.vectorFeatureService.getSelectedFeatureHandler();
-        const getSelectionHandler = () => plugin.vectorFeatureService.getSelectionService();
+        const getSelectionService = () => {
+            const service = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+            if (service) {
+                // TODO: will probably register as another service in sandbox directly instead of getter
+                return service.getSelectionService();
+            }
+        };
         return {
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
@@ -44,25 +49,25 @@ export class ReqEventHandler {
                         });
                     }
                 });
-                /*
                 if (keepPrevious) {
-                    Object.values(modifySelectionOpts)
-                        .forEach(({ layer, features }) => getSelectedHandler().setFeaturesSelections(layer, features, keepPrevious));
-                }
-                */
-                if (keepPrevious) {
-                    Object.keys(modifySelectionOpts).forEach(layerId => {
-                        const service = getSelectionHandler();
-                        modifySelectionOpts[layerId].features
-                            .map(feat => feat.getId())
-                            .forEach(featureId => service.toggleFeatureSelection(layerId, featureId));
-                    });
+                    const service = getSelectionService();
+                    if (service) {
+                        Object.keys(modifySelectionOpts).forEach(layerId => {
+                            modifySelectionOpts[layerId].features
+                                .map(feat => feat.getId())
+                                .forEach(featureId => service.toggleFeatureSelection(layerId, featureId));
+                        });
+                    }
                 }
             },
             WFSSetFilter: (event) => {
+                const service = getSelectionService();
+                if (!service) {
+                    return;
+                }
                 const keepPrevious = Oskari.ctrlKeyDown();
-                const fatureCollection = event.getGeoJson();
-                const filterFeature = fatureCollection.features[0];
+                const featureCollection = event.getGeoJson();
+                const filterFeature = featureCollection.features[0];
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
@@ -80,16 +85,19 @@ export class ReqEventHandler {
                 targetLayers.forEach(layerId => {
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
                     const selectedFeatureIds = propsList.map(props => props[WFS_ID_KEY]);
-                    //getSelectedHandler().setFeatureSelectionsByIds(layerId, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
                     if (keepPrevious) {
-                        selectedFeatureIds.forEach(id => this.getVectorFeatureService().getSelectionService().addSelectedFeature(layerId, id));
+                        selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
                     } else {
-                        this.getVectorFeatureService().getSelectionService().setSelectedFeatureIds(layerId, selectedFeatureIds);
+                        service.setSelectedFeatureIds(layerId, selectedFeatureIds);
                     }
                 });
             },
             WFSSetPropertyFilter: event => {
                 if (!event.getFilters() || event.getFilters().filters.length === 0) {
+                    return;
+                }
+                const service = getSelectionService();
+                if (!service) {
                     return;
                 }
                 const layerId = event.getLayerId();
@@ -106,8 +114,7 @@ export class ReqEventHandler {
                     });
                     filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                //getSelectedHandler().setFeatureSelectionsByIds(layerId, [...filteredIds], false);
-                getSelectionHandler().setSelectedFeatureIds(layerId, [...filteredIds]);
+                service.setSelectedFeatureIds(layerId, [...filteredIds]);
             }
         };
     }
