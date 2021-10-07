@@ -702,8 +702,10 @@ Oskari.clazz.define(
                 return;
             }
 
-            // Style not found, use an empty one!
-            this._currentStyle = this._createEmptyStyle();
+            // Style not found, add new style with default definitions and select it!
+            const style = this._createEmptyStyle();
+            this.addStyle(style);
+            this._currentStyle = style;
             Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
         },
         /**
