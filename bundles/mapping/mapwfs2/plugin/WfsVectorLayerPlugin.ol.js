@@ -48,6 +48,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
+        this.vectorFeatureService.registerDefaultStyles(layertype, DEFAULT_STYLES);
         this._registerEventHandlers(eventHandlers);
     }
 

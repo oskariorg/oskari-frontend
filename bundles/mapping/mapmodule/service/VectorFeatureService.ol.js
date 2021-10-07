@@ -27,7 +27,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
-            this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
 
@@ -40,6 +39,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._sandbox.registerForEventByName(this, 'MapClickedEvent');
             this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
+            this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerStyleEvent');
         }
 
         /**
@@ -222,12 +222,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 return;
             }
             this.hoverHandler.onMapHover(event);
-            this._throttledHoverFeature(event);
+            this._hoverFeature(event);
         }
 
         _hoverFeature (event) {
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
-
             if (feature && layer) {
                 if (feature && feature.get('features')) {
                     // Cluster source
@@ -349,6 +348,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 break;
             case 'AfterChangeMapLayerOpacityEvent':
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
+            case 'AfterChangeMapLayerStyleEvent':
+                this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
             }
         }
     }
