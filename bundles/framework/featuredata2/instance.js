@@ -169,11 +169,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             return this.vectorFeatureService;
         },
         removeAllFeatureSelections: function () {
-            this.getVectorFeatureService().getSelectedFeatureHandler().removeAllSelections();
+            //this.getVectorFeatureService().getSelectedFeatureHandler().removeAllSelections();
+            this.getVectorFeatureService().getSelectionService().removeSelection();
         },
 
         setFeatureSelections: function (layerId, featureIds, keepPrevious) {
-            this.getVectorFeatureService().getSelectedFeatureHandler().setFeatureSelectionsByIds(layerId, featureIds, keepPrevious);
+            // this.getVectorFeatureService().getSelectedFeatureHandler().setFeatureSelectionsByIds(layerId, featureIds, keepPrevious);
+            if (keepPrevious) {
+                featureIds.forEach(id => this.getVectorFeatureService().getSelectionService().toggleFeatureSelection(layerId, id));
+            } else {
+                this.getVectorFeatureService().getSelectionService().setSelectedFeatureIds(layerId, featureIds);
+            }
         },
         /**
          * Adds the Feature data tool for layer

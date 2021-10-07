@@ -12,6 +12,7 @@ export class ReqEventHandler {
         const me = this;
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
         const getSelectedHandler = () => plugin.vectorFeatureService.getSelectedFeatureHandler();
+        const getSelectionHandler = () => plugin.vectorFeatureService.getSelectionService();
         return {
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
@@ -43,9 +44,19 @@ export class ReqEventHandler {
                         });
                     }
                 });
+                /*
                 if (keepPrevious) {
                     Object.values(modifySelectionOpts)
                         .forEach(({ layer, features }) => getSelectedHandler().setFeaturesSelections(layer, features, keepPrevious));
+                }
+                */
+                if (keepPrevious) {
+                    Object.keys(modifySelectionOpts).forEach(layerId => {
+                        const service = getSelectionHandler();
+                        modifySelectionOpts[layerId].features
+                            .map(feat => feat.getId())
+                            .forEach(featureId => service.toggleFeatureSelection(layerId, featureId));
+                    });
                 }
             },
             WFSSetFilter: (event) => {
@@ -68,7 +79,13 @@ export class ReqEventHandler {
                 }
                 targetLayers.forEach(layerId => {
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
-                    getSelectedHandler().setFeatureSelectionsByIds(layerId, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                    const selectedFeatureIds = propsList.map(props => props[WFS_ID_KEY]);
+                    //getSelectedHandler().setFeatureSelectionsByIds(layerId, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                    if (keepPrevious) {
+                        selectedFeatureIds.forEach(id => this.getVectorFeatureService().getSelectionService().addSelectedFeature(layerId, id));
+                    } else {
+                        this.getVectorFeatureService().getSelectionService().setSelectedFeatureIds(layerId, selectedFeatureIds);
+                    }
                 });
             },
             WFSSetPropertyFilter: event => {
@@ -89,7 +106,8 @@ export class ReqEventHandler {
                     });
                     filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                getSelectedHandler().setFeatureSelectionsByIds(layerId, [...filteredIds], false);
+                //getSelectedHandler().setFeatureSelectionsByIds(layerId, [...filteredIds], false);
+                getSelectionHandler().setSelectedFeatureIds(layerId, [...filteredIds]);
             }
         };
     }

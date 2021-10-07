@@ -3,6 +3,7 @@ import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
+import { VectorFeatureSelectionService } from './VectorFeatureSelectionService';
 import { SelectedFeatureHandler } from './SelectedFeatureHandler';
 import {
     LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
@@ -29,6 +30,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
             this.selectedHandler = new SelectedFeatureHandler(sandbox, mapmodule);
+            this.selectionService = new VectorFeatureSelectionService(sandbox);
             this._registerEventHandlers();
         }
 
@@ -270,6 +272,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             return this.selectedHandler;
         }
 
+        getSelectionService () {
+            return this.selectionService;
+        }
+
         /**
          * @method _getGeojson
          *
@@ -357,7 +363,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
             case 'AfterMapLayerRemoveEvent':
                 if (event.getMapLayer().hasFeatureData()) {
-                    this.getSelectedFeatureHandler().removeLayerSelections(event.getMapLayer());
+                    //this.getSelectedFeatureHandler().removeLayerSelections(event.getMapLayer());
+                    this.getSelectionService().removeSelection(event.getMapLayer().getId());
                 }
                 break;
             case 'AfterChangeMapLayerStyleEvent':

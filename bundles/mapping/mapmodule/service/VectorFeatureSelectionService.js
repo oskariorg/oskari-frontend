@@ -100,6 +100,14 @@ export class VectorFeatureSelectionService {
             this.__notifySelectionChange(layerId, previousSelection);
         }
     }
+    toggleFeatureSelection (layerId, featureId) {
+        const selection = this.getSelectedFeatureIdsByLayer(layerId);
+        if (selection.includes(featureId)) {
+            this.removeSelection(layerId, featureId);
+        } else {
+            this.addSelectedFeature(layerId, featureId);
+        }
+    }
     getSelectedFeatureIdsByLayer (layerId) {
         if (typeof layerId === 'undefined') {
            return [];

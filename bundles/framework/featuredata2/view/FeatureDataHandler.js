@@ -178,7 +178,15 @@ class ViewHandler extends StateHandler {
             }
             this.selectedHandler = featureService.getSelectedFeatureHandler();
         }
-        return this.selectedHandler.getSelectedFeatureIds(layerId);
+        //return this.selectedHandler.getSelectedFeatureIds(layerId);
+        if (!this.selectionService) {
+            const featureService = Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
+            if (!featureService) {
+                return [];
+            }
+            this.selectionService = featureService.getSelectionService();
+        }
+        return this.selectionService.getSelectedFeatureIdsByLayer(layerId);
     }
 }
 
