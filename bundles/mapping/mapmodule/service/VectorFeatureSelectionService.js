@@ -29,6 +29,22 @@ const isSameContent = (previous = [], current = []) => {
 };
 
 /**
+ * Share style for selected features
+ */
+export const SELECTED_STYLE = {
+    inherit: true,
+    effect: 'auto major',
+    stroke: {
+        area: {
+            effect: 'none',
+            color: '#000000',
+            width: 4
+        },
+        width: 3
+    }
+};
+
+/**
  * Responsible for tracking selected features that are set by feature id/layer or filter that selected features from layers.
  */
 export class VectorFeatureSelectionService {
@@ -119,7 +135,7 @@ export class VectorFeatureSelectionService {
         return [];
     }
     /* ****************************************
-     * Might be worth it to get actual features through this service instead of just ids
+     * Might be worth it to get actual features (as GeoJSON) through this service instead of just ids
      * ****************************************
      */
     /*
@@ -160,7 +176,8 @@ export class VectorFeatureSelectionService {
     */
     /* ****************************************
      * Filter stuff - the idea is that selected features could change when
-    *    map moves as more features are loaded in to viewport (and others are removed from it)
+     *    map moves as more features are loaded in to viewport (and others are removed from it)
+     *  NOTE! Not sure if this service should react to map moving or just store the filters
      * ****************************************
      */
     /*
