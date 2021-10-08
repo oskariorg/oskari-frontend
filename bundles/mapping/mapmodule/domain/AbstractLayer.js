@@ -687,27 +687,26 @@ Oskari.clazz.define(
          * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
          */
         selectStyle: function (styleName) {
-            var existingStyle = this.getStyles().find(function (existingStyle) {
-                return existingStyle.getName() === styleName;
-            });
+            const styles = this.getStyles();
+            const found = styles.find(s => s.getName() === styleName);
+            if (found) {
+                this._currentStyle = found;
+                return;
+            }
+            Oskari.log('AbstractLayer').debug('selectStyle(' + styleName + ') didn\'t match any style for layer:', this.getId());
 
-            if (existingStyle) {
-                this._currentStyle = existingStyle;
-            } else {
-                Oskari.log('AbstractLayer').debug('selectStyle(' + styleName + ') didn\'t match any style for layer:', this.getId());
-                // if layer has only one style - always use it
-                if (this.getStyles().length === 1) {
-                    this._currentStyle = this.getStyles()[0];
-                    Oskari.log('AbstractLayer').debug('selectStyle() defaulting to only available style for layer:', this.getId());
-                }
+            // if layer has styles - select first
+            if (styles.length) {
+                this._currentStyle = this.getStyles()[0];
+                Oskari.log('AbstractLayer').debug('selectStyle() defaulting to first available style for layer:', this.getId());
+                return;
             }
 
-            // didn't match anything select the first one
-            if (!this._currentStyle) {
-                // Style not found, use an empty one!
-                this._currentStyle = this._createEmptyStyle();
-                Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
-            }
+            // Style not found, add new style with default definitions and select it!
+            const style = this._createEmptyStyle();
+            this.addStyle(style);
+            this._currentStyle = style;
+            Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
         },
         /**
          * Creates an empty style

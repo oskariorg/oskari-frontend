@@ -1415,6 +1415,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             layer.setOrderNumber(mapLayerJson.orderNumber);
 
+            if (mapLayerJson.styles) {
+                this.populateStyles(layer, mapLayerJson.styles);
+            }
+            // styles have to be populated by this or builder/layer impl before selecting
+            layer.selectStyle(mapLayerJson.style);
+
             return layer;
         },
         parseUrls: function (commaSeparatedUrlList) {
@@ -1436,84 +1442,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _populateWmsMapLayerAdditionalData: function (layer, jsonLayer) {
             layer.setGfiContent(jsonLayer.gfiContent);
-            return this.populateStyles(layer, jsonLayer);
         },
         /**
          * @method populateStyles
-         *
-         * Parses styles attribute from JSON and adds them as a
-         * Oskari.mapframework.domain.Style to the layer Object.
-         * If no styles attribute is present, adds an empty
-         * dummy style and sets that as current style.
-         *
          * @param {Oskari.mapframework.domain.AbstractLayer} layerModel
-         * @param {Object} jsonLayer JSON presentation for the maplayer
-         * @param {Oskari.mapframework.domain.Style} defaultStyle
-         * @return {Oskari.mapframework.domain.AbstractLayer} returns the same layer object with populated styles for convenience
+         * @param {Array} styles
          */
-        populateStyles: function (layer, jsonLayer, defaultStyle) {
-            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style'),
-                i,
-                styleJson,
-                blnMultipleStyles,
-                style;
-
-            if (jsonLayer.styles) {
-                // has styles
-                for (i = 0; i < jsonLayer.styles.length; i++) {
-                    styleJson = jsonLayer.styles;
-                    // TODO: can be removed if impl now returns
-                    // an array always so loop works properly
-                    blnMultipleStyles = !(isNaN(i));
-                    if (blnMultipleStyles) {
-                        styleJson = jsonLayer.styles[i];
-                    }
-                    // setup backwards compatibility for WMTS layer style
-                    if (styleJson.identifier) {
-                        //   use identifier as name and title if not set explicitly
-                        if (!styleJson.name) {
-                            styleJson.name = styleJson.identifier;
-                        }
-                        if (!styleJson.title) {
-                            styleJson.title = styleJson.identifier;
-                        }
-                        // use isDefault styles identifier as default style if not set
-                        if (styleJson.isDefault && !jsonLayer.style) {
-                            jsonLayer.style = styleJson.identifier;
-                        }
-                    }
-                    // /WMTS style backwards compatibility end
-
-                    style = styleBuilder();
-                    style.setName(styleJson.name);
-                    style.setTitle(styleJson.title);
-                    style.setLegend(styleJson.legend);
-                    layer.addStyle(style);
-
-                    // only add the style once if not an array
-                    if (!blnMultipleStyles) {
-                        break;
-                    }
+        populateStyles: function (layer, styles) {
+            if (!Array.isArray(styles)) {
+                return;
+            }
+            const styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
+            styles.forEach(({ name, title, legend }) => {
+                if (!name) {
+                    return;
                 }
-
-                // set the default style
-                layer.selectStyle(jsonLayer.style);
-            }
-            if (defaultStyle) {
-                layer.addStyle(defaultStyle);
-                layer.selectStyle(defaultStyle.getName());
-            }
-            if (layer.getLayerType() === 'wfs') {
-                // style none -> not rendered in transport
-                var locNoneStyle = layer.localization['none-style'];
-                var noneStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                noneStyle.setName('oskari_none');
-                noneStyle.setTitle(locNoneStyle);
-                noneStyle.setLegend('');
-                layer.addStyle(noneStyle);
-            }
-
-            return layer;
+                const style = styleBuilder();
+                style.setName(name);
+                style.setTitle(title);
+                style.setLegend(legend);
+                layer.addStyle(style);
+            });
         },
         /**
          * @method checkForDuplicateId
