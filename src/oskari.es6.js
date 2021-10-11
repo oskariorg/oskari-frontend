@@ -115,6 +115,15 @@ const Oskari = {
                     return appendQueryToURL(url, 'action_route=' + route);
                 }
                 return url;
+            },
+            /**
+             * Builds an URL by attaching optional parameters to base url
+             * @param {String} url complete baseUrl that might already have querystring
+             * @param {*} optionalParams parameters that should be attached to baseUrl
+             * @returns base url with optional params included as querystring
+             */
+            buildUrl: function (url, optionalParams) {
+                return appendQueryToURL(url, encodeParams(optionalParams));
             }
     }
 };

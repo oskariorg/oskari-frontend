@@ -110,7 +110,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         // if requestEncoding is set for layer -> use it since proxied are
         //  always KVP and openlayers defaults to REST
         options.requestEncoding = config.requestEncoding || options.requestEncoding;
-        if (options.requestEncoding === 'KVP') {
+        if (!options.urls.length) {
+            // force KVP if we have no resource urls/possible misconfig
+            options.requestEncoding = 'KVP';
+            const url = Oskari.urls.buildUrl(layer.getLayerUrl(), layer.getParams());
+            options.urls = [url];
+        } else if (options.requestEncoding === 'KVP') {
             // override url to one provided by server since the layer might be proxied
             options.urls = [layer.getLayerUrl()];
         }
