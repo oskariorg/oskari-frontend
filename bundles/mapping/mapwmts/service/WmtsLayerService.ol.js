@@ -113,11 +113,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         if (!options.urls.length) {
             // force KVP if we have no resource urls/possible misconfig
             options.requestEncoding = 'KVP';
+        }
+        if (options.requestEncoding === 'KVP') {
+            // override url to one provided by server since the layer might be proxied
             const url = Oskari.urls.buildUrl(layer.getLayerUrl(), layer.getParams());
             options.urls = [url];
-        } else if (options.requestEncoding === 'KVP') {
-            // override url to one provided by server since the layer might be proxied
-            options.urls = [layer.getLayerUrl()];
         }
         // allows layer.options.wrapX to be passed to source.
         // On OL 6.4.3 it's always false from optionsFromCapabilities()
