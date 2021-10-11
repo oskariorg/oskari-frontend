@@ -3,7 +3,6 @@ import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { HoverHandler } from './HoverHandler';
-import { SelectedFeatureHandler } from './SelectedFeatureHandler';
 import {
     LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, VECTOR_TYPE,
     SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
@@ -28,8 +27,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
-            this.selectedHandler = new SelectedFeatureHandler(sandbox, mapmodule);
-            this._throttledHoverFeature = Oskari.util.throttle(this._hoverFeature.bind(this), 100);
             this._registerEventHandlers();
         }
 
@@ -42,7 +39,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._sandbox.registerForEventByName(this, 'MapClickedEvent');
             this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
-            this._sandbox.registerForEventByName(this, 'AfterMapLayerRemoveEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerStyleEvent');
         }
 
@@ -226,12 +222,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 return;
             }
             this.hoverHandler.onMapHover(event);
-            this._throttledHoverFeature(event);
+            this._hoverFeature(event);
         }
 
         _hoverFeature (event) {
             let { feature, layer } = this._getTopmostFeatureAndLayer(event);
-
             if (feature && layer) {
                 if (feature && feature.get('features')) {
                     // Cluster source
@@ -266,10 +261,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
 
         setVectorLayerHoverTooltip (layer) {
             this.hoverHandler.setTooltipContent(layer);
-        }
-
-        getSelectedFeatureHandler () {
-            return this.selectedHandler;
         }
 
         /**
@@ -357,17 +348,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 break;
             case 'AfterChangeMapLayerOpacityEvent':
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
-            case 'AfterMapLayerRemoveEvent':
-                if (event.getMapLayer().hasFeatureData()) {
-                    this.getSelectedFeatureHandler().removeLayerSelections(event.getMapLayer());
-                }
-                break;
             case 'AfterChangeMapLayerStyleEvent':
-                this.getSelectedFeatureHandler().updateLayerStyle(event.getMapLayer());
+                this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
             }
         }
-    }
-    , {
+    }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

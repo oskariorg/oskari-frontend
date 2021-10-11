@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.selectionPlugin = null;
         this.conf = {};
         this.__loadingStatus = {};
-        this.vectorFeatureService = null;
+        this._featureSelectionService = null;
     }, {
         /**
          * @static
@@ -162,18 +162,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
-        getVectorFeatureService: function () {
-            if (!this.vectorFeatureService) {
-                this.vectorFeatureService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+        getSelectionService: function () {
+            if (!this._featureSelectionService) {
+                this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
             }
-            return this.vectorFeatureService;
+            return this._featureSelectionService;
         },
         removeAllFeatureSelections: function () {
-            this.getVectorFeatureService().getSelectedFeatureHandler().removeAllSelections();
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            service.removeSelection();
         },
 
-        setFeatureSelections: function (layerId, featureIds, keepPrevious) {
-            this.getVectorFeatureService().getSelectedFeatureHandler().setFeatureSelectionsByIds(layerId, featureIds, keepPrevious);
+        setFeatureSelections: function (layerId, featureIds, useToggle) {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            if (useToggle) {
+                featureIds.forEach(id => service.toggleFeatureSelection(layerId, id));
+            } else {
+                service.setSelectedFeatureIds(layerId, featureIds);
+            }
         },
         /**
          * Adds the Feature data tool for layer

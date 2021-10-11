@@ -11,7 +11,7 @@ export class ReqEventHandler {
     createEventHandlers (plugin) {
         const me = this;
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
-        const getSelectedHandler = () => plugin.vectorFeatureService.getSelectedFeatureHandler();
+        const getSelectionService = () => this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
         return {
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
@@ -44,14 +44,24 @@ export class ReqEventHandler {
                     }
                 });
                 if (keepPrevious) {
-                    Object.values(modifySelectionOpts)
-                        .forEach(({ layer, features }) => getSelectedHandler().setFeaturesSelections(layer, features, keepPrevious));
+                    const service = getSelectionService();
+                    if (service) {
+                        Object.keys(modifySelectionOpts).forEach(layerId => {
+                            modifySelectionOpts[layerId].features
+                                .map(feat => feat.getId())
+                                .forEach(featureId => service.toggleFeatureSelection(layerId, featureId));
+                        });
+                    }
                 }
             },
             WFSSetFilter: (event) => {
+                const service = getSelectionService();
+                if (!service) {
+                    return;
+                }
                 const keepPrevious = Oskari.ctrlKeyDown();
-                const fatureCollection = event.getGeoJson();
-                const filterFeature = fatureCollection.features[0];
+                const featureCollection = event.getGeoJson();
+                const filterFeature = featureCollection.features[0];
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
@@ -68,11 +78,20 @@ export class ReqEventHandler {
                 }
                 targetLayers.forEach(layerId => {
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
-                    getSelectedHandler().setFeatureSelectionsByIds(layerId, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                    const selectedFeatureIds = propsList.map(props => props[WFS_ID_KEY]);
+                    if (keepPrevious) {
+                        selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
+                    } else {
+                        service.setSelectedFeatureIds(layerId, selectedFeatureIds);
+                    }
                 });
             },
             WFSSetPropertyFilter: event => {
                 if (!event.getFilters() || event.getFilters().filters.length === 0) {
+                    return;
+                }
+                const service = getSelectionService();
+                if (!service) {
                     return;
                 }
                 const layerId = event.getLayerId();
@@ -89,7 +108,7 @@ export class ReqEventHandler {
                     });
                     filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                getSelectedHandler().setFeatureSelectionsByIds(layerId, [...filteredIds], false);
+                service.setSelectedFeatureIds(layerId, [...filteredIds]);
             }
         };
     }

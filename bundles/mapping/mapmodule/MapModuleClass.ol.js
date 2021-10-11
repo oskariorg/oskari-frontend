@@ -23,6 +23,7 @@ import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
 import { STYLE_TYPE } from './oskariStyle/constants';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import { VectorFeatureSelectionService } from './service/VectorFeatureSelectionService';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
 import './AbstractMapModule';
@@ -242,6 +243,12 @@ export class MapModule extends AbstractMapModule {
         if (!ftrService) {
             ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this);
             sandbox.registerService(ftrService);
+        }
+
+        let selectionService = sandbox.getService(VectorFeatureSelectionService.QNAME);
+        if (!selectionService) {
+            selectionService = new VectorFeatureSelectionService(sandbox);
+            sandbox.registerService(selectionService);
         }
         this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
