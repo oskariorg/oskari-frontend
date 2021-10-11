@@ -110,10 +110,16 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         // if requestEncoding is set for layer -> use it since proxied are
         //  always KVP and openlayers defaults to REST
         options.requestEncoding = config.requestEncoding || options.requestEncoding;
+        if (!options.urls.length) {
+            // force KVP if we have no resource urls/possible misconfig
+            options.requestEncoding = 'KVP';
+        }
         if (options.requestEncoding === 'KVP') {
             // override url to one provided by server since the layer might be proxied
             options.urls = [layer.getLayerUrl()];
         }
+        // attach params to URLs (might contain apikey or other params that aren't passed by the service on capabilities etc)
+        options.urls = options.urls.map(url => Oskari.urls.buildUrl(url, layer.getParams()));
         // allows layer.options.wrapX to be passed to source.
         // On OL 6.4.3 it's always false from optionsFromCapabilities()
         // On 6.6.1 it appears to be correct and this line could be removed
