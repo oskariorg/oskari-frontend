@@ -116,9 +116,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         }
         if (options.requestEncoding === 'KVP') {
             // override url to one provided by server since the layer might be proxied
-            const url = Oskari.urls.buildUrl(layer.getLayerUrl(), layer.getParams());
-            options.urls = [url];
+            options.urls = [layer.getLayerUrl()];
         }
+        // attach params to URLs (might contain apikey or other params that aren't passed by the service on capabilities etc)
+        options.urls = options.urls.map(url => Oskari.urls.buildUrl(url, layer.getParams()));
         // allows layer.options.wrapX to be passed to source.
         // On OL 6.4.3 it's always false from optionsFromCapabilities()
         // On 6.6.1 it appears to be correct and this line could be removed
