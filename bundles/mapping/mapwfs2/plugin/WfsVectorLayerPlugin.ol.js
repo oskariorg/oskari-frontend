@@ -1,7 +1,7 @@
 import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandler.ol';
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
-import { styleGenerator, DEFAULT_STYLES } from './WfsVectorLayerPlugin/util/style';
+import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/style';
 
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 
@@ -99,6 +99,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
+        this.getMapModule().registerDefaultFeatureStyle(this.layertype, DEFAULT_STYLES.style);
         sandbox.registerService(this.WFSLayerService);
     }
 
@@ -209,7 +210,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
-                lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+                lyr.setStyle(this.getCurrentOlStyle(layer, handler));
             }
             this.getMapModule().addLayer(lyr, !keepLayerOnTop);
         });
@@ -266,19 +267,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
-     * @method getCurrentStyleFunction
+     * @method getCurrentOlStyle
      * Returns OL style corresponding to layer currently selected style
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {ol/style/Style}
+     * @return {ol/style/Style | StyleLike}
      */
-    getCurrentStyleFunction (layer, handler = this._getLayerHandler(layer)) {
-        if (!handler) {
-            return;
-        }
-        const factory = this.mapModule.getGeomTypedStyles.bind(this.mapModule);
-        const styleFunction = styleGenerator(factory, layer);
-        const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
-        return handler.getStyleFunction(layer, styleFunction, selectedIds);
+    getCurrentOlStyle (layer) {
+        return styleGenerator(this.mapModule, layer);
     }
 
     /**
@@ -293,7 +288,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!olLayers || olLayers.length === 0) {
             return;
         }
-        const style = this.getCurrentStyleFunction(layer);
+        const style = this.getCurrentOlStyle(layer);
         olLayers.forEach(lyr => {
             if (lyr.get(LAYER_HOVER)) {
                 // don't add style for hover layer

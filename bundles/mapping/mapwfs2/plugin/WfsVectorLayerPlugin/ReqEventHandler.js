@@ -10,15 +10,9 @@ export class ReqEventHandler {
 
     createEventHandlers (plugin) {
         const me = this;
-        const modifySelection = (layer, featureIds, keepPrevious) => {
-            plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
-            plugin.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
-        };
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
+        const getSelectionService = () => this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
         return {
-            WFSFeaturesSelectedEvent: (event) => {
-                plugin.updateLayerStyle(event.getMapLayer());
-            },
             MapClickedEvent: (event) => {
                 if (!me.isClickResponsive) {
                     return;
@@ -34,14 +28,13 @@ export class ReqEventHandler {
                     }
                     return selectionOpts;
                 };
-                hits.forEach(({ featureProperties, layerId }) => {
+                hits.forEach(({ featureProperties, layerId, feature }) => {
                     const layer = getSelectedLayer(layerId);
                     if (!layer || !plugin.isLayerSupported(layer)) {
                         return;
                     }
-                    const wfsFeatureId = featureProperties[WFS_ID_KEY];
                     if (keepPrevious) {
-                        getSelectionOptsForLayer(layer).features.push(wfsFeatureId);
+                        getSelectionOptsForLayer(layer).features.push(feature);
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId,
@@ -51,14 +44,24 @@ export class ReqEventHandler {
                     }
                 });
                 if (keepPrevious) {
-                    Object.values(modifySelectionOpts)
-                        .forEach(({ layer, features }) => modifySelection(layer, features, keepPrevious));
+                    const service = getSelectionService();
+                    if (service) {
+                        Object.keys(modifySelectionOpts).forEach(layerId => {
+                            modifySelectionOpts[layerId].features
+                                .map(feat => feat.getId())
+                                .forEach(featureId => service.toggleFeatureSelection(layerId, featureId));
+                        });
+                    }
                 }
             },
             WFSSetFilter: (event) => {
+                const service = getSelectionService();
+                if (!service) {
+                    return;
+                }
                 const keepPrevious = Oskari.ctrlKeyDown();
-                const fatureCollection = event.getGeoJson();
-                const filterFeature = fatureCollection.features[0];
+                const featureCollection = event.getGeoJson();
+                const filterFeature = featureCollection.features[0];
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
@@ -66,7 +69,7 @@ export class ReqEventHandler {
                 if (plugin.WFSLayerService.getAnalysisWFSLayerId()) {
                     targetLayers = [plugin.WFSLayerService.getAnalysisWFSLayerId()];
                 } else {
-                    if (plugin.WFSLayerService.isSelectFromAllLayers()) {
+                    if (event.selectFromAllLayers()) {
                         targetLayers = plugin.getAllLayerIds();
                     } else {
                         const layerId = plugin.WFSLayerService.getTopWFSLayer();
@@ -74,13 +77,21 @@ export class ReqEventHandler {
                     }
                 }
                 targetLayers.forEach(layerId => {
-                    const layer = getSelectedLayer(layerId);
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
-                    modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                    const selectedFeatureIds = propsList.map(props => props[WFS_ID_KEY]);
+                    if (keepPrevious) {
+                        selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
+                    } else {
+                        service.setSelectedFeatureIds(layerId, selectedFeatureIds);
+                    }
                 });
             },
             WFSSetPropertyFilter: event => {
                 if (!event.getFilters() || event.getFilters().filters.length === 0) {
+                    return;
+                }
+                const service = getSelectionService();
+                if (!service) {
                     return;
                 }
                 const layerId = event.getLayerId();
@@ -97,7 +108,7 @@ export class ReqEventHandler {
                     });
                     filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
                 });
-                modifySelection(getSelectedLayer(layerId), [...filteredIds], false);
+                service.setSelectedFeatureIds(layerId, [...filteredIds]);
             }
         };
     }
@@ -107,6 +118,7 @@ export class ReqEventHandler {
             'WfsLayerPlugin.ActivateHighlightRequest': this
         };
     }
+
     // handle WfsLayerPlugin.ActivateHighlightRequest
     handleRequest (oskariCore, request) {
         this.isClickResponsive = request.isEnabled();

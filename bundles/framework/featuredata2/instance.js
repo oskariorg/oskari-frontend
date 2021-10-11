@@ -23,6 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         this.selectionPlugin = null;
         this.conf = {};
         this.__loadingStatus = {};
+        this._featureSelectionService = null;
     }, {
         /**
          * @static
@@ -161,7 +162,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
         getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
+        getSelectionService: function () {
+            if (!this._featureSelectionService) {
+                this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+            }
+            return this._featureSelectionService;
+        },
+        removeAllFeatureSelections: function () {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            service.removeSelection();
+        },
 
+        setFeatureSelections: function (layerId, featureIds, useToggle) {
+            const service = this.getSelectionService();
+            if (!service) {
+                return;
+            }
+            if (useToggle) {
+                featureIds.forEach(id => service.toggleFeatureSelection(layerId, id));
+            } else {
+                service.setSelectedFeatureIds(layerId, featureIds);
+            }
+        },
         /**
          * Adds the Feature data tool for layer
          * @param  {Object} layer layer to process
@@ -340,11 +365,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // no features
                     return;
                 }
-
+                const allLayers = this.selectionPlugin.isSelectFromAllLayers();
                 this.selectionPlugin.setFeatures(geojson.features);
                 this.selectionPlugin.stopDrawing();
-
-                const event = Oskari.eventBuilder('WFSSetFilter')(geojson);
+                const event = Oskari.eventBuilder('WFSSetFilter')(geojson, null, allLayers);
                 this.sandbox.notifyAll(event);
 
                 this.popupHandler.removeButtonSelection();

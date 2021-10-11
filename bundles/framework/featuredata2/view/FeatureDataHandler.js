@@ -9,10 +9,10 @@ export const DEFAULT_PROPERTY_LABELS = new Map([
 ]);
 
 class ViewHandler extends StateHandler {
-    constructor (consumer) {
+    constructor (selectionService, consumer) {
         super();
         this.wfsPlugin = null;
-        this.wfsLayerService = null;
+        this.selectionService = selectionService;
         this.setState({
             isActive: false,
             layerId: this._getFirstLayerId(),
@@ -70,7 +70,8 @@ class ViewHandler extends StateHandler {
             WFSFeaturesSelectedEvent: event => {
                 const layerId = event.getMapLayer().getId();
                 if (layerId === this.getState().layerId) {
-                    this._updateSelectedFeatureIds();
+                    const selectedFeatures = event.getWfsFeatureIds();
+                    this.updateState({ selectedFeatures }, 'selectedFeatures');
                 }
             },
             MapLayerVisibilityChangedEvent: event => {
@@ -117,12 +118,6 @@ class ViewHandler extends StateHandler {
         }
     }
 
-    _updateSelectedFeatureIds () {
-        const { layerId } = this.getState();
-        const selectedFeatures = this._getWFSService().getSelectedFeatureIds(layerId);
-        this.updateState({ selectedFeatures }, 'selectedFeatures');
-    }
-
     _afterMapMove () {
         // update viewport properties only when flyout is active/open
         if (!this.getState().isActive) {
@@ -135,7 +130,7 @@ class ViewHandler extends StateHandler {
         if (layerId === this.getState().layerId) {
             return;
         }
-        const selectedFeatures = this._getWFSService().getSelectedFeatureIds(layerId);
+        const selectedFeatures = this._getSelectedFeatureIds(layerId);
         const layerState = this.getLayerState(layerId);
         this.updateState({ layerId, selectedFeatures, ...layerState });
     }
@@ -175,11 +170,11 @@ class ViewHandler extends StateHandler {
         return this.wfsPlugin;
     }
 
-    _getWFSService () {
-        if (!this.wfsLayerService) {
-            this.wfsLayerService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+    _getSelectedFeatureIds (layerId) {
+        if (!this.selectionService) {
+            return [];
         }
-        return this.wfsLayerService;
+        return this.selectionService.getSelectedFeatureIdsByLayer(layerId);
     }
 }
 

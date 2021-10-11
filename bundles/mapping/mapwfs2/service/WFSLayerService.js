@@ -17,7 +17,6 @@ Oskari.clazz.define(
     function (sandbox) {
         var me = this;
         me.sandbox = sandbox;
-        me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
         me.selectedWFSLayerIds = [];
         me.selectFromAllLayers = false;
@@ -96,7 +95,6 @@ Oskari.clazz.define(
                 selectedLayers.push(layerId);
             } else {
                 selectedLayers = selectedLayers.filter(id => id !== layerId);
-                this.__removeFeatureSelectionForLayer(layerId);
             }
             // update selected layers
             this.selectedWFSLayerIds = selectedLayers;
@@ -129,138 +127,6 @@ Oskari.clazz.define(
             }
             return topWFSLayer;
         },
-
-        /**
-         * @method setWFSFeaturesSelections
-         * @param {Number} layeIdr; LayerID whose feature selections are chenged
-         * @param {Array} featureIds; featureIds that are selected or removed from selection
-         * @param {Boolean} makeNewSelection; true if user makes selections with selection tool without Ctrl
-         *
-         * Handles status of selected features
-         */
-        setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
-            let selectedFeatureIds = featureIds;
-            if (!makeNewSelection) {
-                const previousSelectedFeatureIds = this.getSelectedFeatureIds(layerId);
-                // Either add all featureIds or remove all feature Ids from selection. Don't mix.
-                const shouldRemoveFeaturesFromSelection = previousSelectedFeatureIds.some(selected => featureIds.includes(selected));
-                if (shouldRemoveFeaturesFromSelection) {
-                    selectedFeatureIds = previousSelectedFeatureIds.filter(id => !featureIds.includes(id));
-                } else {
-                    selectedFeatureIds = [...previousSelectedFeatureIds, ...featureIds];
-                }
-            }
-            // clear old selection
-            this.__removeFeatureSelectionForLayer(layerId);
-            // add the updated selection
-            this.getWFSSelections().push({ layerId, featureIds: selectedFeatureIds });
-        },
-
-        /**
-         * @method getWFSSelections
-         *
-         * @return {array} this.WFSFeatureSelections
-         *
-         * Returns array of objects including slected layers id and selected features of layers.
-         */
-        getWFSSelections: function () {
-            return this.WFSFeatureSelections;
-        },
-
-        /**
-         * @method getSelectedFeatureIds
-         * @param {Number} layerID; ID of layer whose selected featureIds are wanted
-         *
-         * @return {array} featureIds
-         *
-         * Returns selected featureIds of the given layer ID. If no layerId is given, returns all the selected featureIds.
-         */
-        getSelectedFeatureIds: function (layerId) {
-            return this.getWFSSelections()
-                .filter((item) => item.layerId === layerId)
-                .flatMap((item) => item.featureIds);
-        },
-
-        /**
-         * @method emptyWFSFeatureSelections
-         * @param {Object} layer; layer whose selected features are going to be removed
-         *
-         *
-         * Changes the values of me.WFSFeatureSelections and sends WFSFeaturesSelectedEvent to notify others about it
-         */
-        emptyWFSFeatureSelections: function (layer) {
-            if (!layer) {
-                return;
-            }
-            const layerId = layer.getId();
-            const features = this.getSelectedFeatureIds(layerId);
-            if (!features) {
-                return;
-            }
-            this.__removeFeatureSelectionForLayer(layerId);
-            var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
-            this.sandbox.notifyAll(event);
-        },
-        __removeFeatureSelectionForLayer: function (layerId) {
-            if (typeof layerId === 'undefined') {
-                return;
-            }
-            const selectedFeatures = this.getWFSSelections();
-            this.WFSFeatureSelections = selectedFeatures.filter(item => item.layerId !== layerId);
-        },
-        /*
-         * @method emptyWFSFeatureSelections
-         *
-         * Convenience function to clear selections from all WFS layers
-         */
-        emptyAllWFSFeatureSelections: function () {
-            const selections = this.WFSFeatureSelections || [];
-            selections.forEach((selection) => {
-                var layer = this.sandbox.findMapLayerFromSelectedMapLayers(selection.layerId);
-                this.emptyWFSFeatureSelections(layer);
-            });
-        },
-        /**
-         * @method setSelectFromAllLayers
-         * @param {boolean} selectAll; true if the selection is wanted to be done from all layers and false if not
-         *
-         * sets the selection mode so that selection is made from all layers on the map
-         */
-        setSelectFromAllLayers: function (selectAll) {
-            var me = this;
-
-            me.selectFromAllLayers = selectAll;
-        },
-        /**
-         * @method isSelectFromAllLayers
-         *
-         * @return {boolean} me.selectFromAllLayers
-         *
-         * Tells weather the selection is made from all layers or not
-         */
-        isSelectFromAllLayers: function () {
-            return this.selectFromAllLayers;
-        },
-        /**
-         * @method setSelectionToolsActive
-         * @param {boolean} selectionToolsActive; one or more of the selection tools is active -> gfi not allowed, not even by accident...
-         *
-         */
-        setSelectionToolsActive: function (selectionToolsActive) {
-            var me = this;
-            me.selectionToolsActive = selectionToolsActive;
-        },
-        /**
-         * @method selectionToolsActive
-         *
-         * @return {boolean} me.selectionToolsActive
-         *
-         * Tells the mediator that raising the mapclick is a no-no, because the selection tools are active.
-         */
-        isSelectionToolsActive: function () {
-            return this.selectionToolsActive;
-        },
-
         getAnalysisWFSLayerId: function () {
             return this.analysisWFSLayerId;
         },

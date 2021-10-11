@@ -5,7 +5,6 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
-import { styleGenerator } from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
 import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
@@ -105,8 +104,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
             return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
         }
-        const factory = this.mapModule.getStyle.bind(this.mapModule);
-        return style.hasDefinitions() ? styleGenerator(factory, style) : this._createDefaultStyle();
+        return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
     }
 
     /**

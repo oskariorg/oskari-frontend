@@ -1,4 +1,3 @@
-
 import { AbstractVectorLayer } from '../../domain/AbstractVectorLayer';
 import { VectorStyle } from '../../domain/VectorStyle';
 
@@ -6,6 +5,11 @@ export class VectorTileLayer extends AbstractVectorLayer {
     constructor () {
         super(...arguments);
         this._layerType = 'VECTORTILE';
+    }
+
+    // Clustering isn't supported for VectorTile
+    getClusteringDistance () {
+        return undefined;
     }
 
     /**

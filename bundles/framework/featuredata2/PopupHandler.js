@@ -124,13 +124,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
 
             selectFromTop.find('span').html(this.loc('selectionTools.selectFromTop'));
             selectFromAll.find('span').html(this.loc('selectionTools.selectAll'));
-            if (this.WFSLayerService.isSelectFromAllLayers()) {
+            if (this.selectionPlugin.isSelectFromAllLayers()) {
                 selectFromAll.find('input').prop('checked', true);
             } else {
                 selectFromTop.find('input').prop('checked', true);
             }
-            selectFromTop.on('click', () => this.WFSLayerService.setSelectFromAllLayers(false));
-            selectFromAll.on('click', () => this.WFSLayerService.setSelectFromAllLayers(true));
+            selectFromTop.on('click', () => this.selectionPlugin.setSelectFromAllLayers(false));
+            selectFromAll.on('click', () => this.selectionPlugin.setSelectFromAllLayers(true));
             content.append(selectOptions);
 
             const controlButtons = [];
@@ -138,8 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             emptyBtn.setTitle(this.loc('selectionTools.button.empty'));
             emptyBtn.setHandler(() => {
                 // Remove selections
-                const layers = Oskari.getSandbox().findAllSelectedMapLayers().filter(l => l.hasFeatureData());
-                layers.forEach(l => this.WFSLayerService.emptyWFSFeatureSelections(l));
+                this.instance.removeAllFeatureSelections();
             });
             controlButtons.push(emptyBtn);
             controlButtons.push(dialog.createCloseButton());
@@ -220,12 +219,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             if (!content) {
                 content = jQuery('.selectionToolsDiv');
             }
-            var me = this,
-                isActive = jQuery(content).find('.tool').hasClass('active');
-
+            const isActive = jQuery(content).find('.tool').hasClass('active');
             if (isActive) {
                 jQuery(content).find('.active').removeClass('active');
-                me.WFSLayerService.setSelectionToolsActive(false);
             }
         }
     });

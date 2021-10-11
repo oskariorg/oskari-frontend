@@ -352,8 +352,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
             }
         }
-    }
-    , {
+    }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static

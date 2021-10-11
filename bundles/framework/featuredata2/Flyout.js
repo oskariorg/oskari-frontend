@@ -55,8 +55,7 @@ Oskari.clazz.define(
                 this.sandbox.registerForEventByName(this, t);
             }
         }
-        this.WFSLayerService = null;
-        this.handler = new FeatureDataHandler((state, updated) => this.update(state, updated));
+        this.handler = new FeatureDataHandler(instance.getSelectionService(), (state, updated) => this.update(state, updated));
     }, {
         __templates: {
             wrapper: '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
@@ -561,7 +560,7 @@ Oskari.clazz.define(
 
             // set selection handler
             grid.addSelectionListener((pGrid, dataId, isCtrlKey) => {
-                this._handleGridSelect(layer, dataId, !isCtrlKey);
+                this._handleGridSelect(layer, dataId, isCtrlKey);
             });
 
             // set popup handler for inner data
@@ -676,12 +675,6 @@ Oskari.clazz.define(
                 this.flyout.find('div.tab-content').css({ opacity });
             }
         },
-        getWFSLayerService: function () {
-            if (!this.WFSLayerService) {
-                this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
-            }
-            return this.WFSLayerService;
-        },
         /**
          * @method _addFeatureValues
          * @private
@@ -739,22 +732,18 @@ Oskari.clazz.define(
          *           WFS layer that was added
          * @param {String} featureId
          *           id for the feature that was selected
-         * @param {Boolean} makeNewSelection
+         * @param {Boolean} keepPrevious
          *           true to keep previous selection, false to clear before selecting
          * Notifies components that a selection was made
          */
         // TODO: why WFSLayerService doesn't send selected events??
-        _handleGridSelect: function (layer, featureId, makeNewSelection) {
+        _handleGridSelect: function (layer, featureId, keepPrevious) {
             const layerId = layer.getId();
             const panel = this.getPanel(layerId);
             if (!this.tabsContainer.isSelected(panel)) {
                 return;
             }
-            const service = this.getWFSLayerService();
-            const builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
-            service.setWFSFeaturesSelections(layerId, [featureId], makeNewSelection);
-            var event = builder(service.getSelectedFeatureIds(layerId), layer, true);
-            this.instance.sandbox.notifyAll(event);
+            this.instance.setFeatureSelections(layerId, [featureId], keepPrevious);
         },
 
         /**
