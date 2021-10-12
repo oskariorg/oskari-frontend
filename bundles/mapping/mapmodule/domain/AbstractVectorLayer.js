@@ -28,16 +28,21 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     setOptions (options) {
         super.setOptions(options);
-        // Create styles before setting options
         const { styles = {} } = options;
-        // use addStyle to avoid duplicate and invalid styles
+        const hasStyles = this.getStyles().length > 0;
+        // Clear styles before adding
         this.setStyles([]);
+        // use addStyle to avoid duplicate and invalid styles
         Object.keys(styles).forEach(styleId => {
             const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
             this.addStyle(style);
         });
         // Remove styles from options to be sure that VectorStyle is used
         delete options.styles;
+        // update current style on styles update
+        if (hasStyles && this._currentStyle) {
+            this.selectStyle(this._currentStyle.getName());
+        }
     }
 
     removeStyle (name) {

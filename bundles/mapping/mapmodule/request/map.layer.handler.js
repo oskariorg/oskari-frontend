@@ -53,10 +53,6 @@ Oskari.clazz.define('map.layer.handler',
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
             } else if (request.getName() === 'ChangeMapLayerStyleRequest') {
-                if (request.getStyle() === '!default!') {
-                    // Check for magic string - should propably be removed...
-                    return;
-                }
                 layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
