@@ -25,6 +25,7 @@
     "lintfix": "eslint . --quiet --fix",
     "sprite": "node webpack/sprite.js",
     "storybook": "start-storybook",
+    "storybook:fixcache": "start-storybook --no-manager-cache",
     "lint": "eslint . --quiet",
     "test": "eslint . --quiet && jest",
     "test:coverage": "jest --coverage",
