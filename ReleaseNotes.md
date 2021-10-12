@@ -6,15 +6,15 @@ For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/33?closed=1
 
 ### Improvements to visual vector style editor
-- Added "empty fill" option for area/polygon type geometries
-- Added "butt" option for line-ending options
-- Added pre-defined color selection for easier color picking
-- The new editor is now available for end-users on myplaces layer styling (in addition to layer admin functionality)
+- Added "empty fill" option for area/polygon type geometries.
+- Added "butt" option for line-ending options.
+- Added pre-defined color selection for easier color picking.
+- The new editor is now available for end-users on myplaces layer styling (in addition to layer admin functionality).
 
-### Stylehandling for vector layers
+### Style handling for vector layers
 Various changes to style handling implementation like:
 - Hover styling implementation changed to improve performance and clarify code.
-- Vector features styles definitions are now available through `AbstractLayer.getStyles()/getCurrentStyle()` with `style.getFeatureStyle()` instead of separate `AbstractLayer.getCurrentStyleDef()`
+- Vector features styles definitions are now available through `AbstractLayer.getStyles()/getCurrentStyle()` with `style.getFeatureStyle()` instead of separate `AbstractLayer.getCurrentStyleDef()`.
 - Moved end-user UI implementation for vector layer styling to new bundle `userstyle` instead of being built-in to "wfs-support for map" (`mapwfs2` bundle). This enables smaller filesize for embedded maps since the UI is not available to end-users on embedded maps. To keep current functionality you should link `userstyle` bundle import to your geoportal apps: https://github.com/oskariorg/sample-application/pull/17/files
 
 ### Selected vector features
@@ -45,11 +45,11 @@ Changes to selection trigger `WFSFeaturesSelectedEvent` like it did before and b
 
 ### Layer admin improvements
 - When adding layers from service the layers are now sorted alphabetically in addition to being grouped by "type". Where type is "existing" (already registered as layer), "problematic" (might have problems with layer/projection not supported), "available" (these are the ones you probably are most interested in adding).
-- Fixed an issue with selecting default style when style name was very long (input was pushed out of view of the user)
+- Fixed an issue with selecting default style when style name was very long (input was pushed out of view of the user).
 
 ### Other improvements
-- Fixed GetFeatureInfo displaying for XSLT formatted responses
-- `layerlist` bundle now closes its flyout on `UIChangeEvent` (when publisher etc functionality is opened by the user)
+- Fixed GetFeatureInfo displaying for XSLT formatted responses.
+- `layerlist` bundle now closes its flyout on `UIChangeEvent` (when publisher etc functionality is opened by the user).
 - Modal-component in oskariui now has styling to keep the window on browser viewport and scroll the modal-window content instead of having a page scrollbar for large contents.
 - WMTS-layers can now be forced to use the wrapX boolean toggle for OpenLayers by having `{ wrapX: true }` in the layer options.
 - Changed when data is being sanitized for layers. Layer name is no longer sanitized in AbstractLayer.setName(). The UI components showing the name now sanitize the value instead. This might affect application specific extensions to functionalities that rely on the name being sanitized. For jQuery-based UIs this means that you need to call `Oskari.util.sanitize(layer.getName())` or use `jQuery.text(name)` instead of `jQuery.append(name)`. For React-based UI this means that you no longer need to use `dangerouslySetInnerHTML` to show the layer name properly but can use it as is.
