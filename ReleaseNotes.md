@@ -9,6 +9,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/33?closed=1
 - Added "empty fill" option for area/polygon type geometries.
 - Added "butt" option for line-ending options.
 - Added pre-defined color selection for easier color picking.
+- Area and stroke/line type geometries now have their own controls for line joins. Previously the settings was shared when editing with the React-based visual style editor.
 - The new editor is now available for end-users on myplaces layer styling (in addition to layer admin functionality).
 
 ### Style handling for vector layers
@@ -48,11 +49,35 @@ Changes to selection trigger `WFSFeaturesSelectedEvent` like it did before and b
 - Fixed an issue with selecting default style when style name was very long (input was pushed out of view of the user).
 
 ### Other improvements
+- `MapModulePlugin.MapLayerUpdateRequest` can now be used to force vector layers to refetch the features from service (after for example editing a feature). Previously it was mostly usable for WMS-layers.
+- Map legends functionality for end-users on geoportal was rewritten with React (embedded maps version still uses jQuery)
 - Fixed GetFeatureInfo displaying for XSLT formatted responses.
+- Fixed a visual issue on Firefox with layerlisting.
 - `layerlist` bundle now closes its flyout on `UIChangeEvent` (when publisher etc functionality is opened by the user).
 - Modal-component in oskariui now has styling to keep the window on browser viewport and scroll the modal-window content instead of having a page scrollbar for large contents.
 - WMTS-layers can now be forced to use the wrapX boolean toggle for OpenLayers by having `{ wrapX: true }` in the layer options.
 - Changed when data is being sanitized for layers. Layer name is no longer sanitized in AbstractLayer.setName(). The UI components showing the name now sanitize the value instead. This might affect application specific extensions to functionalities that rely on the name being sanitized. For jQuery-based UIs this means that you need to call `Oskari.util.sanitize(layer.getName())` or use `jQuery.text(name)` instead of `jQuery.append(name)`. For React-based UI this means that you no longer need to use `dangerouslySetInnerHTML` to show the layer name properly but can use it as is.
+
+### Library updates
+
+- @ant-design/icons 4.2.1 -> 4.6.3
+- @storybook/react 5.3.18 -> 6.3.7
+- antd 4.8.5 -> 4.16.13
+- cesium 1.77 -> 1.84
+- dompurify 2.0.10 -> 2.3.1
+- intl-messageformat 2.1.0 -> 9.9.1 (now loaded with npm instead of having a copy under libraries)
+- Jest 26.0.1 -> 27.0.6
+- jQuery 3.5.1 -> 3.6.0
+- lodash 4.17.19 -> 4.17.21
+- node-sass 4.14.1 -> 6.0.1
+- moment 2.24.0 -> 2.29.1
+- OpenLayers 6.4.3 -> 6.6.1
+- ol-mapbox-style 6.3.1 -> 6.4.1
+- olcs 2.12 -> 2.13
+- React 16.13 -> 16.14
+- Styled-components 5.0.1 -> 5.3.1
+
+Also tested a migration to Webpack 5, but there's some compatibility issues with Cesium and Webpack 5 that prevented the update for now. Also the testing library enzyme doesn't support React 17 yet so couldn't update React further for now.
 
 ## 2.4.0
 
