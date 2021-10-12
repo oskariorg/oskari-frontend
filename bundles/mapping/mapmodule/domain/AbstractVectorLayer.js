@@ -41,9 +41,7 @@ export class AbstractVectorLayer extends AbstractLayer {
         delete options.styles;
         // update current style on styles update
         if (hasStyles && this._currentStyle) {
-            if (this._currentStyle) {
-                this.selectStyle(this._currentStyle.getName());
-            }
+            this.selectStyle(this._currentStyle.getName());
         }
     }
 
