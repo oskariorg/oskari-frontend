@@ -119,6 +119,12 @@ export class VectorFeatureSelectionService {
         }
         return [];
     }
+
+    getLayerIdsWithSelections () {
+        // filter ids with empty arrays
+        return Object.keys(this._selectedFeaturesByLayer)
+            .filter(id => this._selectedFeaturesByLayer[id].length);
+    }
     /* ****************************************
      * Might be worth it to get actual features (as GeoJSON) through this service instead of just ids
      * ****************************************
