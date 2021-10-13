@@ -4,7 +4,7 @@ import { VectorFeatureSelectionService } from './VectorFeatureSelectionService';
 
 // Fake sandbox and mapmodule
 const sandbox = {
-    findMapLayerFromSelectedMapLayers: () => layer,
+    findMapLayerFromAllAvailable: () => layer,
     registerForEventByName: () => 'no-op'
 };
 

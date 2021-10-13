@@ -119,6 +119,12 @@ export class VectorFeatureSelectionService {
         }
         return [];
     }
+
+    getLayerIdsWithSelections () {
+        // filter ids with empty arrays
+        return Object.keys(this._selectedFeaturesByLayer)
+            .filter(id => this._selectedFeaturesByLayer[id].length);
+    }
     /* ****************************************
      * Might be worth it to get actual features (as GeoJSON) through this service instead of just ids
      * ****************************************
@@ -207,7 +213,7 @@ export class VectorFeatureSelectionService {
      * ****************************************
      */
     __notifySelectionChange (layerId, previousSelection) {
-        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        const layer = this._sandbox.findMapLayerFromAllAvailable(layerId);
         const selectedFeatureIds = this.getSelectedFeatureIdsByLayer(layerId);
         const build = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
         if (typeof build === 'function') {

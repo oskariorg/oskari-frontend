@@ -7,7 +7,6 @@ import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
-import { SelectionHelper } from './SelectionHelper';
 
 import olPoint from 'ol/geom/Point';
 import olLineString from 'ol/geom/LineString';
@@ -38,7 +37,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     constructor (layerPlugin) {
         super(layerPlugin);
         this.loadingStrategies = {};
-        this.selectionHelper = new SelectionHelper(layerPlugin);
     }
 
     createEventHandlers () {
@@ -49,13 +47,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
                 this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
-        handlers['WFSFeaturesSelectedEvent'] = (evt) => {
-            this.selectionHelper.updateSelection(evt.getMapLayer(), evt.getWfsFeatureIds());
-        };
-        handlers['AfterChangeMapLayerStyleEvent'] = (evt) => {
-            this.selectionHelper.updateSelectionStyles(evt.getMapLayer());
-        };
-
         return handlers;
     }
 

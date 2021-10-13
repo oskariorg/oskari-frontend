@@ -210,7 +210,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
-                lyr.setStyle(this.getCurrentOlStyle(layer, handler));
+                lyr.setStyle(this.getCurrentOlStyle(layer));
             }
             this.getMapModule().addLayer(lyr, !keepLayerOnTop);
         });
