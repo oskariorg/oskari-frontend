@@ -48,7 +48,7 @@ export class SelectionHelper {
     }
     getFeaturesByIds (layerId, featureIds) {
         const olLayers = this.getMapModule().getOLMapLayers(layerId);
-        if (!olLayers.length || typeof olLayers[0].getSource !== 'function') {
+        if (!olLayers || !olLayers.length || typeof olLayers[0].getSource !== 'function') {
             return [];
         }
         const source = olLayers[0].getSource();
