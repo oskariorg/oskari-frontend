@@ -52,9 +52,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         handlers['WFSFeaturesSelectedEvent'] = (evt) => {
             this.selectionHelper.updateSelection(evt.getMapLayer(), evt.getWfsFeatureIds());
         };
-        handlers['AfterChangeMapLayerStyleEvent'] = (evt) => {
-            this.selectionHelper.updateSelectionStyles(evt.getMapLayer());
-        };
 
         return handlers;
     }

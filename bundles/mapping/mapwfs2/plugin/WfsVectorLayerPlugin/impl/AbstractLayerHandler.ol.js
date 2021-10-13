@@ -100,6 +100,7 @@ export class AbstractLayerHandler {
             return;
         }
         this.plugin.updateLayerStyle(layer);
+        this.selectionHelper.updateSelectionStyles(layer);
     }
 
     /**
