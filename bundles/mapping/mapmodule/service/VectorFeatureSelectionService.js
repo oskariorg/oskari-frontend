@@ -213,7 +213,7 @@ export class VectorFeatureSelectionService {
      * ****************************************
      */
     __notifySelectionChange (layerId, previousSelection) {
-        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        const layer = this._sandbox.findMapLayerFromAllAvailable(layerId);
         const selectedFeatureIds = this.getSelectedFeatureIdsByLayer(layerId);
         const build = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
         if (typeof build === 'function') {
