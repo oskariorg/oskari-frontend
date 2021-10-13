@@ -1,5 +1,6 @@
 import { processFeatureProperties } from '../util/props';
 import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
+import { SelectionHelper } from './SelectionHelper';
 
 const LOADING_STATUS_VALUE = {
     COMPLETE: 'complete',
@@ -18,6 +19,7 @@ export class AbstractLayerHandler {
 
         this.loadingTimers = new Map();
         this.timerDelayInMillis = 60000;
+        this.selectionHelper = new SelectionHelper(layerPlugin);
     }
 
     /**
@@ -38,7 +40,8 @@ export class AbstractLayerHandler {
         return {
             AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
             AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer()),
-            MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer())
+            MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer()),
+            WFSFeaturesSelectedEvent: event => this._updateSelection(event.getMapLayer(), event.getWfsFeatureIds())
         };
     }
 
@@ -101,6 +104,13 @@ export class AbstractLayerHandler {
         }
         this.plugin.updateLayerStyle(layer);
         this.selectionHelper.updateSelectionStyles(layer);
+    }
+
+    _updateSelection (layer, featureIds) {
+        if (!this.layerIds.includes(layer.getId())) {
+            return;
+        }
+        this.selectionHelper.updateSelection(layer, featureIds);
     }
 
     /**
