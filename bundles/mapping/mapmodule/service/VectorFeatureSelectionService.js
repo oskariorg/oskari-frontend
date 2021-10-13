@@ -121,9 +121,10 @@ export class VectorFeatureSelectionService {
     }
 
     getLayerIdsWithSelections () {
-        // filter ids with empty arrays
+        // filter ids with empty arrays and convert to Number if possible
         return Object.keys(this._selectedFeaturesByLayer)
-            .filter(id => this._selectedFeaturesByLayer[id].length);
+            .filter(id => this._selectedFeaturesByLayer[id].length)
+            .map(layerId => isNaN(layerId) ? layerId : Number(layerId));
     }
     /* ****************************************
      * Might be worth it to get actual features (as GeoJSON) through this service instead of just ids
