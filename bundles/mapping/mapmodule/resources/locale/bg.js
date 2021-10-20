@@ -21,10 +21,7 @@ Oskari.registerLocalization(
         },
         "plugin": {
             "AnnouncementsPlugin": {
-                "terms": "Условия на ползване",
-                "dataSources": "",
-                "layersHeader": "",
-                "indicatorsHeader": ""
+                "terms": "Условия на ползване"
             },
             "LogoPlugin": {
                 "terms": "Условия на ползване",

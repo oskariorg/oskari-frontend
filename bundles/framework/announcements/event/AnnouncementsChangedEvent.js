@@ -1,7 +1,7 @@
 /**
  * @class Oskari.framework.announcements.event.AnnouncementsChangedEvent
  *
- * Used to notify getinfo plugin that the announcements have changed.
+ * Used to notify announcements plugin that the announcements have changed.
  */
 Oskari.clazz.define('Oskari.framework.announcements.event.AnnouncementsChangedEvent',
 
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.framework.announcements.event.AnnouncementsChangedEv
         this._announcements = announcements;
     }, {
         /** @static @property __name event name */
-        __name: 'Announcements.AnnouncementsChangedEvent',
+        __name: 'AnnouncementsChangedEvent',
         /**
          * @method getName
          * Returns event name

@@ -88,15 +88,6 @@ Oskari.clazz.define(
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/getinfo.scss'
                 },
-                // AnnouncementsPlugin
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/announcements/AnnouncementsPlugin.js'
-                }, {
-                    'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/announcementsplugin.ol.scss'
-                },
-
                 /**
                  * Search plugin
                  */

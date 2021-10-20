@@ -281,13 +281,6 @@ Oskari.registerLocalization(
                 "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
         },
-        "AnnouncementsTool": {
-            "buttonLabel": "Valitse Ilmoitukset",
-            "popup": {
-                "title": "Ilmoitukset",
-                "close": "Sulje"
-            },
-        },
         "guidedTour": {
             "title": "Karttajulkaisu",
             "message": "Karttajulkaisu-toiminnolla voit julkaista karttoja omalla verkkosivullasi. <br/><br/> Valitse kartalla näytettävät karttatasot, kerro missä aiot julkaista kartan, valitse työkalut ja määrittele kartan ulkoasu. Paina Tallenna ja kartta on valmis julkaistavaksi. Kopioi vain saamasi html-koodi verkkosivullesi. <br/><br/> Voit myöhemmin päivittää karttaa Omat tiedot -valikon kautta. Muutokset näkyvät heti myös omalla verkkosivullasi.<br/><br/> Vain kirjautuneet käyttäjät voivat julkaista karttoja.",

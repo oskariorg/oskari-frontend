@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin',
+Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
     function (config) {
         var me = this;
         me._clazz =
-            'Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin';
+            'Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
         me._index = 3;
@@ -19,6 +19,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         me.templates = {};
         me.annRefs = {};
         me.open = false;
+        me.allAnnouncements = []
+        me.announcementsService = Oskari.getSandbox().getService('Oskari.framework.announcements.service.AnnouncementsService');
     }, {
         /**
          * @private @method _initImpl
@@ -27,17 +29,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
          */
         _initImpl: function () {
             var me = this;
-            Oskari.on('app.start', function (details) {
-                const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
-                if (!rpcService) {
-                    return;
-                }
-                rpcService.addFunction('getAnnouncements', function () {
-                    return new Promise((resolve) => {
-                        me._getAnnouncements(announcements => resolve(announcements));
-                    });
-                });
-            });
+            
+            me.allAnnouncements = announcementsService.fetchAnnouncements();
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.AnnouncementsPlugin;
             me.templates.main = jQuery(
@@ -91,26 +84,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
                     callback([{ error: this.locale.announcementsError }]);
                 }
             });
-        },
-
-        _createEventHandlers: function () {
-            return {
-                'Announcements.AnnouncementsChangedEvent': function (evt) {
-                    this._handleAnnouncementsChangedEvent(evt);
-                }
-            };
-        },
-
-        _handleAnnouncementsChangedEvent: function (evt) {
-            if (this._config) {
-                this._config.announcements = evt.getAnnouncements();
-                this.addAnnouncements();
-            } else {
-                this._config = {
-                    announcements: evt.getAnnouncements()
-                };
-                this.addAnnouncements();
-            }
         },
 
         /**
@@ -193,7 +166,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
         * Adds announcements to the list from config
         */
         addAnnouncements: function () {
-            var announcements = this._config.announcements;
+            var announcementsIds = this._config.announcements;
+            
+            var announcements = me.allAnnouncements.filter(ann => {
+                announcementsIds.filter(id => id == ann.id);
+            });
+
             if (!this.open) {
                 delete this.announcementsContent;
             } else {
@@ -227,6 +205,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPl
                 this.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
+        },
+
+        /**
+         * @method getSelectedAnnouncements
+         * Returns list of the selected announcements
+         * @return {Object} returning object has property announcements, containing a {String[]} json
+         * representation of announcements.
+         */
+        updateAnnouncements: function (announcements) {
+            if (this._config) {
+                this._config.announcements = announcements;
+                this.addAnnouncements();
+            } else {
+                this._config = {
+                    announcements: announcements
+                };
+                this.addAnnouncements();
+            }
         },
 
         /**

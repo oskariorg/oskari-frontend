@@ -17,7 +17,10 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
     }, {
 
-        afterStart: function () {
+        start: function () {
+            var announcementsServiceName =
+                'Oskari.framework.announcements.service.AnnouncementsService';
+            me.searchService = Oskari.clazz.create(announcementsServiceName);
         }
 
     }, {
