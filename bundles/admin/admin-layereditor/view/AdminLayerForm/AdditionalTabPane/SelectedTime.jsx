@@ -7,7 +7,7 @@ import { StyledFormField } from '../styled';
 export const SelectedTime = ({ layer, controller }) => {
     const value = layer.params ? layer.params.selectedTime : '';
     const { capabilities } = layer;
-    if (!Array.isArray(capabilities.times)) {
+    if (!capabilities.times) {
         return null;
     }
     return (
