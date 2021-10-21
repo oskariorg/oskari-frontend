@@ -1,6 +1,8 @@
 import olFormatWKT from 'ol/format/WKT';
 
+const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
+const LAYER_WKT_STATUS = {};
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
@@ -84,21 +86,71 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      *
      */
     _parseGeometryForLayer (layer) {
-    // parse geometry if available
-        if (layer.getGeometry && layer.getGeometry().length === 0) {
-            var layerWKTGeom = layer.getGeometryWKT();
-            if (!layerWKTGeom) {
-            // no wkt, dont parse
+        // parse geometry if available
+        const layerId = layer.getId();
+        if (LAYER_WKT_STATUS[layerId] === true) {
+            // already loading or loaded/handled
+            return;
+        }
+        // set a flag to notify the layer WKT is loading/loaded/handled and we don't need to try again
+        LAYER_WKT_STATUS[layerId] = true;
+        if (typeof layer.getGeometry !== 'function') {
+            // layer type doesn't support this
+            return;
+        }
+        if (layer.getGeometry().length > 0) {
+            // already parsed, no need to parse again
+            return;
+        }
+        this.__getLayerCoverageWKT(layer, coverageWKT => {
+            if (!coverageWKT) {
                 return;
             }
-
-            var wkt = new olFormatWKT();
-            var geometry = wkt.readGeometry(layerWKTGeom);
-
+            const geometry = WKT_READER.readGeometry(coverageWKT);
             if (geometry) {
+                layer.setGeometryWKT(coverageWKT);
                 layer.setGeometry([geometry]);
             }
+        });
+    }
+    /**
+     * Fetches WKT from server if required
+     * @param {AbstractLayer} layer layer to get WKT for
+     * @param {Function} callback gets the wkt as parameter or undefined if it's not available
+     * @returns callback is used for return value
+     */
+    __getLayerCoverageWKT (layer, callback) {
+        if (typeof layer.getGeometryWKT === 'function' && layer.getGeometryWKT()) {
+            // we didn't load it but the layer has WKT present -> use it.
+            // userlayers, analysis etc might do this
+            callback(layer.getGeometryWKT());
+            return;
         }
+        const layerId = layer.getId();
+        if (isNaN(layerId)) {
+            // only layers that have numeric ids can have reasonable coverage WKT response for DescribeLayer
+            callback();
+            return;
+        }
+        const url = Oskari.urls.getRoute('DescribeLayer', {
+            id: layerId,
+            lang: Oskari.getLang(),
+            srs: this.getMapModule().getProjection()
+        });
+
+        fetch(url).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            callback(json.coverage);
+        }).catch(error => {
+            // reset flag to try again later
+            LAYER_WKT_STATUS[layerId] = false;
+            Oskari.log('WKT download').warn(error);
+            callback();
+        });
     }
 
     /**

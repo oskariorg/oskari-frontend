@@ -593,7 +593,7 @@ Oskari.clazz.define(
         /**
          * @method getProjection
          * Returns the SRS projection code for the map.
-         * Currently always 'EPSG:3067'
+         * Currently defaults to 'EPSG:3067'
          * @return {String}
          */
         getProjection: function () {
@@ -2468,17 +2468,15 @@ Oskari.clazz.define(
          * @param {Object} params
          */
         handleMapLayerUpdateRequest: function (layerId, forced, params) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var layerPlugins = me.getLayerPlugins();
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            const layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // couldn't find layer to update
                 return;
             }
+            const layerPlugins = this.getLayerPlugins();
             Object.values(layerPlugins).forEach((plugin) => {
                 // true if either plugin doesn't have the function or says the layer is supported.
-                var isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
+                const isSupported = typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
                 if (isSupported && typeof plugin.updateLayerParams === 'function') {
                     plugin.updateLayerParams(layer, forced, params);
                 }

@@ -3,6 +3,7 @@ Oskari.registerLocalization({
     key: 'oskariui',
     value: {
         StyleEditor: {
+            newtitle: 'Uusi tyyli',
             subheaders: {
                 styleFormat: 'Geometriatyyppi',
                 name: 'Tyylin nimi',
@@ -28,6 +29,7 @@ Oskari.registerLocalization({
                 color: 'Väri',
                 lineCap: 'Päädyt',
                 lineDash: 'Tyyli',
+                lineJoin: 'Kulmat',
                 width: 'Leveys',
                 area: {
                     color: 'Väri',
@@ -36,6 +38,6 @@ Oskari.registerLocalization({
                     width: 'Viivan paksuus'
                 }
             }
-        }        
+        }
     }
 });

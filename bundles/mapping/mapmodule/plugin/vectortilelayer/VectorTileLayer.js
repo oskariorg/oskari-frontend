@@ -1,82 +1,49 @@
-Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
-    function () {
-        // passes params and options to AbstractLayer constructor automatically.
-        // If this is changed to ES6 class these will need to be passed manually with super(...arguments)
-        // like in https://github.com/oskariorg/oskari-frontend/pull/1260
-        /* style definition for this layer */
-        this.hoverOptions = null;
+import { AbstractVectorLayer } from '../../domain/AbstractVectorLayer';
+import { VectorStyle } from '../../domain/VectorStyle';
 
-        /* Layer Type */
+export class VectorTileLayer extends AbstractVectorLayer {
+    constructor () {
+        super(...arguments);
         this._layerType = 'VECTORTILE';
-    }, {
-        setHoverOptions (options) {
-            this.hoverOptions = options;
-        },
-        /**
-         * @method getHoverOptions
-         * @return {Object} options
-         */
-        getHoverOptions () {
-            return this.hoverOptions;
-        },
-        /**
-         * @method getStyleDef
-         * @param {String} styleName
-         * @return {Object}
-         */
-        getStyleDef (styleName) {
-            if (this._options.styles) {
-                return this._options.styles[styleName];
-            }
-        },
-        /**
-         * @method getCurrentStyleDef
-         * @return {Object/null}
-         */
-        getCurrentStyleDef () {
-            if (!this._currentStyle) {
-                return null;
-            }
-            return this.getStyleDef(this._currentStyle.getName());
-        },
-        /**
-         * @method getExternalStyleDef
-         * @param {String} styleName
-         * @return {Object}
-         */
-        getExternalStyleDef (styleName) {
-            if (this._options.externalStyles) {
-                return this._options.externalStyles[styleName];
-            }
-        },
-        /**
-         * @method getCurrentExternalStyleDef
-         * @return {Object/null}
-         */
-        getCurrentExternalStyleDef () {
-            if (!this._currentStyle) {
-                return null;
-            }
-            return this.getExternalStyleDef(this._currentStyle.getName());
-        },
-        /**
-         * @method getTileGrid
-         * @return {Object} tile grid configuration
-         */
-        getTileGrid () {
-            return this._options.tileGrid;
-        },
+    }
 
-        isSupportedSrs (srsName) {
-            if (Oskari.getSandbox().getMap().getSupports3D()) {
-                return false;
-            }
-            if (!this._srsList || !this._srsList.length) {
-                // if list is not provided, treat as supported
-                return true;
-            }
-            return this._srsList.indexOf(srsName) !== -1;
+    // Clustering isn't supported for VectorTile
+    getClusteringDistance () {
+        return undefined;
+    }
+
+    /**
+     * @method getTileGrid
+     * @return {Object} tile grid configuration
+     */
+    getTileGrid () {
+        return this._options.tileGrid;
+    }
+
+    isSupportedSrs (srsName) {
+        if (Oskari.getSandbox().getMap().getSupports3D()) {
+            return false;
         }
-    }, {
-        'extend': ['Oskari.mapframework.domain.AbstractLayer']
-    });
+        if (!this._srsList || !this._srsList.length) {
+            // if list is not provided, treat as supported
+            return true;
+        }
+        return this._srsList.indexOf(srsName) !== -1;
+    }
+
+    setOptions (options) {
+        // super sets normal styles
+        super.setOptions(options);
+        const { externalStyles = {} } = options;
+        // set external styles
+        Object.keys(externalStyles).forEach(name => {
+            // Use name as title
+            const style = new VectorStyle(name, name, 'external', externalStyles[name]);
+            this.addStyle(style);
+        });
+        // Remove externalStyles from options to be sure that VectorStyle is used
+        delete options.externalStyles;
+    }
+}
+
+Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayer', VectorTileLayer);

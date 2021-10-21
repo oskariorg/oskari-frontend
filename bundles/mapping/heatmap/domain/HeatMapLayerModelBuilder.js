@@ -16,20 +16,16 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
-            var me = this,
-                toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
-
-            if (!layer.isLayerOfType('HEATMAP')) {
+            if (!layer.isLayerOfType('HEATMAP') || !this.sandbox.hasHandler('ShowUserStylesRequest')) {
                 return;
             }
-            var locLabel = this.localization['tool_label'],
-                toolHeatmap = toolBuilder();
+            const toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
+            const locLabel = this.localization['tool_label'];
+            const toolHeatmap = toolBuilder();
             toolHeatmap.setName('heatmap');
             toolHeatmap.setTitle(locLabel);
             toolHeatmap.setTooltip(locLabel);
-            toolHeatmap.setCallback(function () {
-                me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
-            });
+            toolHeatmap.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId()]));
             layer.addTool(toolHeatmap);
         }
     });

@@ -315,21 +315,22 @@ Oskari.clazz.define(
          * A generic implementation of forcing a redraw on a layer. Override in layer plugins where necessary.
          */
         updateLayerParams: function (layer, forced, params) {
-            var olLayerList = this.getMapModule().getOLMapLayers(layer.getId());
-            if (olLayerList) {
-                for (var i = 0; i < olLayerList.length; ++i) {
-                    if (olLayerList[i].redraw && typeof (olLayerList[i].redraw) === 'function') {
-                        olLayerList[i].redraw(forced);
-                    } else if (typeof (olLayerList[i].getSource) === 'function' && typeof (olLayerList[i].getSource().updateParams) === 'function') {
-                        var updatedParams = jQuery.extend(true, {}, olLayerList[i].getSource().getParams(), params);
-                        // add timestamp to make sure that params are changed and layer is forced to redraw
-                        if (forced === true) {
-                            updatedParams._ts = Date.now();
-                        }
-                        olLayerList[i].getSource().updateParams(updatedParams);
-                    }
-                }
+            const olLayerList = this.getMapModule().getOLMapLayers(layer.getId());
+            if (!olLayerList) {
+                return;
             }
+            olLayerList.forEach(olLayer => {
+                if (typeof (olLayer.getSource) !== 'function' || typeof (olLayer.getSource().updateParams) !== 'function') {
+                    this._log.warn(`Tried updating layer (${layer.getId()}), but plugin (${this.getName()}) doesn't support update operation`);
+                    return;
+                }
+                const updatedParams = jQuery.extend(true, {}, olLayer.getSource().getParams(), params);
+                // add timestamp to make sure that params are changed and layer is forced to redraw
+                if (forced === true) {
+                    updatedParams._ts = Date.now();
+                }
+                olLayer.getSource().updateParams(updatedParams);
+            });
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

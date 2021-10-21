@@ -23,6 +23,9 @@ Oskari.registerLocalization(
         "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
         "unsupported-layer": "Karttatasoa ei voida näyttää.",
         "unsupported-layer-projection": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
+        "styles": {
+            "defaultTitle" : "Oletustyyli"
+        },
         "plugin": {
             "AnnouncementsPlugin": {
                 "title": "Ilmoitukset"

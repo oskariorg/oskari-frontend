@@ -5,8 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "KartaWfs2",
         "desc": "",
-        "default-style": "Privzeti stil",
-        "own-style": "Lastni stil",
         "refresh": "Osveži",
         "refresh_title": "Posodobljeni podatkovni izdelki niso samodejno prikazani na karti",
         "tile": {
@@ -34,13 +32,6 @@ Oskari.registerLocalization(
             "show": "Prikaži kraje",
             "close": "Zapri",
             "edit": "Urejaj"
-        },
-        "popup": {
-            "title": "Lastni stil",
-            "button": {
-                "cancel": "Prekliči",
-                "save": "Shrani"
-            }
         }
     }
 });

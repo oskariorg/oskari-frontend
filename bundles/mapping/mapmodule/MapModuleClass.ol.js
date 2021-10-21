@@ -20,8 +20,10 @@ import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
-import { getOlStyle } from './oskariStyle/generator.ol';
+import { getOlStyle, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
+import { STYLE_TYPE } from './oskariStyle/constants';
 import { LAYER_ID } from '../mapmodule/domain/constants';
+import { VectorFeatureSelectionService } from './service/VectorFeatureSelectionService';
 import proj4 from '../../../libraries/Proj4js/proj4js-2.2.1/proj4-src.js';
 // import code so it's usable via Oskari global
 import './AbstractMapModule';
@@ -234,12 +236,19 @@ export class MapModule extends AbstractMapModule {
             sandbox.notifyAll(hoverEvent);
         });
     }
+
     _registerVectorFeatureService () {
         const sandbox = this._sandbox;
         let ftrService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
         if (!ftrService) {
             ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this);
             sandbox.registerService(ftrService);
+        }
+
+        let selectionService = sandbox.getService(VectorFeatureSelectionService.QNAME);
+        if (!selectionService) {
+            selectionService = new VectorFeatureSelectionService(sandbox);
+            sandbox.registerService(selectionService);
         }
         this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
@@ -278,12 +287,37 @@ export class MapModule extends AbstractMapModule {
     /**
      * @override @method getStyle
      * @param styleDef Oskari style definition
-     * @param geomType One of 'line', 'dot', 'area' | optional
+     * @param styleType One of 'line', 'point', 'area' | optional
      * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
      * @return {ol/style/Style}
      **/
-    getStyle (styleDef, geomType, requestedStyle) {
-        return getOlStyle(this, styleDef, geomType, requestedStyle);
+    getStyle (styleDef, styleType, requestedStyle) {
+        return getOlStyle(this, styleDef, styleType, requestedStyle);
+    }
+
+    getGeomTypedStyles (styleDef) {
+        const styles = {};
+        styles[STYLE_TYPE.AREA] = this.getStyle(styleDef, STYLE_TYPE.AREA);
+        styles[STYLE_TYPE.LINE] = this.getStyle(styleDef, STYLE_TYPE.LINE);
+        styles[STYLE_TYPE.POINT] = this.getStyle(styleDef, STYLE_TYPE.POINT);
+        if (styleDef.text) {
+            styles.labelProperty = styleDef.text.labelProperty;
+        }
+        return styles;
+    };
+
+    /**
+     * @method getStyleForLayer
+     * @param layer Oskari layer
+     * @param extendedDef Oskari style definition which overrides layer's featureStyle
+     * @return {ol/style/StyleLike}
+     **/
+    getStyleForLayer (layer, extendedDef) {
+        return getOlStyleForLayer(this, layer, extendedDef);
+    };
+
+    registerDefaultFeatureStyle (layerType, styleDef) {
+        setDefaultStyle(layerType, styleDef);
     }
 
     getDefaultMarkerSize () {
@@ -301,6 +335,7 @@ export class MapModule extends AbstractMapModule {
         const hits = [];
         const addHit = (ftr, layer) => {
             hits.push({
+                feature: ftr,
                 featureProperties: ftr.getProperties(),
                 layerId: layer.get(LAYER_ID)
             });

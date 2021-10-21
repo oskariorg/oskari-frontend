@@ -1,6 +1,12 @@
 import './Tile';
 import './Flyout';
+import './model/LayerGroup';
+import './service/layerlist';
 import './service/LayerListToolingService';
+import './request/ShowFilteredLayerListRequest';
+import './request/ShowFilteredLayerListRequestHandler';
+import './request/AddLayerListFilterRequest';
+import './request/AddLayerListFilterRequestHandler';
 
 const FILTER_NEWEST_COUNT = 20;
 
@@ -107,10 +113,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             sandbox.request(this, request);
 
             // create and register request handlers
-            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
+            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLayerListRequestHandler', sandbox, this);
             sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
-            const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
+            const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerlist.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             this._registerForGuidedTour();
@@ -144,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerRemoveEvent': function (event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
             },
             /**
@@ -153,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function (event) {
+            AfterMapLayerAddEvent: function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
             },
             /**
@@ -162,11 +168,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              *
              * Rearranges layers
              */
-            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+            AfterRearrangeSelectedMapLayerEvent: function (event) {
                 if (event._creator !== this.getName()) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Tile'].refresh();
                 }
+            },
+            UIChangeEvent: function () {
+                this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             }
         },
         /**

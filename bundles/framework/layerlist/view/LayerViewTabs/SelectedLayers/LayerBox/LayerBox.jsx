@@ -28,7 +28,7 @@ const Publishable = styled.span`
 
 const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const organizationName = layer.getOrganizationName();
-    const publishable = layer.getPermission('publish');
+    const publishable = layer.hasPermission('publish');
 
     const [visible, setVisible] = useState(visibilityInfo.visible);
     useEffect(() => {
@@ -43,10 +43,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
         controller.removeLayer(layer);
     };
     const getName = () => {
-        // The layer model has entity-references for < > etc (&gt; &lt;)
-        // FIXME: after 2.4.0 when we remove the older layerlisting bundles we can
-        //  have the name in the model without encoding and NOT use dangerouslySetInnerHTML
-        const field = <b dangerouslySetInnerHTML={{__html: layer.getName()}} />;
+        const field = <b>{layer.getName()}</b>;
         const description = layer.getDescription();
         if (!description) {
             return field;

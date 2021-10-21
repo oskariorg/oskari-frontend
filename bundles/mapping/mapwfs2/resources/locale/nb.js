@@ -5,8 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Standardstil",
-        "own-style": "Egen stil",
         "none-style": "Ingen",
         "refresh": "Oppdater",
         "refresh_title": "Oppdater dataprodukter som ikke gjengis automatisk på kartet",
@@ -40,13 +38,6 @@ Oskari.registerLocalization(
             "show": "Vis steder",
             "close": "Lukk",
             "edit": "Tilpass"
-        },
-        "popup": {
-            "title": "Egen stil",
-            "button": {
-                "cancel": "Avbryt",
-                "save": "Lagre"
-            }
         }
     }
 });

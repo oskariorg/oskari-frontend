@@ -79,12 +79,12 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
                 header.attr('id', headerElementId);
             }
             link = header.find('a');
-            link.html(this.getTitle());
+            link.text(this.getTitle());
         },
         updateTitle: function (title) {
             if (!this.header) return;
             this.title = title;
-            this.header.find('a').html(title);
+            this.header.find('a').text(title);
         },
         /**
          * @method setTitleIcon
@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
             var iconDiv = this.templateIconTemplate.clone();
             iconDiv.addClass(iconClass);
             this.header.find('a').after(iconDiv);
-            if (_.isFunction(clickHandler)) {
+            if (typeof clickHandler === 'function') {
                 iconDiv.on('click', clickHandler);
             }
         },

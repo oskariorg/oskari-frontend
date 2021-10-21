@@ -4,11 +4,6 @@ Oskari.registerLocalization({
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Standard stil",
-        "own-style": "Egen stil",
-        "own-styles-flyout-title": "Egna stilar",
-        "styles" : "Stilar",
-        "add-style" : "Lägg till stil",
         "refresh": "Refresh",
         "refresh_title": "Refresh WFS-layers, which are not rendered automatically on a map",
         "tile": {
@@ -42,13 +37,6 @@ Oskari.registerLocalization({
             "show": "Visa platser",
             "close": "Stäng",
             "edit": "Redigera"
-        },
-        "popup": {
-            "title": "Egen stil",
-            "button": {
-                "cancel": "Avbryt",
-                "save": "Spara"
-            }
         },
         "scale_dialog": {
             "title": "Skaala uppdaterad",

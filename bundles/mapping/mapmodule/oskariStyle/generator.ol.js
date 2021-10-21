@@ -1,4 +1,3 @@
-
 import olStyleStyle from 'ol/style/Style';
 import olStyleFill from 'ol/style/Fill';
 import olStyleStroke from 'ol/style/Stroke';
@@ -6,9 +5,225 @@ import olStyleCircle from 'ol/style/Circle';
 import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 
-import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE } from './constants';
+import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE } from './constants';
+import { filterOptionalStyle, getOptionalStyleFilter } from './filter';
 
+const log = Oskari.log('MapModule.util.style');
 const TRANSPARENT = 'rgba(0,0,0,0)';
+
+const merge = (...styles) => jQuery.extend(true, {}, ...styles);
+
+export const HIDDEN_STYLE = new olStyleStyle({ visibility: 'hidden' });
+
+const defaultStyles = {};
+export const setDefaultStyle = (layerType, styleDef) => {
+    defaultStyles[layerType] = styleDef;
+};
+const getDefaultStyle = layerType => {
+    return defaultStyles[layerType] || {};
+};
+
+const getFeatureStyle = (layer, extendedDef = {}) => {
+    const style = layer.getCurrentStyle();
+    const defaultDef = getDefaultStyle(layer.getLayerType());
+    return merge(defaultDef, style.getFeatureStyle(), extendedDef);
+};
+
+export const useStyleFunction = layer => {
+    const styleType = geometryTypeToStyleType(layer.getGeometryType());
+    const hasOptionalStyles = layer.getCurrentStyle().getOptionalStyles().length > 0;
+    const hasCluster = typeof layer.getClusteringDistance() !== 'undefined';
+    return hasOptionalStyles || hasCluster ||
+        !styleType || styleType === STYLE_TYPE.COLLECTION;
+};
+
+export const geometryTypeToStyleType = type => {
+    let styleType;
+    switch (type) {
+    case 'LineString':
+    case 'MultiLineString':
+        styleType = STYLE_TYPE.LINE; break;
+    case 'Polygon':
+    case 'MultiPolygon':
+        styleType = STYLE_TYPE.AREA; break;
+    case 'Point':
+    case 'MultiPoint':
+        styleType = STYLE_TYPE.POINT; break;
+    case 'GeometryCollection':
+        styleType = STYLE_TYPE.COLLECTION; break;
+    }
+    return styleType;
+};
+
+/**
+ * @method getStyleForLayer
+ * @param mapmodule
+ * @param layer Oskari layer
+ * @param extendedDef Oskari style definition which overrides layer's featureStyle
+ * @return {ol/style/StyleLike}
+ **/
+export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
+    const featureStyle = getFeatureStyle(layer, extendedDef);
+    if (!useStyleFunction(layer)) {
+        const styleType = geometryTypeToStyleType(layer.getGeometryType());
+        return mapmodule.getStyle(featureStyle, styleType);
+    }
+    const typed = mapmodule.getGeomTypedStyles(featureStyle);
+    const optional = layer.getCurrentStyle().getOptionalStyles().map(optionalDef => {
+        return {
+            filter: getOptionalStyleFilter(optionalDef),
+            typed: mapmodule.getGeomTypedStyles(merge(featureStyle, optionalDef))
+        };
+    });
+    return getStyleFunction({ typed, optional });
+};
+
+export const getStyleForGeometry = (geometry, styleTypes) => {
+    if (!geometry || !styleTypes) {
+        return;
+    }
+    let geometries = [];
+    const geomType = geometry.getType ? geometry.getType() : geometry;
+    const type = geometryTypeToStyleType(geomType);
+    if (type === STYLE_TYPE.COLLECTION) {
+        if (typeof geometry.getGeometries === 'function') {
+            geometries = geometry.getGeometries() || [];
+        }
+        if (geometries.length > 0) {
+            log.debug('Received GeometryCollection. Using first feature to determine feature style.');
+            return getStyleForGeometry(geometries[0], styleTypes);
+        } else {
+            log.info('Received GeometryCollection without geometries. Feature style cannot be determined.');
+        }
+    };
+    return styleTypes[type];
+};
+
+// Style for cluster circles
+const clusterStyleCache = {};
+const clusterStyleFunc = feature => {
+    const size = feature.get('features').length;
+    const cacheKey = `${size}`;
+    let style = clusterStyleCache[cacheKey];
+    if (!style) {
+        style = new olStyleStyle({
+            image: new olStyleCircle({
+                radius: size > 9 ? 14 : 12,
+                stroke: new olStyleStroke({
+                    color: '#fff'
+                }),
+                fill: new olStyleFill({
+                    color: '#3399CC' // isSelected '#005d90'
+                })
+            }),
+            text: new olStyleText({
+                text: size.toString(),
+                font: 'bold 14px sans-serif',
+                fill: new olStyleFill({
+                    color: '#fff'
+                })
+            })
+        });
+        clusterStyleCache[cacheKey] = style;
+    }
+    return style;
+};
+
+export const getStyleFunction = styles => {
+    return (feature) => {
+        const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
+        const typed = found ? found.typed : styles.typed;
+        const style = getStyleForGeometry(feature.getGeometry(), typed);
+        const { labelProperty } = style || {};
+        const textStyle = style ? style.getText() : undefined;
+        if (labelProperty && textStyle) {
+            _setFeatureLabel(feature, textStyle, labelProperty);
+        }
+        return style;
+    };
+};
+export const wrapClusterStyleFunction = styleFunction => {
+    return (feature) => {
+        // Cluster layer feature
+        const feats = feature.get('features');
+        if (feats) {
+            if (feats.length > 1) {
+                return clusterStyleFunc(feature);
+            } else {
+                // Only single point in cluster. Use it in styling.
+                feature = feature.get('features')[0];
+            }
+        } else {
+            // Vector layer feature, hide single points
+            const geomType = feature.getGeometry().getType();
+            if (geomType === 'Point' ||
+                (geomType === 'MultiPoint' && feature.getGeometry().getPoints().length === 1)) {
+                return null;
+            }
+        }
+        return styleFunction(feature);
+    };
+};
+
+const applyAlphaToColorable = (colorable, alpha) => {
+    if (!colorable || !colorable.getColor()) {
+        return;
+    }
+    if (Array.isArray(colorable.getColor())) {
+        const color = [...colorable.getColor()];
+        color[3] = alpha;
+        colorable.setColor(color);
+        return;
+    }
+    let colorLike = colorable.getColor();
+    if (typeof colorLike !== 'string') {
+        return;
+    }
+    if (colorLike.startsWith('rgba')) {
+        colorLike = colorLike.substring(0, colorLike.lastIndexOf(','));
+        colorLike += `,${alpha})`;
+        colorable.setColor(colorLike);
+        return;
+    } else if (colorLike.startsWith('rgb')) {
+        colorLike = colorLike.replace('rgb', 'rgba');
+        colorLike = colorLike.substring(0, colorLike.lastIndexOf(')'));
+        colorLike += `,${alpha})`;
+        colorable.setColor(colorLike);
+        return;
+    }
+    const rgb = Oskari.util.hexToRgb(colorLike);
+    if (!rgb) {
+        return;
+    }
+    const { r, g, b } = rgb;
+    colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
+};
+
+export const applyOpacity = (olStyle, opacity) => {
+    if (!olStyle || isNaN(opacity)) {
+        return;
+    }
+    const alpha = opacity < 1 ? opacity : opacity / 100.0;
+    applyAlphaToColorable(olStyle.getFill(), alpha);
+    applyAlphaToColorable(olStyle.getStroke(), alpha);
+    if (olStyle.getImage()) {
+        olStyle.getImage().setOpacity(alpha);
+    }
+    return olStyle;
+};
+
+const _setFeatureLabel = (feature, textStyle, labelProperty) => {
+    let prop;
+    if (Array.isArray(labelProperty)) {
+        prop = labelProperty.find(p => feature.get(p));
+    } else {
+        prop = labelProperty;
+    }
+    if (!prop) {
+        return;
+    }
+    textStyle.setText(feature.get(prop));
+};
 
 /**
  * Creates style based on JSON

@@ -298,7 +298,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
                 infoIcon = this.templateinfoIcon.clone(),
                 layerName = layer.getName();
             if (layerName) {
-                var layerItem = jQuery('<li>' + layerName + '</li>');
+                var layerItem = jQuery('<li></li>');
+                layerItem.text(layerName);
                 // metadata link
                 var uuid = layer.getMetadataIdentifier();
                 if (uuid) {

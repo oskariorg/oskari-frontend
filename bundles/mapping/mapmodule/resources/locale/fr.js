@@ -23,6 +23,9 @@ Oskari.registerLocalization(
         "unsupportedProj": "Impossible d'afficher certaines couches ajoutées à cette vue cartographique avec la projection cartographique actuelle.",
         "unsupported-layer": "La couche de carte ne peut pas être affichée.",
         "unsupported-layer-projection": "La couche cartographique ne peut pas être affichée dans la projection cartographique sélectionnée.",
+        "styles": {
+            "defaultTitle": "Style par défaut"
+        },
         "plugin": {
             "LogoPlugin": {
                 "terms": "Conditions d’utilisation",

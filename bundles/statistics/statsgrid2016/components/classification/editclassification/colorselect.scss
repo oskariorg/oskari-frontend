@@ -9,6 +9,11 @@ $colorHeight: 16px;
 .oskari-color-selection-main {
     position: relative;
 
+    div {
+        /* AntD global reset changes default sizing to border-box which breaks SumoSelect */
+        box-sizing: content-box;
+    }
+
     &.disabled {
         .oskari-selected-color {
             border: 1px solid $disabledBorderColor;

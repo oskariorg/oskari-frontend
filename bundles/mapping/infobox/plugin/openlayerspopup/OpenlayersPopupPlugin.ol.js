@@ -284,7 +284,22 @@ Oskari.clazz.define(
                 type: popupType
             };
 
+            if (me.adaptable && !isInMobileMode) {
+                if (positioning && positioning !== 'no-position-info') {
+                    me._adaptPopupSizeWithPositioning(id, refresh);
+                    // if refresh, we need to reset the positioning
+                    if (refresh) {
+                        popup.setPositioning(null);
+                    }
+                    // update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol)
+                    popup.setPositioning(positioning);
+                } else {
+                    me._adaptPopupSize(id, refresh);
+                }
+            }
+
             // Fix popup header height to match title content height if using desktop popup
+            // we need to do this AFTER _adaptPopupSize() since it might make the popup smaller -> making the title add more height
             if (title && !isInMobileMode) {
                 var popupEl = jQuery(popup.getElement());
                 var popupHeaderEl = popupEl.find('.popupHeader');
@@ -312,19 +327,6 @@ Oskari.clazz.define(
                 popupHeaderEl.height(fixedHeight);
             }
 
-            if (me.adaptable && !isInMobileMode) {
-                if (positioning && positioning !== 'no-position-info') {
-                    me._adaptPopupSizeWithPositioning(id, refresh);
-                    // if refresh, we need to reset the positioning
-                    if (refresh) {
-                        popup.setPositioning(null);
-                    }
-                    // update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol)
-                    popup.setPositioning(positioning);
-                } else {
-                    me._adaptPopupSize(id, refresh);
-                }
-            }
             if (popupType === 'desktop') {
                 setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
             }

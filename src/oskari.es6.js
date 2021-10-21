@@ -5,7 +5,7 @@
  */
 import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
-import { version } from '../package.json';
+import pkg from '../package.json';
 
 let _markers = [];
 
@@ -46,7 +46,7 @@ function appendQueryToURL(url, query) {
 }
 
 const Oskari = {
-    VERSION: version,
+    VERSION: pkg.version,
     setMarkers (markers) {
         _markers = markers || [];
     },
@@ -115,6 +115,15 @@ const Oskari = {
                     return appendQueryToURL(url, 'action_route=' + route);
                 }
                 return url;
+            },
+            /**
+             * Builds an URL by attaching optional parameters to base url
+             * @param {String} url complete baseUrl that might already have querystring
+             * @param {*} optionalParams parameters that should be attached to baseUrl
+             * @returns base url with optional params included as querystring
+             */
+            buildUrl: function (url, optionalParams) {
+                return appendQueryToURL(url, encodeParams(optionalParams));
             }
     }
 };

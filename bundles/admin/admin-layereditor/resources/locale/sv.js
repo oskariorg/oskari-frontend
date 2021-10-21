@@ -101,7 +101,7 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "realtimeDesc": "Klicka för att välja, om det är fråga om ett kartlager, som uppdateras i realtid. Kartlagrets uppfriskningsfrekvens definieras i sekunder.",
             "singleTileDesc": "Då du väljer Single Tile ber tjänsten om data för hela området i stället för en kartruta i taget",
-            "serviceNotAvailable": "Inte tillgänglig",
+            "serviceNotAvailable": "ej tillgänglig",
             "metadata": {
                 "title": "Metadatans filtagg",
                 "desc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
@@ -116,7 +116,12 @@ Oskari.registerLocalization(
                 "updateRateDesc": "Uppdateringsfrekvens i sekunder",
                 "updatedSuccesfully": "Uppdatering lyckades.",
                 "updateFailed": "Uppdatering misslyckades.",
-                "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
+                "updateFailedWithReason": "Uppdatering misslyckades: {reason}",
+                "rasterStyle" : {
+                    "defaultStyle" : "Den valda standardstilen finns inte längre i tjänsten. Vänligen välj en ny standardstil.",
+                    "additionalLegend": "För kartlagret finns en teckenförklaring utan giltig stil. Vänligen uppdatera förklaringen. Den icke fungerande stilen är markerad med ( ! ) ",
+                    "globalWithStyles": "Till kartlagret har endast en standard teckenförklaring fastställts, men det finns ytterliga stilar med förklaringar tillgängliga på gränssnittet. Du kan ta bort standardvalet för att kunna utnyttja dessa."
+                }
             },
             "styles": {
                 "default": "Förvald utseende",
@@ -124,10 +129,9 @@ Oskari.registerLocalization(
                 "raster": {
                     "title": "Stilar och kartförklaringar",
                     "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
-                    "legendImage": "URL adress för kartförklaringar",
-                    "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
-                    "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
-                    "serviceLegend": "Definierad i tjänsten",
+                    "unavailable": "I tjänsten definierad stil: ej tillgänglig",
+                    "legendImage": "Generella kartförklaringar",
+                    "serviceLegend": "I tjänsten definierad kartförklaring",
                     "overriddenLegend": "Adress för kartförklaring",
                     "overrideTooltip": "URL adress för kartförklaringar som ersätter kartförklaringar definierad i tjänsten"
                 },

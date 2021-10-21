@@ -1,4 +1,3 @@
-const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -10,6 +9,7 @@ Oskari.clazz.define(
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
         this.service = null;
+        this._pendingUserStyleTools = [];
         this._registerForLayerFiltering();
     }, {
         /**
@@ -19,6 +19,10 @@ Oskari.clazz.define(
         _registerForLayerFiltering: function () {
             var me = this;
             Oskari.on('app.start', function (details) {
+                if (me.sandbox.hasHandler('ShowUserStylesRequest')) {
+                    me._pendingUserStyleTools.forEach(l => me._addUserStyleTool(l));
+                }
+                me._pendingUserStyleTools = [];
                 var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
                 if (!layerlistService) {
@@ -33,6 +37,16 @@ Oskari.clazz.define(
                     'featuredata');
             });
         },
+        _addUserStyleTool: function (layer) {
+            const locOwnStyle = this.localization['own-style'];
+            const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('ownStyle');
+            toolOwnStyle.setTitle(locOwnStyle);
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(locOwnStyle);
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId(), false]));
+            layer.addTool(toolOwnStyle);
+        },
         /**
          * parses any additional fields to model
          * @param {Oskari.mapframework.domain.WfsLayer} layer partially populated layer
@@ -40,70 +54,14 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson = {}, maplayerService) {
-            var me = this;
-
             if (layer.isLayerOfType('WFS')) {
-                var locOwnStyle = me.localization['own-style'];
-                var toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                toolOwnStyle.setName('ownStyle');
-                toolOwnStyle.setTitle(locOwnStyle);
-                toolOwnStyle.setIconCls('show-own-style-tool');
-                toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(function () {
-                    me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId(), undefined, false]);
-                });
-                layer.addTool(toolOwnStyle);
-            }
-
-            // create a default style
-            const locDefaultStyle = this.localization['default-style'];
-            const defaultStyle = new Style();
-            defaultStyle.setName('default');
-            defaultStyle.setTitle(locDefaultStyle);
-            defaultStyle.setLegend('');
-
-            const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            let layerType = layer.getLayerType();
-            if (layerType === 'userlayer' || layerType === 'myplaces') {
-                layerType = 'wfs';
-            }
-            const wfsPlugin = mapModule.getLayerPlugins(layerType);
-
-            if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
-                // Read options object for styles and hover options
-                const { styles = {} } = mapLayerJson.options || {};
-                const layerStyles = [];
-                Object.keys(styles).forEach(styleId => {
-                    const style = new Style();
-                    style.setName(styleId);
-                    style.setTitle(styleId === 'default' ? locDefaultStyle : styles[styleId].title || styleId);
-                    layerStyles.push(style);
-                });
-                if (layerStyles.length === 0) {
-                    // ensure we have at least one style so:
-                    // - things don't break as easily in other parts of the app
-                    // - end-user can switch back to "default" when adding a runtime style of their own
-                    layerStyles.push(defaultStyle);
+                if (this.sandbox.hasHandler('ShowUserStylesRequest')) {
+                    this._addUserStyleTool(layer);
+                } else {
+                    this._pendingUserStyleTools.push(layer);
                 }
-                layer.setStyles(layerStyles);
-                layer.setHoverOptions(mapLayerJson.options.hover);
-            } else {
-                // check if default style comes and give localization for it if found
-                if (Array.isArray(mapLayerJson.styles)) {
-                    const definedDefaultStyle = mapLayerJson.styles.find(style => style.name === 'default');
-                    if (definedDefaultStyle) {
-                        definedDefaultStyle.title = locDefaultStyle;
-                    }
-                }
-
-                // default style for WFS is given as last parameter
-                maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
             }
-
-            // Set current Style
-            if (mapLayerJson.style) {
-                layer.selectStyle(mapLayerJson.style);
-            }
+            layer.setHoverOptions(mapLayerJson.options.hover);
             this.parseLayerAttributes(layer);
         },
         parseLayerAttributes: function (layer) {

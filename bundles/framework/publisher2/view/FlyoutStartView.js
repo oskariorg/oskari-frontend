@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 if (reasons.length) {
                     txt += ' (' + reasons.join(', ') + ')';
                 }
-                item.append(txt);
+                item.text(txt);
                 listElement.append(item);
             });
             return layerList;

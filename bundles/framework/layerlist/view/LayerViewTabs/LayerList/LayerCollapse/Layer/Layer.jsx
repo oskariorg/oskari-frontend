@@ -45,13 +45,6 @@ const onToolClick = tool => {
     }
 };
 
-// The layer model has entity-references for < > etc (&gt; &lt;)
-// FIXME: after 2.4.0 when we remove the older layerlisting bundles we can
-//  have the name in the model without encoding and NOT use dangerouslySetInnerHTML
-const LayerName = ({ layer }) => {
-    return (<div dangerouslySetInnerHTML={{__html: layer.getName()}} />);
-};
-
 const Layer = ({ model, selected, controller }) => {
     return (
         <LayerDiv className="t_layer" data-id={model.getId()}>
@@ -73,7 +66,7 @@ const Layer = ({ model, selected, controller }) => {
                     <Switch size="small" checked={selected}
                         onChange={checked => onSelect(checked, model.getId(), controller)}
                         disabled={model.isSticky()} />
-                    <LayerName layer={ model } />
+                    <div>{model.getName()}</div>
                 </Label>
             </Body>
             <LayerTools model={model} controller={controller}/>

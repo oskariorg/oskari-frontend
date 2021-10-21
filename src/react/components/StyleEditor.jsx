@@ -22,8 +22,6 @@ const TabSelector = styled(Radio.Group)`
 `;
 
 const StaticForm = styled(Form)`
-    width: 400px;
-
     & > .ant-space {
         width: 100%;
     }
@@ -45,33 +43,51 @@ const FormSpace = styled(Space)`
  * <StyleEditor props={{ ...exampleProps }}/>
  */
 
+ const styleExceptionHandler = (exceptionStyle) => {
+    // if fill pattern is set to null, set color as empty
+    if (typeof exceptionStyle.fill.area.pattern !== 'undefined') {
+        if (exceptionStyle.fill.area.pattern === 4) {
+            exceptionStyle.fill.color = '';
+        } else if (exceptionStyle.fill.area.pattern !== 4 && exceptionStyle.fill.color === '') {
+            exceptionStyle.fill.color = OSKARI_BLANK_STYLE.fill.color;
+        }
+    }
 
-export const StyleEditor = (props) => {
+    return exceptionStyle;
+};
+
+export const StyleEditor = ({ oskariStyle, onChange, format }) => {
     let [form] = Form.useForm();
 
+    // if we don't clone the input here the mappings
+    //  between form <> style, the values can get mixed up due to mutability
     const style = {
-        ... OSKARI_BLANK_STYLE,
-        ...props.oskariStyle
+        ...OSKARI_BLANK_STYLE,
+        ...oskariStyle
     };
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
-    const [selectedTab, setSelectedTab] = useState(props.format || 'point');
+    const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
+    const [selectedTab, setSelectedTab] = useState(format || 'point');
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
+
     const onUpdate = (values) => {
-        // {image.shape: 3}
+        // values ex: {image.shape: 3}
+        FormToOskariMapper.convertFillPatternToStyle(values);
         const newStyle = updateStyle(values);
-        props.onChange(newStyle)
+        // if we don't clone the output here the mappings
+        //  between form <> style, the values can get mixed up due to mutability
+        onChange(styleExceptionHandler(newStyle));
     };
 
     useEffect(() => {
-        form.setFieldsValue(fieldValuesForForm);
-    }, [props.oskariStyle]);
+        form.setFieldsValue(convertedStyleValues);
+    }, [oskariStyle]);
 
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
-                <Message messageKey='StyleEditor.subheaders.styleFormat' />
                 <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
                     <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
                     <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>

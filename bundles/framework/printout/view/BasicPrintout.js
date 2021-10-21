@@ -310,7 +310,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const checkUnsupportedLayers = () => {
                 const layerNames = this.instance.sandbox.findAllSelectedMapLayers()
                     .filter(l => l.getLayerType() === 'wmts')
-                    .map(l => l.getName());
+                    .map(l => Oskari.util.sanitize(l.getName()));
                 if (layerNames.length === 0) return;
                 const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 const message = '<div>' + me.loc.scale.unsupportedLayersMessage + ':</div><ul><li>' + layerNames.join('</li><li>') + '</li></ul>';
@@ -578,11 +578,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
 
             selectedLayers.forEach(l => {
-                if (typeof l.getCustomStyle === 'function') {
-                    const custom = l.getCustomStyle();
-                    if (custom && custom.style) {
-                        customStyles[l.getId()] = custom.style;
-                    }
+                const style = l.getCurrentStyle();
+                if (typeof style.isRuntimeStyle === 'function' && style.isRuntimeStyle()) {
+                    customStyles[l.getId()] = style.getFeatureStyle();
                 }
             });
             return customStyles;

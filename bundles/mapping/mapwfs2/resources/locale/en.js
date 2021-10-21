@@ -4,11 +4,6 @@ Oskari.registerLocalization({
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Default style",
-        "own-style": "Own style",
-        "own-styles-flyout-title": "Own styles",
-        "styles" : "Styles",
-        "add-style" : "Add new style",
         "none-style": "None",
         "refresh": "Refresh",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
@@ -43,13 +38,6 @@ Oskari.registerLocalization({
             "show": "Show places",
             "close": "Close",
             "edit": "Edit"
-        },
-        "popup": {
-            "title": "Own style",
-            "button": {
-                "cancel": "Cancel",
-                "save": "Save"
-            }
         },
         "scale_dialog": {
             "title": "Scale updated",

@@ -5,8 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Estilo por defecto",
-        "own-style": "Estilo propio",
         "refresh": "refrescar",
         "refresh_title": "el refresco de los productos de datos no se realiza automaticamente en el mapa",
         "tile": {
@@ -39,13 +37,6 @@ Oskari.registerLocalization(
             "show": "Mostrar lugares",
             "close": "Cerrar",
             "edit": "Editar"
-        },
-        "popup": {
-            "title": "Estilo propio",
-            "button": {
-                "cancel": "Cancelar",
-                "save": "Guardar"
-            }
         }
     }
 });

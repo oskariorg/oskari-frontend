@@ -1,5 +1,97 @@
 # Release Notes
 
+## 2.5.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/33?closed=1
+
+### Improvements to visual vector style editor
+- Added "empty fill" option for area/polygon type geometries.
+- Added "butt" option for line-ending options.
+- Added pre-defined color selection for easier color picking.
+- Area and stroke/line type geometries now have their own controls for line joins. Previously the settings was shared when editing with the React-based visual style editor.
+- The new editor is now available for end-users on myplaces layer styling (in addition to layer admin functionality).
+
+### Style handling for vector layers
+Various changes to style handling implementation like:
+- Hover styling implementation changed to improve performance and clarify code.
+- Vector features styles definitions are now available through `AbstractLayer.getStyles()/getCurrentStyle()` with `style.getFeatureStyle()` instead of separate `AbstractLayer.getCurrentStyleDef()`.
+- Moved end-user UI implementation for vector layer styling to new bundle `userstyle` instead of being built-in to "wfs-support for map" (`mapwfs2` bundle). This enables smaller filesize for embedded maps since the UI is not available to end-users on embedded maps. To keep current functionality you should link `userstyle` bundle import to your geoportal apps: https://github.com/oskariorg/sample-application/pull/17/files
+
+### Selected vector features
+New service was added for tracking feature selection. Usage:
+```
+const service = Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
+// add a feature to current selection
+service.addSelectedFeature(layerId, featureId);
+// set feature selection for layer replacing current selection
+service.setSelectedFeatureIds(layerId, [featureId1, ...featureIdN]);
+// remove a feature from current selection
+service.removeSelection(layerId, featureId);
+// remove all selections from layer
+service.removeSelection(layerId);
+// remove all selections from all layers
+service.removeSelection();
+// toggle feature selection in current selection (if already selected -> unselect, otherwise mark as selected)
+service.toggleFeatureSelection(layerId, featureId);
+
+// get a list of ids for features that are selected
+const selectedFeatureIds = service.getSelectedFeatureIdsByLayer (layerId);
+```
+Changes to selection trigger `WFSFeaturesSelectedEvent` like it did before and bundles can react to it like before.
+
+### Performance improvements
+- Layer coverage data is no longer part of the layer listing. It is fetched separately when a layer is added to the map. This reduces the file size of layer listing by ~75% and improves performance.
+- WMTS-layers tile matrix metadata is now provided by the server in JSON-based format and the full capabilities XML is no longer required to be loaded to the frontend. This reduces the amount of data clients need to load and optimizes startup-time and performance.
+
+### Layer admin improvements
+- When adding layers from service the layers are now sorted alphabetically in addition to being grouped by "type". Where type is "existing" (already registered as layer), "problematic" (might have problems with layer/projection not supported), "available" (these are the ones you probably are most interested in adding).
+- Fixed an issue with selecting default style when style name was very long (input was pushed out of view of the user).
+
+### Other improvements
+- `MapModulePlugin.MapLayerUpdateRequest` can now be used to force vector layers to refetch the features from service (after for example editing a feature). Previously it was mostly usable for WMS-layers.
+- Map legends functionality for end-users on geoportal was rewritten with React (embedded maps version still uses jQuery)
+- Fixed GetFeatureInfo displaying for XSLT formatted responses.
+- Fixed a visual issue on Firefox with layerlisting.
+- `layerlist` bundle now closes its flyout on `UIChangeEvent` (when publisher etc functionality is opened by the user).
+- Modal-component in oskariui now has styling to keep the window on browser viewport and scroll the modal-window content instead of having a page scrollbar for large contents.
+- WMTS-layers can now be forced to use the wrapX boolean toggle for OpenLayers by having `{ wrapX: true }` in the layer options.
+- Changed when data is being sanitized for layers. Layer name is no longer sanitized in AbstractLayer.setName(). The UI components showing the name now sanitize the value instead. This might affect application specific extensions to functionalities that rely on the name being sanitized. For jQuery-based UIs this means that you need to call `Oskari.util.sanitize(layer.getName())` or use `jQuery.text(name)` instead of `jQuery.append(name)`. For React-based UI this means that you no longer need to use `dangerouslySetInnerHTML` to show the layer name properly but can use it as is.
+
+### Library updates
+
+- @ant-design/icons 4.2.1 -> 4.6.3
+- @storybook/react 5.3.18 -> 6.3.7
+- antd 4.8.5 -> 4.16.13
+- cesium 1.77 -> 1.84
+- dompurify 2.0.10 -> 2.3.1
+- intl-messageformat 2.1.0 -> 9.9.1 (now loaded with npm instead of having a copy under libraries)
+- Jest 26.0.1 -> 27.0.6
+- jQuery 3.5.1 -> 3.6.0
+- lodash 4.17.19 -> 4.17.21
+- node-sass 4.14.1 -> 6.0.1
+- moment 2.24.0 -> 2.29.1
+- OpenLayers 6.4.3 -> 6.6.1
+- ol-mapbox-style 6.3.1 -> 6.4.1
+- olcs 2.12 -> 2.13
+- React 16.13 -> 16.14
+- Styled-components 5.0.1 -> 5.3.1
+
+Also tested a migration to Webpack 5, but there's some compatibility issues with Cesium and Webpack 5 that prevented the update for now. Also the testing library enzyme doesn't support React 17 yet so couldn't update React further for now.
+
+## 2.4.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/31?closed=1
+
+- Refactored feature data handling to clean up some solutions that were necessary for the old (1.x) WFS-backend but could be improved with the current one
+- Improved performance on layer list UI
+- Groups without layers are now shown in layer listing if they have subgroups that have layers
+- Link function now provides a bit cleaner URLs
+- Removed deprecated bundles so we can make better solutions for layer handling without worrying backwards compatibility with older UI implementations. Details: https://github.com/oskariorg/oskari-docs/issues/245
+- Improved WMS-layer legends handling for admin UI
+- Other smaller fixes
+
 ## 2.3.1
 
 For a full list of changes see:

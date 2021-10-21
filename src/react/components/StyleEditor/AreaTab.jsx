@@ -2,50 +2,131 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, Preview, SizeControl, constants } from './index';
-import { Form, Row } from 'antd';
+import { Form, Row, Col } from 'antd';
+
+const getFillIconTransparent = (id) => {
+    const myId = 'transparent-' + id;
+    return `<svg viewBox="0 0 0 0" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <pattern id="${myId}" viewBox="0, 0, 0, 0" width="0%" height="0%"><path d="M0,0 l0,0" stroke="#000000" stroke-width="0"/></pattern>
+        </defs>
+        <rect width="0" height="0" fill="url(#${myId})" />
+    </svg>`;
+};
+
+const createSVG = (id, pattern) => {
+    return `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
+        <defs>${pattern}</defs>
+        <rect width="32" height="32" fill="url(#${id})" } />
+    </svg>`;
+};
+
+const getFillIconSolid = (id) => {
+    const myId = 'solid-' + id;
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%"><path d="M-1,6 l13,0" stroke="#000000" stroke-width="12"/></pattern>`);
+};
+
+const getFillIconHorizontalThin = (id) => {
+    const myId = 'thin_horizontal-' + id;
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,1 l33,0, M-1,4 l33,0 M-1,7 l33,0 M-1,10 l33,0 M-1,13 l33,1" stroke="#000000" stroke-width="1"/>
+            </pattern>`);
+};
+
+const getFillIconHorizontalThick = (id) => {
+    const myId = 'thick_horizontal-' + id;
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,2 l33,0, M-1,7 l33,0 M-1,12 l33,0" stroke="#000000" stroke-width="3" />
+            </pattern>`);
+};
+
+const getFillIconDiagonalThin = (id) => {
+    const myId = 'thin_diagonal-' + id;
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-1,2 l2,-2 M-1,7 l6,-7 M-2,13 l11,-13 M2,13 l11,-13 M6,13 l11,-13 M10,13 l11,-13" stroke="#000000" stroke-width="1"/>
+            </pattern>`);
+};
+
+const getFillIconDiagonalThick = (id) => {
+    const myId = 'thick_diagonal-' + id;
+    return createSVG(myId, `<pattern id="${myId}" viewBox="0, 0, 12, 12" width="100%" height="100%">
+                <path d="M-2,4 l12,-14 M-2,13 l12,-14 M6,13 l11,-13" stroke="#000000" stroke-width="3"/>
+            </pattern>`);
+};
 
 const areaFills = [
     {
-        name: 'solid',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="solid" viewBox="0, 0, 4, 4" width="100%" height="100%"><path d="M-1,2 l6,0" stroke="#000000" stroke-width="4"/></pattern></defs><rect width="32" height="32" fill="url(#solid)"/></svg>' 
+        name: 'TRANSPARENT',
+        data: getFillIconTransparent
     },
     {
-        name: 'line',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line" viewBox="0, 0, 4, 4" width="50%" height="50%"> <path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/></pattern></defs><rect width="32" height="32" fill="url(#line)"/></svg>'
+        name: 'SOLID',
+        data: getFillIconSolid
     },
     {
-        name: 'line2',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line2" viewBox="0, 0, 4, 4" width="80%" height="80%"><path d="M-1,1 l2,-2 M0,4 l4,-4 M3,5 l2,-2" stroke="#000000" stroke-width="1"/></pattern></defs><rect width="32" height="32" fill="url(#line2)"/></svg>'
+        name: 'HORIZONTAL_THIN',
+        data: getFillIconHorizontalThin
     },
     {
-        name: 'line3',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line3" viewBox="0, 0, 32, 32" width="100%" height="100%"> <path d="M0,4 l32,0, M0,12 l32,0 M0,20 l32,0 M0,28 l32,0" stroke="#000000" stroke-width="5"/></pattern></defs><rect width="32" height="32" fill="url(#line3)"/></svg>'
+        name: 'HORIZONTAL_THICK',
+        data: getFillIconHorizontalThick
     },
     {
-        name: 'line4',
-        data: '<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="line4" viewBox="0, 0, 32, 32" width="100%" height="100%"> <path d="M0,4 l32,0, M0,15 l32,0 M0,26 l32,0" stroke="#000000" stroke-width="5"/></pattern></defs><rect width="32" height="32" fill="url(#line4)"/></svg>'
+        name: 'DIAGONAL_THIN',
+        data: getFillIconDiagonalThin
+    },
+    {
+        name: 'DIAGONAL_THICK',
+        data: getFillIconDiagonalThick
     }
 ];
 
-export const AreaTab = (props) => {
+// counter is used to generate changing ids for SVG to workaround conflicting ids when hard coded
+let counter = 0;
+export const AreaTab = ({oskariStyle}) => {
+    counter++;
+    const areaFillOptions = areaFills.map(item => {
+        return {
+            ...item,
+            data: item.data(counter)
+    }});
+
     return (
         <React.Fragment>
             <Row>
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='stroke.area.color'
-                    label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                <Col span={ 10 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.area.color'
+                        label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
+                        >
+                        <ColorPicker />
+                    </Form.Item>
 
-                <Form.Item
-                    { ...constants.ANTD_FORMLAYOUT }
-                    name='fill.color'
-                    label={ <Message messageKey='StyleEditor.fill.color' /> }
-                >
-                    <ColorPicker />
-                </Form.Item>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='stroke.area.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
+
+                <Col span={ 10 } offset={ 2 }>
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='fill.color'
+                        label={ <Message messageKey='StyleEditor.fill.color' /> }
+                        >
+                        <ColorPicker />
+                    </Form.Item>
+
+                    <Form.Item
+                        { ...constants.ANTD_FORMLAYOUT }
+                        name='fill.color'
+                    >
+                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
+                    </Form.Item>
+                </Col>
             </Row>
 
             <Row>
@@ -56,15 +137,21 @@ export const AreaTab = (props) => {
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
                 </Form.Item>
-            </Row>
 
-            <Row>
+                <Form.Item
+                    { ...constants.ANTD_FORMLAYOUT }
+                    name='stroke.area.lineJoin'
+                    label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
+                >
+                    <SvgRadioButton options={ constants.LINE_STYLES.corners } />
+                </Form.Item>
+
                 <Form.Item
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
                     label={ <Message messageKey='StyleEditor.fill.area.pattern' /> }
                 >
-                    <SvgRadioButton options={ areaFills } />
+                    <SvgRadioButton options={ areaFillOptions } />
                 </Form.Item>
             </Row>
 
@@ -77,13 +164,15 @@ export const AreaTab = (props) => {
             </Row>
 
             <Preview
-                oskariStyle={ props.oskariStyle }
+                oskariStyle={ oskariStyle }
                 format={ 'area' }
-                areaFills={ areaFills }
+                areaFills={ areaFillOptions }
             />
+
         </React.Fragment>
     );
 };
+
 
 AreaTab.propTypes = {
     oskariStyle: PropTypes.object.isRequired

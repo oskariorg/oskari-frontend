@@ -9,6 +9,26 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.5.0
+
+### [add] userstyle
+
+Added initial bundle documentation. Userstyle functionality has been moved from wfsvector to own bundle.
+
+### [mod] MapModulePlugin.MapLayerUpdateRequest
+
+Added documentation for the request. The request itself has been available from 1.x already but the it wasn't documented. 
+Since 2.5 it can also be used to force reload of features from a service on a vector/WFS-layer.
+
+## 2.4.0
+
+### [rem] Removed unmaintained bundles
+
+Bundles layerselection2, layerselector2 and hierarchical-layerlist have been removed. Current replacement is the bundle: layerlist.
+Bundles admin-layerselector and admin-hierarchical-layerlist have been removed. Current replacement is: admin-layereditor.
+
+See https://github.com/oskariorg/oskari-docs/issues/245 for details.
+
 ## 2.3.0
 
 ### [add] layerlist

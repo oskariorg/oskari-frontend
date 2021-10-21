@@ -93,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         layer.setSource(updatedLayer.source);
         layer.setDescription(updatedLayer.description);
         layer.setOptions(updatedLayer.options);
-
         var evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         this.sandbox.notifyAll(evt);
         if (this.sandbox.isLayerAlreadySelected(id)) {

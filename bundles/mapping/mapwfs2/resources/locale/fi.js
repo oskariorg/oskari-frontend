@@ -5,11 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "Vektoritasojen ylläpito",
         "desc": "",
-        "default-style": "Oletustyyli",
-        "own-style": "Oma tyyli",
-        "own-styles-flyout-title": "Omat tyylit",
-        "styles" : "Tyylit",
-        "add-style" : "Lisää uusi tyyli",
         "refresh": "Päivitä",
         "refresh_title": "Päivitä vektoritasot, jotka eivät päivity automaattisesti kartalla.",
         "tile": {
@@ -43,13 +38,6 @@ Oskari.registerLocalization(
             "show": "Näytä kohteet",
             "close": "Sulje",
             "edit": "Muokkaa"
-        },
-        "popup": {
-            "title": "Oma tyyli",
-            "button": {
-                "cancel": "Peruuta",
-                "save": "Tallenna"
-            }
         },
         "scale_dialog": {
           "title": "Skaala päivitetty",

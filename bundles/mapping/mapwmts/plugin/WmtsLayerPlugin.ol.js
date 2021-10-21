@@ -41,8 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 LayerComposingModel.VERSION
             ], ['1.0.0']);
             mapLayerService.registerLayerModel(this.layertype, className, composingModel);
-            const layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
-            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
 
             this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },

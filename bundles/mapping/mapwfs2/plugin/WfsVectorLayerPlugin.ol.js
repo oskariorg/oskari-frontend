@@ -1,15 +1,12 @@
 import { VectorLayerHandler } from './WfsVectorLayerPlugin/impl/VectorLayerHandler.ol';
 import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol';
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
-import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
-import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
-import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
+import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/style';
+
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
-import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
 const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
@@ -20,16 +17,12 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
         this.renderMode = config.renderMode || RENDER_MODE_VECTOR;
-        this.visualizationForm = null;
         this.oskariStyleSupport = true;
         this.layertype = 'wfs';
         this.layertypes = new Set([this.layertype]);
-        this.hoverHandler = new HoverHandler(WFS_ID_KEY);
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
         this.layerHandlersByLayerId = {};
-        this.userStyleService = new UserStyleService();
-        Oskari.getSandbox().registerService(this.userStyleService);
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -55,6 +48,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
+        this.vectorFeatureService.registerDefaultStyles(layertype, DEFAULT_STYLES);
         this._registerEventHandlers(eventHandlers);
     }
 
@@ -81,7 +75,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             this.renderMode = RENDER_MODE_VECTOR;
         }
         this.reqEventHandler = new ReqEventHandler(sandbox);
-        this.visualizationForm = new VisualizationForm({ name: '' });
         this.WFSLayerService = new WFSLayerService(sandbox);
         this.vectorFeatureService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
         this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -105,15 +98,9 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), layerClass, composingModel);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
+        this.vectorFeatureService.registerDefaultStyles(this.layertype, DEFAULT_STYLES);
+        this.getMapModule().registerDefaultFeatureStyle(this.layertype, DEFAULT_STYLES.style);
         sandbox.registerService(this.WFSLayerService);
-        this._setupMouseOutOfMapHandler();
-    }
-
-    _setupMouseOutOfMapHandler () {
-        const me = this;
-        this.getMapModule().getMap().getViewport().addEventListener('mouseout', (evt) => {
-            me.hoverHandler.clearHover();
-        }, false);
     }
 
     _createPluginEventHandlers () {
@@ -140,7 +127,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     _createRequestHandlers () {
-        return this.reqEventHandler.createRequestHandlers(this);
+        return this.reqEventHandler.createRequestHandlers();
     }
 
     isLayerSupported (layer) {
@@ -165,6 +152,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
     }
 
+    /**
+     * @method updateLayerParams
+     * Force updating features on layer
+     */
+    updateLayerParams (layer, forced, params) {
+        const handler = this._getLayerHandler(layer);
+        if (handler) {
+            handler.refreshLayer(layer);
+        }
+    }
     /**
      * @method getPropertiesForIntersectingGeom
      * To get feature properties as a list. Returns features that intersect with given geometry.
@@ -202,24 +199,20 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const handler = renderMode === RENDER_MODE_MVT ? this.mvtLayerHandler : this.vectorLayerHandler;
         this.layerHandlersByLayerId[layer.getId()] = handler;
-        let added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        if (!added) {
-            return;
-        }
-        if (!Array.isArray(added)) {
-            added = [added];
-        }
+        const added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         // Set oskari properties for vector feature service functionalities.
         added.forEach(lyr => {
+            handler.applyZoomBounds(layer, lyr);
             const silent = true;
             lyr.set(LAYER_ID, layer.getId(), silent);
             lyr.set(LAYER_TYPE, layer.getLayerType(), silent);
-            lyr.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-            if (layer.isVisible()) {
+            // don't add style for hover layer
+            if (layer.isVisible() && !lyr.get(LAYER_HOVER)) {
                 // Only set style if visible as it's an expensive operation
                 // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
-                lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+                lyr.setStyle(this.getCurrentOlStyle(layer));
             }
+            this.getMapModule().addLayer(lyr, !keepLayerOnTop);
         });
     }
 
@@ -240,43 +233,8 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
                 }
             });
     }
-    /* ----- VectorFeatureService interface functions ----- */
-
-    onMapHover (event, feature, layer) {
-        this.hoverHandler.onMapHover(event, feature, layer);
-    }
-
-    onLayerRequest (request, layer) {
-        this.hoverHandler.onLayerRequest(request, layer);
-    }
 
     /* ---- Impl specific functions ---- */
-
-    /**
-     * @method getCustomStyleEditorForm To get editor ui element for custom style.
-     * @param {Object} styleWithMetadata
-     * @return VisualizationForm's form element
-     */
-    getCustomStyleEditorForm (styleWithMetadata = {}) {
-        const { style, title } = styleWithMetadata;
-        if (!style || !title) {
-            this.visualizationForm = new VisualizationForm({ name: '' });
-        } else {
-            this.visualizationForm.setOskariStyleValues(style, title);
-        }
-        return this.visualizationForm.getForm();
-    }
-
-    /**
-     * @method applyEditorStyle Applies custom style editor's style to the layer.
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {String} styleName
-     */
-    applyEditorStyle (layer, styleName) {
-        const style = this.visualizationForm.getOskariStyle();
-        layer.setCustomStyle(style);
-        layer.selectStyle(styleName);
-    }
 
     /**
      * @method findLayerByOLLayer
@@ -309,19 +267,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     }
 
     /**
-     * @method getCurrentStyleFunction
+     * @method getCurrentOlStyle
      * Returns OL style corresponding to layer currently selected style
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {ol/style/Style}
+     * @return {ol/style/Style | StyleLike}
      */
-    getCurrentStyleFunction (layer, handler = this._getLayerHandler(layer)) {
-        if (!handler) {
-            return;
-        }
-        const factory = this.mapModule.getStyle.bind(this.mapModule);
-        const styleFunction = styleGenerator(factory, layer, this.hoverHandler);
-        const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
-        return handler.getStyleFunction(layer, styleFunction, selectedIds);
+    getCurrentOlStyle (layer) {
+        return styleGenerator(this.mapModule, layer);
     }
 
     /**
@@ -336,8 +288,12 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!olLayers || olLayers.length === 0) {
             return;
         }
-        const style = this.getCurrentStyleFunction(layer);
+        const style = this.getCurrentOlStyle(layer);
         olLayers.forEach(lyr => {
+            if (lyr.get(LAYER_HOVER)) {
+                // don't add style for hover layer
+                return;
+            }
             lyr.setStyle(style);
             if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
                 // Trigger features changed to synchronize 3D view
@@ -391,19 +347,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             return;
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
-    }
-
-    saveUserStyle (layer, name) {
-        const style = this.visualizationForm.getOskariStyle();
-        const layerId = layer.getId();
-        let title = this.visualizationForm.getOskariStyleName();
-        if (!title) {
-            const existing = this.userStyleService.getUserStylesForLayer(layerId);
-            title = Oskari.getMsg('MapWfs2', 'own-style') + ' ' + (existing.length + 1);
-        }
-        const styleWithMetadata = { name, style, title };
-        layer.saveUserStyle(styleWithMetadata);
-        this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
     }
 
     /**

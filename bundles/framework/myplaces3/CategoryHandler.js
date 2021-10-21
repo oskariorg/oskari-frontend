@@ -1,3 +1,5 @@
+import { showModal } from './reactModalHelper';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -87,14 +89,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         _parseLayerToCategory: function (layer) {
             const layerId = layer.getId();
-            // has only one style default for now
-            const { featureStyle } = layer.getCurrentStyleDef();
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
+                // TODO: check if we need to sanitize name here or somewhere down the line
                 name: layer.getName(),
                 isDefault: !!layer.getOptions().isDefault,
-                style: featureStyle || {}
+                // has only one style default for now
+                style: layer.getCurrentStyle().getFeatureStyle()
             };
         },
         parseCategoryId: function (layerId) {
@@ -179,42 +181,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         editCategory: function (categoryId) {
-            var me = this;
-            const values = this.getCategory(categoryId);
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            if (!values) {
-                dialog.show(me.loc('notification.error.title'), me.loc('notification.error.generic'), [dialog.createCloseButton()]);
-                return;
-            }
-            var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
-            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            var buttons = [];
-            var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc('buttons.save'));
-            saveBtn.addClass('primary');
-            saveBtn.setHandler(function () {
-                const formValues = form.getValues();
-                if (formValues.errors) {
-                    me.showValidationErrorMessage(formValues.errors);
-                    return;
-                }
-                me.saveCategory({ ...values, ...formValues });
-                dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            cancelBtn.setTitle(me.loc('buttons.cancel'));
-            cancelBtn.setHandler(function () {
-                dialog.close();
-                me.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            buttons.push(cancelBtn);
-            buttons.push(saveBtn);
-            form.getForm(values);
-            dialog.show(me.loc('categoryform.edit.title'), form.getForm(values), buttons);
-            dialog.moveTo('div.personaldata ul li select', 'right');
-            // bind listeners etc. for category form
-            form.start();
+            const layer = this.getCategory(categoryId);
+            const saveLayer = (name, style) => {
+                this.saveCategory({
+                    ...layer,
+                    name,
+                    style
+                });
+            };
+            showModal(layer.name, layer.style, saveLayer);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -403,7 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 dialog.close();
             });
             buttons.push(operationalBtn);
-            var locParams = [mapLayer.getName()];
+            var locParams = [Oskari.util.sanitize(mapLayer.getName())];
 
             if (makePublic) {
                 operationalBtn.setTitle(this.loc('buttons.changeToPublic'));
@@ -423,11 +398,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 this._showMessage(this.loc('notification.error.title'), this.loc('notification.error.generic'));
                 return;
             }
-            if (makePublic) {
-                mapLayer.addPermission('publish', 'publication_permission_ok');
-            } else {
-                mapLayer.addPermission('publish', 'no_publication_permission');
-            }
+            mapLayer.addPermission('publish', !!makePublic);
             // send an event to notify other bundles of updated permissions
             var evt = Oskari.eventBuilder('MapLayerEvent')(mapLayer.getId(), 'update');
             this.sandbox.notifyAll(evt);

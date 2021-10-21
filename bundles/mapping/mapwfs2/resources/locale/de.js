@@ -5,8 +5,6 @@ Oskari.registerLocalization(
     "value": {
         "title": "MapWfs2",
         "desc": "",
-        "default-style": "Standarddarstellung",
-        "own-style": "Eigene Darstellung",
         "refresh": "",
         "refresh_title": "",
         "tile": {
@@ -34,13 +32,6 @@ Oskari.registerLocalization(
             "show": "View places",
             "close": "Schließen",
             "edit": "Bearbeiten"
-        },
-        "popup": {
-            "title": "Eigene Darstellung",
-            "button": {
-                "cancel": "Abbrechen",
-                "save": "Speichern"
-            }
         }
     }
 });

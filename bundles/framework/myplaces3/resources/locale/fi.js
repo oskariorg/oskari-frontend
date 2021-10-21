@@ -17,8 +17,8 @@ Oskari.registerLocalization(
                 "publicTooltip": "Karttataso on julkinen. Muuta karttataso yksityiseksi klikkaamalla tästä."
             },
             "export": {
-                "title":"Lataa",
-                "tooltip": "Voit ladata karttatason JSON-muodossa"
+                "title":"Vie kohteet",
+                "tooltip": "Voit ladata karttatason GeoJSON-muodossa"
             },
             "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",
@@ -141,33 +141,9 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
-            "name": {
-                "label": "Karttatason nimi",
-                "placeholder": "Karttatason nimi"
-            },
-            "visibleFields": {
-                "label": "Näytettävät kohteen tiedot",
-                "placename": "Nimi",
-                "placedesc": "Kuvaus",
-                "image": "Kuva"
-            },
-            "edit": {
-                "title": "Muokkaa karttatasoa",
-                "save": "Tallenna",
-                "cancel": "Peruuta"
-            },
-            "rendering": {
-                "label": "Karttatason kohteiden esitystavat",
-                "point": {
-                    "tooltip": "Muokkaa pisteiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien pisteiden esitystapaa."
-                },
-                "area": {
-                    "tooltip": "Muokkaa alueiden esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien alueiden esitystapaa."
-                },
-                "line": {
-                    "tooltip": "Muokkaa viivojen esitystapaa. Huom! Tämä muuttaa kaikkien karttatasolla olevien viivojen esitystapaa."
-                }
-            }
+            "title": "Tason tiedot",
+            "layerName": "Nimi",
+            "styleTitle": "Tyyli"
         },
         "notification": {
             "placeAdded": {

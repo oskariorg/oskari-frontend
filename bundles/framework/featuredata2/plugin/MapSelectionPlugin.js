@@ -19,9 +19,9 @@ Oskari.clazz.define(
         me.currentDrawMode = null;
         me.prefix = 'Default.';
         me.sandbox = sandbox;
-        me.WFSLayerService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         me._features = null;
         me._drawing = null;
+        me.selectFromAllLayers = false;
 
         if (me._config && me._config.id) {
             me.prefix = me._config.id + '.';
@@ -40,15 +40,11 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
-            // Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
-            this.WFSLayerService.setSelectionToolsActive(true);
             this._toggleControl(params.drawMode);
         },
         clearDrawing: function () {
-            var me = this;
-            var sb = this.getSandbox();
-            sb.postRequestByName('DrawTools.StopDrawingRequest', [
-                me.DRAW_REQUEST_ID,
+            this.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [
+                this.DRAW_REQUEST_ID,
                 true,
                 true
             ]);
@@ -63,7 +59,12 @@ Oskari.clazz.define(
             // disable all draw controls
             this._toggleControl();
         },
-
+        setSelectFromAllLayers: function (selectAll) {
+            this.selectFromAllLayers = selectAll;
+        },
+        isSelectFromAllLayers: function () {
+            return this.selectFromAllLayers;
+        },
         /**
          * @method _toggleControl
          * Enables the given draw control
