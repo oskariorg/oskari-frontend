@@ -31,11 +31,10 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
     // and notify admin that such styles don't exist any more on the service
     const additionalLegends = additionalLegendsToStyles(styles, legends, getMessage('styles.raster.legendImage'));
     const styleOptions = [...styles, ...additionalLegends];
-
     const firstOption = styleOptions.length > 0 ? styleOptions[0].name : '';
     const [selected, setSelected] = useState(defaultName || firstOption);
 
-    const style = styles.find(s => s.name === selected);
+    const style = styleOptions.find(s => s.name === selected);
     const name = style ? style.name : GLOBAL_LEGEND;
     const styleLegend = style ? style.legend : '';
     // user/layer gets legend in following order: named override, global override, defined in service/capabilities/style
