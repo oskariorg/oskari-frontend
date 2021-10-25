@@ -30,10 +30,12 @@ const getFeatureStyle = (layer, extendedDef = {}) => {
 };
 
 export const useStyleFunction = layer => {
+    const current = layer.getCurrentStyle();
     const styleType = geometryTypeToStyleType(layer.getGeometryType());
-    const hasOptionalStyles = layer.getCurrentStyle().getOptionalStyles().length > 0;
+    const hasPropertyLabel = Oskari.util.keyExists(current.getFeatureStyle(), 'text.labelProperty');
+    const hasOptionalStyles = current.getOptionalStyles().length > 0;
     const hasCluster = typeof layer.getClusteringDistance() !== 'undefined';
-    return hasOptionalStyles || hasCluster ||
+    return hasOptionalStyles || hasCluster || hasPropertyLabel ||
         !styleType || styleType === STYLE_TYPE.COLLECTION;
 };
 
@@ -134,7 +136,8 @@ export const getStyleFunction = styles => {
         const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
         const typed = found ? found.typed : styles.typed;
         const style = getStyleForGeometry(feature.getGeometry(), typed);
-        const { labelProperty } = style || {};
+        // if typed is from optional styles and it doesn't have labelProperty, check if normal style has
+        const { labelProperty } = typed || styles.typed;
         const textStyle = style ? style.getText() : undefined;
         if (labelProperty && textStyle) {
             _setFeatureLabel(feature, textStyle, labelProperty);
