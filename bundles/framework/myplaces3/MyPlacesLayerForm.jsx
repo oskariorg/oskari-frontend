@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Message, TextInput, Divider, Modal } from 'oskari-ui';
 
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
+import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 
 export const MyPlacesLayerForm = ({ name, style, onSave, onCancel }) => {
     const [editorState, setEditorState] = useState({
-        style: style,
+        style: style || OSKARI_BLANK_STYLE,
         name: name
     });
 
@@ -40,7 +41,7 @@ export const MyPlacesLayerForm = ({ name, style, onSave, onCancel }) => {
 
 MyPlacesLayerForm.propTypes = {
     name: PropTypes.string.isRequired,
-    style: PropTypes.object.isRequired,
+    style: PropTypes.object,
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired
 };
