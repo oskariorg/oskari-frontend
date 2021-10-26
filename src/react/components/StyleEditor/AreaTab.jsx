@@ -17,7 +17,7 @@ const getFillIconTransparent = (id) => {
 const createSVG = (id, pattern) => {
     return `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">
         <defs>${pattern}</defs>
-        <rect width="32" height="32" fill="url(#${id})" } />
+        <rect width="32" height="32" fill="url(#${id})" />
     </svg>`;
 };
 
