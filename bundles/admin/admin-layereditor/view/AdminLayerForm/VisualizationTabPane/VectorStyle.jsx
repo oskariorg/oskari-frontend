@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { VectorStyleSelect } from './VectorStyle/VectorStyleSelect';
 import { VectorNameInput } from './VectorStyle/VectorNameInput';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Button, Message, Modal, Space, StyleEditor } from 'oskari-ui';
+import { Button, Message, Modal, Space } from 'oskari-ui';
+import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { PlusOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 

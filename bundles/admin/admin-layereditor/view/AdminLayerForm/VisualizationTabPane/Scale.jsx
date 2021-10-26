@@ -5,7 +5,7 @@ import { Numeric } from '../Numeric';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { getZoomLevelHelper } from '../../../../../mapping/mapmodule/util/scale';
-import { PlusCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, MinusCircleOutlined, WarningOutlined } from '@ant-design/icons';
 
 const VerticalComponent = styled('div')`
     display: flex;
@@ -16,6 +16,11 @@ const VerticalComponent = styled('div')`
 
 const FieldLabel = styled('div')`
     padding-bottom: 5px;
+`;
+
+const WarningIcon = styled(WarningOutlined)`
+    color: #da5151;
+    padding-left: 10px;
 `;
 
 const SliderContainer = styled('div')`
@@ -57,6 +62,8 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
         // if max zoom is undefined the slider needs to be at the max value
         layerMaxZoom = maxZoomUnrestrictedValue;
     }
+    // if min scale is defined and it's under map scales or invalid order, layer isInScale is always false
+    const invalidScale = minscale > 0 && (minscale < mapScales[mapScales.length - 1] || minscale < maxscale);
     const onValueChange = ([min, max]) => {
         if (min < 0) {
             min = -1;
@@ -72,7 +79,9 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
     };
     return (
         <VerticalComponent>
-            <Message messageKey='fields.scale' LabelComponent={FieldLabel} />
+            <Message messageKey='fields.scale' LabelComponent={FieldLabel}>
+                { invalidScale && <WarningIcon /> }
+            </Message>
             <ScaleInput
                 prefix="1:"
                 placeholder={locNoLimit}

@@ -34,4 +34,3 @@ export { GenericForm } from './components/GenericForm';
 export { DateRange } from './components/DateRange';
 export { ColorPicker } from './components/ColorPicker';
 export { Modal } from './components/Modal';
-export { StyleEditor } from './components/StyleEditor';

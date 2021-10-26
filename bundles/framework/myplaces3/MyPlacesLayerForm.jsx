@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextInput, Divider, Modal, StyleEditor } from 'oskari-ui';
+import { Message, TextInput, Divider, Modal } from 'oskari-ui';
+import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 
 export const MyPlacesLayerForm = ({ name, style, onSave, onCancel }) => {
