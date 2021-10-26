@@ -45,6 +45,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         this.layertypes.add(layertype);
         this.getMapModule().setLayerPlugin(layertype, this);
+        this.getMapModule().registerDefaultFeatureStyle(layertype, DEFAULT_STYLES.style);
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
