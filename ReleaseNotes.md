@@ -1,5 +1,17 @@
 # Release Notes
 
+## 2.5.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/35?closed=1
+
+- Fixed an issue with my places features where new layers didn't show features on map if the layer style was not modified
+- Fixed an issue with my places features where the label on map was not shown on the map
+- Fixed an issue where hover style for vector features was not properly updated after modifying the layer style
+- Fixed an issue which prevented style changes in the editor for Area-shaped features on Firefox
+- Fixed an issue with admin-layereditor when administering WMS-T layer with start, end and interval as time dimension
+- Fixed an issue with admin-layereditor when a style was no longer available for a WMS-layer but the layer had a legend configured for the missing style
+
 ## 2.5.0
 
 For a full list of changes see:
