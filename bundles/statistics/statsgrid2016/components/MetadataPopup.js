@@ -62,13 +62,12 @@ export class MetadataPopup extends Popup {
         panel.setTitle(Oskari.getLocalized(metadata.name));
         accordion.addPanel(panel);
         this._accordions.push(accordion);
-        
+
         ReactDOM.render(<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
             <MetadataContent
                 description={metadata.description}
                 source={metadata.source}
-                metadata={metadata.metadata}
-                 />
+                metadata={metadata.metadata} />
         </LocaleProvider>, panel.getContainer()[0]);
 
         panel.on('open', () => this._contentSizeChanged(true));
