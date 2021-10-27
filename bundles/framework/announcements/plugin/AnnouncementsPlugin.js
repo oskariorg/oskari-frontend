@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
  */
-Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
+Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -10,29 +10,30 @@ Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
      */
     function (config) {
         var me = this;
+        me.sandbox = Oskari.getSandbox();
+        me._loc = Oskari.getLocalization("announcements");
         me._clazz =
             'Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
-        me._index = 3;
+        me._index = 80;
         me._name = 'AnnouncementsPlugin';
         me.templates = {};
         me.annRefs = {};
         me.open = false;
-        me.allAnnouncements = []
-        me.announcementsService = Oskari.getSandbox().getService('Oskari.framework.announcements.service.AnnouncementsService');
+        me.allAnnouncements = [];
     }, {
         /**
          * @private @method _initImpl
          * Interface method for the module protocol. Initializes the request
          * handlers/templates.
          */
-        _initImpl: function () {
+        init: function () {
             var me = this;
-            
-            me.allAnnouncements = announcementsService.fetchAnnouncements();
+            console.log(this._config);
+            const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
+            service.fetchAnnouncements((data) => this.allAnnouncements = data);
 
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.AnnouncementsPlugin;
             me.templates.main = jQuery(
                 '<div class="mapplugin announcements">' +
                 '  <div class="header">' +
@@ -64,26 +65,10 @@ Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
                 '  <div class="content-close icon-close-white"></div>' +
                 '</div>'
             );
-            if (this._config.announcements) {
+
+            if (this._config.announcements != undefined) {
                 this.addAnnouncements();
             }
-        },
-
-        _getAnnouncements: function (callback) {
-            if (typeof callback !== 'function') {
-                return;
-            }
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    callback(pResp.data);
-                },
-                error: function () {
-                    callback([{ error: this.locale.announcementsError }]);
-                }
-            });
         },
 
         /**
@@ -166,11 +151,21 @@ Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
         * Adds announcements to the list from config
         */
         addAnnouncements: function () {
+            var me = this;
             var announcementsIds = this._config.announcements;
             
-            var announcements = me.allAnnouncements.filter(ann => {
-                announcementsIds.filter(id => id == ann.id);
-            });
+            var announcements = [];
+            console.log(me.allAnnouncements);
+
+            for (const i of announcementsIds) {
+                for (const j of me.allAnnouncements) {
+                    if (j.id == i) {
+                        announcements.push(j);
+                    }
+                }
+            }
+
+            console.log(announcements);
 
             if (!this.open) {
                 delete this.announcementsContent;
@@ -185,8 +180,6 @@ Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
                     // already added
                     return;
                 }
-
-                var me = this;
 
                 if (!me.announcementsContent) {
                     me.announcementsContent = me.templates.announcementsContent.clone();
@@ -214,12 +207,16 @@ Oskari.clazz.define('Oskari.framework.bundle.plugin.AnnouncementsPlugin',
          * representation of announcements.
          */
         updateAnnouncements: function (announcements) {
+            var annIds = [];
+            for (const i of announcements) {
+                annIds.push(i.id);
+            }
             if (this._config) {
-                this._config.announcements = announcements;
+                this._config.announcements = annIds;
                 this.addAnnouncements();
             } else {
                 this._config = {
-                    announcements: announcements
+                    announcements: annIds
                 };
                 this.addAnnouncements();
             }
