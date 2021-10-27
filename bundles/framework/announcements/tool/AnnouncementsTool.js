@@ -1,5 +1,8 @@
 Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
     function () {
+        this.sandbox = Oskari.getSandbox();
+        this.localization = Oskari.getLocalization("announcements");
+        this.announcements = {};
     }, {
         index: 8,
         pluginName: 'AnnouncementsPlugin',
@@ -8,15 +11,15 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
         data: [],
         selectedAnnouncements: [],
         annTitles: [],
-        announcements: {},
 
         isAnnouncementsDialogOpen: false,
 
         groupedSiblings: true,
+        
 
         templates: {
-            announcements: jQuery('<div id="publisher-layout-announcements" class="tool-options">' + '<input type="text" name="publisher-announcements" id="publisher-announcements" disabled />' + '<button id="publisher-announcements-button"></button>' + '</div>'),
-            announcementsPopup: jQuery('<div id="publisher-announcements-inputs"></div>'),
+            announcements: jQuery('<div id="publisher-layout-announcements" class="tool-options">' + '<div>' + '<input type="text" name="publisher-announcements" disabled />' + '<button></button>' + '</div>' + '</div>'),
+            announcementsPopup: jQuery('<div>' + '<div id="publisher-announcements-inputs"></div>' + '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" /><label></label></div>')
         },
 
@@ -35,7 +38,11 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
             me.data = data;
             me.selectedAnnouncements = [];
             me.annTitles = [];
-            const announcementsService = Oskari.getSandbox().getService('Oskari.framework.announcements.service.AnnouncementsService');
+
+            this.announcementsServiceService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
+            me.sandbox.registerService(this.announcementsServiceService);
+            const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
+            service.fetchAnnouncements((data) => this.announcements = data).bind(this);
 
             if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
                 const myId = this.getTool().id;
@@ -48,9 +55,7 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
                     me.__sandbox.registerForEventByName(me, p);
                 }
             }
-            // !!!!!!!!!
             const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            // !!!!!!!!!
             if (toolPluginAnnouncementsConf != null) {
                 this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                 toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
@@ -58,7 +63,6 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
                     me.selectedAnnouncements.push(announcement);
                 });
             }
-            me.announcements = announcementsService.fetchAnnouncements();
             jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString()).attr('announcement-name', me.annTitles.toString());
         },
 
@@ -113,7 +117,7 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
         */
         getExtraOptions: function () {
             var me = this;
-            var buttonLabel = me.__instance._localization.announcementsTool.buttonLabel,
+            var buttonLabel = me.localization.tool.buttonLabel,
                 template = me.templates.announcements.clone();
 
             // Set the button handler
@@ -137,18 +141,18 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                title = me.__instance._localization.announcementsTool.popup.title,
+                title = me.localization.tool.popup.title,
                 content = me.templates.announcementsPopup.clone(),
-                annIds = [],
                 announcementInput,
                 annName,
                 i;
-            closeButton.setTitle(me.__instance._localization.announcementsTool.popup.close);
+                
+            closeButton.setTitle(me.localization.tool.popup.close);
             closeButton.setHandler(function () {
                 popup.close(true);
                 me.isAnnouncementsDialogOpen = false;
             });
-            var aLen = this.announcements.length;
+            var aLen = me.announcements.length;
 
             for (i = 0; i < aLen; ++i) {
                 announcementInput = me.templates.inputCheckbox.clone();
@@ -174,26 +178,18 @@ Oskari.clazz.define('Oskari.framework.announcements.tool.AnnouncementsTool',
             content.find('input[name=announcement]').on('change', function () {
                 var announcement = me.announcements.find(item => item.title === jQuery(this).val());
                 // check if announcement is already checked, if is, add/remove accordingly
-                if (!me.checked) {
+                if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
                         return ann.title !== announcement.title;
                     });
                     me.annTitles = me.annTitles.filter(function (e) { return e !== announcement.title; });
 
-                    for (i in me.selectedAnnouncements) {
-                        annIds.push(i.id);
-                    }
-
-                    me.getPlugin().updateAnnouncements(annIds);
+                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements );
                 } else {
                     me.selectedAnnouncements.push(announcement);
                     me.annTitles.push(announcement.title);
 
-                    for (i in me.selectedAnnouncements) {
-                        annIds.push(i.id);
-                    }
-
-                    me.getPlugin().updateAnnouncements(annIds);
+                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements );
                 }
                 jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString()).attr('announcement-name', me.annTitles.toString());
             });
