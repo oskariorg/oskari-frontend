@@ -285,7 +285,9 @@ Oskari.registerLocalization({
         'metadataPopup': {
             'open': 'Näytä {indicators, plural, one {indikaattorin kuvaus} other {indikaattorien kuvaukset}}',
             'title': '{indicators, plural, one {Indikaattorin kuvaus} other {Indikaattorien kuvaukset}}',
-            'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.'
+            'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.',
+            'updated': 'Viimeksi päivitetty',
+            'nextUpdate': 'Seuraava päivitys'
         },
         'sumo': {
             'placeholder': 'Valitse tästä',

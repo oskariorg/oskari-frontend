@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MetadataContent } from './MetadataContent';
+import { LocaleProvider } from 'oskari-ui/util';
+
 const Popup = Oskari.clazz.get('Oskari.userinterface.component.Popup');
 
 export class MetadataPopup extends Popup {
@@ -51,30 +56,20 @@ export class MetadataPopup extends Popup {
             this._count();
             return;
         }
-        const header = Oskari.getLocalized(metadata.name);
-        const description = Oskari.getLocalized(metadata.description);
-        const datasource = Oskari.getLocalized(metadata.source);
-        if (!description && !datasource) {
-            this._count();
-            return;
-        }
-        let content = '';
-        if (description) {
-            content += description;
-        }
-        if (datasource) {
-            content += `<p>
-                            <b>${this.loc('panels.newSearch.datasourceTitle')}</b>
-                            <br>
-                            ${datasource}
-                        </p>`;
-        }
+
         const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        panel.setTitle(header);
-        panel.setContent(content);
+        panel.setTitle(Oskari.getLocalized(metadata.name));
         accordion.addPanel(panel);
         this._accordions.push(accordion);
+        
+        ReactDOM.render(<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+            <MetadataContent
+                description={metadata.description}
+                source={metadata.source}
+                metadata={metadata.metadata}
+                 />
+        </LocaleProvider>, panel.getContainer()[0]);
 
         panel.on('open', () => this._contentSizeChanged(true));
         panel.on('close', () => this._contentSizeChanged(false));
