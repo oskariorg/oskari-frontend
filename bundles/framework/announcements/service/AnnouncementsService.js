@@ -33,13 +33,13 @@
     *
     * Makes an ajax call to get announcements
     */
-    fetchAnnouncements: function () {
+    fetchAnnouncements: function (callback) {
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
             url: Oskari.urls.getRoute('Announcements'),
             success: (pResp) => {
-                return pResp.data;
+                callback(pResp.data);
             },
             error: function (jqXHR, textStatus) {
             }
