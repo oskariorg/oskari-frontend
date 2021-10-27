@@ -12,17 +12,43 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
      * @static
      */
     function () {
-        var conf = this.getConfiguration();
-        conf.name = 'announcements';
-        conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
+        this.sandbox = null;
+        this.started = false;
+        this.localization = null;
+        this.loc = Oskari.getMsg.bind(null, 'announcements');
+        this.announcementsServiceService = undefined;
     }, {
 
         start: function () {
-            var announcementsServiceName =
-                'Oskari.framework.announcements.service.AnnouncementsService';
-            me.searchService = Oskari.clazz.create(announcementsServiceName);
-        }
+            var me = this;
+            if (me.started) {
+                return;
+            }
+            me.started = true;
+            me.sandbox = Oskari.getSandbox();
+            me.sandbox.register(me);
 
+            this.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
+            me.sandbox.registerService(this.announcementsService);
+            console.log(me.conf);
+            
+            if (me.conf && me.conf.plugin) {
+                const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+                const plugin = Oskari.clazz.create('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin', this, me.conf.plugin, me.loc, mapModule, me.sandbox);
+                mapModule.registerPlugin(plugin);
+                mapModule.startPlugin(plugin);
+                return;
+            }
+        },
+
+        /**
+         * @method update
+         * implements BundleInstance protocol update method - does nothing atm
+         */
+        stop: function () {
+            this.sandbox = null;
+            this.started = false;
+        }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultExtension']
     }
