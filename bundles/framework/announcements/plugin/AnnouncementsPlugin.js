@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         updateAnnouncements: function (announcements) {
             var annIds = [];
             for (const i of announcements) {
-                annIds.push(i.id);
+                annIds.push(i);
             }
             if (this._config) {
                 this._config.announcements = annIds;
