@@ -9,6 +9,23 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.6.0
+
+### [add] [rpc] GFIResultEvent
+
+Added new GFIREsultEvent. Event sends GFI results.
+
+Event returns following Object:
+<code>
+{
+  content: "<table><tr><td>test</td></tr></table>", // or json object
+  x: 423424,
+  y: 6652055,
+  layerId: 1,
+  type: "text" // or json or geojson
+}
+</code>
+
 ## 2.5.0
 
 ### [add] userstyle
@@ -17,7 +34,7 @@ Added initial bundle documentation. Userstyle functionality has been moved from 
 
 ### [mod] MapModulePlugin.MapLayerUpdateRequest
 
-Added documentation for the request. The request itself has been available from 1.x already but the it wasn't documented. 
+Added documentation for the request. The request itself has been available from 1.x already but the it wasn't documented.
 Since 2.5 it can also be used to force reload of features from a service on a vector/WFS-layer.
 
 ## 2.4.0
@@ -112,7 +129,7 @@ Object with optional parameters for options as default for all locations.
 Added fourth parameter "options".
 ```javascript
 { srsName, animation }
-``` 
+```
 `srsName`: The projection in which the given coordinates are
 `animation`: Animation to use on map move. Possible values: `fly`, `pan`.
 
