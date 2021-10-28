@@ -499,7 +499,6 @@ Oskari.clazz.define(
             var contentData = {};
             var fragments = [];
 
-
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else {
