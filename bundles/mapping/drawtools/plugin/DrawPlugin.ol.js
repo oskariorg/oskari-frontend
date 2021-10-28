@@ -524,6 +524,7 @@ Oskari.clazz.define(
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
+            case 'Box':
             case 'Square':
                 features.forEach(function (f) {
                     me._featuresValidity[f.getId()] = true;
