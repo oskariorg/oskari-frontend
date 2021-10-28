@@ -40,6 +40,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this._sandbox.registerForEventByName(this, 'MapLayerVisibilityChangedEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerOpacityEvent');
             this._sandbox.registerForEventByName(this, 'AfterChangeMapLayerStyleEvent');
+            this._sandbox.registerForEventByName(this, 'AfterMapLayerRemoveEvent');
         }
 
         /**
@@ -350,6 +351,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 this.hoverHandler.updateHoverLayer(event.getMapLayer()); break;
             case 'AfterChangeMapLayerStyleEvent':
                 this.hoverHandler.updateLayerStyle(event.getMapLayer()); break;
+            case 'AfterMapLayerRemoveEvent':
+                this.hoverHandler.removeLayer(event.getMapLayer()); break;
             }
         }
     }, {

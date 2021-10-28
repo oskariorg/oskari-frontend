@@ -284,7 +284,9 @@ Oskari.registerLocalization({
         'metadataPopup': {
             'open': 'Show indicator {indicators, plural, one {description} other {descriptions}}',
             'title': 'Indicator {indicators, plural, one {description} other {descriptions}}',
-            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}'
+            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}',
+            'updated': 'Last update',
+            'nextUpdate': 'Next update'
         },
         'sumo': {
             'placeholder': 'Select Here',

@@ -112,12 +112,19 @@ export class HoverHandler {
         this._styleCache[layer.getId()] = this._styleGenerator(layer);
     }
 
+    removeLayer (layer) {
+        const layerId = layer.getId();
+        if (this._state.layerId === layerId) {
+            this.clearHover(true);
+        }
+        delete this._styleCache[layerId];
+        delete this._vectorTileLayers[layerId];
+    }
+
     updateLayerStyle (layer) {
         const layerId = layer.getId();
         if (this._state.layerId === layerId) {
-            this.clearHover();
-            // clear layer id from state to be sure that onFeatureHover uses updated style
-            this._state.layerId = null;
+            this.clearHover(true);
         }
         this.setTooltipContent(layer);
         const vectorTileLayer = this._vectorTileLayers[layerId];
@@ -175,10 +182,10 @@ export class HoverHandler {
         };
     }
 
-    _clearState () {
+    _clearState (clearLayerId) {
         const layerId = this._state.layerId;
-        // remove others than layerId from state
-        this._state = { layerId };
+        // store layerId to avoid unnecessary style updates
+        this._state = clearLayerId ? {} : { layerId };
         if (layerId) {
             const vtLayer = this._vectorTileLayers[layerId];
             if (vtLayer) {
@@ -189,8 +196,8 @@ export class HoverHandler {
         }
     }
 
-    clearHover () {
-        this._clearState();
+    clearHover (clearLayerId) {
+        this._clearState(clearLayerId);
         this._clearTooltip();
     }
 
