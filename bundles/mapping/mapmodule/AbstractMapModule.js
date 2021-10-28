@@ -2582,7 +2582,9 @@ Oskari.clazz.define(
             rpcService.addFunction('getAllLayers', function () {
                 const layers = me._mapLayerService.getAllLayers();
                 const mapResolutions = me.getResolutionArray();
-                return layers.map(function (layer) {
+
+                return layers.map(layer => {
+                    const dataAttributes = layer.getAttributes().data || {};
                     if (layer.getMaxScale() && layer.getMinScale()) {
                         const layerResolutions = me.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
                         const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
@@ -2593,14 +2595,16 @@ Oskari.clazz.define(
                             visible: layer.isVisible(),
                             name: layer.getName(),
                             minZoom: minZoomLevel,
-                            maxZoom: maxZoomLevel
+                            maxZoom: maxZoomLevel,
+                            data: dataAttributes
                         };
                     } else {
                         return {
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
-                            name: layer.getName()
+                            name: layer.getName(),
+                            data: dataAttributes
                         };
                     }
                 });
