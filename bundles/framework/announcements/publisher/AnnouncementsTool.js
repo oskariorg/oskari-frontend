@@ -37,31 +37,31 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             me.selectedAnnouncements = [];
             me.annTitles = [];
 
-            this.announcementsServiceService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
-            me.sandbox.registerService(this.announcementsServiceService);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-            service.fetchAnnouncements((data) => this.announcements = data).bind(this);
 
-            if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
+            if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin) {
                 const myId = this.getTool().id;
-                const enabled = data.configuration.announcements.conf.plugins.some(plugin => myId === plugin.id);
+                const enabled = data.configuration.announcements.conf.plugin.id === myId ? true : false ;
                 me.setEnabled(enabled);
-            }
 
+            }
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.__sandbox.registerForEventByName(me, p);
                 }
             }
-            const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (toolPluginAnnouncementsConf != null) {
-                this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
-                toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                    me.annTitles.push(announcement.title);
-                    me.selectedAnnouncements.push(announcement);
-                });
-            }
-            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+
+            service.fetchAnnouncements((announcements) => {
+                me.announcements = announcements;
+                const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
+                if (toolPluginAnnouncementsConf != null) {
+                    toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
+                        me.annTitles.push(announcement.title);
+                        me.selectedAnnouncements.push(announcement);
+                    });
+                }
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+            });
         },
 
         getName: function () {
@@ -114,8 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         * @returns {Object} jQuery element
         */
         getExtraOptions: function () {
-            console.log(this.data);
-            console.log(this.data.configuration);
             var me = this;
             var buttonLabel = me.localization.tool.buttonLabel,
                 template = me.templates.announcements.clone();
@@ -231,18 +229,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         _getToolPluginAnnouncementsConf: function () {
             var me = this;
             var isConfig = !!((me.data && me.data.configuration));
-            var isPlugins = !!((isConfig && me.data.configuration.announcements &&
-            me.data.configuration.announcements.conf && me.data.configuration.announcements.conf.plugins));
+            var isPlugin = !!((isConfig && me.data.configuration.announcements &&
+            me.data.configuration.announcements.conf && me.data.configuration.announcements.conf.plugin));
             var toolPlugin = null;
-            if (isPlugins) {
-                var plugins = me.data.configuration.announcements.conf.plugins;
-                for (var i = 0; i < plugins.length; i++) {
-                    var plugin = plugins[i];
-                    if (plugin.id === me.getTool().id) {
-                        toolPlugin = plugin;
-                        break;
-                    }
-                }
+            if (isPlugin) {
+                toolPlugin = me.data.configuration.announcements.conf.plugin;
             }
             return toolPlugin;
         },
@@ -270,15 +261,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             if (me.state.enabled) {
                 var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig() };
                 var announcementsSelection = me._getAnnouncementsSelection();
+                console.log(announcementsSelection);
 
                 if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                     pluginConfig.config.announcements = announcementsSelection.announcements;
+                    console.log(pluginConfig.config.announcements);
                 }
                 return {
                     configuration: {
                         announcements: {
                             conf: {
-                                plugins: [pluginConfig]
+                                plugin: pluginConfig
                             }
                         }
                     }

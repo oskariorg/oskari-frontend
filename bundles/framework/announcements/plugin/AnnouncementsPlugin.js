@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
             var me = this;
             console.log(this._config);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-            service.fetchAnnouncements((data) => this.allAnnouncements = data);
 
             me.templates.main = jQuery(
                 '<div class="mapplugin announcements">' +
@@ -66,9 +65,12 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 '</div>'
             );
 
-            if (this._config.announcements != undefined) {
-                this.addAnnouncements();
-            }
+            service.fetchAnnouncements((data) => {
+                me.allAnnouncements = data;
+                if (this._config.announcements !== undefined) {
+                    this.addAnnouncements();
+                }
+            });
         },
 
         /**
@@ -201,7 +203,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         },
 
         /**
-         * @method getSelectedAnnouncements
+         * @method updateAnnouncements
          * Returns list of the selected announcements
          * @return {Object} returning object has property announcements, containing a {String[]} json
          * representation of announcements.
