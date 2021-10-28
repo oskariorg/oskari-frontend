@@ -1,4 +1,6 @@
+import GeoJSON from 'ol/format/GeoJSON';
 import '../BasicMapModulePlugin';
+import './event/GFIResultEvent';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -386,6 +388,106 @@ Oskari.clazz.define(
         },
 
         /**
+         * Sends GFIResultEvent.
+         *
+         * @method _sendGFIResultEvent
+         * @private
+         * @param  {Object} data
+         */
+        _sendGFIResultEvent: function (data) {
+            /**
+             * Checks at if data has JSON
+             * @param {Object} data
+             * @returns {Boolean} true if data has JSON Object, other false
+             */
+            const hasJSON = (data) => {
+                try {
+                    if (typeof data === 'string') {
+                        JSON.parse(data);
+                        return true;
+                    } else if (typeof data === 'object') {
+                        return true;
+                    }
+                    return false;
+                } catch (e) {}
+                return false;
+            };
+            /**
+             * Checks at if data has GeoJSON
+             * @param {Object} data
+             * @returns {Boolean} true if data has GeoJSON Object, other false
+             */
+            const hasGeoJSON = (data) => {
+                try {
+                    new GeoJSON().readFeatures(data);
+                } catch (e) {
+                    return false;
+                }
+                return true;
+            };
+
+            /**
+             * Gets GFI response type
+             * @param {Object} feature
+             * @returns {String} GFI response type (json, geojson or text)
+             */
+            const getGfiResponseType = (feature) => {
+                if (hasJSON(feature.content) && !hasGeoJSON(feature.content)) {
+                    return 'json';
+                } else if (hasJSON(feature.content) && hasGeoJSON(feature.content)) {
+                    return 'geojson';
+                }
+                return 'text';
+            };
+
+            /**
+             * Gets GFI content
+             * @param {Object} feature
+             * @returns GFI content
+             */
+            const getGfiContent = (feature) => {
+                if (hasJSON(feature.content) && typeof feature.content !== 'object') {
+                    return JSON.parse(feature.content);
+                } else if (typeof feature.content === 'object') {
+                    return feature.content;
+                }
+                return feature.content;
+            };
+
+            /**
+             * Check at if content has GFI data
+             * @param {Object} content
+             * @param {String} type
+             * @returns {Boolean} true if there is GFI content data
+             */
+            const hasGfiData = (content, type) => {
+                const hasStringGfiData = typeof content === 'string' && content !== 'unknown' && content !== '';
+                const hasGeoJsonGfiData = type === 'geojson' && content.features && content.features.length > 0;
+                const hasJsonGfiData = type === 'json';
+                if (hasStringGfiData ||
+                    hasGeoJsonGfiData ||
+                    hasJsonGfiData) {
+                    return true;
+                }
+                return false;
+            };
+
+            // Loop all GFI response data and send GFIREsultEvent for all features
+            data.features.forEach(feature => {
+                const content = getGfiContent(feature);
+                const type = getGfiResponseType(feature);
+
+                if (hasGfiData(content, type)) {
+                    // send event if layer get gfi for selected coordinates
+                    var gfiResultEvent = Oskari.eventBuilder(
+                        'GFIResultEvent'
+                    )(data.lonlat.lon, data.lonlat.lat, content, feature.layerId, type);
+                    this.getSandbox().notifyAll(gfiResultEvent);
+                }
+            });
+        },
+
+        /**
          * Formats the given data and sends a request to show infobox.
          *
          * @method _handleInfoResult
@@ -397,11 +499,14 @@ Oskari.clazz.define(
             var contentData = {};
             var fragments = [];
 
+
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }
+
+            this._sendGFIResultEvent(data);
 
             if (fragments.length) {
                 contentData.html = this._renderFragments(fragments);
