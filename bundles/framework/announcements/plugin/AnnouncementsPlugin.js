@@ -30,9 +30,9 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
          */
         init: function () {
             var me = this;
-            console.log(this._config);
+            console.log(me._config);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-            service.fetchAnnouncements((data) => this.allAnnouncements = data);
+
 
             me.templates.main = jQuery(
                 '<div class="mapplugin announcements">' +
@@ -66,9 +66,15 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 '</div>'
             );
 
-            if (this._config.announcements != undefined) {
-                this.addAnnouncements();
-            }
+            service.fetchAnnouncements((data) => {
+                me.allAnnouncements = data;
+
+                if (this._config.announcements !== undefined) {
+                    this.addAnnouncements();
+                }
+            });
+
+
         },
 
         /**
@@ -153,7 +159,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         addAnnouncements: function () {
             var me = this;
             var announcementsIds = this._config.announcements;
-            
+
             var announcements = [];
             console.log(me.allAnnouncements);
 

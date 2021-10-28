@@ -40,28 +40,30 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             this.announcementsServiceService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(this.announcementsServiceService);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-            service.fetchAnnouncements((data) => this.announcements = data).bind(this);
+            service.fetchAnnouncements((announcements) => {
+                me.announcements = announcements;
 
-            if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
-                const myId = this.getTool().id;
-                const enabled = data.configuration.announcements.conf.plugins.some(plugin => myId === plugin.id);
-                me.setEnabled(enabled);
-            }
-
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.registerForEventByName(me, p);
+                if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
+                    const myId = this.getTool().id;
+                    const enabled = data.configuration.announcements.conf.plugins.some(plugin => myId === plugin.id);
+                    me.setEnabled(enabled);
                 }
-            }
-            const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (toolPluginAnnouncementsConf != null) {
-                this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
-                toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                    me.annTitles.push(announcement.title);
-                    me.selectedAnnouncements.push(announcement);
-                });
-            }
-            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+
+                for (var p in me.eventHandlers) {
+                    if (me.eventHandlers.hasOwnProperty(p)) {
+                        me.__sandbox.registerForEventByName(me, p);
+                    }
+                }
+                const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
+                if (toolPluginAnnouncementsConf != null) {
+                    this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
+                    toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
+                        me.annTitles.push(announcement.title);
+                        me.selectedAnnouncements.push(announcement);
+                    });
+                }
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+            });
         },
 
         getName: function () {
@@ -278,7 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                     configuration: {
                         announcements: {
                             conf: {
-                                plugins: [pluginConfig]
+                                plugin: pluginConfig
                             }
                         }
                     }
