@@ -38,23 +38,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             me.annTitles = [];
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-
-            if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin) {
-                const myId = this.getTool().id;
-                const enabled = data.configuration.announcements.conf.plugin.id === myId ? true : false ;
-                me.setEnabled(enabled);
-
-            }
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.registerForEventByName(me, p);
-                }
-            }
-
             service.fetchAnnouncements((announcements) => {
                 me.announcements = announcements;
+
+                if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
+                    const myId = this.getTool().id;
+                    const enabled = data.configuration.announcements.conf.plugins.some(plugin => myId === plugin.id);
+                    me.setEnabled(enabled);
+                }
+
+                for (var p in me.eventHandlers) {
+                    if (me.eventHandlers.hasOwnProperty(p)) {
+                        me.__sandbox.registerForEventByName(me, p);
+                    }
+                }
                 const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf != null) {
+                    this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         me.annTitles.push(announcement.title);
                         me.selectedAnnouncements.push(announcement);

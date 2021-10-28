@@ -31,13 +31,12 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             this.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(this.announcementsService);
             console.log(me.conf);
-            
+
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                const plugin = Oskari.clazz.create('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin', this, me.conf.plugin, me.loc, mapModule, me.sandbox);
+                const plugin = Oskari.clazz.create('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);
                 mapModule.registerPlugin(plugin);
                 mapModule.startPlugin(plugin);
-                return;
             }
         },
 

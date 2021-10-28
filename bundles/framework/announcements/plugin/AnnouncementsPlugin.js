@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
          */
         init: function () {
             var me = this;
-            console.log(this._config);
+            console.log(me._config);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
             me.templates.main = jQuery(
@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         addAnnouncements: function () {
             var me = this;
             var announcementsIds = this._config.announcements;
-            
+
             var announcements = [];
             console.log(me.allAnnouncements);
 
