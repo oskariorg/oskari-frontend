@@ -38,26 +38,28 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             me.annTitles = [];
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
+
+            if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin) {
+                const myId = me.getTool().id;
+                const enabled = data.configuration.announcements.conf.plugin.id === myId ? true : false ;
+                me.setEnabled(enabled);
+
+            }
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.__sandbox.registerForEventByName(me, p);
+                }
+            }
+
             service.fetchAnnouncements((announcements) => {
                 me.announcements = announcements;
-
-                if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugins) {
-                    const myId = this.getTool().id;
-                    const enabled = data.configuration.announcements.conf.plugins.some(plugin => myId === plugin.id);
-                    me.setEnabled(enabled);
-                }
-
-                for (var p in me.eventHandlers) {
-                    if (me.eventHandlers.hasOwnProperty(p)) {
-                        me.__sandbox.registerForEventByName(me, p);
-                    }
-                }
-                const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-                if (toolPluginAnnouncementsConf != null) {
-                    this.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
+                const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
+                if (toolPluginAnnouncementsConf !== null) {
+                    me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                        me.annTitles.push(announcement.title);
-                        me.selectedAnnouncements.push(announcement);
+                        const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement )
+                        me.annTitles.push(filteredAnnouncement[0].title);
+                        me.selectedAnnouncements.push(filteredAnnouncement[0]);
                     });
                 }
                 jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
@@ -155,17 +157,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             for (i = 0; i < aLen; ++i) {
                 announcementInput = me.templates.inputCheckbox.clone();
 
-                annName = this.announcements[i].title;
+                annName = me.announcements[i].title;
 
                 announcementInput.find('input[type=checkbox]').attr({
-                    'id': this.announcements[i].id,
+                    'id': me.announcements[i].id,
                     'name': 'announcement',
-                    'value': this.announcements[i].title
+                    'value': me.announcements[i].title
                 });
                 announcementInput.find('label').html(annName).attr({
-                    'for': this.announcements[i].title
+                    'for': me.announcements[i].title
                 });
-                if (this.selectedAnnouncements.includes(this.announcements[i]) || me.shouldPreselectAnnouncement(this.announcements[i].id)) {
+                if (me.shouldPreselectAnnouncement(me.announcements[i])) {
                     announcementInput.find('input[type=checkbox]').prop('checked', true);
                 }
 
@@ -203,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
          * @param  {Integer} id announcement id
          * @return {Boolean} true if announcement must be preselect, other false
          */
-        shouldPreselectAnnouncement: function (id) {
+        shouldPreselectAnnouncement: function (announcement) {
             const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
             if (toolPluginAnnouncementsConf) {
                 var isPluginConfig = !!((toolPluginAnnouncementsConf && toolPluginAnnouncementsConf.config &&
@@ -211,7 +213,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
 
                 if (isPluginConfig) {
                     for (var i = 0; i < toolPluginAnnouncementsConf.config.announcements.length; i++) {
-                        if (toolPluginAnnouncementsConf.config.announcements[i].id == '' + id) {
+                        if (toolPluginAnnouncementsConf.config.announcements[i] === announcement.id) {
                             return true;
                         }
                     }
@@ -259,7 +261,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             var me = this;
 
             if (me.state.enabled) {
-                var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig() };
+                var pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
                 var announcementsSelection = me._getAnnouncementsSelection();
                 console.log(announcementsSelection);
 

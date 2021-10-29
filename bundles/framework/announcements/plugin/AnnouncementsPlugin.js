@@ -30,7 +30,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
          */
         init: function () {
             var me = this;
-            console.log(me._config);
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
             me.templates.main = jQuery(
@@ -67,8 +66,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
 
             service.fetchAnnouncements((data) => {
                 me.allAnnouncements = data;
-                if (this._config.announcements !== undefined) {
-                    this.addAnnouncements();
+                if (me._config.announcements !== undefined) {
+                    me.addAnnouncements();
                 }
             });
         },
@@ -79,7 +78,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         */
         openSelection: function () {
             var me = this,
-                div = this.getElement(),
+                div = me.getElement(),
                 icon = div.find('div.header div.header-icon');
             me.open = true;
             icon.removeClass('icon-arrow-white-right');
@@ -92,8 +91,9 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         * Programmatically closes the plugins interface as if user had clicked it close
         */
         closeSelection: function (el) {
-            this.open = false;
-            var element = el || this.getElement();
+            var me = this;
+            me.open = false;
+            var element = el || me.getElement();
             if (!element) {
                 return;
             }
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 el = me.templates.main.clone(),
                 header = el.find('div.header');
 
-            header.append(this._loc.title);
+            header.append(me._loc.title);
             me._bindHeader(header);
             return el;
         },
@@ -154,14 +154,14 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         */
         addAnnouncements: function () {
             var me = this;
-            var announcementsIds = this._config.announcements;
-
+            var announcementsIds = me._config.announcements;
+            
             var announcements = [];
             console.log(me.allAnnouncements);
 
             for (const i of announcementsIds) {
                 for (const j of me.allAnnouncements) {
-                    if (j.id == i) {
+                    if (j.id === i) {
                         announcements.push(j);
                     }
                 }
@@ -169,16 +169,16 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
 
             console.log(announcements);
 
-            if (!this.open) {
-                delete this.announcementsContent;
+            if (!me.open) {
+                delete me.announcementsContent;
             } else {
                 jQuery('div.announcements-content').children().remove();
             }
-            delete this.annRefs;
-            this.annRefs = {};
+            delete me.annRefs;
+            me.annRefs = {};
 
             announcements.forEach(announcement => {
-                if (this.annRefs[announcement.id]) {
+                if (me.annRefs[announcement.id]) {
                     // already added
                     return;
                 }
@@ -191,13 +191,13 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 }
 
                 var announcementsDiv = me.announcementsContent.find('div.announcements-content'),
-                    div = this.templates.announcement.clone();
+                    div = me.templates.announcement.clone();
 
                 div.find('button').append(announcement.title);
                 div.find('div.announcement-content').append(announcement.content);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
-                this.annRefs[announcement.id] = div;
+                me.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
         },
@@ -209,18 +209,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
          * representation of announcements.
          */
         updateAnnouncements: function (announcements) {
+            var me = this;
             var annIds = [];
             for (const i of announcements) {
-                annIds.push(i);
+                i.id === undefined ? annIds.push(i) : annIds.push(i.id) ;
             }
-            if (this._config) {
-                this._config.announcements = annIds;
-                this.addAnnouncements();
+            if (me._config) {
+                me._config.announcements = annIds;
+                me.addAnnouncements();
             } else {
-                this._config = {
+                me._config = {
                     announcements: annIds
                 };
-                this.addAnnouncements();
+                me.addAnnouncements();
             }
         },
 
