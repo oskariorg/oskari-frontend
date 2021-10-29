@@ -2596,7 +2596,7 @@ Oskari.clazz.define(
                             name: layer.getName(),
                             minZoom: minZoomLevel,
                             maxZoom: maxZoomLevel,
-                            data: dataAttributes
+                            config: dataAttributes
                         };
                     } else {
                         return {
@@ -2604,7 +2604,7 @@ Oskari.clazz.define(
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
                             name: layer.getName(),
-                            data: dataAttributes
+                            config: dataAttributes
                         };
                     }
                 });

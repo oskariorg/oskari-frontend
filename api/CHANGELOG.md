@@ -13,7 +13,7 @@ Some extra tags:
 
 ### [mod] [rpc] getAllLayers
 
-getAllLayers function now also return layer attributes data block, if it's empty then return empty object.
+The RPC `getAllLayers()` function now includes layer `attributes` `data` block. The object includes optional configuration like localized names for vector feature properties etc.
 
 ```javascript
 {
@@ -23,7 +23,7 @@ getAllLayers function now also return layer attributes data block, if it's empty
     name : layerName,
     minZoom: minZoomLevel,
     maxZoom: maxZoomLevel,
-    data: layerAttributesDataBlock
+    config: layerAttributesDataBlock
 }
 ```
 
