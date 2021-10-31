@@ -34,8 +34,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
 
             me.templates.main = jQuery(
                 '<div class="mapplugin announcements">' +
-                '  <div class="header">' +
-                '    <div class="header-icon icon-arrow-white-right"></div>' +
+                '  <div class="announcements-header">' +
+                '    <div class="announcements-header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
                 '</div>');
             me.templates.announcementsContent = jQuery(
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 '    </div>' +
                 '  </div>');
             // same as in main, only used when returning from some other layout to default (publisher)
-            me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
+            me.templates.defaultArrow = jQuery('<div class="announcements-header-icon icon-arrow-white-right"></div>');
             me.templates.announcement = jQuery(
                 `<div class="announcement">
                     <div>
@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         openSelection: function () {
             var me = this,
                 div = me.getElement(),
-                icon = div.find('div.header div.header-icon');
+                icon = div.find('div.announcements-header div.announcements-header-icon');
             me.open = true;
             icon.removeClass('icon-arrow-white-right');
             icon.addClass('icon-arrow-white-down');
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
             if (!element) {
                 return;
             }
-            var icon = element.find('div.header div.header-icon');
+            var icon = element.find('div.announcements-header div.announcements-header-icon');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         _createControlElement: function () {
             var me = this,
                 el = me.templates.main.clone(),
-                header = el.find('div.header');
+                header = el.find('div.announcements-header');
 
             header.append(me._loc.title);
             me._bindHeader(header);
@@ -204,9 +204,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
 
         /**
          * @method updateAnnouncements
-         * Returns list of the selected announcements
-         * @return {Object} returning object has property announcements, containing a {String[]} json
-         * representation of announcements.
+         * Updates announcements to plugin config
          */
         updateAnnouncements: function (announcements) {
             var me = this;

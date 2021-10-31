@@ -14,9 +14,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
     function () {
         this.sandbox = null;
         this.started = false;
-        this.localization = null;
-        this.loc = Oskari.getMsg.bind(null, 'announcements');
-        this.announcementsServiceService = undefined;
     }, {
 
         start: function () {
@@ -30,7 +27,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
 
             this.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(this.announcementsService);
-            console.log(me.conf);
 
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');

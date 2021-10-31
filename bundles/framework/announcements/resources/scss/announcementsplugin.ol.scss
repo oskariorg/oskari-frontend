@@ -89,13 +89,13 @@ div.mapplugin.announcements {
       padding: 10px;
     }
   
-    div.header {
+    div.announcements-header {
       background-color: #3c3c3c;
       color: #FFF;
       cursor: pointer;
       padding: 8px;
       text-align: left;
-      div.header-icon {
+      div.announcements-header-icon {
         display: inline-block;
         margin-right: 4px;
         vertical-align: middle;
@@ -136,7 +136,7 @@ div.mapplugin.announcements {
         transition: max-height 0.2s ease-out;
     }
   
-    div.header:hover {
+    div.announcements-header:hover {
       color: #ff9100;
     }
   
