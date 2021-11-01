@@ -20,4 +20,4 @@ const COLOR_SCALE = {
     'count': '',
     'split': ''
 };
-export const getColorScaleTypeForValueType =  (valueType, defaultType = 'seq') => COLOR_SCALE[valueType] || defaultType;
+export const getColorScaleTypeForValueType = (valueType, defaultType = 'seq') => COLOR_SCALE[valueType] || defaultType;
