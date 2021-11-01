@@ -126,7 +126,8 @@ Returns all the layers available on map. If layer has minimum zoom level and max
         visible: layerVisibility,
         name : layerName,
         minZoom: minZoomLevel,
-        maxZoom: maxZoomLevel
+        maxZoom: maxZoomLevel,
+        config: layerAttributesDataBlock
     }
 
 **getMapPosition()**

@@ -26,6 +26,23 @@ Event returns following Object:
 }
 </code>
 
+### [mod] [rpc] getAllLayers
+
+The RPC `getAllLayers()` function now includes layer `attributes` `data` block. The object includes optional configuration like localized names for vector feature properties etc.
+
+```javascript
+{
+    id: layerId,
+    opacity: layerOpacity,
+    visible: layerVisibility,
+    name : layerName,
+    minZoom: minZoomLevel,
+    maxZoom: maxZoomLevel,
+    config: layerAttributesDataBlock
+}
+```
+
+
 ## 2.5.0
 
 ### [add] userstyle
