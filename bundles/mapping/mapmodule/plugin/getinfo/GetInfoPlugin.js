@@ -436,6 +436,10 @@ Oskari.clazz.define(
                     return 'json';
                 } else if (hasJSON(feature.content) && hasGeoJSON(feature.content)) {
                     return 'geojson';
+                } else if (typeof feature === 'object' && !hasGeoJSON(feature)) {
+                    return 'json';
+                } else if (typeof feature === 'object' && hasGeoJSON(feature)) {
+                    return 'geojson';
                 }
                 return 'text';
             };
@@ -450,6 +454,8 @@ Oskari.clazz.define(
                     return JSON.parse(feature.content);
                 } else if (typeof feature.content === 'object') {
                     return feature.content;
+                } else if (typeof feature === 'object') {
+                    return feature;
                 }
                 return feature.content;
             };
@@ -476,7 +482,6 @@ Oskari.clazz.define(
             data.features.forEach(feature => {
                 const content = getGfiContent(feature);
                 const type = getGfiResponseType(feature);
-
                 if (hasGfiData(content, type)) {
                     // send event if layer get gfi for selected coordinates
                     var gfiResultEvent = Oskari.eventBuilder(
