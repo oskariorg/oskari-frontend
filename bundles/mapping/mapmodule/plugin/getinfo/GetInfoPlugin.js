@@ -403,9 +403,14 @@ Oskari.clazz.define(
             const hasJSON = (data) => {
                 try {
                     if (typeof data === 'string') {
-                        JSON.parse(data);
+                        const parsedJSON = JSON.parse(data);
+
+                        // Handle non-exception-throwing cases:
+                        if ((parsedJSON && typeof parsed !== 'object') || !parsedJSON) {
+                            return false;
+                        }
                         return true;
-                    } else if (typeof data === 'object') {
+                    } else if (data && typeof data === 'object') {
                         return true;
                     }
                     return false;
