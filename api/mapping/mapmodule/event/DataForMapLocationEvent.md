@@ -4,7 +4,7 @@ Notifies user that map gets GFI results.
 
 ## Description
 
-Event is used to nofify user about the GFI response. Event includes information about the click coordinates and content of GFI.
+The event allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks). Event includes information about the click coordinates and content of the GFI response.
 
 Note! This event is triggered for each layer and vector feature that is hit. You can detect if the events are from the same click by comparing coordinates
 
