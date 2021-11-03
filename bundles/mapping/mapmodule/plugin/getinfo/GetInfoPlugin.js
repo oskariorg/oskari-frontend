@@ -1,6 +1,6 @@
-import GeoJSON from 'ol/format/GeoJSON';
 import '../BasicMapModulePlugin';
 import './event/GFIResultEvent';
+import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -388,119 +388,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Trying get GFI JSON
-         * @method _getGfiJSON
-         * @private
-         * @param {Object} data
-         * @returns {Object} returns object if data has JSON Object, other null
-         */
-        _getGfiJSON: function (data) {
-            try {
-                if (typeof data === 'string') {
-                    const parsedJSON = JSON.parse(data);
-
-                    // Handle non-exception-throwing cases:
-                    if ((parsedJSON && typeof parsedJSON !== 'object') || !parsedJSON) {
-                        return null;
-                    }
-                    return parsedJSON;
-                } else if (data && typeof data === 'object') {
-                    return data;
-                }
-                return null;
-            } catch (e) {}
-            return null;
-        },
-
-        /**
-         * Checks at if data has GeoJSON
-         * @method _hasGeoJSON
-         * @private
-         * @param {Object} data
-         * @returns {Boolean} true if data has GeoJSON Object, other false
-         */
-        _hasGeoJSON: function (data) {
-            try {
-                new GeoJSON().readFeatures(data);
-            } catch (e) {
-                return false;
-            }
-            return true;
-        },
-
-        /**
-         * Checks at if feature has WMS gfi response
-         * @method _isWMSgfi
-         * @private
-         * @param {Object} feature
-         * @returns
-         */
-        _isWMSgfi: function (feature) {
-            return feature.type === 'wmslayer' &&
-                ['presentationType', 'content', 'type'].every(key => !!feature[key]);
-        },
-
-        /**
-         * Gets GFI response type
-         * @method _getGfiResponseType
-         * @private
-         * @param {Object} feature
-         * @returns {String} GFI response type (json, geojson or text)
-         */
-        _getGfiResponseType: function (feature) {
-            if (this._isWMSgfi(feature)) {
-                const isJSON = this._getGfiJSON(feature.content);
-                if (isJSON) {
-                    if (this._hasGeoJSON(feature.content)) {
-                        return 'geojson';
-                    }
-                    return 'json';
-                }
-                return 'text';
-            } else {
-                // Content is WFS feature properties
-                return 'json';
-            }
-        },
-
-        /**
-         * Gets GFI content
-         * @method _getGfiContent
-         * @private
-         * @param {Object} feature
-         * @returns GFI content
-         */
-        _getGfiContent: function (feature) {
-            const gfiJSON = this._getGfiJSON(feature.content);
-            if (gfiJSON) {
-                return gfiJSON;
-            } else if (typeof feature === 'object' && !feature.content && feature.content !== '') {
-                return feature;
-            }
-            return feature.content;
-        },
-
-        /**
-         * Check at if content has GFI data
-         * @method _hasGfiData
-         * @private
-         * @param {Object} content
-         * @param {String} type
-         * @returns {Boolean} true if there is GFI content data
-         */
-        _hasGfiData: function (content, type) {
-            const hasStringGfiData = typeof content === 'string' && content !== 'unknown' && content !== '';
-            const hasGeoJsonGfiData = type === 'geojson' && content.features && content.features.length > 0;
-            const hasJsonGfiData = type === 'json' && content !== '';
-            if (hasStringGfiData ||
-                hasGeoJsonGfiData ||
-                hasJsonGfiData) {
-                return true;
-            }
-            return false;
-        },
-
-        /**
          * Sends GFIResultEvent.
          *
          * @method _sendGFIResultEvent
@@ -511,9 +398,9 @@ Oskari.clazz.define(
             const me = this;
             // Loop all GFI response data and send GFIResultEvent for all features
             data.features.forEach(feature => {
-                const content = me._getGfiContent(feature);
-                const type = me._getGfiResponseType(feature);
-                if (me._hasGfiData(content, type)) {
+                const content = getGfiContent(feature);
+                const type = getGfiResponseType(feature);
+                if (hasGfiData(content, type)) {
                     // send event if layer get gfi for selected coordinates
                     // WFS layer layerId come from data object other layers layerId come from feature object
                     var gfiResultEvent = Oskari.eventBuilder(
