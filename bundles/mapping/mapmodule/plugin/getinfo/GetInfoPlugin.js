@@ -1,4 +1,6 @@
 import '../BasicMapModulePlugin';
+import './event/DataForMapLocationEvent';
+import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
  *
@@ -386,6 +388,30 @@ Oskari.clazz.define(
         },
 
         /**
+         * Sends DataForMapLocationEvent.
+         *
+         * @method _sendDataForMapLocationEvent
+         * @private
+         * @param  {Object} data
+         */
+        _sendDataForMapLocationEvent: function (data) {
+            const me = this;
+            // Loop all GFI response data and send GFIResultEvent for all features
+            data.features.forEach(feature => {
+                const content = getGfiContent(feature);
+                const type = getGfiResponseType(feature);
+                if (hasGfiData(content, type)) {
+                    // send event if layer get gfi for selected coordinates
+                    // WFS layer layerId come from data object other layers layerId come from feature object
+                    var dataForMapLocationEvent = Oskari.eventBuilder(
+                        'DataForMapLocationEvent'
+                    )(data.lonlat.lon, data.lonlat.lat, content, data.layerId || feature.layerId, type);
+                    me.getSandbox().notifyAll(dataForMapLocationEvent);
+                }
+            });
+        },
+
+        /**
          * Formats the given data and sends a request to show infobox.
          *
          * @method _handleInfoResult
@@ -402,6 +428,8 @@ Oskari.clazz.define(
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }
+
+            this._sendDataForMapLocationEvent(data);
 
             if (fragments.length) {
                 contentData.html = this._renderFragments(fragments);

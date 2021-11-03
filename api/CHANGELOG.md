@@ -11,6 +11,21 @@ Some extra tags:
 
 ## 2.6.0
 
+### [add] [rpc] DataForMapLocationEvent
+
+Added new DataForMapLocationEvent. This allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks).
+
+Event returns following Object:
+<code>
+{
+  content: "<table><tr><td>test</td></tr></table>", // or json object
+  x: 423424,
+  y: 6652055,
+  layerId: 1,
+  type: "text" // or json or geojson
+}
+</code>
+
 ### [mod] [rpc] getAllLayers
 
 The RPC `getAllLayers()` function now includes layer `attributes` `data` block. The object includes optional configuration like localized names for vector feature properties etc.
