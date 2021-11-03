@@ -1,3 +1,4 @@
+import { getMapTypeForValueType, getColorScaleTypeForValueType } from '../util/ClassificationHelpers';
 /**
  * @class Oskari.statistics.statsgrid.StateService
  */
@@ -245,12 +246,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          * Gets getClassificationOpts
          * @param  {String} indicatorHash indicator hash
          */
-        getClassificationOpts: function (indicatorHash) {
-            var indicator = this.getIndicator(indicatorHash) || {};
+        getClassificationOpts: function (indicatorHash, opts = {}) {
+            const indicator = this.getIndicator(indicatorHash) || {};
             const lastSelected = { ...this.lastSelectedClassification };
             delete lastSelected.manualBounds;
             delete lastSelected.fractionDigits;
-            return jQuery.extend({}, this._defaults.classification, lastSelected, indicator.classification || {});
+
+            const metadataClassification = {};
+            // Note! Assumes that the metadata has been loaded when selecting the indicator from the list to get a sync response
+            // don't try this at home...
+            this.seriesService.getStatisticsService().getIndicatorMetadata(indicator.datasource || opts.ds, indicator.indicator || opts.id, (err, data = {}) => {
+                if (err) {
+                    // unable to get metadata, ignored since this only enhances the classification and is not required
+                    return;
+                }
+                const metadata = data.metadata || {};
+                metadataClassification.mapStyle = getMapTypeForValueType(metadata.valueType, lastSelected.mapStyle);
+                let decimalCount = metadata.decimalCount;
+                if (typeof decimalCount !== 'number') {
+                    decimalCount = lastSelected.fractionDigits;
+                }
+                metadataClassification.fractionDigits = decimalCount;
+                metadataClassification.type = getColorScaleTypeForValueType(metadata.valueType, lastSelected.type);
+            });
+            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification, indicator.classification || {});
+            return result;
         },
         /**
          * Returns an wanted indicator.
@@ -384,7 +404,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 hash: this.getHash(datasrc, indicator, selections, series)
             };
             // init classification values if not given
-            ind.classification = classification || this.getClassificationOpts(ind.hash);
+            ind.classification = classification || this.getClassificationOpts(ind.hash, {
+                ds: datasrc,
+                id: indicator
+            });
             var found = false;
             this.indicators.forEach(function (existing) {
                 if (existing.hash === ind.hash) {

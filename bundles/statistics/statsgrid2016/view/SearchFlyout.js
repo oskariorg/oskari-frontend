@@ -117,6 +117,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         indicatorListAccordionPanel.setTitle(this.loc('indicatorList.title'));
         indicatorListAccordionPanel.setContent(indicatorList.getElement());
+        if (this.service.getStateService().getIndicators().length > 0) {
+            // open at start if there are indicators selected
+            indicatorListAccordionPanel.open();
+        }
         indicatorListAccordion.addPanel(indicatorListAccordionPanel);
 
         indicatorListAccordion.insertTo(container);
