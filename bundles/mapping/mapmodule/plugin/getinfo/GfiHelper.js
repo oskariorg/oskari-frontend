@@ -99,10 +99,5 @@ export const hasGfiData = (content, type) => {
     const hasStringGfiData = typeof content === 'string' && content !== 'unknown' && content !== '';
     const hasGeoJsonGfiData = type === 'geojson' && content.features && content.features.length > 0;
     const hasJsonGfiData = type === 'json' && content !== '';
-    if (hasStringGfiData ||
-        hasGeoJsonGfiData ||
-        hasJsonGfiData) {
-        return true;
-    }
-    return false;
+    return hasStringGfiData || hasGeoJsonGfiData || hasJsonGfiData;
 };
