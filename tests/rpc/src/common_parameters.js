@@ -357,7 +357,7 @@ var supportedEvents = [
   "InfoBox.InfoBoxEvent",
   "RPCUIEvent",
   "map.rotated",
-  "GFIResultEvent"
+  "DataForMapLocationEvent"
 ];
 
 var supportedFunctions = [
