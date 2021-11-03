@@ -156,7 +156,7 @@ Returns events that are supported by rpc functionality. For example:
         "UserLocationEvent": true,
         "DrawingEvent": true,
         "FeatureEvent": true,
-        "GFIResultEvent": true
+        "DataForMapLocationEvent": true
     }
 
 **getSupportedFunctions()**
