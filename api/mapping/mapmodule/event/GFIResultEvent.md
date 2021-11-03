@@ -6,6 +6,8 @@ Notifies user that map gets GFI results.
 
 Event is used to nofify user about the GFI response. Event includes information about the click coordinates and content of GFI.
 
+Note! This event is triggered for each layer and vector feature that is hit. You can detect if the events are from the same click by comparing coordinates
+
 ## Parameters
 
 (* means the parameter is required)
