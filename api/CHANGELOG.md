@@ -13,7 +13,7 @@ Some extra tags:
 
 ### [add] [rpc] DataForMapLocationEvent
 
-Added new DataForMapLocationEvent. Event sends GFI results.
+Added new DataForMapLocationEvent. This allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks).
 
 Event returns following Object:
 <code>
