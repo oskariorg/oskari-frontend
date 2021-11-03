@@ -37,6 +37,12 @@ div.notLoggedIn {
     padding: 10px;
 }
 
+div#publisher-announcements-inputs {
+    display: grid;
+    grid-column-gap: 50px;
+    grid-template-columns: auto auto ;
+}
+
 div.basic_publisher {
     // Temp, change inputs to TextInput and get rid of this
     input[type=text] {
