@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.mapmodule.getinfoplugin.eventGFIResultEvent
+ * @class Oskari.mapframework.mapmodule.getinfoplugin.event.DataForMapLocationEvent
  *
  */
-Oskari.clazz.define('Oskari.mapframework.mapmodule.getinfoplugin.eventGFIResultEvent',
+Oskari.clazz.define('Oskari.mapframework.mapmodule.getinfoplugin.event.DataForMapLocationEvent',
     /**
      * @method create called automatically on construction
      * @static
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.getinfoplugin.eventGFIResultE
         this._type = type;
     }, {
         /** @static @property __name event name */
-        __name: 'GFIResultEvent',
+        __name: 'DataForMapLocationEvent',
         /**
          * @method getName
          * @return {String} the name for the event

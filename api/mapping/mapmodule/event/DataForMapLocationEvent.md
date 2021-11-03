@@ -1,4 +1,4 @@
-# GFIResultEvent [rpc]
+# DataForMapLocationEvent [rpc]
 
 Notifies user that map gets GFI results.
 
@@ -85,12 +85,12 @@ Returns object including all the parameters, for example:
 
 ## Examples
 
-GetInfoPlugin send GFIResultEvent:
+GetInfoPlugin send DataForMapLocationEvent:
 <pre class="event-code-block">
 <code>
-var gfiResultEvent = Oskari.eventBuilder(
-    'GFIResultEvent'
+var dataForMapLocationEvent = Oskari.eventBuilder(
+    'DataForMapLocationEvent'
 )(data.lonlat.lon, data.lonlat.lat, content, feature.layerId, type);
-this.getSandbox().notifyAll(gfiResultEvent);
+this.getSandbox().notifyAll(dataForMapLocationEvent);
 </code>
 </pre>

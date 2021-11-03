@@ -11,9 +11,9 @@ Some extra tags:
 
 ## 2.6.0
 
-### [add] [rpc] GFIResultEvent
+### [add] [rpc] DataForMapLocationEvent
 
-Added new GFIREsultEvent. Event sends GFI results.
+Added new DataForMapLocationEvent. Event sends GFI results.
 
 Event returns following Object:
 <code>
