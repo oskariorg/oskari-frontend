@@ -1,6 +1,6 @@
 # DataForMapLocationEvent [rpc]
 
-Notifies user that map gets GFI results.
+Notifies application that a click on the map resulted in more data for that location (GFI style content).
 
 ## Description
 
