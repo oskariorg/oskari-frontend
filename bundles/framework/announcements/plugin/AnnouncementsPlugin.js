@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="announcements-header-icon icon-arrow-white-right"></div>');
             me.templates.announcement = jQuery(
-                `<div class="announcement"> 
+                `<div class="announcement">
                     <div>
                         <label>
                             <button class="collapsible"></button>
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
         addAnnouncements: function () {
             var me = this;
             var announcementsIds = me._config.announcements;
-            
+
             var announcements = [];
 
             for (const i of announcementsIds) {

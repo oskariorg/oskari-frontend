@@ -163,7 +163,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 popup.close(true);
                 me.isAnnouncementsDialogOpen = false;
             });
-            var aLen = me.announcements.length;
 
             me.announcements.forEach(announcement => {
                 const announcementInput = me.templates.inputCheckbox.clone();
@@ -316,7 +315,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         */
         stop: function () {
             var me = this;
-            me.announcementsPopup.close(true);
+            if (me.announcementsPopup) {
+                me.announcementsPopup.close(true);
+            }
             if (me.__plugin) {
                 if (me.__sandbox && me.__plugin.getSandbox()) {
                     me.__plugin.stopPlugin(me.__sandbox);

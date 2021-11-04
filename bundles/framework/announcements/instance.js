@@ -12,11 +12,12 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
      * @static
      */
     function () {
-        this.sandbox = null;
-        this.started = false;
+        var conf = this.getConfiguration();
+        conf.name = 'announcements';
+        conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
     }, {
 
-        start: function () {
+        afterStart: function () {
             var me = this;
             if (me.started) {
                 return;
