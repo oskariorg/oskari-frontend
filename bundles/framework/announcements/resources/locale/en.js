@@ -15,6 +15,18 @@ Oskari.registerLocalization(
         "dontShow" : "Don't show this again",
         "messages": {
             "getFailed":"Fetching announcements failed"
+        },
+        "tool": {
+            "buttonLabel": "Select Announcements",
+            "popup": {
+                "title": "Announcements",
+                "close": "Close"
+            },
+            "announcementsName": "Name",
+            "announcementsTime": "Valid"
+        },
+        "plugin" : {
+            "title": "Announcements"
         }
     }
 });

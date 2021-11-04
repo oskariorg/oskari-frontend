@@ -35,16 +35,6 @@ Oskari.registerLocalization(
             },
             "titleError": "Lägg till en titel!",
             "contentError": "Lägg till innehåll!",
-            "dateError": "Lägg till intervall!",
-            "tool": {
-                "buttonLabel": "Välj Aviseringar",
-                "popup": {
-                    "title": "Aviseringar",
-                    "close": "Stäng"
-                },
-            },
-            "plugin" : {
-                "title": "Aviseringar"
-            }
+            "dateError": "Lägg till intervall!"
         }
     });

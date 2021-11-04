@@ -35,20 +35,6 @@ Oskari.registerLocalization(
             },
             "titleError": "Lisää otsikko!",
             "contentError": "Lisää sisältö!",
-            "dateError": "Lisää aikaväli!",
-            "tool": {
-                "announcementsName": "Nimi",
-                "announcementsValid": "Voimassa",
-                "buttonLabel": "Valitse Ilmoitukset",
-                "popup": {
-                    "title": "Ilmoitukset",
-                    "close": "Sulje"
-                },
-            },
-            "plugin" : {
-                "title": "Ilmoitukset"
-            }
-
-
+            "dateError": "Lisää aikaväli!"
         }
     });

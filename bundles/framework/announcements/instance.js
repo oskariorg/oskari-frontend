@@ -42,6 +42,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          */
         stop: function () {
             this.sandbox = null;
+            console.log("vithu");
+            jQuery('div#announcements-popup').remove();
             this.started = false;
         }
     }, {

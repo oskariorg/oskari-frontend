@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
+Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
         this.localization = Oskari.getLocalization("announcements");
@@ -13,10 +13,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         this.annTitles = [];
         this.isAnnouncementsDialogOpen = false;
         this.groupedSiblings = true;
+        this.announcementsPopup = null;
 
         this.templates = {
-            announcements: jQuery('<div id="publisher-layout-announcements" class="tool-options">' + '<div>' + '<input type="text" name="publisher-announcements" disabled />' + '<button></button>' + '</div>' + '</div>'),
-            announcementsPopup: jQuery('<div>' + '<div id="publisher-announcements-inputs"></div>' + '</div>'),
+            announcements: jQuery(
+                '<div id="publisher-layout-announcements" class="tool-options">' + 
+                    '<div>' + 
+                        '<input type="text" name="publisher-announcements" disabled />' + 
+                        '<button/>' + 
+                    '</div>' + 
+                '</div>'),
+            announcementsPopup: jQuery(
+                '<div>' + 
+                    '<div id="publisher-announcements-inputs">' +
+                        '<h4>'+this.localization.tool.announcementsName+'</h4><h4>'+this.localization.tool.announcementsValid+'</h4>'+
+                        '<div class="ann-column" id="ann-title"></div>' +
+                        '<div class="ann-column" id="ann-time"/></div>' +
+                    '</div>' + 
+                '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" /><label></label></div>')
         };
 
@@ -67,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         },
 
         getName: function () {
-            return 'Oskari.mapframework.publisher.tool.AnnouncementsTool';
+            return 'Oskari.framework.announcements.publisher.AnnouncementsTool';
         },
 
         /**
@@ -91,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         */
         getTool: function () {
             return {
-                id: 'Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin',
+                id: 'Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 title: 'AnnouncementsPlugin',
                 config: {}
             };
@@ -158,6 +172,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                 announcementInput = me.templates.inputCheckbox.clone();
 
                 annName = me.announcements[i].title;
+                annTime = me.announcements[i].begin_date.replace(/\-/g,'/') + " - " + me.announcements[i].end_date.replace(/\-/g,'/');
 
                 announcementInput.find('input[type=checkbox]').attr({
                     'id': me.announcements[i].id,
@@ -165,13 +180,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
                     'value': me.announcements[i].title
                 });
                 announcementInput.find('label').html(annName).attr({
-                    'for': me.announcements[i].title
+                    'for': me.announcements[i].id
                 });
                 if (me.shouldPreselectAnnouncement(me.announcements[i])) {
                     announcementInput.find('input[type=checkbox]').prop('checked', true);
                 }
 
-                content.find('div#publisher-announcements-inputs').append(announcementInput);
+                content.find('div#ann-title').append(announcementInput);
+                content.find('div#ann-time').append('<div>' + annTime + '</div>');
             }
 
             // WHAT TO DO WHEN ANNOUNCEMENTS ARE SELECTED
@@ -195,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             });
 
             popup.show(title, content, [closeButton]);
-            me._announcementsPopup = popup;
+            me.announcementsPopup = popup;
             me.isAnnouncementsDialogOpen = true;
         },
 
@@ -263,11 +279,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
             if (me.state.enabled) {
                 var pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
                 var announcementsSelection = me._getAnnouncementsSelection();
-                console.log(announcementsSelection);
 
                 if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                     pluginConfig.config.announcements = announcementsSelection.announcements;
-                    console.log(pluginConfig.config.announcements);
                 }
                 return {
                     configuration: {
@@ -307,6 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AnnouncementsTool',
         */
         stop: function () {
             var me = this;
+            me.announcementsPopup.close(true);
             if (me.__plugin) {
                 if (me.__sandbox && me.__plugin.getSandbox()) {
                     me.__plugin.stopPlugin(me.__sandbox);

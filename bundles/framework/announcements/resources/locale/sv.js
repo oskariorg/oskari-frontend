@@ -15,6 +15,18 @@ Oskari.registerLocalization(
             "dontShow" : "Visa inte detta igen",
             "messages": {
                 "getFailed":"Fetching announcements failed"
+            },
+            "tool": {
+                "buttonLabel": "Välj Aviseringar",
+                "popup": {
+                    "title": "Aviseringar",
+                    "close": "Stäng"
+                },
+                "announcementsName": "Namn",
+                "announcementsTime": "VaDatumintervalllid"
+            },
+            "plugin" : {
+                "title": "Aviseringar"
             }
         }
     });

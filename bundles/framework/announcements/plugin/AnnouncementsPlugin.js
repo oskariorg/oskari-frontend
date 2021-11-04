@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.AnnouncementsPlugin
+ * @class Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
  */
-Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin',
+Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
     /**
      * @static @method create called automatically on construction
      *
@@ -12,8 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
         var me = this;
         me.sandbox = Oskari.getSandbox();
         me._loc = Oskari.getLocalization("announcements");
-        me._clazz =
-            'Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin';
+        me._clazz = 'Oskari.framework.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
         me._index = 80;
@@ -46,7 +45,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
             // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="announcements-header-icon icon-arrow-white-right"></div>');
             me.templates.announcement = jQuery(
-                `<div class="announcement">
+                `<div class="announcement"> 
                     <div>
                         <label>
                             <button class="collapsible"></button>
@@ -55,13 +54,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                         </div>
                     </div>
                 </div>`
-            );
-
-            me.templates.contentHeader = jQuery(
-                '<div class="content-header">' +
-                '  <div class="content-header-title"></div>' +
-                '  <div class="content-close icon-close-white"></div>' +
-                '</div>'
             );
 
             service.fetchAnnouncements((data) => {
@@ -117,7 +109,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 el = me.templates.main.clone(),
                 header = el.find('div.announcements-header');
 
-            header.append(me._loc.title);
+            header.append(me._loc.plugin.title);
             me._bindHeader(header);
             return el;
         },
@@ -157,7 +149,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
             var announcementsIds = me._config.announcements;
             
             var announcements = [];
-            console.log(me.allAnnouncements);
 
             for (const i of announcementsIds) {
                 for (const j of me.allAnnouncements) {
@@ -166,8 +157,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                     }
                 }
             }
-
-            console.log(announcements);
 
             if (!me.open) {
                 delete me.announcementsContent;
@@ -200,6 +189,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.plugin.AnnouncementsP
                 me.annRefs[announcement.id] = div;
                 announcementsDiv.append(div);
             });
+            jQuery.isEmptyObject(me.annRefs) ? jQuery('div.mapplugin.announcements').hide() : jQuery('div.mapplugin.announcements').show();
         },
 
         /**

@@ -37,6 +37,7 @@
         jQuery.ajax({
             type: 'GET',
             dataType: 'json',
+            data: { all: true },
             url: Oskari.urls.getRoute('Announcements'),
             success: (pResp) => {
                 callback(pResp.data);

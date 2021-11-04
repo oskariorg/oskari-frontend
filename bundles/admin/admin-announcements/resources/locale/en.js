@@ -35,16 +35,6 @@ Oskari.registerLocalization(
         },
         "titleError": "Add title",
         "contentError": "Add content!",
-        "dateError": "Add daterange!",
-        "tool": {
-            "buttonLabel": "Select Announcements",
-            "popup": {
-                "title": "Announcements",
-                "close": "Close"
-            },
-        },
-        "plugin" : {
-            "title": "Announcements"
-        }
+        "dateError": "Add daterange!"
     }
 });
