@@ -92,6 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
             }
         },
+        noUI: false,
         init: function (data) {
             var me = this;
             var isConf = !!((data && data.configuration && data.configuration.mapfull));
@@ -102,6 +103,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                         if (plugin.config && plugin.config.colourScheme) {
                             me.values.colourScheme = plugin.config.colourScheme;
                             me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                        }
+                        if (plugin.config && plugin.config.noUI) {
+                            me.noUI = !!plugin.config.noUI;
                         }
                         me.setEnabled(true);
                     }
@@ -202,6 +206,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             // Prepopulate data
             template.find('input[name=publisher-colour]').attr('placeholder', colourPlaceholder).val(colourName);
+
+            var input = Oskari.clazz.create(
+                'Oskari.userinterface.component.CheckboxInput'
+            );
+            input.setTitle(me.__instance._localization.BasicView.noUI);
+            input.setHandler(function (checked) {
+                if (checked === 'on') {
+                    me.noUI = true;
+                    me.getPlugin().publisherHideUI(true);
+                } else {
+                    me.noUI = false;
+                    me.getPlugin().publisherHideUI(false);
+                }
+            });
+
+            input.setChecked(me.noUI);
+
+            var inputEl = input.getElement();
+            if (inputEl.style) {
+                inputEl.style.width = 'auto';
+            }
+
+            template.append(inputEl);
 
             return template;
         },

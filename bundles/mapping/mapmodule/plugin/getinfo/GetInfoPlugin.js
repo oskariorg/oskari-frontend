@@ -412,6 +412,18 @@ Oskari.clazz.define(
         },
 
         /**
+         * Toggle GFI popup visibility when selected/unselected "Hide user interface (Use RPC interface)" in publisher
+         * @method publisherHideUI
+         * @param {Boolean} hide hide UI
+         */
+        publisherHideUI: function (hide) {
+            this._config.noUI = hide;
+            if (hide === true && this.getSandbox().hasHandler('InfoBox.HideInfoBoxRequest')) {
+                var reqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
+                this.getSandbox().request(this, reqBuilder(this.infoboxId));
+            }
+        },
+        /**
          * Formats the given data and sends a request to show infobox.
          *
          * @method _handleInfoResult
@@ -436,7 +448,13 @@ Oskari.clazz.define(
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
-            var { colourScheme, font } = this._config || {};
+            var { colourScheme, font, noUI } = this._config || {};
+
+            // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
+            // DataForMapLocationEvent is still triggered allowing RPC apps to customize and format the data that is shown.
+            if (noUI === true) {
+                return;
+            }
 
             this._showGfiInfo(content, data, this.formatters, {
                 colourScheme: colourScheme,

@@ -196,7 +196,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Vložená mapa sa nedá uložiť.",
                 "nameIllegalCharacters": "Názov mapy obsahuje nepovolené znaky (napr. html-tagy). Prosím, opravte názov a skúste znovu.",
                 "domainIllegalCharacters": "Adresa webstránky obsahuje nepovolené znaky. Zadajte URL adresu webstránky bez predpôn alebo adresu podstránky. Napríklad: homepage.com. Povolené znaky sú písmená (a-z, A-Z, å, ä, ö, Å, Ä, Ö), čísla (0-9) a špeciálne znaky (-, _, ., !, ~, *, ' a ()). Prosím, opravte adresu a skúste znovu."
-            }
+            },
+            "noUI": "Skryť používateľské rozhranie (Použiť RPC rozhranie)"
         },
         "NotLoggedView": {
             "text": "Môžte zverejniť vloženú mapu na vašej stránke. Prosím, prihláste sa alebo sa najprv zaregistrujte.",

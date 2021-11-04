@@ -196,7 +196,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Embedded' kart kunne ikke lagres",
                 "nameIllegalCharacters": "Kartnavn inneholder ugyldige tegn. Vennligst korriger og prøv igjen.",
                 "domainIllegalCharacters": "Navn på nettsted inneholder ugyldige tegn. Angi nettsted uten http og www. Tillatte tegn er bokstavene a-z samt å, ä og ö, tall og bindestreker."
-            }
+            },
+            "noUI": "Skjul brukergrensesnitt (bruk RPC grensesnitt)"
         },
         "NotLoggedView": {
             "text": "Du kan opprette 'embeddede' kart etter at du har logget inn",
