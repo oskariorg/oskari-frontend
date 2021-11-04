@@ -450,7 +450,8 @@ Oskari.clazz.define(
             }
             var { colourScheme, font, noUI } = this._config || {};
 
-            // Not show GFI popup if noUI configured
+            // GFIPlugin.config.noUI: true means the infobox for GFI content shouldn't be shown
+            // DataForMapLocationEvent is still triggered allowing RPC apps to customize and format the data that is shown.
             if (noUI === true) {
                 return;
             }
