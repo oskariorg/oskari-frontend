@@ -93,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             }
         },
         noUI: false,
-        noUiIsCheckedInModifyMode: false,
         init: function (data) {
             var me = this;
             var isConf = !!((data && data.configuration && data.configuration.mapfull));
@@ -106,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                             me._sendColourSchemeChangedEvent(me.values.colourScheme);
                         }
                         if (plugin.config && plugin.config.noUI) {
-                            me.noUiIsCheckedInModifyMode = !!plugin.config.noUI;
+                            me.noUI = !!plugin.config.noUI;
                         }
                         me.setEnabled(true);
                     }
@@ -222,10 +221,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
             });
 
-            if (me.noUiIsCheckedInModifyMode) {
-                input.setChecked(true);
-                me.noUI = true;
-            }
+            input.setChecked(me.noUI);
+
             var inputEl = input.getElement();
             if (inputEl.style) {
                 inputEl.style.width = 'auto';
