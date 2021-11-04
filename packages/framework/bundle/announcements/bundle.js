@@ -51,10 +51,6 @@ Oskari.clazz.define("Oskari.framework.bundle.announcements.AnnouncementsBundle",
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/announcements/service/AnnouncementsService.js"
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/announcements/publisher/AnnouncementsTool.js"
         }],
         "locales": [
         {

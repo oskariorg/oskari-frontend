@@ -1,7 +1,7 @@
-Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool',
+Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
-        this.localization = Oskari.getLocalization("announcements");
+        this.localization = Oskari.getLocalization('announcements');
         this.announcements = {};
         this.allowedLocations = ['top left', 'top center', 'top right'];
         this.lefthanded = 'top right';
@@ -17,19 +17,19 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
 
         this.templates = {
             announcements: jQuery(
-                '<div id="publisher-layout-announcements" class="tool-options">' + 
-                    '<div>' + 
-                        '<input type="text" name="publisher-announcements" disabled />' + 
-                        '<button/>' + 
-                    '</div>' + 
+                '<div id="publisher-layout-announcements" class="tool-options">' +
+                    '<div>' +
+                        '<input type="text" name="publisher-announcements" disabled />' +
+                        '<button/>' +
+                    '</div>' +
                 '</div>'),
             announcementsPopup: jQuery(
-                '<div>' + 
+                '<div>' +
                     '<div id="publisher-announcements-inputs">' +
-                        '<h4>'+this.localization.tool.announcementsName+'</h4><h4>'+this.localization.tool.announcementsValid+'</h4>'+
+                        '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsValid + '</h4>' +
                         '<div class="ann-column" id="ann-title"></div>' +
                         '<div class="ann-column" id="ann-time"/></div>' +
-                    '</div>' + 
+                    '</div>' +
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" /><label></label></div>')
         };
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
     }, {
 
         init: function (data) {
-            var me = this;
+            const me = this;
             me.data = data;
             me.selectedAnnouncements = [];
             me.annTitles = [];
@@ -55,10 +55,10 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
 
             if (data.configuration && data.configuration.announcements && data.configuration.announcements.conf && data.configuration.announcements.conf.plugin) {
                 const myId = me.getTool().id;
-                const enabled = data.configuration.announcements.conf.plugin.id === myId ? true : false ;
+                const enabled = data.configuration.announcements.conf.plugin.id === myId;
                 me.setEnabled(enabled);
-
             }
+
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.__sandbox.registerForEventByName(me, p);
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
                 if (toolPluginAnnouncementsConf !== null) {
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
-                        const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement )
+                        const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
                         me.annTitles.push(filteredAnnouncement[0].title);
                         me.selectedAnnouncements.push(filteredAnnouncement[0]);
                     });
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -130,9 +130,9 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
         * @returns {Object} jQuery element
         */
         getExtraOptions: function () {
-            var me = this;
-            var buttonLabel = me.localization.tool.buttonLabel,
-                template = me.templates.announcements.clone();
+            const me = this;
+            const buttonLabel = me.localization.tool.buttonLabel;
+            const template = me.templates.announcements.clone();
 
             // Set the button handler
             template.find('button').html(buttonLabel).on('click', function () {
@@ -152,14 +152,11 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
          * @method _openAnnouncementsDialog
          */
         _openAnnouncementsDialog: function () {
-            var me = this,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                title = me.localization.tool.popup.title,
-                content = me.templates.announcementsPopup.clone(),
-                announcementInput,
-                annName,
-                i;
+            const me = this;
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            const title = me.localization.tool.popup.title;
+            const content = me.templates.announcementsPopup.clone();
 
             closeButton.setTitle(me.localization.tool.popup.close);
             closeButton.setHandler(function () {
@@ -168,27 +165,26 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
             });
             var aLen = me.announcements.length;
 
-            for (i = 0; i < aLen; ++i) {
-                announcementInput = me.templates.inputCheckbox.clone();
-
-                annName = me.announcements[i].title;
-                annTime = me.announcements[i].begin_date.replace(/\-/g,'/') + " - " + me.announcements[i].end_date.replace(/\-/g,'/');
+            me.announcements.forEach(announcement => {
+                const announcementInput = me.templates.inputCheckbox.clone();
+                const annName = announcement.title;
+                const annTime = announcement.begin_date.replace(/\-/g,'/') + " - " + announcement.end_date.replace(/\-/g,'/');
 
                 announcementInput.find('input[type=checkbox]').attr({
-                    'id': me.announcements[i].id,
+                    'id': announcement.id,
                     'name': 'announcement',
-                    'value': me.announcements[i].title
+                    'value': announcement.title
                 });
                 announcementInput.find('label').html(annName).attr({
-                    'for': me.announcements[i].id
+                    'for': announcement.id
                 });
-                if (me.shouldPreselectAnnouncement(me.announcements[i])) {
+                if (me.shouldPreselectAnnouncement(announcement)) {
                     announcementInput.find('input[type=checkbox]').prop('checked', true);
                 }
 
                 content.find('div#ann-title').append(announcementInput);
                 content.find('div#ann-time').append('<div>' + annTime + '</div>');
-            }
+            });
 
             // WHAT TO DO WHEN ANNOUNCEMENTS ARE SELECTED
             content.find('input[name=announcement]').on('change', function () {
@@ -257,8 +253,8 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
         },
 
         _getAnnouncementsSelection: function () {
-            var me = this,
-                announcementsSelection = {};
+            const me = this;
+            const announcementsSelection = {};
             var pluginValues = me.getPlugin().getSelectedAnnouncements();
             if (pluginValues.announcements) {
                 announcementsSelection.announcements = pluginValues.announcements;
@@ -274,11 +270,11 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
         * @returns {Object} tool value object
         */
         getValues: function () {
-            var me = this;
+            const me = this;
 
             if (me.state.enabled) {
-                var pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
-                var announcementsSelection = me._getAnnouncementsSelection();
+                const pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
+                const announcementsSelection = me._getAnnouncementsSelection();
 
                 if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
                     pluginConfig.config.announcements = announcementsSelection.announcements;
@@ -305,11 +301,10 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
          * @param {Whatever} eventData the data we want to send with the event
          */
         _sendEvent: function (eventName, eventData) {
-            var eventBuilder = Oskari.eventBuilder(eventName),
-                evt;
+            const eventBuilder = Oskari.eventBuilder(eventName);
 
             if (eventBuilder) {
-                evt = eventBuilder(eventData);
+                const evt = eventBuilder(eventData);
                 this.__sandbox.notifyAll(evt);
             }
         },
@@ -335,6 +330,6 @@ Oskari.clazz.define('Oskari.framework.announcements.publisher.AnnouncementsTool'
             }
         }
     }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        extend: ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        protocol: ['Oskari.mapframework.publisher.Tool']
     });

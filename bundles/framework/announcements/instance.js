@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
 
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                const plugin = Oskari.clazz.create('Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);
+                const plugin = Oskari.clazz.create('Oskari.framework.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);
                 mapModule.registerPlugin(plugin);
                 mapModule.startPlugin(plugin);
             }
@@ -42,7 +42,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          */
         stop: function () {
             this.sandbox = null;
-            console.log("vithu");
             jQuery('div#announcements-popup').remove();
             this.started = false;
         }
