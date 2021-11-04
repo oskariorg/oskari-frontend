@@ -16,6 +16,7 @@ export class MetadataPopup extends Popup {
         this._accordions = [];
 
         this.onClose(() => this._contentSizeChanged(false));
+        this.makeDraggable();
     }
 
     /**
