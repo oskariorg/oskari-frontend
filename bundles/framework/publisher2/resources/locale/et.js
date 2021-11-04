@@ -197,7 +197,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Lõimkaarti ei saa salvestada.",
                 "nameIllegalCharacters": "Lõimkaardi nimi sisladab lubamatuid tähemärke( näiteks: html-tag'e). Muuda nime ja proovi uuesti.",
                 "domainIllegalCharacters": "Veebilehe aadress sisaldab lubamatuid tähemärke. Kirjuta veebilehe aadress, ilma prefikisiteta või alamlehe aadress. Näiteks: koduleht.ee. Lubatavad tähemargid on (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbrid(0-9) ja muud märgid  (-, _, ., !, ~, *, ' ja ()). Sisesta korrketne aadress ja proovi uuesti."
-            }
+            },
+            "noUI": "Peida kasutajaliides (Kasuta RPC liidest)"
         },
         "NotLoggedView": {
             "text": "Tere tulemast postitama lõimkaarti oma veebilehele. Postitamiseks tuleb ELF'i sisse logida või ennast kasutajaks registreerida.",

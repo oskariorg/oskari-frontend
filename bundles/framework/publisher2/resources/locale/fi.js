@@ -232,7 +232,8 @@ Oskari.registerLocalization(
                 "saveFailed": "Kartan tallennus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä (esim. html-tagit). Poista kielletyt merkit ja yritä uudelleen.",
                 "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
-            }
+            },
+            "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
         },
         "NotLoggedView": {
             "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
