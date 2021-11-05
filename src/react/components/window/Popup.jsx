@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { createDraggable } from './util';
+import { createDraggable, getPositionForCentering } from './util';
 
 const Container = styled.div`
     position: absolute;
@@ -36,28 +36,42 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Popup = ({title = '', children, onClose}) => {
-    const [position, setPosition] = useState({ x: 210, y: 30 });
+export const Popup = ({title = '', children, onClose, opts = {}}) => {
+    // hide before we can calculate centering coordinates
+    const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
+    const containerProps = {
+        style: {
+            transform: `translate(${position.x}px, ${position.y}px)`
+        }
+    };
     const elementRef = useRef();
-    const onMouseDown = useCallback((event) => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]);
+    const headerProps = {};
+    if (opts.isDraggable === true) {
+        containerProps.ref = elementRef;
+        headerProps.onMouseDown = useCallback(() => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]);
+    }
+    useEffect(() => {
+        if (position.centered) {
+            return;
+        }
+        // center after content has been rendered
+        setPosition({
+            ...getPositionForCentering(elementRef),
+            centered: true
+        });
+    });
     /*
-
-    <div class="divmanazerpopup draggablestack oskari-measurement arrow top" style="opacity: 1; margin-left: 0px; margin-top: 0px; left: 0px; top: 350.641px;">
-        <h3 class="popupHeader">Mittaustulokset</h3>
-        <div class="popup-body">
-            <div class="content">Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä.</div>
-            <div class="actions">
-                <input class="oskari-formcomponent oskari-button" type="button" value="Poista kaikki mittaukset">
-                <input class="oskari-formcomponent oskari-button" type="button" value="Lopeta">
-            </div>
-        </div>
+    Previously:
+    <div class="divmanazerpopup arrow top">
+        <h3 class="popupHeader">title</h3>
+        <div class="popup-body">content</div>
     </div>
     */
-    return (<Container ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <PopupHeader onMouseDown={onMouseDown}>
+    return (<Container {...containerProps}>
+        <PopupHeader {...headerProps}>
             {title}
             <ToolsContainer>
-                <CloseCircleFilled className="oskari-flyouttool-close" onClick={onClose}/>
+                <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
             </ToolsContainer>
         </PopupHeader>
         <div className="t_popup-body">

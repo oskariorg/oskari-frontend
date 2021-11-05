@@ -17,6 +17,9 @@ export const getAvailableHeight = () => {
         window.innerHeight;
 };
 
+const DEFAULT_WIDTH = 50;
+const DEFAULT_HEIGHT = 30;
+
 export const createDraggable = (position, setPosition, elementRef) => {
     if (typeof position !== 'object') {
         throw new TypeError('Pass an object with x and y keys as first param');
@@ -28,8 +31,8 @@ export const createDraggable = (position, setPosition, elementRef) => {
         throw new TypeError('Pass React.useRef() for the element to move as third param');
     }
     const element = elementRef.current;
-    let width = 50;
-    let height = 30;
+    let width = DEFAULT_WIDTH;
+    let height = DEFAULT_HEIGHT;
     if (element) {
         const bounds = element.getBoundingClientRect();
         width = bounds.width;
@@ -57,4 +60,24 @@ export const createDraggable = (position, setPosition, elementRef) => {
     };
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
+};
+
+export const getPositionForCentering = (elementRef) => {
+    if (!elementRef) {
+        throw new TypeError('Pass React.useRef() for the element to center');
+    }
+    const element = elementRef.current;
+    let width = DEFAULT_WIDTH;
+    let height = DEFAULT_HEIGHT;
+    const availableWidth = getAvailableWidth();
+    const availableHeight = getAvailableHeight();
+    if (element) {
+        const bounds = element.getBoundingClientRect();
+        width = bounds.width;
+        height = bounds.height;
+    }
+    return {
+        x: Math.max((availableWidth - width) / 2, 0),
+        y: Math.max((availableHeight - height) / 2, 0)
+    };
 };

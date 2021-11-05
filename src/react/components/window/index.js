@@ -47,7 +47,7 @@ export const showPopup = (title, content, onClose) => {
         }
     };
 
-    ReactDOM.render(<Popup title={title} onClose={removeWindow}>
+    ReactDOM.render(<Popup title={title} onClose={removeWindow} opts={{isDraggable: true}}>
         {content}
     </Popup>,element);
     return removeWindow;
