@@ -1,6 +1,7 @@
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Flyout } from './Flyout';
+import { Popup } from './Popup';
 
 const createTmpContainer = () => {
     const element = document.createElement('div');
@@ -10,23 +11,46 @@ const createTmpContainer = () => {
 };
 
 /**
- * Opens a modal window for editing my places layer name and style.
+ * Opens a an Oskari popup type of window.
+ * Usage:
+ * 
+ *       let closeFn = null;
+ *       btn.on('click', (event) => {
+ *           if (closeFn) {
+ *               closeFn();
+ *               closeFn = null;
+ *               return;
+ *           }
+ *           closeFn = showPopup('Title', 'Content', () => {
+ *               // closed -> cleanup
+ *               closeFn = null;
+ *           });
+ *       });
  *
- * @param {String} name layer name for editing
- * @param {Object} style Oskari style object for editing
- * @param {Function} saveLayer callback to call when user hits "Save"
+ * @param {String} title title for flyout
+ * @param {String|ReactElement} content content for flyout
+ * @param {Function} onClose callback that is called when the window closes
+ * @returns function that can be used to close the flyout
  */
-export const showPopup = (title, content) => {
+export const showPopup = (title, content, onClose) => {
     const element = createTmpContainer();
-
-    const removeModal = () => {
+    let isStillOnDOM = true;
+    const removeWindow = () => {
+        if (!isStillOnDOM) {
+            return;
+        }
         unmountComponentAtNode(element);
         document.body.removeChild(element);
+        isStillOnDOM = false;
+        if(typeof onClose === 'function') {
+            onClose();
+        }
     };
 
-    ReactDOM.render(<Window title={title} onClose={removeModal}>
+    ReactDOM.render(<Popup title={title} onClose={removeWindow}>
         {content}
-    </Window>,element);
+    </Popup>,element);
+    return removeWindow;
 };
 
 /**
