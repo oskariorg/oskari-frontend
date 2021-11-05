@@ -85,20 +85,15 @@ export const Flyout = ({title = '', children, onClose}) => {
             const onMouseMove = (event) => {
                 // prevents text selection from other elements while dragging
                 event.preventDefault();
-                const element = elementRef.current;
-                let sideways = position.x + event.movementX;
-                let vertical = position.y + event.movementY;
-                if (sideways < 0 || sideways + width > availableWidth) {
-                    return;
-                }
-                if (vertical < 0 || vertical + height > availableHeight) {
-                    return;
-                }
                 position.x += event.movementX;
                 position.y += event.movementY;
-                if (element) {
+                const outOfScreen = (position.x < 0 || position.x + width > availableWidth) || (position.y < 0 || position.y + height > availableHeight);
+                const element = elementRef.current;
+                if (!outOfScreen && element) {
+                    // don't make the actual move if we would move off-screen or we don't get an element to move
                     element.style.transform = `translate(${position.x}px, ${position.y}px)`;
                 }
+                // update state anyway so the flyout will start moving at/jump to where the mouse cursor re-enters the viewport
                 setPosition(position);
             };
             const onMouseUp = () => {
