@@ -142,7 +142,7 @@ export class HoverHandler {
     }
 
     setTooltipContent (layer) {
-        const options = layer.getHoverOptions();
+        const options = typeof layer.getHoverOptions === 'function' ? layer.getHoverOptions() : {};
         if (!options || !Array.isArray(options.content)) {
             return;
         }
