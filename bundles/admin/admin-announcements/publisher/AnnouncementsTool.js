@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 return false;
             }
         },
-        
+
         /**
          * @private @method _getToolPluginAnnouncementsConf
          * @return {Object / null} config or null if not found

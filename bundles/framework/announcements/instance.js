@@ -26,8 +26,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             me.sandbox = Oskari.getSandbox();
             me.sandbox.register(me);
 
-            this.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
-            me.sandbox.registerService(this.announcementsService);
+            me.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
+            me.sandbox.registerService(me.announcementsService);
 
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -35,6 +35,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                 mapModule.registerPlugin(plugin);
                 mapModule.startPlugin(plugin);
             }
+
+            // RPC function to get announcements
+            Oskari.on('app.start', function (details) {
+                const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
+                if (!rpcService) {
+                    return;
+                }
+                rpcService.addFunction('getAnnouncements', function () {
+                    return new Promise((resolve) => {
+                        me.announcementsService.fetchAnnouncements(announcements => resolve(announcements));
+                    });
+                });
+            });
         },
 
         /**
