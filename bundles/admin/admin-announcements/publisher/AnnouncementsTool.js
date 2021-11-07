@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
-        this.localization = Oskari.getLocalization('announcements');
+        this.localization = Oskari.getLocalization('admin-announcements');
         this.announcements = {};
         this.allowedLocations = ['top left', 'top center', 'top right'];
         this.lefthanded = 'top right';
@@ -218,6 +218,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             me.isAnnouncementsDialogOpen = true;
         },
 
+        /**
+         * Check if Announcement is inside the given timeframe
+         * @method @private isAnnouncementValid
+         * @param  {Object} announcement announcement
+         * @return {Boolean} true if announcement is valid
+         */
         isAnnouncementValid: function (announcement) {
             const announcementEnd = new Date(announcement.end_date);
             const currentDate = new Date();
@@ -225,10 +231,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         },
 
         /**
-         * Should preselect announcement.
+         * Should preselect announcement for tool popup.
          * @method @private shouldPreselectAnnouncement
          * @param  {Integer} id announcement id
-         * @return {Boolean} true if announcement must be preselect, other false
+         * @return {Boolean} true if announcement must be preselect
          */
         shouldPreselectAnnouncement: function (announcement) {
             const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
@@ -249,6 +255,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 return false;
             }
         },
+        
         /**
          * @private @method _getToolPluginAnnouncementsConf
          * @return {Object / null} config or null if not found

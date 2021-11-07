@@ -16,15 +16,6 @@ Oskari.registerLocalization(
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
             },
-            "tool": {
-                "buttonLabel": "Valitse Ilmoitukset",
-                "popup": {
-                    "title": "Ilmoitukset",
-                    "close": "Sulje"
-                },
-                "announcementsName": "Nimi",
-                "announcementsTime": "Voimasssa"
-            },
             "plugin" : {
                 "title": "Ilmoitukset"
             }
