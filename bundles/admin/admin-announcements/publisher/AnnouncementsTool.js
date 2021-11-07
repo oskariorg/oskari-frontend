@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             announcementsPopup: jQuery(
                 '<div>' +
                     '<div id="publisher-announcements-inputs">' +
-                        '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsValid + '</h4>' +
+                        '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsTime + '</h4>' +
                         '<div class="ann-column" id="ann-title"></div>' +
                         '<div class="ann-column" id="ann-time"/></div>' +
                     '</div>' +
@@ -65,15 +65,17 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             }
 
-            service.fetchAnnouncements((announcements) => {
+            service.fetchAdminAnnouncements((announcements) => {
                 me.announcements = announcements;
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
-                        me.annTitles.push(filteredAnnouncement[0].title);
-                        me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                        if (me.isAnnouncementValid(filteredAnnouncement[0])) {
+                            me.annTitles.push(filteredAnnouncement[0].title);
+                            me.selectedAnnouncements.push(filteredAnnouncement[0]);
+                        }
                     });
                 }
                 jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
@@ -167,7 +169,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             me.announcements.forEach(announcement => {
                 const announcementInput = me.templates.inputCheckbox.clone();
                 const annName = announcement.title;
-                const annTime = announcement.begin_date.replace(/\-/g,'/') + " - " + announcement.end_date.replace(/\-/g,'/');
+                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
 
                 announcementInput.find('input[type=checkbox]').attr({
                     'id': announcement.id,
@@ -177,12 +179,18 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 announcementInput.find('label').html(annName).attr({
                     'for': announcement.id
                 });
-                if (me.shouldPreselectAnnouncement(announcement)) {
-                    announcementInput.find('input[type=checkbox]').prop('checked', true);
-                }
 
-                content.find('div#ann-title').append(announcementInput);
-                content.find('div#ann-time').append('<div>' + annTime + '</div>');
+                if (me.isAnnouncementValid(announcement)) {
+                    content.find('div#ann-time').append('<div>' + annTime + '</div>');
+                    if (me.shouldPreselectAnnouncement(announcement)) {
+                        announcementInput.find('input[type=checkbox]').prop('checked', true);
+                    }
+                    content.find('div#ann-title').append(announcementInput);
+                } else {
+                    content.find('div#ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
+                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
+                    content.find('div#ann-title').append(announcementInput);
+                }
             });
 
             // WHAT TO DO WHEN ANNOUNCEMENTS ARE SELECTED
@@ -195,12 +203,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     });
                     me.annTitles = me.annTitles.filter(function (e) { return e !== announcement.title; });
 
-                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements );
+                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
                 } else {
                     me.selectedAnnouncements.push(announcement);
                     me.annTitles.push(announcement.title);
 
-                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements );
+                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
                 }
                 jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
             });
@@ -208,6 +216,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             popup.show(title, content, [closeButton]);
             me.announcementsPopup = popup;
             me.isAnnouncementsDialogOpen = true;
+        },
+
+        isAnnouncementValid: function (announcement) {
+            const announcementEnd = new Date(announcement.end_date);
+            const currentDate = new Date();
+            return currentDate.getTime() <= announcementEnd.getTime() ? true : false;
         },
 
         /**

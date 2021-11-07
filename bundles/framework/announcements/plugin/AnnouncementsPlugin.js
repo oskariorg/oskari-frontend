@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
     function (config) {
         var me = this;
         me.sandbox = Oskari.getSandbox();
-        me._loc = Oskari.getLocalization("announcements");
+        me._loc = Oskari.getLocalization('announcements');
         me._clazz = 'Oskari.framework.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
         me._config = config || {};
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             var me = this;
             var annIds = [];
             for (const i of announcements) {
-                i.id === undefined ? annIds.push(i) : annIds.push(i.id) ;
+                i.id === undefined ? annIds.push(i) : annIds.push(i.id);
             }
             if (me._config) {
                 me._config.announcements = annIds;
