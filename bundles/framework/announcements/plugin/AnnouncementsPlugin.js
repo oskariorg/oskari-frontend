@@ -45,15 +45,18 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="announcements-header-icon icon-arrow-white-right"></div>');
             me.templates.announcement = jQuery(
-                `<div class="announcement">
-                    <div>
-                        <label>
-                            <button class="collapsible"></button>
-                        </label>
-                        <div class="announcement-content">
-                        </div>
-                    </div>
-                </div>`
+                '<div class="announcement">' +
+                '   <div>' +
+                '       <label>' +
+                '           <button class="collapsible"></button>' +
+                '       </label>' +
+                '       <div class="announcement-content">' +
+                '           <div id="announcement-description"></div>' +
+                '           <h4>' + me._loc.plugin.valid + ':</h4>' +
+                '           <div id="announcement-time"></div>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>`'
             );
 
             service.fetchAnnouncements((data) => {
@@ -182,8 +185,11 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 var announcementsDiv = me.announcementsContent.find('div.announcements-content'),
                     div = me.templates.announcement.clone();
 
+                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+
                 div.find('button').append(announcement.title);
-                div.find('div.announcement-content').append(announcement.content);
+                div.find('div#announcement-description').append(announcement.content);
+                div.find('div#announcement-time').append(annTime);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
                 me.annRefs[announcement.id] = div;

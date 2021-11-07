@@ -17,7 +17,8 @@ Oskari.registerLocalization(
                 "getFailed":"Fetching announcements failed"
             },
             "plugin" : {
-                "title": "Aviseringar"
+                "title": "Aviseringar",
+                "valid": "Vägande"
             }
         }
     });

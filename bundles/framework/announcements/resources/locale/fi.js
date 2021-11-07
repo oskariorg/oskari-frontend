@@ -17,7 +17,8 @@ Oskari.registerLocalization(
                 "getFailed":"Ilmoitusten haku epäonnistui."
             },
             "plugin" : {
-                "title": "Ilmoitukset"
+                "title": "Ilmoitukset",
+                "valid": "Voimassa"
             }
         }
     });

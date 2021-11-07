@@ -130,10 +130,15 @@ div.mapplugin.announcements {
       
     .announcement-content {
         max-height: 0;
-        //visibility: hidden;
         overflow: hidden;
         transition: padding 0.2s ease-out;
         transition: max-height 0.2s ease-out;
+        div#announcement-description {
+          padding-bottom: 5px;
+        }
+        h4 {
+          padding-bottom: 0px !important;
+        }
     }
   
     div.announcements-header:hover {
