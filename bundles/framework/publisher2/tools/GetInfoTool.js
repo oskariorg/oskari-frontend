@@ -251,7 +251,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                                 plugins: [{
                                     id: this.getTool().id,
                                     config: {
-                                        colourScheme: me.values.colourScheme || {}
+                                        colourScheme: me.values.colourScheme || {},
+                                        noUI: me.noUI
                                     }
                                 }]
                             }
