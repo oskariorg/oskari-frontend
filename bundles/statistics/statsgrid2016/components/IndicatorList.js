@@ -1,10 +1,9 @@
-import { MetadataPopup } from './MetadataPopup';
+import { prepareData, showMedataPopup } from './description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
     this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
     this.service = service;
-    this.metadataPopup = new MetadataPopup();
     this._removeAllBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     this._wrapper = jQuery('<div class="statsgrid-indicator-list-wrapper"></div>');
     this._content = jQuery('<div class="statsgrid-indicator-list-content"><ol class="statsgrid-indicator-list"></ol></div>');
@@ -81,7 +80,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                 });
                 // Add event listener for showing indicator description
                 indElem.find('.icon-info').on('click', function () {
-                    me.metadataPopup.show(ind.datasource, ind.indicator);
+                    prepareData(me.service, ind.datasource, ind.indicator, (result) => {
+                        showMedataPopup(result);
+                    })
                 });
             });
         });

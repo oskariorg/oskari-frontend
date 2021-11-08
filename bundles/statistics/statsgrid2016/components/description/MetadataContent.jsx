@@ -32,7 +32,7 @@ const DataLabel = ({labelKey, value}) => {
 }
 
 MetadataContent.propTypes = {
-    description: PropTypes.object,
-    source: PropTypes.object,
+    description: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    source: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     metadata: PropTypes.object
 };

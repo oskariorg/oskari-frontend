@@ -1,5 +1,5 @@
 import { SelectList } from './SelectList';
-import { MetadataPopup } from './MetadataPopup';
+import { prepareData, showMedataPopup } from './description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
@@ -8,7 +8,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
-    this.metadataPopup = new MetadataPopup();
+    this.popupCloserFn = null;
+    this.popupCleanup = () => {
+        this.popupCloserFn = null;
+    };
     this.selectClassRef = [];
     Oskari.makeObservable(this);
 }, {
@@ -184,7 +187,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var indicDescriptionLink = jQuery(this.__templates.link());
         main.append(indicDescriptionLink);
         indicDescriptionLink.on('click', function () {
-            me.metadataPopup.show(dsSelect.getValue(), indicSelect.getValue());
+            prepareData(me.service, dsSelect.getValue(), indicSelect.getValue(), (result) => {
+                me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
+            })
         });
 
         // Refine data label and tooltips
@@ -267,8 +272,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
                 indicDescriptionLink.html(locale('metadataPopup.open', { indicators: indId.length }));
-                if (me.metadataPopup.isVisible()) {
-                    me.metadataPopup.show(dsSelect.getValue(), indId);
+                if (typeof me.popupCloserFn === 'function') {
+                    // description popup is currently on screen -> update content
+                    me.popupCloserFn();
+                    prepareData(me.service, dsSelect.getValue(), indId, (result) => {
+                        // Note! Content updates but the popup jumps to a new centered position
+                        // not great for user experience
+                        me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
+                    });
                 }
             }
             // this will show the params or clean them depending if values exist
