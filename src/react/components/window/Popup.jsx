@@ -23,6 +23,14 @@ const PopupHeader = styled.h3`
     background-color: #FDF8D9;
     padding: 8px 10px;
 `;
+const PopupTitle = styled.span`
+    margin-right: 5px;
+`;
+// Note! max-height isn't recalculated when window size changes :(
+const PopupBody = styled.div`
+    max-height: ${window.innerHeight - 100}px;
+    overflow: auto;
+`;
 const ToolsContainer = styled.div`
     float: right;
     height: 16px;
@@ -34,7 +42,6 @@ const ToolsContainer = styled.div`
         color: #ffd400;
     }
 `;
-
 
 export const Popup = ({title = '', children, onClose, opts = {}}) => {
     // hide before we can calculate centering coordinates
@@ -69,19 +76,19 @@ export const Popup = ({title = '', children, onClose, opts = {}}) => {
     */
     return (<Container {...containerProps}>
         <PopupHeader {...headerProps}>
-            {title}
+            <PopupTitle>{title}</PopupTitle>
             <ToolsContainer>
                 <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
             </ToolsContainer>
         </PopupHeader>
-        <div className="t_popup-body">
+        <PopupBody className="t_popup-body">
             {children}
-        </div>
+        </PopupBody>
     </Container>)
 };
 
 Popup.propTypes = {
     children: PropTypes.any,
-    title: PropTypes.string,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onClose: PropTypes.func.isRequired
 };

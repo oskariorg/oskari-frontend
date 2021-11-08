@@ -3,6 +3,12 @@ import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 
+/*
+TODOs:
+- Some way of triggering re-render for content on a popup? Currently you can just open a new popup with new content but it is centered instead of keeping the previous position.
+- Popup size can change if the content is a collapse panel -> opening it makes popup grow -> can be off screen
+*/
+
 const createTmpContainer = () => {
     const element = document.createElement('div');
     document.body.appendChild(element);
@@ -49,7 +55,7 @@ export const showPopup = (title, content, onClose) => {
 
     ReactDOM.render(<Popup title={title} onClose={removeWindow} opts={{isDraggable: true}}>
         {content}
-    </Popup>,element);
+    </Popup>, element);
     return removeWindow;
 };
 
