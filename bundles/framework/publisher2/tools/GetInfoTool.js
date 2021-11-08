@@ -281,10 +281,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 title = me.__instance._localization.BasicView.layout.popup.title,
                 content = me.templates.coloursPopup.clone(),
                 colours = me.initialValues.colours,
-                cLen = colours.length,
                 colourInput,
                 colourName,
-                i,
                 prevColour = me.values.colourScheme,
                 selectedColour;
             closeButton.setTitle(me.__instance._localization.BasicView.layout.popup.close);
@@ -298,23 +296,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             content.find('div#publisher-colour-preview').append(me._createGfiPreview());
 
             // Append the colour scheme inputs to the dialog.
-            for (i = 0; i < cLen; ++i) {
+            colours.forEach(color => {
                 colourInput = me.templates.inputRadio.clone();
-                colourName = me.__instance._localization.BasicView.layout.fields.colours[colours[i].val];
+                colourName = me.__instance._localization.BasicView.layout.fields.colours[color.val];
 
                 colourInput.find('input[type=radio]').attr({
-                    'id': colours[i].val,
-                    'name': 'colour',
-                    'value': colours[i].val
+                    id: color.val,
+                    name: 'colour',
+                    value: color.val
                 });
                 colourInput.find('label').html(colourName).attr({
-                    'for': colours[i].val
+                    for: color.val
                 });
 
                 content.find('div#publisher-colour-inputs').append(colourInput);
 
                 // Create the inputs for custom colour
-                if (colours[i].val === 'custom') {
+                if (color.val === 'custom') {
                     content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
                     // Color picker value or icon changed
                     content.find('div#publisher-custom-colours').on('change', function () {
@@ -323,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                         me._updatePreviewFromCustomValues(content);
                     });
                 }
-            }
+            });
 
             // Things to do when the user changes the colour scheme:
             content.find('input[name=colour]').on('change', function () {
