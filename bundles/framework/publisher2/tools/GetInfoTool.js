@@ -620,7 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @return {Object/null}
      */
         _getItemByCode: function (code, list) {
-            return list.filter(l => { return l.val === code; })[0] || null;
+            return list.find(l => l.val === code) || null;
         },
 
         /**
