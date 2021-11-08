@@ -620,15 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @return {Object/null}
      */
         _getItemByCode: function (code, list) {
-            var listLen = list.length,
-                i;
-
-            for (i = 0; i < listLen; ++i) {
-                if (list[i].val === code) {
-                    return list[i];
-                }
-            }
-            return null;
+            return list.filter(l => { return l.val === code; })[0] || null;
         },
 
         /**
@@ -720,11 +712,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
                 me.__mapmodule.unregisterPlugin(me.__plugin);
             }
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.unregisterFromEventByName(me, p);
-                }
-            }
+
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                me.__sandbox.unregisterFromEventByName(me, eventName);
+            });
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
