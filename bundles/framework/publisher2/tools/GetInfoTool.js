@@ -22,7 +22,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         values: {
-            colourScheme: null
+            colourScheme: {
+                val: 'dark_grey',
+                bgColour: '#424343',
+                titleColour: '#FFFFFF',
+                headerColour: '#424343',
+                iconCls: 'icon-close-white'
+            }
         },
 
         initialValues: {
@@ -97,25 +103,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             var me = this;
             var isConf = !!((data && data.configuration && data.configuration.mapfull));
             if (isConf && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
-                var tool = this.getTool();
-                _.each(data.configuration.mapfull.conf.plugins, function (plugin) {
-                    if (tool.id === plugin.id) {
-                        if (plugin.config && plugin.config.colourScheme) {
-                            me.values.colourScheme = plugin.config.colourScheme;
-                            me._sendColourSchemeChangedEvent(me.values.colourScheme);
-                        }
-                        if (plugin.config && plugin.config.noUI) {
-                            me.noUI = !!plugin.config.noUI;
-                        }
-                        me.setEnabled(true);
-                    }
-                });
-            }
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.registerForEventByName(me, p);
+                const tool = this.getTool();
+                const plugin = data.configuration.mapfull.conf.plugins.filter(p => p.id === tool.id)[0];
+                const pluginConfig = plugin ? plugin.config || {} : {};
+
+                // Gets plugin color scheme
+                if (pluginConfig.colourScheme) {
+                    me.values.colourScheme = pluginConfig.colourScheme;
+                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
                 }
+
+                me.noUI = !!pluginConfig.noUI;
+                me.setEnabled(true);
             }
+
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                me.__sandbox.registerForEventByName(me, eventName);
+            });
         },
         getName: function () {
             return 'Oskari.mapframework.publisher.tool.GetInfoTool';
@@ -251,7 +255,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                                 plugins: [{
                                     id: this.getTool().id,
                                     config: {
-                                        colourScheme: me.values.colourScheme || {}
+                                        colourScheme: me.values.colourScheme || {},
+                                        noUI: me.noUI
                                     }
                                 }]
                             }
@@ -276,10 +281,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 title = me.__instance._localization.BasicView.layout.popup.title,
                 content = me.templates.coloursPopup.clone(),
                 colours = me.initialValues.colours,
-                cLen = colours.length,
                 colourInput,
                 colourName,
-                i,
                 prevColour = me.values.colourScheme,
                 selectedColour;
             closeButton.setTitle(me.__instance._localization.BasicView.layout.popup.close);
@@ -293,29 +296,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             content.find('div#publisher-colour-preview').append(me._createGfiPreview());
 
             // Append the colour scheme inputs to the dialog.
-            for (i = 0; i < cLen; ++i) {
+            colours.forEach(color => {
                 colourInput = me.templates.inputRadio.clone();
-                colourName = me.__instance._localization.BasicView.layout.fields.colours[colours[i].val];
+                colourName = me.__instance._localization.BasicView.layout.fields.colours[color.val];
 
                 colourInput.find('input[type=radio]').attr({
-                    'id': colours[i].val,
-                    'name': 'colour',
-                    'value': colours[i].val
+                    id: color.val,
+                    name: 'colour',
+                    value: color.val
                 });
                 colourInput.find('label').html(colourName).attr({
-                    'for': colours[i].val
+                    for: color.val
                 });
-
-                // Set the selected colour or default to 'dark_grey' if non-existant.
-                if ((prevColour && prevColour.val === colours[i].val) || (!prevColour && colours[i].val === 'dark_grey')) {
-                    colourInput.find('input[type=radio]').prop('checked', true);
-                    me._changeGfiColours(colours[i], content);
-                }
 
                 content.find('div#publisher-colour-inputs').append(colourInput);
 
                 // Create the inputs for custom colour
-                if (colours[i].val === 'custom') {
+                if (color.val === 'custom') {
                     content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
                     // Color picker value or icon changed
                     content.find('div#publisher-custom-colours').on('change', function () {
@@ -324,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                         me._updatePreviewFromCustomValues(content);
                     });
                 }
-            }
+            });
 
             // Things to do when the user changes the colour scheme:
             content.find('input[name=colour]').on('change', function () {
@@ -338,6 +335,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 // notify others of the changed colour scheme
                 me._sendColourSchemeChangedEvent(selectedColour);
             });
+
+            // Set the selected colour
+            if (prevColour) {
+                me._changeGfiColours(prevColour, content);
+                content.find('input[name=colour][value=' + prevColour.val + ']').attr('checked', 'checked');
+            }
 
             popup.show(title, content, [closeButton]);
             this._colourSchemePopup = popup;
@@ -617,15 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @return {Object/null}
      */
         _getItemByCode: function (code, list) {
-            var listLen = list.length,
-                i;
-
-            for (i = 0; i < listLen; ++i) {
-                if (list[i].val === code) {
-                    return list[i];
-                }
-            }
-            return null;
+            return list.find(l => l.val === code) || null;
         },
 
         /**
@@ -717,11 +712,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
                 me.__mapmodule.unregisterPlugin(me.__plugin);
             }
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.unregisterFromEventByName(me, p);
-                }
-            }
+
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                me.__sandbox.unregisterFromEventByName(me, eventName);
+            });
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
