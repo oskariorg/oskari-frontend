@@ -8,28 +8,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
-    this.popupCloserFn = null;
+    this.popupControls = null;
     this.popupCleanup = () => {
-        this.popupCloserFn = null;
+        this.popupControls = null;
     };
     this.selectClassRef = [];
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="statsgrid-ds-selections"></div>'),
-        selections: _.template('<div class="statsgrid-indicator-selections"></div>'),
-        select: _.template('<div class="selection">' +
-            '<div class="title">${name}</div>' +
-            '<div class=${clazz}>' +
-            '</div>' +
-            '</div>'),
-        headerWithTooltip: _.template('<div class="selection tooltip">' +
-            '<div class="title">${title}</div>' +
-            '<div class="tooltip">${tooltip1}</div>' +
-            '<div class="tooltip">${tooltip2}</div>' +
-            '</div>'),
-        option: _.template('<option value="${id}">${name}</option>'),
-        link: _.template('<a href="javascript:void(0);"></a>')
+        main: () => '<div class="statsgrid-ds-selections"></div>',
+        selections: () => '<div class="statsgrid-indicator-selections"></div>',
+        select: ({ name, clazz }) => `<div class="selection">
+                <div class="title">${name}</div>
+                <div class=${clazz}></div>
+            </div>`,
+        headerWithTooltip: ({ title, tooltip1, tooltip2 }) => `<div class="selection tooltip">
+                <div class="title">${title}</div>
+                <div class="tooltip">${tooltip1}</div>
+                <div class="tooltip">${tooltip2}</div>
+            </div>`,
+        option: ({ id, name }) => `<option value="${id}">${name}</option>`,
+        link: () => '<a href="javascript:void(0);"></a>'
     },
     /** **** PRIVATE METHODS ******/
 
@@ -188,7 +187,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(indicDescriptionLink);
         indicDescriptionLink.on('click', function () {
             prepareData(me.service, dsSelect.getValue(), indicSelect.getValue(), (result) => {
-                me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
+                if (me.popupControls) {
+                    me.popupControls.update(result);
+                } else {
+                    me.popupControls = showMedataPopup(result, me.popupCleanup);
+                }
             });
         });
 
@@ -272,13 +275,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
                 indicDescriptionLink.html(locale('metadataPopup.open', { indicators: indId.length }));
-                if (typeof me.popupCloserFn === 'function') {
+                if (me.popupControls) {
                     // description popup is currently on screen -> update content
-                    me.popupCloserFn();
+                    //me.popupControls.close();
                     prepareData(me.service, dsSelect.getValue(), indId, (result) => {
                         // Note! Content updates but the popup jumps to a new centered position
                         // not great for user experience
-                        me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
+                        me.popupControls.update(result);
+                        //me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
                     });
                 }
             }

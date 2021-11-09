@@ -34,9 +34,21 @@ export const prepareData = (service, datasource, indicators, done) => {
 };
 
 export const showMedataPopup = (data = [], onClose) => {
-    return showPopup(
+    const controls = showPopup(
         <Message messageKey="metadataPopup.title" bundleKey="StatsGrid" messageArgs={{indicators: data.length}}/>,
         (<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
             <MetadataCollapse data={data} />
         </LocaleProvider>), onClose);
+    return {
+        ...controls,
+        update: (data) => {
+            controls.update(
+                <Message messageKey="metadataPopup.title" bundleKey="StatsGrid" messageArgs={{indicators: data.length}}/>,
+                (<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+                    <MetadataCollapse data={data} />
+                </LocaleProvider>)
+            );
+            controls.bringToTop();
+        }
+    };
 };
