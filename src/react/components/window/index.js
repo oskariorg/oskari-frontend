@@ -48,15 +48,24 @@ export const showPopup = (title, content, onClose) => {
         unmountComponentAtNode(element);
         document.body.removeChild(element);
         isStillOnDOM = false;
-        if(typeof onClose === 'function') {
+        if (typeof onClose === 'function') {
             onClose();
         }
     };
-
-    ReactDOM.render(<Popup title={title} onClose={removeWindow} opts={{isDraggable: true}}>
-        {content}
-    </Popup>, element);
-    return removeWindow;
+    const bringToTop = () => document.body.appendChild(element);
+    const render = (title, content) => {
+        ReactDOM.render(
+            <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} opts={{isDraggable: true}}>
+                {content}
+            </Popup>, element);
+    };
+    render(title, content);
+    return {
+        update: render,
+        close: removeWindow,
+        bringToTop
+        // , getRootEl: () => element
+    };
 };
 
 /**
@@ -91,7 +100,7 @@ export const showFlyout = (title, content, onClose) => {
         unmountComponentAtNode(element);
         document.body.removeChild(element);
         isStillOnDOM = false;
-        if(typeof onClose === 'function') {
+        if (typeof onClose === 'function') {
             onClose();
         }
     };
