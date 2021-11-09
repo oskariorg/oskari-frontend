@@ -277,12 +277,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 indicDescriptionLink.html(locale('metadataPopup.open', { indicators: indId.length }));
                 if (me.popupControls) {
                     // description popup is currently on screen -> update content
-                    //me.popupControls.close();
                     prepareData(me.service, dsSelect.getValue(), indId, (result) => {
-                        // Note! Content updates but the popup jumps to a new centered position
-                        // not great for user experience
                         me.popupControls.update(result);
-                        //me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
                     });
                 }
             }
