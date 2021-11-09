@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseCircleFilled } from '@ant-design/icons';
-import { createDraggable, getPositionForCentering } from './util';
+import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 
 const Container = styled.div`
@@ -86,7 +86,16 @@ export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) =>
         headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
     }
     const bodyResizeHandler = (newSize, prevSize) => {
+        if (elementRef.current && (prevSize.width < newSize.width || prevSize.height < newSize.height)) {
+            // Note! The class is added in createDraggable()
+            // but we might not be able to remove it there after recentering on window size change
+            // remove it if window is now bigger
+            elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
+        }
         if (position.x > newSize.width || position.y > newSize.height) {
+            if (elementRef.current) {
+                elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
+            }
             // console.log('Popup relocating! Window size changed from', prevSize, 'to', newSize);
             setPosition({
                 ...position,

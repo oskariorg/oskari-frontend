@@ -3,6 +3,10 @@ import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 
+/* ************************************************
+ * Note! The API is not finalized and can change unexpectedly!!
+ * ************************************************ */
+
 /**
  * Creates a root element to render a flyout/popup window into
  * @returns {HTMLElement}
@@ -123,5 +127,5 @@ export const showFlyout = (title, content, onClose) => {
         update: render,
         close: removeWindow,
         bringToTop
-    };;
+    };
 };

@@ -18,6 +18,7 @@ export const getAvailableHeight = () => {
 
 const DEFAULT_WIDTH = 50;
 const DEFAULT_HEIGHT = 30;
+export const OUTOFSCREEN_CLASSNAME = 'outofviewport';
 
 export const createDraggable = (position, setPosition, elementRef) => {
     if (typeof position !== 'object') {
@@ -57,12 +58,12 @@ export const createDraggable = (position, setPosition, elementRef) => {
         const outFromBottom = position.y + halfHeight > availableHeight;
         const outOfScreen = outFromLeft || outFromRight || outFromUp || outFromBottom;
         if (!outOfScreen) {
-            element.classList.remove('outofviewport');
+            element.classList.remove(OUTOFSCREEN_CLASSNAME);
             // don't make the actual move if we would move off-screen or we don't get an element to move
             element.style.transform = `translate(${position.x}px, ${position.y}px)`;
             setPosition(position);
         } else {
-            element.classList.add('outofviewport');
+            element.classList.add(OUTOFSCREEN_CLASSNAME);
             if (outFromLeft) {
                 setPosition({
                     ...position,
