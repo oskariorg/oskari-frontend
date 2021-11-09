@@ -90,9 +90,15 @@ export const createDraggable = (position, setPosition, elementRef) => {
     const onMouseUp = () => {
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("touchmove", onMouseMove);
+        document.removeEventListener("touchend", onMouseUp);
+        document.removeEventListener("touchcancel", onMouseUp);
     };
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
+    document.addEventListener("touchmove", onMouseMove);
+    document.addEventListener("touchend", onMouseUp);
+    document.addEventListener("touchcancel", onMouseUp);
 };
 
 export const getPositionForCentering = (elementRef) => {

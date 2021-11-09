@@ -74,7 +74,7 @@ export const Flyout = ({title = '', children, onClose, bringToTop}) => {
     Maybe allow passing tools from caller?
     */
     return (<Container ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader className="oskari-flyouttoolbar" onMouseDown={onMouseDown}>
+        <FlyoutHeader className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
             <HeaderBand />
             <Title>{title}</Title>
             <ToolsContainer>
