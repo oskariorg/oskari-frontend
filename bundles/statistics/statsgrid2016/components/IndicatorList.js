@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                 indElem.find('.icon-info').on('click', function () {
                     prepareData(me.service, ind.datasource, ind.indicator, (result) => {
                         showMedataPopup(result);
-                    })
+                    });
                 });
             });
         });

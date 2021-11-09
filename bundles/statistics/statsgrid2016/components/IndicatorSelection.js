@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         indicDescriptionLink.on('click', function () {
             prepareData(me.service, dsSelect.getValue(), indicSelect.getValue(), (result) => {
                 me.popupCloserFn = showMedataPopup(result, me.popupCleanup);
-            })
+            });
         });
 
         // Refine data label and tooltips
