@@ -43,7 +43,8 @@ const ToolsContainer = styled.div`
     }
 `;
 
-export const Popup = ({title = '', children, onClose, opts = {}}) => {
+
+export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
@@ -53,9 +54,16 @@ export const Popup = ({title = '', children, onClose, opts = {}}) => {
     };
     const elementRef = useRef();
     const headerProps = {};
+    const headerFuncs = [];
+    if (typeof bringToTop === 'function') {
+        headerFuncs.push(bringToTop);
+    }
     if (opts.isDraggable === true) {
         containerProps.ref = elementRef;
-        headerProps.onMouseDown = useCallback(() => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]);
+        headerFuncs.push(useCallback(() => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]));
+    }
+    if (headerFuncs.length) {
+        headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
     }
     useEffect(() => {
         if (position.centered) {
@@ -90,5 +98,6 @@ export const Popup = ({title = '', children, onClose, opts = {}}) => {
 Popup.propTypes = {
     children: PropTypes.any,
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    bringToTop: PropTypes.func
 };
