@@ -11,6 +11,10 @@ const Container = styled.div`
     z-index: 20009;
     background:white;
     min-width: 300px;
+
+    &.outofviewport {
+        border: 2px solid rgba(255, 0, 0);
+    }
 `;
 
 const FlyoutHeader = styled.div`
@@ -51,10 +55,15 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Flyout = ({title = '', children, onClose}) => {
+export const Flyout = ({title = '', children, onClose, bringToTop}) => {
     const [position, setPosition] = useState({ x: 210, y: 30 });
     const elementRef = useRef();
-    const onMouseDown = useCallback((event) => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]);
+    const onMouseDown = useCallback(() => {
+        if (typeof bringToTop === 'function') {
+            bringToTop();
+        }
+        createDraggable(position, setPosition, elementRef)
+    }, [position, setPosition, elementRef]);
     /*
     Other tools for toolcontainer:
         <div className="oskari-flyouttool-help"></div>
@@ -81,5 +90,6 @@ export const Flyout = ({title = '', children, onClose}) => {
 Flyout.propTypes = {
     children: PropTypes.any,
     title: PropTypes.string,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    bringToTop: PropTypes.func
 };

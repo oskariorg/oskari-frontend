@@ -17,6 +17,10 @@ const Container = styled.div`
     border: 5px solid rgba(0, 0, 0, 0.2);
     border-radius: 7px;
     z-index: 50000;
+
+    &.outofviewport {
+        border: 5px solid rgba(255, 0, 0, 0.5);
+    }
 `;
 
 const PopupHeader = styled.h3`

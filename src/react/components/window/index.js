@@ -52,7 +52,11 @@ export const showPopup = (title, content, onClose) => {
             onClose();
         }
     };
-    const bringToTop = () => document.body.appendChild(element);
+    const bringToTop = () => {
+        if (document.body.lastChild !== element) {
+            document.body.appendChild(element);
+        }
+    };
     const render = (title, content) => {
         ReactDOM.render(
             <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} opts={{isDraggable: true}}>
@@ -105,8 +109,22 @@ export const showFlyout = (title, content, onClose) => {
         }
     };
 
-    ReactDOM.render(<Flyout title={title} onClose={removeWindow}>
-        {content}
-    </Flyout>, element);
-    return removeWindow;
+    const bringToTop = () => {
+        if (document.body.lastChild !== element) {
+            document.body.appendChild(element);
+        }
+    };
+    const render = (title, content) => {
+        ReactDOM.render(
+            <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop}>
+                {content}
+            </Flyout>, element);
+    };
+    render(title, content);
+    return  {
+        update: render,
+        close: removeWindow,
+        bringToTop
+        // , getRootEl: () => element
+    };;
 };
