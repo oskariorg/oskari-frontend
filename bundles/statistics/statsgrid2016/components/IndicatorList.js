@@ -1,14 +1,17 @@
-import { MetadataPopup } from './MetadataPopup';
+import { prepareData, showMedataPopup } from './description/MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
     this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
     this.service = service;
-    this.metadataPopup = new MetadataPopup();
     this._removeAllBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     this._wrapper = jQuery('<div class="statsgrid-indicator-list-wrapper"></div>');
     this._content = jQuery('<div class="statsgrid-indicator-list-content"><ol class="statsgrid-indicator-list"></ol></div>');
     this._bindToEvents();
+    this.popupControls = null;
+    this.popupCleanup = () => {
+        this.popupControls = null;
+    };
 }, {
     __templates: {
         indicator: _.template(
@@ -81,7 +84,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                 });
                 // Add event listener for showing indicator description
                 indElem.find('.icon-info').on('click', function () {
-                    me.metadataPopup.show(ind.datasource, ind.indicator);
+                    const ctrls = me.popupControls;
+                    if (ctrls && ctrls.ds === ind.datasource && ctrls.id === ind.indicator) {
+                        // clicked again -> close and stop execution
+                        ctrls.close();
+                        return;
+                    }
+                    prepareData(me.service, ind.datasource, ind.indicator, (result) => {
+                        if (!ctrls) {
+                            // show new popup
+                            me.popupControls = showMedataPopup(result, me.popupCleanup);
+                        } else {
+                            // update content in existing popup
+                            ctrls.update(result);
+                        }
+                        // keep track of what we are showing currently
+                        me.popupControls.ds = ind.datasource;
+                        me.popupControls.id = ind.indicator;
+                    });
                 });
             });
         });
