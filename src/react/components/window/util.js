@@ -1,4 +1,3 @@
-
 export const getAvailableWidth = () => {
     // width of <body>
     return document.body.clientWidth ||
@@ -40,8 +39,8 @@ export const createDraggable = (position, setPosition, elementRef) => {
     }
     const availableWidth = getAvailableWidth();
     const availableHeight = getAvailableHeight();
-    const halfWidth = width/2;
-    const halfHeight = height/2;
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
     const screenTopLimit = -5;
     const onMouseMove = (event) => {
         // prevents text selection from other elements while dragging
@@ -72,7 +71,7 @@ export const createDraggable = (position, setPosition, elementRef) => {
             } else if (outFromRight) {
                 setPosition({
                     ...position,
-                    x: Math.max(availableWidth-halfWidth, 0)
+                    x: Math.max(availableWidth - halfWidth, 0)
                 });
             } else if (outFromUp) {
                 setPosition({
@@ -82,7 +81,7 @@ export const createDraggable = (position, setPosition, elementRef) => {
             } else if (outFromBottom) {
                 setPosition({
                     ...position,
-                    y: Math.max(availableHeight-halfHeight, 0)
+                    y: Math.max(availableHeight - halfHeight, 0)
                 });
             }
         }

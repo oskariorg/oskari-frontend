@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseCircleFilled } from '@ant-design/icons';
 import { createDraggable, getPositionForCentering } from './util';
+import { monitorResize, unmonitorResize } from './WindowWatcher';
 
 const Container = styled.div`
     position: absolute;
@@ -19,7 +20,22 @@ const Container = styled.div`
     z-index: 50000;
 
     &.outofviewport {
-        border: 5px solid rgba(255, 0, 0, 0.5);
+        border: 5px solid rgba(100, 0, 0, 0.5);
+
+        h3 {
+            animation:vibrate 0.5s linear;
+            @keyframes vibrate {
+                25%, 75% {
+                    transform:rotate(1deg);
+                }
+                50% {
+                    transform:rotate(-1deg);
+                }
+                100% {
+                    transform:rotate(0deg);
+                }
+            }
+        }
     }
 `;
 
@@ -69,15 +85,27 @@ export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) =>
     if (headerFuncs.length) {
         headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
     }
+    const bodyResizeHandler = (newSize, prevSize) => {
+        if (position.x > newSize.width || position.y > newSize.height) {
+            // console.log('Popup relocating! Window size changed from', prevSize, 'to', newSize);
+            setPosition({
+                ...position,
+                centered: false
+            });
+        }
+    };
+    const handleUnmounting = () => unmonitorResize(bodyResizeHandler);
     useEffect(() => {
+        monitorResize(document.body, bodyResizeHandler);
         if (position.centered) {
-            return;
+            return handleUnmounting;
         }
         // center after content has been rendered
         setPosition({
             ...getPositionForCentering(elementRef),
             centered: true
         });
+        return handleUnmounting;
     });
     /*
     Previously:
