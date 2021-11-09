@@ -899,8 +899,7 @@ Oskari.clazz.define(
                 if (options.allowMultipleDrawing === 'single') {
                     me.clearDrawing();
                 }
-                var tooltipClass = me._tooltipClassForMeasure + ' ' + me.getCurrentDrawShape();
-                me.createDrawingTooltip(id, tooltipClass);
+                me.createDrawingTooltip(id);
             });
         },
         /**
@@ -979,23 +978,30 @@ Oskari.clazz.define(
          * - displays measurement result on feature
          * @param {ol/MapBrowserEvent} evt
          */
-        pointerMoveHandler: function (evt = {}) {
-            const me = this;
-            let tooltipCoord = evt.coordinate;
-            if (!me._sketch || !me.getOpts('showMeasureOnMap')) {
+        pointerMoveHandler: function (evt) {
+            if (!this._sketch || !this.getOpts('showMeasureOnMap')) {
                 // if no drawing of we don't want to show it on map -> skip
                 return;
             }
-            const geom = (me._sketch.getGeometry());
+            this.updateDrawingTooltip(this._sketch);
+        },
+        updateDrawingTooltip: function (feature) {
+            const id = feature.getId();
+            const overlay = this._overlays[id];
+            if (!overlay) {
+                // no overlay to update
+                return;
+            }
+            const geom = feature.getGeometry();
             const mapmodule = this.getMapModule();
-            let output;
+            let output = '';
+            let tooltipCoord;
             if (geom instanceof olGeom.Polygon) {
                 tooltipCoord = geom.getInteriorPoint().getCoordinates();
                 // for Polygon-drawing checking itself-intersection
-                if (me._featuresValidity[me._sketch.getId()] === false) {
-                    output = '';
-                    if (me._showIntersectionWarning) {
-                        output = me._loc.intersectionNotAllowed;
+                if (this._featuresValidity[id] === false) {
+                    if (this._showIntersectionWarning) {
+                        output = this._loc.intersectionNotAllowed;
                     }
                 } else {
                     // all good - get actual measurement
@@ -1011,17 +1017,12 @@ Oskari.clazz.define(
                 // we don't know where we should show this
                 return;
             }
-            const overlay = me._overlays[me._sketch.getId()];
-            if (!overlay) {
-                // no overlay to update
-                return;
-            }
-            var ii = jQuery('div.' + me._tooltipClassForMeasure + '.' + me._sketch.getId());
-            ii.html(output);
+            const elem = overlay.getElement();
+            elem.innerHTML = output;
             if (output === '') {
-                ii.addClass('withoutText');
+                elem.classList.add('withoutText');
             } else {
-                ii.removeClass('withoutText');
+                elem.classList.remove('withoutText');
             }
             overlay.setPosition(tooltipCoord);
         },
@@ -1033,8 +1034,8 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         addModifyInteraction: function (layerId, shape, options) {
-            var me = this,
-                layer = me.getLayer(layerId);
+            const me = this;
+            const layer = me.getLayer(layerId);
             if (layer) {
                 me._modify[me._id] = new olInteractionModify({
                     features: layer.getSource().getFeaturesCollection(),
@@ -1043,6 +1044,12 @@ Oskari.clazz.define(
                         return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
                     }
                 });
+                if (options.showMeasureOnMap) {
+                    layer.getSource().forEachFeature(f => {
+                        this.createDrawingTooltip(f.getId());
+                        this.updateDrawingTooltip(f);
+                    });
+                }
             }
             me.modifyStartEvent(shape, options);
             me.getMap().on('pointermove', me.pointerMoveHandler, me);
@@ -1295,10 +1302,10 @@ Oskari.clazz.define(
         /** @method createDrawingTooltip
        * - creates a new tooltip on drawing
        */
-        createDrawingTooltip: function (id, tooltipClass) {
-            var me = this;
+        createDrawingTooltip: function (id) {
+            const tooltipClass = this._tooltipClassForMeasure + ' ' + this.getCurrentDrawShape() + ' ' + id;
             var tooltipElement = document.createElement('div');
-            tooltipElement.className = tooltipClass + ' ' + id;
+            tooltipElement.className = tooltipClass;
             var tooltip = new olOverlay({
                 element: tooltipElement,
                 offset: [0, -5],
@@ -1307,8 +1314,8 @@ Oskari.clazz.define(
             });
             tooltipElement.parentElement.style.pointerEvents = 'none';
             tooltip.id = id;
-            me.getMap().addOverlay(tooltip);
-            me._overlays[id] = tooltip;
+            this.getMap().addOverlay(tooltip);
+            this._overlays[id] = tooltip;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
