@@ -122,7 +122,7 @@ export const createDraggable = (position, setPosition, elementRef) => {
     };
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
-    document.addEventListener("touchmove", onTouchMove);
+    document.addEventListener("touchmove", onTouchMove, { passive: false });
     document.addEventListener("touchend", onMouseUp);
     document.addEventListener("touchcancel", onMouseUp);
 };
