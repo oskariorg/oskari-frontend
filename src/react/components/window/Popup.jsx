@@ -84,18 +84,18 @@ export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) =>
     }
     if (headerFuncs.length) {
         headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
+        headerProps.onTouchStart = () => headerFuncs.forEach(fn => fn());
     }
     const bodyResizeHandler = (newSize, prevSize) => {
-        if (elementRef.current && (prevSize.width < newSize.width || prevSize.height < newSize.height)) {
+        const windowIsNowBigger = prevSize.width < newSize.width || prevSize.height < newSize.height;
+        const popupNoLongerOnScreen = position.x > newSize.width || position.y > newSize.height;
+        if (elementRef.current && (windowIsNowBigger || popupNoLongerOnScreen)) {
             // Note! The class is added in createDraggable()
             // but we might not be able to remove it there after recentering on window size change
             // remove it if window is now bigger
             elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
         }
-        if (position.x > newSize.width || position.y > newSize.height) {
-            if (elementRef.current) {
-                elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
-            }
+        if (popupNoLongerOnScreen) {
             // console.log('Popup relocating! Window size changed from', prevSize, 'to', newSize);
             setPosition({
                 ...position,
