@@ -43,6 +43,25 @@ export const createDraggable = (position, setPosition, elementRef) => {
     const halfWidth = width / 2;
     const halfHeight = height / 2;
     const screenTopLimit = -5;
+    // previousTouch is assigned in onTouchMove to track change and onMouseUp for reset
+    let previousTouch;
+    const onTouchMove = (event) => {
+        // prevents text selection from other elements while dragging
+        event.preventDefault();
+        const element = elementRef.current;
+        if (!element) {
+            return;
+        }
+
+        const touch = event.touches[0];
+        if (previousTouch) {
+            onGenericMove({
+                x: touch.pageX - previousTouch.pageX,
+                y: touch.pageY - previousTouch.pageY
+            });
+        };
+        previousTouch = touch;
+    };
     const onMouseMove = (event) => {
         // prevents text selection from other elements while dragging
         event.preventDefault();
@@ -50,8 +69,14 @@ export const createDraggable = (position, setPosition, elementRef) => {
         if (!element) {
             return;
         }
-        position.x += event.movementX;
-        position.y += event.movementY;
+        onGenericMove({
+            x: event.movementX,
+            y: event.movementY
+        });
+    };
+    const onGenericMove = (delta) => {
+        position.x += delta.x;
+        position.y += delta.y;
         const outFromLeft = position.x < -halfWidth;
         const outFromRight = position.x + halfWidth > availableWidth;
         const outFromUp = position.y < screenTopLimit; // the header should remain visible to make it possible to drag back on screen
@@ -90,13 +115,14 @@ export const createDraggable = (position, setPosition, elementRef) => {
     const onMouseUp = () => {
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
-        document.removeEventListener("touchmove", onMouseMove);
+        document.removeEventListener("touchmove", onTouchMove);
         document.removeEventListener("touchend", onMouseUp);
         document.removeEventListener("touchcancel", onMouseUp);
+        previousTouch = null;
     };
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
-    document.addEventListener("touchmove", onMouseMove);
+    document.addEventListener("touchmove", onTouchMove);
     document.addEventListener("touchend", onMouseUp);
     document.addEventListener("touchcancel", onMouseUp);
 };
