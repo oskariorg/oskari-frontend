@@ -2585,28 +2585,28 @@ Oskari.clazz.define(
 
                 return layers.map(layer => {
                     const dataAttributes = layer.getAttributes().data || {};
+
+                    const layerObject = {
+                        id: layer.getId(),
+                        opacity: layer.getOpacity(),
+                        visible: layer.isVisible(),
+                        name: layer.getName(),
+                        config: dataAttributes
+                    };
+
                     if (layer.getMaxScale() && layer.getMinScale()) {
                         const layerResolutions = me.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
                         const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
                         const maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
-                        return {
-                            id: layer.getId(),
-                            opacity: layer.getOpacity(),
-                            visible: layer.isVisible(),
-                            name: layer.getName(),
-                            minZoom: minZoomLevel,
-                            maxZoom: maxZoomLevel,
-                            config: dataAttributes
-                        };
-                    } else {
-                        return {
-                            id: layer.getId(),
-                            opacity: layer.getOpacity(),
-                            visible: layer.isVisible(),
-                            name: layer.getName(),
-                            config: dataAttributes
-                        };
+                        layerObject.minZoom = minZoomLevel;
+                        layerObject.maxZoom = maxZoomLevel;
+                    };
+
+                    if (layer.getMetadataIdentifier() !== '') {
+                        layerObject.metadataIdentifier = layer.getMetadataIdentifier();
                     }
+
+                    return layerObject;
                 });
             });
 

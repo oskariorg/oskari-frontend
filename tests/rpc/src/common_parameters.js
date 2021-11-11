@@ -405,5 +405,7 @@ var supportedRequests = [
   "DrawTools.StartDrawingRequest",
   "DrawTools.StopDrawingRequest",
   "MapModulePlugin.ZoomToFeaturesRequest",
-  "MapModulePlugin.MapLayerUpdateRequest"
+  "MapModulePlugin.MapLayerUpdateRequest",
+  "ChangeMapLayerStyleRequest",
+  "RearrangeSelectedMapLayerRequest"
 ];
