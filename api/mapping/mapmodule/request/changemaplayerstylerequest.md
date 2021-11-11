@@ -1,6 +1,6 @@
 # ChangeMapLayerStyleRequest [rpc]
 
-Allow user to change map layer style on a map.
+Allow user to change map layer style between preconfigured options on the map (styles available for a WMS-layer etc).
 
 ## Use cases
 
