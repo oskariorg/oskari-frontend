@@ -63,7 +63,7 @@ The `metadataIdentifier` string shows layers metadata identifier. If layer haven
     name : layerName,
     minZoom: minZoomLevel,
     maxZoom: maxZoomLevel,
-    config: layerAttributesDataBlock
+    config: layerAttributesDataBlock,
     metadataIdentifier: metadataIdentifier
 }
 ```
