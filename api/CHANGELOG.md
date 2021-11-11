@@ -11,14 +11,24 @@ Some extra tags:
 
 ## 2.6.0
 
+### [add] [rpc] RearrangeSelectedMapLayerRequest
+
+Allowed request for rpc use and also added request documentation.
+
+```javascript
+const layerId = 1;
+const position = 0;
+channel.postRequest('RearrangeSelectedMapLayerRequest', [layerId, position]);
+```
+
 ### [add] [rpc] ChangeMapLayerStyleRequest
 
 Allowed request for rpc use.
 
 ```javascript
 const layerId = 1;
-const new_style_name = 'new_awesome_style';
-channel.postRequest('ChangeMapLayerStyleRequest', [layerId, new_style_name]);
+const newStyleName = 'new_awesome_style';
+channel.postRequest('ChangeMapLayerStyleRequest', [layerId, newStyleName]);
 ```
 
 ### [add] [rpc] DataForMapLocationEvent
