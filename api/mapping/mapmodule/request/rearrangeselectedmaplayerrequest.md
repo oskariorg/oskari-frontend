@@ -4,7 +4,7 @@ Allow user to change order of map layers in relation to other layers on the map.
 
 ## Use cases
 
-- change selected map layer position
+- re-arrange order of layers on the map
 
 ## Description
 
