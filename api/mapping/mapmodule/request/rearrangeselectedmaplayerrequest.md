@@ -1,6 +1,6 @@
 # RearrangeSelectedMapLayerRequest [rpc]
 
-Allow user to change selected map layer position (upper/lower) on a map.
+Allow user to change order of map layers in relation to other layers on the map.
 
 ## Use cases
 
