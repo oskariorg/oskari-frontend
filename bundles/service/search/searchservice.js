@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'Language': lang,
                     'epsg': sb.getMap().getSrsName(),
                     'autocomplete': false,
-                    'options': JSON.stringify(options),
+                    'options': JSON.stringify(options)
                 },
                 success: function (response) {
                     sb.notifyAll(evtBuilder(true, searchString, response, options));
