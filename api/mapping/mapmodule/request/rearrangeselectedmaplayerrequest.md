@@ -8,7 +8,7 @@ Allow user to change order of map layers in relation to other layers on the map.
 
 ## Description
 
-Requests a map layer position to be changed on a map.
+Requests order of a map layer to be changed in relation to other layers on the map.
 
 ## Parameters
 
