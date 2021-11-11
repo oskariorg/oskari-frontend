@@ -16,7 +16,7 @@ Some extra tags:
 Added new DataForMapLocationEvent. This allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks).
 
 Event returns following Object:
-<code>
+```javascript
 {
   content: "<table><tr><td>test</td></tr></table>", // or json object
   x: 423424,
@@ -24,11 +24,16 @@ Event returns following Object:
   layerId: 1,
   type: "text" // or json or geojson
 }
-</code>
+```
 
 ### [mod] [rpc] getAllLayers
 
-The RPC `getAllLayers()` function now includes layer `attributes` `data` block. The object includes optional configuration like localized names for vector feature properties etc.
+The RPC `getAllLayers()` function now includes new properties: `config` and `metadataIdentifier`.
+
+The `config` (layer `attributes` `data` block) object includes optional configuration like localized names for vector feature properties etc.
+
+The `metadataIdentifier` string shows layers metadata identifier. If layer haven't metadata identifier, layer object not contains `metadataIdentifier` properties.
+
 
 ```javascript
 {
@@ -39,6 +44,7 @@ The RPC `getAllLayers()` function now includes layer `attributes` `data` block. 
     minZoom: minZoomLevel,
     maxZoom: maxZoomLevel,
     config: layerAttributesDataBlock
+    metadataIdentifier: metadataIdentifier
 }
 ```
 
