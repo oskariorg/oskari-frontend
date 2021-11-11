@@ -11,7 +11,8 @@ Make a search query
 Requests search results (addresses, locations) by given params. After the search is completed a ``SearchResultEvent`` is triggered where following data is available:
 - event.getSuccess(), returns boolean. If ``true``, search is done and there is no errors
 - event.getResult(), returns search result object. Look at searchresultevent.md for more details
-- event.getRequestParameters(), returns request paremeters, which are used for search
+- event.getRequestParameters(), returns the `query` that was used for searching
+- event.getOptions(), returns options used when requesting search if any
 
 ## Parameters
 
@@ -23,6 +24,9 @@ Requests search results (addresses, locations) by given params. After the search
 </tr>
 <tr>
   <td> \* query</td><td> String </td><td> address or location to be searched</td><td> </td>
+</tr>
+<tr>
+  <td> options</td><td> Object </td><td> Arbitratry options to send to server side implementation. These might get handled or not depending on the backend implementation/search channel</td><td>{}</td>
 </tr>
 </table>
 

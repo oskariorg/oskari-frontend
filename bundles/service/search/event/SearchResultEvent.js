@@ -7,62 +7,73 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Boolean} success succesfully got route
- * @param {JSON} requestParameters request parameters
- * @param {JSON} search result
+ * @param {Boolean} success succesfully got a result or an error occured
+ * @param {String} requestParameters request parameters
+ * @param {Object} search result
+ * @param {Object} options options that were used for searching
  */
-    function (success, requestParameters, result) {
-        this._success = success;
-        this._requestParameters = requestParameters;
-        this._result = result;
-    }, {
+function (success, requestParameters, result, options = {}) {
+    this._success = !!success;
+    this._requestParameters = requestParameters;
+    this._result = result;
+    this._options = options;
+}, {
     /** @static @property __name event name */
         __name: 'SearchResultEvent',
 
-        /**
+    /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName: function () {
-            return this.__name;
-        },
-        /**
+    getName: function () {
+        return this.__name;
+    },
+    /**
      * @method getSuccess
      * Returns the successfully routing info
      * @return {Boolean}
      */
-        getSuccess: function () {
-            return this._success;
-        },
-        /**
+    getSuccess: function () {
+        return this._success;
+    },
+    /**
      * @method getResult
      * Returns the search result JSON
-     * @return {JSON}
+     * @return {Object}
      */
-        getResult: function () {
-            return this._result;
-        },
-        /**
+    getResult: function () {
+        return this._result;
+    },
+    /**
+     * @method getOptions
+     * Returns options that were used for searching
+     * @return {Object}
+     */
+    getOptions: function () {
+        return this._options || {};
+    },
+    /**
      * @method getRequestParameters
      * Returns request paremeters
-     * @return {JSON}
+     * @return {String}
      */
-        getRequestParameters: function () {
-            return this._requestParameters;
-        },
+    getRequestParameters: function () {
+        return this._requestParameters;
+    },
 
-        getParams: function () {
-            return {
-                success: this._success,
-                result: this._result,
-                requestParameters: this._requestParameters
-            };
-        }
-    }, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
-     * @static
-     */
-        'protocol': ['Oskari.mapframework.event.Event']
-    });
+    getParams: function () {
+        return {
+            success: this.getSuccess(),
+            result: this.getResult(),
+            requestParameters: this.getRequestParameters(),
+            options: this.getOptions()
+        };
+    }
+}, {
+/**
+ * @property {String[]} protocol array of superclasses as {String}
+ * @static
+ */
+    'protocol': ['Oskari.mapframework.event.Event']
+});

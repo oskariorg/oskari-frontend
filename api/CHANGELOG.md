@@ -42,6 +42,9 @@ The RPC `getAllLayers()` function now includes layer `attributes` `data` block. 
 }
 ```
 
+### [mod] [rpc] SearchRequest and SearchResultEvent
+
+SearchRequest can now take an optional second parameter that is sent to the server side implementation. As the server side implementation are handled by different "channels" depending on the Oskari instance and implementation these options might or might not be handled. However the same options are returned on the SearchResultEvent enabling tracking  which event is a response to which request making the functionality more versatile whether any extra flags are supported by the server instance or not. Contact your Oskari instance administrator for options that are used by the server side on given instance.
 
 ## 2.5.0
 
