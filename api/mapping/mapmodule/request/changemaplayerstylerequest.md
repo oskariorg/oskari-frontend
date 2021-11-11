@@ -28,9 +28,10 @@ Requests a map layer style to be changed on a map.
 
 ## Examples
 
-Change map layer opacity to 50 %.
+Change map layer style to `new_awesome_style`.
 ```javascript
-var sb = Oskari.getSandbox();
-var new_style_name = 'new_awesome_style';
-sb.postRequestByName('ChangeMapLayerStyleRequest', [layer.id, new_style_name]);
+const sb = Oskari.getSandbox();
+const layerId = 1;
+const newStyleName = 'new_awesome_style';
+sb.postRequestByName('ChangeMapLayerStyleRequest', [layerId, newStyleName]);
 ```
