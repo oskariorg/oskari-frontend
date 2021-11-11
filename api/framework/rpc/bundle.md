@@ -199,7 +199,8 @@ Returns requests that are supported  by rpc functionality. For example:
         "MyLocationPlugin.GetUserLocationRequest": true,
         "DrawTools.StartDrawingRequest": true,
         "DrawTools.StopDrawingRequest": true,
-        "MapModulePlugin.ZoomToFeaturesRequest": true
+        "MapModulePlugin.ZoomToFeaturesRequest": true,
+        "ChangeMapLayerStyleRequest": true
     }
 
 **getZoomRange()**

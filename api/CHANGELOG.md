@@ -11,6 +11,16 @@ Some extra tags:
 
 ## 2.6.0
 
+### [add] [rpc] ChangeMapLayerStyleRequest
+
+Allowed request for rpc use.
+
+```javascript
+const layerId = 1;
+const new_style_name = 'new_awesome_style';
+channel.postRequest('ChangeMapLayerStyleRequest', [layerId, new_style_name]);
+```
+
 ### [add] [rpc] DataForMapLocationEvent
 
 Added new DataForMapLocationEvent. This allows applications to get programmatic access to the content that is normally shown on the map in an `infobox` popup when the user clicks the map (GFI/wfs feature clicks).
