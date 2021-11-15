@@ -26,7 +26,7 @@ Requests search results (addresses, locations) by given params. After the search
   <td> \* query</td><td> String </td><td> address or location to be searched</td><td> </td>
 </tr>
 <tr>
-  <td> options</td><td> Object </td><td> Arbitratry options to send to server side implementation. These might get handled or not depending on the backend implementation/search channel</td><td>{}</td>
+  <td> options</td><td> Object </td><td> Arbitratry options to send to server side implementation. These might get handled or not depending on the backend implementation/search channel. A common handling is for key `limit` so client can request less or more results than the instance default. However the instance admin can set a hard limit for results.</td><td>{}</td>
 </tr>
 </table>
 
@@ -35,7 +35,13 @@ Requests search results (addresses, locations) by given params. After the search
 Get search result in an RPC application:
 ```javascript
   var query = "Finland";
-  channel.postRequest('SearchRequest', [ query ],
+  channel.postRequest('SearchRequest', [ query ]);
+```
+
+Same search but limit results to 10:
+```javascript
+  var query = "Finland";
+  channel.postRequest('SearchRequest', [ query, { 'limit': 10 } ]);
 ```
 
 ## Related api
