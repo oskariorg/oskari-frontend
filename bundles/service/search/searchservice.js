@@ -59,12 +59,8 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var params = request.getSearchParams();
-            // backward compatibility code, can be removed in Oskari 1.36
-            if (typeof params === 'object') {
-                params = params.searchKey;
-            }
-            this.doSearch(params);
+            const params = request.getSearchParams();
+            this.doSearch(params, undefined, undefined, request.getOptions());
         },
         /**
          * @method doSearch
@@ -76,11 +72,13 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          *            onSuccess callback method for successful search
          * @param {Function}
          *            onComplete callback method for search completion
+         * @param {Object}
+         *            options optional parameters for server side implementation that may be handled by the search channels or not depending on implementation
          */
-        doSearch: function (searchString, onSuccess, onError) {
-            var lang = Oskari.getLang();
-            var sb = this.sandbox || Oskari.getSandbox();
-            var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
+        doSearch: function (searchString, onSuccess, onError, options = {}) {
+            const lang = Oskari.getLang();
+            const sb = this.sandbox || Oskari.getSandbox();
+            const evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
                 dataType: 'json',
                 type: 'POST',
@@ -89,16 +87,17 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'searchKey': searchString,
                     'Language': lang,
                     'epsg': sb.getMap().getSrsName(),
-                    'autocomplete': false
+                    'autocomplete': false,
+                    'options': JSON.stringify(options)
                 },
                 success: function (response) {
-                    sb.notifyAll(evtBuilder(true, searchString, response));
+                    sb.notifyAll(evtBuilder(true, searchString, response, options));
                     if (typeof onSuccess === 'function') {
                         onSuccess(response);
                     }
                 },
                 error: function (response) {
-                    sb.notifyAll(evtBuilder(false, searchString, response));
+                    sb.notifyAll(evtBuilder(false, searchString, response, options));
                     if (typeof onError === 'function') {
                         onError(response);
                     }
