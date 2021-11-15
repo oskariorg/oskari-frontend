@@ -697,18 +697,13 @@ Oskari.clazz.define(
 
             // if layer has styles - select first
             if (styles.length) {
-                this._currentStyle = this.getStyles()[0];
+                this._currentStyle = styles[0];
                 Oskari.log('AbstractLayer').debug('selectStyle() defaulting to first available style for layer:', this.getId());
                 return;
             }
 
             // Style not found, add new style with default definitions and select it!
             const style = this._createEmptyStyle();
-
-            // try digging up the global legend if set
-            const opts = this.getOptions() || {};
-            const { legends = {} } = opts;
-            style.setLegend(legends.legendImage || '');
             this.addStyle(style);
             this._currentStyle = style;
             Oskari.log('AbstractLayer').debug('selectStyle() created an empty style for layer:', this.getId());
