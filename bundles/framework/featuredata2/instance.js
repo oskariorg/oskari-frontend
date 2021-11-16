@@ -243,7 +243,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (event.getLayerId() === undefined) {
                     return;
                 }
-                var layer = this.sandbox.findMapLayerFromSelectedMapLayers(event.getLayerId());
                 if (!this.__loadingStatus) {
                     this.__loadingStatus = {};
                 }
@@ -258,12 +257,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     delete this.__loadingStatus['' + event.getLayerId()];
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), false);
-
-                    if (layer && layer.isManualRefresh()) {
-                        if (event.getNop()) {
-                            this.plugins['Oskari.userinterface.Flyout'].setGridOpacity(layer.getId(), 0.5);
-                        }
-                    }
                 }
                 if (event.getStatus() === event.status.error) {
                     if (this.__loadingStatus.hasOwnProperty('' + event.getLayerId())) {
@@ -335,19 +328,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             },
 
-            /**
-             * @method FeatureData.FinishedDrawingEvent
-             */
-            'FeatureData.FinishedDrawingEvent': function () {
-                if (!this.selectionPlugin) {
-                    return;
-                }
-                const features = this.selectionPlugin.getFeaturesAsGeoJSON();
-                this.selectionPlugin.clearDrawing();
-
-                const evt = Oskari.eventBuilder('WFSSetFilter')(features);
-                this.sandbox.notifyAll(evt);
-            },
             'DrawingEvent': function (evt) {
                 if (!evt.getIsFinished() || !this.selectionPlugin) {
                     // only interested in finished drawings
