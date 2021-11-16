@@ -577,7 +577,7 @@ Oskari.clazz.define(
 
             grid.setColumnSelector(true);
             grid.setResizableColumns(true);
-            const { disableExport, allowLocateOnMap } = this.instance.getConfiguration();
+            const { disableExport } = this.instance.getConfiguration();
             if (!disableExport) {
                 grid.setExcelExporter(layer.hasPermission('download'));
             }
