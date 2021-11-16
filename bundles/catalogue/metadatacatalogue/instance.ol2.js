@@ -299,10 +299,6 @@ Oskari.clazz.define(
          * @static
          */
         eventHandlers: {
-
-            /**
-             * @method FeatureData.FinishedDrawingEvent
-             */
             'MetaData.FinishedDrawingEvent': function () {
                 var me = this,
                     coverageFeature;
