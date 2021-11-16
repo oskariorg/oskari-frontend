@@ -1454,9 +1454,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             const styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
             styles.forEach(({ name, title, legend }) => {
-                if (!name) {
-                    return;
-                }
                 const style = styleBuilder();
                 style.setName(name);
                 style.setTitle(title);
