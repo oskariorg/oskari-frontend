@@ -592,69 +592,7 @@ Oskari.clazz.define(
             const visibleFields = model.getFields().filter(field => !DEFAULT_HIDDEN_FIELDS.includes(field));
             visibleFields.forEach(field => grid.setNumericField(field, this._fixedDecimalCount));
             grid.setVisibleFields(visibleFields);
-            // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
-            if (layer.isManualRefresh() && allowLocateOnMap) {
-                this.createLocateMapColumn(grid);
-            }
             return grid;
-        },
-        createLocateMapColumn: function (grid) {
-            // custom renderer for locating feature on map
-            grid.setColumnUIName('locate_on_map', ' ');
-            grid.setColumnValueRenderer('locate_on_map', (name, data) => {
-                const div = this.templateLocateOnMap.clone();
-                const { __fid } = data;
-                div.attr('data-fid', __fid);
-
-                const iconData = Oskari.getMarkers()[this.locateOnMapIcon].data;
-                const icon = jQuery(iconData);
-                const fillColor = __fid === this.locateOnMapFID ? this.colors.locateOnMap.active : this.colors.locateOnMap.normal;
-                icon.find('path').attr('fill', fillColor);
-                icon.attr({
-                    x: 0,
-                    y: 0
-                });
-                div.html(icon.outerHTML());
-
-                div.on('click', event => {
-                    // Save clicked feature fid to check centered status
-                    this.locateOnMapFID = __fid;
-                    // TODO: reset old
-                    // jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
-                    // jQuery(this).html(activeIconObj.outerHTML());
-                    icon.find('path').attr('fill', this.colors.locateOnMap.active);
-
-                    // create the eventhandler for this particular fid
-                    this.instance.eventHandlers.WFSFeatureGeometriesEvent = event => {
-                        const wkts = event.getGeometries();
-                        let wkt;
-                        for (var i = 0; i < wkts.length; i++) {
-                            if (wkts[i][0] === __fid) {
-                                wkt = wkts[i][1];
-                                break;
-                            }
-                        }
-                        var viewportInfo = this.instance.mapModule.getViewPortForGeometry(wkt);
-                        if (viewportInfo) {
-                            // feature didn't fit -> zoom to bounds
-                            if (viewportInfo.bounds) {
-                                setTimeout(() => {
-                                    this.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
-                                }, 1000);
-                            } else {
-                                // else just set center.
-                                setTimeout(() => {
-                                    this.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y]);
-                                }, 1000);
-                            }
-                        }
-                        this.instance.sandbox.unregisterFromEventByName(this.instance, 'WFSFeatureGeometriesEvent');
-                        this.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
-                    };
-                    this.instance.sandbox.registerForEventByName(this.instance, 'WFSFeatureGeometriesEvent');
-                });
-                return div;
-            });
         },
         createShowSelectedFirst: function (grid) {
             const checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
