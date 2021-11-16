@@ -53,9 +53,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "src": "../../../bundles/framework/featuredata2/event/WFSSetPropertyFilter.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/featuredata2/event/AddedFeatureEvent.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../bundles/framework/featuredata2/Flyout.js"
         }, {
             "type": "text/javascript",
