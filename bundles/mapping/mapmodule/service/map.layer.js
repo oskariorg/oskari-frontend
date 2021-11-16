@@ -1454,11 +1454,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             const styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
             styles.forEach(({ name, title, legend }) => {
-                // layer with global legend override will have a no-name style with only legend
-                // so skip if there's no name and no legend
-                if (!name && !legend) {
-                    return;
-                }
                 const style = styleBuilder();
                 style.setName(name);
                 style.setTitle(title);
