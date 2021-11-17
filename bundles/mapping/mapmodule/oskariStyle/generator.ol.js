@@ -135,14 +135,15 @@ export const getStyleFunction = styles => {
     return (feature) => {
         const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
         const typed = found ? found.typed : styles.typed;
-        const style = getStyleForGeometry(feature.getGeometry(), typed);
+        const olStyles = getStyleForGeometry(feature.getGeometry(), typed);
         // if typed is from optional styles and it doesn't have labelProperty, check if normal style has
         const { labelProperty } = typed || styles.typed;
+        const style = Array.isArray(olStyles) ? olStyles[0] : olStyles;
         const textStyle = style ? style.getText() : undefined;
         if (labelProperty && textStyle) {
             _setFeatureLabel(feature, textStyle, labelProperty);
         }
-        return style;
+        return olStyles;
     };
 };
 export const wrapClusterStyleFunction = styleFunction => {
@@ -256,7 +257,25 @@ export const getOlStyle = (mapModule, styleDef, geomType, requestedStyle = {}) =
             olStyle.text = textStyle;
         }
     }
-    return new olStyleStyle(olStyle);
+    const mainStyle = new olStyleStyle(olStyle);
+    return geomType === 'line' ? _setStrokeDash(mainStyle) : mainStyle;
+};
+
+// draw transparent solid stroke to fire hover and click also on gaps with dashed stroke
+// open layers renders only dashes so hover or click aren't fired on gaps
+const _setStrokeDash = olStyle => {
+    const stroke = olStyle.getStroke();
+    if (!stroke) {
+        return olStyle;
+    }
+    const lineDash = stroke.getLineDash();
+    if (lineDash && lineDash.length) {
+        const transparent = stroke.clone();
+        applyAlphaToColorable(transparent, 0.01);
+        transparent.setLineDash([]);
+        return [olStyle, new olStyleStyle({ stroke: transparent })];
+    }
+    return olStyle;
 };
 
 /**
