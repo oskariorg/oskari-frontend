@@ -552,7 +552,7 @@ Oskari.clazz.define(
                 if (!mapLayerService.findMapLayer(layer.getId())) {
                     // check if we have a group for this layer in maplayer service
                     const groupForLayer = layer.getGroups()[0];
-                    const mapLayerGroup = mapLayerService.getAllLayerGroups(groupForLayer.id);
+                    const mapLayerGroup = mapLayerService.findLayerGroupById(groupForLayer.id);
                     if (!mapLayerGroup) {
                         const group = {
                             id: groupForLayer.id,
