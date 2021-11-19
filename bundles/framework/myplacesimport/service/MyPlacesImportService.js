@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     _addLayersToService: function (layers = [], cb) {
         // initialize the group these layers will be in:
         const mapLayerService = this.instance.getMapLayerService();
-        const mapLayerGroup = mapLayerService.getAllLayerGroups(this.groupId);
+        const mapLayerGroup = mapLayerService.findLayerGroupById(this.groupId);
         if (!mapLayerGroup) {
             const loclayer = this.instance.getLocalization().layer;
             const group = {

@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             if (!this.groupId) {
                 // negative value for group id means that admin isn't presented with tools for it
                 this.groupId = -10 * Oskari.seq.nextVal('usergeneratedGroup');
-                const mapLayerGroup = maplayerService.getAllLayerGroups(this.groupId);
+                const mapLayerGroup = maplayerService.findLayerGroupById(this.groupId);
                 if (!mapLayerGroup) {
                     const group = {
                         id: this.groupId,
