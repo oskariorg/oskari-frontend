@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         me.setChildren(json);
     }, {
         getGroups: function () {
-            return this.groups;
+            return this.groups || [];
         },
         setGroups: function (groups) {
             this.groups = groups;

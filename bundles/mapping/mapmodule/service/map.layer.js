@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if (group.id === -1) {
                         return;
                     }
-                    var groupConf = me.getAllLayerGroups(group.id);
+                    var groupConf = me.findLayerGroupById(group.id);
                     if (!groupConf) {
                         return;
                     }
@@ -408,7 +408,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // group of -1 is "ungrouped"
                 return;
             }
-            const group = this.getAllLayerGroups(groupId);
+            const group = this.findLayerGroupById(groupId);
             if (!group) {
                 return;
             }
@@ -443,7 +443,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // group of -1 is "ungrouped"
                 return;
             }
-            const group = this.getAllLayerGroups(groupId);
+            const group = this.findLayerGroupById(groupId);
             if (!group) {
                 return;
             }
@@ -468,86 +468,28 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param {Boolean}          deleteLayers deleteLayers
          */
         deleteLayerGroup: function (id, parentId, deleteLayers) {
-            var me = this;
-            var editable = me.getAllLayerGroups(parentId);
-
-            var getGroupIndexInArray = function (arr) {
-                var founded = -1;
-                for (var i = 0; i < arr.length; i++) {
-                    var group = arr[i];
-                    if (group.id === id) {
-                        founded = i;
-                        break;
-                    }
+            let groupsList = this.getAllLayerGroups();
+            if (parentId) {
+                const parentGroup = this.findLayerGroupById(parentId);
+                if (parentGroup) {
+                    groupsList = parentGroup.getGroups();
                 }
-                return founded;
-            };
-
-            var groupIndex = getGroupIndexInArray(editable.groups || editable);
-            if (groupIndex >= 0 && editable.groups) {
-                editable.groups.splice(groupIndex, 1);
-            } else {
-                editable.splice(groupIndex, 1);
             }
+            const allLayers = this.getAllLayers();
+            const isLayerInGroup = (layer) => layer.getGroups().filter(g => g.getId() === id).length > 0;
+            const layersInDeletedGroup = allLayers.filter(isLayerInGroup).map(l => l.getId());
+
             if (deleteLayers) {
-                // Remove layers
-                const deletedLayerIds = this._loadedLayersList.filter(l => l._groups.filter(g => g.id === id).length > 0).map(l => l.getId());
-                this._loadedLayersList = this._loadedLayersList.filter(l => !deletedLayerIds.includes(l._id));
-            } else if (typeof deleteLayers !== 'undefined' && !deleteLayers) {
-                // Clear group from needed layers.
-                this.getAllLayers().filter(l => l._groups.filter(g => g.id === id).length > 0).map(l => {
-                    const groups = [...l._groups];
-                    const index = groups.findIndex(g => g.id === id);
-                    if (index !== -1) {
-                        groups.splice(index, 1);
-                        l._groups = groups;
-                    }
-                });
+                layersInDeletedGroup.forEach(layerId => this.removeLayer(layerId));
+            } else {
+                layersInDeletedGroup.forEach(layerId => this.removeLayerFromGroup(id, layerId, true));
+            }
+
+            const groupIndex = groupsList.findIndex(group => group.id === id);
+            if (groupIndex >= 0) {
+                groupsList.splice(groupIndex, 1);
             }
             this.trigger('theme.update');
-        },
-        /**
-         * Updata layer groups
-         * @method updateLayerGroups
-         * @param  {Object}          data data
-         */
-        updateLayerGroups: function (data) {
-            var me = this;
-            var editable = me.getAllLayerGroups(data.id);
-            // if found then update only
-            if (editable && editable.name) {
-                editable.name = data.name;
-                editable.parentId = data.parentId;
-                editable.selectable = data.selectable;
-            } else if (data.parentId === -1) {
-                me.getAllLayerGroups().push(
-                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                        groups: [],
-                        id: data.id,
-                        name: data.name,
-                        layers: [],
-                        parentId: data.parentId,
-                        selectable: data.selectable
-                    })
-                );
-            } else {
-                me.getAllLayerGroups(data.parentId).groups.push(
-                    Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                        groups: [],
-                        id: data.id,
-                        name: data.name,
-                        layers: [],
-                        parentId: data.parentId,
-                        selectable: data.selectable
-                    })
-                );
-
-                me.getAllLayerGroups(data.parentId).children.push({
-                    type: 'group',
-                    id: data.id,
-                    order: 100000000
-                });
-            }
         },
 
         /**
@@ -852,44 +794,41 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         /**
-         * @method getLayerGroup
-         * Returns a group that matches given id
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
-         * @return {Oskari.clazz.define.getGroups}
-         */
-        getLayerGroup: function (group, id) {
-            if (group.id + '' === id + '') {
-                return group;
-            }
-            if (group.groups) {
-                for (let g of group.groups) {
-                    let foundGroup = this.getLayerGroup(g, id);
-                    if (foundGroup) {
-                        return foundGroup;
-                    }
-                }
-            }
-            return null;
-        },
-
-        /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
-         * @param {String|Integer} id if defined and not equal -1 return only wanted group
+         * @param {String|Integer} id if defined return only requested group (deprecated - use findLayerGroupById() instead)
          * @return {Oskari.clazz.define.getGroups[]}
          */
         getAllLayerGroups: function (id) {
-            var layerGroups = null;
-            if (id && id !== -1) {
-                for (let group of this._layerGroups) {
-                    layerGroups = this.getLayerGroup(group, id);
-                    if (layerGroups) {
-                        break;
-                    }
-                }
+            if (typeof id !== 'undefined' && id !== null) {
+                return this.findLayerGroupById(id);
             }
-            return (id && id !== -1) ? layerGroups : this._layerGroups;
+            return this._layerGroups;
+        },
+        /**
+         * @method findLayerGroupById
+         * Returns the requested group matching the id or null if not found.
+         * @param {String|Integer} id id for requested group
+         * @param {Oskari.mapframework.domain.MaplayerGroup[]} array of groups to search from (optional, defaults to all groups). Recurses to subgroups
+         * @return {Oskari.clazz.define.getGroups[]}
+         */
+        findLayerGroupById: function (id, groupsToSearchFrom) {
+            if (!groupsToSearchFrom) {
+                return this.findLayerGroupById(id, this.getAllLayerGroups());
+            }
+            let requestedGroup = null;
+            groupsToSearchFrom.forEach(group => {
+                if (group.getId() + '' === id + '') {
+                    requestedGroup = group;
+                }
+                if (requestedGroup) {
+                    // already found it
+                    return;
+                }
+                // keep searching - result may be null so we might need to dig deeper still
+                requestedGroup = this.findLayerGroupById(id, group.getGroups());
+            });
+            return requestedGroup;
         },
 
         /**

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     this.urls.get = Oskari.urls.getRoute('GetUserLayers', { srs: srsName });
     this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
     // negative value for group id means that admin isn't presented with tools for it
-    this.groupId = -1 * Oskari.seq.nextVal('usergeneratedGroup');
+    this.groupId = -1 * Oskari.getSeq('usergeneratedGroup').nextVal();
 }, {
     __name: 'MyPlacesImport.MyPlacesImportService',
     __qname: 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     _addLayersToService: function (layers = [], cb) {
         // initialize the group these layers will be in:
         const mapLayerService = this.instance.getMapLayerService();
-        const mapLayerGroup = mapLayerService.getAllLayerGroups(this.groupId);
+        const mapLayerGroup = mapLayerService.findLayerGroupById(this.groupId);
         if (!mapLayerGroup) {
             const loclayer = this.instance.getLocalization().layer;
             const group = {
