@@ -4,15 +4,14 @@ import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { DEFAULT_STYLES, styleGenerator } from './WfsVectorLayerPlugin/util/style';
 
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
-
-const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
-export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
+export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
-        super();
+        super(config);
         this._config = config;
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
