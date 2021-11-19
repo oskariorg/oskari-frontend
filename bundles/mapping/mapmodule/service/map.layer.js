@@ -814,7 +814,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         findLayerGroupById: function (id, groupsToSearchFrom) {
             if (!groupsToSearchFrom) {
-                return findLayerGroupById(id, this._layerGroups);
+                return this.findLayerGroupById(id, this.getAllLayerGroups());
             }
             let requestedGroup = null;
             groupsToSearchFrom.forEach(group => {
