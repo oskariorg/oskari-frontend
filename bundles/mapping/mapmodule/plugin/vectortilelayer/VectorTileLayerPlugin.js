@@ -9,14 +9,14 @@ import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
 import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 
-const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
  * Provides functionality to draw vector tile layers on the map
  */
-class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
+class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
         super(config);
         this.__name = 'VectorTileLayerPlugin';
