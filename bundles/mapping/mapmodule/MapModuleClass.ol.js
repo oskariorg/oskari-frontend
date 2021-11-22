@@ -301,7 +301,10 @@ export class MapModule extends AbstractMapModule {
         styles[STYLE_TYPE.LINE] = this.getStyle(styleDef, STYLE_TYPE.LINE);
         styles[STYLE_TYPE.POINT] = this.getStyle(styleDef, STYLE_TYPE.POINT);
         if (styleDef.text) {
-            styles.labelProperty = styleDef.text.labelProperty;
+            styles.label = {
+                property: styleDef.text.labelProperty,
+                text: styleDef.text.labelText
+            };
         }
         return styles;
     };
