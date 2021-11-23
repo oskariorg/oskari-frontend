@@ -8,6 +8,9 @@ import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
 import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
+import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
+import { getMVTFeaturesInExtent } from '../../util/vectorfeatures/mvtHelper';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../util/vectorfeatures/filter';
 
 const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -164,6 +167,55 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     }
 
     /**
+     * Override in actual plugins to returns features.
+     *
+     * Returns features that are currently on map filtered by given geometry and/or properties
+     * {
+     *   "[layer id]": {
+     *      runtime: true,
+     *      features: [{ geometry: {...}, properties: {...}}, ...]
+     *   },
+     *   ...
+     * }
+     * Runtime flag is true for features pushed with AddFeaturesToMapRequest etc and false/missing for features from WFS/OGC API sources.
+     * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
+     * @param {Object} opts additional options to narrow feature collection
+     * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
+     */
+     getFeatures (geojson = {}, opts = {}) {
+        // console.log('getting features from ', this.getName());
+        const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        let { layers } = opts;
+        if (!layers || !layers.length) {
+            layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+        }
+        const result = {};
+        layers.forEach(layerId => {
+            const layerImpls = this.getOLMapLayers(layerId);
+            if (!layerImpls || !layerImpls.length) {
+                return;
+            }
+            const features = getMVTFeaturesInExtent(layerImpls[0].getSource(), extent);
+            if (!features) {
+                return;
+            }
+            let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
+            if (geojson.geometry) {
+                geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
+            }
+            if (geojson.properties) {
+                geojsonFeatures = filterFeaturesByAttribute(geojsonFeatures, geojson.properties);
+            }
+            result[layerId] = {
+                accuracy: 'extent',
+                features: geojsonFeatures
+            };
+        });
+        return result;
+    }
+
+    /**
      * @method addMapLayerToMap
      * @private
      * Adds a single vector tile layer to this map
@@ -222,6 +274,7 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     }
 
     createSource (layer, options) {
+        // TODO: maybe use FeatureExposingSource from mapwfs?
         return new olSourceVectorTile(options);
     }
 

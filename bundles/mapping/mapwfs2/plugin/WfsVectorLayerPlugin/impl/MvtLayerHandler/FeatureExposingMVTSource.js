@@ -8,6 +8,8 @@ import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
 import { WFS_ID_KEY } from '../../../../../mapmodule/domain/constants';
+import { getMVTFeaturesInExtent } from '../../../../../mapmodule/util/vectorfeatures/mvthelper';
+
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
@@ -25,10 +27,9 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
      * @return {Object[]} List of feature properties objects
      */
     getFeaturePropsInExtent (extent) {
-        const features = this._getDistinctFeatures(extent);
+        const features = getMVTFeaturesInExtent(extent, this, WFS_ID_KEY);
         return features.map(f => f.getProperties());
     }
-
     /**
      * @method getPropsIntersectingGeom
      * Returns properties of features whose geometry intersects given GeoJson geometry
@@ -38,8 +39,8 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
     getPropsIntersectingGeom (geom) {
         const geomFilter = reader.read(geom);
         const envelope = geomFilter.getEnvelopeInternal();
-        const features = this._getDistinctFeatures([envelope.getMinX(), envelope.getMinY(),
-            envelope.getMaxX(), envelope.getMaxY()]);
+        const features = this.getMVTFeaturesInExtent([envelope.getMinX(), envelope.getMinY(),
+            envelope.getMaxX(), envelope.getMaxY()], this, WFS_ID_KEY);
         const jstsGeomFeatures = features.map(feature => ({
             id: feature.get(WFS_ID_KEY),
             properties: feature.getProperties(),
@@ -48,23 +49,5 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
         return jstsGeomFeatures
             .filter(feature => RelateOp.relate(geomFilter, feature.geometry).isIntersects())
             .map(f => f.getProperties());
-    }
-
-    /**
-     * Returns all features in extent and gets rid of duplicates based on id (WFS_ID_KEY)
-     * @private @method _getDistinctFeatures
-     * @param {ol/extent | Number[]} extent requested extent [minx, miny, maxx, maxy]
-     */
-    _getDistinctFeatures (extent) {
-        const featuresById = new Map();
-        const features = this.getFeaturesInExtent(extent);
-        // map will only hold one feature/id so we get get rid of duplicates
-        features.forEach((feature) => {
-            const id = feature.get(WFS_ID_KEY);
-            if (typeof id !== 'undefined') {
-                featuresById.set(id, feature);
-            }
-        });
-        return Array.from(featuresById.values());
     }
 }

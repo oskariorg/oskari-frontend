@@ -1,4 +1,7 @@
 import { processFeatureProperties } from '../util/props';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../mapmodule/util/vectorfeatures/filter';
+import { getFeatureAsGeojson } from '../../../../mapmodule/util/vectorfeatures/jsonHelper';
+
 import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
 import { SelectionHelper } from './SelectionHelper';
 
@@ -64,22 +67,39 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
-
+// TODO: is this used anymore?
     getLayerFeaturePropertiesInViewport (layerId) {
         const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const source = this._getLayerSource(layerId);
         const features = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
         return features.map(f => processFeatureProperties(f));
     }
+    getFeaturesWithFilter (layerId, geojson = {}) {
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
+        const source = this._getLayerSource(layerId);
+        const features = this._getFeaturesInExtent(source, [left, bottom, right, top]);
+        let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
+        if (geojson && geojson.geometry) {
+            geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
+        }
+        if (geojson && geojson.properties) {
+            geojsonFeatures = filterFeaturesByAttribute(geojsonFeatures, geojson.properties);
+        }
+        return geojsonFeatures;
+    }
 
-    _getFeaturePropsInExtent (source, extent) {
-        if (typeof source.getFeaturePropsInExtent === 'function') {
-            return source.getFeaturePropsInExtent(extent);
+    _getFeaturesInExtent (source, extent) {
+        if (typeof source.getMVTFeaturesInExtent === 'function') {
+            return source.getMVTFeaturesInExtent(extent);
         }
         if (typeof source.getFeaturesInExtent === 'function') {
-            return source.getFeaturesInExtent(extent).map(ftr => ftr.getProperties());
+            return source.getFeaturesInExtent(extent);
         }
         return [];
+    }
+
+    _getFeaturePropsInExtent (source, extent) {
+        return this._getFeaturesInExtent(source, extent).map(ftr => ftr.getProperties());
     }
 
     /**

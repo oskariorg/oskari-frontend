@@ -171,21 +171,76 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
      * @return {Array} features' properties as a list
      */
     getPropertiesForIntersectingGeom (geoJsonGeom, layer) {
+        const layerId = layer.getId();
+        const result = this.getFeatures({
+            geometry: geoJsonGeom
+        }, {
+            layers: [layerId]
+        });
+        const { features = [] } = result[layerId];
+        return features.map(f => f.properties);
+
+/*
         const handler = this._getLayerHandler(layer);
         if (!handler) {
             return;
         }
         const olLayer = this.getOLMapLayers(layer)[0];
         return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
+        */
     }
 
     getLayerFeaturePropertiesInViewport (layerId) {
+        const result = this.getFeatures(null, {
+            layers: [layerId]
+        });
+        const { features = [] } = result[layerId];
+        return features.map(f => f.properties);
+        /*
         const handler = this._getLayerHandler(layerId);
         if (handler) {
             return handler.getLayerFeaturePropertiesInViewport(layerId);
         }
+        */
     }
 
+    /**
+     * Override in actual plugins to returns features.
+     *
+     * Returns features that are currently on map filtered by given geometry and/or properties
+     * {
+     *   "[layer id]": {
+     *      runtime: true,
+     *      features: [{ geometry: {...}, properties: {...}}, ...]
+     *   },
+     *   ...
+     * }
+     * Runtime flag is true for features pushed with AddFeaturesToMapRequest etc and false/missing for features from WFS/OGC API sources.
+     * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
+     * @param {Object} opts additional options to narrow feature collection
+     * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
+     */
+     getFeatures (geojson = {}, opts = {}) {
+        // console.log('getting features from ', this.getName());
+        let { layers } = opts;
+        if (!layers || !layers.length) {
+            layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+        }
+        const result = {};
+        layers.forEach(layerId => {
+                const handler = this._getLayerHandler(layerId);
+                if (!handler) {
+                    return;
+                }
+                const features = handler.getFeaturesWithFilter(layerId, geojson);
+                if (features) {
+                    result[layerId] = {
+                        features
+                    };
+                }
+            });
+        return result;
+    }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
