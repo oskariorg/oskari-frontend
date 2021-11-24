@@ -20,7 +20,7 @@ import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
-import { getOlStyle, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
+import { getOlStyles, getOlStyleForLayer, setDefaultStyle } from './oskariStyle/generator.ol';
 import { STYLE_TYPE } from './oskariStyle/constants';
 import { LAYER_ID } from '../mapmodule/domain/constants';
 import { VectorFeatureSelectionService } from './service/VectorFeatureSelectionService';
@@ -289,10 +289,10 @@ export class MapModule extends AbstractMapModule {
      * @param styleDef Oskari style definition
      * @param styleType One of 'line', 'point', 'area' | optional
      * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
-     * @return {ol/style/Style}
+     * @return {ol/style/StyleLike}
      **/
     getStyle (styleDef, styleType, requestedStyle) {
-        return getOlStyle(this, styleDef, styleType, requestedStyle);
+        return getOlStyles(this, styleDef, styleType, requestedStyle);
     }
 
     getGeomTypedStyles (styleDef) {
