@@ -697,7 +697,7 @@ Oskari.clazz.define(
 
             // if layer has styles - select first
             if (styles.length) {
-                this._currentStyle = this.getStyles()[0];
+                this._currentStyle = styles[0];
                 Oskari.log('AbstractLayer').debug('selectStyle() defaulting to first available style for layer:', this.getId());
                 return;
             }

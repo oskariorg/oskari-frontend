@@ -351,7 +351,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 });
             };
             const popupTitle = id ? this.loc('editTheme') : this.loc('addTheme');
-            const hasSubgroups = id ? this._getLayerService().getAllLayerGroups(id).hasSubgroups() : false;
+            const hasSubgroups = id ? this._getLayerService().findLayerGroupById(id).hasSubgroups() : false;
             this.themeFlyout = new LocalizingFlyout(this, popupTitle, {
                 headerMessageKey: 'themeName',
                 id,

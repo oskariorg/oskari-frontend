@@ -326,10 +326,6 @@ Oskari.clazz.define(
          * @static
          */
         eventHandlers: {
-
-            /**
-             * @method FeatureData.FinishedDrawingEvent
-             */
             'DrawingEvent': function (event) {
                 var me = this,
                     coverageFeature;

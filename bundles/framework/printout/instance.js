@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
             // requesthandler
             this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function () {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
             });
             sandbox.requestHandler('printout.PrintMapRequest', this.printoutHandler);
 

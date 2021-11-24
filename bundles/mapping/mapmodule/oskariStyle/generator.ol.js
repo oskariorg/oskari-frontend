@@ -137,10 +137,10 @@ export const getStyleFunction = styles => {
         const typed = found ? found.typed : styles.typed;
         const olStyles = getStylesForGeometry(feature.getGeometry(), typed);
         // if typed is from optional styles and it doesn't have labelProperty, check if normal style has
-        const { labelProperty } = typed || styles.typed;
+        const { label } = typed || styles.typed;
         const textStyle = olStyles.length ? olStyles[0].getText() : undefined;
-        if (labelProperty && textStyle) {
-            _setFeatureLabel(feature, textStyle, labelProperty);
+        if (textStyle) {
+            _setFeatureLabel(feature, textStyle, label);
         }
         return olStyles;
     };
@@ -215,17 +215,23 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
-const _setFeatureLabel = (feature, textStyle, labelProperty) => {
-    let prop;
-    if (Array.isArray(labelProperty)) {
-        prop = labelProperty.find(p => feature.get(p));
-    } else {
-        prop = labelProperty;
-    }
-    if (!prop) {
+const _setFeatureLabel = (feature, textStyle, label = {}) => {
+    const { text, property } = label;
+    if (!property) {
         return;
     }
-    textStyle.setText(feature.get(prop));
+    let value;
+    if (Array.isArray(property)) {
+        const keyForFirstValue = property.find(p => feature.get(p));
+        value = feature.get(keyForFirstValue);
+    } else {
+        value = feature.get(property);
+    }
+    if (!value) {
+        return;
+    }
+    const featureLabel = text ? text + ': ' + value : value;
+    textStyle.setText(featureLabel);
 };
 
 /**

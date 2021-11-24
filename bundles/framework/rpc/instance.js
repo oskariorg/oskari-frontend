@@ -181,7 +181,9 @@ Oskari.clazz.define(
                     'MapModulePlugin.MapLayerUpdateRequest',
                     'rotate.map',
                     'StartUserLocationTrackingRequest',
-                    'StopUserLocationTrackingRequest'
+                    'StopUserLocationTrackingRequest',
+                    'ChangeMapLayerStyleRequest',
+                    'RearrangeSelectedMapLayerRequest'
                 ];
             }
             // try to get event/request builder for each of these to see that they really are supported!!

@@ -1,4 +1,4 @@
-import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, WFS_TYPE, VECTOR_TYPE } from '../domain/constants';
+import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, VECTOR_TILE_TYPE, VECTOR_TYPE } from '../domain/constants';
 import { getStylesForGeometry } from '../oskariStyle/generator.ol';
 import olOverlay from 'ol/Overlay';
 import olLayerVector from 'ol/layer/Vector';
@@ -52,19 +52,19 @@ export class HoverHandler {
         const layerId = olLayer.get(LAYER_ID);
         this.updateTooltipContent(layerId, feature);
 
-        // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
-        if (layerType === VECTOR_TYPE) {
-            return;
-        }
         const layerChanged = this._state.layerId !== layerId;
         this._state = {
             feature,
             layerId
         };
+        // Vectorhandler updates vector layers' feature styles but tooltip is handled by hoverhandler
+        if (layerType === VECTOR_TYPE) {
+            return;
+        }
         // Try first if layer has stored vectorlayer
         const vtLayer = this._vectorTileLayers[layerId];
         if (vtLayer) {
-            const idProp = WFS_TYPE === layerType ? WFS_ID_KEY : FTR_PROPERTY_ID;
+            const idProp = this._getIdProperty(layerType);
             this._state.renderFeatureId = feature.get(idProp);
             vtLayer.changed();
             return;
@@ -142,7 +142,7 @@ export class HoverHandler {
     }
 
     setTooltipContent (layer) {
-        const options = layer.getHoverOptions();
+        const options = typeof layer.getHoverOptions === 'function' ? layer.getHoverOptions() : {};
         if (!options || !Array.isArray(options.content)) {
             return;
         }
@@ -211,7 +211,9 @@ export class HoverHandler {
     }
 
     _getIdProperty (layerType) {
-        return WFS_TYPE === layerType ? WFS_ID_KEY : FTR_PROPERTY_ID;
+        // WFS layer plugin handles additional layer types which uses '_oid' key but layer type isn't wfs
+        // It's clearer to check layers which uses 'id' key
+        return layerType === VECTOR_TILE_TYPE || layerType === VECTOR_TYPE ? FTR_PROPERTY_ID : WFS_ID_KEY;
     }
 
     /**
