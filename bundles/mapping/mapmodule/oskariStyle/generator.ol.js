@@ -80,7 +80,7 @@ export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
     return getStyleFunction({ typed, optional });
 };
 
-export const getStyleForGeometry = (geometry, styleTypes) => {
+export const getStylesForGeometry = (geometry, styleTypes) => {
     if (!geometry || !styleTypes) {
         return;
     }
@@ -93,12 +93,12 @@ export const getStyleForGeometry = (geometry, styleTypes) => {
         }
         if (geometries.length > 0) {
             log.debug('Received GeometryCollection. Using first feature to determine feature style.');
-            return getStyleForGeometry(geometries[0], styleTypes);
+            return getStylesForGeometry(geometries[0], styleTypes);
         } else {
             log.info('Received GeometryCollection without geometries. Feature style cannot be determined.');
         }
     };
-    return styleTypes[type];
+    return styleTypes[type] || [];
 };
 
 // Style for cluster circles
@@ -135,14 +135,14 @@ export const getStyleFunction = styles => {
     return (feature) => {
         const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
         const typed = found ? found.typed : styles.typed;
-        const style = getStyleForGeometry(feature.getGeometry(), typed);
+        const olStyles = getStylesForGeometry(feature.getGeometry(), typed);
         // if typed is from optional styles and it doesn't have labelProperty, check if normal style has
         const { label } = typed || styles.typed;
-        const textStyle = style ? style.getText() : undefined;
+        const textStyle = olStyles.length ? olStyles[0].getText() : undefined;
         if (textStyle) {
             _setFeatureLabel(feature, textStyle, label);
         }
-        return style;
+        return olStyles;
     };
 };
 export const wrapClusterStyleFunction = styleFunction => {
@@ -240,18 +240,20 @@ const _setFeatureLabel = (feature, textStyle, label = {}) => {
  * @param styleDef Oskari style definition
  * @param geomType One of 'area', 'line', 'dot' | optional
  * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
- * @return {ol/style/Style} style ol specific!
+ * @return {Array} ol/style/Style. First item is main style and rest are optional/additional
  */
-export const getOlStyle = (mapModule, styleDef, geomType, requestedStyle = {}) => {
+export const getOlStyles = (mapModule, styleDef, geomType, requestedStyle = {}) => {
+    const olStyles = [];
     const style = jQuery.extend(true, {}, styleDef);
-
     const olStyle = {};
     olStyle.fill = getFillStyle(style);
     if (style.stroke) {
         if (geomType === 'line') {
             delete style.stroke.area;
         }
-        olStyle.stroke = getStrokeStyle(style);
+        const olStroke = getStrokeStyle(style);
+        olStyles.push(...getWorkaroundForDash(olStroke));
+        olStyle.stroke = olStroke;
     }
     if (style.image) {
         olStyle.image = getImageStyle(mapModule, style, requestedStyle);
@@ -262,7 +264,23 @@ export const getOlStyle = (mapModule, styleDef, geomType, requestedStyle = {}) =
             olStyle.text = textStyle;
         }
     }
-    return new olStyleStyle(olStyle);
+    const mainStyle = new olStyleStyle(olStyle);
+    olStyles.unshift(mainStyle);
+    return olStyles;
+};
+
+// draw transparent solid stroke to fire hover and click also on gaps with dashed stroke
+// open layers renders only dashes so hover or click aren't fired on gaps
+const getWorkaroundForDash = olStroke => {
+    const lineDash = olStroke.getLineDash();
+    if (!lineDash || !lineDash.length) {
+        return [];
+    }
+    const transparent = olStroke.clone();
+    applyAlphaToColorable(transparent, 0.01);
+    transparent.setLineDash(null);
+    const olStyle = new olStyleStyle({ stroke: transparent });
+    return [olStyle];
 };
 
 /**

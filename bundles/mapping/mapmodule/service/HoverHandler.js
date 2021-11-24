@@ -1,5 +1,5 @@
 import { LAYER_TYPE, LAYER_HOVER, WFS_ID_KEY, FTR_PROPERTY_ID, LAYER_ID, VECTOR_TILE_TYPE, VECTOR_TYPE } from '../domain/constants';
-import { getStyleForGeometry } from '../oskariStyle/generator.ol';
+import { getStylesForGeometry } from '../oskariStyle/generator.ol';
 import olOverlay from 'ol/Overlay';
 import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';
@@ -173,12 +173,12 @@ export class HoverHandler {
             const idProp = this._getIdProperty(layerType);
             return feature => {
                 if (this._state.renderFeatureId === feature.get(idProp)) {
-                    return getStyleForGeometry(feature.getType(), olStyles);
+                    return getStylesForGeometry(feature.getType(), olStyles);
                 }
             };
         }
         return feature => {
-            return getStyleForGeometry(feature.getGeometry(), olStyles);
+            return getStylesForGeometry(feature.getGeometry(), olStyles);
         };
     }
 
