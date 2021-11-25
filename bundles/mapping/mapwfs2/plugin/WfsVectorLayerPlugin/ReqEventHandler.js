@@ -2,6 +2,7 @@ import { processFeatureProperties } from './util/props';
 import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../../mapmodule/domain/constants';
 import { getFilterAlternativesAsArray, filterFeaturesByAttribute } from '../../../mapmodule/util/vectorfeatures/filter';
 
+const getFeatureId = (feature) => feature.id || feature.properties[WFS_ID_KEY] || feature.properties[WFS_FTR_ID_KEY];
 export class ReqEventHandler {
     constructor (sandbox) {
         this.sandbox = sandbox;
@@ -83,7 +84,7 @@ export class ReqEventHandler {
                 });
                 Object.keys(featuresResult).forEach(layerId => {
                     const layerFeatures = featuresResult[layerId].features || [];
-                    const selectedFeatureIds = layerFeatures.map(feat => feat.properties[WFS_ID_KEY]);
+                    const selectedFeatureIds = layerFeatures.map(getFeatureId);
 
                     if (keepPrevious) {
                         selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
@@ -114,7 +115,7 @@ export class ReqEventHandler {
                         filteredList = filterFeaturesByAttribute(filteredList, filter);
                     });
                     filteredList
-                        .map(feat => feat.id || feat.properties[WFS_ID_KEY] || feat.properties[WFS_FTR_ID_KEY])
+                        .map(getFeatureId)
                         .filter(id => !!id)
                         .forEach(id => filteredIds.add(id));
                 });
