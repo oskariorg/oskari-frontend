@@ -40,11 +40,11 @@ export const filterFeaturesByAttribute = (features, filter = {}) => {
     });
 };
 
-const reader = new GeoJSONReader();
 const filterFeaturesByJSTSGeometry = (features, jstsGeometry) => {
     const geomFilter = (feature) => RelateOp.relate(jstsGeometry, reader.read(feature.geometry)).isIntersects();
     return features.filter(geomFilter);
 };
+const reader = new GeoJSONReader();
 export const filterFeaturesByGeometry = (features, geometry) => {
     const jstsGeometry = reader.read(geometry);
     return filterFeaturesByJSTSGeometry(features, jstsGeometry);
@@ -56,8 +56,8 @@ export const filterFeaturesByExtent = (features, extent) => {
     }
     // https://github.com/bjornharrtell/jsts/blob/master/src/org/locationtech/jts/geom/Envelope.js
     // assumes that extent is [x1, x2, y1, y2], but openlayers uses [left, bottom, right, top]
-    const daa = GEOM_FACTORY.toGeometry(new Envelope(extent[0], extent[2], extent[1], extent[3]))
-    return filterFeaturesByJSTSGeometry(features, daa);
+    const extentAsJSTSGeometry = GEOM_FACTORY.toGeometry(new Envelope(extent[0], extent[2], extent[1], extent[3]));
+    return filterFeaturesByJSTSGeometry(features, extentAsJSTSGeometry);
 };
 
 /**
