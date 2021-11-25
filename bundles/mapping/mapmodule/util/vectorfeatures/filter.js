@@ -33,16 +33,6 @@ const propertiesMatchFilter = (props = {}, filter) => {
     return operators[filter.operator](val, filterVal);
 };
 
-/**
- * @method filterByAttribute Filters the given record list.
- * @param {Object} filter a filter from WFSSetPropertyFilter event
- * @param {Array} featurePropertyList array of feature properties (object) to filter
- * @return {Array} filtered array or the original recordList if the filter was invalid.
- */
-export const filterByAttribute = (filter, featurePropertyList) => {
-    return featurePropertyList.filter(props => propertiesMatchFilter(props, filter));
-};
-
 export const filterFeaturesByAttribute = (features, filter = {}) => {
     return features.filter(feature => {
         return propertiesMatchFilter(feature.properties || {}, filter);

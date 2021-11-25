@@ -8,7 +8,7 @@ import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
 import { WFS_ID_KEY } from '../../../../../mapmodule/domain/constants';
-import { getMVTFeaturesInExtent } from '../../../../../mapmodule/util/vectorfeatures/mvthelper';
+import { getMVTFeaturesInExtent } from '../../../../../mapmodule/util/vectorfeatures/mvtHelper';
 
 
 const reader = new GeoJSONReader();
@@ -39,7 +39,7 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
     getPropsIntersectingGeom (geom) {
         const geomFilter = reader.read(geom);
         const envelope = geomFilter.getEnvelopeInternal();
-        const features = this.getMVTFeaturesInExtent([envelope.getMinX(), envelope.getMinY(),
+        const features = getMVTFeaturesInExtent([envelope.getMinX(), envelope.getMinY(),
             envelope.getMaxX(), envelope.getMaxY()], this, WFS_ID_KEY);
         const jstsGeomFeatures = features.map(feature => ({
             id: feature.get(WFS_ID_KEY),

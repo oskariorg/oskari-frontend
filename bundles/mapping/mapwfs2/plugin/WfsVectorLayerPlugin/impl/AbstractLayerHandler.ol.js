@@ -1,7 +1,6 @@
-import { processFeatureProperties } from '../util/props';
+import { Cluster as olCluster } from 'ol/source';
 import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../../../mapmodule/util/vectorfeatures/filter';
 import { getFeatureAsGeojson } from '../../../../mapmodule/util/vectorfeatures/jsonHelper';
-
 import { getZoomLevelHelper } from '../../../../mapmodule/util/scale';
 import { SelectionHelper } from './SelectionHelper';
 
@@ -67,16 +66,12 @@ export class AbstractLayerHandler {
     refreshLayer (layer) {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
-// TODO: is this used anymore?
-    getLayerFeaturePropertiesInViewport (layerId) {
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
-        const source = this._getLayerSource(layerId);
-        const features = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
-        return features.map(f => processFeatureProperties(f));
-    }
     getFeaturesWithFilter (layerId, geojson = {}) {
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const source = this._getLayerSource(layerId);
+        if (!source) {
+            return [];
+        }
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const features = this._getFeaturesInExtent(source, [left, bottom, right, top]);
         let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
         if (geojson && geojson.geometry) {
@@ -108,10 +103,17 @@ export class AbstractLayerHandler {
      * @return {ol/source/VectorTile}
      */
     _getLayerSource (layer) {
-        const olLayers = this.plugin.getOLMapLayers(layer);
-        if (olLayers && olLayers.length > 0) {
-            return olLayers[0].getSource();
+        const olLayers = this.plugin.getOLMapLayers(layer) || [];
+        const mainLayer = olLayers.length ? olLayers[0] : null;
+        if (!mainLayer) {
+            return;
         }
+        let source = mainLayer.getSource();
+        if (source instanceof olCluster) {
+            // Get wrapped vector source
+            source = source.getSource();
+        }
+        return source;
     }
 
     /**

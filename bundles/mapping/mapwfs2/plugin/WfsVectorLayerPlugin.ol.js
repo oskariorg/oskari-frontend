@@ -162,33 +162,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             handler.refreshLayer(layer);
         }
     }
-    /**
-     * @method getPropertiesForIntersectingGeom
-     * To get feature properties as a list. Returns features that intersect with given geometry.
-     *
-     * @param {String | Object} geoJsonGeom GeoJson format geometry object. Note: NOT feature, but feature's geometry
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {Array} features' properties as a list
-     */
-    getPropertiesForIntersectingGeom (geoJsonGeom, layer) {
-        const layerId = layer.getId();
-        const result = this.getFeatures({
-            geometry: geoJsonGeom
-        }, {
-            layers: [layerId]
-        });
-        const { features = [] } = result[layerId];
-        return features.map(f => f.properties);
-
-/*
-        const handler = this._getLayerHandler(layer);
-        if (!handler) {
-            return;
-        }
-        const olLayer = this.getOLMapLayers(layer)[0];
-        return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
-        */
-    }
 
     getLayerFeaturePropertiesInViewport (layerId) {
         const result = this.getFeatures(null, {
@@ -196,12 +169,6 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         });
         const { features = [] } = result[layerId];
         return features.map(f => f.properties);
-        /*
-        const handler = this._getLayerHandler(layerId);
-        if (handler) {
-            return handler.getLayerFeaturePropertiesInViewport(layerId);
-        }
-        */
     }
 
     /**
@@ -229,6 +196,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         let { layers } = opts;
         if (!layers || !layers.length) {
             layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+            // TODO: filter layers by isInScale()
         }
         const result = {};
         layers.forEach(layerId => {
