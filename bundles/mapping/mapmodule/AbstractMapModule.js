@@ -914,7 +914,6 @@ Oskari.clazz.define(
                 const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
                 const extent = [left, bottom, right, top];
                 const features = filterFeaturesByExtent([geojson], extent);
-                console.log(features);
                 if (!features.length) {
                     // requested geojson is not in viewport -> respond with an error
                     return {
