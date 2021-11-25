@@ -191,15 +191,26 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
      * @param {Object} opts additional options to narrow feature collection
      * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
      */
-     getFeatures (geojson = {}, opts = {}) {
-        // console.log('getting features from ', this.getName());
+    getFeatures (geojson = {}, opts = {}) {
         let { layers } = opts;
         if (!layers || !layers.length) {
             layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
-            // TODO: filter layers by isInScale()
         }
         const result = {};
         layers.forEach(layerId => {
+            const layer = this.getSandbox().getMap().getSelectedLayer(layerId);
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const err = this.detectErrorOnFeatureQuery(layer);
+            if (err) {
+                result[layerId] = {
+                    error: err,
+                    features: []
+                };
+                return;
+            }
+
             const handler = this._getLayerHandler(layerId);
             if (!handler) {
                 return;

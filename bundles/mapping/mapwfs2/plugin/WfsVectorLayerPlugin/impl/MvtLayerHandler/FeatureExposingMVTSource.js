@@ -10,7 +10,6 @@ import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 import { WFS_ID_KEY } from '../../../../../mapmodule/domain/constants';
 import { getMVTFeaturesInExtent } from '../../../../../mapmodule/util/vectorfeatures/mvtHelper';
 
-
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
@@ -20,16 +19,6 @@ olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olG
  * MVT source that allows queries about loaded features. Uses OL internal APIs.
  */
 export class FeatureExposingMVTSource extends olSourceVectorTile {
-    /**
-     * @method getFeaturePropsInExtent
-     * Returns properties of features whose extent intersects with the given extent
-     * @param {ol/extent | Number[]} extent requested extent [minx, miny, maxx, maxy]
-     * @return {Object[]} List of feature properties objects
-     */
-    getFeaturePropsInExtent (extent) {
-        const features = getMVTFeaturesInExtent(extent, this, WFS_ID_KEY);
-        return features.map(f => f.getProperties());
-    }
     /**
      * @method getPropsIntersectingGeom
      * Returns properties of features whose geometry intersects given GeoJson geometry

@@ -900,18 +900,19 @@ Oskari.clazz.define(
          */
         getVectorFeatures (geojson = {}, opts = {}) {
             const layerPlugins = this.getLayerPlugins();
-            const featuresPerPlugin = Object.keys(layerPlugins).map(pluginName => {
-                const plugin = layerPlugins[pluginName];
-                if (plugin instanceof AbstractVectorLayerPlugin) {
-                    return plugin.getFeatures(geojson, opts);
-                }
-                return null;
-            })
-            .filter(item => !!item);
+            const featuresPerPlugin = Object.keys(layerPlugins)
+                .map(pluginName => {
+                    const plugin = layerPlugins[pluginName];
+                    if (plugin instanceof AbstractVectorLayerPlugin) {
+                        return plugin.getFeatures(geojson, opts);
+                    }
+                    return null;
+                })
+                .filter(item => !!item);
             // gather results from different plugins to one result object
             const result = {};
             featuresPerPlugin.forEach(res => {
-                Object.keys(res).forEach(layerId => result[layerId] = res[layerId]);
+                Object.keys(res).forEach(layerId => (result[layerId] = res[layerId]));
             });
             return result;
         },
