@@ -210,12 +210,16 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
      * Returns features that are currently on map filtered by given geometry and/or properties
      * {
      *   "[layer id]": {
+     *      accuracy: 'extent',
      *      runtime: true,
      *      features: [{ geometry: {...}, properties: {...}}, ...]
      *   },
      *   ...
      * }
      * Runtime flag is true for features pushed with AddFeaturesToMapRequest etc and false/missing for features from WFS/OGC API sources.
+     * For features that are queried from MVT-tiles we might not be able to get the whole geometry and since it's not accurate they will
+     *  only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the
+     *  feature continues on unloaded tiles.
      * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
      * @param {Object} opts additional options to narrow feature collection
      * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
@@ -228,17 +232,17 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
         }
         const result = {};
         layers.forEach(layerId => {
-                const handler = this._getLayerHandler(layerId);
-                if (!handler) {
-                    return;
-                }
-                const features = handler.getFeaturesWithFilter(layerId, geojson);
-                if (features) {
-                    result[layerId] = {
-                        features
-                    };
-                }
-            });
+            const handler = this._getLayerHandler(layerId);
+            if (!handler) {
+                return;
+            }
+            const features = handler.getFeaturesWithFilter(layerId, geojson);
+            if (features) {
+                result[layerId] = {
+                    features
+                };
+            }
+        });
         return result;
     }
     /**

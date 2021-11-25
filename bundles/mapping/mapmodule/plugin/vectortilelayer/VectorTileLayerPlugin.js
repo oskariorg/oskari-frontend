@@ -274,7 +274,6 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     }
 
     createSource (layer, options) {
-        // TODO: maybe use FeatureExposingSource from mapwfs?
         return new olSourceVectorTile(options);
     }
 
