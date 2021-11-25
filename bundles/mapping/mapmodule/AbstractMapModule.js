@@ -905,6 +905,7 @@ Oskari.clazz.define(
          */
         getVectorFeatures (geojson = {}, opts = {}) {
             const layerPlugins = this.getLayerPlugins();
+            // TODO: detect if geojson is not on the current viewport and return an error if it is without querying plugins
             const featuresPerPlugin = Object.keys(layerPlugins)
                 .map(pluginName => {
                     const plugin = layerPlugins[pluginName];
