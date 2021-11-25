@@ -133,7 +133,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * Like so:
      * Set breakpoint on "const tileGrid = createXYZ({ ... });"
      * Call this._createDebugLayer(source)
-     * @param {FeatureExposingMVTSource} source layer source
+     * @param {ol.source.TileDebug} source layer source
      */
     _createDebugLayer (tileGrid) {
         this.plugin.getMapModule().getMap().addLayer(new olLayerTile({

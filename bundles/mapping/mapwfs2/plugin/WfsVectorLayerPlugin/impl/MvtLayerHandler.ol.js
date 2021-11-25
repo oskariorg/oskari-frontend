@@ -4,7 +4,9 @@ import olLayerTile from 'ol/layer/Tile';
 import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
-import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
+import olSourceVectorTile from 'ol/source/VectorTile';
+import { getMVTFeaturesInExtent } from '../../../../mapmodule/util/vectorfeatures/mvtHelper';
+import { WFS_ID_KEY } from '../../../../mapmodule/domain/constants';
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { RequestCounter } from './RequestCounter';
 
@@ -40,7 +42,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         if (mvtMinScale && (!layerMinScale || layerMinScale > mvtMinScale)) {
             layer.setMinScale(mvtMinScale);
         }
-        const source = new FeatureExposingMVTSource(sourceOpts);
+        const source = new olSourceVectorTile(sourceOpts);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
@@ -53,6 +55,16 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         const olLayers = [vectorTileLayer, hoverLayer];
         this.plugin.setOLMapLayers(layer.getId(), olLayers);
         return olLayers;
+    }
+
+    _getFeaturesInViewport (layerId) {
+        const source = this._getLayerSource(layerId);
+        if (!source) {
+            return [];
+        }
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        return getMVTFeaturesInExtent(source, extent, WFS_ID_KEY) || [];
     }
 
     _getMinZoom (config) {
@@ -97,13 +109,13 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
     /**
      * @method _createDebugLayer Helper for debugging purposes.
-     * Use from console. Set breakpoint when new FeatureExposingMVTSource() is called
+     * Use from console. Set breakpoint when new olSourceVectorTile() is called
      *  and add desired layer to map.
      *
      * Like so:
-     * Set breakpoint on "const source = new FeatureExposingMVTSource(options);"
+     * Set breakpoint on "const source = new olSourceVectorTile(options);"
      * Call this._createDebugLayer(source)
-     * @param {FeatureExposingMVTSource} source layer source
+     * @param {ol.source.TileDebug} source layer source
      */
     _createDebugLayer (source) {
         this.plugin.getMapModule().getMap().addLayer(new olLayerTile({

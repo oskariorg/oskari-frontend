@@ -67,12 +67,10 @@ export class AbstractLayerHandler {
         this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
     }
     getFeaturesWithFilter (layerId, geojson = {}) {
-        const source = this._getLayerSource(layerId);
-        if (!source) {
+        const features = this._getFeaturesInViewport(layerId);
+        if (!features.length) {
             return [];
         }
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
-        const features = this._getFeaturesInExtent(source, [left, bottom, right, top]);
         let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
         if (geojson && geojson.geometry) {
             geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
@@ -83,18 +81,14 @@ export class AbstractLayerHandler {
         return geojsonFeatures;
     }
 
-    _getFeaturesInExtent (source, extent) {
-        if (typeof source.getMVTFeaturesInExtent === 'function') {
-            return source.getMVTFeaturesInExtent(extent);
+    _getFeaturesInViewport (layerId) {
+        const source = this._getLayerSource(layerId);
+        if (!source) {
+            return [];
         }
-        if (typeof source.getFeaturesInExtent === 'function') {
-            return source.getFeaturesInExtent(extent);
-        }
-        return [];
-    }
-
-    _getFeaturePropsInExtent (source, extent) {
-        return this._getFeaturesInExtent(source, extent).map(ftr => ftr.getProperties());
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        return source.getFeaturesInExtent(extent) || [];
     }
 
     /**

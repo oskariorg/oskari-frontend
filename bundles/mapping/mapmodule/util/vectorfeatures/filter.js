@@ -55,7 +55,7 @@ export const filterFeaturesByExtent = (features, extent) => {
         return features;
     }
     // https://github.com/bjornharrtell/jsts/blob/master/src/org/locationtech/jts/geom/Envelope.js
-    // assumes that extent is [x1, x2, y1, y2], but openlayers uses [left, bottom, right, top]
+    // assumes that extent is [x1, x2, y1, y2], but OpenLayers uses [left, bottom, right, top]
     const extentAsJSTSGeometry = GEOM_FACTORY.toGeometry(new Envelope(extent[0], extent[2], extent[1], extent[3]));
     return filterFeaturesByJSTSGeometry(features, extentAsJSTSGeometry);
 };
