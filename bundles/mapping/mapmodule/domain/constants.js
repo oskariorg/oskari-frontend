@@ -24,5 +24,6 @@ export const FEATURE_QUERY_ERRORS = {
     NOT_FOUND: 'not_found',
     NOT_SELECTED: 'not_selected',
     HIDDEN: 'hidden',
-    SCALE: 'scale'
+    SCALE: 'scale',
+    OUT_OF_BOUNDS: 'out_of_bounds'
 };

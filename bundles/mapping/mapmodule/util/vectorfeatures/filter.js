@@ -1,7 +1,8 @@
 
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
-import GeoJSONWriter from 'jsts/org/locationtech/jts/io/GeoJSONWriter';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
+import Envelope from 'jsts/org/locationtech/jts/geom/Envelope';
+import GeometryFactory from 'jsts/org/locationtech/jts/geom/GeometryFactory';
 
 const operators = {
     '=': (a, b) => a === b,
@@ -40,24 +41,23 @@ export const filterFeaturesByAttribute = (features, filter = {}) => {
 };
 
 const reader = new GeoJSONReader();
-const writer = new GeoJSONWriter();
+const filterFeaturesByJSTSGeometry = (features, jstsGeometry) => {
+    const geomFilter = (feature) => RelateOp.relate(jstsGeometry, reader.read(feature.geometry)).isIntersects();
+    return features.filter(geomFilter);
+};
 export const filterFeaturesByGeometry = (features, geometry) => {
-    const geomFilter = reader.read(geometry);
-    const jstsGeomFeatures = features.map(feature => ({
-        id: feature.id,
-        properties: {
-            ...feature.properties
-        },
-        // this is not very performant since we write geojson from ol feature to
-        //  get it parsed by jsts and then we write it back to geojson from jsts geometry
-        geometry: reader.read(feature.geometry)
-    }));
-    return jstsGeomFeatures
-        .filter(feature => RelateOp.relate(geomFilter, feature.geometry).isIntersects())
-        .map(feature => ({
-            ...feature,
-            geometry: writer.write(feature.geometry)
-        }));
+    const jstsGeometry = reader.read(geometry);
+    return filterFeaturesByJSTSGeometry(features, jstsGeometry);
+};
+const GEOM_FACTORY = new GeometryFactory();
+export const filterFeaturesByExtent = (features, extent) => {
+    if (!extent || extent.length < 4) {
+        return features;
+    }
+    // https://github.com/bjornharrtell/jsts/blob/master/src/org/locationtech/jts/geom/Envelope.js
+    // assumes that extent is [x1, x2, y1, y2], but openlayers uses [left, bottom, right, top]
+    const daa = GEOM_FACTORY.toGeometry(new Envelope(extent[0], extent[2], extent[1], extent[3]))
+    return filterFeaturesByJSTSGeometry(features, daa);
 };
 
 /**
