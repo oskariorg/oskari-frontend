@@ -8,11 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
         allowedSiblings: [],
         bundleName: 'maplegend',
         /**
-   * Get tool object.
-   * @method getTool
-   *
-   * @returns {Object} tool description
-   */
+         * Get tool object.
+         * @method getTool
+         *
+         * @returns {Object} tool description
+         */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
@@ -30,9 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return maplegend.plugin;
         },
         /**
-   * Initialise tool
-   * @method init
-   */
+         * Initialise tool
+         * @method init
+         */
         init: function (data) {
             var me = this;
 
@@ -64,22 +64,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return true;
         },
         /**
-  * Set enabled.
-  * @method setEnabled
-  * @public
-  *
-  * @param {Boolean} enabled is tool enabled or not
-  */
+         * Set enabled.
+         * @method setEnabled
+         * @public
+         *
+         * @param {Boolean} enabled is tool enabled or not
+         */
         setEnabled: function (enabled) {
-            var me = this,
-                tool = me.getTool();
+            var me = this;
 
+            // state actually hasn't changed -> do nothing
+            if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+                return;
+            }
             me.state.enabled = enabled;
-            if (tool.config.instance.plugin === null && enabled) {
+
+            if (enabled) {
                 me.getInstance().createPlugin();
                 me.__started = true;
-            }
-            if (!enabled && me.__started) {
+            } else {
                 if (me.getInstance().plugin) {
                     me.getInstance().stopPlugin();
                 }
@@ -87,12 +90,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             }
         },
         /**
-  * Get values.
-  * @method getValues
-  * @public
-  *
-  * @returns {Object} tool value object
-  */
+         * Get values.
+         * @method getValues
+         * @public
+         *
+         * @returns {Object} tool value object
+         */
         getValues: function () {
             var me = this;
             if (me.state.enabled) {
