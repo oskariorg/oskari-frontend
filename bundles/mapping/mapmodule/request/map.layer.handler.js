@@ -44,10 +44,11 @@ Oskari.clazz.define('map.layer.handler',
                 this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
             } else if (request.getName() === 'ChangeMapLayerOpacityRequest') {
                 layer = this.mapState.getSelectedLayer(request.getMapLayerId());
-                if (!layer) {
+                const opacity = request.getOpacity();
+                if (!layer || isNaN(opacity)) {
                     return;
                 }
-                layer.setOpacity(request.getOpacity());
+                layer.setOpacity(Number(opacity));
 
                 evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
                 evt._creator = request._creator;
