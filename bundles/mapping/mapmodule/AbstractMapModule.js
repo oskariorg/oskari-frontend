@@ -922,17 +922,33 @@ Oskari.clazz.define(
                 }
             }
 
+            const result = {};
+            const layers = opts.layers || [];
+            // check if requested layers are on the map
+            // plugin.detectErrorOnFeatureQuery() has handling for this but plugins check if they
+            // support the layer before it's called and with missing layer the method is not called.
+            layers.forEach(layerId => {
+                const layer = this.getSandbox().getMap().getSelectedLayer(layerId);
+                if (!layer) {
+                    result[layerId] = {
+                        error: FEATURE_QUERY_ERRORS.NOT_SELECTED,
+                        features: []
+                    };
+                }
+            });
+
             const featuresPerPlugin = Object.keys(layerPlugins)
                 .map(pluginName => {
                     const plugin = layerPlugins[pluginName];
                     if (plugin instanceof AbstractVectorLayerPlugin) {
-                        return plugin.getFeatures(geojson, opts);
+                        // always pass {} if geojson is not present since default value isn't used for `null`
+                        return plugin.getFeatures(geojson || {}, opts);
                     }
                     return null;
                 })
                 .filter(item => !!item);
+
             // gather results from different plugins to one result object
-            const result = {};
             featuresPerPlugin.forEach(res => {
                 Object.keys(res).forEach(layerId => (result[layerId] = res[layerId]));
             });
