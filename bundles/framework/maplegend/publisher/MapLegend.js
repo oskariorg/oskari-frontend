@@ -71,15 +71,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
          * @param {Boolean} enabled is tool enabled or not
          */
         setEnabled: function (enabled) {
-            var me = this,
-                tool = me.getTool();
+            var me = this;
 
+            // state actually hasn't changed -> do nothing
+            if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+                return;
+            }
             me.state.enabled = enabled;
-            if (tool.config.instance.plugin === null && enabled) {
+
+            if (enabled) {
                 me.getInstance().createPlugin();
                 me.__started = true;
-            }
-            if (!enabled && me.__started) {
+            } else {
                 if (me.getInstance().plugin) {
                     me.getInstance().stopPlugin();
                 }
