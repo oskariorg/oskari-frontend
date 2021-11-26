@@ -6,17 +6,20 @@ import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
-import { LAYER_ID, LAYER_TYPE } from '../../domain/constants';
+import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
+import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
+import { getMVTFeaturesInExtent } from '../../util/vectorfeatures/mvtHelper';
+import { filterFeaturesByAttribute, filterFeaturesByGeometry } from '../../util/vectorfeatures/filter';
 
-const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const AbstractVectorLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractVectorLayerPlugin');
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
  * Provides functionality to draw vector tile layers on the map
  */
-class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
+class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     constructor (config) {
         super(config);
         this.__name = 'VectorTileLayerPlugin';
@@ -161,6 +164,73 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const params = layer.getParams();
         return Object.keys(params)
             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+    }
+
+    /**
+     * Override in actual plugins to returns features.
+     *
+     * Returns features that are currently on map filtered by given geometry and/or properties
+     * {
+     *   "[layer id]": {
+            accuracy: 'extent',
+     *      features: [{ geometry: {...}, properties: {...}}, ...]
+     *   },
+     *   ...
+     * }
+     * For features that are queried from MVT-tiles we might not be able to get the whole geometry and since it's not accurate they will
+     *  only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the
+     *  feature continues on unloaded tiles.
+     * @param {Object} geojson an object with geometry and/or properties as filter for features. Geometry defaults to current viewport.
+     * @param {Object} opts additional options to narrow feature collection
+     * @returns {Object} an object with layer ids as keys with an object value with key "features" for the features on that layer and optional runtime-flag
+     */
+    getFeatures (geojson = {}, opts = {}) {
+        // console.log('getting features from ', this.getName());
+        const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+        const extent = [left, bottom, right, top];
+        let { layers } = opts;
+        if (!layers || !layers.length) {
+            layers = this.getSandbox().getMap().getLayers().map(l => l.getId());
+        }
+        const result = {};
+        layers.forEach(layerId => {
+            const layer = this.getSandbox().getMap().getSelectedLayer(layerId);
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            const err = this.detectErrorOnFeatureQuery(layer);
+            if (err) {
+                result[layerId] = {
+                    error: err,
+                    features: []
+                };
+                return;
+            }
+            const layerImpls = this.getOLMapLayers(layerId);
+            if (!layerImpls || !layerImpls.length) {
+                result[layerId] = {
+                    error: FEATURE_QUERY_ERRORS.NOT_FOUND,
+                    features: []
+                };
+                return;
+            }
+            const features = getMVTFeaturesInExtent(layerImpls[0].getSource(), extent);
+            if (!features) {
+                return;
+            }
+            let geojsonFeatures = features.map(feat => getFeatureAsGeojson(feat));
+            if (geojson.geometry) {
+                geojsonFeatures = filterFeaturesByGeometry(geojsonFeatures, geojson.geometry);
+            }
+            if (geojson.properties) {
+                geojsonFeatures = filterFeaturesByAttribute(geojsonFeatures, geojson.properties);
+            }
+            result[layerId] = {
+                accuracy: 'extent',
+                features: geojsonFeatures
+            };
+        });
+        return result;
     }
 
     /**

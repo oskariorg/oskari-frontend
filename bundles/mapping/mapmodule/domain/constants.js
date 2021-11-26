@@ -19,3 +19,11 @@ export const SERVICE_CLICK = 'click';
 // Note! integration/admin-layerselector bundle doesn't use these constants so remember to update values there if required
 export const RENDER_MODE_MVT = 'mvt';
 export const RENDER_MODE_VECTOR = 'vector';
+
+export const FEATURE_QUERY_ERRORS = {
+    NOT_FOUND: 'not_found',
+    NOT_SELECTED: 'not_selected',
+    HIDDEN: 'hidden',
+    SCALE: 'scale',
+    OUT_OF_BOUNDS: 'out_of_bounds'
+};

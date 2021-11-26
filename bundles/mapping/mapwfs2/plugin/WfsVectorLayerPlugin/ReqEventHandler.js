@@ -1,7 +1,8 @@
 import { processFeatureProperties } from './util/props';
 import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../../mapmodule/domain/constants';
-import { filterByAttribute, getFilterAlternativesAsArray } from './util/filter';
+import { getFilterAlternativesAsArray, filterFeaturesByAttribute } from '../../../mapmodule/util/vectorfeatures/filter';
 
+const getFeatureId = (feature) => feature.id || feature.properties[WFS_ID_KEY] || feature.properties[WFS_FTR_ID_KEY];
 export class ReqEventHandler {
     constructor (sandbox) {
         this.sandbox = sandbox;
@@ -76,9 +77,15 @@ export class ReqEventHandler {
                         targetLayers = layerId ? [layerId] : [];
                     }
                 }
-                targetLayers.forEach(layerId => {
-                    const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
-                    const selectedFeatureIds = propsList.map(props => props[WFS_ID_KEY]);
+                const featuresResult = plugin.getFeatures({
+                    geometry: filterFeature.geometry
+                }, {
+                    layers: targetLayers
+                });
+                Object.keys(featuresResult).forEach(layerId => {
+                    const layerFeatures = featuresResult[layerId].features || [];
+                    const selectedFeatureIds = layerFeatures.map(getFeatureId);
+
                     if (keepPrevious) {
                         selectedFeatureIds.forEach(id => service.addSelectedFeature(layerId, id));
                     } else {
@@ -95,8 +102,9 @@ export class ReqEventHandler {
                     return;
                 }
                 const layerId = event.getLayerId();
-                const records = plugin.getLayerFeaturePropertiesInViewport(layerId);
-                if (!records || records.length === 0) {
+                const featuresResult = plugin.getFeatures(null, { layers: [layerId] });
+                const records = featuresResult[layerId].features || [];
+                if (!records.length) {
                     return;
                 }
                 const filteredIds = new Set();
@@ -104,9 +112,12 @@ export class ReqEventHandler {
                 alternatives.forEach(attributeFilters => {
                     let filteredList = records;
                     attributeFilters.forEach(filter => {
-                        filteredList = filterByAttribute(filter, filteredList);
+                        filteredList = filterFeaturesByAttribute(filteredList, filter);
                     });
-                    filteredList.forEach(props => filteredIds.add(props[WFS_FTR_ID_KEY]));
+                    filteredList
+                        .map(getFeatureId)
+                        .filter(id => !!id)
+                        .forEach(id => filteredIds.add(id));
                 });
                 service.setSelectedFeatureIds(layerId, [...filteredIds]);
             }

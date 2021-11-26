@@ -68,6 +68,10 @@ import './request/GetUserLocationRequest';
 import './request/GetUserLocationRequestHandler';
 import './event/UserLocationEvent';
 
+import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
+import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
+import { FEATURE_QUERY_ERRORS } from './domain/constants';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -881,6 +885,58 @@ Oskari.clazz.define(
                 return this._forEachFeatureAtPixelImpl(pixel, callback);
             }
             throw new Error('Not implemented _forEachFeatureAtPixelImpl function.');
+        },
+        /**
+         * @method getVectorFeatures
+         * Returns features that are currently on map filtered by given geometry and/or properties
+         * {
+         *   "[layer id]": {
+         *      accuracy: 'extent',
+         *      runtime: true,
+         *      features: [{ geometry: {...}, properties: {...}}, ...]
+         *   },
+         *   ...
+         * }
+         * Runtime flag is true for features pushed with AddFeaturesToMapRequest etc and false/missing for features from WFS/OGC API sources.
+         * For features that are queried from MVT-tiles we might not be able to get the whole geometry and since it's not accurate they will
+         *  only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the
+         *  feature continues on unloaded tiles.
+         * The opts-parameter can have key "layers" with an array of layer ids as value to select the layers to query.
+         * @param {Object} geojson an object with geometry and/or properties as filter or nothing to default getting all features on current viewport
+         * @param {Object} opts additional options to narrow feature collection
+         * @returns {Object} an object with layer ids as keys and features for the layers as an array for value or an object with key
+         *  "error" if the requested geometry filter is not in the current viewport
+         */
+        getVectorFeatures (geojson = {}, opts = {}) {
+            const layerPlugins = this.getLayerPlugins();
+            // Detect if requested geojson is not on the current viewport
+            if (geojson && geojson.geometry) {
+                const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
+                const extent = [left, bottom, right, top];
+                const features = filterFeaturesByExtent([geojson], extent);
+                if (!features.length) {
+                    // requested geojson is not in viewport -> respond with an error
+                    return {
+                        error: FEATURE_QUERY_ERRORS.OUT_OF_BOUNDS
+                    };
+                }
+            }
+
+            const featuresPerPlugin = Object.keys(layerPlugins)
+                .map(pluginName => {
+                    const plugin = layerPlugins[pluginName];
+                    if (plugin instanceof AbstractVectorLayerPlugin) {
+                        return plugin.getFeatures(geojson, opts);
+                    }
+                    return null;
+                })
+                .filter(item => !!item);
+            // gather results from different plugins to one result object
+            const result = {};
+            featuresPerPlugin.forEach(res => {
+                Object.keys(res).forEach(layerId => (result[layerId] = res[layerId]));
+            });
+            return result;
         },
 
         /**
