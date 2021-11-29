@@ -1,4 +1,3 @@
-
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 import Envelope from 'jsts/org/locationtech/jts/geom/Envelope';
