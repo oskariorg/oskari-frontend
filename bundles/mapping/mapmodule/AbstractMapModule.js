@@ -2759,6 +2759,10 @@ Oskari.clazz.define(
             rpcService.addFunction('setCursorStyle', function (cursorStyle) {
                 return me.setCursorStyle(cursorStyle);
             });
+
+            rpcService.addFunction('getVectorFeatures', function (geojsonFilter, opts) {
+                return me.getVectorFeatures(geojsonFilter, opts);
+            });
         },
 
         /**
