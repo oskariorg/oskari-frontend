@@ -1,4 +1,3 @@
-
 import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../mapping/mapmodule/domain/constants';
 import { getFilterAlternativesAsArray, filterFeaturesByAttribute } from '../../mapping/mapmodule/util/vectorfeatures/filter';
 
