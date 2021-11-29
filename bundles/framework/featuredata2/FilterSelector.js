@@ -96,6 +96,6 @@ export class FilterSelector {
         if (fromAllLayers) {
             return selectedVectorLayers;
         }
-        return [selectedVectorLayers[0]];
+        return [selectedVectorLayers[selectedVectorLayers.length - 1]];
     }
 };
