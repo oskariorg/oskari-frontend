@@ -78,6 +78,7 @@ AbstractMapModule:
 
 MapModuleClassOl:
 - getScreenshot()
+- getVectorFeatures(featureFilter, options)
 
 VectorLayerPlugin:
 - getFeatures(includeFeatures)
@@ -319,6 +320,26 @@ Additionally, the service providing the layer tiles must support CORS, i.e. have
 Access-Control-Allow-Origin:*
 ```
 
+**getVectorFeatures(featureFilter, options)**
+
+Returns an object with current vector layer ids as keys or a single `error` key with an error code if there's a problem with the query.
+```
+{
+   "[layer id]": {
+      accuracy: 'extent',
+      features: [{ geometry: {...}, properties: {...}}, ...]
+   },
+   ...
+}
+```
+
+-  For features that are queried from MVT-sources we might not be able to get the whole geometry and since it's not accurate they will only get the extent of the feature. This is marked with accuracy: 'extent' and it might not even be the whole extent if the feature continues on unloaded tiles.
+- There should always be "features" array available but the query can result in an error.
+- In case the layer is not part of the current layers on map, the layer is not visible on map, the layer isn't shown on current map scale etc there is an `error` key under the layer object next to an empty features-array.
+
+The method takes 2 parameters:
+- The first parameter is an object that can have geometry and/or properties keys like a GeoJSON feature. The geometry is used to limit the query. When missing it defaults to the extent of current viewport. Properties can be used to filter out features that have specific property value for simple filtering like features with `properties.type = 3`. If the requested geometry is not in current map viewport an error object is returned `{ "error": "out_of_bounds" }`
+- The second parameter is also an object that can be used to pass additional flags. Currently only the key `layers` with an array of layer ids as value is used from the second parameter. It can be used to select the layers to query (defaults to all layers on map that have vector features).
 
 ### Allowed events
 
