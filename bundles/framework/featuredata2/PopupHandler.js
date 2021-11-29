@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             mapModule.startPlugin(me.selectionPlugin);
         }
 
-        this.WFSLayerService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
         this.buttons = {
             point: {
                 iconCls: 'selection-point',

@@ -1,4 +1,3 @@
-
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 import Envelope from 'jsts/org/locationtech/jts/geom/Envelope';
@@ -62,14 +61,10 @@ export const filterFeaturesByExtent = (features, extent) => {
 
 /**
  * @method getFilterAlternativesAsArray Arranges attribute filters based on AND & OR statements.
- * @param {WFSSetPropertyFilter} event event containing the filters
+ * @param {WFSSetPropertyFilter} filters array from WFSSetPropertyFilter
  * @return {Array} An array of arrays containing attribute filters for each OR statement.
  */
-export const getFilterAlternativesAsArray = event => {
-    if (!event || !event.getFilters()) {
-        return;
-    }
-    const { filters } = event.getFilters();
+export const getFilterAlternativesAsArray = filters => {
     if (!filters || filters.length === 0) {
         return;
     }

@@ -6,6 +6,8 @@
  * See Oskari.mapframework.bundle.featuredata2.FeatureDataBundle for bundle definition.
  *
  */
+import { FilterSelector } from './FilterSelector';
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance',
 
     /**
@@ -70,7 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             this.sandbox.register(this);
             this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-
             // Let's extend UI
             var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
@@ -167,6 +168,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
             }
             return this._featureSelectionService;
+        },
+        getFilterSelector: function () {
+            if (!this._selectionHelper) {
+                const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+                this._selectionHelper = new FilterSelector(featureQueryFn, this.getSelectionService());
+            }
+            return this._selectionHelper;
         },
         removeAllFeatureSelections: function () {
             const service = this.getSelectionService();
@@ -338,19 +346,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 }
                 var geojson = evt.getGeoJson();
-                var pixelTolerance = 15;
-                if (geojson.features.length > 0) {
-                    geojson.features[0].properties.buffer_radius = this.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
-                } else {
-                    // no features
+                if (!geojson.features.length) {
+                    // no features drawn
                     return;
                 }
-                const allLayers = this.selectionPlugin.isSelectFromAllLayers();
-                this.selectionPlugin.setFeatures(geojson.features);
+                const helper = this.getFilterSelector();
+                const layers = helper.getLayersToQuery(
+                    this.getSandbox().findAllSelectedMapLayers(),
+                    this.selectionPlugin.isSelectFromAllLayers());
+                helper.selectWithGeometry(geojson.features[0], layers);
                 this.selectionPlugin.stopDrawing();
-                const event = Oskari.eventBuilder('WFSSetFilter')(geojson, null, allLayers);
-                this.sandbox.notifyAll(event);
-
                 this.popupHandler.removeButtonSelection();
             },
             'AfterMapMoveEvent': function () {

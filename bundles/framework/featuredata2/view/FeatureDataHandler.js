@@ -11,7 +11,7 @@ export const DEFAULT_PROPERTY_LABELS = new Map([
 class ViewHandler extends StateHandler {
     constructor (selectionService, consumer) {
         super();
-        this.wfsPlugin = null;
+        this._mapmodule = null;
         this.selectionService = selectionService;
         this.setState({
             isActive: false,
@@ -145,7 +145,7 @@ class ViewHandler extends StateHandler {
 
     getLayerState (layerId = this.getState().layerId) {
         const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        const features = this._getWFSPlugin().getLayerFeaturePropertiesInViewport(layerId);
+        const features = this._getCurrentFeatureProperties(layerId);
         const inScale = !!layer && layer.isInScale();
         return {
             inScale,
@@ -163,11 +163,19 @@ class ViewHandler extends StateHandler {
         this.updateState({ hiddenProperties });
     }
 
-    _getWFSPlugin () {
-        if (!this.wfsPlugin) {
-            this.wfsPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getLayerPlugins('wfs');
+    _getCurrentFeatureProperties (layerId) {
+        if (!this._mapmodule) {
+            this._mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         }
-        return this.wfsPlugin;
+        if (!this._mapmodule || typeof this._mapmodule.getVectorFeatures !== 'function') {
+            return [];
+        }
+        const result = this._mapmodule.getVectorFeatures(null, { layers: [layerId] });
+        if (!result[layerId] || !result[layerId].features) {
+            return [];
+        }
+
+        return result[layerId].features.map(feature => feature.properties);
     }
 
     _getSelectedFeatureIds (layerId) {

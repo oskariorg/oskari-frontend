@@ -243,7 +243,7 @@ Oskari.clazz.define(
 
             // this is needed to add the functionality to filter with aggregate analyse values
             // if value is true, the link to filter with aggregate analyse values is added to dialog
-            var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+            var isAggregateValueAvailable = false; // me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {
                 bboxSelection: true,
@@ -255,13 +255,10 @@ Oskari.clazz.define(
                 fixedOptions
             );
 
-            me.filterDialog.setUpdateButtonHandler(function (filters) {
-                // throw event to new wfs
-                var event = Oskari.eventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
-                me.instance.sandbox.notifyAll(event);
+            me.filterDialog.setUpdateButtonHandler(function (values = {}) {
+                me.instance.getFilterSelector().selectWithProperties(values.filters, layer.getId());
             });
-
-            if (me.service) {
+            if (isAggregateValueAvailable) {
                 me.aggregateAnalyseFilter = Oskari.clazz.create(
                     'Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                     me.instance,
@@ -279,6 +276,11 @@ Oskari.clazz.define(
 
         // function gives value to addLinkToAggregateValues (true/false)
         checkIfAggregateValuesAreAvailable: function () {
+            // Force false since 99,999% of users don't have aggregate analysis saved and this only adds confusion to most people.
+            // We could enable it if we detect that user actually have these OR add error handling that tells the user the
+            //  links is not functioning before there are aggregate analysis available for the user
+            return false;
+            /*
             this.service = this.instance.sandbox.getService(
                 'Oskari.analysis.bundle.analyse.service.AnalyseService'
             );
@@ -286,6 +288,7 @@ Oskari.clazz.define(
                 return false;
             }
             return true;
+            */
         },
 
         /**

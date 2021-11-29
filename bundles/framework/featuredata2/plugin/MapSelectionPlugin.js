@@ -19,8 +19,6 @@ Oskari.clazz.define(
         me.currentDrawMode = null;
         me.prefix = 'Default.';
         me.sandbox = sandbox;
-        me._features = null;
-        me._drawing = null;
         me.selectFromAllLayers = false;
 
         if (me._config && me._config.id) {
@@ -131,34 +129,6 @@ Oskari.clazz.define(
                     ]);
                 }
             };
-        },
-        /**
-         * @Return the drawn geometry from the draw layer from drawing event
-         * @method setDrawing
-         */
-        setDrawing: function (drawing) {
-            this._drawing = drawing;
-        },
-        /**
-         * @Return the drawn geometry from the draw layer
-         * @method getDrawing
-         */
-        getDrawing: function () {
-            return this._drawing;
-        },
-        /**
-         * @method setFeatures
-         * @param features Features from the drawing event when drawing is finished
-         */
-        setFeatures: function (features) {
-            this._features = features;
-        },
-        /**
-         * @Return {String} the drawn geometry from the draw layer
-         * @method getFeatures
-         */
-        getFeatures: function () {
-            return this._features;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

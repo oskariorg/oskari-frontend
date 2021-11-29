@@ -108,7 +108,9 @@ export class ReqEventHandler {
                     return;
                 }
                 const filteredIds = new Set();
-                const alternatives = getFilterAlternativesAsArray(event);
+                // filters is an object with key "filters" that we actually want to process...
+                const { filters = [] } = event.getFilters();
+                const alternatives = getFilterAlternativesAsArray(filters);
                 alternatives.forEach(attributeFilters => {
                     let filteredList = records;
                     attributeFilters.forEach(filter => {
