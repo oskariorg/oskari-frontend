@@ -338,19 +338,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     return;
                 }
                 var geojson = evt.getGeoJson();
-                var pixelTolerance = 15;
-                if (geojson.features.length > 0) {
-                    geojson.features[0].properties.buffer_radius = this.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
-                } else {
-                    // no features
+                if (!geojson.features.length) {
+                    // no features drawn
                     return;
                 }
-                const allLayers = this.selectionPlugin.isSelectFromAllLayers();
-                this.selectionPlugin.setFeatures(geojson.features);
+                // const filterFeature = geojson.features[0];
+                this._selectFeaturesWithGeometry(geojson, this.selectionPlugin.isSelectFromAllLayers());
                 this.selectionPlugin.stopDrawing();
-                const event = Oskari.eventBuilder('WFSSetFilter')(geojson, null, allLayers);
-                this.sandbox.notifyAll(event);
-
                 this.popupHandler.removeButtonSelection();
             },
             'AfterMapMoveEvent': function () {
@@ -381,6 +375,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        _selectFeaturesWithGeometry: function (geojson, fromAllLayers) {
+            const event = Oskari.eventBuilder('WFSSetFilter')(geojson, null, fromAllLayers);
+            this.sandbox.notifyAll(event);
         },
 
         /**
