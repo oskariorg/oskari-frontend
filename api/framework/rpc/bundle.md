@@ -77,7 +77,7 @@ AbstractMapModule:
 - setCursorStyle(cursorStyle)
 
 MapModuleClassOl:
-- getScreenshot
+- getScreenshot()
 
 VectorLayerPlugin:
 - getFeatures(includeFeatures)
@@ -297,10 +297,14 @@ Functionality to change the mouse cursor on the map to any valid cursor css decl
 
 Used to toggle tools (e.g. coordinatetool) visible.
 
-**getScreenshot() (beta)**
+**getScreenshot()**
 
-This is an experimental function that might be changed/removed. It's only available when the Oskari instance uses Openlayers 3 based mapmodule.
-The function returns an empty string if screenshot could not be produced and a dataURL for png-image when successful.
+Returns a data-url containing PNG-image data for the current map viewport that can be used as a screenshot.
+Note! This function is very fragile and it has severe restrictions around it:
+- Oskari instance admin needs to enable usage of the functionality per layer (CORS/proxying)
+- RPC app might make getScreenshot() unsable for itself by for example using a point symbolizer on the map that triggers the browsers Security restrictions for HTML Canvas element.
+
+If the image data can't be collected for the map the function returns an empty string.
 
 Usage requires additional configuration on the map layers used on the published map. The map layers have to be set to support CORS in oskari's layer administration, i.e. the attributes-field must contain the crossOrigin definition:
 ```javascript
@@ -309,11 +313,12 @@ Usage requires additional configuration on the map layers used on the published 
 }
 ```
 
-Additionally, the service providing the layer tiles must support CORS, i.e. have the Access-Control-Allow-Origin - header set.
+Additionally, the service providing the layer tiles must support CORS, i.e. have the Access-Control-Allow-Origin - header set. As a workaround for CORS issues the admin can force the layer to be proxied through Oskari-server.
 
 ```javascript
 Access-Control-Allow-Origin:*
 ```
+
 
 ### Allowed events
 
