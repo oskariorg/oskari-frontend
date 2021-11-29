@@ -63,7 +63,6 @@ export class ReqEventHandler {
                 const keepPrevious = Oskari.ctrlKeyDown();
                 const featureCollection = event.getGeoJson();
                 const filterFeature = featureCollection.features[0];
-                // TODO: move to validate getVectorFeatures() call
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
