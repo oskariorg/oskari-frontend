@@ -63,6 +63,7 @@ export class ReqEventHandler {
                 const keepPrevious = Oskari.ctrlKeyDown();
                 const featureCollection = event.getGeoJson();
                 const filterFeature = featureCollection.features[0];
+                // TODO: move to validate getVectorFeatures() call
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
@@ -108,7 +109,7 @@ export class ReqEventHandler {
                     return;
                 }
                 const filteredIds = new Set();
-                const alternatives = getFilterAlternativesAsArray(event);
+                const alternatives = getFilterAlternativesAsArray(event.getFilters());
                 alternatives.forEach(attributeFilters => {
                     let filteredList = records;
                     attributeFilters.forEach(filter => {

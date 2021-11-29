@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter
  *
- * <GIEV MIEH! COMMENTS>
+ * @deprecated - use mapmodule.getVectorFeatures() and VectorFeatureSelectionService instead
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter',
     /**

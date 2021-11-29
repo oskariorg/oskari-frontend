@@ -256,9 +256,7 @@ Oskari.clazz.define(
             );
 
             me.filterDialog.setUpdateButtonHandler(function (filters) {
-                // throw event to new wfs
-                var event = Oskari.eventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
-                me.instance.sandbox.notifyAll(event);
+                me.instance.getFilterSelector().selectWithProperties(filters, layer.getId());
             });
 
             if (me.service) {

@@ -6,9 +6,8 @@
  * See Oskari.mapframework.bundle.featuredata2.FeatureDataBundle for bundle definition.
  *
  */
-import { WFS_ID_KEY, WFS_FTR_ID_KEY } from '../../mapping/mapmodule/domain/constants';
+import { FilterSelector } from './FilterSelector';
 
-const getFeatureId = (feature) => feature.id || feature.properties[WFS_ID_KEY] || feature.properties[WFS_FTR_ID_KEY];
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance',
 
     /**
@@ -73,7 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             this.sandbox.register(this);
             this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-
             // Let's extend UI
             var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
@@ -170,6 +168,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 this._featureSelectionService = this.sandbox.getService('Oskari.mapframework.service.VectorFeatureSelectionService');
             }
             return this._featureSelectionService;
+        },
+        getFilterSelector: function () {
+            if (!this._selectionHelper) {
+                const featureQueryFn = (geojson, opts) => this.mapModule.getVectorFeatures(geojson, opts);
+                this._selectionHelper = new FilterSelector(featureQueryFn, this.getSelectionService());
+            }
+            return this._selectionHelper;
         },
         removeAllFeatureSelections: function () {
             const service = this.getSelectionService();
@@ -345,8 +350,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     // no features drawn
                     return;
                 }
-                const filterFeature = geojson.features[0];
-                this._selectFeaturesWithGeometry(filterFeature, this.selectionPlugin.isSelectFromAllLayers());
+                const helper = this.getFilterSelector();
+                const layers = helper.getLayersToQuery(
+                    this.getSandbox().findAllSelectedMapLayers(),
+                    this.selectionPlugin.isSelectFromAllLayers());
+                helper.selectWithGeometry(geojson.features[0], layers);
                 this.selectionPlugin.stopDrawing();
                 this.popupHandler.removeButtonSelection();
             },
@@ -378,38 +386,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             this.sandbox.unregister(this);
             this.started = false;
-        },
-        _selectFeaturesWithGeometry: function (filterFeature, fromAllLayers) {
-            const service = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureSelectionService');
-            if (!service) {
-                // no service to select features through
-                Oskari.log('FeatureData').error('VectorFeatureSelectionService is not available in appsetup');
-                return;
-            }
-            const selectedLayers = this.getSandbox().findAllSelectedMapLayers();
-            const selectedVectorLayers = selectedLayers.filter(l => l.hasFeatureData());
-            let layers = selectedVectorLayers;
-            if (!layers.length) {
-                Oskari.log('FeatureData').debug('No vector layers to select from');
-                return;
-            }
-            if (!fromAllLayers) {
-                layers = [selectedVectorLayers[0]];
-            }
-            const result = this.mapModule.getVectorFeatures(
-                { geometry: filterFeature.geometry },
-                { layers: layers.map(l => l.getId()) });
-            const { error, ...layerData } = result;
-            if (error) {
-                Oskari.log('FeatureData').warn('Error querying features:', error);
-                return;
-            }
-
-            Object.keys(layerData).forEach(layerId => {
-                const layerFeatures = layerData[layerId].features || [];
-                const selectedFeatureIds = layerFeatures.map(getFeatureId);
-                service.setSelectedFeatureIds(layerId, selectedFeatureIds);
-            });
         },
 
         /**
