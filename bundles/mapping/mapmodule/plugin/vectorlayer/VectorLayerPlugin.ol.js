@@ -257,9 +257,11 @@ Oskari.clazz.define(
             const hoverStyleDef = hoverOptions.featureStyle;
             if (!ftrStyles.olHover) {
                 const hoverStyle = hoverStyleDef.inherit ? jQuery.extend(true, {}, ftrStyles.oskari || {}, hoverStyleDef) : hoverStyleDef;
-                ftrStyles.olHover = this.getMapModule().getStyle(hoverStyle);
-                ftrStyles.olHover.setZIndex(ftrStyles.ol.getZIndex());
-                this._setFeatureLabel(feature, hoverStyle, ftrStyles.olHover);
+                const olHover = this.getMapModule().getStyle(hoverStyle);
+                const zIndex = this.getStyleZIndex(ftrStyles.ol);
+                this.setStyleZIndex(olHover, zIndex);
+                this._setFeatureLabel(feature, hoverStyle, olHover);
+                ftrStyles.olHover = olHover;
             }
             ftrStyles.hoverActive = true;
             feature.setStyle(ftrStyles.olHover);
@@ -840,7 +842,7 @@ Oskari.clazz.define(
             this._features[layerId].forEach(featObj => {
                 featObj.data.forEach(feature => {
                     this.updateCachedZIndex(layerId, feature, zIndex);
-                    feature.getStyle().setZIndex(zIndex);
+                    this.setStyleZIndex(feature.getStyle(), zIndex);
                     zIndex++;
                 });
             });
@@ -922,8 +924,13 @@ Oskari.clazz.define(
         _animateFillColorChange: function (feature, newStyle, duration) {
             const me = this;
             const featureId = me.getFeatureId(feature);
-            const hasFillColor = style => style && style.getFill() && style.getFill().getColor();
-            if (!hasFillColor(feature.getStyle()) || !hasFillColor(newStyle) || !duration) {
+            const getFillColor = styles => {
+                const fill = styles && styles.length ? styles[0].getFill() : undefined;
+                return fill ? fill.getColor() : undefined;
+            };
+            const oldColor = getFillColor(feature.getStyle());
+            const newColor = getFillColor(newStyle);
+            if (!oldColor || !newColor || !duration) {
                 // No animation. Just set the style.
                 delete me._animatingFeatures[featureId];
                 feature.setStyle(newStyle);
@@ -934,9 +941,6 @@ Oskari.clazz.define(
             const start = new Date().getTime();
             const map = me.getMapModule().getMap();
             const listenerKey = map.on('postcompose', animate);
-
-            const oldColor = feature.getStyle().getFill().getColor();
-            const newColor = newStyle.getFill().getColor();
 
             function animate (event) {
                 if (!me._animatingFeatures[featureId]) {
@@ -950,9 +954,9 @@ Oskari.clazz.define(
                     feature.setStyle(newStyle);
                     return;
                 }
-                const style = feature.getStyle();
-                style.getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
-                feature.setStyle(style);
+                const olStyles = feature.getStyle();
+                olStyles[0].getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
+                feature.setStyle(olStyles);
             }
             // Start animation
             map.render();
@@ -1104,18 +1108,15 @@ Oskari.clazz.define(
             if (!cached) {
                 return;
             }
-            if (cached.ol) {
-                cached.ol.setZIndex(zIndex);
-            }
-            if (cached.olHover) {
-                cached.olHover.setZIndex(zIndex);
-            }
+            this.setStyleZIndex(cached.ol, zIndex);
+            this.setStyleZIndex(cached.olHover, zIndex);
         },
-        _setFeatureLabel: function (feature, oskariStyle, olStyle) {
-            if (!feature || !oskariStyle || !olStyle) {
+        _setFeatureLabel: function (feature, oskariStyle, olStyles) {
+            if (!feature || !oskariStyle || !olStyles) {
                 return;
             }
-            if (olStyle.getText()) {
+            const olText = olStyles.length ? olStyles[0].getText() : undefined;
+            if (olText) {
                 let labelProp = Oskari.util.keyExists(oskariStyle, 'text.labelProperty') ? oskariStyle.text.labelProperty : '';
                 let label = '';
                 if (labelProp) {
@@ -1124,9 +1125,8 @@ Oskari.clazz.define(
                     }
                     label = feature.get(labelProp);
                 }
-                olStyle.getText().setText('' + label);
+                olText.setText('' + label);
             }
-            return olStyle;
         },
         setFeatureStyle: function (options, feature, update) {
             const me = this;
@@ -1134,8 +1134,7 @@ Oskari.clazz.define(
             const featureId = me.getFeatureId(feature);
 
             me._initStyleCache(layerId, featureId);
-            const olStyle = this.getStyle(options, feature, update);
-
+            const olStyles = this.getStyle(options, feature, update);
             // Setup label
             const cached = me.getCachedStyles(layerId, featureId);
             let styleDef = options.featureStyle || {};
@@ -1143,13 +1142,13 @@ Oskari.clazz.define(
                 styleDef = cached.oskari;
                 delete cached.olHover;
             }
-            me._setFeatureLabel(feature, styleDef, olStyle);
+            me._setFeatureLabel(feature, styleDef, olStyles);
 
             if (update && cached.hoverActive) {
                 delete cached.hoverActive;
                 me._applyHoverStyle(me._hoverState.feature, me._hoverState.layer);
             } else {
-                me._animateFillColorChange(feature, olStyle, options.animationDuration);
+                me._animateFillColorChange(feature, olStyles, options.animationDuration);
             }
         },
         /**
@@ -1193,14 +1192,18 @@ Oskari.clazz.define(
                     cached.oskari = optionalStyleDef;
                 }
             }
-
-            let zIndex = 1;
-            if (cached.ol) {
-                zIndex = cached.ol.getZIndex();
-            }
-            cached.ol = me.getMapModule().getStyle(cached.oskari, null, overrideStyle);
-            cached.ol.setZIndex(zIndex);
+            const olStyles = me.getMapModule().getStyle(cached.oskari, null, overrideStyle);
+            const zIndex = this.getStyleZIndex(cached.ol);
+            this.setStyleZIndex(olStyles, zIndex);
+            cached.ol = olStyles;
             return cached.ol;
+        },
+        setStyleZIndex: function (olStyles = [], zIndex) {
+            olStyles.forEach(style => style.setZIndex(zIndex));
+        },
+        getStyleZIndex: function (olStyles = []) {
+            // get z index from main style, default to 1
+            return olStyles.length ? olStyles[0].getZIndex() : 1;
         },
         /**
          * @method getOptionalStyle
