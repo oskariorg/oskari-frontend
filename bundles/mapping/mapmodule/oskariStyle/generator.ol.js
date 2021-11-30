@@ -227,8 +227,8 @@ const _setFeatureLabel = (feature, textStyle, label = {}) => {
     } else {
         value = feature.get(property);
     }
-    if (!value) {
-        return;
+    if (typeof value === 'undefined') {
+        value = '';
     }
     const featureLabel = text ? text + ': ' + value : value;
     textStyle.setText(featureLabel);
