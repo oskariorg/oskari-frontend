@@ -925,7 +925,7 @@ Oskari.clazz.define(
             const me = this;
             const featureId = me.getFeatureId(feature);
             const getFillColor = styles => {
-                const fill = styles && styles.length ? styles[0].getFill() : undefined;
+                const fill = Array.isArray(styles) && styles.length ? styles[0].getFill() : undefined;
                 return fill ? fill.getColor() : undefined;
             };
             const oldColor = getFillColor(feature.getStyle());
