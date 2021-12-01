@@ -43,28 +43,27 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __templates: {
-            main: _.template(
-                '<div class="searchContainer">' +
-                '  <div class="searchDescription">${desc}</div>' +
-                '  <div class="controls">' +
-                '  </div>' +
-                '  <div><br></div>' +
-                '  <div class="info"></div>' +
-                '  <div><br></div>' +
-                '  <div class="resultList"></div>' +
-                '</div>'),
-            resultTable: _.template(
-                '<table class="search_result oskari-grid">' +
-                '  <thead><tr></tr></thead>' +
-                '  <tbody></tbody>' +
-                '</table>'),
-            resultTableHeader: _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
-            resultTableRow: _.template(
-                '<tr>' +
-                '  <td><a href="JavaScript:void(0);">${name}</a></td>' +
-                '  <td>${region}</td>' +
-                '  <td>${type}</td>' +
-                '</tr>')
+            main: ({ desc }) =>
+                `<div class="searchContainer">
+                    <div class="searchDescription">${desc}</div>
+                    <div class="controls"></div>
+                    <div><br></div>
+                    <div class="info"></div>
+                    <div><br></div>
+                    <div class="resultList"></div>
+                </div>`,
+            resultTable: () =>
+                `<table class="search_result oskari-grid">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>`,
+            resultTableHeader: ({ title }) => `<th><a href="JavaScript:void(0);">${title}</a></th>`,
+            resultTableRow: ({ name, region, type }) =>
+                `<tr>
+                    <td><a href="JavaScript:void(0);">${name}</a></td>
+                    <td>${region}</td>
+                    <td>${type}</td>
+                </tr>`
         },
         /**
          * @method createUi
