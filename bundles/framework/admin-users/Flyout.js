@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                 tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
             this.tabsContainer = tabsContainer;
 
-            _.each(this.tabs, function (tabDef) {
+            this.tabs.forEach(function (tabDef) {
                 var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
                 tab.setId(tabDef.id);
                 tabsContainer.addPanel(tab);
@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         },
         getEventHandlers: function () {
             var list = {};
-            _.each(this.tabs, function (tabDef) {
+            this.tabs.forEach(function (tabDef) {
                 var p;
                 if (tabDef.instance.eventHandlers) {
                     for (p in tabDef.instance.eventHandlers) {
@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             return list;
         },
         onEvent: function (event) {
-            _.each(this.tabs, function (tabDef) {
+            this.tabs.forEach(function (tabDef) {
                 if (tabDef.instance && tabDef.instance.eventHandlers) {
                     var handler = tabDef.instance.eventHandlers[event.getName()];
                     if (!handler) {
