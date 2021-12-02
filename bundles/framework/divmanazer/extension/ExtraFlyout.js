@@ -38,10 +38,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 '       <div class="oskari-flyoutcontent"></div>' +
                 '   </div>' +
                 '</div>'),
-            sideTool: _.template('<div class="sidetool">' +
-                '   <div class="icon icon-arrow-white-right"></div>' +
-                '   <label class="verticalsidelabel">${ label }</label>' +
-                '</div>'),
+            sideTool: ({ label }) =>
+                `<div class="sidetool">
+                    <div class="icon icon-arrow-white-right"></div>
+                    <label class="verticalsidelabel">${Oskari.util.sanitize(label)}</label>
+                </div>`,
             toolage: jQuery('<div class="oskari-flyouttool-help"></div>' +
                 '<div class="oskari-flyouttool-attach"></div>' +
                 '<div class="oskari-flyouttool-detach"></div>' +

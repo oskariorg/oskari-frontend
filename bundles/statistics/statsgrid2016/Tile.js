@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
     this.flyoutManager = null;
     this._attached = false;
     this._templates = {
-        extraSelection: _.template('<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div></div>')
+        extraSelection: ({ id, label }) => `<div class="statsgrid-functionality ${ id }" data-view="${ id }"><div class="icon"></div><div class="text">${ label }</div></div>`
     };
 }, {
     /**

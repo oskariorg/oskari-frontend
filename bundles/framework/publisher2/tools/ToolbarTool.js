@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var pluginConf = null || {};
 
             if (conf.mapfull.conf && conf.mapfull.conf.plugins) {
-                _.each(conf.mapfull.conf.plugins, function (plugin) {
+                conf.mapfull.conf.plugins.forEach(function (plugin) {
                     if (me.getTool().id === plugin.id) {
                         me.setEnabled(true);
                         pluginConf = plugin.config || {};
@@ -407,7 +407,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 optionSettings.append(optionSetting);
 
                 // build DOM based on button configs
-                _.forEach(me.drawOptions, function (isToolChecked, toolName) {
+                Object.keys(me.drawOptions).forEach(toolName => {
+                    const isToolChecked = me.drawOptions[toolName];
                     toolButton = me.drawButtons[toolName];
                     toolButton.toolbarid = toolOption.toolbarId;
 
