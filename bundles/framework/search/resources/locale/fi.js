@@ -18,7 +18,7 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "Hakusanalla ei löytynyt yhtään hakutulosta. Tarkista hakusanan oikeinkirjoitus.",
         "too_short": "Hakusana on liian lyhyt. Hakusanassa on oltava vähintään yksi merkki. Jos käytät jokerimerkkiä (*), hakusanassa on oltava vähintään neljä muuta merkkiä.",
         "cannot_be_empty": "Hakusanassa on oltava vähintään yksi merkki.",
-        "too_many_stars": "Hakusanassa saa olla enintään yksi jokerimerkki (*) sanan lopussa.",
+        "too_many_stars": "Hakusana ei voi olla pelkkiä jokerimerkkejä (*/?).",
         "generic_error": "Haku epäonnistui.",
         "grid": {
             "name": "Nimi",

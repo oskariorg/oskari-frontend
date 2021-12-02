@@ -43,28 +43,27 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __templates: {
-            main: _.template(
-                '<div class="searchContainer">' +
-                '  <div class="searchDescription">${desc}</div>' +
-                '  <div class="controls">' +
-                '  </div>' +
-                '  <div><br></div>' +
-                '  <div class="info"></div>' +
-                '  <div><br></div>' +
-                '  <div class="resultList"></div>' +
-                '</div>'),
-            resultTable: _.template(
-                '<table class="search_result oskari-grid">' +
-                '  <thead><tr></tr></thead>' +
-                '  <tbody></tbody>' +
-                '</table>'),
-            resultTableHeader: _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
-            resultTableRow: _.template(
-                '<tr>' +
-                '  <td><a href="JavaScript:void(0);">${name}</a></td>' +
-                '  <td>${region}</td>' +
-                '  <td>${type}</td>' +
-                '</tr>')
+            main: ({ desc }) =>
+                `<div class="searchContainer">
+                    <div class="searchDescription">${desc}</div>
+                    <div class="controls"></div>
+                    <div><br></div>
+                    <div class="info"></div>
+                    <div><br></div>
+                    <div class="resultList"></div>
+                </div>`,
+            resultTable: () =>
+                `<table class="search_result oskari-grid">
+                    <thead><tr></tr></thead>
+                    <tbody></tbody>
+                </table>`,
+            resultTableHeader: ({ title }) => `<th><a href="JavaScript:void(0);">${title}</a></th>`,
+            resultTableRow: ({ name, region, type }) =>
+                `<tr>
+                    <td><a href="JavaScript:void(0);">${Oskari.util.sanitize(name)}</a></td>
+                    <td>${region}</td>
+                    <td>${type}</td>
+                </tr>`
         },
         /**
          * @method createUi
@@ -132,13 +131,7 @@ Oskari.clazz.define(
                 this._searchField = field;
                 field.setPlaceholder(this.instance.getLocalization('searchAssistance'));
                 field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
-
-                if (this.instance.safeChars) {
-                    var regex = /[\s\w\d.,?!\-äöåÄÖÅ]*\*?$/;
-                    field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
-                }
-
-                field.bindChange(function (event) {
+                field.bindChange(function () {
                     me.__searchTextChanged(field.getValue());
                 });
                 field.addClearButton('oskari_search_forminput_clearbutton');
@@ -179,31 +172,30 @@ Oskari.clazz.define(
         },
 
         __doSearch: function () {
-            var me = this;
             var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
 
             searchContainer.find('div.resultList').empty();
             searchContainer.find('div.info').empty();
-            var searchKey = field.getValue(this.instance.safeChars);
+            var searchKey = field.getValue(false);
 
-            if (!this._validateSearchKey(field.getValue(false))) {
+            if (!this._validateSearchKey(searchKey)) {
                 field.setEnabled(true);
                 button.setEnabled(true);
                 return;
             }
 
-            me.progressSpinner.start();
+            this.progressSpinner.start();
             var reqBuilder = Oskari.requestBuilder('SearchRequest');
             if (reqBuilder) {
                 var request = reqBuilder(searchKey);
-                me.getSandbox().request(this.instance, request);
+                this.getSandbox().request(this.instance, request);
             }
         },
         __doAutocompleteSearch: function () {
             var field = this.getField();
-            var searchKey = field.getValue(this.instance.safeChars);
+            var searchKey = field.getValue(false);
 
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
                 var autocompleteValues = [];
@@ -247,27 +239,16 @@ Oskari.clazz.define(
         _validateSearchKey: function (key) {
             var me = this;
             // empty string
-            if (key === null || key === undefined || key.length === 0) {
+            if (key === null || key === undefined || key.trim().length === 0) {
                 me._showError(me.instance.getLocalization('cannot_be_empty'));
                 return false;
             }
-            // too many stars
-            if ((key.match(/\*/g) || []).length > 1) {
+            const query = key.trim();
+            const nonWildcardQuery = query.replaceAll('*', '').replaceAll('?', '');
+            if (!nonWildcardQuery.length) {
+                // only stars/wildcards
                 me._showError(me.instance.getLocalization('too_many_stars'));
                 return false;
-            }
-            // not enough characters accompanying a star
-            if (key.indexOf('*') > -1 && key.length < 5) {
-                me._showError(me.instance.getLocalization('too_short'));
-                return false;
-            }
-
-            // invalid characters (or a star in the wrong place...)
-            if (me.instance.safeChars) {
-                if (!/^[a-zåäöA-ZÅÄÖ .,?!0-9]+\**$/.test(key)) {
-                    me._showError(me.instance.getLocalization('invalid_characters'));
-                    return false;
-                }
             }
             return true;
         },
@@ -332,7 +313,7 @@ Oskari.clazz.define(
                 tableHeaderRow = table.find('thead tr'),
                 tableBody = table.find('tbody');
 
-            _.each(this.resultHeaders, function (headerItem) {
+            this.resultHeaders.forEach(headerItem => {
                 var header = me.__templates.resultTableHeader({ title: headerItem.title });
                 header = jQuery(header);
                 var link = header.find('a');
@@ -386,8 +367,8 @@ Oskari.clazz.define(
 
         _populateResultTable: function (resultsTableBody, locations) {
             var me = this;
-            _.each(locations, function (row) {
-                var resultRow = me.__templates.resultTableRow(row);
+            locations.forEach(row => {
+                let resultRow = this.__templates.resultTableRow(row);
                 resultRow = jQuery(resultRow);
                 resultRow.find('a').on('click', function () {
                     me._resultClicked(row);
@@ -444,7 +425,10 @@ Oskari.clazz.define(
 
             const alternatives = me._createAlternativeNamesHTMLBlock(result);
             var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + alternatives + '<p>' + result.region + '<br/>' + result.type + '</p>',
+                html: `<h3>${Oskari.util.sanitize(result.name)}</h3>
+                        ${alternatives}
+                        <p>${result.region}<br/>
+                        ${result.type}</p>`,
                 actions: resultActions
             };
             var content = [contentItem];

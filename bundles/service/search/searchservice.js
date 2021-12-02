@@ -76,7 +76,6 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          *            options optional parameters for server side implementation that may be handled by the search channels or not depending on implementation
          */
         doSearch: function (searchString, onSuccess, onError, options = {}) {
-            const lang = Oskari.getLang();
             const sb = this.sandbox || Oskari.getSandbox();
             const evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
@@ -84,8 +83,8 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    'searchKey': searchString,
-                    'Language': lang,
+                    'q': searchString,
+                    'lang': Oskari.getLang(),
                     'epsg': sb.getMap().getSrsName(),
                     'autocomplete': false,
                     'options': JSON.stringify(options)
@@ -108,15 +107,14 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
             if (typeof onSuccess !== 'function') {
                 return;
             }
-            var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
             jQuery.ajax({
                 dataType: 'json',
                 type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    'searchKey': searchKey,
-                    'Language': lang,
+                    'q': searchKey,
+                    'lang': Oskari.getLang(),
                     'epsg': sb.getMap().getSrsName(),
                     'autocomplete': true
                 },
