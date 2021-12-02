@@ -1,5 +1,34 @@
 import { getFormatter } from './ValueFormatters';
 const ID_SKIP_LABEL = '$SKIP$__';
+/* ****************************************
+ * Helpers
+ */
+const isEmpty = (value) => (typeof value === 'string' && value.trim() === '');
+
+const isDataShown = (value, formatterOpts = {}) => {
+    if (typeof value === 'undefined' || formatterOpts.type === 'hidden') {
+        return false;
+    }
+    if (formatterOpts.skipEmpty === true) {
+        return !isEmpty(value);
+    }
+    return true;
+};
+/**
+ * Removes properties that are not referenced in the second parameter (if second parameter has an array of prop names)
+ * @param {Object} properties vector feature properties
+ * @param {String[]} selectedPropNames list of property names to include for the result object
+ * @returns filtered properties object or original if no selection is provided
+ */
+const filterProperties = (properties = {}, selectedPropNames) => {
+    if (!selectedPropNames || !Array.isArray(selectedPropNames) || !selectedPropNames.length) {
+        return properties;
+    }
+    return selectedPropNames.reduce((result, prop) => {
+        result[prop] = properties[prop];
+        return result;
+    }, {});
+};
 
 const jsonFormatter = (pValue, pluginLocale = {}) => {
     if (!pValue) {
@@ -33,6 +62,9 @@ const jsonFormatter = (pValue, pluginLocale = {}) => {
     }
     return value;
 };
+/*
+ * /Helpers
+ **************************************** */
 
 Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter', {
     __templates: {
@@ -156,7 +188,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return;
         }
         const me = this;
-        const sandbox = this._sandbox;
+        const sandbox = this.getSandbox();
 
         const coll = data.features
             .map(function (datum) {
@@ -295,28 +327,15 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         if (typeof layerId === 'undefined' || typeof features === 'undefined') {
             return;
         }
-        const layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        const layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
         if (features === 'empty' || !layer) {
             return;
         }
         // TODO: cleanup the my places references where they can be cleaned. Not sure if the boolean isMyPlace is used by the callers of this method
         const isMyPlace = layer.isLayerOfType('myplaces');
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
-        const isEmpty = (value) => {
-            if (typeof value === 'string' && value.trim() === '') {
-                return true;
-            }
-            return false;
-        };
-        const isDataShown = (value, formatterOpts) => {
-            if (typeof value === 'undefined' || formatterOpts.type === 'hidden') {
-                return false;
-            }
-            if (formatterOpts.skipEmpty === true) {
-                return !isEmpty(value);
-            }
-            return true;
-        };
+        // use localized labels for properties when available instead of property names
+        const localeMapping = layer.getPropertyLabels();
         const processEntry = ([prop, value]) => {
             let uiLabel = localeMapping[prop] || prop;
             let formatterOpts = {};
@@ -332,29 +351,21 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             }
             return null;
         };
-        // use localized labels for properties when available instead of property names
-        const localeMapping = layer.getPropertyLabels();
-        const selection = layer.getPropertySelection();
-
+        const formattersForLayerFeatureData = this.layerFormatters.filter((formatter) => formatter.enabled(data));
+        const visiblePropertiesSelection = layer.getPropertySelection();
         const result = features.map(properties => {
-            let markup;
-            let feature;
-            if (selection.length) {
-                feature = selection.reduce((result, prop) => {
-                    const processed = processEntry([prop, properties[prop]]);
-                    if (processed) {
-                        result[processed[0]] = processed[1];
-                    }
-                    return result;
-                }, {});
+            let markup = noDataResult;
+            const formattedData = formattersForLayerFeatureData.map((formatter) => formatter.format(properties, layerId));
+            if (formattedData.length > 0) {
+                // layerFormatter was used - overriding the default WFS feature data formatting
+                markup = formattedData.join('');
             } else {
-                feature = Object.fromEntries(Object.entries(properties).map(processEntry));
-            }
-            // TODO noDataResult if features doesn't have properties
-            if (Object.keys(feature).length > 0) {
-                markup = me._json2html(feature);
-            } else {
-                markup = noDataResult;
+                const filteredProps = filterProperties(properties, visiblePropertiesSelection);
+                // map feature property values by running configured property formatters per property (links/images markup wrapping etc)
+                const featureProps = Object.fromEntries(Object.entries(filteredProps).map(processEntry));
+                if (Object.keys(featureProps).length > 0) {
+                    markup = me._json2html(featureProps);
+                }
             }
             return {
                 markup,
@@ -364,7 +375,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 isMyPlace
             };
         });
-
         return result;
     },
 
