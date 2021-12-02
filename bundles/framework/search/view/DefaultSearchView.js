@@ -366,6 +366,7 @@ Oskari.clazz.define(
         },
 
         _populateResultTable: function (resultsTableBody, locations) {
+            var me = this;
             locations.forEach(row => {
                 let resultRow = this.__templates.resultTableRow(row);
                 resultRow = jQuery(resultRow);
