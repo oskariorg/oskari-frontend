@@ -335,7 +335,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         const isMyPlace = layer.isLayerOfType('myplaces');
         const noDataResult = `<table><tr><td>${this._loc.noAttributeData}</td></tr></table>`;
         // use localized labels for properties when available instead of property names
-        const localeMapping = layer.getPropertyLabels();
+        const localeMapping = layer.getPropertyLabels() || {};
         const processEntry = ([prop, value]) => {
             let uiLabel = localeMapping[prop] || prop;
             let formatterOpts = {};
@@ -362,7 +362,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             } else {
                 const filteredProps = filterProperties(properties, visiblePropertiesSelection);
                 // map feature property values by running configured property formatters per property (links/images markup wrapping etc)
-                const featureProps = Object.fromEntries(Object.entries(filteredProps).map(processEntry));
+                const featureProps = Object.fromEntries(
+                    Object.entries(filteredProps)
+                        .map(processEntry)
+                        .filter(entry => !!entry));
                 if (Object.keys(featureProps).length > 0) {
                     markup = me._json2html(featureProps);
                 }
