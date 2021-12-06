@@ -56,7 +56,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          */
         stop: function () {
             this.sandbox = null;
-            jQuery('div#announcements-popup').remove();
             this.started = false;
         }
     }, {
