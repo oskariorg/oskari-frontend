@@ -37,7 +37,7 @@ div.notLoggedIn {
     padding: 10px;
 }
 
-div#publisher-announcements-inputs {
+div.publisher-announcements-inputs {
     display: grid;
     grid-column-gap: 50px;
     grid-template-columns: auto auto;
@@ -54,7 +54,7 @@ div.basic_publisher {
         width: 260px;
     }
     
-    #publisher-layout-announcements {
+    .publisher-layout-announcements {
         padding-left: 28px;
       
         input[name=publisher-announcements] {
