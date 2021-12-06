@@ -27,9 +27,6 @@ Oskari.registerLocalization(
             "defaultTitle": "Standard stil"
         },
         "plugin": {
-            "AnnouncementsPlugin": {
-                "title": "Aviseringar"
-            },
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",

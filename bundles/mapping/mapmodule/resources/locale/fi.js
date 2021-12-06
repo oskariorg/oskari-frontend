@@ -27,9 +27,6 @@ Oskari.registerLocalization(
             "defaultTitle" : "Oletustyyli"
         },
         "plugin": {
-            "AnnouncementsPlugin": {
-                "title": "Ilmoitukset"
-            },
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
                 "dataSources": "Tietolähteet",

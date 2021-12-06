@@ -40,7 +40,7 @@ Oskari.registerLocalization(
                     "close": "Stäng"
                 },
                 "announcementsName": "Namn",
-                "announcementsTime": "VaDatumintervalllid"
+                "announcementsTime": "Datumintervall"
             },
             "titleError": "Lägg till en titel!",
             "contentError": "Lägg till innehåll!",
