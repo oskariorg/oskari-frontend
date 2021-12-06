@@ -51,9 +51,9 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 '           <button class="collapsible"></button>' +
                 '       </label>' +
                 '       <div class="announcement-content">' +
-                '           <div id="announcement-description"></div>' +
+                '           <div class="announcement-description"></div>' +
                 '           <h4>' + me._loc.plugin.valid + ':</h4>' +
-                '           <div id="announcement-time"></div>' +
+                '           <div class="announcement-time"></div>' +
                 '       </div>' +
                 '   </div>' +
                 '</div>`'
@@ -149,22 +149,14 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
         */
         addAnnouncements: function () {
             var me = this;
-            var announcementsIds = me._config.announcements;
+            const announcementsIds = me._config.announcements;
 
-            var announcements = [];
-
-            for (const i of announcementsIds) {
-                for (const j of me.allAnnouncements) {
-                    if (j.id === i) {
-                        announcements.push(j);
-                    }
-                }
-            }
+            const announcements = this.allAnnouncements.filter(ann => announcementsIds.includes(ann.id));
 
             if (!me.open) {
                 delete me.announcementsContent;
             } else {
-                jQuery('div.announcements-content').children().remove();
+                me.announcementsContent.find('div.announcements-content').children().remove();
             }
             delete me.annRefs;
             me.annRefs = {};
@@ -188,8 +180,8 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
 
                 div.find('button').append(announcement.title);
-                div.find('div#announcement-description').append(announcement.content);
-                div.find('div#announcement-time').append(annTime);
+                div.find('div.announcement-description').append(announcement.content);
+                div.find('div.announcement-time').append(annTime);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
                 me.annRefs[announcement.id] = div;
@@ -204,10 +196,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
          */
         updateAnnouncements: function (announcements) {
             var me = this;
-            var annIds = [];
-            for (const i of announcements) {
-                i.id === undefined ? annIds.push(i) : annIds.push(i.id);
-            }
+            var annIds = announcements.map(i => i.id || i);
             if (me._config) {
                 me._config.announcements = annIds;
                 me.addAnnouncements();

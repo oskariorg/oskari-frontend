@@ -10,14 +10,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         this.pluginName = 'AnnouncementsPlugin';
         this.data = [];
         this.selectedAnnouncements = [];
-        this.annTitles = [];
-        this.isAnnouncementsDialogOpen = false;
+        this.selectedAnnouncementsTitles = [];
         this.groupedSiblings = true;
         this.announcementsPopup = null;
 
         this.templates = {
             announcements: jQuery(
-                '<div id="publisher-layout-announcements" class="tool-options">' +
+                '<div class="publisher-layout-announcements" class="tool-options">' +
                     '<div>' +
                         '<input type="text" name="publisher-announcements" disabled />' +
                         '<button/>' +
@@ -25,13 +24,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             announcementsPopup: jQuery(
                 '<div>' +
-                    '<div id="publisher-announcements-inputs">' +
+                    '<div class="publisher-announcements-inputs">' +
                         '<h4>' + this.localization.tool.announcementsName + '</h4><h4>' + this.localization.tool.announcementsTime + '</h4>' +
-                        '<div class="ann-column" id="ann-title"></div>' +
-                        '<div class="ann-column" id="ann-time"/></div>' +
+                        '<div class="ann-column ann-title"></div>' +
+                        '<div class="ann-column ann-time"/></div>' +
                     '</div>' +
                 '</div>'),
-            inputCheckbox: jQuery('<div><input type="checkbox" /><label></label></div>')
+            inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
 
         this.eventHandlers = {
@@ -49,7 +48,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             const me = this;
             me.data = data;
             me.selectedAnnouncements = [];
-            me.annTitles = [];
+            me.selectedAnnouncementsTitles = [];
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
@@ -73,12 +72,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
                         if (me.isAnnouncementValid(filteredAnnouncement[0])) {
-                            me.annTitles.push(filteredAnnouncement[0].title);
+                            me.selectedAnnouncementsTitles.push(filteredAnnouncement[0].title);
                             me.selectedAnnouncements.push(filteredAnnouncement[0]);
                         }
                     });
                 }
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+
+                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
             });
         },
 
@@ -138,13 +139,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
             // Set the button handler
             template.find('button').html(buttonLabel).on('click', function () {
-                if (me.isAnnouncementsDialogOpen === false) {
+                if (me.announcementsPopup === null) {
                     me._openAnnouncementsDialog(jQuery(this));
                 }
             });
-            if (me.annTitles.length > 0) {
-                template.find('input[name=publisher-announcements]').val(me.annTitles.toString());
-            }
+
             return template;
         },
 
@@ -163,7 +162,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             closeButton.setTitle(me.localization.tool.popup.close);
             closeButton.setHandler(function () {
                 popup.close(true);
-                me.isAnnouncementsDialogOpen = false;
+                me.announcementsPopup = null;
             });
 
             me.announcements.forEach(announcement => {
@@ -171,29 +170,29 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const annName = announcement.title;
                 const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
 
+                const idPrefix = 'oskari_announcement_select_';
                 announcementInput.find('input[type=checkbox]').attr({
-                    'id': announcement.id,
-                    'name': 'announcement',
+                    'id': idPrefix  + announcement.id,
                     'value': announcement.title
                 });
                 announcementInput.find('label').html(annName).attr({
-                    'for': announcement.id
+                    'for': idPrefix  + announcement.id
                 });
 
                 if (me.isAnnouncementValid(announcement)) {
-                    content.find('div#ann-time').append('<div>' + annTime + '</div>');
+                    content.find('div.ann-time').append('<div>' + annTime + '</div>');
                     if (me.shouldPreselectAnnouncement(announcement)) {
                         announcementInput.find('input[type=checkbox]').prop('checked', true);
                     }
-                    content.find('div#ann-title').append(announcementInput);
+                    content.find('div.ann-title').append(announcementInput);
                 } else {
-                    content.find('div#ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
+                    content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
                     announcementInput.find('input[type=checkbox]').prop('disabled', true);
-                    content.find('div#ann-title').append(announcementInput);
+                    content.find('div.ann-title').append(announcementInput);
                 }
             });
 
-            // WHAT TO DO WHEN ANNOUNCEMENTS ARE SELECTED
+            // Announcement is selected
             content.find('input[name=announcement]').on('change', function () {
                 var announcement = me.announcements.find(item => item.title === jQuery(this).val());
                 // check if announcement is already checked, if is, add/remove accordingly
@@ -201,21 +200,19 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
                         return ann.title !== announcement.title;
                     });
-                    me.annTitles = me.annTitles.filter(function (e) { return e !== announcement.title; });
-
-                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
+                    me.selectedAnnouncementsTitles = me.selectedAnnouncementsTitles.filter(function (e) { return e !== announcement.title; });
                 } else {
                     me.selectedAnnouncements.push(announcement);
-                    me.annTitles.push(announcement.title);
-
-                    me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
+                    me.selectedAnnouncementsTitles.push(announcement.title);
                 }
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.annTitles.toString());
+                me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
+                
+                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
             });
 
             popup.show(title, content, [closeButton]);
             me.announcementsPopup = popup;
-            me.isAnnouncementsDialogOpen = true;
         },
 
         /**
