@@ -33,16 +33,21 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         *
         * Makes an ajax call to get admin announcements (all announcements)
         */
-        fetchAdminAnnouncements: function (callback) {
+        fetchAdminAnnouncements: function (handler) {
+            if (typeof handler !== 'function') {
+                return;
+            }
+    
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 data: { all: true },
                 url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    callback(pResp.data);
+                success: function (pResp) {
+                    handler(null, pResp.data);
                 },
                 error: function (jqXHR, textStatus) {
+                    handler('Error', []);
                 }
             });
         },
@@ -52,15 +57,87 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         *
         * Makes an ajax call to get announcements (all except expired ones)
         */
-        fetchAnnouncements: function (callback) {
+        fetchAnnouncements: function (handler) {
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements'),
                 success: (pResp) => {
-                    callback(pResp.data);
+                    handler(null, pResp.data);
                 },
                 error: function (jqXHR, textStatus) {
+                    handler('Error', []);
+                }
+            });
+        },
+
+        /**
+        * @method saveAnnouncements
+        *
+        * Makes an ajax call to save new announcement
+        */
+        saveAnnouncement: function (data, handler) {
+            if (typeof handler !== 'function') {
+                return;
+            }
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data),
+                url: Oskari.urls.getRoute('Announcements'),
+                success: function (pResp) {
+                    handler(null, pResp);
+                },
+                error: function (jqXHR, textStatus) {
+                    handler('Error', []);
+                }
+            });
+        },
+
+        /**
+        * @method updateAnnouncements
+        *
+        * Makes an ajax call to update announcement
+        */
+        updateAnnouncement: function (data, handler) {
+            if (typeof handler !== 'function') {
+                return;
+            }
+            jQuery.ajax({
+                type: 'PUT',
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data),
+                url: Oskari.urls.getRoute('Announcements'),
+                success: function (pResp) {
+                    handler(null, pResp);
+                },
+                error: function (jqXHR, textStatus) {
+                    handler('Error', []);
+                }
+            });
+        },
+
+        /**
+        * @method deleteAnnouncements
+        *
+        * Makes an ajax call to delete announcement
+        */
+        deleteAnnouncement: function (data, handler) {
+            if (typeof handler !== 'function') {
+                return;
+            }
+    
+            jQuery.ajax({
+                type: 'DELETE',
+                dataType: 'json',
+                url: Oskari.urls.getRoute('Announcements', { id: data }),
+                success: function (pResp) {
+                    handler(null, pResp);
+                },
+                error: function (jqXHR, textStatus) {
+                    handler('Error', []);
                 }
             });
         }

@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.announcementsHandler = new AnnouncementsHandler(this.instance);
+        this.announcementsHandler = new AnnouncementsHandler();
         this.announcementsHandler.addStateListener(() => this.render());
         this.container = null;
     }, {

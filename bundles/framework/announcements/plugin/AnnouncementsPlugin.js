@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 '</div>`'
             );
 
-            service.fetchAnnouncements((data) => {
+            service.fetchAnnouncements((err, data) => {
                 me.allAnnouncements = data;
                 if (me._config.announcements !== undefined) {
                     me.addAnnouncements();

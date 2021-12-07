@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         this.pluginName = 'AnnouncementsPlugin';
         this.data = [];
         this.selectedAnnouncements = [];
-        this.selectedAnnouncementsTitles = [];
         this.groupedSiblings = true;
         this.announcementsPopup = null;
 
@@ -48,7 +47,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             const me = this;
             me.data = data;
             me.selectedAnnouncements = [];
-            me.selectedAnnouncementsTitles = [];
 
             const service = me.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
 
@@ -64,15 +62,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             }
 
-            service.fetchAdminAnnouncements((announcements) => {
-                me.announcements = announcements;
+            service.fetchAdminAnnouncements((err, data) => {
+                me.announcements = data;
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
                         if (me.isAnnouncementValid(filteredAnnouncement[0])) {
-                            me.selectedAnnouncementsTitles.push(filteredAnnouncement[0].title);
                             me.selectedAnnouncements.push(filteredAnnouncement[0]);
                         }
                     });
@@ -200,10 +197,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
                         return ann.title !== announcement.title;
                     });
-                    me.selectedAnnouncementsTitles = me.selectedAnnouncementsTitles.filter(function (e) { return e !== announcement.title; });
                 } else {
                     me.selectedAnnouncements.push(announcement);
-                    me.selectedAnnouncementsTitles.push(announcement.title);
                 }
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
                 

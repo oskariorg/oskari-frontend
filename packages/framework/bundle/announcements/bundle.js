@@ -33,10 +33,16 @@ Oskari.clazz.define("Oskari.framework.bundle.announcements.AnnouncementsBundle",
          * @property source.scripts
          *
          */
-        "scripts": [{
+        "scripts": [
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/announcements/service/AnnouncementsService.js"
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/announcements/instance.js"
-        }, {
+        },
+        {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/announcements/Flyout.js"
         },
@@ -47,10 +53,6 @@ Oskari.clazz.define("Oskari.framework.bundle.announcements.AnnouncementsBundle",
         }, {
             'type': 'text/css',
             'src': '../../../../bundles/framework/announcements/resources/scss/announcementsplugin.ol.scss'
-        },
-        {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/announcements/service/AnnouncementsService.js"
         }],
         "locales": [
         {
