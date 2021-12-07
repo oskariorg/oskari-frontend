@@ -169,11 +169,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
                 const idPrefix = 'oskari_announcement_select_';
                 announcementInput.find('input[type=checkbox]').attr({
-                    'id': idPrefix  + announcement.id,
+                    'id': idPrefix + announcement.id,
                     'value': announcement.title
                 });
                 announcementInput.find('label').html(annName).attr({
-                    'for': idPrefix  + announcement.id
+                    'for': idPrefix + announcement.id
                 });
 
                 if (me.isAnnouncementValid(announcement)) {
@@ -201,7 +201,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.selectedAnnouncements.push(announcement);
                 }
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
-                
+
                 // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
                 jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
             });

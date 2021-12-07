@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
             if (typeof handler !== 'function') {
                 return;
             }
-    
+
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
             if (typeof handler !== 'function') {
                 return;
             }
-    
+
             jQuery.ajax({
                 type: 'DELETE',
                 dataType: 'json',
