@@ -18,7 +18,7 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "Inga resultat hittades.",
         "too_short": "Sökordet är för kort.",
         "cannot_be_empty": "Sökordet måste innehålla minst ett tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck.",
-        "too_many_stars": "Sökordet innehåller för många stjärnor (* -tecken). Den kan innehålla högst N * -tecken.",
+        "too_many_stars": "Sökordet kan inte vara endast jokertecken (*/?).",
         "generic_error": "Sök misslyckades. Försök på nytt senare.",
         "grid": {
             "name": "Platsnamn",
