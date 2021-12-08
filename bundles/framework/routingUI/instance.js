@@ -242,7 +242,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
             }
             titleDiv.html('<h4>' + title + '</h4>');
 
-            _.forEach(plan.itineraries, function (itinerary, index) {
+            plan.itineraries.forEach(function (itinerary, index) {
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 var panelTitle = loc.routeInstructions.route + ' ' + (index + 1);
                 panel.setTitle(panelTitle);

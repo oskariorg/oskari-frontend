@@ -38,11 +38,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @return {Object} projectionSelect
          */
         initCoordinatesTransformChange: function (popupContent) {
-            var me = this,
-                keys = _.keys(me._config.supportedProjections);
+            const me = this;
+            const config = this._config || {};
+            const hasMoreProjConfigs = config.supportedProjections && Object.keys(config.supportedProjections) > 1;
             me._popupContent = popupContent;
 
-            if (keys && keys.length > 1) {
+            if (hasMoreProjConfigs) {
                 me._popupContent.find('.srs').append(me._templates.projectionTransformSelect.clone());
 
                 me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale('display.coordinatesTransform.header'));
@@ -52,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     var nowSelected = jQuery('#projection option:selected').val();
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                     var data = coordinateToolPlugin._getInputsData();
-                    var usersInputs = _.clone(data);
+                    var usersInputs = JSON.parse(JSON.stringify(data));
                     coordinateToolPlugin._projectionChanged = true;
                     coordinateToolPlugin.refresh(data);
                     coordinateToolPlugin._labelMetricOrDegrees(nowSelected);
@@ -72,7 +73,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 });
             }
 
-            return me._projectionSelect;
+            return this._projectionSelect;
         },
         /**
          * Generates the options for the projection change select based on config, or hides control if no options

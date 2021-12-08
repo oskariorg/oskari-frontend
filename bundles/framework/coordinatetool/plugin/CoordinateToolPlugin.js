@@ -1,3 +1,5 @@
+const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
+
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin
  * Provides a coordinate display for map
@@ -291,7 +293,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._progressSpinner.stop();
             });
 
-            if (_.isArray(me._config.supportedProjections)) {
+            if (Array.isArray(me._config.supportedProjections)) {
                 me._getPreciseTransform = true;
                 me._projectionSelect = me._coordinateTransformationExtension.initCoordinatesTransformChange(popupContent);
             } else if (typeof me._config.supportedProjections === 'object') {
@@ -710,7 +712,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 conf = me._config;
 
             if (me._latInput && me._lonInput) {
-                var isSupported = !!((conf && _.isArray(conf.supportedProjections)));
+                var isSupported = !!((conf && Array.isArray(conf.supportedProjections)));
                 var isDifferentProjection = !!((me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() &&
                     data.lonlat.lat !== 0 && data.lonlat.lon !== 0));
                 var lat = parseFloat(data.lonlat.lat);
@@ -1059,13 +1061,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                 'lon': parseFloat(event.getLon())
                             }
                         };
-                        var dataServer = _.clone(data);
+                        var dataServer = cloneJSON(data);
                         if (me._projectionSelect) {
                             if (me._mapmodule.getProjection() === me._projectionSelect.val()) {
-                                me.refresh(_.clone(data));
+                                me.refresh(cloneJSON(data));
                             }
                         } else {
-                            me.refresh(_.clone(data));
+                            me.refresh(cloneJSON(data));
                         }
 
                         if (event.isPaused() && me._getPreciseTransform) {
@@ -1073,11 +1075,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
 
                         if (event.isPaused() && me._showReverseGeocode) {
-                            me._updateReverseGeocode(_.clone(data));
+                            me._updateReverseGeocode(cloneJSON(data));
                         }
 
                         if (event.isPaused()) {
-                            me.getEmergencyCallInfo(_.clone(data));
+                            me.getEmergencyCallInfo(cloneJSON(data));
                         }
                     }
                 },
@@ -1115,19 +1117,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                 'lon': parseFloat(lonlat.lon)
                             }
                         },
-                        dataServer = _.clone(data);
+                        dataServer = cloneJSON(data);
                     if (!me._showMouseCoordinates) {
                         // don't manipulate the original data- object, we need the coordinates in map projection for the reverse geocoding to work
-                        me.refresh(_.clone(data));
+                        me.refresh(cloneJSON(data));
                         if (me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
                         }
                     }
                     if (me._showReverseGeocode) {
-                        me._updateReverseGeocode(_.clone(data));
+                        me._updateReverseGeocode(cloneJSON(data));
                     }
 
-                    me.getEmergencyCallInfo(_.clone(data));
+                    me.getEmergencyCallInfo(cloneJSON(data));
                 },
                 /**
                  * @method RPCUIEvent
@@ -1169,24 +1171,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             el.addClass(styleClass);
         },
         _labelMetricOrDegrees: function (projection) {
-            var me = this;
-            var loc = me._locale;
-            var conf = me._config;
-            projection = projection || me._previousProjection || me.getMapModule().getProjection;
-            var showDegrees = (me._mapModule.getProjectionUnits() === 'degrees');
+            const loc = this._locale;
+            const conf = this._config || {};
+            projection = projection || this._previousProjection || this.getMapModule().getProjection;
+            let showDegrees = (this._mapModule.getProjectionUnits() === 'degrees');
+            const projFormats = conf.projectionShowFormat || {};
+            const formatDef = projFormats[projection];
 
-            if (!_.has(conf.projectionShowFormat, projection)) {
-                me._log.debug('Not specified projection format. Used defaults from map projection units.');
+            if (!formatDef) {
+                this._log.debug('Not specified projection format. Used defaults from map projection units.');
             } else {
-                showDegrees = (conf.projectionShowFormat[projection].format === 'degrees');
+                showDegrees = (formatDef.format === 'degrees');
             }
-            if (me._latLabel !== null && me._lonLabel !== null) {
+            if (this._latLabel !== null && this._lonLabel !== null) {
                 if (showDegrees) {
-                    me._latLabel.html(loc('display.compass.lat') + ':');
-                    me._lonLabel.html(loc('display.compass.lon') + ':');
+                    this._latLabel.html(loc('display.compass.lat') + ':');
+                    this._lonLabel.html(loc('display.compass.lon') + ':');
                 } else {
-                    me._latLabel.html(loc('display.compass.n') + ':');
-                    me._lonLabel.html(loc('display.compass.e') + ':');
+                    this._latLabel.html(loc('display.compass.n') + ':');
+                    this._lonLabel.html(loc('display.compass.e') + ':');
                 }
             }
             return showDegrees;

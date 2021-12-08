@@ -86,7 +86,6 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'q': searchString,
                     'lang': Oskari.getLang(),
                     'epsg': sb.getMap().getSrsName(),
-                    'autocomplete': false,
                     'options': JSON.stringify(options)
                 },
                 success: function (response) {
