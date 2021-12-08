@@ -40,10 +40,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         initCoordinatesTransformChange: function (popupContent) {
             const me = this;
             const config = this._config || {};
-            const hasMoreProjConfigs = config.supportedProjections && Object.keys(config.supportedProjections) > 1;
+            const supportedProjs = config.supportedProjections || [];
+            let amountOfProjections = 0;
+            if (Array.isArray(supportedProjs)) {
+                amountOfProjections = supportedProjs.length;
+            } else if (typeof supportedProjs === 'object') {
+                // Note! Supported projs seems to be an array always when present. However old code used _.keys() to calculate length which
+                // suggests that this might be an object at some point. Probably can be removed if refactored to React.js
+                amountOfProjections = Object.keys(supportedProjs).length;
+            }
+
             me._popupContent = popupContent;
 
-            if (hasMoreProjConfigs) {
+            if (amountOfProjections > 1) {
                 me._popupContent.find('.srs').append(me._templates.projectionTransformSelect.clone());
 
                 me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale('display.coordinatesTransform.header'));
@@ -82,8 +91,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _populateCoordinatesTransformSelect: function (select) {
             var me = this;
-            var projections = me._config.supportedProjections || [];
-            projections.forEach(function (key) {
+            const config = this._config || {};
+            const supportedProjs = config.supportedProjections || [];
+            supportedProjs.forEach(function (key) {
                 var option = me._templates.projectionSelectOption.clone();
                 option.val(key);
                 if (me._locale('display.coordinatesTransform.projections.' + key)) {
