@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
                     channelId: location.channelId,
                     name: location.name,
                     type: location.type
-                }
+                };
             });
             cb(result);
         }

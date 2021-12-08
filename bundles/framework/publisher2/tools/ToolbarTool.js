@@ -408,7 +408,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 // build DOM based on button configs
                 Object.keys(me.drawOptions).forEach(toolName => {
-                    const isToolChecked = me.drawOptions[toolName];
+                    let isToolChecked = me.drawOptions[toolName];
                     toolButton = me.drawButtons[toolName];
                     toolButton.toolbarid = toolOption.toolbarId;
 
