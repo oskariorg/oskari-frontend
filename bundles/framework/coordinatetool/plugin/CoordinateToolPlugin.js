@@ -187,16 +187,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method @private _showPopup
          */
         _showPopup: function () {
-            var me = this,
-                loc = me._locale,
-                popupTitle = loc('display.popup.title'),
-                popupContent = me._templates.popupContent.clone(),
-                crs = me.getMapModule().getProjection(),
-                popupName = 'xytoolpopup',
-                popupLocation,
-                isMobile = Oskari.util.isMobile(),
-                mapmodule = me.getMapModule(),
-                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+            const me = this;
+            const loc = me._locale;
+            const popupTitle = loc('display.popup.title');
+            const popupContent = me._templates.popupContent.clone();
+            const crs = me.getMapModule().getProjection();
+            const popupName = 'xytoolpopup';
+            const isMobile = Oskari.util.isMobile();
+            const mapmodule = me.getMapModule();
+            const popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
+            let popupLocation;
 
             const crsText = loc('display.crs')[crs] || loc('display.crs.default', { crs: crs });
             me._popup = popupService.createPopup();
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             popupContent.find('.coordinatetool__popup__content').html(loc('display.popup.info'));
             popupContent.find('.mousecoordinates-label').html(loc('display.popup.showMouseCoordinates'));
 
-            var centerToCoordsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            const centerToCoordsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             centerToCoordsBtn.setTitle(loc('display.popup.searchButton'));
             centerToCoordsBtn.setHandler(function () {
                 // Check valid
@@ -245,7 +245,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     me._showCoordinatesNotValidMessage();
                 }
             });
-            var buttons = [centerToCoordsBtn];
+            const buttons = [centerToCoordsBtn];
             me._centerToCoordsBtn = centerToCoordsBtn;
             if (me._markersSupported()) {
                 var addMarkerBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
