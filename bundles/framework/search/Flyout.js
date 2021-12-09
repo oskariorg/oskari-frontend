@@ -169,23 +169,23 @@ Oskari.clazz.define(
          *
          */
         addTab: function (item) {
-            var me = this,
-                flyout = jQuery(me.container);
+            const me = this;
+            const flyout = jQuery(me.container);
             // Change into tab mode if not already
             if (me.tabsContainer.panels.length === 0) {
                 me.tabsContainer.insertTo(flyout);
 
                 if (me.instance.disableDefault !== true) {
-                    var defaultPanel = Oskari.clazz.create(
-                            'Oskari.userinterface.component.TabPanel'
-                        ),
-                        searchContainer = jQuery('div.searchContainer');
+                    var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+                    //var searchContainer = jQuery('div.searchContainer');
 
                     defaultPanel.setTitle(
                         me.getTabTitle(),
                         'oskari_search_tabpanel_header'
                     );
-                    defaultPanel.setContent(searchContainer);
+                    const defaultSearchEl = this.getDefaultUI().getContainer();
+                    defaultSearchEl.detach();
+                    defaultPanel.setContent(defaultSearchEl);
                     defaultPanel.setId('oskari_search_tabpanel_header');
                     defaultPanel.setPriority(me.instance.tabPriority);
                     me.tabsContainer.addPanel(defaultPanel);
