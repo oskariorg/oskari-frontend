@@ -237,7 +237,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             if (!Array.isArray(announcementSelection)) {
                 return false;
             }
-            return announcementSelection.includes(announcement.id)
+            return announcementSelection.includes(announcement.id);
         },
 
         /**
