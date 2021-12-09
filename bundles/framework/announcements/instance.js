@@ -22,9 +22,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             if (me.started) {
                 return;
             }
-            me.started = true;
-            me.sandbox = Oskari.getSandbox();
-            me.sandbox.register(me);
+            me.sandbox = this.getSandbox();
 
             me.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.announcementsService);
@@ -55,8 +53,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
          * implements BundleInstance protocol update method - does nothing atm
          */
         stop: function () {
-            this.sandbox = null;
-            this.started = false;
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultExtension']

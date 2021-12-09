@@ -219,7 +219,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         isAnnouncementValid: function (announcement) {
             const announcementEnd = new Date(announcement.end_date);
             const currentDate = new Date();
-            return currentDate.getTime() <= announcementEnd.getTime() ? true : false;
+            return currentDate.getTime() <= announcementEnd.getTime();
         },
 
         /**
@@ -230,22 +230,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
          */
         shouldPreselectAnnouncement: function (announcement) {
             const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (toolPluginAnnouncementsConf) {
-                var isPluginConfig = !!((toolPluginAnnouncementsConf && toolPluginAnnouncementsConf.config &&
-                    toolPluginAnnouncementsConf.config.announcements));
-
-                if (isPluginConfig) {
-                    for (var i = 0; i < toolPluginAnnouncementsConf.config.announcements.length; i++) {
-                        if (toolPluginAnnouncementsConf.config.announcements[i] === announcement.id) {
-                            return true;
-                        }
-                    }
-                } else {
-                    return false;
-                }
-            } else {
+            if (!toolPluginAnnouncementsConf || !toolPluginAnnouncementsConf.config) {
                 return false;
             }
+            const announcementSelection = toolPluginAnnouncementsConf.config.announcements;
+            if (!Array.isArray(announcementSelection)) {
+                return false;
+            }
+            return announcementSelection.includes(announcement.id)
         },
 
         /**

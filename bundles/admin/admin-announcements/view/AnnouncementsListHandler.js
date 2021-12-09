@@ -33,7 +33,6 @@ class ViewHandler extends StateHandler {
     constructor (sandbox) {
         super();
         this.service = sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-        console.log(this.service);
         this.fetchAdminAnnouncements();
         this.state = {
             announcements: [],
