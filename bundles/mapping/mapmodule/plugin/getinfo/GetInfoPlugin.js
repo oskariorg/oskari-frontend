@@ -315,9 +315,10 @@ Oskari.clazz.define(
                         return result;
                     }
 
-                    params.STYLES = layer.getCurrentStyle().getName();
-                    result[layer.getId()] = params;
-
+                    result[layer.getId()] = {
+                         ...params,
+                         STYLES: layer.getCurrentStyle().getName()
+                     };
                     return result;
                 }, {});
 
