@@ -311,10 +311,13 @@ Oskari.clazz.define(
                 .filter((layer) => layerIds.includes(layer.getId()))
                 .reduce((result, layer) => {
                     const params = layer.getParams();
-                    if (typeof params !== 'object' || !Object.keys(params).length) {
+                    if (typeof params !== 'object') {
                         return result;
                     }
+
+                    params.STYLES = layer.getCurrentStyle().getName();
                     result[layer.getId()] = params;
+
                     return result;
                 }, {});
 
