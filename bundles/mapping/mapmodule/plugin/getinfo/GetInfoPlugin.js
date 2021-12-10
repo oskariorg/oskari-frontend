@@ -316,9 +316,9 @@ Oskari.clazz.define(
                     }
 
                     result[layer.getId()] = {
-                         ...params,
-                         STYLES: layer.getCurrentStyle().getName()
-                     };
+                        ...params,
+                        STYLES: layer.getCurrentStyle().getName()
+                    };
                     return result;
                 }, {});
 
