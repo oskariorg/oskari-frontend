@@ -80,6 +80,14 @@ const areaFills = [
         data: getFillIconDiagonalThick
     }
 ];
+export const getFillOption = name => {
+    const fill = areaFills.find(pattern => pattern.name === name);
+    return {
+        ...fill,
+        data: fill.data(counter)
+    };
+
+};
 
 // counter is used to generate changing ids for SVG to workaround conflicting ids when hard coded
 let counter = 0;
