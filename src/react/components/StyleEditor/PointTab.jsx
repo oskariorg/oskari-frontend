@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl, constants } from './index';
+import { SvgRadioButton, SizeControl, constants } from './index';
 import { Form, Row, Col } from 'antd';
 
 
@@ -46,15 +46,6 @@ export const PointTab = ({ oskariStyle }) => {
                     localeKey={ 'StyleEditor.image.size' }
                 />
             </Row>
-
-            <Row>
-                <Preview
-                    oskariStyle={ oskariStyle }
-                    format={ 'point' }
-                    markers={ markers }
-                />
-            </Row>
-
         </React.Fragment>
     );
 };

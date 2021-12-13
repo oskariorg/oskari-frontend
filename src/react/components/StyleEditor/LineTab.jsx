@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, Preview, SizeControl, constants } from './index';
+import { SvgRadioButton, SizeControl, constants } from './index';
 import { Form, Row, Col } from 'antd';
 
 export const LineTab = (props) => {
@@ -59,12 +59,6 @@ export const LineTab = (props) => {
                     localeKey={ 'StyleEditor.stroke.width' }
                 />
             </Row>
-
-            <Preview
-                oskariStyle={ props.oskariStyle }
-                format={ 'line' }
-            />
-
         </React.Fragment>
     );
 };
