@@ -9,7 +9,6 @@ import './request/AddSearchResultActionRequest';
 import './request/RemoveSearchResultActionRequest';
 import './request/SearchResultActionRequestHandler';
 import '../../service/search/searchservice';
-import './resources/scss/style.scss';
 
 /**
  * @class Oskari.mapframework.bundle.search.SearchBundleInstance
