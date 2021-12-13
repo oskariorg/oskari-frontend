@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import { SearchInput } from './SearchInput';
 import { SearchHandler } from './SearchHandler';
 import { SearchResultTable } from './SearchResultTable';
-
-
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
+import styled from 'styled-components';
+
+const Description = styled('div')`
+    margin-bottom: 8px;
+`;
+
 /**
  * @class Oskari.mapframework.bundle.search.Flyout
  *
@@ -80,9 +84,7 @@ Oskari.clazz.define(
             ReactDOM.render(
                 (<LocaleProvider value={{ bundleKey: 'Search' }}>
                     <div className="searchContainer">
-                        <div className="searchDescription">
-                            <Message messageKey="searchDescription" />
-                        </div>
+                        <Message messageKey="searchDescription" LabelComponent={Description}/>
                         <div className="controls">
                             <SearchInput
                                 placeholder={this.instance.getLocalization('searchAssistance')}

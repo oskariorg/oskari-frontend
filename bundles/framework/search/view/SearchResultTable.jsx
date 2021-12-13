@@ -3,9 +3,25 @@ import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table } from 'antd';
 import 'antd/es/table/style/index.js';
+import styled from 'styled-components';
 
+const PTI_YELLOW = '#fdf8d9';
+
+const PointableTable = styled(Table)`
+    thead {
+        tr {
+            background-color: ${PTI_YELLOW};
+        }
+    }
+    tr {
+        cursor: pointer;
+        :hover {
+            background-color: ${PTI_YELLOW};
+        }
+    }
+`;
 const noop = () => {};
-export const SearchResultTable = ({ query = '', result = {}, onResultClick = noop }) => {
+export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
     
     if (!result || !result.locations || result.totalCount === 0) {
         return null;
@@ -14,19 +30,16 @@ export const SearchResultTable = ({ query = '', result = {}, onResultClick = noo
         {
             title: <Message messageKey='grid.name' />,
             dataIndex: 'name',
-            defaultSortOrder: 'descend',
             sorter: (a, b) => Oskari.util.naturalSort(a.name, b.name)
         },
         {
             title: <Message messageKey='grid.region' />,
             dataIndex: 'region',
-            defaultSortOrder: 'descend',
             sorter: (a, b) => Oskari.util.naturalSort(a.region, b.region)
         },
         {
             title: <Message messageKey='grid.type' />,
             dataIndex: 'type',
-            defaultSortOrder: 'descend',
             sorter: (a, b) => Oskari.util.naturalSort(a.type, b.type)
         }
     ];
@@ -55,18 +68,19 @@ export const SearchResultTable = ({ query = '', result = {}, onResultClick = noo
     },
     ];
     */
-    return (<Table
+    return (<PointableTable
         columns={columns}
         dataSource={data}
+        showSorterTooltip={false}
         onRow={(record, rowIndex) => {
             return {
               onClick: () => onResultClick(record)
             };
-          }} />);
+          }}
+          pagination={{defaultPageSize: 50, hideOnSinglePage: true}} />);
 };
 
 SearchResultTable.propTypes = {
-    query: PropTypes.string,
     result: PropTypes.object,
     onResultClick: PropTypes.func
 };
