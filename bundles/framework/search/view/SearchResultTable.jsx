@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Table } from 'antd';
@@ -20,6 +20,21 @@ const PointableTable = styled(Table)`
         }
     }
 `;
+/*
+Example result.locations = [{
+    "zoomScale": 4000000,
+    "paikkatyyppi": "Hallinto ja julkiset palvelut",
+    "name": "Tampere",
+    "rank": -1,
+    "lon": 327629.273,
+    "id": "10581718",
+    "source": "geographic-names",
+    "type": "Kunta",
+    "region": "Tampere",
+    "lat": 6822513.158,
+    "channelId": "NLSFI_GEOCODING"
+}, ...];
+*/
 const noop = () => {};
 export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
     
@@ -46,33 +61,19 @@ export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
     const data = result.locations.map(item => ({
         key: item.id,
         ...item
-    })); 
-    /*[
-    {
-      "zoomScale": 4000000,
-      "paikkatyyppi": "Hallinto ja julkiset palvelut",
-      "name": "Tampere",
-      "rank": -1,
-      "lon": 327629.273,
-      "id": "10581718",
-      "source": "geographic-names",
-      "type": "Kunta",
-      "region": "Tampere",
-      "lat": 6822513.158,
-      "channelId": "NLSFI_GEOCODING"
+    }));
 
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-    },
-    ];
-    */
+    // single result -> "click" immediately
+    useEffect(() => {
+        if (result.totalCount === 1) {
+            onResultClick(result.locations[0]);
+        }
+    }, [result.locations]);
     return (<PointableTable
         columns={columns}
         dataSource={data}
         showSorterTooltip={false}
-        onRow={(record, rowIndex) => {
+        onRow={(record) => {
             return {
               onClick: () => onResultClick(record)
             };

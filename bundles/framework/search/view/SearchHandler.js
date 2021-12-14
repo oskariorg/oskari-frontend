@@ -5,14 +5,15 @@ import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 const showMessage = (key, args, defaultMsg = key) => Messaging.error(<Message messageKey={key} messageArgs={args} defaultMsg={defaultMsg} bundleKey='Search' />);
 
 class UIHandler extends StateHandler {
-    constructor (sandbox, consumer) {
+    constructor (useAutoComplete, service, sandbox, consumer) {
         super();
         this.sandbox = sandbox;
+        this.service = service;
+        this.useAutoComplete = !!useAutoComplete;
         this.log = Oskari.log('SearchHandler');
-        this.loadingCount = 0;
         this.setState({
             query: '',
-            autocomplete: [],
+            suggestions: [],
             result: {},
             loading: false
         });
@@ -20,10 +21,12 @@ class UIHandler extends StateHandler {
         this.eventHandlers = this._createEventHandlers();
     }
     triggerSearch (query) {
-        console.log('searching for:', query);
-
         this.updateState({ query });
         if (query === '') {
+            this.updateState({
+                suggestions: [],
+                result: {}
+            });
             return;
         }
         if (!this._validateSearchKey(query)) {
@@ -32,13 +35,22 @@ class UIHandler extends StateHandler {
         this.updateState({
             loading: true,
             result: {},
-            autocomplete: []
+            suggestions: []
         });
 
         this.sandbox.postRequestByName('SearchRequest', [query]);
     }
-    autocomplete (query) {
-        this.updateState({ query });
+    updateQuery (query) {
+        this.updateState({
+            query,
+            suggestions: []
+        });
+
+        if (this.useAutoComplete && query.length > 1) {
+            this.service.doAutocompleteSearch(query, (result) => {
+                this.updateState({ suggestions: result.methods });
+            });
+        }
     }
 
     _validateSearchKey (key) {
@@ -61,7 +73,7 @@ class UIHandler extends StateHandler {
             loading: false,
             result: result,
             query,
-            autocomplete: []
+            suggestions: []
         });
         // error handling
         if (!success) {
@@ -110,7 +122,6 @@ class UIHandler extends StateHandler {
 
 const wrapped = controllerMixin(UIHandler, [
     'triggerSearch',
-    'autocomplete',
-    'resultClicked'
+    'updateQuery'
 ]);
 export { wrapped as SearchHandler };

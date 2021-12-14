@@ -1,7 +1,6 @@
 import './Flyout';
 import './Tile';
-//import './view/DefaultSearchView';
-import './view/DefaultSearchViewReact';
+import './view/DefaultSearchView';
 import './event/TabChangedEvent';
 import './request/AddTabRequest';
 import './request/AddTabRequestHandler';
