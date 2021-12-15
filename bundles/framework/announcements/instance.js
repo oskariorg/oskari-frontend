@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
      */
     function () {
         var conf = this.getConfiguration();
+        this.sandbox = this.getSandbox();
         conf.name = 'announcements';
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
     }, {
@@ -22,10 +23,11 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             if (me.started) {
                 return;
             }
-            me.sandbox = this.getSandbox();
 
             me.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.announcementsService);
+
+            me.plugins['Oskari.userinterface.Flyout'].createAnnouncementsHandler(me.announcementsService);
 
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
