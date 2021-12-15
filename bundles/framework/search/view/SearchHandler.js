@@ -21,6 +21,7 @@ class UIHandler extends StateHandler {
         this.eventHandlers = this._createEventHandlers();
     }
     triggerSearch (query) {
+        console.log(query);
         this.updateState({ query });
         if (query === '') {
             this.updateState({
@@ -88,7 +89,7 @@ class UIHandler extends StateHandler {
     /**
      * "Module" name for event handling
      */
-     getName () {
+    getName () {
         return 'LayerViewTabsHandler';
     }
     /**
@@ -117,7 +118,6 @@ class UIHandler extends StateHandler {
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
     }
-
 }
 
 const wrapped = controllerMixin(UIHandler, [

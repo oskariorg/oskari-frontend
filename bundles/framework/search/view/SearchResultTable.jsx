@@ -5,18 +5,15 @@ import { Table } from 'antd';
 import 'antd/es/table/style/index.js';
 import styled from 'styled-components';
 
-const PTI_YELLOW = '#fdf8d9';
-
 const PointableTable = styled(Table)`
-    thead {
-        tr {
-            background-color: ${PTI_YELLOW};
-        }
-    }
     tr {
         cursor: pointer;
-        :hover {
-            background-color: ${PTI_YELLOW};
+
+        th {
+            padding: 8px 8px;
+        }
+        td {
+            padding: 8px;
         }
     }
 `;
@@ -78,7 +75,7 @@ export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
               onClick: () => onResultClick(record)
             };
           }}
-          pagination={{defaultPageSize: 50, hideOnSinglePage: true}} />);
+          pagination={{defaultPageSize: result.totalCount, hideOnSinglePage: true}} />);
 };
 
 SearchResultTable.propTypes = {

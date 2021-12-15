@@ -34,9 +34,8 @@ Oskari.clazz.define(
         // Actions that get added to the search result popup
         this.resultActions = {};
         this._searchContainer = null;
-        const instanceConf = instance.conf ||{};
-        this.handler = new SearchHandler(!!instanceConf.autocomplete, this.searchservice, this.sandbox, () => { this.__refresh() });
-
+        const instanceConf = instance.conf || {};
+        this.handler = new SearchHandler(!!instanceConf.autocomplete, this.searchservice, this.sandbox, () => { this.__refresh(); });
         this.loc = Oskari.getMsg.bind(null, this.instance.getName());
     }, {
         __refresh: function () {

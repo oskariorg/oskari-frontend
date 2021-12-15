@@ -13,7 +13,7 @@ const noop = () => {};
 export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onSearch = noop, ...rest }) => {
     const input = (
         <Input value={query}
-            className='searchInput'
+            className='t_searchInput'
             { ...rest }
             size='large'
             // autocomplete/large setting will show it's own clear option
