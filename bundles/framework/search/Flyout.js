@@ -177,8 +177,6 @@ Oskari.clazz.define(
 
                 if (me.instance.disableDefault !== true) {
                     var defaultPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-                    //var searchContainer = jQuery('div.searchContainer');
-
                     defaultPanel.setTitle(
                         me.getTabTitle(),
                         'oskari_search_tabpanel_header'
@@ -198,9 +196,6 @@ Oskari.clazz.define(
             panel.setContent(item.content);
             panel.setPriority(item.priority);
             me.tabsContainer.addPanel(panel);
-        },
-        handleSearchResult: function (isSuccess, result, searchedFor) {
-            this.getDefaultUI().handleSearchResult(isSuccess, result, searchedFor);
         },
         addSearchResultAction: function (action) {
             this.getDefaultUI().addSearchResultAction(action);
