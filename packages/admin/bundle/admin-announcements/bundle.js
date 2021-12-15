@@ -43,6 +43,10 @@ Oskari.clazz.define("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsB
         {
             "type": "text/javascript",
             "src": "../../../../bundles/admin/admin-announcements/publisher/AnnouncementsTool.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../bundles/admin/admin-announcements/resources/scss/style.scss"
         }],
         "locales": [
         {
