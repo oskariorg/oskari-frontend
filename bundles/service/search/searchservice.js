@@ -1,3 +1,6 @@
+import './event/SearchResultEvent';
+import './request/SearchRequest';
+
 /**
  * @class Oskari.service.search.SearchService
  *

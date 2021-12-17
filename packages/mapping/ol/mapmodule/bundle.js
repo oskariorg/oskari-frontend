@@ -96,18 +96,6 @@ Oskari.clazz.define(
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/search/SearchPlugin.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/service/search/searchservice.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/service/search/event/SearchResultEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/service/search/request/SearchRequest.js'
-                }, {
-                    'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/search.scss'
                 },
                 /**
                  * Logo plugin
