@@ -88,7 +88,6 @@ Oskari.clazz.define(
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/getinfo.scss'
                 },
-
                 /**
                  * Search plugin
                  */
@@ -310,9 +309,7 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mylocation.scss'
-                },
-
-                {
+                }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/zoombar/Portti2Zoombar.js'
                 }, {

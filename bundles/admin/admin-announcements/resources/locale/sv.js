@@ -33,6 +33,15 @@ Oskari.registerLocalization(
                 "deleteAnnouncementConfirm": "Radera avisering?",
                 "cancelAnnouncementConfirm": "Är du säker?"
             },
+            "tool": {
+                "buttonLabel": "Välj Aviseringar",
+                "popup": {
+                    "title": "Aviseringar",
+                    "close": "Stäng"
+                },
+                "announcementsName": "Namn",
+                "announcementsTime": "Datumintervall"
+            },
             "titleError": "Lägg till en titel!",
             "contentError": "Lägg till innehåll!",
             "dateError": "Lägg till intervall!"

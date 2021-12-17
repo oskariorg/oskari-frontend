@@ -33,6 +33,15 @@ Oskari.registerLocalization(
             "deleteAnnouncementConfirm": "Delete the announcement?",
             "cancelAnnouncementConfirm": "Are you sure?"
         },
+        "tool": {
+            "buttonLabel": "Select Announcements",
+            "popup": {
+                "title": "Announcements",
+                "close": "Close"
+            },
+            "announcementsName": "Name",
+            "announcementsTime": "Valid"
+        },
         "titleError": "Add title",
         "contentError": "Add content!",
         "dateError": "Add daterange!"

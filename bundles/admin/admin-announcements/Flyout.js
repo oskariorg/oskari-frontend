@@ -19,7 +19,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.announcementsListHandler = new AnnouncementsListHandler();
+        this.sandbox = instance.getSandbox();
+        this.announcementsListHandler = new AnnouncementsListHandler(this.sandbox);
         this.announcementsListHandler.addStateListener(() => this.render());
     }, {
         /**

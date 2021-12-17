@@ -33,10 +33,17 @@ Oskari.registerLocalization(
                 "deleteAnnouncementConfirm": "Poistetaanko ilmoitus?",
                 "cancelAnnouncementConfirm": "Oletko varma?"
             },
+            "tool": {
+                "buttonLabel": "Valitse Ilmoitukset",
+                "popup": {
+                    "title": "Ilmoitukset",
+                    "close": "Sulje"
+                },
+                "announcementsName": "Nimi",
+                "announcementsTime": "Voimasssa"
+            },
             "titleError": "Lisää otsikko!",
             "contentError": "Lisää sisältö!",
             "dateError": "Lisää aikaväli!"
-
-
         }
     });
