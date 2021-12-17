@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchInput } from './SearchInput';
 import { SearchHandler } from './SearchHandler';
+import { SearchResultInfo } from './SearchResultInfo';
 import { SearchResultTable } from './SearchResultTable';
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
@@ -47,36 +48,22 @@ Oskari.clazz.define(
                 result = {}
             } = this.handler.getState();
             const controller = this.handler.getController();
+            const searchPerformed = result && Array.isArray(result.locations);
 
             ReactDOM.render(
                 (<LocaleProvider value={{ bundleKey: 'Search' }}>
-                    <div className="searchContainer">
-                        <Message messageKey="searchDescription" LabelComponent={Description}/>
-                        <div className="controls">
-                            <SearchInput
-                                placeholder={this.instance.getLocalization('searchAssistance')}
-                                query={query}
-                                suggestions={suggestions}
-                                onSearch={controller.triggerSearch}
-                                onChange={controller.updateQuery}
-                                loading={loading} />
-                        </div>
-                        <div><br /></div>
-                        <div className="info">
-                            { result.hasMore && <Message messageKey="searchMoreResults" messageArgs={{ count: result.totalCount }}/> }
-                            { result.totalCount === 0 && <React.Fragment>
-                                <Message messageKey="searchservice_search_alert_title" />:
-                                <Message messageKey="searchservice_search_not_found_anything_text" />
-                            </React.Fragment> }
-                            { result.totalCount > 0 && <Message messageKey="searchResultDescriptionOrdering" /> }
-                        </div>
-                        <div><br /></div>
-                        <div className="resultList">
-                            <SearchResultTable
-                                result={result}
-                                onResultClick={(result) => this._resultClicked(result)} />
-                        </div>
-                    </div>
+                    <Message messageKey="searchDescription" LabelComponent={Description}/>
+                    <SearchInput
+                        placeholder={this.instance.getLocalization('searchAssistance')}
+                        query={query}
+                        suggestions={suggestions}
+                        onSearch={controller.triggerSearch}
+                        onChange={controller.updateQuery}
+                        loading={loading} />
+                    { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
+                    <SearchResultTable
+                        result={result}
+                        onResultClick={(result) => this._resultClicked(result)} />
                 </LocaleProvider>)
                 , el[0]);
         },
