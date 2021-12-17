@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "searchResultDescriptionOrdering": "You can sort search results by clicking the headers of the table below.",
         "searchResults": "Search result",
         "searchResultsDescription": "results by search term",
+        "autocompleteInfo": "Similar search ideas",
         "searchservice_search_alert_title": "Error",
         "searchservice_search_not_found_anything_text": "No search results found. Please check the search term and try again.",
         "too_short": "The search term is too short. It must be at least one character long. If you use an asterisk (*), the search tearm must contain at least four other characters.",

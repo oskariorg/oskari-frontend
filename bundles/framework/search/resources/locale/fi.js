@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "searchResultDescriptionOrdering": "Järjestä hakutulokset klikkaamalla sarakkeen otsikkoa alla olevassa taulukossa.",
         "searchResults": "Hakutulokset:",
         "searchResultsDescription": "hakutulosta hakusanalla",
+        "autocompleteInfo": "Vastaavia hakuehdotuksia",
         "searchservice_search_alert_title": "Virhe",
         "searchservice_search_not_found_anything_text": "Hakusanalla ei löytynyt yhtään hakutulosta. Tarkista hakusanan oikeinkirjoitus.",
         "too_short": "Hakusana on liian lyhyt. Hakusanassa on oltava vähintään yksi merkki. Jos käytät jokerimerkkiä (*), hakusanassa on oltava vähintään neljä muuta merkkiä.",

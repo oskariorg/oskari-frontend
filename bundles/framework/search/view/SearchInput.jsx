@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SearchInput as Input } from 'oskari-ui';
+import { SearchInput as Input, Message } from 'oskari-ui';
 import { AutoComplete } from 'antd';
 import styled from 'styled-components';
 
@@ -27,6 +27,16 @@ const WideAutoComplete = styled(AutoComplete)`
 
 const noop = () => {};
 
+const getSuggestionOptions = (suggestions = []) => {
+    if (!suggestions.length) {
+        return [];
+    }
+    return [{
+        label: (<Message messageKey="autocompleteInfo" />),
+        options: suggestions.map(word => ({ value: word }))
+    }];
+};
+
 export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onSearch = noop, ...rest }) => {
     const input = (
         <Input value={query}
@@ -42,7 +52,7 @@ export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onS
     }
     return (<WideAutoComplete
         allowClear={false}
-        options={suggestions.map(word => ({ value: word }))}
+        options={getSuggestionOptions(suggestions)}
         onSelect={onSearch}>
             {input}
         </WideAutoComplete>);

@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "searchResultDescriptionOrdering": "Du kan även ordna resultaten i tabellen nedan genom att klicka på kolumnrubrikerna.",
         "searchResults": "Sökresultat:",
         "searchResultsDescription": "resultat efter sökord",
+        "autocompleteInfo": "Motsvarande sökvillkor",
         "searchservice_search_alert_title": "Fel",
         "searchservice_search_not_found_anything_text": "Inga resultat hittades.",
         "too_short": "Sökordet är för kort.",
