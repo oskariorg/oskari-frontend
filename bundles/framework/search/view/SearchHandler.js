@@ -2,6 +2,18 @@ import React from 'react';
 import { Message } from 'oskari-ui';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 
+export const getValidationMessageKey = (inputQuery = '') => {
+    if (!inputQuery) {
+        return;
+    }
+    const query = inputQuery.trim();
+    const nonWildcardQuery = query.replaceAll('*', '').replaceAll('?', '');
+    if (!nonWildcardQuery.length) {
+        // only stars/wildcards
+        return 'too_many_stars';
+    }
+};
+
 const showMessage = (key, args, defaultMsg = key) => Messaging.error(<Message messageKey={key} messageArgs={args} defaultMsg={defaultMsg} bundleKey='Search' />);
 
 class UIHandler extends StateHandler {
@@ -60,11 +72,9 @@ class UIHandler extends StateHandler {
             showMessage('cannot_be_empty');
             return false;
         }
-        const query = key.trim();
-        const nonWildcardQuery = query.replaceAll('*', '').replaceAll('?', '');
-        if (!nonWildcardQuery.length) {
-            // only stars/wildcards
-            showMessage('too_many_stars');
+        const errorMsgKey = getValidationMessageKey(key);
+        if (errorMsgKey) {
+            showMessage(errorMsgKey);
             return false;
         }
         return true;

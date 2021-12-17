@@ -4,10 +4,13 @@ import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 import { InfoCircleTwoTone } from '@ant-design/icons';
 
-const InfoBlock = styled('div')`
+const StyledInfoBlock = styled('div')`
     padding-top: 1em;
     padding-bottom: 0.5em;
 `;
+
+export const InfoBlock = ({ children }) => (<StyledInfoBlock className="info">{ children }</StyledInfoBlock>);
+
 export const SearchResultInfo = ({ count = 0, hasMore = false }) => {
     const hasResults = count > 0;
     return (

@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchInput as Input, Message } from 'oskari-ui';
+import { getValidationMessageKey } from './SearchHandler';
+import { InfoBlock } from './SearchResultInfo';
 import { AutoComplete } from 'antd';
+import { InfoCircleTwoTone } from '@ant-design/icons';
 import styled from 'styled-components';
 
 /*
@@ -26,7 +29,6 @@ const WideAutoComplete = styled(AutoComplete)`
 `;
 
 const noop = () => {};
-
 const getSuggestionOptions = (suggestions = []) => {
     if (!suggestions.length) {
         return [];
@@ -38,24 +40,28 @@ const getSuggestionOptions = (suggestions = []) => {
 };
 
 export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onSearch = noop, ...rest }) => {
-    const input = (
-        <Input value={query}
-            className='t_searchInput'
-            { ...rest }
-            size='large'
-            allowClear={true}
-            enterButton={true}
-            onChange={(event) => onChange(event.target.value)}
-            onSearch={onSearch} />);
-    if (!suggestions && !suggestions.length) {
-        return input;
-    }
-    return (<WideAutoComplete
-        allowClear={false}
-        options={getSuggestionOptions(suggestions)}
-        onSelect={onSearch}>
-            {input}
-        </WideAutoComplete>);
+    const validationMsgKey = getValidationMessageKey(query);
+    return (
+        <React.Fragment>
+            <WideAutoComplete
+                allowClear={false}
+                options={getSuggestionOptions(suggestions)}
+                onSelect={onSearch}>
+                <Input value={query}
+                    className='t_searchInput'
+                    { ...rest }
+                    size='large'
+                    allowClear={true}
+                    enterButton={true}
+                    onChange={(event) => onChange(event.target.value)}
+                    onSearch={onSearch} />
+            </WideAutoComplete>
+            { validationMsgKey &&
+                <InfoBlock>
+                    <InfoCircleTwoTone /> <Message messageKey={validationMsgKey} />
+                </InfoBlock>}
+        </React.Fragment>
+    );
 };
 
 SearchInput.propTypes = {
