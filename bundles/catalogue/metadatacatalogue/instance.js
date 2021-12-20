@@ -288,6 +288,16 @@ Oskari.clazz.define(
                 this.addSearchResultActionRequestHandler
             );
 
+            this.metadataSearchRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.MetadataSearchRequestHandler',
+                sandbox,
+                me
+            );
+            sandbox.requestHandler(
+                'MetadataSearchRequest',
+                this.metadataSearchRequestHandler
+            );
+
             // draw ui
             me.createUi();
         },
