@@ -33,7 +33,6 @@ class UIHandler extends StateHandler {
         this.eventHandlers = this._createEventHandlers();
     }
     triggerSearch (query) {
-        console.log(query);
         this.updateState({ query });
         if (query === '') {
             this.updateState({
