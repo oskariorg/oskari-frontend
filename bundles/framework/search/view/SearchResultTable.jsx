@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { Table } from 'antd';
-import 'antd/es/table/style/index.js';
+import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import styled from 'styled-components';
 
 const PointableTable = styled(Table)`
@@ -32,32 +31,18 @@ Example result.locations = [{
     "channelId": "NLSFI_GEOCODING"
 }, ...];
 */
+
+const FIELDS = ['name', 'region', 'type'];
 const noop = () => {};
 export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
     
     if (!result || !result.locations || result.totalCount === 0) {
         return null;
     }
-    const columns = [
-        {
-            title: <Message messageKey='grid.name' />,
-            dataIndex: 'name',
-            sorter: (a, b) => Oskari.util.naturalSort(a.name, b.name)
-        },
-        {
-            title: <Message messageKey='grid.region' />,
-            dataIndex: 'region',
-            sorter: (a, b) => Oskari.util.naturalSort(a.region, b.region)
-        },
-        {
-            title: <Message messageKey='grid.type' />,
-            dataIndex: 'type',
-            sorter: (a, b) => Oskari.util.naturalSort(a.type, b.type)
-        }
-    ];
-    const data = result.locations.map(item => ({
-        key: item.id,
-        ...item
+    const columns = FIELDS.map(key => ({
+        title: <Message messageKey={`grid.${key}`} />,
+        dataIndex: key,
+        sorter: getSorterFor(key)
     }));
 
     // single result -> "click" immediately
@@ -67,9 +52,9 @@ export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
         }
     }, [result.locations]);
     return (<PointableTable
+        rowKey="id"
         columns={columns}
-        dataSource={data}
-        showSorterTooltip={false}
+        dataSource={result.locations}
         onRow={(record) => {
             return {
               onClick: () => onResultClick(record)
