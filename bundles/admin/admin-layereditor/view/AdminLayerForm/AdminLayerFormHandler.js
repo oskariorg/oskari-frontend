@@ -4,6 +4,7 @@ import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 import { getWarningsForStyles } from './VisualizationTabPane/RasterStyle/helper';
+import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -197,16 +198,32 @@ class UIHandler extends StateHandler {
 
     setTimeSeriesUI (ui) {
         const layer = { ...this.getState().layer };
-        const timeseries = { ...layer.options.timeseries, ui };
-        layer.options.timeseries = timeseries;
+        const options = layer.options || {};
+        layer.options = options;
+        if (TIME_SERIES_UI.PLAYER === ui) {
+            // default UI -> remove additional timeseries config
+            delete options.timeseries;
+        } else {
+            // range or none options needs additional timeseries config
+            const timeseries = { ...options.timeseries, ui };
+            layer.options.timeseries = timeseries;
+
+            // show no UI for timeseries -> remove timeseries metadata config
+            if (TIME_SERIES_UI.NONE === ui) {
+                delete timeseries.metadata;
+            }
+        }
         this.updateState({ layer });
     }
 
     setTimeSeriesMetadataLayer (layerId) {
         const layer = { ...this.getState().layer };
-        const timeseries = { ...layer.options.timeseries };
+        const options = layer.options || {};
+        layer.options = options;
+        const timeseries = { ...options.timeseries };
         const metadata = { ...timeseries.metadata, layer: layerId };
         if (layerId === '') {
+            delete metadata.layer;
             delete metadata.attribute;
             delete metadata.layerAttributes;
             timeseries.metadata = metadata;

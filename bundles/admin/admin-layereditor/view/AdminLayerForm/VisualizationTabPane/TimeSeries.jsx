@@ -9,7 +9,7 @@ import { TimeSeriesMetadataLayerSelect } from './TimeSeries/TimeSeriesMetadataLa
 import { TimeSeriesMetadataToggleLevel } from './TimeSeries/TimeSeriesMetadataToggleLevel';
 import { TimeSeriesMetadataVisualization } from './TimeSeries/TimeSeriesMetadataVisualization';
 
-const TIME_SERIES_UI = {
+export const TIME_SERIES_UI = {
     PLAYER: 'player',
     RANGE: 'range',
     NONE: 'none'
