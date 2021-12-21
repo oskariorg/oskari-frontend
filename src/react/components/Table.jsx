@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table as AntTable } from 'antd';
 import 'antd/es/table/style/index.js';
+import { getMsg } from '../util/locale';
 
 export const getSorterFor = key => (a, b) => Oskari.util.naturalSort(a[key], b[key]);
 
@@ -12,9 +13,6 @@ export const getSorterFor = key => (a, b) => Oskari.util.naturalSort(a[key], b[k
  * - https://github.com/ant-design/ant-design/blob/master/components/locale/fi_FI.tsx
  * - https://github.com/ant-design/ant-design/pull/33372
  */
-const LOCALE_BUNDLE = 'oskariui';
-const getMsg = (key) => Oskari.getMsg(LOCALE_BUNDLE, key);
-
 export const Table = ({ ...other }) => {
     const locale = {
         triggerDesc: getMsg('table.sort.desc'), // 'Click to sort descending',
