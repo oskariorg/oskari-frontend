@@ -2,6 +2,13 @@ Oskari.registerLocalization({
     lang: 'en',
     key: 'oskariui',
     value: {
+        grid: {
+            sort: {
+                desc: 'Click to sort descending',
+                asc: 'Click to sort ascending',
+                cancel: 'Click to cancel sorting'
+            }
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Geometry type',

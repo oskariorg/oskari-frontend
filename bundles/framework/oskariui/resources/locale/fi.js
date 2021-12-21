@@ -2,6 +2,13 @@ Oskari.registerLocalization({
     lang: 'fi',
     key: 'oskariui',
     value: {
+        grid: {
+            sort: {
+                desc: 'Lajittele laskevasti',
+                asc: 'Lajittele nousevasti',
+                cancel: 'Peruuta lajittelu'
+            }
+        },
         StyleEditor: {
             newtitle: 'Uusi tyyli',
             subheaders: {
