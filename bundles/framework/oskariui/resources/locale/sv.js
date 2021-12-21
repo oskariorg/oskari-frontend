@@ -2,6 +2,9 @@ Oskari.registerLocalization({
     lang: 'sv',
     key: 'oskariui',
     value: {
+        error: {
+            generic: 'Something went wrong'
+        },
         table: {
             sort: {
                 desc: 'Sortera i fallande ordning',
