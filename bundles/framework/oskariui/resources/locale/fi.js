@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     lang: 'fi',
     key: 'oskariui',
     value: {
-        grid: {
+        table: {
             sort: {
                 desc: 'Lajittele laskevasti',
                 asc: 'Lajittele nousevasti',

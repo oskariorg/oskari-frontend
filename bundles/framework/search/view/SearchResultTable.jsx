@@ -34,8 +34,8 @@ Example result.locations = [{
 
 const FIELDS = ['name', 'region', 'type'];
 const noop = () => {};
+
 export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
-    
     if (!result || !result.locations || result.totalCount === 0) {
         return null;
     }

@@ -17,9 +17,9 @@ const getMsg = (key) => Oskari.getMsg(LOCALE_BUNDLE, key);
 
 export const Table = ({ ...other }) => {
     const locale = {
-        triggerDesc: getMsg('grid.sort.desc'), // 'Click to sort descending',
-        triggerAsc: getMsg('grid.sort.asc'), //'Click to sort ascending',
-        cancelSort: getMsg('grid.sort.cancel') // 'Click to cancel sorting'
+        triggerDesc: getMsg('table.sort.desc'), // 'Click to sort descending',
+        triggerAsc: getMsg('table.sort.asc'), //'Click to sort ascending',
+        cancelSort: getMsg('table.sort.cancel') // 'Click to cancel sorting'
     };
     return (<AntTable locale={locale} {...other} />);
 };

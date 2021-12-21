@@ -2,7 +2,7 @@ Oskari.registerLocalization({
     lang: 'en',
     key: 'oskariui',
     value: {
-        grid: {
+        table: {
             sort: {
                 desc: 'Click to sort descending',
                 asc: 'Click to sort ascending',
