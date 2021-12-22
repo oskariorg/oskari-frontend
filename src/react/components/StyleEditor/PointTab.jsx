@@ -35,7 +35,7 @@ export const PointTab = ({ oskariStyle }) => {
                     name='image.shape'
                     label={ <Message messageKey='StyleEditor.image.shape' /> }
                 >
-                    <SvgRadioButton options={ constants.MARKERS } />
+                    <SvgRadioButton options={ Oskari.getMarkers() } />
                 </Form.Item>
             </Row>
 
