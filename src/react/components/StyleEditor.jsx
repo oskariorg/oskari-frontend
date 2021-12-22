@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
-import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
-import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE } from './StyleEditor/';
+import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
 const TabSelector = styled(Radio.Group)`
@@ -56,7 +55,7 @@ const FormSpace = styled(Space)`
     return exceptionStyle;
 };
 
-export const StyleEditor = ({ oskariStyle, onChange, format }) => {
+export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
     let [form] = Form.useForm();
 
     // if we don't clone the input here the mappings
@@ -85,13 +84,12 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
         form.setFieldsValue(convertedStyleValues);
     }, [oskariStyle]);
 
+    const formats = tabs || constants.SUPPORTED_FORMATS;
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
                 <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                    <Radio.Button value='point'><Message messageKey='StyleEditor.subheaders.pointTab' /></Radio.Button>
-                    <Radio.Button value='line'><Message messageKey='StyleEditor.subheaders.lineTab' /></Radio.Button>
-                    <Radio.Button value='area'><Message messageKey='StyleEditor.subheaders.areaTab' /></Radio.Button>
+                    { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
                 </TabSelector>
                 <Card>
                     <StaticForm form={ form } onValuesChange={ onUpdate }>
@@ -107,6 +105,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format }) => {
 
 StyleEditor.propTypes = {
     oskariStyle: PropTypes.object,
-    format: PropTypes.oneOf(['point', 'line', 'area']),
+    format: PropTypes.oneOf(constants.SUPPORTED_FORMATS),
+    tabs: PropTypes.array,
     onChange: PropTypes.func.isRequired
 };

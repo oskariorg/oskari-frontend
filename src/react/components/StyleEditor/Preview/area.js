@@ -1,5 +1,6 @@
 import { parsePathFromSVG } from './SVGHelper';
 import { OSKARI_BLANK_STYLE } from '../OskariDefaultStyle';
+import { getFillOption } from '../AreaTab';
 
 const areaPreviewSVG = `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -40,9 +41,9 @@ const getPatternName = (patternId) => {
     };
 }
 
-const getPatternSVG = (areaFills, patternId) => {
-    const name = getPatternName(patternId);
-    const patternSVG = areaFills.find(pattern => pattern.name === name);
+const getPatternSVG = (pattern) => {
+    const name = getPatternName(pattern);
+    const patternSVG = getFillOption(name);
     return parsePathFromSVG(patternSVG.data);
 }
 
@@ -52,7 +53,7 @@ const getPatternSVG = (areaFills, patternId) => {
 * @returns {String} area svg path
 */
 let patternIdCounter = 0;
-export const getAreaSVG = (areaParams, areaFills) => {
+export const getAreaSVG = (areaParams) => {
    const { color, strokecolor, size, linejoin, strokestyle, pattern } = areaParams;
    const path = parsePathFromSVG(areaPreviewSVG);
 
@@ -63,7 +64,7 @@ export const getAreaSVG = (areaParams, areaFills) => {
    path.setAttribute('stroke-linejoin', linejoin);
 
    const patternId = 'patternPreview' + patternIdCounter++;
-   const fillPatternSVG = getPatternSVG(areaFills, pattern);
+   const fillPatternSVG = getPatternSVG(pattern);
    fillPatternSVG.setAttribute('stroke', color);
    path.setAttribute('fill', 'url(#' + patternId + ')');
 
