@@ -379,7 +379,7 @@ Oskari.clazz.define(
             'MetadataSearchResultEvent': function (event) {
                 this.progressSpinner.stop();
                 if (!event.hasError()) {
-                    this._showResults(this.metadataCatalogueContainer, event.getResult());
+                    this._showResults(this.metadataCatalogueContainer, event.getResults());
                 } else {
                     this._showError(this.getLocalization('metadatasearchservice_error'));
                 }
@@ -454,6 +454,13 @@ Oskari.clazz.define(
          */
         createUi: function () {
             var me = this;
+            const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+
+            if (!reqBuilder) {
+                // bundle started from embedded maps, not create UI
+                return;
+            }
+
             var metadataCatalogueContainer = me.templates.metadataTab.clone();
             me.metadataCatalogueContainer = metadataCatalogueContainer;
             me.optionPanel = me.templates.optionPanel.clone();
@@ -577,8 +584,7 @@ Oskari.clazz.define(
             // Metadata catalogue tab
             var title = me.getLocalization('tabTitle'),
                 content = metadataCatalogueContainer,
-                priority = this.tabPriority,
-                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
+                priority = this.tabPriority;
 
             const req = reqBuilder(title, content, priority, this.id);
 
@@ -833,9 +839,13 @@ Oskari.clazz.define(
          * @method showResults
          * Displays metadata search results
          */
-        _showResults: function (metadataCatalogueContainer, data) {
+        _showResults: function (metadataCatalogueContainer, results) {
             var me = this;
-            me.lastResult = data.results;
+            if (!metadataCatalogueContainer) {
+                // bundle started from embedded maps, not create UI
+                return;
+            }
+            me.lastResult = results;
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                 searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
                 optionPanel = metadataCatalogueContainer.find('.metadataOptions');
@@ -862,7 +872,7 @@ Oskari.clazz.define(
                 me._removeFeaturesFromMap();
             });
 
-            if (data.results.length === 0) {
+            if (results.length === 0) {
                 resultPanel.append(resultHeader);
                 resultPanel.append(me.getLocalization('searchservice_search_not_found_anything_text'));
                 resultPanel.show();

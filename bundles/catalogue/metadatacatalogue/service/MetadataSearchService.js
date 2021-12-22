@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
                     me._sendMetadataSearchResultEvent(null, true);
                 },
                 success: function (data) {
-                    me._sendMetadataSearchResultEvent(data);
+                    me._sendMetadataSearchResultEvent(data.results);
                 }
             });
         }
