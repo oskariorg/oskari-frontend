@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
-import { Message } from './Message';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
 
@@ -90,7 +89,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
                 <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                    { formats.map(format => <PreviewButton oskariStyle = { style } format = {format} /> ) }
+                    { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
                 </TabSelector>
                 <Card>
                     <StaticForm form={ form } onValuesChange={ onUpdate }>
