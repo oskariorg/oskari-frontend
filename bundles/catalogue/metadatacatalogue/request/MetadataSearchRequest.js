@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.MetadataS
     * @method create called automatically on construction
     * @static
     *
-    * @param {Object} data request data
+    * @param {Object} search request data
     */
     function (search) {
         this._search = search;
