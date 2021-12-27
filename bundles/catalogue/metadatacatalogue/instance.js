@@ -202,7 +202,7 @@ Oskari.clazz.define(
          * implements BundleInstance protocol start method
          */
         start: function () {
-            var me = this;
+            const me = this;
 
             if (me.started) {
                 return;
@@ -210,9 +210,9 @@ Oskari.clazz.define(
 
             me.started = true;
 
-            var conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+            const conf = me.conf;
+            const sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
 
@@ -235,39 +235,36 @@ Oskari.clazz.define(
                 me.tabPriority = me.conf.priority;
             }
 
-            var optionServName =
+            const optionServName =
               'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
             me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
 
-            var searchServName =
+            const searchServName =
                 'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService';
             me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
 
             sandbox.register(me);
-            var p;
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                sandbox.registerForEventByName(me, eventName);
+            });
 
-            this.addSearchResultActionRequestHandler = Oskari.clazz.create(
+            const addSearchResultActionRequestHandler = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler',
                 sandbox,
                 me
             );
             sandbox.requestHandler(
                 'AddSearchResultActionRequest',
-                this.addSearchResultActionRequestHandler
+                addSearchResultActionRequestHandler
             );
 
-            this.metadataSearchRequestHandler = Oskari.clazz.create(
+            const metadataSearchRequestHandler = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadatacatalogue.request.MetadataSearchRequestHandler',
                 me
             );
             sandbox.requestHandler(
                 'MetadataSearchRequest',
-                this.metadataSearchRequestHandler
+                metadataSearchRequestHandler
             );
 
             if (conf.noUI === true) {
@@ -314,16 +311,13 @@ Oskari.clazz.define(
          */
         eventHandlers: {
             'DrawingEvent': function (event) {
-                var me = this,
-                    coverageFeature;
-
-                if (event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage) {
+                if (event.getId() !== this.getName() || event.getIsFinished() !== true || this.drawCoverage) {
                     return;
                 }
 
-                coverageFeature = event.getGeoJson();
+                const coverageFeature = event.getGeoJson();
 
-                this.coverageButton.val(me.loc('deleteArea'));
+                this.coverageButton.val(this.loc('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.coverageButton.prop('disabled', false).css({
                     'border-color': ''
@@ -334,8 +328,7 @@ Oskari.clazz.define(
             },
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    isShown = event.getViewState() !== 'close';
+                const isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
                 if (event.getExtension().getName() !== 'Search') {
@@ -343,7 +336,7 @@ Oskari.clazz.define(
                     return;
                 }
 
-                if ((!isShown && me.drawCoverage === false) || event.getViewState() === 'close') {
+                if ((!isShown && this.drawCoverage === false) || event.getViewState() === 'close') {
                     this._teardownMetaSearch();
                 }
             },
@@ -362,7 +355,7 @@ Oskari.clazz.define(
                     return;
                 }
                 if (!event.hasError()) {
-                    this._showResults(this.metadataCatalogueContainer, event.getResults());
+                    this._showResults(event.getResults());
                 } else {
                     this._showError(this.loc('metadatasearchservice_error'));
                 }
@@ -401,16 +394,14 @@ Oskari.clazz.define(
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox;
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+            const sandbox = this.sandbox;
+
+            Object.keys(this.eventHandlers).forEach(eventName => {
+                sandbox.unregisterFromEventByName(this, eventName);
+            });
 
             var reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
-            sandbox.request(this, reqBuilder(this));
+            this.sandbox.request(this, reqBuilder(this));
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
@@ -437,20 +428,20 @@ Oskari.clazz.define(
          */
         createUi: function () {
             var me = this;
-            var metadataCatalogueContainer = me.templates.metadataTab.clone();
+            me.metadataCatalogueContainer = me.templates.metadataTab.clone();
             me.optionPanel = me.templates.optionPanel.clone();
             me.searchPanel = me.templates.searchPanel.clone();
             me.resultPanel = me.templates.resultPanel.clone();
-            metadataCatalogueContainer.append(me.optionPanel);
-            metadataCatalogueContainer.append(me.searchPanel);
-            metadataCatalogueContainer.append(me.resultPanel);
+            me.metadataCatalogueContainer.append(me.optionPanel);
+            me.metadataCatalogueContainer.append(me.searchPanel);
+            me.metadataCatalogueContainer.append(me.resultPanel);
             me.searchPanel.hide();
             me.searchPanel.append(me.loc('searching'));
             me.resultPanel.hide();
 
-            me.progressSpinner.insertTo(metadataCatalogueContainer);
+            me.progressSpinner.insertTo(me.metadataCatalogueContainer);
 
-            var metadataCatalogueDescription = metadataCatalogueContainer.find(
+            var metadataCatalogueDescription = me.metadataCatalogueContainer.find(
                 'div.metadataCatalogueDescription'
             );
             metadataCatalogueDescription.html(
@@ -469,7 +460,7 @@ Oskari.clazz.define(
                 me.state.metadatacataloguetext = value;
                 if (!value) {
                     // remove results when field is emptied
-                    var resultList = metadataCatalogueContainer.find('div.resultList');
+                    var resultList = me.metadataCatalogueContainer.find('div.resultList');
                     resultList.empty();
                 }
             });
@@ -483,8 +474,8 @@ Oskari.clazz.define(
             var doMetadataCatalogue = function () {
                 me.progressSpinner.start();
                 me._removeFeaturesFromMap();
-                metadataCatalogueContainer.find('.metadataOptions').hide();
-                metadataCatalogueContainer.find('.metadataSearching').show();
+                me.metadataCatalogueContainer.find('.metadataOptions').hide();
+                me.metadataCatalogueContainer.find('.metadataSearching').show();
                 var search = {
                     search: field.getValue().trim()
                 };
@@ -493,7 +484,7 @@ Oskari.clazz.define(
                 if (moreLessLink.html() === me.loc('showLess')) {
                     isAdvancedSearch = true;
                     // Checkboxes
-                    var checkboxRows = metadataCatalogueContainer.find('.checkboxRow'),
+                    var checkboxRows = me.metadataCatalogueContainer.find('.checkboxRow'),
                         i,
                         checkboxDefs,
                         values,
@@ -516,7 +507,7 @@ Oskari.clazz.define(
                         search[jQuery(checkboxDefs[0]).attr('name')] = values.join();
                     }
                     // Dropdown lists
-                    dropdownRows = metadataCatalogueContainer.find('.dropdownRow');
+                    dropdownRows = me.metadataCatalogueContainer.find('.dropdownRow');
                     for (i = 0; i < dropdownRows.length; i += 1) {
                         dropdownDef = jQuery(dropdownRows[i]).find('.metadataDef');
                         search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
@@ -535,13 +526,7 @@ Oskari.clazz.define(
                     doSearch = value ? true : doSearch;
                 });
                 if (doSearch) {
-                    me.searchService.doSearch(search, function (data) {
-                        me._showResults(metadataCatalogueContainer, data);
-                        me.progressSpinner.stop();
-                    }, function (data) {
-                        me._showError(me.loc('metadatasearchservice_error'));
-                        me.progressSpinner.stop();
-                    });
+                    me.searchService.doSearch(search);
                 } else {
                     if (isAdvancedSearch) {
                         me._showError(me.loc('no_search_selections'));
@@ -554,14 +539,14 @@ Oskari.clazz.define(
             button.setHandler(doMetadataCatalogue);
             field.bindEnterKey(doMetadataCatalogue);
 
-            var controls = metadataCatalogueContainer.find('div.controls');
+            var controls = me.metadataCatalogueContainer.find('div.controls');
             controls.append(field.getField());
             controls.append(button.getElement());
 
             // Metadata catalogue tab
 
             var title = me.loc('tabTitle'),
-                content = metadataCatalogueContainer,
+                content = me.metadataCatalogueContainer,
                 priority = this.tabPriority,
                 reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
@@ -573,7 +558,7 @@ Oskari.clazz.define(
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.loc('showMore'));
             moreLessLink.on('click', function () {
-                var advancedContainer = metadataCatalogueContainer.find('div.advanced');
+                var advancedContainer = me.metadataCatalogueContainer.find('div.advanced');
                 if (moreLessLink.html() === me.loc('showMore')) {
                     if (advancedContainer.is(':empty')) {
                         me.optionService.getOptions(function (data) {
@@ -599,15 +584,14 @@ Oskari.clazz.define(
                     advancedContainer.hide();
                 }
             });
-            metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
+            me.metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
         },
 
         _showError: function (error) {
-            var me = this;
-            me.searchPanel.hide();
-            me.optionPanel.show();
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okButton = dialog.createCloseButton('OK');
+            this.searchPanel.hide();
+            this.optionPanel.show();
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okButton = dialog.createCloseButton('OK');
 
             dialog.setId('oskari_search_error_popup');
             dialog.makeModal();
@@ -744,13 +728,12 @@ Oskari.clazz.define(
          * Generates localization for option values
          */
         _getOptionLocalization: function (value) {
-            var me = this,
-                text;
+            var text;
             // Localization available?
             if (typeof value.locale !== 'undefined') {
                 text = value.locale;
             } else {
-                text = me.loc(value.val);
+                text = this.loc(value.val);
                 if (typeof text !== 'string') {
                     text = value.val;
                 }
@@ -759,10 +742,8 @@ Oskari.clazz.define(
         },
 
         _getCoverage: function () {
-            var me = this;
-
-            me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.getName(), 'Box', {
-                style: me.__drawStyle
+            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.getName(), 'Box', {
+                style: this.__drawStyle
             }]);
         },
 
@@ -818,12 +799,12 @@ Oskari.clazz.define(
          * @method showResults
          * Displays metadata search results
          */
-        _showResults: function (metadataCatalogueContainer, results) {
+        _showResults: function (results) {
             var me = this;
             me.lastResult = results;
-            var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
-                searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
-                optionPanel = metadataCatalogueContainer.find('.metadataOptions');
+            var resultPanel = me.metadataCatalogueContainer.find('.metadataResults');
+            var searchPanel = me.metadataCatalogueContainer.find('.metadataSearching');
+            var optionPanel = me.metadataCatalogueContainer.find('.metadataOptions');
 
             // Hide other panels, if visible
             searchPanel.hide();
@@ -861,17 +842,18 @@ Oskari.clazz.define(
             showServicessLink.html(me.loc('showServices'));
 
             // render results
-            var table = me.templates.resultTable.clone(),
-                tableHeaderRow = table.find('thead tr'),
-                tableBody = table.find('tbody');
+            var table = me.templates.resultTable.clone();
+            var tableHeaderRow = table.find('thead tr');
+            var tableBody = table.find('tbody');
             tableBody.empty();
             // header reference needs some closure magic to work here
             var headerClosureMagic = function (scopedValue) {
                 return function () {
+                    var i;
                     // save hidden results
-                    var hiddenRows = tableBody.find('tr.resultRow:hidden'),
-                        hiddenResults = [],
-                        i;
+                    var hiddenRows = tableBody.find('tr.resultRow:hidden');
+                    var hiddenResults = [];
+
                     for (i = 0; i < hiddenRows.length; i += 1) {
                         hiddenResults.push(jQuery(hiddenRows[i]).data('resultId'));
                     }
@@ -891,12 +873,10 @@ Oskari.clazz.define(
                     me._populateResultTable(tableBody);
 
                     // hide hidden results
-                    var newRows = tableBody.find('tr'),
-                        resultId,
-                        j;
+                    var newRows = tableBody.find('tr');
                     for (i = 0; i < newRows.length; i += 1) {
-                        resultId = jQuery(newRows[i]).data('resultId');
-                        for (j = 0; j < hiddenResults.length; j += 1) {
+                        var resultId = jQuery(newRows[i]).data('resultId');
+                        for (var j = 0; j < hiddenResults.length; j += 1) {
                             if (resultId === hiddenResults[j]) {
                                 jQuery(newRows[i]).hide();
                             }
@@ -915,20 +895,18 @@ Oskari.clazz.define(
                     return false;
                 };
             };
-            var i,
-                header,
-                link;
-            for (i = 0; i < me.resultHeaders.length; i += 1) {
-                header = me.templates.resultTableHeader.clone();
-                header.addClass(me.resultHeaders[i].prop);
-                link = header.find('a');
-                link.append(me.resultHeaders[i].title);
+
+            me.resultHeaders.forEach((resultHeader, index) => {
+                var header = me.templates.resultTableHeader.clone();
+                header.addClass(resultHeader.prop);
+                var link = header.find('a');
+                link.append(resultHeader.title);
                 // Todo: Temporarily only the first column is sortable
-                if (i === 0) {
-                    link.on('click', headerClosureMagic(me.resultHeaders[i]));
+                if (index === 0) {
+                    link.on('click', headerClosureMagic(resultHeader));
                 }
                 tableHeaderRow.append(header);
-            }
+            });
 
             me._populateResultTable(tableBody);
             resultPanel.append(resultHeader);
@@ -960,18 +938,18 @@ Oskari.clazz.define(
         },
 
         _populateResultTable: function (resultsTableBody) {
-            var me = this,
-                results = me.lastResult;
-            var i,
-                style = {
-                    stroke: {
-                        color: 'rgba(211, 187, 27, 0.8)',
-                        width: 2
-                    },
-                    fill: {
-                        color: 'rgba(255,222,0, 0.6)'
-                    }
-                };
+            var me = this;
+            var results = me.lastResult;
+            var i;
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
 
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
@@ -1063,9 +1041,9 @@ Oskari.clazz.define(
 
                         // Add layer links
                         layerList = me.templates.layerList.clone();
-                        for (j = 0; j < layers.length; j += 1) {
-                            me._addLayerLinks(layers[j], layerList);
-                        }
+                        layers.forEach(layer => {
+                            me._addLayerLinks(layer, layerList);
+                        });
 
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
@@ -1076,9 +1054,8 @@ Oskari.clazz.define(
                         if (me._isAction() === true) {
                             jQuery.each(me.searchResultActions, function (index, action) {
                                 if (action.showAction(row)) {
-                                    var actionElement = action.actionElement.clone(),
-                                        callbackElement = null,
-                                        actionTextEl = null;
+                                    var actionElement = action.actionElement.clone();
+                                    var actionTextEl = null;
 
                                     actionElement.css('margin-left', '6px');
                                     actionElement.css('margin-right', '6px');
@@ -1086,7 +1063,7 @@ Oskari.clazz.define(
                                     // Set action callback
                                     if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                        callbackElement = actionElement.first();
+                                        var callbackElement = actionElement.first();
                                         callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
@@ -1185,27 +1162,14 @@ Oskari.clazz.define(
                 .addClass('icon-info-area');
         },
         _addLayerLinks: function (layer, layerList) {
-            var me = this,
-                selectedLayers,
-                selectedLayer,
-                layerSelected,
-                showText,
-                hideText,
-                layerListItem,
-                layerLink;
+            const me = this;
+            var layerSelected = false;
 
-            layerSelected = false;
-            selectedLayers = me.sandbox.findAllSelectedMapLayers();
-            for (var k = 0; k < selectedLayers.length; k += 1) {
-                selectedLayer = selectedLayers[k];
-                if (layer.getId() === selectedLayer.getId()) {
-                    layerSelected = true;
-                    break;
-                }
-            }
-            layerLink = me.templates.layerLink.clone();
-            showText = me.loc('show');
-            hideText = me.loc('hide');
+            const selectedLayers = this.sandbox.findAllSelectedMapLayers();
+            layerSelected = (selectedLayers.filter(selectedLayer => { return layer.getId() === selectedLayer.getId(); })).length > 0;
+            const layerLink = this.templates.layerLink.clone();
+            const showText = this.loc('show');
+            const hideText = this.loc('hide');
 
             // Check if layer is already selected and visible
             if ((layerSelected) && (layer.isVisible())) {
@@ -1234,7 +1198,7 @@ Oskari.clazz.define(
                     jQuery(this).html(hideText);
                 }
             });
-            layerListItem = me.templates.layerListItem.clone();
+            const layerListItem = me.templates.layerListItem.clone();
             layerListItem.text(layer.getName());
             layerListItem.append('&nbsp;&nbsp;');
             layerListItem.append(layerLink);
@@ -1251,11 +1215,12 @@ Oskari.clazz.define(
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortResults: function (pAttribute, pDescending) {
-            var me = this;
+            const me = this;
+
             if (!this.lastResult) {
                 return;
             }
-            me.lastSort = {
+            this.lastSort = {
                 attr: pAttribute,
                 descending: pDescending
             };
@@ -1275,9 +1240,9 @@ Oskari.clazz.define(
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase(),
-                nameB = b[pAttribute].toLowerCase(),
-                value = 0;
+            var nameA = a[pAttribute].toLowerCase();
+            var nameB = b[pAttribute].toLowerCase();
+            var value = 0;
             if (nameA === nameB) {
                 nameA = a.id;
                 nameB = b.id;
@@ -1304,10 +1269,7 @@ Oskari.clazz.define(
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
         addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
-            var me = this,
-                status = null;
-
-            status = {
+            const status = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
@@ -1320,7 +1282,7 @@ Oskari.clazz.define(
                 status.showAction = showAction;
             }
 
-            me.searchResultActions.push(status);
+            this.searchResultActions.push(status);
         },
         /**
         * @method _isAction
@@ -1328,22 +1290,7 @@ Oskari.clazz.define(
         * @return {Boolean} is action
         */
         _isAction: function () {
-            var me = this;
-            return me.searchResultActions.length > 0;
-        },
-        /**
-         * @method setState
-         * @param {Object} state bundle state as JSON
-         */
-        setState: function (state) {
-
-        },
-        /**
-         * @method getState
-         * @return {Object} bundle state as JSON
-         */
-        getState: function () {
-
+            return this.searchResultActions.length > 0;
         }
     }, {
         /**
