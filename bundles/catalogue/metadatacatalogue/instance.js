@@ -18,28 +18,28 @@ Oskari.clazz.define(
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.localization = null;
+        this.loc = Oskari.getMsg.bind(null, 'catalogue.bundle.metadatacatalogue');
         this.optionService = null;
         this.searchService = null;
         this.tabPriority = 5.0;
         this.conditions = [];
         this.resultHeaders = [{
-            title: this.getLocalization('grid').name,
+            title: this.loc('grid.name'),
             prop: 'name'
         }, {
             title: '',
             tooltip: ''
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').showBBOX,
+            tooltip: this.loc('grid.showBBOX'),
             prop: 'showBbox'
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').info,
+            tooltip: this.loc('grid.info'),
             prop: 'info'
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').remove,
+            tooltip: this.loc('grid.remove'),
             prop: 'remove'
         }];
         this.lastSearch = '';
@@ -198,31 +198,6 @@ Oskari.clazz.define(
             return this.sandbox;
         },
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for
-         * current language.
-         * If key-parameter is not given, returns the whole localization
-         * data.
-         *
-         * @param {String} key (optional) if given, returns the value for
-         *         key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key && this._localization[key]) {
-                return this._localization[key];
-            }
-            if (!this.localization) {
-                return {};
-            }
-            return this._localization;
-        },
-        /**
          * @method start
          * implements BundleInstance protocol start method
          */
@@ -240,8 +215,6 @@ Oskari.clazz.define(
                 sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
-
-            me.localization = Oskari.getLocalization(me.getName());
 
             var optionAjaxUrl = null;
             if (me.conf && me.conf.optionUrl) {
@@ -350,7 +323,7 @@ Oskari.clazz.define(
 
                 coverageFeature = event.getGeoJson();
 
-                this.coverageButton.val(me.getLocalization('deleteArea'));
+                this.coverageButton.val(me.loc('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.coverageButton.prop('disabled', false).css({
                     'border-color': ''
@@ -391,7 +364,7 @@ Oskari.clazz.define(
                 if (!event.hasError()) {
                     this._showResults(this.metadataCatalogueContainer, event.getResults());
                 } else {
-                    this._showError(this.getLocalization('metadatasearchservice_error'));
+                    this._showError(this.loc('metadatasearchservice_error'));
                 }
             }
         },
@@ -404,7 +377,7 @@ Oskari.clazz.define(
             this._stopCoverage();
 
             if (this.coverageButton) {
-                this.coverageButton.val(this.getLocalization('delimitArea'));
+                this.coverageButton.val(this.loc('delimitArea'));
                 this.coverageButton[0].data = '';
             }
 
@@ -448,7 +421,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('tabTitle');
+            return this.loc('tabTitle');
         },
         /**
          * @method getDescription
@@ -456,7 +429,7 @@ Oskari.clazz.define(
          * component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return this.loc('desc');
         },
         /**
          * @method createUi
@@ -472,7 +445,7 @@ Oskari.clazz.define(
             metadataCatalogueContainer.append(me.searchPanel);
             metadataCatalogueContainer.append(me.resultPanel);
             me.searchPanel.hide();
-            me.searchPanel.append(me.getLocalization('searching'));
+            me.searchPanel.append(me.loc('searching'));
             me.resultPanel.hide();
 
             me.progressSpinner.insertTo(metadataCatalogueContainer);
@@ -481,11 +454,11 @@ Oskari.clazz.define(
                 'div.metadataCatalogueDescription'
             );
             metadataCatalogueDescription.html(
-                me.getLocalization('metadataCatalogueDescription')
+                me.loc('metadataCatalogueDescription')
             );
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            field.setPlaceholder(me.getLocalization('assistance'));
+            field.setPlaceholder(me.loc('assistance'));
             field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
 
             field.bindChange(function (event) {
@@ -517,7 +490,7 @@ Oskari.clazz.define(
                 };
                 var isAdvancedSearch = false;
                 // Collect the advanced search options
-                if (moreLessLink.html() === me.getLocalization('showLess')) {
+                if (moreLessLink.html() === me.loc('showLess')) {
                     isAdvancedSearch = true;
                     // Checkboxes
                     var checkboxRows = metadataCatalogueContainer.find('.checkboxRow'),
@@ -566,14 +539,14 @@ Oskari.clazz.define(
                         me._showResults(metadataCatalogueContainer, data);
                         me.progressSpinner.stop();
                     }, function (data) {
-                        me._showError(me.getLocalization('metadatasearchservice_error'));
+                        me._showError(me.loc('metadatasearchservice_error'));
                         me.progressSpinner.stop();
                     });
                 } else {
                     if (isAdvancedSearch) {
-                        me._showError(me.getLocalization('no_search_selections'));
+                        me._showError(me.loc('no_search_selections'));
                     } else {
-                        me._showError(me.getLocalization('cannot_be_empty'));
+                        me._showError(me.loc('cannot_be_empty'));
                     }
                 }
             };
@@ -587,7 +560,7 @@ Oskari.clazz.define(
 
             // Metadata catalogue tab
 
-            var title = me.getLocalization('tabTitle'),
+            var title = me.loc('tabTitle'),
                 content = metadataCatalogueContainer,
                 priority = this.tabPriority,
                 reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
@@ -598,31 +571,31 @@ Oskari.clazz.define(
 
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
-            moreLessLink.html(me.getLocalization('showMore'));
+            moreLessLink.html(me.loc('showMore'));
             moreLessLink.on('click', function () {
                 var advancedContainer = metadataCatalogueContainer.find('div.advanced');
-                if (moreLessLink.html() === me.getLocalization('showMore')) {
+                if (moreLessLink.html() === me.loc('showMore')) {
                     if (advancedContainer.is(':empty')) {
                         me.optionService.getOptions(function (data) {
                             // open advanced/toggle link text
-                            moreLessLink.html(me.getLocalization('showLess'));
+                            moreLessLink.html(me.loc('showLess'));
                             me._createAdvancedPanel(data, advancedContainer, moreLessLink);
                         }, function (data) {
                             // don't toggle link text on error
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
-                            var title = me.getLocalization('metadataoptionservice_alert_title');
-                            var msg = me.getLocalization('metadataoptionservice_not_found_anything_text');
+                            var title = me.loc('metadataoptionservice_alert_title');
+                            var msg = me.loc('metadataoptionservice_not_found_anything_text');
                             dialog.show(title, msg, [okBtn]);
                         });
                     } else {
                         // open advanced/toggle link text
-                        moreLessLink.html(me.getLocalization('showLess'));
+                        moreLessLink.html(me.loc('showLess'));
                         advancedContainer.show();
                     }
                 } else {
                     // close advanced/toggle link text
-                    moreLessLink.html(me.getLocalization('showMore'));
+                    moreLessLink.html(me.loc('showMore'));
                     advancedContainer.hide();
                 }
             });
@@ -640,7 +613,7 @@ Oskari.clazz.define(
             dialog.makeModal();
 
             dialog.show(
-                this.getLocalization('metadataoptionservice_alert_title'),
+                this.loc('metadataoptionservice_alert_title'),
                 error, [okButton]
             );
         },
@@ -671,7 +644,7 @@ Oskari.clazz.define(
                     continue;
                 }
                 newRow = null;
-                newLabel = me.getLocalization(dataField.field);
+                newLabel = me.loc(dataField.field);
                 // Continue gracefully also without localization
                 if (typeof newLabel !== 'string') {
                     newLabel = dataField.field;
@@ -700,7 +673,7 @@ Oskari.clazz.define(
                     dropdownDef.attr('name', dataField.field);
                     emptyOption = me.templates.dropdownOption.clone();
                     emptyOption.attr('value', '');
-                    emptyOption.text(me.getLocalization('emptyOption'));
+                    emptyOption.text(me.loc('emptyOption'));
                     dropdownDef.append(emptyOption);
                     for (j = 0; j < dataField.values.length; j += 1) {
                         value = dataField.values[j];
@@ -727,7 +700,7 @@ Oskari.clazz.define(
 
             if (renderCoverageButton) {
                 newRow = me.templates.buttonRow.clone();
-                newLabel = me.getLocalization('searchArea');
+                newLabel = me.loc('searchArea');
                 newRow.find('div.rowLabel').append(newLabel);
 
                 var newButton = me.templates.metadataButton.clone();
@@ -739,13 +712,13 @@ Oskari.clazz.define(
                         me.coverageButton.prop('disabled', true).css({
                             'border-color': '#0099CB'
                         });
-                        me.coverageButton.val(me.getLocalization('startDraw'));
+                        me.coverageButton.val(me.loc('startDraw'));
                         me._getCoverage();
                         me.drawCoverage = false;
                     } else {
                         me.drawCoverage = true;
                         me._stopCoverage();
-                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.coverageButton.val(me.loc('delimitArea'));
                         document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                         me.coverageButton[0].data = '';
                         me._removeFeaturesFromMap();
@@ -761,7 +734,7 @@ Oskari.clazz.define(
         },
         _initCoverageButton: function (me, newButton) {
             this.coverageButton = newButton.find('.metadataCoverageDef');
-            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+            this.coverageButton.attr('value', me.loc('delimitArea'));
             this.coverageButton.attr('name', 'coverage');
             return this.coverageButton;
         },
@@ -777,7 +750,7 @@ Oskari.clazz.define(
             if (typeof value.locale !== 'undefined') {
                 text = value.locale;
             } else {
-                text = me.getLocalization(value.val);
+                text = me.loc(value.val);
                 if (typeof text !== 'string') {
                     text = value.val;
                 }
@@ -857,17 +830,17 @@ Oskari.clazz.define(
             optionPanel.hide();
             // Create header
             var resultHeader = me.templates.resultHeader.clone();
-            resultHeader.find('.resultTitle').text(me.getLocalization('metadataCatalogueResults'));
+            resultHeader.find('.resultTitle').text(me.loc('metadataCatalogueResults'));
             var showLink = resultHeader.find('.showLink');
             showLink.hide();
-            showLink.html(me.getLocalization('showSearch'));
+            showLink.html(me.loc('showSearch'));
             showLink.on('click', function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
                 resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
-            modifyLink.html(me.getLocalization('modifySearch'));
+            modifyLink.html(me.loc('modifySearch'));
             modifyLink.on('click', function () {
                 resultPanel.empty();
                 optionPanel.show();
@@ -876,16 +849,16 @@ Oskari.clazz.define(
 
             if (results.length === 0) {
                 resultPanel.append(resultHeader);
-                resultPanel.append(me.getLocalization('searchservice_search_not_found_anything_text'));
+                resultPanel.append(me.loc('searchservice_search_not_found_anything_text'));
                 resultPanel.show();
                 return;
             }
 
             var showDatasetsLink = resultHeader.find('.showDatasets');
-            showDatasetsLink.html(me.getLocalization('showDatasets'));
+            showDatasetsLink.html(me.loc('showDatasets'));
 
             var showServicessLink = resultHeader.find('.showServices');
-            showServicessLink.html(me.getLocalization('showServices'));
+            showServicessLink.html(me.loc('showServices'));
 
             // render results
             var table = me.templates.resultTable.clone(),
@@ -1037,7 +1010,7 @@ Oskari.clazz.define(
                     var isIdentificationDate = !!((identification && identification.date && identification.date.length > 0));
                     var isUpdateFrequency = !!((identification && identification.updateFrequency && identification.updateFrequency.length > 0));
                     if (isIdentificationCode && isIdentificationDate) {
-                        var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
+                        var locIdentificationCode = me.loc('identificationCode')[identification.code];
                         if (!locIdentificationCode) {
                             locIdentificationCode = identification.code;
                         }
@@ -1046,7 +1019,7 @@ Oskari.clazz.define(
                         if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
-                                titleText += ', ' + me.getLocalization('updated') + ': ' + identification.updateFrequency;
+                                titleText += ', ' + me.loc('updated') + ': ' + identification.updateFrequency;
                             }
                             titleText += ')';
                         }
@@ -1100,7 +1073,7 @@ Oskari.clazz.define(
                         // jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if (me._isAction() == true) {
+                        if (me._isAction() === true) {
                             jQuery.each(me.searchResultActions, function (index, action) {
                                 if (action.showAction(row)) {
                                     var actionElement = action.actionElement.clone(),
@@ -1133,13 +1106,13 @@ Oskari.clazz.define(
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.val(action.actionText);
                                         } else {
-                                            actionTextEl.val(me.getLocalization('licenseText'));
+                                            actionTextEl.val(me.loc('licenseText'));
                                         }
                                     } else {
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.html(action.actionText);
                                         } else {
-                                            actionTextEl.html(me.getLocalization('licenseText'));
+                                            actionTextEl.html(me.loc('licenseText'));
                                         }
                                     }
 
@@ -1156,7 +1129,7 @@ Oskari.clazz.define(
                                 // If show info area is active, remove geom from map
                                 if (jQuery(this).hasClass('icon-info-area-active')) {
                                     me._removeFeaturesFromMap();
-                                    jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
+                                    jQuery(this).parent().attr('title', me.loc('grid.showBBOX'));
                                 }
                                 // Else show info area is not active, add geom to map
                                 else {
@@ -1170,7 +1143,7 @@ Oskari.clazz.define(
                                     }]);
                                     me._unactiveShowInfoAreaIcons();
                                     jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
-                                    jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);
+                                    jQuery(this).parent().attr('title', me.loc('grid.removeBBOX'));
                                 }
                             });
                         } else {
@@ -1231,8 +1204,8 @@ Oskari.clazz.define(
                 }
             }
             layerLink = me.templates.layerLink.clone();
-            showText = me.getLocalization('show');
-            hideText = me.getLocalization('hide');
+            showText = me.loc('show');
+            hideText = me.loc('hide');
 
             // Check if layer is already selected and visible
             if ((layerSelected) && (layer.isVisible())) {
