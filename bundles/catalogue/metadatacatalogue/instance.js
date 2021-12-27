@@ -297,6 +297,11 @@ Oskari.clazz.define(
                 this.metadataSearchRequestHandler
             );
 
+            if (conf.noUI === true) {
+                // bundle started by published map
+                return;
+            }
+
             // draw ui
             me.createUi();
         },
@@ -378,6 +383,11 @@ Oskari.clazz.define(
             },
             'MetadataSearchResultEvent': function (event) {
                 this.progressSpinner.stop();
+
+                if (this.conf.noUI === true) {
+                    // bundle started by published map --> not handle event
+                    return;
+                }
                 if (!event.hasError()) {
                     this._showResults(this.metadataCatalogueContainer, event.getResults());
                 } else {
@@ -454,15 +464,7 @@ Oskari.clazz.define(
          */
         createUi: function () {
             var me = this;
-            const reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
-
-            if (!reqBuilder) {
-                // bundle started from embedded maps, not create UI
-                return;
-            }
-
             var metadataCatalogueContainer = me.templates.metadataTab.clone();
-            me.metadataCatalogueContainer = metadataCatalogueContainer;
             me.optionPanel = me.templates.optionPanel.clone();
             me.searchPanel = me.templates.searchPanel.clone();
             me.resultPanel = me.templates.resultPanel.clone();
@@ -560,11 +562,13 @@ Oskari.clazz.define(
                     doSearch = value ? true : doSearch;
                 });
                 if (doSearch) {
-                    const reqBuilder = Oskari.requestBuilder('MetadataSearchRequest');
-                    if (reqBuilder) {
-                        const req = reqBuilder(search);
-                        me.sandbox.request(me, req);
-                    }
+                    me.searchService.doSearch(search, function (data) {
+                        me._showResults(metadataCatalogueContainer, data);
+                        me.progressSpinner.stop();
+                    }, function (data) {
+                        me._showError(me.getLocalization('metadatasearchservice_error'));
+                        me.progressSpinner.stop();
+                    });
                 } else {
                     if (isAdvancedSearch) {
                         me._showError(me.getLocalization('no_search_selections'));
@@ -582,9 +586,11 @@ Oskari.clazz.define(
             controls.append(button.getElement());
 
             // Metadata catalogue tab
+
             var title = me.getLocalization('tabTitle'),
                 content = metadataCatalogueContainer,
-                priority = this.tabPriority;
+                priority = this.tabPriority,
+                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
             const req = reqBuilder(title, content, priority, this.id);
 
@@ -841,10 +847,6 @@ Oskari.clazz.define(
          */
         _showResults: function (metadataCatalogueContainer, results) {
             var me = this;
-            if (!metadataCatalogueContainer) {
-                // bundle started from embedded maps, not create UI
-                return;
-            }
             me.lastResult = results;
             var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
                 searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
