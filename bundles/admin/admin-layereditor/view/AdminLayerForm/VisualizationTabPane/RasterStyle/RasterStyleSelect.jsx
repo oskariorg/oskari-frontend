@@ -58,7 +58,7 @@ const RasterStyleSelect = ({ selected, styles, defaultName, setSelected, control
 RasterStyleSelect.propTypes = {
     selected: PropTypes.string.isRequired,
     styles: PropTypes.array.isRequired,
-    defaultName: PropTypes.string.isRequired,
+    defaultName: PropTypes.string,
     setSelected: PropTypes.func.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
     getMessage: PropTypes.func.isRequired

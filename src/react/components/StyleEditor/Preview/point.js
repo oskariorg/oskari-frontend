@@ -1,8 +1,9 @@
 import { parsePathFromSVG } from './SVGHelper';
 import { OSKARI_BLANK_STYLE } from '../OskariDefaultStyle';
 
-export const getPointSVG = (pointParams, markers) => {
+export const getPointSVG = (pointParams) => {
     const { color, shape } = pointParams;
+    const markers = Oskari.getMarkers();
     const path = parsePathFromSVG(markers[shape].data);
 
     path.setAttribute('stroke', '#000000');

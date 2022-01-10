@@ -2,6 +2,16 @@ Oskari.registerLocalization({
     lang: 'sv',
     key: 'oskariui',
     value: {
+        error: {
+            generic: 'Something went wrong'
+        },
+        table: {
+            sort: {
+                desc: 'Sortera i fallande ordning',
+                asc: 'Sortera i stigande ordning',
+                cancel: 'Annullera sorteringen'
+            }
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',

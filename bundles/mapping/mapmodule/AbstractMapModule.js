@@ -1901,9 +1901,11 @@ Oskari.clazz.define(
             // marker shape is number --> find it from Oskari.getMarkers()
             if (!isNaN(style.shape)) {
                 var markers = Oskari.getMarkers();
-                svgObject = markers[style.shape];
-                if (!svgObject) {
-                    svgObject = Oskari.getDefaultMarker();
+                if (markers[style.shape]) {
+                    svgObject = { ...markers[style.shape] };
+                } else {
+                    this.log.warn('Requested marker:', style.shape, 'does not exist. Using default marker instead.');
+                    svgObject = { ...Oskari.getDefaultMarker() };
                 }
 
                 if (style.color) {
@@ -2009,7 +2011,6 @@ Oskari.clazz.define(
                 offsetX: 16,
                 offsetY: 16
             };
-
             if (isMarker && isMarkerShape) {
                 if (marker.data.shape < Oskari.getMarkers().length) {
                     markerDetails = Oskari.getMarkers()[marker.data.shape];

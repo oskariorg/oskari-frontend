@@ -6,6 +6,8 @@ export const ANTD_FORMLAYOUT = {
     wrapperCol: { span: 24 } // width of wrapping column in AntD grid settings -> full width = own row inside element
 };
 
+export const SUPPORTED_FORMATS = ['point', 'line', 'area'];
+
 export const LINE_STYLES = {
     "lineDash": [
         {

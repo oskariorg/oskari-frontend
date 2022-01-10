@@ -12,18 +12,19 @@ const previewSize = '80px';
 
 // Style settings for wrapping preview rectangle
 const previewWrapperStyle = {
-    border: '1px solid #d9d9d9',
     height: previewSize,
-    width: previewSize
+    width: previewSize,
+    marginLeft: 'auto',
+    marginRight: 'auto'
 };
 
-const getSVGContent = (format, propsForSVG, markers, areaFills) => {
+const getSVGContent = (format, propsForSVG) => {
     if (format === 'point') {
-        return getPointSVG(propsForSVG, markers);
+        return getPointSVG(propsForSVG);
     } else if (format === 'line') {
         return getLineSVG(propsForSVG);
     } else if (format === 'area') {
-        return getAreaSVG(propsForSVG, areaFills);
+        return getAreaSVG(propsForSVG);
     }
     return '';
 };
@@ -57,7 +58,5 @@ export const Preview = ({markers, areaFills, format, oskariStyle}) => {
 
 Preview.propTypes = {
     oskariStyle: PropTypes.object.isRequired,
-    format: PropTypes.string.isRequired,
-    markers: PropTypes.array,
-    areaFills: PropTypes.array
+    format: PropTypes.string.isRequired
 };
