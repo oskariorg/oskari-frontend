@@ -1163,10 +1163,8 @@ Oskari.clazz.define(
         },
         _addLayerLinks: function (layer, layerList) {
             const me = this;
-            var layerSelected = false;
-
             const selectedLayers = this.sandbox.findAllSelectedMapLayers();
-            layerSelected = (selectedLayers.filter(selectedLayer => { return layer.getId() === selectedLayer.getId(); })).length > 0;
+            const layerSelected = selectedLayers.map(l => l.getId()).includes(layer.getId());
             const layerLink = this.templates.layerLink.clone();
             const showText = this.loc('show');
             const hideText = this.loc('hide');
