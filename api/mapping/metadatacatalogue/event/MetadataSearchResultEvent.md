@@ -18,20 +18,23 @@ Used to notify that the ``MetadataSearchRequest`` has received a reply from serv
   <td> \* results</td><td> Object </td><td> metadata search results object</td><td> </td>
 </tr>
 <tr>
-  <td> \* error</td><td> Boolean </td><td> whether an error occurred during the search </td><td> </td>
+  <td> \* success</td><td> Boolean </td><td> whether the search was successful </td><td> </td>
 </tr>
 </table>
 
 ## Event methods
 
 ### getName()
+
 Returns event name
 
 ### getResults()
+
 Returns search result as JSON
 
-### hasError()
-Has error occurred during the search
+### hasSuccess()
+
+Did the search succeed
 
 ## RPC
 
@@ -39,7 +42,7 @@ Event occurs after a metadata search request.
 
 ```javascript
 {
-  "error": false,
+  "success": true,
   "results": [{
         "identification":{
           "date":"2021-05-18",

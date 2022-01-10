@@ -8,11 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Metadata
   * @method create called automatically on construction
   * @static
   * @param {Array} results the search results
-  * @param {Boolean} error the error, if search cannot do then return error = true --> event listener bundles needs handle this
+  * @param {Boolean} success the success, if search cannot do then return success = false --> event listener bundles needs handle this
   */
-    function (results, error) {
+    function (results, success) {
         this._results = results;
-        this._error = error;
+        this._success = success;
     }, {
         /** @static @property __name event name */
         __name: 'MetadataSearchResultEvent',
@@ -33,12 +33,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Metadata
             return this._results;
         },
         /**
-         * @method hasError
-         * Returns true if error come
+         * @method hasSuccess
+         * Returns true if search succees
          * @returns {Boolean}
          */
-        hasError: function () {
-            return this._error;
+        hasSuccess: function () {
+            return this._success;
         },
         /**
          * Serialization for RPC
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Metadata
         getParams: function () {
             return {
                 results: this.getResults(),
-                error: this.hasError()
+                success: this.hasSuccess()
             };
         }
     }, {

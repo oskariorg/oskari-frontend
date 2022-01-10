@@ -28,7 +28,7 @@ Added new MetadataSearchResultEvent. This allows applications to get metadata se
 Event returns following Object:
 ```javascript
 {
-  "error": false,
+  "success": true,
   "results": [{
         "identification":{
           "date":"2021-05-18",

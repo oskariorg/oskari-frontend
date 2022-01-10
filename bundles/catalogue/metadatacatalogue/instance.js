@@ -354,7 +354,7 @@ Oskari.clazz.define(
                     // bundle started by published map --> not handle event
                     return;
                 }
-                if (!event.hasError()) {
+                if (event.hasSuccess()) {
                     this._showResults(event.getResults());
                 } else {
                     this._showError(this.loc('metadatasearchservice_error'));
@@ -1164,7 +1164,7 @@ Oskari.clazz.define(
         _addLayerLinks: function (layer, layerList) {
             const me = this;
             const selectedLayers = this.sandbox.findAllSelectedMapLayers();
-            const layerSelected = selectedLayers.map(l => l.getId()).includes(layer.getId());
+            let layerSelected = selectedLayers.map(l => l.getId()).includes(layer.getId());
             const layerLink = this.templates.layerLink.clone();
             const showText = this.loc('show');
             const hideText = this.loc('hide');

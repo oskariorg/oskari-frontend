@@ -38,11 +38,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
         /**
          * @method @private _sendMetadataSearchResultEvent
          * @param {Object} result search results
-         * @param {Boolean} error error come
+         * @param {Boolean} success search succeed
          */
-        _sendMetadataSearchResultEvent: function (result, error) {
+        _sendMetadataSearchResultEvent: function (result, success) {
             const eventBuilder = Oskari.eventBuilder('MetadataSearchResultEvent');
-            const event = eventBuilder(result, error === true);
+            const event = eventBuilder(result, success || true);
             Oskari.getSandbox().notifyAll(event);
         },
         /**
@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
                 url: this._searchUrl,
                 data: search,
                 error: function () {
-                    me._sendMetadataSearchResultEvent(null, true);
+                    me._sendMetadataSearchResultEvent(null, false);
                 },
                 success: function (data) {
                     me._sendMetadataSearchResultEvent(data.results);
