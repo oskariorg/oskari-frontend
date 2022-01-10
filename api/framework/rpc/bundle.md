@@ -157,7 +157,8 @@ Returns events that are supported by rpc functionality. For example:
         "UserLocationEvent": true,
         "DrawingEvent": true,
         "FeatureEvent": true,
-        "DataForMapLocationEvent": true
+        "DataForMapLocationEvent": true,
+        "MetadataSearchResultEvent": true
     }
 
 **getSupportedFunctions()**
@@ -202,7 +203,8 @@ Returns requests that are supported  by rpc functionality. For example:
         "DrawTools.StopDrawingRequest": true,
         "MapModulePlugin.ZoomToFeaturesRequest": true,
         "ChangeMapLayerStyleRequest": true,
-        "RearrangeSelectedMapLayerRequest": true
+        "RearrangeSelectedMapLayerRequest": true,
+        "MetadataSearchRequest": true
     }
 
 **getZoomRange()**

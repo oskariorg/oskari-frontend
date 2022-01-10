@@ -80,6 +80,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinatverktyg",
                 "FeedbackServiceTool": "Responsverktyg (Open311)",
+                "MetadataSearchTool": "Möjlig användning av metadatasökningar programmatiskt",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",

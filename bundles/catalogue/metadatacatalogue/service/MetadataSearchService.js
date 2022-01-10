@@ -7,48 +7,55 @@
 Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService',
 
     /**
- * @method create called automatically on construction
- * @static
- *
- * @param {String}
- *            searchUrl ajax URL to actual metadata catalogue search implementation
- */
+    * @method create called automatically on construction
+    * @static
+    *
+    * @param {String}
+    *            searchUrl ajax URL to actual metadata catalogue search implementation
+    */
     function (searchUrl) {
     /* searchUrl url that will give us results */
         this._searchUrl = searchUrl;
     }, {
-    /** @static @property __qname fully qualified name for service */
+        /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService',
         /**
-     * @method getQName
-     * @return {String} fully qualified name for service
-     */
+        * @method getQName
+        * @return {String} fully qualified name for service
+        */
         getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
         __name: 'SearchService',
         /**
-     * @method getName
-     * @return {String} service name
-     */
+        * @method getName
+        * @return {String} service name
+        */
         getName: function () {
             return this.__name;
         },
         /**
-     * @method doSearch
-     *
-     * Makes the actual ajax call to search service implementation
-     * @param {String}
-     *            searchString the query to search with
-     * @param {Function}
-     *            onSuccess callback method for successful search
-     * @param {Function}
-     *            onComplete callback method for search completion
-     */
-        doSearch: function (search, onSuccess, onError) {
+         * @method @private _sendMetadataSearchResultEvent
+         * @param {Object} result search results
+         * @param {Boolean} success search succeed
+         */
+        _sendMetadataSearchResultEvent: function (result, success) {
+            const eventBuilder = Oskari.eventBuilder('MetadataSearchResultEvent');
+            const event = eventBuilder(result, success || true);
+            Oskari.getSandbox().notifyAll(event);
+        },
+        /**
+         * @method doSearch
+         *
+         * Makes the actual ajax call to search service implementation
+         * @param {String} searchString the query to search with
+         */
+        doSearch: function (search) {
             var epsg = Oskari.getSandbox().getMap().getSrsName();
+            const me = this;
             if (!search.srs) search.srs = epsg;
+
             jQuery.ajax({
                 dataType: 'json',
                 type: 'POST',
@@ -59,8 +66,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
                 },
                 url: this._searchUrl,
                 data: search,
-                error: onError,
-                success: onSuccess
+                error: function () {
+                    me._sendMetadataSearchResultEvent(null, false);
+                },
+                success: function (data) {
+                    me._sendMetadataSearchResultEvent(data.results);
+                }
             });
         }
     }, {
@@ -68,7 +79,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataS
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     });
 
 /* Inheritance */
