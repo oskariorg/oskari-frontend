@@ -49,9 +49,12 @@ export const FILL_STYLE = {
     THICK_DIAGONAL: 1,
     THIN_HORIZONTAL: 2,
     THICK_HORIZONTAL: 3,
-    TRANSPAREN: 4,
+    TRANSPARENT: 4,
     SOLID: 5
 };
+
+export const PATTERN_THIN_WIDTH = 2;
+export const PATTERN_THICK_WIDTH = 3;
 
 export const FILTER = {
     EQUAL: 'value',

@@ -1,28 +1,19 @@
-import { parsePathFromSVG } from './SVGHelper';
+import { getAreaPattern } from './SVGHelper';
 import { OSKARI_BLANK_STYLE } from '../OskariDefaultStyle';
-import { getFillOption } from '../AreaTab';
 
-const areaPreviewSVG = `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <pattern id="checker" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <rect fill="#eee" x="0" width="10" height="10" y="0">
-                <rect fill="#eee" x="10" width="10" height="10" y="10"></rect>
-            </rect>
-        </pattern>
-    </defs>
-    <rect x="0" y="0" width="80" height="80" fill="url(#checker)"></rect>
-    <path d="M10,17L40,12L29,40Z" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path>
-</svg>`;
+const CAP = OSKARI_BLANK_STYLE.stroke.lineCap;
+const ID_PREFIX = 'patternPreview-';
 
-/**
- * @method _composeSvgPattern
- * @param {HTMLElement} patternPath pattern as DOM node element
- * @description Combine provided plain pattern path with definitive svg base
- * @returns {String} full pattern as string
- */
- const _composeSvgPattern = (patternPath, patternId) => {
-    return '<defs><pattern id="' + patternId +'" viewBox="0, 0, 12, 12" width="100%" height="100%">' + patternPath.outerHTML + '</pattern></defs>';
-}
+const getPreviewSVG = (params, patternDef, fillPattern ) => {
+    const { strokecolor, size, linejoin, strokestyle } = params;
+    const dash = strokestyle === 'dash' ? '5, 4': '';
+    return `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            ${patternDef}
+        <path d="M10,17L40,12L29,40Z" stroke="${strokecolor}" stroke-width="${size}" fill="${fillPattern}"
+            stroke-linejoin="${linejoin}" stroke-linecap="${CAP}" stroke-dasharray="${dash}">
+        </path>
+    </svg>`;
+};
 
 const getPatternName = (patternId) => {
     switch (patternId) {
@@ -41,12 +32,6 @@ const getPatternName = (patternId) => {
     };
 }
 
-const getPatternSVG = (pattern) => {
-    const name = getPatternName(pattern);
-    const patternSVG = getFillOption(name);
-    return parsePathFromSVG(patternSVG.data);
-}
-
 /**
 * @method getAreaSVG
 * @description Composes area svg path
@@ -54,19 +39,17 @@ const getPatternSVG = (pattern) => {
 */
 let patternIdCounter = 0;
 export const getAreaSVG = (areaParams) => {
-   const { color, strokecolor, size, linejoin, strokestyle, pattern } = areaParams;
-   const path = parsePathFromSVG(areaPreviewSVG);
+    patternIdCounter++;
+    let { color, pattern, ...params } = areaParams;
+    if (color==='') {
+        color = 'none';
+    }
+    const patternName = getPatternName(pattern);
+    const patternId = ID_PREFIX + patternIdCounter;
+    // TODO add pattern only when really needed
+    const fillPattern = pattern < 0 || pattern > 3 ? color : `url(#${patternId})`;
 
-   path.setAttribute('stroke', strokecolor);
-   path.setAttribute('stroke-width', size);
-   path.setAttribute('stroke-linecap', OSKARI_BLANK_STYLE.stroke.lineCap);
-   path.setAttribute('stroke-dasharray', strokestyle === 'dash' ? '4, 4': '');
-   path.setAttribute('stroke-linejoin', linejoin);
 
-   const patternId = 'patternPreview' + patternIdCounter++;
-   const fillPatternSVG = getPatternSVG(pattern);
-   fillPatternSVG.setAttribute('stroke', color);
-   path.setAttribute('fill', 'url(#' + patternId + ')');
-
-   return _composeSvgPattern(fillPatternSVG, patternId) + path.outerHTML;
+    const patternDef = getAreaPattern(patternId, patternName, color);
+    return getPreviewSVG(params, patternDef, fillPattern);
 };
