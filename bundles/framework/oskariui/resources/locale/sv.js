@@ -2,6 +2,10 @@ Oskari.registerLocalization({
     lang: 'sv',
     key: 'oskariui',
     value: {
+        ColorPicker: {
+            tooltip: 'Välj färg',
+            moreColors: 'Mera färger'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',

@@ -2,6 +2,10 @@ Oskari.registerLocalization({
     lang: 'fi',
     key: 'oskariui',
     value: {
+        ColorPicker: {
+            tooltip: 'Valitse väri',
+            moreColors: 'Enemmän värejä'
+        },
         StyleEditor: {
             newtitle: 'Uusi tyyli',
             subheaders: {
@@ -22,7 +26,7 @@ Oskari.registerLocalization({
                 shape: 'Symboli',
                 size: 'Koko',
                 fill: {
-                    color: 'Täyttöväri'
+                    color: 'Väri'
                 }
             },
             stroke: {

@@ -2,6 +2,10 @@ Oskari.registerLocalization({
     lang: 'en',
     key: 'oskariui',
     value: {
+        ColorPicker: {
+            tooltip: 'Choose color',
+            moreColors: 'More colors'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Geometry type',
@@ -21,7 +25,7 @@ Oskari.registerLocalization({
                 shape: 'Icon',
                 size: 'Size',
                 fill: {
-                    color: 'Fill colour'
+                    color: 'Colour'
                 }
             },
             stroke: {
