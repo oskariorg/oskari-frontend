@@ -23,6 +23,14 @@ const sortGroupsAlphabetically = (groups = []) => {
     return sorted;
 };
 
+const layerSortFn = (a, b) => {
+    const delta = Oskari.util.naturalSort(a.getName(), b.getName());
+    if (delta !== 0) {
+        return delta;
+    }
+    return a.getLayerType().localeCompare(b.getLayerType());
+};
+
 /*
 const group = {
     id: -1,
@@ -50,7 +58,7 @@ const createGroupModel = (group, method, allLayers, tools) => {
             }
             return groupLayerIds.includes(layer.getId());
         });
-        layerModels.sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+        layerModels.sort(layerSortFn);
         newGroup.setLayers(layerModels);
     }
 

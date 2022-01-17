@@ -2,6 +2,16 @@ Oskari.registerLocalization({
     lang: 'en',
     key: 'oskariui',
     value: {
+        error: {
+            generic: 'Something went wrong'
+        },
+        table: {
+            sort: {
+                desc: 'Click to sort descending',
+                asc: 'Click to sort ascending',
+                cancel: 'Click to cancel sorting'
+            }
+        },
         ColorPicker: {
             tooltip: 'Choose color',
             moreColors: 'More colors'

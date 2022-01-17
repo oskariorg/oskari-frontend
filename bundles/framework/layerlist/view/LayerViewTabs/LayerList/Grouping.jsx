@@ -7,7 +7,7 @@ import { Controller } from 'oskari-ui/util';
 
 const Grouping = ({ selected, options, controller }) =>
     <Labelled label={'grouping.title'}>
-        <Select value={selected} onChange={controller.setGrouping}>
+        <Select value={selected} onChange={controller.setGrouping} className="t_grouping">
             {
                 options.map(cur =>
                     <Option key={cur.getKey()} value={cur.getKey()}>

@@ -282,7 +282,9 @@ Oskari.registerLocalization({
         'metadataPopup': {
             'open': 'Visa {indicators, plural, one {indikator beskrivning} other {indikator beskrivningar}}',
             'title': '{indicators, plural, one {Indikator beskrivning} other {Indikator beskrivningar}}',
-            'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.'
+            'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.',
+            'updated': 'Senast uppdaterad',
+            'nextUpdate': 'Nästa uppdatering'
         },
         'sumo': {
             'placeholder': 'Välj här',

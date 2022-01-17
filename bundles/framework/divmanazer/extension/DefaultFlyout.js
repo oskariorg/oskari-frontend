@@ -27,17 +27,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         this._log = Oskari.log(this.getName());
     }, {
         __temp: {
-            sideTool: _.template(
-                '<div class="sidetool">' +
-                '<div class="icon icon-arrow-white-right"></div>' +
-                '<label class="verticalsidelabel"></label>' +
-                '</div>')
+            sideTool: ({ label }) =>
+                `<div class="sidetool">
+                    <div class="icon icon-arrow-white-right"></div>
+                    <label class="verticalsidelabel">${Oskari.util.sanitize(label)}</label>
+                </div>`
         },
         // this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
         getSideLabel: function (text) {
-            var sidelabel = jQuery(this.__temp.sideTool());
-            sidelabel.find('label').text(text);
-            return sidelabel;
+            return jQuery(this.__temp.sideTool({ label: text }));
         },
         _calcSideLabelPositions: function () {
             var me = this;

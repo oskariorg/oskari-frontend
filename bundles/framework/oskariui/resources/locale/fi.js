@@ -2,6 +2,16 @@ Oskari.registerLocalization({
     lang: 'fi',
     key: 'oskariui',
     value: {
+        error: {
+            generic: 'Tapahtui odottamaton virhe'
+        },
+        table: {
+            sort: {
+                desc: 'Lajittele laskevasti',
+                asc: 'Lajittele nousevasti',
+                cancel: 'Peruuta lajittelu'
+            }
+        },
         ColorPicker: {
             tooltip: 'Valitse väri',
             moreColors: 'Enemmän värejä'

@@ -18,28 +18,28 @@ Oskari.clazz.define(
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
-        this.localization = null;
+        this.loc = Oskari.getMsg.bind(null, 'catalogue.bundle.metadatacatalogue');
         this.optionService = null;
         this.searchService = null;
         this.tabPriority = 5.0;
         this.conditions = [];
         this.resultHeaders = [{
-            title: this.getLocalization('grid').name,
+            title: this.loc('grid.name'),
             prop: 'name'
         }, {
             title: '',
             tooltip: ''
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').showBBOX,
+            tooltip: this.loc('grid.showBBOX'),
             prop: 'showBbox'
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').info,
+            tooltip: this.loc('grid.info'),
             prop: 'info'
         }, {
             title: '',
-            tooltip: this.getLocalization('grid').remove,
+            tooltip: this.loc('grid.remove'),
             prop: 'remove'
         }];
         this.lastSearch = '';
@@ -198,36 +198,11 @@ Oskari.clazz.define(
             return this.sandbox;
         },
         /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for
-         * current language.
-         * If key-parameter is not given, returns the whole localization
-         * data.
-         *
-         * @param {String} key (optional) if given, returns the value for
-         *         key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key && this._localization[key]) {
-                return this._localization[key];
-            }
-            if (!this.localization) {
-                return {};
-            }
-            return this._localization;
-        },
-        /**
          * @method start
          * implements BundleInstance protocol start method
          */
         start: function () {
-            var me = this;
+            const me = this;
 
             if (me.started) {
                 return;
@@ -235,13 +210,11 @@ Oskari.clazz.define(
 
             me.started = true;
 
-            var conf = me.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+            const conf = me.conf;
+            const sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
-
-            me.localization = Oskari.getLocalization(me.getName());
 
             var optionAjaxUrl = null;
             if (me.conf && me.conf.optionUrl) {
@@ -262,31 +235,42 @@ Oskari.clazz.define(
                 me.tabPriority = me.conf.priority;
             }
 
-            var optionServName =
+            const optionServName =
               'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataOptionService';
             me.optionService = Oskari.clazz.create(optionServName, optionAjaxUrl);
 
-            var searchServName =
+            const searchServName =
                 'Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService';
             me.searchService = Oskari.clazz.create(searchServName, searchAjaxUrl);
 
             sandbox.register(me);
-            var p;
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
-                }
-            }
+            Object.keys(me.eventHandlers).forEach(eventName => {
+                sandbox.registerForEventByName(me, eventName);
+            });
 
-            this.addSearchResultActionRequestHandler = Oskari.clazz.create(
+            const addSearchResultActionRequestHandler = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler',
                 sandbox,
                 me
             );
             sandbox.requestHandler(
                 'AddSearchResultActionRequest',
-                this.addSearchResultActionRequestHandler
+                addSearchResultActionRequestHandler
             );
+
+            const metadataSearchRequestHandler = Oskari.clazz.create(
+                'Oskari.catalogue.bundle.metadatacatalogue.request.MetadataSearchRequestHandler',
+                me
+            );
+            sandbox.requestHandler(
+                'MetadataSearchRequest',
+                metadataSearchRequestHandler
+            );
+
+            if (conf.noUI === true) {
+                // bundle started by published map
+                return;
+            }
 
             // draw ui
             me.createUi();
@@ -327,16 +311,13 @@ Oskari.clazz.define(
          */
         eventHandlers: {
             'DrawingEvent': function (event) {
-                var me = this,
-                    coverageFeature;
-
-                if (event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage) {
+                if (event.getId() !== this.getName() || event.getIsFinished() !== true || this.drawCoverage) {
                     return;
                 }
 
-                coverageFeature = event.getGeoJson();
+                const coverageFeature = event.getGeoJson();
 
-                this.coverageButton.val(me.getLocalization('deleteArea'));
+                this.coverageButton.val(this.loc('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.coverageButton.prop('disabled', false).css({
                     'border-color': ''
@@ -347,8 +328,7 @@ Oskari.clazz.define(
             },
 
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    isShown = event.getViewState() !== 'close';
+                const isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
                 if (event.getExtension().getName() !== 'Search') {
@@ -356,7 +336,7 @@ Oskari.clazz.define(
                     return;
                 }
 
-                if ((!isShown && me.drawCoverage === false) || event.getViewState() === 'close') {
+                if ((!isShown && this.drawCoverage === false) || event.getViewState() === 'close') {
                     this._teardownMetaSearch();
                 }
             },
@@ -365,6 +345,19 @@ Oskari.clazz.define(
                     this._teardownMetaSearch();
                 } else {
                     this._removeFeaturesFromMap(); // unactive show-area-icons when changing to metadata search tab
+                }
+            },
+            'MetadataSearchResultEvent': function (event) {
+                this.progressSpinner.stop();
+
+                if (this.conf.noUI === true) {
+                    // bundle started by published map --> not handle event
+                    return;
+                }
+                if (event.hasSuccess()) {
+                    this._showResults(event.getResults());
+                } else {
+                    this._showError(this.loc('metadatasearchservice_error'));
                 }
             }
         },
@@ -377,7 +370,7 @@ Oskari.clazz.define(
             this._stopCoverage();
 
             if (this.coverageButton) {
-                this.coverageButton.val(this.getLocalization('delimitArea'));
+                this.coverageButton.val(this.loc('delimitArea'));
                 this.coverageButton[0].data = '';
             }
 
@@ -401,16 +394,14 @@ Oskari.clazz.define(
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox;
-            var p;
-            for (p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
+            const sandbox = this.sandbox;
+
+            Object.keys(this.eventHandlers).forEach(eventName => {
+                sandbox.unregisterFromEventByName(this, eventName);
+            });
 
             var reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
-            sandbox.request(this, reqBuilder(this));
+            this.sandbox.request(this, reqBuilder(this));
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
@@ -421,7 +412,7 @@ Oskari.clazz.define(
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('tabTitle');
+            return this.loc('tabTitle');
         },
         /**
          * @method getDescription
@@ -429,7 +420,7 @@ Oskari.clazz.define(
          * component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return this.loc('desc');
         },
         /**
          * @method createUi
@@ -437,28 +428,28 @@ Oskari.clazz.define(
          */
         createUi: function () {
             var me = this;
-            var metadataCatalogueContainer = me.templates.metadataTab.clone();
+            me.metadataCatalogueContainer = me.templates.metadataTab.clone();
             me.optionPanel = me.templates.optionPanel.clone();
             me.searchPanel = me.templates.searchPanel.clone();
             me.resultPanel = me.templates.resultPanel.clone();
-            metadataCatalogueContainer.append(me.optionPanel);
-            metadataCatalogueContainer.append(me.searchPanel);
-            metadataCatalogueContainer.append(me.resultPanel);
+            me.metadataCatalogueContainer.append(me.optionPanel);
+            me.metadataCatalogueContainer.append(me.searchPanel);
+            me.metadataCatalogueContainer.append(me.resultPanel);
             me.searchPanel.hide();
-            me.searchPanel.append(me.getLocalization('searching'));
+            me.searchPanel.append(me.loc('searching'));
             me.resultPanel.hide();
 
-            me.progressSpinner.insertTo(metadataCatalogueContainer);
+            me.progressSpinner.insertTo(me.metadataCatalogueContainer);
 
-            var metadataCatalogueDescription = metadataCatalogueContainer.find(
+            var metadataCatalogueDescription = me.metadataCatalogueContainer.find(
                 'div.metadataCatalogueDescription'
             );
             metadataCatalogueDescription.html(
-                me.getLocalization('metadataCatalogueDescription')
+                me.loc('metadataCatalogueDescription')
             );
 
             var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-            field.setPlaceholder(me.getLocalization('assistance'));
+            field.setPlaceholder(me.loc('assistance'));
             field.setIds('oskari_metadatacatalogue_forminput', 'oskari_metadatacatalogue_forminput_searchassistance');
 
             field.bindChange(function (event) {
@@ -469,7 +460,7 @@ Oskari.clazz.define(
                 me.state.metadatacataloguetext = value;
                 if (!value) {
                     // remove results when field is emptied
-                    var resultList = metadataCatalogueContainer.find('div.resultList');
+                    var resultList = me.metadataCatalogueContainer.find('div.resultList');
                     resultList.empty();
                 }
             });
@@ -483,17 +474,17 @@ Oskari.clazz.define(
             var doMetadataCatalogue = function () {
                 me.progressSpinner.start();
                 me._removeFeaturesFromMap();
-                metadataCatalogueContainer.find('.metadataOptions').hide();
-                metadataCatalogueContainer.find('.metadataSearching').show();
+                me.metadataCatalogueContainer.find('.metadataOptions').hide();
+                me.metadataCatalogueContainer.find('.metadataSearching').show();
                 var search = {
                     search: field.getValue().trim()
                 };
                 var isAdvancedSearch = false;
                 // Collect the advanced search options
-                if (moreLessLink.html() === me.getLocalization('showLess')) {
+                if (moreLessLink.html() === me.loc('showLess')) {
                     isAdvancedSearch = true;
                     // Checkboxes
-                    var checkboxRows = metadataCatalogueContainer.find('.checkboxRow'),
+                    var checkboxRows = me.metadataCatalogueContainer.find('.checkboxRow'),
                         i,
                         checkboxDefs,
                         values,
@@ -516,7 +507,7 @@ Oskari.clazz.define(
                         search[jQuery(checkboxDefs[0]).attr('name')] = values.join();
                     }
                     // Dropdown lists
-                    dropdownRows = metadataCatalogueContainer.find('.dropdownRow');
+                    dropdownRows = me.metadataCatalogueContainer.find('.dropdownRow');
                     for (i = 0; i < dropdownRows.length; i += 1) {
                         dropdownDef = jQuery(dropdownRows[i]).find('.metadataDef');
                         search[dropdownDef.attr('name')] = dropdownDef.find(':selected').val();
@@ -535,18 +526,12 @@ Oskari.clazz.define(
                     doSearch = value ? true : doSearch;
                 });
                 if (doSearch) {
-                    me.searchService.doSearch(search, function (data) {
-                        me._showResults(metadataCatalogueContainer, data);
-                        me.progressSpinner.stop();
-                    }, function (data) {
-                        me._showError(me.getLocalization('metadatasearchservice_error'));
-                        me.progressSpinner.stop();
-                    });
+                    me.searchService.doSearch(search);
                 } else {
                     if (isAdvancedSearch) {
-                        me._showError(me.getLocalization('no_search_selections'));
+                        me._showError(me.loc('no_search_selections'));
                     } else {
-                        me._showError(me.getLocalization('cannot_be_empty'));
+                        me._showError(me.loc('cannot_be_empty'));
                     }
                 }
             };
@@ -554,14 +539,14 @@ Oskari.clazz.define(
             button.setHandler(doMetadataCatalogue);
             field.bindEnterKey(doMetadataCatalogue);
 
-            var controls = metadataCatalogueContainer.find('div.controls');
+            var controls = me.metadataCatalogueContainer.find('div.controls');
             controls.append(field.getField());
             controls.append(button.getElement());
 
             // Metadata catalogue tab
 
-            var title = me.getLocalization('tabTitle'),
-                content = metadataCatalogueContainer,
+            var title = me.loc('tabTitle'),
+                content = me.metadataCatalogueContainer,
                 priority = this.tabPriority,
                 reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
 
@@ -571,49 +556,48 @@ Oskari.clazz.define(
 
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
-            moreLessLink.html(me.getLocalization('showMore'));
+            moreLessLink.html(me.loc('showMore'));
             moreLessLink.on('click', function () {
-                var advancedContainer = metadataCatalogueContainer.find('div.advanced');
-                if (moreLessLink.html() === me.getLocalization('showMore')) {
+                var advancedContainer = me.metadataCatalogueContainer.find('div.advanced');
+                if (moreLessLink.html() === me.loc('showMore')) {
                     if (advancedContainer.is(':empty')) {
                         me.optionService.getOptions(function (data) {
                             // open advanced/toggle link text
-                            moreLessLink.html(me.getLocalization('showLess'));
+                            moreLessLink.html(me.loc('showLess'));
                             me._createAdvancedPanel(data, advancedContainer, moreLessLink);
                         }, function (data) {
                             // don't toggle link text on error
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
-                            var title = me.getLocalization('metadataoptionservice_alert_title');
-                            var msg = me.getLocalization('metadataoptionservice_not_found_anything_text');
+                            var title = me.loc('metadataoptionservice_alert_title');
+                            var msg = me.loc('metadataoptionservice_not_found_anything_text');
                             dialog.show(title, msg, [okBtn]);
                         });
                     } else {
                         // open advanced/toggle link text
-                        moreLessLink.html(me.getLocalization('showLess'));
+                        moreLessLink.html(me.loc('showLess'));
                         advancedContainer.show();
                     }
                 } else {
                     // close advanced/toggle link text
-                    moreLessLink.html(me.getLocalization('showMore'));
+                    moreLessLink.html(me.loc('showMore'));
                     advancedContainer.hide();
                 }
             });
-            metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
+            me.metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
         },
 
         _showError: function (error) {
-            var me = this;
-            me.searchPanel.hide();
-            me.optionPanel.show();
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okButton = dialog.createCloseButton('OK');
+            this.searchPanel.hide();
+            this.optionPanel.show();
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okButton = dialog.createCloseButton('OK');
 
             dialog.setId('oskari_search_error_popup');
             dialog.makeModal();
 
             dialog.show(
-                this.getLocalization('metadataoptionservice_alert_title'),
+                this.loc('metadataoptionservice_alert_title'),
                 error, [okButton]
             );
         },
@@ -644,7 +628,7 @@ Oskari.clazz.define(
                     continue;
                 }
                 newRow = null;
-                newLabel = me.getLocalization(dataField.field);
+                newLabel = me.loc(dataField.field);
                 // Continue gracefully also without localization
                 if (typeof newLabel !== 'string') {
                     newLabel = dataField.field;
@@ -673,7 +657,7 @@ Oskari.clazz.define(
                     dropdownDef.attr('name', dataField.field);
                     emptyOption = me.templates.dropdownOption.clone();
                     emptyOption.attr('value', '');
-                    emptyOption.text(me.getLocalization('emptyOption'));
+                    emptyOption.text(me.loc('emptyOption'));
                     dropdownDef.append(emptyOption);
                     for (j = 0; j < dataField.values.length; j += 1) {
                         value = dataField.values[j];
@@ -700,7 +684,7 @@ Oskari.clazz.define(
 
             if (renderCoverageButton) {
                 newRow = me.templates.buttonRow.clone();
-                newLabel = me.getLocalization('searchArea');
+                newLabel = me.loc('searchArea');
                 newRow.find('div.rowLabel').append(newLabel);
 
                 var newButton = me.templates.metadataButton.clone();
@@ -712,13 +696,13 @@ Oskari.clazz.define(
                         me.coverageButton.prop('disabled', true).css({
                             'border-color': '#0099CB'
                         });
-                        me.coverageButton.val(me.getLocalization('startDraw'));
+                        me.coverageButton.val(me.loc('startDraw'));
                         me._getCoverage();
                         me.drawCoverage = false;
                     } else {
                         me.drawCoverage = true;
                         me._stopCoverage();
-                        me.coverageButton.val(me.getLocalization('delimitArea'));
+                        me.coverageButton.val(me.loc('delimitArea'));
                         document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
                         me.coverageButton[0].data = '';
                         me._removeFeaturesFromMap();
@@ -734,7 +718,7 @@ Oskari.clazz.define(
         },
         _initCoverageButton: function (me, newButton) {
             this.coverageButton = newButton.find('.metadataCoverageDef');
-            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+            this.coverageButton.attr('value', me.loc('delimitArea'));
             this.coverageButton.attr('name', 'coverage');
             return this.coverageButton;
         },
@@ -744,13 +728,12 @@ Oskari.clazz.define(
          * Generates localization for option values
          */
         _getOptionLocalization: function (value) {
-            var me = this,
-                text;
+            var text;
             // Localization available?
             if (typeof value.locale !== 'undefined') {
                 text = value.locale;
             } else {
-                text = me.getLocalization(value.val);
+                text = this.loc(value.val);
                 if (typeof text !== 'string') {
                     text = value.val;
                 }
@@ -759,10 +742,8 @@ Oskari.clazz.define(
         },
 
         _getCoverage: function () {
-            var me = this;
-
-            me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [me.getName(), 'Box', {
-                style: me.__drawStyle
+            this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.getName(), 'Box', {
+                style: this.__drawStyle
             }]);
         },
 
@@ -818,60 +799,61 @@ Oskari.clazz.define(
          * @method showResults
          * Displays metadata search results
          */
-        _showResults: function (metadataCatalogueContainer, data) {
+        _showResults: function (results) {
             var me = this;
-            me.lastResult = data.results;
-            var resultPanel = metadataCatalogueContainer.find('.metadataResults'),
-                searchPanel = metadataCatalogueContainer.find('.metadataSearching'),
-                optionPanel = metadataCatalogueContainer.find('.metadataOptions');
+            me.lastResult = results;
+            var resultPanel = me.metadataCatalogueContainer.find('.metadataResults');
+            var searchPanel = me.metadataCatalogueContainer.find('.metadataSearching');
+            var optionPanel = me.metadataCatalogueContainer.find('.metadataOptions');
 
             // Hide other panels, if visible
             searchPanel.hide();
             optionPanel.hide();
             // Create header
             var resultHeader = me.templates.resultHeader.clone();
-            resultHeader.find('.resultTitle').text(me.getLocalization('metadataCatalogueResults'));
+            resultHeader.find('.resultTitle').text(me.loc('metadataCatalogueResults'));
             var showLink = resultHeader.find('.showLink');
             showLink.hide();
-            showLink.html(me.getLocalization('showSearch'));
+            showLink.html(me.loc('showSearch'));
             showLink.on('click', function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
                 resultHeader.find('.filter-link').show();
             });
             var modifyLink = resultHeader.find('.modifyLink');
-            modifyLink.html(me.getLocalization('modifySearch'));
+            modifyLink.html(me.loc('modifySearch'));
             modifyLink.on('click', function () {
                 resultPanel.empty();
                 optionPanel.show();
                 me._removeFeaturesFromMap();
             });
 
-            if (data.results.length === 0) {
+            if (results.length === 0) {
                 resultPanel.append(resultHeader);
-                resultPanel.append(me.getLocalization('searchservice_search_not_found_anything_text'));
+                resultPanel.append(me.loc('searchservice_search_not_found_anything_text'));
                 resultPanel.show();
                 return;
             }
 
             var showDatasetsLink = resultHeader.find('.showDatasets');
-            showDatasetsLink.html(me.getLocalization('showDatasets'));
+            showDatasetsLink.html(me.loc('showDatasets'));
 
             var showServicessLink = resultHeader.find('.showServices');
-            showServicessLink.html(me.getLocalization('showServices'));
+            showServicessLink.html(me.loc('showServices'));
 
             // render results
-            var table = me.templates.resultTable.clone(),
-                tableHeaderRow = table.find('thead tr'),
-                tableBody = table.find('tbody');
+            var table = me.templates.resultTable.clone();
+            var tableHeaderRow = table.find('thead tr');
+            var tableBody = table.find('tbody');
             tableBody.empty();
             // header reference needs some closure magic to work here
             var headerClosureMagic = function (scopedValue) {
                 return function () {
+                    var i;
                     // save hidden results
-                    var hiddenRows = tableBody.find('tr.resultRow:hidden'),
-                        hiddenResults = [],
-                        i;
+                    var hiddenRows = tableBody.find('tr.resultRow:hidden');
+                    var hiddenResults = [];
+
                     for (i = 0; i < hiddenRows.length; i += 1) {
                         hiddenResults.push(jQuery(hiddenRows[i]).data('resultId'));
                     }
@@ -891,12 +873,10 @@ Oskari.clazz.define(
                     me._populateResultTable(tableBody);
 
                     // hide hidden results
-                    var newRows = tableBody.find('tr'),
-                        resultId,
-                        j;
+                    var newRows = tableBody.find('tr');
                     for (i = 0; i < newRows.length; i += 1) {
-                        resultId = jQuery(newRows[i]).data('resultId');
-                        for (j = 0; j < hiddenResults.length; j += 1) {
+                        var resultId = jQuery(newRows[i]).data('resultId');
+                        for (var j = 0; j < hiddenResults.length; j += 1) {
                             if (resultId === hiddenResults[j]) {
                                 jQuery(newRows[i]).hide();
                             }
@@ -915,20 +895,18 @@ Oskari.clazz.define(
                     return false;
                 };
             };
-            var i,
-                header,
-                link;
-            for (i = 0; i < me.resultHeaders.length; i += 1) {
-                header = me.templates.resultTableHeader.clone();
-                header.addClass(me.resultHeaders[i].prop);
-                link = header.find('a');
-                link.append(me.resultHeaders[i].title);
+
+            me.resultHeaders.forEach((resultHeader, index) => {
+                var header = me.templates.resultTableHeader.clone();
+                header.addClass(resultHeader.prop);
+                var link = header.find('a');
+                link.append(resultHeader.title);
                 // Todo: Temporarily only the first column is sortable
-                if (i === 0) {
-                    link.on('click', headerClosureMagic(me.resultHeaders[i]));
+                if (index === 0) {
+                    link.on('click', headerClosureMagic(resultHeader));
                 }
                 tableHeaderRow.append(header);
-            }
+            });
 
             me._populateResultTable(tableBody);
             resultPanel.append(resultHeader);
@@ -960,18 +938,18 @@ Oskari.clazz.define(
         },
 
         _populateResultTable: function (resultsTableBody) {
-            var me = this,
-                results = me.lastResult;
-            var i,
-                style = {
-                    stroke: {
-                        color: 'rgba(211, 187, 27, 0.8)',
-                        width: 2
-                    },
-                    fill: {
-                        color: 'rgba(255,222,0, 0.6)'
-                    }
-                };
+            var me = this;
+            var results = me.lastResult;
+            var i;
+            var style = {
+                stroke: {
+                    color: 'rgba(211, 187, 27, 0.8)',
+                    width: 2
+                },
+                fill: {
+                    color: 'rgba(255,222,0, 0.6)'
+                }
+            };
 
             for (i = 0; i < results.length; i += 1) {
                 if ((!results[i].name) || (results[i].name.length === 0)) {
@@ -1010,7 +988,7 @@ Oskari.clazz.define(
                     var isIdentificationDate = !!((identification && identification.date && identification.date.length > 0));
                     var isUpdateFrequency = !!((identification && identification.updateFrequency && identification.updateFrequency.length > 0));
                     if (isIdentificationCode && isIdentificationDate) {
-                        var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
+                        var locIdentificationCode = me.loc('identificationCode')[identification.code];
                         if (!locIdentificationCode) {
                             locIdentificationCode = identification.code;
                         }
@@ -1019,7 +997,7 @@ Oskari.clazz.define(
                         if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
-                                titleText += ', ' + me.getLocalization('updated') + ': ' + identification.updateFrequency;
+                                titleText += ', ' + me.loc('updated') + ': ' + identification.updateFrequency;
                             }
                             titleText += ')';
                         }
@@ -1063,9 +1041,9 @@ Oskari.clazz.define(
 
                         // Add layer links
                         layerList = me.templates.layerList.clone();
-                        for (j = 0; j < layers.length; j += 1) {
-                            me._addLayerLinks(layers[j], layerList);
-                        }
+                        layers.forEach(layer => {
+                            me._addLayerLinks(layer, layerList);
+                        });
 
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
@@ -1073,12 +1051,11 @@ Oskari.clazz.define(
                         // jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if (me._isAction() == true) {
+                        if (me._isAction() === true) {
                             jQuery.each(me.searchResultActions, function (index, action) {
                                 if (action.showAction(row)) {
-                                    var actionElement = action.actionElement.clone(),
-                                        callbackElement = null,
-                                        actionTextEl = null;
+                                    var actionElement = action.actionElement.clone();
+                                    var actionTextEl = null;
 
                                     actionElement.css('margin-left', '6px');
                                     actionElement.css('margin-right', '6px');
@@ -1086,7 +1063,7 @@ Oskari.clazz.define(
                                     // Set action callback
                                     if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                        callbackElement = actionElement.first();
+                                        var callbackElement = actionElement.first();
                                         callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
@@ -1106,13 +1083,13 @@ Oskari.clazz.define(
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.val(action.actionText);
                                         } else {
-                                            actionTextEl.val(me.getLocalization('licenseText'));
+                                            actionTextEl.val(me.loc('licenseText'));
                                         }
                                     } else {
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.html(action.actionText);
                                         } else {
-                                            actionTextEl.html(me.getLocalization('licenseText'));
+                                            actionTextEl.html(me.loc('licenseText'));
                                         }
                                     }
 
@@ -1129,7 +1106,7 @@ Oskari.clazz.define(
                                 // If show info area is active, remove geom from map
                                 if (jQuery(this).hasClass('icon-info-area-active')) {
                                     me._removeFeaturesFromMap();
-                                    jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
+                                    jQuery(this).parent().attr('title', me.loc('grid.showBBOX'));
                                 }
                                 // Else show info area is not active, add geom to map
                                 else {
@@ -1143,7 +1120,7 @@ Oskari.clazz.define(
                                     }]);
                                     me._unactiveShowInfoAreaIcons();
                                     jQuery(this).removeClass('icon-info-area').addClass('icon-info-area-active');
-                                    jQuery(this).parent().attr('title', me.getLocalization('grid').removeBBOX);
+                                    jQuery(this).parent().attr('title', me.loc('grid.removeBBOX'));
                                 }
                             });
                         } else {
@@ -1185,27 +1162,12 @@ Oskari.clazz.define(
                 .addClass('icon-info-area');
         },
         _addLayerLinks: function (layer, layerList) {
-            var me = this,
-                selectedLayers,
-                selectedLayer,
-                layerSelected,
-                showText,
-                hideText,
-                layerListItem,
-                layerLink;
-
-            layerSelected = false;
-            selectedLayers = me.sandbox.findAllSelectedMapLayers();
-            for (var k = 0; k < selectedLayers.length; k += 1) {
-                selectedLayer = selectedLayers[k];
-                if (layer.getId() === selectedLayer.getId()) {
-                    layerSelected = true;
-                    break;
-                }
-            }
-            layerLink = me.templates.layerLink.clone();
-            showText = me.getLocalization('show');
-            hideText = me.getLocalization('hide');
+            const me = this;
+            const selectedLayers = this.sandbox.findAllSelectedMapLayers();
+            let layerSelected = selectedLayers.map(l => l.getId()).includes(layer.getId());
+            const layerLink = this.templates.layerLink.clone();
+            const showText = this.loc('show');
+            const hideText = this.loc('hide');
 
             // Check if layer is already selected and visible
             if ((layerSelected) && (layer.isVisible())) {
@@ -1234,7 +1196,7 @@ Oskari.clazz.define(
                     jQuery(this).html(hideText);
                 }
             });
-            layerListItem = me.templates.layerListItem.clone();
+            const layerListItem = me.templates.layerListItem.clone();
             layerListItem.text(layer.getName());
             layerListItem.append('&nbsp;&nbsp;');
             layerListItem.append(layerLink);
@@ -1251,11 +1213,12 @@ Oskari.clazz.define(
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortResults: function (pAttribute, pDescending) {
-            var me = this;
+            const me = this;
+
             if (!this.lastResult) {
                 return;
             }
-            me.lastSort = {
+            this.lastSort = {
                 attr: pAttribute,
                 descending: pDescending
             };
@@ -1275,9 +1238,9 @@ Oskari.clazz.define(
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _searchResultComparator: function (a, b, pAttribute, pDescending) {
-            var nameA = a[pAttribute].toLowerCase(),
-                nameB = b[pAttribute].toLowerCase(),
-                value = 0;
+            var nameA = a[pAttribute].toLowerCase();
+            var nameB = b[pAttribute].toLowerCase();
+            var value = 0;
             if (nameA === nameB) {
                 nameA = a.id;
                 nameB = b.id;
@@ -1304,10 +1267,7 @@ Oskari.clazz.define(
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
         addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
-            var me = this,
-                status = null;
-
-            status = {
+            const status = {
                 actionElement: actionElement,
                 actionTextElement: actionTextElement,
                 callback: callback,
@@ -1320,7 +1280,7 @@ Oskari.clazz.define(
                 status.showAction = showAction;
             }
 
-            me.searchResultActions.push(status);
+            this.searchResultActions.push(status);
         },
         /**
         * @method _isAction
@@ -1328,22 +1288,7 @@ Oskari.clazz.define(
         * @return {Boolean} is action
         */
         _isAction: function () {
-            var me = this;
-            return me.searchResultActions.length > 0;
-        },
-        /**
-         * @method setState
-         * @param {Object} state bundle state as JSON
-         */
-        setState: function (state) {
-
-        },
-        /**
-         * @method getState
-         * @return {Object} bundle state as JSON
-         */
-        getState: function () {
-
+            return this.searchResultActions.length > 0;
         }
     }, {
         /**

@@ -15,6 +15,10 @@ Oskari.registerLocalization(
             "dontShow" : "Visa inte detta igen",
             "messages": {
                 "getFailed":"Fetching announcements failed"
+            },
+            "plugin" : {
+                "title": "Aviseringar",
+                "valid": "Vägande"
             }
         }
     });

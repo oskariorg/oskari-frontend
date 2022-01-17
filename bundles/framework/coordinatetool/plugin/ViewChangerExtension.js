@@ -68,38 +68,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          * @return {Object} projectionSelect
          */
         initProjectionChange: function (popup) {
-            var me = this;
+            const me = this;
 
             me._popup = popup;
-            var keys = _.keys(me._config.supportedProjections);
+            const config = this._config || {};
+            const hasMoreProjConfigs = config.supportedProjections && Object.keys(config.supportedProjections) > 1;
 
-            if (keys && keys.length > 1) {
-                me._popup.dialog.find('.actions').after(me._templates.projectionSelect.clone());
-                me._popup.dialog.find('.coordinatetool-projection-change-header').html(me._locale('display.projectionChange.header'));
-                me._popup.dialog.find('.projection-label').html(me._locale('display.projectionChange.projection'));
-                me._popup.dialog.find('.projection-change-confirmation-message').html(me._locale('display.projectionChange.confirmationMessage'));
-                me._popup.dialog.find('.projection-change-button-cancel').html(me._locale('display.projectionChange.buttons.cancel'));
-                me._popup.dialog.find('.projection-change-button-ok').html(me._locale('display.projectionChange.buttons.ok'));
-
-                me._projectionSelect = me._popup.dialog.find('.projection-select');
-                me._populateProjectionSelect(me._projectionSelect);
-                me._projectionSelect.on('change', function (event) {
-                    me._toggleProjectionSelectionConfirmation(true);
-                });
-
-                me._popup.dialog.find('.projection-change-button-ok').off('click');
-                me._popup.dialog.find('.projection-change-button-ok').on('click', function () {
-                    me._changeProjection(me._projectionSelect.val());
-                });
-
-                me._popup.dialog.find('.projection-change-button-cancel').off('click');
-                me._popup.dialog.find('.projection-change-button-cancel').on('click', function () {
-                    me._toggleProjectionSelectionConfirmation(false);
-                });
-
-                // set default value
-                me._resetProjectionSelect();
+            if (!hasMoreProjConfigs) {
+                return;
             }
+            me._popup.dialog.find('.actions').after(me._templates.projectionSelect.clone());
+            me._popup.dialog.find('.coordinatetool-projection-change-header').html(me._locale('display.projectionChange.header'));
+            me._popup.dialog.find('.projection-label').html(me._locale('display.projectionChange.projection'));
+            me._popup.dialog.find('.projection-change-confirmation-message').html(me._locale('display.projectionChange.confirmationMessage'));
+            me._popup.dialog.find('.projection-change-button-cancel').html(me._locale('display.projectionChange.buttons.cancel'));
+            me._popup.dialog.find('.projection-change-button-ok').html(me._locale('display.projectionChange.buttons.ok'));
+
+            me._projectionSelect = me._popup.dialog.find('.projection-select');
+            me._populateProjectionSelect(me._projectionSelect);
+            me._projectionSelect.on('change', function (event) {
+                me._toggleProjectionSelectionConfirmation(true);
+            });
+
+            me._popup.dialog.find('.projection-change-button-ok').off('click');
+            me._popup.dialog.find('.projection-change-button-ok').on('click', function () {
+                me._changeProjection(me._projectionSelect.val());
+            });
+
+            me._popup.dialog.find('.projection-change-button-cancel').off('click');
+            me._popup.dialog.find('.projection-change-button-cancel').on('click', function () {
+                me._toggleProjectionSelectionConfirmation(false);
+            });
+
+            // set default value
+            me._resetProjectionSelect();
         },
         /**
          * Generates the options for the projection change select based on config, or hides control if no options
@@ -107,11 +109,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          * @param {Object} popupContent
          */
         _populateProjectionSelect: function (select) {
-            var me = this,
-                keys = _.keys(me._config.supportedProjections).sort();
-            _.each(keys, function (key) {
-                var option = me._templates.projectionSelectOption.clone();
-                option.val(me._config.supportedProjections[key]);
+            const config = this._config || {};
+            const keys = Object.keys(config.supportedProjections || {}).sort();
+            keys.forEach((key) => {
+                var option = this._templates.projectionSelectOption.clone();
+                option.val(config.supportedProjections[key]);
                 option.html(key);
                 select.append(option);
             });
@@ -121,11 +123,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          * @method @private _toggleProjectionSelectionConfirmation
          */
         _toggleProjectionSelectionConfirmation: function (display) {
-            var me = this,
-                cssDisplay = display ? 'block' : 'none';
-            me._popup.dialog.find('.coordinate-tool-projection-change-confirmation').css('display', cssDisplay);
+            const cssDisplay = display ? 'block' : 'none';
+            this._popup.dialog.find('.coordinate-tool-projection-change-confirmation').css('display', cssDisplay);
             if (!display) {
-                me._resetProjectionSelect();
+                this._resetProjectionSelect();
             }
         },
         /**
@@ -133,8 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
          * @method @private _resetProjectionSelect
          */
         _resetProjectionSelect: function () {
-            var me = this,
-                currentProjection = me._mapmodule.getProjection();
+            const currentProjection = this._mapmodule.getProjection();
 
             // select the option with projection text
             jQuery(this._projectionSelect).find('option').filter(function () {

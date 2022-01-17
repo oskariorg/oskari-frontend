@@ -19,6 +19,18 @@ Setting hideMetadataXMLLink to true will hide metadata XML link (ISO 19139 XML -
 
 Setting hideMetaDataPrintLink to true will hide print link.
 
+
+## Requests the bundle handles
+
+<table class="table">
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MetadataSearchRequest</td><td>Make a metadata search query.</td>
+  </tr>
+</table>
+
 ## Requests the bundle sends out
 
 <table class="table">
@@ -51,6 +63,29 @@ Setting hideMetaDataPrintLink to true will hide print link.
   </tr>
   <tr>
     <td>'DrawTools.StopDrawingRequest'</td><td>Sends out when user stops data coverage rectangle drawing.</td>
+  </tr>
+</table>
+
+## Events the bundle listens to
+
+<table class="table">
+  <tr>
+    <th> Event </th><th> How does the bundle react</th>
+  </tr>
+  <tr>
+    <td> MetadataSearchResultEvent</td><td> Show metadata search results</td>
+  </tr>
+</table>
+
+
+## Events the bundle sends out
+
+<table class="table">
+  <tr>
+    <th> Event </th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> MetadataSearchResultEvent </td><td> Notifies that a metadata search has been performed and the result is accessible through the event </td>
   </tr>
 </table>
 

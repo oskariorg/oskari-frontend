@@ -18,8 +18,9 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
      */
     function (instance) {
         this.instance = instance;
-        this.announcementsHandler = new AnnouncementsHandler(this.instance);
-        this.announcementsHandler.addStateListener(() => this.render());
+        this.sandbox = instance.getSandbox();
+        this.service = null;
+        this.announcementsHandler = null;
         this.container = null;
     }, {
         /**
@@ -42,8 +43,19 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
          * @method startPlugin
          */
         startPlugin: function () {
-            this.render();
+            this.announcementsHandler !== null && this.render();
         },
+
+        /**
+        * Cretes AnnouncementsHandler with given service
+        * @method createAnnouncementsHandler
+        */
+        createAnnouncementsHandler: function (service) {
+            this.service = service;
+            this.announcementsHandler = new AnnouncementsHandler(this.service);
+            this.announcementsHandler.addStateListener(() => this.render());
+        },
+
         /**
          * @method render
          * Renders React content
