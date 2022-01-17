@@ -12,6 +12,10 @@ Oskari.registerLocalization({
                 cancel: 'Annullera sorteringen'
             }
         },
+        ColorPicker: {
+            tooltip: 'Välj färg',
+            moreColors: 'Mera färger'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',

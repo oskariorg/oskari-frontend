@@ -18,15 +18,7 @@ export const PointTab = ({ oskariStyle }) => {
                     >
                         <ColorPicker />
                     </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='image.fill.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
                 </Col>
-
             </Row>
 
             <Row>

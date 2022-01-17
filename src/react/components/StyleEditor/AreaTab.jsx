@@ -110,13 +110,6 @@ export const AreaTab = ({oskariStyle}) => {
                         >
                         <ColorPicker />
                     </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.area.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
                 </Col>
 
                 <Col span={ 10 } offset={ 2 }>
@@ -126,13 +119,6 @@ export const AreaTab = ({oskariStyle}) => {
                         label={ <Message messageKey='StyleEditor.fill.color' /> }
                         >
                         <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='fill.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
                     </Form.Item>
                 </Col>
             </Row>

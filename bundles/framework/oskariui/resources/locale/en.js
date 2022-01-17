@@ -12,6 +12,10 @@ Oskari.registerLocalization({
                 cancel: 'Click to cancel sorting'
             }
         },
+        ColorPicker: {
+            tooltip: 'Choose color',
+            moreColors: 'More colors'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Geometry type',
@@ -31,7 +35,7 @@ Oskari.registerLocalization({
                 shape: 'Icon',
                 size: 'Size',
                 fill: {
-                    color: 'Fill colour'
+                    color: 'Colour'
                 }
             },
             stroke: {

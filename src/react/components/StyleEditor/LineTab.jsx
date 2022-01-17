@@ -16,13 +16,6 @@ export const LineTab = (props) => {
                     >
                         <ColorPicker />
                     </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
                 </Col>
             </Row>
 
