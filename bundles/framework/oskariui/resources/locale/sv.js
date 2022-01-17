@@ -59,7 +59,10 @@ Oskari.registerLocalization({
             }
         },
         LocalizationComponent: {
+            otherLanguages: 'Andra språk',
+            othersTip: '',
             locale: {
+                generic: 'på ({0})',
                 fi: 'på finska',
                 en: 'på engelska',
                 sv: 'på svenska'

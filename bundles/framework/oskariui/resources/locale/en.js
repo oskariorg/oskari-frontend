@@ -59,7 +59,10 @@ Oskari.registerLocalization({
             }
         },
         LocalizationComponent: {
+            otherLanguages: 'Other languages',
+            othersTip: 'Translations will be shown when using the service in different languages.',
             locale: {
+                generic: 'in ({0})',
                 fi: 'in Finnish',
                 en: 'in English',
                 sv: 'in Swedish'
