@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @private
          * @param {Object} data
          */
-        _editUserLayer: function (data) {
+        _editUserLayerREMOVE: function (data) {
             var me = this;
             var styleForm;
             var form;
@@ -311,6 +311,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
             dialog.show(me.loc('tab.editLayer'), form, buttons);
+        },
+        _editUserLayer: function (data) {
+            const { id } = data;
+            var tokenIndex = id.lastIndexOf('_') + 1;
+            const idParam = parseInt(id.substring(tokenIndex));
+            const layer = this.instance.getMapLayerService().findMapLayer(id);
+            const values = {
+                locale: layer.getLocale(),
+                style: layer.getCurrentStyle().getFeatureStyle(),
+                id: idParam
+            };
+            this.instance.openLayerDialog(values);
         },
         /**
          * Displays a message on the screen

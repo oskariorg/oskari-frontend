@@ -1,3 +1,4 @@
+import { Messaging } from 'oskari-ui/util';
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService
  */
@@ -9,9 +10,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     const srsName = this.sandbox.getMap().getSrsName();
     this.urls.create = Oskari.urls.getRoute('CreateUserLayer', { srs: srsName });
     this.urls.get = Oskari.urls.getRoute('GetUserLayers', { srs: srsName });
-    this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
     // negative value for group id means that admin isn't presented with tools for it
     this.groupId = -1 * Oskari.getSeq('usergeneratedGroup').nextVal();
+    this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
+    this.log = Oskari.log('MyPlacesImportService');
 }, {
     __name: 'MyPlacesImport.MyPlacesImportService',
     __qname: 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
@@ -33,8 +35,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getFileImportUrl
      * @return {String}
      */
-    getFileImportUrl: function () {
-        return this.urls.create;
+    getFileImportUrl: function (sourceSrs) {
+        const url = this.urls.create;
+        if (sourceSrs) {
+            return url + '&sourceEpsg=EPSG:' + sourceSrs;
+        }
+        return url;
     },
     /**
      * Returns the url used to update layer.
@@ -42,10 +48,85 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getEditLayerUrl
      * @return {String}
      */
-    getEditLayerUrl: function () {
-        return this.urls.edit;
+    getEditLayerUrl: function (id) {
+        return Oskari.urls.getRoute('EditUserLayer', { id });
+    },
+    submitUserLayer: function (values, successCb, errorCb) {
+        const { sourceSrs, locale, style, file } = values || {};
+        const formData = new FormData();
+        formData.append('locale', JSON.stringify(locale));
+        formData.append('style', JSON.stringify(style));
+        formData.append('file', file);
+
+        fetch(this.getFileImportUrl(sourceSrs), {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok && response.status !== 400) {
+                // if bad request try to dig error code from json
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            if (json.error) {
+                const info = json.info || {};
+                throw Error(json.error, { cause: info.error });
+            }
+            this.instance.addUserLayer(json); // TODO move addUserLayer from instance to service (tab refresh)
+            this._showSuccess(this.loc('flyout.finish.success.message', { count: json.featuresCount }));
+            if (typeof successCb === 'function') {
+                successCb();
+            }
+        }).catch(error => {
+            this.log.error(error);
+            const errorKey = error.cause || 'generic';
+            this._showError(this.loc(`flyout.error.${errorKey}`));
+            if (typeof errorCb === 'function') {
+                // TODO: use errorCb to update layerform
+                errorCb();
+            }
+        });
     },
 
+    updateUserLayer: function (id, values, closeCb, errorCb) {
+        // const payload = { id, ...values };
+        fetch(this.getEditLayerUrl(id), {
+            method: 'POST',
+            body: JSON.stringify(values),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            this.updateLayer(id, json);
+            this._showSuccess(this.loc('tab.notification.editedMsg'));
+            if (typeof closeCb === 'function') {
+                closeCb();
+            }
+        }).catch(error => {
+            this.log.error(error);
+            this._showError(this.loc('tab.error.editMsg'));
+            if (typeof errorCb === 'function') {
+                // TODO enable layerform
+                errorCb();
+            }
+        });
+    },
+    _showError: function (content) {
+        Messaging.error({ content, duration: 10 });
+    },
+
+    _showSuccess: function (content) {
+        Messaging.success({ content, duration: 10 });
+    },
     /**
      * Retrieves the user layers (with the id param only the specified layer)
      * from the backend and adds them to the map layer service.

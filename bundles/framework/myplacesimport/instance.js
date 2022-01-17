@@ -1,3 +1,5 @@
+import { showLayerForm } from './LayerForm';
+
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance
  */
@@ -19,6 +21,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     this.mapLayerService = null;
     this.tab = undefined;
     this.layerType = 'userlayer';
+    this.popupControls = null;
+    this.popupCleanup = () => {
+        this.popupControls = null;
+    };
 }, {
     /**
      * Registers itself to the sandbox, creates the tab and the service
@@ -86,18 +92,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
      * @method startTool
      */
     startTool: function () {
-        var sandbox = this.getSandbox();
-        var reqBuilder = Oskari.requestBuilder('userinterface.UpdateExtensionRequest');
-        var toolbarReqBuilder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-
-        if (reqBuilder) {
-            // open the flyout
-            sandbox.request(this, reqBuilder(this, 'attach', this.getName()));
-        }
-
+        const toolbarReqBuilder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+        this.openLayerDialog();
         if (toolbarReqBuilder) {
             // ask toolbar to select the default tool
-            sandbox.request(this, toolbarReqBuilder());
+            this.getSandbox().request(this, toolbarReqBuilder());
         }
     },
     getMapLayerService: function () {
@@ -105,6 +104,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         }
         return this.mapLayerService;
+    },
+    openLayerDialog: function (values = {}) {
+        const { id } = values;
+        const isImport = !id;
+        const conf = {
+            maxSize: parseInt(this.conf.maxFileSizeMb),
+            isImport
+        };
+        const closeCb = () => this.closeLayerDialog();
+        const save = values => this.getService().submitUserLayer(values, closeCb);
+        const update = values => this.getService().updateUserLayer(id, values, closeCb);
+        // create popup
+        const onOk = isImport ? save : update;
+        this.popupControls = showLayerForm(values, conf, onOk, this.popupCleanup);
+    },
+    closeLayerDialog: function () {
+        if (!this.popupControls) {
+            return;
+        }
+        this.popupControls.close();
+        this.popupControls = null;
     },
     /**
      * Adds the user layer to the map layer service and to the map.
