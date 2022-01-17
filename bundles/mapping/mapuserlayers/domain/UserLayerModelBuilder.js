@@ -21,8 +21,7 @@ Oskari.clazz.define(
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
-            layer.setDescription(mapLayerJson.description);
-            layer.setSource(mapLayerJson.source);
+            layer.setLocale(mapLayerJson.locale);
         }
     }
 );
