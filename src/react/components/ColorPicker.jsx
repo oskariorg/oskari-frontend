@@ -93,5 +93,5 @@ export const ColorPicker = (props) => {
 
 ColorPicker.propTypes = {
     value: PropTypes.string,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func
 };
