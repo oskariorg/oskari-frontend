@@ -12,11 +12,15 @@ const PaddedInput = styled(TextInput)`
     margin-bottom: 10px;
 `;
 
-const getPlaceholders = (defaultLang) => {
+const getPlaceholders = () => {
     const localizedFields = { name: Oskari.getMsg(LOCALE_KEY, 'categoryform.layerName') };
-    const placeholders = createLocalizedLabels(localizedFields);
-    placeholders[defaultLang].name = placeholders[defaultLang].name + ' *'; // add mandatory mark
-    return placeholders;
+    return createLocalizedLabels(localizedFields);
+};
+
+const getMandatory = (defaultLang) => {
+    const mandatory = {};
+    mandatory[defaultLang] = ['name'];
+    return mandatory;
 };
 
 export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
@@ -43,10 +47,11 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
             okText={ <Message messageKey="buttons.save" /> }
         >
             <LocalizationComponent
-                placeholders={ getPlaceholders(defaultLang) }
+                placeholders={ getPlaceholders() }
                 value={ locale }
                 languages={ Oskari.getSupportedLanguages() }
                 onChange={ updateLocale }
+                mandatoryFields = { getMandatory(defaultLang) }
             >
                 <PaddedInput type='text' name='name' />
             </LocalizationComponent>
