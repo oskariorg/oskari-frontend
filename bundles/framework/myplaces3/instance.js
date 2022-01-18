@@ -278,13 +278,13 @@ Oskari.clazz.define(
         openAddLayerDialog: function () {
             // create popup
             const handler = this.categoryHandler;
-            const saveLayer = (name, style) => {
+            const saveLayer = (locale, style) => {
                 handler.saveCategory({
-                    name,
+                    locale,
                     style
                 });
             };
-            showModal(this.loc('tab.addCategoryFormButton'), null, saveLayer);
+            showModal({}, null, saveLayer);
         }
     }, {
         /**

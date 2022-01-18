@@ -181,15 +181,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         editCategory: function (categoryId) {
-            const layer = this.getCategory(categoryId);
-            const saveLayer = (name, style) => {
+            const layer = this.mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
+            const saveLayer = (locale, style) => {
                 this.saveCategory({
-                    ...layer,
-                    name,
+                    id: categoryId,
+                    locale,
                     style
                 });
             };
-            showModal(layer.name, layer.style, saveLayer);
+            const names = { ...layer._name }; // TODO: getter?
+            const locale = Object.keys(names).reduce((locale, lang) => {
+                locale[lang] = { name: names[lang] };
+                return locale;
+            }, {});
+            const style = layer.getCurrentStyle().getFeatureStyle();
+            showModal(locale, style, saveLayer);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
