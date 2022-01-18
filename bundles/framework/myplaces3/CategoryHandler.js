@@ -232,12 +232,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             dialog.show(title, message, [okBtn]);
         },
         saveCategory: function (category, callback) {
-            const id = category.categoryId;
+            const { id, locale, isDefault, style } = category;
             const data = {
                 id,
-                name: category.name,
-                isDefault: category.isDefault,
-                style: JSON.stringify(category.style)
+                isDefault,
+                locale: JSON.stringify(locale),
+                style: JSON.stringify(style)
             };
             this.instance.getService().commitCategory(data, layerJson => {
                 const isNew = !id;
