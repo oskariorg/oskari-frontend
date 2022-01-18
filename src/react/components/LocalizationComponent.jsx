@@ -12,6 +12,26 @@ const StyledTooltip = styled(Tooltip)`
     float: right;
 `;
 
+export const createLocalizedLabels = (fields, languages = Oskari.getSupportedLanguages()) => {
+    const labels = {};
+    languages.forEach((lang, index) => {
+        if (index === 0 && lang === Oskari.getLang()) {
+            labels[lang] = fields;
+            return;
+        }
+        const path = `LocalizationComponent.locale.${lang}`;
+        let locale = Oskari.getMsg('oskariui', path);
+        if (path === locale) {
+            locale = Oskari.getMsg('oskariui', 'LocalizationComponent.locale.generic', [lang]);
+        }
+        labels[lang] = Object.keys(fields).reduce((langLabels,field) => {
+            langLabels[field]=`${fields[field]} ${locale}`;
+            return langLabels;
+        }, {});
+    });
+    return labels;
+};
+
 const getMsg = path => <Message messageKey={`LocalizationComponent.${path}`} bundleKey='oskariui'/>;
 
 const getInitialValue = (languages, value, isSingle) => {
@@ -142,7 +162,7 @@ export const LocalizationComponent = ({
         });
 
         return (
-            <React.Fragment>
+            <React.Fragment key={`${lang}_${index}`}>
                 {addDivider && renderDivider(lang)}
                 {nodes}
             </React.Fragment>
