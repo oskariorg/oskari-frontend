@@ -58,20 +58,15 @@ const getContent = (props) => {
         </StyledColorPicker>
     );
 };
-const getIcon = value => {
-    const style = {
-        fontSize: '20px',
-        color: Oskari.util.isDarkColor(value) ? '#FFFFFF' :'#000000'
-    };
-    return (
-        <BgColorsOutlined style = {style}/>
-    );
-};
-
 
 export const ColorPicker = (props) => {
-    const { value = '#000000' } = props;
+    const { value = '#000000', disabled = false } = props;
     const [visible, setVisible] = useState(false);
+    const chooseIconStyle = {
+        fontSize: '20px',
+        color: disabled || Oskari.util.isDarkColor(value) ? '#FFFFFF' :'#000000'
+    };
+    const chooseTooltip = disabled ? '' : <Message messageKey={`ColorPicker.tooltip`}/>;
     return (
         <React.Fragment>
             <Popover
@@ -82,16 +77,19 @@ export const ColorPicker = (props) => {
                 zIndex={zIndex}
                 onVisibleChange = {setVisible}
                 >
-            <Tooltip title={<Message messageKey='ColorPicker.tooltip' />}>
-                <ChooseColor style={{background: value}} icon={getIcon(value)}/>
+            <Tooltip title={chooseTooltip}>
+                <ChooseColor style={{ background: value }} disabled={disabled} >
+                    <BgColorsOutlined style={chooseIconStyle}/>
+                </ChooseColor>
             </Tooltip>
             </Popover>
-            <ColorTextInput { ...props }/>
+            {!disabled && <ColorTextInput { ...props }/> }
         </React.Fragment>
     );
 }
 
 ColorPicker.propTypes = {
     value: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool
 };
