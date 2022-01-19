@@ -25,6 +25,9 @@ Oskari.registerLocalization({
                 lineTab: 'Linje',
                 areaTab: 'Området'
             },
+            tooltips: {
+                noFillColor: 'Vänligen välj först ett annat mönster'
+            },
             fill: {
                 color: 'Ifyllnadsfärg för område',
                 area: {

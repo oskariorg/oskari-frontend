@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
+const { TRANSPARENT_FILL } = constants;
+
 const TabSelector = styled(Radio.Group)`
     &&& {
         display: flex;
@@ -45,9 +47,9 @@ const FormSpace = styled(Space)`
  const styleExceptionHandler = (exceptionStyle) => {
     // if fill pattern is set to null, set color as empty
     if (typeof exceptionStyle.fill.area.pattern !== 'undefined') {
-        if (exceptionStyle.fill.area.pattern === 4) {
+        if (exceptionStyle.fill.area.pattern === TRANSPARENT_FILL) {
             exceptionStyle.fill.color = '';
-        } else if (exceptionStyle.fill.area.pattern !== 4 && exceptionStyle.fill.color === '') {
+        } else if (exceptionStyle.fill.area.pattern !== TRANSPARENT_FILL && exceptionStyle.fill.color === '') {
             exceptionStyle.fill.color = OSKARI_BLANK_STYLE.fill.color;
         }
     }
