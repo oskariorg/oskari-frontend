@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
+import { ColorPicker, Message, Tooltip } from 'oskari-ui';
 import { SvgRadioButton, SizeControl, constants } from './index';
 import { Form, Row, Col } from 'antd';
 
@@ -98,7 +98,10 @@ export const AreaTab = ({oskariStyle}) => {
             ...item,
             data: item.data(counter)
     }});
+    const isTransparentFill = Oskari.util.keyExists(oskariStyle, 'fill.area.pattern')
+        && oskariStyle.fill.area.pattern === constants.TRANSPARENT_FILL;
 
+    const fillColorTooltip = isTransparentFill ? <Message messageKey='StyleEditor.tooltips.noFillColor' /> : '';
     return (
         <React.Fragment>
             <Row>
@@ -113,13 +116,15 @@ export const AreaTab = ({oskariStyle}) => {
                 </Col>
 
                 <Col span={ 10 } offset={ 2 }>
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='fill.color'
-                        label={ <Message messageKey='StyleEditor.fill.color' /> }
-                        >
-                        <ColorPicker />
-                    </Form.Item>
+                    <Tooltip title={fillColorTooltip} placement='topLeft'>
+                        <Form.Item
+                            { ...constants.ANTD_FORMLAYOUT }
+                            name='fill.color'
+                            label={ <Message messageKey='StyleEditor.fill.color' /> }
+                            >
+                            <ColorPicker disabled={isTransparentFill} />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
 
