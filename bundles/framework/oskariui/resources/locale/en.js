@@ -25,6 +25,9 @@ Oskari.registerLocalization({
                 lineTab: 'Line',
                 areaTab: 'Area'
             },
+            tooltips: {
+                noFillColor: 'Please select a different fill pattern first'
+            },
             fill: {
                 color: 'Fill colour',
                 area: {

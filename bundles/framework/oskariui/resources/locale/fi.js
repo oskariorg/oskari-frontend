@@ -26,6 +26,9 @@ Oskari.registerLocalization({
                 lineTab: 'Viiva',
                 areaTab: 'Alue'
             },
+            tooltips: {
+                noFillColor: 'Valitse ensin joku muu täyttökuvio'
+            },
             fill: {
                 color: 'Täyttöväri',
                 area: {
