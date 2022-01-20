@@ -23,6 +23,9 @@ const getMandatory = (defaultLang) => {
     return mandatory;
 };
 
+// name in default language is mandatory
+const validate = (lang, value) => lang !== Oskari.getDefaultLanguage() || (typeof value === 'string' && value.trim().length > 0);
+
 export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
     const [editorState, setEditorState] = useState({
         style: initStyle || OSKARI_BLANK_STYLE,
@@ -53,7 +56,7 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
                 onChange={ updateLocale }
                 mandatoryFields = { getMandatory(defaultLang) }
             >
-                <PaddedInput type='text' name='name' />
+                <PaddedInput type='text' name='name' validate={validate}/>
             </LocalizationComponent>
             <Divider orientation="left"><Message messageKey={ 'categoryform.styleTitle' } /></Divider>
             <StyleEditor
