@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined, StarTwoTone } from '@ant-design/icons';
 
 const Label = styled('div')`
     display: inline-block;
@@ -149,13 +149,15 @@ export const LocalizationComponent = ({
             let elementValue = single ? internalValue[lang] : internalValue[lang][name];
             let label = getLabel(labels, lang, name, single);
             const placeholder = getPlaceholder(placeholders, lang, name, single);
+            const { validate, ...rest } = element.props; // don't pass validate to element node
+            const suffix = typeof validate === 'function' && !validate(lang, elementValue) ? <StarTwoTone twoToneColor={'#da5151'}/> : '';
             return (
                 <React.Fragment key={`${lang}_${index}`}>
                     { label &&
                         <LabelComponent>{ label }</LabelComponent>
                     }
                     <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholder } trigger={ ['focus', 'hover'] }>
-                        <element.type {...element.props} value={elementValue} onChange={onElementValueChange} placeholder={placeholder} autoComplete='off' />
+                        <element.type {...rest} value={elementValue} onChange={onElementValueChange} placeholder={placeholder} autoComplete='off' suffix={suffix}/>
                     </Tooltip>
                 </React.Fragment>
             );
