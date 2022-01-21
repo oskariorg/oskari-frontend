@@ -8,11 +8,13 @@ import { LayerFormContent } from './LayerFormContent';
 
 export const showLayerForm = (values, conf, onOk, onClose) => {
     const { maxSize, isImport } = conf;
-    return showPopup(
-        <Message messageKey="flyout.title" bundleKey={LOCALE_KEY} />,
-        (<LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
+    const content = (
+        <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
             <LayerFormContent values={values} isImport={isImport} onOk={onOk} maxSize={maxSize}/>
-        </LocaleProvider>), onClose);
+        </LocaleProvider>
+    );
+    const title = <Message messageKey="flyout.title" bundleKey={LOCALE_KEY} />;
+    return showPopup(title, content, onClose);
 };
 
 showLayerForm.propTypes = {
