@@ -75,7 +75,7 @@ export const FileInput = ({
         // Special case for single option to override existing file
         if (!multiple && inputFiles.length === 1) {
             const file = inputFiles[0];
-            if(validate(file)){
+            if (validate(file)) {
                 onFiles([file]);
                 setFiles([file]);
             }
@@ -87,7 +87,7 @@ export const FileInput = ({
             return;
         }
         const validFiles = [];
-        //FileList doesn't have filter
+        // FileList (not array) doesn't have filter, use forEach to filter valid files
         inputFiles.forEach(file => validate(file) && validFiles.push(file));
         const files = [...currentFiles, ...validFiles];
         onFiles(files);
@@ -95,12 +95,12 @@ export const FileInput = ({
     };
 
     const validate = file => {
-        const validType = allowedTypes.length ? allowedTypes.includes(file.type) : true;
+        const validType = !allowedTypes.length || allowedTypes.includes(file.type);
         if (!validType) {
             showError('invalidType');
         }
         const validSize = file.size < (maxSize * 1024 * 1024);
-        if(!validSize) {
+        if (!validSize) {
             showError('fileSize', { maxSize });
         }
         return validType && validSize;
