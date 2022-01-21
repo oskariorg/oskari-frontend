@@ -4,6 +4,9 @@ import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 import { QuestionCircleOutlined, StarTwoTone } from '@ant-design/icons';
 
+const BUNDLE_KEY = 'oskariui';
+const COMPONENT_KEY = 'LocalizationComponent';
+
 const Label = styled('div')`
     display: inline-block;
 `;
@@ -12,27 +15,16 @@ const StyledTooltip = styled(Tooltip)`
     float: right;
 `;
 
-export const createLocalizedLabels = (fields, languages = Oskari.getSupportedLanguages()) => {
-    const labels = {};
-    languages.forEach((lang, index) => {
-        if (index === 0 && lang === Oskari.getLang()) {
-            labels[lang] = fields;
-            return;
-        }
-        const path = `LocalizationComponent.locale.${lang}`;
-        let locale = Oskari.getMsg('oskariui', path);
-        if (path === locale) {
-            locale = Oskari.getMsg('oskariui', 'LocalizationComponent.locale.generic', [lang]);
-        }
-        labels[lang] = Object.keys(fields).reduce((langLabels,field) => {
-            langLabels[field]=`${fields[field]} ${locale}`;
-            return langLabels;
-        }, {});
-    });
-    return labels;
-};
+const getMsg = path => <Message messageKey={`${COMPONENT_KEY}.${path}`} bundleKey={BUNDLE_KEY}/>;
 
-const getMsg = path => <Message messageKey={`LocalizationComponent.${path}`} bundleKey='oskariui'/>;
+const getLangSuffix = lang => {
+    const path = `${COMPONENT_KEY}.locale.${lang}`;
+    let suffix = Oskari.getMsg(BUNDLE_KEY, path);
+    if (suffix === path) {
+        suffix = Oskari.getMsg(BUNDLE_KEY, `${COMPONENT_KEY}.locale.generic`, [lang]);
+    }
+    return suffix;
+};
 
 const getInitialValue = (languages, value, isSingle) => {
     const initialValue = value || {};
@@ -63,15 +55,11 @@ const getLabel = (labels, lang, elementName, isSingle) => {
     }
     return label;
 };
-const getPlaceholder = (placeholders, lang, elementName, isSingle) => {
-    if (!placeholders) {
+const getPlaceholderWithLangSuffix = (placeholder, lang) => {
+    if (!placeholder) {
         return '';
     }
-    let value = placeholders[lang];
-    if (value && !isSingle) {
-        value = value[elementName];
-    }
-    return value || '';
+    return placeholder + ' ' + getLangSuffix(lang);
 };
 const getElementValueChangeHandler = (values, lang, elementName, isSingle, setValue, onChange) => {
     if (!isSingle && !elementName) {
@@ -92,12 +80,9 @@ const getElementValueChangeHandler = (values, lang, elementName, isSingle, setVa
 };
 
 const renderDivider = lang => {
-    const msg = getMsg(`locale.${lang}`);
-    // TODO how to fallback to generic message. Add fallback key or fail if missing optional prop to Message. or Oskari.getMsg()
-    // Message messageKey={`LocalizationComponent.locale.generic`} bundleKey='oskariui' messageArgs={[lang]}/>
     return (
         <Divider orientation="left">
-            {msg}
+            { getLangSuffix(lang) }
         </Divider>
     );
 };
@@ -137,7 +122,8 @@ export const LocalizationComponent = ({
     }, [languages, value, single]);
 
     const localizedElements = languages.map((lang, index) => {
-        const addDivider = index !== 0 && showDivider;
+        const isDefaultLang = index === 0;
+        const addDivider = showDivider && !isDefaultLang; // add dividers only to CollapsePanel
         const nodes = React.Children.toArray(children).map((element, index) => {
             if (!React.isValidElement(element)) {
                 // Text or some other non-react node.
@@ -148,16 +134,17 @@ export const LocalizationComponent = ({
                 getElementValueChangeHandler(internalValue, lang, name, single, setInternalValue, onChange);
             let elementValue = single ? internalValue[lang] : internalValue[lang][name];
             let label = getLabel(labels, lang, name, single);
-            const placeholder = getPlaceholder(placeholders, lang, name, single);
-            const { validate, ...rest } = element.props; // don't pass validate to element node
-            const suffix = typeof validate === 'function' && !validate(lang, elementValue) ? <StarTwoTone twoToneColor={'#da5151'}/> : '';
+
+            const { required = [], placeholder = '', ...restProps } = element.props; // don't pass required and placeholder to element node
+            const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
+            const suffix = required.includes(lang) ? <StarTwoTone twoToneColor={'#da5151'}/> : '';
             return (
                 <React.Fragment key={`${lang}_${index}`}>
                     { label &&
                         <LabelComponent>{ label }</LabelComponent>
                     }
-                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholder } trigger={ ['focus', 'hover'] }>
-                        <element.type {...rest} value={elementValue} onChange={onElementValueChange} placeholder={placeholder} autoComplete='off' suffix={suffix}/>
+                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholderWithSuffix } trigger={ ['focus', 'hover'] }>
+                        <element.type {...restProps} value={elementValue} onChange={onElementValueChange} placeholder={placeholderWithSuffix} autoComplete='off' suffix={suffix}/>
                     </Tooltip>
                 </React.Fragment>
             );
