@@ -54,6 +54,29 @@ Oskari.registerLocalization({
                     width: 'Line width'
                 }
             }
-        }        
+        },
+        FileInput: {
+            drag: 'Drag {maxCount, plural, one {a file} other {files}} here or select by browsing.',
+            noFiles: 'No file selected.',
+            error: {
+                invalidType: 'File format is not allowed.',
+                allowedExtensions: 'Allowed file extensions: {allowedExtensions}.',
+                multipleNotAllowed: 'Only single file is allowed to be uploaded.',
+                fileSize: 'The selected file is too large. It can be at most {maxSize, number} Mb.'
+            }
+        },
+        LocalizationComponent: {
+            otherLanguages: 'Other languages',
+            othersTip: 'Translations will be shown when using the service in different languages.',
+            locale: {
+                generic: 'in ({0})',
+                fi: 'in Finnish',
+                en: 'in English',
+                sv: 'in Swedish'
+            }
+        },
+        Spin: {
+            loading: 'Loading...'
+        }
     }
 });
