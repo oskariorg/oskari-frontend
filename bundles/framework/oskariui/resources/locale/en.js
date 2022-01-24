@@ -12,6 +12,10 @@ Oskari.registerLocalization({
                 cancel: 'Click to cancel sorting'
             }
         },
+        ColorPicker: {
+            tooltip: 'Choose color',
+            moreColors: 'More colors'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Geometry type',
@@ -20,6 +24,9 @@ Oskari.registerLocalization({
                 pointTab: 'Point',
                 lineTab: 'Line',
                 areaTab: 'Area'
+            },
+            tooltips: {
+                noFillColor: 'Please select a different fill pattern first'
             },
             fill: {
                 color: 'Fill colour',
@@ -31,7 +38,7 @@ Oskari.registerLocalization({
                 shape: 'Icon',
                 size: 'Size',
                 fill: {
-                    color: 'Fill colour'
+                    color: 'Colour'
                 }
             },
             stroke: {
@@ -47,6 +54,29 @@ Oskari.registerLocalization({
                     width: 'Line width'
                 }
             }
-        }        
+        },
+        FileInput: {
+            drag: 'Drag {maxCount, plural, one {a file} other {files}} here or select by browsing.',
+            noFiles: 'No file selected.',
+            error: {
+                invalidType: 'File format is not allowed.',
+                allowedExtensions: 'Allowed file extensions: {allowedExtensions}.',
+                multipleNotAllowed: 'Only single file is allowed to be uploaded.',
+                fileSize: 'The selected file is too large. It can be at most {maxSize, number} Mb.'
+            }
+        },
+        LocalizationComponent: {
+            otherLanguages: 'Other languages',
+            othersTip: 'Translations will be shown when using the service in different languages.',
+            locale: {
+                generic: 'in ({0})',
+                fi: 'in Finnish',
+                en: 'in English',
+                sv: 'in Swedish'
+            }
+        },
+        Spin: {
+            loading: 'Loading...'
+        }
     }
 });

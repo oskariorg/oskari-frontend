@@ -12,6 +12,10 @@ Oskari.registerLocalization({
                 cancel: 'Annullera sorteringen'
             }
         },
+        ColorPicker: {
+            tooltip: 'Välj färg',
+            moreColors: 'Mera färger'
+        },
         StyleEditor: {
             subheaders: {
                 styleFormat: 'Typ av geometri',
@@ -20,6 +24,9 @@ Oskari.registerLocalization({
                 pointTab: 'Punkten',
                 lineTab: 'Linje',
                 areaTab: 'Området'
+            },
+            tooltips: {
+                noFillColor: 'Vänligen välj först ett annat mönster'
             },
             fill: {
                 color: 'Ifyllnadsfärg för område',
@@ -47,6 +54,29 @@ Oskari.registerLocalization({
                     width: 'Linjens bredd'
                 }
             }
-        }        
+        },
+        FileInput: {
+            drag: 'Dra {maxCount, plural, one {fil} other {filerna}} hit, eller välj genom att bläddra.',
+            noFiles: 'Ingen fil vald.',
+            error: {
+                invalidType: 'Filformatet är inte tillåtet.',
+                allowedExtensions: 'Tillåtna filändelser: {allowedExtensions}.',
+                multipleNotAllowed: 'Endast en fil kan laddas upp.',
+                fileSize: 'Den valda filen är för stor. Den högsta tillåtna storleken är {maxSize, number} Mb.'
+            }
+        },
+        LocalizationComponent: {
+            otherLanguages: 'Andra språk',
+            othersTip: '',
+            locale: {
+                generic: 'på ({0})',
+                fi: 'på finska',
+                en: 'på engelska',
+                sv: 'på svenska'
+            }
+        },
+        Spin: {
+            loading:'Laddar...'
+        }
     }
 });

@@ -12,6 +12,10 @@ Oskari.registerLocalization({
                 cancel: 'Peruuta lajittelu'
             }
         },
+        ColorPicker: {
+            tooltip: 'Valitse väri',
+            moreColors: 'Enemmän värejä'
+        },
         StyleEditor: {
             newtitle: 'Uusi tyyli',
             subheaders: {
@@ -21,6 +25,9 @@ Oskari.registerLocalization({
                 pointTab: 'Piste',
                 lineTab: 'Viiva',
                 areaTab: 'Alue'
+            },
+            tooltips: {
+                noFillColor: 'Valitse ensin joku muu täyttökuvio'
             },
             fill: {
                 color: 'Täyttöväri',
@@ -32,7 +39,7 @@ Oskari.registerLocalization({
                 shape: 'Symboli',
                 size: 'Koko',
                 fill: {
-                    color: 'Täyttöväri'
+                    color: 'Väri'
                 }
             },
             stroke: {
@@ -48,6 +55,29 @@ Oskari.registerLocalization({
                     width: 'Viivan paksuus'
                 }
             }
+        },
+        FileInput: {
+            drag: 'Raahaa {maxCount, plural, one {tiedosto} other {tiedostot}} tähän tai valitse selaamalla.',
+            noFiles: 'Ei tiedostoja.',
+            error: {
+                invalidType: 'Tiedostomuoto ei ole sallittu.',
+                allowedExtensions: 'Sallitut tiedostopäätteet: {allowedExtensions}.',
+                multipleNotAllowed: 'Anna vain yksi tiedosto.',
+                fileSize: 'Tiedoston koko on liian suuri. Suurin sallittu koko yksittäiselle tiedostolle on {maxSize, number} Mt.'
+            }
+        },
+        LocalizationComponent: {
+            otherLanguages: 'Muut kielet',
+            othersTip: 'Käännökset näytetään käytettäessä palvelua eri kielillä.',
+            locale: {
+                generic: 'kielellä ({0})',
+                fi: 'suomeksi',
+                en: 'englanniksi',
+                sv: 'ruotsiksi'
+            }
+        },
+        Spin: {
+            loading: 'Ladataan...'
         }
     }
 });

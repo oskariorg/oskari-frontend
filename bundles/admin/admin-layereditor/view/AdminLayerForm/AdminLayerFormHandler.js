@@ -486,7 +486,7 @@ class UIHandler extends StateHandler {
         this.updateState({ tab });
     }
 
-    resetLayer () {
+    resetForm () {
         const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -495,6 +495,19 @@ class UIHandler extends StateHandler {
             propertyFields: [],
             tab: DEFAULT_TAB
         });
+    }
+
+    resetLayer (keepCapabilities) {
+        const typesAndRoles = this.getAdminMetadata();
+        const newState = {
+            layer: this.layerHelper.createEmpty(typesAndRoles.roles),
+            versions: [],
+            propertyFields: []
+        };
+        if (!keepCapabilities) {
+            newState.capabilities = {};
+        }
+        this.updateState(newState);
     }
 
     ajaxStarted () {
@@ -553,9 +566,10 @@ class UIHandler extends StateHandler {
     fetchLayer (id, keepCapabilities = false) {
         if (!id) {
             // adding new layer
-            this.resetLayer();
+            this.resetForm();
             return;
         }
+        this.resetLayer(keepCapabilities);
         this.ajaxStarted();
         fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
             method: 'GET',
@@ -565,7 +579,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error(getMessage('messages.errorFetchLayerFailed'));
+                throw new Error(response.statusText);
             }
             return response.json();
         }).then(json => {
@@ -594,6 +608,9 @@ class UIHandler extends StateHandler {
             }
             this.updateState(newState);
             this.validateCapabilities();
+        }).catch(error => {
+            Messaging.error(getMessage('messages.errorFetchLayerFailed'));
+            this.log.error(error);
         });
     }
 
@@ -901,7 +918,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             if (response.ok) {
                 // TODO: handle this somehow/close the flyout?
-                this.resetLayer();
+                this.resetForm();
                 this.mapLayerService.removeLayer(layer.id);
             } else {
                 Messaging.error(getMessage('messages.errorRemoveLayer'));
@@ -1040,7 +1057,7 @@ class UIHandler extends StateHandler {
                 const currentLayer = this.getState().layer;
                 this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
                 this.updateState({
-                    currentLayer,
+                    layer: currentLayer,
                     loading: this.isLoading(),
                     metadata: data
                 });

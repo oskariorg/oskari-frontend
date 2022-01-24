@@ -1,5 +1,56 @@
 # Release Notes
 
+## 2.6.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/34?closed=1
+
+### Map module
+
+- New function: getVectorFeatures() that returns the vector features currently in the map viewport. Takes parameters like geometry and properties to filter the features. Code that shows feature properties in an object data table etc have been refactored to use this function instead. More details: https://github.com/oskariorg/oskari-frontend/pull/1696
+- New event: DataForMapLocationEvent. The event is used to notify with the result of a map click that is used for rendering the "GetFeatureInfo" style result for the user. Now it's possible to render the result on the embedding page (requires GFI to be enabled on the embedded map).
+- GetFeatureInfoPlugin can now be configured to NOT show the GFI-result. This makes the plugin only trigger the DataForMapLocationEvent and let external code to generate the UI for GFI responses for the user.
+
+### RPC/embedded maps
+
+- The map modules getVectorFeatures() function is available through RPC making it possible to get a list of vector features from WFS/OGC API layers on an embedded map.
+- New option for GFI-tool on publisher to enable GFI without showing the results automatically on the map. Allowing the embedding page to render the result by listening to DataForMapLocationEvent.
+- New request: MetadataSearchRequest to query service metadata through RPC. The result is returned with a new event: MetadataSearchResultEvent. More details: https://github.com/oskariorg/oskari-frontend/pull/1717
+- getAllLayers() function now also returns the data block from layer attributes. This can include localized names for fields etc. It also includes metadataIdentifier if the layer has one.
+- Enabled more requests to be used via RPC API: RearrangeSelectedMapLayerRequest and ChangeMapLayerStyleRequest.
+- Enabled sending options for `SearchRequest`. See https://github.com/oskariorg/oskari-frontend/pull/1688 for details.
+- The `showMeasureOnMap` flag now works on `StartDrawingRequest` when modifying features.
+
+### Improved metadata support for statistical maps
+
+- The UI for showing metadata was refactored from jQuery to React. Also it's now draggable.
+- The UI now shows dates for last and next update for the data if the information is available for given indicator.
+- The style for how data of an indicator should be visualized on the map/classification can now be configured in the metadata (color scheme and choropleth/points style) instead of always defaulting to choropleth.
+
+### Other fixes
+
+- Enabled measurement results for features drawn by users when the draw type is "Box".
+- Improvements for the vector feature style editor.
+- The default search UI for geoportals has been rewritten using React  (previously jQuery implementation).
+- Fixed an issue where WMS layer style was not sent in GFI requests resulting in responses for default style instead of the one user was seeing.
+- Most of the restrictions was removed from search UI: https://github.com/oskariorg/oskari-frontend/pull/1705
+- GFI layerformatters are now available for WFS layers (previously only WMS) for customizing GFI display
+- Fixed an issue where generated layer groups (like for user generated content) were not always shown in layerlisting depending on what bundles the app was using.
+- Fixed an error preventing map layer legend functionality from being shown on the embedded map: https://github.com/oskariorg/oskari-docs/issues/252
+- Fixed an issue where dashed lines were not triggering click/hover events on the gaps of the line.
+- `printout.PrintMapRequest` works again -> allows opening the printout UI when the functionality is part of the app.
+- Fix for global legend when a layer has no styles.
+- Removed unused events/dead code: https://github.com/oskariorg/oskari-frontend/pull/1690
+- Improvements on the vector feature label handling.
+- Fixed an issue regarding layer opacity in URL/links to the map.
+- Lodash usage reduced (in order to remove it at some point)
+- Added a publisher tool for admins to select instance announcements to be shown on a single embedded map (the one they are publishing/editing with publisher).
+- Added initial implementation for showing React-based popups and flyouts:
+https://github.com/oskariorg/oskari-frontend/pull/1680
+- A generic ErrorBoundary component for React was added for oskari-ui/util: https://github.com/oskariorg/oskari-frontend/pull/1713
+- The layer admin functionality for timeseries layers now cleans up unnecessary config when admin switches the UI options. Previously the "range" UI option could leave the layer in misconfigured state: https://github.com/oskariorg/oskari-docs/issues/260.
+- Other smaller fixes
+
 ## 2.5.1
 
 For a full list of changes see:

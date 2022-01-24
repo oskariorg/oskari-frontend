@@ -40,7 +40,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setLayer (layer) {
         if (!layer) {
-            this.uiHandler.resetLayer();
+            this.uiHandler.resetForm();
         } else {
             this.uiHandler.fetchLayer(layer.getId());
         }
