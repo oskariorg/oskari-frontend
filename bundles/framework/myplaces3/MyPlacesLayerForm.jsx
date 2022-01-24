@@ -24,10 +24,6 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
     const hasName = Oskari.util.keyExists(locale, `${defaultLang}.name`) && locale[defaultLang].name.trim().length > 0;
 
     const placeholder = Oskari.getMsg(LOCALE_KEY, 'categoryform.layerName');
-    const required = [];
-    if (!hasName) {
-        required.push(defaultLang);
-    }
     // TODO: show warning in button tooltip
     // { !hasName && <Message messageKey='validation.categoryName' /> }
 
@@ -47,7 +43,7 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
                 languages={ Oskari.getSupportedLanguages() }
                 onChange={ updateLocale }
             >
-                <PaddedInput type='text' name='name' placeholder={placeholder} required={required} />
+                <PaddedInput type='text' name='name' placeholder={placeholder} mandatory={[defaultLang]} />
             </LocalizationComponent>
             <Divider orientation="left"><Message messageKey={ 'categoryform.styleTitle' } /></Divider>
             <StyleEditor
