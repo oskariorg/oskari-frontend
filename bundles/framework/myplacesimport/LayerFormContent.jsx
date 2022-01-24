@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Collapse, CollapsePanel, Message, TextInput, Button, Tooltip } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, TextInput, Button, Tooltip, Spin } from 'oskari-ui';
 import { FileInput } from 'oskari-ui/components/FileInput';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
@@ -31,41 +31,26 @@ const Description = styled('div')`
 const renderImport = (confMaxSize, updateFile) => {
     const { maxSize: defaultMaxSize, ...props } = FILE_INPUT_PROPS;
     const maxSize = confMaxSize || defaultMaxSize;
-    const desc = Oskari.getMsg(LOCALE_KEY, 'flyout.description', { maxSize });
     return (
         <React.Fragment>
-            <Description dangerouslySetInnerHTML={{ __html: desc }}/>
+            <Description>
+                <Message messageKey='flyout.description' messageArgs={{ maxSize }} allowHTML={true} />
+            </Description>
             <FileInput onFiles={updateFile} maxSize={maxSize} { ...props } />
         </React.Fragment>
     );
 };
+const getPlaceholder = name => Oskari.getMsg(LOCALE_KEY, `flyout.layer.${name}`);
 
-const getLabels = languages => {
-    const getMsg = Oskari.getMsg.bind(null, LOCALE_KEY);
-    const getLocale = Oskari.getMsg.bind(null, 'oskariui');
-    const labels = {};
-    const userLang = Oskari.getLang();
-    languages.forEach((lang, index) => {
-        const locale = getLocale(`LocalizationComponent.locale.${lang}`);
-        const isDefaultLang = index === 0;
-        const mandatory = isDefaultLang ? ' (*)' : '';
-        // don't add suffix if userLang is first (default) language
-        const suffix = isDefaultLang && lang === userLang ? '' : ` ${locale}`;
-        labels[lang] = {
-            name: getMsg('flyout.layer.name') + suffix + mandatory,
-            desc: getMsg('flyout.layer.desc') + suffix,
-            source: getMsg('flyout.layer.source') + suffix
-        };
-    });
-    return labels;
-};
-
-const getButtonTooltip = (hasName, hasFile) => {
+const getValidationMessage = errorKeys => {
+    if (!errorKeys.length) {
+        return '';
+    }
     return (
-        <React.Fragment>
-            {!hasName && <Message messageKey='flyout.validations.error.name' /> }
-            {!hasFile && <Message messageKey='flyout.validations.error.file' /> }
-        </React.Fragment>
+        <ul>
+            { errorKeys.map(key =>
+                <li key={key}><Message messageKey={`flyout.validations.error.${key}`} /></li>) }
+        </ul>
     );
 };
 
@@ -75,38 +60,38 @@ export const LayerFormContent = ({ values, isImport, onOk, maxSize }) => {
 
     const updateStyle = (style) => setState({ ...state, style });
     const updateLocale = (locale) => setState({ ...state, locale });
-    const updateFile = (file) => setState({ ...state, file });
-
-    const okMessageKey = isImport ? 'flyout.actions.submit' : 'tab.buttons.save';
-    const languages = Oskari.getSupportedLanguages();
-    const defaultLang = languages[0];
-
-    const hasFile = !!state.file;
-    const hasName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
-    const valid = isImport ? hasName && hasFile : hasName;
-
+    const updateFile = (files) => setState({ ...state, file: files[0] });
     const onClick = () => {
         const { style, locale, file } = state;
         onOk({ style, locale, file });
         setState({ ...state, loading: true });
     };
-    const tooltip = valid ? '' : getButtonTooltip(hasName, hasFile);
-    return (
+
+    const okMessageKey = isImport ? 'flyout.actions.submit' : 'tab.buttons.save';
+    const languages = Oskari.getSupportedLanguages();
+    const defaultLang = languages[0];
+    const hasName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
+
+    const validationKeys = !state.file ? ['file'] : [];
+    if (!hasName) {
+        validationKeys.push('name');
+    };
+    const Component = (
         <Content>
             { isImport && renderImport(maxSize, updateFile) }
             <PaddingTop/>
             <LocalizationComponent
-                placeholders={getLabels(languages)}
                 value={ state.locale }
                 languages={languages}
                 onChange={ updateLocale }
+                showDivider={true}
                 LabelComponent={PaddedLabel}
             >
-                <TextInput type='text' name='name'/>
+                <TextInput type='text' name='name' placeholder={getPlaceholder('name')} mandatory={[defaultLang]}/>
                 <PaddingTop/>
-                <TextInput type='text' name='desc'/>
+                <TextInput type='text' name='desc' placeholder={getPlaceholder('desc')}/>
                 <PaddingTop/>
-                <TextInput type='text' name='source'/>
+                <TextInput type='text' name='source' placeholder={getPlaceholder('source')}/>
                 <PaddingTop/>
             </LocalizationComponent>
             <PaddingTop/>
@@ -119,19 +104,22 @@ export const LayerFormContent = ({ values, isImport, onOk, maxSize }) => {
                 </CollapsePanel>
             </Collapse>
             <PaddingTop/>
-            <Tooltip key="okButtonTooltip" title={ tooltip }>
-                <Button disabled={!valid} type="primary" onClick={onClick} loading={state.loading}>
+            <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
+                <Button disabled={validationKeys.length > 0} type="primary" onClick={onClick}>
                     <Message messageKey={okMessageKey} />
                 </Button>
             </Tooltip>
         </Content>
     );
+    if (state.loading) {
+        return <Spin showTip={true}>{Component}</Spin>;
+    }
+    return Component;
 };
 
 LayerFormContent.propTypes = {
     values: PropTypes.object,
     maxSize: PropTypes.number,
     isImport: PropTypes.bool.isRequired,
-    onOk: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onOk: PropTypes.func.isRequired
 };
