@@ -30,7 +30,7 @@ Oskari.registerLocalization(
                 "error": {
                     "title": "Virhe",
                     "message": "Aineiston tuonti epäonnistui. Huomioi seuraavat puutteet ja yritä sitten uudelleen.",
-                    "name": "Karttatasolla pitää antaa nimi.",
+                    "name": "Karttatasolle pitää antaa nimi.",
                     "file": "Valitse aineiston sisältävä tiedosto.",
                     "epsg": "EPSG-koodi pitää antaa numerona"
                 }
