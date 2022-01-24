@@ -98,14 +98,13 @@ const getCollapseHeader = () => {
     );
 };
 
-
+const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
 
 export const LocalizationComponent = ({
     languages,
     onChange,
     value,
     labels,
-    placeholders,
     LabelComponent = Label,
     collapse = true,
     defaultOpen = false,
@@ -135,9 +134,13 @@ export const LocalizationComponent = ({
             let elementValue = single ? internalValue[lang] : internalValue[lang][name];
             let label = getLabel(labels, lang, name, single);
 
-            const { required = [], placeholder = '', ...restProps } = element.props; // don't pass required and placeholder to element node
+            const { mandatory = [], placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
             const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
-            const suffix = required.includes(lang) ? <StarTwoTone twoToneColor={'#da5151'}/> : '';
+            let suffix;
+            if (mandatory.includes(lang)) {
+                const isValid = validateMandatory(elementValue);
+                suffix = <StarTwoTone twoToneColor={isValid ? '#52c41a' : '#da5151'}/>;
+            }
             return (
                 <React.Fragment key={`${lang}_${index}`}>
                     { label &&
@@ -183,7 +186,6 @@ LocalizationComponent.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.object,
     labels: PropTypes.object,
-    placeholders: PropTypes.object,
     LabelComponent: PropTypes.elementType,
     collapse: PropTypes.bool,
     single: PropTypes.bool,
