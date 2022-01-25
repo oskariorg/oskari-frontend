@@ -20,6 +20,10 @@ export class UserLayer extends WFSLayer {
         return false;
     }
 
+    getName (lang) {
+        return this.getLocalizedValue('name', lang);
+    }
+
     getLocale () {
         return this._locale;
     }
