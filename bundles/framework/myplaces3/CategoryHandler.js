@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
-                // TODO: check if we need to sanitize name here or somewhere down the line
                 name: layer.getName(),
                 isDefault: !!layer.getOptions().isDefault,
                 // has only one style default for now
@@ -150,13 +149,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return layer;
         },
         updateLayer: function (layerJson) {
-            const { id, name, options } = layerJson;
+            const { id, locale, options } = layerJson;
             const layer = this.mapLayerService.findMapLayer(id);
             if (!layer) {
                 this.log.warn('tried to update layer which does not exist, id: ' + id);
                 return;
             }
-            layer.setName(name);
+            layer.setLocale(locale);
             layer.setOptions(options);
             const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
             this.sandbox.notifyAll(evt);
@@ -189,11 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     style
                 });
             };
-            const names = { ...layer._name }; // TODO: getter?
-            const locale = Object.keys(names).reduce((locale, lang) => {
-                locale[lang] = { name: names[lang] };
-                return locale;
-            }, {});
+            const locale = layer.getLocale();
             const style = layer.getCurrentStyle().getFeatureStyle();
             showModal(locale, style, saveLayer);
         },

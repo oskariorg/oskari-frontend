@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             var loclayer = me.localization.layer;
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
+            layer.setLocale(mapLayerJson.locale);
 
             if (loclayer.organization) {
                 layer.setOrganizationName(loclayer.organization);
