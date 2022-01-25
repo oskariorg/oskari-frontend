@@ -2,6 +2,16 @@ Oskari.registerLocalization({
     lang: 'sv',
     key: 'oskariui',
     value: {
+        buttons: {
+            add: 'Lägg till',
+            cancel: 'Avbryt',
+            close: 'Stäng',
+            delete: 'Ta bort',
+            edit: 'Redigera',
+            save: 'Spara',
+            yes: 'Ja',
+            no: 'Nej'
+        },
         error: {
             generic: 'Something went wrong'
         },
