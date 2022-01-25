@@ -71,6 +71,10 @@ export class HoverHandler {
         }
         if (layerChanged) {
             const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+            if (!layer) {
+                // this happens when reseting the map state while a feature is being hovered on
+                return;
+            }
             this._hoverLayer.setOpacity(layer.getOpacity() / 100);
             this._hoverLayer.setStyle(this.getCachedStyle(layerId));
             this._hoverLayer.changed();

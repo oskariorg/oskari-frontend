@@ -64,13 +64,14 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) => {
+export const Popup = ({title = '', children, onClose, bringToTop, options = {}}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
         style: {
             transform: `translate(${position.x}px, ${position.y}px)`
-        }
+        },
+        className: options.id ? `t_popup t_${options.id}` : 't_popup'
     };
     const elementRef = useRef();
     const headerProps = {};
@@ -78,7 +79,7 @@ export const Popup = ({title = '', children, onClose, bringToTop, opts = {}}) =>
     if (typeof bringToTop === 'function') {
         headerFuncs.push(bringToTop);
     }
-    if (opts.isDraggable === true) {
+    if (options.isDraggable === true) {
         containerProps.ref = elementRef;
         headerFuncs.push(useCallback(() => createDraggable(position, setPosition, elementRef), [position, setPosition, elementRef]));
     }
@@ -140,5 +141,6 @@ Popup.propTypes = {
     children: PropTypes.any,
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onClose: PropTypes.func.isRequired,
-    bringToTop: PropTypes.func
+    bringToTop: PropTypes.func,
+    options: PropTypes.object
 };

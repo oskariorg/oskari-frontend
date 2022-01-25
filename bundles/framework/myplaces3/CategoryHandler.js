@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return {
                 categoryId: this.parseCategoryId(layerId),
                 layerId,
-                // TODO: check if we need to sanitize name here or somewhere down the line
                 name: layer.getName(),
                 isDefault: !!layer.getOptions().isDefault,
                 // has only one style default for now
@@ -150,13 +149,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             return layer;
         },
         updateLayer: function (layerJson) {
-            const { id, name, options } = layerJson;
+            const { id, locale, options } = layerJson;
             const layer = this.mapLayerService.findMapLayer(id);
             if (!layer) {
                 this.log.warn('tried to update layer which does not exist, id: ' + id);
                 return;
             }
-            layer.setName(name);
+            layer.setLocale(locale);
             layer.setOptions(options);
             const evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
             this.sandbox.notifyAll(evt);
@@ -181,15 +180,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             this._notifyUpdate();
         },
         editCategory: function (categoryId) {
-            const layer = this.getCategory(categoryId);
-            const saveLayer = (name, style) => {
+            const layer = this.mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
+            const saveLayer = (locale, style) => {
                 this.saveCategory({
-                    ...layer,
-                    name,
+                    id: categoryId,
+                    locale,
                     style
                 });
             };
-            showModal(layer.name, layer.style, saveLayer);
+            const locale = layer.getLocale();
+            const style = layer.getCurrentStyle().getFeatureStyle();
+            showModal(locale, style, saveLayer);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -226,12 +227,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             dialog.show(title, message, [okBtn]);
         },
         saveCategory: function (category, callback) {
-            const id = category.categoryId;
+            const { id, locale, isDefault, style } = category;
             const data = {
                 id,
-                name: category.name,
-                isDefault: category.isDefault,
-                style: JSON.stringify(category.style)
+                isDefault,
+                locale: JSON.stringify(locale),
+                style: JSON.stringify(style)
             };
             this.instance.getService().commitCategory(data, layerJson => {
                 const isNew = !id;

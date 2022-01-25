@@ -6,6 +6,9 @@ import { Popup } from './Popup';
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
  * ************************************************ */
+const DEFAULT_POPUP_OPTIONS = {
+    isDraggable: true
+};
 
 /**
  * Creates a root element to render a flyout/popup window into
@@ -71,15 +74,17 @@ const createBringToTop = (element) => {
  * @param {String} title title for flyout
  * @param {String|ReactElement} content content for flyout
  * @param {Function} onClose callback that is called when the window closes
+ * @param {Object} options (optional) to override default options
  * @returns {Object} that provides functions that can be used to close/update the flyout
  */
-export const showPopup = (title, content, onClose) => {
+export const showPopup = (title, content, onClose, options = {}) => {
     const element = createTmpContainer();
     const removeWindow = createRemoveFn(element, onClose);
     const bringToTop = createBringToTop(element);
+    const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
     const render = (title, content) => {
         ReactDOM.render(
-            <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} opts={{isDraggable: true}}>
+            <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                 {content}
             </Popup>, element);
     };
@@ -110,15 +115,16 @@ export const showPopup = (title, content, onClose) => {
  * @param {String} title title for flyout
  * @param {String|ReactElement} content content for flyout
  * @param {Function} onClose callback that is called when the window closes
+ * @param {Object} options (optional) to override default options
  * @returns {Object} that provides functions that can be used to close/update the flyout
  */
-export const showFlyout = (title, content, onClose) => {
+export const showFlyout = (title, content, onClose, options = {}) => {
     const element = createTmpContainer();
     const removeWindow = createRemoveFn(element, onClose);
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
         ReactDOM.render(
-            <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop}>
+            <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
                 {content}
             </Flyout>, element);
     };

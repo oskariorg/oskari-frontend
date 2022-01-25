@@ -11,7 +11,7 @@ import { LOCALE_KEY } from './constants';
  * @param {Object} style Oskari style object for editing
  * @param {Function} saveLayer callback to call when user hits "Save"
  */
-export const showModal = (name, style, saveLayer) => {
+export const showModal = (locale, style, saveLayer) => {
     const element = document.createElement('div');
     document.body.appendChild(element);
 
@@ -23,10 +23,10 @@ export const showModal = (name, style, saveLayer) => {
     ReactDOM.render(
         <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
             <MyPlacesLayerForm
-                name={ name }
+                locale={ locale }
                 style={ style }
-                onSave={ (name, style) => {
-                    saveLayer(name, style);
+                onSave={ (locale, style) => {
+                    saveLayer(locale, style);
                     removeModal();
                 } }
                 onCancel={ removeModal }

@@ -8,6 +8,8 @@ export const ANTD_FORMLAYOUT = {
 
 export const SUPPORTED_FORMATS = ['point', 'line', 'area'];
 
+export const TRANSPARENT_FILL = 4;
+
 export const LINE_STYLES = {
     "lineDash": [
         {
