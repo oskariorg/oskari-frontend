@@ -55,9 +55,10 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Flyout = ({title = '', children, onClose, bringToTop}) => {
+export const Flyout = ({title = '', children, onClose, bringToTop, options = {}}) => {
     const [position, setPosition] = useState({ x: 210, y: 30 });
     const elementRef = useRef();
+    const containerClass = options.id ? `t_flyout t_${options.id}` : 't_flyout'
     const onMouseDown = useCallback(() => {
         if (typeof bringToTop === 'function') {
             bringToTop();
@@ -73,7 +74,7 @@ export const Flyout = ({title = '', children, onClose, bringToTop}) => {
         <div className="oskari-flyouttool-restore"></div>
     Maybe allow passing tools from caller?
     */
-    return (<Container ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
+    return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
         <FlyoutHeader className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
             <HeaderBand />
             <Title>{title}</Title>
@@ -91,5 +92,6 @@ Flyout.propTypes = {
     children: PropTypes.any,
     title: PropTypes.string,
     onClose: PropTypes.func.isRequired,
-    bringToTop: PropTypes.func
+    bringToTop: PropTypes.func,
+    options: PropTypes.object
 };
