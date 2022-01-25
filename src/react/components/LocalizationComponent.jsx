@@ -154,10 +154,10 @@ export const LocalizationComponent = ({
         });
 
         return (
-            <React.Fragment key={`${lang}_${index}`}>
+            <div className={`t_localization-${lang}`} key={`${lang}_${index}`}>
                 {addDivider && renderDivider(lang)}
                 {nodes}
-            </React.Fragment>
+            </div>
         );
     });
     if (localizedElements.length === 1 || !collapse) {
