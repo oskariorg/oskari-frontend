@@ -2,6 +2,16 @@ Oskari.registerLocalization({
     lang: 'fi',
     key: 'oskariui',
     value: {
+        buttons: {
+            add: 'Lisää',
+            cancel: 'Peruuta',
+            close: 'Sulje',
+            delete: 'Poista',
+            edit: 'Muokkaa',
+            save: 'Tallenna',
+            yes: 'Kyllä',
+            no: 'Ei'
+        },
         error: {
             generic: 'Tapahtui odottamaton virhe'
         },
@@ -17,11 +27,10 @@ Oskari.registerLocalization({
             moreColors: 'Enemmän värejä'
         },
         StyleEditor: {
-            newtitle: 'Uusi tyyli',
             subheaders: {
                 styleFormat: 'Geometriatyyppi',
                 name: 'Tyylin nimi',
-                style: 'Style',
+                style: 'Esitystapa',
                 pointTab: 'Piste',
                 lineTab: 'Viiva',
                 areaTab: 'Alue'
