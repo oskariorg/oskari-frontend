@@ -51,6 +51,10 @@ export class UserStyleService {
         this.trigger('update');
     }
 
+    update () {
+        this.trigger('update');
+    }
+
     notifyLayerUpdate (layerId) {
         const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
         this.sandbox.notifyAll(event);
