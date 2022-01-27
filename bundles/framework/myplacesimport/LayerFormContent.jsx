@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Collapse, CollapsePanel, Message, TextInput, Button, Tooltip, Spin } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, TextInput, Tooltip, Spin } from 'oskari-ui';
+import { SecondaryButton, PrimaryButton } from 'oskari-ui/components/buttons';
 import { FileInput } from 'oskari-ui/components/FileInput';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
-import { LOCALE_KEY, FILE_INPUT_PROPS } from './constants';
+import { BUNDLE_NAME, ERRORS, FILE_INPUT_PROPS } from './constants';
 
 const Content = styled('div')`
     padding: 24px;
     width: 550px;
 `;
-
+const Buttons = styled('div')`
+    display: flex;
+    justify-content: flex-end;
+    button {
+        margin-left: 5px;
+    }
+`;
 const PaddedLabel = styled('div')`
     padding-bottom: 10px;
 `;
-
 const PaddingTop = styled('div')`
     padding-top: 10px;
 `;
@@ -28,57 +34,81 @@ const Description = styled('div')`
     }
 `;
 
-const renderImport = (confMaxSize, updateFile) => {
-    const { maxSize: defaultMaxSize, ...props } = FILE_INPUT_PROPS;
-    const maxSize = confMaxSize || defaultMaxSize;
+const SrsInput = styled(TextInput)`
+    margin-top: 10px;
+`;
+
+const renderImport = (file, maxSize, updateFile) => {
+    const files = file ? [file] : [];
     return (
         <React.Fragment>
             <Description>
                 <Message messageKey='flyout.description' messageArgs={{ maxSize }} allowHTML={true} />
             </Description>
-            <FileInput onFiles={updateFile} maxSize={maxSize} { ...props } />
+            <FileInput onFiles={updateFile} maxSize={maxSize} files={files} { ...FILE_INPUT_PROPS } />
         </React.Fragment>
     );
 };
-const getPlaceholder = name => Oskari.getMsg(LOCALE_KEY, `flyout.layer.${name}`);
+const getPlaceholder = name => Oskari.getMsg(BUNDLE_NAME, `flyout.layer.${name}`);
 
-const getValidationMessage = errorKeys => {
-    if (!errorKeys.length) {
+const getValidationMessage = keys => {
+    if (!keys.length) {
         return '';
     }
     return (
         <ul>
-            { errorKeys.map(key =>
-                <li key={key}><Message messageKey={`flyout.validations.error.${key}`} /></li>) }
+            { keys.map(key =>
+                <li key={key}><Message messageKey={`flyout.validations.${key}`} /></li>) }
         </ul>
     );
 };
 
-export const LayerFormContent = ({ values, isImport, onOk, maxSize }) => {
+export const LayerFormContent = ({ values, config, onOk, onCancel, errorCode }) => {
+    const { maxSize, isImport } = config;
     const { style = OSKARI_BLANK_STYLE, locale = {} } = values || {};
     const [state, setState] = useState({ style, locale, loading: false });
+
+    const showSrs = isImport && errorCode === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
     const updateLocale = (locale) => setState({ ...state, locale });
     const updateFile = (files) => setState({ ...state, file: files[0] });
-    const onClick = () => {
-        const { style, locale, file } = state;
-        onOk({ style, locale, file });
+    const updateSrs = (sourceSrs) => setState({ ...state, sourceSrs });
+    const onOkClick = () => {
+        const values = {
+            style: state.style,
+            locale: state.locale,
+            file: state.file
+        };
+        if (showSrs) {
+            // add sourceSrs only if field is visible
+            values.sourceSrs = state.sourceSrs;
+        }
+        onOk(values);
         setState({ ...state, loading: true });
     };
 
-    const okMessageKey = isImport ? 'flyout.actions.submit' : 'tab.buttons.save';
+    const okBtnType = isImport ? 'import' : 'save';
     const languages = Oskari.getSupportedLanguages();
     const defaultLang = languages[0];
-    const hasName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
+    const hasMandatoryName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
 
-    const validationKeys = !state.file ? ['file'] : [];
-    if (!hasName) {
+    const validationKeys = isImport && !state.file ? ['file'] : [];
+    if (!hasMandatoryName) {
         validationKeys.push('name');
     };
+    if (showSrs && state.sourceSrs) {
+        const { sourceSrs: srs } = state;
+        // check that existing value is valid
+        if (isNaN(srs) || srs.length < 4 || srs.length > 6) {
+            validationKeys.push('epsg');
+        }
+    }
     const Component = (
         <Content>
-            { isImport && renderImport(maxSize, updateFile) }
+            { isImport && renderImport(state.file, maxSize, updateFile) }
+            { showSrs &&
+                <SrsInput placeholder={getPlaceholder('srs')} value={state.sourceSrs} onChange={e => updateSrs(e.target.value) }/> }
             <PaddingTop/>
             <LocalizationComponent
                 value={ state.locale }
@@ -104,14 +134,15 @@ export const LayerFormContent = ({ values, isImport, onOk, maxSize }) => {
                 </CollapsePanel>
             </Collapse>
             <PaddingTop/>
-            <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
-                <Button disabled={validationKeys.length > 0} type="primary" onClick={onClick}>
-                    <Message messageKey={okMessageKey} />
-                </Button>
-            </Tooltip>
+            <Buttons>
+                <SecondaryButton type='cancel' onClick={() => onCancel()}/>
+                <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
+                    <PrimaryButton disabled={validationKeys.length > 0} type={okBtnType} onClick={onOkClick}/>
+                </Tooltip>
+            </Buttons>
         </Content>
     );
-    if (state.loading) {
+    if (!errorCode && state.loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
@@ -119,7 +150,8 @@ export const LayerFormContent = ({ values, isImport, onOk, maxSize }) => {
 
 LayerFormContent.propTypes = {
     values: PropTypes.object,
-    maxSize: PropTypes.number,
-    isImport: PropTypes.bool.isRequired,
-    onOk: PropTypes.func.isRequired
+    config: PropTypes.object.isRequired,
+    onOk: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    errorCode: PropTypes.string
 };
