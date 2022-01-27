@@ -4,7 +4,6 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Eget dataset",
-        "desc": "Du kan importera dina egna dataset i shape-, gpx- eller mif/mid filformat i zip-paketet eller kmz filformat.",
         "tool": {
             "tooltip": "Importera ditt eget dataset"
         },
@@ -12,14 +11,9 @@ Oskari.registerLocalization(
             "title": "Dataset importering",
             "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>MapInfo (.mif och .mid)</li><li>Google Map (.kml)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst {maxSize, number} Mb.",
             "help": "Importera en datamängd från din dator som ett zip-paket. Var vänlig och kontrollera, att alla filerna är i ett lämpligt filformat och koordinatsystem.",
-            "actions": {
-                "cancel": "Avbryt",
-                "next": "Nästa",
-                "close": "Stäng",
-                "submit": "Skicka"
-            },
+            "submit": "Skicka",
+            "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
             "layer": {
-                "title": "Spara dataset information:",
                 "name": "Namnge kartlagret",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
@@ -27,19 +21,8 @@ Oskari.registerLocalization(
                 "srs": "EPSG-kod"
             },
             "validations": {
-                "error": {
-                    "title": "Fel",
-                    "message": "Filen har inte valts och namnet på kartlagret saknas."
-                }
-            },
-            "finish": {
-                "success": {
-                    "title": "Importering av dataset lyckades.",
-                    "message": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
-                },
-                "failure": {
-                    "title": "Dataset importen lyckades inte. Försök på nytt senare."
-                }
+                "name": "Namnet på kartlagret saknas.",
+                "file": "Filen har inte valts."
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",
@@ -63,7 +46,7 @@ Oskari.registerLocalization(
                 // "unknown_projection": "Datamängdens koordinatsystem kunde inte identifieras. Kontrollera att datamängden är antingen i kartans koordinatsystem eller försäkra, att datamängden innehåller de nödvändiga uppgifterna av koordinatsystemet.",
                 "no_main_file": "Lämpliga filer för importeringen kunde inte hittas från zip-filen. Var vänlig och kontrollera att filformatet understött och att datamänderna är packade till en zip-fil.", 
                 "too_many_files": "Zip-arkivet innehöll extra filer. Radera överlopps filerna och lämna endast de nödvändiga filerna enligt anvisningarna.",
-                "multiple_extensions": "Filen innehöll flera filer med samma {extension} filändelse. Filen kan innehålla filerna av endast en datamängd.",
+                "multiple_extensions": "Filen innehöll flera filer med samma {extensions} filändelse. Filen kan innehålla filerna av endast en datamängd.",
                 "multiple_main_file": "Filen innehöll flera olika datamängder ({extensions}). Filen kan innehålla filerna av endast en datamängd.",
                 "unable_to_store_data": "Datamängdens objekt kunde inte sparas. Kontrollera att alla obligatoriska filer som filformatet kräver är inom zip-arkivet och att datamängdens objekt inte är felaktiga.",
                 // "short_file_prefix": "Hämtningen av datamängderna från zip-filen misslyckades. Kontrollera, att prefixerna av de packade filerna innehåller åtminstone tre tecken.",

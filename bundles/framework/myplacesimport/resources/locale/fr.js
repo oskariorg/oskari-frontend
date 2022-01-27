@@ -12,33 +12,16 @@ Oskari.registerLocalization(
             "title": "Importation de jeux de données",
             "description": "Vous pouvez importer votre propres jeux de données en fichier au format shp, gpx ou mif/mid sous forme de fichier zip ou bien au format de fichier kmz (kml compressé). Vous pouvez importer des fichiers contenant au maximum 5000 entités.",
             "help": "Sélectionnez un fichier de votre ordinateur ou entrez un lien vers le fichier qui contient votre jeu de données. Le fichier peut être en format shp, zip ou kml/kmz. Vous pouvez créer des fichiers zip à partir de fichiers de formes en comprimant les fichiers avec les suffixes shp, shx, dbf et prj au même fichier zip. \r\nDe plus, on peut comprimer les fichiers kml/kmz de cartes Google de la même façon.\r\nLes données Mif/mid doivent être conformes au SRC cartographique actuel - voir le SRC actuel dans la barre de zoom",
-            "actions": {
-                "cancel": "Annuler",
-                "next": "Suivant",
-                "close": "Fermer",
-                "submit": "Envoyer"
-            },
+            "success": "L’importation du jeu de données s’est déroulée avec succès. Vous pouvez trouver la couche cartographique dans le menu « Mes données ».",
             "layer": {
-                "title": "Enregistrer les informations relatives au jeu de données :",
                 "name": "Nom",
                 "desc": "Description",
                 "source": "Source des données",
                 "style": "Définitions du style de jeu de données :"
             },
             "validations": {
-                "error": {
-                    "title": "Erreur",
-                    "message": "Le fichier n’a pas été sélectionné et la couche cartographique est manquante."
-                }
-            },
-            "finish": {
-                "success": {
-                    "title": "L’importation du jeu de données s’est déroulée avec succès.",
-                    "message": "Vous pouvez trouver la couche cartographique dans le menu « Mes données »."
-                },
-                "failure": {
-                    "title": "L’importation du jeu de données a échoué. Veuillez réessayer plus tard."
-                }
+                "name": "La nom est manquant.",
+                "file": "Le fichier n’a pas été sélectionné."
             },
             "error": {
                 "title": "Impossible d'importer le jeu de données.",

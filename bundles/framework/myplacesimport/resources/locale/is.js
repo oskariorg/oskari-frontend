@@ -12,33 +12,18 @@ Oskari.registerLocalization(
             "title": "Flytja inn gagnasett",
             "description": "Hægt er að flytja inn eigin gagnasett í shp, gpx eða mif/mid skráarsniði í zip skrá eða kmz skráarsniði (zippað kml). Hægt er að flytja inn skrár sem innihalda allt að 5000 fitjur.",
             "help": "Þú getur hlaðið gagnapakka úr tölvunni þinni sem zip-skrá. Vinsamlegast athugaðu að allar skrár séu á réttu skráarsniði og í réttu hnitakerfi.",
-            "actions": {
-                "cancel": "Hætta",
-                "next": "Næst",
-                "close": "Loka",
-                "submit": "Senda"
-            },
+            "success": "Það tókst að flytja inn gagnasettið. Þú getur fundið kortalagið undir valmyndinni \"Gögnin mín\".",
             "layer": {
-                "title": "Vista upplýsingar um gagnasettið:",
                 "name": "Nafn",
                 "desc": "Lýsing",
                 "source": "Gagnalind",
                 "style": "Skilgreining á gerð gagnasetts:"
             },
             "validations": {
-                "error": {
-                    "title": "Villa",
-                    "message": "Skráin hefur ekki verið valin og kortalagið vantar."
-                }
+                "file": "Skráin hefur ekki verið valin."
             },
-            "finish": {
-                "success": {
-                    "title": "Það tókst að flytja inn gagnasettið.",
-                    "message": "Þú getur fundið kortalagið undir valmyndinni \"Gögnin mín\"."
-                },
-                "failure": {
-                    "title": "Það tókst ekki að flytja inn gagnasettið. Vinsamlega reyndu aftur."
-                }
+            "error":{
+                "title": "Það tókst ekki að flytja inn gagnasettið. Vinsamlega reyndu aftur."
             }
         },
         "tab": {

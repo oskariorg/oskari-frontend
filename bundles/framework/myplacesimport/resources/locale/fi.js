@@ -4,7 +4,6 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Omat aineistot",
-        "desc": "",
         "tool": {
             "tooltip": "Omien aineistojen tuonti"
         },
@@ -12,14 +11,8 @@ Oskari.registerLocalization(
             "title": "Omien aineistojen tuonti",
             "description": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:<ul><li>Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen.cpg)</li><li>GPX-siirtotiedosto (.gpx)</li><li>MapInfo (.mif ja .mid)</li><li>Google Map (.kml)</li></ul>Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on {maxSize, number} Mt.",
             "help": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Tarkista, että aineisto on oikeassa tiedostomuodossa ja koordinaattijärjestelmässä.",
-            "actions": {
-                "cancel": "Peruuta",
-                "next": "Seuraava",
-                "close": "Sulje",
-                "submit": "Tuo aineisto"
-            },
+            "success": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta.",
             "layer": {
-                "title": "Tallenna karttatason tiedot:",
                 "name": "Karttatason nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
@@ -27,23 +20,9 @@ Oskari.registerLocalization(
                 "srs": "EPSG-koodi"
             },
             "validations": {
-                "error": {
-                    "title": "Virhe",
-                    "message": "Aineiston tuonti epäonnistui. Huomioi seuraavat puutteet ja yritä sitten uudelleen.",
-                    "name": "Karttatasolle pitää antaa nimi.",
-                    "file": "Valitse aineiston sisältävä tiedosto.",
-                    "epsg": "EPSG-koodi pitää antaa numerona"
-                }
-            },
-            "finish": {
-                "success": {
-                    "title": "Aineiston tuonti onnistui",
-                    "message": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta."
-                },
-                "failure": {
-                    "title": "Aineiston tuonti epäonnistui"
-                }
-
+                "name": "Karttatasolle pitää antaa nimi.",
+                "file": "Valitse aineiston sisältävä tiedosto.",
+                "epsg": "EPSG-koodi pitää antaa numerona."
             },
             "error":{
                 "title": "Aineiston tuonti epäonnistui",
@@ -66,7 +45,7 @@ Oskari.registerLocalization(
                 // Error codes from backend
                 "no_main_file":"Järjestelmän tukemaa tiedostoa ei löytynyt. Tarkista, että käyttämäsi tiedostomuoto on tuettu ja aineisto on pakattuna zip-tiedostoon.",
                 "too_many_files": "Zip-tiedosto sisälsi ylimääräisiä tiedostoja. Poista ylimääräiset tiedostot ja jätä vain tarvittavat ohjeiden mukaiset tiedostot.",
-                "multiple_extensions": "Tiedostosta löytyi useita samalla {extension}-tiedostopäätteellä olevia tiedostoja. Tiedosto voi sisältää vain yhden aineiston tiedostot.",
+                "multiple_extensions": "Tiedostosta löytyi useita samalla {extensions}-tiedostopäätteellä olevia tiedostoja. Tiedosto voi sisältää vain yhden aineiston tiedostot.",
                 "multiple_main_file": "Tiedostosta löytyi useita eri aineistoja ({extensions}). Tiedosto voi sisältää vain yhden aineiston tiedostot.",
                 "unable_to_store_data":"Aineiston kohteita ei voitu tallentaa. Tarkista, että kaikki tiedostomuodon tarvitsemat tiedostot ovat zip-tiedostossa sekä tarkista ettei aineiston kohdetiedot ole virheellisiä.",
                 //"short_file_prefix":"Zip-tiedostosta ei onnistuttu hakemaan aineiston tiedostoja. Tarkista, ettei pakattujen tiedostojen nimet ole alle kolmen merkin pituisia.",

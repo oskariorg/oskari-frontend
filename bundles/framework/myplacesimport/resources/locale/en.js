@@ -4,7 +4,6 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Own datasets",
-        "desc": "",
         "tool": {
             "tooltip": "Import your own datasets."
         },
@@ -12,14 +11,8 @@ Oskari.registerLocalization(
             "title": "Dataset Import",
             "description": "Upload a dataset from your computer as a zipped file which contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX-file (.gpx)</li><li>MapInfo (.mif and .mid)</li><li>Google Map (.kml)</li></ul>The zipped file can contain only one dataset and it can be at most {maxSize, number} Mb.",
             "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
-            "actions": {
-                "cancel": "Cancel",
-                "next": "Next",
-                "close": "Close",
-                "submit": "Import"
-            },
+            "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "layer": {
-                "title": "Dataset Information",
                 "name": "Map layer name",
                 "desc": "Description",
                 "source": "Data source",
@@ -27,19 +20,9 @@ Oskari.registerLocalization(
                 "srs": "EPSG code"
             },
             "validations": {
-                "error": {
-                    "title": "Error",
-                    "message": "The dataset has not been imported. A file and a name are missing. Please correct them and try again."
-                }
-            },
-            "finish": {
-                "success": {
-                    "title": "Dataset Import Succeeded",
-                    "message": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu."
-                },
-                "failure": {
-                    "title": "The dataset could not be imported."
-                }
+                "name": "The map layer name is missing.",
+                "file":  "A file is missing.",
+                "epsg": "EPSG code has to be number."
             },
             "error":{
                 "title": "The dataset could not be imported.",
@@ -62,7 +45,7 @@ Oskari.registerLocalization(
                 // Error codes from backend
                 "no_main_file": "Couldn't find valid import file in the zip file. Please check that the file format is supported and it's a zipped file.",
                 "too_many_files": "The zip file contained redundant files. Remove the redundant files and keep only those that are required according to the instructions.",
-                "multiple_extensions":"Multiple files with the same {extension} file extension were found from the input data. The input data can only contain data sets of one file.",
+                "multiple_extensions":"Multiple files with the same {extensions} file extension were found from the input data. The input data can only contain data sets of one file.",
                 "multiple_main_file": "Multiple different data sets ({extensions}) were found from the input data. The input data can only contain data of one file.",
                 "unable_to_store_data":"Unable to save the features of the input data. Check that all files required by the file format are inside a zip file and that the features of the input data are valid.",
                 // "short_file_prefix":"Couldn't get the import file set - Prefix string too short",
