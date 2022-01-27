@@ -109,78 +109,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             okBtn.addClass('primary');
 
             okBtn.setHandler(() => {
-                this._deleteUserLayer(data.id);
                 dialog.close();
+                this.instance.getService().deleteUserLayer(data.id);
             });
             var cancelBtn = dialog.createCloseButton(this.loc('tab.buttons.cancel'));
             var confirmMsg = this.loc('tab.confirmDeleteMsg', { name: data.name });
             dialog.show(this.loc('tab.deleteLayer'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
-        },
-        /**
-         * @method _deleteUserLayer
-         * Request backend to delete user layer. On success removes the layer
-         * from map and layerservice. On failure displays a notification.
-         * @param layer layer userlayer data to be destroyed
-         * @private
-         */
-        _deleteUserLayer: function (layerId) {
-            var me = this;
-
-            // parse actual id from layer id
-            var tokenIndex = layerId.lastIndexOf('_') + 1;
-            var idParam = layerId.substring(tokenIndex);
-
-            jQuery.ajax({
-                url: Oskari.urls.getRoute('DeleteUserLayer'),
-                data: {
-                    id: idParam
-                },
-                type: 'POST',
-                success: function (response) {
-                    if (response && response.result === 'success') {
-                        me._deleteSuccess(layerId);
-                    } else {
-                        me._deleteFailure();
-                    }
-                },
-                error: function () {
-                    me._deleteFailure();
-                }
-            });
-        },
-        /**
-         * Success callback for backend operation.
-         * @method _deleteSuccess
-         * @param layerId Id of the layer that was removed
-         * @private
-         */
-        _deleteSuccess: function (layerId) {
-            var me = this;
-            const sandbox = me.instance.sandbox;
-
-            // Remove layer from grid... this is really ugly, but so is jumping
-            // through hoops to masquerade as a module
-            const model = me.grid.getDataModel().data;
-            const gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-            model.forEach(row => {
-                if (row.id !== layerId) {
-                    gridModel.addData(row);
-                }
-            });
-            me.grid.setDataModel(gridModel);
-            me.grid.renderTo(me.container);
-
-            // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
-            // also we need to do it before service.remove() to avoid problems on other components
-            const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layerId);
-            sandbox.request(me.instance, request);
-            this.instance.getMapLayerService().removeLayer(layerId);
-
-            // show msg to user about successful removal
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(me.loc('tab.notification.deletedTitle'), me.loc('tab.notification.deletedMsg'));
-            dialog.fadeout(3000);
         },
         /**
          * Failure callback for backend operation.
@@ -227,13 +162,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         },
         _editUserLayer: function (data) {
             const { id } = data;
-            var tokenIndex = id.lastIndexOf('_') + 1;
-            const idParam = parseInt(id.substring(tokenIndex));
             const layer = this.instance.getMapLayerService().findMapLayer(id);
             const values = {
                 locale: layer.getLocale(),
                 style: layer.getCurrentStyle().getFeatureStyle(),
-                id: idParam
+                id
             };
             this.instance.openLayerDialog(values);
         }

@@ -5,12 +5,7 @@ import { ERRORS } from '../constants';
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', function (instance) {
     this.instance = instance;
-    this.sandbox = instance.sandbox;
-    this.urls = {};
-
-    const srsName = this.sandbox.getMap().getSrsName();
-    this.urls.create = Oskari.urls.getRoute('CreateUserLayer', { srs: srsName });
-    this.urls.get = Oskari.urls.getRoute('GetUserLayers', { srs: srsName });
+    this.srs = instance.getSandbox().getMap().getSrsName();
     // negative value for group id means that admin isn't presented with tools for it
     this.groupId = -1 * Oskari.getSeq('usergeneratedGroup').nextVal();
     this.log = Oskari.log('MyPlacesImportService');
@@ -37,11 +32,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @return {String}
      */
     getFileImportUrl: function (sourceSrs) {
-        const url = this.urls.create;
+        const params = {
+            srs: this.srs
+        };
         if (sourceSrs) {
-            return url + '&sourceEpsg=EPSG:' + sourceSrs;
+            params.sourceEpsg = `EPSG:${sourceSrs}`;
         }
-        return url;
+        return Oskari.urls.getRoute('CreateUserLayer', params);
     },
     /**
      * Returns the url used to update layer.
@@ -52,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     getEditLayerUrl: function (id, values) {
         const params = {
             id,
-            srs: this.sandbox.getMap().getSrsName(),
+            srs: this.srs,
             locale: JSON.stringify(values.locale),
             style: JSON.stringify(values.style)
         };
@@ -94,7 +91,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         });
     },
 
-    updateUserLayer: function (id, values, successCb, errorCb) {
+    updateUserLayer: function (layerId, values, successCb, errorCb) {
+        const id = this.getActualId(layerId);
         fetch(this.getEditLayerUrl(id, values), {
             method: 'POST',
             headers: {
@@ -142,37 +140,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         Messaging.success({ content, duration: 10 });
     },
     /**
-     * Retrieves the user layers (with the id param only the specified layer)
+     * Retrieves the user layers
      * from the backend and adds them to the map layer service.
      *
      * @method getUserLayers
-     * @param  {Function} successCb (optional)
-     * @param  {Function} errorCb (optional)
-     * @param  {String} id (optional)
      */
     getUserLayers: function (id) {
-        const me = this;
-        let url = this.urls.get;
-
-        if (id) {
-            url = url + '&id=' + id;
-        }
-
         jQuery.ajax({
-            url: url,
+            url: Oskari.urls.getRoute('GetUserLayers', { srs: this.srs }),
             type: 'GET',
             dataType: 'json',
-            success: function (response) {
+            success: (response) => {
                 if (response) {
-                    me._addLayersToService(response.userlayers);
+                    this._addLayersToService(response.userlayers);
                 }
+                // TODO: this._showError(''); ??
             },
-            error: function (jqXHR, textStatus) {
+            error: (jqXHR, textStatus) => {
                 if (jqXHR.status !== 0) {
-                    // me._showError('flyout.error.');
+                    // TODO: this._showError(''); ??
                     this.log.error('Failed to load userlayers', textStatus);
                 }
             }
+        });
+    },
+    getActualId: function (layerId) {
+        const tokenIndex = layerId.lastIndexOf('_') + 1;
+        return layerId.substring(tokenIndex);
+    },
+    /**
+     * @method _deleteUserLayer
+     * Request backend to delete user layer. On success removes the layer
+     * from map and layerservice. On failure displays a notification.
+     * @param layer layer userlayer data to be destroyed
+     */
+    deleteUserLayer: function (layerId) {
+        jQuery.ajax({
+            url: Oskari.urls.getRoute('DeleteUserLayer'),
+            data: {
+                id: this.getActualId(layerId)
+            },
+            type: 'POST',
+            success: response => {
+                if (response && response.result === 'success') {
+                    this._removeLayerFromService(layerId);
+                    this._showSuccess('tab.notification.deletedMsg');
+                } else {
+                    this._showError('tab.error.deleteMsg');
+                }
+            },
+            error: () => this._showError('tab.error.deleteMsg')
         });
     },
     notifyUpdate: function () {
@@ -194,13 +211,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         }
         layer.setLocale(locale);
         layer.setOptions(options);
+        const sandbox = this.instance.getSandbox();
         var evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
-        this.sandbox.notifyAll(evt);
+        sandbox.notifyAll(evt);
         this.notifyUpdate();
-        if (this.sandbox.isLayerAlreadySelected(id)) {
+        if (sandbox.isLayerAlreadySelected(id)) {
             // update layer on map
-            this.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
-            this.instance.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
+            sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
+            sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
         }
     },
     _handleImportedLayer: function (layerJson) {
@@ -242,9 +260,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         });
         if (layers.length > 0) {
             const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
-            this.sandbox.notifyAll(event);
+            this.instance.getSandbox().notifyAll(event);
             this.notifyUpdate();
         }
+    },
+    _removeLayerFromService: function (layerId) {
+        this.instance.getMapLayerService().removeLayer(layerId);
+        this.instance.getSandbox().postRequestByName('RemoveMapLayerRequest', [layerId]);
+        this.notifyUpdate();
     },
     /**
      * Adds one layer to the map layer service
