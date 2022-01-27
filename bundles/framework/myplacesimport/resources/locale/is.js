@@ -23,7 +23,7 @@ Oskari.registerLocalization(
                 "file": "Skráin hefur ekki verið valin."
             },
             "error":{
-                "title": "Það tókst ekki að flytja inn gagnasettið. Vinsamlega reyndu aftur."
+                "generic": "Það tókst ekki að flytja inn gagnasettið. Vinsamlega reyndu aftur."
             }
         },
         "tab": {

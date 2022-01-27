@@ -25,21 +25,21 @@ Oskari.registerLocalization(
             },
             "error": {
                 "title": "Impossible d'importer le jeu de données.",
-                "unknown_projection": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
-                "invalid_file": "Impossible de trouver un fichier d'importation valide dans le fichier zip. Veuillez vérifier que le format du fichier est pris en charge et qu'il s'agit d'un fichier comprimé.",
-                "unable_to_store_data": "Il est impossible de stocker les données de l'utilisateur ou il n'y a pas de fonctionnalité dans les données d'entrée.",
-                "short_file_prefix": "Impossible d'obtenir le jeu de fichiers d'importation - le préfixe est trop court",
-                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de {maxSize, number} Mo.",
-                "no_features": "Impossible de trouver les fonctionnalités dans les données d'entrée",
-                "malformed": "Veuillez vous assurer que les noms de fichier sont du bon format (pas d'alphabet scandinave).",
-                "kml": "Impossible de créer de jeu de données à partir du fichier KML.",
-                "shp": "Impossible de créer de jeu de données à partir du fichier de formes.",
-                "mif": "Impossible de créer de jeu de données à partir du fichier MIF.",
-                "gpx": "Impossible de créer de jeu de données à partir du fichier GPX.",
                 "timeout": "Impossible de terminer l'importation du jeu de données en raison d'une erreur de temporisation.",
                 "abort": "L'importation du jeu de données a été interrompue.",
-                "parsererror": "Impossible de traiter le jeu de données.",
-                "generic": "L'importation du jeu de données a échoué."
+                "generic": "L'importation du jeu de données a échoué.",
+
+                // Parser errors
+                "parser_error": "Impossible de traiter le jeu de données.",
+                // Doesn't have different localization for shp, use same to both
+                "noSrs": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
+                "shpNoSrs": "Données de projection inconnues dans le fichier d'importation d'origine. Veuillez vous assurer que tous les fichiers soient dans le système de référence des coordonnées des cartes ou vous assurer que les fichiers contiennent les renseignements nécessaires à la transformation.",
+
+                // Error codes from backend
+                "no_main_file": "Impossible de trouver un fichier d'importation valide dans le fichier zip. Veuillez vérifier que le format du fichier est pris en charge et qu'il s'agit d'un fichier comprimé.",
+                "unable_to_store_data": "Il est impossible de stocker les données de l'utilisateur ou il n'y a pas de fonctionnalité dans les données d'entrée.",
+                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de {maxSize, number} Mo.",
+                "no_features": "Impossible de trouver les fonctionnalités dans les données d'entrée"
             },
             "warning": {
                 "features_skipped": "Attention! Pendant l'importation, {count, plural, one {# fonctionnalité} other {# fonctionnalités}} ont été refusées en raison de coordonnées ou de géométrie manquantes."
