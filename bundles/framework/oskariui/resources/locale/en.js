@@ -9,6 +9,8 @@ Oskari.registerLocalization({
             delete: 'Delete',
             edit: 'Edit',
             save: 'Save',
+            submit: 'Submit',
+            import: 'Import',
             yes: 'Yes',
             no: 'No'
         },

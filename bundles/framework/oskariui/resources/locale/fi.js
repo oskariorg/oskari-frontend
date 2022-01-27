@@ -9,6 +9,8 @@ Oskari.registerLocalization({
             delete: 'Poista',
             edit: 'Muokkaa',
             save: 'Tallenna',
+            submit: 'Lähetä',
+            import: 'Tuo',
             yes: 'Kyllä',
             no: 'Ei'
         },

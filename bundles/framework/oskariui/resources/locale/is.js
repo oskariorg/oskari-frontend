@@ -9,6 +9,7 @@ Oskari.registerLocalization({
             delete: 'Eyða',
             edit: 'Breyta',
             save: 'Vista',
+            submit: 'Senda',
             yes: 'Já',
             no: 'Nei'
         },
