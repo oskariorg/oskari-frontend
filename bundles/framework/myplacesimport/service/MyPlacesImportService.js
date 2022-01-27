@@ -1,4 +1,5 @@
 import { Messaging } from 'oskari-ui/util';
+import { ERRORS } from '../constants';
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService
  */
@@ -12,8 +13,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     this.urls.get = Oskari.urls.getRoute('GetUserLayers', { srs: srsName });
     // negative value for group id means that admin isn't presented with tools for it
     this.groupId = -1 * Oskari.getSeq('usergeneratedGroup').nextVal();
-    this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
     this.log = Oskari.log('MyPlacesImportService');
+    Oskari.makeObservable(this);
 }, {
     __name: 'MyPlacesImport.MyPlacesImportService',
     __qname: 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
@@ -48,11 +49,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @method getEditLayerUrl
      * @return {String}
      */
-    getEditLayerUrl: function (id) {
-        return Oskari.urls.getRoute('EditUserLayer', { id });
+    getEditLayerUrl: function (id, values) {
+        const params = {
+            id,
+            srs: this.sandbox.getMap().getSrsName(),
+            locale: JSON.stringify(values.locale),
+            style: JSON.stringify(values.style)
+        };
+        return Oskari.urls.getRoute('EditUserLayer', params);
     },
     submitUserLayer: function (values, successCb, errorCb) {
-        const { sourceSrs, locale, style, file } = values || {};
+        const { sourceSrs, locale, style, file } = values;
         const formData = new FormData();
         formData.append('locale', JSON.stringify(locale));
         formData.append('style', JSON.stringify(style));
@@ -71,34 +78,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             }
             return response.json();
         }).then(json => {
-            if (json.error) {
-                const info = json.info || {};
-                throw Error(json.error, { cause: info.error });
+            const { error, info } = json;
+            if (error) {
+                this.log.error(error);
+                this._handleErrorResponse(info, errorCb);
+                return;
             }
-            this.instance.addUserLayer(json); // TODO move addUserLayer from instance to service (tab refresh)
-            this._showSuccess(this.loc('flyout.finish.success.message', { count: json.featuresCount }));
-            if (typeof successCb === 'function') {
-                successCb();
-            }
+            this._handleImportedLayer(json);
+            this._showSuccess('flyout.success', { count: json.featuresCount });
+            successCb();
         }).catch(error => {
             this.log.error(error);
-            const errorKey = error.cause || 'generic';
-            this._showError(this.loc(`flyout.error.${errorKey}`));
-            if (typeof errorCb === 'function') {
-                // TODO: use errorCb to update layerform
-                errorCb();
-            }
+            this._showError('flyout.error.generic');
+            errorCb();
         });
     },
 
-    updateUserLayer: function (id, values, closeCb, errorCb) {
-        // const payload = { id, ...values };
-        fetch(this.getEditLayerUrl(id), {
+    updateUserLayer: function (id, values, successCb, errorCb) {
+        fetch(this.getEditLayerUrl(id, values), {
             method: 'POST',
-            body: JSON.stringify(values),
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Accept': 'application/json'
             }
         }).then(response => {
             if (!response.ok) {
@@ -106,25 +106,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             }
             return response.json();
         }).then(json => {
-            this.updateLayer(id, json);
-            this._showSuccess(this.loc('tab.notification.editedMsg'));
-            if (typeof closeCb === 'function') {
-                closeCb();
-            }
+            this.updateLayer(json);
+            this._showSuccess('tab.notification.editedMsg');
+            successCb();
         }).catch(error => {
             this.log.error(error);
-            this._showError(this.loc('tab.error.editMsg'));
-            if (typeof errorCb === 'function') {
-                // TODO enable layerform
-                errorCb();
-            }
+            this._showError('tab.error.editMsg');
+            errorCb();
         });
     },
-    _showError: function (content) {
+    _handleErrorResponse: function (info, errorCb) {
+        const { errorKey = ERRORS.GENERIC, extensions = [], cause, parser } = info || {};
+
+        if (cause === ERRORS.NO_SRS) {
+            const noSrsKey = parser === 'shp' ? 'shpNoSrs' : 'noSrs';
+            this._showError(`flyout.error.${noSrsKey}`);
+            errorCb(ERRORS.NO_SRS);
+            return;
+        }
+        // pass args for localization even them aren't needed for requested errorKey
+        const args = {
+            maxSize: this.instance.getMaxSize(),
+            extensions: extensions.join(',')
+        };
+        this._showError(`flyout.error.${errorKey}`, args);
+        errorCb(errorKey);
+    },
+    _showError: function (locKey, args) {
+        const content = this.instance.loc(locKey, args);
         Messaging.error({ content, duration: 10 });
     },
 
-    _showSuccess: function (content) {
+    _showSuccess: function (locKey, args) {
+        const content = this.instance.loc(locKey, args);
         Messaging.success({ content, duration: 10 });
     },
     /**
@@ -136,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param  {Function} errorCb (optional)
      * @param  {String} id (optional)
      */
-    getUserLayers: function (successCb, errorCb, id) {
+    getUserLayers: function (id) {
         const me = this;
         let url = this.urls.get;
 
@@ -150,17 +164,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             dataType: 'json',
             success: function (response) {
                 if (response) {
-                    me._addLayersToService(response.userlayers, successCb);
+                    me._addLayersToService(response.userlayers);
                 }
             },
             error: function (jqXHR, textStatus) {
-                if (typeof errorCb === 'function' && jqXHR.status !== 0) {
-                    errorCb(jqXHR, textStatus);
+                if (jqXHR.status !== 0) {
+                    // me._showError('flyout.error.');
+                    this.log.error('Failed to load userlayers', textStatus);
                 }
             }
         });
     },
-
+    notifyUpdate: function () {
+        this.trigger('update');
+    },
     /**
      * Update userlayer name, source and description
      *
@@ -168,19 +185,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {String} id
      * @param {Object} updatedLayer
      */
-    updateLayer: function (id, updatedLayer) {
+    updateLayer: function (updatedLayer) {
+        const { id, locale, options } = updatedLayer;
         const layer = this.instance.getMapLayerService().findMapLayer(id);
-        layer.setName(updatedLayer.name);
-        layer.setSource(updatedLayer.source);
-        layer.setDescription(updatedLayer.description);
-        layer.setOptions(updatedLayer.options);
+        if (!layer) {
+            this.log.error('Could not find layer for update with id:' + id);
+            return;
+        }
+        layer.setLocale(locale);
+        layer.setOptions(options);
         var evt = Oskari.eventBuilder('MapLayerEvent')(id, 'update');
         this.sandbox.notifyAll(evt);
+        this.notifyUpdate();
         if (this.sandbox.isLayerAlreadySelected(id)) {
             // update layer on map
             this.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerUpdateRequest', [id, true]);
             this.instance.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
         }
+    },
+    _handleImportedLayer: function (layerJson) {
+        const cb = (mapLayer) => {
+            const sandbox = this.instance.getSandbox();
+            const layerId = mapLayer.getId();
+            // Request the layer to be added to the map.
+            sandbox.postRequestByName('AddMapLayerRequest', [layerId]);
+            // Request to move and zoom map to layer's content
+            sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
+            this.notifyUpdate();
+        };
+        this.addLayerToService(layerJson, false, cb);
     },
     /**
      * Adds the layers to the map layer service.
@@ -190,16 +223,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param {JSON[]} layers
      * @param {Function} cb
      */
-    _addLayersToService: function (layers = [], cb) {
+    _addLayersToService: function (layers = []) {
         // initialize the group these layers will be in:
         const mapLayerService = this.instance.getMapLayerService();
         const mapLayerGroup = mapLayerService.findLayerGroupById(this.groupId);
         if (!mapLayerGroup) {
-            const loclayer = this.instance.getLocalization().layer;
             const group = {
                 id: this.groupId,
                 name: {
-                    [Oskari.getLang()]: loclayer.inspire
+                    [Oskari.getLang()]: this.instance.loc('layer.inspire')
                 }
             };
             mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
@@ -208,12 +240,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         layers.forEach((layerJson) => {
             this.addLayerToService(layerJson, true);
         });
-        if (typeof cb === 'function') {
-            cb();
-        }
         if (layers.length > 0) {
             const event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // null as id triggers mass update
             this.sandbox.notifyAll(event);
+            this.notifyUpdate();
         }
     },
     /**
@@ -234,11 +264,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         // This is used to filter out other users shared layers when listing layers on the My Data functionality.
         mapLayer.markAsInternalDownloadSource();
         // Add organization and groups for users own datasets (otherwise left empty/data from baselayer)
-        var loclayer = this.instance.getLocalization().layer;
-        mapLayer.setOrganizationName(loclayer.organization);
+        mapLayer.setOrganizationName(this.instance.loc('layer.organization'));
         mapLayer.setGroups([{
             id: this.groupId,
-            name: loclayer.inspire
+            name: this.instance.loc('layer.inspire')
         }]);
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer, skipEvent);
