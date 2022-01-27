@@ -16,10 +16,10 @@ export const showLayerForm = (values, config, onOk, onClose) => {
     const controls = showPopup(title, content, onClose);
     return {
         ...controls,
-        update: errorCode => {
+        update: error => {
             controls.update(title,
                 (<LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
-                    <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} errorCode={errorCode}/>
+                    <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} error={error}/>
                 </LocaleProvider>));
         }
     };

@@ -81,8 +81,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
                 this._handleErrorResponse(info, errorCb);
                 return;
             }
-            this._handleImportedLayer(json);
             this._showSuccess('flyout.success', { count: json.featuresCount });
+            this._handleImportedLayer(json);
             successCb();
         }).catch(error => {
             this.log.error(error);
@@ -114,13 +114,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         });
     },
     _handleErrorResponse: function (info, errorCb) {
-        const { errorKey = ERRORS.GENERIC, extensions = [], cause, parser } = info || {};
-
-        if (cause === ERRORS.NO_SRS) {
-            const noSrsKey = parser === 'shp' ? 'shpNoSrs' : 'noSrs';
-            this._showError(`flyout.error.${noSrsKey}`);
-            errorCb(ERRORS.NO_SRS);
-            return;
+        const { error, extensions = [], cause, parser } = info || {};
+        let errorKey = error || ERRORS.GENERIC;
+        // Parser error has cause which is used for localized message
+        if (error === ERRORS.PARSER) {
+            if (cause === ERRORS.NO_SRS) {
+                errorKey = parser === 'shp' ? 'shpNoSrs' : 'noSrs';
+            } else if (cause === ERRORS.FORMAT) {
+                errorKey = cause;
+            }
         }
         // pass args for localization even them aren't needed for requested errorKey
         const args = {
@@ -128,7 +130,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             extensions: extensions.join(',')
         };
         this._showError(`flyout.error.${errorKey}`, args);
-        errorCb(errorKey);
+        // Only unknown srs is handled differently, use cause for callback
+        errorCb(cause);
     },
     _showError: function (locKey, args) {
         const content = this.instance.loc(locKey, args);
@@ -138,6 +141,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
     _showSuccess: function (locKey, args) {
         const content = this.instance.loc(locKey, args);
         Messaging.success({ content, duration: 10 });
+    },
+    _showWarning: function (warning = {}) {
+        const { featuresSkipped } = warning;
+        if (!featuresSkipped) {
+            return;
+        }
+        const content = this.instance.loc('flyout.warning.features_skipped', { count: featuresSkipped });
+        Messaging.warn({ content, duration: 10 });
     },
     /**
      * Retrieves the user layers
@@ -231,6 +242,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, true]);
             this.notifyUpdate();
         };
+        const { warning } = layerJson;
+        if (warning) {
+            this._showWarning(warning);
+        }
         this.addLayerToService(layerJson, false, cb);
     },
     /**

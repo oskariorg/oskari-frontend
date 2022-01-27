@@ -93,9 +93,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             isImport
         };
         const onSuccess = () => this.popupCleanup();
-        const onError = (errorKey = ERRORS.GENERIC) => {
+        const onError = (error = ERRORS.GENERIC) => {
             if (this.popupControls) {
-                this.popupControls.update(errorKey);
+                this.popupControls.update(error);
             }
         };
         const save = values => this.getService().submitUserLayer(values, onSuccess, onError);

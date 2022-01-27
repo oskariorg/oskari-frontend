@@ -16,5 +16,7 @@ export const FILE_INPUT_PROPS = {
 
 export const ERRORS = {
     GENERIC: 'generic',
-    NO_SRS: 'unknown_projection'
+    PARSER: 'parser_error',
+    NO_SRS: 'unknown_projection',
+    FORMAT: 'format_failure'
 };

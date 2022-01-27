@@ -63,12 +63,12 @@ const getValidationMessage = keys => {
     );
 };
 
-export const LayerFormContent = ({ values, config, onOk, onCancel, errorCode }) => {
+export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
     const { maxSize, isImport } = config;
     const { style = OSKARI_BLANK_STYLE, locale = {} } = values || {};
     const [state, setState] = useState({ style, locale, loading: false });
 
-    const showSrs = isImport && errorCode === ERRORS.NO_SRS;
+    const showSrs = isImport && error === ERRORS.NO_SRS;
 
     const updateStyle = (style) => setState({ ...state, style });
     const updateLocale = (locale) => setState({ ...state, locale });
@@ -142,7 +142,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, errorCode }) 
             </Buttons>
         </Content>
     );
-    if (!errorCode && state.loading) {
+    if (!error && state.loading) {
         return <Spin showTip={true}>{Component}</Spin>;
     }
     return Component;
@@ -153,5 +153,5 @@ LayerFormContent.propTypes = {
     config: PropTypes.object.isRequired,
     onOk: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
-    errorCode: PropTypes.string
+    error: PropTypes.string
 };
