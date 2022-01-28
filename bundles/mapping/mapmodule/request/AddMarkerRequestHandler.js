@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         }
         // Else format old data to new form and inform user about this
         else {
-            this.sandbox.printWarn('AddMarkerRequest data is debricated format, formatted this to the new format before processing request. Please check your request!');
+            this._log.warn('AddMarkerRequest data is debricated format, formatted this to the new format before processing request. Please check your request!');
             var shape = null;
             if (data.iconUrl) {
                 shape = data.iconUrl;

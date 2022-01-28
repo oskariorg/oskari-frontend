@@ -13,6 +13,8 @@ import '../../request/MarkerVisibilityRequestHandler';
 import '../../event/AfterAddMarkerEvent';
 import '../../event/MarkerClickEvent';
 import '../../event/AfterRemoveMarkersEvent';
+import { showAddMarkerPopup } from './MarkersForm';
+import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, STYLE_TYPE } from './constants';
 
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
@@ -24,56 +26,31 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
      * @method create called automatically on construction
      * @static
      */
-    function (conf, state) {
-        var me = this;
-        me._clazz =
+    function () {
+        this._clazz =
             'Oskari.mapframework.mapmodule.MarkersPlugin';
-        me._name = 'MarkersPlugin';
+        this._name = PLUGIN_NAME;
 
-        me.state = state;
-        me.dotForm = null;
-        me._markers = {};
-        me._unVisibleMarkers = {};
-        me._markerFeatures = {};
-        me._nextMarkerId = 0;
-        me._svg = false;
-        me._defaultIconUrlSize = 32;
-        me._prevIconUrl = '';
-        me._preSVGIconUrl = 'data:image/svg+xml;base64,';
-        me._font = {
-            name: 'dot-markers',
-            baseIndex: 57344
-        };
-        me._defaultData = {
-            x: 0,
-            y: 0,
-            color: 'ffde00',
-            stroke: 'b4b4b4',
-            msg: '',
-            shape: 2,
-            size: 1,
-            transient: false
-        };
-        me._strokeStyle = {
-            'stroke-width': 1,
-            'stroke': '#b4b4b4'
-        };
-        me.buttonGroup = 'selectiontools';
-        me.buttons = null;
-        me.dialog = null;
-        me._buttonsAdded = false;
-        me._waitingUserClickToAddMarker = false;
+        this._markers = {}; // hidden markers aren't added to layer
+
+        this.buttons = null;
+        this.dialog = null;
+        this._buttonsAdded = false;
+        this._showAddMarkerPopupOnMapClick = false;
 
         // Show the marker button
-        me._showMarkerButton = true;
-        if ((conf) && (typeof conf.markerButton === 'boolean')) {
-            me._showMarkerButton = conf.markerButton;
-        }
-        this.__layer = undefined;
+        this._layer = undefined;
+        this.log = Oskari.log(PLUGIN_NAME);
+        this.popupControls = null;
+        this.popupCleanup = () => {
+            if (this.popupControls) {
+                this.popupControls.close();
+                this._showAddMarkerPopupOnMapClick = true;
+            }
+            this.popupControls = null;
+        };
     }, {
-        getDefaultIconUrl: function () {
-            return this.getImagePath('marker.png');
-        },
+
         /**
          * @method hasUI
          * @return {Boolean} true
@@ -84,21 +61,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         },
 
         _createEventHandlers: function () {
-            var me = this;
-
             return {
-                MapClickedEvent: function (event) {
-                    me.__mapClick(event);
-                },
-                'Toolbar.ToolbarLoadedEvent': function () {
-                    me._registerTools();
-                },
-                AfterRearrangeSelectedMapLayerEvent: function () {
-                    me.raiseMarkerLayer();
-                },
-                'Toolbar.ToolSelectedEvent': function (event) {
-                    if (event.getGroupId() !== me.buttonGroup && event.getToolId() !== 'add' && event.getSticky()) {
-                        me._close(false);
+                MapClickedEvent: event => this._mapClick(event),
+                'Toolbar.ToolbarLoadedEvent': () => this._registerTools(),
+                AfterRearrangeSelectedMapLayerEvent: () => this.raiseMarkerLayer(),
+                'Toolbar.ToolSelectedEvent': event => {
+                    if (event.getToolId() !== 'addMarker' && event.getSticky()) {
+                        this.stopMarkerAdd(false);
                     }
                 }
             };
@@ -107,7 +76,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _createRequestHandlers: function () {
             var me = this;
             var sandbox = me.getSandbox();
-
             return {
                 'MapModulePlugin.AddMarkerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.AddMarkerRequestHandler',
@@ -148,94 +116,34 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Creates the base marker layer.
          */
         _startPluginImpl: function () {
-            var me = this;
-
-            this.__layer = this.__layer ? this.__layer : me._createMapMarkerLayer();
-
-            var loc = me.getLocalization();
-            me.dialog = Oskari.clazz.create(
+            this.dialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.Popup'
             );
-
-            me.buttons = {
-                'add': {
+            this.buttons = {
+                addMarker: {
                     iconCls: 'marker-share',
-                    tooltip: loc.buttons.add,
+                    tooltip: this.getMsg('buttons.add'),
                     sticky: true,
-                    callback: function () {
-                        me.__toolButtonClicked();
-                    }
+                    callback: () => this.startMarkerAdd()
                 }
             };
-
-            // Is SVG supported?
-            me._svg = document.implementation.hasFeature(
-                'http://www.w3.org/TR/SVG11/feature#Image',
-                '1.1'
-            );
-
             // Register marker tools
-            me._registerTools();
-
-            // Creates markers on the map
-            me.setState(this.state);
+            this._registerTools();
         },
-        /**
-         * Handle toolbar tool click.
-         * Activate the "add marker mode" on map.
-         */
-        __toolButtonClicked: function () {
-            var me = this;
-            me.enableGfi(false);
-            me._waitingUserClickToAddMarker = true;
-            var loc = me.getLocalization();
-            var diaLoc = loc.dialog;
-            var controlButtons = [];
-            var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
-
-            clearBtn.setTitle(loc.buttons.clear);
-            clearBtn.setHandler(function () {
-                me.removeMarkers();
-                me.stopMarkerAdd(true);
-                me.enableGfi(true);
-            });
-            controlButtons.push(clearBtn);
-            closeBtn.setHandler(function () {
-                me._close(true);
-            });
-            closeBtn.setPrimary(true);
-            controlButtons.push(closeBtn);
-
-            me.dialog.show(
-                diaLoc.title,
-                diaLoc.message,
-                controlButtons
-            );
-            me.getMapModule().getMapEl().addClass(
-                'cursor-crosshair'
-            );
-            me.dialog.moveTo(
-                '#toolbar div.toolrow[tbgroup=default-selectiontools]',
-                'bottom'
-            );
+        getMarker: function (id) {
+            const marker = this._markers[id];
+            if (!marker) {
+                this.log.warn(`Couldn't find marker with id: ${id}`);
+            }
+            return marker;
         },
-
-        _close: function (selectDefault) {
-            this.stopMarkerAdd(selectDefault);
-            this.enableGfi(true);
-        },
-
         /**
          * Creates a marker layer
          * @private
          */
         _createMapMarkerLayer: function () {
-            var me = this;
-            var markerLayer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
-
-            me.getMap().addLayer(markerLayer);
-            me.raiseMarkerLayer(markerLayer);
+            const markerLayer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
+            this.getMap().addLayer(markerLayer);
             return markerLayer;
         },
         /**
@@ -243,29 +151,53 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
-        __mapClick: function (event) {
+        _mapClick: function (event) {
             // adding a marker
-            if (this._waitingUserClickToAddMarker) {
-                this._showForm(event.getMouseX(), event.getMouseY());
+            const { lon, lat } = event.getLonLat();
+            const coord = [lon, lat];
+            if (this._showAddMarkerPopupOnMapClick) {
+                this._showAddMarkerPopupOnMapClick = false;
+                const onAdd = values => {
+                    this.popupCleanup();
+                    this._addMarkerFromPopup(values, coord);
+                };
+                this.popupControls = showAddMarkerPopup(onAdd, this.popupCleanup);
                 return;
             }
-            var me = this;
-            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
-                if (layer === me.getMarkersLayer()) {
-                    me.__markerClicked(feature.get('id'));
-                }
-            });
+            if (!Object.keys(this._markers).length) {
+                return;
+            }
+            this.getMarkersLayer().getSource().getFeaturesAtCoordinate(coord).forEach(feat => this._markerClicked(feat.getId()));
+        },
+        _addMarkerFromPopup: function (values, coord) {
+            const reqBuilder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
+            if (!reqBuilder) {
+                this.log.error('MapModulePlugin.AddMarkerRequest is not available');
+                return;
+            }
+            const { msg, style } = values;
+            const { image } = style;
+            // map style values to marker data
+            const { fill, shape, size } = image;
+            const data = {
+                x: coord[0],
+                y: coord[1],
+                msg,
+                color: fill.color,
+                shape,
+                size
+            };
+            this.getSandbox().request(this.getName(), reqBuilder(data));
         },
         /**
          * Called when a marker has been clicked.
-         * @method  __markerClicked
+         * @method  _markerClicked
          * @private
          * @param  {String} markerId which was clicked
          */
-        __markerClicked: function (markerId) {
-            var sandbox = this.getSandbox();
-            var clickEvent = Oskari.eventBuilder('MarkerClickEvent')(markerId);
-            sandbox.notifyAll(clickEvent);
+        _markerClicked: function (markerId) {
+            const clickEvent = Oskari.eventBuilder('MarkerClickEvent')(markerId);
+            this.getSandbox().notifyAll(clickEvent);
         },
 
         /**
@@ -273,69 +205,54 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {Function}
          */
         addMapLayerToMap: function () {
-            var me = this;
-            return function () {
-                me.raiseMarkerLayer();
-            };
+            return () => this.raiseMarkerLayer();
         },
         getMarkersLayer: function () {
-            // call _createMapMarkerLayer if not created yet?
-            return this.__layer;
+            if (!this._layer) {
+                this._layer = this._createMapMarkerLayer();
+            }
+            return this._layer;
         },
 
         /**
          * Removes all markers from the layer
          * @param {Boolean} suppressEvent true to suppress from sending event
-         * @param {String} optionalMarkerId marker id
-         * @param {Boolean} notCleanUnvisibleMarkers true to not clean unvisibled markers
+         * @param {String} markerId marker id
+         * @param {Boolean} skipHidden true to not clean unvisibled markers
          */
-        removeMarkers: function (suppressEvent, optionalMarkerId, notCleanUnvisibleMarkers) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var markerLayer = this.getMarkersLayer();
-            if (!markerLayer) {
-                sandbox.printWarn('Tried to remove markers, but lost the layer');
-                return;
-            }
-
+        removeMarkers: function (markerId, suppressEvent, skipHidden) {
+            const layerSource = this.getMarkersLayer().getSource();
             // remove all
-            if (!optionalMarkerId) {
-                // Openlayers
-                markerLayer.getSource().clear();
+            if (!markerId) {
+                // Openlayers (doesn't have hidden markers)
+                layerSource.clear();
                 // internal data structure
-                delete me._markers;
-                me._markers = {};
-                delete me._markerFeatures;
-                me._markerFeatures = {};
-                if (!notCleanUnvisibleMarkers) {
-                    delete me._unVisibleMarkers;
-                    me._unVisibleMarkers = {};
+                if (skipHidden) {
+                    Object.keys(this._markers).forEach(id => {
+                        if (this._markers[id].hidden) {
+                            return;
+                        }
+                        delete this._markers[id];
+                    });
+                } else {
+                    this._markers = {};
                 }
             } else {
-                // remove single marker
-                var marker = me._markerFeatures[optionalMarkerId];
-                if (!marker) {
-                    sandbox.printWarn('Tried to remove non-existing marker with id: ' + optionalMarkerId);
-                    return;
+                // layer doesn't have hidden markers
+                const { hidden } = this.getMarker(markerId);
+                if (!hidden) {
+                    const feature = layerSource.getFeatureById(markerId);
+                    layerSource.removeFeature(feature);
                 }
-                // Openlayers
-                markerLayer.getSource().removeFeature(marker);
                 // internal data structure
-                me._markers[optionalMarkerId] = null;
-                delete me._markers[optionalMarkerId];
-                me._markerFeatures[optionalMarkerId] = null;
-                delete me._markerFeatures[optionalMarkerId];
-                if (!notCleanUnvisibleMarkers) {
-                    me._unVisibleMarkers[optionalMarkerId] = null;
-                    delete me._unVisibleMarkers[optionalMarkerId];
-                }
+                delete this._markers[markerId];
             }
 
             if (!suppressEvent) {
                 var removeEvent = Oskari.eventBuilder(
                     'AfterRemoveMarkersEvent'
-                )(optionalMarkerId);
-                sandbox.notifyAll(removeEvent);
+                )(markerId);
+                this.getSandbox().notifyAll(removeEvent);
             }
         },
 
@@ -344,119 +261,91 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {*}
          */
         getMapMarkerBounds: function () {
-            var markerLayer = this.getMarkersLayer();
-            if (markerLayer) {
-                return markerLayer.getDataExtent();
-            }
+            return this.getMarkersLayer().getSource().getExtent();
         },
 
         /**
-         * Shows a configuration form for new marker visualization
-         * @param e
-         * @private
+         * Activate the "add marker mode" on map.
          */
-        _showForm: function (clickX, clickY) {
-            var me = this;
-            // if we dont set false here the user can click map again and a new popup is opened on top of the existing one
-            me._waitingUserClickToAddMarker = false;
-            var lonlat = me._map.getCoordinateFromPixel([
-                clickX,
-                clickY
-            ]);
-            var loc = me.getLocalization().form;
-            me.dotForm = Oskari.clazz.create(
-                'Oskari.userinterface.component.visualization-form.DotForm',
-                me,
-                loc,
-                me._defaultData
+        startMarkerAdd: function () {
+            this.enableGfi(false);
+            this._showAddMarkerPopupOnMapClick = true;
+            const clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            const closeBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+
+            clearBtn.setTitle(this.getMsg('dialog.clear'));
+            clearBtn.setHandler(() => this.removeMarkers());
+            closeBtn.setHandler(() => this.stopMarkerAdd(true));
+            closeBtn.setPrimary(true);
+
+            this.dialog.show(
+                this.getMsg('title'),
+                this.getMsg('dialog.message'),
+                [clearBtn, closeBtn]
             );
-            var dialog = me.dotForm.getDialog();
-            if (dialog) {
-                dialog.close(true);
-            }
-            me.dotForm.showForm(jQuery('div.selection-line')[0], {
-                messageEnabled: true
-            }, 'right');
-
-            me.dotForm.setSaveHandler(function () {
-                var values = me.dotForm.getValues();
-                var reqBuilder = Oskari.requestBuilder(
-                    'MapModulePlugin.AddMarkerRequest'
-                );
-
-                if (reqBuilder) {
-                    var data = {
-                        x: lonlat[0],
-                        y: lonlat[1],
-                        msg: values.message,
-                        color: values.color,
-                        shape: values.shape,
-                        size: values.size
-                    };
-                    var request = reqBuilder(data);
-                    me.getSandbox().request(me.getName(), request);
-                    me.stopMarkerAdd(true);
-                }
-                me.dotForm.getDialog().close(true);
-                me.enableGfi(true);
-            });
-
-            me.dotForm.setCancelHandler(function () {
-                // return to wait another click for a marker
-                me.dotForm.getDialog().close();
-                me._waitingUserClickToAddMarker = true;
-            });
+            this.getMapModule().getMapEl().addClass(
+                'cursor-crosshair'
+            );
+            this.dialog.moveTo(
+                '#toolbar div.toolrow[tbgroup=default-selectiontools]',
+                'bottom'
+            );
         },
-
         /**
          * Stops the marker location selector
          */
         stopMarkerAdd: function (selectDefault) {
-            var me = this;
-            var sandbox = this.getSandbox();
-            me._waitingUserClickToAddMarker = false;
-            if (me.dialog) {
-                me.getMapModule().getMapEl().removeClass('cursor-crosshair');
-                me.dialog.close(true);
+            this.enableGfi(true);
+            this._showAddMarkerPopupOnMapClick = false;
+            if (this.dialog) {
+                this.dialog.close(true);
             }
+            this.getMapModule().getMapEl().removeClass('cursor-crosshair');
             if (!selectDefault) {
                 return;
             }
             // ask toolbar to select default tool if available
-            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+            const toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             if (toolbarRequest) {
-                sandbox.request(me, toolbarRequest());
+                this.getSandbox().request(this, toolbarRequest());
             }
         },
-
-        /**
-         * Adds an array of markers to the map
-         * @param markers
-         */
-        addMapMarkers: function (markers) {
-            var i;
-            for (i = 0; i < markers.length; i += 1) {
-                this.addMapMarker(markers[i], null, true);
-            }
-        },
-
-        __getSanitizedMarker: function (markerData, id) {
+        _getSanitizedMarker: function (markerData, markerId) {
+            const { x, y } = markerData;
             // Validation: coordinates are needed
-            if ((typeof markerData.x === 'undefined') || (typeof markerData.y === 'undefined')) {
-                this.getSandbox().printWarn('Undefined coordinate in', markerData);
+            if ((typeof x === 'undefined') || (typeof y === 'undefined')) {
+                this.log.warn('Undefined coordinate in', markerData);
                 return null;
             }
             // Remove null values to get defaults
             Object.keys(markerData).forEach(key => markerData[key] === null && delete markerData[key]);
-            // Combine default values with given values
-            var data = jQuery.extend(true, {}, this._defaultData, markerData);
 
             // generate id if not provided
-            data.id = id;
-            if (!id) {
-                data.id = 'M' + this._nextMarkerId++;
+            const id = markerId || ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();
+            // check for existing marker
+            if (this._markers[id]) {
+                // remove if found - will be replaced with new config
+                // event is suppressed as this is "modify"
+                this.removeMarkers(id, true);
             }
-            return data;
+            this._markers[id] = markerData;
+
+            const oskariStyle = { ...DEFAULT_STYLE };
+            const { color, shape, size, msg } = markerData;
+
+            if (color) {
+                oskariStyle.image.fill.color = color.charAt(0) === '#' ? color : '#' + color;
+            }
+            if (!isNaN(shape)) {
+                oskariStyle.image.shape = parseInt(shape);
+            }
+            if (size) {
+                oskariStyle.image.size = size;
+            }
+            if (msg) {
+                oskariStyle.text.labelText = decodeURIComponent(msg);
+            }
+            return { id, x, y, oskariStyle };
         },
 
         /**
@@ -465,103 +354,24 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param {String} id
          * @param {Boolean} suppressEvent true to not send out an event about adding marker
          */
-        addMapMarker: function (markerData, id, suppressEvent) {
+        addMapMarker: function (markerData, markerId, suppressEvent) {
             var me = this;
             // Combine default values with given values
-            var data = this.__getSanitizedMarker(markerData, id);
+            var data = this._getSanitizedMarker(markerData, markerId);
             if (!data) {
                 // validation failed
-                this.getSandbox().printWarn('Error while adding marker');
+                this.log.warn('Error while adding marker');
                 return;
             }
+            const { id, x, y, oskariStyle } = data;
+            const layer = this.getMarkersLayer();
+            const style = this.getMapModule().getStyle(oskariStyle, STYLE_TYPE);
 
-            // check for existing marker
-            if (this._markers[data.id]) {
-                // remove if found - will be replaced with new config
-                // event is suppressed as this is "modify"
-                this.removeMarkers(true, data.id);
-            }
-
-            // Check if marker is unvisible
-            if (this._unVisibleMarkers[data.id]) {
-                this._unVisibleMarkers[data.id] = null;
-                delete this._unVisibleMarkers[data.id];
-            }
-
-            // Image data already available
-            var iconSrc = null;
-            if (me._svg) {
-                if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
-                    iconSrc = data.iconUrl;
-                }
-            } else {
-                iconSrc = me.getDefaultIconUrl();
-            }
-            if (typeof data.color === 'string') {
-                if (data.color.charAt(0) !== '#') {
-                    data.color = '#' + data.color;
-                }
-            } else {
-                data.color = me._defaultData.color;
-            }
-            if (typeof data.stroke === 'string') {
-                if (data.stroke.charAt(0) !== '#') {
-                    data.stroke = '#' + data.stroke;
-                }
-            } else {
-                data.stroke = me._defaultData.stroke;
-            }
-            var style = {
-                image: {
-                    fill: {
-                        color: data.color
-                    },
-                    size: data.size,
-                    shape: data.shape,
-                    offsetX: data.offsetX,
-                    offsetY: data.offsetY,
-                    stroke: data.stroke
-                },
-                text: {
-                    font: 'bold 16px Arial',
-                    textAlign: 'left',
-                    textBaseline: 'middle',
-                    offsetX: 8 + 2 * data.size,
-                    offsetY: 8,
-                    fill: {
-                        color: '#000000'
-                    },
-                    stroke: {
-                        color: '#ffffff',
-                        width: 3
-                    }
-                }
-            };
-            if (data.msg) {
-                try {
-                    style.text.labelText = decodeURIComponent(data.msg);
-                } catch (e) {
-                    // For some reason this is called when getting stateparameters.
-                    // Message is not urlencoded at that point and % causes error to be thrown
-                    style.text.labelText = data.msg;
-                }
-            }
-            var markerLayer = this.getMarkersLayer();
-            var markerStyle = this.getMapModule().getStyle(style);
-            var newMarker = new olFeature({ id: data.id, geometry: new olGeom.Point([data.x, data.y]) });
-
-            this._markerFeatures[data.id] = newMarker;
-            this._markers[data.id] = data;
-            newMarker.setStyle(markerStyle);
-
-            markerLayer.getSource().addFeature(newMarker);
-            this.raiseMarkerLayer(markerLayer);
-
-            // Save generated icon
-            me._prevIconUrl = iconSrc;
-
-            // Update the state
-            me.updateState();
+            const feature = new olFeature(new olGeom.Point([x, y]));
+            feature.setId(id);
+            feature.setStyle(style);
+            layer.getSource().addFeature(feature);
+            this.raiseMarkerLayer();
 
             if (!suppressEvent) {
                 var addEvent = Oskari.eventBuilder(
@@ -579,73 +389,39 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *                  exists, it will be changed visibility.
          */
         changeMapMarkerVisibility: function (visible, markerId) {
-            var key;
-            if (!visible && markerId) { // Check hiding for wanted marker
-                if (this._markers[markerId]) {
-                    this._unVisibleMarkers[markerId] = { ...this._markers[markerId] };
-                    // remove if found
-                    // event is suppressed as this is "modify"
-                    this.removeMarkers(true, markerId, true);
-                    delete this._markers[markerId];
+            const suppressEvent = true;
+            if (markerId) {
+                const marker = this.getMarker(markerId);
+                if (visible) {
+                    // need to use addMapMarker to create and add feature to map
+                    this.addMapMarker(marker, markerId, suppressEvent);
+                } else {
+                    const layerSource = this.getMarkersLayer().getSource();
+                    const feature = layerSource.getFeatureById(markerId);
+                    layerSource.removeFeature(feature);
                 }
-            } else if (!visible) { // Check hiding for all markers
-                for (key in this._markers) {
-                    this._unVisibleMarkers[key] = { ...this._markers[key] };
-                    // remove if found
-                    // event is suppressed as this is "modify"
-                    this.removeMarkers(true, key, true);
-                    delete this._markers[key];
-                }
-            } else if (markerId) { // Check showing for wanted marker
-                if (this._unVisibleMarkers[markerId]) {
-                    this._markers[markerId] = { ...this._unVisibleMarkers[markerId] };
-                    // remove if found
-                    // event is suppressed as this is "modify"
-                    this.addMapMarker(this._markers[markerId], markerId, true);
-                    delete this._unVisibleMarkers[markerId];
-                }
-            } else { // Check showing for all markers
-                for (key in this._unVisibleMarkers) {
-                    this._markers[key] = { ...this._unVisibleMarkers[key] };
-                    // remove if found
-                    // event is suppressed as this is "modify"
-                    this.addMapMarker(this._markers[key], key, true);
-                    delete this._unVisibleMarkers[key];
-                }
+                marker.hidden = !visible;
+                return;
             }
+            if (visible) {
+                const idsToAdd = Object.keys(this._markers).filter(id => this.getMarker(id).hidden);
+                // need to use addMapMarker to create and add features to map
+                idsToAdd.forEach(id => this.addMapMarker(this.getMarker(id), id, suppressEvent));
+                return;
+            }
+            this.getMarkersLayer().getSource().clear();
+            Object.keys(this._markers).forEach(id => {
+                this.getMarker(id).hidden = true;
+            });
         },
-
-        /**
-         * Constructs a marker image dynamically
-         * @param marker
-         * @returns {*}
-         */
-        constructImage: function () {
-            return this.getDefaultIconUrl();
-        },
-
-        /**
-         * Converts from abstract marker size to real pixel size
-         *
-         * @param size Abstract size
-         * @returns {number} Size in pixels
-         * @private
-         */
-        // --> method moved to AbstractMapModule.js
-        /* _getSizeInPixels: function(size) {
-            return 40 + 10 * size;
-        }, */
 
         /**
          * Raises the marker layer above the other layers
          *
          * @param markerLayer
          */
-        raiseMarkerLayer: function (layer) {
-            if (!layer) {
-                layer = this.getMarkersLayer();
-            }
-            this.getMapModule().bringToTop(layer);
+        raiseMarkerLayer: function () {
+            this.getMapModule().bringToTop(this.getMarkersLayer());
         },
 
         /**
@@ -654,33 +430,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @method registerTool
          */
         _registerTools: function () {
-            var me = this;
-            var request;
-            var tool;
-            var sandbox = this.getSandbox();
-
-            // Is button available or already added the button?
-            if (!me._showMarkerButton || me._buttonsAdded) {
+            const { markerButton } = this.getConfig();
+            if (this._buttonsAdded || markerButton === false) {
                 return;
             }
-
+            const sandbox = this.getSandbox();
             if (!sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 // Couldn't get the request, toolbar not loaded
                 return;
             }
-            var reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-
-            for (tool in me.buttons) {
-                if (me.buttons.hasOwnProperty(tool)) {
-                    request = reqBuilder(
-                        tool,
-                        me.buttonGroup,
-                        me.buttons[tool]
-                    );
-                    sandbox.request(me.getName(), request);
-                }
-            }
-            me._buttonsAdded = true;
+            const reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+            Object.keys(this.buttons).forEach(btnName => {
+                const request = reqBuilder(btnName, TOOL_GROUP, this.buttons[btnName]);
+                sandbox.request(this.getName(), request);
+            });
+            this._buttonsAdded = true;
         },
 
         /**
@@ -689,6 +453,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param {Boolean} blnEnable true to enable, false to disable
          */
         enableGfi: function (blnEnable) {
+            // TODO or use isDrawing
             var sandbox = this.getSandbox();
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
@@ -707,35 +472,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 sandbox.request(this.getName(), hiReqBuilder(blnEnable));
             }
         },
-
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (key) {
-                return this._loc[key];
-            }
-            return this._loc;
-        },
-
         /**
          * @method setState
          * Set the bundle state
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            this.state = state;
+            const { markers } = state || {};
             // remove markers without sending an AfterRemoveMarkersEvent
-            this.removeMarkers(true);
-            if (this.state && this.state.markers) {
-                this.addMapMarkers(this.state.markers);
+            this.removeMarkers(null, true);
+            if (markers) {
+                markers.forEach(marker => this.addMapMarker(marker, null, true));
             }
         },
         /**
@@ -795,43 +542,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            this.updateState();
-            return jQuery.extend({}, this.state);
-        },
-
-        /**
-         *  Updates the bundle state.
-         */
-        updateState: function () {
-            var me = this;
-
-            if ((typeof me.state === 'undefined') || (me.state === null)) {
-                me.state = {};
-            }
-            me.state.markers = [];
-            Object.values(this._markers).forEach(marker => {
-                if (!marker.transient) {
-                    me.state.markers.push(marker);
-                }
-            });
-        },
-
-        /**
-         * @method getFont
-         * Returns a marker shape font
-         * @return {Object} font
-         */
-        getFont: function () {
-            return this._font;
-        },
-
-        /**
-         * @method getIcon
-         * Return a marker icon
-         * @return {Object} icon
-         */
-        getIcon: function () {
-            return this._prevIconUrl;
+            const markers = Object.values(this._markers).filter(marker => !marker.transient);
+            const state = { markers };
+            return state;
         },
         /**
          * @method getOLMapLayers
@@ -839,8 +552,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @return null
          */
         getOLMapLayers: function () {
-            // TODO: Should return the markers layer?
-            return null;
+            return [this.getMarkersLayer()];
         }
 
     }, {
