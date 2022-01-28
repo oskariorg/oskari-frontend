@@ -16,9 +16,9 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     _startImpl: function (sandbox) {
         this.service = new UserStyleService(sandbox);
         sandbox.registerService(this.service);
-        this.service.on('update', () => {
+        this.service.on('update', (layerId) => {
             if (this.popupController) {
-                this.popupController.update();
+                this.popupController.update({ layerId });
             }
         });
     },
@@ -32,9 +32,12 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
         this.popupController = null;
     },
     showPopup (values) {
-        this.cleanPopup(); // TODO: is this only way to open new style from list's button (could update be used?? or add comment?)
         const onClose = () => this.cleanPopup();
-        this.popupController = showStylesPopup(this.service, values, onClose);
+        if (this.popupController) {
+            this.popupController.update(values);
+        } else {
+            this.popupController = showStylesPopup(this.service, values, onClose);
+        }
     }
 }, {
     extend: ['Oskari.BasicBundle'],

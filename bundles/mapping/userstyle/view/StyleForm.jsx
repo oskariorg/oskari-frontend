@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, TextInput, Tooltip, Divider } from 'oskari-ui';
-import { SecondaryButton, PrimaryButton } from 'oskari-ui/components/buttons';
+import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 import { BUNDLE_KEY } from './';
@@ -11,14 +11,10 @@ const Content = styled('div')`
     padding: 24px;
     width: 550px;
 `;
-const Buttons = styled('div')`
-    padding: 10px 0px;
-    margin-left: auto;
-`;
 
 const getMessage = key => <Message messageKey={ `popup.${key}` } />;
 
-export const StyleForm = ({ vectorStyle, onAdd, onClose }) => {
+export const StyleForm = ({ vectorStyle, onAdd, onCancel }) => {
     const [state, setState] = useState({
         featureStyle: vectorStyle.hasDefinitions() ? vectorStyle.getFeatureStyle() : OSKARI_BLANK_STYLE,
         title: vectorStyle.getTitle()
@@ -41,16 +37,16 @@ export const StyleForm = ({ vectorStyle, onAdd, onClose }) => {
                 oskariStyle={ state.featureStyle }
                 onChange={ updateStyle }
             />
-            <Buttons>
-                <SecondaryButton type='cancel' onClick={onClose}/>
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={onCancel}/>
                 <PrimaryButton type='save' onClick={() => onAdd(state) }/>
-            </Buttons>
+            </ButtonContainer>
         </Content>
     );
 };
 
 StyleForm.propTypes = {
     onAdd: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
     vectorStyle: PropTypes.object.isRequired
 };

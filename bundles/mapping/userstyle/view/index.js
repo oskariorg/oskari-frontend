@@ -8,12 +8,8 @@ import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 
 export const BUNDLE_KEY = 'userstyle';
 
-export const showStylesPopup = (service, values, onClose) => {
-    const { layerId, styleName, showStyle } = values;
-    const styles = service.getUserStylesForLayer(layerId);
-    const showStyleForm = styles.length === 0 || showStyle;
-    const onRemove = service.removeUserStyle.bind(service);
-
+const getContent = (service, styles, values, showStyleForm, onClose) => {
+    const { layerId, styleName } = values;
     let content;
     if (showStyleForm) {
         const style = service.getUserStyle(layerId, styleName) || new VectorStyle('', '', 'user');
@@ -22,29 +18,41 @@ export const showStylesPopup = (service, values, onClose) => {
             style.setTitle(title);
             service.saveUserStyle(layerId, style);
         };
-        // Service triggers update on saveUserLayer. Trigger update also onClose to render style list
-        content = <StyleForm vectorStyle={ style } onAdd={ onAdd } onClose={ service.update.bind(service) }/>;
+        const onCancel = () => {
+            if (styles.length > 0) {
+                service.notify(layerId);
+            } else {
+                onClose();
+            }
+        };
+        content = <StyleForm vectorStyle={ style } onAdd={ onAdd } onCancel={ onCancel }/>;
     } else {
-        content = <UserStyles layerId={layerId} styles={styles} removeUserStyleHandler={onRemove} />;
+        content = <UserStyles layerId={ layerId } styles={ styles } removeUserStyleHandler={ service.removeUserStyle.bind(service) } />;
     }
+    return (
+        <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+            { content }
+        </LocaleProvider>
+    );
+};
 
-    const title = <Message bundleKey={ BUNDLE_KEY } messageKey={showStyleForm ? 'popup.title' : 'title'} />;
-    const controls = showPopup(title,
-        (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-            {content}
-        </LocaleProvider>),
-        onClose, { id: BUNDLE_KEY }
+const getTitle = (showStyleForm) => <Message bundleKey={ BUNDLE_KEY } messageKey={showStyleForm ? 'popup.title' : 'title'} />;
+
+export const showStylesPopup = (service, values = {}, onClose) => {
+    const styles = service.getUserStylesForLayer(values.layerId);
+    const showStyleForm = styles.length === 0 || values.showStyle;
+    const controls = showPopup(
+        getTitle(showStyleForm),
+        getContent(service, styles, values, showStyleForm, onClose),
+        onClose,
+        { id: BUNDLE_KEY }
     );
     return {
         ...controls,
-        update: () => {
-            const styles = service.getUserStylesForLayer(layerId);
-            const title = <Message bundleKey={ BUNDLE_KEY } messageKey='title' />;
-            controls.update(title,
-                (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
-                    <UserStyles layerId={layerId} styles={styles} removeUserStyleHandler={onRemove} />
-                </LocaleProvider>));
-            controls.bringToTop();
+        update: (values = {}) => {
+            const styles = service.getUserStylesForLayer(values.layerId);
+            const showStyleForm = styles.length === 0 || values.showStyle;
+            controls.update(getTitle(showStyleForm), getContent(service, styles, values, showStyleForm, onClose));
         }
     };
 };
