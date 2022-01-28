@@ -40,21 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         }
         return Oskari.urls.getRoute('CreateUserLayer', params);
     },
-    /**
-     * Returns the url used to update layer.
-     *
-     * @method getEditLayerUrl
-     * @return {String}
-     */
-    getEditLayerUrl: function (id, values) {
-        const params = {
-            id,
-            srs: this.srs,
-            locale: JSON.stringify(values.locale),
-            style: JSON.stringify(values.style)
-        };
-        return Oskari.urls.getRoute('EditUserLayer', params);
-    },
+
     submitUserLayer: function (values, successCb, errorCb) {
         const { sourceSrs, locale, style, file } = values;
         const formData = new FormData();
@@ -93,8 +79,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
 
     updateUserLayer: function (layerId, values, successCb, errorCb) {
         const id = this.getActualId(layerId);
-        fetch(this.getEditLayerUrl(id, values), {
+        const formData = new FormData();
+        formData.append('locale', JSON.stringify(values.locale));
+        formData.append('style', JSON.stringify(values.style));
+        fetch(Oskari.urls.getRoute('EditUserLayer', { id, srs: this.srs }), {
             method: 'POST',
+            body: formData,
             headers: {
                 'Accept': 'application/json'
             }
