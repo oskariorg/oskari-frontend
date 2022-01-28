@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         return {
             Contents: {
                 Layer: [{
-                    Identifier: layerCapabilities.id,
+                    Identifier: layerCapabilities.id || layerCapabilities.name,
                     TileMatrixSetLink: [{
                         TileMatrixSet: tileMatrixSet.identifier
                     }],
