@@ -1,10 +1,11 @@
 import { UserStyleService } from './service/UserStyleService';
-import { UserStylesFlyout } from './UserStylesFlyout';
+import { showStylesPopup } from './view';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
  */
 Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', function () {
     this.service = null;
+    this.popupController = null;
 }, {
     __name: 'UserStyleBundleInstance',
     requestHandlers: {
@@ -15,15 +16,28 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     _startImpl: function (sandbox) {
         this.service = new UserStyleService(sandbox);
         sandbox.registerService(this.service);
+        this.service.on('update', (layerId) => {
+            if (this.popupController) {
+                this.popupController.update({ layerId });
+            }
+        });
     },
     getService: function () {
         return this.service;
     },
-    getFlyout () {
-        if (!this.flyout) {
-            this.flyout = new UserStylesFlyout(this);
+    cleanPopup () {
+        if (this.popupController) {
+            this.popupController.close();
         }
-        return this.flyout;
+        this.popupController = null;
+    },
+    showPopup (values) {
+        const onClose = () => this.cleanPopup();
+        if (this.popupController) {
+            this.popupController.update(values);
+        } else {
+            this.popupController = showStylesPopup(this.service, values, onClose);
+        }
     }
 }, {
     extend: ['Oskari.BasicBundle'],

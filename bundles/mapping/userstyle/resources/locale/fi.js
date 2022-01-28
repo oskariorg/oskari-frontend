@@ -9,10 +9,8 @@ Oskari.registerLocalization(
         "defaultName": "Oma tyyli",        
         "popup": {
             "title": "Oma tyyli",
-            "button": {
-                "cancel": "Peruuta",
-                "save": "Tallenna"
-            }
+            "name" : "Tyylin nimi",
+            "style" : "Esitystapa"
         }
     }
 });
