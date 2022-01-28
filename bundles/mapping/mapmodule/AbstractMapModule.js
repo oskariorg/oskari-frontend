@@ -168,6 +168,7 @@ Oskari.clazz.define(
 
         // mapcontrols assumes this to be present before init or start
         me._localization = null;
+        this._loc = Oskari.getMsg.bind(null, 'MapModule');
 
         me._defaultMarker = {
             shape: 2,
@@ -1755,6 +1756,13 @@ Oskari.clazz.define(
                 return this._localization[key];
             }
             return this._localization;
+        },
+        getPluginMsg: function (plugin, path, args) {
+            // return whole Object if path isn't given
+            if (!path) {
+                return this._loc(`plugin.${plugin}`);
+            }
+            return this._loc(`plugin.${plugin}.${path}`, args);
         },
         /**
          * @method onEvent
