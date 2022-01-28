@@ -113,22 +113,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.ComponentsBundle", function(
             "src" : "../../../../bundles/framework/divmanazer/component/ProgressBar.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/LineForm.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/DotForm.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/divmanazer/resources/scss/visualizationform.scss"
         }, {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/divmanazer/resources/scss/divman.scss"
