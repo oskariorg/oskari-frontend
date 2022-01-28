@@ -87,17 +87,27 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
     }, [oskariStyle]);
 
     const formats = tabs || constants.SUPPORTED_FORMATS;
+
+    // Don't render tab selector and show preview in tab if there is only one format
+    const showSelector = formats.length > 1;
+    const showPreview = !showSelector;
+
+    const renderTab = () => {
+        return (
+            <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
+            </TabSelector>
+        );
+    }
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
-                <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                    { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
-                </TabSelector>
+                {showSelector  && renderTab() }
                 <Card>
                     <StaticForm form={ form } onValuesChange={ onUpdate }>
-                        { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
-                        { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
-                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
+                        { selectedTab === 'point' && <PointTab oskariStyle={ style } showPreview={showPreview}/> }
+                        { selectedTab === 'line' && <LineTab oskariStyle={ style } showPreview={showPreview} /> }
+                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } showPreview={showPreview} /> }
                     </StaticForm>
                 </Card>
             </FormSpace>
