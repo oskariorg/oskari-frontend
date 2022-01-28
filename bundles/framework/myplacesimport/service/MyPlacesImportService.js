@@ -146,23 +146,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      *
      * @method getUserLayers
      */
-    getUserLayers: function (id) {
-        jQuery.ajax({
-            url: Oskari.urls.getRoute('GetUserLayers', { srs: this.srs }),
-            type: 'GET',
-            dataType: 'json',
-            success: (response) => {
-                if (response) {
-                    this._addLayersToService(response.userlayers);
-                }
-                // TODO: this._showError(''); ??
-            },
-            error: (jqXHR, textStatus) => {
-                if (jqXHR.status !== 0) {
-                    // TODO: this._showError(''); ??
-                    this.log.error('Failed to load userlayers', textStatus);
-                }
+    getUserLayers: function () {
+        fetch(Oskari.urls.getRoute('GetUserLayers', { srs: this.srs }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
             }
+        }).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then(json => {
+            this._addLayersToService(json.userlayers);
+        }).catch(error => {
+            // this._showError('tab.error.load');
+            this.log.error(error);
         });
     },
     getActualId: function (layerId) {
@@ -176,23 +175,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
      * @param layer layer userlayer data to be destroyed
      */
     deleteUserLayer: function (layerId) {
-        jQuery.ajax({
-            url: Oskari.urls.getRoute('DeleteUserLayer'),
-            data: {
-                id: this.getActualId(layerId)
-            },
-            type: 'POST',
-            success: response => {
-                if (response && response.result === 'success') {
-                    this._removeLayerFromService(layerId);
-                    this._showSuccess('tab.notification.deletedMsg');
-                } else {
-                    this._showError('tab.error.deleteMsg');
-                }
-            },
-            error: () => this._showError('tab.error.deleteMsg')
+        const id = this.getActualId(layerId);
+        fetch(Oskari.urls.getRoute('DeleteUserLayer', { id }), {
+            method: 'POST'
+        }).then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            this._showSuccess('tab.notification.deletedMsg');
+            this._removeLayerFromService(layerId);
+        }).catch(error => {
+            this._showError('tab.error.deleteMsg');
+            this.log.error(error);
         });
     },
+
     notifyUpdate: function () {
         this.trigger('update');
     },
