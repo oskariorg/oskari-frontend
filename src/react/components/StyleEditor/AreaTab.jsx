@@ -105,7 +105,7 @@ export const AreaTab = ({oskariStyle}) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
+                <Col span={ 12 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.area.color'
@@ -115,7 +115,7 @@ export const AreaTab = ({oskariStyle}) => {
                     </Form.Item>
                 </Col>
 
-                <Col span={ 10 } offset={ 2 }>
+                <Col span={ 12 } >
                     <Tooltip title={fillColorTooltip} placement='topLeft'>
                         <Form.Item
                             { ...constants.ANTD_FORMLAYOUT }

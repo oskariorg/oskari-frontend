@@ -8,7 +8,7 @@ export const LineTab = (props) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
+                <Col span={ 12 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
