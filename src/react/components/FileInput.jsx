@@ -31,7 +31,6 @@ const HiddenFileInput = styled('input')`
     display: none;
 `;
 const StyledFileList = styled('div')`
-    display: inline-block;
     padding: 0px 12px;
     margin-top: 8px;
 `;
@@ -42,6 +41,7 @@ const StyledUploadIcon = styled(CloudUploadOutlined)`
 const StyledListItem = styled('span')`
     white-space: nowrap;
     padding-left: 5px;
+    display: inline-block;
 `;
 const StyledName = styled('span')`
     color: #40a9ff;
@@ -62,9 +62,10 @@ export const FileInput = ({
     multiple=true,
     tooltip,
     allowedTypes = [],
-    maxSize = MAX_SIZE
+    maxSize = MAX_SIZE,
+    files = []
 }) => {
-    const [currentFiles, setFiles] = useState([]);
+    const [currentFiles, setFiles] = useState(files);
     const maxCount = multiple ? MAX_COUNT : 1;
 
     const onDrop = event => {

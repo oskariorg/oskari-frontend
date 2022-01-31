@@ -8,10 +8,8 @@ Oskari.registerLocalization({
         "defaultName": "Own style",
         "popup": {
             "title": "Own style",
-            "button": {
-                "cancel": "Cancel",
-                "save": "Save"
-            }
+            "name" : "Style name",
+            "style" : "Style"
         }
     }
 });

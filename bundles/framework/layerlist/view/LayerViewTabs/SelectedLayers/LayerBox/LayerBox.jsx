@@ -67,12 +67,12 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                             : <EyeShut onClick={handleToggleVisibility} />}
                                     </ColAuto>
                                     <Col>
-                                        <Row style={{ padding: '0px' }}>
-                                            <ColAuto style={{ padding: '0px' }}>
+                                        <Row style={{ padding: '0px', flexWrap: 'nowrap' }}>
+                                            <ColAuto style={{ padding: '0px', flexShrink: 1 }}>
                                                 {getName()}<br/>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px' }}>
+                                            <ColAutoRight style={{ padding: '0px', alignSelf: 'flex-end' }}>
                                                 {publishable &&
                                                 <Fragment>
                                                     <br/>

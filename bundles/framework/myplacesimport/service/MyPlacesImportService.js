@@ -6,8 +6,8 @@ import { ERRORS } from '../constants';
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService', function (instance) {
     this.instance = instance;
     this.srs = instance.getSandbox().getMap().getSrsName();
-    // negative value for group id means that admin isn't presented with tools for it
-    this.groupId = -1 * Oskari.getSeq('usergeneratedGroup').nextVal();
+    // negative value for group id means that admin isn't presented with tools for it (-1 is reserved for default group)
+    this.groupId = -10 * Oskari.getSeq('usergeneratedGroup').nextVal();
     this.log = Oskari.log('MyPlacesImportService');
     Oskari.makeObservable(this);
 }, {

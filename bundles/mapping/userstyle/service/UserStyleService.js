@@ -12,7 +12,8 @@ export class UserStyleService {
         }
         const layerStyles = this.getUserStylesForLayer(layerId);
         if (!style.getTitle()) {
-            style.setTitle(Oskari.getMsg('userstyle', 'defaultName') + ' ' + (layerStyles.length + 1));
+            const nextVal = Oskari.getSeq('userstyle').nextVal();
+            style.setTitle(Oskari.getMsg('userstyle', 'defaultName') + ' ' + nextVal);
         }
         const name = style.getName();
         const index = layerStyles.findIndex(s => s.getName() === name);
@@ -30,7 +31,7 @@ export class UserStyleService {
             this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
             this.notifyLayerUpdate(layerId);
         }
-        this.trigger('update');
+        this.notify(layerId);
     }
 
     removeUserStyle (layerId, name) {
@@ -48,7 +49,11 @@ export class UserStyleService {
             layerStyles.splice(index, 1);
             this.styles.set(layerId, layerStyles);
         }
-        this.trigger('update');
+        this.notify(layerId);
+    }
+
+    notify (layerId) {
+        this.trigger('update', layerId);
     }
 
     notifyLayerUpdate (layerId) {
