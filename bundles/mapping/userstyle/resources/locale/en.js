@@ -8,7 +8,7 @@ Oskari.registerLocalization({
         "defaultName": "Own style",
         "popup": {
             "title": "Own style",
-            "name" : "Style name",
+            "name" : "Name for style",
             "style" : "Style"
         }
     }
