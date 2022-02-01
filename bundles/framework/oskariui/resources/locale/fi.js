@@ -79,7 +79,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Muut kielet',
-            othersTip: 'Käännökset näytetään käytettäessä palvelua eri kielillä.',
+            othersTip: 'Käännökset näytetään käytettäessä palvelua eri kielillä',
             locale: {
                 generic: 'kielellä ({0})',
                 fi: 'suomeksi',

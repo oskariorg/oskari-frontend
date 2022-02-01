@@ -17,12 +17,12 @@ Oskari.registerLocalization(
                 "name": "Namnge kartlagret",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
-                "style": "Dataset stil definitioner:",
+                "style": "Dataset stil definitioner",
                 "srs": "EPSG-kod"
             },
             "validations": {
-                "name": "Namnet på kartlagret saknas.",
-                "file": "Filen har inte valts."
+                "name": "Namnet på kartlagret saknas",
+                "file": "Filen har inte valts"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",

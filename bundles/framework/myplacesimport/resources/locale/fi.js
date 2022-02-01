@@ -20,9 +20,9 @@ Oskari.registerLocalization(
                 "srs": "EPSG-koodi"
             },
             "validations": {
-                "name": "Karttatasolle pitää antaa nimi.",
-                "file": "Valitse aineiston sisältävä tiedosto.",
-                "epsg": "EPSG-koodi pitää antaa numerona."
+                "name": "Karttatasolle pitää antaa nimi",
+                "file": "Valitse aineiston sisältävä tiedosto",
+                "epsg": "EPSG-koodi pitää antaa numerona"
             },
             "error":{
                 "title": "Aineiston tuonti epäonnistui",

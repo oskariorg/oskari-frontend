@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Own datasets",
         "tool": {
-            "tooltip": "Import your own datasets."
+            "tooltip": "Import your own datasets"
         },
         "flyout": {
             "title": "Dataset Import",
@@ -20,9 +20,9 @@ Oskari.registerLocalization(
                 "srs": "EPSG code"
             },
             "validations": {
-                "name": "The map layer name is missing.",
-                "file":  "A file is missing.",
-                "epsg": "EPSG code has to be number."
+                "name": "The map layer name is missing",
+                "file":  "A file is missing",
+                "epsg": "EPSG code has to be number"
             },
             "error":{
                 "title": "The dataset could not be imported.",
