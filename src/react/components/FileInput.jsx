@@ -9,10 +9,9 @@ const MAX_SIZE = 10; //MB
 const MAX_COUNT = 5;
 
 const Border = styled('div')`
-    display: block;
+    display: flex;
     width: 100%;
-    min-height: 70px;
-    padding: 12px;
+    padding: 6px;
     background: #fafafa;
     border: 1px dashed #d9d9d9;
     transition: border-color .3s;
@@ -22,7 +21,9 @@ const Border = styled('div')`
 `;
 const StyledLabel = styled('label')`
     cursor: pointer;
-    padding: 12px;
+    padding: 6px;
+    margin-left: auto;
+    margin-right: auto;
     &:hover{
         color: #40a9ff;
     }
@@ -31,17 +32,19 @@ const HiddenFileInput = styled('input')`
     display: none;
 `;
 const StyledFileList = styled('div')`
-    padding: 0px 12px;
-    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
 `;
 const StyledUploadIcon = styled(CloudUploadOutlined)`
     padding-right: 10px;
+    font-size: 24px;
+    color: #006ce8;
+    vertical-align: -0.25em;
 `;
 
 const StyledListItem = styled('span')`
     white-space: nowrap;
-    padding-left: 5px;
-    display: inline-block;
+    padding: 10px 10px 0px 0px;
 `;
 const StyledName = styled('span')`
     color: #40a9ff;
@@ -129,13 +132,13 @@ export const FileInput = ({
                         accept={allowedTypes.join(',')}
                         onChange={e => handleInputFiles(e.target.files)}
                     />
-                    <StyledUploadIcon className="t_fileinput_btn" style={{ fontSize: '30px', color: '#006ce8'}}/>
+                    <StyledUploadIcon className="t_fileinput_btn" />
                     { getMsg('drag',{ maxCount }) }
                 </StyledLabel>
-                <StyledFileList className="t_fileinput_list">
-                    { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
-                </StyledFileList>
             </Border>
+            <StyledFileList className="t_fileinput_list">
+                { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
+            </StyledFileList>
         </Tooltip>
     );
 };
