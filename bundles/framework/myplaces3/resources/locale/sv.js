@@ -142,7 +142,7 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "title": "Uppgifter om kartlagret",
-            "layerName": "Namn",
+            "layerName": "Namn på kartlagret",
             "styleTitle": "Stil"
         },
         "notification": {

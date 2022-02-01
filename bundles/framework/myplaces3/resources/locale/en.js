@@ -142,7 +142,7 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "title": "Map layer details",
-            "layerName": "Name",
+            "layerName": "Map layer name",
             "styleTitle": "Styling"
         },
         "notification": {

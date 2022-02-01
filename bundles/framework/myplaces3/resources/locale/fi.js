@@ -142,7 +142,7 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "title": "Tason tiedot",
-            "layerName": "Nimi",
+            "layerName": "Karttatason nimi",
             "styleTitle": "Tyyli"
         },
         "notification": {
