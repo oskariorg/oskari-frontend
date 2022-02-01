@@ -3,9 +3,8 @@ import styled from 'styled-components';
 export const Row = styled.div`
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     padding: 10px;
-    flex-wrap: wrap;
 `;
 
 export const Col = styled.div`
