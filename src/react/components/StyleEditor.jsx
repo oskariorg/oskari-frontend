@@ -84,7 +84,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 
     useEffect(() => {
         form.setFieldsValue(convertedStyleValues);
-    }, [oskariStyle]);
+    }, [style]);
 
     const formats = tabs || constants.SUPPORTED_FORMATS;
 
