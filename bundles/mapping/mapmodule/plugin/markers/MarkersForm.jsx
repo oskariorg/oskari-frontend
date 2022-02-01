@@ -14,9 +14,11 @@ const Content = styled('div')`
 
 const getMessage = path => <Message messageKey={ `plugin.${PLUGIN_NAME}.${path}` } bundleKey={BUNDLE_KEY} />;
 
-const updateTextStyle = (style, msg) => {
+const getMarkerStyle = state => {
+    const style = { ...state.style };
     style.text.offsetX = 8 + 2 * style.image.size;
-    style.text.textLabel = msg;
+    style.text.labelText = Oskari.util.sanitize(state.msg);
+    return style;
 };
 
 const Form = ({ onAdd, onClose }) => {
@@ -25,7 +27,7 @@ const Form = ({ onAdd, onClose }) => {
         msg: ''
     });
 
-    const updateStyle = (style) => setState({ ...state, style: updateTextStyle(style, state.msg) });
+    const updateStyle = (style) => setState({ ...state, style });
     const updateMsg = (msg) => setState({ ...state, msg });
 
     return (
@@ -45,7 +47,7 @@ const Form = ({ onAdd, onClose }) => {
             />
             <ButtonContainer>
                 <SecondaryButton type='close' onClick={onClose}/>
-                <PrimaryButton type='add' onClick={() => onAdd(state) }/>
+                <PrimaryButton type='add' onClick={() => onAdd(getMarkerStyle(state)) }/>
             </ButtonContainer>
         </Content>
     );
