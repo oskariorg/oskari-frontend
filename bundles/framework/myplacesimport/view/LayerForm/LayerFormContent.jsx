@@ -7,7 +7,7 @@ import { FileInput } from 'oskari-ui/components/FileInput';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
-import { BUNDLE_NAME, ERRORS, FILE_INPUT_PROPS } from './constants';
+import { BUNDLE_NAME, ERRORS, FILE_INPUT_PROPS } from '../../constants';
 
 const Content = styled('div')`
     padding: 24px;

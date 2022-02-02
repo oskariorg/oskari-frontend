@@ -1,4 +1,4 @@
-import { showLayerForm } from './LayerForm';
+import { showLayerForm } from './view/LayerForm';
 import { TOOL, BUNDLE_NAME, MAX_SIZE, ERRORS } from './constants';
 
 /**

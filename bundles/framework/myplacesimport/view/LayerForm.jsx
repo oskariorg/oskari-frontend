@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { showPopup } from 'oskari-ui/components/window';
-import { BUNDLE_NAME } from './constants';
-import { LayerFormContent } from './LayerFormContent';
+import { LayerFormContent } from './LayerForm/';
+import { BUNDLE_NAME } from '../constants';
 
 export const showLayerForm = (values, config, onOk, onClose) => {
     const content = (
