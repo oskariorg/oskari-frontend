@@ -58,7 +58,7 @@ export const GeneralTab = ({
                 value={locale}
                 languages={languages}
                 onChange={updateLocale}
-                showDivider={false}
+                showDivider
             >
                 <Input type='text' name='name' placeholder={getPlaceholder('name')} mandatory={[defaultLang]}/>
                 <Input type='text' name='desc' placeholder={getPlaceholder('desc')}/>
