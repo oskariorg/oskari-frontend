@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // Remove null values to get defaults
             Object.keys(markerData).forEach(key => markerData[key] === null && delete markerData[key]);
 
-            if (markerData.color.charAt(0) === '#') {
+            if (markerData.color && markerData.color.charAt(0) === '#') {
                 markerData.color = markerData.color.substring(1);
             }
 
@@ -337,11 +337,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             feature.setStyle(olStyle);
 
             if (layerSource.hasFeature(feature)) {
-                // if layer has marker with same id remove feature to add with new data
-                layerSource.removeFeature(feature);
+                // ol doesn't add features with same id, update existing
+                layerSource.getFeatureById(id).setGeometry(new olGeom.Point(coord));
+            } else {
+                layerSource.addFeature(feature);
             }
 
-            layerSource.addFeature(feature);
             this.raiseMarkerLayer();
             const data = this._featureToMarkerData(feature);
             const addEvent = Oskari.eventBuilder('AfterAddMarkerEvent')(data, id);
