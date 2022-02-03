@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Divider, Modal, LocalizationComponent, TextInput } from 'oskari-ui';
-
+import { Message, Divider, LocalizationComponent, TextInput, Tooltip } from 'oskari-ui';
+import { LocaleProvider } from 'oskari-ui/util';
+import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
+import { showPopup } from 'oskari-ui/components/window';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 import { LOCALE_KEY } from './constants';
+
+const Content = styled.div`
+    padding: 24px;
+    width: 500px;
+`;
 
 const PaddedInput = styled(TextInput)`
     margin-bottom: 10px;
 `;
 
-export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
+const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
     const [editorState, setEditorState] = useState({
         style: initStyle || OSKARI_BLANK_STYLE,
         locale: initLocale || {}
@@ -24,20 +31,8 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
     const hasName = Oskari.util.keyExists(locale, `${defaultLang}.name`) && locale[defaultLang].name.trim().length > 0;
 
     const placeholder = Oskari.getMsg(LOCALE_KEY, 'categoryform.layerName');
-    // TODO: show warning in button tooltip
-    // { !hasName && <Message messageKey='validation.categoryName' /> }
-
     return (
-        <Modal
-            title={ <Message messageKey={ 'categoryform.title' } /> }
-            visible={ true }
-            onOk={ () => onSave(locale, style) }
-            maskClosable = { false }
-            okButtonProps={ { disabled: !hasName } }
-            onCancel={ onCancel }
-            cancelText={ <Message messageKey="buttons.cancel" /> }
-            okText={ <Message messageKey="buttons.save" /> }
-        >
+        <Content>
             <LocalizationComponent
                 value={ locale }
                 languages={ Oskari.getSupportedLanguages() }
@@ -50,7 +45,13 @@ export const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave
                 oskariStyle={ style }
                 onChange={ updateStyle }
             />
-        </Modal>
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={onCancel}/>
+                <Tooltip key="okButtonTooltip" title={!hasName && <Message messageKey='validation.categoryName' /> }>
+                    <PrimaryButton disabled={!hasName} type='save' onClick={() => onSave(locale, style) }/>
+                </Tooltip>
+            </ButtonContainer>
+        </Content>
     );
 };
 
@@ -59,4 +60,14 @@ MyPlacesLayerForm.propTypes = {
     style: PropTypes.object,
     onSave: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired
+};
+export const showLayerPopup = (locale, style, saveLayer, onClose) => {
+    return showPopup(
+        <Message messageKey={ 'categoryform.title' } bundleKey = {LOCALE_KEY}/>,
+        (<LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
+            <MyPlacesLayerForm style={style} locale={locale} onSave={saveLayer} onCancel={onClose}/>
+        </LocaleProvider>),
+        onClose,
+        { id: LOCALE_KEY }
+    );
 };
