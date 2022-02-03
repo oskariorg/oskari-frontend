@@ -45,9 +45,9 @@ const StyledListItem = styled(ListItem)`
     &:nth-child(odd) {
         background-color: #ffffff;
     }
-    border-style: solid;
-    border-width: 0.5px;
-    border-color: #d9d9d9;
+    &&& {
+        border: solid 1px #d9d9d9;
+    }
 `;
 
 const AddStyleIcon = styled(PlusOutlined)`

@@ -1,5 +1,5 @@
 import { LOCALE_KEY } from './constants';
-import { showModal } from './reactModalHelper';
+import { showLayerPopup } from './MyPlacesLayerForm';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance
@@ -22,6 +22,7 @@ Oskari.clazz.define(
         this.idPrefix = 'myplaces';
         this.finishedDrawing = false;
         this.editPlace = false;
+        this.popupControls = null;
     }, {
         __name: 'MyPlaces3',
 
@@ -275,16 +276,28 @@ Oskari.clazz.define(
             this.sandbox = null;
         },
 
-        openAddLayerDialog: function () {
+        openLayerDialog: function (categoryId, locale, style) {
+            if (this.popupControls) {
+                // already opened, do nothing
+                return;
+            }
             // create popup
             const handler = this.categoryHandler;
             const saveLayer = (locale, style) => {
                 handler.saveCategory({
+                    categoryId,
                     locale,
                     style
                 });
+                onClose();
             };
-            showModal({}, null, saveLayer);
+            const onClose = () => {
+                if (this.popupControls) {
+                    this.popupControls.close();
+                }
+                this.popupControls = null;
+            };
+            this.popupControls = showLayerPopup(locale, style, saveLayer, onClose);
         }
     }, {
         /**

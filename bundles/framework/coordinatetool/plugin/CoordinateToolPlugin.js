@@ -499,7 +499,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     y: data.lonlat.lat,
                     msg: msg,
                     size: 5,
-                    color: 'ee9900'
+                    color: 'ee9900',
+                    shape: 2
                 };
                 me._sandbox.request(this, reqBuilder(marker));
             }

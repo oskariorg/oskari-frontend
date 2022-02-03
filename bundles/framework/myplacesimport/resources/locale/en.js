@@ -5,11 +5,11 @@ Oskari.registerLocalization(
     "value": {
         "title": "Own datasets",
         "tool": {
-            "tooltip": "Import your own datasets."
+            "tooltip": "Import your own datasets"
         },
         "flyout": {
             "title": "Dataset Import",
-            "description": "Upload a dataset from your computer as a zipped file which contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX-file (.gpx)</li><li>MapInfo (.mif and .mid)</li><li>Google Map (.kml)</li></ul>The zipped file can contain only one dataset and it can be at most {maxSize, number} Mb.",
+            "description": "Upload a dataset from your computer as a zipped file which contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX-file (.gpx)</li><li>MapInfo (.mif and .mid)</li><li>Google Maps (.kml)</li></ul>The zipped file can contain only one dataset and it can be at most {maxSize, number} Mb.",
             "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
             "tabs": {
@@ -23,9 +23,9 @@ Oskari.registerLocalization(
                 "srs": "EPSG code"
             },
             "validations": {
-                "name": "The map layer name is missing.",
-                "file":  "A file is missing.",
-                "epsg": "EPSG code has to be number."
+                "name": "The map layer name is missing",
+                "file":  "A file is missing",
+                "epsg": "EPSG code has to be number"
             },
             "error":{
                 "title": "The dataset could not be imported.",
