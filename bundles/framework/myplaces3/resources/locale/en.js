@@ -180,11 +180,11 @@ Oskari.registerLocalization(
         },
         "validation": {
             "title": "The given data are invalid:",
-            "placeName": "A place name is missing.",
-            "categoryName": "A map layer name is missing.",
-            "placeNameIllegal": "The place name contains illegal characters.",
-            "descIllegal": "The place description contains illegal characters.",
-            "categoryNameIllegal": "The map layer name contains illegal characters."
+            "placeName": "A place name is missing",
+            "categoryName": "A map layer name is missing",
+            "placeNameIllegal": "The place name contains illegal characters",
+            "descIllegal": "The place description contains illegal characters",
+            "categoryNameIllegal": "The map layer name contains illegal characters"
         }
     }
 });
