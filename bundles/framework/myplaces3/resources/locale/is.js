@@ -136,33 +136,8 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
-            "name": {
-                "label": "Nafn",
-                "placeholder": "Nafn á kortalagi"
-            },
-            "visibleFields": {
-                "label": "Sýnileg staðgögn",
-                "placename": "Nafn",
-                "placedesc": "Lýsing",
-                "image": "Mynd"
-            },
-            "edit": {
-                "title": "Breyta kortalagi",
-                "save": "Vista",
-                "cancel": "Hætta við"
-            },
-            "rendering": {
-                "label": "Staðsetningarmát",
-                "point": {
-                    "tooltip": "Breyta punktamáti"
-                },
-                "area": {
-                    "tooltip": "Breyta svæðismáti"
-                },
-                "line": {
-                    "tooltip": "Breyta línumáti"
-                }
-            }
+            "layerName": "Nafn á kortalagi",
+            "styleTitle": "Staðsetningarmát"
         },
         "notification": {
             "placeAdded": {

@@ -9,7 +9,7 @@ import { BUNDLE_KEY } from './';
 
 const Content = styled('div')`
     padding: 24px;
-    width: 550px;
+    width: 500px;
 `;
 
 const getMessage = key => <Message messageKey={ `popup.${key}` } />;

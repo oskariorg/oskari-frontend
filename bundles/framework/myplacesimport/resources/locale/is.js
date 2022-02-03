@@ -4,7 +4,6 @@ Oskari.registerLocalization(
     "key": "MyPlacesImport",
     "value": {
         "title": "Flytja inn gagnasett",
-        "desc": "Hægt er að flytja inn eigin gagnasett í shp, gpx eða mif/mid skráarsniði í zip skrá eða kmz skráarsniði (zippað kml).",
         "tool": {
             "tooltip": "Flytja inn eigið gagnasett"
         },

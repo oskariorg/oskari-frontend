@@ -136,33 +136,9 @@ Oskari.registerLocalization(
             }
         },
         "categoryform": {
-            "name": {
-                "label": "Nom",
-                "placeholder": "Nom de la couche cartographique"
-            },
-            "visibleFields": {
-                "label": "Données du lieu visibles",
-                "placename": "Nom",
-                "placedesc": "Description",
-                "image": "Image"
-            },
-            "edit": {
-                "title": "Modifier la couche cartographique",
-                "save": "Enregistrer",
-                "cancel": "Annuler"
-            },
-            "rendering": {
-                "label": "Style du lieu",
-                "point": {
-                    "tooltip": "Modifier le style de point"
-                },
-                "area": {
-                    "tooltip": "Modifier le style de zone"
-                },
-                "line": {
-                    "tooltip": "Modifier le style de ligne"
-                }
-            }
+            "title": "Données de la couche cartographique",
+            "layerName": "Nom de la couche cartographique",
+            "styleTitle": "Style du lieu"
         },
         "notification": {
             "placeAdded": {

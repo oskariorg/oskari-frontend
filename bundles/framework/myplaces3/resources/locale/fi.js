@@ -142,7 +142,7 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "title": "Tason tiedot",
-            "layerName": "Nimi",
+            "layerName": "Karttatason nimi",
             "styleTitle": "Tyyli"
         },
         "notification": {
@@ -180,11 +180,11 @@ Oskari.registerLocalization(
         },
         "validation": {
             "title": "Annetuissa tiedoissa on virheitä:",
-            "placeName": "Kohteen nimi puuttuu.",
-            "categoryName": "Karttatason nimi puuttuu.",
-            "placeNameIllegal": "Kohteen nimessä on kiellettyjä merkkejä.",
-            "descIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä.",
-            "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä."
+            "placeName": "Kohteen nimi puuttuu",
+            "categoryName": "Karttatason nimi puuttuu",
+            "placeNameIllegal": "Kohteen nimessä on kiellettyjä merkkejä",
+            "descIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä",
+            "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä"
         }
     }
 });

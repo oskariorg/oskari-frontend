@@ -9,7 +9,7 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset importering",
-            "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>MapInfo (.mif och .mid)</li><li>Google Map (.kml)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst {maxSize, number} Mb.",
+            "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx, .dbf och .prj, frivilligt .cpg)</li><li>GPX (.gpx)</li><li>MapInfo (.mif och .mid)</li><li>Google Maps (.kml)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst {maxSize, number} Mb.",
             "help": "Importera en datamängd från din dator som ett zip-paket. Var vänlig och kontrollera, att alla filerna är i ett lämpligt filformat och koordinatsystem.",
             "submit": "Skicka",
             "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
@@ -17,12 +17,12 @@ Oskari.registerLocalization(
                 "name": "Namnge kartlagret",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
-                "style": "Dataset stil definitioner:",
+                "style": "Dataset stil definitioner",
                 "srs": "EPSG-kod"
             },
             "validations": {
-                "name": "Namnet på kartlagret saknas.",
-                "file": "Filen har inte valts."
+                "name": "Namnet på kartlagret saknas",
+                "file": "Filen har inte valts"
             },
             "error":{
                 "title": "Importerningen av datamängden misslyckades.",

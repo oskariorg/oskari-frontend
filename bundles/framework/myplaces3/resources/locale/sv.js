@@ -142,7 +142,7 @@ Oskari.registerLocalization(
         },
         "categoryform": {
             "title": "Uppgifter om kartlagret",
-            "layerName": "Namn",
+            "layerName": "Namn på kartlagret",
             "styleTitle": "Stil"
         },
         "notification": {
@@ -180,11 +180,11 @@ Oskari.registerLocalization(
         },
         "validation": {
             "title": "Brister i uppgifterna:",
-            "placeName": "Platsnamnet saknas.",
-            "categoryName": "Kartlagrets namn saknas.",
-            "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken.",
-            "descIllegal": "Platsens beskrivning innehåller otillåtna tecken.",
-            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken."
+            "placeName": "Platsnamnet saknas",
+            "categoryName": "Kartlagrets namn saknas",
+            "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken",
+            "descIllegal": "Platsens beskrivning innehåller otillåtna tecken",
+            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken"
         }
     }
 });
