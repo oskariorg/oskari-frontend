@@ -12,11 +12,14 @@ Oskari.registerLocalization(
             "description": "Upload a dataset from your computer as a zipped file which contains all required files from one of the following file formats: <ul><li>Shapefile (.shp, .shx, .dbf and .prj, optionally .cpg)</li><li>GPX-file (.gpx)</li><li>MapInfo (.mif and .mid)</li><li>Google Map (.kml)</li></ul>The zipped file can contain only one dataset and it can be at most {maxSize, number} Mb.",
             "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "success": "The dataset has been imported with {count, plural, one {# feature} other {# features}}. You can now find it in the \"My data\" menu.",
+            "tabs": {
+                "general": "General",
+                "visualization": "Visualization"
+            },
             "layer": {
                 "name": "Map layer name",
                 "desc": "Description",
                 "source": "Data source",
-                "style": "Style definitions",
                 "srs": "EPSG code"
             },
             "validations": {

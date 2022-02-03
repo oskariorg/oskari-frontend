@@ -13,11 +13,14 @@ Oskari.registerLocalization(
             "help": "Importera en datamängd från din dator som ett zip-paket. Var vänlig och kontrollera, att alla filerna är i ett lämpligt filformat och koordinatsystem.",
             "submit": "Skicka",
             "success": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\".",
+            "tabs": {
+                "general" : "Allmän",
+                "visualization": "Visualisering"
+            },
             "layer": {
                 "name": "Namnge kartlagret",
                 "desc": "Beskrivning",
                 "source": "Datakälla",
-                "style": "Dataset stil definitioner:",
                 "srs": "EPSG-kod"
             },
             "validations": {
