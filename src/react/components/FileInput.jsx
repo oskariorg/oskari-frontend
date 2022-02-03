@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Tooltip } from 'oskari-ui';
+import { MandatoryIcon } from 'oskari-ui/components/icons';
 import { Messaging } from 'oskari-ui/util';
-import { CloudUploadOutlined, CloseCircleOutlined  } from '@ant-design/icons';
+import { CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 const MAX_SIZE = 10; //MB
 const MAX_COUNT = 5;
@@ -66,6 +67,7 @@ export const FileInput = ({
     tooltip,
     allowedTypes = [],
     maxSize = MAX_SIZE,
+    mandatory,
     files = []
 }) => {
     const [currentFiles, setFiles] = useState(files);
@@ -134,6 +136,7 @@ export const FileInput = ({
                     />
                     <StyledUploadIcon className="t_fileinput_btn" />
                     { getMsg('drag',{ maxCount }) }
+                    { mandatory && <MandatoryIcon isValid={currentFiles.length > 0}/>}
                 </StyledLabel>
             </Border>
             <StyledFileList className="t_fileinput_list">
@@ -157,5 +160,6 @@ FileInput.propTypes = {
     multiple: PropTypes.bool,
     allowedTypes: PropTypes.array,
     tooltip: PropTypes.string,
-    maxSize: PropTypes.number
+    maxSize: PropTypes.number,
+    mandatory: PropTypes.bool
 };
