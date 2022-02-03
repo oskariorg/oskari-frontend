@@ -2,17 +2,17 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Tooltip } from 'oskari-ui';
+import { MandatoryIcon } from 'oskari-ui/components/icons';
 import { Messaging } from 'oskari-ui/util';
-import { CloudUploadOutlined, CloseCircleOutlined  } from '@ant-design/icons';
+import { CloudUploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 const MAX_SIZE = 10; //MB
 const MAX_COUNT = 5;
 
 const Border = styled('div')`
-    display: block;
+    display: flex;
     width: 100%;
-    min-height: 70px;
-    padding: 12px;
+    padding: 6px;
     background: #fafafa;
     border: 1px dashed #d9d9d9;
     transition: border-color .3s;
@@ -22,7 +22,9 @@ const Border = styled('div')`
 `;
 const StyledLabel = styled('label')`
     cursor: pointer;
-    padding: 12px;
+    padding: 6px;
+    margin-left: auto;
+    margin-right: auto;
     &:hover{
         color: #40a9ff;
     }
@@ -31,17 +33,19 @@ const HiddenFileInput = styled('input')`
     display: none;
 `;
 const StyledFileList = styled('div')`
-    padding: 0px 12px;
-    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
 `;
 const StyledUploadIcon = styled(CloudUploadOutlined)`
     padding-right: 10px;
+    font-size: 24px;
+    color: #006ce8;
+    vertical-align: -0.25em;
 `;
 
 const StyledListItem = styled('span')`
     white-space: nowrap;
-    padding-left: 5px;
-    display: inline-block;
+    padding: 10px 10px 0px 0px;
 `;
 const StyledName = styled('span')`
     color: #40a9ff;
@@ -63,6 +67,7 @@ export const FileInput = ({
     tooltip,
     allowedTypes = [],
     maxSize = MAX_SIZE,
+    mandatory,
     files = []
 }) => {
     const [currentFiles, setFiles] = useState(files);
@@ -129,13 +134,14 @@ export const FileInput = ({
                         accept={allowedTypes.join(',')}
                         onChange={e => handleInputFiles(e.target.files)}
                     />
-                    <StyledUploadIcon className="t_fileinput_btn" style={{ fontSize: '30px', color: '#006ce8'}}/>
+                    <StyledUploadIcon className="t_fileinput_btn" />
                     { getMsg('drag',{ maxCount }) }
+                    { mandatory && <MandatoryIcon isValid={currentFiles.length > 0}/>}
                 </StyledLabel>
-                <StyledFileList className="t_fileinput_list">
-                    { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
-                </StyledFileList>
             </Border>
+            <StyledFileList className="t_fileinput_list">
+                { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
+            </StyledFileList>
         </Tooltip>
     );
 };
@@ -154,5 +160,6 @@ FileInput.propTypes = {
     multiple: PropTypes.bool,
     allowedTypes: PropTypes.array,
     tooltip: PropTypes.string,
-    maxSize: PropTypes.number
+    maxSize: PropTypes.number,
+    mandatory: PropTypes.bool
 };

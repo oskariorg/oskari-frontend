@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
+import { MandatoryIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { QuestionCircleOutlined, StarTwoTone } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const BUNDLE_KEY = 'oskariui';
 const COMPONENT_KEY = 'LocalizationComponent';
@@ -138,8 +139,7 @@ export const LocalizationComponent = ({
             const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
             let suffix;
             if (mandatory.includes(lang)) {
-                const isValid = validateMandatory(elementValue);
-                suffix = <StarTwoTone twoToneColor={isValid ? '#52c41a' : '#da5151'}/>;
+                suffix = <MandatoryIcon isValid={validateMandatory(elementValue)} />;
             }
             return (
                 <React.Fragment key={`${lang}_${index}`}>

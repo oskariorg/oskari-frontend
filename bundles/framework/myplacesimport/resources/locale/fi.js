@@ -12,11 +12,14 @@ Oskari.registerLocalization(
             "description": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:<ul><li>Shapefile (.shp, .shx, .dbf ja .prj sekä mahdollinen.cpg)</li><li>GPX-siirtotiedosto (.gpx)</li><li>MapInfo (.mif ja .mid)</li><li>Google Maps (.kml)</li></ul>Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on {maxSize, number} Mt.",
             "help": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Tarkista, että aineisto on oikeassa tiedostomuodossa ja koordinaattijärjestelmässä.",
             "success": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta.",
+            "tabs" : {
+                "general": "Yleiset",
+                "visualization": "Visualisointi"
+            },
             "layer": {
                 "name": "Karttatason nimi",
                 "desc": "Kuvaus",
                 "source": "Tietolähde",
-                "style": "Tyylimäärittelyt",
                 "srs": "EPSG-koodi"
             },
             "validations": {
