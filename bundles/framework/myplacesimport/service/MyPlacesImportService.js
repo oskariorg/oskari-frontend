@@ -79,13 +79,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
 
     updateUserLayer: function (layerId, values, successCb, errorCb) {
         const id = this.getActualId(layerId);
-        const formData = new FormData();
-        formData.append('locale', JSON.stringify(values.locale));
-        formData.append('style', JSON.stringify(values.style));
         fetch(Oskari.urls.getRoute('EditUserLayer', { id, srs: this.srs }), {
             method: 'POST',
-            body: formData,
+            body: JSON.stringify(values),
             headers: {
+                'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
         }).then(response => {
