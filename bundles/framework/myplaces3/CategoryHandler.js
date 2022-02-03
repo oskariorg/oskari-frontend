@@ -1,5 +1,3 @@
-import { showModal } from './reactModalHelper';
-
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -181,16 +179,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         },
         editCategory: function (categoryId) {
             const layer = this.mapLayerService.findMapLayer(this.getMapLayerId(categoryId));
-            const saveLayer = (locale, style) => {
-                this.saveCategory({
-                    id: categoryId,
-                    locale,
-                    style
-                });
-            };
             const locale = layer.getLocale();
             const style = layer.getCurrentStyle().getFeatureStyle();
-            showModal(locale, style, saveLayer);
+            this.instance.openLayerDialog(categoryId, locale, style);
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -227,15 +218,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             dialog.show(title, message, [okBtn]);
         },
         saveCategory: function (category, callback) {
-            const { id, locale, isDefault, style } = category;
+            const { categoryId, locale, isDefault, style } = category;
             const data = {
-                id,
+                id: categoryId,
                 isDefault,
                 locale: JSON.stringify(locale),
                 style: JSON.stringify(style)
             };
             this.instance.getService().commitCategory(data, layerJson => {
-                const isNew = !id;
+                const isNew = !categoryId;
                 if (layerJson) {
                     if (isNew) {
                         this.addLayerToService(layerJson);
