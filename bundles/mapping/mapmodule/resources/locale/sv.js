@@ -83,35 +83,18 @@ Oskari.registerLocalization(
                 }
             },
             "MarkersPlugin": {
-                "buttons": {
-                    "add": "Kartmarkör",
-                    "clear": "Ta bort alla markörer"
-                },
+                "title": "Kartmarkör",
+                "tooltip": "Kartmarkör",
                 "form": {
-                    "title": "Punktens stil",
-                    "tooltip": "",
-                    "symbol": {
-                        "label": "Ikon"
-                    },
-                    "size": {
-                        "label": "Storlek"
-                    },
-                    "color": {
-                        "label": "Färg",
-                        "labelOr": "eller",
-                        "labelCustom": "Egen färg (RGB 0-255)"
-                    },
-                    "preview": {
-                        "label": "Förhandsgranskning"
-                    },
+                    "style": "Punktens stil",
                     "message": {
                         "label": "Texten på kartan",
                         "hint": "Skriv ett meddelande"
                     }
                 },
                 "dialog": {
-                    "title": "Kartmarkör",
-                    "message": "Välj en ny plats för markören genom att klicka på kartan."
+                    "message": "Välj en ny plats för markören genom att klicka på kartan.",
+                    "clear": "Ta bort alla markörer"
                 }
             },
             "MyLocationPlugin": {

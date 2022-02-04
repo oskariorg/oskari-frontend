@@ -82,12 +82,12 @@ Oskari.registerLocalization(
             },
             "MarkersPlugin": {
                 "title": "Karttamerkintä",
+                "tooltip": "Tee karttamerkintä",
                 "form": {
                     "style": "Karttamerkinnän esitystapa",
-                    "add": "Tee karttamerkintä",
                     "message": {
                         "label": "Teksti kartalla",
-                        "hint": "Nimi tai kuvaus",
+                        "hint": "Nimi tai kuvaus"
                     }
                 },
                 "dialog": {
