@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message, Tooltip } from 'oskari-ui';
-import { SvgRadioButton, SizeControl, constants } from './index';
+import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
 import { Form, Row, Col } from 'antd';
 
 const getFillIconTransparent = (id) => {
@@ -91,7 +91,7 @@ export const getFillOption = name => {
 
 // counter is used to generate changing ids for SVG to workaround conflicting ids when hard coded
 let counter = 0;
-export const AreaTab = ({oskariStyle}) => {
+export const AreaTab = ({oskariStyle, showPreview}) => {
     counter++;
     const areaFillOptions = areaFills.map(item => {
         return {
@@ -155,11 +155,14 @@ export const AreaTab = ({oskariStyle}) => {
             </Row>
 
             <Row>
-                <SizeControl
-                    format={ 'area' }
-                    name='stroke.area.width'
-                    localeKey={ 'StyleEditor.stroke.area.width' }
-                />
+                <Col span={ 16 }>
+                    <SizeControl
+                        format={ 'area' }
+                        name='stroke.area.width'
+                        localeKey={ 'StyleEditor.stroke.area.width' }
+                    />
+                </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='area' /> }
             </Row>
         </React.Fragment>
     );
@@ -167,5 +170,6 @@ export const AreaTab = ({oskariStyle}) => {
 
 
 AreaTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

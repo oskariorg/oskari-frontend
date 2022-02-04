@@ -1,22 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, SizeControl, Preview, constants } from './index';
+import { SvgRadioButton, SizeControl, PreviewCol, constants } from './index';
 import { Form, Row, Col } from 'antd';
-
-
-
-const PreviewCol = ({ oskariStyle }) => {
-    return (
-        <Col span={ 8 }>
-            <Preview
-                oskariStyle={ oskariStyle }
-                format={ 'point' }
-                style={{ border: '1px solid #d9d9d9' }}
-            />
-        </Col>
-    );
-};
 
 export const PointTab = ({ oskariStyle, showPreview }) => {
     return (
@@ -31,7 +17,7 @@ export const PointTab = ({ oskariStyle, showPreview }) => {
                         <ColorPicker />
                     </Form.Item>
                 </Col>
-                { showPreview && <PreviewCol oskariStyle={ oskariStyle }/> }
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='point' /> }
             </Row>
 
             <Row>
