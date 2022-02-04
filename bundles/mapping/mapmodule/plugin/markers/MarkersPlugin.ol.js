@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             this.buttons = {
                 addMarker: {
                     iconCls: 'marker-share',
-                    tooltip: this.getMsg('buttons.add'),
+                    tooltip: this.getMsg('tooltip'),
                     sticky: true,
                     callback: () => this.startMarkerAdd()
                 }
@@ -231,9 +231,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.getMsg('dialog.message'),
                 [clearBtn, closeBtn]
             );
-            this.getMapModule().getMapEl().addClass(
-                'cursor-crosshair'
-            );
+            this.getMapModule().setCursorStyle('crosshair');
             this.dialog.moveTo(
                 '#toolbar div.toolrow[tbgroup=default-selectiontools]',
                 'bottom'
@@ -249,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 this.dialog.close(true);
             }
             this.popupCleanup();
-            this.getMapModule().getMapEl().removeClass('cursor-crosshair');
+            this.getMapModule().setCursorStyle('');
             if (!selectDefault) {
                 return;
             }
