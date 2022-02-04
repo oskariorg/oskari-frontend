@@ -132,15 +132,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             this._registerTools();
         },
         /**
-         * Creates a marker layer
-         * @private
-         */
-        _createMapMarkerLayer: function () {
-            const markerLayer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
-            this.getMap().addLayer(markerLayer);
-            return markerLayer;
-        },
-        /**
          * Handles generic map click
          * @private
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
@@ -180,7 +171,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         },
         getMarkersLayer: function () {
             if (!this._layer) {
-                this._layer = this._createMapMarkerLayer();
+                this._layer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
+                this.getMap().addLayer(this._layer);
             }
             return this._layer;
         },
