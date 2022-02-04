@@ -353,32 +353,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {String} id  optional marker id for marker to change it's visibility, all markers visibility changed if not given.
          */
         changeMapMarkerVisibility: function (visible, id) {
-            const layerSource = this.getMarkersLayer().getSource();
-            if (id) {
-                if (visible) {
-                    const feature = this._hiddenMarkers[id];
-                    layerSource.addFeature(feature);
-                    delete this._hiddenMarkers[id];
-                } else {
-                    const feature = layerSource.getFeatureById(id);
-                    this._hiddenMarkers[id] = feature;
-                    layerSource.removeFeature(feature);
-                }
+            if (!id) {
+                this.getMarkersLayer().setVisible(visible);
                 return;
             }
-
+            const layerSource = this.getMarkersLayer().getSource();
             if (visible) {
-                const features = Object.values(this._hiddenMarkers);
-                layerSource.addFeatures(features);
-                this._hiddenMarkers = {};
+                const feature = this._hiddenMarkers[id];
+                layerSource.addFeature(feature);
+                delete this._hiddenMarkers[id];
             } else {
-                layerSource.forEachFeature(feat => {
-                    this._hiddenMarkers[feat.getId()] = feat;
-                });
-                this.layerSource.clear();
+                const feature = layerSource.getFeatureById(id);
+                this._hiddenMarkers[id] = feature;
+                layerSource.removeFeature(feature);
             }
         },
-
         /**
          * Raises the marker layer above the other layers
          *
@@ -500,6 +489,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @return {Object} bundle state as JSON
          */
         getState: function () {
+            if (!this.getMarkersLayer().isVisible()) {
+                return {};
+            }
             const markers = this.getMarkersLayer().getSource().getFeatures()
                 .map(feat => this._featureToMarkerData(feat))
                 .filter(markerData => !markerData.transient);
