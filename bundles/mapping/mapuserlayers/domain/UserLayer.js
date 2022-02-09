@@ -38,7 +38,8 @@ export class UserLayer extends WFSLayer {
     }
 
     getSource () {
-        return getValueFromLocale(this.getLocale(), 'source');
+        const source = getValueFromLocale(this.getLocale(), 'source');
+        return Oskari.util.sanitize(source);
     }
 
     /**

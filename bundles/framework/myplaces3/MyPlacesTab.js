@@ -82,7 +82,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
                 var categoryHandler = this.instance.getCategoryHandler();
                 const categories = categoryHandler.getAllCategories();
-                categories.forEach(({ name, categoryId }) => {
+                categories.forEach(({ name: rawName, categoryId }) => {
+                    const name = Oskari.util.sanitize(rawName);
                     var panel = this.tabPanels[categoryId];
                     if (!panel) {
                         panel = this._createLayerTab(categoryId, name);

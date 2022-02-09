@@ -1,10 +1,9 @@
 export const getValueFromLocale = (locale, key, lang = Oskari.getLang()) => {
     let values = locale[lang] || {};
-    let value = values[key];
+    const value = values[key];
     if (value && value.trim()) {
-        return Oskari.util.sanitize(value);
+        return value;
     }
     values = locale[Oskari.getDefaultLanguage()] || {};
-    value = values[key] || '';
-    return Oskari.util.sanitize(value);
+    return values[key] || '';
 };

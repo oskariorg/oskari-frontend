@@ -151,9 +151,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 }
                 gridModel.addData({
                     'id': layer.getId(),
-                    'name': layer.getName(),
-                    'description': layer.getDescription(),
-                    'source': layer.getSource(),
+                    'name': Oskari.util.sanitize(layer.getName()),
+                    'description': Oskari.util.sanitize(layer.getDescription()),
+                    'source': Oskari.util.sanitize(layer.getSource()),
                     'isBase': layer.isBaseLayer()
                 });
                 layersAdded.push(layer.getId());
