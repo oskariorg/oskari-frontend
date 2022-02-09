@@ -1,5 +1,4 @@
 export const ID_PREFIX = 'M_';
-export const TRANSIENT = false;
 export const BUNDLE_KEY = 'MapModule';
 export const PLUGIN_NAME = 'MarkersPlugin';
 export const TOOL_GROUP = 'selectiontools';
