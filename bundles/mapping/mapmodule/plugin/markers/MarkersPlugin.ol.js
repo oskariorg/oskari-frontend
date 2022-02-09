@@ -274,37 +274,50 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             this.getSandbox().notifyAll(removeEvent);
         },
         _getSanitizedMarker: function (markerData, markerId) {
-            const { x, y } = markerData;
+            const { x, y, shape, msg, color, ...other } = markerData;
             // Validation: coordinates are needed
             if ((typeof x === 'undefined') || (typeof y === 'undefined')) {
                 this.log.warn('Undefined coordinate in', markerData);
                 return {};
             }
-            // Remove null values to get defaults
-            Object.keys(markerData).forEach(key => markerData[key] === null && delete markerData[key]);
-
-            if (markerData.color && markerData.color.charAt(0) === '#') {
-                markerData.color = markerData.color.substring(1);
-            }
-
             // generate id if not provided
             const id = markerId || ID_PREFIX + Oskari.getSeq(this.getName()).nextVal();
-            return { id, ...DEFAULT_DATA, ...markerData };
+            const sanitized = { id, x, y, ...DEFAULT_DATA };
+
+            if (typeof shape !== 'undefined') {
+                sanitized.shape = isNaN(shape) ? shape : parseInt(shape);
+            }
+            if (msg) {
+                sanitized.msg = decodeURIComponent(msg);
+            }
+            if (color) {
+                sanitized.color = color.charAt(0) === '#' ? color.substring(1) : color;
+            }
+            Object.keys(other).forEach(key => {
+                const value = other[key];
+                if (typeof value !== 'undefined') {
+                    sanitized[key] = value;
+                }
+            });
+            return sanitized;
         },
         _getStyleFromMarkerData: function (markerData) {
             const style = jQuery.extend(true, {}, DEFAULT_STYLE);
-            const { color, shape, size, msg } = markerData;
-            if (color) {
-                style.image.fill.color = '#' + color;
-            }
-            if (!isNaN(shape)) {
-                style.image.shape = parseInt(shape);
-            }
-            if (size) {
+            const { color, shape, size, msg, offsetX, offsetY } = markerData;
+            style.image.fill.color = '#' + color;
+            style.image.shape = shape;
+            style.text.labelText = msg;
+            // use pixel size if shape is svg or url
+            if (typeof shape === 'string') {
+                style.image.sizePx = size;
+            } else {
                 style.image.size = size;
             }
-            if (msg) {
-                style.text.labelText = decodeURIComponent(msg);
+            if (typeof offsetX !== 'undefined') {
+                style.image.offsetX = offsetX;
+            }
+            if (typeof offsetY !== 'undefined') {
+                style.image.offsetY = offsetY;
             }
             return style;
         },
@@ -336,7 +349,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             } else {
                 layerSource.addFeature(feature);
             }
-
             this.raiseMarkerLayer();
             const data = this._featureToMarkerData(feature);
             const addEvent = Oskari.eventBuilder('AfterAddMarkerEvent')(data, id);
@@ -471,7 +483,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            if (!this.getMarkersLayer().isVisible()) {
+            if (!this.getMarkersLayer().getVisible()) {
                 return {};
             }
             const markers = this.getMarkersLayer().getSource().getFeatures()
