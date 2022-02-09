@@ -207,9 +207,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
                 "src": "../../../../bundles/framework/divmanazer/component/TextAreaInput.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/buttons/AddButton.js"
             }, {
                 "type": "text/javascript",
@@ -238,15 +235,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/buttons/SearchButton.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/visualization-form/LineForm.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/visualization-form/DotForm.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/extension/DefaultTile.js"
@@ -308,9 +296,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/overlay.scss"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/scss/visualizationform.scss"
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/popover.scss"
