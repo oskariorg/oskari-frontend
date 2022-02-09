@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveMarkersR
 }, {
     handleRequest: function (core, request) {
         this._log.debug('Remove markers');
-        this.markersPlugin.removeMarkers(false, request.getId());
+        this.markersPlugin.removeMarkers(request.getId());
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']

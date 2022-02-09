@@ -66,11 +66,12 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         ...OSKARI_BLANK_STYLE,
         ...oskariStyle
     };
+    const formats = tabs || constants.SUPPORTED_FORMATS;
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
     const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
-    const [selectedTab, setSelectedTab] = useState(format || 'point');
+    const [selectedTab, setSelectedTab] = useState(format || formats[0]);
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
 
     const onUpdate = (values) => {
@@ -84,20 +85,27 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 
     useEffect(() => {
         form.setFieldsValue(convertedStyleValues);
-    }, [oskariStyle]);
+    }, [style]);
 
-    const formats = tabs || constants.SUPPORTED_FORMATS;
+    // Don't render tab selector and show preview in tab if there is only one format
+    const showSelector = formats.length > 1;
+
+    const renderTab = () => {
+        return (
+            <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
+            </TabSelector>
+        );
+    }
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
-                <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                    { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
-                </TabSelector>
+                {showSelector  && renderTab() }
                 <Card>
                     <StaticForm form={ form } onValuesChange={ onUpdate }>
-                        { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
-                        { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
-                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
+                        { selectedTab === 'point' && <PointTab oskariStyle={ style } showPreview={!showSelector} /> }
+                        { selectedTab === 'line' && <LineTab oskariStyle={ style } showPreview={!showSelector} /> }
+                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } showPreview={!showSelector} /> }
                     </StaticForm>
                 </Card>
             </FormSpace>
