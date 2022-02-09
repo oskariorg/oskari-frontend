@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
         // Else format old data to new form and inform user about this
         else {
             this._log.warn('AddMarkerRequest data is in deprecated format. Modifying data format before processing request. Please check your request!');
-            var shape = null;
+            var shape;
             if (data.iconUrl) {
                 shape = data.iconUrl;
             } else if (data.shape && data.shape.data) {
@@ -35,8 +35,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.AddMarkerReque
                 stoke: data.stroke,
                 // Converted properties
                 shape: shape,
-                offsetX: (data.shape && data.shape.x && !isNaN(data.shape.x)) ? data.shape.x : null,
-                offsetY: (data.shape && data.shape.y && !isNaN(data.shape.y)) ? data.shape.y : null
+                offsetX: (data.shape && data.shape.x && !isNaN(data.shape.x)) ? data.shape.x : undefined,
+                offsetY: (data.shape && data.shape.y && !isNaN(data.shape.y)) ? data.shape.y : undefined
             };
         }
 
