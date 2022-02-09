@@ -470,6 +470,7 @@ const getImageStyle = (mapModule, styleDef, requestedStyle) => {
             anchorYUnits: 'pixels',
             anchorXUnits: 'pixels',
             anchorOrigin: 'bottom-left',
+            size: [size, size],
             anchor: [offsetX, offsetY],
             opacity
         };
