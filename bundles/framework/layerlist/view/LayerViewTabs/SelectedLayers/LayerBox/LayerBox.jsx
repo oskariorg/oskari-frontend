@@ -69,13 +69,16 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                     <Col>
                                         <Row style={{ padding: '0px' }}>
                                             <ColAuto style={{ padding: '0px' }}>
-                                                {getName()}<br/>
+                                                {getName()}
+                                            </ColAuto>
+                                        </Row>
+                                        <Row style={{ padding: '0px', flexWrap: 'nowrap' }}>
+                                            <ColAuto style={{ padding: '0px', flexShrink: 1 }}>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px' }}>
+                                            <ColAutoRight style={{ padding: '0px', alignSelf: 'flex-end' }}>
                                                 {publishable &&
                                                 <Fragment>
-                                                    <br/>
                                                     <CheckOutlined style={{ color: '#01ca79' }} />
                                                     <Publishable>
                                                         <Message messageKey={'layer.publishable'} />

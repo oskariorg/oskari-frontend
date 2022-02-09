@@ -430,16 +430,13 @@ Oskari.clazz.define(
          * Adds tools for all layers
          */
         __setupLayerTools: function () {
-            var me = this;
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function (layer) {
-                me.__addTool(layer, true);
-            });
+            layers.forEach(layer => this.__addTool(layer, true));
             // update all layers at once since we suppressed individual events
             var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
-            me.sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
         },
 
         /**

@@ -8,6 +8,11 @@ import { PlusOutlined } from '@ant-design/icons';
 // TODO: Fix this once style accessible smarter way
 const secondaryColor = '#006ce8';
 
+const Content = styled('div')`
+    padding: 24px;
+    min-width: 500px;
+`;
+
 const Header = styled.div`
     display: flex;
     margin-bottom: 10px;
@@ -40,9 +45,9 @@ const StyledListItem = styled(ListItem)`
     &:nth-child(odd) {
         background-color: #ffffff;
     }
-    border-style: solid;
-    border-width: 0.5px;
-    border-color: #d9d9d9;
+    &&& {
+        border: solid 1px #d9d9d9;
+    }
 `;
 
 const AddStyleIcon = styled(PlusOutlined)`
@@ -55,7 +60,7 @@ const showVisualizationForm = (layerId, styleName) => {
 
 export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
     return (
-        <div>
+        <Content>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
                 <AddStyle onClick={() => showVisualizationForm(layerId)}>
@@ -63,7 +68,7 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
                     <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
-            { styles && styles.length > 0 &&
+            { styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
                 const name = style.getName();
                 const title = style.getTitle();
@@ -76,7 +81,7 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
                 );
             }}/>
             }
-        </div>
+        </Content>
     );
 };
 

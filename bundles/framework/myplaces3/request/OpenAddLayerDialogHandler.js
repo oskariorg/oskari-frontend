@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDi
          */
         handleRequest: function (core, request) {
             if (this.instance) {
-                this.instance.openAddLayerDialog(request.getOriginator(), request.getSide());
+                this.instance.openLayerDialog();
             }
         }
     }, {

@@ -15,6 +15,10 @@ Oskari.registerLocalization(
             "dontShow" : "Älä näytä uudelleen",
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
+            },
+            "plugin" : {
+                "title": "Ilmoitukset",
+                "valid": "Voimassa"
             }
         }
     });

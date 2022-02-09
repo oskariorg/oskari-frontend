@@ -6,11 +6,7 @@ Oskari.registerLocalization(
         "title": "Eigin stíll",
         "defaultName": "Eigin stíll",
         "popup": {
-            "title": "Eigin stíll",
-            "button": {
-                "cancel": "Hætta við",
-                "save": "Vista"
-            }
+            "title": "Eigin stíll"
         }
     }
 });

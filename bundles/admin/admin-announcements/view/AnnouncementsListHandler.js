@@ -1,6 +1,5 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { announcementsHelper } from './AnnouncementsHelper';
 import { Message } from 'oskari-ui';
 import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../framework/announcements/view/Constants';
 
@@ -31,9 +30,9 @@ const removeFromLocalStorageArray = (name, value) => {
 };
 
 class ViewHandler extends StateHandler {
-    constructor () {
+    constructor (sandbox) {
         super();
-        this.announcementsHelper = announcementsHelper();
+        this.service = sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
         this.fetchAdminAnnouncements();
         this.state = {
             announcements: [],
@@ -43,19 +42,19 @@ class ViewHandler extends StateHandler {
     }
 
     fetchAdminAnnouncements () {
-        this.announcementsHelper.getAdminAnnouncements(function (err, data) {
+        this.service.fetchAdminAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
             } else {
                 this.updateState({
-                    announcements: data.data
+                    announcements: data
                 });
             }
         }.bind(this));
     }
 
     saveAnnouncement (data) {
-        this.announcementsHelper.saveAnnouncement(data, function (err) {
+        this.service.saveAnnouncement(data, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.saveFailed'));
             } else {
@@ -70,7 +69,7 @@ class ViewHandler extends StateHandler {
 
     // Update all the announcements f.ex. when saved. Set active key as empty so all panels get closed.
     updateAnnouncement (data) {
-        this.announcementsHelper.updateAnnouncement(data, function (err, data) {
+        this.service.updateAnnouncement(data, function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.updateFailed'));
                 return false;
@@ -86,7 +85,7 @@ class ViewHandler extends StateHandler {
     }
 
     deleteAnnouncement (id) {
-        this.announcementsHelper.deleteAnnouncement(id, function (err) {
+        this.service.deleteAnnouncement(id, function (err) {
             if (err) {
                 Messaging.error(getMessage('messages.deleteFailed'));
             } else {

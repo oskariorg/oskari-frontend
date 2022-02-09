@@ -1,23 +1,95 @@
-import React from 'react';
-import { Input } from 'antd';
+import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Button, Popover, TextInput, Tooltip, Message } from 'oskari-ui'
+import { constants, SvgRadioButton } from './StyleEditor/index';
+import { BgColorsOutlined } from '@ant-design/icons';
 
-const StyledColorPicker = styled(Input)`
-    width: 50px;
+// Use z-index to render popover top of the Modal
+const zIndex = 55500;
 
-    &:focus,
-    &:hover {
-        border-color: #ffd400;
-    }
-
-    &:focus {
-        box-shadow: none;
-        outline-color: #ffd400;
-    }
+// Hide input softly to render color picker to correct place
+const HiddenInput = styled('input')`
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+    padding: 0px;
+    border: none;
+    left: -10px;
+    top: 20px;
+    position: relative;
 `;
 
-export const ColorPicker = (props) => {
+const StyledColorPicker = styled('div')`
+    width: 210px;
+    margin-left: 7px;
+    margin-top: 7px;
+`;
+
+const ColorTextInput = styled(TextInput)`
+    width: 90px;
+    height: 34px;
+`;
+const ChooseColor = styled(Button)`
+    width: 70px;
+    height: 34px;
+`;
+
+const MoreColors = styled('div')`
+    display: inline-block;
+`;
+
+const getContent = (props) => {
+    const colorInput = useRef(null);
+    const onClick = () => {
+        const el = colorInput.current;
+        el.focus(); // Safari might need focus before click
+        el.click();
+    }
     return (
-        <StyledColorPicker type='color' { ...props } />
+        <StyledColorPicker>
+            <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } { ...props }/>
+            <MoreColors>
+                <HiddenInput ref={colorInput} type='color' { ...props }/>
+                <Button type="primary" onClick={onClick}>
+                    <Message messageKey='ColorPicker.moreColors' />
+                </Button>
+            </MoreColors>
+        </StyledColorPicker>
+    );
+};
+
+export const ColorPicker = (props) => {
+    const { value = '#FFFFFF', disabled = false } = props;
+    const [visible, setVisible] = useState(false);
+    const chooseIconStyle = {
+        fontSize: '20px',
+        color: disabled || Oskari.util.isDarkColor(value) ? '#FFFFFF' :'#000000'
+    };
+    const chooseTooltip = disabled ? '' : <Message messageKey={`ColorPicker.tooltip`}/>;
+    return (
+        <React.Fragment>
+            <Popover
+                content={getContent(props)}
+                trigger="click"
+                placement="bottom"
+                visible={visible}
+                zIndex={zIndex}
+                onVisibleChange = {setVisible}
+                >
+            <Tooltip title={chooseTooltip}>
+                <ChooseColor style={{ background: value }} disabled={disabled} >
+                    <BgColorsOutlined style={chooseIconStyle}/>
+                </ChooseColor>
+            </Tooltip>
+            </Popover>
+            {!disabled && <ColorTextInput { ...props }/> }
+        </React.Fragment>
     );
 }
+
+ColorPicker.propTypes = {
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool
+};

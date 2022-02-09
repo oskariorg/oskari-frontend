@@ -1,0 +1,25 @@
+div.publisher-announcements-inputs {
+    display: grid;
+    grid-column-gap: 50px;
+    grid-template-columns: auto auto;
+
+    .icon-warning-light {
+        float: right;
+        margin-left: 12px;
+    }
+}
+
+div.basic_publisher {
+    
+    .publisher-layout-announcements {
+        padding-left: 28px;
+      
+        input[name=publisher-announcements] {
+            width: 125px;
+    
+            button {
+                float: right;
+            }
+        }
+    }
+}

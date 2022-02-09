@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
+const { TRANSPARENT_FILL } = constants;
+
 const TabSelector = styled(Radio.Group)`
     &&& {
         display: flex;
@@ -45,9 +47,9 @@ const FormSpace = styled(Space)`
  const styleExceptionHandler = (exceptionStyle) => {
     // if fill pattern is set to null, set color as empty
     if (typeof exceptionStyle.fill.area.pattern !== 'undefined') {
-        if (exceptionStyle.fill.area.pattern === 4) {
+        if (exceptionStyle.fill.area.pattern === TRANSPARENT_FILL) {
             exceptionStyle.fill.color = '';
-        } else if (exceptionStyle.fill.area.pattern !== 4 && exceptionStyle.fill.color === '') {
+        } else if (exceptionStyle.fill.area.pattern !== TRANSPARENT_FILL && exceptionStyle.fill.color === '') {
             exceptionStyle.fill.color = OSKARI_BLANK_STYLE.fill.color;
         }
     }
@@ -64,11 +66,12 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         ...OSKARI_BLANK_STYLE,
         ...oskariStyle
     };
+    const formats = tabs || constants.SUPPORTED_FORMATS;
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
     const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
-    const [selectedTab, setSelectedTab] = useState(format || 'point');
+    const [selectedTab, setSelectedTab] = useState(format || formats[0]);
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
 
     const onUpdate = (values) => {
@@ -82,20 +85,27 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 
     useEffect(() => {
         form.setFieldsValue(convertedStyleValues);
-    }, [oskariStyle]);
+    }, [style]);
 
-    const formats = tabs || constants.SUPPORTED_FORMATS;
+    // Don't render tab selector and show preview in tab if there is only one format
+    const showSelector = formats.length > 1;
+
+    const renderTab = () => {
+        return (
+            <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
+                { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
+            </TabSelector>
+        );
+    }
     return (
         <LocaleProvider value={{ bundleKey: constants.LOCALIZATION_BUNDLE }}>
             <FormSpace direction='vertical'>
-                <TabSelector { ...constants.ANTD_FORMLAYOUT } value={selectedTab} onChange={(event) => setSelectedTab(event.target.value) } >
-                    { formats.map(format => <PreviewButton key={format} oskariStyle = { style } format = {format} /> ) }
-                </TabSelector>
+                {showSelector  && renderTab() }
                 <Card>
                     <StaticForm form={ form } onValuesChange={ onUpdate }>
-                        { selectedTab === 'point' && <PointTab oskariStyle={ style } /> }
-                        { selectedTab === 'line' && <LineTab oskariStyle={ style } /> }
-                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } /> }
+                        { selectedTab === 'point' && <PointTab oskariStyle={ style } showPreview={!showSelector} /> }
+                        { selectedTab === 'line' && <LineTab oskariStyle={ style } showPreview={!showSelector} /> }
+                        { selectedTab === 'area' && <AreaTab oskariStyle={  style } showPreview={!showSelector} /> }
                     </StaticForm>
                 </Card>
             </FormSpace>

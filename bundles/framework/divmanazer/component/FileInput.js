@@ -19,19 +19,18 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     this.visible = true;
 
     this._template = {
-        fileBox: _.template('<div class="<%= classes %>"> ' +
-            '<div class="box__input">' +
-                '<input type="file" class="box__file" accept="<%= allowedFiles %>" />' +
-                    '<label><%= fileupload %>' +
-                        '&nbsp;<a href="javascript:void(0);"><%= link %></a>' +
-                    '</label> ' +
-            '</div>' +
-            '<div class="box__uploaded"></div>' +
-        '</div>'),
-        basicInput: _.template(
-            '<div class="<%= classes %>">' +
-                '<input type="file" class="basic__file" accept="<%= allowedFiles %>" <%= allowMultiple %> />' +
-            '</div>')
+        fileBox: ({ classes, allowedFiles, fileupload, link }) =>
+            `<div class="${classes}">
+                <div class="box__input">
+                    <input type="file" class="box__file" accept="${allowedFiles}" />
+                        <label>${fileupload}&nbsp;<a href="javascript:void(0);">${link}</a></label>
+                </div>
+                <div class="box__uploaded"></div>
+            </div>`,
+        basicInput: ({ classes, allowedFiles, allowMultiple }) =>
+            `<div class="${classes}">
+                <input type="file" class="basic__file" accept="${allowedFiles}" ${allowMultiple} />
+            </div>`
     };
     this.isAdvancedUpload = this._canUseAdvancedUpload();
     this._createUi();

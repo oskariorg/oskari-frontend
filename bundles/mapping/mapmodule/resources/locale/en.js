@@ -83,46 +83,29 @@ Oskari.registerLocalization(
                 }
             },
             "MarkersPlugin": {
-                "buttons": {
-                    "add": "Map marker",
-                    "clear": "Delete all markers"
-                },
+                "title": "Map Marker",
+                "tooltip": "Add map marker",
                 "form": {
-                    "title": "Map Marker Style",
-                    "tooltip": "Define a style for map markers.",
-                    "symbol": {
-                        "label": "Icon"
-                    },
-                    "size": {
-                        "label": "Size"
-                    },
-                    "color": {
-                        "label": "Colour",
-                        "labelOr": "or",
-                        "labelCustom": "Custom colour (RGB 0-255)"
-                    },
-                    "preview": {
-                        "label": "Preview"
-                    },
+                    "style": "Map Marker Style",
                     "message": {
-                        "label": "Text on map",
+                        "label": "Text on the map",
                         "hint": "Name or description"
                     }
                 },
                 "dialog": {
-                    "title": "Map Marker",
                     "message": "Select a new location for your map marker by clicking the map.",
-                    "error": {
-                        "title": "Error for getting location!",
-                        "timeout": "Getting a location takes longer than excepted...",
-                        "denied": "The site has blocked location. Please enable location and try again",
-                        "noLocation": "Failed to determine location",
-                        "close": "Close"
-                    }
+                    "clear": "Delete all markers"
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Center map to your location"
+                "tooltip": "Center map to your location",
+                "error": {
+                    "title": "Error for getting location!",
+                    "timeout": "Getting a location takes longer than excepted...",
+                    "denied": "The site has blocked location. Please enable location and try again",
+                    "noLocation": "Failed to determine location",
+                    "close": "Close"
+                }
             },
             "PanButtonsPlugin": {
                 "center" : {

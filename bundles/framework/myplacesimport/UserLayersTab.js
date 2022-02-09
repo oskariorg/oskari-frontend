@@ -109,78 +109,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             okBtn.addClass('primary');
 
             okBtn.setHandler(() => {
-                this._deleteUserLayer(data.id);
                 dialog.close();
+                this.instance.getService().deleteUserLayer(data.id);
             });
             var cancelBtn = dialog.createCloseButton(this.loc('tab.buttons.cancel'));
             var confirmMsg = this.loc('tab.confirmDeleteMsg', { name: data.name });
             dialog.show(this.loc('tab.deleteLayer'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
-        },
-        /**
-         * @method _deleteUserLayer
-         * Request backend to delete user layer. On success removes the layer
-         * from map and layerservice. On failure displays a notification.
-         * @param layer layer userlayer data to be destroyed
-         * @private
-         */
-        _deleteUserLayer: function (layerId) {
-            var me = this;
-
-            // parse actual id from layer id
-            var tokenIndex = layerId.lastIndexOf('_') + 1;
-            var idParam = layerId.substring(tokenIndex);
-
-            jQuery.ajax({
-                url: Oskari.urls.getRoute('DeleteUserLayer'),
-                data: {
-                    id: idParam
-                },
-                type: 'POST',
-                success: function (response) {
-                    if (response && response.result === 'success') {
-                        me._deleteSuccess(layerId);
-                    } else {
-                        me._deleteFailure();
-                    }
-                },
-                error: function () {
-                    me._deleteFailure();
-                }
-            });
-        },
-        /**
-         * Success callback for backend operation.
-         * @method _deleteSuccess
-         * @param layerId Id of the layer that was removed
-         * @private
-         */
-        _deleteSuccess: function (layerId) {
-            var me = this;
-            const sandbox = me.instance.sandbox;
-
-            // Remove layer from grid... this is really ugly, but so is jumping
-            // through hoops to masquerade as a module
-            const model = me.grid.getDataModel().data;
-            const gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-            model.forEach(row => {
-                if (row.id !== layerId) {
-                    gridModel.addData(row);
-                }
-            });
-            me.grid.setDataModel(gridModel);
-            me.grid.renderTo(me.container);
-
-            // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
-            // also we need to do it before service.remove() to avoid problems on other components
-            const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layerId);
-            sandbox.request(me.instance, request);
-            this.instance.getMapLayerService().removeLayer(layerId);
-
-            // show msg to user about successful removal
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(me.loc('tab.notification.deletedTitle'), me.loc('tab.notification.deletedMsg'));
-            dialog.fadeout(3000);
         },
         /**
          * Failure callback for backend operation.
@@ -225,112 +160,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             });
             return gridModel;
         },
-        /**
-         * Request backend to update userlayer name, source, description and style.
-         * On success updates the layer on the map and layerservice.
-         * On failure displays a notification.
-         *
-         * @method _editUserLayer
-         * @private
-         * @param {Object} data
-         */
         _editUserLayer: function (data) {
-            var me = this;
-            var styleForm;
-            var form;
-            var dialog;
-            var buttons = [];
-            var saveBtn;
-            var cancelBtn;
-            var action = this.instance.getService().getEditLayerUrl();
             const { id } = data;
-            var tokenIndex = id.lastIndexOf('_') + 1;
-            var idParam = id.substring(tokenIndex);
-            me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            styleForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.StyleForm', me.instance);
             const layer = this.instance.getMapLayerService().findMapLayer(id);
-            // has only one style default for now
-            styleForm.setStyleValues(layer.getCurrentStyle().getFeatureStyle());
-
-            form = styleForm.getForm();
-            form.find('input[data-name=userlayername]').val(data.name);
-            form.find('input[data-name=userlayerdesc]').val(data.description);
-            form.find('input[data-name=userlayersource]').val(data.source);
-
-            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-
-            saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            saveBtn.setTitle(me.loc('tab.buttons.save'));
-            saveBtn.addClass('primary');
-            saveBtn.setHandler(function () {
-                var values = styleForm.getValues();
-                var msg;
-                var title;
-                var fadeout;
-                values.id = idParam;
-
-                if (!values.name) {
-                    me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.styleName'), false);
-                    return;
-                }
-
-                jQuery.ajax({
-                    url: action,
-                    data: values,
-                    type: 'POST',
-                    success: function (response) {
-                        if (typeof response === 'object') {
-                            msg = me.loc('tab.notification.editedMsg');
-                            title = me.loc('tab.title');
-                            me.instance.getService().updateLayer(data.id, response);
-                            me.refresh();
-                            fadeout = true;
-                        } else {
-                            msg = me.loc('tab.error.editMsg');
-                            title = me.loc('tab.error.title');
-                            fadeout = false;
-                        }
-                        me._showMessage(title, msg, fadeout);
-                    },
-                    error: function (jqXHR, textStatus) {
-                        msg = me.loc('tab.error.editMsg');
-                        title = me.loc('tab.error.title');
-                        fadeout = false;
-                        me._showMessage(title, msg, fadeout);
-                    }
-                });
-
-                dialog.close();
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            cancelBtn = dialog.createCloseButton(me.loc('tab.buttons.cancel'));
-            cancelBtn.setHandler(function () {
-                dialog.close();
-                me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-            });
-            buttons.push(cancelBtn);
-            buttons.push(saveBtn);
-            dialog.show(me.loc('tab.editLayer'), form, buttons);
-        },
-        /**
-         * Displays a message on the screen
-         *
-         * @method _showMessage
-         * @private
-         * @param  {String} title
-         * @param  {String} message
-         * @param  {Boolean} fadeout optional default true
-         */
-        _showMessage: function (title, message, fadeout) {
-            fadeout = fadeout !== false;
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var btn = dialog.createCloseButton(me.loc('tab.buttons.close'));
-
-            dialog.makeModal();
-            dialog.show(title, message, [btn]);
-            if (fadeout) {
-                dialog.fadeout(5000);
-            }
+            const values = {
+                locale: layer.getLocale(),
+                style: layer.getCurrentStyle().getFeatureStyle(),
+                id
+            };
+            this.instance.openLayerDialog(values);
         }
     });

@@ -12,6 +12,7 @@ export { NumberInput } from './components/NumberInput';
 export { Opacity } from './components/Opacity';
 export { Popover } from './components/Popover';
 export { Radio } from './components/Radio';
+export { SearchInput } from './components/SearchInput';
 export { Select, Option } from './components/Select';
 export { Slider } from './components/Slider';
 export { Space } from './components/Space';

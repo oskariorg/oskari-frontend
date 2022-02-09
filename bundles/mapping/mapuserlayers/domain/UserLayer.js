@@ -10,8 +10,7 @@ export class UserLayer extends WFSLayer {
         super(...arguments);
         this._layerType = 'USERLAYER';
         this._metaType = 'USERLAYER';
-        this.description = undefined;
-        this.source = undefined;
+        this._locale = {};
     }
 
     /**
@@ -21,26 +20,38 @@ export class UserLayer extends WFSLayer {
         return false;
     }
 
-    setDescription (desc) {
-        this.description = desc;
+    getName (lang) {
+        return this.getLocalizedValue('name', lang);
+    }
+
+    getLocale () {
+        return this._locale;
+    }
+
+    setLocale (locale) {
+        this._locale = locale;
     }
 
     getDescription () {
-        if (this.description) {
-            return Oskari.util.sanitize(this.description);
-        }
-        return this.description;
-    }
-
-    setSource (source) {
-        this.source = source;
+        return this.getLocalizedValue('desc');
     }
 
     getSource () {
-        if (this.source) {
-            return Oskari.util.sanitize(this.source);
+        return this.getLocalizedValue('source');
+    }
+
+    getLocalizedValue (key, lang = Oskari.getLang()) {
+        const locale = this.getLocale();
+        let values = locale[lang] || {};
+        let value = values[key];
+        if (!value) {
+            values = locale[Oskari.getDefaultLanguage()] || {};
+            value = values[key];
         }
-        return this.source;
+        if (value) {
+            return Oskari.util.sanitize(value);
+        }
+        return '';
     }
 
     /**

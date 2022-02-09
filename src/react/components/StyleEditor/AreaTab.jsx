@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, SizeControl, constants } from './index';
+import { ColorPicker, Message, Tooltip } from 'oskari-ui';
+import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
 import { Form, Row, Col } from 'antd';
 import { getAreaPattern } from './Preview/SVGHelper';
 
@@ -35,14 +35,18 @@ const getFillOptions = () => {
 
 // counter is used to generate changing ids for SVG to workaround conflicting ids when hard coded
 let counter = 0;
-export const AreaTab = ({oskariStyle}) => {
+export const AreaTab = ({oskariStyle, showPreview}) => {
     counter++;
     const areaFillOptions = getFillOptions();
 
+    const isTransparentFill = Oskari.util.keyExists(oskariStyle, 'fill.area.pattern')
+        && oskariStyle.fill.area.pattern === constants.TRANSPARENT_FILL;
+
+    const fillColorTooltip = isTransparentFill ? <Message messageKey='StyleEditor.tooltips.noFillColor' /> : '';
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
+                <Col span={ 12 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.area.color'
@@ -50,30 +54,18 @@ export const AreaTab = ({oskariStyle}) => {
                         >
                         <ColorPicker />
                     </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.area.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
                 </Col>
 
-                <Col span={ 10 } offset={ 2 }>
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='fill.color'
-                        label={ <Message messageKey='StyleEditor.fill.color' /> }
-                        >
-                        <ColorPicker />
-                    </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='fill.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
+                <Col span={ 12 } >
+                    <Tooltip title={fillColorTooltip} placement='topLeft'>
+                        <Form.Item
+                            { ...constants.ANTD_FORMLAYOUT }
+                            name='fill.color'
+                            label={ <Message messageKey='StyleEditor.fill.color' /> }
+                            >
+                            <ColorPicker disabled={isTransparentFill} />
+                        </Form.Item>
+                    </Tooltip>
                 </Col>
             </Row>
 
@@ -104,11 +96,14 @@ export const AreaTab = ({oskariStyle}) => {
             </Row>
 
             <Row>
-                <SizeControl
-                    format={ 'area' }
-                    name='stroke.area.width'
-                    localeKey={ 'StyleEditor.stroke.area.width' }
-                />
+                <Col span={ 16 }>
+                    <SizeControl
+                        format={ 'area' }
+                        name='stroke.area.width'
+                        localeKey={ 'StyleEditor.stroke.area.width' }
+                    />
+                </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='area' /> }
             </Row>
         </React.Fragment>
     );
@@ -116,5 +111,6 @@ export const AreaTab = ({oskariStyle}) => {
 
 
 AreaTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

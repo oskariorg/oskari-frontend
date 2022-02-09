@@ -8,8 +8,9 @@ import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='announcements' />;
 
 class ViewHandler extends StateHandler {
-    constructor () {
+    constructor (service) {
         super();
+        this.service = service;
         this.fetchAnnouncements();
         this.state = {
             modals: [],
@@ -19,20 +20,15 @@ class ViewHandler extends StateHandler {
     }
 
     fetchAnnouncements () {
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: Oskari.urls.getRoute('Announcements'),
-            success: (pResp) => {
+        this.service.fetchAnnouncements(function (err, data) {
+            if (err) {
+                Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
+            } else {
                 this.updateState({
-                    announcements: pResp.data
+                    announcements: data
                 });
-                this.updateModals();
-            },
-            error: function (jqXHR, textStatus) {
-                Messaging.error(getMessage('messages.getFailed'));
             }
-        });
+        }.bind(this));
     }
 
     updateModals () {

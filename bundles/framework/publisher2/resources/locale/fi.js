@@ -64,6 +64,7 @@ Oskari.registerLocalization(
             "maptools": {
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
+                "AnnouncementsPlugin": "Ilmoitukset",
                 "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
@@ -79,6 +80,7 @@ Oskari.registerLocalization(
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
                 "FeedbackServiceTool": "Palautteen antaminen (Open311)",
+                "MetadataSearchTool": "Mahdollista metadatahakujen ohjelmallinen käyttö",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",

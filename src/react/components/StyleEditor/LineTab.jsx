@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, SizeControl, constants } from './index';
+import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
 import { Form, Row, Col } from 'antd';
 
-export const LineTab = (props) => {
+export const LineTab = ({ oskariStyle, showPreview }) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
+                <Col span={ 16 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.color'
@@ -16,14 +16,8 @@ export const LineTab = (props) => {
                     >
                         <ColorPicker />
                     </Form.Item>
-
-                    <Form.Item
-                        { ...constants.ANTD_FORMLAYOUT }
-                        name='stroke.color'
-                    >
-                        <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } />
-                    </Form.Item>
                 </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='line' /> }
             </Row>
 
             <Row>
@@ -64,5 +58,6 @@ export const LineTab = (props) => {
 };
 
 LineTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

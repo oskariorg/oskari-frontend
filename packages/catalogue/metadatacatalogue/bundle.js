@@ -1,6 +1,6 @@
 /**
  * @class Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogueBundle
- * 
+ *
  */
 Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogueBundle", function() {
 
@@ -35,7 +35,17 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        {
 				"type" : "text/javascript",
 				"src" : "../../../bundles/catalogue/metadatacatalogue/instance.js"
-			}, 
+			},
+			/* publisher tool */
+			{
+	            "type": "text/javascript",
+	            "src": "../../../bundles/catalogue/metadatacatalogue/publisher/MetadataSearchTool.js"
+	        },
+			/* event */
+			{
+	            "type": "text/javascript",
+	            "src": "../../../bundles/catalogue/metadatacatalogue/event/MetadataSearchResultEvent.js"
+	        },
 			/* request */
 	        {
 	            "type": "text/javascript",
@@ -44,13 +54,20 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	            "type": "text/javascript",
 	            "src": "../../../bundles/catalogue/metadatacatalogue/request/AddSearchResultActionRequestHandler.js"
 			},
+			{
+	            "type": "text/javascript",
+	            "src": "../../../bundles/catalogue/metadatacatalogue/request/MetadataSearchRequest.js"
+	        }, {
+	            "type": "text/javascript",
+	            "src": "../../../bundles/catalogue/metadatacatalogue/request/MetadataSearchRequestHandler.js"
+			},
 	        /* css */
 			{
 				"type" : "text/css",
 				"src" : "../../../bundles/catalogue/metadatacatalogue/resources/scss/style.scss"
 			}
-		], 
-		"locales" : [  
+		],
+		"locales" : [
 		{
 			"lang" : "fi",
 			"type" : "text/javascript",
@@ -131,7 +148,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 						"License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
 					}
 				}
-			}],			
+			}],
 			"Bundle-Version" : "1.0.0",
 			"Import-Namespace" : ["Oskari"],
 			"Import-Bundle" : {}
