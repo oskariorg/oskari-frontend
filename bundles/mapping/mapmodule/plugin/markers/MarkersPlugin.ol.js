@@ -345,7 +345,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
 
             if (layerSource.hasFeature(feature)) {
                 // ol doesn't add features with same id, update existing
-                layerSource.getFeatureById(id).setGeometry(new olGeom.Point(coord));
+                const existing = layerSource.getFeatureById(id);
+                existing.setGeometry(new olGeom.Point(coord));
+                existing.setStyle(olStyle);
             } else {
                 layerSource.addFeature(feature);
             }
