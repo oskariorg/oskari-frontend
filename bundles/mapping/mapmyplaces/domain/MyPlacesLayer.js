@@ -1,3 +1,5 @@
+import { getValueFromLocale } from '../../mapmodule/util/UserDataHelper';
+
 /**
  * @class Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
  *
@@ -16,17 +18,8 @@ export class MyPlacesLayer extends WFSLayer {
     /* Layer type specific functions */
 
     // override to get name from locale
-    getName (lang = Oskari.getLang()) {
-        const locale = this.getLocale();
-        let { name } = locale[lang] || {};
-        if (!name) {
-            const defaultLocale = locale[Oskari.getDefaultLanguage()] || {};
-            name = defaultLocale.name;
-        }
-        if (name) {
-            return Oskari.util.sanitize(name);
-        }
-        return '';
+    getName (lang) {
+        return getValueFromLocale(this.getLocale(), 'name', lang);
     }
 
     getLocale () {

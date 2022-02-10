@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
                 // setup id
                 layerContainer.find('div.layer-title h4').append(Oskari.util.sanitize(layer.getName()));
-                layerContainer.find('div.layer-title').append(layer.getDescription());
+                layerContainer.find('div.layer-title').append(Oskari.util.sanitize(layer.getDescription()));
 
                 // remove layer from selected tool
                 if (!layer.isSticky()) {

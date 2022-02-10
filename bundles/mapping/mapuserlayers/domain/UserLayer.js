@@ -1,3 +1,4 @@
+import { getValueFromLocale } from '../../mapmodule/util/UserDataHelper';
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.domain.UserLayer
  *
@@ -21,7 +22,7 @@ export class UserLayer extends WFSLayer {
     }
 
     getName (lang) {
-        return this.getLocalizedValue('name', lang);
+        return getValueFromLocale(this.getLocale(), 'name', lang);
     }
 
     getLocale () {
@@ -33,25 +34,12 @@ export class UserLayer extends WFSLayer {
     }
 
     getDescription () {
-        return this.getLocalizedValue('desc');
+        return getValueFromLocale(this.getLocale(), 'desc');
     }
 
     getSource () {
-        return this.getLocalizedValue('source');
-    }
-
-    getLocalizedValue (key, lang = Oskari.getLang()) {
-        const locale = this.getLocale();
-        let values = locale[lang] || {};
-        let value = values[key];
-        if (!value) {
-            values = locale[Oskari.getDefaultLanguage()] || {};
-            value = values[key];
-        }
-        if (value) {
-            return Oskari.util.sanitize(value);
-        }
-        return '';
+        const source = getValueFromLocale(this.getLocale(), 'source');
+        return Oskari.util.sanitize(source);
     }
 
     /**
