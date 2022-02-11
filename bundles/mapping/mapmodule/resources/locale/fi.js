@@ -86,7 +86,7 @@ Oskari.registerLocalization(
                 "form": {
                     "style": "Karttamerkinnän esitystapa",
                     "message": {
-                        "label": "Teksti kartalla",
+                        "label": "Kartalla näkyvä teksti",
                         "hint": "Nimi tai kuvaus"
                     }
                 },
