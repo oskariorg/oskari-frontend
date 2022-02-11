@@ -1,14 +1,4 @@
-import { parsePathFromSVG } from './SVGHelper';
-
-const linePreviewSVG = `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10,15L20,35L40,25"
-        stroke-width="3"
-        stroke-linejoin="miter"
-        stroke-linecap="butt"
-        strokeDasharray="0"
-        fill="none"
-        stroke="#000000"></path>
-</svg>`;
+import { LINE_DASH } from '../../../../../bundles/mapping/mapmodule/oskariStyle/constants';
 
 /**
  * @method _composeLinePath
@@ -17,13 +7,18 @@ const linePreviewSVG = `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="h
  */
 export const getLineSVG = (lineParams) => {
     const { color, size, linecap, linedash, linejoin } = lineParams;
-    const path = parsePathFromSVG(linePreviewSVG);
+    const dashArray = linedash === LINE_DASH.DASH ? `5, ${4 + size}`: ''
+    console.log(dashArray);
+    const svg =
+        `<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,20L30,60L70,40"
+                stroke-width="${2 * size}"
+                stroke-linejoin="${linejoin}"
+                stroke-linecap="${linecap}"
+                stroke-dasharray="${dashArray}"
+                stroke="${color}"
+                fill="transparent"/>
+        </svg>`;
 
-    path.setAttribute('stroke', color);
-    path.setAttribute('stroke-width', size);
-    path.setAttribute('stroke-linecap', linecap);
-    path.setAttribute('stroke-dasharray', linedash === 'dash' ? '4, 4': '');
-    path.setAttribute('stroke-linejoin', linejoin);
-
-    return path.outerHTML;
+    return svg;
 };

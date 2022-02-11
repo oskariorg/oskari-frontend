@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { getPointSVG } from './point';
 
 // Viewbox settings for preview svg
 const previewViewbox = {
@@ -15,10 +16,6 @@ const maxSize = 5;
 const multiplier = 2.5;
 
 const _composePreviewViewbox = (size) => {
-    if (typeof size === 'undefined') {
-        // for area and line so they are centered
-        return '2.5 2.5 45 45';
-    }
     // calculate viewbox for centering point symbols
     const minX = previewViewbox.minX - (multiplier * (maxSize-size));
     const minY = previewViewbox.minY - (multiplier * (maxSize-size));
@@ -27,20 +24,20 @@ const _composePreviewViewbox = (size) => {
     return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
 };
 
-export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, iconSize, content = '' }) => {
+export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, propsForSVG }) => {
+    const { size } = propsForSVG;
     return (<svg
-        viewBox={ _composePreviewViewbox(iconSize) }
+        viewBox={ _composePreviewViewbox(size) }
         width={ width }
         height={ height }
         xmlns="http://www.w3.org/2000/svg"
-        dangerouslySetInnerHTML={ { __html: content } }
+        dangerouslySetInnerHTML={ { __html: getPointSVG(propsForSVG) } }
     >
     </svg>);
 };
 
 SVGWrapper.propTypes = {
-    content: PropTypes.string.isRequired,
+    propsForSVG: PropTypes.object.isRequired,
     width: PropTypes.string,
-    height: PropTypes.string,
-    iconSize: PropTypes.number
+    height: PropTypes.string
 };

@@ -10,9 +10,7 @@ const getFillSVG = (name, counter) => {
     const patternDef = getAreaPattern(myId, name, '#000000');
     // TODO
     let fillPattern = `url(#${myId})`;
-    if (name === 'TRANSPARENT') {
-        fillPattern = 'none';
-    } else if (name === 'SOLID') {
+    if (name === 'SOLID') {
         fillPattern = '#000000'
     }
     return `<svg viewBox="0 0 32 32" width="32" height="32" xmlns="http://www.w3.org/2000/svg">

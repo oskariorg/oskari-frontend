@@ -16,6 +16,9 @@ export const parsePathFromSVG = (baseSvg) => {
 };
 
 export const getAreaPattern = (patternId, patternName, color)=> {
+    if (patternName === 'TRANSPARENT') {
+        return _composeTransparent(patternId);
+    }
     let strokeWidth = 2;
     let path = '';
     // TODO move logic to generator/mapmodule
@@ -38,6 +41,14 @@ const _composeSvgPattern = (id, path, color, strokeWidth) => {
     return `<defs>
         <pattern id="${id}" viewBox="0, 0, 64, 64" width="100%" height="100%">
             <path d="${path}" stroke="${color}" stroke-width="${strokeWidth}"/>
+        </pattern>
+    </defs>`;
+}
+const _composeTransparent = (id) => {
+    return `<defs>
+        <pattern id="${id}" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+            <rect fill="#eee" x="0" width="8" height="8" y="0"/>
+            <rect fill="#eee" x="8" width="8" height="8" y="8"/>
         </pattern>
     </defs>`;
 }

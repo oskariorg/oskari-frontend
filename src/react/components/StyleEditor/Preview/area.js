@@ -7,9 +7,9 @@ const ID_PREFIX = 'patternPreview-';
 const getPreviewSVG = (params, patternDef, fillPattern ) => {
     const { strokecolor, size, linejoin, strokestyle } = params;
     const dash = strokestyle === 'dash' ? '5, 4': '';
-    return `<svg viewBox="0 0 80 80" width="80" height="80" xmlns="http://www.w3.org/2000/svg">
+    return `<svg width="80" height="80" xmlns="http://www.w3.org/2000/svg">
             ${patternDef}
-        <path d="M10,17L40,12L29,40Z" stroke="${strokecolor}" stroke-width="${size}" fill="${fillPattern}"
+        <path d="M10,25L70,15L50,70Z" stroke="${strokecolor}" stroke-width="${2*size}" fill="${fillPattern}"
             stroke-linejoin="${linejoin}" stroke-linecap="${CAP}" stroke-dasharray="${dash}">
         </path>
     </svg>`;
@@ -47,7 +47,7 @@ export const getAreaSVG = (areaParams) => {
     const patternName = getPatternName(pattern);
     const patternId = ID_PREFIX + patternIdCounter;
     // TODO add pattern only when really needed
-    const fillPattern = pattern < 0 || pattern > 3 ? color : `url(#${patternId})`;
+    const fillPattern = pattern < 0 || pattern > 4 ? color : `url(#${patternId})`;
 
 
     const patternDef = getAreaPattern(patternId, patternName, color);
