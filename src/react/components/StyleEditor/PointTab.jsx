@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ColorPicker, Message } from 'oskari-ui';
-import { SvgRadioButton, SizeControl, constants } from './index';
+import { SvgRadioButton, SizeControl, PreviewCol, constants } from './index';
 import { Form, Row, Col } from 'antd';
 
-
-
-export const PointTab = ({ oskariStyle }) => {
+export const PointTab = ({ oskariStyle, showPreview }) => {
     return (
         <React.Fragment>
             <Row>
-                <Col span={ 10 }>
+                <Col span={ 16 }>
                     <Form.Item
                         { ...constants.ANTD_FORMLAYOUT }
                         name='image.fill.color'
@@ -19,6 +17,7 @@ export const PointTab = ({ oskariStyle }) => {
                         <ColorPicker />
                     </Form.Item>
                 </Col>
+                { showPreview && <PreviewCol oskariStyle={ oskariStyle } format='point' /> }
             </Row>
 
             <Row>
@@ -43,5 +42,6 @@ export const PointTab = ({ oskariStyle }) => {
 };
 
 PointTab.propTypes = {
-    oskariStyle: PropTypes.object.isRequired
+    oskariStyle: PropTypes.object.isRequired,
+    showPreview: PropTypes.bool
 };

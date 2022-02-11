@@ -60,7 +60,7 @@ const getContent = (props) => {
 };
 
 export const ColorPicker = (props) => {
-    const { value = '#000000', disabled = false } = props;
+    const { value = '#FFFFFF', disabled = false } = props;
     const [visible, setVisible] = useState(false);
     const chooseIconStyle = {
         fontSize: '20px',

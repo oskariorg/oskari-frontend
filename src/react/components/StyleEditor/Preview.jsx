@@ -40,13 +40,14 @@ const getSVGContent = (format, propsForSVG) => {
  * @example <caption>Basic usage</caption>
  * <Preview }/>
  */
-export const Preview = ({markers, areaFills, format, oskariStyle}) => {
+export const Preview = ({markers, areaFills, format, oskariStyle, style = {}}) => {
     const propsForSVG = StyleMapper.getPropsForFormat(format, oskariStyle);
     const flagsForSelenium = StyleMapper.getAsDataAttributes(format, propsForSVG);
     const svgIcon = getSVGContent(format, propsForSVG, markers, areaFills);
     const size = format === 'point' ? propsForSVG.size : undefined;
+    const mergedStyle = { ...previewWrapperStyle, ...style };
     return (
-        <div style={ previewWrapperStyle } className="t_preview" { ...flagsForSelenium } >
+        <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
             <SVGWrapper
                 width={ previewSize }
                 height={ previewSize }

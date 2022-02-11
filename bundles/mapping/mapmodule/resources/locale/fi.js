@@ -81,35 +81,18 @@ Oskari.registerLocalization(
                 }
             },
             "MarkersPlugin": {
-                "buttons": {
-                    "add": "Tee karttamerkintä.",
-                    "clear": "Poista kaikki merkinnät"
-                },
+                "title": "Karttamerkintä",
+                "tooltip": "Tee karttamerkintä",
                 "form": {
-                    "title": "Karttamerkinnän esitystapa",
-                    "tooltip": "",
-                    "symbol": {
-                        "label": "Symboli"
-                    },
-                    "size": {
-                        "label": "Koko"
-                    },
-                    "color": {
-                        "label": "Väri",
-                        "labelOr": "tai",
-                        "labelCustom": "Oma RGB-väri (0-255)"
-                    },
-                    "preview": {
-                        "label": "Esikatselu"
-                    },
+                    "style": "Karttamerkinnän esitystapa",
                     "message": {
                         "label": "Teksti kartalla",
                         "hint": "Nimi tai kuvaus"
                     }
                 },
                 "dialog": {
-                    "title": "Karttamerkintä",
-                    "message": "Valitse karttamerkinnälle uusi sijainti klikkaamalla pistettä kartalla."
+                    "message": "Valitse karttamerkinnälle uusi sijainti klikkaamalla pistettä kartalla.",
+                    "clear": "Poista kaikki merkinnät"
                 }
             },
             "MyLocationPlugin": {
