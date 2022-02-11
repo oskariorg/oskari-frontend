@@ -202,6 +202,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     },
     removeFiles: function () {
         this.files = [];
+        this.getElement().find('input[type="file"]').val('');
         this._updateFileList();
     },
     /**

@@ -88,7 +88,7 @@ Oskari.registerLocalization(
                 "form": {
                     "style": "Map Marker Style",
                     "message": {
-                        "label": "Text on the map",
+                        "label": "Text visible on map",
                         "hint": "Name or description"
                     }
                 },

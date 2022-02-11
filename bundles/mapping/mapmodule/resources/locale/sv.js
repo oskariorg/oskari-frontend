@@ -88,7 +88,7 @@ Oskari.registerLocalization(
                 "form": {
                     "style": "Punktens stil",
                     "message": {
-                        "label": "Texten på kartan",
+                        "label": "Placera text på kartan",
                         "hint": "Skriv ett meddelande"
                     }
                 },
