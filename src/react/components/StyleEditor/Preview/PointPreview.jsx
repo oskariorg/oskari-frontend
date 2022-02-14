@@ -32,7 +32,7 @@ const _composePreviewViewbox = (size) => {
     return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
 };
 
-export const SVGWrapper = ({ previewSize, propsForSVG }) => {
+export const PointPreview = ({ previewSize, propsForSVG }) => {
     const { size } = propsForSVG;
     return (<svg
         viewBox={ _composePreviewViewbox(size) }
@@ -44,7 +44,7 @@ export const SVGWrapper = ({ previewSize, propsForSVG }) => {
     </svg>);
 };
 
-SVGWrapper.propTypes = {
+PointPreview.propTypes = {
     previewSize: PropTypes.number.isRequired,
     propsForSVG: PropTypes.object.isRequired
 };

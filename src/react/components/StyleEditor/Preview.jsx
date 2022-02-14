@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleMapper } from './Preview/StyleMapper';
-import { SVGWrapper } from './Preview/SVGWrapper';
-import { LinePreview } from './Preview/line';
-import { AreaPreview } from './Preview/area';
+import { StyleMapper, PointPreview, LinePreview, AreaPreview } from './Preview/';
 
 // Size for preview svg
 const previewSize = 80;
@@ -34,7 +31,7 @@ export const Preview = ({format, oskariStyle, style = {}}) => {
 
     return (
         <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
-            { format === 'point' && <SVGWrapper previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'point' && <PointPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
             { format === 'line' && <LinePreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
             { format === 'area' && <AreaPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
         </div>

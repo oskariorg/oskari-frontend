@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { ColorPicker, Message, Tooltip } from 'oskari-ui';
 import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
 import { Form, Row, Col } from 'antd';
-import { FillPattern, isSolid } from './Preview/FillPattern';
+import { FillPattern, isSolid } from './FillPattern';
 
 const { FILLS } = constants;
 const SIZE = 32;

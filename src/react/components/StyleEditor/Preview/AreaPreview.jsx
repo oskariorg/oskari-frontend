@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FillPattern, isSolid }  from './FillPattern';
+import { FillPattern, isSolid }  from '../FillPattern';
 
 const CAP = 'butt'; // round or square doesn't look nice with dash
 const ID_PREFIX = 'preview-fill-pattern-';

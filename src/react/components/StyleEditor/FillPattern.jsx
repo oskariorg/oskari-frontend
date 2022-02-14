@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getFillPatternPath } from '../../../../../bundles/mapping/mapmodule/oskariStyle/generator.ol';
-import { FILLS } from '../constants';
+import { getFillPatternPath } from '../../../../bundles/mapping/mapmodule/oskariStyle/generator.ol';
+import { FILLS } from './constants';
 
 const PATTERN_SIZE = 32;
 
