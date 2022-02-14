@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleMapper } from './Preview/StyleMapper';
 import { SVGWrapper } from './Preview/SVGWrapper';
-import { getLineSVG } from './Preview/line';
-import { getAreaSVG } from './Preview/area';
+import { LinePreview } from './Preview/line';
+import { AreaPreview } from './Preview/area';
 
 // Size for preview svg
-const previewSize = '80px';
+const previewSize = 80;
 
 // Style settings for wrapping preview rectangle
 const previewWrapperStyle = {
@@ -14,16 +14,6 @@ const previewWrapperStyle = {
     width: previewSize,
     marginLeft: 'auto',
     marginRight: 'auto'
-};
-
-const getSVGContent = (format, propsForSVG) => {
-    if (format === 'line') {
-        return getLineSVG(propsForSVG);
-    }
-    if (format === 'area') {
-        return getAreaSVG(propsForSVG);
-    }
-    return '';
 };
 
 /**
@@ -41,23 +31,14 @@ export const Preview = ({format, oskariStyle, style = {}}) => {
     const propsForSVG = StyleMapper.getPropsForFormat(format, oskariStyle);
     const flagsForSelenium = StyleMapper.getAsDataAttributes(format, propsForSVG);
     const mergedStyle = { ...previewWrapperStyle, ...style };
-    if (format === 'point') {
-        return (
-            <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
-                <SVGWrapper
-                    width={ previewSize }
-                    height={ previewSize }
-                    propsForSVG={ propsForSVG } />
-            </div>
-        );
-    }
-    return (
-        <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium }
-            dangerouslySetInnerHTML={ { __html: getSVGContent(format, propsForSVG) } }>
 
+    return (
+        <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
+            { format === 'point' && <SVGWrapper previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'line' && <LinePreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'area' && <AreaPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
         </div>
     );
-
 };
 
 Preview.propTypes = {

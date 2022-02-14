@@ -1,6 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getPointSVG } from './point';
+
+const PARSER = new DOMParser();
+
+const getPointSVG = (pointParams) => {
+    const { color, shape } = pointParams;
+    const baseSvg = Oskari.getMarkers()[shape].data;
+    const parsed = PARSER.parseFromString(baseSvg, 'image/svg+xml');
+    const path = parsed.getElementsByTagName('path')[0];
+    path.setAttribute('fill', color);
+    return path.outerHTML;
+};
 
 // Viewbox settings for preview svg
 const previewViewbox = {
@@ -10,8 +20,6 @@ const previewViewbox = {
     height: 60
 };
 
-// Size for preview svg
-const defaultPreviewSize = '80px';
 const maxSize = 5;
 const multiplier = 2.5;
 
@@ -24,12 +32,12 @@ const _composePreviewViewbox = (size) => {
     return minX + ' ' + minY + ' ' +  widthV + ' ' + heightV;
 };
 
-export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreviewSize, propsForSVG }) => {
+export const SVGWrapper = ({ previewSize, propsForSVG }) => {
     const { size } = propsForSVG;
     return (<svg
         viewBox={ _composePreviewViewbox(size) }
-        width={ width }
-        height={ height }
+        width={ previewSize }
+        height={ previewSize }
         xmlns="http://www.w3.org/2000/svg"
         dangerouslySetInnerHTML={ { __html: getPointSVG(propsForSVG) } }
     >
@@ -37,7 +45,6 @@ export const SVGWrapper = ({ width = defaultPreviewSize, height = defaultPreview
 };
 
 SVGWrapper.propTypes = {
-    propsForSVG: PropTypes.object.isRequired,
-    width: PropTypes.string,
-    height: PropTypes.string
+    previewSize: PropTypes.number.isRequired,
+    propsForSVG: PropTypes.object.isRequired
 };

@@ -37,7 +37,7 @@ const getAreaPropsFromStyle = (style) => {
         size: style.stroke.area.width,
         strokestyle: style.stroke.area.lineDash,
         linejoin: style.stroke.area.lineJoin,
-        pattern: style.fill.area.pattern
+        fillCode: style.fill.area.pattern
     };
 };
 
