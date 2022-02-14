@@ -5,7 +5,7 @@ import olStyleCircle from 'ol/style/Circle';
 import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 
-import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE } from './constants';
+import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE, PATTERN_STROKE } from './constants';
 import { filterOptionalStyle, getOptionalStyleFilter } from './filter';
 
 const log = Oskari.log('MapModule.util.style');
@@ -325,26 +325,31 @@ const getFillPattern = (fillStyleCode, color) => {
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'square';
     ctx.strokeStyle = color;
-    let lineWidth = 2;
-    let path;
-    switch (fillStyleCode) {
-    case FILL_STYLE.THICK_DIAGONAL:
-        lineWidth = 3;
-    case FILL_STYLE.THIN_DIAGONAL:
-        path = getDiagonalPattern(canvasSize, lineWidth);
-        break;
-    case FILL_STYLE.THICK_HORIZONTAL :
-        lineWidth = 3;
-    case FILL_STYLE.THIN_HORIZONTAL :
-        path = getHorizontalPattern(canvasSize, lineWidth);
-        break;
-    }
-    ctx.lineWidth = lineWidth;
+    const { width, path } = getFillPatternPath(canvasSize, fillStyleCode);
+    ctx.lineWidth = width;
     ctx.stroke(new Path2D(path));
     return ctx.createPattern(canvas, 'repeat');
 };
+export const getFillPatternPath = (size, fillCode) => {
+    const { THIN, THICK } = PATTERN_STROKE;
+    let width = THIN;
+    let path;
+    switch (fillCode) {
+    case FILL_STYLE.THICK_DIAGONAL:
+        width = THICK;
+    case FILL_STYLE.THIN_DIAGONAL:
+        path = getDiagonalPattern(size, width);
+        break;
+    case FILL_STYLE.THICK_HORIZONTAL :
+        width = THICK;
+    case FILL_STYLE.THIN_HORIZONTAL :
+        path = getHorizontalPattern(size, width);
+        break;
+    }
+    return { width, path };
+};
 
-export const getDiagonalPattern = (size, lineWidth) => {
+const getDiagonalPattern = (size, lineWidth) => {
     const numberOfStripes = lineWidth > 2 ? 12 : 18;
     const bandWidth = size / numberOfStripes;
     const path = [];
@@ -359,7 +364,7 @@ export const getDiagonalPattern = (size, lineWidth) => {
     return path.join(' ');
 };
 
-export const getHorizontalPattern = (size, lineWidth) => {
+const getHorizontalPattern = (size, lineWidth) => {
     const numberOfStripes = lineWidth > 2 ? 16 : 18;
     const bandWidth = size / numberOfStripes;
     const path = [];

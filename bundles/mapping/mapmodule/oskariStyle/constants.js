@@ -44,17 +44,20 @@ export const EFFECT = {
     LIGHTEN_MAJOR: `${LIGHTEN} ${MAJOR}`
 };
 
+// Note! order affects to StyleEditor icons
 export const FILL_STYLE = {
+    TRANSPARENT: 4,
+    SOLID: 5,
     THIN_DIAGONAL: 0,
     THICK_DIAGONAL: 1,
     THIN_HORIZONTAL: 2,
-    THICK_HORIZONTAL: 3,
-    TRANSPARENT: 4,
-    SOLID: 5
+    THICK_HORIZONTAL: 3
 };
 
-export const PATTERN_THIN_WIDTH = 2;
-export const PATTERN_THICK_WIDTH = 3;
+export const PATTERN_STROKE = {
+    THIN: 2,
+    THICK: 4
+};
 
 export const FILTER = {
     EQUAL: 'value',
