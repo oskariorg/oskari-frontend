@@ -59,7 +59,6 @@ const FormSpace = styled(Space)`
 
 export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
     let [form] = Form.useForm();
-
     // if we don't clone the input here the mappings
     //  between form <> style, the values can get mixed up due to mutability
     const style = {
@@ -70,13 +69,11 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
     const fieldValuesForForm = FormToOskariMapper.createFlatFormObjectFromStyle(style);
-    const convertedStyleValues = FormToOskariMapper.convertFillPatternToForm(fieldValuesForForm);
     const [selectedTab, setSelectedTab] = useState(format || formats[0]);
     const updateStyle = FormToOskariMapper.createStyleAdjuster(style);
 
     const onUpdate = (values) => {
         // values ex: {image.shape: 3}
-        FormToOskariMapper.convertFillPatternToStyle(values);
         const newStyle = updateStyle(values);
         // if we don't clone the output here the mappings
         //  between form <> style, the values can get mixed up due to mutability
@@ -84,7 +81,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
     };
 
     useEffect(() => {
-        form.setFieldsValue(convertedStyleValues);
+        form.setFieldsValue(fieldValuesForForm);
     }, [style]);
 
     // Don't render tab selector and show preview in tab if there is only one format

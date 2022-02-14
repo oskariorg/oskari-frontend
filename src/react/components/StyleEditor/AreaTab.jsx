@@ -8,10 +8,10 @@ import { FillPattern, isSolid } from './FillPattern';
 const { FILLS } = constants;
 const SIZE = 32;
 const COLOR = '#000000';
-const ID_PREFIX = 'button-pattern-';
+const ID_PREFIX = 'pattern-';
 
-const getFillIcon = fillCode => {
-    const id = ID_PREFIX + fillCode;
+const getFillIcon = (name, fillCode) => {
+    const id = ID_PREFIX + name.toLowerCase();
     const solid = isSolid(fillCode);
     const fillPattern = solid ? COLOR : `url(#${id})`;
     return (
@@ -25,7 +25,13 @@ const getFillIcon = fillCode => {
 let fillOtions;
 const getFillOptions = () => {
     if (!fillOtions) {
-        fillOtions = Object.keys(FILLS).map(name  => ({ name, data: getFillIcon(FILLS[name]) }));
+        fillOtions = Object.keys(FILLS).map(name  => {
+            const fillCode = FILLS[name];
+            return {
+                name: fillCode,
+                data: getFillIcon(name, fillCode)
+            };
+        });
     }
     return fillOtions;
 };
