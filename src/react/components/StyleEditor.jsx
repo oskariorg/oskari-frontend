@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';
 
-const { TRANSPARENT } = constants.FILLS;
+const { TRANSPARENT, SOLID } = constants.FILLS;
 
 const TabSelector = styled(Radio.Group)`
     &&& {
@@ -43,15 +43,22 @@ const FormSpace = styled(Space)`
  * @example <caption>Basic usage</caption>
  * <StyleEditor props={{ ...exampleProps }}/>
  */
-
- const styleExceptionHandler = (exceptionStyle) => {
+let tempFillColor;
+const styleExceptionHandler = (exceptionStyle, oldStyle) => {
+    const isTransparent = exceptionStyle.fill.area.pattern === TRANSPARENT;
+    const hasColor = exceptionStyle.fill.color !== '';
     // if fill pattern is set to null, set color as empty
-    if (typeof exceptionStyle.fill.area.pattern !== 'undefined') {
-        if (exceptionStyle.fill.area.pattern === TRANSPARENT) {
+    if (isTransparent) {
+        const isColorChange = exceptionStyle.fill.color !== oldStyle.fill.color;
+        if (isColorChange) {
+            exceptionStyle.fill.area.pattern = SOLID;
+        } else {
+            tempFillColor = exceptionStyle.fill.color;
             exceptionStyle.fill.color = '';
-        } else if (exceptionStyle.fill.area.pattern !== TRANSPARENT && exceptionStyle.fill.color === '') {
-            exceptionStyle.fill.color = OSKARI_BLANK_STYLE.fill.color;
         }
+    } else if (!isTransparent && !hasColor) {
+        exceptionStyle.fill.color = tempFillColor || OSKARI_BLANK_STYLE.fill.color;
+        tempFillColor = null;
     }
 
     return exceptionStyle;
@@ -77,7 +84,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         const newStyle = updateStyle(values);
         // if we don't clone the output here the mappings
         //  between form <> style, the values can get mixed up due to mutability
-        onChange(styleExceptionHandler(newStyle));
+        onChange(styleExceptionHandler(newStyle, style));
     };
 
     useEffect(() => {
