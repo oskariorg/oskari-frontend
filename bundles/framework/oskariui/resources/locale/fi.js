@@ -38,7 +38,12 @@ Oskari.registerLocalization({
                 areaTab: 'Alue'
             },
             tooltips: {
-                noFillColor: 'Valitse ensin joku muu täyttökuvio'
+                transparent: 'Ei täyttöväriä',
+                solid: 'Peittävä täyttöväri',
+                thin_diagonal: 'Ohut vinottainen raita',
+                thick_diagonal:'Paksu vinottainen raita',
+                thin_horizontal: 'Ohut vaakaraita',
+                thick_horizontal: 'Paksu vaakaraita'
             },
             fill: {
                 color: 'Täyttöväri',

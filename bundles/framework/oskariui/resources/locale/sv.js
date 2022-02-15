@@ -38,7 +38,12 @@ Oskari.registerLocalization({
                 areaTab: 'Området'
             },
             tooltips: {
-                noFillColor: 'Vänligen välj först ett annat mönster'
+                transparent: 'Ingen fyllning',
+                solid: 'Täckande fyllning',
+                thin_diagonal: 'Tunn diagonal linje',
+                thick_diagonal: 'Tjock diagonal linje',
+                thin_horizontal: 'Tunn horisontal linje',
+                thick_horizontal: 'Tjock horisontal linje'
             },
             fill: {
                 color: 'Ifyllnadsfärg för område',
