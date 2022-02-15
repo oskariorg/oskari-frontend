@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { getFillPatternPath } from '../../../../bundles/mapping/mapmodule/oskariStyle/generator.ol';
 import { FILLS } from './constants';
 
-const PATTERN_SIZE = 32;
+const PATTERN_SIZE = 64;
 
 export const isSolid = id => {
     return id === FILLS.SOLID || id < 0;
