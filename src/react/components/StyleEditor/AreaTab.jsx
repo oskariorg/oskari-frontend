@@ -1,31 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message, Tooltip } from 'oskari-ui';
+import { ColorPicker, Message } from 'oskari-ui';
 import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
-import { Form, Row, Col } from 'antd';
+import { Form, Row, Col, Tooltip } from 'antd';
 import { FillPattern, isSolid } from './FillPattern';
 
-const { FILLS } = constants;
+const { FILLS, FILL_ORDER } = constants;
+
 const SIZE = 32;
 const COLOR = '#000000';
 const ID_PREFIX = 'pattern-';
 
 const getFillIcon = (name, fillCode) => {
-    const id = ID_PREFIX + name.toLowerCase();
+    const lowerName = name.toLowerCase();
+    const id = ID_PREFIX + lowerName;
     const solid = isSolid(fillCode);
     const fillPattern = solid ? COLOR : `url(#${id})`;
     return (
-        <svg width={SIZE} height={SIZE}>
-            { !solid && <FillPattern id={id} fillCode={fillCode} color={COLOR}/> }
-            <rect width={SIZE} height={SIZE} fill={fillPattern} />
-        </svg>
+         // use tooltip from antd because oskari-ui tooltip wraps children inside span which has height issue with svg
+        <Tooltip title={<Message messageKey={`StyleEditor.tooltips.${lowerName}`}/>}>
+            <svg width={SIZE} height={SIZE}>
+                { !solid && <FillPattern id={id} fillCode={fillCode} color={COLOR}/> }
+                <rect width={SIZE} height={SIZE} fill={fillPattern} />
+            </svg>
+        </Tooltip>
     );
 };
 
 let fillOtions;
 const getFillOptions = () => {
     if (!fillOtions) {
-        fillOtions = Object.keys(FILLS).map(name  => {
+        fillOtions = FILL_ORDER.map(name  => {
             const fillCode = FILLS[name];
             return {
                 name: fillCode,
