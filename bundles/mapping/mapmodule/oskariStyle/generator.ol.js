@@ -325,28 +325,28 @@ const getFillPattern = (fillStyleCode, color) => {
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'square';
     ctx.strokeStyle = color;
-    const { width, path } = getFillPatternPath(canvasSize, fillStyleCode);
-    ctx.lineWidth = width;
+    const { strokeWidth, path } = getFillPatternPath(canvasSize, fillStyleCode);
+    ctx.lineWidth = strokeWidth;
     ctx.stroke(new Path2D(path));
     return ctx.createPattern(canvas, 'repeat');
 };
 export const getFillPatternPath = (size, fillCode) => {
     const { THIN, THICK } = PATTERN_STROKE;
-    let width = THIN;
+    let strokeWidth = THIN;
     let path;
     switch (fillCode) {
     case FILL_STYLE.THICK_DIAGONAL:
-        width = THICK;
+        strokeWidth = THICK;
     case FILL_STYLE.THIN_DIAGONAL:
-        path = getDiagonalPattern(size, width);
+        path = getDiagonalPattern(size, strokeWidth);
         break;
     case FILL_STYLE.THICK_HORIZONTAL :
-        width = THICK;
+        strokeWidth = THICK;
     case FILL_STYLE.THIN_HORIZONTAL :
-        path = getHorizontalPattern(size, width);
+        path = getHorizontalPattern(size, strokeWidth);
         break;
     }
-    return { width, path };
+    return { strokeWidth, path };
 };
 
 const getDiagonalPattern = (size, lineWidth) => {
