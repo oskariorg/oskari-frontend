@@ -1,3 +1,6 @@
+import { FILL_STYLE } from '../../../../bundles/mapping/mapmodule/oskariStyle/constants';
+export const FILLS = FILL_STYLE;
+export const FILL_ORDER = ['TRANSPARENT', 'SOLID', 'THIN_HORIZONTAL', 'THICK_HORIZONTAL', 'THIN_DIAGONAL', 'THICK_DIAGONAL'];
 export const LOCALIZATION_BUNDLE = 'oskariui';
 
 // AntD width settings for grid
@@ -7,8 +10,6 @@ export const ANTD_FORMLAYOUT = {
 };
 
 export const SUPPORTED_FORMATS = ['point', 'line', 'area'];
-
-export const TRANSPARENT_FILL = 4;
 
 export const LINE_STYLES = {
     "lineDash": [

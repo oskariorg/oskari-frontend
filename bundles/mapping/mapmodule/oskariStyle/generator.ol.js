@@ -5,7 +5,7 @@ import olStyleCircle from 'ol/style/Circle';
 import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 
-import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE } from './constants';
+import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE, PATTERN_STROKE } from './constants';
 import { filterOptionalStyle, getOptionalStyleFilter } from './filter';
 
 const log = Oskari.log('MapModule.util.style');
@@ -325,45 +325,58 @@ const getFillPattern = (fillStyleCode, color) => {
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'square';
     ctx.strokeStyle = color;
-
-    switch (fillStyleCode) {
-    case FILL_STYLE.THIN_DIAGONAL : return getDiagonalPattern(ctx, canvas, 2);
-    case FILL_STYLE.THICK_DIAGONAL : return getDiagonalPattern(ctx, canvas, 3);
-    case FILL_STYLE.THIN_HORIZONTAL : return getHorizontalPattern(ctx, canvas, 2);
-    case FILL_STYLE.THICK_HORIZONTAL : return getHorizontalPattern(ctx, canvas, 3);
+    const { strokeWidth, path } = getFillPatternPath(canvasSize, fillStyleCode);
+    ctx.lineWidth = strokeWidth;
+    ctx.stroke(new Path2D(path));
+    return ctx.createPattern(canvas, 'repeat');
+};
+export const getFillPatternPath = (size, fillCode) => {
+    const { THIN, THICK } = PATTERN_STROKE;
+    let strokeWidth = THIN;
+    let path;
+    switch (fillCode) {
+    case FILL_STYLE.THICK_DIAGONAL:
+        strokeWidth = THICK;
+    case FILL_STYLE.THIN_DIAGONAL:
+        path = getDiagonalPattern(size, strokeWidth);
+        break;
+    case FILL_STYLE.THICK_HORIZONTAL :
+        strokeWidth = THICK;
+    case FILL_STYLE.THIN_HORIZONTAL :
+        path = getHorizontalPattern(size, strokeWidth);
+        break;
     }
+    return { strokeWidth, path };
 };
 
-const getDiagonalPattern = (ctx, canvas, lineWidth) => {
-    ctx.lineWidth = lineWidth;
+const getDiagonalPattern = (size, lineWidth) => {
     const numberOfStripes = lineWidth > 2 ? 12 : 18;
-    const bandWidth = canvas.width / numberOfStripes;
+    const bandWidth = size / numberOfStripes;
+    const path = [];
     for (let i = 0; i < numberOfStripes * 2 + 2; i++) {
         if (i % 2 === 0) {
             continue;
         }
-        ctx.beginPath();
-        ctx.moveTo(i * bandWidth + bandWidth / 2, 0);
-        ctx.lineTo(i * bandWidth + bandWidth / 2 - canvas.width, canvas.width);
-        ctx.stroke();
+        const a = i * bandWidth + bandWidth / 2;
+        path.push(`M${a},0`);
+        path.push(`L${a - size},${size}`);
     }
-    return ctx.createPattern(canvas, 'repeat');
+    return path.join(' ');
 };
 
-const getHorizontalPattern = (ctx, canvas, lineWidth) => {
-    ctx.lineWidth = lineWidth;
+const getHorizontalPattern = (size, lineWidth) => {
     const numberOfStripes = lineWidth > 2 ? 16 : 18;
-    const bandWidth = canvas.width / numberOfStripes;
+    const bandWidth = size / numberOfStripes;
+    const path = [];
     for (let i = 0; i < numberOfStripes; i++) {
         if (i % 2 === 0) {
             continue;
         }
-        ctx.beginPath();
-        ctx.moveTo(0, i * bandWidth + bandWidth / 2);
-        ctx.lineTo(canvas.width, i * bandWidth + bandWidth / 2);
-        ctx.stroke();
+        const b = i * bandWidth + bandWidth / 2;
+        path.push(`M0,${b}`);
+        path.push(`L${size},${b}`);
     }
-    return ctx.createPattern(canvas, 'repeat');
+    return path.join(' ');
 };
 
 /**

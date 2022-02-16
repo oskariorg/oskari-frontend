@@ -49,8 +49,13 @@ export const FILL_STYLE = {
     THICK_DIAGONAL: 1,
     THIN_HORIZONTAL: 2,
     THICK_HORIZONTAL: 3,
-    TRANSPAREN: 4,
+    TRANSPARENT: 4,
     SOLID: 5
+};
+
+export const PATTERN_STROKE = {
+    THIN: 2,
+    THICK: 3
 };
 
 export const FILTER = {

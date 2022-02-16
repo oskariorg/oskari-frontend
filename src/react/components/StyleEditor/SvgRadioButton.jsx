@@ -48,8 +48,9 @@ export const SvgRadioButton = (props) => {
     return (
         <Radio.Group name={ props.id + '.radio' } { ...props.formLayout } onChange={ props.onChange } value={ props.value }>
             { props.options.map((singleOption, index) => {
+                const value = typeof singleOption.name === 'undefined' ? index : singleOption.name;
                 return(
-                    <RadioIcon key={ props.id + '-' + (singleOption.name || index) } value={ (singleOption.name || index) }>
+                    <RadioIcon key={ props.id + '-' + value } value={ value }>
                         <ButtonVisualization data={singleOption.data} />
                     </RadioIcon>
                 );
@@ -67,6 +68,7 @@ SvgRadioButton.propTypes = {
         PropTypes.shape({
             data: PropTypes.oneOfType([
                 PropTypes.string,
+                PropTypes.node,
                 PropTypes.func
             ]).isRequired,
             name: PropTypes.oneOfType([

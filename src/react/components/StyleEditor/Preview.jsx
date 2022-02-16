@@ -1,14 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleMapper } from './Preview/StyleMapper';
-import { SVGWrapper } from './Preview/SVGWrapper';
-import { getPointSVG } from './Preview/point';
-import { getLineSVG } from './Preview/line';
-import { getAreaSVG } from './Preview/area';
-
+import { StyleMapper, PointPreview, LinePreview, AreaPreview } from './Preview/';
 
 // Size for preview svg
-const previewSize = '80px';
+const previewSize = 80;
 
 // Style settings for wrapping preview rectangle
 const previewWrapperStyle = {
@@ -16,17 +11,6 @@ const previewWrapperStyle = {
     width: previewSize,
     marginLeft: 'auto',
     marginRight: 'auto'
-};
-
-const getSVGContent = (format, propsForSVG) => {
-    if (format === 'point') {
-        return getPointSVG(propsForSVG);
-    } else if (format === 'line') {
-        return getLineSVG(propsForSVG);
-    } else if (format === 'area') {
-        return getAreaSVG(propsForSVG);
-    }
-    return '';
 };
 
 /**
@@ -40,19 +24,16 @@ const getSVGContent = (format, propsForSVG) => {
  * @example <caption>Basic usage</caption>
  * <Preview }/>
  */
-export const Preview = ({markers, areaFills, format, oskariStyle, style = {}}) => {
+export const Preview = ({format, oskariStyle, style = {}}) => {
     const propsForSVG = StyleMapper.getPropsForFormat(format, oskariStyle);
     const flagsForSelenium = StyleMapper.getAsDataAttributes(format, propsForSVG);
-    const svgIcon = getSVGContent(format, propsForSVG, markers, areaFills);
-    const size = format === 'point' ? propsForSVG.size : undefined;
     const mergedStyle = { ...previewWrapperStyle, ...style };
+
     return (
         <div style={ mergedStyle } className="t_preview" { ...flagsForSelenium } >
-            <SVGWrapper
-                width={ previewSize }
-                height={ previewSize }
-                content={ svgIcon }
-                iconSize={ size } />
+            { format === 'point' && <PointPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'line' && <LinePreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
+            { format === 'area' && <AreaPreview previewSize={ previewSize } propsForSVG={ propsForSVG } /> }
         </div>
     );
 };

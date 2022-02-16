@@ -40,6 +40,8 @@ const MoreColors = styled('div')`
 `;
 
 const getContent = (props) => {
+    // Don't add id to hidden input to avoid getting duplicate id with ColorTextInput, modify id if needed
+    const { id, ...inputProps } = props;
     const colorInput = useRef(null);
     const onClick = () => {
         const el = colorInput.current;
@@ -50,7 +52,7 @@ const getContent = (props) => {
         <StyledColorPicker>
             <SvgRadioButton options={ constants.PRE_DEFINED_COLORS } { ...props }/>
             <MoreColors>
-                <HiddenInput ref={colorInput} type='color' { ...props }/>
+                <HiddenInput ref={colorInput} type='color' { ...inputProps }/>
                 <Button type="primary" onClick={onClick}>
                     <Message messageKey='ColorPicker.moreColors' />
                 </Button>

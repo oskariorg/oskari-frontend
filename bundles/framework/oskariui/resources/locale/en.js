@@ -38,7 +38,12 @@ Oskari.registerLocalization({
                 areaTab: 'Area'
             },
             tooltips: {
-                noFillColor: 'Please select a different fill pattern first'
+                transparent: 'No fill',
+                solid: 'Solid fill',
+                thin_diagonal: 'Thin diagonal line',
+                thick_diagonal: 'Thick diagonal line',
+                thin_horizontal: 'Thin horizontal line',
+                thick_horizontal: 'Thick horizontal line'
             },
             fill: {
                 color: 'Fill colour',
