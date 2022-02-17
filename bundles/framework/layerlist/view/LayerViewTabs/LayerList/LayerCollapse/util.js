@@ -6,8 +6,8 @@ const sortGroupsAlphabetically = (groups = []) => {
     const sorted = [...groups].sort((a, b) => {
         // ensure that empty groups are at the top
         // not sure if this is requested functionality or not
-        const layerCountA = a.layers.length;
-        const layerCountB = b.layers.length;
+        const layerCountA = a.getLayerCount();
+        const layerCountB = b.getLayerCount();
         if (layerCountA === 0 && layerCountB !== 0) {
             return -1;
         }
