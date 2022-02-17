@@ -260,7 +260,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     return;
                 }
                 const metadata = data.metadata || {};
-                lastSelected.mapStyle || 'choropleth'
                 if (typeof metadata.isRatio === 'boolean') {
                     metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
                 } else {
