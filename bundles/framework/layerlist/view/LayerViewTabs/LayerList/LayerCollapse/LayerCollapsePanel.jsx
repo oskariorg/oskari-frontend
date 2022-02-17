@@ -162,7 +162,7 @@ const LayerCollapsePanel = (props) => {
                 <PanelToolContainer
                     group={group}
                     opts={opts}
-                    layerCount={layerRows.length}
+                    layerCount={group.getLayerCount()}
                     controller={controller}
                     allLayersOnMap={allLayersOnMap} />
             }>
