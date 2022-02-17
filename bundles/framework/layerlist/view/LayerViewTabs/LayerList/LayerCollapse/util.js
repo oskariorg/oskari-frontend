@@ -1,3 +1,4 @@
+import { LayerGroup } from '../../../../model/LayerGroup';
 
 const sortGroupsAlphabetically = (groups = []) => {
     if (!Array.isArray(groups)) {
@@ -41,10 +42,11 @@ const group = {
 createGroupModel(group, ...)
 */
 const createGroupModel = (group, method, allLayers, tools) => {
-    const newGroup = Oskari.clazz.create(
+    const newGroup = new LayerGroup(group.id, method, group.name);
+    /*Oskari.clazz.create(
         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
         group.id, method, group.name
-    );
+    );*/
     newGroup.setTools(tools);
     // attach layers to group
     const groupLayers = group.layers || [];
