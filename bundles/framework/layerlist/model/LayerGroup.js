@@ -68,7 +68,7 @@ export class LayerGroup {
         this.layers.push(layer);
         this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
     }
-    getLayerCount() {
+    getLayerCount () {
         return this.getGroups().reduce((prev, cur) => {
             return prev + cur.getLayerCount();
         }, this.layers.length);
