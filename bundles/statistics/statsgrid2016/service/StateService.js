@@ -1,4 +1,3 @@
-import { getMapTypeForValueType, getColorScaleTypeForValueType } from '../util/ClassificationHelpers';
 /**
  * @class Oskari.statistics.statsgrid.StateService
  */
@@ -261,13 +260,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     return;
                 }
                 const metadata = data.metadata || {};
-                metadataClassification.mapStyle = getMapTypeForValueType(metadata.valueType, lastSelected.mapStyle);
+                if (typeof metadata.isRatio === 'boolean') {
+                    metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
+                } else {
+                    // we have no metadata, default to last used or 'choropleth'
+                    metadataClassification.mapStyle = lastSelected.mapStyle || 'choropleth';
+                }
                 let decimalCount = metadata.decimalCount;
                 if (typeof decimalCount !== 'number') {
                     decimalCount = lastSelected.fractionDigits;
                 }
                 metadataClassification.fractionDigits = decimalCount;
-                metadataClassification.type = getColorScaleTypeForValueType(metadata.valueType, lastSelected.type);
+                if (typeof metadata.base === 'number') {
+                    // if there is a base value the data is divided at base value
+                    // TODO: other stuff based on this
+                    metadataClassification.type = 'div';
+                } else {
+                    // we have no metadata, default to last used or 'seq'
+                    metadataClassification.type = lastSelected.type || 'seq';
+                }
             });
             const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification, indicator.classification || {});
             return result;
