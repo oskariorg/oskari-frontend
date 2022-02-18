@@ -1,3 +1,4 @@
+import { LayerGroup } from '../../../../model/LayerGroup';
 
 const sortGroupsAlphabetically = (groups = []) => {
     if (!Array.isArray(groups)) {
@@ -6,8 +7,8 @@ const sortGroupsAlphabetically = (groups = []) => {
     const sorted = [...groups].sort((a, b) => {
         // ensure that empty groups are at the top
         // not sure if this is requested functionality or not
-        const layerCountA = a.layers.length;
-        const layerCountB = b.layers.length;
+        const layerCountA = a.getLayerCount();
+        const layerCountB = b.getLayerCount();
         if (layerCountA === 0 && layerCountB !== 0) {
             return -1;
         }
@@ -41,10 +42,7 @@ const group = {
 createGroupModel(group, ...)
 */
 const createGroupModel = (group, method, allLayers, tools) => {
-    const newGroup = Oskari.clazz.create(
-        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-        group.id, method, group.name
-    );
+    const newGroup = new LayerGroup(group.id, method, group.name);
     newGroup.setTools(tools);
     // attach layers to group
     const groupLayers = group.layers || [];

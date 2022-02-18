@@ -75,10 +75,10 @@ const filterGroups = (groups = [], searchText) => {
         return groups;
     }
     return groups.map(group => {
-        group.unfilteredLayerCount = group.layers.length;
+        group.unfilteredLayerCount = group.getLayerCount();
         group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
         group.groups = filterGroups(group.groups, searchText);
-        if (!group.layers.length && !group.groups.length) {
+        if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
             return;
         }
