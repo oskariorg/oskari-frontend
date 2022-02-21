@@ -197,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             return this._layer;
         },
         getOLMapLayers: function () {
-            return [this.getMarkersLayer()];
+            return [];
         },
         getMapMarkerBounds: function () {
             return this.getMarkersLayer().getSource().getExtent();
