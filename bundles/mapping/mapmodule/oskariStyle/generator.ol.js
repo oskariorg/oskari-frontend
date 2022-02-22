@@ -315,17 +315,17 @@ const getFillStyle = styleDef => {
  * @return {CanvasPattern} fill style
  */
 const getFillPattern = (fillStyleCode, color) => {
-    if ((!fillStyleCode && fillStyleCode !== 0) || !color) {
+    const canvasSize = 64;
+    const { strokeWidth, path } = getFillPatternPath(canvasSize, fillStyleCode);
+    if (!path || !color) {
         return;
     }
-    const canvasSize = 64;
     const canvas = document.createElement('canvas');
     canvas.width = canvasSize;
     canvas.height = canvasSize;
     const ctx = canvas.getContext('2d');
     ctx.lineCap = 'square';
     ctx.strokeStyle = color;
-    const { strokeWidth, path } = getFillPatternPath(canvasSize, fillStyleCode);
     ctx.lineWidth = strokeWidth;
     ctx.stroke(new Path2D(path));
     return ctx.createPattern(canvas, 'repeat');
