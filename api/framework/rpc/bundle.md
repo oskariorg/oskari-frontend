@@ -13,6 +13,12 @@ Examples of all the RPC functionalities can be found [here](https://www.oskari.o
 No configuration is required, but it can be used to define allowed functions, events and requests.
 By default the [events](https://www.oskari.org/api/events) and [requests](https://www.oskari.org/api/requests) that have the RPC tag in their api documentation are allowed.
 
+If you want allow additional requests or event then you can use following configuration:
+```
+conf.allowAdditionalRequests = ['newRequest1', 'newRequest2'];
+conf.allowAdditionalEvents = ['newEvent1', 'newEvent2'];
+```
+
 ### How to add new functions to RPC
 
 Use `RpcService` to add new functions.
@@ -348,10 +354,14 @@ The method takes 2 parameters:
 Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc.
 List will be modified on startup so events that are not available in the appsetup will be removed from the list.
 
+If configuration has defined config.allowAdditionalEvents these additional events are added after the originals events.
+
 ### Allowed requests
 
 Allowed requests (config.allowedRequests) lists all the requests that can be sent over rpc.
 List will be modified on startup so requests that are not available in the appsetup will be removed from the list.
+
+If configuration has defined config.allowAdditionalRequests these additional requests are added after the originals requests.
 
 ## Using the bundle functionality
 
