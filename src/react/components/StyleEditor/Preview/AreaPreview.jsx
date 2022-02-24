@@ -18,7 +18,7 @@ export const AreaPreview = ({ previewSize, propsForSVG }) => {
     const fillPattern = solid ? color : `url(#${id})`;
     return (
         <svg width={previewSize} height={previewSize}>
-            { !solid && <FillPattern id={id} fillCode={pattern} color={color}/> }
+            { !solid && <FillPattern id={id} fillCode={pattern} color={color} size={previewSize}/> }
             <path d={PATH}
                 stroke={strokecolor}
                 strokeWidth={size}
