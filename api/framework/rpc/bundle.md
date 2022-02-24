@@ -15,8 +15,8 @@ By default the [events](https://www.oskari.org/api/events) and [requests](https:
 
 Additional requests or events can be allowed with the following configuration:
 ```
-conf.allowAdditionalRequests = ['newRequest1', 'newRequest2'];
-conf.allowAdditionalEvents = ['newEvent1', 'newEvent2'];
+conf.addRequests = ['newRequest1', 'newRequest2'];
+conf.addEvents = ['newEvent1', 'newEvent2'];
 ```
 This can 
 
@@ -25,14 +25,14 @@ This can
 Allowed events (`config.allowedEvents`) lists all the events that can be listened to over rpc.
 List will be modified on startup so events that are not available in the appsetup will be removed from the list. This can be used to for example limit the events exposed for RPC per embedded map.
 
-If configuration has defined `config.allowAdditionalEvents` the events referenced in the value array are included in addition to the default events. This is an easier way of adding for example application specific events without the need to adjust the events that are allowed by default (if a new version changes the default list/adds events etc).
+If configuration has defined `config.addEvents` the events referenced in the value array are included in addition to the default events. This is an easier way of adding for example application specific events without the need to adjust the events that are allowed by default (if a new version changes the default list/adds events etc).
 
 ### Allowed requests
 
 Allowed requests (`config.allowedRequests`) lists all the requests that can be sent over rpc.
 List will be modified on startup so requests that are not available in the appsetup will be removed from the list. This can be used to for example limit the requests exposed for RPC per embedded map.
 
-If configuration has defined `config.allowAdditionalRequests` the requests referenced in the value array are included in addition to the default requests. This is an easier way of adding for example application specific requests without the need to adjust the requests that are allowed by default (if a new version changes the default list/adds requests etc).
+If configuration has defined `config.addRequests` the requests referenced in the value array are included in addition to the default requests. This is an easier way of adding for example application specific requests without the need to adjust the requests that are allowed by default (if a new version changes the default list/adds requests etc).
 
 ### Allowed functions
 
