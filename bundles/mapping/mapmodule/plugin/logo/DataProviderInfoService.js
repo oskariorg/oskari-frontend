@@ -176,6 +176,23 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
                 this.trigger('change');
                 return true;
             },
+            updateItem: function (groupId, item) {
+                if (!groupId || !item) {
+                    return false;
+                }
+                const group = this.getGroups(groupId);
+                if (!group) {
+                    return false;
+                }
+                const itemIndex = this._getItemIndex('id', item.id, group.items);
+                if (itemIndex === -1) {
+                    _log.warn('Could not find Item: ' + item.id + ' in group: ' + groupId + ' for update.');
+                    return false;
+                }
+                group.items[itemIndex] = item;
+                this.trigger('change');
+                return true;
+            },
             /**
          * Returns an index for an object in the list.
          * @private
