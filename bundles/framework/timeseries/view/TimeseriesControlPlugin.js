@@ -91,6 +91,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'week', value: 'weeks' },
             { key: 'month', value: 'months' }
         ],
+        hasUI: function () {
+            // prevent publisher to stop this plugin and start it again when leaving the publisher
+            return false;
+        },
         /**
          * @method getCurrentTimeFormatted
          * return current time in timeseries in same format as shown in timeseries control

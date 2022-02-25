@@ -205,6 +205,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         handleRequest: function (core, request) {
             if (request.getName() === 'Timeseries.ConfigurationRequest') {
                 this._setControlPluginConfiguration(request.getConfiguration());
+                const active = this._timeseriesService.getActiveTimeseries();
+                this._updateControl(active);
             }
         },
         /**

@@ -84,10 +84,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
             // Set control visibility by updating it's config.
             this.controlConfig.showControl = enabled;
             this._updateTimeseriesPluginConfig();
-
-            // Apply changed configuration.
-            var active = this._getTimeseriesService().getActiveTimeseries();
-            this.service.trigger('activeChanged', active);
         },
         /**
         * Is this tool disabled.
