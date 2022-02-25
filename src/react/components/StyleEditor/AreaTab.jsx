@@ -20,7 +20,7 @@ const getFillIcon = (name, fillCode) => {
          // use tooltip from antd because oskari-ui tooltip wraps children inside span which has height issue with svg
         <Tooltip title={<Message messageKey={`StyleEditor.tooltips.${lowerName}`}/>}>
             <svg width={SIZE} height={SIZE}>
-                { !solid && <FillPattern id={id} fillCode={fillCode} color={COLOR}/> }
+                { !solid && <FillPattern id={id} fillCode={fillCode} color={COLOR} size={SIZE}/> }
                 <rect width={SIZE} height={SIZE} fill={fillPattern} />
             </svg>
         </Tooltip>
