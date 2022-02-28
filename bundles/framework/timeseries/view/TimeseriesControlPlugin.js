@@ -514,31 +514,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Function} time formatting function
          */
         _getTickFormatter: function () {
-            var locale;
-            var formatterFunction;
+            let locale;
+            let formatterFunction;
             if (this._d3TimeDef) {
                 locale = d3.timeFormatLocale(this._d3TimeDef);
                 formatterFunction = locale.format.bind(locale);
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
             }
-            var formatMillisecond = formatterFunction('.%L'),
-                formatSecond = formatterFunction(':%S'),
-                formatMinute = formatterFunction(locale ? '%H:%M' : '%I:%M'),
-                formatHour = formatterFunction(locale ? '%H:%M' : '%I %p'),
-                formatDay = formatterFunction(locale ? '%d.%m.' : '%d %b'),
-                formatMonth = formatterFunction('%b'),
-                formatYear = formatterFunction('%Y');
-
+            const getFormatter = (date) => {
+                if (d3.timeSecond(date) < date) {
+                    return formatterFunction('.%L');
+                } else if (d3.timeMinute(date) < date) {
+                    return formatterFunction(':%S');
+                } else if (d3.timeHour(date) < date) {
+                    return formatterFunction(locale ? '%H:%M' : '%I:%M');
+                } else if (d3.timeDay(date) < date) {
+                    return formatterFunction(locale ? '%H:%M' : '%I %p');
+                } else if (d3.timeMonth(date) < date) {
+                    return formatterFunction(locale ? '%d.%m.' : '%d %b');
+                } else if (d3.timeYear(date) < date) {
+                    return formatterFunction('%b');
+                }
+                return null;
+            };
             return function multiFormat (date) {
-                var textEl = d3.select(this);
-                return (d3.timeSecond(date) < date ? formatMillisecond
-                    : d3.timeMinute(date) < date ? formatSecond
-                        : d3.timeHour(date) < date ? formatMinute
-                            : d3.timeDay(date) < date ? formatHour
-                                : d3.timeMonth(date) < date ? formatDay
-                                    : d3.timeYear(date) < date ? formatMonth
-                                        : (textEl.classed('bold', true), formatYear))(date);
+                const formatter = getFormatter(date);
+                if (typeof formatter === 'function') {
+                    return formatter(date);
+                }
+                const textEl = d3.select(this);
+                // to best of my understanding "textEl.classed('bold', true)" is never called in this and
+                // this is in practice just "formatterFunction('%Y')(date)" but this is how it was previously coded
+                // as a complex one-liner with multiple chained ternary expressions so...
+                return (textEl.classed('bold', true), formatterFunction('%Y'))(date);
             };
         },
         /**
