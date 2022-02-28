@@ -147,12 +147,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 me._selections.push(select);
             }
         });
-
-        var optionsToDisable = regionsets.filter(function (iter) {
-            if (me.regionsetRestrictions.length && me.regionsetRestrictions.indexOf(iter) === -1) {
-                return iter;
-            }
-        });
+        const restrictedSets = me.regionsetRestrictions || [];
+        var optionsToDisable = regionsets.filter((item) => !restrictedSets.includes(item));
         var regionSelect = me.regionSelector.create(regionsets, false);
         me.regionSelector.setWidth(205);
         if (regionsets.length === 1) {

@@ -33,8 +33,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
         me.data = me.instance.publisher.data;
-        me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout
-            ? me.instance.publisher.data.metadata.toolLayout : 'userlayout';
+        me.activeToolLayout = 'userlayout';
+        if (me.instance.publisher.data &&
+            me.instance.publisher.data.metadata &&
+            me.instance.publisher.data.metadata.toolLayout) {
+            me.activeToolLayout = me.instance.publisher.data.metadata.toolLayout;
+        }
         me.toolLayoutEditMode = false;
         me._addedDraggables = [];
     }, {

@@ -60,6 +60,10 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
             );
 
             service.fetchAnnouncements((err, data) => {
+                if (err) {
+                    alert('Error loading announcements');
+                    return;
+                }
                 me.allAnnouncements = data;
                 if (me._config.announcements !== undefined) {
                     me.addAnnouncements();
