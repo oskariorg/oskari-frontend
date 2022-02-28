@@ -63,6 +63,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             }
 
             service.fetchAdminAnnouncements((err, data) => {
+                if (err) {
+                    alert('Error loading announcements');
+                    return;
+                }
                 me.announcements = data;
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {

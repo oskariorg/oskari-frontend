@@ -327,7 +327,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             if (current) {
                 me.service.getIndicatorData(current.datasource, current.indicator,
                     current.selections, current.series, me.service.getStateService().getRegionset(), function (err, data) {
-                        if (err) {}
+                        if (err) {
+                            return;
+                        }
                         if (!data) {
                             me._accordion.getPanels().forEach(function (panel) {
                                 if (panel.isOpen()) {

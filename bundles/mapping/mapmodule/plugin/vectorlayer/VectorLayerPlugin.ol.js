@@ -1074,8 +1074,8 @@ Oskari.clazz.define(
                             if (a.config.positionInsideLayer > b.config.positionInsideLayer) {
                                 return 1;
                             }
-                            return 0;
                         }
+                        return 0;
                     });
                     layer.removeAllFeatures();
                     layer.addFeatures(features);

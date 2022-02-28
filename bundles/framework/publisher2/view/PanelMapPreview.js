@@ -456,22 +456,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object}
          */
         getValues: function () {
-            var me = this,
-                values = {},
-                selected = me._getSelectedMapSize(),
-                size = isNaN(parseInt(selected.width)) || isNaN(parseInt(selected.height)) ? undefined : {
-                    width: selected.width,
-                    height: selected.height
-                };
-
-            values = {
+            const selected = this._getSelectedMapSize();
+            const values = {
                 metadata: {
-                    preview: selected.option.id,
-                    size: size
-
+                    preview: selected.option.id
                 }
             };
 
+            if (!isNaN(parseInt(selected.width)) && !isNaN(parseInt(selected.height))) {
+                values.metadata.size = {
+                    width: selected.width,
+                    height: selected.height
+                };
+            }
             return values;
         },
         validate: function () {

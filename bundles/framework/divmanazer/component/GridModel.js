@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          */
         setFirstField: function (firstField) {
             if (_.indexOf(this.fields, firstField) === 0 || _.indexOf(this.fields, firstField) === -1) {
-
+                // nothing to do
             } else {
                 _.pull(this.fields, firstField);
                 this.fields.unshift(firstField);

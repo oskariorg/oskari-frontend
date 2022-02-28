@@ -612,8 +612,9 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                     if (supported instanceof UnsupportedLayerReason) {
                         return layer;
                     }
+                    return null;
                 })
-                .filter(layer => typeof layer !== 'undefined');
+                .filter(layer => !!layer);
 
             if (affectedLayers.length !== 0) {
                 const event = Oskari.eventBuilder('MapLayerEvent')(null, 'update');

@@ -337,18 +337,16 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
          * applies draggable handle to flyouts title bar
          */
         _applyDraggableToFlyout: function (flyout, extensionInfo, cls) {
-            var me = this,
-                handle = flyout.children(cls).get()[0],
-                flyoutTarget = flyout.get()[0],
-                useHelper = false,
-                el;
-
-            extensionInfo.draggableHandle = handle;
-            extensionInfo.draggableTarget = flyoutTarget;
-
-            extensionInfo.draggable = jQuery(flyout).draggable({
-                handle: jQuery(handle),
-                helper: useHelper ? function () {
+            const me = this;
+            const handle = flyout.children(cls).get()[0];
+            const flyoutTarget = flyout.get()[0];
+            const useHelper = false;
+            let el;
+            let helperFn;
+            if (useHelper) {
+                // note! useHelper is always false
+                // not sure why this is here...
+                helperFn = function () {
                     el = jQuery('<div />');
 
                     el.css('width', flyout.css('width'));
@@ -357,7 +355,14 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     el.css('z-index', flyout.css('z-index'));
 
                     return el;
-                } : null,
+                };
+            }
+            extensionInfo.draggableHandle = handle;
+            extensionInfo.draggableTarget = flyoutTarget;
+
+            extensionInfo.draggable = jQuery(flyout).draggable({
+                handle: jQuery(handle),
+                helper: useHelper ? helperFn : null,
                 scroll: false,
                 stack: '.oskari-flyout',
                 create: function (event, ui) {},

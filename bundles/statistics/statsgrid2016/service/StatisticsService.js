@@ -2,6 +2,7 @@
  * @class Oskari.statistics.statsgrid.StatisticsService
  */
 (function (Oskari) {
+    /* eslint-disable node/no-callback-literal */
     var _log = Oskari.log('StatsGrid.StatisticsService');
     var _cacheHelper = null;
 

@@ -186,10 +186,14 @@
             return this.getTitle();
         },
         getPosition: function (inside) {
-            return $.extend({}, (inside ? {
+            let offset = {
                 top: 0,
                 left: 0
-            } : this.$element.offset()), {
+            };
+            if (!inside) {
+                offset = this.$element.offset();
+            }
+            return $.extend({}, offset, {
                 width: this.$element[0].offsetWidth,
                 height: this.$element[0].offsetHeight
             });

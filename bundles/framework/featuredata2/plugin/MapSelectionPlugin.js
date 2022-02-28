@@ -80,7 +80,6 @@ Oskari.clazz.define(
                     control = this.drawControls[key];
                     if (this.currentDrawMode === key) {
                         control();
-                    } else {
                     }
                 }
             }

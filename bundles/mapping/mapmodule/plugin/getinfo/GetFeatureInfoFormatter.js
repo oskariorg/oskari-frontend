@@ -202,7 +202,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     pretty = me._formatGfiDatum(datum);
                 }
                 if (typeof pretty === 'undefined') {
-                    return;
+                    return null;
                 }
 
                 const layer = sandbox.findMapLayerFromSelectedMapLayers(datum.layerId);
@@ -217,7 +217,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     isMyPlace: !!layerIdString.match('myplaces_')
                 };
             })
-            .filter(feature => typeof feature !== 'undefined');
+            .filter(feature => !!feature);
 
         return coll || [];
     },
