@@ -527,31 +527,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 formatterFunction = d3.timeFormat.bind(d3);
             }
             const getFormatter = (date) => {
+                // try to format date sensibly based on accuracy
                 if (d3.timeSecond(date) < date) {
+                    // milliseconds
                     return formatterFunction('.%L');
                 } else if (d3.timeMinute(date) < date) {
+                    // seconds
                     return formatterFunction(':%S');
                 } else if (d3.timeHour(date) < date) {
+                    // minutes
                     return formatterFunction(locale ? '%H:%M' : '%I:%M');
                 } else if (d3.timeDay(date) < date) {
+                    // hours
                     return formatterFunction(locale ? '%H:%M' : '%I %p');
                 } else if (d3.timeMonth(date) < date) {
+                    // days
                     return formatterFunction(locale ? '%d.%m.' : '%d %b');
                 } else if (d3.timeYear(date) < date) {
+                    // months
                     return formatterFunction('%b');
                 }
-                return null;
+                // default to years
+                return formatterFunction('%Y');
             };
             return function multiFormat (date) {
-                const formatter = getFormatter(date);
-                if (typeof formatter === 'function') {
-                    return formatter(date);
-                }
                 const textEl = d3.select(this);
-                // to best of my understanding "textEl.classed('bold', true)" is never called in this and
-                // this is in practice just "formatterFunction('%Y')(date)" but this is how it was previously coded
-                // as a complex one-liner with multiple chained ternary expressions so...
-                return (textEl.classed('bold', true), formatterFunction('%Y'))(date);
+                textEl.classed('bold', true);
+                const formatFn = getFormatter(date);
+                return formatFn(date);
             };
         },
         /**
