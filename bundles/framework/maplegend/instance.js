@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          */
         start: function () {
             var me = this;
-            
+
             if (me.started) {
                 return;
             }
