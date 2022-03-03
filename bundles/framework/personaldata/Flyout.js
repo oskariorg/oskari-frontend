@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     getTitle: () => Oskari.getMsg('PersonalData', `tabs.account.title`),
                     // eslint seems to think this is defining a new unnamed component
                     // eslint-disable-next-line react/display-name
-                    getJsx: () => <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} displayName="AccountTab" />,
+                    getJsx: () => <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} />,
                     sideEffects: [
                         () => {
                             jQuery('#oskari-profile-link').on('click', function () {
