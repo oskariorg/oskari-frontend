@@ -6,8 +6,10 @@ import { StyledFormField } from '../styled';
 
 export const SelectedTime = ({ layer, controller }) => {
     const value = layer.params ? layer.params.selectedTime : '';
-    const { capabilities } = layer;
-    if (!Array.isArray(capabilities.times)) {
+    const { capabilities = {} } = layer;
+    const { typeSpecific = {} } = capabilities;
+
+    if (!Array.isArray(typeSpecific.times)) {
         return null;
     }
     return (
@@ -19,7 +21,7 @@ export const SelectedTime = ({ layer, controller }) => {
                     allowClear
                     value={value}
                     onChange={value => controller.setSelectedTime(value)}>
-                    { capabilities.times.map(time => <Option key={time}>{time}</Option>)}
+                    { typeSpecific.times.map(time => <Option key={time}>{time}</Option>)}
                 </Select>
             </StyledFormField>
         </Fragment>

@@ -7,8 +7,8 @@ import { StyledFormField } from '../styled';
 
 export const GfiType = ({ layer, controller }) => {
     const { capabilities, gfiType } = layer;
-    const { formats = {} } = capabilities;
-    const options = formats.available || [];
+    const { typeSpecific = {} } = capabilities;
+    const options = typeSpecific.infoFormats || [];
     const value = gfiType || '';
     if (options.length === 0) {
         return null;
