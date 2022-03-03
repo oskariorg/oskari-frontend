@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import AccountTab from './AccountTab';
+
 /**
  * @class Oskari.mapframework.bundle.personaldata.Flyout
  */
@@ -59,7 +63,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 'myviews': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
                 'publishedmaps': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
                 // TODO should we pass conf to accounttab here?
-                'account': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.AccountTab', me.instance)
+                'account': {
+                    getTitle: () => Oskari.getMsg('PersonalData', `tabs.account.title`),
+                    // eslint seems to think this is defining a new unnamed component
+                    // eslint-disable-next-line react/display-name
+                    getJsx: () => <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} displayName="AccountTab" />,
+                    sideEffects: [
+                        () => {
+                            jQuery('#oskari-profile-link').on('click', function () {
+                                me.instance.openProfileTab();
+                                return false;
+                            });
+                        }
+                    ]
+                }
             };
         },
         /**
@@ -141,7 +158,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
                 panel.setTitle(tab.getTitle());
                 panel.setId(tabId);
-                tab.addTabContent(panel.getContainer());
+
+                if (tab.hasOwnProperty('getJsx')) {
+                    panel.setContent(ReactDOMServer.renderToString(tab.getJsx(), document.createElement('div')));
+                } else {
+                    tab.addTabContent(panel.getContainer());
+                }
+
+                if (tab.sideEffects) {
+                    tab.sideEffects.forEach(func => func());
+                }
 
                 // binds tab to events
                 if (tab.bindEvents) {
