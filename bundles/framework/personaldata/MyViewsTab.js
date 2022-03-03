@@ -1,3 +1,5 @@
+import { showViewForm } from './view/ViewForm/ViewForm';
+
 /**
  * @class Oskari.mapframework.bundle.personaldata.MyViewsTab
  * Renders the "personal data/my views" tab.
@@ -22,6 +24,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             '<textarea id="view_description" name="description" placeholder="' + this.loc('tabs.myviews.popup.description_placeholder') + '"></textarea></div>');
         this.templateDefaultView = jQuery('<div class="oskarifield"><input type="checkbox" id="defaultview"/><label for="defaultview"></label></div>');
         this.container = null;
+        this.popupControls = null;
+        this.popupCleanup = () => {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
+        };
 
         var sandbox = instance.sandbox,
             me = this;
@@ -41,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     me._promptForView(function (name, description, isDefault) {
                         var rbState = Oskari.requestBuilder('StateHandler.SaveStateRequest');
                         sandbox.request(instance, rbState(name, description, isDefault));
+                        me.popupCleanup();
                     });
                 }
             }));
@@ -156,6 +166,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
 
             var successCallback = function (newName, newDescription, newDefault) {
                 service.updateView(view.id, newName, newDescription, newDefault, function (isSuccess) {
+                    if (isSuccess) {
+                        me.popupCleanup();
+                    }
                     me._editViewSuccessNotify(isSuccess);
                 });
             };
@@ -189,72 +202,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @param {bool} isDefault to prepopulate form (optional)
          * @private
          */
-        _promptForView: function (successCallback, viewName, viewDescription, isDefault) {
-            var me = this;
-
-            if (me.dialog) {
-                return;
-            }
-
-            var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
-            var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
-            nameInput.setPlaceholder(this.loc('tabs.myviews.popup.name_placeholder'));
-            var title = this.loc('tabs.myviews.popup.title');
-            if (viewName) {
-                title = this.loc('tabs.myviews.popup.edit');
-                nameInput.setValue(viewName);
-            }
-            nameInput.setRequired(true, me.loc('tabs.myviews.save.error_noname'));
-            nameInput.setContentCheck(true, me.loc('tabs.myviews.save.error_illegalchars'));
-            form.addField(nameInput);
-
-            var template = form.getForm();
-            template.append(me.templateDesc.clone());
-
-            if (viewDescription) {
-                template.find('textarea').val(viewDescription);
-            }
-
-            var defaultViewTemplate = me.templateDefaultView.clone();
-            defaultViewTemplate.find('label').html(me.loc('tabs.myviews.popup.default'));
-            isDefault = isDefault || false;
-            defaultViewTemplate.find('#defaultview').prop('checked', isDefault);
-            template.append(defaultViewTemplate);
-
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc('tabs.myviews.button.save'));
-            okBtn.addClass('primary');
-
-            okBtn.setHandler(function () {
-                var errors = form.validate();
-                if (errors.length === 0) {
-                    successCallback(nameInput.getValue(), template.find('textarea').val(), template.find('#defaultview').prop('checked'));
-                    dialog.close();
-                    me.dialog = null;
-                } else {
-                    form.showErrors();
-                }
-            });
-            var cancelBtn = dialog.createCloseButton(this.loc('tabs.myviews.button.cancel'));
-            cancelBtn.setHandler(function () {
-                dialog.close(true);
-                me.dialog = null;
-            });
-            dialog.onClose(function () {
-                me.popupOpen = false;
-            });
-            dialog.show(title, template, [cancelBtn, okBtn]);
-            me.popupOpen = true;
-            // we dont want key events to bubble up...
-            dialog.dialog.on('keyup', function (e) {
-                e.stopPropagation();
-            });
-            dialog.dialog.on('keydown', function (e) {
-                e.stopPropagation();
-            });
-
-            me.dialog = dialog;
+        _promptForView: function (successCallback, name, description, isDefault) {
+            const onOk = (values) => {
+                successCallback(values.name, values.description, values.isDefault);
+            };
+            const values = {
+                name,
+                description,
+                isDefault
+            };
+            // create popup
+            this.popupControls = showViewForm(values, onOk, this.popupCleanup);
         },
 
         /**
