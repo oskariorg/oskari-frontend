@@ -161,7 +161,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
 
                 if (tab.hasOwnProperty('getJsx')) {
                     const container = document.createElement('div');
-                    panel.setContent(ReactDOM.render(tab.getJsx(), container));
+                    panel.setContent(container);
+                    ReactDOM.render(tab.getJsx(), container);
                 } else {
                     tab.addTabContent(panel.getContainer());
                 }
