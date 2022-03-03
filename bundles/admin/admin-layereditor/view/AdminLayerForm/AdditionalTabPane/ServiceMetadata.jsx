@@ -5,6 +5,13 @@ import { Controller } from 'oskari-ui/util';
 import { MetadataButton } from './styled';
 
 export const ServiceMetadata = ({ capabilities, controller, hasHandler }) => {
+    // this is currently 2.7.0-SNAPSHOT:
+    /*
+    "typeSpecific": {
+        "metadataUrl": "the whole url instead of just metadata uuid"
+        ...
+    */
+    // FIXME: parse uuid part to be accessible directly from somewhere under capabilities AND update reference here:
     const { metadataUuid } = capabilities;
     if (!metadataUuid) {
         return (
