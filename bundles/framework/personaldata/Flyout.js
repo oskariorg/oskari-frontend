@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import AccountTab from './AccountTab';
+import ReactDOM from 'react-dom';
+import { AccountTab } from './AccountTab';
 
 /**
  * @class Oskari.mapframework.bundle.personaldata.Flyout
@@ -160,7 +160,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 panel.setId(tabId);
 
                 if (tab.hasOwnProperty('getJsx')) {
-                    panel.setContent(ReactDOMServer.renderToString(tab.getJsx(), document.createElement('div')));
+                    const container = document.createElement('div');
+                    panel.setContent(ReactDOM.render(tab.getJsx(), container));
                 } else {
                     tab.addTabContent(panel.getContainer());
                 }

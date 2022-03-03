@@ -2,7 +2,7 @@ import React from 'react'
 import { Message } from 'oskari-ui'
 
 
-const AccountTab = ({ user, changeInfoUrl }) => {
+export const AccountTab = ({ user, changeInfoUrl }) => {
     const BUNDLE_NAME = 'PersonalData';
 
     const accountData = [{
@@ -39,5 +39,3 @@ const AccountTab = ({ user, changeInfoUrl }) => {
         </div>
     )
 };
-
-export default AccountTab;
