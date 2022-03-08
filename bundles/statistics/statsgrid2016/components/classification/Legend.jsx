@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PointLegend, ChoroplethLegend, InactiveLegend } from './legend/';
+import { PointsLegend, ChoroplethLegend, InactiveLegend } from './legend/';
 import './legend.scss';
 
 export const Legend = ({
@@ -15,7 +15,7 @@ export const Legend = ({
     }
     if (mapStyle === 'points') {
         return (
-            <PointLegend classification={classification} transparency={transparency}/>
+            <PointsLegend classification={classification} transparency={transparency}/>
         );
     }
     return (
