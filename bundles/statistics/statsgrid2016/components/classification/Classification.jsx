@@ -1,77 +1,74 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withContext, handleBinder } from 'oskari-ui/util';
 import { EditClassification } from './editclassification/EditClassification';
 import { Legend } from './Legend';
 import { Header } from './Header';
 import './classification.scss';
 
-class Classification extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {
-            isEdit: false
-        };
-        handleBinder(this);
-    }
-    componentDidUpdate () {
-        this.props.onRenderChange(this.state.isEdit);
-    }
-    componentDidMount () {
-        this.props.onRenderChange(false);
-    }
-    handleToggleClassification () {
-        this.setState(oldState => ({ isEdit: !oldState.isEdit }));
-    }
-    getContentWrapperStyle () {
+export const Classification = ({
+    activeIndicator,
+    indicators,
+    editOptions,
+    pluginState,
+    classification,
+    data,
+    manualView,
+    onRenderChange,
+    controller
+}) => {
+    const [isEdit, setEdit] = useState(false);
+    const { classification: values, hash } = activeIndicator;
+    const { transparent, editEnabled } = pluginState;
+
+    useEffect(() => {
+        onRenderChange(isEdit);
+    });
+
+    const toggleEdit = () => setEdit(!isEdit);
+    const getContentWrapperStyle = () => {
         const docHeight = document.documentElement.offsetHeight;
         return {
             maxHeight: docHeight - 50 + 'px', // header + border,
             overflowY: 'auto'
         };
+    };
+    let containerClass = 'statsgrid-classification-container';
+    if (transparent) {
+        containerClass += ' transparent-classification';
     }
-
-    render () {
-        const { classifications, pluginState } = this.props;
-        const isEdit = this.state.isEdit;
-        let containerClass = pluginState.transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
-
-        return (
-            <div className={containerClass}>
-                <Header active = {this.props.indicators.active} isEdit = {isEdit}
-                    handleClick = {this.handleToggleClassification}
-                    indicators = {this.props.indicators.selected}
-                    controller = {this.props.controller}/>
-                <div className="classification-content-wrapper" style={this.getContentWrapperStyle()}>
-                    {isEdit &&
-                        <EditClassification classifications = {classifications}
-                            indicators = {this.props.indicators}
-                            editEnabled = {pluginState.editEnabled}
-                            controller = {this.props.controller}
-                            indicatorData = {this.props.indicatorData}
-                            manualView = {this.props.manualView}/>
-                    }
-                    <Legend legendProps = {this.props.legendProps}
-                        indicatorData = {this.props.indicatorData}
-                        transparency = {classifications.values.transparency}
-                        controller = {this.props.controller}/>
-                </div>
+    return (
+        <div className={containerClass}>
+            <Header
+                selected = {hash}
+                isEdit = {isEdit}
+                toggleEdit = {toggleEdit}
+                indicators = {indicators}
+                controller = {controller}/>
+            <div className="classification-content-wrapper" style={getContentWrapperStyle()}>
+                {isEdit &&
+                    <EditClassification
+                        options = {editOptions}
+                        values={values}
+                        data={data}
+                        editEnabled = {editEnabled}
+                        controller = {controller}
+                        manualView = {manualView}/>
+                }
+                <Legend classification = {classification} values = {values} />
             </div>
-        );
-    }
-}
-
-Classification.propTypes = {
-    indicators: PropTypes.object.isRequired,
-    indicatorData: PropTypes.object.isRequired,
-    classifications: PropTypes.object.isRequired,
-    pluginState: PropTypes.object.isRequired,
-    legendProps: PropTypes.object.isRequired,
-    manualView: PropTypes.object,
-    onRenderChange: PropTypes.func.isRequired,
-    controller: PropTypes.object.isRequired,
-    loc: PropTypes.func.isRequired
+        </div>
+    );
 };
 
-const cls = withContext(Classification);
-export { cls as Classification };
+Classification.propTypes = {
+    activeIndicator: PropTypes.object.isRequired,
+    indicators: PropTypes.array.isRequired,
+    data: PropTypes.object.isRequired,
+    editOptions: PropTypes.object.isRequired,
+    pluginState: PropTypes.object.isRequired,
+    classification: PropTypes.object.isRequired,
+    manualView: PropTypes.object,
+    seriesStats: PropTypes.object,
+    onRenderChange: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired
+};
