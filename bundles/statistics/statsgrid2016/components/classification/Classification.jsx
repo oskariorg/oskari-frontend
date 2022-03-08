@@ -32,10 +32,8 @@ export const Classification = ({
             overflowY: 'auto'
         };
     };
-    let containerClass = 'statsgrid-classification-container';
-    if (transparent) {
-        containerClass += ' transparent-classification';
-    }
+    const containerClass = transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
+
     return (
         <div className={containerClass}>
             <Header
