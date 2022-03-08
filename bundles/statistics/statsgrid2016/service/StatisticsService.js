@@ -28,6 +28,8 @@
 
         // Make series service listen for changes
         this.series.bindToEvents(this);
+
+        this.log = Oskari.log(this.getQName());
     }, {
         __name: 'StatsGrid.StatisticsService',
         __qname: 'Oskari.statistics.statsgrid.StatisticsService',
@@ -116,7 +118,7 @@
         getUILabels: function (ind, callback) {
             var selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested UI labels without callback function');
                 return;
             }
             const { datasource, indicator, selections, series } = ind;
@@ -241,11 +243,11 @@
          */
         getRegions: function (regionset, callback) {
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested regions without callback function');
                 return;
             }
             if (!regionset) {
-                // log error message
+                this.log.warn('Requested regions without regionset');
                 callback('Regionset missing');
                 return;
             }
