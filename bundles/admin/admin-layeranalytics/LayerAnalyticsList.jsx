@@ -1,12 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'antd';
+import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Confirm, Message, Space, Spin, Tooltip } from 'oskari-ui';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { DELETE_ICON_STYLE } from './LayerAnalyticsDetails';
 import styled from 'styled-components';
-
-import 'antd/es/table/style/index.js';
 
 const TitleArea = styled.span`
     & {
@@ -34,7 +32,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             dataIndex: 'title',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
-            sorter: (a, b) => Oskari.util.naturalSort(a.title, b.title),
+            sorter: getSorterFor('title'),
             showSorterTooltip: sorterTooltipOptions,
             render: (title, item) => {
                 return (
@@ -52,7 +50,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             dataIndex: 'dataProducer',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
-            sorter: (a, b) => Oskari.util.naturalSort(a.dataProducer, b.dataProducer),
+            sorter: getSorterFor('dataProducer'),
             showSorterTooltip: sorterTooltipOptions,
             render: (title, item) => {
                 return (<TitleArea>{ title }</TitleArea>);
@@ -64,7 +62,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             dataIndex: 'layerType',
             defaultSortOrder: 'ascend',
             sortDirections: ['descend', 'ascend', 'descend'],
-            sorter: (a, b) => Oskari.util.naturalSort(a.layerType, b.layerType),
+            sorter: getSorterFor('layerType'),
             showSorterTooltip: sorterTooltipOptions,
             render: (title, item) => {
                 return (<TitleArea>{ title }</TitleArea>);
