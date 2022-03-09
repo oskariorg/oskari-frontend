@@ -1,11 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Table, Space, Spin } from 'antd';
-import { Confirm, Message, Tooltip } from 'oskari-ui';
+import { Table } from 'oskari-ui/components/Table';
+import { Button, Confirm, Message, Space, Spin, Tooltip } from 'oskari-ui';
 import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
 import { red } from '@ant-design/colors'
-
-import 'antd/es/table/style/index.js';
 
 const dateLocale = 'fi-FI';
 const localeDateOptions = {
