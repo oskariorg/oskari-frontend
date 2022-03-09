@@ -6,18 +6,24 @@ import { showPopup } from 'oskari-ui/components/window';
 import { LayerFormContent } from './LayerForm/';
 import { BUNDLE_NAME } from '../constants';
 
+const getTitle = config => {
+    const key = config.isImport ? 'flyout.title' : 'tab.editLayer';
+    return <Message messageKey={key} bundleKey={BUNDLE_NAME} />;
+};
+
 export const showLayerForm = (values, config, onOk, onClose) => {
+    const { id } = values;
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
             <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose}/>
         </LocaleProvider>
     );
-    const title = <Message messageKey="flyout.title" bundleKey={BUNDLE_NAME} />;
-    const controls = showPopup(title, content, onClose);
+    const controls = showPopup(getTitle(config), content, onClose);
     return {
+        id,
         ...controls,
         update: error => {
-            controls.update(title,
+            controls.update(getTitle(config),
                 (<LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
                     <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose} error={error}/>
                 </LocaleProvider>));

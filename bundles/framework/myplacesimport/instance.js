@@ -12,6 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     this.popupControls = null;
     this.popupCleanup = () => {
         if (this.popupControls) {
+            if (!this.popupControls.id) {
+                // select default tool when import popup is closed (started from sticky tool)
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest');
+            }
             this.popupControls.close();
         }
         this.popupControls = null;
@@ -45,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         const loggedIn = Oskari.user().isLoggedIn();
         const toolBtn = {
             iconCls: TOOL.ICON,
-            sticky: false,
+            sticky: true,
             disabled: !loggedIn,
             tooltip: this.loc('tool.tooltip')
         };
@@ -53,24 +57,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             if (loggedIn) {
                 // toolbar requires a callback so we need to check guest flag
                 // inside callback instead of not giving any callback
-                this.startTool();
+                this.openLayerDialog();
             }
         };
         if (reqBuilder) {
             sandbox.request(this, reqBuilder(TOOL.NAME, TOOL.GROUP, toolBtn));
-        }
-    },
-    /**
-     * Opens the flyout when the tool gets clicked.
-     *
-     * @method startTool
-     */
-    startTool: function () {
-        const toolbarReqBuilder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-        this.openLayerDialog();
-        if (toolbarReqBuilder) {
-            // ask toolbar to select the default tool
-            this.getSandbox().request(this, toolbarReqBuilder());
         }
     },
     getSandbox: function () {
@@ -87,6 +78,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     },
     openLayerDialog: function (values = {}) {
         const { id } = values;
+        if (this.popupControls) {
+            // already opened, do nothing
+            if (this.popupControls.id === id) {
+                return;
+            }
+            // remove previous popup
+            this.popupCleanup();
+        }
         const isImport = !id;
         const conf = {
             maxSize: this.getMaxSize(),
