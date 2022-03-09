@@ -30,17 +30,19 @@ Oskari.registerLocalization(
                     "default": "Default"
                 },
                 "popup": {
-                    "edit": "Edit Map View",
-                    "title": "Save Map View",
-                    "label": "Name",
-                    "name_placeholder": "Name",
-                    "description_placeholder": "Description",
-                    "save": "Save",
-                    "cancel": "Cancel",
-                    "error_noname": "The map view name is required. Please type a name and try again.",
+                    "title" : {
+                        "edit": "Edit Map View",
+                        "save": "Save Map View"
+                    },
+                    "label": {
+                        "name": "Name",
+                        "description": "Description",
+                        "default": "Default view"
+                    },
+                    "defaultName": "Own map view {now, date} {now, time, short}",
+                    "noName": "The map view name is required",
                     "deletetitle": "Delete Map View",
-                    "deletemsg": "Do you want to delete the map view \"{name}\"?",
-                    "default": "Default view"
+                    "deletemsg": "Do you want to delete the map view \"{name}\"?"
                 },
                 "save": {
                     "success": "The map view has been saved.",

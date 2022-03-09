@@ -26,17 +26,21 @@ Oskari.registerLocalization(
                     "description": "Beskrivning",
                     "publish": "Publicerad",
                     "edit": "Redigera",
-                    "delete": "Ta bort"
+                    "delete": "Ta bort",
+                    "default": "" // Förval
                 },
                 "popup": {
-                    "edit": "Redigera kartvyn",
-                    "title": "Spara kartvyn",
-                    "label": "Kartvyns namn",
-                    "name_placeholder": "Namnge kartvyn",
-                    "description_placeholder": "Beskriv kartvyn",
-                    "save": "Spara",
-                    "cancel": "Avbryt",
-                    "error_noname": "Skriv namnet på kartvyn",
+                    "title" : {
+                        "edit": "Redigera kartvyn",
+                        "save": "Spara kartvyn"
+                    },
+                    "label": {
+                        "name": "Namnge kartvyn",
+                        "description": "Beskriv kartvyn",
+                        "default": "" //Förvalt kartvyn
+                    },
+                    "defaultName": "{now, date} {now, time, short}", // Egna kartvyn
+                    "noName": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
                     "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
                 },

@@ -30,17 +30,19 @@ Oskari.registerLocalization(
                     "default": "Oletus"
                 },
                 "popup": {
-                    "edit": "Muokkaa karttanäkymää",
-                    "title": "Tallenna karttanäkymä",
-                    "label": "Nimi",
-                    "name_placeholder": "Nimi",
-                    "description_placeholder": "Kuvaus",
-                    "save": "Tallenna",
-                    "cancel": "Peruuta",
-                    "error_noname": "Karttanäkymän nimi puuttuu. Anna nimi ja yritä uudelleen.",
+                    "title" : {
+                        "edit": "Muokkaa karttanäkymää",
+                        "save": "Tallenna karttanäkymä"
+                    },
+                    "label": {
+                        "name": "Nimi",
+                        "description": "Kuvaus",
+                        "default": "Oletusnäkymä"
+                    },
+                    "defaultName": "Oma karttanäkymä {now, date} {now, time, short}",
+                    "noName": "Karttanäkymän nimi puuttuu",
                     "deletetitle": "Poista karttanäkymä",
-                    "deletemsg": "Haluatko poistaa karttanäkymän \"{name}\"?",
-                    "default": "Oletusnäkymä"
+                    "deletemsg": "Haluatko poistaa karttanäkymän \"{name}\"?"
                 },
                 "save": {
                     "success": "Karttanäkymän tallennus onnistui.",
