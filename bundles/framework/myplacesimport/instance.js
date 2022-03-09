@@ -79,8 +79,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     openLayerDialog: function (values = {}) {
         const { id } = values;
         if (this.popupControls) {
-            // already opened, do nothing
+            // already opened
             if (this.popupControls.id === id) {
+                this.popupControls.bringToTop();
                 return;
             }
             // remove previous popup
