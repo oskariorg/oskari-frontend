@@ -23,48 +23,50 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             me._clearRegions();
             return;
         }
-        me._updateLayerProperties();
-
         const { datasource, indicator, selections, series, classification } = activeIndicator;
-        this.service.getIndicatorData(datasource, indicator, selections, series, regionset, function (err, data) {
+        const { mapStyle } = classification;
+        me._updateLayerProperties(mapStyle, regionset);
+
+        this.service.getIndicatorData(datasource, indicator, selections, series, regionset, function (err, dataByRegion) {
             if (err) {
                 me.log.warn('Error getting indicator data', datasource, indicator, selections, regionset);
                 me._clearRegions();
                 return;
             }
-            const { error, ...classified } = me.service.getClassificationService().getClassification(data, classification, seriesStats);
+            const { error, ...classifiedDataset } = me.service.getClassificationService().getClassification(dataByRegion, classification, seriesStats);
             if (error) {
                 me._clearRegions();
                 return;
             }
-            if (me._lastRenderCache.mapStyle !== classification.mapStyle) {
+            if (me._lastRenderCache.mapStyle !== mapStyle) {
                 me._clearRegions();
             }
-            me._viewRegions(regionset, classification, classified, data, highlightRegionId);
+            me._viewRegions(regionset, classification, classifiedDataset, dataByRegion, highlightRegionId);
         });
     },
     /** **** PRIVATE METHODS ******/
-    _viewRegions: function (regionset, classification, classified, regionValues, highlightRegionId) {
+    _viewRegions: function (regionset, classification, classifiedDataset, dataByRegion, highlightRegionId) {
         const me = this;
         const locale = me.instance.getLocalization();
-        this.service.getRegions(regionset, function (err, regionIds) {
+        this.service.getRegions(regionset, function (err, regions) {
             if (err) {
                 // notify error!!
                 me.service.getErrorService().show(locale.errors.title, locale.errors.regionsDataError);
                 return;
             }
-            if (regionIds.length === 0) {
+            if (regions.length === 0) {
                 me.service.getErrorService().show(locale.errors.title, locale.errors.regionsDataIsEmpty);
                 return;
             }
-            me._addRegionFeatures(classification, classified, regionIds, regionValues, highlightRegionId);
+            me._addRegionFeatures(classification, classifiedDataset, regions, dataByRegion, highlightRegionId);
         });
     },
-    _addRegionFeatures: function (classification, classified, regions, regionValues, highlightRegionId) {
+    _addRegionFeatures: function (classification, classifiedDataset, regions, dataByRegion, highlightRegionId) {
         const me = this;
         const addFeaturesRequestParams = [];
         const handledRegions = [];
-        const { groups, format } = classified;
+        const { groups, format } = classifiedDataset;
+        const { mapStyle, showValues, transparency } = classification;
         groups.forEach(function (regiongroup, index) {
             const { color, sizePx, regionIds } = regiongroup;
             const optionalStyles = [];
@@ -75,13 +77,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
             regionIds.forEach(regionId => {
                 if (highlightRegionId && (highlightRegionId.toString() === regionId.toString())) {
-                    optionalStyles.push(me._getFeatureStyle(classification, regionId, color, true, sizePx));
+                    optionalStyles.push(me._getFeatureStyle(mapStyle, regionId, color, true, sizePx));
                 }
                 const region = regions.find(r => r.id === regionId);
                 if (!region) {
                     return;
                 }
-                const regionVal = format(regionValues[regionId]);
+                const regionVal = format(dataByRegion[regionId]);
                 if (me._regionsAdded.includes(regionId)) {
                     updates.push({
                         value: regionId,
@@ -90,8 +92,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                         }
                     });
                 } else {
-                    const feature = me._getFeature(classification, region, regionVal);
-                    if (classification.mapStyle === 'points') {
+                    const feature = me._getFeature(mapStyle, region, regionVal);
+                    if (mapStyle === 'points') {
                         borderFeatures.push(me._getBorderFeature(region, regionVal));
                     }
                     regionFeaturesToAdd.push(feature);
@@ -100,7 +102,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 handledRegions.push(regionId);
             });
 
-            const defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, sizePx);
+            const defaultFeatureStyle = me._getFeatureStyle(mapStyle, null, color, false, sizePx);
             const regionFeatureStyle = Object.assign({
                 text: {
                     scale: 1.2,
@@ -110,7 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     stroke: {
                         width: 0
                     },
-                    labelProperty: classification.showValues ? 'regionValue' : '',
+                    labelProperty: showValues ? 'regionValue' : '',
                     offsetX: 0,
                     offsetY: 0
                 }
@@ -122,7 +124,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 optionalStyles: optionalStyles,
                 layerId: me.LAYER_ID,
                 prio: REGION_PRIO + index,
-                opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100,
+                opacity: typeof transparency !== 'undefined' ? transparency : 100,
                 animationDuration: 250
             };
             const borderRequestOptions = Object.assign({}, regionRequestOptions, {
@@ -142,7 +144,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 const searchOptions = { 'id': updates };
                 addFeaturesRequestParams.push([searchOptions, regionRequestOptions]);
 
-                if (classification.mapStyle === 'points') {
+                if (mapStyle === 'points') {
                     const borderUpdates = updates.map(updateParams => Object.assign({}, updateParams, { value: 'border' + updateParams.value }));
                     const borderSearchOptions = { 'id': borderUpdates };
                     addFeaturesRequestParams.push([borderSearchOptions, borderRequestOptions]);
@@ -170,7 +172,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
         });
 
-        me._lastRenderCache = { classification, groups, highlightRegionId, mapStyle: classification.mapStyle };
+        me._lastRenderCache = { groups, highlightRegionId, mapStyle };
     },
 
     _getGeoJSON: function (features) {
@@ -193,9 +195,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         me._regionsAdded = [];
     },
 
-    _getFeatureStyle: function (classification, region, color, highlighted, size) {
+    _getFeatureStyle: function (mapStyle, region, color, highlighted, size) {
         var me = this;
-        var mapStyle = classification.mapStyle || 'choropleth';
         var style = null;
         var strokeWidth = highlighted ? 4 : 1;
         if (mapStyle === 'points') {
@@ -244,14 +245,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         return style;
     },
 
-    _getFeature: function (classification, region, label) {
+    _getFeature: function (mapStyle, region, label) {
         var featureProperties = {
             'id': region.id,
             'name': region.name,
             'regionValue': label,
             'oskari_type': 'region'
         };
-        if (classification.mapStyle === 'points') {
+        if (mapStyle === 'points') {
             return {
                 'type': 'Feature',
                 'geometry': {
@@ -279,20 +280,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         return geojson;
     },
 
-    _updateLayerProperties: function () {
-        var service = this.service;
-        var state = service.getStateService();
-        var ind = state.getActiveIndicator();
-        if (!ind) {
-            return;
-        }
+    _updateLayerProperties: function (mapStyle, regionsetId) {
+        const regionset = this.service.getRegionsets(regionsetId);
 
-        var regionsetId = state.getRegionset();
-        var regionset = service.getRegionsets(regionsetId);
-        var classification = state.getClassificationOpts(ind.hash);
-        var highlightStrokeWidth = 4;
-
-        var hoverOptions = {
+        const hoverOptions = {
+            featureStyle: {
+                stroke: {
+                    width: 4
+                },
+                inherit: true
+            },
             content: [
                 {
                     keyProperty: 'name',
@@ -301,21 +298,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             ]
         };
 
-        if (classification.mapStyle && classification.mapStyle === 'points') {
-            hoverOptions.featureStyle = {
-                stroke: {
-                    width: highlightStrokeWidth
-                },
-                inherit: true
-            };
-        } else {
-            hoverOptions.featureStyle = {
-                stroke: {
-                    width: highlightStrokeWidth
-                },
-                inherit: true,
-                effect: 'darken'
-            };
+        if (mapStyle !== 'points') {
+            hoverOptions.featureStyle.effect = 'darken';
         }
         this.sb.postRequestByName(
             'VectorLayerRequest',
@@ -330,8 +314,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         );
     },
     _updateFeatureStyle: function (regionId, highlight) {
-        const { classification, groups } = this._lastRenderCache;
-        if (!groups || !classification) {
+        const { mapStyle, groups } = this._lastRenderCache;
+        if (!groups || !mapStyle) {
             return;
         }
         const index = groups.findIndex(group => group.regionIds && group.regionIds.includes(regionId));
@@ -339,7 +323,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             return;
         }
         const { color, sizePx } = groups[index];
-        const style = this._getFeatureStyle(classification, regionId, color, highlight, sizePx);
+        const style = this._getFeatureStyle(mapStyle, regionId, color, highlight, sizePx);
         style.effect = highlight ? 'darken' : '';
         const requestOptions = {
             featureStyle: style,
@@ -349,7 +333,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const searchOptions = { id: regionId };
         this.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
 
-        if (classification.mapStyle && classification.mapStyle === 'points') {
+        if (mapStyle === 'points') {
             const borderRequestOptions = { ...requestOptions };
             const borderSearchOptions = { ...searchOptions };
             delete borderRequestOptions.prio;
