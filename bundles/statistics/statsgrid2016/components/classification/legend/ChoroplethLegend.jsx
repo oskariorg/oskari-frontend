@@ -4,12 +4,13 @@ import { InactiveLegend } from './';
 import { hexToRGBA } from './util';
 
 export const ChoroplethLegend = ({
-    classification,
+    classifiedDataset,
     transparency
 }) => {
+    const { getHtmlLegend, groups } = classifiedDataset;
     const opacity = transparency / 100 || 1;
-    const colors = classification.groups.map(group => opacity !== 1 ? hexToRGBA(group.color, opacity) : group.color);
-    const legend = classification.getHtmlLegend(colors);
+    const colors = groups.map(group => opacity !== 1 ? hexToRGBA(group.color, opacity) : group.color);
+    const legend = getHtmlLegend(colors);
     if (!legend) {
         return (<InactiveLegend error="cannotCreateLegend" />);
     }
@@ -20,5 +21,5 @@ export const ChoroplethLegend = ({
 
 ChoroplethLegend.propTypes = {
     transparency: PropTypes.number.isRequired,
-    classification: PropTypes.object.isRequired
+    classifiedDataset: PropTypes.object.isRequired
 };

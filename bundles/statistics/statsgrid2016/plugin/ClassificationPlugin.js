@@ -67,12 +67,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (!this.node) {
                 return;
             }
-            const { error, ...state } = this.service.getStateService().getStateForClassifiation();
+            const { error, ...state } = this.service.getStateService().getStateForClassification();
             if (error) return;
             const { data, status, validDataCount } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
             const editOptions = this.getEditOptions(state, validDataCount);
-            const classification = this.getClassification(state, data);
+            const classifiedDataset = this.classifyDataset(state, data);
             const manualView = this.getManualViewProps(state);
 
             ReactDOM.render((
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     <Classification
                         { ...state }
                         editOptions = {editOptions}
-                        classification = {classification}
+                        classifiedDataset = {classifiedDataset}
                         manualView = {manualView}
                         data = {data}
                         onRenderChange = {this.rendered.bind(this)}
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 colorsets
             };
         },
-        getClassification: function (state, data) {
+        classifyDataset: function (state, data) {
             const { activeIndicator: { classification }, seriesStats } = state;
             return this.service.getClassificationService().getClassification(data, classification, seriesStats);
         },

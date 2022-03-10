@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 seriesStats: this.service.getSeriesService().getSeriesStats(activeIndicator.hash)
             };
         },
-        getStateForClassifiation: function () {
+        getStateForClassification: function () {
             return {
                 ...this.getStateForRender(),
                 pluginState: this.getClassificationPluginState(),

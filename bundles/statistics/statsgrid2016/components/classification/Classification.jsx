@@ -10,14 +10,14 @@ export const Classification = ({
     indicators,
     editOptions,
     pluginState,
-    classification,
+    classifiedDataset,
     data,
     manualView,
     onRenderChange,
     controller
 }) => {
     const [isEdit, setEdit] = useState(false);
-    const { classification: values, hash } = activeIndicator;
+    const { classification, hash } = activeIndicator;
     const { transparent, editEnabled } = pluginState;
 
     useEffect(() => {
@@ -46,13 +46,17 @@ export const Classification = ({
                 {isEdit &&
                     <EditClassification
                         options = {editOptions}
-                        values={values}
-                        data={data}
+                        values = {classification}
+                        data = {data}
                         editEnabled = {editEnabled}
                         controller = {controller}
                         manualView = {manualView}/>
                 }
-                <Legend classification = {classification} values = {values} />
+                <Legend
+                    classifiedDataset = {classifiedDataset}
+                    mapStyle = {classification.mapStyle}
+                    transparency = {classification.transparency}
+                />
             </div>
         </div>
     );
@@ -64,7 +68,7 @@ Classification.propTypes = {
     data: PropTypes.object.isRequired,
     editOptions: PropTypes.object.isRequired,
     pluginState: PropTypes.object.isRequired,
-    classification: PropTypes.object.isRequired,
+    classifiedDataset: PropTypes.object.isRequired,
     manualView: PropTypes.object,
     seriesStats: PropTypes.object,
     onRenderChange: PropTypes.func.isRequired,

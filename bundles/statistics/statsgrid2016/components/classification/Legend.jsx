@@ -4,26 +4,27 @@ import { PointsLegend, ChoroplethLegend, InactiveLegend } from './legend/';
 import './legend.scss';
 
 export const Legend = ({
-    classification,
-    values
+    transparency,
+    mapStyle,
+    classifiedDataset
 }) => {
-    const { transparency, mapStyle } = values;
-    const { error } = classification;
+    const { error } = classifiedDataset;
     if (error) {
         const errorKey = error === 'general' ? 'cannotCreateLegend' : error;
         return (<InactiveLegend error = {errorKey} />);
     }
     if (mapStyle === 'points') {
         return (
-            <PointsLegend classification={classification} transparency={transparency}/>
+            <PointsLegend classifiedDataset={classifiedDataset} transparency={transparency}/>
         );
     }
     return (
-        <ChoroplethLegend classification={classification} transparency={transparency}/>
+        <ChoroplethLegend classifiedDataset={classifiedDataset} transparency={transparency}/>
     );
 };
 
 Legend.propTypes = {
-    classification: PropTypes.object.isRequired,
-    values: PropTypes.object.isRequired
+    transparency: PropTypes.number.isRequired,
+    mapStyle: PropTypes.string.isRequired,
+    classifiedDataset: PropTypes.object.isRequired
 };

@@ -17,11 +17,11 @@ const getSizes = groups => {
 };
 
 export const PointsLegend = ({
-    classification,
+    classifiedDataset,
     transparency
 }) => {
     const opacity = transparency / 100 || 1;
-    const { groups, ...rest } = classification;
+    const { groups, ...rest } = classifiedDataset;
     const { maxSize, height, pointsY } = getSizes(groups);
 
     return (
@@ -35,5 +35,5 @@ export const PointsLegend = ({
 
 PointsLegend.propTypes = {
     transparency: PropTypes.number.isRequired,
-    classification: PropTypes.object.isRequired
+    classifiedDataset: PropTypes.object.isRequired
 };
