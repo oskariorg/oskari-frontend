@@ -30,17 +30,19 @@ Oskari.registerLocalization(
                     "default": "Défaut"
                 },
                 "popup": {
-                    "edit": "Modifier la vue cartographique",
-                    "title": "Enregistrer la vue cartographique",
-                    "label": "Le nom de la vue cartographique",
-                    "name_placeholder": "Donnez un nom à la vue cartographique",
-                    "description_placeholder": "Donnez une description à la vue cartographique",
-                    "save": "Enregistrer",
-                    "cancel": "Annuler",
-                    "error_noname": "Saisissez le nom de la vue cartographique",
+                    "title" : {
+                        "edit": "Modifier la vue cartographique",
+                        "save": "Enregistrer la vue cartographique"
+                    },
+                    "label": {
+                        "name": "Donnez un nom à la vue cartographique",
+                        "description": "Donnez une description à la vue cartographique",
+                        "default": "Vue par défaut"
+                    },
+                    "defaultName": "{now, date} {now, time, short}",
+                    "noName": "Saisissez le nom de la vue cartographique",
                     "deletetitle": "Supprimer la vue cartographique",
-                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique \"{name}\"?",
-                    "default": "Vue par défaut"
+                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique \"{name}\"?"
                 },
                 "save": {
                     "success": "La vue cartographique a été enregistrée.",
