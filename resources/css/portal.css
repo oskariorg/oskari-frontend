@@ -1,7 +1,8 @@
 /* Variables */
 /* Mixins */
 /* Resets */
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
+/* removed: html, body, */
+div, span, object, iframe, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
 img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
 dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
@@ -21,11 +22,11 @@ footer, header, nav, section, audio, video {
 a img {
   border: 0;
 }
-
+/*
 html, body {
   height: 100% !important;
 }
-
+*/
 html {
   font-size: 100%;
   -webkit-overflow-scrolling: touch;
@@ -84,12 +85,14 @@ img::-moz-selection {
 }
 
 /* Content is only in the portal version afaik so this could be moved there? */
+/*
 #content {
   width: 760px;
   padding-left: 20px;
 }
-
+*/
 /* Portal version */
+/*
 .mml-map #logo.no-hover {
   display: block !important;
 }
@@ -111,6 +114,7 @@ img::-moz-selection {
   width: 100%;
   margin-left: 0;
 }
+*/
 
 
 .oskariui-left {
@@ -471,14 +475,14 @@ select:not([class*="ant-"]) {
 .clearfix:after {
   clear: both;
 }
-
+/*
 #maptools {
   width: 170px !important;
   height: 100% !important;
   overflow: auto;
   position: fixed !important;
 }
-
+*/
 @keyframes backgroundFlash {
   50% {
     background-color: rgb(255,212,0);

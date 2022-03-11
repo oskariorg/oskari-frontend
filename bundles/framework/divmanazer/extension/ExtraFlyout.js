@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             if (!me._popup) {
                 if (!me.options.container) {
-                    jQuery('body').append(popup);
+                    jQuery(Oskari.getRootEl()).append(popup);
                 } else {
                     me.options.container.append(popup);
                 }

@@ -44,6 +44,7 @@ function appendQueryToURL(url, query) {
     }
     return `${url}&${query}`;
 }
+let rootEl;
 
 const Oskari = {
     VERSION: pkg.version,
@@ -52,6 +53,21 @@ const Oskari = {
     },
     getMarkers () {
         return _markers;
+    },
+    setRootEl (id) {
+        if (id) {
+            rootEl = document.getElementById(id);
+        }
+        if (!rootEl) {
+            rootEl = document.getElementsByTagName('body');
+        }
+        return rootEl;
+    },
+    getRootEl () {
+        if (!rootEl) {
+            return this.setRootEl('oskari');
+        }
+        return rootEl;
     },
     getDefaultMarker () {
         return (_markers.length >= 3) ? _markers[2] : _markers[0];
