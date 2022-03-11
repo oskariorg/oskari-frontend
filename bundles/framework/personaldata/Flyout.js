@@ -61,11 +61,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
                 'myviews': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
-                'publishedmaps': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
-                /* 'publishedmaps': {
-                    getTitle: () => Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
-                    getJsx: () => <PublishedMapsTab instance={me.instance} service={me.instance.getViewService()} />
-                }, */
+                'publishedmaps': {
+                    customRender: true,
+                    js: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
+                    getTitle: () => Oskari.getMsg('PersonalData', `tabs.publishedmaps.title`)
+                },
                 // TODO should we pass conf to accounttab here?
                 'account': {
                     getTitle: () => Oskari.getMsg('PersonalData', `tabs.account.title`),
@@ -163,14 +163,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 panel.setTitle(tab.getTitle());
                 panel.setId(tabId);
 
-                if (tabId === 'publishedmaps') {
-                    const container = document.createElement('div');
-                    panel.setContent(container);
-                    tab.addTabContent(container);
-                } else if (tab.hasOwnProperty('getJsx')) {
+                if (tab.hasOwnProperty('getJsx')) {
                     const container = document.createElement('div');
                     panel.setContent(container);
                     ReactDOM.render(tab.getJsx(), container);
+                } else if (tab.hasOwnProperty('customRender')) {
+                    const container = document.createElement('div');
+                    panel.setContent(container);
+                    tab.js.addTabContent(container);
                 } else {
                     tab.addTabContent(panel.getContainer());
                 }

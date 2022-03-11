@@ -42,17 +42,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         },
 
         /**
-         * @method getTitle
-         * Returns tab title
-         *
-         *
-         * @return {string}
-         */
-        getTitle: function () {
-            return this.loc('tabs.publishedmaps.title');
-        },
-
-        /**
          * @method addTabContent
          * Writes the tab content to the given container
          *
