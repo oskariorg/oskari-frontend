@@ -186,16 +186,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         return this.__started;
     },
     /**
-    * Is default.
-    * @method isDefaultTool
-    * @public
-    *
-    * @returns {Boolean} is the tool toggled on by default. Default value false, override where necessary.
-    */
-    isDefaultTool: function () {
-        return false;
-    },
-    /**
     * Whether or not to create a panel and checkbox for the tool in the tools' panel.
     * @method isShownInToolsPanel
     * @public
