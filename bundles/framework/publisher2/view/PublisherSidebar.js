@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             me.progressSpinner.insertTo(content);
 
-            container.append(content);
+            container.prepend(content);
             var contentDiv = content.find('div.content'),
                 accordion = Oskari.clazz.create(
                     'Oskari.userinterface.component.Accordion'

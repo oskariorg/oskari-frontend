@@ -61,50 +61,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 // do not resize map if resizeEnabled is false
                 return;
             }
+            /*
             const contentMap = jQuery('#' + this.contentMapDivId);
-            const dataContent = jQuery('.oskariui-left');
-            const dataContentHasContent = dataContent.length && !dataContent.is(':empty');
-            const dataContentWidth = dataContent.width();
-            const mapContainer = contentMap.find('.oskariui-center');
             const mapDiv = jQuery('#' + this.mapDivId);
-            const windowHeight = jQuery(window).height();
-            const sidebar = jQuery('#sidebar:visible');
-            let mapHeight = windowHeight;
+            const containerHeight = jQuery(Oskari.getRootEl()).height();
+            let mapHeight = containerHeight;
             let mapWidth = contentMap.width();
-            let maxMapWidth = jQuery(window).width() - sidebar.width();
-
-            contentMap.height(windowHeight);
+            let maxMapWidth = jQuery(Oskari.getRootEl()).width();
 
             // adjust map size of there is a toolbar above the map
             const toolbar = contentMap.find('#menutoolbar:visible');
             if (toolbar.length > 0) {
                 mapHeight -= toolbar.height();
             }
-            dataContent.height(mapHeight);
             mapDiv.height(mapHeight);
-
-            if (!dataContentHasContent) {
-                dataContent.addClass('oskari-closed');
-            } else if (dataContent.is(':visible') && dataContentWidth) {
-                mapWidth -= dataContentWidth;
-            }
-
-            if (contentMap.hasClass('oskari-map-window-fullscreen')) {
-                const mapTools = jQuery('#maptools:visible');
-                maxMapWidth += mapTools.width();
-                maxMapWidth += sidebar.width();
-                const position = sidebar.position();
-                if (position && position.left) {
-                    maxMapWidth += position.left;
-                }
-            }
-
             if (mapWidth > maxMapWidth) {
                 mapWidth = maxMapWidth;
             }
-
-            mapContainer.width(mapWidth);
-
+            */
             // notify map module that size has changed
             this.updateSize();
         },
@@ -116,8 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * config or if isn't specified, sets the height of the element to window height
          * and starts listening to window resizing.
          * Initializes and registers map module plugins if specified in bundles config.
-         *
-         *
          */
         _createUi: function () {
             const me = this;
@@ -138,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     .width(me.conf.size.width)
                     .height(me.conf.size.height);
                 // TODO check if we need to set mapDiv size at all here...
-                jQuery('#' + me.mapDivId).height(me.conf.size.height);
+                //jQuery('#' + me.mapDivId).height(me.conf.size.height);
             }
 
             // react to window resize with timer so app stays responsive

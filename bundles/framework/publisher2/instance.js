@@ -274,8 +274,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param {Layer[]} deniedLayers layers that the user can't publish (optional)
          */
         setPublishMode: function (blnEnabled, data, deniedLayers) {
-            var me = this;
-            var map = jQuery('#contentMap');
+            const me = this;
+            const root = jQuery(Oskari.getRootEl());
+            const navigation = root.find('nav');
+            navigation.css('display', blnEnabled ? 'none' : 'block');
+            const map = root.find('#contentMap');
             data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
@@ -311,7 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
-                me.publisher.render(map);
+                me.publisher.render(root);
             } else {
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
