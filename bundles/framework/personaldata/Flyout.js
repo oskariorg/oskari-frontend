@@ -163,10 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     const container = document.createElement('div');
                     panel.setContent(container);
                     ReactDOM.render(tab.getJsx(), container);
-                } else if (tab.hasOwnProperty('customRender')) {
-                    const container = document.createElement('div');
-                    panel.setContent(container);
-                    tab.js.addTabContent(container);
                 } else {
                     tab.addTabContent(panel.getContainer());
                 }
