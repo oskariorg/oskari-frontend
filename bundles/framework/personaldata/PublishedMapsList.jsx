@@ -32,7 +32,7 @@ const showHtml = (view, setPopup, closePopup) => {
     setPopup(controls);
 }
 
-export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePublish, showOnMap, setPopup, closePopup }) => {
+export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handlePublish, showOnMap, setPopup, closePopup }) => {
 
     const columnSettings = [
         {
@@ -129,7 +129,7 @@ export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePubli
         <div className="viewsList volatile">
             <StyledTable
                 columns={columnSettings}
-                dataSource={views?.map((item) => ({
+                dataSource={views.map((item) => ({
                     key: item.id,
                     ...item
                 }))}
