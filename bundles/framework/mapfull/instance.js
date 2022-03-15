@@ -93,6 +93,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         _createUi: function () {
             const me = this;
+            // Note! Oskari.getRootEl(); generates a side-effect to set body size to 100% height
+            // FIXME: call the getRootEl() on app start to generate the side-effect instead of here or refactor the side-effect to app start?
+            const rootEl = Oskari.getRootEl();
+            let contentMapEl = document.getElementById(this.contentMapDivId);
+            if (!contentMapEl) {
+                contentMapEl = document.createElement('div');
+                contentMapEl.setAttribute('id', this.contentMapDivId);
+                rootEl.append(contentMapEl);
+            }
+            let mapdivEl = document.getElementById(this.mapDivId);
+            if (!mapdivEl) {
+                mapdivEl = document.createElement('div');
+                mapdivEl.setAttribute('id', this.mapDivId);
+                contentMapEl.append(mapdivEl);
+            }
             const module = Oskari.clazz.create(
                 'Oskari.mapframework.ui.module.common.MapModule',
                 'Main',
