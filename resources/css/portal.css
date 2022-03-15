@@ -42,6 +42,33 @@ body {
   background: #fafafa;
 }
 
+
+#oskari {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0px;
+  position: relative;
+  overflow: hidden;
+  /* for application to set */
+  height: 100%;
+  width: 100%;
+}
+#oskari nav {
+  min-width: 170px;
+  flex-basis: 170px;
+  display: block;
+  overflow: auto;
+
+  /* for application to set */
+  background-color: #333438;
+}
+
+#contentMap {
+  height: 100%;
+  width: 100%;
+}
+
 body, button, input, select, textarea {
   font-size: 14px;
   line-height: 21px;
