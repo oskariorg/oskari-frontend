@@ -1,10 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Message, Confirm } from 'oskari-ui'
 import { Table } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
-import { showHTMLrender } from './view/HTMLrender/HTMLrender'
+import { showSnippetPopup } from './view/embedded/SnippetPopup'
 
 const DELETE_ICON_STYLE = {
     color: red.primary
@@ -18,36 +19,20 @@ const StyledTable = styled(Table)`
 
 const BUNDLE_NAME = 'PersonalData';
 
+const openView = (view) => {
+    window.open(
+        view.url,
+        'Published',
+        'location=1,status=1,scrollbars=yes,width=850,height=800'
+    );
+}
+
+const showHtml = (view, setPopup, closePopup) => {
+    const controls = showSnippetPopup(view, closePopup);
+    setPopup(controls);
+}
+
 export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePublish, showOnMap, setPopup, closePopup }) => {
-
-    const showHtml = (view) => {
-        const url = Oskari.getSandbox().createURL(view.url);
-        const size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
-        const width = size ? size.width + 'px' : '100%';
-        const height = size ? size.height + 'px' : '100%';
-        let iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
-        if (width !== null && width !== undefined) {
-            iframeCode += ' width: ' + width + ';';
-        }
-        if (height !== null && height !== undefined) {
-            iframeCode += ' height: ' + height + ';';
-        }
-        iframeCode += '"></iframe>';
-        const values = {
-            html: iframeCode
-        };
-        
-        const controls = showHTMLrender(values, closePopup);
-        setPopup(controls);
-    }
-
-    const openView = (view) => {
-        window.open(
-            view.url,
-            'Published',
-            'location=1,status=1,scrollbars=yes,width=850,height=800'
-        );
-    }
 
     const columnSettings = [
         {
@@ -63,12 +48,7 @@ export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePubli
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.domain' bundleKey="PersonalData" />,
-            dataIndex: 'pubDomain',
-            render: (title, item) => {
-                return (
-                    <span>{title}</span>
-                )
-            }
+            dataIndex: 'pubDomain'
         },
         {
             align: 'left',
@@ -109,7 +89,7 @@ export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePubli
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <a onClick={() => showHtml(item)}><Message messageKey='tabs.publishedmaps.grid.html' bundleKey={BUNDLE_NAME} /></a>
+                    <a onClick={() => showHtml(item, setPopup, closePopup)}><Message messageKey='tabs.publishedmaps.grid.html' bundleKey={BUNDLE_NAME} /></a>
                 );
             }
         },
@@ -118,7 +98,6 @@ export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePubli
             title: <Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />,
             dataIndex: 'id',
             render: (title, item) => {
-
                 return (
                     <a onClick={() => handleEdit(item)}>
                         <EditOutlined />
@@ -154,8 +133,18 @@ export const PublishedMapsList = ({ views, handleEdit, handleDelete, handlePubli
                     key: item.id,
                     ...item
                 }))}
-                pagination={{ position: ['none', 'none'] }}
+                pagination={{ position: ['none', 'bottomCenter'] }}
             />
         </div>
     )
+}
+
+PublishedMapsList.propTypes = {
+    views: PropTypes.arrayOf(PropTypes.object),
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    handlePublish: PropTypes.func.isRequired,
+    showOnMap: PropTypes.func.isRequired,
+    setPopup: PropTypes.func.isRequired,
+    closePopup: PropTypes.func.isRequired
 }
