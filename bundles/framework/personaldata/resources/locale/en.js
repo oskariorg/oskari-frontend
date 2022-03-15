@@ -88,7 +88,8 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Copy the HTML code below to your html code and the map will be visible on your website:",
-                    "copy": "Copy to the clipboard"
+                    "copy": "Copy to the clipboard",
+                    "copied": "Copied"
                 },
                 "popup": {
                     "edit": "Edit Map Name",
@@ -100,6 +101,7 @@ Oskari.registerLocalization(
                     "error_noname": "The map layer name is required. Please type a name and try again.",
                     "deletetitle": "Delete Embedded Map",
                     "deletemsg": "You are deleting the embedded map \"{name}\". After that the map is not visible at your website. Do you want to delete the map?",
+                    "unpublishmsg": "Are you sure you want to change the published map \"{name}\" to private? Other users will no longer be able to open the map.",
                     "showErrorTitle": "Error",
                     "showConfirmMissing": "All the map layers are not available. Do you want to open the embedded map?",
                     "showConfirmNotLoaded": "All the map layers could not be loaded."

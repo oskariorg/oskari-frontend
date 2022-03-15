@@ -88,7 +88,8 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
-                    "copy": "Kopioi leikepöydälle"
+                    "copy": "Kopioi leikepöydälle",
+                    "copied": "Kopioitu"
                 },
                 "popup": {
                     "edit": "Vaihda kartan nimi",
@@ -100,6 +101,7 @@ Oskari.registerLocalization(
                     "error_noname": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
                     "deletetitle": "Poista julkaistu kartta",
                     "deletemsg": "Haluatko poistaa julkaistun kartan \"{name}\"? Kartta ei tämän jälkeen näy enää verkkosivullasi.",
+                    "unpublishmsg": "Haluatko peruuttaa julkaistun kartan \"{name}\"? Kartta ei tämän jälkeen näy enää muille käyttäjille.",
                     "showErrorTitle": "Karttanäkymässä on puutteita",
                     "showConfirmMissing": "Osa karttatasoista ei ole käytettävissä. Haluatko silti avata karttanäkymän?",
                     "showConfirmNotLoaded": "Osa karttatasoista ei latautunut karttanäkymään."

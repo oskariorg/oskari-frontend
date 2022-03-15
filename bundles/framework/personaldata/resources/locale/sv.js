@@ -88,7 +88,8 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
-                    "copy": "Kopiera till klippbordet"
+                    "copy": "Kopiera till klippbordet",
+                    "copied": "Kopieras"
                 },
                 "popup": {
                     "edit": "Byt namn på kartan",
@@ -100,6 +101,7 @@ Oskari.registerLocalization(
                     "error_noname": "Namnge kartan",
                     "deletetitle": "Ta bort den inbäddade kartan",
                     "deletemsg": "Vill du ta bort den inbäddade kartan \"{name}\"? Efter radering kartan kommer inte längre att visas på din webbplats.",
+                    "unpublishmsg": "Är du säker på att du vill avbryta kartpubliceringen \"{name}\"? Den inbäddade kartan syns därefter inte mera på din webbsida, men du kan återställa den senare.",
                     "showErrorTitle": "Ofullständig kartvy",
                     "showConfirmMissing": "Kartvyn är ofullständig. Några av kartlagren är inte tillgängliga. Vill du fortfarande öppna den här kartvyn?",
                     "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned. Försök på nytt senare."
