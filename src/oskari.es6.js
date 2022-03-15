@@ -59,7 +59,12 @@ const Oskari = {
             rootEl = document.getElementById(id);
         }
         if (!rootEl) {
-            rootEl = document.getElementsByTagName('body');
+            rootEl = document.getElementsByTagName('body')[0];
+            if (!rootEl.style.height) {
+                // rendering directly to body -> set CSS to follow expected styling
+                rootEl.style.height = '100vh';
+                rootEl.style.display = 'flex';
+            }
         }
         return rootEl;
     },
