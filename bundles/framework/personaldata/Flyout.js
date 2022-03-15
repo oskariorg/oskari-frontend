@@ -60,7 +60,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             var me = this;
             // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
             this.tabsData = {
-                'myviews': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
+                'myviews': {
+                    customRender: true,
+                    js: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
+                    getTitle: () => Oskari.getMsg('PersonalData', `tabs.myviews.title`)
+                },
                 'publishedmaps': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
                 // TODO should we pass conf to accounttab here?
                 'account': {
@@ -163,6 +167,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     const container = document.createElement('div');
                     panel.setContent(container);
                     ReactDOM.render(tab.getJsx(), container);
+                } else if (tab.hasOwnProperty('customRender')) {
+                    const container = document.createElement('div');
+                    panel.setContent(container);
+                    tab.js.addTabContent(container);
                 } else {
                     tab.addTabContent(panel.getContainer());
                 }
