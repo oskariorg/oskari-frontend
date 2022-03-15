@@ -24,9 +24,9 @@ const ButtonContainer = styled.div`
     justify-content: flex-end;
 `
 
-export const MyViewsList = ({ data, handleEdit, handleDelete, openView, setDefault, saveCurrent }) => {
+export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, setDefault, saveCurrent }) => {
 
-    const columnSettings = React.useMemo(() => [
+    const columnSettings = [
         {
             align: 'left',
             title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.default' />,
@@ -80,7 +80,7 @@ export const MyViewsList = ({ data, handleEdit, handleDelete, openView, setDefau
                 )
             }
         }
-    ], [data]);
+    ];
 
     return (
         <>
@@ -91,7 +91,7 @@ export const MyViewsList = ({ data, handleEdit, handleDelete, openView, setDefau
             </ButtonContainer>
             <StyledTable
                 columns={columnSettings}
-                dataSource={data?.map(item => ({
+                dataSource={data.map(item => ({
                     key: item.id,
                     ...item
                 }))}

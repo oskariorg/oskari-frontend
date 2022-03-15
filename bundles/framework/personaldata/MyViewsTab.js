@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     saveCurrent={() => me.saveCurrent()}
                 />
                 ,
-                me.container
+                me.container[0]
             );
         },
 
@@ -250,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 return;
             }
             var rb = Oskari.requestBuilder('StateHandler.SetStateRequest');
-            if (rb && !me.popupOpen) {
+            if (rb) {
                 var req = rb(data.state);
                 req.setCurrentViewId(data.id);
                 sandbox.request(me.instance, req);
