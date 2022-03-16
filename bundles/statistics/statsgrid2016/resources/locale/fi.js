@@ -107,8 +107,20 @@ Oskari.registerLocalization({
         },
         'classify': {
             'classify': 'Luokittelu',
-            'classifymethod': 'Luokittelutapa',
-            'classes': 'Luokkajako',
+            'labels': {
+                'method': 'Luokittelutapa',
+                'count': 'Luokkajako', // classes
+                'mode': 'Luokkarajat',
+                'mapStyle': 'Kartan tyyli',
+                'type': 'Jakauma', // setselection
+                'reverseColors': 'Käännä värit',
+                'color': 'Väri',
+                'colorset': 'Värit', //button
+                'pointSize': 'Pisteen koko',
+                'transparency': 'Läpinäkyvyys',
+                'showValues': 'Näytä arvot',
+                'fractionDigits': 'Desimaalien lukumäärä'
+            },
             'methods': {
                 'jenks': 'Luonnolliset välit',
                 'quantile': 'Kvantiilit',
@@ -121,7 +133,6 @@ Oskari.registerLocalization({
             'nanError': 'Antamasi arvo ei ole luku. Korjaa arvo ja yritä uudelleen. Käytä desimaalierottimena pistettä.',
             'infoTitle': 'Luokittelu käsin',
             'info': 'Anna luokkarajat pilkulla erotettuina lukuina. Käytä desimaalierottimena pistettä. Esimerkiksi syöttämällä "0, 10.5, 24, 30.2, 57, 73.1" saat viisi luokkaa, joiden arvot ovat välillä "0-10,5", "10,5-24", "24-30,2", "30,2-57" ja "57-73,1". Indikaattorin arvoja, jotka ovat pienempiä kuin alin luokkaraja (esimerkissä 0) tai suurempia kuin ylin luokkaraja (73,1), ei näytetä kartalla. Luokkarajojen on oltava indikaattorin pienimmän ja suurimman arvon välillä.',
-            'mode': 'Luokkarajat',
             'modes': {
                 'distinct': 'Jatkuva',
                 'discontinuous': 'Epäjatkuva'
@@ -132,29 +143,19 @@ Oskari.registerLocalization({
                 'close': 'Sulje luokittelun muokkaus'
             },
             'classifyFieldsTitle': 'Luokitteluarvot',
-            'map': {
-                'mapStyle': 'Kartan tyyli',
+            'mapStyles': {
                 'choropleth': 'Koropleettikartta',
-                'points': 'Pisteet',
-                'pointSize': 'Pisteen koko',
+                'points': 'Pisteet'
+            },
+            'pointSizes': {
                 'min': 'Minimi',
-                'max': 'Maksimi',
-                'color': 'Väri',
-                'transparency': 'Läpinäkyvyys',
-                'showValues': 'Näytä arvot',
-                'fractionDigits': 'Desimaalien lukumäärä'
+                'max': 'Maksimi'
+            },
+            'types': {
+                'seq': 'Kvantitatiivinen',
+                'qual': 'Kvalitatiivinen',
+                'div': 'Jakautuva'
             }
-        },
-        'colorset': {
-            'button': 'Värit',
-            'flipButton': 'Käännä värit',
-            'themeselection': 'Valitse luokkien värit',
-            'setselection': 'Jakauma',
-            'seq': 'Kvantitatiivinen',
-            'qual': 'Kvalitatiivinen',
-            'div': 'Jakautuva',
-            'info2': 'Valitse värit klikkaamalla haluamaasi väriryhmää.',
-            'cancel': 'Peruuta'
         },
         'errors': {
             'title': 'Virhe',

@@ -30,17 +30,19 @@ Oskari.registerLocalization(
                     "default": "Default"
                 },
                 "popup": {
-                    "edit": "Edit Map View",
-                    "title": "Save Map View",
-                    "label": "Name",
-                    "name_placeholder": "Name",
-                    "description_placeholder": "Description",
-                    "save": "Save",
-                    "cancel": "Cancel",
-                    "error_noname": "The map view name is required. Please type a name and try again.",
+                    "title" : {
+                        "edit": "Edit Map View",
+                        "save": "Save Map View"
+                    },
+                    "label": {
+                        "name": "Name",
+                        "description": "Description",
+                        "default": "Default view"
+                    },
+                    "defaultName": "Own map view {now, date} {now, time, short}",
+                    "noName": "The map view name is required",
                     "deletetitle": "Delete Map View",
-                    "deletemsg": "Do you want to delete the map view \"{name}\"?",
-                    "default": "Default view"
+                    "deletemsg": "Do you want to delete the map view \"{name}\"?"
                 },
                 "save": {
                     "success": "The map view has been saved.",
@@ -86,7 +88,8 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Copy the HTML code below to your html code and the map will be visible on your website:",
-                    "copy": "Copy to the clipboard"
+                    "copy": "Copy to the clipboard",
+                    "copied": "Copied"
                 },
                 "popup": {
                     "edit": "Edit Map Name",
@@ -98,6 +101,7 @@ Oskari.registerLocalization(
                     "error_noname": "The map layer name is required. Please type a name and try again.",
                     "deletetitle": "Delete Embedded Map",
                     "deletemsg": "You are deleting the embedded map \"{name}\". After that the map is not visible at your website. Do you want to delete the map?",
+                    "unpublishmsg": "Are you sure you want to change the published map \"{name}\" to private? Other users will no longer be able to open the map.",
                     "showErrorTitle": "Error",
                     "showConfirmMissing": "All the map layers are not available. Do you want to open the embedded map?",
                     "showConfirmNotLoaded": "All the map layers could not be loaded."

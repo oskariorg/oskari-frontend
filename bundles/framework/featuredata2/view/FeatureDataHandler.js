@@ -81,6 +81,16 @@ class ViewHandler extends StateHandler {
                 } else {
                     this._removeLayer(layer);
                 }
+            },
+            MapLayerEvent: event => {
+                if (event.getOperation() !== 'update') {
+                    return;
+                }
+                const id = event.getLayerId();
+                if (this.state.layerIds.includes(id)) {
+                    // notify to render
+                    this.updateState({}, 'layerUpdate');
+                }
             }
         };
         const sb = Oskari.getSandbox();

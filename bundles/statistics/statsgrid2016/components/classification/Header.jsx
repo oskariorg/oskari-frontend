@@ -1,17 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withContext } from 'oskari-ui/util';
+import { Tooltip, Message } from 'oskari-ui';
 import './header.scss';
 
-const handleIndicatorChange = (controller, value) => {
-    controller.setActiveIndicator(value);
-};
-
-const getTitleComponent = (indicators, active, controller, title) => {
+const getTitleComponent = (selected, indicators, controller, title) => {
     if (indicators.length > 1) {
         return (
-            <select value={active.hash} onChange={evt => handleIndicatorChange(controller, evt.target.value)}>
-                {indicators.map(opt => <option key={opt.id} value={opt.id}>{opt.title}</option>)}
+            <select value={selected} onChange={evt => controller.setActiveIndicator(evt.target.value)}>
+                {indicators.map(opt => <option key={opt.hash} value={opt.hash}>{opt.title}</option>)}
             </select>
         );
     }
@@ -20,33 +16,25 @@ const getTitleComponent = (indicators, active, controller, title) => {
     );
 };
 
-const Header = props => {
-    const { indicators, active, controller } = props;
+export const Header = ({ selected, indicators, isEdit, toggleEdit, controller }) => {
     const headerClass = indicators.length > 1 ? 'active-header multi-selected' : 'active-header single-selected';
-    const { title } = indicators.find(indicator => active.hash === indicator.id) || { title: '' };
-    let buttonClass = 'edit-button';
-    let buttonTooltip = 'classify.edit.open';
-    if (props.isEdit) {
-        buttonClass = 'edit-button edit-active';
-        buttonTooltip = 'classify.edit.close';
-    }
+    const buttonClass = isEdit ? 'edit-button edit-active' : 'edit-button';
+    const { title = '' } = indicators.find(indicator => indicator.hash === selected) || {};
 
     return (
         <div className={headerClass} data-selected-indicator={title}>
-            {getTitleComponent(indicators, active, controller, title)}
-            <div className={buttonClass} title={props.loc(buttonTooltip)} onMouseUp = {props.handleClick}/>
+            {getTitleComponent(selected, indicators, controller, title)}
+            <Tooltip placement='topRight' title={<Message messageKey={`classify.edit.${isEdit ? 'close' : 'open'}`}/>}>
+                <div className={buttonClass} onMouseUp = {toggleEdit}/>
+            </Tooltip>
         </div>
     );
 };
 
 Header.propTypes = {
+    selected: PropTypes.string.isRequired,
     indicators: PropTypes.array.isRequired,
-    active: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,
-    handleClick: PropTypes.func.isRequired,
-    controller: PropTypes.object.isRequired,
-    loc: PropTypes.func.isRequired
+    toggleEdit: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired
 };
-
-const contextWrapped = withContext(Header);
-export { contextWrapped as Header };

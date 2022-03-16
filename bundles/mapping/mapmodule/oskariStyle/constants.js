@@ -55,7 +55,7 @@ export const FILL_STYLE = {
 
 export const PATTERN_STROKE = {
     THIN: 2,
-    THICK: 3
+    THICK: 4
 };
 
 export const FILTER = {

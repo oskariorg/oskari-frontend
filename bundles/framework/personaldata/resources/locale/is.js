@@ -24,17 +24,19 @@ Oskari.registerLocalization(
                     "default": "Sjálfgefið"
                 },
                 "popup": {
-                    "edit": "Breyta kortasýn",
-                    "title": "Vista kortasýn",
-                    "label": "Nafn kortasýninnar.",
-                    "name_placeholder": "Gefðu kortasýn nafn",
-                    "description_placeholder": "Gefðu kortasýn lýsingu",
-                    "save": "Vista",
-                    "cancel": "Hætta við",
-                    "error_noname": "Nafn á kortasýn",
+                    "title" : {
+                        "edit": "Breyta kortasýn",
+                        "save": "Vista kortasýn"
+                    },
+                    "label": {
+                        "name": "Gefðu kortasýn nafn",
+                        "description": "Gefðu kortasýn lýsingu",
+                        "default": "Sjálfgefin sýn"
+                    },
+                    "defaultName": "{now, date} {now, time, short}",
+                    "noName": "Nafn á kortasýn",
                     "deletetitle": "Eyða kortasýn",
-                    "deletemsg": "Viltu eyða þessari kortasýn?",
-                    "default": "Sjálfgefin sýn"
+                    "deletemsg": "Viltu eyða þessari kortasýn?"
                 },
                 "save": {
                     "success": "Kortasýnin hefur verið vistuð.",

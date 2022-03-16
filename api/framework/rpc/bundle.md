@@ -10,47 +10,33 @@ Examples of all the RPC functionalities can be found [here](https://www.oskari.o
 
 ## Bundle configuration
 
-No configuration is required, but it can be used to define allowed functions, events and requests.
+No configuration is required, but it can be used to define restrict allowed functions (`allowedFunctions`), events (`allowedEvents`) and requests (`allowedRequests`).
 By default the [events](https://www.oskari.org/api/events) and [requests](https://www.oskari.org/api/requests) that have the RPC tag in their api documentation are allowed.
 
-### How to add new functions to RPC
-
-Use `RpcService` to add new functions.
-
+Additional requests or events can be allowed with the following configuration:
 ```
-// listen to application started event and register new RPC function.
-Oskari.on('app.start', function (details) {
-    const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
-
-    if (!rpcService) {
-        return;
-    }
-
-    rpcService.addFunction('example', function () {
-        console.log('New added RPC function');
-        return 'my example result';
-    });
-
-    // async functions can return a promise and signal failure through reject
-    rpcService.addFunction('example2', function () {
-            return new Promise((resolve, reject) => {
-                setTimeout(() => resolve('my async example result'), 500);
-              });
-    });
-});
-// now you can call created example function from your published map
-channel.example(function(data) {
-    console.log(data);
-});
-
-channel.example2(function(data) {
-    console.log(data);
-});
+conf.addRequests = ['newRequest1', 'newRequest2'];
+conf.addEvents = ['newEvent1', 'newEvent2'];
 ```
+This can 
+
+### Allowed events
+
+Allowed events (`config.allowedEvents`) lists all the events that can be listened to over rpc.
+List will be modified on startup so events that are not available in the appsetup will be removed from the list. This can be used to for example limit the events exposed for RPC per embedded map.
+
+If configuration has defined `config.addEvents` the events referenced in the value array are included in addition to the default events. This is an easier way of adding for example application specific events without the need to adjust the events that are allowed by default (if a new version changes the default list/adds events etc).
+
+### Allowed requests
+
+Allowed requests (`config.allowedRequests`) lists all the requests that can be sent over rpc.
+List will be modified on startup so requests that are not available in the appsetup will be removed from the list. This can be used to for example limit the requests exposed for RPC per embedded map.
+
+If configuration has defined `config.addRequests` the requests referenced in the value array are included in addition to the default requests. This is an easier way of adding for example application specific requests without the need to adjust the requests that are allowed by default (if a new version changes the default list/adds requests etc).
 
 ### Allowed functions
 
-Allowed functions (config.allowedFunctions) lists all the functions that can be called over rpc.
+Allowed functions (`config.allowedFunctions`) lists all the functions that can be called over rpc.
 
 Defaults at the moment are all the functions what all bundles adds to rpc.
 RPC bundle adds default functions and other additionals are optionals (exists in RPC when bundle is added to published view).
@@ -343,15 +329,44 @@ The method takes 2 parameters:
 - The first parameter is an object that can have geometry and/or properties keys like a GeoJSON feature. The geometry is used to limit the query. When missing it defaults to the extent of current viewport. Properties can be used to filter out features that have specific property value for simple filtering like features with `properties.type = 3`. If the requested geometry is not in current map viewport an error object is returned `{ "error": "out_of_bounds" }`
 - The second parameter is also an object that can be used to pass additional flags. Currently only the key `layers` with an array of layer ids as value is used from the second parameter. It can be used to select the layers to query (defaults to all layers on map that have vector features).
 
-### Allowed events
+### Adding functions for RPC-client
 
-Allowed events (config.allowedEvents) lists all the events that can be listened to over rpc.
-List will be modified on startup so events that are not available in the appsetup will be removed from the list.
+Bundles/functionalities can use `RpcService` to expose functions through RPC:
 
-### Allowed requests
+```
+// listen to application started event and register new RPC function.
+Oskari.on('app.start', function (details) {
+    const rpcService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.rpc.service.RpcService');
 
-Allowed requests (config.allowedRequests) lists all the requests that can be sent over rpc.
-List will be modified on startup so requests that are not available in the appsetup will be removed from the list.
+    if (!rpcService) {
+        return;
+    }
+
+    rpcService.addFunction('example', function () {
+        console.log('New added RPC function');
+        return 'my example result';
+    });
+
+    // async functions can return a promise and signal failure through reject
+    rpcService.addFunction('example2', function () {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => resolve('my async example result'), 500);
+              });
+    });
+});
+```
+On the RPC-client/embedding page:
+
+```
+// now you can call created example function from your published map
+channel.example(function(data) {
+    console.log(data);
+});
+
+channel.example2(function(data) {
+    console.log(data);
+});
+```
 
 ## Using the bundle functionality
 

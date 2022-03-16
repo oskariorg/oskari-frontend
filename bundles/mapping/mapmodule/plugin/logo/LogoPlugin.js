@@ -78,35 +78,45 @@ Oskari.clazz.define(
         _createEventHandlers: function () {
             // TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
             return {
-                'AfterMapLayerRemoveEvent': function (event) {
+                AfterMapLayerRemoveEvent: function (event) {
                     var service = this.getService();
                     if (!service || !event.getMapLayer()) {
                         return;
                     }
                     service.removeItemFromGroup(this.constLayerGroupId, event.getMapLayer().getId());
                 },
-                'AfterMapLayerAddEvent': function (event) {
+                AfterMapLayerAddEvent: function (event) {
                     var layer = event.getMapLayer();
                     var service = this.getService();
                     if (!service || !layer) {
                         return;
                     }
-                    service.addItemToGroup(this.constLayerGroupId, {
-                        'id': layer.getId(),
-                        'name': layer.getName(),
-                        // AH-2182 Show source for user layers
-                        'source': layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
-                    });
+                    service.addItemToGroup(this.constLayerGroupId, this.getItemFromLayer(layer));
                 },
-                'MapSizeChangedEvent': function (event) {
+                MapSizeChangedEvent: function (event) {
                     if (this.dataSourcesDialog) {
                         var target = this.getElement().find('.data-sources');
                         if (target) {
                             this.dataSourcesDialog.moveTo(target, 'top');
                         }
                     }
+                },
+                MapLayerEvent: function (event) {
+                    if (event.getOperation() !== 'update') {
+                        return;
+                    }
+                    const layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+                    if (layer) {
+                        this.getService().updateItem(this.constLayerGroupId, this.getItemFromLayer(layer));
+                    }
                 }
-
+            };
+        },
+        getItemFromLayer: function (layer) {
+            return {
+                id: layer.getId(),
+                name: layer.getName(),
+                source: layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
             };
         },
 

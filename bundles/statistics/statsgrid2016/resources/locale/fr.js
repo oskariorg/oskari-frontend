@@ -106,8 +106,20 @@ Oskari.registerLocalization(
         },
         "classify": {
             "classify": "Classification",
-            "classifymethod": "Méthode de classification",
-            "classes": "Division de catégories",
+            "labels": {
+                "method": "Méthode de classification",
+                "count": "Division de catégories",
+                "mode": "Séparations de catégories",
+                "mapStyle": "Style de carte",
+                "type": "Distribution",
+                "reverseColors": "Passer d'une couleur à l'autre",
+                "color": "Couleur",
+                "colorset": "Couleurs",
+                "pointSize": "Force du corps",
+                "transparency": "Transparence",
+                "showValues": "Afficher les valeurs",
+                "fractionDigits": "Décimales"
+            },
             "methods": {
                 "jenks": "Intervalles naturels",
                 "quantile": "Quantiles",
@@ -119,7 +131,6 @@ Oskari.registerLocalization(
             "nanError": "La valeur saisie n'est pas un chiffre. Corriger la valeur et recommencer. Utiliser le signe décimal comme délimiteur.",
             "infoTitle": "Classification manuelle des intervalles",
             "info": "Saisir les séparations de catégories en tant que chiffres séparés par une virgule. Utiliser le signe décimal comme délimiteur. Par exemple, en saisissant \"0, 10.5, 24, 30.2, 57, 73.1\", on  obtient cinq catégories dont les valeurs se trouvent entre \"0-10,5\", \"10,5-24\", \"24-30,2\", \"30,2-57\" et \"57-73,1\". Les valeurs d'indicateur qui sont plus petites que la séparation de catégorie la plus basse (dans l'exemple précédent 0) ou plus grandes que la séparation de catégorie la plus élevée (73,1) ne sont pas affichées dans la carte. Les séparations de catégories doivent être entre la valeur la plus basse et la plus élevée de l'indicateur.",
-            "mode": "Séparations de catégories",
             "modes": {
                 "distinct": "En continu",
                 "discontinuous": "En discontinu"
@@ -130,29 +141,19 @@ Oskari.registerLocalization(
                 'close': 'Ouvrir l\'éditeur de classification'
             },
             "classifyFieldsTitle": "Valeurs de classification",
-            "map": {
-                "mapStyle": "Style de carte",
+            "mapStyles": {
                 "choropleth": "Carte choroplèthe",
-                "points": "Carte par symboles",
-                "pointSize": "Force du corps",
+                "points": "Carte par symboles"
+            },
+            "pointSizes": {
                 "min": "Minimum",
-                "max": "Maximum",
-                "color": "Couleur",
-                "transparency": "Transparence",
-                "showValues": "Afficher les valeurs",
-                "fractionDigits": "Décimales"
+                "max": "Maximum"
+            },
+            "types": {
+                "seq": "Quantitative",
+                "qual": "Qualitative",
+                "div": "Divergente"
             }
-        },
-        "colorset": {
-            "button": "Couleurs",
-            "flipButton": "Passer d'une couleur à l'autre",
-            "themeselection": "Sélectionner les couleurs pour les catégories",
-            "setselection": "Distribution",
-            "seq": "Quantitative",
-            "qual": "Qualitative",
-            "div": "Divergente",
-            "info2": "Choisir les couleurs en cliquant sur le schéma de couleur.",
-            "cancel": "Annuler"
         },
         "errors": {
             "title": "Erreur",
