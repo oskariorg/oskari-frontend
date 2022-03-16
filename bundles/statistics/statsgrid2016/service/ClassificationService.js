@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
     function (colorService) {
         this._colorService = colorService;
         this.lastUsedBounds = null;
+        this.log = Oskari.log(this.getQName());
     }, {
         __name: 'StatsGrid.ClassificationService',
         __qname: 'Oskari.statistics.statsgrid.ClassificationService',
@@ -26,33 +27,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         // limits should be used when creating UI for classification
         limits: {
-            // 2-9 ranges is what we have colorsets for in colorservice, 5 as default is arbitrary
+            // 2-7 used for points, colorservice's colorsets limits other mapStyles
             count: {
                 min: 2,
-                max: 9,
-                def: 5
+                max: 7
             },
             // values recognized by the code (and geostats)
-            method: ['jenks', 'quantile', 'equal', 'manual'],
+            methods: ['jenks', 'quantile', 'equal', 'manual'],
             // values recognized by the code (and geostats)
-            mode: ['distinct', 'discontinuous'],
+            modes: ['distinct', 'discontinuous'],
             // values recognized by the code (and geostats)
-            mapStyle: ['choropleth', 'points']
+            mapStyles: ['choropleth', 'points']
+        },
+        getRangeForPoints: function () {
+            return { ...this.limits.count };
         },
         getAvailableMethods: function () {
-            return this.limits.method.slice(0);
+            return [...this.limits.methods];
         },
         getAvailableModes: function () {
-            return this.limits.mode.slice(0);
+            return [...this.limits.modes];
         },
         getAvailableMapStyles: function () {
-            return this.limits.mapStyle.slice(0);
+            return [...this.limits.mapStyles];
         },
-        getAvailableOptions: function (data) {
-            var validOpts = {};
-            var list = Array.isArray(data) ? data : this._getDataAsList(data);
-            validOpts.maxCount = list.length - 1;
-            return validOpts;
+        getLimits: function () {
+            return { ...this.limits };
         },
         /**
          * Classifies given dataset.
@@ -85,7 +85,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getClassification: function (indicatorData, options, groupStats) {
             var me = this;
             if (typeof indicatorData !== 'object') {
-                throw new Error('Data expected as object with region/value as keys/values.');
+                this.log.warn('Data expected as object with region/value as keys/values.');
+                return { error: 'noData' };
             }
             var opts = me._validateOptions(options);
             var list = me._getDataAsList(indicatorData);
@@ -93,7 +94,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             if (me._hasNonNumericValues(list)) {
                 // geostats can handle this, but lets not support for now (gstats.getUniqueValues() used previously)
-                throw new Error('Non-numeric data not supported for now');
+                this.log.warn('Non-numeric data not supported for now');
+                return { error: 'noData' };
             }
 
             var stats = new geostats(list);
@@ -122,7 +124,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             if (groupStats) {
                 if (groupStats.serie.length < 3) {
-                    return;
+                    return { error: 'noEnough' };
                 }
                 groupStats.silent = true;
                 groupStats.setPrecision(opts.precision);
@@ -148,8 +150,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stats.setRanges();
             } else {
                 if (list.length < 2) {
-                    return;
+                    return { error: 'noEnough' };
                 } else if (list.length === 2) {
+                    // TODO: these should be handled when options are edited
                     opts.count = list.length;
                     /* Switch method from jenks to quantile with value length of two since geostats.getClassJenks()
                      * does not return bounds correctly with two values
@@ -162,8 +165,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 setBounds(stats);
             }
-
-            response.ranges = stats.ranges;
             response.stats = {
                 min: stats.min(),
                 max: stats.max(),
@@ -175,69 +176,47 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stddev: stats.stddev(),
                 cov: stats.cov()
             };
-            var groups = [];
-            var getGroups = function () {
-                if (groups.length) {
-                    return groups;
-                }
-                // make groups.length equal to opts.count and each item is an array
-                for (var i = 0; i < opts.count; ++i) {
-                    groups.push([]);
-                }
-                for (var region in indicatorData) {
-                    var value = indicatorData[region];
-                    if (typeof value === 'undefined') {
-                        // no value for region -> skip
-                        continue;
-                    }
-                    var index = stats.getRangeNum(value);
-                    groups[index].push(region);
-                }
-                return groups;
-            };
-            response.getGroups = function (index) {
-                var groups = getGroups();
-                if (index || index === 0) {
-                    if (index < 0 || index >= groups.length) {
-                        throw new Error('Grouped to ' + groups.length + ' parts, ' +
-                            index + ' is out of bounds.');
-                    }
-                    return groups[index];
-                }
-                return groups;
-            };
-            // functions in response
-            response.getIndex = function (value) {
-                return stats.getRangeNum(value);
-            };
-            // createLegend
-            response.createLegend = function (colors, title) {
-                // Point legend
-                if (opts.mapStyle === 'points') {
-                    stats.doCount();
-                    var counter = stats.counter;
-                    var ranges = stats.getRanges();
-                    if (opts.mode === 'discontinuous') {
-                        ranges = stats.getInnerRanges();
-                    }
 
-                    if (!ranges) {
-                        return;
-                    }
+            let ranges;
+            if (opts.method === 'manual') {
+                ranges = this.getRangesFromBounds(response.bounds);
+            } else {
+                ranges = opts.mode === 'discontinuous' ? stats.getInnerRanges() : stats.getRanges();
+            }
+            // TODO: could use regionIds.length where count is needed
+            stats.doCount();
+            const counts = stats.counter;
+            const colors = this._colorService.getColorsForClassification(options);
+            const pixels = this.getPixelsForClassification(options);
 
-                    return me._getPointsLegend(ranges, opts, colors[0], counter,
-                        {
-                            separator: stats.separator,
-                            legendSeparator: stats.legendSeparator
-                        },
-                        formatter
-                    );
+            if (![colors, pixels, counts, ranges].every(list => list.length === opts.count)) {
+                this.log.warn('Failed to create groups');
+                return { error: 'general' };
+            }
+            const groups = [];
+            for (let i = 0; i < opts.count; i++) {
+                const group = {
+                    sizePx: pixels[i],
+                    range: ranges[i],
+                    color: colors[i],
+                    count: counts[i],
+                    regionIds: []
+                };
+                groups.push(group);
+            }
+            for (const region in indicatorData) {
+                const value = indicatorData[region];
+                if (typeof value === 'undefined') {
+                    // no value for region -> skip
+                    continue;
                 }
-                // Choropleth  legend
-                stats.setColors(colors);
+                var index = stats.getRangeNum(value);
+                groups[index].regionIds.push(region);
+            }
+            response.groups = groups;
+            response.format = formatter.format;
 
-                return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
-            };
+            // TODO: could add bounds to groups (and maybe remove range as its parsed and formatted for legend)
             this.lastUsedBounds = response.bounds;
             var maxBounds = [];
             if (response.bounds) {
@@ -252,35 +231,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
             }
             response.maxBounds = maxBounds;
+            response.getHtmlLegend = function (colors) {
+                // Choropleth  legend
+                return stats.getHtmlLegend(colors, '', true, formatter.format, opts.mode);
+            };
             return response;
         },
-        getPixelForSize: function (index, size, range) {
-            var iconSize = size || {};
-            var ranges = range || {};
-            if (!iconSize.min) {
-                iconSize.min = 10;
-            }
-            if (!iconSize.max) {
-                iconSize.max = 150;
-            }
-            if (!ranges.min) {
-                ranges.min = 0;
-            }
-            if (!ranges.max) {
-                ranges.max = 4;
-            }
+        getPixelsForClassification: function (classification, index) {
+            const { min, max, count } = classification;
 
-            var x = d3.scaleLinear()
-                .domain([ranges.min, ranges.max])
-                .range([iconSize.min, iconSize.max]);
+            const x = d3.scaleLinear()
+                .domain([0, count - 1])
+                .range([min, max]);
 
-            // Make size an even value for rendering
-            size = Math.floor(x(index));
-            if (size % 2 !== 0) {
-                size += 1;
+            const getSize = index => {
+                const size = Math.floor(x(index));
+                // Make size an even value for rendering
+                return size % 2 !== 0 ? size + 1 : size;
+            };
+
+            if (typeof index !== 'undefined') {
+                return getSize(index);
             }
-
-            return size;
+            const sizes = [];
+            for (let i = 0; i < count; i++) {
+                sizes.push(getSize(i));
+            }
+            return sizes;
+        },
+        getRangesFromBounds: function (bounds) {
+            const ranges = [];
+            for (let i = 0; i < bounds.length - 1; i++) {
+                ranges.push(bounds[i] + ' - ' + bounds[i + 1]);
+            }
+            return ranges;
         },
         getBoundsFallback: function (bounds, count, dataMin, dataMax) {
             return this._tryKnownBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
@@ -309,173 +293,41 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 .slice(0, -2)
                 .concat(extraNeeded);
         },
-        _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {
-            var me = this;
-            var x = 0;
-            var y = 0;
-            var fontSize = 8;
-
-            var legend = jQuery('<div class="statsgrid-svg-legend"></div>');
-            var svg = jQuery('<svg xmlns="http://www.w3.org/2000/svg">' +
-                '   <svg class="symbols"></svg>' +
-                '</svg>');
-
-            var pointSymbol = jQuery('<div>' +
-                '       <svg x="0" y="0">' +
-                '           <circle stroke="#000000" stroke-width="0.7" fill="#ff0000" cx="32" cy="32" r="31"></circle>' +
-                '       </svg>' +
-                '</div>');
-
-            var lineAndText = jQuery('<div>' +
-                '   <svg>' +
-                '       <g>' +
-                '           <svg>' +
-                '               <line stroke="#000000" stroke-width="1"></line>' +
-                '           </svg>' +
-                '       </g>' +
-                '   </svg>' +
-                '</div>');
-
-            var maxSize = me.getPixelForSize(ranges.length - 1,
-                {
-                    min: opts.min,
-                    max: opts.max
-                }, {
-                    min: 0,
-                    max: opts.count - 1
-                }
-            );
-
-            var minSize = me.getPixelForSize(0,
-                {
-                    min: opts.min,
-                    max: opts.max
-                }, {
-                    min: 0,
-                    max: opts.count - 1
-                }
-            );
-
-            svg.attr('height', maxSize + fontSize + 2);
-            svg.find('svg.texts').attr('y', fontSize);
-            svg.find('svg.texts').attr('height', maxSize + fontSize);
-
-            var legendValuesPosition = function (size, index) {
-                var step = (maxSize - minSize / 2) / (ranges.length - 1);
-                var y = (ranges.length - index - 1) * step;
-                y += fontSize + 2;
-                return {
-                    x1: maxSize / 2,
-                    x2: maxSize + 10,
-                    y1: y,
-                    y2: y
-                };
-            };
-
-            var classificationLabelCorrection = function (index) {
-                return ((ranges.length - 1 - index) / (ranges.length - 1) * fontSize) / 2;
-            };
-
-            ranges.forEach(function (range, index) {
-                // Create point symbol
-                var point = pointSymbol.clone();
-                var svgMain = point.find('svg').first();
-
-                var tmp = range.split(statsOpts.separator);
-                var startValue = formatter.format(parseFloat(tmp[0]));
-                var endValue = formatter.format(parseFloat(tmp[1]));
-
-                var size = me.getPixelForSize(index,
-                    {
-                        min: opts.min,
-                        max: opts.max
-                    }, {
-                        min: 0,
-                        max: opts.count - 1
-                    }
-                );
-                svgMain.find('circle').attr('cx', size / 2 + 1);
-                svgMain.find('circle').attr('cy', size / 2 + 1);
-                svgMain.find('circle').attr('r', size / 2);
-                x = (maxSize - size) / 2;
-                y = maxSize + fontSize - size;
-
-                svgMain.attr('x', x);
-                svgMain.attr('y', y);
-                svgMain.attr('width', size + 2);
-                svgMain.attr('height', size + 2);
-
-                var circle = point.find('circle');
-                circle.attr({
-                    'fill': color
-                });
-
-                svg.find('svg.symbols').prepend(point.html());
-
-                // Create texts and lines
-                var label = lineAndText.clone();
-                var line = label.find('line');
-                var valPos = legendValuesPosition(size, index);
-                line.attr({
-                    x1: valPos.x1,
-                    y1: valPos.y1,
-                    x2: valPos.x2,
-                    y2: valPos.y2,
-                    'shape-rendering': 'crispEdges'
-                });
-
-                var count = counter[index];
-                var text = startValue + statsOpts.legendSeparator + endValue;
-                if (startValue === endValue) {
-                    text = startValue;
-                }
-                var textSvgEl = jQuery('<svg>' +
-                '   <text fill="#000000" font-size="' + fontSize + '" letter-spacing="0.7">' +
-                    text + '<tspan font-size="' + fontSize + '" fill="#666" dx="4">(' + count + ')</tspan>' +
-                '   </text>' +
-                '</svg>');
-
-                textSvgEl.find('text').attr({
-                    x: valPos.x2 + 4,
-                    y: valPos.y2 + classificationLabelCorrection(index)
-                });
-
-                label.find('g').append(textSvgEl);
-                svg.find('svg.symbols').prepend(label.html());
-            });
-
-            legend.append(svg);
-            return legend;
-        },
         /**
          * Validates and normalizes options
          * @param  {Object} options options for classification
          * @return {Object}         normalized options
          */
+        // TODO: should validate earlier
         _validateOptions: function (options) {
             var opts = options || {};
-            opts.count = opts.count || this.limits.count.def;
+            opts.count = opts.count || 5;
             opts.type = opts.type || 'seq';
 
-            var range = this._colorService.getRange(opts.type, opts.mapStyle);
+            var range = opts.mapStyle === 'points'
+                ? this.getRangeForPoints()
+                : this._colorService.getRange(opts.type, opts.mapStyle);
             if (opts.count < range.min) {
                 // no need to classify if partitioning to less than 2 groups
                 throw new Error('Requires atleast ' + range.min + ' partitions. Count was ' + opts.count);
             }
+            // TODO: can't update values on validate
             if (opts.count > range.max) {
                 opts.count = range.max;
             }
             // maybe validate max count?
-            opts.method = opts.method || this.limits.method[0];
+            const methods = this.getAvailableMethods();
+            opts.method = opts.method || methods[0];
             // method needs to be one of 'jenks', 'quantile', 'equal', 'manual'
-            if (this.limits.method.indexOf(opts.method) === -1) {
-                throw new Error('Requested method not allowed: ' + opts.method + '. Allowed values are: ' + this.limits.method.join());
+            if (methods.indexOf(opts.method) === -1) {
+                throw new Error('Requested method not allowed: ' + opts.method + '. Allowed values are: ' + methods.join());
             }
 
             // Jatkuva / epäjatkuva
-            opts.mode = opts.mode || this.limits.mode[0];
-            if (this.limits.mode.indexOf(opts.mode) === -1) {
-                throw new Error('Requested mode not allowed: ' + opts.mode + '. Allowed values are: ' + this.limits.mode.join());
+            const modes = this.getAvailableModes();
+            opts.mode = opts.mode || modes[0];
+            if (modes.indexOf(opts.mode) === -1) {
+                throw new Error('Requested mode not allowed: ' + opts.mode + '. Allowed values are: ' + modes.join());
             }
             return opts;
         },

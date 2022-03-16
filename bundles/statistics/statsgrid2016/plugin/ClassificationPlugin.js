@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { GenericContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
 import { ManualClassificationView } from '../components/manualClassification/View';
 import '../resources/scss/classificationplugin.scss';
@@ -63,49 +63,34 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             this._overflowCheck();
         },
-        render: function (activeClassfication) {
+        render: function () {
             if (!this.node) {
                 return;
             }
-            const stateService = this.service.getStateService();
-            const activeIndicator = stateService.getActiveIndicator();
-            const regionset = stateService.getRegionset();
-            if (!activeIndicator || !regionset) return;
-            const indicators = this.getIndicatorProps(activeIndicator, regionset);
-            const indicatorData = this.getIndicatorData(activeIndicator, regionset, stateService.isSeriesActive());
-            if (indicatorData.status === 'PENDING') return;
-            const classifications = this.getClassificationProps(activeIndicator, activeClassfication, indicatorData);
-            const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
-            const controller = this.service.getStateService().getClassificationController();
-            const classification = legendProps.classification;
-            // TODO: These should be handled elsewhere
-            if (classification) {
-                if (classifications.values.method === 'manual' && !classifications.values.manualBounds) {
-                    // store manual bounds based on last used bounds
-                    controller.updateClassification('manualBounds', classification.bounds);
-                    return;
-                }
-                if (classifications.values.count !== classification.getGroups().length) {
-                    // classification count changed!!
-                    controller.updateClassification('count', classification.getGroups().length);
-                    return;
-                }
-            }
-            const pluginState = this.service.getStateService().getClassificationPluginState();
-            const manualView = this.getManualViewProps(classifications.values);
+            const { error, ...state } = this.service.getStateService().getStateForClassification();
+            if (error) return;
+            const { data, status, validDataCount } = this.getIndicatorData(state);
+            if (status === 'PENDING') return;
+            const editOptions = this.getEditOptions(state, validDataCount);
+            const classifiedDataset = this.classifyDataset(state, data);
+            const manualView = this.getManualViewProps(state);
 
             ReactDOM.render((
-                <GenericContext.Provider value={{ loc: this._locale }}>
-                    <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps} pluginState = {pluginState}
+                <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
+                    <Classification
+                        { ...state }
+                        editOptions = {editOptions}
+                        classifiedDataset = {classifiedDataset}
+                        manualView = {manualView}
+                        data = {data}
                         onRenderChange = {this.rendered.bind(this)}
-                        indicatorData = {indicatorData}
-                        controller = {controller}
-                        manualView = {manualView}/>
-                </GenericContext.Provider>
+                    />
+                </LocaleProvider>
             ), this.node);
         },
-        getIndicatorData: function (activeIndicator, activeRegionset, isSerie) {
+        getIndicatorData: function (state) {
+            const { activeIndicator, regionset: activeRegionset } = state;
+            const isSerie = !!activeIndicator.series;
             const { status, hash, regionset } = this.indicatorData;
             const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
             if (status !== 'PENDING' && hash === activeIndicator.hash && regionset === activeRegionset) {
@@ -117,12 +102,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 hash: activeIndicator.hash,
                 regionset: activeRegionset,
                 data: {},
+                validDataCount: 0,
                 serieSelection,
                 status: 'PENDING'
             };
             this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
                 if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
+                    this.indicatorData.validDataCount = Object.values(data).filter(val => val !== undefined).length;
                     this.indicatorData.data = data;
                     this.indicatorData.status = 'DONE';
                 }
@@ -134,64 +121,62 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             });
             return this.indicatorData;
         },
-        getIndicatorProps: function (active, regionset) {
-            const indicators = {
-                active,
-                regionset,
-                selected: []
-            };
-            if (active.series) {
-                indicators.serieStats = this.service.getSeriesService().getSeriesStats(active.hash);
+        getEditOptions: function (state, validDataCount) {
+            // TODO validate values here or in controller
+            const { activeIndicator } = state;
+            const { type, count, reverseColors, mapStyle } = activeIndicator.classification;
+            const { count: minmax, methods, modes, mapStyles } = this.service.getClassificationService().getLimits();
+            const colorsService = this.service.getColorService();
+            const types = colorsService.getAvailableTypes();
+
+            let colorsets = [];
+            let max = minmax.max;
+            if (mapStyle !== 'points') {
+                colorsets = colorsService.getOptionsForType(type, count, reverseColors);
+                const { max: colorMax } = colorsService.getRange(type);
+                max = colorMax;
             }
-            this.service.getStateService().getIndicators().forEach((ind) => {
-                this.service.getUILabels(ind, label => {
-                    indicators.selected.push({
-                        id: ind.hash,
-                        title: label.full
-                    });
-                });
+            const dataMax = validDataCount - 1;
+            const counts = [];
+            // TODO disable invalid counts?
+            for (let i = minmax.min; i <= Math.min(dataMax, max); i++) {
+                counts.push({ value: i });
+            }
+            const disabled = [];
+            if (validDataCount < 3) {
+                disabled.push('jenks');
+            }
+            if (activeIndicator.series) {
+                // Discontinous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
+                disabled.push('discontinuous');
+            }
+            const toOption = (option, value) => ({
+                value,
+                title: this._locale(`classify.${option}.${value}`),
+                disabled: disabled.includes(value)
             });
 
-            return indicators;
-        },
-        getClassificationProps: function (activeIndicator, classification, indicatorData) {
-            const props = {
-                countRange: []
+            return {
+                methods: methods.map(val => toOption('methods', val)),
+                modes: modes.map(val => toOption('modes', val)),
+                mapStyles: mapStyles.map(val => toOption('mapStyles', val)),
+                types: types.map(val => toOption('types', val)),
+                counts,
+                colorsets
             };
-            const service = this.service.getClassificationService();
-            const colorsService = this.service.getColorService();
-            const values = classification || this.service.getStateService().getClassificationOpts(activeIndicator.hash);
-            props.values = values;
-            props.methods = service.getAvailableMethods();
-            props.modes = service.getAvailableModes();
-            props.mapStyles = service.getAvailableMapStyles();
-            props.types = colorsService.getAvailableTypes();
-            props.validOptions = service.getAvailableOptions(indicatorData.data);
-            if (values.mapStyle !== 'choropleth') {
-                props.colors = colorsService.getDefaultSimpleColors();
-            } else {
-                props.colors = colorsService.getOptionsForType(values.type, values.count, values.reverseColors);
-            }
-            const range = colorsService.getRange(values.type, values.style);
-            for (let i = range.min; i <= range.max; i++) {
-                props.countRange.push(i);
-            }
-            return props;
         },
-        getLegendProps: function (data, classificationOpts, serieStats) {
-            const props = {};
-            if (Object.keys(data).length !== 0) {
-                props.classification = this.service.getClassificationService().getClassification(data, classificationOpts, serieStats);
-            }
-            props.colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-            return props;
+        classifyDataset: function (state, data) {
+            const { activeIndicator: { classification }, seriesStats } = state;
+            return this.service.getClassificationService().getClassification(data, classification, seriesStats);
         },
-        getManualViewProps: function (classification) {
+        getManualViewProps: function (state) {
+            const { classification } = state.activeIndicator;
             if (classification.method !== 'manual') return;
             const { seriesService, classificationService, colorService } = this.service.getAllServices();
             return {
                 view: new ManualClassificationView(classificationService, colorService, classification),
-                setAnimating: seriesService.setAnimating
+                setAnimating: seriesService.setAnimating,
+                btnLabel: this._locale('classify.edit.title')
             };
         },
 
@@ -225,7 +210,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.trigger('show');
         },
         _makeDraggable: function () {
-            this.getElement().draggable();
+            this.getElement().draggable({
+                handle: '.active-header,.statsgrid-svg-legend'
+            });
         },
         getElement: function () {
             return this.element;
@@ -287,22 +274,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         _bindToEvents: function () {
             // if indicator is removed/added - recalculate the source 1/2 etc links
-            this.service.on('StatsGrid.IndicatorEvent', event => this.render());
+            this.service.on('StatsGrid.IndicatorEvent', () => this.render());
 
             // Always show the active indicator - also handles "no indicator selected"
-            this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event => this.render());
+            this.service.on('StatsGrid.ActiveIndicatorChangedEvent', () => this.render());
 
             // need to update the legend as data changes when regionset changes
-            this.service.on('StatsGrid.RegionsetChangedEvent', event => this.render());
+            this.service.on('StatsGrid.RegionsetChangedEvent', () => this.render());
 
-            this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
+            this.service.on('StatsGrid.ClassificationChangedEvent', () => this.render());
 
             // UI styling changes e.g. disable classification editing, make transparent
             this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
             // need to update transparency select
-            this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
+            this.service.on('AfterChangeMapLayerOpacityEvent', () => this.render());
             // need to calculate contents max height and check overflow
-            this.service.on('MapSizeChangedEvent', event => this.render());
+            this.service.on('MapSizeChangedEvent', () => this.render());
             // need to update labels
             this.service.on('StatsGrid.ParameterChangedEvent', () => this.render());
         }

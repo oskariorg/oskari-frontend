@@ -187,6 +187,15 @@ Oskari.clazz.define(
                     'MetadataSearchRequest'
                 ];
             }
+
+            if (Array.isArray(conf.addEvents)) {
+                allowedEvents.push(...conf.addEvents);
+            }
+
+            if (Array.isArray(conf.addRequests)) {
+                allowedRequests.push(...conf.addRequests);
+            }
+
             // try to get event/request builder for each of these to see that they really are supported!!
             me.__setupAvailableEvents(allowedEvents);
             me.__setupAvailableRequests(allowedRequests);

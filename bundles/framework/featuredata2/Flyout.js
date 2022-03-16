@@ -219,6 +219,10 @@ Oskari.clazz.define(
                 this._updatePanels(layerIds);
                 return;
             }
+            if (updated === 'layerUpdate') {
+                this.updatePanelTitles();
+                return;
+            }
             if (state.isActive) {
                 this._renderFeatureData(state);
             }

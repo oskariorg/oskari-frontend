@@ -12,7 +12,7 @@
         this.cache = Oskari.clazz.create('Oskari.statistics.statsgrid.Cache');
         _cacheHelper = Oskari.clazz.create('Oskari.statistics.statsgrid.CacheHelper', this.cache, this);
         this.series = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesService', sandbox);
-        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this.series);
+        this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
@@ -29,6 +29,8 @@
 
         // Make series service listen for changes
         this.series.bindToEvents(this);
+
+        this.log = Oskari.log(this.getQName());
     }, {
         __name: 'StatsGrid.StatisticsService',
         __qname: 'Oskari.statistics.statsgrid.StatisticsService',
@@ -117,7 +119,7 @@
         getUILabels: function (ind, callback) {
             var selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested UI labels without callback function');
                 return;
             }
             const { datasource, indicator, selections, series } = ind;
@@ -242,11 +244,11 @@
          */
         getRegions: function (regionset, callback) {
             if (typeof callback !== 'function') {
-                // log error message
+                this.log.warn('Requested regions without callback function');
                 return;
             }
             if (!regionset) {
-                // log error message
+                this.log.warn('Requested regions without regionset');
                 callback('Regionset missing');
                 return;
             }

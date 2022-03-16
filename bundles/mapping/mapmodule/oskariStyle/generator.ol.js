@@ -350,31 +350,29 @@ export const getFillPatternPath = (size, fillCode) => {
 };
 
 const getDiagonalPattern = (size, lineWidth) => {
-    const numberOfStripes = lineWidth > 2 ? 12 : 18;
-    const bandWidth = size / numberOfStripes;
+    const whiteSpace = lineWidth * 2 + 2;
+    const bandWidth = lineWidth + whiteSpace;
+    const transition = size / Math.floor(size / bandWidth);
     const path = [];
-    for (let i = 0; i < numberOfStripes * 2 + 2; i++) {
-        if (i % 2 === 0) {
-            continue;
-        }
-        const a = i * bandWidth + bandWidth / 2;
-        path.push(`M${a},0`);
-        path.push(`L${a - size},${size}`);
+    for (let t = transition / 2; t < size; t += transition) {
+        path.push(`M${t},0`);
+        path.push(`L0,${t}`);
+    }
+    for (let t = transition / 2; t < size; t += transition) {
+        path.push(`M${t},${size}`);
+        path.push(`L${size},${t}`);
     }
     return path.join(' ');
 };
 
 const getHorizontalPattern = (size, lineWidth) => {
-    const numberOfStripes = lineWidth > 2 ? 16 : 18;
-    const bandWidth = size / numberOfStripes;
+    const whiteSpace = lineWidth + 2;
+    const bandWidth = lineWidth + whiteSpace;
+    const transition = size / Math.floor(size / bandWidth);
     const path = [];
-    for (let i = 0; i < numberOfStripes; i++) {
-        if (i % 2 === 0) {
-            continue;
-        }
-        const b = i * bandWidth + bandWidth / 2;
-        path.push(`M0,${b}`);
-        path.push(`L${size},${b}`);
+    for (let y = transition / 2; y < size; y += transition) {
+        path.push(`M0,${y}`);
+        path.push(`L${size},${y}`);
     }
     return path.join(' ');
 };

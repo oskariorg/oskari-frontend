@@ -26,17 +26,21 @@ Oskari.registerLocalization(
                     "description": "Beskrivning",
                     "publish": "Publicerad",
                     "edit": "Redigera",
-                    "delete": "Ta bort"
+                    "delete": "Ta bort",
+                    "default": "" // Förval
                 },
                 "popup": {
-                    "edit": "Redigera kartvyn",
-                    "title": "Spara kartvyn",
-                    "label": "Kartvyns namn",
-                    "name_placeholder": "Namnge kartvyn",
-                    "description_placeholder": "Beskriv kartvyn",
-                    "save": "Spara",
-                    "cancel": "Avbryt",
-                    "error_noname": "Skriv namnet på kartvyn",
+                    "title" : {
+                        "edit": "Redigera kartvyn",
+                        "save": "Spara kartvyn"
+                    },
+                    "label": {
+                        "name": "Namnge kartvyn",
+                        "description": "Beskriv kartvyn",
+                        "default": "" //Förvalt kartvyn
+                    },
+                    "defaultName": "{now, date} {now, time, short}", // Egna kartvyn
+                    "noName": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
                     "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
                 },
@@ -84,7 +88,8 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
-                    "copy": "Kopiera till klippbordet"
+                    "copy": "Kopiera till klippbordet",
+                    "copied": "Kopieras"
                 },
                 "popup": {
                     "edit": "Byt namn på kartan",
@@ -96,6 +101,7 @@ Oskari.registerLocalization(
                     "error_noname": "Namnge kartan",
                     "deletetitle": "Ta bort den inbäddade kartan",
                     "deletemsg": "Vill du ta bort den inbäddade kartan \"{name}\"? Efter radering kartan kommer inte längre att visas på din webbplats.",
+                    "unpublishmsg": "Är du säker på att du vill avbryta kartpubliceringen \"{name}\"? Den inbäddade kartan syns därefter inte mera på din webbsida, men du kan återställa den senare.",
                     "showErrorTitle": "Ofullständig kartvy",
                     "showConfirmMissing": "Kartvyn är ofullständig. Några av kartlagren är inte tillgängliga. Vill du fortfarande öppna den här kartvyn?",
                     "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned. Försök på nytt senare."
