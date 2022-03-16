@@ -220,4 +220,19 @@ export const showBanner = (content, onClose, options = {}) => {
         close: removeWindow,
         bringToTop
     };
-}
+};
+
+export const getNavigationDimensions = () => {
+    let nav = [...Oskari.getRootEl().children].find(c => c.localName === 'nav');
+    if (!nav) {
+        return null;
+    }
+    return {
+        top: nav.offsetTop,
+        left: nav.offsetLeft,
+        width: nav.clientWidth,
+        height: nav.clientHeight,
+        right: nav.offsetLeft + nav.clientWidth,
+        bottom: nav.offsetTop + nav.clientHeight
+    };
+};
