@@ -709,16 +709,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
                 // fix layers content height
                 me._handleMapSizeChanged(size, false);
-
-                var layersTitle = div.find('.content-header');
-
-                if (layersTitle.length == 0) {
-                    layersTitle = div.find('.header');
-                }
-
-                // Get layers title height
-                if (layersTitle.length > 0) {
-                }
             }
 
             me._rebindHandlers();

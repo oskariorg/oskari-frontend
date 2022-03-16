@@ -80,10 +80,10 @@ const filterGroups = (groups = [], searchText) => {
         group.groups = filterGroups(group.groups, searchText);
         if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
-            return;
+            return null;
         }
         return group;
-    }).filter(group => typeof group !== 'undefined');
+    }).filter(group => !!group);
 };
 
 /* ------------- /Helpers ------ */

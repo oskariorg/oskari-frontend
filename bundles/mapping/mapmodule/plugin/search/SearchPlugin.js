@@ -298,10 +298,6 @@ Oskari.clazz.define(
          * Detects if <enter> key was pressed and calls #_doSearch if it was
          */
         _checkForEnter: function (event) {
-            if (window.event) {
-            } else if (event) {
-            }
-
             if (event.keyCode === 13) {
                 this._doSearch();
             }

@@ -775,10 +775,15 @@ class MapModuleOlCesium extends MapModuleOl {
             const cameraHeight = this._zoomToAltitude(zoom);
             const duration = options.duration ? options.duration : 3000;
             const animationDuration = duration / 1000;
-            const camera = options.heading && options.roll && options.pitch
-                ? { heading: options.heading,
+
+            let camera;
+            if (options.heading && options.roll && options.pitch) {
+                camera = {
+                    heading: options.heading,
                     roll: options.roll,
-                    pitch: options.pitch } : undefined;
+                    pitch: options.pitch
+                };
+            }
             const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
@@ -875,11 +880,17 @@ class MapModuleOlCesium extends MapModuleOl {
         const cameraHeight = this._zoomToAltitude(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
-        const cameraOptions = options.camera;
-        const camera = cameraOptions
-            ? { heading: Cesium.Math.toRadians(cameraOptions.heading),
-                roll: Cesium.Math.toRadians(cameraOptions.roll),
-                pitch: Cesium.Math.toRadians(cameraOptions.pitch) } : undefined;
+        const getCameraOpts = (opts, defaultOpts) => {
+            if (!opts) {
+                return defaultOpts;
+            }
+            return {
+                heading: Cesium.Math.toRadians(opts.heading),
+                roll: Cesium.Math.toRadians(opts.roll),
+                pitch: Cesium.Math.toRadians(opts.pitch)
+            };
+        };
+        const camera = getCameraOpts(options.camera);
         let index = 0;
         let delay = 0;
         let status = { steps: coordinates.length, step: 0 };
@@ -889,10 +900,7 @@ class MapModuleOlCesium extends MapModuleOl {
             if (index < coordinates.length) {
                 const location = coords[index];
                 const locOptions = coordinates[index];
-                const cameraValues = locOptions.camera
-                    ? { heading: Cesium.Math.toRadians(locOptions.camera.heading),
-                        roll: Cesium.Math.toRadians(locOptions.camera.roll),
-                        pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
+                const cameraValues = getCameraOpts(locOptions.camera, camera);
                 const heightValue = locOptions.zoom ? this._zoomToAltitude(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };

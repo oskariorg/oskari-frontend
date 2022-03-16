@@ -172,13 +172,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
          *      list of layers to render
          * @return {jQuery} DOM element with layer listing
          */
-        _getRenderedLayerList: function (list) {
+        _getRenderedLayerList: function (list = []) {
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
             var listItemTemplate = this.templateListItem;
             var map = this.instance.sandbox.getMap();
 
-            (list || []).forEach((layer) => {
+            list.forEach((layer) => {
                 var item = listItemTemplate.clone();
                 var txt = layer.getName();
                 var reasons = [];
@@ -190,10 +190,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     reasons.push(this.loc.noRights);
                 }
                 if (!map.isLayerSupported(layer)) {
-                    reasons = reasons.concat(map.getUnsupportedLayerReasons(layer).map(
-                        cur => cur instanceof UnsupportedLayerSrs
-                            ? this.loc.unsupportedProjection : cur.getDescription().replace(/\./g, '')
-                    ));
+                    reasons = reasons.concat(map.getUnsupportedLayerReasons(layer)
+                        .map(cur => {
+                            if (cur instanceof UnsupportedLayerSrs) {
+                                return this.loc.unsupportedProjection;
+                            }
+                            return cur.getDescription().replace(/\./g, '');
+                        })
+                    );
                 }
                 if (reasons.length) {
                     txt += ' (' + reasons.join(', ') + ')';

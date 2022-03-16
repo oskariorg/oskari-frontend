@@ -675,10 +675,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._loadedLayersList = layers;
             } else {
                 // Clear data provider from needed layers.
-                this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => {
-                    l._organizationName = '';
-                    delete l.admin.organizationId;
-                });
+                this.getAllLayers()
+                    .filter(l => l.admin && l.admin.organizationId === dataProvider.id)
+                    .forEach(l => {
+                        l._organizationName = '';
+                        delete l.admin.organizationId;
+                    });
             }
             this.trigger('dataProvider.update');
         },

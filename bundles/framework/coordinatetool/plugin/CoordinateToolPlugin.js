@@ -867,7 +867,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     function (responseDataTo4326) {
                         me._updateEmergencyCallMessage(responseDataTo4326);
                     },
-                    function (error) {
+                    function () {
                         me._coordinateTransformationExtension._showMessage(me._locale('display.cannotTransformCoordinates.title'), me._locale('cannotTransformCoordinates.message'));
                     });
             }

@@ -85,10 +85,10 @@ const filterOutEmptyGroups = (groups = []) => {
         group.groups = filterOutEmptyGroups(group.groups);
         if (!group.layers.length && !group.groups.length) {
             // no layers and no subgroups with layers
-            return;
+            return null;
         }
         return group;
-    }).filter(group => typeof group !== 'undefined');
+    }).filter(group => !!group);
 };
 /**
  * Function to construct layer groups based on information included in layers and given grouping method.
