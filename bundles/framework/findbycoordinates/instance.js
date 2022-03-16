@@ -134,7 +134,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         startTool: function () {
             var me = this;
             me.tool.active = true;
-            jQuery('#mapdiv').addClass('findbycoordinates-cursor');
+            const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            mapmodule.getMapEl().addClass('findbycoordinates-cursor');
             me._hidePopups();
             me.enableGFI(false);
         },
@@ -154,7 +155,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 sandbox.request(this, spinnerRequestBuilder(false));
             }
             this.tool.active = false;
-            jQuery('#mapdiv').removeClass('findbycoordinates-cursor');
+            const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            mapmodule.getMapEl().removeClass('findbycoordinates-cursor');
             this.enableGFI(true);
         },
         /**

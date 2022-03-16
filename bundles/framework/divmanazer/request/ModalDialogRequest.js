@@ -7,7 +7,7 @@ Oskari.clazz
             this._title = title || 'Untitled';
             this._message = message || 'Lorem ipsum';
             this._buttons = buttons || {};
-            this._parent = parent || jQuery('#mapdiv');
+            this._parent = parent || jQuery(Oskari.getRootEl());
             this._onshow = onshow || null;
         }, {
             __name: 'userinterface.ModalDialogRequest',

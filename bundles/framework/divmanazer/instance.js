@@ -1,3 +1,4 @@
+import { getNavigationDimensions } from 'oskari-ui/components/window';
 /**
  * @class Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance
  *
@@ -182,11 +183,30 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             this.sandbox.unregister(this);
             this.started = false;
         },
+        // TODO: rename "getDefaultFlyoutPosition()"?
         getMapdivOffset: function () {
-            var mapdiv = jQuery('#mapdiv');
+            const dimensions = getNavigationDimensions();
+            if (!dimensions) {
+                // no nav
+                return {
+                    top: 0,
+                    left: 0
+                };
+            }
+
+            let left = 0;
+            let top = 0;
+            if (dimensions.left === 0) {
+                // menu on left side -> make flyouts open next to it
+                left = dimensions.width;
+            }
+            if (dimensions.width > dimensions.height) {
+                // menu on top -> make flyouts open under
+                top = dimensions.height;
+            }
             return {
-                'top': mapdiv.offset().top,
-                'left': mapdiv.offset().left
+                top,
+                left
             };
         },
         /**
