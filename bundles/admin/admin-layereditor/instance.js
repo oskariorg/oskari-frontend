@@ -302,22 +302,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             }
             return this.flyout;
         }
-        // TODO: rename "getNavigationOffset"
-        getNavigationOffset () {
-            const rootEl = jQuery(Oskari.getRootEl());
-            let left = 0;
-            let top = 0;
-            const nav = rootEl.find('nav');
-            const navPosition = nav.position();
-            if (navPosition.left === 0) {
-                // menu on left side -> make flyouts open next to it
-                left = navPosition.left + nav.width();
-            }
-            return {
-                top,
-                left
-            };
-        }
 
         /**
          * @method _getThemeFlyout
