@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ master, develop ]
 
+# Cancel job when new commit is pushed for the same build
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#concurrency
+# https://github.com/OSGeo/gdal/pull/5460
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
