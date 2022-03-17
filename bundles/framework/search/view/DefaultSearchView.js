@@ -10,6 +10,7 @@ import styled from 'styled-components';
 
 const Description = styled('div')`
     margin-bottom: 8px;
+    max-width: 55%;
 `;
 
 /**
