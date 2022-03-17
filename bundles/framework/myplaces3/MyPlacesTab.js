@@ -3,6 +3,7 @@ import React from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
 import { MyPlacesLayerControls } from './MyPlacesLayerControls';
 import { LOCALE_KEY } from './constants';
+import { MyPlacesList } from './MyPlacesList';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
@@ -23,10 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
         this.loc = Oskari.getMsg.bind(null, LOCALE_KEY);
         this.tabsContainer = undefined;
         this.tabPanels = {};
-
-        this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
-        this.iconTemplate = jQuery('<div class="icon"></div>');
-        this.descriptionTemplate = jQuery('<div></div>');
+        this.places = [];
     }, {
         /**
          * @method getName
@@ -96,15 +94,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                         this.tabsContainer.updatePanel(panel);
                     }
                     // update places
-                    this._populatePlaces(categoryId);
+                    const places = this._populatePlaces(categoryId);
                     panel.getContainer().empty();
-                    panel.grid.renderTo(panel.getContainer());
+
+                    const listContainer = document.createElement('div');
+                    panel.getContainer().append(listContainer);
 
                     const modalWrapper = jQuery('<div class="myplaces-modal-wrapper"></div>');
                     panel.getContainer().append(modalWrapper);
 
                     const values = categoryHandler.getCategory(categoryId);
                     const container = jQuery(modalWrapper)[0];
+
+                    ReactDOM.render(
+                        <MyPlacesList
+                            data={places}
+                            handleDelete={(data) => this.deletePlace(data)}
+                            handleEdit={(data) => this.editPlace(data)}
+                            showPlace={(geometry, categoryId) => this.showPlace(geometry, categoryId)}
+                            getGeometryIcon={(geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)}
+                        />,
+                        listContainer
+                    );
 
                     ReactDOM.render(
                         <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
@@ -130,14 +141,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             }
         },
         /**
-         * @method _showPlace
+         * @method showPlace
          * Moves the map so the given geometry is visible on viewport. Adds the myplaces
          * layer to map if its not already selected.
          * @param {OpenLayers.Geometry} geometry place geometry to move map to
          * @param {Number} categoryId categoryId for the place so we can add it's layer to map
-         * @private
          */
-        _showPlace: function (geometry, categoryId) {
+        showPlace: function (geometry, categoryId) {
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);
@@ -147,49 +157,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             this.instance.getCategoryHandler().addLayerToMap(categoryId);
         },
         /**
-         * @method _editPlace
+         * @method editPlace
          * Requests for given place to be opened for editing
          * @param {Object} data grid data object for place
-         * @private
          */
-        _editPlace: function (data) {
+        editPlace: function (data) {
             // focus on map
-            this._showPlace(data.geometry, data.categoryId);
+            this.showPlace(data.geometry, data.categoryId);
             // request form
             var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
             this.instance.sandbox.request(this.instance, request);
         },
         /**
-         * @method _deletePlace
+         * @method deletePlace
          * Confirms delete for given place and deletes it if confirmed. Also shows
          * notification about cancel, deleted or error on delete.
          * @param {Object} data grid data object for place
-         * @private
          */
-        _deletePlace: function (data) {
+        deletePlace: function (data) {
             var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(me.loc('tab.notification.delete.btnDelete'));
-            okBtn.addClass('primary');
-
-            okBtn.setHandler(function () {
-                dialog.close();
-                var callback = function (isSuccess) {
-                    const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    if (isSuccess) {
-                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        popup.fadeout();
-                    } else {
-                        popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
-                    }
-                };
-                me.instance.getService().deleteMyPlace(data.id, callback);
-            });
-            var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel'));
-            var confirmMsg = me.loc('tab.notification.delete.confirm', { name: data.name });
-            dialog.show(me.loc('tab.notification.delete.title'), confirmMsg, [cancelBtn, okBtn]);
-            dialog.makeModal();
+            var callback = function (isSuccess) {
+                const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                if (isSuccess) {
+                    popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
+                    popup.fadeout();
+                } else {
+                    popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
+                }
+            };
+            me.instance.getService().deleteMyPlace(data.id, callback);
         },
 
         /**
@@ -214,89 +210,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             };
             panel.setSelectionHandler(selectionHandler);
 
-            panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
-            panel.grid.setVisibleFields(visibleFields);
-            // setup localization
-            visibleFields.forEach(function (field) {
-                panel.grid.setColumnUIName(field, me.loc('tab.grid.' + field));
-            });
-
-            // set up the description field
-            panel.grid.setColumnValueRenderer('desc', function (name, data) {
-                const description = me.descriptionTemplate.clone();
-                description.text(name);
-                return description;
-            });
-
-            // set up the link from name field
-            panel.grid.setColumnValueRenderer('name', function (name, data) {
-                var link = me.linkTemplate.clone();
-                var linkIcon = me.iconTemplate.clone();
-                var shape = service.getDrawModeFromGeometry(data.geometry);
-                linkIcon.addClass('myplaces-' + shape);
-                link.append(linkIcon);
-                link.append(name);
-                link.on('click', function () {
-                    me._showPlace(data.geometry, data.categoryId);
-                    return false;
-                });
-                return link;
-            });
-
-            // set up the link from edit field
-            panel.grid.setColumnValueRenderer('edit', function (name, data) {
-                var link = me.linkTemplate.clone();
-                link.append(name);
-                link.on('click', function () {
-                    me._editPlace(data);
-                    // FIX ME: Usability of this?
-                    // sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
-                    return false;
-                });
-                return link;
-            });
-
-            // set up the link from edit field
-            panel.grid.setColumnValueRenderer('delete', function (name, data) {
-                var link = me.linkTemplate.clone();
-                link.append(name);
-                link.on('click', function () {
-                    me.stopDrawingCallback();
-                    me._deletePlace(data);
-                    return false;
-                });
-                return link;
-            });
             return panel;
         },
         /**
          * @method _populatePlaces
          * Populates given categorys grid
          * @param {Number} categoryId id for category to populate
+         * @returns {Array} Array of places.
          */
         _populatePlaces: function (categoryId) {
-            var panel = this.tabPanels[categoryId];
-            // update places
-            var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-            gridModel.setIdField('id');
-            panel.grid.setDataModel(gridModel);
-            const places = this.instance.getService().getPlacesInCategory(categoryId);
-            places.forEach(place => {
-                gridModel.addData({
-                    'id': place.getId(),
-                    'name': place.getName(),
-                    'desc': place.getDescription(),
-                    'attentionText': place.getAttentionText(),
-                    'geometry': place.getGeometry(),
-                    'categoryId': place.getCategoryId(),
-                    'edit': this.loc('tab.edit'),
-                    'delete': this.loc('tab.delete'),
-                    'createDate': place.getCreateDate(),
-                    'updateDate': place.getUpdateDate(),
-                    'measurement': place.getMeasurement()
-                });
-            });
+            return this.instance.getService().getPlacesInCategory(categoryId);
         },
         /**
          * @method _removeObsoleteCategories
