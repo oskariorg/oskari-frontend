@@ -1,19 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Message, Confirm } from 'oskari-ui'
-import { Table } from 'oskari-ui/components/Table'
+import { Message, Confirm, Tooltip } from 'oskari-ui'
+import { Table, getSorterFor } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
 import { showSnippetPopup } from './view/embedded/SnippetPopup'
 
 const DELETE_ICON_STYLE = {
-    color: red.primary
+    color: red.primary,
+    fontSize: '14px'
+};
+
+const EDIT_ICON_STYLE = {
+    fontSize: '14px'
 };
 
 const StyledTable = styled(Table)`
+    .icon {
+        cursor: pointer;
+    }
     a {
         cursor: pointer;
+    }
+    tr {
+        th {
+            padding: 8px 8px;
+        }
+        td {
+            padding: 8px;
+        }
     }
 `
 
@@ -39,6 +55,8 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.name' bundleKey="PersonalData" />,
             dataIndex: 'name',
+            sorter: getSorterFor('name'),
+            defaultSortOrder: 'ascend',
             render: (title, item) => {
                 return (
                     <a onClick={() => openView(item)}>{title}</a>
@@ -48,12 +66,14 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.domain' bundleKey="PersonalData" />,
-            dataIndex: 'pubDomain'
+            dataIndex: 'pubDomain',
+            sorter: getSorterFor('pubDomain'),
         },
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.publish' bundleKey="PersonalData" />,
             dataIndex: 'isPublic',
+            sorter: getSorterFor('isPublic'),
             render: (title, item) => {
                 if (item.isPublic) {
                     return (
@@ -95,34 +115,31 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.actions' bundleKey="PersonalData" />,
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <a onClick={() => handleEdit(item)}>
-                        <EditOutlined />
-                    </a>
+                    <div className='table-actions'>
+                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />}>
+                            <div className='icon t_edit' onClick={() => handleEdit(item)}>
+                                <EditOutlined style={ EDIT_ICON_STYLE } />
+                            </div>
+                        </Tooltip>
+                        <Confirm
+                            title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
+                            onConfirm={() => handleDelete(item)}
+                            okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
+                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
+                            placement='bottomLeft'
+                        >
+                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' bundleKey="PersonalData" />}>
+                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
+                            </Tooltip>
+                        </Confirm>
+                    </div>
                 );
             }
-        },
-        {
-            align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.delete' bundleKey="PersonalData" />,
-            dataIndex: 'id',
-            render: (title, item) => {
-                return (
-                    <Confirm
-                        title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
-                        onConfirm={() => handleDelete(item)}
-                        okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
-                        cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
-                        placement='bottomLeft'
-                    >
-                        <a><DeleteOutlined style={ DELETE_ICON_STYLE } /></a>
-                    </Confirm>
-                );
-            }
-        },
+        }
     ];
     
     return (
