@@ -91,35 +91,37 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         minColourValue: 0,
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
-                var me = this;
-                var tool = event.getTool();
-                if (tool.getTool().id === me.getTool().id && tool.isStarted() && me.values.colourScheme) {
-                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                const tool = event.getTool();
+                if (tool.getTool().id !== this.getTool().id) {
+                    return;
+                }
+                if (tool.isStarted() && this.values.colourScheme) {
+                    this._sendColourSchemeChangedEvent(this.values.colourScheme);
                 }
             }
         },
         noUI: false,
         init: function (data) {
-            var me = this;
-            var isConf = !!((data && data.configuration && data.configuration.mapfull));
-            if (isConf && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
-                const tool = this.getTool();
-                const plugin = data.configuration.mapfull.conf.plugins.filter(p => p.id === tool.id)[0];
-                const pluginConfig = plugin ? plugin.config || {} : {};
+            Object.keys(this.eventHandlers).forEach(eventName => {
+                this.__sandbox.registerForEventByName(this, eventName);
+            });
+            if (!Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
+                return;
+            }
+            const { id } = this.getTool();
+            const plugin = data.configuration.mapfull.conf.plugins.find(p => p.id === id);
+            if (plugin) {
+                const { colourScheme, noUI } = plugin.config || {};
 
                 // Gets plugin color scheme
-                if (pluginConfig.colourScheme) {
-                    me.values.colourScheme = pluginConfig.colourScheme;
-                    me._sendColourSchemeChangedEvent(me.values.colourScheme);
+                if (colourScheme) {
+                    this.values.colourScheme = colourScheme;
+                    this._sendColourSchemeChangedEvent(colourScheme);
                 }
 
-                me.noUI = !!pluginConfig.noUI;
-                me.setEnabled(true);
+                this.noUI = !!noUI;
+                this.setEnabled(true);
             }
-
-            Object.keys(me.eventHandlers).forEach(eventName => {
-                me.__sandbox.registerForEventByName(me, eventName);
-            });
         },
         getName: function () {
             return 'Oskari.mapframework.publisher.tool.GetInfoTool';
@@ -152,17 +154,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
             };
         },
-        /**
-    * Is the tool toggled on by default.
-    * @method isDefaultTool
-    * @public
-    *
-    * @returns {Boolean} is the tool toggled on by default.
-    */
-        isDefaultTool: function () {
-            return true;
-        },
-
         isColourDialogOpen: false,
 
         /**

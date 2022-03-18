@@ -116,17 +116,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         },
 
         /**
-        * Is the tool toggled on by default.
-        * @method isDefaultTool
-        * @public
-        *
-        * @returns {Boolean} is the tool toggled on by default.
-        */
-        isDefaultTool: function () {
-            return false;
-        },
-
-        /**
         * Get extra options.
         * @method getExtraOptions
         * @public
