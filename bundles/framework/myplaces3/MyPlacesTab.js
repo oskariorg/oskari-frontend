@@ -97,9 +97,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     const places = this._populatePlaces(categoryId);
                     panel.getContainer().empty();
 
-                    const listContainer = document.createElement('div');
-                    panel.getContainer().append(listContainer);
-
                     const modalWrapper = jQuery('<div class="myplaces-modal-wrapper"></div>');
                     panel.getContainer().append(modalWrapper);
 
@@ -107,25 +104,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     const container = jQuery(modalWrapper)[0];
 
                     ReactDOM.render(
-                        <MyPlacesList
-                            data={places}
-                            handleDelete={(data) => this.deletePlace(data)}
-                            handleEdit={(data) => this.editPlace(data)}
-                            showPlace={(geometry, categoryId) => this.showPlace(geometry, categoryId)}
-                            getGeometryIcon={(geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)}
-                        />,
-                        listContainer
-                    );
-
-                    ReactDOM.render(
-                        <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-                            <MyPlacesLayerControls
-                                layer={{ ...values, categoryId: categoryId }}
-                                editCategory={ () => categoryHandler.editCategory(categoryId) }
-                                deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
-                                exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
+                        <>
+                            <MyPlacesList
+                                data={places}
+                                handleDelete={(data) => this.deletePlace(data)}
+                                handleEdit={(data) => this.editPlace(data)}
+                                showPlace={(geometry, categoryId) => this.showPlace(geometry, categoryId)}
+                                getGeometryIcon={(geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)}
                             />
-                        </LocaleProvider>,
+                            <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
+                                <MyPlacesLayerControls
+                                    layer={{ ...values, categoryId: categoryId }}
+                                    editCategory={ () => categoryHandler.editCategory(categoryId) }
+                                    deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
+                                    exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
+                                />
+                            </LocaleProvider>
+                        </>,
                         container
                     );
                 });
