@@ -33,6 +33,11 @@ const ColorTextInput = styled(TextInput)`
 const ChooseColor = styled(Button)`
     width: 70px;
     height: 34px;
+    &:hover {
+        -webkit-box-shadow:inset 0px 0px 0px 2px white;
+        -moz-box-shadow:inset 0px 0px 0px 2px white;
+        box-shadow:inset 0px 0px 0px 2px white;
+    }
 `;
 
 const MoreColors = styled('div')`
