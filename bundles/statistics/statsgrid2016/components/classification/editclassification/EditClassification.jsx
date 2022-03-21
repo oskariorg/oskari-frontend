@@ -1,125 +1,125 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select } from './Select';
+import styled from 'styled-components';
+import { LabeledSelect } from './LabeledSelect';
 import { SizeSlider } from './SizeSlider';
-import { Checkbox } from './Checkbox';
 import { Color } from './Color';
-import { ManualClassification } from '../../manualClassification/ManualClassification';
-import './editclassification.scss';
+import { Checkbox, Message, Slider } from 'oskari-ui';
+import { EditTwoTone, DownOutlined } from '@ant-design/icons';
 
-// Slider ?
-const getTransparencyOptions = transparency => {
-    var options = [];
-    for (var i = 100; i >= 30; i -= 10) {
-        options.push({
-            value: i,
-            text: i + ' %'
-        });
+const Container = styled.div`
+    background-color: #fafafa;
+    padding: 6px 12px;
+`;
+
+// Overrride -50% translateX
+const TRANSPARENCY = {
+    min: 0,
+    max: 100,
+    step: 10,
+    tipFormatter: val => `${val}%`,
+    marks: {
+        0: {
+            style: { transform: 'translateX(-20%)' },
+            label: '0%'
+        },
+        100: {
+            style: { transform: 'translateX(-80%)' },
+            label: '100%'
+        }
     }
-    options.push({
-        value: transparency,
-        text: transparency + ' %',
-        hidden: true
-    });
-    return options;
 };
 
 export const EditClassification = ({
     options,
     controller,
     editEnabled,
-    manualView,
-    seriesStats,
-    data,
+    handleManualView,
     values
 }) => {
     const handleChange = (id, value) => controller.updateClassification(id, value);
-    const handleNumberChange = (id, value) => handleChange(id, parseInt(value));
-
+    const handleMethodChange = (id, value) => {
+        if (value === 'manual') {
+            handleManualView();
+        }
+        handleChange(id, value);
+    };
     const disabled = !editEnabled;
-
+    const methodSuffix = values.method === 'manual' ? <EditTwoTone onClick={() => handleManualView()}/> : <DownOutlined />;
     return (
-        <div className="classification-edit">
-            <div className="classification-options">
-                <Select name ='mapStyle'
-                    value = {values.mapStyle}
-                    disabled = {disabled}
-                    handleChange = {handleChange}
-                    options = {options.mapStyles}
-                />
+        <Container className="t_classification-edit">
+            <LabeledSelect
+                name = 'mapStyle'
+                value = {values.mapStyle}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.mapStyles}
+            />
+            <LabeledSelect
+                name = 'method'
+                value = {values.method}
+                disabled = {disabled}
+                handleChange = {handleMethodChange}
+                options = {options.methods}
+                suffixIcon ={methodSuffix}
+            />
+            <LabeledSelect
+                name = 'count'
+                value = {values.count}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.counts}
+            />
+            <LabeledSelect
+                name = 'mode'
+                value = {values.mode}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.modes}
+            />
 
-                <Select name= 'method'
-                    value = {values.method}
-                    disabled = {disabled}
-                    handleChange = {handleChange}
-                    options = {options.methods}
-                />
+            {values.mapStyle === 'points' &&
+                <SizeSlider values={values} controller={controller} disabled={disabled} />
+            }
 
-                { manualView &&
-                    <ManualClassification
-                        manualView = {manualView}
-                        seriesStats = {seriesStats}
-                        data = {data}
-                        disabled = {disabled}
-                        controller= {controller}
-                    />
-                }
-                <Select name= 'count'
-                    value = {values.count}
-                    disabled = {disabled}
-                    handleChange = {handleNumberChange}
-                    options = {options.counts}
-                />
+            <Checkbox
+                checked = {values.showValues}
+                disabled = {disabled}
+                onChange = {e => handleChange('showValues', e.target.checked)}
+            >
+                <Message messageKey='classify.labels.showValues'/>
+            </Checkbox>
 
-                <Select name= 'mode'
-                    value = {values.mode}
-                    disabled = {disabled}
-                    handleChange = {handleChange}
-                    options = {options.modes}
-                />
+            <Color values = {values} disabled = {disabled} colorsets = {options.colorsets} controller = {controller}/>
 
-                {values.mapStyle === 'points' &&
-                    <SizeSlider values={values} controller={controller} disabled={disabled} />
-                }
-
-                <Checkbox name="showValues"
-                    value = {values.showValues}
-                    disabled = {disabled}
-                    handleChange = {handleChange}
-                />
-
-                <Color values = {values} disabled = {disabled} colorsets = {options.colorsets} controller = {controller}/>
-
-                <Select name="transparency"
-                    value = {values.transparency}
-                    disabled = {disabled}
-                    handleChange = {handleNumberChange}
-                    options = {getTransparencyOptions(values.transparency)}
-                />
-
-                <Select name="type"
-                    value = {values.type}
-                    disabled = {disabled}
-                    handleChange = {handleChange}
-                    options = {options.types}
-                />
-
-                <Select name="fractionDigits"
-                    value = {values.fractionDigits}
-                    disabled = {disabled}
-                    handleChange = {handleNumberChange}
-                    options = {[0, 1, 2, 3, 4, 5]}
-                />
-            </div>
-        </div>
+            <Message messageKey='classify.labels.transparency'/>
+            <Slider
+                value = {values.transparency}
+                disabled = {disabled}
+                onChange = {value => handleChange('transparency', value)}
+                { ...TRANSPARENCY }
+            />
+            <LabeledSelect
+                name = 'type'
+                value = {values.type}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.types}
+            />
+            <LabeledSelect
+                name = 'fractionDigits'
+                value = {values.fractionDigits}
+                disabled = {disabled}
+                handleChange = {handleChange}
+                options = {options.fractionDigits}
+            />
+        </Container>
     );
 };
 EditClassification.propTypes = {
     options: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     values: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
-    controller: PropTypes.object.isRequired,
-    seriesStats: PropTypes.object,
-    manualView: PropTypes.object
+    handleManualView: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired
 };
