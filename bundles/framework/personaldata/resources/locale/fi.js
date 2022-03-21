@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                     "edit": "Muokkaa",
                     "delete": "Poista",
                     "default": "Oletus",
-                    "actions": "Toimenpiteet"
+                    "actions": "Toiminnot"
                 },
                 "popup": {
                     "title" : {
@@ -86,7 +86,7 @@ Oskari.registerLocalization(
                     "html": "HTML-koodi",
                     "edit": "Muokkaa",
                     "delete": "Poista",
-                    "actions": "Toimenpiteet"
+                    "actions": "Toiminnot"
                 },
                 "published": {
                     "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
