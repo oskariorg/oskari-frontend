@@ -55,8 +55,8 @@ Oskari.clazz.define(
             const searchPerformed = result && Array.isArray(result.locations);
 
             ReactDOM.render(
-                (<SearchContainer>
-                    <LocaleProvider value={{ bundleKey: 'Search' }}>
+                (<LocaleProvider value={{ bundleKey: 'Search' }}>
+                    <SearchContainer>
                         <Message messageKey="searchDescription" LabelComponent={Description}/>
                         <SearchInput
                             placeholder={this.instance.getLocalization('searchAssistance')}
@@ -69,8 +69,8 @@ Oskari.clazz.define(
                         <SearchResultTable
                             result={result}
                             onResultClick={(result) => this._resultClicked(result)} />
-                    </LocaleProvider>
-                </SearchContainer>)
+                    </SearchContainer>
+                </LocaleProvider>)
                 , el[0]);
         },
         /**
