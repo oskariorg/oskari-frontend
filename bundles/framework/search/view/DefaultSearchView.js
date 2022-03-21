@@ -12,6 +12,10 @@ const Description = styled('div')`
     margin-bottom: 8px;
 `;
 
+const SearchContainer = styled('div')`
+    max-width: 450px;
+`;
+
 /**
  * @class Oskari.mapframework.bundle.search.Flyout
  *
@@ -51,20 +55,22 @@ Oskari.clazz.define(
             const searchPerformed = result && Array.isArray(result.locations);
 
             ReactDOM.render(
-                (<LocaleProvider value={{ bundleKey: 'Search' }}>
-                    <Message messageKey="searchDescription" LabelComponent={Description}/>
-                    <SearchInput
-                        placeholder={this.instance.getLocalization('searchAssistance')}
-                        query={query}
-                        suggestions={suggestions}
-                        onSearch={controller.triggerSearch}
-                        onChange={controller.updateQuery}
-                        loading={loading} />
-                    { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
-                    <SearchResultTable
-                        result={result}
-                        onResultClick={(result) => this._resultClicked(result)} />
-                </LocaleProvider>)
+                (<SearchContainer>
+                    <LocaleProvider value={{ bundleKey: 'Search' }}>
+                        <Message messageKey="searchDescription" LabelComponent={Description}/>
+                        <SearchInput
+                            placeholder={this.instance.getLocalization('searchAssistance')}
+                            query={query}
+                            suggestions={suggestions}
+                            onSearch={controller.triggerSearch}
+                            onChange={controller.updateQuery}
+                            loading={loading} />
+                        { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
+                        <SearchResultTable
+                            result={result}
+                            onResultClick={(result) => this._resultClicked(result)} />
+                    </LocaleProvider>
+                </SearchContainer>)
                 , el[0]);
         },
         /**
