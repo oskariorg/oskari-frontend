@@ -10,7 +10,10 @@ import styled from 'styled-components';
 
 const Description = styled('div')`
     margin-bottom: 8px;
-    max-width: 55%;
+`;
+
+const SearchContainer = styled('div')`
+    max-width: 450px;
 `;
 
 /**
@@ -53,18 +56,20 @@ Oskari.clazz.define(
 
             ReactDOM.render(
                 (<LocaleProvider value={{ bundleKey: 'Search' }}>
-                    <Message messageKey="searchDescription" LabelComponent={Description}/>
-                    <SearchInput
-                        placeholder={this.instance.getLocalization('searchAssistance')}
-                        query={query}
-                        suggestions={suggestions}
-                        onSearch={controller.triggerSearch}
-                        onChange={controller.updateQuery}
-                        loading={loading} />
-                    { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
-                    <SearchResultTable
-                        result={result}
-                        onResultClick={(result) => this._resultClicked(result)} />
+                    <SearchContainer>
+                        <Message messageKey="searchDescription" LabelComponent={Description}/>
+                        <SearchInput
+                            placeholder={this.instance.getLocalization('searchAssistance')}
+                            query={query}
+                            suggestions={suggestions}
+                            onSearch={controller.triggerSearch}
+                            onChange={controller.updateQuery}
+                            loading={loading} />
+                        { searchPerformed && <SearchResultInfo count={result.totalCount} hasMore={result.hasMore} /> }
+                        <SearchResultTable
+                            result={result}
+                            onResultClick={(result) => this._resultClicked(result)} />
+                    </SearchContainer>
                 </LocaleProvider>)
                 , el[0]);
         },
