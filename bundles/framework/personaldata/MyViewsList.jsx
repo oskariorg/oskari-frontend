@@ -106,7 +106,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                     key: item.id,
                     ...item
                 }))}
-                pagination={{ position: ['none', 'bottomCenter'] }}
+                pagination={false}
             />
         </>
     )

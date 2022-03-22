@@ -144,7 +144,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                     key: item.id,
                     ...item
                 }))}
-                pagination={{ position: ['none', 'bottomCenter'] }}
+                pagination={false}
             />
         </div>
     )
