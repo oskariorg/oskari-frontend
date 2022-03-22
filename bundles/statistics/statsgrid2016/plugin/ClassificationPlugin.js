@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
-import { ManualClassificationView } from '../components/manualClassification/View';
+import { openEditor } from '../components/manualClassification/View';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
@@ -69,11 +69,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             const { error, ...state } = this.service.getStateService().getStateForClassification();
             if (error) return;
-            const { data, status, validDataCount } = this.getIndicatorData(state);
+            const { data, status, uniqueCount } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
-            const editOptions = this.getEditOptions(state, validDataCount);
+            const editOptions = this.getEditOptions(state, uniqueCount);
             const classifiedDataset = this.classifyDataset(state, data);
-            const manualView = this.getManualViewProps(state);
 
             ReactDOM.render((
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
@@ -81,8 +80,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         { ...state }
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
-                        manualView = {manualView}
-                        data = {data}
+                        handleManualView = {() => this.startManualView(state, classifiedDataset, data)}
                         onRenderChange = {this.rendered.bind(this)}
                     />
                 </LocaleProvider>
@@ -102,14 +100,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 hash: activeIndicator.hash,
                 regionset: activeRegionset,
                 data: {},
-                validDataCount: 0,
+                uniqueCount: 0,
                 serieSelection,
                 status: 'PENDING'
             };
             this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
                 if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
-                    this.indicatorData.validDataCount = Object.values(data).filter(val => val !== undefined).length;
+                    const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
+                    const uniqueValues = [...new Set(Object.values(validData))];
+                    this.indicatorData.uniqueCount = uniqueValues.length;
                     this.indicatorData.data = data;
                     this.indicatorData.status = 'DONE';
                 }
@@ -121,47 +121,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             });
             return this.indicatorData;
         },
-        getEditOptions: function (state, validDataCount) {
-            // TODO validate values here or in controller
+        getEditOptions: function (state, uniqueCount) {
             const { activeIndicator } = state;
             const { type, count, reverseColors, mapStyle } = activeIndicator.classification;
-            const { count: minmax, methods, modes, mapStyles } = this.service.getClassificationService().getLimits();
-            const colorsService = this.service.getColorService();
-            const types = colorsService.getAvailableTypes();
+            const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
 
-            let colorsets = [];
-            let max = minmax.max;
-            if (mapStyle !== 'points') {
-                colorsets = colorsService.getOptionsForType(type, count, reverseColors);
-                const { max: colorMax } = colorsService.getRange(type);
-                max = colorMax;
-            }
-            const dataMax = validDataCount - 1;
-            const counts = [];
-            // TODO disable invalid counts?
-            for (let i = minmax.min; i <= Math.min(dataMax, max); i++) {
-                counts.push({ value: i });
-            }
+            const colorsets = mapStyle === 'points' ? [] : this.service.getColorService().getOptionsForType(type, count, reverseColors);
+
             const disabled = [];
-            if (validDataCount < 3) {
+            if (uniqueCount < 3) {
                 disabled.push('jenks');
-            }
-            if (activeIndicator.series) {
-                // Discontinous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
-                disabled.push('discontinuous');
             }
             const toOption = (option, value) => ({
                 value,
-                title: this._locale(`classify.${option}.${value}`),
+                label: this._locale(`classify.${option}.${value}`),
                 disabled: disabled.includes(value)
             });
-
+            const getNumberOptions = (min, max) => Array.from({ length: max - min + 1 }, (v, i) => i + min).map(i => ({ value: i, label: `${i}` }));
             return {
                 methods: methods.map(val => toOption('methods', val)),
                 modes: modes.map(val => toOption('modes', val)),
                 mapStyles: mapStyles.map(val => toOption('mapStyles', val)),
                 types: types.map(val => toOption('types', val)),
-                counts,
+                counts: getNumberOptions(min, Math.min(uniqueCount, max)),
+                fractionDigits: getNumberOptions(0, fractionDigits),
                 colorsets
             };
         },
@@ -169,17 +152,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const { activeIndicator: { classification }, seriesStats } = state;
             return this.service.getClassificationService().getClassification(data, classification, seriesStats);
         },
-        getManualViewProps: function (state) {
-            const { classification } = state.activeIndicator;
-            if (classification.method !== 'manual') return;
-            const { seriesService, classificationService, colorService } = this.service.getAllServices();
-            return {
-                view: new ManualClassificationView(classificationService, colorService, classification),
-                setAnimating: seriesService.setAnimating,
-                btnLabel: this._locale('classify.edit.title')
-            };
-        },
+        startManualView: function (state, classifiedDataset, data) {
+            const { activeIndicator: { classification }, seriesStats, controller } = state;
+            const { manualBounds, count } = classification;
 
+            const colors = classifiedDataset.groups.map(group => group.color);
+            this.service.getSeriesService().setAnimating(false);
+            const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
+            const bounds = this.service.getClassificationService().getBoundsFallback(manualBounds, count, d3.min(dataAsList), d3.max(dataAsList));
+            const onOk = bounds => controller.updateClassification('manualBounds', bounds);
+            openEditor(dataAsList, bounds, colors, onOk);
+        },
         redrawUI: function () {
             // No need to redraw because mobile & desktop is same
             return false;
@@ -211,7 +194,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         _makeDraggable: function () {
             this.getElement().draggable({
-                handle: '.active-header,.statsgrid-svg-legend'
+                handle: '.classification-header,.classification-legend'
             });
         },
         getElement: function () {

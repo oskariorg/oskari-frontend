@@ -34,27 +34,3 @@
         }
     }
 }
-
-.classification-manual .oskari-button {
-    margin-bottom: 4px;
-    margin-top: 8px;
-    padding: 2px 5px;
-    font-size: 12px;
-}
-
-.statsgrid-classification-container.transparent-classification {
-    .classification-manual{
-        .oskari-button, .oskari-button:hover:enabled {
-            padding-left: 0px;
-            background-color: transparent;
-            background: none;
-            border: none;
-            color: #ffffff;
-            text-shadow:
-                -1px -1px 0 #000,
-                1px -1px 0 #000,
-                -1px 1px 0 #000,
-                1px 1px 0 #000;
-        }
-    }
-}

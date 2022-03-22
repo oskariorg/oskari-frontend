@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
 
     function () {
         this._defaults = {
-            color: '#00ff01',
+            color: '#2ba7ff',
             colorSet: 'Blues'
         };
         this._limits = {
@@ -41,12 +41,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         },
         getAvailableTypes: function () {
             return [...this._limits.types];
-        },
-        getDefaultColor: function (mapStyle) {
-            if (mapStyle === 'points') {
-                return this._defaults.color;
-            }
-            return this._defaults.colorSet;
         },
         /**
          * [getColorsForClassification description]
@@ -99,6 +93,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 .map(set => set.colors.length)
                 .reduce((max, size) => max > size ? max : size);
             return { min: 2, max: max + 2 };
+        },
+        validateColor: function (color, mapStyle, type) {
+            if (mapStyle === 'points') {
+                return !!Oskari.util.hexToRgb(color);
+            }
+            const colorset = this.colorsets.find(set => set.name === color);
+            const { type: setType } = colorset || {};
+            return setType === type;
+        },
+        getDefaultColorForType: function (mapStyle, type) {
+            if (mapStyle === 'points') {
+                return this._defaults.color;
+            }
+            if (!this.getAvailableTypes().includes(type)) {
+                throw new Error(`Invalid type: ${type}`);
+            }
+            return this.colorsets.find(set => set.type === type).name;
         },
         /**
          * Options to show in classification UI for selected type and count

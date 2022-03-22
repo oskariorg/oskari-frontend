@@ -27,7 +27,7 @@ export function updateBandBlocks (svg, handlesData, xScale, colorSet, histoHeigh
         .attr('class', 'block')
         .attr('y', 0)
         .attr('height', histoHeight)
-        .attr('fill', (d, i) => `#${colorSet[i]}`)
+        .attr('fill', (d, i) => colorSet[i])
         .merge(blocks)
         .attr('x', (d) => xScale(d.x0))
         .attr('width', d => 1 + xScale(d.x1) - xScale(d.x0));
