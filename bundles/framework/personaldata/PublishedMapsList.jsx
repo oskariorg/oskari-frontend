@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Message, Confirm, Tooltip } from 'oskari-ui'
-import { Table, getSorterFor } from 'oskari-ui/components/Table'
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
@@ -17,12 +17,6 @@ const EDIT_ICON_STYLE = {
 };
 
 const StyledTable = styled(Table)`
-    .icon {
-        cursor: pointer;
-    }
-    a {
-        cursor: pointer;
-    }
     tr {
         th {
             padding: 8px 8px;
@@ -119,7 +113,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <div className='table-actions'>
+                    <ToolsContainer>
                         <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />}>
                             <div className='icon t_edit' onClick={() => handleEdit(item)}>
                                 <EditOutlined style={ EDIT_ICON_STYLE } />
@@ -136,7 +130,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                                 <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
                             </Tooltip>
                         </Confirm>
-                    </div>
+                    </ToolsContainer>
                 );
             }
         }
