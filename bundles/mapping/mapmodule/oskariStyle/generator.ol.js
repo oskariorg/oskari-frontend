@@ -272,6 +272,10 @@ export const getOlStyles = (mapModule, styleDef, geomType, requestedStyle = {}) 
 // draw transparent solid stroke to fire hover and click also on gaps with dashed stroke
 // open layers renders only dashes so hover or click aren't fired on gaps
 const getWorkaroundForDash = olStroke => {
+    if (!olStroke) {
+        // stroke with width 0 returns null as olStroke
+        return [];
+    }
     const lineDash = olStroke.getLineDash();
     if (!lineDash || !lineDash.length) {
         return [];
