@@ -147,13 +147,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 me._selections.push(select);
             }
         });
-
-        var optionsToDisable = regionsets.filter(function (iter) {
-            if (me.regionsetRestrictions.length && me.regionsetRestrictions.indexOf(iter) === -1) {
-                return iter;
-            }
-        });
-        var regionSelect = me.regionSelector.create(regionsets, false);
+        const regionSelect = me.regionSelector.create(regionsets, false);
         me.regionSelector.setWidth(205);
         if (regionsets.length === 1) {
             regionSelect.value(regionsets[0]);
@@ -163,12 +157,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         }
         regionSelect.container.addClass('margintop');
         cont.append(regionSelect.container);
-        var select = regionSelect.selectInstance;
+        const select = regionSelect.selectInstance;
         if (select) {
-            select.disableOptions(optionsToDisable);
-            var state = select.getOptions();
-            var enabled = state.options.not(':disabled').first();
-            regionSelect.value(enabled.val());
+            const restrictedSets = me.regionsetRestrictions || [];
+            if (restrictedSets.length) {
+                select.disableOptions(regionsets.filter((item) => !restrictedSets.includes(item)));
+            }
+            const state = select.getOptions();
+            const firstSelectableOption = state.options.not(':disabled').first();
+            regionSelect.value(firstSelectableOption.val());
         }
 
         me._values = {

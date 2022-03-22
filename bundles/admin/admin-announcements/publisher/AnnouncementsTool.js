@@ -63,6 +63,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             }
 
             service.fetchAdminAnnouncements((err, data) => {
+                if (err) {
+                    alert('Error loading announcements');
+                    return;
+                }
                 me.announcements = data;
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
@@ -109,17 +113,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 title: 'AnnouncementsPlugin',
                 config: {}
             };
-        },
-
-        /**
-        * Is the tool toggled on by default.
-        * @method isDefaultTool
-        * @public
-        *
-        * @returns {Boolean} is the tool toggled on by default.
-        */
-        isDefaultTool: function () {
-            return false;
         },
 
         /**

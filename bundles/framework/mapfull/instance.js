@@ -524,23 +524,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             params.mapLayers = state.selectedLayers
                 .map(layer => {
                     if (layer.hidden) {
-                        return;
+                        return null;
                     }
                     if (optimized) {
                         if (layer.opacity === 0) {
                             // leave out layers that are not visible
-                            return;
+                            return null;
                         }
                         // also leave out layers that are not inside zoom-limits, are outside of extent
                         //  or are otherwise not shown to user
                         if (!this.getMapModule().isLayerVisible(layer.id)) {
-                            return;
+                            return null;
                         }
                     }
                     return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
                 })
                 // filter out hidden == undefined from map-function
-                .filter(layer => typeof layer !== 'undefined')
+                .filter(layer => !!layer)
                 // separate with comma
                 .join(',');
 

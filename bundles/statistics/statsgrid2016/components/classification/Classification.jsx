@@ -1,9 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { EditClassification } from './editclassification/EditClassification';
 import { Legend } from './Legend';
 import { Header } from './Header';
-import './classification.scss';
+
+const Container = styled.div`
+    background-color: #FFFFFF;
+    width: 300px;
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: auto;
+    text-align: left;
+
+    &.transparent-classification {
+        background-color: transparent;
+        border: 1px solid transparent;
+        .classification-header {
+            border: 1px solid black;
+            border-radius: 2px;
+            background-color: #FFFFFF;
+            padding: 0px;
+        }
+        .classification-legend span {
+            color: #FFFFFF;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+    }
+`;
+
+const LegendContainer = styled.div`
+    margin-bottom: 6px;
+    cursor: grab;
+`;
 
 export const Classification = ({
     activeIndicator,
@@ -11,8 +43,7 @@ export const Classification = ({
     editOptions,
     pluginState,
     classifiedDataset,
-    data,
-    manualView,
+    handleManualView,
     onRenderChange,
     controller
 }) => {
@@ -32,45 +63,43 @@ export const Classification = ({
             overflowY: 'auto'
         };
     };
-    const containerClass = transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
 
     return (
-        <div className={containerClass}>
+        <Container className={transparent && !isEdit ? 'transparent-classification' : ''}>
             <Header
                 selected = {hash}
                 isEdit = {isEdit}
                 toggleEdit = {toggleEdit}
                 indicators = {indicators}
-                controller = {controller}/>
-            <div className="classification-content-wrapper" style={getContentWrapperStyle()}>
+                onChange = {controller.setActiveIndicator}/>
+            <div style={getContentWrapperStyle()}>
                 {isEdit &&
                     <EditClassification
                         options = {editOptions}
                         values = {classification}
-                        data = {data}
                         editEnabled = {editEnabled}
                         controller = {controller}
-                        manualView = {manualView}/>
+                        handleManualView = {handleManualView}/>
                 }
-                <Legend
-                    classifiedDataset = {classifiedDataset}
-                    mapStyle = {classification.mapStyle}
-                    transparency = {classification.transparency}
-                />
+                <LegendContainer className = "classification-legend">
+                    <Legend
+                        classifiedDataset = {classifiedDataset}
+                        mapStyle = {classification.mapStyle}
+                        transparency = {classification.transparency}
+                    />
+                </LegendContainer>
             </div>
-        </div>
+        </Container>
     );
 };
 
 Classification.propTypes = {
     activeIndicator: PropTypes.object.isRequired,
     indicators: PropTypes.array.isRequired,
-    data: PropTypes.object.isRequired,
     editOptions: PropTypes.object.isRequired,
     pluginState: PropTypes.object.isRequired,
     classifiedDataset: PropTypes.object.isRequired,
-    manualView: PropTypes.object,
-    seriesStats: PropTypes.object,
+    handleManualView: PropTypes.func.isRequired,
     onRenderChange: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
 };

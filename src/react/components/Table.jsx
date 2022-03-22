@@ -2,6 +2,24 @@ import React from 'react';
 import { Table as AntTable } from 'antd';
 import 'antd/es/table/style/index.js';
 import { getMsg } from '../util/locale';
+import styled from 'styled-components';
+
+const StyledToolsContainer = styled('div')`
+    display: flex;
+    justify-content: space-evenly;
+    .icon {
+        cursor: pointer;
+    }
+    a {
+        cursor: pointer;
+    }
+`;
+
+const StyledTable = styled(AntTable)`
+    a {
+        cursor: pointer;
+    }
+`;
 
 export const getSorterFor = key => (a, b) => Oskari.util.naturalSort(a[key], b[key]);
 
@@ -19,5 +37,13 @@ export const Table = ({ ...other }) => {
         triggerAsc: getMsg('table.sort.asc'), //'Click to sort ascending',
         cancelSort: getMsg('table.sort.cancel') // 'Click to cancel sorting'
     };
-    return (<AntTable locale={locale} {...other} />);
+    return (<StyledTable locale={locale} {...other} />);
+};
+
+export const ToolsContainer = ({ children }) => {
+    return (
+        <StyledToolsContainer>
+            {children}
+        </StyledToolsContainer>
+    )
 };

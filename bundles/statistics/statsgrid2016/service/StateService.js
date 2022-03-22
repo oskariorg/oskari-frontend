@@ -313,11 +313,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             return result;
         },
         validateClassification: function (classification) {
-            const { mapStyle, color } = classification;
-            const isHex = !!Oskari.util.hexToRgb(color);
-            const isPoints = mapStyle === 'points';
-            if ((isPoints && !isHex) || (!isPoints && isHex)) {
-                classification.color = this.service.getColorService().getDefaultColor(mapStyle);
+            const { mapStyle, color, type } = classification;
+            const colorService = this.service.getColorService();
+            if (!colorService.validateColor(color, mapStyle, type)) {
+                classification.color = colorService.getDefaultColorForType(mapStyle, type);
             }
         },
         /**

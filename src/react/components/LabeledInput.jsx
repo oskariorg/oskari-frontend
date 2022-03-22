@@ -11,6 +11,9 @@ const Label = styled.div`
 const Component = styled.div`
     margin-bottom: 10px;
 `;
+const Textarea = styled(Input.TextArea)`
+    font-family: inherit;
+`
 export const LabeledInput = ({
     label,
     mandatory,
@@ -18,7 +21,7 @@ export const LabeledInput = ({
     ...inputProps
 }) => {
     const { value, type } = inputProps;
-    const InputNode = type === 'textarea' ? Input.TextArea : Input;
+    const InputNode = type === 'textarea' ? Textarea : Input;
     const isValid = mandatory ? typeof value !== 'undefined' && value.trim().length > 0 : true;
     if (minimal) {
         const suffix = mandatory ? <MandatoryIcon isValid={isValid}/> : <span />;

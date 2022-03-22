@@ -518,31 +518,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {Function} time formatting function
          */
         _getTickFormatter: function () {
-            var locale;
-            var formatterFunction;
+            let locale;
+            let formatterFunction;
             if (this._d3TimeDef) {
                 locale = d3.timeFormatLocale(this._d3TimeDef);
                 formatterFunction = locale.format.bind(locale);
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
             }
-            var formatMillisecond = formatterFunction('.%L'),
-                formatSecond = formatterFunction(':%S'),
-                formatMinute = formatterFunction(locale ? '%H:%M' : '%I:%M'),
-                formatHour = formatterFunction(locale ? '%H:%M' : '%I %p'),
-                formatDay = formatterFunction(locale ? '%d.%m.' : '%d %b'),
-                formatMonth = formatterFunction('%b'),
-                formatYear = formatterFunction('%Y');
-
+            const getFormatter = (date) => {
+                // try to format date sensibly based on accuracy
+                if (d3.timeSecond(date) < date) {
+                    // milliseconds
+                    return formatterFunction('.%L');
+                } else if (d3.timeMinute(date) < date) {
+                    // seconds
+                    return formatterFunction(':%S');
+                } else if (d3.timeHour(date) < date) {
+                    // minutes
+                    return formatterFunction(locale ? '%H:%M' : '%I:%M');
+                } else if (d3.timeDay(date) < date) {
+                    // hours
+                    return formatterFunction(locale ? '%H:%M' : '%I %p');
+                } else if (d3.timeMonth(date) < date) {
+                    // days
+                    return formatterFunction(locale ? '%d.%m.' : '%d %b');
+                } else if (d3.timeYear(date) < date) {
+                    // months
+                    return formatterFunction('%b');
+                }
+                // default to years
+                return formatterFunction('%Y');
+            };
             return function multiFormat (date) {
-                var textEl = d3.select(this);
-                return (d3.timeSecond(date) < date ? formatMillisecond
-                    : d3.timeMinute(date) < date ? formatSecond
-                        : d3.timeHour(date) < date ? formatMinute
-                            : d3.timeDay(date) < date ? formatHour
-                                : d3.timeMonth(date) < date ? formatDay
-                                    : d3.timeYear(date) < date ? formatMonth
-                                        : (textEl.classed('bold', true), formatYear))(date);
+                const textEl = d3.select(this);
+                textEl.classed('bold', true);
+                const formatFn = getFormatter(date);
+                return formatFn(date);
             };
         },
         /**

@@ -1,37 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
+import styled from 'styled-components';
+import { Message, Checkbox } from 'oskari-ui';
 import { ColorSelect } from './ColorSelect';
-import './color.scss';
+
+const Component = styled.div`
+    padding-bottom: 10px;
+    padding-top: 10px;
+`;
+const StyledCheckbox = styled(Checkbox)`
+    margin-left: 10px;
+`;
 
 export const Color = ({ colorsets, values, controller, disabled }) => {
     const { color, mapStyle, reverseColors } = values;
     const isSimple = mapStyle === 'points';
-    const labelKey = isSimple ? 'color' : 'colorset';
 
-    const handleReverseColors = isReverse => controller.updateClassification('reverseColors', isReverse);
+    const handleReverseColors = evt => controller.updateClassification('reverseColors', evt.target.checked);
     const handleColorChange = color => controller.updateClassification('color', color);
-
     return (
-        <div className="classification-colors option">
-            <div className="select-label">
-                <Message messageKey={`classify.labels.${labelKey}`}/>
-            </div>
-            <div className = "classification-colors value">
-                <ColorSelect colorsets = {colorsets} isSimple = {isSimple} value = {color}
-                    disabled = {disabled} handleColorChange = {handleColorChange}/>
-                {!isSimple &&
-                    <span className="flip-colors">
-                        <input id="legend-flip-colors" type="checkbox"
-                            checked = {reverseColors} disabled = {disabled}
-                            onChange = {evt => handleReverseColors(evt.target.checked)}/>
-                        <label htmlFor="legend-flip-colors">
-                            <Message messageKey="classify.labels.reverseColors"/>
-                        </label>
-                    </span>
-                }
-            </div>
-        </div>
+        <Component className="classification-colors option">
+            <ColorSelect colorsets = {colorsets} isSimple = {isSimple} value = {color}
+                disabled = {disabled} handleColorChange = {handleColorChange}/>
+            {!isSimple && (
+                <StyledCheckbox
+                    checked = {reverseColors}
+                    disabled = {disabled}
+                    onChange = {handleReverseColors}>
+                    <Message messageKey='classify.labels.reverseColors'/>
+                </StyledCheckbox>)}
+        </Component>
     );
 };
 Color.propTypes = {

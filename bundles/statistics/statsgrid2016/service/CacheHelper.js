@@ -57,6 +57,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                     return '' + ind.id === '' + data.id;
                 });
                 if (!existingIndicator) {
+                    /* eslint-disable node/no-callback-literal */
                     callback('Tried saving an indicator with id, but id didn\'t match existing indicator');
                     return;
                 }
@@ -94,6 +95,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
                 return '' + ind.id === '' + indicatorId;
             });
             if (!existingIndicator) {
+                /* eslint-disable node/no-callback-literal */
                 callback('Tried saving dataset for an indicator, but id didn\'t match existing indicator');
                 return;
             }

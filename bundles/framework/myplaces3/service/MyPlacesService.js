@@ -108,6 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             var places = me.getPlacesInCategory(oldCategoryId);
             if (places.length === 0) {
                 // no places to move -> callback right away
+                /* eslint-disable node/no-callback-literal */
                 callback(true);
                 return;
             }
@@ -133,6 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             if (idList.length === 0) {
                 // no places to delete -> callback right away
                 this._removePlaces(categoryId);
+                /* eslint-disable node/no-callback-literal */
                 callback(true);
                 return;
             }
@@ -159,6 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
+                        /* eslint-disable node/no-callback-literal */
                         callback(false);
                     }
                 }
@@ -267,6 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
+                        /* eslint-disable node/no-callback-literal */
                         callback(false);
                     }
                 }
@@ -311,6 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             const place = this.findMyPlace(placeId);
             if (!place) {
                 this.log.error('Could not find requested place with id:', placeId);
+                /* eslint-disable node/no-callback-literal */
                 callback(false);
                 return;
             }
@@ -379,6 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 },
                 error: function (jqXHR, textStatus) {
                     if (jqXHR.status !== 0) {
+                        /* eslint-disable node/no-callback-literal */
                         callback(false);
                     }
                 }
@@ -449,6 +455,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 },
                 error: jqXHR => {
                     if (jqXHR.status !== 0) {
+                        /* eslint-disable node/no-callback-literal */
                         callback(false);
                     }
                 }
