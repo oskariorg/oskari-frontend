@@ -33,7 +33,8 @@ Oskari.registerLocalization(
                 "updateDate": "Updated",
                 "measurement": "Size",
                 "edit": "Edit",
-                "delete": "Delete"
+                "delete": "Delete",
+                "actions": "Actions"
             },
             "notification": {
                 "delete": {

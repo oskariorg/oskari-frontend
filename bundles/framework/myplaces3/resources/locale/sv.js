@@ -33,7 +33,8 @@ Oskari.registerLocalization(
                 "updateDate": "Uppdaterad",
                 "measurement": "Storlek",
                 "edit": "Redigera",
-                "delete": "Ta bort"
+                "delete": "Ta bort",
+                "actions": "Handlingar"
             },
             "notification": {
                 "delete": {
