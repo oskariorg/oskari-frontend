@@ -12,7 +12,7 @@ module.exports = {
     timers: 'fake',
     verbose: true,
     transformIgnorePatterns: [
-        'node_modules/(?!(ol|jsts|geotiff)/).+\\.js$'
+        'node_modules/(?!(ol|jsts|geotiff)).+\\.js$'
     ]
     /*
     ,transform: {
