@@ -243,7 +243,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const ranges = [];
             for (let i = 0; i < bounds.length - 1; i++) {
                 const max = bounds[i + 1];
-                console.log(max);
                 const min = bounds[i];
                 const values = sorted.filter(val => val >= min && val < max);
                 if (values.length === 0) {
