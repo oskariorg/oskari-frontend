@@ -1,20 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm, Button } from 'oskari-ui';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { Message, Checkbox, Confirm, Button, Tooltip } from 'oskari-ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { red } from '@ant-design/colors';
 
 const BUNDLE_NAME = 'PersonalData';
 
+const EDIT_ICON_STYLE = {
+    fontSize: '14px'
+};
+
 const DELETE_ICON_STYLE = {
-    color: red.primary
+    color: red.primary,
+    fontSize: '14px'
 };
 
 const StyledTable = styled(Table)`
-    a {
-        cursor: pointer;
+    tr {
+        th {
+            padding: 8px 8px;
+        }
+        td {
+            padding: 8px;
+        }
     }
 `
 
@@ -30,7 +40,8 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
         {
             align: 'left',
             title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.default' />,
-            dataIndex: 'id',
+            dataIndex: 'isDefault',
+            sorter: getSorterFor('isDefault'),
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => setDefault(item)} />
@@ -41,6 +52,8 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             align: 'left',
             title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.name' />,
             dataIndex: 'name',
+            sorter: getSorterFor('name'),
+            defaultSortOrder: 'ascend',
             render: (title, item) => {
                 return (
                     <a onClick={() => openView(item)}>{title}</a>
@@ -50,33 +63,31 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
         {
             align: 'left',
             title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.description' />,
-            dataIndex: 'description'
+            dataIndex: 'description',
+            sorter: getSorterFor('description')
         },
         {
             align: 'left',
-            title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.edit' />,
+            title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.actions' />,
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <a onClick={() => handleEdit(item)}><EditOutlined /></a>
-                )
-            }
-        },
-        {
-            align: 'left',
-            title: <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.delete' />,
-            dataIndex: 'id',
-            render: (title, item) => {
-                return (
-                    <Confirm
-                        title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
-                        onConfirm={() => handleDelete(item)}
-                        okText={<Message messageKey='tabs.myviews.button.ok' bundleKey={BUNDLE_NAME} />}
-                        cancelText={<Message messageKey='tabs.myviews.button.cancel' bundleKey={BUNDLE_NAME} />}
-                        placement='bottomLeft'
-                    >
-                        <a><DeleteOutlined style={ DELETE_ICON_STYLE } /></a>
-                    </Confirm>
+                    <ToolsContainer>
+                        <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.edit' />}>
+                            <div className='icon t_edit' onClick={() => handleEdit(item)}><EditOutlined style={ EDIT_ICON_STYLE } /></div>
+                        </Tooltip>
+                        <Confirm
+                            title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
+                            onConfirm={() => handleDelete(item)}
+                            okText={<Message messageKey='tabs.myviews.button.ok' bundleKey={BUNDLE_NAME} />}
+                            cancelText={<Message messageKey='tabs.myviews.button.cancel' bundleKey={BUNDLE_NAME} />}
+                            placement='bottomLeft'
+                        >
+                            <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.delete' />}>
+                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
+                            </Tooltip>
+                        </Confirm>
+                    </ToolsContainer>
                 )
             }
         }
