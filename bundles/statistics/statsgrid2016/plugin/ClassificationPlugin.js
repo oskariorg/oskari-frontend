@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
                     const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
-                    const uniqueValues = [...new Set(Object.values(validData))].sort((a,b) => a - b);
+                    const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
                     this.indicatorData.uniqueCount = uniqueValues.length;
                     this.indicatorData.data = data;
                     this.indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
