@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "pievienot nosaukumu kartei"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Pievienot \"Oskari\" logotipu",
-                    "tooltip": "Jūs varat paslēpt logotipu, ja nepieciešams"
-                },
                 "pageScale": {
                     "label": "Pievienot mērogu kartei",
                     "tooltip": "Pievienot mērogu kartei"

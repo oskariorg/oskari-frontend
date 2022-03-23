@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Añadir un título para el mapa impreso"
             },
             "content": {
-                "pageLogo" :{
-                    "label": "Añadir el logo de Oskari en la impresión",
-                    "tooltip": "Si es necesario, puede ocultar el logo"
-                },
                 "pageScale": {
                     "label": "Añadir una escala al mapa impreso",
                     "tooltip": "Añadir una escala al mapa impreso"

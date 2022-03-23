@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Legg til navn på kartet"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Vis logoen til den finske geoportalen Paikkatietoikkuna i utskriften",
-                    "tooltip": "Du kan skjule logoen til den finske geoportalen Paikkatietoikkuna om nødvendig"
-                },
                 "pageScale": {
                     "label": "Legg til målestokk til kartutskriften",
                     "tooltip": "Legg til målestokk til kartet dersom det er ønskelig"

@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "προσθέστε τίτλο του χάρτη"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Προσθέστε τιο λογότυπο του OSKARI",
-                    "tooltip": "Μπορείτε να αποκρύψετε το λογότυπο αν χρειαστεί"
-                },
                 "pageScale": {
                     "label": "Προσθέστε κλίμακα στον χάρτη",
                     "tooltip": "Προσθέστε κλίμακα στον χάρτη"

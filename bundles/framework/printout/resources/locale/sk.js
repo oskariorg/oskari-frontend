@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Pridať názov k mape"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Ukázať logo fínskeho geoportálu Paikkatietoikkuna vo výtlačku.",
-                    "tooltip": "Ak je to nutné, môžete skryť logo fínskeho geoportálu Paikkatietoikkuna."
-                },
                 "pageScale": {
                     "label": "Pridať mierku k výtlačku mapy.",
                     "tooltip": "Ak chcete, môžete pridať mierku k mape."

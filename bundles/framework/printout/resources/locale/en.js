@@ -70,10 +70,6 @@ Oskari.registerLocalization(
                 "mapTitle": {
                     "placeholder": "Title"
                 },
-                "pageLogo": {
-                    "label": "Include logo",
-                    "tooltip": "You can hide the logo if necessary."
-                },
                 "pageScale": {
                     "label": "Include scale bar",
                     "tooltip": "Add a scale to the map, if you want."

@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Shto titullin për hartën"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Shto llogon Oskari",
-                    "tooltip": "Ju mund ta fshihni llogon nëse është e nevojshme"
-                },
                 "pageScale": {
                     "label": "Shto hartës shkallët",
                     "tooltip": "Shto hartës shkallët"

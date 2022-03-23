@@ -69,7 +69,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
             mapTitleInput: '<div class="printout_option_cont printout_settings_cont"><input class="printout_title_field" type="text"></div>',
             optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
-            optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
+            optionTool: `<div class="tool">
+                <label class="printout_radiolabel">
+                    <input type="radio"/>
+                </label>
+            </div>`,
             scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
             contentOptions: '<div class="printout_content"><div class="printout_content_title"></div><div class="printout_content_options"></div></div>',
             pngNote: '<div class="icon-warning-light"/>'
@@ -178,19 +182,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 const { value, width, height } = option;
                 var toolContainer = me.template.optionTool.clone();
                 let label = me.loc.size.options[value];
-                const id = 'printout-size-' + value;
                 if (width && height) {
                     label = label + ' (' + width + ' x ' + height + 'px)';
                 }
-                toolContainer.find('label').append(label).attr('for', id);
+                toolContainer.find('label').append(label);
                 const input = toolContainer.find('input');
                 if (i === 0) {
                     input.prop('checked', true);
                 }
                 input.attr({
                     value,
-                    name: 'printout-size',
-                    id
+                    name: 'printout-size'
                 });
                 input.on('change', function () {
                     me._cleanMapPreview();
@@ -224,17 +226,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             FORMAT_OPTIONS.forEach((option, i) => {
                 const { name, mime } = option;
                 var toolContainer = this.template.optionTool.clone();
-                const id = 'printout-format-' + name;
                 const label = this.loc.format.options[name];
-                toolContainer.find('label').append(label).attr('for', id);
+                toolContainer.find('label').append(label);
                 const input = toolContainer.find('input');
-                if (i === 0) {
+                if (name === 'pdf') {
                     input.prop('checked', true);
                 }
                 input.attr({
                     value: mime,
-                    name: 'printout-format',
-                    id
+                    name: 'printout-format'
                 });
                 input.on('change', function () {
                     if (name === 'png') {
@@ -338,14 +338,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             SCALE_OPTIONS.forEach(function (value, i) {
                 var toolContainer = me.template.optionTool.clone();
                 var label = me.loc.scale[value];
-                const id = 'printout-scale-' + value;
-                toolContainer.find('label').append(label).attr('for', id);
+                toolContainer.find('label').append(label);
                 const input = toolContainer.find('input');
                 if (i === 0) {
                     input.prop('checked', true);
                 }
                 input.attr({
-                    id,
                     value,
                     name: 'printout-scale'
                 });

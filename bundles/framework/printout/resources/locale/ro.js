@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "adăugare titlu hartă"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Adăugare siglă Oskari",
-                    "tooltip": "Puteţi ascunde sigla dacă este necesar"
-                },
                 "pageScale": {
                     "label": "Adăugare scară hartă",
                     "tooltip": "Adăugare scară hartă"
