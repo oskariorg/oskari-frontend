@@ -70,10 +70,6 @@ Oskari.registerLocalization(
                 "mapTitle": {
                     "placeholder": "Otsikko"
                 },
-                "pageLogo": {
-                    "label": "Näytä palvelun logo",
-                    "tooltip": "Näytä tulosteessa tämän palvelun logo."
-                },
                 "pageScale": {
                     "label": "Näytä mittakaava",
                     "tooltip": "Näytä tulosteessa kartan mittakaava."

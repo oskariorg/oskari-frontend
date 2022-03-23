@@ -17,7 +17,6 @@ export const SCALE_OPTIONS = [
 ];
 // all selected by default
 export const PAGE_OPTIONS = [
-    'pageLogo',
     'pageScale',
     'pageDate'
 ];

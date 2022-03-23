@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Fügen Sie der Karte einen Titel hinzu"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Paikkatietoikkuna-Logo hinzufügen",
-                    "tooltip": "Sie können das Logo bei Bedarf verbergen"
-                },
                 "pageScale": {
                     "label": "Maßstab zur Karte hinzufügen",
                     "tooltip": "Maßstab zur Karte hinzufügen"

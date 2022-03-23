@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "adjon címet a térképnek"
             },
             "content": {
-               "pageLogo": {
-                    "label": "Oskari logo hozzáadása",
-                    "tooltip": "A logót elrejtheti, ha szükséges."    
-                },
                 "pageScale": {
                     "label": "Méretarány megadása.",
                     "tooltip": "Adja meg a térkép méretarányát."

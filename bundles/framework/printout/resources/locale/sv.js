@@ -70,10 +70,6 @@ Oskari.registerLocalization(
                 "mapTitle": {
                     "placeholder": "Rubrik"
                 },
-                "pageLogo": {
-                    "label": "Inkludera logotyp i utskriften",
-                    "tooltip": "Du kan dölja logotyp vid behov."
-                },
                 "pageScale": {
                     "label": "Lägg en skala till kartutskriften",
                     "tooltip": "Lägg till skala till kartan, om du vill."

@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Adicionar título à carta"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Adicionar o logótipo Oskari",
-                    "tooltip": "Pode esconder o logótipo se necessário"
-                },
                 "pageScale": {
                     "label": "Adicionar escala à carta",
                     "tooltip": "Adicionar escala à carta"

@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Dodaj naslov za mapu"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Dodaj OSKARI logo",
-                    "tooltip": "Možete sakriti logo ako je potrebno"
-                },
                 "pageScale": {
                     "label": "Dodaj razmeru na mapu",
                     "tooltip": "Dodavanje razmere na mapu"

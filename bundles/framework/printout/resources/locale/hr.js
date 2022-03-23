@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "dodaj naziv karte"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Dodaj logo Oskari",
-                    "tooltip": "Ako je potrebno, logo se može sakriti"
-                },
                 "pageScale": {
                     "label": "Dodaj mjerilo na kartu",
                     "tooltip": "Dodaj mjerilo na kartu"
