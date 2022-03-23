@@ -278,6 +278,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             const lastSelected = { ...this.lastSelectedClassification };
             delete lastSelected.manualBounds;
             delete lastSelected.fractionDigits;
+            delete lastSelected.base;
 
             const metadataClassification = {};
             // Note! Assumes that the metadata has been loaded when selecting the indicator from the list to get a sync response
@@ -290,25 +291,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 const metadata = data.metadata || {};
                 if (typeof metadata.isRatio === 'boolean') {
                     metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
-                } else {
-                    // we have no metadata, default to last used or 'choropleth'
-                    metadataClassification.mapStyle = lastSelected.mapStyle || 'choropleth';
                 }
-                let decimalCount = metadata.decimalCount;
-                if (typeof decimalCount !== 'number') {
-                    decimalCount = lastSelected.fractionDigits;
+                if (typeof metadata.decimalCount === 'number') {
+                    metadataClassification.fractionDigits = metadata.decimalCount;
                 }
-                metadataClassification.fractionDigits = decimalCount;
                 if (typeof metadata.base === 'number') {
                     // if there is a base value the data is divided at base value
                     // TODO: other stuff based on this
+                    metadataClassification.base = metadata.base;
                     metadataClassification.type = 'div';
-                } else {
-                    // we have no metadata, default to last used or 'seq'
-                    metadataClassification.type = lastSelected.type || 'seq';
                 }
             });
-            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification, indicator.classification || {});
+            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification);
             this.validateClassification(result);
             return result;
         },

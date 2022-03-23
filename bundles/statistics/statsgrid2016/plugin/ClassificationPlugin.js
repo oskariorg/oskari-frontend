@@ -69,9 +69,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             const { error, ...state } = this.service.getStateService().getStateForClassification();
             if (error) return;
-            const { data, status, uniqueCount } = this.getIndicatorData(state);
+            const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
-            const editOptions = this.getEditOptions(state, uniqueCount);
+            const editOptions = this.getEditOptions(state, uniqueCount, minMax);
             const classifiedDataset = this.classifyDataset(state, data);
 
             ReactDOM.render((
@@ -108,9 +108,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
                     const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
-                    const uniqueValues = [...new Set(Object.values(validData))];
+                    const uniqueValues = [...new Set(Object.values(validData))].sort((a,b) => a - b);
                     this.indicatorData.uniqueCount = uniqueValues.length;
                     this.indicatorData.data = data;
+                    this.indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
                     this.indicatorData.status = 'DONE';
                 }
                 if (err) {
@@ -121,16 +122,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             });
             return this.indicatorData;
         },
-        getEditOptions: function (state, uniqueCount) {
+        getEditOptions: function (state, uniqueCount, minMax) {
             const { activeIndicator } = state;
-            const { type, count, reverseColors, mapStyle } = activeIndicator.classification;
+            const { type, count, reverseColors, mapStyle, base } = activeIndicator.classification;
             const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
 
-            const colorsets = mapStyle === 'points' ? [] : this.service.getColorService().getOptionsForType(type, count, reverseColors);
+            const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
+            const colorsets = mapStyle === 'points' && type !== 'div' ? [] : this.service.getColorService().getOptionsForType(type, colorCount, reverseColors);
 
             const disabled = [];
             if (uniqueCount < 3) {
                 disabled.push('jenks');
+            }
+            if (mapStyle === 'points') {
+                // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
+                const dividable = minMax.min < 0 && minMax.max > 0;
+                if (typeof base !== 'number' && !dividable) {
+                    // disable option if base isn't given in metadata or dataset isn't dividable
+                    disabled.push('div');
+                }
             }
             const toOption = (option, value) => ({
                 value,
