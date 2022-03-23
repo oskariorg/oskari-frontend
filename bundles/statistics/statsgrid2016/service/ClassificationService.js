@@ -59,31 +59,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         /**
          * Classifies given dataset.
-         * Returns an object like :
-         * {
-         *     bounds : [<classification bounds as numbers like [0,2,5,6]>],
-         *     ranges : [<classification ranges as strings ["0-2", "2-5", "5-6"]>],
-         *     stats : {
-         *         min : <min value in data>,
-         *         max : <max value in data>,
-         *         ...
-         *         mean : <mean value in data>
-         *     },
-         *     getGroups : <function to return keys in data grouped by value ranges, takes an optional param index to get just one group>,
-         *     getIndex : <function to return a group index for data
-         *     createLegend : <function to create html-legend for ranges, takes colorset and optional title as params>
-         * }
-         * Options can include:
-         * {
-         *    count : <number between 2-9 - defaults to 5>,
-         *    method : <one of 'jenks', 'quantile', 'equal' - defaults to 'jenks'>,
-         *    mode : <one of 'distinct', 'discontinuous' - defaults to 'distinct'>,
-         *    precission : <undefined or integer between 0-20 - defaults to undefined>
-         * }
          * @param  {Object} indicatorData data to classify. Keys are available for groups, values are used for classification
-         * @param  {Object} options       optional instructions for classification
+         * @param  {Object} opts      options for classification
          * @param  {geostats} groupStats precalculated geostats | optional
-         * @return {Object}               result with values and helper functions
+         * @return {Object}               result with classified values
          */
         getClassification: function (indicatorData, opts, groupStats) {
             if (typeof indicatorData !== 'object') {
@@ -94,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < 2) {
                 return { error: 'noEnough' };
             }
-
+            const isDivided = opts.mapStyle === 'points' && opts.type === 'div';
             const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
             var stats = new geostats(dataAsList);
             stats.silent = true;
@@ -102,13 +81,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             let bounds;
             const setBounds = (stats) => {
                 if (opts.method === 'jenks') {
-                    // Luonnolliset välit
                     bounds = stats.getClassJenks(opts.count);
                 } else if (opts.method === 'quantile') {
-                    // Kvantiilit
                     bounds = stats.getQuantile(opts.count);
                 } else if (opts.method === 'equal') {
-                    // Tasavälit
                     bounds = stats.getEqInterval(opts.count);
                 } else if (opts.method === 'manual') {
                     bounds = this.getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
@@ -135,6 +111,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 // Set bounds manually.
                 stats.setBounds(groupStats.bounds);
+            } else if (isDivided) {
+                bounds = this.getDividedBounds(stats, opts);
             } else {
                 setBounds(stats);
             }
@@ -142,11 +120,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 this.log.warn('Failed to create bounds');
                 return { error: 'noEnough' };
             }
+
             const ranges = opts.mode === 'distinct'
                 ? this.getRangesFromBounds(bounds, opts, format)
                 : this.getValueRanges(dataAsList, bounds, format);
-            const colors = this._colorService.getColorsForClassification(opts);
-            const pixels = this.getPixelsForClassification(opts);
+            const colors = isDivided ? this._colorService.getDividedColors(opts, bounds) : this._colorService.getColorsForClassification(opts);
+            const pixels = isDivided ? this.getDividedPixels(opts, bounds) : this.getPixelsForClassification(opts);
 
             if (![colors, pixels, ranges].every(list => Array.isArray(list) && list.length === opts.count)) {
                 this.log.warn('Failed to create groups');
@@ -166,6 +145,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const getGroupForValue = value => {
                 const index = bounds.findIndex(bound => value < bound);
                 // first groups values is between bounds[0] and bounds[1]
+                // max value === last bound, max value isn't found, return last group index
                 return index === -1 ? bounds.length - 2 : index - 1;
             };
             for (const region in indicatorData) {
@@ -216,6 +196,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             return sizes;
         },
+        getDividedPixels: function (classification, bounds) {
+            const { min, max, base = 0 } = classification;
+            const baseIndex = bounds.findIndex(bound => bound >= base);
+            const minValueDif = base - bounds[0];
+            const maxValueDif = bounds[bounds.length - 1] - base;
+            const x = d3.scaleLinear()
+                .domain([base, Math.max(minValueDif, maxValueDif)])
+                .range([min, max]);
+
+            const getSize = index => {
+                const size = Math.floor(x(index));
+                // Make size an even value for rendering
+                return size % 2 !== 0 ? size + 1 : size;
+            };
+            const sizes = [];
+            for (let i = 0; i < bounds.length - 1; i++) {
+                const val = i < baseIndex ? base - bounds[i] : bounds[i + 1] - base;
+                sizes[i] = getSize(val);
+            }
+            return sizes;
+        },
+        getDividedBounds: function (stats, classification) {
+            const { method, count, manualBounds, base = 0 } = classification;
+            let bounds;
+            if (method === 'jenks') {
+                bounds = stats.getClassJenks(count);
+            } else if (method === 'quantile') {
+                bounds = stats.getQuantile(count);
+            } else if (method === 'equal') {
+                bounds = stats.getEqInterval(count);
+            } else if (method === 'manual') {
+                bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
+            }
+            const index = bounds.findIndex(bound => bound > base);
+            if (count % 2 === 0) {
+                // move closer bound to base
+                if (base - bounds[index - 1] < bounds[index] - base) {
+                    bounds[index - 1] = base;
+                } else {
+                    bounds[index] = base;
+                }
+            } else {
+                // odd count has 'neutral' group so both bounds have to move to base
+                bounds[index] = base;
+                bounds[index - 1] = base;
+            }
+            return bounds;
+        },
 
         getRangeString: function (min, max) {
             return `${min} - ${max}`;
@@ -223,11 +251,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getRangesFromBounds: function (bounds, opts, format) {
             const { fractionDigits } = opts;
             const ranges = [];
+            const lastRange = bounds.length - 2;
             for (let i = 0; i < bounds.length - 1; i++) {
                 let min = bounds[i];
                 let max = bounds[i + 1];
                 const same = min === max;
-                max = format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
+                // decrease groups max range by fraction digit, skip last
+                max = i === lastRange ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
                 if (same) {
                     ranges.push(max);
                 } else {
@@ -241,10 +271,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getValueRanges: function (data, bounds, format) {
             const sorted = [...data].sort((a, b) => a - b);
             const ranges = [];
+            const lastRange = bounds.length - 2;
             for (let i = 0; i < bounds.length - 1; i++) {
                 const max = bounds[i + 1];
                 const min = bounds[i];
                 const values = sorted.filter(val => val >= min && val < max);
+                if (i === lastRange) {
+                    // max value === last bound, add max value to last range
+                    values.push(sorted[sorted.length - 1]);
+                }
                 if (values.length === 0) {
                     ranges[i] = '';
                 } else if (values.length === 1) {

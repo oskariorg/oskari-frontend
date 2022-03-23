@@ -59,6 +59,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             }
             return reverseColors ? [...set].reverse() : set;
         },
+        getDividedColors: function (classification, bounds) {
+            const { count, color, reverseColors, base = 0 } = classification;
+            const isEven = count % 2 === 0;
+            const colorCount = isEven ? 2 : 3;
+            const colorset = [...this.getColorset(colorCount, color)];
+            if (reverseColors) {
+                colorset.reverse();
+            }
+            const baseIndex = bounds.findIndex(bound => bound >= base);
+            const colors = [];
+            if (isEven) {
+                for (let i = 0; i < bounds.length - 1; i++) {
+                    colors[i] = i < baseIndex ? colorset[0] : colorset[1];
+                }
+            } else {
+                for (let i = 0; i < bounds.length - 1; i++) {
+                    if (i === baseIndex) {
+                        colors[i] = colorset[1];
+                    } else {
+                        colors[i] = i < baseIndex ? colorset[0] : colorset[2];
+                    }
+                }
+            }
+            return colors;
+        },
         /**
          * Tries to return an array of colors where length equals count parameter.
          * If such set is not available, throws Error
@@ -95,7 +120,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return { min: 2, max: max + 2 };
         },
         validateColor: function (color, mapStyle, type) {
-            if (mapStyle === 'points') {
+            if (mapStyle === 'points' && type !== 'div') {
                 return !!Oskari.util.hexToRgb(color);
             }
             const colorset = this.colorsets.find(set => set.name === color);
@@ -103,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return setType === type;
         },
         getDefaultColorForType: function (mapStyle, type) {
-            if (mapStyle === 'points') {
+            if (mapStyle === 'points' && type !== 'div') {
                 return this._defaults.color;
             }
             if (!this.getAvailableTypes().includes(type)) {
