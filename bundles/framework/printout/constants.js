@@ -5,10 +5,10 @@ export const SIZE_OPTIONS = [
     { value: 'A3', landscape: false },
     { value: 'A3_Landscape', landscape: true }
 ];
-// first is default selection
+// 'pdf' is default selection
 export const FORMAT_OPTIONS = [
-    { name: 'pdf', mime: 'application/pdf' },
-    { name: 'png', mime: 'image/png' }
+    { name: 'png', mime: 'image/png' },
+    { name: 'pdf', mime: 'application/pdf' }
 ];
 // first is default selection
 export const SCALE_OPTIONS = [
