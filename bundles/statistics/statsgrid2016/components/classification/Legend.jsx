@@ -22,7 +22,7 @@ export const Legend = ({
     }
     const opacity = transparency / 100 || 1;
     const { groups } = classifiedDataset;
-    const maxSizePx = groups[groups.length - 1].sizePx;
+    const maxSizePx = groups.map(g => g.sizePx).reduce((max, val) => max < val ? val : max);
     return (
         <Container>
             { groups.map((group, i) =>
