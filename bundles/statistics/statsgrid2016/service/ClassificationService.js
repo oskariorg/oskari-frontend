@@ -69,7 +69,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 this.log.warn('Data expected as object with region/value as keys/values.');
                 return { error: 'noData' };
             }
-            const dataAsList = Object.values(indicatorData);
+            // TODO: data should be validated in one place (stateservice?)
+            const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
             if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < 2) {
                 return { error: 'noEnough' };
             }
@@ -94,9 +95,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             if (groupStats) {
                 groupStats.silent = true;
-                if (opts.count >= groupStats.serie.length) {
-                    opts.count = groupStats.serie.length - 1;
-                }
                 var groupOpts = groupStats.classificationOptions || {};
                 const calculateBounds =
                     groupOpts.method !== opts.method ||
@@ -108,6 +106,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
                     groupStats.classificationOptions = groupOpts;
+                } else {
+                    bounds = groupStats.bounds;
                 }
                 // Set bounds manually.
                 stats.setBounds(groupStats.bounds);
