@@ -307,10 +307,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             return result;
         },
         validateClassification: function (classification) {
-            const { mapStyle, color, type } = classification;
             const colorService = this.service.getColorService();
-            if (!colorService.validateColor(color, mapStyle, type)) {
-                classification.color = colorService.getDefaultColorForType(mapStyle, type);
+            if (!colorService.validateColor(classification)) {
+                classification.color = colorService.getDefaultColor(classification);
+            }
+            const { max } = classification.mapStyle === 'points'
+                ? this.service.getClassificationService().getRangeForPoints()
+                : colorService.getRangeForColor(classification.color);
+            if (classification.count > max) {
+                classification.count = max;
             }
         },
         /**
