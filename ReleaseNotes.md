@@ -45,6 +45,7 @@ Others changes/fixes:
 - Layer capabilities structure changed on server and frontend code was changed to accommodate
 - Timeseries player-UI is no longer duplicated after using the publisher tool
 - Editing an embedded map with GFI query tool disactivated no longer results in the tool becoming activated on the embedded map
+- Option to hide service logo from PDF printouts have been removed
 
 Progress for jQuery to React migration:
 - Import userlayers form
