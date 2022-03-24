@@ -1,5 +1,70 @@
 # Release Notes
 
+## 2.7.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/36?closed=1
+
+Layer analytics functionality:
+- two new bundles: `layeranalytics` and `admin-layeranalytics`
+- the `layeranalytics` is used to gather anonymized data about map layer usage and errors end-users experience with map layers
+- the admin functionality can be used to analyze the gathered data to see what layers are used the most and what layers have the most problems
+- the admin is shown statistics to detect if the layers are fully non-operational/broken by misconfiguration/service changes or if there's some edge cases that could be corrected by limiting the coverage area of the layer or imposing scale-limits etc to improve the end-user experience
+- For more details:
+  - https://oskari.org/api/bundles#/2.7.0/framework/layeranalytics
+  - https://oskari.org/api/bundles#/2.7.0/admin/admin-layeranalytics
+  - https://github.com/oskariorg/oskari-frontend/pull/1759
+
+
+Statistical maps classification improvements:
+- classification UI has been mostly rewritten
+- new classification options for diverging data
+- legend is now more readable
+- external metadata handling for indicators has been refined
+
+Improvements to style editor for vector features:
+- area fill patterns tuned (preview is now consistent with map presentation/map presentation updated as well)
+- the new editor is now used for markers, my places, userlayers and runtime styling for vector layers (and analysis layers on contrib repository)
+- Note! VisualizationForm (jQuery-component) is no longer included in frontend build by default. It has been replaced by the new React-based style editor. If you need the jQuery version you can still import it on your own application (example https://github.com/oskariorg/oskari-frontend-contrib/pull/73), but it will be removed on a future release.
+
+RPC improvements:
+- now allows appsetup to expose more events/requests through RPC API
+- existing conf designed to restrict. New config allows including defaults + appsetup specific additions (https://github.com/oskariorg/oskari-frontend/pull/1750)
+- fixed an issue where feature style declaring stroke width 0 (to hide a border of an area etc) resulted in an error
+
+Layerlisting improvements:
+- layer count badge now includes layers from subgroups
+- handling of long layer/dataprovider names improved
+- opacity field controls no longer hide the %-character
+
+Others changes/fixes:
+- localized names are now supported for `myplaces` and `userlayer` layers
+- `myplaces` layer edit form now has consistent styling with other Oskari popups
+- Search UI width is now limited so having longer description text flows/looks better.
+- Layer changes at runtime are now reflected on object data tab names and data provider popup
+- Layer capabilities structure changed on server and frontend code was changed to accommodate
+- Timeseries player-UI is no longer duplicated after using the publisher tool
+- Editing an embedded map with GFI query tool disactivated no longer results in the tool becoming activated on the embedded map
+
+Progress for jQuery to React migration:
+- Import userlayers form
+- My data 
+    - Embedded maps listing
+    - Saved views listing
+    - Account information
+- LocalizationComponent improved
+- FileInput added as new component
+- Improved the API for React-based flyouts/popups
+
+Updated libs:
+- OpenLayers 6.6.1 -> 6.13.0
+- ol-mapbox-style 6.4.1 -> 7.1.1
+- Cesium 1.84.0 -> 1.91.0
+- ESLint 7.1.0 -> 8.9.0 (and various ESLint plugins)
+- dompurify 2.3.1 -> 2.3.6
+- intl-messageformat 9.9.1 -> 9.11.4
+- styled-components 5.3.1 -> 5.3.3
+
 ## 2.6.0
 
 For a full list of changes see:
