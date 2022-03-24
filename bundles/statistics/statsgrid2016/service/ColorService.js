@@ -12,8 +12,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
 
     function () {
         this._defaults = {
-            color: '#2ba7ff',
-            colorSet: 'Blues'
+            points: '#2ba7ff',
+            seq: 'Blues',
+            div: 'BrBG',
+            qual: 'Paired'
+
         };
         this._limits = {
             types: ['div', 'seq', 'qual'],
@@ -113,13 +116,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object} with keys min and max { min : 2, max : 9 }
          */
         getRange: function (type) {
-            // 2 colors is in the colors[0], assume that every next item has one color more
             const max = this.colorsets.filter(set => set.type === type)
-                .map(set => set.colors.length)
+                .map(({ colors }) => colors[colors.length - 1].length)
                 .reduce((max, size) => max > size ? max : size);
-            return { min: 2, max: max + 2 };
+            return { min: 2, max };
         },
-        validateColor: function (color, mapStyle, type) {
+        getRangeForColor: function (color) {
+            const { colors } = this.colorsets.find(set => set.name === color) || {};
+            if (!colors) {
+                throw new Error(`Couldn't get count range for color: ${color}`);
+            }
+            const max = colors[colors.length - 1].length;
+            return { min: 2, max };
+        },
+        validateColor: function (classification) {
+            const { mapStyle, color, type } = classification;
             if (mapStyle === 'points' && type !== 'div') {
                 return !!Oskari.util.hexToRgb(color);
             }
@@ -127,14 +138,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             const { type: setType } = colorset || {};
             return setType === type;
         },
-        getDefaultColorForType: function (mapStyle, type) {
+        getDefaultColor: function (classification) {
+            const { mapStyle, type } = classification;
             if (mapStyle === 'points' && type !== 'div') {
-                return this._defaults.color;
+                return this._defaults.points;
             }
-            if (!this.getAvailableTypes().includes(type)) {
-                throw new Error(`Invalid type: ${type}`);
+            const colorset = this._defaults[type];
+            if (!colorset) {
+                throw new Error(`No default color for type: ${type}`);
             }
-            return this.colorsets.find(set => set.type === type).name;
+            return colorset;
         },
         /**
          * Options to show in classification UI for selected type and count
@@ -143,11 +156,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object[]} Returns an array of objects like { name : "nameOfSet", colors : [.. array of hex colors...]}
          */
         getOptionsForType: function (type, count, reverse) {
-            const range = this.getRange(type);
-            if (typeof count !== 'number' || range.min > count || range.max < count) {
-                throw new Error('Invalid color count provided: ' + count +
-                    '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
-            }
             // 2 colors is the first set and index starts at 0 -> -2
             const arrayIndex = count - 2;
 
