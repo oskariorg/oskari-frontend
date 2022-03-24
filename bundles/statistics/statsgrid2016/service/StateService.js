@@ -165,6 +165,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // map to keep stored states work properly
             this.indicators = indicators.map(ind => {
                 const hash = ind.hash || this.getHash(ind.ds, ind.id, ind.selections, ind.series);
+                if (ind.classification) {
+                    this.validateClassification(ind.classification);
+                }
                 return {
                     datasource: Number(ind.ds),
                     indicator: ind.id,

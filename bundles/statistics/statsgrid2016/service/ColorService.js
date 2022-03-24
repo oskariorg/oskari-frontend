@@ -131,6 +131,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         },
         validateColor: function (classification) {
             const { mapStyle, color, type } = classification;
+            if (typeof color !== 'string') {
+                return false;
+            }
             if (mapStyle === 'points' && type !== 'div') {
                 return !!Oskari.util.hexToRgb(color);
             }
