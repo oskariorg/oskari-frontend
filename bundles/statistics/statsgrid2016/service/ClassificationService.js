@@ -71,7 +71,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
             // TODO: data should be validated in one place (stateservice?)
             const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
-            if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < 2) {
+            const minData = opts.method === 'jenks' ? 3 : 2;
+            if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < minData) {
                 return { error: 'noEnough' };
             }
             const isDivided = opts.mapStyle === 'points' && opts.type === 'div';
