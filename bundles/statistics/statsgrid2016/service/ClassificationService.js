@@ -127,7 +127,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 : this.getValueRanges(dataAsList, bounds, format);
             const colors = isDivided ? this._colorService.getDividedColors(opts, bounds) : this._colorService.getColorsForClassification(opts);
             const pixels = isDivided ? this.getDividedPixels(opts, bounds) : this.getPixelsForClassification(opts);
-
             if (![colors, pixels, ranges].every(list => Array.isArray(list) && list.length === opts.count)) {
                 this.log.warn('Failed to create groups');
                 return { error: 'general' };
@@ -231,17 +230,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
             }
             const index = bounds.findIndex(bound => bound > base);
+            const lastIndex = bounds.length - 1;
+            if (index <= 0) {
+                // All bounds are under or over base
+                return bounds;
+            }
+            // safety check, don't modify firt or last bound
+            const validate = index => {
+                if (index < 1) {
+                    return 1;
+                }
+                if (index >= lastIndex) {
+                    return lastIndex - 1;
+                }
+                return index;
+            };
             if (count % 2 === 0) {
                 // move closer bound to base
+                let closer = index;
                 if (base - bounds[index - 1] < bounds[index] - base) {
-                    bounds[index - 1] = base;
-                } else {
-                    bounds[index] = base;
+                    closer = index - 1;
                 }
+                closer = validate(closer);
+                bounds[closer] = base;
             } else {
                 // odd count has 'neutral' group so both bounds have to move to base
-                bounds[index] = base;
-                bounds[index - 1] = base;
+                let under = validate(index - 1);
+                let over = validate(index);
+                if (under === over) {
+                    if (over === 1) {
+                        over++;
+                    } else {
+                        under--;
+                    }
+                }
+                bounds[under] = base;
+                bounds[over] = base;
             }
             return bounds;
         },
@@ -258,7 +282,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 let max = bounds[i + 1];
                 const same = min === max;
                 // decrease groups max range by fraction digit, skip last
-                max = i === lastRange ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
+                max = i === lastRange || same ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
                 if (same) {
                     ranges.push(max);
                 } else {
@@ -270,7 +294,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
 
         getValueRanges: function (data, bounds, format) {
-            const sorted = [...data].sort((a, b) => a - b);
+            // TODO: could use sorted unique values which is used for classification options
+            const sorted = [...new Set(data)].sort((a, b) => a - b);
             const ranges = [];
             const lastRange = bounds.length - 2;
             for (let i = 0; i < bounds.length - 1; i++) {
