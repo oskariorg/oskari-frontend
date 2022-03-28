@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              */
             'MapLayerEvent': function (event) {
                 if (event.getOperation() === 'update') {
-                    this.plugins['Oskari.userinterface.Flyout'].refresh();
+                    this.refreshUI();
                 }
 
                 if (event.getOperation() !== 'add') {
