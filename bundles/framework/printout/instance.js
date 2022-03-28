@@ -408,7 +408,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (this.printout) {
                     this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
                     this.printout.setEnabled(false);
-                    this.printout.hide();
+                    this.printout.destroy();
                 }
                 var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
                 this.sandbox.request(this, builder());
