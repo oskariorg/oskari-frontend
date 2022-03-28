@@ -1,4 +1,4 @@
-import { equalSizeBands } from '../util/equalSizeBands';
+import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
 
@@ -229,34 +229,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             } else if (method === 'manual') {
                 bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
             }
-            const index = bounds.findIndex(bound => bound > base);
+            const potentialBaseIndex = bounds.findIndex(bound => bound > base);
             const lastIndex = bounds.length - 1;
-            if (index <= 0) {
+            if (potentialBaseIndex <= 0) {
                 // All bounds are under or over base
                 return bounds;
             }
-            // safety check, don't modify firt or last bound
-            const validate = index => {
-                if (index < 1) {
-                    return 1;
-                }
-                if (index >= lastIndex) {
-                    return lastIndex - 1;
-                }
-                return index;
-            };
+            // clamp function is used to ensure that we don't modify first or last bound
+            const clamp = createClamp(1, lastIndex - 1);
             if (count % 2 === 0) {
-                // move closer bound to base
-                let closer = index;
-                if (base - bounds[index - 1] < bounds[index] - base) {
-                    closer = index - 1;
+                const deltaToLowerBound = base - bounds[potentialBaseIndex - 1];
+                const deltaToUpperBound = bounds[potentialBaseIndex] - base;
+                // by default base index is the next bound over base value
+                let indexForBase = potentialBaseIndex;
+                if (deltaToLowerBound < deltaToUpperBound) {
+                    // but if next bound over base value is further from base than the lower bound, adjust lower instead
+                    indexForBase = potentialBaseIndex - 1;
                 }
-                closer = validate(closer);
-                bounds[closer] = base;
+                indexForBase = clamp(indexForBase);
+                bounds[indexForBase] = base;
             } else {
                 // odd count has 'neutral' group so both bounds have to move to base
-                let under = validate(index - 1);
-                let over = validate(index);
+                let under = clamp(potentialBaseIndex - 1);
+                let over = clamp(potentialBaseIndex);
                 if (under === over) {
                     if (over === 1) {
                         over++;
