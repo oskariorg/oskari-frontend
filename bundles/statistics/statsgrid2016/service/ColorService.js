@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
     function () {
         this._defaults = {
             points: '#2ba7ff',
+            divPoints: 'RdBu',
             seq: 'Blues',
             div: 'BrBG',
             qual: 'Paired'
@@ -143,7 +144,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         },
         getDefaultColor: function (classification) {
             const { mapStyle, type } = classification;
-            if (mapStyle === 'points' && type !== 'div') {
+            if (mapStyle === 'points') {
+                if (type === 'div') {
+                    return this._defaults.divPoints;
+                }
                 return this._defaults.points;
             }
             const colorset = this._defaults[type];
