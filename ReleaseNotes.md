@@ -15,7 +15,6 @@ Layer analytics functionality:
   - https://oskari.org/api/bundles#/2.7.0/admin/admin-layeranalytics
   - https://github.com/oskariorg/oskari-frontend/pull/1759
 
-
 Statistical maps classification improvements:
 - classification UI has been mostly rewritten
 - new classification options for diverging data
