@@ -158,13 +158,11 @@ Oskari.clazz.define(
 
             // disable gfi
             me.getMapModule().setDrawingMode(true);
-            // TODO: why not just call the stopDrawing()/_cleanupInternalState() method here?
+
             me.removeInteractions(me._draw, me._id);
             me.removeInteractions(me._modify, me._id);
+            this._cleanupInternalState();
 
-            if (me._sketch) {
-                jQuery('div.' + me._tooltipClassForMeasure + '.' + me._sketch.getId()).remove();
-            }
             me._shape = shape;
 
             // setup functionality id
@@ -455,7 +453,7 @@ Oskari.clazz.define(
         _cleanupInternalState: function () {
             // Remove measure result from map
             if (this._sketch) {
-                jQuery('div.' + this._tooltipClassForMeasure + '.' + this._sketch.getId()).remove();
+                this.removeDrawingTooltip(this._sketch.getId());
             }
             this._sketch = null;
         },
@@ -466,7 +464,6 @@ Oskari.clazz.define(
          */
         clearDrawing: function (id) {
             var me = this;
-
             if (id) {
                 var layer = me.getLayer(me.getLayerIdForFunctionality(id));
                 if (layer) {
@@ -484,8 +481,6 @@ Oskari.clazz.define(
                 me.getMap().removeOverlay(me._overlays[key]);
             });
             me._overlays = {};
-
-            jQuery('.' + me._tooltipClassForMeasure).remove(); // do we need this??
         },
         /**
          * @method sendDrawingEvent
@@ -1320,6 +1315,14 @@ Oskari.clazz.define(
             tooltip.id = id;
             this.getMap().addOverlay(tooltip);
             this._overlays[id] = tooltip;
+        },
+        removeDrawingTooltip: function (id) {
+            const overlay = this._overlays[id];
+            if (!overlay) {
+                return;
+            }
+            this.getMap().removeOverlay(overlay);
+            delete this._overlays[id];
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
