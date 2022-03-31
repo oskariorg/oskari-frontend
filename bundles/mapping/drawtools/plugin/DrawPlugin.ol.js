@@ -1303,6 +1303,10 @@ Oskari.clazz.define(
        * - creates a new tooltip on drawing
        */
         createDrawingTooltip: function (id) {
+            if (this._overlays[id]) {
+                // already added to map
+                return;
+            }
             const tooltipClass = this._tooltipClassForMeasure + ' ' + this.getCurrentDrawShape() + ' ' + id;
             var tooltipElement = document.createElement('div');
             tooltipElement.className = tooltipClass;
