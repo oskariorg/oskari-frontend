@@ -155,11 +155,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.regionset = null;
             this.indicators = [];
             this.activeRegion = null;
+            this.lastSelectedClassification = {};
             const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
             this.sandbox.notifyAll(eventBuilder(true));
         },
-        setState: function (state = {}) {
-            const { regionset, indicators = [], active: activeHash, activeRegion } = state;
+        setState: function (state) {
+            const { regionset, indicators = [], active: activeHash, activeRegion } = state || {};
             this.regionset = regionset;
             this.activeRegion = activeRegion;
             // map to keep stored states work properly
@@ -514,7 +515,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
             } else {
                 // if no indicators then reset state
-                // last indicator removal should act like all indicators or layer was removed
+                // last indicator removal should act like all indicators was removed
                 this.resetState();
             }
 
