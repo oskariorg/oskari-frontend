@@ -33,13 +33,13 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
         {
             align: 'left',
             title: <Message messageKey='tab.grid.name' bundleKey={LOCALE_KEY} />,
-            dataIndex: ['properties', 'name'],
-            sorter: (a, b) => a.properties.name.localeCompare(b.properties.name),
+            dataIndex: 'name',
+            sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
-                const shape = getGeometryIcon(item.geometry);
+                const shape = getGeometryIcon(item._place.geometry);
                 return (
-                    <a onClick={() => showPlace(item.geometry, item.categoryId)}>
+                    <a onClick={() => showPlace(item._place.geometry, item._place.categoryId)}>
                         <div className={`icon myplaces-${shape}`} />
                         <span>{title}</span>
                     </a>
@@ -49,8 +49,8 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
         {
             align: 'left',
             title: <Message messageKey='tab.grid.desc' bundleKey={LOCALE_KEY} />,
-            dataIndex: ['properties', 'description'],
-            sorter: (a, b) => a.properties.description.localeCompare(b.properties.description)
+            dataIndex: 'description',
+            sorter: getSorterFor('description')
         },
         {
             align: 'left',
@@ -77,12 +77,12 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <div className='icon t_edit' onClick={() => handleEdit(item)}>
+                        <div className='icon t_edit' onClick={() => handleEdit(item._place)}>
                             <EditOutlined style={ EDIT_ICON_STYLE } />
                         </div>
                         <Confirm
-                            title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.properties.name }} bundleKey={LOCALE_KEY} />}
-                            onConfirm={() => handleDelete(item)}
+                            title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.name }} bundleKey={LOCALE_KEY} />}
+                            onConfirm={() => handleDelete(item._place)}
                             okText={<Message messageKey='buttons.ok' bundleKey={LOCALE_KEY} />}
                             cancelText={<Message messageKey='buttons.cancel' bundleKey={LOCALE_KEY} />}
                             placement='bottomLeft'
@@ -100,7 +100,11 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
             columns={columnSettings}
             dataSource={data.map(item => ({
                 key: item.id,
-                ...item
+                ...item.properties,
+                createDate: item.createDate,
+                updateDate: item.updateDate,
+                measurement: item.measurement,
+                _place: item
             }))}
             pagination={false}
         />
