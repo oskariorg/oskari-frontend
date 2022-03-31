@@ -229,7 +229,8 @@ Oskari.registerLocalization({
             'grid': {
                 'name': 'Name',
                 'edit': 'Edit',
-                'delete': 'Delete'
+                'delete': 'Delete',
+                'actions': 'Actions'
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',

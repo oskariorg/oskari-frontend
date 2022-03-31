@@ -269,10 +269,7 @@ Oskari.clazz.define(
         eventHandlers: {
             'StatsGrid.StateChangedEvent': function (evt) {
                 if (evt.isReset()) {
-                    this.clearDataProviderInfo();
                     this._removeStatsLayer();
-                    this._setClassificationViewVisible(false);
-                    this._setSeriesControlVisible(false);
                     this.flyoutManager.hideFlyouts();
                 } else {
                     this.statsService.getStateService().getIndicators().forEach(ind => {
@@ -332,13 +329,9 @@ Oskari.clazz.define(
                 if (event.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
-                if (!this.getTile().isAttached()) {
-                    // clear ui if statsgrid isn't active
-                    this.clearDataProviderInfo();
-                    this._setClassificationViewVisible(false);
-                    this._setSeriesControlVisible(false);
-                    this.flyoutManager.hideFlyouts();
-                }
+                this.clearDataProviderInfo();
+                this._setClassificationViewVisible(false);
+                this._setSeriesControlVisible(false);
                 this.statsService.notifyOskariEvent(event);
             },
             /**
@@ -444,11 +437,21 @@ Oskari.clazz.define(
          * bundle documentation for details.
          *
          * @method setState
-         * @param {Object} state bundle state as JSON
+         * @param {Object} newState bundle state as JSON
          */
-        setState: function (state) {
-            state = state || this.state || {};
-            this.statsService.getStateService().setState(state);
+        setState: function (newState) {
+            const state = newState || this.state || {};
+            const stateService = this.statsService.getStateService();
+            if (state.indicators && state.indicators.length) {
+                stateService.setState(state);
+            } else {
+                // if state doesn't have indicators, reset state
+                stateService.resetState();
+                if (this.flyoutManager) {
+                    // teardown ui to get cleaned search flyout on show
+                    this.flyoutManager.getFlyout('search').teardownUI();
+                }
+            }
             // if state says view was visible fire up the UI, otherwise close it
             var uimode = state.view ? 'attach' : 'close';
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);

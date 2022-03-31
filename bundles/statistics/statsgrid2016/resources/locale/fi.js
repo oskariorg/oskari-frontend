@@ -230,7 +230,8 @@ Oskari.registerLocalization({
             'grid': {
                 'name': 'Nimi',
                 'edit': 'Muokkaa',
-                'delete': 'Poista'
+                'delete': 'Poista',
+                'actions': 'Toiminnot'
             },
             'popup': {
                 'deletetitle': 'Poista indikaattori',

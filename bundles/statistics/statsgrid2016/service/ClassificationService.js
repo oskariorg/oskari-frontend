@@ -1,4 +1,4 @@
-import { equalSizeBands } from '../util/equalSizeBands';
+import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
 
@@ -127,7 +127,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 : this.getValueRanges(dataAsList, bounds, format);
             const colors = isDivided ? this._colorService.getDividedColors(opts, bounds) : this._colorService.getColorsForClassification(opts);
             const pixels = isDivided ? this.getDividedPixels(opts, bounds) : this.getPixelsForClassification(opts);
-
             if (![colors, pixels, ranges].every(list => Array.isArray(list) && list.length === opts.count)) {
                 this.log.warn('Failed to create groups');
                 return { error: 'general' };
@@ -230,18 +229,38 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             } else if (method === 'manual') {
                 bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
             }
-            const index = bounds.findIndex(bound => bound > base);
+            const potentialBaseIndex = bounds.findIndex(bound => bound > base);
+            const lastIndex = bounds.length - 1;
+            if (potentialBaseIndex <= 0) {
+                // All bounds are under or over base
+                return bounds;
+            }
+            // clamp function is used to ensure that we don't modify first or last bound
+            const clamp = createClamp(1, lastIndex - 1);
             if (count % 2 === 0) {
-                // move closer bound to base
-                if (base - bounds[index - 1] < bounds[index] - base) {
-                    bounds[index - 1] = base;
-                } else {
-                    bounds[index] = base;
+                const deltaToLowerBound = base - bounds[potentialBaseIndex - 1];
+                const deltaToUpperBound = bounds[potentialBaseIndex] - base;
+                // by default base index is the next bound over base value
+                let indexForBase = potentialBaseIndex;
+                if (deltaToLowerBound < deltaToUpperBound) {
+                    // but if next bound over base value is further from base than the lower bound, adjust lower instead
+                    indexForBase = potentialBaseIndex - 1;
                 }
+                indexForBase = clamp(indexForBase);
+                bounds[indexForBase] = base;
             } else {
                 // odd count has 'neutral' group so both bounds have to move to base
-                bounds[index] = base;
-                bounds[index - 1] = base;
+                let under = clamp(potentialBaseIndex - 1);
+                let over = clamp(potentialBaseIndex);
+                if (under === over) {
+                    if (over === 1) {
+                        over++;
+                    } else {
+                        under--;
+                    }
+                }
+                bounds[under] = base;
+                bounds[over] = base;
             }
             return bounds;
         },
@@ -258,7 +277,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 let max = bounds[i + 1];
                 const same = min === max;
                 // decrease groups max range by fraction digit, skip last
-                max = i === lastRange ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
+                max = i === lastRange || same ? format(max) : format(max.toFixed(fractionDigits) - Math.pow(10, -fractionDigits));
                 if (same) {
                     ranges.push(max);
                 } else {
@@ -270,7 +289,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
 
         getValueRanges: function (data, bounds, format) {
-            const sorted = [...data].sort((a, b) => a - b);
+            // TODO: could use sorted unique values which is used for classification options
+            const sorted = [...new Set(data)].sort((a, b) => a - b);
             const ranges = [];
             const lastRange = bounds.length - 2;
             for (let i = 0; i < bounds.length - 1; i++) {

@@ -33,6 +33,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
         this.uiElement.empty();
     },
+    teardownUI: function () {
+        this.hide();
+        this.uiElement = null;
+    },
     setSpinner: function (spinner) {
         this.spinner = spinner;
     },

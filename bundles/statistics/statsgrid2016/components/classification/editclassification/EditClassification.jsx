@@ -7,9 +7,13 @@ import { Color } from './Color';
 import { Checkbox, Message, Slider } from 'oskari-ui';
 import { EditTwoTone, DownOutlined } from '@ant-design/icons';
 
+// remove mark dots (.ant-slider-dot)
 const Container = styled.div`
     background-color: #fafafa;
     padding: 6px 12px;
+    .ant-slider-dot {
+        display: none;
+    }
 `;
 
 // Overrride -50% translateX

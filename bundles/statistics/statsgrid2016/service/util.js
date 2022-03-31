@@ -18,4 +18,17 @@ export function equalSizeBands (classCount, min, max) {
 
     output.push(max);
     return output;
-}
+};
+
+/**
+ * Generates a function that returns a value based on input but makes sure it is within given range.
+ */
+export const createClamp = (min, max) => value => {
+    if (value < min) {
+        return min;
+    }
+    if (value > max) {
+        return max;
+    }
+    return value;
+};
