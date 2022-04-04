@@ -2,8 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AccountTab } from './view/Account/AccountTab';
 import { Tabs } from 'antd';
-import { MyDataHandler } from './MyDataHandler';
+import { MyDataHandler } from './handler/MyDataHandler';
 import { MyViewsTab } from './view/MyViews//MyViewsTab';
+import { FlyoutContent } from './FlyoutContent';
+import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
+import { MyViewsHandler } from './handler/MyViewsHandler';
+import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
 
 /**
  * @class Oskari.mapframework.bundle.personaldata.Flyout
@@ -25,8 +29,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
         this.template = null;
         this.templateTabHeader = null;
         this.templateTabContent = null;
-        this.tabsData = [];
         this.uiHandler = new MyDataHandler(() => this.update());
+        this.publishedMapsHander = new PublishedMapsHandler(() => this.update(), this.instance);
+        this.myViewsHandler = new MyViewsHandler(() => this.update());
         this.element = null;
     }, {
         /**
@@ -62,64 +67,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            var me = this;
-            // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
-            this.tabsData = {
-                /* 'myviews': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', me.instance),
-                'publishedmaps': Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PublishedMapsTab', me.instance),
-                // TODO should we pass conf to accounttab here?
-                'account': {
-                    getTitle: () => Oskari.getMsg('PersonalData', `tabs.account.title`),
-                    // eslint seems to think this is defining a new unnamed component
-                    // eslint-disable-next-line react/display-name
-                    getJsx: () => <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} />,
-                    sideEffects: [
-                        () => {
-                            jQuery('#oskari-profile-link').on('click', function () {
-                                me.instance.openProfileTab();
-                                return false;
-                            });
-                        }
-                    ]
-                } */
-                //'account': <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} />,
-                //'myviews': 2
-            };
 
-            const controller = this.uiHandler.getController();
-            const { views } = this.uiHandler.getState();
+            /* jQuery('#oskari-profile-link').on('click', function () {
+                me.instance.openProfileTab();
+                return false;
+            }); */
+
+            const { data: views } = this.myViewsHandler.getState();
+            const { data: publishedMaps } = this.publishedMapsHander.getState();
 
             const updateAccountTab = this.addTab(
                 'account',
                 Oskari.getMsg('PersonalData', 'tabs.account.title'),
                 <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} />
             );
-            const updateMyViewsTab = this.addTab(
+            const myViewsUpdater = this.addTab(
                 'myviews',
                 Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
                 <MyViewsTab
-                    controller={controller}
+                    controller={this.myViewsHandler.getController()}
                     data={views}
                 />
-            )
-            this.uiHandler.refreshViewsList();
+            );
+            const publishedMapsUpdater = this.addTab(
+                'publishedmaps',
+                Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
+                <PublishedMapsTab
+                    controller={this.publishedMapsHander.getController()}
+                    data={publishedMaps}
+                />
+            );
+
+            this.myViewsHandler.setUpdateFunc(myViewsUpdater);
+            this.publishedMapsHander.setUpdateFunc(publishedMapsUpdater);
+            this.myViewsHandler.refreshViewsList();
+            this.publishedMapsHander.refreshViewsList();
             this.update();
-/* 
-            {tabs.map(t => (
-                <TabPane tab={'account'} key='account'>
-                    {t.component}
-                </TabPane>
-            ))}
-            <TabPane tab={'myviews'} key={'myviews'}>
-                <MyViewsTab
-                    data={views}
-                    openView={(item) => this.uiHandler.openView(item)}
-                    setDefault={(item) => this.uiHandler.setDefaultView(item)}
-                    handleEdit={(item) => this.uiHandler.editView(item)}
-                    handleDelete={(item) => this.uiHandler.deleteView(item)}
-                    saveCurrent={() => this.uiHandler.saveCurrent()}
-                />
-            </TabPane> */
         },
         /**
          * @method stopPlugin
@@ -164,15 +147,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
 
             const flyout = jQuery(this.container);
 
-            const tabKeys = Object.keys(this.tabsData);
-
             const { TabPane } = Tabs;
 
             const {
                 tabs
             } = this.uiHandler.getState();
 
-            const tabContainer = <Tabs defaultActiveKey={tabKeys && tabKeys > 0 ? tabKeys[0] : null}>
+            const tabContainer = <Tabs>
                {tabs.map(t => (
                    <TabPane tab={t.title} key={t.id}>
                        {t.component}
@@ -180,34 +161,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                ))}
             </Tabs>;
 
-            ReactDOM.render(tabContainer, flyout[0]);
-
-           /*  // now we can presume user is logged in
-            Object.keys(this.tabsData).forEach(function (tabId) {
-                var tab = me.tabsData[tabId];
-                var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
-                panel.setTitle(tab.getTitle());
-                panel.setId(tabId);
-
-                if (tab.hasOwnProperty('getJsx')) {
-                    const container = document.createElement('div');
-                    panel.setContent(container);
-                    ReactDOM.render(tab.getJsx(), container);
-                } else {
-                    tab.addTabContent(panel.getContainer());
-                }
-
-                if (tab.sideEffects) {
-                    tab.sideEffects.forEach(func => func());
-                }
-
-                // binds tab to events
-                if (tab.bindEvents) {
-                    tab.bindEvents();
-                }
-                me.tabsContainer.addPanel(panel);
-            }); */
-
+            ReactDOM.render(
+                <FlyoutContent loggedIn={Oskari.user().isLoggedIn()} getLoginUrl={this.getLoginUrl}>
+                    {tabContainer}
+                </FlyoutContent>
+                ,
+                flyout[0]
+            );
         },
 
         /**
@@ -215,32 +175,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Creates the UI for a fresh start
          */
          createUi: function () {
-            // clear container
-            var flyout = jQuery(this.container);
-
-            const loggedIn = Oskari.user().isLoggedIn();
+            this.update();
+         },
+         /**
+          * @method getLoginUrl
+          * @returns {String}
+          */
+         getLoginUrl: function () {
             var notLoggedInFullText = this.instance.getLocalization('notLoggedIn');
             var conf = this.instance.conf || {};
-
-            // in analyse/publisher it's conf.loginUrl - in here it's conf.logInUrl !!
             var loginUrl = Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login');
             if (loginUrl) {
                 notLoggedInFullText += '<br/><br/>' +
                     '<a href="' + loginUrl + '">' + this.instance.getLocalization('notLoggedInText') + '</a>';
             }
+
             var registerUrl = Oskari.urls.getLocation('register');
             if (registerUrl) {
                 notLoggedInFullText += '<br/><br/>' +
                     '<a href="' + registerUrl + '">' + this.instance.getLocalization('register') + '</a>';
             }
 
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer', loggedIn ? '' : notLoggedInFullText);
-
-            this.tabsContainer.insertTo(flyout);
-
-            if (!loggedIn) {
-                return;
-            }
+            return notLoggedInFullText;
          },
         /**
          *
@@ -251,12 +207,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 return;
             }
 
-            if (id === 'account' || id === 'myviews') {
+            if (id === 'account' || id === 'myviews' || 'publishedmaps') {
                 this.uiHandler.addTab(id, title, component);
             }
 
             return (updatedComponent) => {
-                uiHandler.updateTab(id, updatedComponent)
+                this.uiHandler.updateTab(id, updatedComponent)
             }
         }
     }, {

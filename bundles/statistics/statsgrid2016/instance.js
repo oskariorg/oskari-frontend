@@ -1,5 +1,8 @@
+import React from 'react';
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
+import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from './MyIndicatorsTab';
 
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
@@ -35,6 +38,8 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this.flyoutManager = null;
         this._layerId = 'STATS_LAYER';
+        this.myIndicatorsHandler = new MyIndicatorsHandler(() => this._addIndicatorsTabToPersonalData(Oskari.getSandbox(), this));
+        this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -137,10 +142,12 @@ Oskari.clazz.define(
         _addIndicatorsTabToPersonalData: function (sandbox) {
             var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             if (typeof reqBuilder === 'function') {
-                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
-                tab.bindEvents();
-                var addAsFirstTab = false;
-                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
+                const { data } = this.myIndicatorsHandler.getState();
+                const tab = <MyIndicatorsTab
+                    controller={this.myIndicatorsHandler.getController()}
+                    data={data}
+                />
+                const req = reqBuilder(this.loc('tab.title'), tab, false, 'indicators');
                 sandbox.request(this, req);
             }
         },

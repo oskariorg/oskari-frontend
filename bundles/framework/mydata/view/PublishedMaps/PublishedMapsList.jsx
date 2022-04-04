@@ -5,7 +5,6 @@ import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
-import { showSnippetPopup } from '../embedded/SnippetPopup'
 
 const DELETE_ICON_STYLE = {
     color: red.primary,
@@ -37,12 +36,7 @@ const openView = (view) => {
     );
 }
 
-const showHtml = (view, setPopup, closePopup) => {
-    const controls = showSnippetPopup(view, closePopup);
-    setPopup(controls);
-}
-
-export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handlePublish, showOnMap, setPopup, closePopup }) => {
+export const PublishedMapsList = ({ controller, data = [] }) => {
 
     const columnSettings = [
         {
@@ -73,7 +67,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                     return (
                         <Confirm
                             title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
-                            onConfirm={() => handlePublish(item)}
+                            onConfirm={() => controller.setPublished(item)}
                             okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
                             cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
                             placement='bottomLeft'
@@ -83,7 +77,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                     )
                 } else {
                     return (
-                        <a onClick={() => handlePublish(item)}><Message messageKey='tabs.publishedmaps.publish' bundleKey={BUNDLE_NAME} /></a>
+                        <a onClick={() => controller.setPublished(item)}><Message messageKey='tabs.publishedmaps.publish' bundleKey={BUNDLE_NAME} /></a>
                     )
                 }
             }
@@ -93,7 +87,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
             title: <Message messageKey='tabs.publishedmaps.grid.show' bundleKey="PersonalData" />,
             render: (title, item) => {
                 return (
-                    <a onClick={() => showOnMap(item)}><Message messageKey='tabs.publishedmaps.show' bundleKey={BUNDLE_NAME} /></a>
+                    <a onClick={() => controller.showOnMap(item)}><Message messageKey='tabs.publishedmaps.show' bundleKey={BUNDLE_NAME} /></a>
                 );
             }
         },
@@ -103,7 +97,7 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <a onClick={() => showHtml(item, setPopup, closePopup)}><Message messageKey='tabs.publishedmaps.grid.html' bundleKey={BUNDLE_NAME} /></a>
+                    <a onClick={() => controller.showHtml(item)}><Message messageKey='tabs.publishedmaps.grid.html' bundleKey={BUNDLE_NAME} /></a>
                 );
             }
         },
@@ -115,13 +109,13 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />}>
-                            <div className='icon t_edit' onClick={() => handleEdit(item)}>
+                            <div className='icon t_edit' onClick={() => controller.editView(item)}>
                                 <EditOutlined style={ EDIT_ICON_STYLE } />
                             </div>
                         </Tooltip>
                         <Confirm
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
-                            onConfirm={() => handleDelete(item)}
+                            onConfirm={() => controller.deleteView(item)}
                             okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
                             cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
                             placement='bottomLeft'
@@ -137,21 +131,19 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
     ];
     
     return (
-        <div className="viewsList volatile">
-            <StyledTable
-                columns={columnSettings}
-                dataSource={views.map((item) => ({
-                    key: item.id,
-                    ...item
-                }))}
-                pagination={false}
-            />
-        </div>
+        <StyledTable
+            columns={columnSettings}
+            dataSource={data.map((item) => ({
+                key: item.id,
+                ...item
+            }))}
+            pagination={false}
+        />
     )
 }
 
 PublishedMapsList.propTypes = {
-    views: PropTypes.arrayOf(PropTypes.object),
+    data: PropTypes.arrayOf(PropTypes.object),
     handleEdit: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     handlePublish: PropTypes.func.isRequired,

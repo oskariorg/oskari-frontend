@@ -34,7 +34,7 @@ const editIconStyle = {
     fontSize: '14px'
 };
 
-export const MyIndicatorsList = ({ data = [], handleEdit, handleDelete, addNewIndicator }) => {
+export const MyIndicatorsList = ({ controller, data = [] }) => {
 
     const columnSettings = [
         {
@@ -52,13 +52,13 @@ export const MyIndicatorsList = ({ data = [], handleEdit, handleDelete, addNewIn
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message bundleKey={BUNDLE_KEY} messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => handleEdit(item)}>
+                            <div className='icon t_edit' onClick={() => controller.editIndicator(item)}>
                                 <EditOutlined style={editIconStyle} />
                             </div>
                         </Tooltip>
                         <Confirm
                             title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_KEY} />}
-                            onConfirm={() => handleDelete(item)}
+                            onConfirm={() => controller.deleteIndicator(item)}
                             okText={<Message messageKey='tab.button.ok' bundleKey={BUNDLE_KEY} />}
                             cancelText={<Message messageKey='tab.button.cancel' bundleKey={BUNDLE_KEY} />}
                             placement='bottomLeft'
@@ -78,7 +78,7 @@ export const MyIndicatorsList = ({ data = [], handleEdit, handleDelete, addNewIn
     return (
         <>
             <ButtonContainer>
-                <Button type='primary' onClick={() => addNewIndicator()}>
+                <Button type='primary' onClick={() => controller.addNewIndicator()}>
                     <Message bundleKey={BUNDLE_KEY} messageKey='userIndicators.buttonTitle' />
                 </Button>
             </ButtonContainer>
@@ -95,8 +95,5 @@ export const MyIndicatorsList = ({ data = [], handleEdit, handleDelete, addNewIn
 };
 
 MyIndicatorsList.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object),
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-    addNewIndicator: PropTypes.func.isRequired
+    data: PropTypes.arrayOf(PropTypes.object)
 };
