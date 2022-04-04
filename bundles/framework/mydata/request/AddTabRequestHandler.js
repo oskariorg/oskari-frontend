@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
      *      request to handle
      */
         handleRequest: function (core, request) {
-            this.personaldata.addTab({ 'title': request.getTitle(), 'content': request.getContent(), 'first': request.isFirst(), 'id': request.getId() });
+            this.personaldata.addTab(request.getId(), request.getTitle(), request.getContent());
         }
     }, {
     /**

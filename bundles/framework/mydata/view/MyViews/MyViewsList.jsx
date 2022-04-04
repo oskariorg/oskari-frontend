@@ -26,13 +26,7 @@ const StyledTable = styled(Table)`
             padding: 8px;
         }
     }
-`
-
-const ButtonContainer = styled.div`
-    margin: 10px 0 10px 0;
-    display: flex;
-    justify-content: flex-end;
-`
+`;
 
 export const MyViewsList = ({ controller, data = [] }) => {
 
@@ -94,21 +88,14 @@ export const MyViewsList = ({ controller, data = [] }) => {
     ];
 
     return (
-        <>
-            <ButtonContainer>
-                <Button type='primary' onClick={controller.saveCurrent}>
-                    <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.button.saveCurrent' />
-                </Button>
-            </ButtonContainer>
-            <StyledTable
-                columns={columnSettings}
-                dataSource={data.map(item => ({
-                    key: item.id,
-                    ...item
-                }))}
-                pagination={false}
-            />
-        </>
+        <StyledTable
+            columns={columnSettings}
+            dataSource={data.map(item => ({
+                key: item.id,
+                ...item
+            }))}
+            pagination={false}
+        />
     )
 }
 

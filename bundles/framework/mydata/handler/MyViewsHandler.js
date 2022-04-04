@@ -1,51 +1,24 @@
 import React from 'react';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
-import { showViewForm } from './view/ViewForm/ViewForm';
-import { MyViewsTab } from './view/MyViews/MyViewsTab';
+import { showViewForm } from '../view/ViewForm/ViewForm';
+import { MyViewsTab } from '../view/MyViews/MyViewsTab';
 
-class UIHandler extends StateHandler {
-    constructor (consumer) {
+class ViewsHandler extends StateHandler {
+    constructor (consumer, instance) {
         super();
+        this.instance = instance;
         this.sandbox = Oskari.getSandbox();
-        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
         this.setState({
-            tabs: [],
-            views: []
+            data: []
         });
+        this.updater = null;
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
+        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
         this.addStateListener(consumer);
-        this.eventHandlers = this.createEventHandlers();
 
         this.registerTool();
-    }
-
-    addTab (id, title, component) {
-        this.updateState({
-            tabs: [
-                ...this.state.tabs,
-                {
-                    id,
-                    title,
-                    component
-                }
-            ]
-        });
-    }
-
-    updateTab (id, component) {
-        this.updateState({
-            tabs: this.state.tabs.map(t => {
-                if (t.id === id) {
-                    return {
-                        ...t,
-                        component
-                    };
-                }
-                return t;
-            })
-        })
-    }
+    };
 
     popupCleanup () {
         if (this.popupControls) this.popupControls.close();
@@ -53,7 +26,23 @@ class UIHandler extends StateHandler {
     }
 
     getName () {
-        return 'MyDataHandler';
+        return 'MyViewsHandler';
+    }
+
+    updateTab () {
+        if (this.updater) {
+            this.updater(
+                <MyViewsTab
+                    controller={this.getController()}
+                    data={this.state.data}
+                />
+            );
+        }
+    }
+
+    popupCleanup () {
+        if (this.popupControls) this.popupControls.close();
+        this.popupControls = null;
     }
 
     showErrorMessage (title, message, buttonText) {
@@ -98,7 +87,7 @@ class UIHandler extends StateHandler {
                     view.name = Oskari.util.sanitize(view.name);
                     view.description = Oskari.util.sanitize(view.description);
                 });
-                this.updateState({ views: views });
+                this.updateState({ data: views });
                 this.updateTab(
                     'myviews',
                     <MyViewsTab
@@ -208,9 +197,20 @@ class UIHandler extends StateHandler {
 
         return handler.apply(this, [e]);
     }
+
+    setUpdateFunc (update) {
+        this.updater = update;
+    }
+
+    showErrorMessage (title, message, buttonText) {
+        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        const button = dialog.createCloseButton(buttonText);
+        button.addClass('primary');
+        dialog.show(title, message, [button]);
+    }
 }
 
-const wrapped = controllerMixin(UIHandler, [
+const wrapped = controllerMixin(ViewsHandler, [
     'deleteView',
     'editView',
     'setDefaultView',
@@ -218,4 +218,4 @@ const wrapped = controllerMixin(UIHandler, [
     'saveCurrent'
 ]);
 
-export { wrapped as MyDataHandler };
+export { wrapped as MyViewsHandler };
