@@ -1,7 +1,5 @@
-import React from 'react';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { showViewForm } from '../view/ViewForm/ViewForm';
-import { MyViewsTab } from '../view/MyViews/MyViewsTab';
 
 class ViewsHandler extends StateHandler {
     constructor (consumer, instance) {
@@ -11,45 +9,29 @@ class ViewsHandler extends StateHandler {
         this.setState({
             data: []
         });
-        this.updater = null;
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
         this.addStateListener(consumer);
+        this.eventHandlers = this.createEventHandlers();
 
         this.registerTool();
     };
-
-    popupCleanup () {
-        if (this.popupControls) this.popupControls.close();
-        this.popupControls = null;
-    }
 
     getName () {
         return 'MyViewsHandler';
     }
 
-    updateTab () {
-        if (this.updater) {
-            this.updater(
-                <MyViewsTab
-                    controller={this.getController()}
-                    data={this.state.data}
-                />
-            );
-        }
-    }
-
     popupCleanup () {
         if (this.popupControls) this.popupControls.close();
         this.popupControls = null;
     }
 
-    showErrorMessage (title, message, buttonText) {
+    showErrorMessage (message) {
         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(buttonText);
+        const button = dialog.createCloseButton(this.loc('tabs.myviews.button.ok'));
         button.addClass('primary');
-        dialog.show(title, message, [button]);
+        dialog.show(this.loc('tabs.myviews.error.title'), message, [button]);
     }
 
     promptForView (view) {
@@ -88,15 +70,8 @@ class ViewsHandler extends StateHandler {
                     view.description = Oskari.util.sanitize(view.description);
                 });
                 this.updateState({ data: views });
-                this.updateTab(
-                    'myviews',
-                    <MyViewsTab
-                        controller={this.getController()}
-                        data={views}
-                    />
-                )
             } else {
-                this.showErrorMessage(me.loc('tabs.myviews.error.loadfailed'));
+                this.showErrorMessage(this.loc('tabs.myviews.error.loadfailed'));
             }
         });
     }
@@ -182,8 +157,9 @@ class ViewsHandler extends StateHandler {
     createEventHandlers () {
         const handlers = {
             'StateSavedEvent': event => {
+                console.log(event);
                 this.handleSaveViewResponse(!event.isError());
-            },
+            }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
@@ -196,17 +172,6 @@ class ViewsHandler extends StateHandler {
         }
 
         return handler.apply(this, [e]);
-    }
-
-    setUpdateFunc (update) {
-        this.updater = update;
-    }
-
-    showErrorMessage (title, message, buttonText) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(buttonText);
-        button.addClass('primary');
-        dialog.show(title, message, [button]);
     }
 }
 

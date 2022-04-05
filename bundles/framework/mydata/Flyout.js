@@ -67,39 +67,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-
             /* jQuery('#oskari-profile-link').on('click', function () {
                 me.instance.openProfileTab();
                 return false;
             }); */
 
-            const { data: views } = this.myViewsHandler.getState();
-            const { data: publishedMaps } = this.publishedMapsHander.getState();
-
-            const updateAccountTab = this.addTab(
+            this.addTab(
                 'account',
                 Oskari.getMsg('PersonalData', 'tabs.account.title'),
-                <AccountTab user={Oskari.user()} changeInfoUrl={Oskari.urls.getLocation('profile')} />
+                AccountTab,
+                {
+                    getState: () => ({ user: Oskari.user() }),
+                    getController: () => ({ changeInfoUrl: () => Oskari.urls.getLocation('profile') }),
+                    addStateListener: () => null
+                }
             );
-            const myViewsUpdater = this.addTab(
+            this.addTab(
                 'myviews',
                 Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
-                <MyViewsTab
-                    controller={this.myViewsHandler.getController()}
-                    data={views}
-                />
+                MyViewsTab,
+                this.myViewsHandler
             );
-            const publishedMapsUpdater = this.addTab(
+            this.addTab(
                 'publishedmaps',
                 Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
-                <PublishedMapsTab
-                    controller={this.publishedMapsHander.getController()}
-                    data={publishedMaps}
-                />
+                PublishedMapsTab,
+                this.publishedMapsHander
             );
 
-            this.myViewsHandler.setUpdateFunc(myViewsUpdater);
-            this.publishedMapsHander.setUpdateFunc(publishedMapsUpdater);
             this.myViewsHandler.refreshViewsList();
             this.publishedMapsHander.refreshViewsList();
             this.update();
@@ -144,7 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
         },
 
         update: function () {
-
             const flyout = jQuery(this.container);
 
             const { TabPane } = Tabs;
@@ -154,15 +148,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             } = this.uiHandler.getState();
 
             const tabContainer = <Tabs>
-               {tabs.map(t => (
-                   <TabPane tab={t.title} key={t.id}>
-                       {t.component}
-                   </TabPane>
-               ))}
+                {tabs.map(t => (
+                    <TabPane tab={t.title} key={t.id}>
+                        <t.component
+                            state={t.handler.getState()}
+                            controller={t.handler.getController()}
+                        />
+                    </TabPane>
+                ))}
             </Tabs>;
 
             ReactDOM.render(
-                <FlyoutContent loggedIn={Oskari.user().isLoggedIn()} getLoginUrl={this.getLoginUrl}>
+                <FlyoutContent loggedIn={Oskari.user().isLoggedIn()} getLoginUrl={() => this.getLoginUrl()}>
                     {tabContainer}
                 </FlyoutContent>
                 ,
@@ -174,45 +171,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * @method createUi
          * Creates the UI for a fresh start
          */
-         createUi: function () {
+        createUi: function () {
             this.update();
-         },
-         /**
-          * @method getLoginUrl
-          * @returns {String}
-          */
-         getLoginUrl: function () {
-            var notLoggedInFullText = this.instance.getLocalization('notLoggedIn');
-            var conf = this.instance.conf || {};
-            var loginUrl = Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login');
+        },
+        /**
+         * @method getLoginUrl
+         * @returns {String}
+         */
+        getLoginUrl: function () {
+            const notLoggedInText = this.instance.getLocalization('notLoggedIn');
+            let loginLink;
+            let registerLink;
+            const conf = this.instance.conf || {};
+            const loginUrl = Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login');
+
             if (loginUrl) {
-                notLoggedInFullText += '<br/><br/>' +
-                    '<a href="' + loginUrl + '">' + this.instance.getLocalization('notLoggedInText') + '</a>';
+                loginLink = <a href={loginUrl}>{this.instance.getLocalization('notLoggedInText')}</a>;
             }
-
-            var registerUrl = Oskari.urls.getLocation('register');
+            const registerUrl = Oskari.urls.getLocation('register');
             if (registerUrl) {
-                notLoggedInFullText += '<br/><br/>' +
-                    '<a href="' + registerUrl + '">' + this.instance.getLocalization('register') + '</a>';
+                registerLink = <a href={registerUrl}>{this.instance.getLocalization('register')}</a>;
             }
 
-            return notLoggedInFullText;
-         },
+            return (
+                <div>
+                    <p>
+                        {notLoggedInText}
+                    </p>
+                    <p>
+                        {loginLink}
+                    </p>
+                    <p>
+                        {registerLink}
+                    </p>
+                </div>
+            );
+        },
         /**
          *
          *
          */
-        addTab: function (id, title, component) {
+        addTab: function (id, title, component, handler) {
             if (!Oskari.user().isLoggedIn()) {
                 return;
             }
-
-            if (id === 'account' || id === 'myviews' || 'publishedmaps') {
-                this.uiHandler.addTab(id, title, component);
-            }
-
-            return (updatedComponent) => {
-                this.uiHandler.updateTab(id, updatedComponent)
+            if (handler && typeof handler.addStateListener === 'function') {
+                handler.addStateListener(() => this.update());
+                this.uiHandler.addTab(id, title, component, handler);
             }
         }
     }, {

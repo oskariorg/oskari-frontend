@@ -12,7 +12,7 @@ const ButtonContainer = styled.div`
     justify-content: flex-end;
 `;
 
-export const MyViewsTab = ({ controller, data }) => {
+export const MyViewsTab = ({ controller, state }) => {
 
     return (
         <>
@@ -23,7 +23,7 @@ export const MyViewsTab = ({ controller, data }) => {
             </ButtonContainer>
             <MyViewsList
                 controller={controller}
-                data={data}
+                data={state.data}
             />
         </>
     )
@@ -31,5 +31,5 @@ export const MyViewsTab = ({ controller, data }) => {
 
 MyViewsTab.propTypes = {
     controller: PropTypes.object.isRequired,
-    data: PropTypes.arrayOf(PropTypes.object)
+    state: PropTypes.object.isRequired
 }
