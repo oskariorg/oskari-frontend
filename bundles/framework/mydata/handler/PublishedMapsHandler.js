@@ -1,7 +1,5 @@
-import React from 'react';
-import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showSnippetPopup } from '../view/embedded/SnippetPopup';
-import { PublishedMapsTab } from '../view/PublishedMaps/PublishedMapsTab';
 
 class MapsHandler extends StateHandler {
     constructor (consumer, instance) {
@@ -11,11 +9,11 @@ class MapsHandler extends StateHandler {
         this.setState({
             data: []
         });
-        this.updater = null;
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
         this.addStateListener(consumer);
+        this.eventHandlers = this.createEventHandlers();
     };
 
     popupCleanup () {
@@ -31,21 +29,6 @@ class MapsHandler extends StateHandler {
         this.popupControls = showSnippetPopup(view, this.popupCleanup);
     }
 
-    updateTab () {
-        if (this.updater) {
-            this.updater(
-                <PublishedMapsTab
-                    controller={this.getController()}
-                    data={this.state.data}
-                />
-            );
-        }
-    }
-
-    setUpdateFunc (update) {
-        this.updater = update;
-    }
-
     showErrorMessage (title, message, buttonText) {
         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         const button = dialog.createCloseButton(buttonText);
@@ -59,7 +42,6 @@ class MapsHandler extends StateHandler {
                 this.updateState({
                     data: response.views
                 });
-                this.updateTab();
             } else {
                 this.showErrorMessage(this.loc('tabs.publishedmaps.error.loadfailed'));
             }
@@ -79,11 +61,11 @@ class MapsHandler extends StateHandler {
 
     confirmSetState (cb, blnMissing) {
         const dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
+            'Oskari.userinterface.component.Popup'
+        );
         const okBtn = Oskari.clazz.create(
-                'Oskari.userinterface.component.Button'
-            );
+            'Oskari.userinterface.component.Button'
+        );
         okBtn.setTitle(this.loc('tabs.publishedmaps.button.ok'));
         okBtn.addClass('primary');
 
@@ -204,7 +186,6 @@ class MapsHandler extends StateHandler {
                 this.editRequestSender(data);
             }, resp.msg === 'missing');
         }
-        this.refreshViewsList();
     }
 
     setPublished (data) {
@@ -281,6 +262,24 @@ class MapsHandler extends StateHandler {
         this.confirmSetState(confirmCallback, resp.msg === 'missing');
     }
 
+    createEventHandlers () {
+        const handlers = {
+            'Publisher.MapPublishedEvent': (event) => {
+                this.refreshViewsList();
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
+    }
 }
 
 const wrapped = controllerMixin(MapsHandler, [

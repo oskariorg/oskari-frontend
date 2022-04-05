@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MyIndicatorsList } from './MyIndicatorsList';
 
-export const MyIndicatorsTab = ({ controller, data = [] }) => {
+export const MyIndicatorsTab = ({ state, controller }) => {
     return (
         <MyIndicatorsList
             controller={controller}
-            data={data}
+            data={state.data}
         />
     );
 }
 
 MyIndicatorsTab.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object)
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
 }

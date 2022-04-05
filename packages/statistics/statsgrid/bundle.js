@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/Tile.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/MyIndicatorsTab.js"
+                "src": "../../../bundles/statistics/statsgrid2016/MyIndicatorsTab.jsx"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/service/SeriesService.js"

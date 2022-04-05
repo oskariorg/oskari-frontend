@@ -1,9 +1,12 @@
-import React from 'react'
-import { Message } from 'oskari-ui'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Message } from 'oskari-ui';
 
 
-export const AccountTab = ({ user, changeInfoUrl }) => {
+export const AccountTab = ({ state, controller }) => {
     const BUNDLE_NAME = 'PersonalData';
+
+    const { user } = state;
 
     const accountData = [{
         label: <Message messageKey='tabs.account.firstName' bundleKey={BUNDLE_NAME} />,
@@ -18,6 +21,8 @@ export const AccountTab = ({ user, changeInfoUrl }) => {
         label: <Message messageKey='tabs.account.email' bundleKey={BUNDLE_NAME} />,
         value: user.getEmail()
     }];
+
+    const changeInfoUrl = controller.changeInfoUrl();
 
     return (
         <div className="account">
@@ -39,3 +44,8 @@ export const AccountTab = ({ user, changeInfoUrl }) => {
         </div>
     )
 };
+
+AccountTab.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired
+}

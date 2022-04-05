@@ -1,4 +1,3 @@
-import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
@@ -15,31 +14,18 @@ class UIHandler extends StateHandler {
         this.eventHandlers = this.createEventHandlers();
     }
 
-    addTab (id, title, component) {
+    addTab (id, title, component, handler) {
         this.updateState({
             tabs: [
                 ...this.state.tabs,
                 {
                     id,
                     title,
-                    component
+                    component,
+                    handler
                 }
             ]
         });
-    }
-
-    updateTab (id, component) {
-        this.updateState({
-            tabs: this.state.tabs.map(t => {
-                if (t.id === id) {
-                    return {
-                        ...t,
-                        component
-                    };
-                }
-                return t;
-            })
-        })
     }
 
     getName () {
@@ -54,11 +40,7 @@ class UIHandler extends StateHandler {
     }
 
     createEventHandlers () {
-        const handlers = {
-            'StateSavedEvent': event => {
-                this.handleSaveViewResponse(!event.isError());
-            },
-        };
+        const handlers = {};
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
     }
@@ -73,8 +55,6 @@ class UIHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(UIHandler, [
-    
-]);
+const wrapped = controllerMixin(UIHandler, []);
 
 export { wrapped as MyDataHandler };

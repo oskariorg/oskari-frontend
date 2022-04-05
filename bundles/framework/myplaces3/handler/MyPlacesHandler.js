@@ -1,5 +1,5 @@
 import React from 'react';
-import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { MyPlacesTab } from '../MyPlacesTab';
 
 class PlacesHandler extends StateHandler {
@@ -26,10 +26,6 @@ class PlacesHandler extends StateHandler {
         return 'MyPlacesHandler';
     }
 
-    showHtml (view) {
-        this.popupControls = showSnippetPopup(view, this.popupCleanup);
-    }
-
     updateTab () {
         if (this.updater) {
             this.updater(
@@ -53,8 +49,6 @@ class PlacesHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(PlacesHandler, [
-    
-]);
+const wrapped = controllerMixin(PlacesHandler, []);
 
 export { wrapped as MyPlacesHandler };

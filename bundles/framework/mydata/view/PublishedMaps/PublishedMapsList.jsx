@@ -144,10 +144,5 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
 
 PublishedMapsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-    handlePublish: PropTypes.func.isRequired,
-    showOnMap: PropTypes.func.isRequired,
-    setPopup: PropTypes.func.isRequired,
-    closePopup: PropTypes.func.isRequired
+    controller: PropTypes.object.isRequired
 }
