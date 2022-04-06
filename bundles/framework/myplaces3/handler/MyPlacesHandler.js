@@ -26,17 +26,6 @@ class PlacesHandler extends StateHandler {
         return 'MyPlacesHandler';
     }
 
-    updateTab () {
-        if (this.updater) {
-            this.updater(
-                <MyPlacesTab
-                    controller={this.getController()}
-                    data={this.state.data}
-                />
-            );
-        }
-    }
-
     setUpdateFunc (update) {
         this.updater = update;
     }

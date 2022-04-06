@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { AccountTab } from './view/Account/AccountTab';
 import { Tabs } from 'antd';
 import { MyDataHandler } from './handler/MyDataHandler';
-import { MyViewsTab } from './view/MyViews//MyViewsTab';
+import { MyViewsTab } from './view/MyViews/MyViewsTab';
 import { FlyoutContent } from './FlyoutContent';
 import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
 import { MyViewsHandler } from './handler/MyViewsHandler';
@@ -30,8 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
         this.templateTabHeader = null;
         this.templateTabContent = null;
         this.uiHandler = new MyDataHandler(() => this.update());
-        this.publishedMapsHander = new PublishedMapsHandler(() => this.update(), this.instance);
-        this.myViewsHandler = new MyViewsHandler(() => this.update());
         this.element = null;
     }, {
         /**
@@ -77,8 +75,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 Oskari.getMsg('PersonalData', 'tabs.account.title'),
                 AccountTab,
                 {
-                    getState: () => ({ user: Oskari.user() }),
-                    getController: () => ({ changeInfoUrl: () => Oskari.urls.getLocation('profile') }),
+                    getState: () => ({
+                        user: Oskari.user(),
+                        changeInfoUrl: Oskari.urls.getLocation('profile')
+                    }),
+                    getController: () => null,
                     addStateListener: () => null
                 }
             );
@@ -86,17 +87,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 'myviews',
                 Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
                 MyViewsTab,
-                this.myViewsHandler
+                new MyViewsHandler()
             );
             this.addTab(
                 'publishedmaps',
                 Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
                 PublishedMapsTab,
-                this.publishedMapsHander
+                new PublishedMapsHandler()
             );
 
-            this.myViewsHandler.refreshViewsList();
-            this.publishedMapsHander.refreshViewsList();
             this.update();
         },
         /**
@@ -147,20 +146,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 tabs
             } = this.uiHandler.getState();
 
-            const tabContainer = <Tabs>
-                {tabs.map(t => (
-                    <TabPane tab={t.title} key={t.id}>
-                        <t.component
-                            state={t.handler.getState()}
-                            controller={t.handler.getController()}
-                        />
-                    </TabPane>
-                ))}
-            </Tabs>;
-
             ReactDOM.render(
-                <FlyoutContent loggedIn={Oskari.user().isLoggedIn()} getLoginUrl={() => this.getLoginUrl()}>
-                    {tabContainer}
+                <FlyoutContent loginStatus={this.getLoginStatus()}>
+                    <Tabs>
+                        {tabs.map(t => (
+                            <TabPane tab={t.title} key={t.id}>
+                                <t.component
+                                    state={t.handler.getState()}
+                                    controller={t.handler.getController()}
+                                />
+                            </TabPane>
+                        ))}
+                    </Tabs>
                 </FlyoutContent>
                 ,
                 flyout[0]
@@ -178,34 +175,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * @method getLoginUrl
          * @returns {String}
          */
-        getLoginUrl: function () {
+        getLoginStatus: function () {
             const notLoggedInText = this.instance.getLocalization('notLoggedIn');
-            let loginLink;
-            let registerLink;
             const conf = this.instance.conf || {};
             const loginUrl = Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login');
 
-            if (loginUrl) {
-                loginLink = <a href={loginUrl}>{this.instance.getLocalization('notLoggedInText')}</a>;
-            }
             const registerUrl = Oskari.urls.getLocation('register');
-            if (registerUrl) {
-                registerLink = <a href={registerUrl}>{this.instance.getLocalization('register')}</a>;
-            }
 
-            return (
-                <div>
-                    <p>
-                        {notLoggedInText}
-                    </p>
-                    <p>
-                        {loginLink}
-                    </p>
-                    <p>
-                        {registerLink}
-                    </p>
-                </div>
-            );
+            return {
+                loggedIn: Oskari.user().isLoggedIn(),
+                notLoggedInText,
+                loginUrl,
+                registerUrl
+            };
         },
         /**
          *

@@ -15,7 +15,7 @@ const ButtonContainer = styled.div`
 export const MyViewsTab = ({ controller, state }) => {
 
     return (
-        <>
+        <React.Fragment>
             <ButtonContainer>
                 <Button type='primary' onClick={controller.saveCurrent}>
                     <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.button.saveCurrent' />
@@ -25,7 +25,7 @@ export const MyViewsTab = ({ controller, state }) => {
                 controller={controller}
                 data={state.data}
             />
-        </>
+        </React.Fragment>
     )
 };
 

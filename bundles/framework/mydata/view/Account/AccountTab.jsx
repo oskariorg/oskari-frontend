@@ -6,7 +6,7 @@ import { Message } from 'oskari-ui';
 export const AccountTab = ({ state, controller }) => {
     const BUNDLE_NAME = 'PersonalData';
 
-    const { user } = state;
+    const { user, changeInfoUrl } = state;
 
     const accountData = [{
         label: <Message messageKey='tabs.account.firstName' bundleKey={BUNDLE_NAME} />,
@@ -21,9 +21,7 @@ export const AccountTab = ({ state, controller }) => {
         label: <Message messageKey='tabs.account.email' bundleKey={BUNDLE_NAME} />,
         value: user.getEmail()
     }];
-
-    const changeInfoUrl = controller.changeInfoUrl();
-
+    console.log(changeInfoUrl)
     return (
         <div className="account">
             <table className="info oskari-grid">
@@ -46,6 +44,5 @@ export const AccountTab = ({ state, controller }) => {
 };
 
 AccountTab.propTypes = {
-    state: PropTypes.object.isRequired,
-    controller: PropTypes.object.isRequired
+    state: PropTypes.object.isRequired
 }
