@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.bundle.MyDataBundle', function () {
             'src': './service/ViewService.js'
         }, {
             'type': 'text/javascript',
-            'src': './PublishedMapsTab.js'
+            'src': './view/PublishedMaps/PublishedMapsTab.jsx'
         }, {
             'type': 'text/javascript',
             'src': './view/Account/AccountTab.jsx'

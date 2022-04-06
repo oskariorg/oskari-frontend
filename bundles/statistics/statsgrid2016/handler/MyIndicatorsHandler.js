@@ -1,10 +1,17 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class IndicatorsHandler extends StateHandler {
-    constructor (consumer, instance) {
+    constructor (sandbox, instance, configuration) {
         super();
+        const defaultConf = {
+            name: 'StatsGrid',
+            sandbox: 'sandbox',
+            stateful: true,
+            tileClazz: 'Oskari.statistics.statsgrid.Tile',
+            vectorViewer: false
+        };
         this.instance = instance;
-        this.sandbox = this.instance.getSandbox();
+        this.sandbox = sandbox;
         this.setState({
             data: []
         });
@@ -13,8 +20,12 @@ class IndicatorsHandler extends StateHandler {
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
         this.service = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', this.sandbox, this.loc);
+        const conf = configuration || defaultConf;
+        this.sandbox.registerService(this.service);
+        this.service.addDatasource(conf.sources);
+        this.service.addRegionset(conf.regionsets);
         this.userDsId = this.service.getUserDatasource() ? this.service.getUserDatasource().id : null;
-        this.addStateListener(consumer);
+        this.refreshIndicatorsList();
     };
 
     popupCleanup () {
@@ -38,7 +49,7 @@ class IndicatorsHandler extends StateHandler {
         });
     }
 
-    _getIndicatorById (id) {
+    getIndicatorById (id) {
         const matches = this.state.data.filter((indicator) => {
             return indicator.id === id;
         });
@@ -58,6 +69,7 @@ class IndicatorsHandler extends StateHandler {
                     const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(this.loc('tab.popup.deletetitle'), this.loc('tab.popup.deleteSuccess'));
                     dialog.fadeout();
+                    this.refreshIndicatorsList();
                     // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
                 }
             });

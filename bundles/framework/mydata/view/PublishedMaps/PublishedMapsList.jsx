@@ -105,7 +105,7 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.actions' bundleKey="PersonalData" />,
             dataIndex: 'id',
-            render: (title, item) => {
+                render: (title, item) => {
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />}>

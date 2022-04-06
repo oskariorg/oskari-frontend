@@ -2,7 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showSnippetPopup } from '../view/embedded/SnippetPopup';
 
 class MapsHandler extends StateHandler {
-    constructor (consumer, instance) {
+    constructor (instance) {
         super();
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
@@ -12,8 +12,8 @@ class MapsHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
-        this.addStateListener(consumer);
         this.eventHandlers = this.createEventHandlers();
+        this.refreshViewsList();
     };
 
     popupCleanup () {
@@ -198,7 +198,6 @@ class MapsHandler extends StateHandler {
                 (isSuccess) => {
                     if (isSuccess) {
                         this.refreshViewsList();
-                        this.updateTab();
                     } else {
                         this.showErrorMessage(
                             this.loc('tabs.publishedmaps.error.makePrivate')

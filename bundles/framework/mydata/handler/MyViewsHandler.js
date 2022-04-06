@@ -12,10 +12,9 @@ class ViewsHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
         this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
-        this.addStateListener(consumer);
         this.eventHandlers = this.createEventHandlers();
-
         this.registerTool();
+        this.refreshViewsList();
     };
 
     getName () {

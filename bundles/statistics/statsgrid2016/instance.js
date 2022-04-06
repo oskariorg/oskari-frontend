@@ -38,7 +38,6 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this.flyoutManager = null;
         this._layerId = 'STATS_LAYER';
-        this.myIndicatorsHandler = new MyIndicatorsHandler(() => this._addIndicatorsTabToPersonalData(Oskari.getSandbox()), this);
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     }, {
         afterStart: function (sandbox) {
@@ -142,7 +141,7 @@ Oskari.clazz.define(
         _addIndicatorsTabToPersonalData: function (sandbox) {
             var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             if (typeof reqBuilder === 'function') {
-                const req = reqBuilder('indicators', this.loc('tab.title'), MyIndicatorsTab, this.myIndicatorsHandler);
+                const req = reqBuilder('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.getConfiguration()));
                 sandbox.request(this, req);
             }
         },

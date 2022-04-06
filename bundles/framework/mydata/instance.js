@@ -125,11 +125,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
             sandbox.requestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
-
-            // Personaldata available
-            var eventBuilder = Oskari.eventBuilder('Personaldata.PersonaldataLoadedEvent');
-            var event = eventBuilder();
-            sandbox.notifyAll(event);
             this._registerForGuidedTour();
         },
         /**

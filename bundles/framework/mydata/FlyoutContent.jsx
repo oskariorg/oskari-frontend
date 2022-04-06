@@ -1,12 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Message } from 'oskari-ui';
 
-export const FlyoutContent = ({ loggedIn, getLoginUrl, children }) => {
+const BUNDLE_NAME = 'PersonalData';
 
-    if (!loggedIn) {
+export const FlyoutContent = ({ loginStatus, children }) => {
+
+    if (!loginStatus.loggedIn) {
         return (
             <div>
-                {getLoginUrl()}
+                {<Message messageKey='notLoggedIn' bundleKey={BUNDLE_NAME} />}
+                <br />
+                {loginStatus.loginUrl && <a href={loginStatus.loginUrl}><Message messageKey='notLoggedInText' bundleKey={BUNDLE_NAME} /></a>}
+                <br />
+                {loginStatus.registerUrl && <a href={loginStatus.registerUrl}><Message messageKey='register' bundleKey={BUNDLE_NAME} /></a>}
             </div>
         )
     }
@@ -19,6 +26,5 @@ export const FlyoutContent = ({ loggedIn, getLoginUrl, children }) => {
 }
 
 FlyoutContent.propTypes = {
-    loggedIn: PropTypes.bool.isRequired,
-    getLoginUrl: PropTypes.func.isRequired
+    loginStatus: PropTypes.object
 };
