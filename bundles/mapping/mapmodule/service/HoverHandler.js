@@ -5,6 +5,8 @@ import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import { Vector as olSourceVector } from 'ol/source';
 
+const STROKE_ADDITION = 2;
+
 export class HoverHandler {
     constructor (mapmodule) {
         this._mapmodule = mapmodule;
@@ -161,14 +163,13 @@ export class HoverHandler {
 
     _styleGenerator (layer, isVectorTile) {
         const { featureStyle: layerHoverDef } = layer.getHoverOptions() || {};
-        const { featureStyle: defaultFeatureStyle, hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
+        const { hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
         let hoverDef = layerHoverDef || defaultHoverDef;
         if (!hoverDef) {
             return null;
         }
         if (hoverDef.inherit === true) {
-            const featureStyle = layer.getCurrentStyle().getFeatureStyle();
-            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle, hoverDef);
+            hoverDef = this._getInheritedStyle(layer, hoverDef);
         }
         // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
         const olStyles = this._styleFactory(hoverDef);
@@ -184,6 +185,19 @@ export class HoverHandler {
         return feature => {
             return getStylesForGeometry(feature.getGeometry(), olStyles);
         };
+    }
+
+    _getInheritedStyle (layer, hoverDef) {
+        const { featureStyle: defaultFeatureStyle } = this._defaultStyles[layer.getLayerType()] || {};
+        const featureStyle = layer.getCurrentStyle().getFeatureStyle();
+        const base = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle);
+        if (Oskari.util.keyExists(base, 'stroke.width')) {
+            base.stroke.width = base.stroke.width + STROKE_ADDITION;
+        }
+        if (Oskari.util.keyExists(base, 'stroke.area.width')) {
+            base.stroke.area.width = base.stroke.area.width + STROKE_ADDITION;
+        }
+        return jQuery.extend(true, {}, base, hoverDef);
     }
 
     _clearState (clearLayerId) {
