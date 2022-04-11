@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
         this.templateTabHeader = null;
         this.templateTabContent = null;
         this.uiHandler = new MyDataHandler(() => this.update());
+        this.myDataService = null;
         this.element = null;
     }, {
         /**
@@ -70,7 +71,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 return false;
             }); */
 
-            this.addTab(
+            this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler, () => this.update());
+            Oskari.getSandbox().registerService(this.myDataService);
+
+            this.myDataService.addTab(
                 'account',
                 Oskari.getMsg('PersonalData', 'tabs.account.title'),
                 AccountTab,
@@ -83,13 +87,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                     addStateListener: () => null
                 }
             );
-            this.addTab(
+            this.myDataService.addTab(
                 'myviews',
                 Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
                 MyViewsTab,
                 new MyViewsHandler()
             );
-            this.addTab(
+            this.myDataService.addTab(
                 'publishedmaps',
                 Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
                 PublishedMapsTab,
@@ -188,19 +192,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 loginUrl,
                 registerUrl
             };
-        },
-        /**
-         *
-         *
-         */
-        addTab: function (id, title, component, handler) {
-            if (!Oskari.user().isLoggedIn()) {
-                return;
-            }
-            if (handler && typeof handler.addStateListener === 'function') {
-                handler.addStateListener(() => this.update());
-                this.uiHandler.addTab(id, title, component, handler);
-            }
         }
     }, {
         /**

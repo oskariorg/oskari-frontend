@@ -1,6 +1,4 @@
-import React from 'react';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { MyPlacesTab } from '../MyPlacesTab';
 
 class PlacesHandler extends StateHandler {
     constructor (consumer, instance) {

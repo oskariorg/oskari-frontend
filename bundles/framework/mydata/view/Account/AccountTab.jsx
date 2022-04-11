@@ -21,7 +21,7 @@ export const AccountTab = ({ state, controller }) => {
         label: <Message messageKey='tabs.account.email' bundleKey={BUNDLE_NAME} />,
         value: user.getEmail()
     }];
-    console.log(changeInfoUrl)
+
     return (
         <div className="account">
             <table className="info oskari-grid">
