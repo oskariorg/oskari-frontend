@@ -95,5 +95,6 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
 };
 
 MyIndicatorsList.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object)
+    data: PropTypes.arrayOf(PropTypes.object),
+    controller: PropTypes.object.isRequired
 };

@@ -120,11 +120,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             // draw ui
             me.createUi();
 
-            // Flyout exists and we can hook up the request handler
-            this.requestHandlers = {
-                addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
-            };
-            sandbox.requestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
             this._registerForGuidedTour();
         },
         /**
@@ -172,7 +167,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
-            sandbox.removeRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
             var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
