@@ -30,6 +30,7 @@ import './AbstractMapModule';
 import './plugin/BasicMapModulePlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
+const INTERNAL_LAYER_Z_INDEX = 1;
 
 if (!window.proj4) {
     window.proj4 = proj4;
@@ -1124,7 +1125,7 @@ export class MapModule extends AbstractMapModule {
 ------------------------------------------------------------------> */
 
     /**
-     * @param {ol/layer/Layer} layer ol3 specific!
+     * @param {ol/layer/Layer} layer ol specific!
      * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
      */
     addLayer (layerImpl, toBottom) {
@@ -1136,6 +1137,19 @@ export class MapModule extends AbstractMapModule {
         if (toBottom === true) {
             this.setLayerIndex(layerImpl, 0);
         }
+    }
+
+    /**
+     * Adds internal layer to map. Internal layers aren't listed in selected layers and are always above those.
+     * @method bringToTop
+     * @param {ol/layer/Layer} layer ol specific!
+     */
+    addInternalLayer (layerImpl) {
+        if (!layerImpl) {
+            return;
+        }
+        layerImpl.setZIndex(INTERNAL_LAYER_Z_INDEX);
+        this.getMap().addLayer(layerImpl);
     }
 
     /**
