@@ -19,33 +19,6 @@ Oskari.clazz.define('Oskari.bundle.MyDataBundle', function () {
         'scripts': [{
             'type': 'text/javascript',
             'src': './instance.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './Flyout.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './Tile.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './events/PersonaldataLoadedEvent.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './view/MyViews/MyViewsTab.jsx'
-        }, {
-            'type': 'text/javascript',
-            'src': './service/ViewService.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './service/MyDataService.js'
-        }, {
-            'type': 'text/javascript',
-            'src': './view/PublishedMaps/PublishedMapsTab.jsx'
-        }, {
-            'type': 'text/javascript',
-            'src': './view/Account/AccountTab.jsx'
-        }, {
-            'type': 'text/css',
-            'src': './resources/scss/personaldata.scss'
         }],
 
         'locales': [{

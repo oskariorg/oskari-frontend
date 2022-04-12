@@ -9,13 +9,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
     /**
      * @method create called automatically on construction
      * @static
-     *
-     * @param {String}
-     *            viewUrl ajax URLfor view AJAX-operations
      */
 
-    function (viewUrl) {
-        this._viewUrl = viewUrl;
+    function () {
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.mapframework.bundle.personaldata.service.ViewService',
@@ -46,13 +42,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
          * or error(false). IF success, second parameter has the response.
          */
         loadViews: function (type, callback) {
-            var me = this;
             if (!type) {
                 type = 'USER';
             }
 
             jQuery.ajax({
-                url: me._viewUrl + 'action_route=GetViews',
+                url: Oskari.urls.getRoute('GetViews'),
                 data: {
                     viewType: type
                 },
@@ -84,10 +79,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
          * or error(false)
          */
         deleteView: function (view, callback) {
-            var me = this;
-
             jQuery.ajax({
-                url: me._viewUrl + 'action_route=DeleteView',
+                url: Oskari.urls.getRoute('DeleteView'),
                 data: {
                     id: view.id
                 },
@@ -121,10 +114,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
          * or error(false)
          */
         makeViewPublic: function (id, isPublic, callback) {
-            var me = this;
-
             jQuery.ajax({
-                url: me._viewUrl + 'action_route=AdjustViewAccess',
+                url: Oskari.urls.getRoute('AdjustViewAccess'),
                 data: {
                     id: id,
                     isPublic: isPublic
@@ -161,9 +152,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
          * or error(false)
          */
         updateView: function (id, name, description, isDefault, callback) {
-            var me = this;
             jQuery.ajax({
-                url: me._viewUrl + 'action_route=UpdateView',
+                url: Oskari.urls.getRoute('UpdateView'),
                 type: 'POST',
                 data: {
                     id: id,
