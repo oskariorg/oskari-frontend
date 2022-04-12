@@ -13,6 +13,7 @@ Oskari.registerLocalization(
             },
             "valid": "Voimassa:",
             "dontShow" : "Älä näytä uudelleen",
+            "noAnnouncements": "Ei aktiivisia ilmoituksia",
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
             },

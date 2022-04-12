@@ -88,10 +88,6 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
     }
   }
 
-  const setLocalizedContent = (locale) => {
-    setLocales({ ...locales, ...locale });
-  }
-
     return (
       <div>
             <Form layout="vertical" 
@@ -137,7 +133,7 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
                 <Form.Item>
                   <Confirm
                       title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
-                      onConfirm={() => controller.deleteAnnouncement(announcement.id, announcement.locale[lang].name)}
+                      onConfirm={() => controller.deleteAnnouncement(announcement.id)}
                       okText={<Message messageKey='yes'/>}
                       cancelText={<Message messageKey='cancel'/>}
                       placement='top'

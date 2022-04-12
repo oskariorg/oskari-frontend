@@ -28,20 +28,24 @@ const AnnouncementsCollapse = ({controller, checked, announcements, modals }) =>
             );
           })}
       <div>
-      <Collapse accordion>
-          { announcements.map((announcement) => {
-            let start = moment(announcement.begin_date).format(DATEFORMAT);
-            let end = moment(announcement.end_date).format(DATEFORMAT);
-              return announcement.locale[lang].name && (
-                <CollapsePanel header={announcement.locale[lang].name} key={announcement.id}>
-                    <h3><b>{announcement.locale[lang].name}</b></h3>
-                    <p>{announcement.locale[lang].content}</p>
-                    <Divider />
-                    <b><Message messageKey={'valid'} /></b>
-                    <p>{start.toString()} - {end.toString()}</p>
-                </CollapsePanel>)
-          })}
-        </Collapse>
+        { announcements.length > 0 ?
+          <Collapse accordion>
+            { announcements.map((announcement) => {
+              let start = moment(announcement.begin_date).format(DATEFORMAT);
+              let end = moment(announcement.end_date).format(DATEFORMAT);
+                return announcement.locale[lang].name && (
+                  <CollapsePanel header={announcement.locale[lang].name} key={announcement.id}>
+                      <h3><b>{announcement.locale[lang].name}</b></h3>
+                      <p>{announcement.locale[lang].content}</p>
+                      <Divider />
+                      <b><Message messageKey={'valid'} /></b>
+                      <p>{start.toString()} - {end.toString()}</p>
+                  </CollapsePanel>)
+            })}
+          </Collapse>
+          :
+          <center><h3><Message messageKey={'noAnnouncements'}/></h3></center>
+        }
       </div>
     </div>
   );
