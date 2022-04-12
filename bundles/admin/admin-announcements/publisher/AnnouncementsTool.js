@@ -2,7 +2,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
     function () {
         this.sandbox = Oskari.getSandbox();
         this.lang = Oskari.getLang();
-        console.log(this.lang);
         this.localization = Oskari.getLocalization('admin-announcements');
         this.announcements = {};
         this.allowedLocations = ['top left', 'top center', 'top right'];
@@ -70,10 +69,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     return;
                 }
                 me.announcements = data;
-                console.log(me.announcements);
                 const toolPluginAnnouncementsConf = me._getToolPluginAnnouncementsConf();
                 if (toolPluginAnnouncementsConf !== null) {
-                    console.log(toolPluginAnnouncementsConf);
                     me.getPlugin().updateAnnouncements(toolPluginAnnouncementsConf.config.announcements);
                     toolPluginAnnouncementsConf.config.announcements.forEach(announcement => {
                         const filteredAnnouncement = me.announcements.filter(ann => ann.id === announcement);
@@ -188,15 +185,10 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
             // Announcement is selected
             content.find('input[name=announcement]').on('change', function () {
-                console.log(me.announcements);
-                console.log(me.lang);
                 var announcement = me.announcements.find(item => item.locale[me.lang].name === jQuery(this).val());
                 // check if announcement is already checked, if is, add/remove accordingly
-                        console.log(announcement);
                 if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
-                        console.log(ann);
-                        console.log(announcement);
                         return ann.locale[this.lang].name !== announcement.locale[this.lang].name;
                     });
                 } else {
