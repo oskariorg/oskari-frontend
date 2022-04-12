@@ -16,12 +16,31 @@ Oskari.registerLocalization(
         "save": "Save",
         "yes": "Yes",
         "cancel": "Cancel",
-        "newAnnouncement": {
+        "fields": {
             "title": "Title",
             "content": "Content",
             "date-range": "Date range",
-            "show-popup": "Show pop-up"
+            "show-popup": "Show pop-up",
+            "locale": {
+                "generic": {
+                    "name": "Name in {0}",
+                    "content": "Content in {0}"
+                },
+                "en": {
+                    "name": "Name in English",
+                    "content": "Content in English"
+                },
+                "fi": {
+                    "name": "Name in Finnish",
+                    "content": "Content in Finnish"
+                },
+                "sv": {
+                    "name": "Name in Swedish",
+                    "content": "Content in Swedish"
+                }
+            }
         },
+        "otherLanguages": "Other languages",
         "messages": {
             "saveSuccess": "Announcement saved",
             "saveFailed": "Saving announcement failed",

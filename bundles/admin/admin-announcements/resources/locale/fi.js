@@ -16,12 +16,31 @@ Oskari.registerLocalization(
             "save": "Tallenna",
             "yes": "Kyllä",
             "cancel": "Peruuta",
-            "newAnnouncement": {
+            "fields": {
                 "title": "Otsikko",
                 "content": "Sisältö",
                 "date-range": "Aikaväli",
-                "show-popup": "Näytä ponnahdusikkuna"
+                "show-popup": "Näytä ponnahdusikkuna",
+                "locale": {
+                    "generic": {
+                        "name": "Nimi kielellä {0}",
+                        "content": "Sisältö kielellä {0}"
+                    },
+                    "en": {
+                        "name": "Nimi englanniksi",
+                        "content": "Sisältö englanniksi"
+                    },
+                    "fi": {
+                        "name": "Nimi suomeksi",
+                        "content": "Sisältö suomeksi"
+                    },
+                    "sv": {
+                        "name": "Nimi ruotsiksi",
+                        "content": "Sisältö ruotsiksi"
+                    }
+                }
             },
+            "otherLanguages": "Muut kielet",
             "messages": {
                 "saveSuccess": "Ilmoitus tallennettu.",
                 "saveFailed": "Ilmoituksen tallennus epäonnistui.",
