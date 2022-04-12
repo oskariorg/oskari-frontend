@@ -27,6 +27,7 @@ class ViewHandler extends StateHandler {
                 this.updateState({
                     announcements: data
                 });
+                this.updateModals();
             }
         }.bind(this));
     }
