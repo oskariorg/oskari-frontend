@@ -116,8 +116,9 @@ class ViewHandler extends StateHandler {
 
     addForm () {
         const newList = [...this.state.announcements];
+        const lang = Oskari.getLang();
         newList.push({
-            title: Oskari.getMsg('admin-announcements', 'addNewForm')
+            locale: { [lang]: { name: Oskari.getMsg('admin-announcements', 'addNewForm') } }
         });
         this.updateState({
             announcements: newList
