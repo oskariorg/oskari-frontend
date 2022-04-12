@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
     function (config) {
         var me = this;
         me.sandbox = Oskari.getSandbox();
+        me.lang = Oskari.getLang();
         me._loc = Oskari.getLocalization('announcements');
         me._clazz = 'Oskari.framework.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';
@@ -183,8 +184,8 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
 
                 const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
 
-                div.find('button').append(announcement.title);
-                div.find('div.announcement-description').append(announcement.content);
+                div.find('button').append(announcement.locale[me.lang].name);
+                div.find('div.announcement-description').append(announcement.locale[me.lang].content);
                 div.find('div.announcement-time').append(annTime);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
