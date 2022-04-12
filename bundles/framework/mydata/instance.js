@@ -1,3 +1,7 @@
+import './Tile';
+import './Flyout';
+import './service/ViewService';
+
 /**
  * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance
  *

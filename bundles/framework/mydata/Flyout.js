@@ -8,6 +8,7 @@ import { FlyoutContent } from './FlyoutContent';
 import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
 import { MyViewsHandler } from './handler/MyViewsHandler';
 import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
+import './service/MyDataService';
 
 /**
  * @class Oskari.mapframework.bundle.personaldata.Flyout
@@ -71,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 return false;
             }); */
 
-            this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler, () => this.update());
+            this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler);
             Oskari.getSandbox().registerService(this.myDataService);
 
             this.myDataService.addTab(
@@ -91,13 +92,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 'myviews',
                 Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
                 MyViewsTab,
-                new MyViewsHandler()
+                new MyViewsHandler(this.instance)
             );
             this.myDataService.addTab(
                 'publishedmaps',
                 Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
                 PublishedMapsTab,
-                new PublishedMapsHandler()
+                new PublishedMapsHandler(this.instance)
             );
 
             this.update();
@@ -180,17 +181,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * @returns {String}
          */
         getLoginStatus: function () {
-            const notLoggedInText = this.instance.getLocalization('notLoggedIn');
             const conf = this.instance.conf || {};
-            const loginUrl = Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login');
-
-            const registerUrl = Oskari.urls.getLocation('register');
-
             return {
                 loggedIn: Oskari.user().isLoggedIn(),
-                notLoggedInText,
-                loginUrl,
-                registerUrl
+                notLoggedInText: this.instance.getLocalization('notLoggedIn'),
+                loginUrl: Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login'),
+                registerUrl: Oskari.urls.getLocation('register')
             };
         }
     }, {

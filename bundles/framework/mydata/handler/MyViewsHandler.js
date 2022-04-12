@@ -2,7 +2,7 @@ import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { showViewForm } from '../view/ViewForm/ViewForm';
 
 class ViewsHandler extends StateHandler {
-    constructor (consumer, instance) {
+    constructor (instance) {
         super();
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
@@ -11,7 +11,7 @@ class ViewsHandler extends StateHandler {
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'PersonalData');
-        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
+        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService');
         this.eventHandlers = this.createEventHandlers();
         this.registerTool();
         this.refreshViewsList();
@@ -132,7 +132,7 @@ class ViewsHandler extends StateHandler {
         if (rb) {
             const req = rb(data.state);
             req.setCurrentViewId(data.id);
-            this.sandbox.request(this.consumer, req);
+            this.sandbox.request(this.instance, req);
         }
     }
 
