@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Omat tiedot",
         "desc": "Omat tiedot",

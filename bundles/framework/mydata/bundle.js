@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundle
+ * @class Oskari.mapframework.bundle.mydata.MyDataBundle
  *
  * Definition for bundle. See source for details.
  */
@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.bundle.MyDataBundle', function () {
 
 }, {
     'create': function () {
-        var inst = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance');
+        var inst = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.MyDataBundleInstance');
         return inst;
     },
     'update': function (manager, bundle, bi, info) {}
@@ -145,8 +145,8 @@ Oskari.clazz.define('Oskari.bundle.MyDataBundle', function () {
     },
     'bundle': {
         'manifest': {
-            'Bundle-Identifier': 'personaldata',
-            'Bundle-Name': 'personaldata',
+            'Bundle-Identifier': 'mydata',
+            'Bundle-Name': 'mydata',
             'Bundle-Author': [{
                 'Name': 'ejv',
                 'Organisation': 'nls.fi',
@@ -182,4 +182,4 @@ Oskari.clazz.define('Oskari.bundle.MyDataBundle', function () {
 
 });
 
-Oskari.bundle_manager.installBundleClass('personaldata', 'Oskari.bundle.MyDataBundle');
+Oskari.bundle_manager.installBundleClass('mydata', 'Oskari.bundle.MyDataBundle');

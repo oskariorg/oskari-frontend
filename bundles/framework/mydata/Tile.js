@@ -1,13 +1,13 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.Tile
- * Renders the "personal data" tile.
+ * @class Oskari.mapframework.bundle.mydata.Tile
+ * Renders the "mydata" tile.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
+Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Tile',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance} instance
+     * @param {Oskari.mapframework.bundle.mydata.MyDataBundleInstance} instance
      *      reference to component that created the tile
      */
 
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.mapframework.bundle.personaldata.Tile';
+            return 'Oskari.mapframework.bundle.mydata.Tile';
         },
         /**
          * @method setEl

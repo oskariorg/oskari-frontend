@@ -10,8 +10,8 @@ class MapsHandler extends StateHandler {
             data: []
         });
         this.popupControls = null;
-        this.loc = Oskari.getMsg.bind(null, 'PersonalData');
-        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
+        this.loc = Oskari.getMsg.bind(null, 'MyData');
+        this.viewService = this.instance.getViewService();
         this.eventHandlers = this.createEventHandlers();
         this.refreshViewsList();
     };

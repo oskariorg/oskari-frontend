@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "hu",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Saját adatok",
         "desc": "Saját adatok",

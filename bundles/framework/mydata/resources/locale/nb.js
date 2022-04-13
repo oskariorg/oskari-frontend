@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "nb",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Mine data",
         "desc": "Mine data",

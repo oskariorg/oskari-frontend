@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.service.ViewService
+ * @class Oskari.mapframework.bundle.mydata.service.ViewService
  *
  * Requests for a search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService',
+Oskari.clazz.define('Oskari.mapframework.bundle.mydata.service.ViewService',
 
     /**
      * @method create called automatically on construction
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
     function () {
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: 'Oskari.mapframework.bundle.personaldata.service.ViewService',
+        __qname: 'Oskari.mapframework.bundle.mydata.service.ViewService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service

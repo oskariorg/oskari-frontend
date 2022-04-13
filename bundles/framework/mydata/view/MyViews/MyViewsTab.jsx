@@ -4,8 +4,6 @@ import { MyViewsList } from './MyViewsList';
 import { Button, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
-const BUNDLE_NAME = 'PersonalData';
-
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
     display: flex;
@@ -18,7 +16,7 @@ export const MyViewsTab = ({ controller, state }) => {
         <React.Fragment>
             <ButtonContainer>
                 <Button type='primary' onClick={controller.saveCurrent}>
-                    <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.button.saveCurrent' />
+                    <Message messageKey='tabs.myviews.button.saveCurrent' />
                 </Button>
             </ButtonContainer>
             <MyViewsList

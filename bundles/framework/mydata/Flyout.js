@@ -8,17 +8,18 @@ import { FlyoutContent } from './FlyoutContent';
 import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
 import { MyViewsHandler } from './handler/MyViewsHandler';
 import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
+import { LocaleProvider } from 'oskari-ui/util';
 import './service/MyDataService';
 
 /**
- * @class Oskari.mapframework.bundle.personaldata.Flyout
+ * @class Oskari.mapframework.bundle.mydata.Flyout
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
+Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
 
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance} instance
+     * @param {Oskari.mapframework.bundle.mydata.MyDataBundleInstance} instance
      *     reference to component that created the flyout
      */
 
@@ -39,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * @return {String} the name for the component
          */
         getName: function () {
-            return 'Oskari.mapframework.bundle.personaldata.Flyout';
+            return 'Oskari.mapframework.bundle.mydata.Flyout';
         },
         /**
          * @method setEl
@@ -54,11 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          */
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
-            if (!jQuery(this.container).hasClass('personaldata')) {
-                jQuery(this.container).addClass('personaldata');
+            if (!jQuery(this.container).hasClass('mydata')) {
+                jQuery(this.container).addClass('mydata');
             }
-            if (!flyout.hasClass('personaldata')) {
-                flyout.addClass('personaldata');
+            if (!flyout.hasClass('mydata')) {
+                flyout.addClass('mydata');
             }
         },
         /**
@@ -68,12 +69,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          */
         startPlugin: function () {
             if (Oskari.user().isLoggedIn()) {
-                this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler);
+                this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.MyDataService', this.uiHandler);
                 Oskari.getSandbox().registerService(this.myDataService);
 
                 this.myDataService.addTab(
                     'account',
-                    Oskari.getMsg('PersonalData', 'tabs.account.title'),
+                    Oskari.getMsg('MyData', 'tabs.account.title'),
                     AccountTab,
                     {
                         getState: () => ({
@@ -86,13 +87,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
                 );
                 this.myDataService.addTab(
                     'myviews',
-                    Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
+                    Oskari.getMsg('MyData', 'tabs.myviews.title'),
                     MyViewsTab,
                     new MyViewsHandler(this.instance)
                 );
                 this.myDataService.addTab(
                     'publishedmaps',
-                    Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
+                    Oskari.getMsg('MyData', 'tabs.publishedmaps.title'),
                     PublishedMapsTab,
                     new PublishedMapsHandler(this.instance)
                 );
@@ -150,18 +151,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             } = this.uiHandler.getState();
 
             ReactDOM.render(
-                <FlyoutContent loginStatus={this.getLoginStatus()}>
-                    <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
-                        {tabs.map(t => (
-                            <TabPane tab={t.title} key={t.id}>
-                                <t.component
-                                    state={t.handler.getState()}
-                                    controller={t.handler.getController()}
-                                />
-                            </TabPane>
-                        ))}
-                    </Tabs>
-                </FlyoutContent>
+                <LocaleProvider value={{ bundleKey: 'MyData' }}>
+                    <FlyoutContent loginStatus={this.getLoginStatus()}>
+                        <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
+                            {tabs.map(t => (
+                                <TabPane tab={t.title} key={t.id}>
+                                    <t.component
+                                        state={t.handler.getState()}
+                                        controller={t.handler.getController()}
+                                    />
+                                </TabPane>
+                            ))}
+                        </Tabs>
+                    </FlyoutContent>
+                </LocaleProvider>
                 ,
                 flyout[0]
             );
@@ -193,7 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             const conf = this.instance.conf || {};
             return {
                 loggedIn: Oskari.user().isLoggedIn(),
-                notLoggedInText: this.instance.getLocalization('notLoggedIn'),
                 loginUrl: Oskari.getLocalized(conf.logInUrl) || Oskari.urls.getLocation('login'),
                 registerUrl: Oskari.urls.getLocation('register')
             };

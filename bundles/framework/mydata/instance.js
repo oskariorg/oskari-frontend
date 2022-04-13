@@ -3,13 +3,13 @@ import './Flyout';
 import './service/ViewService';
 
 /**
- * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance
+ * @class Oskari.mapframework.bundle.mydata.MyDataBundleInstance
  *
  * Main component and starting point for the personal data functionality.
  *
- * See Oskari.mapframework.bundle.personaldata.PersonalDataBundle for bundle definition.
+ * See Oskari.mapframework.bundle.mydata.MyDataBundle for bundle definition.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance',
+Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @static
          * @property __name
          */
-        __name: 'PersonalData',
+        __name: 'MyData',
         /**
          * @method getName
          * @return {String} the name for the component
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
         },
         /**
          * @method getViewService
-         * @return {Oskari.mapframework.bundle.personaldata.service.ViewService}
+         * @return {Oskari.mapframework.bundle.mydata.service.ViewService}
          */
         getViewService: function () {
             return this.viewService;
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 p;
 
             me.sandbox = sandbox;
-            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
+            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.ViewService', Oskari.urls.getRoute());
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -173,12 +173,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method startExtension
          * implements Oskari.userinterface.Extension protocol startExtension method
          * Creates a flyout and a tile:
-         * Oskari.mapframework.bundle.personaldata.Flyout
-         * Oskari.mapframework.bundle.personaldata.Tile
+         * Oskari.mapframework.bundle.mydata.Flyout
+         * Oskari.mapframework.bundle.mydata.Tile
          */
         startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.Flyout', this);
-            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.Tile', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Flyout', this);
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.Tile', this);
         },
         /**
          * @method stopExtension
@@ -228,10 +228,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
         __guidedTourDelegateTemplate: {
             priority: 40,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']);
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
             },
             getTitle: function () {
                 return this.getLocalization().guidedTour.title;
@@ -249,7 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 openLink.append(loc.openLink);
                 openLink.on('click',
                     function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']);
                         openLink.hide();
                         closeLink.show();
                     });
@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 closeLink.append(loc.closeLink);
                 closeLink.on('click',
                     function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
                         openLink.show();
                         closeLink.hide();
                     });
