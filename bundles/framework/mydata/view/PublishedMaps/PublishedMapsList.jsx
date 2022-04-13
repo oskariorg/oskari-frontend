@@ -24,9 +24,7 @@ const StyledTable = styled(Table)`
             padding: 8px;
         }
     }
-`
-
-const BUNDLE_NAME = 'PersonalData';
+`;
 
 const openView = (view) => {
     window.open(
@@ -41,7 +39,7 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
     const columnSettings = [
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.name' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.name' />,
             dataIndex: 'name',
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
@@ -53,74 +51,74 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.domain' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
             dataIndex: 'pubDomain',
             sorter: getSorterFor('pubDomain'),
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.publish' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.publish' />,
             dataIndex: 'isPublic',
             sorter: getSorterFor('isPublic'),
             render: (title, item) => {
                 if (item.isPublic) {
                     return (
                         <Confirm
-                            title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
+                            title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.setPublished(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
+                            okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
+                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <a><Message messageKey='tabs.publishedmaps.unpublish' bundleKey={BUNDLE_NAME} /></a>
+                            <a><Message messageKey='tabs.publishedmaps.unpublish' /></a>
                         </Confirm>
                     )
                 } else {
                     return (
-                        <a onClick={() => controller.setPublished(item)}><Message messageKey='tabs.publishedmaps.publish' bundleKey={BUNDLE_NAME} /></a>
+                        <a onClick={() => controller.setPublished(item)}><Message messageKey='tabs.publishedmaps.publish' /></a>
                     )
                 }
             }
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.show' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.show' />,
             render: (title, item) => {
                 return (
-                    <a onClick={() => controller.showOnMap(item)}><Message messageKey='tabs.publishedmaps.show' bundleKey={BUNDLE_NAME} /></a>
+                    <a onClick={() => controller.showOnMap(item)}><Message messageKey='tabs.publishedmaps.show' /></a>
                 );
             }
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.html' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.html' />,
             dataIndex: 'id',
             render: (title, item) => {
                 return (
-                    <a onClick={() => controller.showHtml(item)}><Message messageKey='tabs.publishedmaps.grid.html' bundleKey={BUNDLE_NAME} /></a>
+                    <a onClick={() => controller.showHtml(item)}><Message messageKey='tabs.publishedmaps.grid.html' /></a>
                 );
             }
         },
         {
             align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.actions' bundleKey="PersonalData" />,
+            title: <Message messageKey='tabs.publishedmaps.grid.actions' />,
             dataIndex: 'id',
                 render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' bundleKey="PersonalData" />}>
+                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' />}>
                             <div className='icon t_edit' onClick={() => controller.editView(item)}>
                                 <EditOutlined style={ EDIT_ICON_STYLE } />
                             </div>
                         </Tooltip>
                         <Confirm
-                            title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
+                            title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
+                            okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
+                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' bundleKey="PersonalData" />}>
+                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' />}>
                                 <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
                             </Tooltip>
                         </Confirm>

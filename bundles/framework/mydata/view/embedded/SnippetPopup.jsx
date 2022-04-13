@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { Message, TextAreaInput, Tooltip, Button } from 'oskari-ui';
 import styled from 'styled-components';
 import { SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
-import { showPopup } from 'oskari-ui/components/window'
+import { showPopup } from 'oskari-ui/components/window';
+import { LocaleProvider } from 'oskari-ui/util';
+
+export const BUNDLE_NAME = 'PersonalData';
 
 const Content = styled.div`
     margin: 12px 24px 24px;
@@ -12,9 +15,7 @@ const Content = styled.div`
 
 const StyledButton = styled(Button)`
     width: 165px;
-`
-
-const BUNDLE_NAME = 'PersonalData';
+`;
 
 const SnippetPopup = ({html, onClose}) => {
 
@@ -27,13 +28,13 @@ const SnippetPopup = ({html, onClose}) => {
 
     return (
         <Content>
-            <Message messageKey="tabs.publishedmaps.published.desc" bundleKey={BUNDLE_NAME} />
+            <Message messageKey="tabs.publishedmaps.published.desc" />
             <TextAreaInput name='html' value={html} />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={onClose}/>
-                <Tooltip title={<Message messageKey={`tabs.publishedmaps.published.copy`} bundleKey={BUNDLE_NAME} />}>
+                <Tooltip title={<Message messageKey={`tabs.publishedmaps.published.copy`} />}>
                     <StyledButton onClick={copyText}>
-                        <Message messageKey={copied ? "tabs.publishedmaps.published.copied" : "tabs.publishedmaps.published.copy"} bundleKey={BUNDLE_NAME} />
+                        <Message messageKey={copied ? "tabs.publishedmaps.published.copied" : "tabs.publishedmaps.published.copy"} />
                     </StyledButton>
                 </Tooltip>
             </ButtonContainer>
@@ -58,7 +59,9 @@ export const showSnippetPopup = (view, onClose) => {
     iframeCode += '"></iframe>';
 
     const content = (
-        <SnippetPopup html={iframeCode} onClose={onClose} />
+        <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
+            <SnippetPopup html={iframeCode} onClose={onClose} />
+        </LocaleProvider>
     );
     return showPopup(title, content, onClose);
 }

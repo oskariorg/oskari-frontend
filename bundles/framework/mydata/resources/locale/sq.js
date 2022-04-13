@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "sq",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Të dhënat e mia",
         "desc": "Të dhënat e mia",

@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "el",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Τα δεδομένα μου",
         "desc": "Τα δεδομένα μου",

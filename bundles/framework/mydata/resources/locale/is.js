@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "is",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Gögnin mín",
         "desc": "Gögnin mín",

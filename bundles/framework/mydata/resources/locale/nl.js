@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "nl",
-    "key": "PersonalData",
+    "key": "MyData",
     "value": {
         "title": "Mijn gegevens",
         "desc": "Mijn gegevens",

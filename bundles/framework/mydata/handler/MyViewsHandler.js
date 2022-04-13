@@ -10,8 +10,8 @@ class ViewsHandler extends StateHandler {
             data: []
         });
         this.popupControls = null;
-        this.loc = Oskari.getMsg.bind(null, 'PersonalData');
-        this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService');
+        this.loc = Oskari.getMsg.bind(null, 'MyData');
+        this.viewService = this.instance.getViewService();
         this.eventHandlers = this.createEventHandlers();
         this.registerTool();
         this.refreshViewsList();
@@ -105,7 +105,7 @@ class ViewsHandler extends StateHandler {
                     this.refreshViewsList();
                 }
             } else {
-                this.showErrorMessage(Oskari.getMsg('PersonalData', 'tabs.myviews.error.notdeleted'));
+                this.showErrorMessage(Oskari.getMsg('MyData', 'tabs.myviews.error.notdeleted'));
             }
         });
     }

@@ -106,7 +106,7 @@ Oskari.clazz.define(
             });
         },
         _addIndicatorsTabToMyData: function (sandbox, appStarted) {
-            let myDataService = sandbox.getService('Oskari.mapframework.bundle.personaldata.service.MyDataService');
+            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
             const reqName = 'PersonalData.AddTabRequest';
             if (myDataService) {

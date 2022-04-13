@@ -4,7 +4,7 @@
  * Requests for a search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.MyDataService',
+Oskari.clazz.define('Oskari.mapframework.bundle.mydata.service.MyDataService',
 
     /**
      * @method create called automatically on construction
@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.MyDataServi
         this._uiHandler = uiHandler;
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: 'Oskari.mapframework.bundle.personaldata.service.MyDataService',
+        __qname: 'Oskari.mapframework.bundle.mydata.service.MyDataService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
