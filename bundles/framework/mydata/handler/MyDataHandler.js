@@ -4,7 +4,8 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.setState({
-            tabs: []
+            tabs: [],
+            activeTab: undefined
         });
         this.addStateListener(consumer);
     }
@@ -20,6 +21,12 @@ class UIHandler extends StateHandler {
                     handler
                 }
             ]
+        });
+    }
+
+    setActiveTab (tab) {
+        this.updateState({
+            activeTab: tab
         });
     }
 

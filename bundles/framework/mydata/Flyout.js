@@ -67,39 +67,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            /* jQuery('#oskari-profile-link').on('click', function () {
-                me.instance.openProfileTab();
-                return false;
-            }); */
+            if (Oskari.user().isLoggedIn()) {
+                this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler);
+                Oskari.getSandbox().registerService(this.myDataService);
 
-            this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.MyDataService', this.uiHandler);
-            Oskari.getSandbox().registerService(this.myDataService);
-
-            this.myDataService.addTab(
-                'account',
-                Oskari.getMsg('PersonalData', 'tabs.account.title'),
-                AccountTab,
-                {
-                    getState: () => ({
-                        user: Oskari.user(),
-                        changeInfoUrl: Oskari.urls.getLocation('profile')
-                    }),
-                    getController: () => null,
-                    addStateListener: () => null
-                }
-            );
-            this.myDataService.addTab(
-                'myviews',
-                Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
-                MyViewsTab,
-                new MyViewsHandler(this.instance)
-            );
-            this.myDataService.addTab(
-                'publishedmaps',
-                Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
-                PublishedMapsTab,
-                new PublishedMapsHandler(this.instance)
-            );
+                this.myDataService.addTab(
+                    'account',
+                    Oskari.getMsg('PersonalData', 'tabs.account.title'),
+                    AccountTab,
+                    {
+                        getState: () => ({
+                            user: Oskari.user(),
+                            changeInfoUrl: Oskari.urls.getLocation('profile')
+                        }),
+                        getController: () => null,
+                        addStateListener: () => null
+                    }
+                );
+                this.myDataService.addTab(
+                    'myviews',
+                    Oskari.getMsg('PersonalData', 'tabs.myviews.title'),
+                    MyViewsTab,
+                    new MyViewsHandler(this.instance)
+                );
+                this.myDataService.addTab(
+                    'publishedmaps',
+                    Oskari.getMsg('PersonalData', 'tabs.publishedmaps.title'),
+                    PublishedMapsTab,
+                    new PublishedMapsHandler(this.instance)
+                );
+            }
 
             this.update();
         },
@@ -148,12 +145,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
             const { TabPane } = Tabs;
 
             const {
-                tabs
+                tabs,
+                activeTab
             } = this.uiHandler.getState();
 
             ReactDOM.render(
                 <FlyoutContent loginStatus={this.getLoginStatus()}>
-                    <Tabs>
+                    <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
                         {tabs.map(t => (
                             <TabPane tab={t.title} key={t.id}>
                                 <t.component
@@ -175,6 +173,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          */
         createUi: function () {
             this.update();
+            this.addProfileLink();
+        },
+        addProfileLink: function () {
+            jQuery('#oskari-profile-link').on('click', () => {
+                this.openProfileTab();
+                return false;
+            });
+        },
+        openProfileTab: function () {
+            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
+            this.uiHandler.setActiveTab('account');
         },
         /**
          * @method getLoginUrl
