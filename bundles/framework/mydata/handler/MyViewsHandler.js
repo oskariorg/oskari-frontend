@@ -47,7 +47,7 @@ class ViewsHandler extends StateHandler {
         const onEdit = values => this.viewService.updateView(id, values.name, values.description, values.isDefault, editCb);
         const onOk = id ? onEdit : onSave;
         // create popup
-        this.popupControls = showViewForm(view, onOk, this.popupCleanup);
+        this.popupControls = showViewForm(view, onOk, () => this.popupCleanup());
     }
 
     handleSaveViewResponse (isSuccess) {
