@@ -16,9 +16,8 @@ const { Panel } = Collapse;
 const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
-const AnnouncementsList = ({controller,  announcements, title, activeKey }) => {
+const AnnouncementsList = ({controller,  announcements, activeKey }) => {
 
-  const lang = Oskari.getLang();
   const callback = (key) => {
     controller.openCollapse(key);
   }
@@ -27,8 +26,10 @@ const AnnouncementsList = ({controller,  announcements, title, activeKey }) => {
         <div>
         <Collapse accordion activeKey={activeKey} onChange={callback}>
           {announcements.map((announcement, index) => {
+            const loc = Oskari.getLocalized(announcement.locale) || {};
+            const title = loc.name ||  Oskari.getMsg('admin-announcements', 'addNewForm');
             return (
-              <Panel header={announcement.locale[lang] && announcement.locale[lang].name && announcement.locale[lang].name ? announcement.locale[lang].name : Oskari.getMsg('admin-announcements', 'addNewForm')} key={index} >
+              <Panel header={title} key={index}>
               <AnnouncementsForm
                 controller={controller}
                 announcement={announcement}
