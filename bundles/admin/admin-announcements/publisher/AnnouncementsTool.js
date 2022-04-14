@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
 
                 // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
             });
         },
 
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const idPrefix = 'oskari_announcement_select_';
                 announcementInput.find('input[type=checkbox]').attr({
                     'id': idPrefix + announcement.id,
-                    'value': announcement.locale[this.lang].name
+                    'value': annName
                 });
                 announcementInput.find('label').html(annName).attr({
                     'for': idPrefix + announcement.id
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 // check if announcement is already checked, if is, add/remove accordingly
                 if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
-                        return ann.locale[this.lang].name !== announcement.locale[this.lang].name;
+                        return ann.id !== announcement.id;
                     });
                 } else {
                     me.selectedAnnouncements.push(announcement);
@@ -197,7 +197,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
 
                 // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
             });
 
             popup.show(title, content, [closeButton]);

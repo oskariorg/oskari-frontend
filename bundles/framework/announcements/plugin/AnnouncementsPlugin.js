@@ -184,8 +184,9 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
 
                 const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
 
-                div.find('button').append(announcement.locale[me.lang].name);
-                div.find('div.announcement-description').append(announcement.locale[me.lang].content);
+                const loc = Oskari.getLocalized(announcement.locale);
+                div.find('button').append(loc.name);
+                div.find('div.announcement-description').append(loc.content);
                 div.find('div.announcement-time').append(annTime);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
