@@ -172,9 +172,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
 
                 if (me.isAnnouncementValid(announcement)) {
                     content.find('div.ann-time').append('<div>' + annTime + '</div>');
-                    if (me.shouldPreselectAnnouncement(announcement)) {
-                        announcementInput.find('input[type=checkbox]').prop('checked', true);
-                    }
+                    me.selectedAnnouncements.forEach(ann => {
+                        if (ann.id === announcement.id) {
+                            announcementInput.find('input[type=checkbox]').prop('checked', true);
+                        }
+                    });
                     content.find('div.ann-title').append(announcementInput);
                 } else {
                     content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
@@ -214,24 +216,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             const announcementEnd = new Date(announcement.end_date);
             const currentDate = new Date();
             return currentDate.getTime() <= announcementEnd.getTime();
-        },
-
-        /**
-         * Should preselect announcement for tool popup.
-         * @method @private shouldPreselectAnnouncement
-         * @param  {Integer} id announcement id
-         * @return {Boolean} true if announcement must be preselect
-         */
-        shouldPreselectAnnouncement: function (announcement) {
-            const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (!toolPluginAnnouncementsConf || !toolPluginAnnouncementsConf.config) {
-                return false;
-            }
-            const announcementSelection = toolPluginAnnouncementsConf.config.announcements;
-            if (!Array.isArray(announcementSelection)) {
-                return false;
-            }
-            return announcementSelection.includes(announcement.id);
         },
 
         /**
