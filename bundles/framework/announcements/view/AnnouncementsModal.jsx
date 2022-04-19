@@ -13,7 +13,7 @@ const StyledCheckbox = styled(Checkbox)`
     padding: 4px 15px !important;
 `;
 
-const AnnouncementsModal = ({ id, title, content, controller, index, checked }) => {
+const AnnouncementsModal = ({ id, content, controller, index, checked }) => {
 
     const handleOk = (checked, id) => {
         controller.setAnnouncementAsSeen(checked, id);
@@ -27,7 +27,6 @@ const AnnouncementsModal = ({ id, title, content, controller, index, checked }) 
         <Modal
               mask={false}
               centered
-              title={title}
               visible={true}
               onCancel={() => handleOk(index)}
               footer={[
@@ -37,7 +36,7 @@ const AnnouncementsModal = ({ id, title, content, controller, index, checked }) 
                 </Button>,
               ]}
             >
-              <p>{content}</p>
+            <div className="announcements-content" dangerouslySetInnerHTML={{__html: content}} />
         </Modal>
     );
 };
