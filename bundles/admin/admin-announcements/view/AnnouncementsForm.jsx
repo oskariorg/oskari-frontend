@@ -5,6 +5,10 @@ import { Message, Confirm, DateRange, LocalizationComponent, TextInput, TextArea
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
+import {stateToHTML} from 'draft-js-export-html';
+//import RichEditor from "./RichTextEditor";
+import RichEditor from 'oskari-ui/components/RichTextEditor';
+import 'draft-js/dist/Draft.css';
 
 /*
 This file contains the form for admin-announcements.
@@ -38,6 +42,11 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
     // Should format date value before submit.
     const rangeValue = fieldsValue["range_picker"];
     let content = {...locales};
+    for (const lang in content) {
+      if (content[lang].content && content[lang].content.editorstate) {
+        content[lang].content = stateToHTML(content[lang].content.editorstate.editorState.getCurrentContent());
+      }
+    }
 
     const values = {
       locale: content,
@@ -106,10 +115,10 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
               >
                 
                   
-                <TextInput type='text' name='name'/>
-                <PaddingTop/>
-                <TextAreaInput name='content'/>
-                <PaddingTop/>
+              <TextInput type='text' name='name'/>
+              <PaddingTop/>
+              <RichEditor name='content'/>
+              <PaddingTop/>
               </LocalizationComponent>
                   
               
