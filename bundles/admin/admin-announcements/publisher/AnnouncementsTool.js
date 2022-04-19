@@ -162,7 +162,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     const announcementInput = me.templates.inputCheckbox.clone();
                     const annName = announcement.locale[this.lang].name;
                     const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
-    
                     const idPrefix = 'oskari_announcement_select_';
                     announcementInput.find('input[type=checkbox]').attr({
                         'id': idPrefix + announcement.id,
@@ -171,7 +170,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     announcementInput.find('label').html(annName).attr({
                         'for': idPrefix + announcement.id
                     });
-    
+
                     if (me.isAnnouncementValid(announcement)) {
                         content.find('div.ann-time').append('<div>' + annTime + '</div>');
                         me.selectedAnnouncements.forEach(ann => {
