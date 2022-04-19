@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Switch, Row } from "antd";
-import { Message, Confirm, DateRange, LocalizationComponent, TextInput, TextAreaInput } from 'oskari-ui';
+import { Form, Button, Switch, Row } from "antd";
+import { Message, Confirm, DateRange, LocalizationComponent, TextInput } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
 import {stateToHTML} from 'draft-js-export-html';
-//import RichEditor from "./RichTextEditor";
 import RichEditor from 'oskari-ui/components/RichTextEditor';
 import 'draft-js/dist/Draft.css';
 
@@ -14,7 +13,6 @@ import 'draft-js/dist/Draft.css';
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-const { TextArea } = Input;
 const rangeConfig = {
   rules: [
     {

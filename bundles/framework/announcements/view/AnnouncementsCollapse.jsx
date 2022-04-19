@@ -10,16 +10,16 @@ import moment from 'moment';
 const DATEFORMAT = 'DD/MM/YYYY';
 
 const AnnouncementsCollapse = ({controller, checked, announcements, modals }) => {
-  const lang = Oskari.getLang();
       
   return (
     <div>
       {modals.map((modal, index) => {
-            return (
+            const loc = Oskari.getLocalized(modal.locale);
+            return loc.name && (
               <AnnouncementsModal
               id={modal.id}
               controller={controller}
-              content={modal.locale[lang].content}
+              content={loc.content}
               key={modal.id}
               index={index}
               checked={checked}
@@ -27,23 +27,20 @@ const AnnouncementsCollapse = ({controller, checked, announcements, modals }) =>
             );
           })}
       <div>
-        { announcements.length > 0 ?
           <Collapse accordion>
               { announcements.map((announcement) => {
+                const loc = Oskari.getLocalized(announcement.locale);
                 let start = moment(announcement.begin_date).format(DATEFORMAT);
                 let end = moment(announcement.end_date).format(DATEFORMAT);
-                  return announcement.locale[lang].name && (
-                    <CollapsePanel header={announcement.locale[lang].name} key={announcement.id}>
-                        <div className="announcements-content" dangerouslySetInnerHTML={{__html: announcement.locale[lang].content}} />
+                  return loc.name && loc.content && (
+                    <CollapsePanel header={loc.name} key={announcement.id}>
+                        <div className="announcements-content" dangerouslySetInnerHTML={{__html: loc.content}} />
                         <Divider />
                         <b><Message messageKey={'valid'} /></b>
                         <p>{start.toString()} - {end.toString()}</p>
                     </CollapsePanel>)
               })}
             </Collapse>
-          :
-            <center><h3><Message messageKey={'noAnnouncements'}/></h3></center>
-        }
       </div>
     </div>
   );
