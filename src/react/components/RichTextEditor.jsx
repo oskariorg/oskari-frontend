@@ -3,7 +3,6 @@ import {Editor, EditorState, ContentState, RichUtils, getDefaultKeyBinding, Modi
 import htmlToDraft from 'html-to-draftjs';
 import './TextEditor/RichText.css';
 import 'draft-js/dist/Draft.css';
-import { Button } from 'antd';
 
 import { InlineStyleControls, BlockStyleControls } from './TextEditor/';
 
