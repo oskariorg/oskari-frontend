@@ -157,31 +157,34 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             me.announcements.forEach(announcement => {
-                const announcementInput = me.templates.inputCheckbox.clone();
-                const annName = announcement.locale[this.lang].name;
-                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
-
-                const idPrefix = 'oskari_announcement_select_';
-                announcementInput.find('input[type=checkbox]').attr({
-                    'id': idPrefix + announcement.id,
-                    'value': annName
-                });
-                announcementInput.find('label').html(annName).attr({
-                    'for': idPrefix + announcement.id
-                });
-
-                if (me.isAnnouncementValid(announcement)) {
-                    content.find('div.ann-time').append('<div>' + annTime + '</div>');
-                    me.selectedAnnouncements.forEach(ann => {
-                        if (ann.id === announcement.id) {
-                            announcementInput.find('input[type=checkbox]').prop('checked', true);
-                        }
+                const loc = Oskari.getLocalized(announcement.locale) || {};
+                if (loc.name && loc.content) {
+                    const announcementInput = me.templates.inputCheckbox.clone();
+                    const annName = announcement.locale[this.lang].name;
+                    const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+    
+                    const idPrefix = 'oskari_announcement_select_';
+                    announcementInput.find('input[type=checkbox]').attr({
+                        'id': idPrefix + announcement.id,
+                        'value': annName
                     });
-                    content.find('div.ann-title').append(announcementInput);
-                } else {
-                    content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
-                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
-                    content.find('div.ann-title').append(announcementInput);
+                    announcementInput.find('label').html(annName).attr({
+                        'for': idPrefix + announcement.id
+                    });
+    
+                    if (me.isAnnouncementValid(announcement)) {
+                        content.find('div.ann-time').append('<div>' + annTime + '</div>');
+                        me.selectedAnnouncements.forEach(ann => {
+                            if (ann.id === announcement.id) {
+                                announcementInput.find('input[type=checkbox]').prop('checked', true);
+                            }
+                        });
+                        content.find('div.ann-title').append(announcementInput);
+                    } else {
+                        content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
+                        announcementInput.find('input[type=checkbox]').prop('disabled', true);
+                        content.find('div.ann-title').append(announcementInput);
+                    }
                 }
             });
 
