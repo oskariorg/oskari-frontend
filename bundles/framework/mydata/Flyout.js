@@ -28,12 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
         this.container = null;
         this.state = null;
 
-        this.template = null;
-        this.templateTabHeader = null;
-        this.templateTabContent = null;
         this.uiHandler = new MyDataHandler(() => this.update());
         this.myDataService = null;
-        this.element = null;
     }, {
         /**
          * @method getName
