@@ -214,11 +214,11 @@ class MapsHandler extends StateHandler {
             this.createProjectionChangeDialog(() => {
                 window.location.href = this.constructUrlWithUuid(srs, null, data);
             });
+        } else {
+            this.setMapState(data, false, () => {
+                this.setMapState(data, true);
+            });
         }
-
-        this.setMapState(data, false, () => {
-            this.setMapState(data, true);
-        });
     }
 
     editRequestSender (data) {
