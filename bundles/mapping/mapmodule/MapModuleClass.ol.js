@@ -1140,11 +1140,11 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
-     * Adds internal layer to map. Internal layers aren't listed in selected layers and are always above those.
-     * @method bringToTop
+     * Adds overlay layer to map. These layers aren't listed in selected layers and are always above those.
+     * @method addOverlayLayer
      * @param {ol/layer/Layer} layer ol specific!
      */
-    addInternalLayer (layerImpl) {
+    addOverlayLayer (layerImpl) {
         if (!layerImpl) {
             return;
         }
