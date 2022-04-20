@@ -26,9 +26,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
 
             me.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
             me.sandbox.registerService(me.announcementsService);
-
-            me.plugins['Oskari.userinterface.Flyout'].createAnnouncementsHandler(me.announcementsService);
-
+            me.plugins['Oskari.userinterface.Flyout'] && me.plugins['Oskari.userinterface.Flyout'].createAnnouncementsHandler(me.announcementsService);
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 const plugin = Oskari.clazz.create('Oskari.framework.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);

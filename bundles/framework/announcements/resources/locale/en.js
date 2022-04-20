@@ -13,6 +13,7 @@ Oskari.registerLocalization(
         },
         "valid": "Valid:",
         "dontShow" : "Don't show this again",
+        "noAnnouncements": "No active announcements",
         "messages": {
             "getFailed":"Fetching announcements failed"
         },

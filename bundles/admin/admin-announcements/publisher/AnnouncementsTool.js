@@ -1,6 +1,7 @@
 Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
+        this.lang = Oskari.getLang();
         this.localization = Oskari.getLocalization('admin-announcements');
         this.announcements = {};
         this.allowedLocations = ['top left', 'top center', 'top right'];
@@ -80,7 +81,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
 
                 // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
             });
         },
 
@@ -156,39 +157,43 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             me.announcements.forEach(announcement => {
-                const announcementInput = me.templates.inputCheckbox.clone();
-                const annName = announcement.title;
-                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+                const loc = Oskari.getLocalized(announcement.locale) || {};
+                if (loc.name && loc.content) {
+                    const announcementInput = me.templates.inputCheckbox.clone();
+                    const annName = loc.name;
+                    const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+                    const idPrefix = 'oskari_announcement_select_';
+                    announcementInput.find('input[type=checkbox]').attr({
+                        'id': idPrefix + announcement.id,
+                        'value': annName
+                    });
+                    announcementInput.find('label').html(annName).attr({
+                        'for': idPrefix + announcement.id
+                    });
 
-                const idPrefix = 'oskari_announcement_select_';
-                announcementInput.find('input[type=checkbox]').attr({
-                    'id': idPrefix + announcement.id,
-                    'value': announcement.title
-                });
-                announcementInput.find('label').html(annName).attr({
-                    'for': idPrefix + announcement.id
-                });
-
-                if (me.isAnnouncementValid(announcement)) {
-                    content.find('div.ann-time').append('<div>' + annTime + '</div>');
-                    if (me.shouldPreselectAnnouncement(announcement)) {
-                        announcementInput.find('input[type=checkbox]').prop('checked', true);
+                    if (me.isAnnouncementValid(announcement)) {
+                        content.find('div.ann-time').append('<div>' + annTime + '</div>');
+                        me.selectedAnnouncements.forEach(ann => {
+                            if (ann.id === announcement.id) {
+                                announcementInput.find('input[type=checkbox]').prop('checked', true);
+                            }
+                        });
+                        content.find('div.ann-title').append(announcementInput);
+                    } else {
+                        content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
+                        announcementInput.find('input[type=checkbox]').prop('disabled', true);
+                        content.find('div.ann-title').append(announcementInput);
                     }
-                    content.find('div.ann-title').append(announcementInput);
-                } else {
-                    content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
-                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
-                    content.find('div.ann-title').append(announcementInput);
                 }
             });
 
             // Announcement is selected
             content.find('input[name=announcement]').on('change', function () {
-                var announcement = me.announcements.find(item => item.title === jQuery(this).val());
+                var announcement = me.announcements.find(item => item.locale[me.lang].name === jQuery(this).val());
                 // check if announcement is already checked, if is, add/remove accordingly
                 if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
-                        return ann.title !== announcement.title;
+                        return ann.id !== announcement.id;
                     });
                 } else {
                     me.selectedAnnouncements.push(announcement);
@@ -196,7 +201,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
 
                 // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
             });
 
             popup.show(title, content, [closeButton]);
@@ -213,24 +218,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             const announcementEnd = new Date(announcement.end_date);
             const currentDate = new Date();
             return currentDate.getTime() <= announcementEnd.getTime();
-        },
-
-        /**
-         * Should preselect announcement for tool popup.
-         * @method @private shouldPreselectAnnouncement
-         * @param  {Integer} id announcement id
-         * @return {Boolean} true if announcement must be preselect
-         */
-        shouldPreselectAnnouncement: function (announcement) {
-            const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (!toolPluginAnnouncementsConf || !toolPluginAnnouncementsConf.config) {
-                return false;
-            }
-            const announcementSelection = toolPluginAnnouncementsConf.config.announcements;
-            if (!Array.isArray(announcementSelection)) {
-                return false;
-            }
-            return announcementSelection.includes(announcement.id);
         },
 
         /**
