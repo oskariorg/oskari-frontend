@@ -126,8 +126,7 @@ Oskari.clazz.define(
                     olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
-                    me._map.addLayer(olLayer);
-                    me.raiseVectorLayer(olLayer);
+                    me.getMapModule().addLayer(olLayer);
                     me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
@@ -454,8 +453,7 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                me._map.addLayer(olLayer);
-                me.raiseVectorLayer(olLayer);
+                me.getMapModule().addLayer(olLayer);
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
             olLayer.setVisible(layer.isVisible());
@@ -960,15 +958,6 @@ Oskari.clazz.define(
             }
             // Start animation
             map.render();
-        },
-        /**
-         * Raises the marker layer above the other layers
-         *
-         * @param markerLayer
-         */
-        raiseVectorLayer: function (layer) {
-            this.getMapModule().bringToTop(layer);
-            layer.setVisible(true);
         },
         /**
          * @method _createRequestHandlers
