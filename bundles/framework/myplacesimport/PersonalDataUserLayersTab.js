@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplacesimport.UserLayersTab
+ * @class Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
+Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab',
     /**
      * @method create called automatically on construction
      * @static
