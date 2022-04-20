@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
         this.core = null;
         this.sandbox = null;
         this.started = false;
-        this.template = null;
         this.plugins = {};
         this.viewService = null;
     }, {
@@ -97,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 p;
 
             me.sandbox = sandbox;
-            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.ViewService', Oskari.urls.getRoute());
+            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.ViewService');
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
