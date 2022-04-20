@@ -1137,6 +1137,7 @@ export class MapModule extends AbstractMapModule {
         if (toBottom === true) {
             this.setLayerIndex(layerImpl, 0);
         }
+        this.orderLayersByZIndex();
     }
 
     /**
@@ -1176,6 +1177,7 @@ export class MapModule extends AbstractMapModule {
         var list = map.getLayers();
         list.remove(layer);
         list.push(layer);
+        this.orderLayersByZIndex();
     }
 
     /**
