@@ -596,7 +596,6 @@ Oskari.clazz.define(
             }
             const sandbox = this.getSandbox();
             const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            let layerUpdate = false;
 
             if (options.remove) {
                 const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
@@ -609,12 +608,18 @@ Oskari.clazz.define(
 
                 return layer;
             }
-            if (options.layerName) {
-                layer.setName(options.layerName);
+            let layerUpdate = false;
+            const { layerName, layerOrganizationName, layerDescription } = options;
+            if (layerName && layer.getName() !== layerName) {
+                layer.setName(layerName);
                 layerUpdate = true;
             }
-            if (options.layerOrganizationName) {
-                layer.setOrganizationName(options.layerOrganizationName);
+            if (layerOrganizationName && layer.getOrganizationName() !== layerOrganizationName) {
+                layer.setOrganizationName(layerOrganizationName);
+                layerUpdate = true;
+            }
+            if (layerDescription && layer.getDescription() !== layerDescription) {
+                layer.setDescription(layerDescription);
                 layerUpdate = true;
             }
             if (typeof options.opacity !== 'undefined') {
@@ -623,10 +628,6 @@ Oskari.clazz.define(
                 this._getOlLayer(layer);
             }
             this._setHoverOptions(layer, options);
-            if (options.layerDescription) {
-                layer.setDescription(options.layerDescription);
-                layerUpdate = true;
-            }
             var lyrInService = mapLayerService.findMapLayer(layer.getId());
             if (lyrInService && layerUpdate) {
                 // Send layer updated notification
