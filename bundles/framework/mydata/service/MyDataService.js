@@ -1,8 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.mydata.service.MyDataService
  *
- * Requests for a search to be made with the given query and provides
- * callbacks
  * Provides addTab() for other bundles/functionalities to add a tab panel on mydata UI.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mydata.service.MyDataService',
