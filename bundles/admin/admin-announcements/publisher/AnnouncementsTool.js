@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const loc = Oskari.getLocalized(announcement.locale) || {};
                 if (loc.name && loc.content) {
                     const announcementInput = me.templates.inputCheckbox.clone();
-                    const annName = announcement.locale[this.lang].name;
+                    const annName = loc.name;
                     const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
                     const idPrefix = 'oskari_announcement_select_';
                     announcementInput.find('input[type=checkbox]').attr({
