@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         getMarkersLayer: function () {
             if (!this._layer) {
                 this._layer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
-                this.getMapModule().addInternalLayer(this._layer);
+                this.getMapModule().addOverlayLayer(this._layer);
             }
             return this._layer;
         },

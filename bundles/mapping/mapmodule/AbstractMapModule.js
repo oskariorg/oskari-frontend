@@ -514,7 +514,7 @@ Oskari.clazz.define(
         /* Impl specific - found in ol2, ol3 and olCesium modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
         addLayer: Oskari.AbstractFunc('addLayer'),
-        addInternalLayer: Oskari.AbstractFunc('addInternalLayer'),
+        addOverlayLayer: Oskari.AbstractFunc('addOverlayLayer'),
         removeLayer: Oskari.AbstractFunc('removeLayer'),
         bringToTop: Oskari.AbstractFunc('bringToTop'),
         getLayerIndex: Oskari.AbstractFunc('getLayerIndex'),
