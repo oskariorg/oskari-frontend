@@ -1,3 +1,6 @@
+import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from './MyIndicatorsTab';
+
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
 
@@ -35,6 +38,7 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this.flyoutManager = null;
         this._layerId = 'STATS_LAYER';
+        this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -89,18 +93,7 @@ Oskari.clazz.define(
 
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
-                // Crete indicators tab to personal data view if personaldata bundle exists
-                var reqName = 'PersonalData.AddTabRequest';
-                if (sandbox.hasHandler(reqName)) {
-                    me._addIndicatorsTabToPersonalData(sandbox);
-                } else {
-                    // Wait for the application to load all bundles and try again
-                    Oskari.on('app.start', function (details) {
-                        if (sandbox.hasHandler(reqName)) {
-                            me._addIndicatorsTabToPersonalData(sandbox);
-                        }
-                    });
-                }
+                me._addIndicatorsTabToMyData(sandbox);
             }
             // setup initial state
             this.setState();
@@ -111,6 +104,32 @@ Oskari.clazz.define(
                     this._removeStatsLayer();
                 }
             });
+        },
+        _addIndicatorsTabToMyData: function (sandbox, appStarted) {
+            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+            const reqName = 'PersonalData.AddTabRequest';
+            if (myDataService) {
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.getConfiguration()));
+            } else if (sandbox.hasHandler(reqName)) {
+                // fallback to old personaldata tabs
+                this._addIndicatorsTabToPersonalData(sandbox);
+            } else if (!appStarted) {
+                // Wait for the application to load all bundles and try again
+                Oskari.on('app.start', () => {
+                    this._addIndicatorsTabToMyData(sandbox, true);
+                });
+            }
+        },
+        _addIndicatorsTabToPersonalData: function (sandbox) {
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+            if (typeof reqBuilder === 'function') {
+                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab', this);
+                tab.bindEvents();
+                var addAsFirstTab = false;
+                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
+                sandbox.request(this, req);
+            }
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
@@ -133,16 +152,6 @@ Oskari.clazz.define(
             });
             const visible = this[plugin] && !!this[plugin].getElement();
             this.togglePlugin.toggleTool(tool, visible);
-        },
-        _addIndicatorsTabToPersonalData: function (sandbox) {
-            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
-            if (typeof reqBuilder === 'function') {
-                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
-                tab.bindEvents();
-                var addAsFirstTab = false;
-                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
-                sandbox.request(this, req);
-            }
         },
         isEmbedded: function () {
             return jQuery('#contentMap').hasClass('published');
