@@ -1,4 +1,6 @@
 import { showLayerForm } from './view/LayerForm';
+import { UserLayersTab } from './UserLayersTab';
+import { UserLayersHandler } from './handler/UserLayersHandler';
 import { TOOL, BUNDLE_NAME, MAX_SIZE, ERRORS } from './constants';
 
 /**
@@ -32,9 +34,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     _startImpl: function () {
         if (Oskari.user().isLoggedIn()) {
             // logged in user, create UI
-            this.addTab();
             this.createService();
             this.getService().getUserLayers();
+            this.addTab();
         }
         this.registerTool();
     },
@@ -122,9 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         );
         sandbox.registerService(importService);
         importService.init();
-        importService.on('update', () => {
-            this.getTab().refresh();
-        });
         this.importService = importService;
     },
     /**
@@ -140,21 +139,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
      * Creates the user layers tab and adds it to the personaldata bundle.
      *
      * @method addTab
-     * @param {Oskari.Sandbox} sandbox
-     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
      */
-    addTab: function () {
-        const userLayersTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.UserLayersTab', this);
+    addTab: function (appStarted) {
+        const sandbox = Oskari.getSandbox();
+        let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+        const reqName = 'PersonalData.AddTabRequest';
+        if (myDataService) {
+            myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, new UserLayersHandler(this));
+        } else if (sandbox.hasHandler(reqName)) {
+            // fallback to old personaldata tabs
+            this.addTabToPersonalData();
+        } else if (!appStarted) {
+            // Wait for the application to load all bundles and try again
+            Oskari.on('app.start', () => {
+                this.addTab(true);
+            });
+        }
+    },
+    addTabToPersonalData: function () {
+        const userLayersTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab', this);
         const addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
 
         if (addTabReqBuilder) {
             this.getSandbox().request(this, addTabReqBuilder(this.loc('tab.title'), userLayersTab.getContent(), false, 'userlayers'));
         }
         this.tab = userLayersTab;
+        this.getService().on('update', () => {
+            this.getTab().refresh();
+        });
     },
     /**
      * @method getTab
-     * @return {Oskari.mapframework.bundle.myplacesimport.UserLayersTab}
+     * @return {Oskari.mapframework.bundle.myplacesimport.PersonalDataUserLayersTab}
      */
     getTab: function () {
         return this.tab;

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import { MyIndicatorsList } from './MyIndicatorsList';
 
 /**
- * @class Oskari.mapframework.bundle.statsgrid.MyIndicatorsTab
+ * @class Oskari.mapframework.bundle.statsgrid.PersonalDataIndicatorsTab
  * Renders the "personal data" statsgrid indicators tab.
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
+Oskari.clazz.define('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab',
     /**
      * @method create called automatically on construction
      * @static
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
         this.instance = instance;
         this.template = jQuery('<div class="indicatorsPanel"><div class="indicatorsList volatile"></div></div>');
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
-        this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
+        this.log = Oskari.log('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab');
         this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         this.userDsId = this.service.getUserDatasource().id;
         this.content = undefined;
@@ -62,9 +62,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             ReactDOM.render(
                 <MyIndicatorsList
                     data={indicators}
-                    handleDelete={(item) => this.deleteIndicator(item)}
-                    handleEdit={(item) => this.editIndicator(item)}
-                    addNewIndicator={() => this.addNewIndicator()}
+                    controller={{
+                        deleteIndicator: (item) => this.deleteIndicator(item),
+                        editIndicator: (item) => this.editIndicator(item),
+                        addNewIndicator: () => this.addNewIndicator()
+                    }}
                 />
                 ,
                 this.listContainer[0]

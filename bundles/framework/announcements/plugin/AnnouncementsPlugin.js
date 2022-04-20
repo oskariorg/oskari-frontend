@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
     function (config) {
         var me = this;
         me.sandbox = Oskari.getSandbox();
-        me.lang = Oskari.getLang();
         me._loc = Oskari.getLocalization('announcements');
         me._clazz = 'Oskari.framework.announcements.plugin.AnnouncementsPlugin';
         me._defaultLocation = 'top left';

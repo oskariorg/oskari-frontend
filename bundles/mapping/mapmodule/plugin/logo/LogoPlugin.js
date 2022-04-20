@@ -76,7 +76,6 @@ Oskari.clazz.define(
          * @return {Object.<string, Function>} EventHandlers
          */
         _createEventHandlers: function () {
-            // TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
             return {
                 AfterMapLayerRemoveEvent: function (event) {
                     var service = this.getService();

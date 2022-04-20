@@ -28,7 +28,6 @@ export class HoverHandler {
         this._styleFactory = this._mapmodule.getGeomTypedStyles.bind(this._mapmodule);
         const olLayer = new olLayerVector({ source: new olSourceVector() });
         olLayer.set(LAYER_HOVER, true, true);
-        olLayer.setZIndex(1); // TODO: how to handle layer ordering
         this._mapmodule.addLayer(olLayer);
         this._hoverLayer = olLayer;
     }
@@ -72,14 +71,7 @@ export class HoverHandler {
             return;
         }
         if (layerChanged) {
-            const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // this happens when reseting the map state while a feature is being hovered on
-                return;
-            }
-            this._hoverLayer.setOpacity(layer.getOpacity() / 100);
-            this._hoverLayer.setStyle(this.getCachedStyle(layerId));
-            this._hoverLayer.changed();
+            this.onLayerChange(layerId);
         }
         this._hoverLayer.getSource().addFeature(feature);
     }
@@ -100,6 +92,24 @@ export class HoverHandler {
         this._hoverLayer.setOpacity(layer.getOpacity() / 100);
     }
 
+    onLayerChange (layerId) {
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (!layer) {
+            // this happens when reseting the map state while a feature is being hovered on
+            return;
+        }
+        const mapmodule = this._mapmodule;
+        const hoverLayer = this._hoverLayer;
+        const olLayers = mapmodule.getOLMapLayers(layerId);
+        // assumes that first layer is main layer and others are straight over main layer
+        const topLayer = olLayers[olLayers.length - 1];
+        const index = mapmodule.getLayerIndex(topLayer);
+        mapmodule.setLayerIndex(hoverLayer, index + 1);
+        hoverLayer.setOpacity(layer.getOpacity() / 100);
+        hoverLayer.setStyle(this.getCachedStyle(layerId));
+        hoverLayer.changed();
+    }
+
     // VectorTile uses lightweight and read-only RenderFeature
     // create copy with same source and hover style
     createVectorTileLayer (layer, source) {
@@ -108,7 +118,6 @@ export class HoverHandler {
         olLayer.setVisible(layer.isVisible());
         olLayer.set(LAYER_HOVER, true, true);
         olLayer.setStyle(this._styleGenerator(layer, true));
-        olLayer.setZIndex(1);
         this._vectorTileLayers[layer.getId()] = olLayer;
         this.setTooltipContent(layer);
         return olLayer;

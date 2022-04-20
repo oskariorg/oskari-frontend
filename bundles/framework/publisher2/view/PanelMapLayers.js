@@ -125,8 +125,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              *
              * Calls flyouts handleLayerSelectionChanged() and handleDrawLayerSelectionChanged() functions
              */
-            MapLayerEvent: function (event) {
-                this.handleLayerSelectionChanged();
+            'MapLayerEvent': function (event) {
+                if (event.getOperation() === 'update') {
+                    this.handleLayerSelectionChanged();
+                }
             },
 
             /**
