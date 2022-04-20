@@ -749,7 +749,7 @@ Oskari.clazz.define(
                 source: new olSourceVector({ features: new olCollection() }),
                 style: me._styles.draw
             });
-            me.getMap().addLayer(vector);
+            me.getMapModule().addOverlayLayer(vector);
             me._drawLayers[layerId] = vector;
         },
         /**
