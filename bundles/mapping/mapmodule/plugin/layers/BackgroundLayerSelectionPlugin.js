@@ -118,18 +118,6 @@ Oskari.clazz.define(
                 },
 
                 /**
-                 * @method AfterMapMoveEvent
-                 * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
-                 *
-                 * Adds the layer to selection
-                 */
-                MapLayerEvent: function (event) {
-                    // TODO add check for event.getMapLayer().getId() here?
-                    // this._createLayerSelectionElements();
-                    this.refresh();
-                },
-
-                /**
                  * @method MapSizeChangedEvent
                  *
                  * Changes selector into dropdown if map is too narrow to fit buttons
