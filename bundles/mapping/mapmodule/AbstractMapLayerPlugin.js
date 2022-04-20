@@ -116,9 +116,11 @@ Oskari.clazz.define(
          */
         mapLayerEventHandlers: {
             MapLayerEvent: function (event) {
-                var layer = this.getSandbox().getMap().getSelectedLayer(event.getLayerId());
-
-                if (event.getOperation() === 'update' && layer) {
+                if (event.getOperation() !== 'update') {
+                    return;
+                }
+                const layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId());
+                if (layer && this.isLayerSupported(layer)) {
                     this._updateLayer(layer);
                 }
             },
