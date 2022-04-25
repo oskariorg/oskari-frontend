@@ -1,5 +1,7 @@
 import { LOCALE_KEY } from './constants';
 import { showLayerPopup } from './MyPlacesLayerForm';
+import { MyPlacesTab } from './MyPlacesTab';
+import { MyPlacesHandler } from './handler/MyPlacesHandler';
 
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance
@@ -248,25 +250,7 @@ Oskari.clazz.define(
 
             this._addRequestHandlers();
 
-            this.tab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesTab', this, this.getMainView().sendStopDrawRequest);
-
-            this.tab.initContainer();
-            // binds tab to events
-            if (this.tab.bindEvents) {
-                this.tab.bindEvents();
-            }
-
-            if (!sandbox.hasHandler('PersonalData.AddTabRequest')) {
-                return;
-            }
-            var addAsFirstTab = true;
-            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
-            var req = reqBuilder(
-                this.tab.getTitle(),
-                this.tab.getContent(),
-                addAsFirstTab,
-                this.idPrefix);
-            sandbox.request(this, req);
+            this.addTab();
         },
         /**
          * @method stop
@@ -274,6 +258,40 @@ Oskari.clazz.define(
          */
         stop: function () {
             this.sandbox = null;
+        },
+
+        addTab: function (appStarted) {
+            const sandbox = Oskari.getSandbox();
+            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+            const reqName = 'PersonalData.AddTabRequest';
+            if (myDataService) {
+                myDataService.addTab('myplaces', this.loc('tab.title'), MyPlacesTab, new MyPlacesHandler(this));
+            } else if (sandbox.hasHandler(reqName)) {
+                // fallback to old personaldata tabs
+                this.addTabToPersonalData();
+            } else if (!appStarted) {
+                // Wait for the application to load all bundles and try again
+                Oskari.on('app.start', () => {
+                    this.addTab(true);
+                });
+            }
+        },
+
+        addTabToPersonalData: function () {
+            const MyPlacesTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab', this, this.getMainView().sendStopDrawRequest);
+            this.tab = MyPlacesTab;
+            this.tab.initContainer();
+            // binds tab to events
+            if (this.tab.bindEvents) {
+                this.tab.bindEvents();
+            }
+
+            const addTabReqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+
+            if (addTabReqBuilder) {
+                this.getSandbox().request(this, addTabReqBuilder(this.loc('tab.title'), MyPlacesTab.getContent(), true, 'myplaces'));
+            }
         },
 
         openLayerDialog: function (categoryId, locale, style) {

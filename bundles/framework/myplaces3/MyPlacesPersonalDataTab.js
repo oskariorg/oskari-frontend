@@ -1,15 +1,15 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import { LocaleProvider } from 'oskari-ui/util';
-import { MyPlacesLayerControls } from './MyPlacesLayerControls';
+import { MyPlacesLegacyLayerControls } from './MyPlacesLegacyLayerControls';
 import { LOCALE_KEY } from './constants';
 import { MyPlacesList } from './MyPlacesList';
 
 /**
- * @class Oskari.mapframework.bundle.myplaces3.MyPlacesTab
+ * @class Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab
  * Renders the "personal data" myplaces tab.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab',
     /**
      * @method create called automatically on construction
      * @static
@@ -104,23 +104,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                     const container = jQuery(modalWrapper)[0];
 
                     ReactDOM.render(
-                        <>
+                        <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
                             <MyPlacesList
                                 data={places}
-                                handleDelete={(data) => this.deletePlace(data)}
-                                handleEdit={(data) => this.editPlace(data)}
-                                showPlace={(geometry, categoryId) => this.showPlace(geometry, categoryId)}
-                                getGeometryIcon={(geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)}
+                                controller={{
+                                    deletePlace: (data) => this.deletePlace(data),
+                                    editPlace: (data) => this.editPlace(data),
+                                    showPlace: (geometry, categoryId) => this.showPlace(geometry, categoryId),
+                                    getGeometryIcon: (geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)
+                                }}
                             />
-                            <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-                                <MyPlacesLayerControls
-                                    layer={{ ...values, categoryId: categoryId }}
-                                    editCategory={ () => categoryHandler.editCategory(categoryId) }
-                                    deleteCategory={ (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)) }
-                                    exportCategory={ (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }}
-                                />
-                            </LocaleProvider>
-                        </>,
+                            <MyPlacesLegacyLayerControls
+                                layer={{ ...values, categoryId: categoryId }}
+                                controller={{
+                                    editCategory: () => categoryHandler.editCategory(categoryId),
+                                    deleteCategory: (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)),
+                                    exportCategory: (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }
+                                }}
+                            />
+                        </LocaleProvider>
+                        ,
                         container
                     );
                 });

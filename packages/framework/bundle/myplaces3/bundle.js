@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
             /* plugin */
             {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/MyPlacesTab.js"
+                "src": "../../../../bundles/framework/myplaces3/MyPlacesPersonalDataTab.js"
             },
             /* request */
             {
