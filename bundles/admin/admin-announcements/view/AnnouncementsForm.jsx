@@ -5,8 +5,8 @@ import { Message, Confirm, DateRange, LocalizationComponent, TextInput } from 'o
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
-import {stateToHTML} from 'draft-js-export-html';
-import RichEditor from 'oskari-ui/components/RichTextEditor';
+import { stateToHTML } from 'draft-js-export-html';
+import { RichEditor } from 'oskari-ui/components/RichEditor';
 import 'draft-js/dist/Draft.css';
 
 /*
@@ -42,7 +42,7 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
     let content = {...locales};
     for (const lang in content) {
       if (content[lang].content && content[lang].content.editorstate) {
-        content[lang].content = stateToHTML(content[lang].content.editorstate.editorState.getCurrentContent());
+        content[lang].content = stateToHTML(content[lang].content.editorstate.getCurrentContent());
       }
     }
 

@@ -17,13 +17,11 @@ div.announcements-content {
     margin: 16px;
   }
 
-  p {
-    code {
-      background-color: rgba(0, 0, 0, 0.05);
-      font-family: Inconsolata, Menlo, Consolas, monospace;
-      font-size: 16px;
-      padding: 2px;
-    }
+  code {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: Inconsolata, Menlo, Consolas, monospace;
+    font-size: 16px;
+    padding: 2px;
   }
 }
 
