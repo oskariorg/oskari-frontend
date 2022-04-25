@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Places",
+            "categoryTitle": "Map layer",
             "nocategories": "You do not have any saved places yet.",
             "maxFeaturesExceeded": "You have too many own places. Please remove some places.",
             "publishCategory": {
@@ -18,7 +19,7 @@ Oskari.registerLocalization(
             },
             "export": {
                 "title":"Export features",
-                "tooltip": "You can download the layer's features as GeoJSON"
+                "tooltip": "Download layer features in GeoJSON-format."
             },
             "addCategoryFormButton": "New map layer",
             "addCategory": "Add map layer",

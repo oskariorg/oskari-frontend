@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Platser",
+            "categoryTitle": "Kartlager",
             "nocategories": "Du har inte några sparade platser ännu.",
             "maxFeaturesExceeded": "Du har överskridit det maximala beloppet för de egna platserna. Alla platser har inte laddats.",
             "publishCategory": {

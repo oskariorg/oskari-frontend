@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Confirm } from 'oskari-ui';
+import { Message, Confirm, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { LOCALE_KEY } from './constants';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 
@@ -27,19 +26,19 @@ const StyledTable = styled(Table)`
     }
 `;
 
-export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, getGeometryIcon}) => {
+export const MyPlacesList = ({data = [], controller }) => {
 
     const columnSettings = [
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.name' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.name' />,
             dataIndex: 'name',
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
-                const shape = getGeometryIcon(item._place.geometry);
+                const shape = controller.getGeometryIcon(item._place.geometry);
                 return (
-                    <a onClick={() => showPlace(item._place.geometry, item._place.categoryId)}>
+                    <a onClick={() => controller.showPlace(item._place.geometry, item._place.categoryId)}>
                         <div className={`icon myplaces-${shape}`} />
                         <span>{title}</span>
                     </a>
@@ -48,46 +47,50 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.desc' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.desc' />,
             dataIndex: 'description',
             sorter: getSorterFor('description')
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.createDate' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.createDate' />,
             dataIndex: 'createDate',
             sorter: getSorterFor('createDate')
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.updateDate' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.updateDate' />,
             dataIndex: 'updateDate',
             sorter: getSorterFor('updateDate')
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.measurement' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.measurement' />,
             dataIndex: 'measurement',
             sorter: getSorterFor('measurement')
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.actions' bundleKey={LOCALE_KEY} />,
+            title: <Message messageKey='tab.grid.actions' />,
             dataIndex: 'id',
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <div className='icon t_edit' onClick={() => handleEdit(item._place)}>
-                            <EditOutlined style={ EDIT_ICON_STYLE } />
-                        </div>
+                        <Tooltip title={<Message messageKey='tab.grid.edit' />}>
+                            <div className='icon t_edit' onClick={() => controller.editPlace(item._place)}>
+                                <EditOutlined style={ EDIT_ICON_STYLE } />
+                            </div>
+                        </Tooltip>
                         <Confirm
-                            title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.name }} bundleKey={LOCALE_KEY} />}
-                            onConfirm={() => handleDelete(item._place)}
-                            okText={<Message messageKey='buttons.ok' bundleKey={LOCALE_KEY} />}
-                            cancelText={<Message messageKey='buttons.cancel' bundleKey={LOCALE_KEY} />}
+                            title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.name }} />}
+                            onConfirm={() => controller.deletePlace(item._place)}
+                            okText={<Message messageKey='buttons.ok' />}
+                            cancelText={<Message messageKey='buttons.cancel' />}
                             placement='bottomLeft'
                         >
-                            <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
+                            <Tooltip title={<Message messageKey='tab.grid.delete' />}>
+                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
+                            </Tooltip>
                         </Confirm>
                     </ToolsContainer>
                 );
@@ -113,8 +116,5 @@ export const MyPlacesList = ({data = [], handleDelete, handleEdit, showPlace, ge
 
 MyPlacesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    handleDelete: PropTypes.func.isRequired,
-    handleEdit: PropTypes.func.isRequired,
-    showPlace: PropTypes.func.isRequired,
-    getGeometryIcon: PropTypes.func.isRequired
+    controller: PropTypes.object.isRequired
 };

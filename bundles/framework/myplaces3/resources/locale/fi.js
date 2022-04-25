@@ -10,6 +10,7 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Kohteet",
+            "categoryTitle": "Karttataso",
             "nocategories": "Sinulla ei ole tallennettuja omia kohteita.",
             "maxFeaturesExceeded": "Sinulla on liikaa omia kohteita. Poista osa kohteista.",
             "publishCategory": {
@@ -18,7 +19,7 @@ Oskari.registerLocalization(
             },
             "export": {
                 "title":"Vie kohteet",
-                "tooltip": "Voit ladata karttatason GeoJSON-muodossa"
+                "tooltip": "Lataa karttatason kohteet GeoJSON-muodossa."
             },
             "addCategoryFormButton": "Uusi karttataso",
             "addCategory": "Lisää karttataso",
