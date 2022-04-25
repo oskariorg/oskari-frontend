@@ -1,6 +1,7 @@
 import React, { useState, useRef , useEffect} from "react";
 import { convertFromHTML, Editor, EditorState, ContentState, RichUtils, getDefaultKeyBinding } from 'draft-js';
 import { InlineStyleControls, BlockStyleControls } from './TextEditor';
+import { stateToHTML } from 'draft-js-export-html';
 import './TextEditor/RichText.css';
 import 'draft-js/dist/Draft.css';
 
@@ -33,7 +34,7 @@ export const RichEditor = (props) => {
   }
 
   const updateEditorState = (editorstate) => {
-    props.onChange({target: { value: {editorstate}}});
+    props.onChange({target: { value: stateToHTML(editorstate.getCurrentContent())}});
     setEditorState(editorstate);
   }
           
