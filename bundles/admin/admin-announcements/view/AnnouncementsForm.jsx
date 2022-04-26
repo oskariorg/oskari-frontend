@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
-import { Form, Input, Button, Switch, Row } from "antd";
-import { Message, Confirm, DateRange, LocalizationComponent, TextInput, TextAreaInput } from 'oskari-ui';
+import { Form, Button, Switch, Row } from "antd";
+import { Message, Confirm, DateRange, LocalizationComponent, TextInput } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
+import { RichEditor } from 'oskari-ui/components/RichEditor';
+import 'draft-js/dist/Draft.css';
 
 /*
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-const { TextArea } = Input;
 const rangeConfig = {
   rules: [
     {
@@ -37,10 +38,9 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
   const onFinish  = fieldsValue => {
     // Should format date value before submit.
     const rangeValue = fieldsValue["range_picker"];
-    let content = {...locales};
 
     const values = {
-      locale: content,
+      locale: locales,
       begin_date: rangeValue[0].format(DATEFORMAT), 
       end_date: rangeValue[1].format(DATEFORMAT),
       active: fieldsValue["active"]
@@ -106,10 +106,10 @@ const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) =>
               >
                 
                   
-                <TextInput type='text' name='name'/>
-                <PaddingTop/>
-                <TextAreaInput name='content'/>
-                <PaddingTop/>
+              <TextInput type='text' name='name'/>
+              <PaddingTop/>
+              <RichEditor name='content'/>
+              <PaddingTop/>
               </LocalizationComponent>
                   
               
