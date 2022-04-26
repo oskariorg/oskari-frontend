@@ -14,6 +14,7 @@ class PlaceHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.categoryHandler = this.instance.getCategoryHandler();
+        this.service = this.instance.getService();
         this.eventHandlers = this.createEventHandlers();
         this.refreshCategoryList();
     };
@@ -45,9 +46,13 @@ class PlaceHandler extends StateHandler {
     }
 
     populatePlaces () {
-        if (this.state.selectedCategory) {
+        if (this.state.selectedCategory && this.state.selectedCategory.categoryId) {
             this.updateState({
-                places: this.instance.getService().getPlacesInCategory(this.state.selectedCategory.categoryId)
+                places: this.service.getPlacesInCategory(this.state.selectedCategory.categoryId)
+            });
+        } else {
+            this.updateState({
+                places: []
             });
         }
     }
@@ -57,6 +62,24 @@ class PlaceHandler extends StateHandler {
         this.updateState({
             categories: categories
         });
+        if (!this.state.selectedCategory && categories && categories.length > 0) {
+            this.updateState({
+                selectedCategory: categories[0]
+            });
+            this.service.loadPlaces(categories[0].categoryId);
+        }
+        if (this.state.selectedCategory && this.state.categories.findIndex(c => c.categoryId === this.state.selectedCategory.categoryId) < 0) {
+            if (categories.length > 0) {
+                this.updateState({
+                    selectedCategory: categories[0]
+                });
+                this.service.loadPlaces(categories[0].categoryId);
+            } else {
+                this.updateState({
+                    selectedCategory: null
+                });
+            }
+        }
     }
 
     selectCategory (categoryId) {
@@ -64,7 +87,7 @@ class PlaceHandler extends StateHandler {
         this.updateState({
             selectedCategory: category
         });
-        this.instance.getService().loadPlaces(category.categoryId);
+        this.service.loadPlaces(categoryId);
     }
 
     /**
@@ -113,7 +136,7 @@ class PlaceHandler extends StateHandler {
                 popup.show(this.loc('tab.notification.delete.title'), this.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
             }
         };
-        this.instance.getService().deleteMyPlace(data.id, callback);
+        this.service.deleteMyPlace(data.id, callback);
     }
 
     deleteCategory (categoryId) {
@@ -129,11 +152,11 @@ class PlaceHandler extends StateHandler {
     }
 
     exportCategory (categoryId) {
-        window.location.href = this.instance.getService().getExportCategoryUrl(categoryId);
+        window.location.href = this.service.getExportCategoryUrl(categoryId);
     }
 
     getGeometryIcon (geometry) {
-        return this.instance.getService().getDrawModeFromGeometry(geometry);
+        return this.service.getDrawModeFromGeometry(geometry);
     }
 
     createEventHandlers () {
