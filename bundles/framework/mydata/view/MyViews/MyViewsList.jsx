@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import { red } from '@ant-design/colors';
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const DELETE_ICON_STYLE = {
     color: red.primary,
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const StyledTable = styled(Table)`
@@ -62,6 +62,7 @@ export const MyViewsList = ({ controller, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.actions' />,
             dataIndex: 'id',
+            width: 100,
             render: (title, item) => {
                 return (
                     <ToolsContainer>

@@ -22,7 +22,8 @@ Oskari.registerLocalization({
                 desc: 'Lajittele laskevasti',
                 asc: 'Lajittele nousevasti',
                 cancel: 'Peruuta lajittelu'
-            }
+            },
+            emptyText: 'Ei tuloksia.'
         },
         ColorPicker: {
             tooltip: 'Valitse väri',

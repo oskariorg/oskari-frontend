@@ -9,7 +9,8 @@ class PlaceHandler extends StateHandler {
         this.setState({
             places: [],
             categories: [],
-            selectedCategory: null
+            selectedCategory: null,
+            loading: false
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
@@ -55,9 +56,15 @@ class PlaceHandler extends StateHandler {
                 places: []
             });
         }
+        this.updateState({
+            loading: false
+        });
     }
 
     refreshCategoryList () {
+        this.updateState({
+            loading: true
+        });
         const categories = this.categoryHandler.getAllCategories();
         this.updateState({
             categories: categories
@@ -83,6 +90,9 @@ class PlaceHandler extends StateHandler {
     }
 
     selectCategory (categoryId) {
+        this.updateState({
+            loading: true
+        });
         const category = this.state.categories.find(c => c.categoryId === categoryId);
         this.updateState({
             selectedCategory: category

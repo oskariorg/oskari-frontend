@@ -2,26 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { Select } from 'antd';
+import { Select, Button } from 'antd';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons'
 import { red, green } from '@ant-design/colors'
 
 const DELETE_ICON_STYLE = {
-    fontSize: '14px',
+    fontSize: '16px',
     color: red.primary
 };
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const ADD_ICON_STYLE = {
-    fontSize: '14px',
+    fontSize: '16px',
     color: green.primary
 };
 
 const EXPORT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const StyledControls = styled('div')`
@@ -32,6 +32,7 @@ const StyledControls = styled('div')`
 `;
 
 const StyledSelect = styled(Select)`
+    margin-left: 10px;
     width: 240px;
 `;
 
@@ -39,20 +40,20 @@ const StyledActions = styled('div')`
     display: flex;
 `;
 
-const IconButton = styled('div')`
+const IconButton = styled(Button)`
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 5px;
 `;
 
-export const MyPlacesLayerControls = ({ selectedCategory, categories = [], controller }) => {
+export const MyPlacesLayerControls = ({ selectedCategory, loading, categories = [], controller }) => {
 
     const { Option } = Select;
 
     return (
         <React.Fragment>
-            <label><b><Message messageKey='tab.categoryTitle' /></b></label>
             <StyledControls>
-                <StyledSelect value={selectedCategory ? selectedCategory.categoryId : null} onChange={controller.selectCategory}>
+                <label><b><Message messageKey='tab.categoryTitle' /></b></label>
+                <StyledSelect loading={loading} value={selectedCategory ? selectedCategory.categoryId : null} onChange={controller.selectCategory}>
                     {categories.map(category => (
                         <Option key={category.categoryId} value={category.categoryId}>{category.name}</Option>
                     ))}
@@ -83,5 +84,6 @@ export const MyPlacesLayerControls = ({ selectedCategory, categories = [], contr
 MyPlacesLayerControls.propTypes = {
     categories: PropTypes.arrayOf(PropTypes.object),
     selectedCategory: PropTypes.object,
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired
 };
