@@ -27,7 +27,6 @@ const StyledTable = styled(Table)`
 `;
 
 export const MyViewsList = ({ controller, data = [] }) => {
-    console.log(data)
     const columnSettings = [
         {
             align: 'left',
