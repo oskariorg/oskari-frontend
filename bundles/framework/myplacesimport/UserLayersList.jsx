@@ -48,6 +48,12 @@ export const UserLayersList = ({ data = [], controller }) => {
         },
         {
             align: 'left',
+            title: <Message messageKey='tab.grid.createDate' />,
+            dataIndex: 'createDate',
+            sorter: getSorterFor('createDate')
+        },
+        {
+            align: 'left',
             title: <Message messageKey='tab.grid.source' />,
             dataIndex: 'source',
             sorter: getSorterFor('source')

@@ -28,7 +28,8 @@ Oskari.registerLocalization(
                     "edit": "Edit",
                     "delete": "Delete",
                     "default": "Default",
-                    "actions": "Actions"
+                    "actions": "Actions",
+                    "createDate": "Created"
                 },
                 "popup": {
                     "title" : {
@@ -86,7 +87,9 @@ Oskari.registerLocalization(
                     "html": "HTML code",
                     "edit": "Edit",
                     "delete": "Delete",
-                    "actions": "Actions"
+                    "actions": "Actions",
+                    "createDate": "Created",
+                    "updateDate": "Updated"
                 },
                 "published": {
                     "desc": "Copy the HTML code below to your html code and the map will be visible on your website:",

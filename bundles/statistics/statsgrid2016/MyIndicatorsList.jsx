@@ -45,6 +45,12 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
             defaultSortOrder: 'ascend'
         },
         {
+            dataIndex: 'createDate',
+            align: 'left',
+            title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
+            sorter: getSorterFor('createDate'),
+        },
+        {
             dataIndex: 'id',
             align: 'left',
             title: <Message messageKey='tab.grid.actions' bundleKey={BUNDLE_KEY} />,

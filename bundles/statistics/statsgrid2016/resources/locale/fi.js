@@ -231,7 +231,8 @@ Oskari.registerLocalization({
                 'name': 'Nimi',
                 'edit': 'Muokkaa',
                 'delete': 'Poista',
-                'actions': 'Toiminnot'
+                'actions': 'Toiminnot',
+                'createDate': 'Luontiaika'
             },
             'popup': {
                 'deletetitle': 'Poista indikaattori',

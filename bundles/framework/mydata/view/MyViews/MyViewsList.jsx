@@ -27,7 +27,7 @@ const StyledTable = styled(Table)`
 `;
 
 export const MyViewsList = ({ controller, data = [] }) => {
-
+    console.log(data)
     const columnSettings = [
         {
             align: 'left',
@@ -57,6 +57,12 @@ export const MyViewsList = ({ controller, data = [] }) => {
             title: <Message messageKey='tabs.myviews.grid.description' />,
             dataIndex: 'description',
             sorter: getSorterFor('description')
+        },
+        {
+            align: 'left',
+            title: <Message messageKey='tabs.myviews.grid.createDate' />,
+            dataIndex: 'createDate',
+            sorter: getSorterFor('createDate')
         },
         {
             align: 'left',
