@@ -52,7 +52,7 @@ export const MyPlacesLayerControls = ({ selectedCategory, categories = [], contr
         <React.Fragment>
             <label><b><Message messageKey='tab.categoryTitle' /></b></label>
             <StyledControls>
-                <StyledSelect onChange={controller.selectCategory}>
+                <StyledSelect value={selectedCategory ? selectedCategory.categoryId : null} onChange={controller.selectCategory}>
                     {categories.map(category => (
                         <Option key={category.categoryId} value={category.categoryId}>{category.name}</Option>
                     ))}
