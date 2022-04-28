@@ -7,6 +7,7 @@ export const MyIndicatorsTab = ({ state, controller }) => {
         <MyIndicatorsList
             controller={controller}
             data={state.data}
+            loading={state.loading}
         />
     );
 }

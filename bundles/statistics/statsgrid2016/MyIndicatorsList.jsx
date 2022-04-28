@@ -34,7 +34,7 @@ const editIconStyle = {
     fontSize: '16px'
 };
 
-export const MyIndicatorsList = ({ controller, data = [] }) => {
+export const MyIndicatorsList = ({ controller, data = [], loading }) => {
 
     const columnSettings = [
         {
@@ -90,6 +90,7 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
                     ...item
                 }))}
                 pagination={false}
+                loading={loading}
             />
         </>
     );
@@ -97,5 +98,6 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
 
 MyIndicatorsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool
 };

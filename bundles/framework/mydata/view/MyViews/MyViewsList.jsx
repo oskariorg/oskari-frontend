@@ -26,7 +26,7 @@ const StyledTable = styled(Table)`
     }
 `;
 
-export const MyViewsList = ({ controller, data = [] }) => {
+export const MyViewsList = ({ controller, loading, data = [] }) => {
 
     const columnSettings = [
         {
@@ -94,11 +94,13 @@ export const MyViewsList = ({ controller, data = [] }) => {
                 ...item
             }))}
             pagination={false}
+            loading={loading}
         />
     )
 }
 
 MyViewsList.propTypes = {
     controller: PropTypes.object.isRequired,
-    data: PropTypes.arrayOf(PropTypes.object)
+    data: PropTypes.arrayOf(PropTypes.object),
+    loading: PropTypes.bool.isRequired
 }

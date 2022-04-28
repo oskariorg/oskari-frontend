@@ -6,7 +6,8 @@ class IndicatorsHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = sandbox;
         this.setState({
-            data: []
+            data: [],
+            loading: false
         });
         this.updater = null;
         this.popupControls = null;
@@ -33,12 +34,19 @@ class IndicatorsHandler extends StateHandler {
     }
 
     refreshIndicatorsList () {
+        this.updateState({
+            loading: true
+        });
         this.service.getIndicatorList(this.userDsId, (err, response) => {
             if (err) {
                 this.log.warn('Could not list own indicators in personal data tab');
+                this.updateState({
+                    loading: false
+                });
             } else if (response && response.complete) {
                 this.updateState({
-                    data: response.indicators
+                    data: response.indicators,
+                    loading: false
                 });
             }
         });
@@ -57,9 +65,15 @@ class IndicatorsHandler extends StateHandler {
 
     deleteIndicator (indicator) {
         if (this.getIndicatorById(indicator.id)) {
+            this.updateState({
+                loading: true
+            });
             this.service.deleteIndicator(this.userDsId, indicator.id, null, null, (err, response) => {
                 if (err) {
                     this.showErrorMessage(this.loc('tab.error.notdeleted'));
+                    this.updateState({
+                        loading: false
+                    });
                 } else {
                     const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(this.loc('tab.popup.deletetitle'), this.loc('tab.popup.deleteSuccess'));

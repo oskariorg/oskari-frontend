@@ -26,7 +26,7 @@ const EDIT_ICON_STYLE = {
     fontSize: '16px'
 };
 
-export const UserLayersList = ({ data = [], controller }) => {
+export const UserLayersList = ({ data = [], controller, loading }) => {
     const columnSettings = [
         {
             align: 'left',
@@ -93,11 +93,13 @@ export const UserLayersList = ({ data = [], controller }) => {
                 source: Oskari.util.sanitize(item.getSource())
             }))}
             pagination={false}
+            loading={loading}
         />
     );
 };
 
 UserLayersList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool
 };

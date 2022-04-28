@@ -34,7 +34,7 @@ const openView = (view) => {
     );
 }
 
-export const PublishedMapsList = ({ controller, data = [] }) => {
+export const PublishedMapsList = ({ controller, data = [], loading }) => {
 
     const columnSettings = [
         {
@@ -137,11 +137,13 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
                 ...item
             }))}
             pagination={false}
+            loading={loading}
         />
     )
 }
 
 PublishedMapsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired
 }
