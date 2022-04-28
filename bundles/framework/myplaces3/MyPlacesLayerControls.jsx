@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { Select, Button } from 'antd';
+import { Select, Button } from 'oskari-ui';
 import { DeleteOutlined, EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons'
 import { red, green } from '@ant-design/colors'
 
