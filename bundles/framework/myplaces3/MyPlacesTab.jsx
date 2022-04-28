@@ -9,8 +9,8 @@ export const MyPlacesTab = ({ state, controller }) => {
 
     return (
         <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-            <MyPlacesLayerControls selectedCategory={state.selectedCategory} categories={state.categories} controller={controller} />
-            <MyPlacesList data={state.places} controller={controller} />
+            <MyPlacesLayerControls selectedCategory={state.selectedCategory} loading={state.loading} categories={state.categories} controller={controller} />
+            <MyPlacesList data={state.places} loading={state.loading} controller={controller} />
         </LocaleProvider>
     );
 };

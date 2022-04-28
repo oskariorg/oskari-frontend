@@ -8,7 +8,8 @@ class UserLayersHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
         this.setState({
-            data: []
+            data: [],
+            loading: false
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
@@ -48,8 +49,18 @@ class UserLayersHandler extends StateHandler {
                 this.popupControls.update(error);
             }
         };
-        const save = values => this.instance.getService().submitUserLayer(values, onSuccess, onError);
-        const update = values => this.instance.getService().updateUserLayer(id, values, onSuccess, onError);
+        const save = values => {
+            this.updateState({
+                loading: true
+            });
+            this.instance.getService().submitUserLayer(values, onSuccess, onError);
+        };
+        const update = values => {
+            this.updateState({
+                loading: true
+            });
+            this.instance.getService().updateUserLayer(id, values, onSuccess, onError);
+        };
         const onOk = isImport ? save : update;
         this.popupControls = showLayerForm(values, conf, onOk, () => this.popupCleanup());
     }
@@ -69,9 +80,13 @@ class UserLayersHandler extends StateHandler {
     }
 
     refreshLayersList () {
+        this.updateState({
+            loading: true
+        });
         const layers = this.instance.getMapLayerService().getAllLayersByMetaType(this.layerMetaType);
         this.updateState({
-            data: layers
+            data: layers,
+            loading: false
         });
     }
 
@@ -86,6 +101,9 @@ class UserLayersHandler extends StateHandler {
     }
 
     deleteUserLayer (id) {
+        this.updateState({
+            loading: true
+        });
         this.instance.getService().deleteUserLayer(id);
     }
 

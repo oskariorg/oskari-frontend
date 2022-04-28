@@ -8,6 +8,7 @@ export const PublishedMapsTab = ({ controller, state }) => {
         <PublishedMapsList
             controller={controller}
             data={state.data}
+            loading={state.loading}
         />
     )
 };

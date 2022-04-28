@@ -7,7 +7,8 @@ class MapsHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
         this.setState({
-            data: []
+            data: [],
+            loading: false
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyData');
@@ -37,13 +38,20 @@ class MapsHandler extends StateHandler {
     }
 
     refreshViewsList () {
+        this.updateState({
+            loading: true
+        });
         this.viewService.loadViews('PUBLISHED', (isSuccess, response) => {
             if (isSuccess) {
                 this.updateState({
-                    data: response.views
+                    data: response.views,
+                    loading: false
                 });
             } else {
                 this.showErrorMessage(this.loc('tabs.publishedmaps.error.loadfailed'));
+                this.updateState({
+                    loading: false
+                });
             }
         });
     }
@@ -91,11 +99,17 @@ class MapsHandler extends StateHandler {
     }
 
     deleteView (view) {
+        this.updateState({
+            loading: true
+        });
         this.viewService.deleteView(view, (isSuccess) => {
             if (isSuccess) {
                 this.refreshViewsList();
             } else {
                 this.showErrorMessage(this.loc('tabs.publishedmaps.error.notdeleted'));
+                this.updateState({
+                    loading: false
+                });
             }
         });
     }
@@ -189,6 +203,9 @@ class MapsHandler extends StateHandler {
     }
 
     setPublished (data) {
+        this.updateState({
+            loading: true
+        });
         const view = this.getViewById(data.id);
         if (view) {
             const newState = !view.isPublic;
@@ -202,6 +219,9 @@ class MapsHandler extends StateHandler {
                         this.showErrorMessage(
                             this.loc('tabs.publishedmaps.error.makePrivate')
                         );
+                        this.updateState({
+                            loading: false
+                        });
                     }
                 });
         }

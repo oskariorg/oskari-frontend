@@ -22,7 +22,8 @@ Oskari.registerLocalization({
                 desc: 'Click to sort descending',
                 asc: 'Click to sort ascending',
                 cancel: 'Click to cancel sorting'
-            }
+            },
+            emptyText: 'No data.'
         },
         ColorPicker: {
             tooltip: 'Choose color',

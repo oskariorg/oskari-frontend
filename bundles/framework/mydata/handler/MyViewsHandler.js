@@ -7,7 +7,8 @@ class ViewsHandler extends StateHandler {
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
         this.setState({
-            data: []
+            data: [],
+            loading: false
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyData');
@@ -43,8 +44,18 @@ class ViewsHandler extends StateHandler {
             this.popupCleanup();
         }
         const editCb = success => this.handleSaveViewResponse(success);
-        const onSave = values => this.sandbox.postRequestByName('StateHandler.SaveStateRequest', [values.name, values.description, values.isDefault]);
-        const onEdit = values => this.viewService.updateView(id, values.name, values.description, values.isDefault, editCb);
+        const onSave = values => {
+            this.updateState({
+                loading: true
+            });
+            this.sandbox.postRequestByName('StateHandler.SaveStateRequest', [values.name, values.description, values.isDefault]);
+        };
+        const onEdit = values => {
+            this.updateState({
+                loading: true
+            });
+            this.viewService.updateView(id, values.name, values.description, values.isDefault, editCb);
+        };
         const onOk = id ? onEdit : onSave;
         // create popup
         this.popupControls = showViewForm(view, onOk, () => this.popupCleanup());
@@ -56,11 +67,17 @@ class ViewsHandler extends StateHandler {
             this.refreshViewsList();
         } else {
             Messaging.error(this.loc('tabs.myviews.error.notsaved'));
+            this.updateState({
+                loading: false
+            });
         }
         this.popupCleanup();
     }
 
     refreshViewsList () {
+        this.updateState({
+            loading: true
+        });
         this.viewService.loadViews('USER', (isSuccess, response) => {
             if (isSuccess) {
                 const views = response.views;
@@ -68,9 +85,15 @@ class ViewsHandler extends StateHandler {
                     view.name = Oskari.util.sanitize(view.name);
                     view.description = Oskari.util.sanitize(view.description);
                 });
-                this.updateState({ data: views });
+                this.updateState({
+                    data: views,
+                    loading: false
+                });
             } else {
                 this.showErrorMessage(this.loc('tabs.myviews.error.loadfailed'));
+                this.updateState({
+                    loading: false
+                });
             }
         });
     }
@@ -96,6 +119,9 @@ class ViewsHandler extends StateHandler {
     }
 
     deleteView (view) {
+        this.updateState({
+            loading: true
+        });
         this.viewService.deleteView(view, (isSuccess) => {
             if (isSuccess) {
                 if (Oskari.app.getUuid() === view.uuid) {
@@ -106,6 +132,9 @@ class ViewsHandler extends StateHandler {
                 }
             } else {
                 this.showErrorMessage(Oskari.getMsg('MyData', 'tabs.myviews.error.notdeleted'));
+                this.updateState({
+                    loading: false
+                });
             }
         });
     }
@@ -115,10 +144,10 @@ class ViewsHandler extends StateHandler {
     }
 
     setDefaultView (data) {
-        // start spinner
-        this.sandbox.postRequestByName('ShowProgressSpinnerRequest', [true]);
+        this.updateState({
+            loading: true
+        });
         this.viewService.updateView(data.id, data.name, data.description, !data.isDefault, (isSuccess) => {
-            this.sandbox.postRequestByName('ShowProgressSpinnerRequest', [false]);
             this.handleSaveViewResponse(isSuccess);
         });
     }
