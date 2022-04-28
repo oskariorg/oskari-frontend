@@ -67,11 +67,11 @@ class ViewsHandler extends StateHandler {
             this.refreshViewsList();
         } else {
             Messaging.error(this.loc('tabs.myviews.error.notsaved'));
+            this.updateState({
+                loading: false
+            });
         }
         this.popupCleanup();
-        this.updateState({
-            loading: false
-        });
     }
 
     refreshViewsList () {
