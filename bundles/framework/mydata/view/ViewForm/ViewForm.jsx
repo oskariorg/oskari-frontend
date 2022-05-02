@@ -5,7 +5,7 @@ import { LocaleProvider } from 'oskari-ui/util';
 import { showPopup } from 'oskari-ui/components/window';
 import { ViewFormContent } from './ViewFormContent';
 
-export const BUNDLE_NAME = 'PersonalData';
+export const BUNDLE_NAME = 'MyData';
 
 export const showViewForm = (view, onOk, onClose) => {
     const { id, ...values } = view || {};
