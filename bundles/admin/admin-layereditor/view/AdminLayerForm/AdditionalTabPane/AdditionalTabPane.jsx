@@ -28,9 +28,8 @@ const {
 } = LayerComposingModel;
 
 export const AdditionalTabPane = ({ layer, propertyFields, controller }) => {
-    const { capabilities = {} } = layer;
-    const { typeSpecific = {} } = capabilities;
-    const isQueryable = layer.attributes.isQueryable || capabilities.isQueryable || typeSpecific.isQueryable;
+    const { capabilities = {}, attributes = {}} = layer;
+    const isQueryable = attributes.isQueryable || capabilities.isQueryable || capabilities.queryable;
     return (
         <Fragment>
             { !layer.isNew &&
