@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSnippetPopup } from '../view/embedded/SnippetPopup';
 
 class MapsHandler extends StateHandler {
@@ -30,13 +30,6 @@ class MapsHandler extends StateHandler {
         this.popupControls = showSnippetPopup(view, () => this.popupCleanup());
     }
 
-    showErrorMessage (title, message, buttonText) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(buttonText);
-        button.addClass('primary');
-        dialog.show(title, message, [button]);
-    }
-
     refreshViewsList () {
         this.updateState({
             loading: true
@@ -48,7 +41,7 @@ class MapsHandler extends StateHandler {
                     loading: false
                 });
             } else {
-                this.showErrorMessage(this.loc('tabs.publishedmaps.error.loadfailed'));
+                Messaging.error(this.loc('tabs.publishedmaps.error.loadfailed'));
                 this.updateState({
                     loading: false
                 });
@@ -64,7 +57,7 @@ class MapsHandler extends StateHandler {
             }
         }
         // couldn't find view -> show an error
-        this.showErrorMessage(this.loc('tabs.publishedmaps.error.generic'));
+        Messaging.error(this.loc('tabs.publishedmaps.error.generic'));
     }
 
     confirmSetState (cb, blnMissing) {
@@ -106,7 +99,7 @@ class MapsHandler extends StateHandler {
             if (isSuccess) {
                 this.refreshViewsList();
             } else {
-                this.showErrorMessage(this.loc('tabs.publishedmaps.error.notdeleted'));
+                Messaging.error(this.loc('tabs.publishedmaps.error.notdeleted'));
                 this.updateState({
                     loading: false
                 });
@@ -216,7 +209,7 @@ class MapsHandler extends StateHandler {
                     if (isSuccess) {
                         this.refreshViewsList();
                     } else {
-                        this.showErrorMessage(
+                        Messaging.error(
                             this.loc('tabs.publishedmaps.error.makePrivate')
                         );
                         this.updateState({

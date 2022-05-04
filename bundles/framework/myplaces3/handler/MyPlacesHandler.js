@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showLayerPopup } from '../MyPlacesLayerForm';
 
 class PlaceHandler extends StateHandler {
@@ -138,12 +138,10 @@ class PlaceHandler extends StateHandler {
      */
     deletePlace (data) {
         const callback = (isSuccess) => {
-            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             if (isSuccess) {
-                popup.show(this.loc('tab.notification.delete.title'), this.loc('tab.notification.delete.success'));
-                popup.fadeout();
+                Messaging.success(this.loc('tab.notification.delete.success'));
             } else {
-                popup.show(this.loc('tab.notification.delete.title'), this.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
+                Messaging.error(this.loc('tab.notification.delete.error'));
             }
         };
         this.service.deleteMyPlace(data.id, callback);

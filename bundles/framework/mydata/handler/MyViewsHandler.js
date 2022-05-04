@@ -185,7 +185,6 @@ class ViewsHandler extends StateHandler {
     createEventHandlers () {
         const handlers = {
             'StateSavedEvent': event => {
-                console.log(event);
                 this.handleSaveViewResponse(!event.isError());
             }
         };
