@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class IndicatorsHandler extends StateHandler {
     constructor (sandbox, instance, configuration) {
@@ -60,7 +60,7 @@ class IndicatorsHandler extends StateHandler {
             return matches[0];
         }
         // couldn't find indicator -> show an error
-        this.showErrorMessage(this.loc('tab.error.notfound'));
+        Messaging.error(this.loc('tab.error.notfound'));
     }
 
     deleteIndicator (indicator) {
@@ -70,14 +70,12 @@ class IndicatorsHandler extends StateHandler {
             });
             this.service.deleteIndicator(this.userDsId, indicator.id, null, null, (err, response) => {
                 if (err) {
-                    this.showErrorMessage(this.loc('tab.error.notdeleted'));
+                    Messaging.error(this.loc('tab.error.notdeleted'));
                     this.updateState({
                         loading: false
                     });
                 } else {
-                    const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(this.loc('tab.popup.deletetitle'), this.loc('tab.popup.deleteSuccess'));
-                    dialog.fadeout();
+                    Messaging.success(this.loc('tab.popup.deletetitle'), this.loc('tab.popup.deleteSuccess'));
                     this.refreshIndicatorsList();
                     // Delete fires StatsGrid.DatasourceEvent -> indicator list will be refreshed if delete is successful.
                 }
@@ -118,13 +116,6 @@ class IndicatorsHandler extends StateHandler {
 
     setUpdateFunc (update) {
         this.updater = update;
-    }
-
-    showErrorMessage (title, message, buttonText) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(buttonText);
-        button.addClass('primary');
-        dialog.show(title, message, [button]);
     }
 }
 
