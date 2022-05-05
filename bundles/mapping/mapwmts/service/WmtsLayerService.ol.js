@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     // for how OL parses the JSON and what it expects to find in it
     __formatCapabilitiesForOpenLayers: function (layerCapabilities) {
         // server always just gives one for frontend (one matching the map srs)
-        var tileMatrixSet = layerCapabilities.links[0].tileMatrixSet;
+        var tileMatrixSet = layerCapabilities.tileMatrixSet;
         return {
             Contents: {
                 Layer: [{
