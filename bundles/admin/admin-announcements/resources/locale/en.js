@@ -11,16 +11,24 @@ Oskari.registerLocalization(
         "tile": {
             "title": "A: Announcements"
         },
-        "addNewForm": "New Announcement",
-        "delete": "Delete",
-        "save": "Save",
-        "yes": "Yes",
-        "cancel": "Cancel",
+        "popup": {
+            "title": "Announcement"
+        },
         "fields": {
             "title": "Title",
             "content": "Content",
-            "date-range": "Date range",
-            "show-popup": "Show pop-up",
+            "date": "Date range",
+            "show": {
+                "label": "Show as",
+                "popup": "Popup-window",
+                "banner": "Banner"
+            },
+            "type": {
+                "label": "Type",
+                "title": "Title only",
+                "content": "Contents",
+                "link": "External link"
+            },
             "locale": {
                 "generic": {
                     "name": "Name in {0}",
@@ -40,7 +48,6 @@ Oskari.registerLocalization(
                 }
             }
         },
-        "otherLanguages": "Other languages",
         "messages": {
             "saveSuccess": "Announcement saved",
             "saveFailed": "Saving announcement failed",

@@ -11,16 +11,24 @@ Oskari.registerLocalization(
             "tile": {
                 "title": "A: Aviseringar"
             },
-            "addNewForm": "Ny avisering",
-            "delete": "Ta bort",
-            "save": "Spara",
-            "yes": "Ja",
-            "cancel": "Annullera",
+            "popup": {
+                "title": "Avisering"
+            },
             "fields": {
                 "title": "Titel",
                 "content": "Innehåll",
-                "date-range": "Datumintervall",
-                "show-popup": "Visa popup",
+                "date": "Datumintervall",
+                "show": {
+                    "label": "Visa i",
+                    "popup": "Popupfönster",
+                    "banner": "Webannons"
+                },
+                "type": {
+                    "label": "Typ",
+                    "title": "Bara rubrik",
+                    "content": "Popupens innehåll",
+                    "link": "Extern länk"
+                },
                 "locale": {
                     "generic": {
                         "name": "Namn på {0}",
@@ -40,7 +48,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "otherLanguages": "Andra språk",
             "messages": {
                 "saveSuccess": "Avisering sparat",
                 "saveFailed": "Sparar avisering misslyckades",

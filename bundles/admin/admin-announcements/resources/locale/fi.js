@@ -11,16 +11,24 @@ Oskari.registerLocalization(
             "tile": {
                 "title": "A: Ilmoitukset"
             },
-            "addNewForm": "Uusi Ilmoitus",
-            "delete": "Poista",
-            "save": "Tallenna",
-            "yes": "Kyllä",
-            "cancel": "Peruuta",
+            "popup": {
+                "title": "Ilmoitus"
+            },
             "fields": {
                 "title": "Otsikko",
                 "content": "Sisältö",
-                "date-range": "Aikaväli",
-                "show-popup": "Näytä ponnahdusikkuna",
+                "date": "Aikaväli",
+                "show": {
+                    "label": "Näytä",
+                    "popup": "Ponnahdusikkunassa",
+                    "banner": "Yläpalkissa"
+                },
+                "type": {
+                    "label": "Ilmoituksen tyyppi",
+                    "title": "Vain otsikko",
+                    "content": "Sisältö",
+                    "link": "Lisätietolinkki"
+                },
                 "locale": {
                     "generic": {
                         "name": "Nimi kielellä {0}",
@@ -40,7 +48,6 @@ Oskari.registerLocalization(
                     }
                 }
             },
-            "otherLanguages": "Muut kielet",
             "messages": {
                 "saveSuccess": "Ilmoitus tallennettu.",
                 "saveFailed": "Ilmoituksen tallennus epäonnistui.",
