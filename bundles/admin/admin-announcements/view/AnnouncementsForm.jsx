@@ -1,173 +1,175 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Button, Switch, Row } from "antd";
-import { Message, Confirm, DateRange, LocalizationComponent, TextInput } from 'oskari-ui';
-import { Controller, LocaleConsumer } from 'oskari-ui/util';
+import { Message, Confirm, DateRange, LocalizationComponent, TextInput, Button, Radio, Tooltip } from 'oskari-ui';
+import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
+import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
+import { BUNDLE_KEY, DATEFORMAT } from './constants';
 import 'draft-js/dist/Draft.css';
 
 /*
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-const rangeConfig = {
-  rules: [
-    {
-      type: "array",
-      required: true,
-      message: <Message messageKey='dateError' />
-    }
-  ]
-};
+const SHOW_AS = ['popup', 'banner'];
+const TYPE = ['title', 'content', 'link'];
 
-const PaddingTop = styled('div')`
-    padding-top: 24px;
+const PaddingTop = styled.div`
+    padding-top: 16px;
 `;
 
-const DATEFORMAT = 'YYYY-MM-DD';
-
-const Label = styled('div')`
+const Label = styled.div`
     padding-bottom: 8px;
 `;
+const DeleteButton = ({ onConfirm }) => (
+    <Confirm
+        title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
+        onConfirm={onConfirm}
+        okText={<Message messageKey='buttons.yes' bundleKey='oskariui'/>}
+        cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
+        placement='top'>
+        <Button danger>
+            <Message messageKey='buttons.delete' bundleKey='oskariui'/>
+        </Button>
+    </Confirm>
+);
+DeleteButton.propTypes = {
+    onConfirm: PropTypes.func.isRequired
+};
 
-const AnnouncementsForm = ({controller, key, announcement, bundleKey, index}) => {
-  const [ locales, setLocales ] = useState({...announcement.locale});
-  
-  const onFinish  = fieldsValue => {
-    // Should format date value before submit.
-    const rangeValue = fieldsValue["range_picker"];
-
-    const values = {
-      locale: locales,
-      begin_date: rangeValue[0].format(DATEFORMAT), 
-      end_date: rangeValue[1].format(DATEFORMAT),
-      active: fieldsValue["active"]
+const initState = announcement => {
+    // TODO migrate options and init from announcement
+    const { beginDate, endDate, active, ...rest } = announcement;
+    const begin = beginDate || moment().startOf('hour');
+    const end = endDate || moment().startOf('hour');
+    const date = [moment(begin, DATEFORMAT), moment(end, DATEFORMAT)];
+    const options = {
+        showAs: active ? SHOW_AS[1] : SHOW_AS[0],
+        type: TYPE[1]
     };
+    return { date, options, ...rest };
+};
 
-    if (announcement.id === undefined) {
-      controller.saveAnnouncement(values);
-    } else {
-      values.id = announcement.id;
-      controller.updateAnnouncement(values);
-    }
-  }
-
-  //Return localized labels
-  const getLabels = (bundleKey) => {
-    const getMsg = Oskari.getMsg.bind(null, bundleKey);
+// Return localized labels
+const getLabels = () => {
+    const getMsg = Oskari.getMsg.bind(null, BUNDLE_KEY);
     const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
         const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
         labels[language] = {
             name: getMsg(`fields.locale.${langPrefix}.name`, [language]),
-            content: getMsg(`fields.locale.${langPrefix}.content`, [language])
+            content: getMsg(`fields.locale.${langPrefix}.content`, [language]),
+            link: getMsg('fields.type.link')
         };
     });
     return labels;
-  };
-  
-  //Set initial values to date range depending on if we are editing or creating an announcement
-  const rangeInitial = () => {
+};
+const getRadioButtons = (type, options) => options.map((opt, i) => (
+    <Radio.Button key={`radio-${type}-${i}`} value={opt}>
+        <Message messageKey={`fields.${type}.${opt}`} />
+    </Radio.Button>
+));
 
-    if (announcement.begin_date && announcement.end_date) {
-      return [moment(announcement.begin_date, DATEFORMAT), moment(announcement.end_date, DATEFORMAT)]; 
-    } else {
-      return [moment(moment(),DATEFORMAT), moment(moment(),DATEFORMAT)];  
-    }
+export const AnnouncementsForm = ({
+    controller,
+    announcement = {},
+    onClose
+}) => {
+    const [state, setState] = useState(initState(announcement));
+    console.log(state);
+    const isEdit = !!state.id;
+    const onSave = () => {
+        const { date, ...other } = state;
+        // TODO: should link or/and content be removed from locale??
+        // Should format date value before submit.
+        const values = {
+            beginDate: date[0].format(DATEFORMAT),
+            endDate: date[1].format(DATEFORMAT),
+            ...other
+        };
+        if (isEdit) {
+            controller.updateAnnouncement(values);
+        } else {
+            controller.saveAnnouncement(values);
+        }
+        onClose();
+    };
+    const onDelete = () => controller.deleteAnnouncement(announcement.id);
+    const onOptionChange = (key, value) => {
+        const options = state.options;
+        options[key] = value;
+        setState({ ...state, options });
+    };
 
-  } 
-
-  //Active value set depending on if creating a new announcement or editing an old one
-  const activeInitial = () => {
-    if(announcement.active === undefined) {
-      return true;
-    } else {
-      return announcement.active;
-    }
-  }
-
+    const languages = Oskari.getSupportedLanguages();
+    const defaultLang = languages[0];
+    const hasMandatoryName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
+    const tooltip = hasMandatoryName ? '' : <Message messageKey={`titleError`} />;
+    const type = state.options.type;
+    // TODO: try UrlInput in LocalizationComponent
     return (
-      <div>
-            <Form layout="vertical" 
-              onFinish={onFinish} 
-              initialValues={{
-                range_picker: rangeInitial(),
-                active: activeInitial(),
-              }}>
-                
-              <LocalizationComponent
-                  labels={getLabels(bundleKey)}
-                  languages={Oskari.getSupportedLanguages()}
-                  LabelComponent={Label}
-                  onChange={(locale) => setLocales({ ...locales, ...locale })}
-                  value={locales}
-              >
-                
-                  
-              <TextInput type='text' name='name'/>
-              <PaddingTop/>
-              <RichEditor name='content'/>
-              <PaddingTop/>
-              </LocalizationComponent>
-                  
-              
-              <Form.Item
-                name="range_picker"
-                label={<Message messageKey='fields.date-range' />}
-                style={{marginTop: '25px'}}
-                {...rangeConfig}
-              >
-                <DateRange popupStyle={{zIndex: '999999'}} />
-              </Form.Item>
-              <Form.Item name="active" label={<Message messageKey='fields.show-popup' />} valuePropName="checked">
-                <Switch/>
-              </Form.Item>
-              <Row>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit" >
-                    <Message messageKey={'save'}/>
-                  </Button>
-                </Form.Item>
-                <Form.Item>
-                  <Confirm
-                      title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
-                      onConfirm={() => controller.deleteAnnouncement(announcement.id)}
-                      okText={<Message messageKey='yes'/>}
-                      cancelText={<Message messageKey='cancel'/>}
-                      placement='top'
-                      popupStyle={{zIndex: '999999'}}
-                  >
-                      <Button key={key}>
-                          <Message messageKey='delete'/>
-                      </Button>
-                  </Confirm>
-                </Form.Item>
-                <Form.Item>
-                  <Confirm
-                        title={<Message messageKey='messages.cancelAnnouncementConfirm'/>}
-                        onConfirm={() => controller.cancel(announcement.id)}
-                        okText={<Message messageKey='yes'/>}
-                        cancelText={<Message messageKey='cancel'/>}
-                        placement='top'
-                        popupStyle={{zIndex: '999999'}}
-                    >
-                      <Button>
-                        <Message messageKey={'cancel'}/>
-                      </Button>
-                  </Confirm>
-                </Form.Item>
-              </Row>
-            </Form>
-      </div>
+        <Fragment>
+            <Label>
+                <Message messageKey='fields.show.label' />
+            </Label>
+            <Radio.Group
+                value={state.options.showAs}
+                buttonStyle="solid"
+                onChange={(evt) => onOptionChange('showAs', evt.target.value)}
+            >
+                {getRadioButtons('show', SHOW_AS)}
+            </Radio.Group>
+            <PaddingTop/>
+            <Label>
+                <Message messageKey='fields.date' />
+            </Label>
+            <DateRange
+                value = {state.date}
+                allowClear = {false}
+                format = { DATEFORMAT }
+                showTime = {{ format: 'HH' }}
+                onChange= {(date) => setState({ ...state, date })}
+            />
+            <PaddingTop/>
+            <Label>
+                <Message messageKey='fields.type.label' />
+            </Label>
+            <Radio.Group
+                value={state.options.type}
+                buttonStyle="solid"
+                onChange={(evt) => onOptionChange('type', evt.target.value)}
+            >
+                {getRadioButtons('type', TYPE)}
+            </Radio.Group>
+            <PaddingTop/>
+            <LocalizationComponent
+                labels={getLabels()}
+                languages={languages}
+                LabelComponent={Label}
+                onChange={(locale) => setState({ ...state, locale })}
+                value={state.locale}>
+                <TextInput type='text' name='name'/>
+                <PaddingTop/>
+                { type === 'link' && <TextInput name='link'/> }
+                { type === 'content' && <RichEditor name='content'/> }
+                { type !== 'title' && <PaddingTop/>}
+            </LocalizationComponent>
+
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={() => onClose()}/>
+                {isEdit && <DeleteButton onConfirm={onDelete}/>}
+                <Tooltip title={tooltip}>
+                    <PrimaryButton disabled={!hasMandatoryName} type="save" onClick={onSave}/>
+                </Tooltip>
+            </ButtonContainer>
+        </Fragment>
     );
 };
 
 AnnouncementsForm.propTypes = {
-  key: PropTypes.number,
-  controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    onClose: PropTypes.func.isRequired,
+    announcement: PropTypes.object
 };
-
-const contextWrap = LocaleConsumer(AnnouncementsForm);
-export { contextWrap as AnnouncementsForm };
