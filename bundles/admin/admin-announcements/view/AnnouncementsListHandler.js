@@ -98,33 +98,8 @@ class ViewHandler extends StateHandler {
             }
         }.bind(this));
     }
-    // Cancel creating a new announcement or editing one. Close all panels.
-    cancel (id) {
-        if (id !== undefined) {
-            this.updateState({
-                activeKey: []
-            });
-        } else {
-            const newList = [...this.state.announcements];
-            newList.splice(-1, 1);
-            this.updateState({
-                announcements: newList,
-                activeKey: []
-            });
-        }
-    }
 
-    addForm () {
-        const newList = [...this.state.announcements];
-        const lang = Oskari.getLang();
-        newList.push({
-            locale: { [lang]: { name: Oskari.getMsg('admin-announcements', 'addNewForm') } }
-        });
-        this.updateState({
-            announcements: newList
-        });
-    }
-
+    // TODO: remnove
     openCollapse (key) {
         this.updateState({
             activeKey: key
@@ -133,5 +108,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsListHandler = controllerMixin(ViewHandler, [
-    'addForm', 'deleteAnnouncement', 'saveAnnouncement', 'updateAnnouncement', 'cancel', 'openCollapse'
+    'deleteAnnouncement', 'saveAnnouncement', 'updateAnnouncement', 'openCollapse'
 ]);
