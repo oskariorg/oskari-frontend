@@ -54,11 +54,16 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.Flyout',
             if (!this.container) {
                 return;
             }
+            const edit = (announcement) => {
+                const controller = this.announcementsListHandler.getController();
+                this.instance.showEditPopup(controller, announcement);
+            };
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <AnnouncementsList
                         {...this.announcementsListHandler.getState()}
                         controller={this.announcementsListHandler.getController()}
+                        edit = {edit}
                     />
                 </LocaleProvider>
             );

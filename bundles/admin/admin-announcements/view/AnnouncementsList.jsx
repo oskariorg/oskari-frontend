@@ -1,8 +1,7 @@
 import React from "react";
-import { AnnouncementsForm } from './AnnouncementsForm';
 import PropTypes from 'prop-types';
 import { Collapse } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import { Button } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
@@ -16,8 +15,17 @@ const { Panel } = Collapse;
 const StyledButton = styled(Button)`
     margin-top: 10px;
 `;
-const AnnouncementsList = ({controller,  announcements, activeKey }) => {
 
+const getEditIcon = (edit, announcement) => (
+    <EditOutlined
+        onClick={event => {
+            edit(announcement);
+            event.stopPropagation();
+        }}
+    />
+);
+
+const AnnouncementsList = ({controller,  announcements, activeKey, edit }) => {
   const callback = (key) => {
     controller.openCollapse(key);
   }
@@ -29,20 +37,15 @@ const AnnouncementsList = ({controller,  announcements, activeKey }) => {
             const loc = Oskari.getLocalized(announcement.locale) || {};
             const title = loc.name ||  Oskari.getMsg('admin-announcements', 'addNewForm');
             return (
-              <Panel header={title} key={index}>
-              <AnnouncementsForm
-                controller={controller}
-                announcement={announcement}
-                index={index}
-                key={index}
-              />
+              <Panel header={title} key={index} extra={getEditIcon(edit, announcement)}>
+                <div dangerouslySetInnerHTML={{ __html: loc.content }}/>
               </Panel>
             );
           })}
           </Collapse>
         </div>
 
-        <StyledButton type="primary" onClick={() => controller.addForm()}>
+        <StyledButton type="primary" onClick={() => edit()}>
           <PlusOutlined />
         </StyledButton>
     </div>
