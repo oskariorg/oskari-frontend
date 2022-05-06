@@ -17,7 +17,7 @@ const Container = styled.div`
     background-clip: content-box;
     border: 5px solid rgba(0, 0, 0, 0.2);
     border-radius: 7px;
-    z-index: 50000;
+    z-index: 30000;
 
     &.outofviewport {
         border: 5px solid rgba(100, 0, 0, 0.5);

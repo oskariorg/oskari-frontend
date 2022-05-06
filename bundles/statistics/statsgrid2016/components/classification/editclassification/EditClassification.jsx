@@ -5,7 +5,7 @@ import { LabeledSelect } from './LabeledSelect';
 import { SizeSlider } from './SizeSlider';
 import { Color } from './Color';
 import { Checkbox, Message, Slider } from 'oskari-ui';
-import { EditTwoTone, DownOutlined } from '@ant-design/icons';
+import { EditTwoTone } from '@ant-design/icons';
 
 // remove mark dots (.ant-slider-dot)
 const Container = styled.div`
@@ -14,6 +14,14 @@ const Container = styled.div`
     .ant-slider-dot {
         display: none;
     }
+`;
+
+const MethodContainer = styled.div`
+    padding-top: 5px;
+    padding-bottom: 10px;
+`;
+const EditIcon = styled(EditTwoTone)`
+    float: right;
 `;
 
 // Overrride -50% translateX
@@ -38,18 +46,11 @@ export const EditClassification = ({
     options,
     controller,
     editEnabled,
-    handleManualView,
+    startHistogramView,
     values
 }) => {
     const handleChange = (id, value) => controller.updateClassification(id, value);
-    const handleMethodChange = (id, value) => {
-        if (value === 'manual') {
-            handleManualView();
-        }
-        handleChange(id, value);
-    };
     const disabled = !editEnabled;
-    const methodSuffix = values.method === 'manual' ? <EditTwoTone onClick={() => handleManualView()}/> : <DownOutlined />;
     return (
         <Container className="t_classification-edit">
             <LabeledSelect
@@ -59,14 +60,12 @@ export const EditClassification = ({
                 handleChange = {handleChange}
                 options = {options.mapStyles}
             />
-            <LabeledSelect
-                name = 'method'
-                value = {values.method}
-                disabled = {disabled}
-                handleChange = {handleMethodChange}
-                options = {options.methods}
-                suffixIcon ={methodSuffix}
-            />
+            <MethodContainer>
+                <Message messageKey={`classify.labels.method`}/>
+                <span>: &nbsp;</span>
+                <Message messageKey={`classify.methods.${values.method}`}/>
+                <EditIcon disabled = {disabled} onClick={() => startHistogramView()}/>
+            </MethodContainer>
             <LabeledSelect
                 name = 'count'
                 value = {values.count}
@@ -124,6 +123,6 @@ EditClassification.propTypes = {
     options: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     values: PropTypes.object.isRequired,
-    handleManualView: PropTypes.func.isRequired,
+    startHistogramView: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
 };
