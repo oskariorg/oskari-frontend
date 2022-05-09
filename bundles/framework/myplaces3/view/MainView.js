@@ -1,3 +1,5 @@
+import { Messaging } from 'oskari-ui/util';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.MyPlacesBundleInstance
  *
@@ -261,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                         place.setCategoryId(categoryId);
                         this.savePlace(place);
                     } else {
-                        this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.addCategory'));
+                        Messaging.error(this.loc('notification.error.addCategory'));
                     }
                 };
                 this.instance.getCategoryHandler().saveCategory(category, serviceCallback);
@@ -292,13 +294,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                         handler.refreshLayerIfSelected(oldCategoryId);
                     }
                     this.cleanupPopup();
-
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(this.loc('notification.placeAdded.title'), this.loc('notification.placeAdded.message'));
-                    dialog.fadeout();
+                    Messaging.success(this.loc('notification.placeAdded.message'));
                     // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
                 } else {
-                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
+                    Messaging.error(this.loc('notification.error.savePlace'));
                 }
             };
 

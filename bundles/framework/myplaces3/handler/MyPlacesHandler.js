@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showLayerPopup } from '../MyPlacesLayerForm';
 
 class PlaceHandler extends StateHandler {
@@ -9,7 +9,8 @@ class PlaceHandler extends StateHandler {
         this.setState({
             places: [],
             categories: [],
-            selectedCategory: null
+            selectedCategory: null,
+            loading: false
         });
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
@@ -55,9 +56,15 @@ class PlaceHandler extends StateHandler {
                 places: []
             });
         }
+        this.updateState({
+            loading: false
+        });
     }
 
     refreshCategoryList () {
+        this.updateState({
+            loading: true
+        });
         const categories = this.categoryHandler.getAllCategories();
         this.updateState({
             categories: categories
@@ -83,6 +90,9 @@ class PlaceHandler extends StateHandler {
     }
 
     selectCategory (categoryId) {
+        this.updateState({
+            loading: true
+        });
         const category = this.state.categories.find(c => c.categoryId === categoryId);
         this.updateState({
             selectedCategory: category
@@ -128,12 +138,10 @@ class PlaceHandler extends StateHandler {
      */
     deletePlace (data) {
         const callback = (isSuccess) => {
-            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             if (isSuccess) {
-                popup.show(this.loc('tab.notification.delete.title'), this.loc('tab.notification.delete.success'));
-                popup.fadeout();
+                Messaging.success(this.loc('tab.notification.delete.success'));
             } else {
-                popup.show(this.loc('tab.notification.delete.title'), this.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
+                Messaging.error(this.loc('tab.notification.delete.error'));
             }
         };
         this.service.deleteMyPlace(data.id, callback);

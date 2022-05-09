@@ -40,7 +40,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
             }
-            { (propertyFields.includes(TIMES) && layer.capabilities.typeSpecific && layer.capabilities.typeSpecific.times) &&
+            { (propertyFields.includes(TIMES) && layer.capabilities.times) &&
                 <TimeSeries layer={layer} scales={scales} controller={controller} />
             }
             { propertyFields.includes(CLUSTERING_DISTANCE) &&

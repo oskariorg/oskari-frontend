@@ -7,12 +7,12 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 
 const DELETE_ICON_STYLE = {
-    fontSize: '14px',
+    fontSize: '16px',
     color: red.primary
 };
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const StyledTable = styled(Table)`
@@ -26,7 +26,13 @@ const StyledTable = styled(Table)`
     }
 `;
 
-export const MyPlacesList = ({data = [], controller }) => {
+const NameField = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+export const MyPlacesList = ({data = [], loading, controller }) => {
 
     const columnSettings = [
         {
@@ -39,8 +45,10 @@ export const MyPlacesList = ({data = [], controller }) => {
                 const shape = controller.getGeometryIcon(item._place.geometry);
                 return (
                     <a onClick={() => controller.showPlace(item._place.geometry, item._place.categoryId)}>
-                        <div className={`icon myplaces-${shape}`} />
-                        <span>{title}</span>
+                        <NameField>
+                            <div className={`icon myplaces-${shape}`} />
+                            <span>{title}</span>
+                        </NameField>
                     </a>
                 );
             }
@@ -73,6 +81,7 @@ export const MyPlacesList = ({data = [], controller }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.actions' />,
             dataIndex: 'id',
+            width: 100,
             render: (title, item) => {
                 return (
                     <ToolsContainer>
@@ -100,6 +109,7 @@ export const MyPlacesList = ({data = [], controller }) => {
 
     return (
         <StyledTable
+            loading={loading}
             columns={columnSettings}
             dataSource={data.map(item => ({
                 key: item.id,
@@ -116,5 +126,6 @@ export const MyPlacesList = ({data = [], controller }) => {
 
 MyPlacesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool
 };

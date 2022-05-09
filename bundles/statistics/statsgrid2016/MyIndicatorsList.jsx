@@ -26,15 +26,15 @@ const ButtonContainer = styled.div`
 `;
 
 const deleteIconStyle = {
-    fontSize: '14px',
+    fontSize: '16px',
     color: red.primary
 };
 
 const editIconStyle = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
-export const MyIndicatorsList = ({ controller, data = [] }) => {
+export const MyIndicatorsList = ({ controller, data = [], loading }) => {
 
     const columnSettings = [
         {
@@ -45,7 +45,7 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
             defaultSortOrder: 'ascend'
         },
         {
-            dataIndex: 'createDate',
+            dataIndex: 'created',
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
             sorter: getSorterFor('createDate'),
@@ -54,6 +54,7 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
             dataIndex: 'id',
             align: 'left',
             title: <Message messageKey='tab.grid.actions' bundleKey={BUNDLE_KEY} />,
+            width: 100,
             render: (title, item) => {
                 return (
                     <ToolsContainer>
@@ -95,6 +96,7 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
                     ...item
                 }))}
                 pagination={false}
+                loading={loading}
             />
         </>
     );
@@ -102,5 +104,6 @@ export const MyIndicatorsList = ({ controller, data = [] }) => {
 
 MyIndicatorsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool
 };

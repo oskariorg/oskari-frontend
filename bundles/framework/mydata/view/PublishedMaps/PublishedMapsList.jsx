@@ -34,7 +34,7 @@ const openView = (view) => {
     );
 }
 
-export const PublishedMapsList = ({ controller, data = [] }) => {
+export const PublishedMapsList = ({ controller, data = [], loading }) => {
 
     const columnSettings = [
         {
@@ -115,7 +115,8 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.actions' />,
             dataIndex: 'id',
-                render: (title, item) => {
+            width: 100,
+            render: (title, item) => {
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' />}>
@@ -148,11 +149,13 @@ export const PublishedMapsList = ({ controller, data = [] }) => {
                 ...item
             }))}
             pagination={false}
+            loading={loading}
         />
     )
 }
 
 PublishedMapsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired
 }

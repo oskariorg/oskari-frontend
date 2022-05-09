@@ -35,7 +35,8 @@ export const Table = ({ ...other }) => {
     const locale = {
         triggerDesc: getMsg('table.sort.desc'), // 'Click to sort descending',
         triggerAsc: getMsg('table.sort.asc'), //'Click to sort ascending',
-        cancelSort: getMsg('table.sort.cancel') // 'Click to cancel sorting'
+        cancelSort: getMsg('table.sort.cancel'), // 'Click to cancel sorting',
+        emptyText: getMsg('table.emptyText') // Show when table is empty
     };
     return (<StyledTable locale={locale} {...other} />);
 };

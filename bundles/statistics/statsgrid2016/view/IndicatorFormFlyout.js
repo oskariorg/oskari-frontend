@@ -1,3 +1,5 @@
+import { Messaging } from 'oskari-ui/util';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', function (title, options, instance) {
     this.instance = instance;
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -344,12 +346,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         });
     },
     showSuccessPopup: function () {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        // TODO: add the name of the indicator and/or year/regionset that was added/modified?
-        var title = this.locale('userIndicators.dialog.successTitle');
-        var content = this.locale('userIndicators.dialog.successMsg');
-        dialog.show(title, content, [dialog.createCloseButton()]);
-        dialog.fadeout();
+        Messaging.success(this.locale('userIndicators.dialog.successMsg'));
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

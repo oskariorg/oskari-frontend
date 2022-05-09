@@ -7,12 +7,12 @@ import styled from 'styled-components';
 import { red } from '@ant-design/colors';
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const DELETE_ICON_STYLE = {
     color: red.primary,
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const StyledTable = styled(Table)`
@@ -26,7 +26,8 @@ const StyledTable = styled(Table)`
     }
 `;
 
-export const MyViewsList = ({ controller, data = [] }) => {
+export const MyViewsList = ({ controller, loading, data = [] }) => {
+    console.log(data)
     const columnSettings = [
         {
             align: 'left',
@@ -60,13 +61,14 @@ export const MyViewsList = ({ controller, data = [] }) => {
         {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.createDate' />,
-            dataIndex: 'createDate',
-            sorter: getSorterFor('createDate')
+            dataIndex: 'created',
+            sorter: getSorterFor('created')
         },
         {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.actions' />,
             dataIndex: 'id',
+            width: 100,
             render: (title, item) => {
                 return (
                     <ToolsContainer>
@@ -98,11 +100,13 @@ export const MyViewsList = ({ controller, data = [] }) => {
                 ...item
             }))}
             pagination={false}
+            loading={loading}
         />
     )
 }
 
 MyViewsList.propTypes = {
     controller: PropTypes.object.isRequired,
-    data: PropTypes.arrayOf(PropTypes.object)
+    data: PropTypes.arrayOf(PropTypes.object),
+    loading: PropTypes.bool.isRequired
 }

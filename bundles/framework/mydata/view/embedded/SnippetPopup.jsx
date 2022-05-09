@@ -7,7 +7,7 @@ import { SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 
-export const BUNDLE_NAME = 'PersonalData';
+const BUNDLE_NAME = 'MyData';
 
 const Content = styled.div`
     margin: 12px 24px 24px;

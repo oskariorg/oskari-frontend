@@ -22,7 +22,8 @@ Oskari.registerLocalization({
                 desc: 'Sortera i fallande ordning',
                 asc: 'Sortera i stigande ordning',
                 cancel: 'Annullera sorteringen'
-            }
+            },
+            emptyText: 'Inga data.'
         },
         ColorPicker: {
             tooltip: 'Välj färg',

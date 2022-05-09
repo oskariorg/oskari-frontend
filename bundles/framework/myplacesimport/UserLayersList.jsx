@@ -19,14 +19,14 @@ const StyledTable = styled(Table)`
 
 const DELETE_ICON_STYLE = {
     color: red.primary,
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
-export const UserLayersList = ({ data = [], controller }) => {
+export const UserLayersList = ({ data = [], controller, loading }) => {
     const columnSettings = [
         {
             align: 'left',
@@ -62,7 +62,8 @@ export const UserLayersList = ({ data = [], controller }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.actions' />,
             dataIndex: 'key',
-                render: (title, item) => {
+            width: 100,
+            render: (title, item) => {
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message messageKey='tab.grid.edit' />}>
@@ -98,11 +99,13 @@ export const UserLayersList = ({ data = [], controller }) => {
                 source: Oskari.util.sanitize(item.getSource())
             }))}
             pagination={false}
+            loading={loading}
         />
     );
 };
 
 UserLayersList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
-    controller: PropTypes.object.isRequired
+    controller: PropTypes.object.isRequired,
+    loading: PropTypes.bool
 };

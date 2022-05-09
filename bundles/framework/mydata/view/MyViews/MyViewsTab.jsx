@@ -22,6 +22,7 @@ export const MyViewsTab = ({ controller, state }) => {
             <MyViewsList
                 controller={controller}
                 data={state.data}
+                loading={state.loading}
             />
         </React.Fragment>
     )

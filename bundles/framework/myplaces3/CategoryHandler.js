@@ -1,3 +1,5 @@
+import { Messaging } from 'oskari-ui/util';
+
 /**
  * @class Oskari.mapframework.bundle.myplaces3.CategoryHandler
  *
@@ -200,23 +202,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             dialog.makeModal();
             dialog.show(this.loc('validation.title'), content, [okBtn]);
         },
-        /**
-         * @method _showMessage
-         * Shows user a message with ok button
-         * @private
-         * @param {String} title popup title
-         * @param {String} message popup message
-         */
-        _showMessage: function (title, message) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(this.loc('buttons.ok'));
-            okBtn.addClass('primary');
-            okBtn.setHandler(function () {
-                dialog.close(true);
-            });
-            dialog.show(title, message, [okBtn]);
-        },
         saveCategory: function (category, callback) {
             const { categoryId, locale, isDefault, style } = category;
             const data = {
@@ -237,15 +222,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                         callback(this.parseCategoryId(layerJson.id));
                         return;
                     }
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(this.loc('notification.categorySaved.title'), this.loc('notification.categorySaved.message'));
-                    dialog.fadeout();
+                    Messaging.success(this.loc('notification.categorySaved.message'));
                     return;
                 }
                 if (isNew) {
-                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.addCategory'));
+                    Messaging.error(this.loc('notification.error.addCategory'));
                 } else {
-                    this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.editCategory'));
+                    Messaging.error(this.loc('notification.error.editCategory'));
                 }
                 if (callback) {
                     callback(null);
@@ -328,14 +311,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         _deleteCategory: function (categoryId, moveToId) {
             var service = this.instance.getService();
             const deleteCategoryCb = success => {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 if (success) {
                     this.removeLayer(categoryId);
-                    dialog.show(this.loc('notification.categoryDelete.title'), this.loc('notification.categoryDelete.deleted'));
-                    dialog.fadeout();
+                    Messaging.success(this.loc('notification.categoryDelete.deleted'));
                 } else {
-                    const btn = dialog.createCloseButton();
-                    dialog.show(this.loc('notification.error.title'), this.loc('notification.error.deleteCategory'), [btn]);
+                    Messaging.error(this.loc('notification.error.deleteCategory'));
                 }
             };
             const placesCb = success => {
@@ -387,7 +367,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
 
         _handlePublishCategory: function (mapLayer, makePublic, wasSuccess) {
             if (!wasSuccess) {
-                this._showMessage(this.loc('notification.error.title'), this.loc('notification.error.generic'));
+                Messaging.error(this.loc('notification.error.generic'));
                 return;
             }
             mapLayer.addPermission('publish', !!makePublic);

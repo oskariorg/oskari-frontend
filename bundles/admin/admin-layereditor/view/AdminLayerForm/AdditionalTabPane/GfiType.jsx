@@ -6,9 +6,8 @@ import { InfoTooltip } from '../InfoTooltip';
 import { StyledFormField } from '../styled';
 
 export const GfiType = ({ layer, controller }) => {
-    const { capabilities, gfiType } = layer;
-    const { typeSpecific = {} } = capabilities;
-    const options = typeSpecific.infoFormats || [];
+    const { capabilities = {}, gfiType } = layer;
+    const options = capabilities.infoFormats || [];
     const value = gfiType || '';
     if (options.length === 0) {
         return null;

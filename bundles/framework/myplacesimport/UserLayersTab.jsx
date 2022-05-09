@@ -11,6 +11,7 @@ export const UserLayersTab = ({ controller, state }) => {
             <UserLayersList
                 controller={controller}
                 data={state.data}
+                loading={state.loading}
             />
         </LocaleProvider>
     )
