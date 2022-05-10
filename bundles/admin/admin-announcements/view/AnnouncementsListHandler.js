@@ -1,7 +1,7 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from '../../../framework/announcements/view/Constants';
+import { LOCAL_STORAGE_KEY } from '../../../framework/announcements/view/Constants';
 
 /*
 Handler for admin-announcements forms.
@@ -33,21 +33,21 @@ class ViewHandler extends StateHandler {
     constructor (sandbox) {
         super();
         this.service = sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
-        this.fetchAdminAnnouncements();
+        this.fetchAnnouncements();
         this.state = {
             announcements: [],
-            active: true,
             activeKey: []
         };
     }
 
-    fetchAdminAnnouncements () {
-        this.service.fetchAdminAnnouncements(function (err, data) {
+    fetchAnnouncements () {
+        this.service.fetchAnnouncements(function (err, data) {
             if (err) {
                 Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
             } else {
                 this.updateState({
-                    announcements: data
+                    announcements: data,
+                    activeKey: null
                 });
             }
         }.bind(this));
@@ -59,10 +59,7 @@ class ViewHandler extends StateHandler {
                 Messaging.error(getMessage('messages.saveFailed'));
             } else {
                 Messaging.success(getMessage('messages.saveSuccess'));
-                this.updateState({
-                    activeKey: []
-                });
-                this.fetchAdminAnnouncements();
+                this.fetchAnnouncements();
             }
         }.bind(this));
     }
@@ -75,11 +72,8 @@ class ViewHandler extends StateHandler {
                 return false;
             } else {
                 Messaging.success(getMessage('messages.updateSuccess'));
-                removeFromLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, data.id);
-                this.updateState({
-                    activeKey: []
-                });
-                this.fetchAdminAnnouncements();
+                removeFromLocalStorageArray(LOCAL_STORAGE_KEY, data.id);
+                this.fetchAnnouncements();
             }
         }.bind(this));
     }
@@ -91,10 +85,7 @@ class ViewHandler extends StateHandler {
             } else {
                 Messaging.success(getMessage('messages.deleteSuccess'));
                 // Update accordion with announcements and keep all closed
-                this.updateState({
-                    activeKey: []
-                });
-                this.fetchAdminAnnouncements();
+                this.fetchAnnouncements();
             }
         }.bind(this));
     }

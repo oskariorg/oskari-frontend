@@ -78,18 +78,19 @@ export const AnnouncementsForm = ({
     onClose
 }) => {
     const [state, setState] = useState(initState(announcement));
-    console.log(state);
+
     const isEdit = !!state.id;
     const onSave = () => {
-        const { date, ...other } = state;
         // TODO: should link or/and content be removed from locale??
         // Should format date value before submit.
         const values = {
-            beginDate: date[0].format(DATEFORMAT),
-            endDate: date[1].format(DATEFORMAT),
-            ...other
+            beginDate: state.date[0].format(),
+            endDate: state.date[1].format(),
+            locale: JSON.stringify(state.locale),
+            options: JSON.stringify(state.options)
         };
         if (isEdit) {
+            values.id = state.id;
             controller.updateAnnouncement(values);
         } else {
             controller.saveAnnouncement(values);
@@ -117,7 +118,7 @@ export const AnnouncementsForm = ({
             <Radio.Group
                 value={state.options.showAs}
                 buttonStyle="solid"
-                onChange={(evt) => onOptionChange('showAs', evt.target.value)}
+                onChange={(evt) => onOptionChange('showAsPopup', evt.target.value)}
             >
                 {getRadioButtons('show', SHOW_AS)}
             </Radio.Group>
