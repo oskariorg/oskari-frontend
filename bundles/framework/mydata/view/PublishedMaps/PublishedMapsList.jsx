@@ -52,14 +52,14 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.createDate' />,
-            dataIndex: 'createDate',
-            sorter: getSorterFor('createDate')
+            dataIndex: 'created',
+            sorter: getSorterFor('created')
         },
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.updateDate' />,
-            dataIndex: 'updateDate',
-            sorter: getSorterFor('updateDate')
+            dataIndex: 'updated',
+            sorter: getSorterFor('updated')
         },
         {
             align: 'left',

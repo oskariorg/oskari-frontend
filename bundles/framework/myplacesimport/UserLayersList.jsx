@@ -27,6 +27,7 @@ const EDIT_ICON_STYLE = {
 };
 
 export const UserLayersList = ({ data = [], controller, loading }) => {
+    console.log(data)
     const columnSettings = [
         {
             align: 'left',
@@ -49,8 +50,8 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         {
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' />,
-            dataIndex: 'createDate',
-            sorter: getSorterFor('createDate')
+            dataIndex: 'created',
+            sorter: getSorterFor('created')
         },
         {
             align: 'left',
@@ -96,7 +97,8 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                 key: item.getId(),
                 name: Oskari.util.sanitize(item.getName()),
                 description: Oskari.util.sanitize(item.getDescription()),
-                source: Oskari.util.sanitize(item.getSource())
+                source: Oskari.util.sanitize(item.getSource()),
+                created: item.getCreated()
             }))}
             pagination={false}
             loading={loading}

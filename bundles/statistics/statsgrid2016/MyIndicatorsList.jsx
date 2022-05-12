@@ -35,7 +35,6 @@ const editIconStyle = {
 };
 
 export const MyIndicatorsList = ({ controller, data = [], loading }) => {
-
     const columnSettings = [
         {
             dataIndex: 'name',
@@ -48,7 +47,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             dataIndex: 'created',
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
-            sorter: getSorterFor('createDate'),
+            sorter: getSorterFor('created'),
         },
         {
             dataIndex: 'id',
