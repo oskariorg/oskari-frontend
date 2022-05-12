@@ -43,7 +43,7 @@ export const Classification = ({
     editOptions,
     pluginState,
     classifiedDataset,
-    handleManualView,
+    startHistogramView,
     onRenderChange,
     controller
 }) => {
@@ -79,7 +79,7 @@ export const Classification = ({
                         values = {classification}
                         editEnabled = {editEnabled}
                         controller = {controller}
-                        handleManualView = {handleManualView}/>
+                        startHistogramView = {startHistogramView}/>
                 }
                 <LegendContainer className = "classification-legend">
                     <Legend
@@ -99,7 +99,7 @@ Classification.propTypes = {
     editOptions: PropTypes.object.isRequired,
     pluginState: PropTypes.object.isRequired,
     classifiedDataset: PropTypes.object.isRequired,
-    handleManualView: PropTypes.func.isRequired,
+    startHistogramView: PropTypes.func.isRequired,
     onRenderChange: PropTypes.func.isRequired,
     controller: PropTypes.object.isRequired
 };
