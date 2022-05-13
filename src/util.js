@@ -772,5 +772,21 @@ Oskari.util = (function () {
         }
     }
 
+    /**
+     * Format timestamp to more readable date
+     * @param {String} text
+     * @returns {String}
+     */
+    util.formatDate = (text) => {
+        if (!text) {
+            return '';
+        }
+        const date = new Date(text);
+        if (isNaN(date.getMilliseconds())) {
+            return '';
+        }
+        return date.toLocaleString(undefined, { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+
     return util;
 }());

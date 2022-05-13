@@ -27,7 +27,6 @@ const StyledTable = styled(Table)`
 `;
 
 export const MyViewsList = ({ controller, loading, data = [] }) => {
-    console.log(data)
     const columnSettings = [
         {
             align: 'left',
@@ -97,7 +96,8 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             columns={columnSettings}
             dataSource={data.map(item => ({
                 key: item.id,
-                ...item
+                ...item,
+                created: Oskari.util.formatDate(item.created)
             }))}
             pagination={false}
             loading={loading}

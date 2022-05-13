@@ -146,7 +146,9 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             columns={columnSettings}
             dataSource={data.map((item) => ({
                 key: item.id,
-                ...item
+                ...item,
+                created: Oskari.util.formatDate(item.created),
+                updated: Oskari.util.formatDate(item.updated)
             }))}
             pagination={false}
             loading={loading}

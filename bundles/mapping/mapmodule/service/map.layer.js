@@ -1346,7 +1346,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (mapLayerJson.groups) {
                 layer.setGroups(mapLayerJson.groups);
             }
-            
+
             if (mapLayerJson.created && isNaN(Date.parse(mapLayerJson.created)) === false) {
                 var created = new Date(mapLayerJson.created);
                 if (created) {
