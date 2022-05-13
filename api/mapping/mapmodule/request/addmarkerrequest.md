@@ -56,7 +56,7 @@ Recognized keys in data-object:
   Example values:
   <ul>
     <li>`2` for built-in symbol ![wide pin](/images/markers/marker-pin2.png)</li>
-    <li>`https://www.oskari.org/images/done.png` for external image ![done symbol](https://www.oskari.org/images/done.png)</li>
+    <li>`https://www.oskari.org/images/done.png` for external image <img src="https://www.oskari.org/images/done.png" /></li>
     <li>`<svg width="32" height="32"></svg>` for SVG symbol given as string</li>
   </ul>
 
