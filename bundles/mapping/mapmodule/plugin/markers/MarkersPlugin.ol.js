@@ -158,13 +158,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
         _mapClick: function (event) {
-            const { lon, lat } = event.getLonLat();
-            const coord = [lon, lat];
             if (!this._showAddMarkerPopupOnMapClick) {
-                this.getMarkersLayer().getSource().getFeaturesAtCoordinate(coord).forEach(feat => this._markerClicked(feat.getId()));
+                // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
+                const pixels = [event.getMouseX(), event.getMouseY()];
+                this.getMarkersLayer()
+                    .getFeatures(pixels)
+                    .then(featureList => featureList
+                        .forEach((feature) => this._markerClicked(feature.getId())));
                 return;
             }
             // adding a marker
+            const { lon, lat } = event.getLonLat();
+            const coord = [lon, lat];
             this._showAddMarkerPopupOnMapClick = false;
             const onAdd = style => {
                 this.popupCleanup();
