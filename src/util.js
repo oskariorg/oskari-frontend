@@ -777,7 +777,7 @@ Oskari.util = (function () {
      * @param {String} text
      * @returns {String}
      */
-    util.formatDate = (text) => {
+    util.formatDate = (text, utc = true) => {
         if (!text) {
             return '';
         }
@@ -785,7 +785,15 @@ Oskari.util = (function () {
         if (isNaN(date.getMilliseconds())) {
             return '';
         }
-        return date.toLocaleString(undefined, { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
+        let options = {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+        };
+        if (utc) options.timeZone = 'UTC';
+        return date.toLocaleString(undefined, options);
     }
 
     return util;
