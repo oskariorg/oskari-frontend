@@ -201,7 +201,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 } else {
                     pretty = me._formatGfiDatum(datum);
                 }
-                if (typeof pretty === 'undefined') {
+                if (pretty === null) {
+                    // if formatter returned null we should skip this result
                     return null;
                 }
 
