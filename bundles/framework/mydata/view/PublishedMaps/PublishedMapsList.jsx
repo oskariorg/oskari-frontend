@@ -53,13 +53,15 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.createDate' />,
             dataIndex: 'created',
-            sorter: getSorterFor('created')
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.updateDate' />,
             dataIndex: 'updated',
-            sorter: getSorterFor('updated')
+            sorter: getSorterFor('updated'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
@@ -146,9 +148,7 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             columns={columnSettings}
             dataSource={data.map((item) => ({
                 key: item.id,
-                ...item,
-                created: Oskari.util.formatDate(item.created),
-                updated: Oskari.util.formatDate(item.updated)
+                ...item
             }))}
             pagination={false}
             loading={loading}

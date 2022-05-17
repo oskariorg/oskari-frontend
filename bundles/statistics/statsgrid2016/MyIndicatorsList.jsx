@@ -48,6 +48,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
             sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             dataIndex: 'id',
@@ -92,8 +93,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                 columns={columnSettings}
                 dataSource={data.map(item => ({
                     key: item.id,
-                    ...item,
-                    created: Oskari.util.formatDate(item.created)
+                    ...item
                 }))}
                 pagination={false}
                 loading={loading}

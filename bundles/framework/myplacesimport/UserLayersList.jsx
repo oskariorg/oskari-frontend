@@ -5,7 +5,6 @@ import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
-import { formatDate } from 'oskari-ui/util';
 
 const StyledTable = styled(Table)`
     tr {
@@ -51,7 +50,8 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' />,
             dataIndex: 'created',
-            sorter: getSorterFor('created')
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
@@ -98,7 +98,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                 name: Oskari.util.sanitize(item.getName()),
                 description: Oskari.util.sanitize(item.getDescription()),
                 source: Oskari.util.sanitize(item.getSource()),
-                created: Oskari.util.formatDate(item.getCreated())
+                created: item.getCreated()
             }))}
             pagination={false}
             loading={loading}

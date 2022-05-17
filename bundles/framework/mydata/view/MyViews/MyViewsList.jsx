@@ -27,6 +27,7 @@ const StyledTable = styled(Table)`
 `;
 
 export const MyViewsList = ({ controller, loading, data = [] }) => {
+
     const columnSettings = [
         {
             align: 'left',
@@ -61,7 +62,8 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.createDate' />,
             dataIndex: 'created',
-            sorter: getSorterFor('created')
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
@@ -96,8 +98,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             columns={columnSettings}
             dataSource={data.map(item => ({
                 key: item.id,
-                ...item,
-                created: Oskari.util.formatDate(item.created)
+                ...item
             }))}
             pagination={false}
             loading={loading}

@@ -63,13 +63,15 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' />,
             dataIndex: 'createDate',
-            sorter: getSorterFor('createDate')
+            sorter: getSorterFor('createDate'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
             title: <Message messageKey='tab.grid.updateDate' />,
             dataIndex: 'updateDate',
-            sorter: getSorterFor('updateDate')
+            sorter: getSorterFor('updateDate'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',
