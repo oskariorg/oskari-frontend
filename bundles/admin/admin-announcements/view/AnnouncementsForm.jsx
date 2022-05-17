@@ -6,15 +6,13 @@ import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
-import { BUNDLE_KEY, DATEFORMAT } from './constants';
+import { BUNDLE_KEY, DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
 import 'draft-js/dist/Draft.css';
 
 /*
 This file contains the form for admin-announcements.
 This is the main file for creating and editing announcements.
 */
-const SHOW_AS = ['popup', 'banner'];
-const TYPE = ['title', 'content', 'link'];
 
 const PaddingTop = styled.div`
     padding-top: 16px;
@@ -39,17 +37,64 @@ DeleteButton.propTypes = {
     onConfirm: PropTypes.func.isRequired
 };
 
+// TODO: should type be stored to options??
+const getType = ({ locale }) => {
+    if (!locale) {
+        // For new announcement default to content
+        return TYPE.CONTENT;
+    }
+    const { link, content } = Oskari.getLocalized(locale) || {};
+    if (link) {
+        return TYPE.LINK;
+    }
+    if (content) {
+        return TYPE.CONTENT;
+    }
+    return TYPE.TITLE;
+};
+const getMandatoryFields = type => {
+    const fields = ['name'];
+    if (type !== TYPE.TITLE) {
+        fields.push(type);
+    }
+    return fields;
+};
+const getLocaleForSubmit = (state) => {
+    const { type, locale } = state;
+    // Announcement bundle uses getLocalized so add languages only if set to get fallback to default language
+    const langs = Object.keys(locale).filter(lang => locale[lang].name);
+    const fields = getMandatoryFields(type);
+    const values = {};
+    langs.forEach(lang => {
+        values[lang] = {};
+        fields.forEach(field => {
+            values[lang][field] = locale[lang][field] || '';
+        });
+    });
+    return values;
+};
+// TODO: warn if other languages have name but not content/link ??
+const validateLocale = (state, defaultLang) => {
+    const { type, locale } = state;
+    const fields = getMandatoryFields(type);
+    const defaultLocale = locale[defaultLang] || {};
+    return fields.filter(key => {
+        const value = defaultLocale[key];
+        return !(value && value.trim().length > 0);
+    });
+};
+
 const initState = announcement => {
-    // TODO migrate options and init from announcement
-    const { beginDate, endDate, active, ...rest } = announcement;
-    const begin = beginDate || moment().startOf('hour');
-    const end = endDate || moment().startOf('hour');
-    const date = [moment(begin, DATEFORMAT), moment(end, DATEFORMAT)];
-    const options = {
-        showAs: active ? SHOW_AS[1] : SHOW_AS[0],
-        type: TYPE[1]
+    const { beginDate, endDate, options, locale, ...rest } = announcement;
+    const begin = beginDate ? moment(beginDate) : moment().startOf('hour');
+    const end = endDate ? moment(endDate) : moment().startOf('hour');
+    return {
+        ...rest,
+        date: [begin, end],
+        type: getType(announcement),
+        locale: locale || {},
+        options: options || { ...OPTIONS }
     };
-    return { date, options, ...rest };
 };
 
 // Return localized labels
@@ -66,11 +111,6 @@ const getLabels = () => {
     });
     return labels;
 };
-const getRadioButtons = (type, options) => options.map((opt, i) => (
-    <Radio.Button key={`radio-${type}-${i}`} value={opt}>
-        <Message messageKey={`fields.${type}.${opt}`} />
-    </Radio.Button>
-));
 
 export const AnnouncementsForm = ({
     controller,
@@ -79,14 +119,20 @@ export const AnnouncementsForm = ({
 }) => {
     const [state, setState] = useState(initState(announcement));
 
+    const languages = Oskari.getSupportedLanguages();
+    const defaultLang = languages[0];
+
     const isEdit = !!state.id;
+    const errorKeys = validateLocale(state, defaultLang);
+    const tooltip = errorKeys.length ? errorKeys.map(key => <div key={`validate-${key}`}><Message messageKey={`fields.validate.${key}`} /></div>) : null;
+
     const onSave = () => {
-        // TODO: should link or/and content be removed from locale??
+        const locale = getLocaleForSubmit(state);
         // Should format date value before submit.
         const values = {
-            beginDate: state.date[0].format(),
-            endDate: state.date[1].format(),
-            locale: JSON.stringify(state.locale),
+            beginDate: state.date[0].toISOString(),
+            endDate: state.date[1].toISOString(),
+            locale: JSON.stringify(locale),
             options: JSON.stringify(state.options)
         };
         if (isEdit) {
@@ -97,30 +143,32 @@ export const AnnouncementsForm = ({
         }
         onClose();
     };
-    const onDelete = () => controller.deleteAnnouncement(announcement.id);
+    const onDelete = () => {
+        controller.deleteAnnouncement(announcement.id);
+        onClose();
+    };
     const onOptionChange = (key, value) => {
         const options = state.options;
         options[key] = value;
         setState({ ...state, options });
     };
 
-    const languages = Oskari.getSupportedLanguages();
-    const defaultLang = languages[0];
-    const hasMandatoryName = Oskari.util.keyExists(state.locale, `${defaultLang}.name`) && state.locale[defaultLang].name.trim().length > 0;
-    const tooltip = hasMandatoryName ? '' : <Message messageKey={`titleError`} />;
-    const type = state.options.type;
-    // TODO: try UrlInput in LocalizationComponent
     return (
         <Fragment>
             <Label>
                 <Message messageKey='fields.show.label' />
             </Label>
             <Radio.Group
-                value={state.options.showAs}
+                value={state.options.showAsPopup}
                 buttonStyle="solid"
                 onChange={(evt) => onOptionChange('showAsPopup', evt.target.value)}
             >
-                {getRadioButtons('show', SHOW_AS)}
+                <Radio.Button value={false}>
+                    <Message messageKey={'fields.show.banner'} />
+                </Radio.Button>
+                <Radio.Button value={true}>
+                    <Message messageKey={'fields.show.popup'} />
+                </Radio.Button>
             </Radio.Group>
             <PaddingTop/>
             <Label>
@@ -129,8 +177,8 @@ export const AnnouncementsForm = ({
             <DateRange
                 value = {state.date}
                 allowClear = {false}
-                format = { DATEFORMAT }
-                showTime = {{ format: 'HH' }}
+                format = { DATE_FORMAT }
+                showTime = {{ format: TIME_FORMAT }}
                 onChange= {(date) => setState({ ...state, date })}
             />
             <PaddingTop/>
@@ -138,11 +186,19 @@ export const AnnouncementsForm = ({
                 <Message messageKey='fields.type.label' />
             </Label>
             <Radio.Group
-                value={state.options.type}
+                value={state.type}
                 buttonStyle="solid"
-                onChange={(evt) => onOptionChange('type', evt.target.value)}
+                onChange={(evt) => setState({ ...state, type: evt.target.value })}
             >
-                {getRadioButtons('type', TYPE)}
+                <Radio.Button value={TYPE.TITLE}>
+                    <Message messageKey={'fields.type.title'} />
+                </Radio.Button>
+                <Radio.Button value={TYPE.CONTENT}>
+                    <Message messageKey={'fields.type.content'} />
+                </Radio.Button>
+                <Radio.Button value={TYPE.LINK}>
+                    <Message messageKey={'fields.type.link'} />
+                </Radio.Button>
             </Radio.Group>
             <PaddingTop/>
             <LocalizationComponent
@@ -151,18 +207,18 @@ export const AnnouncementsForm = ({
                 LabelComponent={Label}
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}>
-                <TextInput type='text' name='name'/>
+                <TextInput type='text' name='name' mandatory={[defaultLang]}/>
                 <PaddingTop/>
-                { type === 'link' && <TextInput name='link'/> }
-                { type === 'content' && <RichEditor name='content'/> }
-                { type !== 'title' && <PaddingTop/>}
+                { state.type === 'link' && <TextInput name='link' mandatory={[defaultLang]}/> }
+                { state.type === 'content' && <RichEditor name='content' mandatory={[defaultLang]}/> }
+                { state.type !== 'title' && <PaddingTop/>}
             </LocalizationComponent>
 
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => onClose()}/>
                 {isEdit && <DeleteButton onConfirm={onDelete}/>}
                 <Tooltip title={tooltip}>
-                    <PrimaryButton disabled={!hasMandatoryName} type="save" onClick={onSave}/>
+                    <PrimaryButton disabled={errorKeys.length > 0} type="save" onClick={onSave}/>
                 </Tooltip>
             </ButtonContainer>
         </Fragment>
