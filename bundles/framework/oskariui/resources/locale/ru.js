@@ -10,7 +10,9 @@ Oskari.registerLocalization({
             edit: 'Редактировать',
             save: 'Сохранить',
             yes: 'Да',
-            no: 'Нет'
+            no: 'Нет',
+            next: 'Следующий',
+            previous: 'Предыдущий'
         },
         table: {
             sort: {
