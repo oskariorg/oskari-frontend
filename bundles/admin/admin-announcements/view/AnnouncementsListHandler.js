@@ -1,11 +1,11 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
-import { LOCAL_STORAGE_KEY } from '../../../framework/announcements/view/Constants';
 
 /*
 Handler for admin-announcements forms.
 */
+const LOCAL_STORAGE_KEY = 'oskari-announcements';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-announcements' />;
 
@@ -14,6 +14,7 @@ const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} b
 * @param {String} name  The localStorage() key
 * @param {String} value The localStorage() value
 */
+// TODO: remove this and use from service if needed
 const removeFromLocalStorageArray = (name, value) => {
     // Get the existing data
     var existing = localStorage.getItem(name);
