@@ -31,21 +31,27 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "generic": {
-                        "name": "Nimi kielellä {0}",
+                        "name": "Otsikko kielellä {0}",
                         "content": "Sisältö kielellä {0}"
                     },
                     "en": {
-                        "name": "Nimi englanniksi",
+                        "name": "Otsikko englanniksi",
                         "content": "Sisältö englanniksi"
                     },
                     "fi": {
-                        "name": "Nimi suomeksi",
+                        "name": "Otsikko suomeksi",
                         "content": "Sisältö suomeksi"
                     },
                     "sv": {
-                        "name": "Nimi ruotsiksi",
+                        "name": "Otsikko ruotsiksi",
                         "content": "Sisältö ruotsiksi"
                     }
+                },
+                "validate": {
+                    "name": "Lisää otsikko!",
+                    "content": "Lisää sisältö!",
+                    "link": "Lisää lisätietolinkki!",
+                    "date": "Lisää aikaväli!"
                 }
             },
             "messages": {
@@ -67,9 +73,6 @@ Oskari.registerLocalization(
                 },
                 "announcementsName": "Nimi",
                 "announcementsTime": "Voimasssa"
-            },
-            "titleError": "Lisää otsikko!",
-            "contentError": "Lisää sisältö!",
-            "dateError": "Lisää aikaväli!"
+            }
         }
     });

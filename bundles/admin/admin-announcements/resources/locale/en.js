@@ -31,21 +31,27 @@ Oskari.registerLocalization(
             },
             "locale": {
                 "generic": {
-                    "name": "Name in {0}",
+                    "name": "Title in {0}",
                     "content": "Content in {0}"
                 },
                 "en": {
-                    "name": "Name in English",
+                    "name": "Title in English",
                     "content": "Content in English"
                 },
                 "fi": {
-                    "name": "Name in Finnish",
+                    "name": "Title in Finnish",
                     "content": "Content in Finnish"
                 },
                 "sv": {
-                    "name": "Name in Swedish",
+                    "name": "Title in Swedish",
                     "content": "Content in Swedish"
                 }
+            },
+            "validate": {
+                "name": "Add title",
+                "content": "Add content!",
+                "link": "Add external link!",
+                "date": "Add daterange!"
             }
         },
         "messages": {
@@ -67,9 +73,6 @@ Oskari.registerLocalization(
             },
             "announcementsName": "Name",
             "announcementsTime": "Valid"
-        },
-        "titleError": "Add title",
-        "contentError": "Add content!",
-        "dateError": "Add daterange!"
+        }
     }
 });
