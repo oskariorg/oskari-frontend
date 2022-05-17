@@ -1,3 +1,4 @@
+import { AnnouncementsHandler, showAnnouncementsPopup } from './view/';
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance
  *
@@ -16,6 +17,9 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.sandbox = this.getSandbox();
         conf.name = 'announcements';
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
+        this.service = null;
+        this.handler = null;
+        this.popupControls = null;
     }, {
 
         afterStart: function () {
@@ -24,9 +28,15 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                 return;
             }
 
-            me.announcementsService = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
-            me.sandbox.registerService(me.announcementsService);
-            me.plugins['Oskari.userinterface.Flyout'] && me.plugins['Oskari.userinterface.Flyout'].createAnnouncementsHandler(me.announcementsService);
+            me.service = Oskari.clazz.create('Oskari.framework.announcements.service.AnnouncementsService', me.sandbox);
+            me.sandbox.registerService(me.service);
+            const flyout = me.plugins['Oskari.userinterface.Flyout'];
+            // It looks like plugin (embedded map) handles announcements differently so render popups only if flyout is present
+            if (flyout) {
+                this.handler = new AnnouncementsHandler(this.service);
+                this.handler.addStateListener(state => this.renderPopup(state));
+                flyout.initHandler(this.handler);
+            }
             if (me.conf && me.conf.plugin) {
                 const mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
                 const plugin = Oskari.clazz.create('Oskari.framework.announcements.plugin.AnnouncementsPlugin', me.conf.plugin.config);
@@ -47,7 +57,27 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                 });
             });
         },
-
+        renderPopup: function (state) {
+            if (!state.showAsPopup.length) {
+                return;
+            }
+            if (this.popupControls) {
+                this.popupControls.update(state);
+                return;
+            }
+            const controller = this.handler.getController();
+            const onClose = () => {
+                controller.clearPopup();
+                this.popupCleanup();
+            };
+            this.popupControls = showAnnouncementsPopup(state, controller, onClose);
+        },
+        popupCleanup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
+        },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
