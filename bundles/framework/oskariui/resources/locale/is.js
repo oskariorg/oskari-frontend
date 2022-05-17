@@ -11,7 +11,9 @@ Oskari.registerLocalization({
             save: 'Vista',
             submit: 'Senda',
             yes: 'Já',
-            no: 'Nei'
+            no: 'Nei',
+            next: 'Næst',
+            previous: 'Fyrri'
         },
         StyleEditor: {
             subheaders: {

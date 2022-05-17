@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
-import { openEditor } from '../components/manualClassification/View';
+import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
@@ -42,6 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.indicatorData = {};
         this._bindToEvents();
         this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
+        this.histogramControls = null;
     }, {
         _createControlElement: function () {
             if (this.element !== null) {
@@ -73,6 +74,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (status === 'PENDING') return;
             const editOptions = this.getEditOptions(state, uniqueCount, minMax);
             const classifiedDataset = this.classifyDataset(state, data);
+            // Histogram doesn't need to be updated on every events but props are gathered here
+            // and histogram is updated only if it's opened, so update here for now
+            this.updateHistogram(state, classifiedDataset, data, editOptions);
 
             ReactDOM.render((
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
@@ -80,7 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         { ...state }
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
-                        handleManualView = {() => this.startManualView(state, classifiedDataset, data)}
+                        startHistogramView = {() => this.startHistogramView(state, classifiedDataset, data, editOptions)}
                         onRenderChange = {this.rendered.bind(this)}
                     />
                 </LocaleProvider>
@@ -162,16 +166,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const { activeIndicator: { classification }, seriesStats } = state;
             return this.service.getClassificationService().getClassification(data, classification, seriesStats);
         },
-        startManualView: function (state, classifiedDataset, data) {
-            const { activeIndicator: { classification }, seriesStats, controller } = state;
-            const { manualBounds, count } = classification;
-
-            const colors = classifiedDataset.groups.map(group => group.color);
+        startHistogramView: function (state, classifiedDataset, data, editOptions) {
+            if (this.histogramControls) {
+                // already opened, do nothing
+                return;
+            }
             this.service.getSeriesService().setAnimating(false);
-            const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
-            const bounds = this.service.getClassificationService().getBoundsFallback(manualBounds, count, d3.min(dataAsList), d3.max(dataAsList));
-            const onOk = bounds => controller.updateClassification('manualBounds', bounds);
-            openEditor(dataAsList, bounds, colors, onOk);
+            const onClose = () => this.histogramCleanup();
+            this.histogramControls = showHistogramPopup(state, classifiedDataset, data, editOptions, onClose);
+        },
+        histogramCleanup: function () {
+            if (this.histogramControls) {
+                this.histogramControls.close();
+            }
+            this.histogramControls = null;
+        },
+        updateHistogram: function (state, classifiedDataset, data, editOptions) {
+            if (!this.histogramControls) {
+                return;
+            }
+            this.histogramControls.update(state, classifiedDataset, data, editOptions);
         },
         redrawUI: function () {
             // No need to redraw because mobile & desktop is same
@@ -276,7 +290,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.RegionsetChangedEvent', () => this.render());
 
             this.service.on('StatsGrid.ClassificationChangedEvent', () => this.render());
-
             // UI styling changes e.g. disable classification editing, make transparent
             this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
             // need to update transparency select

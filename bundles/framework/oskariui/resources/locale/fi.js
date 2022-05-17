@@ -12,7 +12,9 @@ Oskari.registerLocalization({
             submit: 'Lähetä',
             import: 'Tuo',
             yes: 'Kyllä',
-            no: 'Ei'
+            no: 'Ei',
+            next: 'Seuraava',
+            previous: 'Edellinen'
         },
         error: {
             generic: 'Tapahtui odottamaton virhe'

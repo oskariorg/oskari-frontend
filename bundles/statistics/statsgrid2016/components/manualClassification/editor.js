@@ -17,7 +17,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeBound, changeCallback) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -47,10 +47,13 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
 
     let selectedId = handlesData[1].id;
+    if (activeBound && activeBound > 0 && activeBound < manualBounds.length - 1) {
+        selectedId = activeBound;
+    }
     const isSelected = d => d.id === selectedId;
 
     const notify = () => {
-        changeCallback(handlesData.map((d) => d.value));
+        changeCallback(handlesData.map((d) => d.value), selectedId);
     };
 
     const dragBehavior = d3.drag()

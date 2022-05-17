@@ -28,6 +28,7 @@ export { Icon } from './components/Icon';
 export { WarningIcon } from './components/WarningIcon';
 export { Tooltip } from './components/Tooltip';
 export { LabeledInput } from './components/LabeledInput';
+export { Pagination } from './components/Pagination';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';
