@@ -11,7 +11,9 @@ Oskari.registerLocalization({
             save: 'Enregistrer',
             submit: 'Envoyer',
             yes: 'Oui',
-            no: 'Non'
+            no: 'Non',
+            next: 'Suivant',
+            previous: 'Précédent'
         },
         table: {
             sort: {

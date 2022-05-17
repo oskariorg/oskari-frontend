@@ -12,7 +12,9 @@ Oskari.registerLocalization({
             submit: 'Skicka',
             import: 'Importera',
             yes: 'Ja',
-            no: 'Nej'
+            no: 'Nej',
+            next: 'Nästa',
+            previous: 'Föregående'
         },
         error: {
             generic: 'Something went wrong'
