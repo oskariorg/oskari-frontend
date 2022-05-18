@@ -1,3 +1,4 @@
+import { showEditPopup } from './view/AnnouncementsPopup';
 /**
  * @class Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance
  *
@@ -15,9 +16,24 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.AdminAnnouncementsB
         var conf = this.getConfiguration();
         conf.name = 'admin-announcements';
         conf.flyoutClazz = 'Oskari.admin.bundle.admin-announcements.Flyout';
+        this.popupControls = null;
     }, {
 
         afterStart: function () {
+        },
+
+        showEditPopup: function (controller, announcement) {
+            if (this.popupControls) {
+                this.popupCleanup();
+            }
+            const onClose = () => this.popupCleanup();
+            this.popupControls = showEditPopup(controller, announcement, onClose);
+        },
+        popupCleanup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
         }
 
     }, {

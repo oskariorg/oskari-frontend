@@ -11,36 +11,47 @@ Oskari.registerLocalization(
             "tile": {
                 "title": "A: Ilmoitukset"
             },
-            "addNewForm": "Uusi Ilmoitus",
-            "delete": "Poista",
-            "save": "Tallenna",
-            "yes": "Kyllä",
-            "cancel": "Peruuta",
+            "popup": {
+                "title": "Ilmoitus"
+            },
             "fields": {
-                "title": "Otsikko",
-                "content": "Sisältö",
-                "date-range": "Aikaväli",
-                "show-popup": "Näytä ponnahdusikkuna",
+                "date": "Aikaväli",
+                "show": {
+                    "label": "Näytä",
+                    "popup": "Ponnahdusikkunassa",
+                    "banner": "Yläpalkissa"
+                },
+                "type": {
+                    "label": "Ilmoituksen tyyppi",
+                    "title": "Vain otsikko",
+                    "content": "Sisältö",
+                    "link": "Lisätietolinkki"
+                },
                 "locale": {
                     "generic": {
-                        "name": "Nimi kielellä {0}",
+                        "title": "Otsikko kielellä {0}",
                         "content": "Sisältö kielellä {0}"
                     },
                     "en": {
-                        "name": "Nimi englanniksi",
+                        "title": "Otsikko englanniksi",
                         "content": "Sisältö englanniksi"
                     },
                     "fi": {
-                        "name": "Nimi suomeksi",
+                        "title": "Otsikko suomeksi",
                         "content": "Sisältö suomeksi"
                     },
                     "sv": {
-                        "name": "Nimi ruotsiksi",
+                        "title": "Otsikko ruotsiksi",
                         "content": "Sisältö ruotsiksi"
                     }
+                },
+                "validate": {
+                    "title": "Lisää otsikko!",
+                    "content": "Lisää sisältö!",
+                    "link": "Lisää lisätietolinkki!",
+                    "date": "Lisää aikaväli!"
                 }
             },
-            "otherLanguages": "Muut kielet",
             "messages": {
                 "saveSuccess": "Ilmoitus tallennettu.",
                 "saveFailed": "Ilmoituksen tallennus epäonnistui.",
@@ -58,11 +69,8 @@ Oskari.registerLocalization(
                     "title": "Ilmoitukset",
                     "close": "Sulje"
                 },
-                "announcementsName": "Nimi",
+                "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
-            },
-            "titleError": "Lisää otsikko!",
-            "contentError": "Lisää sisältö!",
-            "dateError": "Lisää aikaväli!"
+            }
         }
     });
