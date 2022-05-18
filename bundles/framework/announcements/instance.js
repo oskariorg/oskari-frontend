@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
      * @static
      */
     function () {
-        var conf = this.getConfiguration();
+        const conf = this.getConfiguration();
         this.sandbox = this.getSandbox();
         conf.name = 'announcements';
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
     }, {
 
         afterStart: function () {
-            var me = this;
+            const me = this;
             if (me.started) {
                 return;
             }
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                 }
                 rpcService.addFunction('getAnnouncements', function () {
                     return new Promise((resolve) => {
-                        me.announcementsService.fetchAnnouncements(announcements => resolve(announcements));
+                        me.service.fetchAnnouncements((errorMsg, announcements) => resolve(announcements));
                     });
                 });
             });
@@ -85,6 +85,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         stop: function () {
         }
     }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        extend: ['Oskari.userinterface.extension.DefaultExtension']
     }
 );
