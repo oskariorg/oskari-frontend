@@ -15,8 +15,6 @@ Oskari.registerLocalization(
                 "title": "Avisering"
             },
             "fields": {
-                "title": "Titel",
-                "content": "Innehåll",
                 "date": "Datumintervall",
                 "show": {
                     "label": "Visa i",
@@ -31,24 +29,24 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "generic": {
-                        "name": "Titel på {0}",
+                        "title": "Titel på {0}",
                         "content": "Innehåll på {0}"
                     },
                     "en": {
-                        "name": "Titel på engelska",
+                        "title": "Titel på engelska",
                         "content": "Innehåll på engelska"
                     },
                     "fi": {
-                        "name": "Titel på finska",
+                        "title": "Titel på finska",
                         "content": "Innehåll på finska"
                     },
                     "sv": {
-                        "name": "Titel på svenska",
+                        "title": "Titel på svenska",
                         "content": "Innehåll på svenska"
                     }
                 },
                 "validate": {
-                    "name": "Lägg till en titel!",
+                    "title": "Lägg till en titel!",
                     "content": "Lägg till innehåll!",
                     "link": "Lägg till extern länk",
                     "date": "Lägg till intervall!"
@@ -71,7 +69,7 @@ Oskari.registerLocalization(
                     "title": "Aviseringar",
                     "close": "Stäng"
                 },
-                "announcementsName": "Namn",
+                "announcementsName": "Titel",
                 "announcementsTime": "Datumintervall"
             }
         }

@@ -15,8 +15,6 @@ Oskari.registerLocalization(
                 "title": "Ilmoitus"
             },
             "fields": {
-                "title": "Otsikko",
-                "content": "Sisältö",
                 "date": "Aikaväli",
                 "show": {
                     "label": "Näytä",
@@ -31,24 +29,24 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "generic": {
-                        "name": "Otsikko kielellä {0}",
+                        "title": "Otsikko kielellä {0}",
                         "content": "Sisältö kielellä {0}"
                     },
                     "en": {
-                        "name": "Otsikko englanniksi",
+                        "title": "Otsikko englanniksi",
                         "content": "Sisältö englanniksi"
                     },
                     "fi": {
-                        "name": "Otsikko suomeksi",
+                        "title": "Otsikko suomeksi",
                         "content": "Sisältö suomeksi"
                     },
                     "sv": {
-                        "name": "Otsikko ruotsiksi",
+                        "title": "Otsikko ruotsiksi",
                         "content": "Sisältö ruotsiksi"
                     }
                 },
                 "validate": {
-                    "name": "Lisää otsikko!",
+                    "title": "Lisää otsikko!",
                     "content": "Lisää sisältö!",
                     "link": "Lisää lisätietolinkki!",
                     "date": "Lisää aikaväli!"
@@ -71,7 +69,7 @@ Oskari.registerLocalization(
                     "title": "Ilmoitukset",
                     "close": "Sulje"
                 },
-                "announcementsName": "Nimi",
+                "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
             }
         }

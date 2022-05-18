@@ -34,11 +34,10 @@ const AnnouncementsList = ({controller,  announcements, activeKey, edit }) => {
         <div>
         <Collapse accordion activeKey={activeKey} onChange={callback}>
           {announcements.map((announcement, index) => {
-            const loc = Oskari.getLocalized(announcement.locale) || {};
-            const title = loc.name ||  Oskari.getMsg('admin-announcements', 'addNewForm');
+            const { title, content } = Oskari.getLocalized(announcement.locale) || {};
             return (
               <Panel header={title} key={index} extra={getEditIcon(edit, announcement)}>
-                <div dangerouslySetInnerHTML={{ __html: loc.content }}/>
+                <div dangerouslySetInnerHTML={{ __html: content }}/>
               </Panel>
             );
           })}
