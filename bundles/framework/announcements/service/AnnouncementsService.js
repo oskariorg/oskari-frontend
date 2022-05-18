@@ -42,8 +42,8 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 type: 'GET',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    handler(null, pResp.announcements);
+                success: (announcements) => {
+                    handler(null, announcements);
                 },
                 error: function (jqXHR, textStatus) {
                     handler('Error', []);
