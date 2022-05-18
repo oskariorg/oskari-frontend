@@ -53,7 +53,7 @@ const getType = ({ locale }) => {
     return TYPE.TITLE;
 };
 const getMandatoryFields = type => {
-    const fields = ['name'];
+    const fields = ['title'];
     if (type !== TYPE.TITLE) {
         fields.push(type);
     }
@@ -62,7 +62,7 @@ const getMandatoryFields = type => {
 const getLocaleForSubmit = (state) => {
     const { type, locale } = state;
     // Announcement bundle uses getLocalized so add languages only if set to get fallback to default language
-    const langs = Object.keys(locale).filter(lang => locale[lang].name);
+    const langs = Object.keys(locale).filter(lang => locale[lang].title);
     const fields = getMandatoryFields(type);
     const values = {};
     langs.forEach(lang => {
@@ -104,7 +104,7 @@ const getLabels = () => {
     Oskari.getSupportedLanguages().forEach(language => {
         const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
         labels[language] = {
-            name: getMsg(`fields.locale.${langPrefix}.name`, [language]),
+            title: getMsg(`fields.locale.${langPrefix}.title`, [language]),
             content: getMsg(`fields.locale.${langPrefix}.content`, [language]),
             link: getMsg('fields.type.link')
         };
@@ -127,13 +127,12 @@ export const AnnouncementsForm = ({
     const tooltip = errorKeys.length ? errorKeys.map(key => <div key={`validate-${key}`}><Message messageKey={`fields.validate.${key}`} /></div>) : null;
 
     const onSave = () => {
-        const locale = getLocaleForSubmit(state);
         // Should format date value before submit.
         const values = {
             beginDate: state.date[0].toISOString(),
             endDate: state.date[1].toISOString(),
-            locale: JSON.stringify(locale),
-            options: JSON.stringify(state.options)
+            locale: getLocaleForSubmit(state),
+            options: state.options
         };
         if (isEdit) {
             values.id = state.id;
@@ -207,7 +206,7 @@ export const AnnouncementsForm = ({
                 LabelComponent={Label}
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}>
-                <TextInput type='text' name='name' mandatory={[defaultLang]}/>
+                <TextInput type='text' name='title' mandatory={[defaultLang]}/>
                 <PaddingTop/>
                 { state.type === 'link' && <TextInput name='link' mandatory={[defaultLang]}/> }
                 { state.type === 'content' && <RichEditor name='content' mandatory={[defaultLang]}/> }

@@ -15,8 +15,6 @@ Oskari.registerLocalization(
             "title": "Announcement"
         },
         "fields": {
-            "title": "Title",
-            "content": "Content",
             "date": "Date range",
             "show": {
                 "label": "Show as",
@@ -31,24 +29,24 @@ Oskari.registerLocalization(
             },
             "locale": {
                 "generic": {
-                    "name": "Title in {0}",
+                    "title": "Title in {0}",
                     "content": "Content in {0}"
                 },
                 "en": {
-                    "name": "Title in English",
+                    "title": "Title in English",
                     "content": "Content in English"
                 },
                 "fi": {
-                    "name": "Title in Finnish",
+                    "title": "Title in Finnish",
                     "content": "Content in Finnish"
                 },
                 "sv": {
-                    "name": "Title in Swedish",
+                    "title": "Title in Swedish",
                     "content": "Content in Swedish"
                 }
             },
             "validate": {
-                "name": "Add title",
+                "title": "Add title",
                 "content": "Add content!",
                 "link": "Add external link!",
                 "date": "Add daterange!"
@@ -71,7 +69,7 @@ Oskari.registerLocalization(
                 "title": "Announcements",
                 "close": "Close"
             },
-            "announcementsName": "Name",
+            "announcementsName": "Title",
             "announcementsTime": "Valid"
         }
     }
