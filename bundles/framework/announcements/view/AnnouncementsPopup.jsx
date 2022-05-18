@@ -75,7 +75,7 @@ const getContent = (state, controller, onClose) => {
         return null;
     }
     const dontShowAgain = state.dontShowAgain.includes(announcement.id);
-    const { name } = Oskari.getLocalized(announcement.locale);
+    const { title } = Oskari.getLocalized(announcement.locale);
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
@@ -89,7 +89,7 @@ const getContent = (state, controller, onClose) => {
             </Content>
         </LocaleProvider>
     );
-    return { title: name, content };
+    return { title, content };
 };
 
 export const showAnnouncementsPopup = (state, controller, onClose) => {
