@@ -187,8 +187,12 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                 const dateRange = getDateRange(announcement);
 
                 const { title, content, link } = Oskari.getLocalized(announcement.locale);
+                let desc = content;
+                if (link) {
+                    desc = jQuery('<a>').attr('href', link).attr('target', '_blank').text(me._loc.externalLink);
+                }
                 div.find('button').append(title);
-                div.find('div.announcement-description').append(content);
+                div.find('div.announcement-description').append(desc);
                 div.find('div.announcement-time').append(dateRange);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
