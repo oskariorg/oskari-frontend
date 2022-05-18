@@ -35,22 +35,22 @@ Oskari.registerLocalization(
                 "locale": {
                     "generic": {
                         "name": "Nimi kielellä {0}",
-                        "subtitle": "Kuvaus kielellä {0}"
+                        "description": "Kuvaus kielellä {0}"
                     },
                     "en": {
                         "lang": "Englanti",
                         "name": "Nimi englanniksi",
-                        "subtitle": "Kuvaus englanniksi"
+                        "description": "Kuvaus englanniksi"
                     },
                     "fi": {
                         "lang": "Suomi",
                         "name": "Nimi suomeksi",
-                        "subtitle": "Kuvaus suomeksi"
+                        "description": "Kuvaus suomeksi"
                     },
                     "sv": {
                         "lang": "Ruotsi",
                         "name": "Nimi ruotsiksi",
-                        "subtitle": "Kuvaus ruotsiksi"
+                        "description": "Kuvaus ruotsiksi"
                     }
                 },
                 "opacity": "Peittävyys",

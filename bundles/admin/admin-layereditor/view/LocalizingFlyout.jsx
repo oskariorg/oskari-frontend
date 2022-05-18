@@ -90,7 +90,7 @@ class UIService extends StateHandler {
             const langPrefix = typeof getMsg(`fields.locale.${lang}`) === 'object' ? lang : 'generic';
             labels[lang] = {
                 name: getMsg(`fields.locale.${langPrefix}.name`, [lang]),
-                subtitle: getMsg(`fields.locale.${langPrefix}.subtitle`, [lang])
+                description: getMsg(`fields.locale.${langPrefix}.description`, [lang])
             };
         });
         this.initialState = {
@@ -217,7 +217,7 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
                 LabelComponent={Label}
             >
                 <TextInput type="text" name="name" />
-                <TextInput type="text" name="subtitle" />
+                <TextInput type="text" name="description" />
             </LocalizationComponent>
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
