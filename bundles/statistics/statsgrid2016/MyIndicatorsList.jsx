@@ -35,7 +35,6 @@ const editIconStyle = {
 };
 
 export const MyIndicatorsList = ({ controller, data = [], loading }) => {
-
     const columnSettings = [
         {
             dataIndex: 'name',
@@ -43,6 +42,13 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             title: <Message messageKey='tab.grid.name' bundleKey={BUNDLE_KEY} />,
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend'
+        },
+        {
+            dataIndex: 'created',
+            align: 'left',
+            title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
         },
         {
             dataIndex: 'id',

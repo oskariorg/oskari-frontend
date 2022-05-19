@@ -230,7 +230,8 @@ Oskari.registerLocalization({
                 'name': 'Name',
                 'edit': 'Edit',
                 'delete': 'Delete',
-                'actions': 'Actions'
+                'actions': 'Actions',
+                'createDate': 'Created'
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',
