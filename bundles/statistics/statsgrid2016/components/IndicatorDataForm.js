@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 /**
  * Generic form for feeding values for regions. Triggers events on cancel and save.
  */
@@ -171,11 +172,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                 value;
 
             // separator can be tabulator, comma or colon
-            var matches = line.match(/([^\t;,]+) *[\t;,]+ *(.*)/);
+            var matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
             if (matches && matches.length === 3) {
                 area = matches[1].trim();
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
-
+                if (Number.isNaN(parseInt(value))) {
+                    value = '';
+                }
                 validRows.push({
                     name: area,
                     value: value
