@@ -391,8 +391,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             place.setLink(Oskari.util.sanitize(properties.link));
             place.setImageLink(Oskari.util.sanitize(properties.image_url));
             place.setCategoryId(properties.category_id);
-            place.setCreateDate(properties.created, false);
-            place.setUpdateDate(properties.updated, false);
+            place.setCreateDate(properties.created);
+            place.setUpdateDate(properties.updated);
             place.setGeometry(geometry);
             const drawMode = this.getDrawModeFromGeometry(geometry);
             const measurement = this.mapmodule.formatMeasurementResult(this.mapmodule.getMeasurementResult(geometry), drawMode);
