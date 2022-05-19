@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             var area,
                 value;
 
-            // separator can be tabulator, comma or colon
+            // separator can be a tabulator or a semicolon
             var matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
             if (matches && matches.length === 3) {
                 area = matches[1].trim();
