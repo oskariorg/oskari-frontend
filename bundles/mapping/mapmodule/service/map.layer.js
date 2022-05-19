@@ -736,7 +736,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     id,
                     name: pResp.providers[id].name
                 };
-            })
+            });
             this.setDataProviders(providers);
 
             const flatLayerGroups = [];
@@ -1194,12 +1194,12 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
             // for grouping by dataprovider
-            layer.setDataProviderId(baseMapJson.dataproviderId);
+            baseLayer.setDataProviderId(baseMapJson.dataproviderId);
             const provider = this.getDataProviderById(baseMapJson.dataproviderId);
             if (provider) {
-                layer.setOrganizationName(provider.name || '');
+                baseLayer.setOrganizationName(provider.name || '');
             } else {
-                layer.setOrganizationName(baseMapJson.orgName || '');
+                baseLayer.setOrganizationName(baseMapJson.orgName || '');
             }
 
             baseLayer.setDescription(baseMapJson.info);
