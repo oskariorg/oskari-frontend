@@ -48,6 +48,13 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         },
         {
             align: 'left',
+            title: <Message messageKey='tab.grid.createDate' />,
+            dataIndex: 'created',
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            align: 'left',
             title: <Message messageKey='tab.grid.source' />,
             dataIndex: 'source',
             sorter: getSorterFor('source')
@@ -90,7 +97,8 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                 key: item.getId(),
                 name: Oskari.util.sanitize(item.getName()),
                 description: Oskari.util.sanitize(item.getDescription()),
-                source: Oskari.util.sanitize(item.getSource())
+                source: Oskari.util.sanitize(item.getSource()),
+                created: item.getCreated()
             }))}
             pagination={false}
             loading={loading}

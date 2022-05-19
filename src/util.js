@@ -772,5 +772,30 @@ Oskari.util = (function () {
         }
     }
 
+    /**
+     * Format timestamp to more readable date
+     * @param {String} text
+     * @param {String} timezone optional timezone if needed
+     * @returns {String}
+     */
+    util.formatDate = (text, timezone = undefined) => {
+        if (!text) {
+            return '';
+        }
+        const date = new Date(text);
+        if (isNaN(date.getMilliseconds())) {
+            return '';
+        }
+        let options = {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+        };
+        if (timezone) options.timeZone = timezone;
+        return date.toLocaleString(undefined, options);
+    }
+
     return util;
 }());

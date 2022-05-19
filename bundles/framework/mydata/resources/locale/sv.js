@@ -29,6 +29,7 @@ Oskari.registerLocalization(
                     "delete": "Ta bort",
                     "default": "Förvald",
                     "actions": "Handlingar",
+                    "createDate": "Skapad"
                 },
                 "popup": {
                     "title" : {
@@ -86,7 +87,9 @@ Oskari.registerLocalization(
                     "html": "HTML-kod",
                     "edit": "Redigera",
                     "delete": "Ta bort",
-                    "actions": "Handlingar"
+                    "actions": "Handlingar",
+                    "createDate": "Skapad",
+                    "updateDate": "Uppdaterad"
                 },
                 "published": {
                     "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",

@@ -51,6 +51,20 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
         },
         {
             align: 'left',
+            title: <Message messageKey='tabs.publishedmaps.grid.createDate' />,
+            dataIndex: 'created',
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            align: 'left',
+            title: <Message messageKey='tabs.publishedmaps.grid.updateDate' />,
+            dataIndex: 'updated',
+            sorter: getSorterFor('updated'),
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
             dataIndex: 'pubDomain',
             sorter: getSorterFor('pubDomain'),
