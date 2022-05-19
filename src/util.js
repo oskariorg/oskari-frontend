@@ -775,9 +775,10 @@ Oskari.util = (function () {
     /**
      * Format timestamp to more readable date
      * @param {String} text
+     * @param {String} timezone optional timezone if needed
      * @returns {String}
      */
-    util.formatDate = (text, utc = true) => {
+    util.formatDate = (text, timezone = undefined) => {
         if (!text) {
             return '';
         }
@@ -792,7 +793,7 @@ Oskari.util = (function () {
             hour: 'numeric',
             minute: '2-digit'
         };
-        if (utc) options.timeZone = 'UTC';
+        if (timezone) options.timeZone = timezone;
         return date.toLocaleString(undefined, options);
     }
 
