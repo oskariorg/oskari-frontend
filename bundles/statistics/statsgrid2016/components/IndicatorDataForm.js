@@ -1,4 +1,3 @@
-/* eslint-disable no-var */
 /**
  * Generic form for feeding values for regions. Triggers events on cancel and save.
  */
@@ -37,8 +36,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         if (this.buttons.length) {
             return this.buttons;
         }
-        var me = this;
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        const me = this;
+        const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.setVisible(false);
         cancelBtn.setHandler(function () {
             me.clearUi();
@@ -47,7 +46,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         jQuery(cancelBtn.getElement()).css({ 'margin-left': '6px' });
         this.buttons.push(cancelBtn);
 
-        var importClipboard = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        const importClipboard = Oskari.clazz.create('Oskari.userinterface.component.Button');
         importClipboard.setVisible(false);
         importClipboard.setTitle(this.locale('userIndicators.import.title'));
         importClipboard.setHandler(function (event) {
@@ -66,7 +65,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         this.getElement().empty();
     },
     fillTable: function (data) {
-        var table = this.getElement().find('.user-indicator-table');
+        const table = this.getElement().find('.user-indicator-table');
         data.forEach(({ name, value }) => {
             table.find('tr').each(function (index, tr) {
                 if (tr.dataset.name === name.toLowerCase() || tr.dataset.id === name) {
@@ -76,12 +75,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
     },
     showTable: function (selectors, regions, labels) {
-        var me = this;
+        const me = this;
         this.clearUi();
         labels = labels || {};
         this.selectors = selectors || {};
 
-        var header = this.__templates.header({
+        const header = this.__templates.header({
             regionsetLabel: this.locale('parameters.regionset'),
             yearLabel: this.locale('parameters.year'),
             regionset: labels[selectors.regionset] || selectors.regionset,
@@ -89,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
         this.getElement().append(header);
 
-        var tableRef = jQuery(this.__templates.insertTable());
+        const tableRef = jQuery(this.__templates.insertTable());
         regions.forEach(function (region) {
             tableRef.append(me.__templates.row({
                 regionId: region.id,
@@ -99,7 +98,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
         this.getElement().append(tableRef);
 
-        var inputElems = tableRef.find('tr td.uservalue div');
+        const inputElems = tableRef.find('tr td.uservalue div');
         // Focus on the first input cell
         inputElems[0].focus();
         // prevent KeyboardPan
@@ -116,15 +115,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         });
     },
     getValues: function () {
-        var table = this.getElement().find('table');
-        var data = {
+        const table = this.getElement().find('table');
+        const data = {
             selectors: this.selectors,
             values: []
         };
         table.find('tr').each(function (index, element) {
-            var row = jQuery(element);
-            var columns = row.find('td');
-            var dataItem = {
+            const row = jQuery(element);
+            const columns = row.find('td');
+            const dataItem = {
                 id: row.attr('data-id'),
                 name: columns[0].innerText,
                 value: columns[1].innerText.trim()
@@ -140,39 +139,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         return data;
     },
     openImportPopup: function () {
-        var me = this;
-        var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        const me = this;
+        const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         popup.makeDraggable();
-        var content = jQuery(this.__templates.import({
+        const content = jQuery(this.__templates.import({
             placeholder: me.locale('userIndicators.import.placeholder')
         }));
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+        const okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
 
         okBtn.setPrimary(true);
         okBtn.setHandler(function () {
-            var textarea = content.find('textarea');
-            var data = me.parseUserData(textarea);
+            const textarea = content.find('textarea');
+            const data = me.parseUserData(textarea);
             me.fillTable(data);
             popup.close(true);
         });
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+        const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
         cancelBtn.setHandler(function () {
             popup.close(true);
         });
         popup.show(me.locale('userIndicators.import.title'), content, [cancelBtn, okBtn]);
     },
     parseUserData: function (textarea) {
-        var data = textarea.val();
-        var validRows = [];
+        const data = textarea.val();
+        const validRows = [];
 
-        var lines = data.match(/[^\r\n]+/g);
+        const lines = data.match(/[^\r\n]+/g);
         // loop through all the lines and parse municipalities (name or code)
         lines.forEach(function (line) {
-            var area,
+            let area,
                 value;
 
             // separator can be a tabulator or a semicolon
-            var matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
+            const matches = line.match(/([^\t;]+) *[\t;]+ *(.*)/);
             if (matches && matches.length === 3) {
                 area = matches[1].trim();
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
