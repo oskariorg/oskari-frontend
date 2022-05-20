@@ -15,6 +15,9 @@ Oskari.registerLocalization({
             next: 'Næst',
             previous: 'Fyrri'
         },
+        messages: {
+            confirmDelete: 'Viss um að eyða?'
+        },
         StyleEditor: {
             subheaders: {
                 pointTab: 'Punkti',

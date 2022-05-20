@@ -16,6 +16,9 @@ Oskari.registerLocalization({
             next: 'Seuraava',
             previous: 'Edellinen'
         },
+        messages: {
+            confirmDelete: 'Haluatko varmasti poistaa?'
+        },
         error: {
             generic: 'Tapahtui odottamaton virhe'
         },
