@@ -5,6 +5,9 @@
 Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService',
 
     function () {
+        this.tools = [];
+        this.announcements = null;
+        Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.framework.announcements.service.AnnouncementsService',
@@ -27,22 +30,35 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         getName: function () {
             return this.__name;
         },
-
+        getAnnouncement: function (id) {
+            return this.getAnnouncements().find(ann => ann.id === id);
+        },
+        getAnnouncements: function () {
+            return this.announcements || [];
+        },
+        storeAnnouncements: function (announcements) {
+            this.announcements = announcements;
+            this.trigger('fetch'); // store, announcements,...
+        },
         /**
         * @method fetchAnnouncements
         *
         * Makes an ajax call to get active announcements.
         * For admin user all announcements are returned.
         */
-        fetchAnnouncements: function (handler) {
+        fetchAnnouncements: function (handler, force) {
             if (typeof handler !== 'function') {
                 return;
+            }
+            if (this.announcements && !force) {
+                handler(null, this.announcements);
             }
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements'),
                 success: (announcements) => {
+                    this.storeAnnouncements(announcements);
                     handler(null, announcements);
                 },
                 error: function (jqXHR, textStatus) {
@@ -50,7 +66,13 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 }
             });
         },
-
+        submitAnnouncement: function (announcement, cb) {
+            if (announcement.id) {
+                this.updateAnnouncement(announcement, cb);
+            } else {
+                this.saveAnnouncement(announcement, cb);
+            }
+        },
         /**
         * @method saveAnnouncements
         *
@@ -120,6 +142,16 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                     handler('Error', []);
                 }
             });
+        },
+        addTool (tool) {
+            if (!tool || !tool.getName() || !tool.getCallback()) {
+                return;
+            }
+            this.tools.push(tool);
+            this.trigger('tool');
+        },
+        getTools () {
+            return this.tools;
         }
     }, {
     /**

@@ -4,7 +4,7 @@
  *
  */
 
-Oskari.clazz.define("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundle", function () {
+Oskari.clazz.define("Oskari.admin.admin-announcements.bundle", function () {
 
 }, {
     /**
@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsB
      */
     "create": function () {
 
-        return Oskari.clazz.create("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundleInstance");
+        return Oskari.clazz.create("Oskari.admin.admin-announcements.instance");
     },
     /**
      * @method update called by the bundle manager to inform on changes in bundlage
@@ -103,4 +103,4 @@ Oskari.clazz.define("Oskari.admin.bundle.admin-announcements.AdminAnnouncementsB
     }
 });
 
-Oskari.bundle_manager.installBundleClass("admin-announcements", "Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundle");
+Oskari.bundle_manager.installBundleClass("admin-announcements", "Oskari.admin.admin-announcements.bundle");

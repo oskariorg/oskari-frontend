@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, Confirm, DateRange, LocalizationComponent, TextInput, Button, Radio, Tooltip } from 'oskari-ui';
-import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
-import { Controller } from 'oskari-ui/util';
+import { Message, DateRange, LocalizationComponent, TextInput, Radio, Tooltip } from 'oskari-ui';
+import { SecondaryButton, PrimaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
@@ -21,21 +20,6 @@ const PaddingTop = styled.div`
 const Label = styled.div`
     padding-bottom: 8px;
 `;
-const DeleteButton = ({ onConfirm }) => (
-    <Confirm
-        title={<Message messageKey='messages.deleteAnnouncementConfirm'/>}
-        onConfirm={onConfirm}
-        okText={<Message messageKey='buttons.yes' bundleKey='oskariui'/>}
-        cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
-        placement='top'>
-        <Button danger>
-            <Message messageKey='buttons.delete' bundleKey='oskariui'/>
-        </Button>
-    </Confirm>
-);
-DeleteButton.propTypes = {
-    onConfirm: PropTypes.func.isRequired
-};
 
 // TODO: should type be stored to options??
 const getType = ({ locale }) => {
@@ -113,8 +97,9 @@ const getLabels = () => {
 };
 
 export const AnnouncementsForm = ({
-    controller,
     announcement = {},
+    onSubmit,
+    onDelete,
     onClose
 }) => {
     const [state, setState] = useState(initState(announcement));
@@ -126,7 +111,7 @@ export const AnnouncementsForm = ({
     const errorKeys = validateLocale(state, defaultLang);
     const tooltip = errorKeys.length ? errorKeys.map(key => <div key={`validate-${key}`}><Message messageKey={`fields.validate.${key}`} /></div>) : null;
 
-    const onSave = () => {
+    const onSubmitClick = () => {
         // Should format date value before submit.
         const values = {
             beginDate: state.date[0].toISOString(),
@@ -134,17 +119,7 @@ export const AnnouncementsForm = ({
             locale: getLocaleForSubmit(state),
             options: state.options
         };
-        if (isEdit) {
-            values.id = state.id;
-            controller.updateAnnouncement(values);
-        } else {
-            controller.saveAnnouncement(values);
-        }
-        onClose();
-    };
-    const onDelete = () => {
-        controller.deleteAnnouncement(announcement.id);
-        onClose();
+        onSubmit(values);
     };
     const onOptionChange = (key, value) => {
         const options = state.options;
@@ -217,7 +192,7 @@ export const AnnouncementsForm = ({
                 <SecondaryButton type='cancel' onClick={() => onClose()}/>
                 {isEdit && <DeleteButton onConfirm={onDelete}/>}
                 <Tooltip title={tooltip}>
-                    <PrimaryButton disabled={errorKeys.length > 0} type="save" onClick={onSave}/>
+                    <PrimaryButton disabled={errorKeys.length > 0} type="save" onClick={onSubmitClick}/>
                 </Tooltip>
             </ButtonContainer>
         </Fragment>
@@ -225,7 +200,8 @@ export const AnnouncementsForm = ({
 };
 
 AnnouncementsForm.propTypes = {
-    controller: PropTypes.instanceOf(Controller).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     announcement: PropTypes.object
 };
