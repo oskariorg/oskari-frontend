@@ -1,3 +1,6 @@
+import { Messaging } from 'oskari-ui/util';
+import { getDateRange, isOutdated } from '../../../framework/announcements/service/util';
+
 Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
@@ -63,9 +66,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             }
 
-            service.fetchAdminAnnouncements((err, data) => {
+            service.fetchAnnouncements((err, data) => {
                 if (err) {
-                    alert('Error loading announcements');
+                    Messaging.error(this.localization.messages.getAdminAnnouncementsFailed);
                     return;
                 }
                 me.announcements = data;
@@ -79,9 +82,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                         }
                     });
                 }
-
-                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
+                me.updateSelectedInput();
             });
         },
 
@@ -157,39 +158,38 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             me.announcements.forEach(announcement => {
-                const loc = Oskari.getLocalized(announcement.locale) || {};
-                if (loc.name && loc.content) {
-                    const announcementInput = me.templates.inputCheckbox.clone();
-                    const annName = loc.name;
-                    const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
-                    const idPrefix = 'oskari_announcement_select_';
-                    announcementInput.find('input[type=checkbox]').attr({
-                        'id': idPrefix + announcement.id,
-                        'value': annName
-                    });
-                    announcementInput.find('label').html(annName).attr({
-                        'for': idPrefix + announcement.id
-                    });
+                const { title } = Oskari.getLocalized(announcement.locale);
+                const dateRange = getDateRange(announcement);
 
-                    if (me.isAnnouncementValid(announcement)) {
-                        content.find('div.ann-time').append('<div>' + annTime + '</div>');
-                        me.selectedAnnouncements.forEach(ann => {
-                            if (ann.id === announcement.id) {
-                                announcementInput.find('input[type=checkbox]').prop('checked', true);
-                            }
-                        });
-                        content.find('div.ann-title').append(announcementInput);
-                    } else {
-                        content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
-                        announcementInput.find('input[type=checkbox]').prop('disabled', true);
-                        content.find('div.ann-title').append(announcementInput);
-                    }
+                const announcementInput = me.templates.inputCheckbox.clone();
+                const idPrefix = 'oskari_announcement_select_';
+                announcementInput.find('input[type=checkbox]').attr({
+                    id: idPrefix + announcement.id,
+                    value: announcement.id
+                });
+                announcementInput.find('label').html(title).attr({
+                    'for': idPrefix + announcement.id
+                });
+
+                if (isOutdated(announcement)) {
+                    content.find('div.ann-time').append('<div>' + dateRange + '<div class="icon-warning-light"></div></div>');
+                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
+                    content.find('div.ann-title').append(announcementInput);
+                } else {
+                    content.find('div.ann-time').append('<div>' + dateRange + '</div>');
+                    me.selectedAnnouncements.forEach(ann => {
+                        if (ann.id === announcement.id) {
+                            announcementInput.find('input[type=checkbox]').prop('checked', true);
+                        }
+                    });
+                    content.find('div.ann-title').append(announcementInput);
                 }
             });
 
             // Announcement is selected
             content.find('input[name=announcement]').on('change', function () {
-                var announcement = me.announcements.find(item => item.locale[me.lang].name === jQuery(this).val());
+                const selectedId = parseInt(this.value);
+                const announcement = me.announcements.find(item => item.id === selectedId);
                 // check if announcement is already checked, if is, add/remove accordingly
                 if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
@@ -199,25 +199,15 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                     me.selectedAnnouncements.push(announcement);
                 }
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
-
-                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.locale[me.lang].name).toString());
+                me.updateSelectedInput();
             });
 
             popup.show(title, content, [closeButton]);
             me.announcementsPopup = popup;
         },
-
-        /**
-         * Check if Announcement is inside the given timeframe
-         * @method @private isAnnouncementValid
-         * @param  {Object} announcement announcement
-         * @return {Boolean} true if announcement is valid
-         */
-        isAnnouncementValid: function (announcement) {
-            const announcementEnd = new Date(announcement.end_date);
-            const currentDate = new Date();
-            return currentDate.getTime() <= announcementEnd.getTime();
+        // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
+        updateSelectedInput: function () {
+            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => i.locale[this.lang].title).toString());
         },
 
         /**
