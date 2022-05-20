@@ -1,4 +1,5 @@
-import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_SEPARATOR } from '../constants';
+import { Messaging } from 'oskari-ui/util';
+import { BUNDLE_KEY, LOCAL_STORAGE_KEY, LOCAL_STORAGE_SEPARATOR } from '../constants';
 /**
  * @class Oskari.framework.announcements.service.AnnouncementsService
  *
@@ -71,7 +72,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         */
         fetchAnnouncements: function (handler, force) {
             if (typeof handler !== 'function') {
-                return;
+                handler = error => this.fetchErrorNotifier(error);
             }
             if (this.announcements && !force) {
                 handler(null, this.announcements);
@@ -88,6 +89,11 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                     handler('Error', []);
                 }
             });
+        },
+        fetchErrorNotifier: function (error) {
+            if (!error) {
+                Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'messages.getFailed'));
+            }
         },
         submitAnnouncement: function (announcement, cb) {
             if (announcement.id) {

@@ -1,11 +1,6 @@
-import React from 'react';
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { Message } from 'oskari-ui';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 // Handler for announcements. Handles state and service calls.
-
-const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='announcements' />;
-
 class ViewHandler extends StateHandler {
     constructor (service) {
         super();
@@ -16,24 +11,20 @@ class ViewHandler extends StateHandler {
             announcements: [],
             showAsPopup: []
         };
-        this.initState();
         this.service.on('tool', () => this.updateState({ tools: this.service.getTools() }));
+        this.service.on('fetch', () => this.onFetch());
+        this.service.fetchAnnouncements();
     }
 
-    initState () {
-        this.service.fetchAnnouncements(function (err, announcements) {
-            if (err) {
-                Messaging.error(getMessage('messages.getFailed'));
-            } else {
-                const dontShowAgain = this.getDontShowAgainIds(announcements);
-                const showAsPopup = announcements.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
-                this.updateState({
-                    announcements,
-                    dontShowAgain,
-                    showAsPopup
-                });
-            }
-        }.bind(this));
+    onFetch () {
+        const announcements = this.service.getAnnouncements();
+        const dontShowAgain = this.getDontShowAgainIds(announcements);
+        const showAsPopup = announcements.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
+        this.updateState({
+            announcements,
+            dontShowAgain,
+            showAsPopup
+        });
     }
 
     getDontShowAgainIds (announcements = this.state.announcements) {
