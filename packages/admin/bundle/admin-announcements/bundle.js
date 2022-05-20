@@ -38,10 +38,6 @@ Oskari.clazz.define("Oskari.admin.admin-announcements.bundle", function () {
             "src": "../../../../bundles/admin/admin-announcements/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/admin/admin-announcements/Flyout.js"
-        },
-        {
-            "type": "text/javascript",
             "src": "../../../../bundles/admin/admin-announcements/publisher/AnnouncementsTool.js"
         },
         {
