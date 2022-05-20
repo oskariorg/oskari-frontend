@@ -16,6 +16,9 @@ Oskari.registerLocalization({
             next: 'Next',
             previous: 'Previous'
         },
+        messages: {
+            confirmDelete: 'Are you sure you wish to delete?'
+        },
         error: {
             generic: 'Something went wrong'
         },
