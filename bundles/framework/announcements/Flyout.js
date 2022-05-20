@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AnnouncementsCollapse } from './view/';
+import { FlyoutCollapse, FlyoutFooter } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -62,13 +62,17 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             if (!this.container) {
                 return;
             }
-
+            const { tools, ...state } = this.announcementsHandler.getState();
+            const footerTools = tools.filter(tool => tool.getTypes().includes('footer'));
+            const announcementTools = tools.filter(tool => tool.getTypes().includes('announcement'));
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <AnnouncementsCollapse
-                        {...this.announcementsHandler.getState()}
+                    <FlyoutCollapse
+                        {...state}
+                        tools = {announcementTools}
                         controller={this.announcementsHandler.getController()}
                     />
+                    <FlyoutFooter tools={footerTools} />
                 </LocaleProvider>
             );
             ReactDOM.render(content, this.container);
