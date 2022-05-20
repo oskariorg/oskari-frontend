@@ -12,11 +12,13 @@ class ViewHandler extends StateHandler {
         super();
         this.service = service;
         this.state = {
+            tools: [],
             dontShowAgain: [],
             announcements: [],
             showAsPopup: []
         };
         this.initState();
+        this.service.on('tool', () => this.updateState({ tools: this.service.getTools() }));
     }
 
     initState () {

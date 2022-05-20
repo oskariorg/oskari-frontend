@@ -113,6 +113,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 data: JSON.stringify(data),
                 url: Oskari.urls.getRoute('Announcements'),
                 success: function (pResp) {
+                    // removeFromLocalStorageArray(LOCAL_STORAGE_KEY, data.id);
                     handler(null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
