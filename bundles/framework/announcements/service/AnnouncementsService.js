@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
             });
         },
         fetchErrorNotifier: function (error) {
-            if (!error) {
+            if (error) {
                 Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'messages.getFailed'));
             }
         },
@@ -117,8 +117,9 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(data),
                 url: Oskari.urls.getRoute('Announcements'),
-                success: function (pResp) {
+                success: (pResp) => {
                     handler(null, pResp);
+                    this.fetchAnnouncements(null, true);
                 },
                 error: function (jqXHR, textStatus) {
                     handler('Error', []);
@@ -141,13 +142,12 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 contentType: 'application/json; charset=UTF-8',
                 data: JSON.stringify(data),
                 url: Oskari.urls.getRoute('Announcements'),
-                success: function (pResp) {
-                    // removeFromLocalStorageArray(LOCAL_STORAGE_KEY, data.id);
+                success: (pResp) => {
                     handler(null, pResp);
+                    this.removeFromLocalStorage(data.id);
+                    this.fetchAnnouncements(null, true);
                 },
-                error: function (jqXHR, textStatus) {
-                    handler('Error', []);
-                }
+                error: () => handler('Error')
             });
         },
 
@@ -165,12 +165,11 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                 type: 'DELETE',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements', { id: data }),
-                success: function (pResp) {
+                success: (pResp) => {
                     handler(null, pResp);
+                    this.fetchAnnouncements(null, true);
                 },
-                error: function (jqXHR, textStatus) {
-                    handler('Error', []);
-                }
+                error: () => handler('Error')
             });
         },
         addTool (tool) {
