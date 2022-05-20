@@ -12,6 +12,7 @@ Oskari.registerLocalization(
             "title": "Announcements"
         },
         "valid": "Valid:",
+        "externalLink": "Read more",
         "dontShow" : "Don't show this again",
         "noAnnouncements": "No active announcements",
         "messages": {

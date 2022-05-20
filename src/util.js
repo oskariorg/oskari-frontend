@@ -775,26 +775,25 @@ Oskari.util = (function () {
     /**
      * Format timestamp to more readable date
      * @param {String} text
-     * @param {String} timezone optional timezone if needed
+     * @param {Object} options optional
+     * @param {Array || String} locales optional
      * @returns {String}
      */
-    util.formatDate = (text, timezone = undefined) => {
+    util.formatDate = (text, options = {}, locales = []) => {
         if (!text) {
             return '';
         }
-        const date = new Date(text);
-        if (isNaN(date.getMilliseconds())) {
+        const dateTime = new Date(text);
+        if (isNaN(dateTime.getMilliseconds())) {
             return '';
         }
-        let options = {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
+        const defaults = {
+            hour: '2-digit',
             minute: '2-digit'
         };
-        if (timezone) options.timeZone = timezone;
-        return date.toLocaleString(undefined, options);
+        const date = dateTime.toLocaleDateString(locales, options);
+        const time = dateTime.toLocaleTimeString(locales, {...defaults, ...options});
+        return `${date} ${time}`;
     }
 
     return util;

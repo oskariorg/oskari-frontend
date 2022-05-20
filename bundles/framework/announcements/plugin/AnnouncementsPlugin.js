@@ -1,3 +1,6 @@
+import { Messaging } from 'oskari-ui/util';
+import { getDateRange } from '../service/util';
+
 /**
  * @class Oskari.framework.bundle.announcements.plugin.AnnouncementsPlugin
  * Provides selected announcements on the map
@@ -61,7 +64,7 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
 
             service.fetchAnnouncements((err, data) => {
                 if (err) {
-                    alert('Error loading announcements');
+                    Messaging.error(me._loc.messages.getFailed);
                     return;
                 }
                 me.allAnnouncements = data;
@@ -178,15 +181,19 @@ Oskari.clazz.define('Oskari.framework.announcements.plugin.AnnouncementsPlugin',
                     }
                 }
 
-                var announcementsDiv = me.announcementsContent.find('div.announcements-content'),
-                    div = me.templates.announcement.clone();
+                const announcementsDiv = me.announcementsContent.find('div.announcements-content');
+                const div = me.templates.announcement.clone();
 
-                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+                const dateRange = getDateRange(announcement);
 
-                const loc = Oskari.getLocalized(announcement.locale);
-                div.find('button').append(loc.name);
-                div.find('div.announcement-description').append(loc.content);
-                div.find('div.announcement-time').append(annTime);
+                const { title, content, link } = Oskari.getLocalized(announcement.locale);
+                let desc = content;
+                if (link) {
+                    desc = jQuery('<a>').attr('href', link).attr('target', '_blank').text(me._loc.externalLink);
+                }
+                div.find('button').append(title);
+                div.find('div.announcement-description').append(desc);
+                div.find('div.announcement-time').append(dateRange);
                 me._bindAnnButton(div.find('button'), div.find('div.announcement-content'));
 
                 me.annRefs[announcement.id] = div;

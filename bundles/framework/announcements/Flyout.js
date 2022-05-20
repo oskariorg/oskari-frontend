@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AnnouncementsHandler, AnnouncementsCollapse } from './view/';
+import { AnnouncementsCollapse } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
     function (instance) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this.service = null;
         this.announcementsHandler = null;
         this.container = null;
     }, {
@@ -50,9 +49,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
         * Cretes AnnouncementsHandler with given service
         * @method createAnnouncementsHandler
         */
-        createAnnouncementsHandler: function (service) {
-            this.service = service;
-            this.announcementsHandler = new AnnouncementsHandler(this.service);
+        initHandler: function (handler) {
+            this.announcementsHandler = handler;
             this.announcementsHandler.addStateListener(() => this.render());
         },
 
