@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export { PrimaryButton } from './PrimaryButton';
 export { SecondaryButton } from './SecondaryButton';
+export { DeleteButton } from './DeleteButton';
+
 
 export const ButtonContainer = styled.div`
     display: flex;
