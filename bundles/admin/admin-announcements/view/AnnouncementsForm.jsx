@@ -112,8 +112,9 @@ export const AnnouncementsForm = ({
     const tooltip = errorKeys.length ? errorKeys.map(key => <div key={`validate-${key}`}><Message messageKey={`fields.validate.${key}`} /></div>) : null;
 
     const onSubmitClick = () => {
-        // Should format date value before submit.
+        // Should format date and locale before submit.
         const values = {
+            id: state.id,
             beginDate: state.date[0].toISOString(),
             endDate: state.date[1].toISOString(),
             locale: getLocaleForSubmit(state),
