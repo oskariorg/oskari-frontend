@@ -5,14 +5,13 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-ilmoitukset",
             "desc": "",
-            "flyout": {
-                "title": "Admin-ilmoitukset"
-            },
-            "tile": {
-                "title": "A: Ilmoitukset"
-            },
             "popup": {
                 "title": "Ilmoitus"
+            },
+            "tools": {
+                "add": "Lisää uusi ilmoitus",
+                "edit": "Muokkaa ilmoitusta",
+                "delete": "Poista ilmoitus"
             },
             "fields": {
                 "date": "Aikaväli",
