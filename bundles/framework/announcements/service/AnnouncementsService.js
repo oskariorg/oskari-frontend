@@ -1,3 +1,4 @@
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_SEPARATOR } from '../constants';
 /**
  * @class Oskari.framework.announcements.service.AnnouncementsService
  *
@@ -39,6 +40,28 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         storeAnnouncements: function (announcements) {
             this.announcements = announcements;
             this.trigger('fetch'); // store, announcements,...
+        },
+        getIdsFromLocalStorage: function () {
+            // Get the existing ids or empty array
+            const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
+            return existing ? existing.split(LOCAL_STORAGE_SEPARATOR).map(id => parseInt(id)) : [];
+        },
+        addToLocalStorage: function (id) {
+            const existing = this.getIdsFromLocalStorage();
+            if (existing.includes(id)) {
+                return;
+            }
+            existing.push(id);
+            this._storeIdsToLocalStorage(existing);
+        },
+        removeFromLocalStorage: function (id) {
+            const existing = this.getIdsFromLocalStorage();
+            const updated = existing.filter(item => item !== id);
+            this._storeIdsToLocalStorage(updated);
+        },
+        _storeIdsToLocalStorage: function (ids) {
+            // Save ids to localStorage
+            localStorage.setItem(LOCAL_STORAGE_KEY, ids.join(LOCAL_STORAGE_SEPARATOR));
         },
         /**
         * @method fetchAnnouncements

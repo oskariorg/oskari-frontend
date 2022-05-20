@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { showPopup } from 'oskari-ui/components/window';
 import { Controller, LocaleProvider } from 'oskari-ui/util';
 
-import { BUNDLE_KEY } from './Constants';
+import { BUNDLE_KEY } from '../constants';
 import { PaginatedContent, SingleContent } from './';
 
 // Pop-up functionality for announcements

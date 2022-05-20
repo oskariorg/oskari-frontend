@@ -1,7 +1,6 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
-import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_SEPARATOR } from './Constants';
 
 // Handler for announcements. Handles state and service calls.
 
@@ -38,16 +37,16 @@ class ViewHandler extends StateHandler {
     }
 
     getDontShowAgainIds (announcements = this.state.announcements) {
-        const storage = this.getIdsFromLocalStorage();
+        const storage = this.service.getIdsFromLocalStorage();
         const ids = announcements.map(a => a.id);
         return ids.filter(id => storage.includes(id));
     }
 
     setShowAgain (id, dontShow) {
         if (dontShow) {
-            this.addToLocalStorage(id);
+            this.service.addToLocalStorage(id);
         } else {
-            this.removeFromLocalStorage(id);
+            this.service.removeFromLocalStorage(id);
         }
         const dontShowAgain = this.getDontShowAgainIds();
         this.updateState({ dontShowAgain });
@@ -59,32 +58,6 @@ class ViewHandler extends StateHandler {
 
     onPopupChange (currentPopup) {
         this.updateState({ currentPopup });
-    }
-
-    getIdsFromLocalStorage () {
-        // Get the existing ids or empty array
-        const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
-        return existing ? existing.split(LOCAL_STORAGE_SEPARATOR).map(id => parseInt(id)) : [];
-    }
-
-    storeIdsToLocalStorage (ids) {
-        // Save ids to localStorage
-        localStorage.setItem(LOCAL_STORAGE_KEY, ids.join(LOCAL_STORAGE_SEPARATOR));
-    }
-
-    addToLocalStorage (id) {
-        const existing = this.getIdsFromLocalStorage();
-        if (existing.includes(id)) {
-            return;
-        }
-        existing.push(id);
-        this.storeIdsToLocalStorage(existing);
-    }
-
-    removeFromLocalStorage (id) {
-        const existing = this.getIdsFromLocalStorage();
-        const updated = existing.filter(item => item !== id);
-        this.storeIdsToLocalStorage(updated);
     }
 }
 
