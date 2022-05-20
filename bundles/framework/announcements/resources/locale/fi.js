@@ -12,6 +12,7 @@ Oskari.registerLocalization(
                 "title": "Ilmoitukset"
             },
             "valid": "Voimassa:",
+            "externalLink": "Lue lisää",
             "dontShow" : "Älä näytä uudelleen",
             "noAnnouncements": "Ei aktiivisia ilmoituksia",
             "messages": {
