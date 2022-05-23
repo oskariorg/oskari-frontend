@@ -98,6 +98,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getName: function () {
             return this.__name;
         },
+        getLocale: function () {
+            return this.__locale;
+        },
         /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
@@ -600,6 +603,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         updateGroupRecursively: function (group, newGroup) {
             if (group.id === newGroup.id) {
                 group.setName(newGroup.getName());
+                group.setLocale(newGroup.getLocale());
                 return group;
             }
             if (group.groups.length !== 0) {
@@ -622,6 +626,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
                 this._layerGroups[index].setName(group.getName());
+                this._layerGroups[index].setLocale(group.getLocale());
             } else {
                 let temp = [];
                 for (var g of this._layerGroups) {
@@ -633,7 +638,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // Update group to needed layers. Groups under layer only contains group name with current localization
             const lang = Oskari.getLang();
             this.getAllLayers().filter(l =>
-                l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
+                l._groups.filter(g => g.id === group.id).map(g => {
+                    g.name = group.name[lang];
+                    g.locale = group.locale;
+                    return g;
+                }));
             this.trigger('theme.update');
         },
 
@@ -706,7 +715,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const groupModels = pResp.groups
                 .map(group => Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
             this._layerGroups.push(...groupModels);
-
             const flatLayerGroups = [];
             const gatherFlatGroups = (groups = []) => {
                 groups.forEach((group) => {
@@ -729,7 +737,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         .forEach((layer) => {
                             layer.getGroups().push({
                                 id: group.getId(),
-                                name: Oskari.getLocalized(group.getName())
+                                name: Oskari.getLocalized(group.getName()),
+                                locale: group.getLocale()
                             });
                         });
                 });

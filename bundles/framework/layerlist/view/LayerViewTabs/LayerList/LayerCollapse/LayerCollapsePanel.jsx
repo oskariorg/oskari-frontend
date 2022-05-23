@@ -37,11 +37,14 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
     const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] > 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
     const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
+    const localized = Oskari.getLocalized(group.locale);
     return (
         <StyledCollapsePanelTools>
-            <Tooltip title={"Testiä"}>
-                <StyledInfoIcon />
-            </Tooltip>
+            {localized && localized.description && (
+                <Tooltip title={localized.description}>
+                    <StyledInfoIcon />
+                </Tooltip>
+            )}
             <LayerCountBadge
                 layerCount={layerCount}
                 unfilteredLayerCount={group.unfilteredLayerCount} />

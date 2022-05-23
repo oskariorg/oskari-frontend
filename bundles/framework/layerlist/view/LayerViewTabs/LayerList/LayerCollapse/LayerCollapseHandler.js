@@ -16,6 +16,7 @@ const getLayerGroups = (groups = []) => {
         return {
             id: group.id,
             name: Oskari.getLocalized(group.name),
+            locale: group.getLocale(),
             layers: group.getChildren().filter(c => c.type === 'layer') || [],
             groups: getLayerGroups(group.getGroups())
         };

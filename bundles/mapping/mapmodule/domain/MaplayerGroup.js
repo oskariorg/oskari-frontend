@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         me.layersModels = [];
         me.layers = json.layers || [];
         me.name = json.name;
+        me.locale = json.locale;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;
         me.selectable = (typeof json.selectable === 'boolean') ? json.selectable : true;
@@ -101,6 +102,12 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         },
         setName: function (name) {
             this.name = name;
+        },
+        getLocale: function () {
+            return this.locale;
+        },
+        setLocale: function (locale) {
+            this.locale = locale;
         },
         /**
          * You probably shouldn't be using this but getChildren().filter(c => c.type === 'layer')

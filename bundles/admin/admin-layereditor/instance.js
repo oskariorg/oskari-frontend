@@ -346,7 +346,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
@@ -383,6 +383,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
                         group.setName(response.name);
+                        group.setLocale(response.locale);
                         if (id) {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
