@@ -1,7 +1,6 @@
-import React from 'react';
 import { showEditPopup } from './view/AnnouncementsPopup';
+import { Tool } from './Tool';
 import { Messaging } from 'oskari-ui/util';
-import { DeleteButton } from 'oskari-ui/components/buttons';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
@@ -21,12 +20,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-announcements.instance',
             this.popupControls = null;
             this.service = null;
         }
-        // TODO:
-        // REMOVE Flyout, handler
-        // clean loc (tile, flyout)
-
-        // admin service for delete, save/edit??
-        // or callback notify
 
         _startImpl () {
             this.service = this.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
@@ -79,26 +72,19 @@ Oskari.clazz.defineES('Oskari.admin.admin-announcements.instance',
             if (!this.service) {
                 return;
             }
-            const editTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            editTool.setName('announcements-edit');
-            editTool.setIconComponent(<EditOutlined/>);
+            const editTool = new Tool('announcements-edit', EditOutlined);
             editTool.setTooltip(this.loc('tools.edit'));
+            editTool.setTypes(['announcement']);
             editTool.setCallback((id) => this.showEditPopup(id));
-            editTool.setTypes(['announcement']); // collapse
             this.service.addTool(editTool);
 
-            const deleteTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            const onDelete = () => this.service.deleteAnnouncement('id', err => this.notifyDelete(err));
-            deleteTool.setName('announcements-delete');
-            deleteTool.setIconComponent(<DeleteButton icon onConfirm={(test) => console.log(test)}/>);
+            const deleteTool = new Tool('announcements-delete', null);
             deleteTool.setTooltip(this.loc('tools.delete'));
-            deleteTool.setCallback((id) => this.showDeletePopup(id));
-            deleteTool.setTypes(['announcement']); // collapse
+            deleteTool.setCallback((id) => this.service.deleteAnnouncement(id, err => this.notifyDelete(err)));
+            deleteTool.setTypes(['announcement']);
             this.service.addTool(deleteTool);
 
-            const addTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            addTool.setName('announcements-add');
-            addTool.setIconComponent(<PlusOutlined/>);
+            const addTool = new Tool('announcements-add', PlusOutlined);
             addTool.setTooltip(this.loc('tools.add'));
             addTool.setCallback(() => this.showEditPopup());
             addTool.setTypes(['footer']);
