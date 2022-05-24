@@ -743,7 +743,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const providers = Object.keys(pResp.providers).map(id => {
                 return {
                     id,
-                    name: pResp.providers[id].name
+                    name: pResp.providers[id].name,
+                    locale: pResp.providers[id].locale
                 };
             });
             this.setDataProviders(providers);

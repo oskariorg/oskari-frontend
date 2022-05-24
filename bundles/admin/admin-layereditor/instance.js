@@ -429,7 +429,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
@@ -453,13 +453,14 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     type: httpMethod,
                     dataType: 'json',
                     contentType: 'application/json',
-                    url: Oskari.urls.getRoute('SaveOrganization'),
+                    url: Oskari.urls.getRoute('DataProvider'),
                     data: JSON.stringify(payload),
                     success: response => {
                         this.dataProviderFlyout.hide();
                         const dataProvider = {
                             id: response.id,
-                            name: Oskari.getLocalized(response.name)
+                            name: Oskari.getLocalized(response.name),
+                            locale: response.locale
                         };
 
                         httpMethod === 'POST'

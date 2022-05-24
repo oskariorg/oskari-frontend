@@ -34,23 +34,23 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "generic": {
-                        "name": "Nimi kielellä {0}",
-                        "description": "Kuvaus kielellä {0}"
+                        "name": "Nimi",
+                        "description": "Kuvaus"
                     },
                     "en": {
                         "lang": "Englanti",
-                        "name": "Nimi englanniksi",
-                        "description": "Kuvaus englanniksi"
+                        "name": "Nimi",
+                        "description": "Kuvaus"
                     },
                     "fi": {
                         "lang": "Suomi",
-                        "name": "Nimi suomeksi",
-                        "description": "Kuvaus suomeksi"
+                        "name": "Nimi",
+                        "description": "Kuvaus"
                     },
                     "sv": {
                         "lang": "Ruotsi",
-                        "name": "Nimi ruotsiksi",
-                        "description": "Kuvaus ruotsiksi"
+                        "name": "Nimi",
+                        "description": "Kuvaus"
                     }
                 },
                 "opacity": "Peittävyys",
