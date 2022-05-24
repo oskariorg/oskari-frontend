@@ -1,6 +1,7 @@
 export { showAnnouncementsPopup } from './AnnouncementsPopup';
 export { AnnouncementsContent } from './AnnouncementsContent';
 export { AnnouncementsHandler } from './AnnouncementsHandler';
+export { TooledContent } from './flyout/TooledContent';
 export { FlyoutCollapse } from './flyout/FlyoutCollapse';
 export { FlyoutFooter } from './flyout/FlyoutFooter';
 export { CollapseTools } from './flyout/CollapseTools';

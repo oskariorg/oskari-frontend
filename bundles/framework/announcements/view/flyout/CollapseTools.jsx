@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { DeleteButton } from 'oskari-ui/components/buttons';
 import { Tooltip } from 'oskari-ui';
 
 const ToolRow = styled.div`
@@ -11,23 +12,24 @@ const ToolRow = styled.div`
 const StyledTool = styled.span`
     padding-right: 5px;
 `;
-
-const onToolClick = (event, tool, announcementId) => {
-    const cb = tool.getCallback();
-    if (typeof cb === 'function') {
-        cb(announcementId);
-    }
-    // Prevent collapse open on tool icon click
-    event.stopPropagation();
-};
-
 const Tool = ({ tool, announcementId }) => {
+    const Component = tool.getComponent();
+    const name = tool.getName();
+    const callback = tool.getCallback();
+    // Delete tool doesn't have component and callback has to called on confirm
+    if (name === 'announcements-delete') {
+        return (
+            <DeleteButton icon onConfirm = { () => callback(announcementId) } tooltip={tool.getTooltip()}/>
+        );
+    }
     return (
         <Tooltip title={tool.getTooltip()}>
-            <StyledTool onClick={(event) => onToolClick(event, tool, announcementId)} >
-                {tool.getIconComponent()}
-            </StyledTool>
-        </Tooltip>);
+            <Component
+                className={`t_${name}-${announcementId}`}
+                onClick = { () => callback(announcementId) }
+            />
+        </Tooltip>
+    );
 };
 
 Tool.propTypes = {
@@ -35,14 +37,16 @@ Tool.propTypes = {
     announcementId: PropTypes.number.isRequired
 };
 
-export const CollapseTools = ({ tools, announcementId }) => {
+export const CollapseTools = ({ tools = [], announcementId }) => {
     if (!tools.length) {
         return null;
     }
     return (
-        <ToolRow>
+        <ToolRow onClick={(event) => event.stopPropagation()}>
             {tools.map(tool => (
-                <Tool key={tool.getName()} tool={tool} announcementId={ announcementId }/>
+                <StyledTool key={tool.getName()}>
+                    <Tool tool={tool} announcementId={ announcementId }/>
+                </StyledTool>
             ))}
         </ToolRow>
     );

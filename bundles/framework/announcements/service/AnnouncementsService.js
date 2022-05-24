@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         },
         storeAnnouncements: function (announcements) {
             this.announcements = announcements;
-            this.trigger('fetch'); // store, announcements,...
+            this.trigger('fetch');
         },
         getIdsFromLocalStorage: function () {
             // Get the existing ids or empty array
@@ -121,9 +121,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
                     handler(null, pResp);
                     this.fetchAnnouncements(null, true);
                 },
-                error: function (jqXHR, textStatus) {
-                    handler('Error', []);
-                }
+                error: () => handler('Error')
             });
         },
 
@@ -187,5 +185,5 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol': ['Oskari.mapframework.service.Service']
+        protocol: ['Oskari.mapframework.service.Service']
     });

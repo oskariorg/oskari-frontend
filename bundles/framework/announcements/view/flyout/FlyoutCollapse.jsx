@@ -10,32 +10,30 @@ export const FlyoutCollapse = ({
 }) => {
     if (!announcements.length) {
         return (
-            <Message messageKey={'noAnnouncements'}/>
+            <Message messageKey={'flyout.noAnnouncements'}/>
         );
     }
     return (
-        <div>
-            <Collapse accordion>
-                { announcements.map((announcement) => {
-                    const { locale, id } = announcement;
-                    const { title } = Oskari.getLocalized(locale);
-                    const dateRange = getDateRange(announcement);
-                    return (
-                        <CollapsePanel header={title} key={announcement.id}
-                            extra={<CollapseTools tools={tools} announcementId={id}/>}>
-                            <AnnouncementsContent announcement={announcement}/>
-                            <Divider />
-                            <b><Message messageKey={'valid'} /></b>
-                            <p>{dateRange}</p>
-                        </CollapsePanel>
-                    );
-                })}
-            </Collapse>
-        </div>
+        <Collapse accordion>
+            { announcements.map((announcement) => {
+                const { locale, id } = announcement;
+                const { title } = Oskari.getLocalized(locale);
+                const dateRange = getDateRange(announcement);
+                return (
+                    <CollapsePanel header={title} key={announcement.id}
+                        extra={<CollapseTools tools={tools} announcementId={id}/>}>
+                        <AnnouncementsContent announcement={announcement}/>
+                        <Divider />
+                        <b><Message messageKey={'valid'} /></b>
+                        <p>{dateRange}</p>
+                    </CollapsePanel>
+                );
+            })}
+        </Collapse>
     );
 };
 
 FlyoutCollapse.propTypes = {
     announcements: PropTypes.array.isRequired,
-    tools: PropTypes.array.isRequired
+    tools: PropTypes.array
 };

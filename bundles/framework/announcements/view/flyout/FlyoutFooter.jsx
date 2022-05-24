@@ -4,11 +4,13 @@ import { Button, Tooltip } from 'oskari-ui';
 import { ButtonContainer } from 'oskari-ui/components/buttons';
 
 const Tool = ({ tool }) => {
+    const Component = tool.getComponent();
+    const name = tool.getName();
     const onClick = tool.getCallback();
     return (
         <Tooltip title={tool.getTooltip()}>
-            <Button type='primary' onClick={() => onClick()} >
-                {tool.getIconComponent()}
+            <Button type='primary' onClick={() => onClick()} className={`t_${name}`} >
+                <Component/>
             </Button>
         </Tooltip>);
 };
