@@ -60,6 +60,13 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
         },
         {
             align: 'left',
+            title: <Message messageKey='tabs.myviews.grid.createDate' />,
+            dataIndex: 'created',
+            sorter: getSorterFor('created'),
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            align: 'left',
             title: <Message messageKey='tabs.myviews.grid.actions' />,
             dataIndex: 'id',
             width: 100,

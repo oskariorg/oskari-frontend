@@ -11,36 +11,47 @@ Oskari.registerLocalization(
         "tile": {
             "title": "A: Announcements"
         },
-        "addNewForm": "New Announcement",
-        "delete": "Delete",
-        "save": "Save",
-        "yes": "Yes",
-        "cancel": "Cancel",
+        "popup": {
+            "title": "Announcement"
+        },
         "fields": {
-            "title": "Title",
-            "content": "Content",
-            "date-range": "Date range",
-            "show-popup": "Show pop-up",
+            "date": "Date range",
+            "show": {
+                "label": "Show as",
+                "popup": "Popup-window",
+                "banner": "Banner"
+            },
+            "type": {
+                "label": "Type",
+                "title": "Title only",
+                "content": "Contents",
+                "link": "External link"
+            },
             "locale": {
                 "generic": {
-                    "name": "Name in {0}",
+                    "title": "Title in {0}",
                     "content": "Content in {0}"
                 },
                 "en": {
-                    "name": "Name in English",
+                    "title": "Title in English",
                     "content": "Content in English"
                 },
                 "fi": {
-                    "name": "Name in Finnish",
+                    "title": "Title in Finnish",
                     "content": "Content in Finnish"
                 },
                 "sv": {
-                    "name": "Name in Swedish",
+                    "title": "Title in Swedish",
                     "content": "Content in Swedish"
                 }
+            },
+            "validate": {
+                "title": "Add title",
+                "content": "Add content!",
+                "link": "Add external link!",
+                "date": "Add daterange!"
             }
         },
-        "otherLanguages": "Other languages",
         "messages": {
             "saveSuccess": "Announcement saved",
             "saveFailed": "Saving announcement failed",
@@ -58,11 +69,8 @@ Oskari.registerLocalization(
                 "title": "Announcements",
                 "close": "Close"
             },
-            "announcementsName": "Name",
+            "announcementsName": "Title",
             "announcementsTime": "Valid"
-        },
-        "titleError": "Add title",
-        "contentError": "Add content!",
-        "dateError": "Add daterange!"
+        }
     }
 });

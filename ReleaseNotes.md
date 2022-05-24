@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2.7.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/38?closed=1
+
+- Fixed an issue where `MarkerClickEvent` events were not triggered properly
+- Updated `AddMarkerRequest` documentation to match current functionality (size for external graphics is now handled as pixels)
+- Fixed an issue where empty GFI results were shown on map clicks
+
 ## 2.7.0
 
 For a full list of changes see:

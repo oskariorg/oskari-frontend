@@ -338,8 +338,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setDescription(newLayerConf.subtitle);
             }
 
-            if (newLayerConf.orgName) {
-                layer.setOrganizationName(newLayerConf.orgName);
+            if (newLayerConf.dataproviderId) {
+                layer.setDataProviderId(newLayerConf.dataproviderId);
+                const provider = this.getDataProviderById(newLayerConf.dataproviderId);
+                if (provider) {
+                    layer.setOrganizationName(provider.name || '');
+                } else {
+                    layer.setOrganizationName(newLayerConf.orgName || '');
+                }
             }
 
             if (newLayerConf.realtime) {
@@ -652,13 +658,34 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateDataProvider: function (dataProvider) {
             // Update dataProvider to dataProviders
-            const index = this._dataProviders.findIndex(g => g.id === dataProvider.id);
+            const index = this._dataProviders.findIndex(g => '' + g.id === '' + dataProvider.id);
             if (index !== -1) {
                 this._dataProviders[index] = dataProvider;
             }
-            // Update dataProvider to needed layers.
-            this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => (l._organizationName = dataProvider.name));
+            // Update dataProvider to layers.
+            this.getAllLayers()
+                .filter(l => l.getDataProviderId() === dataProvider.id)
+                .forEach(l => l.setOrganizationName(dataProvider.name));
             this.trigger('dataProvider.update');
+        },
+        setDataProviders: function (dataProviders) {
+            this._dataProviders = dataProviders;
+            this.trigger('dataProvider.update');
+        },
+
+        getDataProviderById: function (id) {
+            const index = this._dataProviders.findIndex(g => '' + g.id === '' + id);
+            if (index === -1) {
+                return null;
+            }
+            // return a copy
+            return {
+                ...this._dataProviders[index]
+            };
+        },
+
+        getDataProviders: function () {
+            return this._dataProviders;
         },
         /**
          * @method deleteDataProvider
@@ -676,19 +703,16 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (deleteLayers) {
                 // Remove layers
                 const layers = this._loadedLayersList.filter(l => {
-                    if (!l.admin) {
-                        return true;
-                    }
-                    return l.admin.organizationId !== dataProvider.id;
+                    return l.getDataProviderId() !== dataProvider.id;
                 });
                 this._loadedLayersList = layers;
             } else {
                 // Clear data provider from needed layers.
                 this.getAllLayers()
-                    .filter(l => l.admin && l.admin.organizationId === dataProvider.id)
+                    .filter(l => l.getDataProviderId() === dataProvider.id)
                     .forEach(l => {
-                        l._organizationName = '';
-                        delete l.admin.organizationId;
+                        l.setDataProviderId(null);
+                        l.setOrganizationName('');
                     });
             }
             this.trigger('dataProvider.update');
@@ -715,6 +739,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const groupModels = pResp.groups
                 .map(group => Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
             this._layerGroups.push(...groupModels);
+
+            const providers = Object.keys(pResp.providers).map(id => {
+                return {
+                    id,
+                    name: pResp.providers[id].name
+                };
+            });
+            this.setDataProviders(providers);
+
             const flatLayerGroups = [];
             const gatherFlatGroups = (groups = []) => {
                 groups.forEach((group) => {
@@ -1126,9 +1159,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
 
             // Set additional data
-            if (mapLayer && mapLayerJson.admin !== null && mapLayerJson.admin !== undefined) {
-                mapLayer.admin = mapLayerJson.admin;
-            }
             if (mapLayer && mapLayerJson.names !== null && mapLayerJson.names !== undefined) {
                 mapLayer.names = mapLayerJson.names;
             }
@@ -1173,10 +1203,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setMetadataIdentifier(baseMapJson.metadataUuid);
 
-            if (baseMapJson.orgName) {
-                baseLayer.setOrganizationName(baseMapJson.orgName);
+            // for grouping by dataprovider
+            baseLayer.setDataProviderId(baseMapJson.dataproviderId);
+            const provider = this.getDataProviderById(baseMapJson.dataproviderId);
+            if (provider) {
+                baseLayer.setOrganizationName(provider.name || '');
             } else {
-                baseLayer.setOrganizationName('');
+                baseLayer.setOrganizationName(baseMapJson.orgName || '');
             }
 
             baseLayer.setDescription(baseMapJson.info);
@@ -1195,11 +1228,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     // Notice that we are adding layers to baselayers sublayers array
                     const subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
                     subLayer.setParentId(baseMapJson.id);
-
-                    // if (baseMapJson.subLayer[i].admin) {
-                    subLayer.admin = baseMapJson.subLayer[i].admin || {};
-                    // }
-
                     baseLayer.getSubLayers().push(subLayer);
                 }
             }
@@ -1311,11 +1339,13 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setBackendStatus(mapLayerJson.backendStatus);
             }
 
-            // for grouping: organisation and inspire
-            if (mapLayerJson.orgName) {
-                layer.setOrganizationName(mapLayerJson.orgName);
+            // for grouping by dataprovider
+            layer.setDataProviderId(mapLayerJson.dataproviderId);
+            const provider = this.getDataProviderById(mapLayerJson.dataproviderId);
+            if (provider) {
+                layer.setOrganizationName(provider.name || '');
             } else {
-                layer.setOrganizationName('');
+                layer.setOrganizationName(mapLayerJson.orgName || '');
             }
 
             layer.setVisible(true);
@@ -1516,15 +1546,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
             // return true if all layers were found
             return !missingLayer;
-        },
-
-        setDataProviders: function (dataProviders) {
-            this._dataProviders = dataProviders;
-            this.trigger('dataProvider.update');
-        },
-
-        getDataProviders: function () {
-            return this._dataProviders;
         }
     }, {
         /**

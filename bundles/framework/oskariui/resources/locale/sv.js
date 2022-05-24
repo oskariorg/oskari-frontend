@@ -12,7 +12,12 @@ Oskari.registerLocalization({
             submit: 'Skicka',
             import: 'Importera',
             yes: 'Ja',
-            no: 'Nej'
+            no: 'Nej',
+            next: 'Nästa',
+            previous: 'Föregående'
+        },
+        messages: {
+            confirmDelete: 'Vill du säkert ta bort?'
         },
         error: {
             generic: 'Something went wrong'

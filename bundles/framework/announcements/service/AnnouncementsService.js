@@ -29,41 +29,21 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         },
 
         /**
-        * @method fetchAdminAnnouncements
+        * @method fetchAnnouncements
         *
-        * Makes an ajax call to get admin announcements (all announcements)
+        * Makes an ajax call to get active announcements.
+        * For admin user all announcements are returned.
         */
-        fetchAdminAnnouncements: function (handler) {
+        fetchAnnouncements: function (handler) {
             if (typeof handler !== 'function') {
                 return;
             }
-
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                data: { all: true },
-                url: Oskari.urls.getRoute('Announcements'),
-                success: function (pResp) {
-                    handler(null, pResp.data);
-                },
-                error: function (jqXHR, textStatus) {
-                    handler('Error', []);
-                }
-            });
-        },
-
-        /**
-        * @method fetchAnnouncements
-        *
-        * Makes an ajax call to get announcements (all except expired ones)
-        */
-        fetchAnnouncements: function (handler) {
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    handler(null, pResp.data);
+                success: (announcements) => {
+                    handler(null, announcements);
                 },
                 error: function (jqXHR, textStatus) {
                     handler('Error', []);

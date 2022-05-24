@@ -35,7 +35,6 @@ const ButtonContainer = styled.div`
 `
 
 export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, setDefault, saveCurrent }) => {
-
     const columnSettings = [
         {
             align: 'left',

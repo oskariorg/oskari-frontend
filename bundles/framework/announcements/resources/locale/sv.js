@@ -12,6 +12,7 @@ Oskari.registerLocalization(
                 "title": "Aviseringar"
             },
             "valid": "Giltig:",
+            "externalLink": "Läs mer",
             "dontShow" : "Visa inte detta igen",
             "noAnnouncements": "Inga aktiva aviseringar",
             "messages": {

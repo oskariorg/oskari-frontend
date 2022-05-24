@@ -1,7 +1,7 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
+import { LOCAL_STORAGE_KEY, LOCAL_STORAGE_SEPARATOR } from './Constants';
 
 // Handler for announcements. Handles state and service calls.
 
@@ -11,92 +11,81 @@ class ViewHandler extends StateHandler {
     constructor (service) {
         super();
         this.service = service;
-        this.fetchAnnouncements();
         this.state = {
-            modals: [],
+            dontShowAgain: [],
             announcements: [],
-            checked: false
+            showAsPopup: []
         };
+        this.initState();
     }
 
-    fetchAnnouncements () {
-        this.service.fetchAnnouncements(function (err, data) {
+    initState () {
+        this.service.fetchAnnouncements(function (err, announcements) {
             if (err) {
-                Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
+                Messaging.error(getMessage('messages.getFailed'));
             } else {
+                const dontShowAgain = this.getDontShowAgainIds(announcements);
+                const showAsPopup = announcements.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
                 this.updateState({
-                    announcements: data
+                    announcements,
+                    dontShowAgain,
+                    showAsPopup
                 });
-                this.updateModals();
             }
         }.bind(this));
     }
 
-    updateModals () {
-        var modals = [];
-        this.state.announcements.forEach((announcement) => {
-            if (this.isAnnouncementShown(announcement)) {
-                // if announcement is active, then show pop-up of the content
-                modals.push(announcement);
-            }
-        });
-        this.updateState({
-            modals: modals
-        });
+    getDontShowAgainIds (announcements = this.state.announcements) {
+        const storage = this.getIdsFromLocalStorage();
+        const ids = announcements.map(a => a.id);
+        return ids.filter(id => storage.includes(id));
     }
 
-    setAnnouncementAsSeen (dontShowAgain, id) {
-        if (dontShowAgain) {
-            this.addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
-            this.updateState({
-                checked: false
-            });
-        }
-        const newList = [...this.state.modals];
-        newList.splice(newList.findIndex(a => a.id === id), 1);
-        this.updateState({
-            modals: newList
-        });
-    }
-
-    isAnnouncementShown (announcement) {
-        var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
-        // is the modal stored in the localstorage aka has it been set to not show again
-        if ((announcement.active && localStorageAnnouncements && localStorageAnnouncements.includes(announcement.id)) || !announcement.active) {
-            return false;
+    setShowAgain (id, dontShow) {
+        if (dontShow) {
+            this.addToLocalStorage(id);
         } else {
-            return true;
+            this.removeFromLocalStorage(id);
         }
+        const dontShowAgain = this.getDontShowAgainIds();
+        this.updateState({ dontShowAgain });
     }
 
-    // Is modal's checkbox checked
-    onCheckboxChange (checked) {
-        this.updateState({
-            checked: checked
-        });
+    clearPopup () {
+        this.updateState({ showAsPopup: [] });
     }
 
-    /**
-     * Add an item to a localStorage() array
-     * @param {String} name  The localStorage() key
-     * @param {String} value The localStorage() value
-     */
-    addToLocalStorageArray (name, value) {
-        // Get the existing data
-        var existing = localStorage.getItem(name);
+    onPopupChange (currentPopup) {
+        this.updateState({ currentPopup });
+    }
 
-        // If no existing data, create an array
-        // Otherwise, convert the localStorage string to an array
-        existing = existing ? existing.split(',') : [];
+    getIdsFromLocalStorage () {
+        // Get the existing ids or empty array
+        const existing = localStorage.getItem(LOCAL_STORAGE_KEY);
+        return existing ? existing.split(LOCAL_STORAGE_SEPARATOR).map(id => parseInt(id)) : [];
+    }
 
-        // Add new data to localStorage Array
-        existing.push(value);
+    storeIdsToLocalStorage (ids) {
+        // Save ids to localStorage
+        localStorage.setItem(LOCAL_STORAGE_KEY, ids.join(LOCAL_STORAGE_SEPARATOR));
+    }
 
-        // Save back to localStorage
-        localStorage.setItem(name, existing.toString());
+    addToLocalStorage (id) {
+        const existing = this.getIdsFromLocalStorage();
+        if (existing.includes(id)) {
+            return;
+        }
+        existing.push(id);
+        this.storeIdsToLocalStorage(existing);
+    }
+
+    removeFromLocalStorage (id) {
+        const existing = this.getIdsFromLocalStorage();
+        const updated = existing.filter(item => item !== id);
+        this.storeIdsToLocalStorage(updated);
     }
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setAnnouncementAsSeen', 'onCheckboxChange'
+    'setShowAgain', 'clearPopup', 'onPopupChange'
 ]);

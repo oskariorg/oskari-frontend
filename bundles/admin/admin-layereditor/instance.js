@@ -36,7 +36,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _startImpl () {
             this._setupLayerTools();
             this._setupAdminTooling();
-            this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
             const layerService = this._getLayerService();
             layerService.on('availableLayerTypesUpdated', () => this._setupLayerTools());
@@ -278,34 +277,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             return groups;
         }
 
-        /**
-         * @private @method _loadDataProviders
-         * Loads data provider list
-         */
-        _loadDataProviders () {
-            const me = this;
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                contentType: 'application/json; charset=UTF-8',
-                url: Oskari.urls.getRoute('GetMapLayerGroups'),
-                error: function () {
-                    var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
-                    errorDialog.fadeout();
-                },
-                success: function (response) {
-                    const dataProviders = [];
-                    response.organization.forEach(function (org) {
-                        dataProviders.push({
-                            id: org.id,
-                            name: Oskari.getLocalized(org.name)
-                        });
-                    });
-                    me._getLayerService().setDataProviders(dataProviders);
-                }
-            });
-        }
         /**
          * @private @method _getFlyout
          * Ensure flyout exists and return it

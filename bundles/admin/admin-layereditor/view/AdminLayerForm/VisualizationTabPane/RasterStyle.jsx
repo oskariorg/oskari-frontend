@@ -1,10 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextInput } from 'oskari-ui';
+import { Message, TextInput, Link } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { Link } from './Link';
-import { StyledFormField, Border, InlineBlock } from './styled';
+import { StyledFormField, Border } from './styled';
 import { RasterStyleSelect } from './RasterStyle/RasterStyleSelect';
 import { ServiceLegend } from './RasterStyle/ServiceLegend';
 import { legendsWithoutStyle, GLOBAL_LEGEND } from './RasterStyle/helper';
@@ -60,11 +59,7 @@ const RasterStyle = ({ layer, controller, getMessage }) => {
                         <Fragment>
                             <Message messageKey='styles.raster.overriddenLegend' />
                             <InfoTooltip messageKeys='styles.raster.overrideTooltip' />
-                            { legendUrl &&
-                                <InlineBlock>
-                                    <Link url = {legendUrl} />
-                                </InlineBlock>
-                            }
+                            { legendUrl && <Link url = {legendUrl} /> }
                             <TextInput
                                 value = {legendUrl}
                                 onChange={evt => controller.setLegendUrl(nameForLegendUrl, evt.target.value)}
