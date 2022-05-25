@@ -123,6 +123,8 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
             // reset to the default state
             bundle.setState(bundleState);
         }
+        // trigger an event letting bundles know that the whole UI has changed to clean functionalities
+        this.notifyAll(Oskari.eventBuilder('UIChangeEvent')('sandbox'));
     },
     setSessionExpiring: function (minutes, callback) {
         if (typeof minutes !== 'number' || typeof callback !== 'function') {

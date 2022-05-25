@@ -37,7 +37,7 @@ const validate = (options) => {
     if (active[id]) {
         const newId = id + '-' + seq.nextVal();
         options.id = newId;
-        Oskari.log(NAME).warn(`Popup or flyout is already added with id: ${id} changed to: ${newId}`);
+        Oskari.log(NAME).warn(`Popup or flyout is already added with id: ${id}, changed to: ${newId}`);
         return;
     }
 
