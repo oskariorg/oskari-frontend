@@ -15,7 +15,8 @@ const getLayerGroups = (groups = []) => {
     return groups.map(group => {
         return {
             id: group.id,
-            name: Oskari.getLocalized(group.name),
+            name: group.name,
+            description: group.description,
             locale: group.getLocale(),
             layers: group.getChildren().filter(c => c.type === 'layer') || [],
             groups: getLayerGroups(group.getGroups())
@@ -46,6 +47,7 @@ const getDataProviders = (providers = [], layers = []) => {
         return {
             id: dataProvider.id,
             name,
+            description: dataProvider.description,
             locale: dataProvider.locale,
             layers: layersByProvider['' + dataProvider.id] || [],
             groups: []

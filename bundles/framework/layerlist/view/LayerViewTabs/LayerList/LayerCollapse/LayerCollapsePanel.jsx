@@ -37,11 +37,10 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
     const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] > 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
     const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
-    const localized = Oskari.getLocalized(group.locale);
     return (
         <StyledCollapsePanelTools>
-            {localized && localized.description && (
-                <Tooltip title={localized.description}>
+            {group.description && (
+                <Tooltip title={group.description}>
                     <StyledInfoIcon />
                 </Tooltip>
             )}
@@ -171,7 +170,7 @@ const LayerCollapsePanel = (props) => {
             className={`t_group gid_${group.getId()}`}
             // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
             data-gid={group.getId()}
-            header={group.getTitle()}
+            header={typeof group.getTitle() === 'object' ? '' : group.getTitle()}
             extra={
                 <PanelToolContainer
                     group={group}

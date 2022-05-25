@@ -42,7 +42,7 @@ const group = {
 createGroupModel(group, ...)
 */
 const createGroupModel = (group, method, allLayers, tools) => {
-    const newGroup = new LayerGroup(group.id, method, group.name, group.locale);
+    const newGroup = new LayerGroup(group.id, method, group.name, group.locale, group.description);
     newGroup.setTools(tools);
     // attach layers to group
     const groupLayers = group.layers || [];

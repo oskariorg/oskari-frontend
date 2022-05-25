@@ -353,8 +353,9 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     success: response => {
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
-                        group.setName(response.name);
-                        group.setLocale(response.locale);
+                        const locale = Oskari.getLocalized(response.locale);
+                        group.setName(locale.name);
+                        group.setDescription(locale.description);
                         if (id) {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
@@ -457,10 +458,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     data: JSON.stringify(payload),
                     success: response => {
                         this.dataProviderFlyout.hide();
+                        const locale = Oskari.getLocalized(response.locale);
                         const dataProvider = {
                             id: response.id,
-                            name: Oskari.getLocalized(response.name),
-                            locale: response.locale
+                            name: locale.name,
+                            description: locale.description
                         };
 
                         httpMethod === 'POST'
