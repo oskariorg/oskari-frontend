@@ -779,6 +779,7 @@ Oskari.util = (function () {
      * @param {Array || String} locales optional
      * @returns {String}
      */
+    // FIXME: options can't be passed for both, separate options or filter date/time options
     util.formatDate = (text, options = {}, locales = []) => {
         if (!text) {
             return '';
