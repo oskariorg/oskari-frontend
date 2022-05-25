@@ -6,7 +6,11 @@ import styled from 'styled-components';
 
 const StyledToolsContainer = styled('div')`
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
+    font-size: 16px;
+    > * {
+        margin-left: 10px;
+    }
     .icon {
         cursor: pointer;
     }
@@ -18,6 +22,14 @@ const StyledToolsContainer = styled('div')`
 const StyledTable = styled(AntTable)`
     a {
         cursor: pointer;
+    }
+    tr {
+        th {
+            padding: 8px 8px;
+        }
+        td {
+            padding: 8px;
+        }
     }
 `;
 
