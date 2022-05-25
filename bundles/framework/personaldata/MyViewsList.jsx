@@ -1,38 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm, Button, Tooltip } from 'oskari-ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Message, Checkbox, Button } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { red } from '@ant-design/colors';
 
 const BUNDLE_NAME = 'PersonalData';
-
-const EDIT_ICON_STYLE = {
-    fontSize: '14px'
-};
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '14px'
-};
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`
 
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
     display: flex;
     justify-content: flex-end;
-`
+`;
 
 export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, setDefault, saveCurrent }) => {
     const columnSettings = [
@@ -44,7 +24,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => setDefault(item)} />
-                )
+                );
             }
         },
         {
@@ -56,7 +36,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             render: (title, item) => {
                 return (
                     <a onClick={() => openView(item)}>{title}</a>
-                )
+                );
             }
         },
         {
@@ -72,22 +52,12 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => handleEdit(item)}><EditOutlined style={ EDIT_ICON_STYLE } /></div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => handleEdit(item)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
-                            onConfirm={() => handleDelete(item)}
-                            okText={<Message messageKey='tabs.myviews.button.ok' bundleKey={BUNDLE_NAME} />}
-                            cancelText={<Message messageKey='tabs.myviews.button.cancel' bundleKey={BUNDLE_NAME} />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => handleDelete(item)} />
                     </ToolsContainer>
-                )
+                );
             }
         }
     ];
@@ -99,7 +69,7 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                     <Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.button.saveCurrent' />
                 </Button>
             </ButtonContainer>
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={data.map(item => ({
                     key: item.id,
@@ -108,8 +78,8 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                 pagination={false}
             />
         </>
-    )
-}
+    );
+};
 
 MyViewsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),

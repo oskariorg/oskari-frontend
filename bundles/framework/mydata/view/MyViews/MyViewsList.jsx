@@ -1,33 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm, Button, Tooltip } from 'oskari-ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
-import { red } from '@ant-design/colors';
+import { Message, Checkbox } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 
-const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '16px'
-};
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
-
-export const MyViewsList = ({ controller, loading, data = [] }) => {
-
+export const MyViewsList = ({
+    controller,
+    loading,
+    data = []
+}) => {
     const columnSettings = [
         {
             align: 'left',
@@ -37,7 +19,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => controller.setDefaultView(item)} />
-                )
+                );
             }
         },
         {
@@ -49,7 +31,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             render: (title, item) => {
                 return (
                     <a onClick={() => controller.openView(item)}>{title}</a>
-                )
+                );
             }
         },
         {
@@ -73,28 +55,18 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.myviews.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editView(item)}><EditOutlined style={ EDIT_ICON_STYLE } /></div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => controller.editView(item)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteView(item)}
-                            okText={<Message messageKey='tabs.myviews.button.ok' />}
-                            cancelText={<Message messageKey='tabs.myviews.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message messageKey='tabs.myviews.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => controller.deleteView(item)} />
                     </ToolsContainer>
-                )
+                );
             }
         }
     ];
 
     return (
-        <StyledTable
+        <Table
             columns={columnSettings}
             dataSource={data.map(item => ({
                 key: item.id,
@@ -103,11 +75,11 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             pagination={false}
             loading={loading}
         />
-    )
-}
+    );
+};
 
 MyViewsList.propTypes = {
     controller: PropTypes.object.isRequired,
     data: PropTypes.arrayOf(PropTypes.object),
     loading: PropTypes.bool.isRequired
-}
+};

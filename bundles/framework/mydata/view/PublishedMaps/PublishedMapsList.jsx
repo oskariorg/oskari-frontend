@@ -1,30 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Message, Confirm, Tooltip } from 'oskari-ui'
-import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
-import styled from 'styled-components';
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '14px'
-};
-
-const EDIT_ICON_STYLE = {
-    fontSize: '14px'
-};
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Message, Confirm } from 'oskari-ui';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 
 const openView = (view) => {
     window.open(
@@ -32,10 +11,13 @@ const openView = (view) => {
         'Published',
         'location=1,status=1,scrollbars=yes,width=850,height=800'
     );
-}
+};
 
-export const PublishedMapsList = ({ controller, data = [], loading }) => {
-
+export const PublishedMapsList = ({
+    controller,
+    data = [],
+    loading
+}) => {
     const columnSettings = [
         {
             align: 'left',
@@ -67,7 +49,7 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
             dataIndex: 'pubDomain',
-            sorter: getSorterFor('pubDomain'),
+            sorter: getSorterFor('pubDomain')
         },
         {
             align: 'left',
@@ -86,11 +68,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                         >
                             <a><Message messageKey='tabs.publishedmaps.unpublish' /></a>
                         </Confirm>
-                    )
+                    );
                 } else {
                     return (
                         <a onClick={() => controller.setPublished(item)}><Message messageKey='tabs.publishedmaps.publish' /></a>
-                    )
+                    );
                 }
             }
         },
@@ -121,30 +103,17 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editView(item)}>
-                                <EditOutlined style={ EDIT_ICON_STYLE } />
-                            </div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => controller.editView(item)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteView(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => controller.deleteView(item)} />
                     </ToolsContainer>
                 );
             }
         }
     ];
-    
     return (
-        <StyledTable
+        <Table
             columns={columnSettings}
             dataSource={data.map((item) => ({
                 key: item.id,
@@ -153,11 +122,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             pagination={false}
             loading={loading}
         />
-    )
-}
+    );
+};
 
 PublishedMapsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
     controller: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired
-}
+};

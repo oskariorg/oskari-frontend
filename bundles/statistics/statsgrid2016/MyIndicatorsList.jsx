@@ -1,38 +1,18 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Confirm, Message, Button, Tooltip } from 'oskari-ui';
+import { Message, Button } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 
 const BUNDLE_KEY = 'StatsGrid';
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
 
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
     display: flex;
     justify-content: flex-end;
 `;
-
-const deleteIconStyle = {
-    fontSize: '16px',
-    color: red.primary
-};
-
-const editIconStyle = {
-    fontSize: '16px'
-};
 
 export const MyIndicatorsList = ({ controller, data = [], loading }) => {
     const columnSettings = [
@@ -58,38 +38,24 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message bundleKey={BUNDLE_KEY} messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editIndicator(item)}>
-                                <EditOutlined style={editIconStyle} />
-                            </div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => controller.editIndicator(item)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_KEY} />}
-                            onConfirm={() => controller.deleteIndicator(item)}
-                            okText={<Message messageKey='tab.button.ok' bundleKey={BUNDLE_KEY} />}
-                            cancelText={<Message messageKey='tab.button.cancel' bundleKey={BUNDLE_KEY} />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message bundleKey={BUNDLE_KEY} messageKey='tab.grid.delete' />}>
-                                <div className='icon t_delete'>
-                                    <DeleteOutlined style={deleteIconStyle} />
-                                </div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => controller.deleteIndicator(item)}/>
                     </ToolsContainer>
-                )
+                );
             }
         }
     ];
 
     return (
-        <>
+        <Fragment>
             <ButtonContainer>
                 <Button type='primary' onClick={() => controller.addNewIndicator()}>
                     <Message bundleKey={BUNDLE_KEY} messageKey='userIndicators.buttonTitle' />
                 </Button>
             </ButtonContainer>
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={data.map(item => ({
                     key: item.id,
@@ -98,7 +64,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                 pagination={false}
                 loading={loading}
             />
-        </>
+        </Fragment>
     );
 };
 

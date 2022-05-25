@@ -7,15 +7,9 @@ import styled from 'styled-components';
 const PointableTable = styled(Table)`
     tr {
         cursor: pointer;
-
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
     }
 `;
+
 /*
 Example result.locations = [{
     "zoomScale": 4000000,
@@ -57,10 +51,10 @@ export const SearchResultTable = ({ result = {}, onResultClick = noop }) => {
         dataSource={result.locations}
         onRow={(record) => {
             return {
-              onClick: () => onResultClick(record)
+                onClick: () => onResultClick(record)
             };
-          }}
-          pagination={{defaultPageSize: result.totalCount, hideOnSinglePage: true}} />);
+        }}
+        pagination={{ defaultPageSize: result.totalCount, hideOnSinglePage: true }} />);
 };
 
 SearchResultTable.propTypes = {

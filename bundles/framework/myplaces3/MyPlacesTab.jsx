@@ -6,7 +6,6 @@ import { MyPlacesList } from './MyPlacesList';
 import { MyPlacesLayerControls } from './MyPlacesLayerControls';
 
 export const MyPlacesTab = ({ state, controller }) => {
-
     return (
         <LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
             <MyPlacesLayerControls selectedCategory={state.selectedCategory} loading={state.loading} categories={state.categories} controller={controller} />

@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Confirm, Message, Space, Spin, Tooltip } from 'oskari-ui';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DELETE_ICON_STYLE } from './LayerAnalyticsDetails';
 import styled from 'styled-components';
+import { Table, getSorterFor } from 'oskari-ui/components/Table';
+import { Message, Space, Spin, Tooltip } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 
 const TitleArea = styled.span`
     & {
@@ -24,7 +24,6 @@ const sorterTooltipOptions = {
 };
 
 export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallback, layerDetailsCallback, removeAnalyticsCallback }) => {
-    
     const columnSettings = [
         {
             align: 'left',
@@ -104,17 +103,10 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
                     <React.Fragment>
                         <TitleArea>
                             <Space>
-                                <Tooltip title={ <Message messageKey='flyout.editLayerTooltip' /> }>
-                                    <EditOutlined onClick={ () => layerEditorCallback(item.id) } />
-                                </Tooltip>
-                                <Confirm
+                                <EditIcon onClick={() => layerEditorCallback(item.id)} tooltip={ <Message messageKey='flyout.editLayerTooltip' />}/>
+                                <DeleteButton icon
                                     title={<Message messageKey='flyout.removeAllDataForLayer' />}
-                                    onConfirm={() => removeAnalyticsCallback(item.id)}
-                                    okText={<Message messageKey='flyout.delete' />}
-                                    cancelText={<Message messageKey='flyout.cancel' />}
-                                    placement='bottomLeft'>
-                                    <DeleteOutlined style={ DELETE_ICON_STYLE } />
-                                </Confirm>
+                                    onConfirm={() => removeAnalyticsCallback(item.id)} />
                             </Space>
                         </TitleArea>
                     </React.Fragment>
@@ -124,7 +116,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
     ];
 
     if (isLoading) {
-        return ( <Spin/> );
+        return (<Spin/>);
     }
 
     return (

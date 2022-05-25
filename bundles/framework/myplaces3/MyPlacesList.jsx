@@ -1,30 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Confirm, Tooltip } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
-
-const DELETE_ICON_STYLE = {
-    fontSize: '16px',
-    color: red.primary
-};
-
-const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 
 const NameField = styled('div')`
     display: flex;
@@ -32,8 +12,11 @@ const NameField = styled('div')`
     align-items: center;
 `;
 
-export const MyPlacesList = ({data = [], loading, controller }) => {
-
+export const MyPlacesList = ({
+    data = [],
+    loading,
+    controller
+}) => {
     const columnSettings = [
         {
             align: 'left',
@@ -87,22 +70,10 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editPlace(item._place)}>
-                                <EditOutlined style={ EDIT_ICON_STYLE } />
-                            </div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => controller.editPlace(item._place)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deletePlace(item._place)}
-                            okText={<Message messageKey='buttons.ok' />}
-                            cancelText={<Message messageKey='buttons.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message messageKey='tab.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => controller.deletePlace(item._place)} />
                     </ToolsContainer>
                 );
             }
@@ -110,7 +81,7 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
     ];
 
     return (
-        <StyledTable
+        <Table
             loading={loading}
             columns={columnSettings}
             dataSource={data.map(item => ({
@@ -123,8 +94,8 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
             }))}
             pagination={false}
         />
-    )
-}
+    );
+};
 
 MyPlacesList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),

@@ -1,32 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Tooltip, Confirm } from 'oskari-ui';
-import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
-import styled from 'styled-components';
+import { Message } from 'oskari-ui';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditIcon } from 'oskari-ui/components/icons';
 
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '16px'
-};
-
-const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-export const UserLayersList = ({ data = [], controller, loading }) => {
+export const UserLayersList = ({
+    data = [],
+    controller,
+    loading
+}) => {
     const columnSettings = [
         {
             align: 'left',
@@ -67,22 +50,10 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editUserLayer(item.key)}>
-                                <EditOutlined style={ EDIT_ICON_STYLE } />
-                            </div>
-                        </Tooltip>
-                        <Confirm
+                        <EditIcon onClick={() => controller.editUserLayer(item.key)} />
+                        <DeleteButton icon
                             title={<Message messageKey='tab.confirmDeleteMsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deleteUserLayer(item.key)}
-                            okText={<Message messageKey='tab.buttons.ok' />}
-                            cancelText={<Message messageKey='tab.buttons.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message messageKey='tab.grid.remove' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                            onConfirm={() => controller.deleteUserLayer(item.key)} />
                     </ToolsContainer>
                 );
             }
@@ -90,7 +61,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
     ];
 
     return (
-        <StyledTable
+        <Table
             columns={columnSettings}
             dataSource={data.map(item => ({
                 ...item,
