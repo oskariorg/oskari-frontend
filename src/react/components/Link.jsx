@@ -22,7 +22,7 @@ export const Link = ({
             {label}
             <a href={url} target={target} rel="noreferrer noopener">
                 {children}
-                <LinkIcon/>
+                {external && <LinkIcon/>}
             </a>
         </Tooltip>
     );
