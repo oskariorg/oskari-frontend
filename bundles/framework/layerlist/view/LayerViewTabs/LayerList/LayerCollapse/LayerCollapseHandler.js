@@ -15,9 +15,8 @@ const getLayerGroups = (groups = []) => {
     return groups.map(group => {
         return {
             id: group.id,
-            name: group.name,
-            description: group.description,
-            locale: group.getLocale(),
+            name: group.getName(),
+            description: group.getDescription(),
             layers: group.getChildren().filter(c => c.type === 'layer') || [],
             groups: getLayerGroups(group.getGroups())
         };

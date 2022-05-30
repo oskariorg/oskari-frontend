@@ -98,9 +98,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getName: function () {
             return this.__name;
         },
-        getLocale: function () {
-            return this.__locale;
-        },
         /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
