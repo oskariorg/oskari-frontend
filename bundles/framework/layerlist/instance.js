@@ -1,6 +1,5 @@
 import './Tile';
 import './Flyout';
-import './model/LayerGroup';
 import './service/layerlist';
 import './service/LayerListToolingService';
 import './request/ShowFilteredLayerListRequest';

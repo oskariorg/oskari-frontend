@@ -657,7 +657,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateDataProvider: function (dataProvider) {
             // Update dataProvider to dataProviders
-            const index = this._dataProviders.findIndex(g => '' + g.id === '' + dataProvider.id);
+            const index = this._dataProviders.findIndex(g => g.id === dataProvider.id);
             if (index !== -1) {
                 this._dataProviders[index] = dataProvider;
             }
@@ -673,7 +673,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         getDataProviderById: function (id) {
-            const index = this._dataProviders.findIndex(g => '' + g.id === '' + id);
+            const index = this._dataProviders.findIndex(g => g.id === id);
             if (index === -1) {
                 return null;
             }
@@ -743,7 +743,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return {
                     id,
                     name: pResp.providers[id].name,
-                    description: pResp.providers[id].description
+                    desc: pResp.providers[id].desc
                 };
             });
             this.setDataProviders(providers);

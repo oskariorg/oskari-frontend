@@ -1,17 +1,18 @@
 Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
-    function (json) {
-        var me = this;
+    function (json = {}) {
+        const me = this;
         me.groups = [];
-
-        (json.groups || []).forEach(function (subgroup) {
-            me.groups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', subgroup));
-        });
+        if (Array.isArray(json.groups)) {
+            json.groups.forEach(subgroup => {
+                me.groups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', subgroup));
+            })
+        }
 
         me.id = json.id;
         me.layersModels = [];
         me.layers = json.layers || [];
         me.name = json.name;
-        me.description = json.description;
+        me.description = json.desc;
         me.locale = json.locale;
         me.orderNumber = (typeof json.orderNumber !== 'undefined') ? json.orderNumber : 1000000;
         me.parentId = (typeof json.parentId !== 'undefined') ? json.parentId : -1;

@@ -1,5 +1,5 @@
 export class LayerGroup {
-    constructor (id, groupMethod, title, locale, description, parentId, groups) {
+    constructor (id, groupMethod, title, description, parentId, groups) {
         this.id = id;
         this.groupMethod = groupMethod;
         this.name = title;
@@ -9,7 +9,6 @@ export class LayerGroup {
         this.groups = groups || [];
         this.searchIndex = {};
         this.tools = [];
-        this.locale = locale;
     }
 
     getParentId () {
@@ -116,17 +115,11 @@ export class LayerGroup {
         return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
     }
     clone () {
-        const clone = new LayerGroup(this.id, this.groupMethod, this.name, this.locale);
+        const clone = new LayerGroup(this.id, this.groupMethod, this.name, this.description, this.parentId);
         clone.layers = [...this.layers];
         clone.groups = [...this.groups];
         clone.searchIndex = { ...this.searchIndex };
         clone.tools = [...this.tools];
         return clone;
-    }
-    getLocale () {
-        return this.locale;
-    }
-    setLocale (locale) {
-        this.locale = locale;
     }
 };

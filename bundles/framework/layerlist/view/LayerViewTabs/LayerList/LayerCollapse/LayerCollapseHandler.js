@@ -46,8 +46,7 @@ const getDataProviders = (providers = [], layers = []) => {
         return {
             id: dataProvider.id,
             name,
-            description: dataProvider.description,
-            locale: dataProvider.locale,
+            description: dataProvider.desc,
             layers: layersByProvider['' + dataProvider.id] || [],
             groups: []
         };
