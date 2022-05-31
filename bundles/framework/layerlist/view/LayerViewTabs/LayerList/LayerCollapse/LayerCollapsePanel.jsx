@@ -37,11 +37,10 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     const filtered = typeof group.unfilteredLayerCount !== 'undefined' && layerCount !== group.unfilteredLayerCount;
     const toggleLimitExceeded = opts[LAYER_GROUP_TOGGLE_LIMIT] > 0 && layerCount > opts[LAYER_GROUP_TOGGLE_LIMIT];
     const showAllLayersToggle = opts[LAYER_GROUP_TOGGLE_LIMIT] !== 0 && !toggleLimitExceeded && !filtered;
-    const description = group.getDescription();
     return (
         <StyledCollapsePanelTools>
-            {description && (
-                <Tooltip title={description}>
+            {group.description && (
+                <Tooltip title={group.description}>
                     <StyledInfoIcon />
                 </Tooltip>
             )}
@@ -57,6 +56,12 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
         </StyledCollapsePanelTools>
     );
 }, (prevProps, nextProps) => {
+    if (prevProps.group.name !== nextProps.group.name) {
+        return false;
+    }
+    if (prevProps.group.description !== nextProps.group.description) {
+        return false;
+    }
     const propsToCheck = ['allLayersOnMap', 'layerCount'];
     const changed = propsToCheck.some(prop => prevProps[prop] !== nextProps[prop]);
     if (changed) {

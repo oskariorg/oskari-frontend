@@ -605,9 +605,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
         updateGroupRecursively: function (group, newGroup) {
             if (group.id === newGroup.id) {
-                const locale = Oskari.getLocalized(newGroup.getLocale());
-                group.setName(locale.name);
-                group.setDescription(locale.description);
+                group.setName(newGroup.getName());
+                group.setDescription(group.getDescription());
                 return group;
             }
             if (group.groups.length !== 0) {
@@ -629,9 +628,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // Update group to layerGroups
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
-                const locale = Oskari.getLocalized(group.getLocale());
-                this._layerGroups[index].setName(locale.name);
-                this._layerGroups[index].setDescription(locale.description);
+                this._layerGroups[index].setName(group.getName());
+                this._layerGroups[index].setDescription(group.getDescription());
             } else {
                 let temp = [];
                 for (var g of this._layerGroups) {
@@ -643,9 +641,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             // Update group to needed layers. Groups under layer only contains group name with current localization
             this.getAllLayers().filter(l =>
                 l._groups.filter(g => g.id === group.id).map(g => {
-                    const locale = Oskari.getLocalized(group.getLocale());
-                    g.name = locale.name;
-                    g.description = locale.description;
+                    g.name = group.getName();
                     return g;
                 }));
             this.trigger('theme.update');
@@ -741,7 +737,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             const providers = Object.keys(pResp.providers).map(id => {
                 return {
-                    id,
+                    id: Number(id),
                     name: pResp.providers[id].name,
                     desc: pResp.providers[id].desc
                 };
