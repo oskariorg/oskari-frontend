@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         if (Array.isArray(json.groups)) {
             json.groups.forEach(subgroup => {
                 me.groups.push(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', subgroup));
-            })
+            });
         }
 
         me.id = json.id;

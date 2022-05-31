@@ -336,7 +336,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 scroll: false
             });
             this.themeFlyout.setSaveAction((locales, id, parentId) => {
-                const httpMethod = id ? 'PUT': 'POST';
+                const httpMethod = id ? 'PUT' : 'POST';
 
                 const payload = {
                     parentId,
@@ -450,7 +450,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             });
             this.dataProviderFlyout.setSaveAction(value => {
                 const me = this;
-                const httpMethod = id ? 'PUT': 'POST';
+                const httpMethod = id ? 'PUT' : 'POST';
                 const payload = { locales: value };
                 if (id) {
                     payload.id = id;
