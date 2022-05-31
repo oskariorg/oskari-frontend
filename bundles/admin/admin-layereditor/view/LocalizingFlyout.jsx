@@ -87,12 +87,11 @@ class UIService extends StateHandler {
         const getMsg = Oskari.getMsg.bind(null, instance.getName());
         const labels = {};
         Oskari.getSupportedLanguages().forEach(lang => {
-            const locale = getMsg(`fields.locale.${lang}`);
-            if (typeof locale === 'object') {
-                labels[lang] = locale.lang || lang;
-            } else {
-                labels[lang] = lang;
-            }
+            const langPrefix = typeof getMsg(`fields.locale.${lang}`) === 'object' ? lang : 'generic';
+            labels[lang] = {
+                name: getMsg(`fields.locale.${langPrefix}.name`),
+                desc: getMsg(`fields.locale.${langPrefix}.description`)
+            };
         });
         this.initialState = {
             loading: false,
@@ -211,14 +210,15 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
             </Header>
             <LocalizationComponent
                 labels={labels}
-                collapse={false}
-                single={true}
+                collapse={true}
                 value={value}
                 languages={Oskari.getSupportedLanguages()}
                 onChange={controller.setValue}
                 LabelComponent={Label}
+                showDivider
             >
-                <TextInput />
+                <TextInput type="text" name="name" />
+                <TextInput type="text" name="desc" />
             </LocalizationComponent>
             <Buttons>
                 <Button onClick={() => controller.cancel()}>

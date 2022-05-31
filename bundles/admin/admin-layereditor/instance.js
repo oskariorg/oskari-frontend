@@ -317,7 +317,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
@@ -336,24 +336,28 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 scroll: false
             });
             this.themeFlyout.setSaveAction((locales, id, parentId) => {
-                const httpMethod = id ? 'POST' : 'PUT';
+                const httpMethod = id ? 'PUT' : 'POST';
 
                 const payload = {
-                    id,
                     parentId,
                     locales
                 };
+                if (id) {
+                    payload.id = id;
+                }
 
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
                     contentType: 'application/json',
-                    url: Oskari.urls.getRoute('MapLayerGroups'),
+                    url: Oskari.urls.getRoute('MapLayerGroups', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
-                        group.setName(response.name);
+                        const locale = Oskari.getLocalized(response.locale);
+                        group.setName(locale.name);
+                        group.setDescription(locale.desc);
                         if (id) {
                             this._getLayerService().updateLayerGroup(group);
                         } else {
@@ -428,7 +432,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     },
                     success: function (response) {
                         setLoading(false);
-                        setValue(response.name);
+                        setValue(response.locale);
                     }
                 });
             };
@@ -446,25 +450,31 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             });
             this.dataProviderFlyout.setSaveAction(value => {
                 const me = this;
-                const httpMethod = id ? 'POST' : 'PUT';
-                const payload = id ? { locales: value, id: id } : { locales: value };
+                const httpMethod = id ? 'PUT' : 'POST';
+                const payload = { locales: value };
+                if (id) {
+                    payload.id = id;
+                }
                 jQuery.ajax({
                     type: httpMethod,
                     dataType: 'json',
                     contentType: 'application/json',
-                    url: Oskari.urls.getRoute('SaveOrganization'),
+                    url: Oskari.urls.getRoute('DataProvider', { id }),
                     data: JSON.stringify(payload),
                     success: response => {
                         this.dataProviderFlyout.hide();
+                        const locale = Oskari.getLocalized(response.locale);
                         const dataProvider = {
                             id: response.id,
-                            name: Oskari.getLocalized(response.name)
+                            name: locale.name,
+                            desc: locale.desc
                         };
 
-                        httpMethod === 'POST'
-                            ? this._getLayerService().updateDataProvider(dataProvider)
-                            : this._getLayerService().addDataProvider(dataProvider);
-
+                        if (id) {
+                            this._getLayerService().updateDataProvider(dataProvider);
+                        } else {
+                            this._getLayerService().addDataProvider(dataProvider);
+                        }
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show(' ', me.loc('messages.saveSuccess'));
                         dialog.fadeout();
