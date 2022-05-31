@@ -34,23 +34,23 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "generic": {
-                        "name": "Name",
-                        "description": "Description"
+                        "name": "Name in {0}",
+                        "description": "Description in {0}"
                     },
                     "en": {
                         "lang": "English",
-                        "name": "Name",
-                        "description": "Description"
+                        "name": "Name in English",
+                        "description": "Description in English"
                     },
                     "fi": {
                         "lang": "Finnish",
-                        "name": "Name",
-                        "description": "Description"
+                        "name": "Name in Finnish",
+                        "description": "Description in Finnish"
                     },
                     "sv": {
                         "lang": "Swedish",
-                        "name": "Name",
-                        "description": "Description"
+                        "name": "Name in Swedish",
+                        "description": "Description in Swedish"
                     }
                 },
                 "opacity": "Opacity",
