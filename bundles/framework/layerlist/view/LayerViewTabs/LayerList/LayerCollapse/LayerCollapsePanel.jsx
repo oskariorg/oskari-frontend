@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
 import { QuestionCircleOutlined } from '@ant-design/icons';
-import { Controller } from 'oskari-ui/util';
+import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
 import { AllLayersSwitch } from './AllLayersSwitch';
@@ -170,33 +170,35 @@ const LayerCollapsePanel = (props) => {
     // after AntD version 4.9.0 we could disable panels without children:
     // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
     return (
-        <StyledCollapsePanel {...propsNeededForPanel}
-            // collapsible={hasChildren ? 'header' : 'disabled'}
-            // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
-            className={`t_group gid_${group.getId()}`}
-            // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
-            data-gid={group.getId()}
-            header={group.getTitle()}
-            extra={
-                <PanelToolContainer
-                    group={group}
-                    opts={opts}
-                    layerCount={group.getLayerCount()}
-                    controller={controller}
-                    allLayersOnMap={allLayersOnMap} />
-            }>
-                { isPanelOpen && <React.Fragment>
-                    <SubGroupList
-                        subgroups={group.getGroups()}
-                        selectedLayerIds={selectedLayerIds}
+        <ErrorBoundary hideError={true} debug={{group, selectedLayerIds}}>
+            <StyledCollapsePanel {...propsNeededForPanel}
+                // collapsible={hasChildren ? 'header' : 'disabled'}
+                // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
+                className={`t_group gid_${group.getId()}`}
+                // data-attr doesn't seem to work for the panel in AntD-version 4.8.5
+                data-gid={group.getId()}
+                header={group.getTitle()}
+                extra={
+                    <PanelToolContainer
+                        group={group}
                         opts={opts}
-                        openGroupTitles={openGroupTitles}
+                        layerCount={group.getLayerCount()}
                         controller={controller}
-                        { ...propsNeededForPanel } />
-                    <LayerList
-                        layers={layerRows} />
-                </React.Fragment>}
-        </StyledCollapsePanel>
+                        allLayersOnMap={allLayersOnMap} />
+                }>
+                    { isPanelOpen && <React.Fragment>
+                        <SubGroupList
+                            subgroups={group.getGroups()}
+                            selectedLayerIds={selectedLayerIds}
+                            opts={opts}
+                            openGroupTitles={openGroupTitles}
+                            controller={controller}
+                            { ...propsNeededForPanel } />
+                        <LayerList
+                            layers={layerRows} />
+                    </React.Fragment>}
+            </StyledCollapsePanel>
+        </ErrorBoundary>
     );
 };
 
