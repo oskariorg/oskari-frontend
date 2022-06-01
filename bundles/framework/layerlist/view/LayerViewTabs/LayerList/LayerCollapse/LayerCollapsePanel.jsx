@@ -170,7 +170,7 @@ const LayerCollapsePanel = (props) => {
     // after AntD version 4.9.0 we could disable panels without children:
     // const hasChildren = layerRows.length > 0 || group.getGroups().length > 0;
     return (
-        <ErrorBoundary hideError={true} debug={{group, selectedLayerIds}}>
+        <ErrorBoundary hide={true} debug={{group, selectedLayerIds}}>
             <StyledCollapsePanel {...propsNeededForPanel}
                 // collapsible={hasChildren ? 'header' : 'disabled'}
                 // TODO: remove gid_[id] once data-attributes work for AntD Collapse.Panels
