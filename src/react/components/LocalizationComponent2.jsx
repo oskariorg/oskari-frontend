@@ -119,6 +119,7 @@ const validateMandatory = value => typeof value === 'string' && value.trim().len
  */
 export const LocalizationComponent = ({
     languages,
+    mandatoryLanguages = [languages[0]],
     onChange,
     value,
     labels,
@@ -149,7 +150,7 @@ export const LocalizationComponent = ({
                 getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
             let elementValue = internalValue[lang][name];
 
-            const { mandatory = [], label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+            const { mandatory = false, label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
             
             let labelSingle = label ? label : getLabel(labels, lang, name);
             if (label && !isDefaultLang) {
@@ -157,7 +158,7 @@ export const LocalizationComponent = ({
             }
             const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
             let suffix;
-            if (mandatory.includes(lang)) {
+            if (mandatory && mandatoryLanguages.includes(lang)) {
                 suffix = <MandatoryIcon isValid={validateMandatory(elementValue)} />;
             }
             return (
@@ -204,6 +205,7 @@ export const LocalizationComponent = ({
 
 LocalizationComponent.propTypes = {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    mandatoryLanguages: PropTypes.arrayOf(PropTypes.string),
     onChange: PropTypes.func,
     value: PropTypes.object,
     LabelComponent: PropTypes.elementType,
