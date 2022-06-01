@@ -54,11 +54,20 @@ const getLabel = (labels, lang, elementName) => {
     }
     return label;
 };
-const getPlaceholderWithLangSuffix = (placeholder, lang) => {
-    if (!placeholder) {
+const getPlaceholderWithLangSuffix = (label, lang) => {
+    if (!label) {
         return '';
     }
-    return placeholder + ' ' + getLangSuffix(lang);
+    if (typeof label ==='string') {
+        return label + ' ' + getLangSuffix(lang);
+    }
+    else if (React.isValidElement(label)) {
+        // Works with <Message />
+        return (<label.type {...label.props}>
+            {getLangSuffix(lang)}
+        </label.type>);
+    }
+    return '';
 };
 const getElementValueChangeHandler = (values, lang, elementName, setValue, onChange) => {
     if (!elementName) {
@@ -139,9 +148,13 @@ export const LocalizationComponent = ({
             const onElementValueChange =
                 getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
             let elementValue = internalValue[lang][name];
-            let label = getLabel(labels, lang, name);
 
-            const { mandatory = [], placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+            const { mandatory = [], label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+            
+            let labelSingle = label ? label : getLabel(labels, lang, name);
+            if (label && !isDefaultLang) {
+                labelSingle = getPlaceholderWithLangSuffix(label, lang);
+            }
             const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
             let suffix;
             if (mandatory.includes(lang)) {
@@ -149,8 +162,8 @@ export const LocalizationComponent = ({
             }
             return (
                 <React.Fragment key={`${lang}_${index}`}>
-                    { label &&
-                        <LabelComponent>{ label }</LabelComponent>
+                    { labelSingle &&
+                        <LabelComponent>{ labelSingle }</LabelComponent>
                     }
                     <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholderWithSuffix } trigger={ ['focus', 'hover'] }>
                         <element.type {...restProps} value={elementValue} onChange={onElementValueChange} placeholder={placeholderWithSuffix} autoComplete='off' suffix={suffix}/>
@@ -193,7 +206,6 @@ LocalizationComponent.propTypes = {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
     onChange: PropTypes.func,
     value: PropTypes.object,
-    labels: PropTypes.object,
     LabelComponent: PropTypes.elementType,
     collapse: PropTypes.bool,
     defaultOpen: PropTypes.bool,
