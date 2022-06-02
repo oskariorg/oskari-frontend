@@ -24,16 +24,13 @@ class ViewHandler extends StateHandler {
             active,
             dontShowAgain
         };
-        // Filter active announcements to show in banner or popup, mark banner/popup as shown if list is empty
-        if (!this.state.popupShown) {
-            const ann = active.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
-            newState.popupAnnouncements = ann;
-            newState.popupShown = !ann.length;
+        // Filter active announcements to show in banner or popup
+        // Empty array in state -> already shown, don't populate array more than once
+        if (!this.state.popupAnnouncements) {
+            newState.popupAnnouncements = active.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
         }
-        if (!this.state.bannerShown) {
-            const ann = active.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
-            newState.bannerAnnouncements = ann;
-            newState.bannerShown = !ann.length;
+        if (!this.state.bannerAnnouncements) {
+            newState.bannerAnnouncements = active.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
         }
         this.updateState(newState);
     }
@@ -49,17 +46,11 @@ class ViewHandler extends StateHandler {
     }
 
     onPopupClose () {
-        if (this.state.popupShown) {
-            return;
-        }
-        this.updateState({ popupShown: true });
+        this.updateState({ popupAnnouncements: [] });
     }
 
     onBannerClose () {
-        if (this.state.bannerShown) {
-            return;
-        }
-        this.updateState({ bannerShown: true });
+        this.updateState({ bannerAnnouncements: [] });
     }
 
     onPopupChange (currentPopup) {

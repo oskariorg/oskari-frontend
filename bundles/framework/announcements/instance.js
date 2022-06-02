@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             });
         },
         renderPopup: function (state) {
-            if (state.popupShown) {
+            if (!state.popupAnnouncements || !state.popupAnnouncements.length) {
                 return;
             }
             if (this.popupControls) {
