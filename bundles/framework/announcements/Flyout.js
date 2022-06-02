@@ -65,6 +65,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <FlyoutContent
                         { ...state }
+                        announcements={state.active}
                         controller={this.announcementsHandler.getController()}
                     />
                 </LocaleProvider>

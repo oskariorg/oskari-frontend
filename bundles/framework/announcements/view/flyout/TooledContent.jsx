@@ -5,7 +5,7 @@ import { Message, Divider } from 'oskari-ui';
 
 // Flyout content with tools, outdated and upcoming announcements for admin users
 export const TooledContent = ({
-    announcements,
+    active,
     outdated,
     upcoming,
     tools
@@ -14,7 +14,7 @@ export const TooledContent = ({
     const announcementTools = tools.filter(tool => tool.getTypes().includes('announcement'));
     return (
         <div>
-            <FlyoutCollapse announcements={announcements} tools={announcementTools}/>
+            <FlyoutCollapse announcements={active} tools={announcementTools}/>
             <Divider orientation='left'>
                 <Message messageKey='flyout.outdated'/>
             </Divider>
@@ -29,7 +29,7 @@ export const TooledContent = ({
 };
 
 TooledContent.propTypes = {
-    announcements: PropTypes.array.isRequired,
+    active: PropTypes.array.isRequired,
     outdated: PropTypes.array.isRequired,
     upcoming: PropTypes.array.isRequired,
     tools: PropTypes.array.isRequired

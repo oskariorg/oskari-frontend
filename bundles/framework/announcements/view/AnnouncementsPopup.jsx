@@ -16,21 +16,22 @@ const Content = styled.div`
 `;
 
 const getContent = (state, controller, onClose) => {
-    const { showAsPopup, currentPopup = 1 } = state;
-    const announcement = showAsPopup[currentPopup - 1];
+    const { popupAnnouncements, currentPopup = 1 } = state;
+    const announcement = popupAnnouncements[currentPopup - 1];
     if (!announcement) {
         return null;
     }
     const dontShowAgain = state.dontShowAgain.includes(announcement.id);
     const { title } = Oskari.getLocalized(announcement.locale);
-    const PopupContent = showAsPopup.length === 1 ? SingleContent : PaginatedContent;
+    const count = popupAnnouncements.length;
+    const PopupContent = count === 1 ? SingleContent : PaginatedContent;
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
                 <PopupContent
                     controller={controller}
                     announcement={announcement}
-                    count={showAsPopup.length}
+                    count={count}
                     current={currentPopup}
                     dontShowAgain={dontShowAgain}
                     onClose={onClose} />
