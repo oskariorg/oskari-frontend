@@ -22,7 +22,7 @@ const getLabels = (bundleKey) => {
         const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
         labels[language] = {
             name: getMsg(`fields.locale.${langPrefix}.name`, [language]),
-            subtitle: getMsg(`fields.locale.${langPrefix}.subtitle`, [language])
+            subtitle: getMsg(`fields.locale.${langPrefix}.description`, [language])
         };
     });
     // mark mandatory field

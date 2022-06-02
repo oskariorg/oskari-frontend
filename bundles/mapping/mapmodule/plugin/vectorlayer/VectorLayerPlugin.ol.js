@@ -556,9 +556,7 @@ Oskari.clazz.define(
                     if (!mapLayerGroup) {
                         const group = {
                             id: groupForLayer.id,
-                            name: {
-                                [Oskari.getLang()]: groupForLayer.name
-                            }
+                            name: groupForLayer.name
                         };
                         mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                     }
