@@ -19,8 +19,9 @@ export const LabeledSelect = ({
     return (
         <Fragment>
             <Message messageKey={`classify.labels.${name}`}/>
-            <Margin className={`t_option-${name}`}>
+            <Margin>
                 <Select
+                    className={`t_option-${name}`}
                     onChange={value => handleChange(name, value)}
                     size='small'
                     {...rest}
