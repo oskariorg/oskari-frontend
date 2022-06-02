@@ -46,4 +46,4 @@ const getDrawModeFromGeometry = (geometry) => {
         return 'area';
     }
     return null;
-}
+};
