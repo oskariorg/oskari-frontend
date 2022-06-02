@@ -735,24 +735,21 @@
             const stateService = this.getStateService();
             // remove indicators from state before deleting indicator data
             stateService.getIndicators()
-                .filter(ind => ind.datasource == datasrc && ind.indicator == indicatorId)
+                .filter(ind => ind.datasource === datasrc && ind.indicator === indicatorId)
                 .forEach(ind => {
                     stateService.removeIndicator(ind.datasource, ind.indicator, ind.selections, ind.series);
                 });
-
             if (!Oskari.user().isLoggedIn()) {
                 // just flush cache
                 _cacheHelper.clearCacheOnDelete(datasrc, indicatorId, selectors, regionset);
                 callback();
                 return;
             }
-
             const me = this;
             const data = {
                 datasource: datasrc,
                 id: indicatorId
             };
-
             if (selectors && typeof selectors === 'object') {
                 // only remove dataset from indicator, not the whole indicator
                 data.selectors = JSON.stringify(selectors);
