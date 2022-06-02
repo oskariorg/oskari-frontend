@@ -7,6 +7,7 @@ import { GenericForm } from 'oskari-ui';
  *
  * Shows a form for my place
  */
+// PersonalData removal
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
     /**
@@ -31,8 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         this.templateOption = jQuery('<option></option>');
         this.categoryForm = undefined;
 
-        this.dialog = undefined;
-        this.dialogForm = undefined;
+        this.popupControls = undefined;
 
         // Default generic rules
         this.defaultRules = [
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
             },
             () => ({
                 validator: (_, value) => {
-                    if (Oskari.util.sanitize(value) !== value) {
+                    if (value && Oskari.util.sanitize(value) !== value) {
                         return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
                     }
 
