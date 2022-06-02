@@ -1,5 +1,3 @@
-
-
 import { EDIT_OPTIONS, DRAW_OPTIONS, DRAW_ID } from '../constants';
 
 export class DrawHandler {
@@ -64,7 +62,6 @@ export class DrawHandler {
     }
 
     startModify (geometry) {
-        console.log(this._drawing);
         const shape = geometry.type.replace('Multi', '');
         const options = {
             ...EDIT_OPTIONS,

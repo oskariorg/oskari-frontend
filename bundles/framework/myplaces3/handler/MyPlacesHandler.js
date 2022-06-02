@@ -148,7 +148,6 @@ class PlaceHandler extends StateHandler {
         this.openPlacePopup(place);
     }
 
-    // MyPlaces.EditPlaceRequest
     editPlace (id) {
         const place = this.service.findMyPlace(id);
         if (!place) {

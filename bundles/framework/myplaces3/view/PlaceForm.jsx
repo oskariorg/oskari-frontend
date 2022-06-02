@@ -60,7 +60,6 @@ LayerSelect.propTypes = {
 const PlaceForm = ({ values = {}, categories, onSave, onCancel }) => {
     const [state, setState] = useState(values);
     const updateState = newState => setState({ ...state, ...newState });
-    // TODO: should we add measurement result and illegal char check (name, desc,..) ??
     const hasName = state.name && state.name.trim();
     return (
         <Content>

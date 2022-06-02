@@ -380,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          * @param {Boolean} makePublic true to publish, false to unpublish
          * @param {Function} callback function receives a boolean parameter with true on successful operation
          */
-        publishCategory: function (categoryId, makePublic, callback) {
+        publishCategory: function (categoryId, makePublic) {
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
