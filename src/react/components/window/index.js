@@ -1,8 +1,9 @@
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
+import styled from 'styled-components';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
-import { Alert } from 'antd';
+import { Banner } from './Banner';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
@@ -190,34 +191,26 @@ export const showFlyout = (title, content, onClose, options = {}) => {
 
 /**
  * 
- * @param {String} type Antd Alert type
+ * @param {ReactElement} icon
+ * @param {String} title
+ * @param {ReactNode} content
+ * @param {ReactNode} action
  * @param {Function} onClose 
- * @param {object} props Antd Alert props 
- * @returns 
+ * @param {boolean} closable 
+ * @returns {object} that provides functions that can be used to close/update the banner
  */
-export const showBanner = (type, onClose, props) => {
+export const showBanner = (icon, title, content, onClose, closable, action) => {
     const element = createTmpContainer();
     const removeWindow = createRemoveFn(element, onClose);
     const bringToTop = createBringToTop(element);
 
     const render = (props) => {
         ReactDOM.render(
-            <Alert
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '270px',
-                    height: 'auto',
-                    width: 'auto',
-                    right: '250px',
-                    border: 'none',
-                    backgroundColor: '#fff0e2',
-                    boxShadow: '0 5px 10px 0 #888888'
-                }}
+            <Banner
                 {...props}
             />, element);
     };
-    render({type, onClose, ...props});
+    render({icon, title, content, action, onClose, closable});
     return  {
         update: render,
         close: removeWindow,

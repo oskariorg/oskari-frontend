@@ -27,11 +27,6 @@ const PopupLink = styled('span')`
     cursor: pointer;
 `;
 
-const Title = styled('span')`
-    color: #5e2c00;
-    font-weight: bold;
-`;
-
 const getContent = (state, controller, onClose, renderDescriptionPopup) => {
     const { bannerAnnouncements, currentBanner = 1 } = state;
     const announcement = bannerAnnouncements[currentBanner - 1];
@@ -68,7 +63,6 @@ const getContent = (state, controller, onClose, renderDescriptionPopup) => {
         </PopupLink>;
     }
 
-
     const action = <ActionContainer>
         <Checkbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
             <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
@@ -82,11 +76,10 @@ const getContent = (state, controller, onClose, renderDescriptionPopup) => {
     </ActionContainer>;
 
     return {
-        message: <Title>{title}</Title>,
+        title,
         action,
         closable: bannerAnnouncements.length > 1 ? false : true,
-        description,
-        showIcon: true,
+        content: description,
         icon: <InfoCircleOutlined style={{color: '#5e2c00'}} />
     }
 };
@@ -94,16 +87,19 @@ const getContent = (state, controller, onClose, renderDescriptionPopup) => {
 export const showAnnouncementsBanner = (state, controller, onClose, renderDescriptionPopup) => {
     const content = getContent(state, controller, onClose, renderDescriptionPopup);
     if (content === null) return null;
-    const controls = showBanner('warning', onClose, content);
+    const controls = showBanner(content.icon, content.title, content.content, onClose, content.closable, content.action);
     return {
         ...controls,
         update: (state) => {
             const content = getContent(state, controller, onClose, renderDescriptionPopup);
             if (content === null) return null;
             controls.update({
-                type: 'warning',
+                icon: content.icon,
+                title: content.title,
+                content: content.content,
                 onClose,
-                ...content
+                closable: content.closable,
+                action: content.action
             });
         }
     };
