@@ -2,14 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FlyoutCollapse, FlyoutFooter } from '../';
 import { Message, Divider } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 
 // Flyout content with tools, outdated and upcoming announcements for admin users
-export const TooledContent = ({
-    active,
-    outdated,
-    upcoming,
+export const FlyoutContent = ({
+    active = [],
+    outdated = [],
+    upcoming = [],
     toolController
 }) => {
+    if (!toolController) {
+        return <FlyoutCollapse announcements={active}/>;
+    }
     return (
         <div>
             <FlyoutCollapse announcements={active} toolController={toolController}/>
@@ -26,9 +30,9 @@ export const TooledContent = ({
     );
 };
 
-TooledContent.propTypes = {
-    active: PropTypes.array.isRequired,
-    outdated: PropTypes.array.isRequired,
-    upcoming: PropTypes.array.isRequired,
-    toolController: PropTypes.any.isRequired
+FlyoutContent.propTypes = {
+    active: PropTypes.array,
+    outdated: PropTypes.array,
+    upcoming: PropTypes.array,
+    toolController: PropTypes.instanceOf(Controller)
 };

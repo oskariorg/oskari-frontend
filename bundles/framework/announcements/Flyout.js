@@ -60,14 +60,11 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.Flyout',
             if (!this.container) {
                 return;
             }
-            const toolController = this.announcementsHandler.getToolController();
-            const FlyoutContent = toolController ? TooledContent : FlyoutCollapse;
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                     <FlyoutContent
                         { ...state }
-                        announcements={state.active}
-                        toolController = {toolController}
+                        toolController = {this.announcementsHandler.getToolController()}
                         controller={this.announcementsHandler.getController()}
                     />
                 </LocaleProvider>
