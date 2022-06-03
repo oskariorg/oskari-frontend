@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox } from 'oskari-ui';
-import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller  } from 'oskari-ui/util';
+import { Spin, LocalizationComponent, TextInput, Message, Checkbox } from 'oskari-ui';
+import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller } from 'oskari-ui/util';
 import { DeleteButton, ButtonContainer, SecondaryButton, PrimaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
