@@ -65,14 +65,14 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Popup = ({title = '', children, onClose, bringToTop, options = {}}) => {
+export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
         style: {
             transform: `translate(${position.x}px, ${position.y}px)`
         },
-        className: options.id ? `t_popup t_${options.id}` : 't_popup'
+        className: `t_popup t_${options.id}`
     };
     const elementRef = useRef();
     const headerProps = {};
