@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { TooledContent, FlyoutCollapse } from './view/';
+import { FlyoutContent } from './view/';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**

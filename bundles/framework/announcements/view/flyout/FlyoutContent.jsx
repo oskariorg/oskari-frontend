@@ -4,7 +4,6 @@ import { FlyoutCollapse, FlyoutFooter } from '../';
 import { Message, Divider } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 
-// Flyout content with tools, outdated and upcoming announcements for admin users
 export const FlyoutContent = ({
     active = [],
     outdated = [],
@@ -14,6 +13,7 @@ export const FlyoutContent = ({
     if (!toolController) {
         return <FlyoutCollapse announcements={active}/>;
     }
+    // Flyout content with tools, outdated and upcoming announcements for admin users
     return (
         <div>
             <FlyoutCollapse announcements={active} toolController={toolController}/>
