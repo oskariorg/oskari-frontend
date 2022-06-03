@@ -55,10 +55,10 @@ const ToolsContainer = styled.div`
 `;
 
 
-export const Flyout = ({title = '', children, onClose, bringToTop, options = {}}) => {
+export const Flyout = ({title = '', children, onClose, bringToTop, options}) => {
     const [position, setPosition] = useState({ x: 210, y: 30 });
     const elementRef = useRef();
-    const containerClass = options.id ? `t_flyout t_${options.id}` : 't_flyout'
+    const containerClass = `t_flyout t_${options.id}`
     const onMouseDown = useCallback(() => {
         if (typeof bringToTop === 'function') {
             bringToTop();

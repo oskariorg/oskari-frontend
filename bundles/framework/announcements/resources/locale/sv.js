@@ -6,7 +6,10 @@ Oskari.registerLocalization(
             "title": "Aviseringar",
             "desc": "",
             "flyout": {
-                "title": "Aviseringar"
+                "title": "Aviseringar",
+                "noAnnouncements": "Inga aktiva aviseringar",
+                "outdated": "Föråldrade aviseringar",
+                "upcoming": "Framtida aviseringar"
             },
             "tile": {
                 "title": "Aviseringar"
@@ -14,7 +17,7 @@ Oskari.registerLocalization(
             "valid": "Giltig:",
             "externalLink": "Läs mer",
             "dontShow" : "Visa inte detta igen",
-            "noAnnouncements": "Inga aktiva aviseringar",
+
             "messages": {
                 "getFailed":"Fetching announcements failed"
             },

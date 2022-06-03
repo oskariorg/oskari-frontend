@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const me = this;
         const { activeIndicator, regionset, error, seriesStats } = this.service.getStateService().getStateForRender();
         if (error) {
-            this.log.warn('Error getting state', error);
+            this.log.debug('Error getting state', error);
             me._clearRegions();
             return;
         }

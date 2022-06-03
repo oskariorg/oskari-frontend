@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 
     this.indicatorParamsList.on('delete.data', function (selectors) {
-        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
+        me.service.deleteIndicator(Number(me.datasourceId), me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
             if (err) {
                 me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetDelete'));
                 return;

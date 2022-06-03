@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message } from 'oskari-ui';
 import { showPopup } from 'oskari-ui/components/window';
-import { Controller, LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { AnnouncementsForm } from './AnnouncementsForm';
 import { BUNDLE_KEY } from './constants';
 
@@ -11,14 +11,15 @@ const Content = styled.div`
     margin: 12px 24px 24px;
 `;
 
-export const showEditPopup = (controller, announcement, onClose) => {
+export const showEditPopup = (announcement, onSubmit, onDelete, onClose) => {
     const title = <Message messageKey="popup.title" bundleKey={BUNDLE_KEY} />;
     const content = (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
                 <AnnouncementsForm
-                    controller={controller}
                     announcement={announcement}
+                    onSubmit={onSubmit}
+                    onDelete={onDelete}
                     onClose={onClose} />
             </Content>
         </LocaleProvider>
@@ -27,7 +28,8 @@ export const showEditPopup = (controller, announcement, onClose) => {
 };
 
 showEditPopup.propTypes = {
-    controller: PropTypes.instanceOf(Controller).isRequired,
     announcement: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired
 };
