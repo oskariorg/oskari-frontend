@@ -73,11 +73,15 @@ class ViewHandler extends StateHandler {
         this.updateState({ bannerAnnouncements: [] });
     }
 
+    onBannerChange (currentBanner) {
+        this.updateState({ currentBanner });
+    }
+
     onPopupChange (currentPopup) {
         this.updateState({ currentPopup });
     }
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'getToolController'
+    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'onBannerChange', 'getToolController'
 ]);

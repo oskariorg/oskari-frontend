@@ -1,4 +1,4 @@
-import { AnnouncementsHandler, showAnnouncementsPopup } from './view/';
+import { AnnouncementsHandler, showAnnouncementsPopup, showAnnouncementsBanner, showBannerDescriptionPopup } from './view/';
 /**
  * @class Oskari.framework.bundle.announcements.AnnouncementsBundleInstance
  *
@@ -19,6 +19,8 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
         this.service = null;
         this.handler = null;
         this.popupControls = null;
+        this.bannerControls = null;
+        this.descriptionPopupControls = null;
     }, {
 
         afterStart: function () {
@@ -34,6 +36,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             if (flyout) {
                 this.handler = new AnnouncementsHandler(this.service);
                 this.handler.addStateListener(state => this.renderPopup(state));
+                this.handler.addStateListener(state => this.renderBanner(state));
                 flyout.initHandler(this.handler);
             }
             if (me.conf && me.conf.plugin) {
@@ -71,11 +74,50 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             };
             this.popupControls = showAnnouncementsPopup(state, controller, onClose);
         },
+        renderBanner: function (state) {
+            if (!state.bannerAnnouncements || !state.bannerAnnouncements.length) {
+                return;
+            }
+
+            if (this.bannerControls) {
+                this.bannerControls.update(state);
+                return;
+            }
+            const controller = this.handler.getController();
+            const onClose = () => {
+                controller.onBannerClose();
+                this.bannerCleanup();
+            };
+            this.bannerControls = showAnnouncementsBanner(state, controller, onClose, (title, description) => this.renderDescriptionPopup(title, description));
+        },
+        renderDescriptionPopup: function (title, description) {
+            if (this.descriptionPopupControls) {
+                this.descriptionPopupControls.update(title, description);
+                return;
+            }
+
+            const onClose = () => {
+                this.descriptionPopupCleanup();
+            };
+            this.descriptionPopupControls = showBannerDescriptionPopup(title, description, onClose);
+        },
         popupCleanup: function () {
             if (this.popupControls) {
                 this.popupControls.close();
             }
             this.popupControls = null;
+        },
+        bannerCleanup: function () {
+            if (this.bannerControls) {
+                this.bannerControls.close();
+            }
+            this.bannerControls = null;
+        },
+        descriptionPopupCleanup: function () {
+            if (this.descriptionPopupControls) {
+                this.descriptionPopupControls.close();
+            }
+            this.descriptionPopupControls = null;
         },
         /**
          * @method update
