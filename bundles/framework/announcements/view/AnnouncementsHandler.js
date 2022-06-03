@@ -37,7 +37,9 @@ class ViewHandler extends StateHandler {
 
     getToolController () {
         const controller = this.service.getAdminController();
-        controller.preview = (id) => this.preview(id);
+        if (controller) {
+            controller.preview = (id) => this.preview(id);
+        }
         return controller;
     }
 
