@@ -86,6 +86,20 @@ const getCollapseHeader = () => {
 };
 
 const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
+
+// This checks if the param is a React component. React.isValidElement() checks if it's a valid element that might not be a component
+const isReactComponent = (el) => el && el.$$typeof === Symbol.for('react.element');
+
+const getMandatoryIcon = (mandatory, elementValue) => {
+    if (typeof mandatory === 'boolean') {
+        return (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
+    } else if (isReactComponent(mandatory)) {
+        // Admin-layereditor has custom mandatory context with own mechanism for validation
+        return (<mandatory.type {...mandatory.props}/>);
+    }
+    return null;
+};
+
 /**
  * 
  * @param {String[]} languages käytössä olevat kielet
@@ -104,7 +118,6 @@ export const LocalizationComponent = ({
     languages,
     onChange,
     value,
-    labels,
     mandatoryLanguages = [languages[0]],
     LabelComponent = Label,
     collapse = true,
@@ -136,10 +149,10 @@ export const LocalizationComponent = ({
 
             const { mandatory = false, label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
             
-            let labelCompleted = isDefaultLang ? label : getPlaceholderWithLangSuffix(label, lang);
-            let currentMandatory = mandatory && mandatoryLanguages.includes(lang);
+            let fieldLabel = isDefaultLang ? label : getPlaceholderWithLangSuffix(label, lang);
+            const currentMandatory = mandatory && mandatoryLanguages.includes(lang);
             const elProps = {
-                label: labelCompleted,
+                label: fieldLabel,
                 value: elementValue,
                 onChange: onElementValueChange,
                 autoComplete: 'off',
@@ -147,28 +160,19 @@ export const LocalizationComponent = ({
             };
             const elementDeclaredProps = {...element.type.propTypes};
             const elementRendersLabel = !!elementDeclaredProps.label;
-            if (!elementRendersLabel) {
-                if (currentMandatory) {
-                    elProps.suffix = (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
-                }
+            if (!elementRendersLabel && currentMandatory) {
+                elProps.suffix = getMandatoryIcon(mandatory, elementValue);
             }
-            // 
             // detect if the element we are rendering declares supporting "mandatory" as prop.
-            if (elementDeclaredProps.mandatory) {
-                elProps.mandatory = currentMandatory;
+            if (elementDeclaredProps.mandatory && currentMandatory) {
+                elProps.mandatory = mandatory;
             }
             return (
                 <React.Fragment key={`${lang}_${index}`}>
-                    { !elementRendersLabel && <LabelComponent>{ labelCompleted }</LabelComponent>}
+                    { !elementRendersLabel && <LabelComponent>{ fieldLabel }</LabelComponent>}
                     <element.type {...elProps} />
                 </React.Fragment>
             );
-            /*
-            
-                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ labelSingle } trigger={ ['focus', 'hover'] }>
-                        <element.type {...elProps} />
-                    </Tooltip>
-                    */
         });
 
         return (

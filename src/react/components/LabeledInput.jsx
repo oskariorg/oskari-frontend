@@ -16,6 +16,22 @@ const Textarea = styled(Input.TextArea)`
     font-family: inherit;
 `
 
+const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
+// This checks if the param is a React component. React.isValidElement() checks if it's a valid element that might not be a component
+const isReactComponent = (el) => el && el.$$typeof === Symbol.for('react.element');
+
+const getMandatoryIcon = (mandatory, elementValue) => {
+    if (typeof mandatory === 'boolean') {
+        // generate default check for mandatory field
+        return (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
+    } else if (isReactComponent(mandatory)) {
+        // use icon send through props
+        // Admin-layereditor has custom mandatory context with own mechanism for validation
+        return (<mandatory.type {...mandatory.props}/>);
+    }
+    return null;
+};
+
 export const LabeledInput = ({
     label,
     mandatory,
@@ -24,20 +40,14 @@ export const LabeledInput = ({
 }) => {
     const { value, type } = inputProps;
     const InputNode = type === 'textarea' ? Textarea : Input;
-    const isValid = mandatory ? typeof value !== 'undefined' && value.trim().length > 0 : true;
     if (minimal) {
         let labelStr = label;
         if (typeof label !== 'string') {
-            const isReactComponent = label.$$typeof === Symbol.for('react.element');
-            if (isReactComponent) {
-                // FIXME: doesn't work properly. Would need to get the actual content rendered by the tag instead
-                labelStr = React.Children.toArray(label.props.children).filter(c => typeof c === 'string').join(' ');
-            } else {
-                labelStr = '';
-            }
+            labelStr = '';
+            Oskari.log('React/LabeledInput').error('Minimal input requires label as string');
         }
         if (mandatory) {
-            inputProps.suffix = (<MandatoryIcon isValid={isValid}/>);
+            inputProps.suffix = getMandatoryIcon(mandatory, value);
         }
         return (
             <Component>
@@ -50,7 +60,7 @@ export const LabeledInput = ({
     return (
         <Component>
             <Label>
-                {label} { mandatory && <MandatoryIcon isValid={isValid}/> }
+                {label} { mandatory && getMandatoryIcon(mandatory, value) }
             </Label>
             <InputNode {...inputProps}/>
         </Component>
@@ -63,6 +73,9 @@ LabeledInput.propTypes = {
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ]).isRequired,
-    mandatory: PropTypes.bool,
+    mandatory: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.bool
+    ]),
     minimal: PropTypes.bool
 };

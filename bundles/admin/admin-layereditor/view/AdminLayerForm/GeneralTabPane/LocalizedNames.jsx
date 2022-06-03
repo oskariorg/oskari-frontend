@@ -11,26 +11,7 @@ const PaddingTop = styled('div')`
 const PaddingBottom = styled('div')`
     padding-bottom: 10px;
 `;
-/*
-const getLabels = (bundleKey) => {
-    const getMsg = Oskari.getMsg.bind(null, bundleKey);
-    const labels = {};
-    Oskari.getSupportedLanguages().forEach(language => {
-        const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
-        labels[language] = {
-            name: getMsg(`fields.locale.${langPrefix}.name`, [language]),
-            subtitle: getMsg(`fields.locale.${langPrefix}.description`, [language])
-        };
-    });
-    // mark mandatory field
-    const defaultLanguage = Oskari.getSupportedLanguages()[0];
-    labels[defaultLanguage].name = (<React.Fragment>
-        {labels[defaultLanguage].name} <MandatoryIcon />
-    </React.Fragment>);
-    return labels;
-};
-*/
-export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey, getMessage }) => (
+export const LocalizedNames = LocaleConsumer(({ layer, controller, getMessage }) => (
     <PaddingBottom>
         <LocalizationComponent
             value={layer.locale}
@@ -42,9 +23,8 @@ export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey, ge
                 Can't wrap them to <StyledFormField>.
                 // TODO: make LabeledInput accepts MandatoryIcon with custom logic in addition to boolean
             */}
-            <LabeledInput type='text' label={<Message messageKey='fields.locale.name' />} name='name' mandatory={true} />
-            <LabeledInput type='text' label={getMessage('fields.locale.description')} name='subtitle' minimal={true}/>
-            <PaddingTop/>
+            <LabeledInput type='text' label={getMessage('fields.locale.name')} name='name' mandatory={<MandatoryIcon />} />
+            <LabeledInput type='text' label={<Message messageKey='fields.locale.description' />} name='subtitle' />
         </LocalizationComponent>
     </PaddingBottom>
 ));
