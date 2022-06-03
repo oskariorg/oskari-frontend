@@ -143,7 +143,6 @@ export const LocalizationComponent = ({
                 value: elementValue,
                 onChange: onElementValueChange,
                 autoComplete: 'off',
-                suffix: suffix,
                 ...restProps
             };
             const elementDeclaredProps = {...element.type.propTypes};
