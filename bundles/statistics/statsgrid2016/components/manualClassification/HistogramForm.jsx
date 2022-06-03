@@ -12,9 +12,10 @@ const BUNDLE_KEY = 'StatsGrid';
 const Content = styled.div`
     padding: 24px;
 `;
-const Margin = styled.div`
-    padding-top: 5px;
-    padding-bottom: 10px;
+const StyledSelect = styled(Select)`
+    margin-left: 10px;
+    min-width: 150px;
+    margin-bottom: 10px;
 `;
 
 const Form = ({
@@ -49,18 +50,17 @@ const Form = ({
     };
     return (
         <Content>
-            <Message messageKey={'classify.labels.method' } bundleKey={BUNDLE_KEY} />
-            <Margin>
-                <Select
-                    value = {method}
-                    onChange={value => onMethodChange(value)}>
-                    {methods.map(({ label, ...rest }, i) => (
-                        <Option key={`option-${i}`} {...rest}>
-                            {label}
-                        </Option>
-                    ))}
-                </Select>
-            </Margin>
+            <label><b><Message messageKey={'classify.labels.method' } bundleKey={BUNDLE_KEY} /></b></label>
+            <StyledSelect
+                className='t_option-method'
+                value = {method}
+                onChange={value => onMethodChange(value)}>
+                {methods.map(({ label, ...rest }, i) => (
+                    <Option key={`option-${i}`} {...rest}>
+                        {label}
+                    </Option>
+                ))}
+            </StyledSelect>
             <div ref={ref} className="manual-class-view"/>
             <ButtonContainer>
                 <PrimaryButton type='close' onClick={onClose}/>
