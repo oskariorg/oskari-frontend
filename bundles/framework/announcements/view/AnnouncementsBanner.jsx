@@ -33,8 +33,11 @@ const Title = styled('span')`
 `;
 
 const getContent = (state, controller, onClose, renderDescriptionPopup) => {
-    const { bannerAnnouncements, currentBanner } = state;
+    const { bannerAnnouncements, currentBanner = 1 } = state;
     const announcement = bannerAnnouncements[currentBanner - 1];
+
+    if (!announcement) return null;
+
     const { title, link, content } = Oskari.getLocalized(announcement.locale);
     const setShowAgain = (e) => controller.setShowAgain(announcement.id, e.target.checked);
 
@@ -90,11 +93,13 @@ const getContent = (state, controller, onClose, renderDescriptionPopup) => {
 
 export const showAnnouncementsBanner = (state, controller, onClose, renderDescriptionPopup) => {
     const content = getContent(state, controller, onClose, renderDescriptionPopup);
+    if (content === null) return null;
     const controls = showBanner('warning', onClose, content);
     return {
         ...controls,
         update: (state) => {
             const content = getContent(state, controller, onClose, renderDescriptionPopup);
+            if (content === null) return null;
             controls.update({
                 type: 'warning',
                 onClose,
