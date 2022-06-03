@@ -15,7 +15,7 @@ const getMsg = key => <Message messageKey={key} bundleKey='oskariui'/>
 export const DeleteButton = ({ 
     onConfirm,
     icon,
-    tooltip = getMsg('buttons.delete'),
+    tooltip = icon ? getMsg('buttons.delete') : null,
     title = getMsg('messages.confirmDelete'),
     disabled
 }) => {
