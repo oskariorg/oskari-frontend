@@ -33,9 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                 if (!mapLayerGroup) {
                     const group = {
                         id: this.groupId,
-                        name: {
-                            [Oskari.getLang()]: loclayer.inspire
-                        }
+                        name: loclayer.inspire
                     };
                     maplayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                 }

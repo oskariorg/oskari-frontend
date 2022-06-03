@@ -9,12 +9,13 @@ import '../resources/scss/classificationplugin.scss';
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
-    function (instance, config, locale, sandbox) {
-        var me = this;
-        me._locale = locale;
-        me._config = config || {};
-        me._sandbox = sandbox;
+    function (instance, config) {
+        const me = this;
         me._instance = instance;
+        me._config = config || {};
+        me._sandbox = instance.getSandbox();
+        this.service = instance.getStatisticsService();
+        me._locale = Oskari.getMsg.bind(null, 'StatsGrid');
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
         this._defaultLocation = me._config.legendLocation || 'right bottom';
@@ -35,7 +36,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
 
-        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;

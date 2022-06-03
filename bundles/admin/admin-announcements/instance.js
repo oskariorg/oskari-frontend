@@ -1,4 +1,7 @@
-import { showEditPopup } from './view/AnnouncementsPopup';
+
+import { AdminAnnouncementsHandler } from './service/AdminAnnouncementsHandler';
+
+const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 /**
  * @class Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance
  *
@@ -6,37 +9,18 @@ import { showEditPopup } from './view/AnnouncementsPopup';
  *
  * See Oskari.framework.bundle.admin-announcements.AdminAnnouncementsBundleInstance for bundle definition.
  */
-Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.AdminAnnouncementsBundleInstance',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-    function () {
-        var conf = this.getConfiguration();
-        conf.name = 'admin-announcements';
-        conf.flyoutClazz = 'Oskari.admin.bundle.admin-announcements.Flyout';
-        this.popupControls = null;
-    }, {
-
-        afterStart: function () {
-        },
-
-        showEditPopup: function (controller, announcement) {
-            if (this.popupControls) {
-                this.popupCleanup();
-            }
-            const onClose = () => this.popupCleanup();
-            this.popupControls = showEditPopup(controller, announcement, onClose);
-        },
-        popupCleanup: function () {
-            if (this.popupControls) {
-                this.popupControls.close();
-            }
-            this.popupControls = null;
+Oskari.clazz.defineES('Oskari.admin.admin-announcements.instance',
+    class AdminAnnouncements extends BasicBundle {
+        constructor () {
+            super();
+            this.__name = 'admin-announcements';
+            this.handler = null;
         }
 
-    }, {
-        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+        _startImpl () {
+            const annService = this.sandbox.getService('Oskari.framework.announcements.service.AnnouncementsService');
+            this.handler = new AdminAnnouncementsHandler(this, annService);
+            annService.registerAdminController(this.handler.getController());
+        }
     }
 );

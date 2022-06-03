@@ -106,7 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin',
                 const defaultParams = {
                     LAYERS: _layer.getLayerName(),
                     TRANSPARENT: true,
-                    ID: _layer.getId(),
                     STYLES: _layer.getCurrentStyle().getName(),
                     FORMAT: 'image/png',
                     VERSION: _layer.getVersion() || '1.3.0'

@@ -5,27 +5,21 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-ilmoitukset",
             "desc": "",
-            "flyout": {
-                "title": "Admin-ilmoitukset"
-            },
-            "tile": {
-                "title": "A: Ilmoitukset"
-            },
             "popup": {
                 "title": "Ilmoitus"
             },
             "fields": {
                 "date": "Aikaväli",
                 "show": {
-                    "label": "Näytä",
+                    "label": "Näytä ilmoitus",
                     "popup": "Ponnahdusikkunassa",
                     "banner": "Yläpalkissa"
                 },
                 "type": {
                     "label": "Ilmoituksen tyyppi",
                     "title": "Vain otsikko",
-                    "content": "Sisältö",
-                    "link": "Lisätietolinkki"
+                    "content": "Otsikko ja sisältö",
+                    "link": "Otsikko ja lisätietolinkki"
                 },
                 "locale": {
                     "generic": {

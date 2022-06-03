@@ -480,12 +480,10 @@ Oskari.clazz.define(
             };
         },
         createClassficationView: function () {
-            var config = jQuery.extend(true, {}, this.getConfiguration());
-            var sandbox = this.getSandbox();
-            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const config = jQuery.extend(true, {}, this.getConfiguration());
+            const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
 
-            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config);
             this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
             this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
             mapModule.registerPlugin(this.classificationPlugin);

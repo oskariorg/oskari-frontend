@@ -248,9 +248,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         if (!mapLayerGroup) {
             const group = {
                 id: this.groupId,
-                name: {
-                    [Oskari.getLang()]: this.instance.loc('layer.inspire')
-                }
+                name: this.instance.loc('layer.inspire')
             };
             mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
         }

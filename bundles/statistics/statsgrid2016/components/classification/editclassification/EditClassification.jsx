@@ -64,7 +64,7 @@ export const EditClassification = ({
                 <Message messageKey={`classify.labels.method`}/>
                 <span>: &nbsp;</span>
                 <Message messageKey={`classify.methods.${values.method}`}/>
-                <EditIcon disabled = {disabled} onClick={() => startHistogramView()}/>
+                <EditIcon disabled = {disabled} className='t_button-method' onClick={() => startHistogramView()}/>
             </MethodContainer>
             <LabeledSelect
                 name = 'count'
