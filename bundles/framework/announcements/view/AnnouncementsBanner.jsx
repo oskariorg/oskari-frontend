@@ -1,7 +1,7 @@
 import React from 'react';
 import { showBanner } from 'oskari-ui/components/window';
 import { Checkbox, Message, Pagination, Link } from 'oskari-ui';
-import { BUNDLE_KEY } from '..//constants';
+import { BUNDLE_KEY } from '../constants';
 import styled from 'styled-components';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { InfoCircleOutlined, SelectOutlined } from '@ant-design/icons';
