@@ -1,3 +1,5 @@
+import { PLACEMENTS } from ".";
+
 export const getAvailableWidth = () => {
     // width of <body>
     return document.body.clientWidth ||
@@ -18,6 +20,7 @@ export const getAvailableHeight = () => {
 
 const DEFAULT_WIDTH = 50;
 const DEFAULT_HEIGHT = 30;
+const BORDER_MARGIN = 10;
 export const OUTOFSCREEN_CLASSNAME = 'outofviewport';
 
 export const createDraggable = (position, setPosition, elementRef) => {
@@ -127,22 +130,57 @@ export const createDraggable = (position, setPosition, elementRef) => {
     document.addEventListener("touchcancel", onMouseUp);
 };
 
-export const getPositionForCentering = (elementRef) => {
+const getPlacementXY = (width, height, placement) => {
+    const availableWidth = getAvailableWidth();
+    const availableHeight = getAvailableHeight();
+    let x = Math.max((availableWidth - width) / 2, 0);
+    let y = Math.max((availableHeight - height) / 2, 0);
+
+    switch(placement) {
+        case PLACEMENTS.TOP:
+            y = BORDER_MARGIN;
+            break;
+        case PLACEMENTS.LEFT:
+            x = BORDER_MARGIN;
+            break;
+        case PLACEMENTS.BOTTOM:
+            y = availableHeight - height - BORDER_MARGIN;
+            break;
+        case PLACEMENTS.RIGHT:
+            x = availableWidth - width - BORDER_MARGIN;
+            break;
+        case PLACEMENTS.TL:
+            y = BORDER_MARGIN;
+            x = BORDER_MARGIN;
+            break;
+        case PLACEMENTS.TR:
+            y = BORDER_MARGIN;
+            x = availableWidth - width - BORDER_MARGIN;
+            break;
+        case PLACEMENTS.BL:
+            y = availableHeight - height - BORDER_MARGIN;
+            x = BORDER_MARGIN;
+            break;
+        case PLACEMENTS.BR:
+            y = availableHeight - height - BORDER_MARGIN;
+            x = availableWidth - width - BORDER_MARGIN;
+            break;
+    }
+    return { x, y }
+};
+
+export const getPositionForCentering = (elementRef, placement) => {
     if (!elementRef) {
         throw new TypeError('Pass React.useRef() for the element to center');
     }
     const element = elementRef.current;
     let width = DEFAULT_WIDTH;
     let height = DEFAULT_HEIGHT;
-    const availableWidth = getAvailableWidth();
-    const availableHeight = getAvailableHeight();
+
     if (element) {
         const bounds = element.getBoundingClientRect();
         width = bounds.width;
         height = bounds.height;
     }
-    return {
-        x: Math.max((availableWidth - width) / 2, 0),
-        y: Math.max((availableHeight - height) / 2, 0)
-    };
+    return getPlacementXY(width, height, placement);
 };

@@ -6,6 +6,17 @@ import { Popup } from './Popup';
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
  * ************************************************ */
+export const PLACEMENTS = {
+    TOP: 'top',
+    BOTTOM: 'bottom',
+    RIGHT: 'right',
+    LEFT: 'left',
+    TL: 'topLeft',
+    TR: 'topRight',
+    BL: 'bottomLeft',
+    BR: 'bottomRight'
+};
+
 const DEFAULT_POPUP_OPTIONS = {
     isDraggable: true
 };

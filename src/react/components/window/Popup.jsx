@@ -42,9 +42,10 @@ const Container = styled.div`
 const PopupHeader = styled.h3`
     background-color: #FDF8D9;
     padding: 8px 10px;
+    display: flex;
 `;
 const PopupTitle = styled.span`
-    margin-right: 5px;
+    margin-right: auto;
 `;
 // Note! max-height isn't recalculated when window size changes :(
 const PopupBody = styled.div`
@@ -52,7 +53,7 @@ const PopupBody = styled.div`
     overflow: auto;
 `;
 const ToolsContainer = styled.div`
-    float: right;
+    margin-left: 10px;
     height: 16px;
     display: inline-block;
     /* Size and color for tool icons from AntD: */
@@ -112,7 +113,7 @@ export const Popup = ({title = '', children, onClose, bringToTop, options = {}})
         }
         // center after content has been rendered
         setPosition({
-            ...getPositionForCentering(elementRef),
+            ...getPositionForCentering(elementRef, options.placement),
             centered: true
         });
         return handleUnmounting;
