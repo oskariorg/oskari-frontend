@@ -8,11 +8,6 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Avisering"
             },
-            "tools": {
-                "add": "Lägg till en ny avisering",
-                "edit": "Redigera avisering",
-                "delete": "Ta bort avisering"
-            },
             "fields": {
                 "date": "Datumintervall",
                 "show": {

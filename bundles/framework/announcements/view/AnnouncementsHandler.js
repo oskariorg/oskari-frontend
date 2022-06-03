@@ -6,7 +6,7 @@ class ViewHandler extends StateHandler {
     constructor (service) {
         super();
         this.service = service;
-        this.service.on('tool', () => this.updateState({ tools: this.service.getTools() }));
+        this.service.on('controller', () => this.notify());
         this.service.on('fetch', () => this.onFetch());
         this.service.fetchAnnouncements();
     }
@@ -33,6 +33,10 @@ class ViewHandler extends StateHandler {
             newState.bannerAnnouncements = active.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
         }
         this.updateState(newState);
+    }
+
+    getToolController () {
+        return this.service.getAdminController();
     }
 
     setShowAgain (id, dontShow) {
@@ -63,5 +67,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'onBannerChange'
+    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'onBannerChange', 'getToolController'
 ]);
