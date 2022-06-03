@@ -14,7 +14,9 @@ class ViewHandler extends StateHandler {
         this.state = {
             dontShowAgain: [],
             announcements: [],
-            showAsPopup: []
+            showAsPopup: [],
+            showAsBanner: [],
+            currentBanner: 1
         };
         this.initState();
     }
@@ -26,10 +28,12 @@ class ViewHandler extends StateHandler {
             } else {
                 const dontShowAgain = this.getDontShowAgainIds(announcements);
                 const showAsPopup = announcements.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
+                const showAsBanner = announcements.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
                 this.updateState({
                     announcements,
                     dontShowAgain,
-                    showAsPopup
+                    showAsPopup,
+                    showAsBanner
                 });
             }
         }.bind(this));
@@ -57,6 +61,14 @@ class ViewHandler extends StateHandler {
 
     onPopupChange (currentPopup) {
         this.updateState({ currentPopup });
+    }
+
+    onBannerChange (currentBanner) {
+        this.updateState({ currentBanner });
+    }
+
+    clearBanner() {
+        this.updateState({ showAsBanner: [] });
     }
 
     getIdsFromLocalStorage () {
@@ -87,5 +99,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setShowAgain', 'clearPopup', 'onPopupChange'
+    'setShowAgain', 'clearPopup', 'onPopupChange', 'onBannerChange', 'clearBanner'
 ]);
