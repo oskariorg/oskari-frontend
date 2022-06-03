@@ -99,6 +99,9 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
             Oskari.log('sandbox-state-methods').warn('useState() called with empty state, skipping. Use resetState() instead to restore initial state.');
             return;
         }
+        // trigger an event letting bundles know that the whole UI has changed to clean functionalities
+        this.notifyAll(Oskari.eventBuilder('UIChangeEvent')('sandbox'));
+
         var newStateConfig = jQuery.extend(true, {}, initialConf);
         var components = this.getStatefulComponents();
         var bundleState;
@@ -123,8 +126,6 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
             // reset to the default state
             bundle.setState(bundleState);
         }
-        // trigger an event letting bundles know that the whole UI has changed to clean functionalities
-        this.notifyAll(Oskari.eventBuilder('UIChangeEvent')('sandbox'));
     },
     setSessionExpiring: function (minutes, callback) {
         if (typeof minutes !== 'number' || typeof callback !== 'function') {
