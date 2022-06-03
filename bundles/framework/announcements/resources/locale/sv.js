@@ -21,6 +21,11 @@ Oskari.registerLocalization(
             "messages": {
                 "getFailed":"Fetching announcements failed"
             },
+            "tools": {
+                "add": "Lägg till en ny avisering",
+                "edit": "Redigera avisering",
+                "delete": "Ta bort avisering"
+            },
             "plugin" : {
                 "title": "Aviseringar",
                 "valid": "Vägande"

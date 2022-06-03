@@ -8,11 +8,6 @@ Oskari.registerLocalization(
         "popup": {
             "title": "Announcement"
         },
-        "tools": {
-            "add": "Add new announcement",
-            "edit": "Edit announcement",
-            "delete": "Delete announcement"
-        },
         "fields": {
             "date": "Date range",
             "show": {

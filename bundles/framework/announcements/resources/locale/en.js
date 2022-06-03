@@ -20,6 +20,11 @@ Oskari.registerLocalization(
         "messages": {
             "getFailed":"Fetching announcements failed"
         },
+        "tools": {
+            "add": "Add new announcement",
+            "edit": "Edit announcement",
+            "delete": "Delete announcement"
+        },
         "plugin" : {
             "title": "Announcements",
             "valid": "Valid"
