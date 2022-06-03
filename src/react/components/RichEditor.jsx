@@ -5,19 +5,21 @@ import { stateToHTML } from 'draft-js-export-html';
 import './TextEditor/RichText.css';
 import 'draft-js/dist/Draft.css';
 
+// Force links to use target _blank
 const HTML_OPTIONS = {
     entityStyleFn: entity => {
         const entityType = entity.get('type').toLowerCase();
-        if (entityType === 'link') {
-            const data = entity.getData();
-            return {
-                element: 'a',
-                attributes: {
-                    target: '_blank',
-                    href: data.url
-                }
-            };
+        if (entityType !== 'link') {
+            return;
         }
+        const data = entity.getData();
+        return {
+            element: 'a',
+            attributes: {
+                target: '_blank',
+                href: data.url
+            }
+        };
     }
 };
 
