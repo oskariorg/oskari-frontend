@@ -22,6 +22,7 @@ Oskari.registerLocalization(
                     "link": "Rubrik och extern länk"
                 },
                 "locale": {
+                    "link": "Extern länk",
                     "generic": {
                         "title": "Titel på {0}",
                         "content": "Innehåll på {0}"
