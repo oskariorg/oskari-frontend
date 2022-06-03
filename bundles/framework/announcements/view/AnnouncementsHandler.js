@@ -53,6 +53,10 @@ class ViewHandler extends StateHandler {
         this.updateState({ bannerAnnouncements: [] });
     }
 
+    onBannerChange (currentBanner) {
+        this.updateState({ currentBanner });
+    }
+
     onPopupChange (currentPopup) {
         this.updateState({ currentPopup });
     }

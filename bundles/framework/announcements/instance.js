@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             this.popupControls = showAnnouncementsPopup(state, controller, onClose);
         },
         renderBanner: function (state) {
-            if (!state.showAsBanner.length) {
+            if (!state.bannerAnnouncements || !state.bannerAnnouncements.length) {
                 return;
             }
 
@@ -85,9 +85,9 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             }
             const controller = this.handler.getController();
             const onClose = () => {
-                controller.clearBanner();
+                controller.onBannerClose();
                 this.bannerCleanup();
-            }
+            };
             this.bannerControls = showAnnouncementsBanner(state, controller, onClose, (title, description) => this.renderDescriptionPopup(title, description));
         },
         renderDescriptionPopup: function (title, description) {
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
 
             const onClose = () => {
                 this.descriptionPopupCleanup();
-            }
+            };
             this.descriptionPopupControls = showBannerDescriptionPopup(title, description, onClose);
         },
         popupCleanup: function () {
