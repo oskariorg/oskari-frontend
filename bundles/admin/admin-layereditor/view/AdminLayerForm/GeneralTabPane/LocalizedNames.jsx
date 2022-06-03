@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInput, LocalizationComponent } from 'oskari-ui';
+import { LabeledInput, LocalizationComponent, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { MandatoryIcon } from '../Mandatory';
 
-const PaddedLabel = styled('div')`
-    padding-bottom: 5px;
-`;
 const PaddingTop = styled('div')`
     padding-top: 10px;
 `;
 const PaddingBottom = styled('div')`
     padding-bottom: 10px;
 `;
-
+/*
 const getLabels = (bundleKey) => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
     const labels = {};
@@ -32,23 +29,21 @@ const getLabels = (bundleKey) => {
     </React.Fragment>);
     return labels;
 };
-
-export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
+*/
+export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey, getMessage }) => (
     <PaddingBottom>
         <LocalizationComponent
-            labels={getLabels(bundleKey, layer.locale)}
             value={layer.locale}
             languages={Oskari.getSupportedLanguages()}
             onChange={controller.setLocalizedNames}
-            LabelComponent={PaddedLabel}
         >
             {/*
                 The inputs have to be on direct children for LocalizationComponent.
                 Can't wrap them to <StyledFormField>.
+                // TODO: make LabeledInput accepts MandatoryIcon with custom logic in addition to boolean
             */}
-            <TextInput type='text' name='name'/>
-            <PaddingTop/>
-            <TextInput type='text' name='subtitle'/>
+            <LabeledInput type='text' label={<Message messageKey='fields.locale.name' />} name='name' mandatory={true} />
+            <LabeledInput type='text' label={getMessage('fields.locale.description')} name='subtitle' minimal={true}/>
             <PaddingTop/>
         </LocalizationComponent>
     </PaddingBottom>

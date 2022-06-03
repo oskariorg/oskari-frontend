@@ -37,23 +37,6 @@ const getInitialValue = (languages, value) => {
     return initialValue;
 };
 
-// React.isValidElement() ?
-const isReactComponent = (item) => item.$$typeof === Symbol.for('react.element');
-const getLabel = (labels, lang, elementName) => {
-    if (!labels) {
-        return;
-    }
-    let label = labels[lang];
-    if (label) {
-        label = (elementName && label[elementName]);
-    }
-    if (label) {
-        if (!isReactComponent(label) && typeof label === 'object') {
-            label = Object.values(label).shift();
-        }
-    }
-    return label;
-};
 const getPlaceholderWithLangSuffix = (label, lang) => {
     if (!label) {
         return '';
@@ -119,10 +102,10 @@ const validateMandatory = value => typeof value === 'string' && value.trim().len
  */
 export const LocalizationComponent = ({
     languages,
-    mandatoryLanguages = [languages[0]],
     onChange,
     value,
     labels,
+    mandatoryLanguages = [languages[0]],
     LabelComponent = Label,
     collapse = true,
     defaultOpen = false,
@@ -145,6 +128,7 @@ export const LocalizationComponent = ({
                 // Text or some other non-react node.
                 return element;
             }
+            // TODO: specify fields that we require from inputs for localized content: name, label?, mandatory?, onChange? etc
             const { name } = element.props;
             const onElementValueChange =
                 getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
@@ -152,25 +136,40 @@ export const LocalizationComponent = ({
 
             const { mandatory = false, label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
             
-            let labelSingle = label ? label : getLabel(labels, lang, name);
-            if (label && !isDefaultLang) {
-                labelSingle = getPlaceholderWithLangSuffix(label, lang);
+            let labelCompleted = isDefaultLang ? label : getPlaceholderWithLangSuffix(label, lang);
+            let currentMandatory = mandatory && mandatoryLanguages.includes(lang);
+            const elProps = {
+                label: labelCompleted,
+                value: elementValue,
+                onChange: onElementValueChange,
+                autoComplete: 'off',
+                suffix: suffix,
+                ...restProps
+            };
+            const elementDeclaredProps = {...element.type.propTypes};
+            const elementRendersLabel = !!elementDeclaredProps.label;
+            if (!elementRendersLabel) {
+                if (currentMandatory) {
+                    elProps.suffix = (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
+                }
             }
-            const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
-            let suffix;
-            if (mandatory && mandatoryLanguages.includes(lang)) {
-                suffix = <MandatoryIcon isValid={validateMandatory(elementValue)} />;
+            // 
+            // detect if the element we are rendering declares supporting "mandatory" as prop.
+            if (elementDeclaredProps.mandatory) {
+                elProps.mandatory = currentMandatory;
             }
             return (
                 <React.Fragment key={`${lang}_${index}`}>
-                    { labelSingle &&
-                        <LabelComponent>{ labelSingle }</LabelComponent>
-                    }
-                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholderWithSuffix } trigger={ ['focus', 'hover'] }>
-                        <element.type {...restProps} value={elementValue} onChange={onElementValueChange} placeholder={placeholderWithSuffix} autoComplete='off' suffix={suffix}/>
-                    </Tooltip>
+                    { !elementRendersLabel && <LabelComponent>{ labelCompleted }</LabelComponent>}
+                    <element.type {...elProps} />
                 </React.Fragment>
             );
+            /*
+            
+                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ labelSingle } trigger={ ['focus', 'hover'] }>
+                        <element.type {...elProps} />
+                    </Tooltip>
+                    */
         });
 
         return (

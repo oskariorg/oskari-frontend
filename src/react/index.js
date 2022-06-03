@@ -33,7 +33,7 @@ export { Link } from './components/Link';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';
-export { LocalizationComponent } from './components/LocalizationComponent';
+export { LocalizationComponent } from './components/LocalizationComponent2';
 export { GenericForm } from './components/GenericForm';
 export { DateRange } from './components/DateRange';
 export { ColorPicker } from './components/ColorPicker';
