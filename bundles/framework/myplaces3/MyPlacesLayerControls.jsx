@@ -3,25 +3,12 @@ import PropTypes from 'prop-types';
 import { Message, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 import { Select, Button } from 'oskari-ui';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons'
-import { red, green } from '@ant-design/colors'
+import { DeleteOutlined, ExportOutlined } from '@ant-design/icons';
+import { AddIcon, EditIcon } from 'oskari-ui/components/icons';
+import { red } from '@ant-design/colors';
 
 const DELETE_ICON_STYLE = {
-    fontSize: '16px',
     color: red.primary
-};
-
-const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-const ADD_ICON_STYLE = {
-    fontSize: '16px',
-    color: green.primary
-};
-
-const EXPORT_ICON_STYLE = {
-    fontSize: '16px'
 };
 
 const StyledControls = styled('div')`
@@ -38,6 +25,9 @@ const StyledSelect = styled(Select)`
 
 const StyledActions = styled('div')`
     display: flex;
+    button {
+        font-size: 16px;
+    }
 `;
 
 const IconButton = styled(Button)`
@@ -51,7 +41,7 @@ export const MyPlacesLayerControls = ({ selectedCategory, loading, categories = 
 
     return (
         <React.Fragment>
-            <StyledControls>
+            <StyledControls className='t_tools-category'>
                 <label><b><Message messageKey='tab.categoryTitle' /></b></label>
                 <StyledSelect loading={loading} value={selectedCategory ? selectedCategory.categoryId : null} onChange={controller.selectCategory}>
                     {categories.map(category => (
@@ -59,16 +49,18 @@ export const MyPlacesLayerControls = ({ selectedCategory, loading, categories = 
                     ))}
                 </StyledSelect>
                 <StyledActions>
-                    <Tooltip title={<Message messageKey='tab.addCategory' />}>
-                        <IconButton className='icon category_add' onClick={() => controller.openLayerDialog()}><PlusCircleOutlined style={ADD_ICON_STYLE} /></IconButton>
-                    </Tooltip>
+                    <IconButton>
+                        <AddIcon onClick={() => controller.openLayerDialog()} tooltip={<Message messageKey='tab.addCategory' />} />
+                    </IconButton>
                     {selectedCategory && (
                         <React.Fragment>
-                            <Tooltip title={<Message messageKey='tab.editCategory' />}>
-                                <IconButton className='icon category_edit' onClick={() => controller.editCategory(selectedCategory.categoryId)}><EditOutlined style={EDIT_ICON_STYLE} /></IconButton>
+                            <Tooltip >
+                                <IconButton>
+                                    <EditIcon onClick={() => controller.editCategory(selectedCategory.categoryId)} tooltip={<Message messageKey='tab.editCategory' />}/>
+                                </IconButton>
                             </Tooltip>
                             <Tooltip title={<Message messageKey='tab.export.tooltip' />}>
-                                <IconButton className='icon category_export' onClick={() => controller.exportCategory(selectedCategory.categoryId)}><ExportOutlined style={EXPORT_ICON_STYLE} /></IconButton>
+                                <IconButton className='icon category_export' onClick={() => controller.exportCategory(selectedCategory.categoryId)}><ExportOutlined/></IconButton>
                             </Tooltip>
                             <Tooltip title={<Message messageKey='tab.deleteCategory' />}>
                                 <IconButton className='icon category_delete' onClick={() => controller.deleteCategory(selectedCategory.categoryId)}><DeleteOutlined style={DELETE_ICON_STYLE} /></IconButton>

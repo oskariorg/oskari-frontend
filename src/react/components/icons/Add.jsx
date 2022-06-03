@@ -2,24 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Tooltip } from 'oskari-ui';
-import { EditOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { green } from '@ant-design/colors';
 
 const Icon = styled.div`
     cursor: pointer;
+    color: ${green.primary}
 `;
 
-export const Edit = ({
+export const Add = ({
     onClick,
-    tooltip = <Message messageKey='buttons.edit' bundleKey='oskariui'/>
+    tooltip = <Message messageKey='buttons.add' bundleKey='oskariui'/>
 }) => (
     <Tooltip title={tooltip}>
-        <Icon className='t_icon-edit' onClick={onClick}>
-            <EditOutlined/>
+        <Icon className='t_icon-add' onClick={onClick}>
+            <PlusCircleOutlined/>
         </Icon>
     </Tooltip>
 );
 
-Edit.propTypes = {
+Add.propTypes = {
     onClick: PropTypes.func.isRequired,
     tooltip: PropTypes.any
 };
