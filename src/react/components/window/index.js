@@ -192,7 +192,7 @@ export const showFlyout = (title, content, onClose, options = {}) => {
  * 
  * @param {String} type Antd Alert type
  * @param {Function} onClose 
- * @param {ReactNode} props Antd Alert props 
+ * @param {object} props Antd Alert props 
  * @returns 
  */
 export const showBanner = (type, onClose, props) => {
