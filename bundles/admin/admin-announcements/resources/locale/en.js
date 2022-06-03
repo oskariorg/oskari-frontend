@@ -5,14 +5,13 @@ Oskari.registerLocalization(
     "value": {
         "title": "Admin-announcements",
         "desc": "",
-        "flyout": {
-            "title": "Admin-announcements"
-        },
-        "tile": {
-            "title": "A: Announcements"
-        },
         "popup": {
             "title": "Announcement"
+        },
+        "tools": {
+            "add": "Add new announcement",
+            "edit": "Edit announcement",
+            "delete": "Delete announcement"
         },
         "fields": {
             "date": "Date range",

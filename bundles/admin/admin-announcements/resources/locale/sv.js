@@ -5,14 +5,13 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-aviseringar",
             "desc": "",
-            "flyout": {
-                "title": "Admin-aviseringar"
-            },
-            "tile": {
-                "title": "A: Aviseringar"
-            },
             "popup": {
                 "title": "Avisering"
+            },
+            "tools": {
+                "add": "Lägg till en ny avisering",
+                "edit": "Redigera avisering",
+                "delete": "Ta bort avisering"
             },
             "fields": {
                 "date": "Datumintervall",
