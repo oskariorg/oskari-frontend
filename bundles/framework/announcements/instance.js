@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
      */
     function () {
         const conf = this.getConfiguration();
-        this.sandbox = this.getSandbox();
         conf.name = 'announcements';
         conf.flyoutClazz = 'Oskari.framework.bundle.announcements.Flyout';
         this.service = null;
@@ -61,7 +60,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             });
         },
         renderPopup: function (state) {
-            if (!state.showAsPopup.length) {
+            if (!state.popupAnnouncements || !state.popupAnnouncements.length) {
                 return;
             }
             if (this.popupControls) {
@@ -70,7 +69,7 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
             }
             const controller = this.handler.getController();
             const onClose = () => {
-                controller.clearPopup();
+                controller.onPopupClose();
                 this.popupCleanup();
             };
             this.popupControls = showAnnouncementsPopup(state, controller, onClose);

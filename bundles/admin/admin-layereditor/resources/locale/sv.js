@@ -35,22 +35,22 @@ Oskari.registerLocalization(
                 "locale": {
                     "generic": {
                         "name": "Namn på {0}",
-                        "subtitle": "Beskrivning på {0}"
+                        "description": "Beskrivning på {0}"
                     },
                     "en": {
                         "lang": "Engelska",
                         "name": "Namn på engelska",
-                        "subtitle": "Beskrivning på engelska"
+                        "description": "Beskrivning på engelska"
                     },
                     "fi": {
                         "lang": "Finska",
                         "name": "Namn på finska",
-                        "subtitle": "Beskrivning på finska"
+                        "description": "Beskrivning på finska"
                     },
                     "sv": {
                         "lang": "Svenska",
                         "name": "Namn på svenska",
-                        "subtitle": "Beskrivning på svenska"
+                        "description": "Beskrivning på svenska"
                     }
                 },
                 "opacity": "Opacitet",

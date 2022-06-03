@@ -6,7 +6,10 @@ Oskari.registerLocalization(
             "title": "Ilmoitukset",
             "desc": "",
             "flyout": {
-                "title": "Ilmoitukset"
+                "title": "Ilmoitukset",
+                "noAnnouncements": "Ei aktiivisia ilmoituksia",
+                "outdated": "Vanhentuneet ilmoitukset",
+                "upcoming": "Tulevat ilmoitukset"
             },
             "tile": {
                 "title": "Ilmoitukset"
@@ -14,7 +17,6 @@ Oskari.registerLocalization(
             "valid": "Voimassa:",
             "externalLink": "Lue lisää",
             "dontShow" : "Älä näytä uudelleen",
-            "noAnnouncements": "Ei aktiivisia ilmoituksia",
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
             },

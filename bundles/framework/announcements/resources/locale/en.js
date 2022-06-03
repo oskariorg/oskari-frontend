@@ -6,7 +6,10 @@ Oskari.registerLocalization(
         "title": "Announcements",
         "desc": "",
         "flyout": {
-            "title": "Announcements"
+            "title": "Announcements",
+            "noAnnouncements": "No active announcements",
+            "outdated": "Outdated announcements",
+            "upcoming": "Upcoming announcements"
         },
         "tile": {
             "title": "Announcements"
@@ -14,7 +17,6 @@ Oskari.registerLocalization(
         "valid": "Valid:",
         "externalLink": "Read more",
         "dontShow" : "Don't show this again",
-        "noAnnouncements": "No active announcements",
         "messages": {
             "getFailed":"Fetching announcements failed"
         },

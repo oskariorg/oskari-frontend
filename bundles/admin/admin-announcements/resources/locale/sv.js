@@ -5,27 +5,26 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-aviseringar",
             "desc": "",
-            "flyout": {
-                "title": "Admin-aviseringar"
-            },
-            "tile": {
-                "title": "A: Aviseringar"
-            },
             "popup": {
                 "title": "Avisering"
+            },
+            "tools": {
+                "add": "Lägg till en ny avisering",
+                "edit": "Redigera avisering",
+                "delete": "Ta bort avisering"
             },
             "fields": {
                 "date": "Datumintervall",
                 "show": {
-                    "label": "Visa i",
+                    "label": "Visa annonsen i",
                     "popup": "Popupfönster",
                     "banner": "Webannons"
                 },
                 "type": {
                     "label": "Typ",
                     "title": "Bara rubrik",
-                    "content": "Popupens innehåll",
-                    "link": "Extern länk"
+                    "content": "Rubrik och innehåll",
+                    "link": "Rubrik och extern länk"
                 },
                 "locale": {
                     "generic": {

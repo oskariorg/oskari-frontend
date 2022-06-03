@@ -606,6 +606,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         updateGroupRecursively: function (group, newGroup) {
             if (group.id === newGroup.id) {
                 group.setName(newGroup.getName());
+                group.setDescription(group.getDescription());
                 return group;
             }
             if (group.groups.length !== 0) {
@@ -628,6 +629,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
             if (index !== -1) {
                 this._layerGroups[index].setName(group.getName());
+                this._layerGroups[index].setDescription(group.getDescription());
             } else {
                 let temp = [];
                 for (var g of this._layerGroups) {
@@ -637,9 +639,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this._layerGroups = temp;
             }
             // Update group to needed layers. Groups under layer only contains group name with current localization
-            const lang = Oskari.getLang();
             this.getAllLayers().filter(l =>
-                l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
+                l._groups.filter(g => g.id === group.id).map(g => {
+                    g.name = group.getName();
+                    return g;
+                }));
             this.trigger('theme.update');
         },
 
@@ -649,7 +653,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         updateDataProvider: function (dataProvider) {
             // Update dataProvider to dataProviders
-            const index = this._dataProviders.findIndex(g => '' + g.id === '' + dataProvider.id);
+            const index = this._dataProviders.findIndex(g => g.id === dataProvider.id);
             if (index !== -1) {
                 this._dataProviders[index] = dataProvider;
             }
@@ -665,7 +669,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
 
         getDataProviderById: function (id) {
-            const index = this._dataProviders.findIndex(g => '' + g.id === '' + id);
+            const index = this._dataProviders.findIndex(g => g.id === id);
             if (index === -1) {
                 return null;
             }
@@ -733,8 +737,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             const providers = Object.keys(pResp.providers).map(id => {
                 return {
-                    id,
-                    name: pResp.providers[id].name
+                    id: Number(id),
+                    name: pResp.providers[id].name,
+                    desc: pResp.providers[id].desc
                 };
             });
             this.setDataProviders(providers);
@@ -761,7 +766,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         .forEach((layer) => {
                             layer.getGroups().push({
                                 id: group.getId(),
-                                name: Oskari.getLocalized(group.getName())
+                                name: group.getName(),
+                                description: group.getDescription()
                             });
                         });
                 });
