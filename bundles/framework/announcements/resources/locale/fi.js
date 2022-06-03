@@ -23,7 +23,8 @@ Oskari.registerLocalization(
             "tools": {
                 "add": "Lisää uusi ilmoitus",
                 "edit": "Muokkaa ilmoitusta",
-                "delete": "Poista ilmoitus"
+                "delete": "Poista ilmoitus",
+                "preview": "Esikatselu"
             },
             "plugin" : {
                 "title": "Ilmoitukset",

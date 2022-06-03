@@ -23,7 +23,8 @@ Oskari.registerLocalization(
         "tools": {
             "add": "Add new announcement",
             "edit": "Edit announcement",
-            "delete": "Delete announcement"
+            "delete": "Delete announcement",
+            "preview": "Preview"
         },
         "plugin" : {
             "title": "Announcements",

@@ -36,7 +36,21 @@ class ViewHandler extends StateHandler {
     }
 
     getToolController () {
-        return this.service.getAdminController();
+        const controller = this.service.getAdminController();
+        controller.preview = (id) => this.preview(id);
+        return controller;
+    }
+
+    preview (id) {
+        const ann = this.service.getAnnouncement(id);
+        if (!ann) {
+            return;
+        }
+        if (ann.options.showAsPopup) {
+            this.updateState({ popupAnnouncements: [ann] });
+        } else {
+            this.updateState({ bannerAnnouncements: [ann] });
+        }
     }
 
     setShowAgain (id, dontShow) {
