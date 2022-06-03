@@ -6,7 +6,7 @@ import { getDateRange } from '../../service/util';
 
 export const FlyoutCollapse = ({
     announcements,
-    tools
+    toolController
 }) => {
     if (!announcements.length) {
         return (
@@ -21,7 +21,7 @@ export const FlyoutCollapse = ({
                 const dateRange = getDateRange(announcement);
                 return (
                     <CollapsePanel header={title} key={announcement.id}
-                        extra={<CollapseTools tools={tools} announcementId={id}/>}>
+                        extra={<CollapseTools toolController={toolController} announcementId={id}/>}>
                         <AnnouncementsContent announcement={announcement}/>
                         <Divider />
                         <b><Message messageKey={'valid'} /></b>
@@ -35,5 +35,5 @@ export const FlyoutCollapse = ({
 
 FlyoutCollapse.propTypes = {
     announcements: PropTypes.array.isRequired,
-    tools: PropTypes.array
+    toolController: PropTypes.any
 };

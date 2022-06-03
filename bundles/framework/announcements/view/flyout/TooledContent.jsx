@@ -8,22 +8,20 @@ export const TooledContent = ({
     active,
     outdated,
     upcoming,
-    tools
+    toolController
 }) => {
-    const footerTools = tools.filter(tool => tool.getTypes().includes('footer'));
-    const announcementTools = tools.filter(tool => tool.getTypes().includes('announcement'));
     return (
         <div>
-            <FlyoutCollapse announcements={active} tools={announcementTools}/>
+            <FlyoutCollapse announcements={active} toolController={toolController}/>
             <Divider orientation='left'>
                 <Message messageKey='flyout.outdated'/>
             </Divider>
-            <FlyoutCollapse announcements={outdated} tools={announcementTools}/>
+            <FlyoutCollapse announcements={outdated} toolController={toolController}/>
             <Divider orientation='left'>
                 <Message messageKey='flyout.upcoming'/>
             </Divider>
-            <FlyoutCollapse announcements={upcoming} tools={announcementTools}/>
-            <FlyoutFooter tools={footerTools} />
+            <FlyoutCollapse announcements={upcoming} toolController={toolController}/>
+            <FlyoutFooter toolController={toolController} />
         </div>
     );
 };
@@ -32,5 +30,5 @@ TooledContent.propTypes = {
     active: PropTypes.array.isRequired,
     outdated: PropTypes.array.isRequired,
     upcoming: PropTypes.array.isRequired,
-    tools: PropTypes.array.isRequired
+    toolController: PropTypes.any.isRequired
 };
