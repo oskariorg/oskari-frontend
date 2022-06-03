@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Tiilimatriisi"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Nimi kielellä {0}",
-                        "description": "Kuvaus kielellä {0}"
-                    },
-                    "en": {
-                        "lang": "Englanti",
-                        "name": "Nimi englanniksi",
-                        "description": "Kuvaus englanniksi"
-                    },
-                    "fi": {
-                        "lang": "Suomi",
-                        "name": "Nimi suomeksi",
-                        "description": "Kuvaus suomeksi"
-                    },
-                    "sv": {
-                        "lang": "Ruotsi",
-                        "name": "Nimi ruotsiksi",
-                        "description": "Kuvaus ruotsiksi"
-                    }
+                    "name": "Nimi",
+                    "description": "Kuvaus"
                 },
                 "opacity": "Peittävyys",
                 "params": {

@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Tile grid"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Name in {0}",
-                        "description": "Description in {0}"
-                    },
-                    "en": {
-                        "lang": "English",
-                        "name": "Name in English",
-                        "description": "Description in English"
-                    },
-                    "fi": {
-                        "lang": "Finnish",
-                        "name": "Name in Finnish",
-                        "description": "Description in Finnish"
-                    },
-                    "sv": {
-                        "lang": "Swedish",
-                        "name": "Name in Swedish",
-                        "description": "Description in Swedish"
-                    }
+                    "name": "Name",
+                    "description": "Description"
                 },
                 "opacity": "Opacity",
                 "params": {

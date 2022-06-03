@@ -33,25 +33,8 @@ Oskari.registerLocalization(
                     "tileGrid": "Rutmatris"
                 },
                 "locale": {
-                    "generic": {
-                        "name": "Namn på {0}",
-                        "description": "Beskrivning på {0}"
-                    },
-                    "en": {
-                        "lang": "Engelska",
-                        "name": "Namn på engelska",
-                        "description": "Beskrivning på engelska"
-                    },
-                    "fi": {
-                        "lang": "Finska",
-                        "name": "Namn på finska",
-                        "description": "Beskrivning på finska"
-                    },
-                    "sv": {
-                        "lang": "Svenska",
-                        "name": "Namn på svenska",
-                        "description": "Beskrivning på svenska"
-                    }
+                    "name": "Namn",
+                    "description": "Beskrivning"
                 },
                 "opacity": "Opacitet",
                 "params": {
