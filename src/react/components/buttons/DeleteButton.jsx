@@ -16,19 +16,23 @@ export const DeleteButton = ({
     onConfirm,
     icon,
     tooltip = getMsg('buttons.delete'),
-    title = getMsg('messages.confirmDelete')
+    title = getMsg('messages.confirmDelete'),
+    disabled
 }) => {
     const button = icon
         ? <DeleteIcon/>
-        : <SecondaryButton danger type="delete"/>;
+        : <SecondaryButton disabled={disabled} danger type="delete"/>;
     const placement = tooltip ? 'bottom' : 'top';
     return (
         <Confirm
             title={title}
             onConfirm={onConfirm}
+            okButtonProps={{className: 't_confirm'}}
+            cancelButtonProps={{className: 't_cancel'}}
             okText={getMsg('buttons.delete')}
             cancelText={getMsg('buttons.cancel')}
-            placement={placement}>
+            placement={placement}
+            disabled={disabled}>
             <Tooltip title={tooltip}>
                 {button}
             </Tooltip>
@@ -39,5 +43,6 @@ DeleteButton.propTypes = {
     onConfirm: PropTypes.func.isRequired,
     title: PropTypes.any,
     tooltip: PropTypes.any,
-    icon: PropTypes.bool
+    icon: PropTypes.bool,
+    disabled: PropTypes.bool
 };
