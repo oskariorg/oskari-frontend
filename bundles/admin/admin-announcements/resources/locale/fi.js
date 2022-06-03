@@ -8,11 +8,6 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Ilmoitus"
             },
-            "tools": {
-                "add": "Lisää uusi ilmoitus",
-                "edit": "Muokkaa ilmoitusta",
-                "delete": "Poista ilmoitus"
-            },
             "fields": {
                 "date": "Aikaväli",
                 "show": {

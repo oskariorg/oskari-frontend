@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
     function () {
         this.tools = [];
         this.announcements = null;
+        this.adminController = null;
         Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
@@ -31,6 +32,13 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
         */
         getName: function () {
             return this.__name;
+        },
+        registerAdminController: function (controller) {
+            this.adminController = controller;
+            this.trigger('controller');
+        },
+        getAdminController: function () {
+            return this.adminController;
         },
         getAnnouncement: function (id) {
             return this.getAnnouncements().find(ann => ann.id === id);
@@ -94,91 +102,6 @@ Oskari.clazz.define('Oskari.framework.announcements.service.AnnouncementsService
             if (error) {
                 Messaging.error(Oskari.getMsg(BUNDLE_KEY, 'messages.getFailed'));
             }
-        },
-        submitAnnouncement: function (announcement, cb) {
-            if (announcement.id) {
-                this.updateAnnouncement(announcement, cb);
-            } else {
-                this.saveAnnouncement(announcement, cb);
-            }
-        },
-        /**
-        * @method saveAnnouncements
-        *
-        * Makes an ajax call to save new announcement
-        */
-        saveAnnouncement: function (data, handler) {
-            if (typeof handler !== 'function') {
-                return;
-            }
-            jQuery.ajax({
-                type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(data),
-                url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    handler(null, pResp);
-                    this.fetchAnnouncements(null, true);
-                },
-                error: () => handler('Error')
-            });
-        },
-
-        /**
-        * @method updateAnnouncements
-        *
-        * Makes an ajax call to update announcement
-        */
-        updateAnnouncement: function (data, handler) {
-            if (typeof handler !== 'function') {
-                return;
-            }
-            jQuery.ajax({
-                type: 'PUT',
-                dataType: 'json',
-                contentType: 'application/json; charset=UTF-8',
-                data: JSON.stringify(data),
-                url: Oskari.urls.getRoute('Announcements'),
-                success: (pResp) => {
-                    handler(null, pResp);
-                    this.removeFromLocalStorage(data.id);
-                    this.fetchAnnouncements(null, true);
-                },
-                error: () => handler('Error')
-            });
-        },
-
-        /**
-        * @method deleteAnnouncements
-        *
-        * Makes an ajax call to delete announcement
-        */
-        deleteAnnouncement: function (data, handler) {
-            if (typeof handler !== 'function') {
-                return;
-            }
-
-            jQuery.ajax({
-                type: 'DELETE',
-                dataType: 'json',
-                url: Oskari.urls.getRoute('Announcements', { id: data }),
-                success: (pResp) => {
-                    handler(null, pResp);
-                    this.fetchAnnouncements(null, true);
-                },
-                error: () => handler('Error')
-            });
-        },
-        addTool (tool) {
-            if (!tool || !tool.getName() || !tool.getCallback()) {
-                return;
-            }
-            this.tools.push(tool);
-            this.trigger('tool');
-        },
-        getTools () {
-            return this.tools;
         }
     }, {
     /**

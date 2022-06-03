@@ -6,7 +6,7 @@ class ViewHandler extends StateHandler {
     constructor (service) {
         super();
         this.service = service;
-        this.service.on('tool', () => this.updateState({ tools: this.service.getTools() }));
+        this.service.on('controller', () => this.notify());
         this.service.on('fetch', () => this.onFetch());
         this.service.fetchAnnouncements();
     }
@@ -35,6 +35,10 @@ class ViewHandler extends StateHandler {
         this.updateState(newState);
     }
 
+    getToolController () {
+        return this.service.getAdminController();
+    }
+
     setShowAgain (id, dontShow) {
         if (dontShow) {
             this.service.addToLocalStorage(id);
@@ -59,5 +63,5 @@ class ViewHandler extends StateHandler {
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose'
+    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'getToolController'
 ]);
