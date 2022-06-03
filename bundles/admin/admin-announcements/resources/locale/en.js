@@ -17,15 +17,15 @@ Oskari.registerLocalization(
         "fields": {
             "date": "Date range",
             "show": {
-                "label": "Show as",
+                "label": "Show announcement as",
                 "popup": "Popup-window",
                 "banner": "Banner"
             },
             "type": {
                 "label": "Type",
                 "title": "Title only",
-                "content": "Contents",
-                "link": "External link"
+                "content": "Title and contents",
+                "link": "Title and external link"
             },
             "locale": {
                 "generic": {

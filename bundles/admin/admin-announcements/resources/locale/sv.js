@@ -17,15 +17,15 @@ Oskari.registerLocalization(
             "fields": {
                 "date": "Datumintervall",
                 "show": {
-                    "label": "Visa i",
+                    "label": "Visa annonsen i",
                     "popup": "Popupfönster",
                     "banner": "Webannons"
                 },
                 "type": {
                     "label": "Typ",
                     "title": "Bara rubrik",
-                    "content": "Popupens innehåll",
-                    "link": "Extern länk"
+                    "content": "Rubrik och innehåll",
+                    "link": "Rubrik och extern länk"
                 },
                 "locale": {
                     "generic": {
