@@ -8,6 +8,17 @@ import { Popup } from './Popup';
  * ************************************************ */
 const ID_PREFIX = 'abstract-';
 const NAME = 'OskariWindowing';
+export const PLACEMENTS = {
+    TOP: 'top',
+    BOTTOM: 'bottom',
+    RIGHT: 'right',
+    LEFT: 'left',
+    TL: 'topLeft',
+    TR: 'topRight',
+    BL: 'bottomLeft',
+    BR: 'bottomRight'
+};
+
 const DEFAULT_POPUP_OPTIONS = {
     isDraggable: true
 };

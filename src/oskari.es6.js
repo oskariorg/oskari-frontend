@@ -24,9 +24,9 @@ function encodeParams(params) {
         return '';
     }
     return Object.keys(params)
+        .filter(k => params[k] != null && typeof params[k] !== 'undefined')
         .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
         .join('&');
-    
 }
 
 function appendQueryToURL(url, query) {

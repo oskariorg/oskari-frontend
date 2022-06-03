@@ -29,18 +29,27 @@ export class ErrorBoundary extends React.Component {
     constructor(props) {
         super(props);
         this.errorComp = props.errorComponent;
+        this.hideError = !!props.hide;
+        this.debugInfo = props.debug;
         this.state = { hasError: false };
     }
 
     componentDidCatch (error, errorInfo) {
+        const log = Oskari.log('React/ErrorBoundary');
+        log.error(error);
+        if (this.debugInfo) {
+            log.info('Debug info', this.debugInfo);
+        }
         this.setState({
             hasError: true,
             errorInfo });
-        Oskari.log('React/ErrorBoundary').error(error, errorInfo);
     }
 
     render () {
         if (this.state.hasError) {
+            if (this.hideError) {
+                return null;
+            }
             const ErrorComp = this.errorComp || DefaultError;
             return (<ErrorComp info={this.state.errorInfo}/>);
         }
@@ -48,6 +57,12 @@ export class ErrorBoundary extends React.Component {
     }
 }
 ErrorBoundary.propTypes = {
-    children: PropTypes.node,
-    errorComponent: PropTypes.elementType
+    // boolean to just skip without showing an error
+    hide: PropTypes.bool,
+    // info to include in logging if an error occurs
+    debug: PropTypes.object,
+    // custom component for rendering an error message
+    errorComponent: PropTypes.elementType,
+    // children are rendered when there is no error
+    children: PropTypes.node
 };
