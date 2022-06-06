@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Tooltip } from 'oskari-ui';
-import { MandatoryIcon } from 'oskari-ui/components/icons';
+import { getMandatoryIcon } from '../util/validators';
 import { Input } from 'antd';
 
 const Label = styled.div`
@@ -16,22 +16,6 @@ const Textarea = styled(Input.TextArea)`
     font-family: inherit;
 `
 
-const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
-// This checks if the param is a React component. React.isValidElement() checks if it's a valid element that might not be a component
-const isReactComponent = (el) => el && el.$$typeof === Symbol.for('react.element');
-
-const getMandatoryIcon = (mandatory, elementValue) => {
-    if (typeof mandatory === 'boolean') {
-        // generate default check for mandatory field
-        return (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
-    } else if (isReactComponent(mandatory)) {
-        // use icon send through props
-        // Admin-layereditor has custom mandatory context with own mechanism for validation
-        return (<mandatory.type {...mandatory.props}/>);
-    }
-    return null;
-};
-
 export const LabeledInput = ({
     label,
     mandatory,
@@ -44,7 +28,7 @@ export const LabeledInput = ({
         let labelStr = label;
         if (typeof label !== 'string') {
             labelStr = '';
-            Oskari.log('React/LabeledInput').error('Minimal input requires label as string');
+            Oskari.log('React/LabeledInput').error('Minimal input requires label as string. Got:', label);
         }
         if (mandatory) {
             inputProps.suffix = getMandatoryIcon(mandatory, value);
@@ -68,14 +52,17 @@ export const LabeledInput = ({
 };
 
 LabeledInput.propTypes = {
+    // label MUST be string IF minimal=true as it's placed on the field placeholder
     label: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
     ]).isRequired,
+    // boolean to have simple String.isEmpty() validation, component for controlling isValid-check for more complex validation
     mandatory: PropTypes.oneOfType([
         PropTypes.node,
         PropTypes.bool
     ]),
+    // true to show label as placeholder inside the field instead of on top of the field
     minimal: PropTypes.bool
 };

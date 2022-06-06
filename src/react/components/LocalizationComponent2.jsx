@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
-import { MandatoryIcon } from 'oskari-ui/components/icons';
+import { getMandatoryIcon } from '../util/validators';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -85,21 +85,10 @@ const getCollapseHeader = () => {
     );
 };
 
-const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
-
-// This checks if the param is a React component. React.isValidElement() checks if it's a valid element that might not be a component
-const isReactComponent = (el) => el && el.$$typeof === Symbol.for('react.element');
-
-const getMandatoryIcon = (mandatory, elementValue) => {
-    if (typeof mandatory === 'boolean') {
-        return (<MandatoryIcon isValid={validateMandatory(elementValue)} />);
-    } else if (isReactComponent(mandatory)) {
-        // Admin-layereditor has custom mandatory context with own mechanism for validation
-        return (<mandatory.type {...mandatory.props}/>);
-    }
-    return null;
-};
-
+            {/*
+                The inputs have to be on direct children for LocalizationComponent.
+                Can't wrap them to <StyledFormField>.
+            */}
 /**
  * 
  * @param {String[]} languages käytössä olevat kielet
