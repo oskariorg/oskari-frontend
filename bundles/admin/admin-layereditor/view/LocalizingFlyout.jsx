@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Spin, LabeledInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
+import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleProvider, LocaleConsumer, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
 import styled from 'styled-components';
@@ -161,18 +162,18 @@ const Container = styled('div')`
 const Header = styled('div')`
     font-weight: bold;
 `;
-const Label = styled('div')`
-    margin-top: 8px;
-`;
-const Buttons = styled('div')`
-    display: flex;
-    justify-content: space-between;
-    padding-top: 15px;
-`;
 
 const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
+const hasMandatoryValues = (current, defaultLang) => {
+    if (!current) {
+        return false;
+    }
+    const langValue = current[defaultLang] || {};
+    const curName = langValue.name || '';
+    return curName.trim().length > 0;
+};
 const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups, getMessage }) => {
     const RemoveGroupButton = () => {
         if (isNew) {
@@ -194,6 +195,8 @@ const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, con
                 deleteLayers={deleteLayers} />
         );
     };
+    const languages = Oskari.getSupportedLanguages();
+    const isValid = hasMandatoryValues(value, languages[0]);
     const Component = (
         <Container>
             <Header>
@@ -201,21 +204,17 @@ const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, con
             </Header>
             <LocalizationComponent
                 value={value}
-                languages={Oskari.getSupportedLanguages()}
+                languages={languages}
                 onChange={controller.setValue}
             >
                 <LabeledInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
                 <LabeledInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
             </LocalizationComponent>
-            <Buttons>
-                <Button onClick={() => controller.cancel()}>
-                    <Message messageKey='cancel' />
-                </Button>
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={() => controller.cancel()} />
                 <RemoveGroupButton />
-                <Button onClick={() => controller.save()} type='primary'>
-                    <Message messageKey='save' />
-                </Button>
-            </Buttons>
+                <PrimaryButton type='save' onClick={() => controller.save()} disabled={!isValid} />
+            </ButtonContainer>
         </Container>
     );
     if (loading) {
