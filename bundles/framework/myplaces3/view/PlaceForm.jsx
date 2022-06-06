@@ -5,8 +5,13 @@ import { Message, Tooltip, LabeledInput, UrlInput, Select, Button, Option } from
 import { LocaleProvider } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { showPopup } from 'oskari-ui/components/window';
+import { showPopup, PLACEMENTS } from 'oskari-ui/components/window';
 import { LOCALE_KEY, PLACE_FORM } from '../constants';
+
+const POPUP_OPTIONS = {
+    id: PLACE_FORM,
+    placement: PLACEMENTS.BL
+};
 
 const Content = styled.div`
     padding: 10px;
@@ -119,7 +124,7 @@ export const showPlacePopup = (values, categoryId, categories, controller) => {
                 controller={controller}/>
         </LocaleProvider>),
         controller.onClose,
-        { id: PLACE_FORM }
+        POPUP_OPTIONS
     );
     return {
         ...controls,
