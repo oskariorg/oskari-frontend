@@ -30,7 +30,7 @@ class PlaceHandler extends StateHandler {
         this.service.on('category', (addedId) => {
             this.refreshCategoryList(addedId);
             if (this.placeControls) {
-                this.placeControls.update(this.state.categories, addedId);
+                this.placeControls.update(addedId, this.state.categories);
             }
         });
         this.refreshCategoryList();
@@ -172,24 +172,27 @@ class PlaceHandler extends StateHandler {
             this.placePopupCleanup();
         }
         const categoryId = place.getCategoryId();
-        const onClose = () => this.placePopupCleanup();
-        const onSave = (values) => {
-            const { categoryId: newCatId, ...properties } = values;
-            place.setProperties(properties);
-            place.setCategoryId(newCatId);
-            this.instance.getDrawHandler().setPlaceGeometry(place);
-            const oldCategoryId = categoryId && categoryId !== newCatId ? categoryId : null;
-            this.service.saveMyPlace(place, oldCategoryId);
-            onClose();
+        const { categories } = this.state;
+
+        const controller = {
+            onClose: () => this.placePopupCleanup(),
+            handleCategoryId: (id) => this.placeControls && this.placeControls.update(id, categories),
+            onSave: (values, newCatId) => {
+                place.setProperties(values);
+                place.setCategoryId(newCatId);
+                this.instance.getDrawHandler().setPlaceGeometry(place);
+                const oldCategoryId = categoryId && categoryId !== newCatId ? categoryId : null;
+                this.service.saveMyPlace(place, oldCategoryId);
+                this.placePopupCleanup();
+            }
         };
 
         const values = {
             id,
-            categoryId,
             ...place.getProperties()
         };
-        const { categories } = this.state;
-        this.placeControls = showPlacePopup(values, categories, onSave, onClose);
+
+        this.placeControls = showPlacePopup(values, categoryId, categories, controller);
     }
 
     isPlacePopupActive () {

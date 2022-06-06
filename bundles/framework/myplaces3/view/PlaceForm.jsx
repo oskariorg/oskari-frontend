@@ -57,8 +57,8 @@ LayerSelect.propTypes = {
     onChange: PropTypes.func.isRequired
 };
 
-const PlaceForm = ({ values = {}, categories, onSave, onCancel }) => {
-    const [state, setState] = useState(values);
+const PlaceForm = ({ values = {}, categoryId, categories, controller }) => {
+    const [state, setState] = useState({ ...values });
     const updateState = newState => setState({ ...state, ...newState });
     const hasName = state.name && state.name.trim();
     return (
@@ -87,14 +87,14 @@ const PlaceForm = ({ values = {}, categories, onSave, onCancel }) => {
             { categories &&
                 <LayerSelect
                     categories={categories}
-                    selected={state.categoryId}
-                    onChange={categoryId => updateState({ categoryId })}
+                    selected={categoryId}
+                    onChange={categoryId => controller.handleCategoryId(categoryId)}
                 />
             }
             <ButtonContainer>
-                <SecondaryButton type='cancel' onClick={onCancel}/>
+                <SecondaryButton type='cancel' onClick={controller.onClose}/>
                 <Tooltip title={hasName ? null : <Message messageKey='placeform.validation.mandatoryName'/>}>
-                    <PrimaryButton disabled={!hasName} type='save' onClick={() => onSave(state) }/>
+                    <PrimaryButton disabled={!hasName} type='save' onClick={() => controller.onSave(state, categoryId) }/>
                 </Tooltip>
             </ButtonContainer>
         </Content>
@@ -103,28 +103,31 @@ const PlaceForm = ({ values = {}, categories, onSave, onCancel }) => {
 
 PlaceForm.propTypes = {
     values: PropTypes.object,
+    categoryId: PropTypes.number.isRequired,
     categories: PropTypes.array,
-    onSave: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired
+    controller: PropTypes.object.isRequired
 };
 
-export const showPlacePopup = (values, categories, saveLayer, onClose) => {
+export const showPlacePopup = (values, categoryId, categories, controller) => {
     const controls = showPopup(
         <Message messageKey={ 'placeform.title' } bundleKey = {LOCALE_KEY}/>,
         (<LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-            <PlaceForm values={values} categories={categories} onSave={saveLayer} onCancel={onClose}/>
+            <PlaceForm
+                values={values}
+                categoryId={categoryId}
+                categories={categories}
+                controller={controller}/>
         </LocaleProvider>),
-        onClose,
+        controller.onClose,
         { id: PLACE_FORM }
     );
     return {
         ...controls,
-        update: (categories, categoryId) => {
-            // use added category id, TODO this doesn't update state
-            values.categoryId = categoryId;
+        update: (categoryId, categories) => {
+            // use added category id
             controls.update(<Message messageKey={ 'placeform.title' } bundleKey = {LOCALE_KEY}/>,
                 (<LocaleProvider value={{ bundleKey: LOCALE_KEY }}>
-                    <PlaceForm values={values} categories={categories} onSave={saveLayer} onCancel={onClose}/>
+                    <PlaceForm values={values} categoryId={categoryId} categories={categories} controller={controller}/>
                 </LocaleProvider>));
         }
     };
