@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
+import { Spin, LocalizationComponent, LabeledInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
 import { LocaleProvider, LocaleConsumer, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -202,10 +202,9 @@ const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, con
                 value={value}
                 languages={Oskari.getSupportedLanguages()}
                 onChange={controller.setValue}
-                showDivider
             >
-                <TextInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
-                <TextInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
+                <LabeledInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
+                <LabeledInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
             </LocalizationComponent>
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
