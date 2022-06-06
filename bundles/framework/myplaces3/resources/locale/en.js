@@ -38,10 +38,15 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteCategory": "Do you want to delete the map layer \"{name}\"?",
-                "deleteCategoryWithMove": "You are deleting the map layer \"{name}\". There {count, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {count, plural, one {place} other {places}} <br/> 2. move the {count, plural, one {place} other {places}} to the map layer \"{moveTo}\" before deleting the map layer?",
                 "categoryToPrivate": "You are unpublishing the map layer {name}. After that the map layer cannot be shared in public and embedded in another map service. Also other users cannot view the map layer anymore.",
                 "categoryToPublic": "You are publishing the map layer {name}. After that the map layer can be shared in public and embedded in another map service. Also other users can view the map layer.",
                 "deletePlace": "Do you want to delete place \"{name}\"?"
+            },
+            "deleteWithMove": {
+                "name": "You are deleting the map layer:",
+                "count": "There {count, plural, one {is # place} other {are # places}} on the map layer. Do you want to:",
+                "delete": "1. delete the map layer and its {count, plural, one {place} other {places}}",
+                "move": "2. move the {count, plural, one {place} other {places}} to the map layer:"
             }
         },
         "tools": {

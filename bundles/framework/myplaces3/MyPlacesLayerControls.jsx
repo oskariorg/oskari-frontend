@@ -46,7 +46,7 @@ const IconButton = styled(Button)`
     margin-left: 5px;
 `;
 
-const MarginLeft = styled.div`
+const MarginLeft = styled.span`
     margin-left: 5px;
 `;
 
@@ -65,7 +65,6 @@ const DeletePlaces = ({
     const [moveToId, setMoveToId] = useState(getDefaultCategoryId(categories));
     const options = categories.filter(cat => cat.categoryId !== selectedCategoryId);
     const { name } = categories.find(cat => cat.categoryId === selectedCategoryId);
-    const { name: moveTo } = categories.find(cat => cat.categoryId === moveToId);
     const deleteTooltip = isDefault ? 'tab.deleteDefault' : 'tab.deleteCategory';
     const onConfirm = (move) => {
         if (move) {
@@ -77,13 +76,21 @@ const DeletePlaces = ({
     };
     const content = (
         <Content>
-            <Message messageKey='tab.confirm.deleteCategoryWithMove' allowHTML messageArgs={{ name, count, moveTo }}/>
-            <label><b><Message messageKey='tab.categoryTitle' /></b></label>
-            <StyledSelect value={moveToId} onChange={setMoveToId}>
+            <b><Message messageKey='tab.deleteWithMove.name'/></b>
+            <MarginLeft/>
+            {name}
+            <br/>
+            <Message messageKey='tab.deleteWithMove.count' messageArgs={{ count }}/>
+            <br/>
+            <Message messageKey='tab.deleteWithMove.delete' messageArgs={{ count }}/>
+            <br/>
+            <Message messageKey='tab.deleteWithMove.move' messageArgs={{ count }}/>
+            <MarginLeft/>
+            <Select value={moveToId} onChange={setMoveToId}>
                 {options.map(category => (
                     <Option key={category.categoryId} value={category.categoryId}>{category.name}</Option>
                 ))}
-            </StyledSelect>
+            </Select>
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => setVisible(false)}/>
                 <Button onClick={() => onConfirm(false)}>
