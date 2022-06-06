@@ -440,19 +440,21 @@ export class MapModule extends AbstractMapModule {
         }
     }
 
-    getMeasurementResult (geometry) {
+    getMeasurementResult (geometry, format) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geometry);
         var sum = 0;
         if (olGeometry.getType() === 'LineString') {
-            return this.getGeomLength(olGeometry);
+            const line = this.getGeomLength(olGeometry);
+            return format ? this.formatMeasurementResult(line, 'line') : line;
         } else if (olGeometry.getType() === 'MultiLineString') {
             var lineStrings = olGeometry.getLineStrings();
             for (var i = 0; i < lineStrings.length; i++) {
                 sum += this.getGeomLength(lineStrings[i]);
             }
-            return sum;
+            return format ? this.formatMeasurementResult(sum, 'line') : sum;
         } else if (olGeometry.getType() === 'Polygon' || olGeometry.getType() === 'MultiPolygon') {
-            return this.getGeomArea(olGeometry);
+            const area = this.getGeomArea(olGeometry);
+            return format ? this.formatMeasurementResult(area, 'area') : area;
         }
     }
 

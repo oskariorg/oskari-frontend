@@ -7,7 +7,7 @@ import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/compo
 import { showPopup } from 'oskari-ui/components/window';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
-import { LOCALE_KEY } from './constants';
+import { LOCALE_KEY, LAYER_FORM } from './constants';
 
 const Content = styled.div`
     padding: 24px;
@@ -68,6 +68,6 @@ export const showLayerPopup = (locale, style, saveLayer, onClose) => {
             <MyPlacesLayerForm style={style} locale={locale} onSave={saveLayer} onCancel={onClose}/>
         </LocaleProvider>),
         onClose,
-        { id: LOCALE_KEY }
+        { id: LAYER_FORM }
     );
 };

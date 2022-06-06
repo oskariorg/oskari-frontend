@@ -42,11 +42,10 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend',
             render: (title, item) => {
-                const shape = controller.getGeometryIcon(item._place.geometry);
                 return (
-                    <a onClick={() => controller.showPlace(item._place.geometry, item._place.categoryId)}>
+                    <a onClick={() => controller.showPlace(item.key)}>
                         <NameField>
-                            <div className={`icon myplaces-${shape}`} />
+                            <div className={`icon myplaces-${item.icon}`} />
                             <span>{title}</span>
                         </NameField>
                     </a>
@@ -88,13 +87,13 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                 return (
                     <ToolsContainer>
                         <Tooltip title={<Message messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editPlace(item._place)}>
+                            <div className='icon t_edit' onClick={() => controller.editPlace(item.key)}>
                                 <EditOutlined style={ EDIT_ICON_STYLE } />
                             </div>
                         </Tooltip>
                         <Confirm
-                            title={<Message messageKey='tab.notification.delete.confirm' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.deletePlace(item._place)}
+                            title={<Message messageKey='tab.confirm.deletePlace' messageArgs={{ name: item.name }} />}
+                            onConfirm={() => controller.deletePlace(item.key)}
                             okText={<Message messageKey='buttons.ok' />}
                             cancelText={<Message messageKey='buttons.cancel' />}
                             placement='bottomLeft'
@@ -119,7 +118,7 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                 createDate: item.createDate,
                 updateDate: item.updateDate,
                 measurement: item.measurement,
-                _place: item
+                icon: item.getDrawMode()
             }))}
             pagination={false}
         />
