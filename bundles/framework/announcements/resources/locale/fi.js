@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "desc": "",
             "flyout": {
                 "title": "Ilmoitukset",
-                "noAnnouncements": "Ei aktiivisia ilmoituksia",
+                "noAnnouncements": "Ei ilmoituksia",
+                "active": "Voimassa olevat ilmoitukset",
                 "outdated": "Vanhentuneet ilmoitukset",
                 "upcoming": "Tulevat ilmoitukset"
             },
