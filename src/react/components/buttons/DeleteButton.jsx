@@ -41,7 +41,7 @@ export const DeleteButton = ({
     const placement = tooltip ? 'bottom' : 'top';
     return (
         <Confirm
-            overlayClassName='t_popover t_confirm'
+            overlayClassName='t_confirm'
             title={title}
             onConfirm={onConfirm}
             disabled={disabled}
