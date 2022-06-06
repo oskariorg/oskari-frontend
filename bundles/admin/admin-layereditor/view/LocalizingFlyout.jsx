@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
-import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
+import { Spin, LabeledInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
+import { LocaleProvider, LocaleConsumer, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -84,20 +85,10 @@ export class LocalizingFlyout extends ExtraFlyout {
 class UIService extends StateHandler {
     constructor(instance, id, parentId) {
         super();
-        const getMsg = Oskari.getMsg.bind(null, instance.getName());
-        const labels = {};
-        Oskari.getSupportedLanguages().forEach(lang => {
-            const langPrefix = typeof getMsg(`fields.locale.${lang}`) === 'object' ? lang : 'generic';
-            labels[lang] = {
-                name: getMsg(`fields.locale.${langPrefix}.name`),
-                desc: getMsg(`fields.locale.${langPrefix}.description`)
-            };
-        });
         this.initialState = {
             loading: false,
             headerMessageKey: null,
             value: {},
-            labels,
             deleteLayers: false,
             deleteGroups: false
         };
@@ -182,7 +173,7 @@ const Buttons = styled('div')`
 const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups }) => {
+const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups, getMessage }) => {
     const RemoveGroupButton = () => {
         if (isNew) {
             // we are adding a group so we don't want to show Delete button
@@ -209,16 +200,12 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
                 <Message messageKey={headerMessageKey} />
             </Header>
             <LocalizationComponent
-                labels={labels}
-                collapse={true}
                 value={value}
                 languages={Oskari.getSupportedLanguages()}
                 onChange={controller.setValue}
-                LabelComponent={Label}
-                showDivider
             >
-                <TextInput type="text" name="name" />
-                <TextInput type="text" name="desc" />
+                <LabeledInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
+                <LabeledInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
             </LocalizationComponent>
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
@@ -235,7 +222,7 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
         return <Spin>{Component}</Spin>;
     }
     return Component;
-};
+});
 LocalizedContent.propTypes = {
     loading: PropTypes.bool,
     labels: PropTypes.object,
