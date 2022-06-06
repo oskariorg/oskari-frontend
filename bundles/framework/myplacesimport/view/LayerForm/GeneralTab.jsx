@@ -55,9 +55,9 @@ export const GeneralTab = LocaleConsumer(({
                 onChange={updateLocale}
                 showDivider
             >
-                <LabeledInput type='text' name='name' label={getMessage('flyout.layer.name')} mandatory={true} minimal={true}/>
-                <LabeledInput type='text' name='desc' label={getMessage('flyout.layer.desc')} minimal={true}/>
-                <LabeledInput type='text' name='source' label={getMessage('flyout.layer.source')} minimal={true}/>
+                <LabeledInput type='text' name='name' label={getMessage('flyout.layer.name')} minimal={true} mandatory={true} />
+                <LabeledInput type='text' name='desc' label={getMessage('flyout.layer.desc')} minimal={true} />
+                <LabeledInput type='text' name='source' label={getMessage('flyout.layer.source')} minimal={true} />
             </LocalizationComponent>
         </Fragment>
     );
