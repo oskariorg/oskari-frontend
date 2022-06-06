@@ -3,6 +3,7 @@ import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 import { LocalizingFlyout } from './view/LocalizingFlyout';
+import { Messaging } from 'oskari-ui/util';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
@@ -364,16 +365,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             this._getLayerService().addLayerGroup(group, parentId);
                         }
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show('', me.loc('messages.saveSuccess'));
-                        dialog.fadeout();
+                        Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.themeFlyout.setLoading(false);
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show('', me.loc('messages.saveFailed'));
-                        dialog.fadeout();
+                        Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                         Oskari.log('admin-layereditor').error(errorText);
@@ -393,16 +390,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             this.themeFlyout.hide();
                             this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteSuccess'));
-                            dialog.fadeout();
+                            Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
                             this.themeFlyout.setLoading(false);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteFailed'));
-                            dialog.fadeout();
+                            Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
                             const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                             Oskari.log('admin-layereditor').error(errorText);
@@ -475,16 +468,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         } else {
                             this._getLayerService().addDataProvider(dataProvider);
                         }
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveSuccess'));
-                        dialog.fadeout();
+                        Messaging.success(me.loc('messages.saveSuccess'));
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
                         this.dataProviderFlyout.setLoading(false);
                         // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.saveFailed'));
-                        dialog.fadeout();
+                        Messaging.error(me.loc('messages.saveFailed'));
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                         Oskari.log('admin-layereditor').error(errorText);
@@ -504,16 +493,12 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             this.dataProviderFlyout.hide();
                             this._getLayerService().deleteDataProvider(response, deleteLayers);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteSuccess'));
-                            dialog.fadeout();
+                            Messaging.success(me.loc('messages.deleteSuccess'));
                         },
                         error: (jqXHR, textStatus, errorThrown) => {
                             this.dataProviderFlyout.setLoading(false);
                             // Inform user with popup
-                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            dialog.show(' ', me.loc('messages.deleteFailed'));
-                            dialog.fadeout();
+                            Messaging.error(me.loc('messages.deleteFailed'));
                             // Log error
                             const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
                             Oskari.log('admin-layereditor').error(errorText);
