@@ -34,7 +34,7 @@ const getInitialValue = (languages, value) => {
     return initialValue;
 };
 
-const getPlaceholderWithLangSuffix = (label, lang) => {
+const getWithLangSuffix = (label, lang) => {
     if (!label) {
         return '';
     }
@@ -82,23 +82,38 @@ const getCollapseHeader = () => {
     );
 };
 
-            {/*
-                The inputs have to be on direct children for LocalizationComponent.
-                Can't wrap them to <StyledFormField>.
-            */}
 /**
- * 
- * @param {String[]} languages käytössä olevat kielet
- * @param {Function} onChange 
- * @param {Object} value "locale" object if single { [lang]: [value] } else { [lang]: { key: [value] }}
- * @param {Object} labels samanmallinen object kuin value == vaikuttaa onko single vai ei (placeholder tulee silti children propsina)
- * @param {ReactElement} LabelComponent labelille wrapper
- * @param {Boolean} collapse disabling "other languages" collapse with false
+ * This component generates an UI for inputing localized content. It duplicates fields that are as children for each language and works for example with LabeledInput components as children.
+ * The children of this component have some requirements:
+ * - the input-components must be DIRECT children of this component (this can be worked around for styling by wrapping the children in a component that supports mentioned props and redistributes them to actual inputs)
+ * - The children must have the following props:
+ * -> name (name of the field that is used to map individual field value from value param)
+ * -> value (value of an individual field)
+ * -> label (optional but usually defined for localization purposes, string or React-component that will be shown as field label, defaults to name-prop)
+ * -> onChange (function to call when user changes the value of the input)
+ * -> mandatory (optional, boolean or React-component for custom validation)
+ *
+ * Example usage:
+ *   <LocalizationComponent
+ *      value={localeValue}
+ *       languages={Oskari.getSupportedLanguages()}
+ *       onChange={(values) => controller.setLocalizedValues(values)}
+ *   >
+ *       <LabeledInput type='text' label={getMessage('fields.locale.name')} name='name' mandatory={true} />
+ *       <LabeledInput type='text' label={<Message messageKey='fields.locale.description' />} name='desc' />
+ *   </LocalizationComponent>
+ *
+ * @param {String[]} languages Commonly Oskari.getSupportedLanguages() ie. the languages that are supported by the instance. Example: ["en", "fi", "sv"] (required)
+ * @param {Function} onChange Callback function to get a new "locale" value for user input. Example: (newValue) => doStuff(newValue)
+ * @param {Object} value "locale" object like this { "en": { "name": "user input" }} means that there's a value for field "name" for the "en" (english) language
+ * @param {String[]} mandatoryLanguages If a mandatory is required for more than default language, you can specify the languages that are required. Example: ["fi"]. Defaults to first language in languages array (optional)
+ * @param {ReactElement} LabelComponent For custom label tag when not using LabeledInput (used when the input components DON'T define label prop in PropTypes). Example: const Label = ({children}) => <div>{children}</div>
+ * @param {Boolean} collapse "false" to show "other languages" directly and not in a collapse element (useful when there's only one field to localize)
  * @param {Boolean} defaultOpen have "other languages" collapse open by default with true
- * @param {Boolean} showDivider have lang fields separated by divider in "other languages" collapse (useful for grouping languages when there are 3+ fields to localize)
+ * @param {Boolean} showDivider have lang fields separated by divider in "other languages" collapse (useful for grouping languages when there are 3+ fields to localize and when using with <LabeledInput minimal=true />)
  * @param {ReactElement[]} children name, value, onChange, placeholder, autoComplete, suffix, mandatory
- * 
- * @returns 
+ *
+ * @returns an input collection where child inputs are duplicated for each of the languages
  */
 export const LocalizationComponent = ({
     languages,
@@ -133,9 +148,9 @@ export const LocalizationComponent = ({
                 getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
             let elementValue = internalValue[lang][name];
 
-            const { mandatory = false, label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
-            
-            let fieldLabel = isDefaultLang ? label : getPlaceholderWithLangSuffix(label, lang);
+            const { mandatory = false, label = name, ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+
+            let fieldLabel = isDefaultLang ? label : getWithLangSuffix(label, lang);
             const currentMandatory = mandatory && mandatoryLanguages.includes(lang);
             const elProps = {
                 label: fieldLabel,
@@ -144,13 +159,16 @@ export const LocalizationComponent = ({
                 autoComplete: 'off',
                 ...restProps
             };
+            // detect if the child component declares handling a "label" prop in it's propTypes
             const elementDeclaredProps = {...element.type.propTypes};
             const elementRendersLabel = !!elementDeclaredProps.label;
             if (!elementRendersLabel && currentMandatory) {
+                // if element doesn't render a label -> bake the mandatory icon as field suffix when needed
                 elProps.suffix = getMandatoryIcon(mandatory, elementValue);
             }
             // detect if the element we are rendering declares supporting "mandatory" as prop.
             if (elementDeclaredProps.mandatory && currentMandatory) {
+                // pass in mandatory value IF the child component declares it handles "mandatory" in it's propTypes
                 elProps.mandatory = mandatory;
             }
             return (
