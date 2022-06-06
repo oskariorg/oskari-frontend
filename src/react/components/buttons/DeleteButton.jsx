@@ -41,11 +41,15 @@ export const DeleteButton = ({
     const placement = tooltip ? 'bottom' : 'top';
     return (
         <Confirm
+            overlayClassName='t_popover t_confirm'
             title={title}
             onConfirm={onConfirm}
             disabled={disabled}
             okText={<Message messageKey='buttons.delete' bundleKey='oskariui'/>}
             cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
+            okButtonProps={{className: 't_button t_delete'}}
+            cancelButtonProps={{className: 't_button t_cancel'}}
+            okType='danger'
             placement={placement}>
             <Tooltip title={tooltip}>
                 {getButton(type, disabled)}
