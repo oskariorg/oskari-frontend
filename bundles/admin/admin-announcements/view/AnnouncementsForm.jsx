@@ -1,8 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, DateRange, LocalizationComponent, LabeledInput, Radio, Tooltip } from 'oskari-ui';
+import { Message, DateRange, Label, LabeledInput, Radio, Tooltip } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
@@ -16,10 +17,6 @@ This is the main file for creating and editing announcements.
 
 const PaddingTop = styled.div`
     padding-top: 16px;
-`;
-
-const Label = styled.div`
-    padding-bottom: 8px;
 `;
 
 // TODO: should type be stored to options??
@@ -165,13 +162,12 @@ export const AnnouncementsForm = LocaleConsumer(({
             <PaddingTop/>
             <LocalizationComponent
                 languages={languages}
-                LabelComponent={Label}
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}>
                 <LabeledInput type='text' name='title' label={getMessage('fields.locale.title')} mandatory={true}/>
-                { state.type === 'link' && <LabeledInput  label={getMessage('fields.locale.link')} name='link' mandatory={true}/> }
+                { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={true}/> }
                 { state.type === 'content' && <RichEditor label={getMessage('fields.locale.content')} name='content' mandatory={true}/> }
-                { state.type !== 'title' && <PaddingTop/>}
+                { state.type === 'content' && <PaddingTop/> }
             </LocalizationComponent>
 
             <ButtonContainer>

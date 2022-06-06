@@ -2,13 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Tooltip } from 'oskari-ui';
+import { Label } from './Label';
 import { getMandatoryIcon } from '../util/validators';
 import { Input } from 'antd';
 
-const Label = styled.div`
-    display: inline-block;
-    padding-bottom: 5px;
-`;
 const Component = styled.div`
     margin-bottom: 10px;
 `;

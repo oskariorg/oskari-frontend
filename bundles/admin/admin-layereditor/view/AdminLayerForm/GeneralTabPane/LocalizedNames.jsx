@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LabeledInput, LocalizationComponent, Message } from 'oskari-ui';
+import { LabeledInput, Message } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { MandatoryIcon } from '../Mandatory';

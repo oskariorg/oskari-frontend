@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, LabeledInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
+import { Spin, LabeledInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleProvider, LocaleConsumer, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
