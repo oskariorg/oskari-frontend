@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, DateRange, Label, LabeledInput, Radio, Tooltip } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { Message, Label, LabeledInput, Radio, Tooltip } from 'oskari-ui';
 import { SecondaryButton, PrimaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
 import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
+import { DateRange } from 'oskari-ui/components/DateRange';
+import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
