@@ -92,6 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         const isImport = !id;
         const conf = {
             maxSize: this.getMaxSize(),
+            unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
         const onSuccess = () => this.popupCleanup();

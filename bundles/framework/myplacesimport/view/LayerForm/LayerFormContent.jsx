@@ -34,7 +34,7 @@ const getGeneralTabTitle = isValid => (
 );
 
 export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
-    const { maxSize, isImport } = config;
+    const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = OSKARI_BLANK_STYLE, locale = {} } = values || {};
     const [state, setState] = useState({ style, locale, loading: false, tab: 'general' });
 
@@ -85,6 +85,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
                         sourceSrs = {state.sourceSrs}
                         isImport = {isImport}
                         maxSize = {maxSize}
+                        unzippedMaxSize = {unzippedMaxSize}
                         showSrs = {showSrs}
                         updateState = {updateState}
                     />
