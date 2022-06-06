@@ -8,11 +8,6 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Avisering"
             },
-            "tools": {
-                "add": "Lägg till en ny avisering",
-                "edit": "Redigera avisering",
-                "delete": "Ta bort avisering"
-            },
             "fields": {
                 "date": "Datumintervall",
                 "show": {
@@ -27,6 +22,7 @@ Oskari.registerLocalization(
                     "link": "Rubrik och extern länk"
                 },
                 "locale": {
+                    "link": "Extern länk",
                     "generic": {
                         "title": "Titel på {0}",
                         "content": "Innehåll på {0}"

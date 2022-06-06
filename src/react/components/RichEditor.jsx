@@ -5,6 +5,24 @@ import { stateToHTML } from 'draft-js-export-html';
 import './TextEditor/RichText.css';
 import 'draft-js/dist/Draft.css';
 
+// Force links to use target _blank
+const HTML_OPTIONS = {
+    entityStyleFn: entity => {
+        const entityType = entity.get('type').toLowerCase();
+        if (entityType !== 'link') {
+            return;
+        }
+        const data = entity.getData();
+        return {
+            element: 'a',
+            attributes: {
+                target: '_blank',
+                href: data.url
+            }
+        };
+    }
+};
+
 export const RichEditor = (props) => {
   const [ editorState, setEditorState ] = useState(EditorState.createEmpty());
   const editorRef = useRef("editor");
@@ -34,7 +52,7 @@ export const RichEditor = (props) => {
   }
 
   const updateEditorState = (editorstate) => {
-    props.onChange({target: { value: stateToHTML(editorstate.getCurrentContent())}});
+    props.onChange({target: { value: stateToHTML(editorstate.getCurrentContent(), HTML_OPTIONS)}});
     setEditorState(editorstate);
   }
           

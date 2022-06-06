@@ -20,6 +20,12 @@ Oskari.registerLocalization(
             "messages": {
                 "getFailed":"Ilmoitusten haku epäonnistui."
             },
+            "tools": {
+                "add": "Lisää uusi ilmoitus",
+                "edit": "Muokkaa ilmoitusta",
+                "delete": "Poista ilmoitus",
+                "preview": "Esikatselu"
+            },
             "plugin" : {
                 "title": "Ilmoitukset",
                 "valid": "Voimassa"

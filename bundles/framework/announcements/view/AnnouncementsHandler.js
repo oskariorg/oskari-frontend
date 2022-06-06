@@ -6,7 +6,7 @@ class ViewHandler extends StateHandler {
     constructor (service) {
         super();
         this.service = service;
-        this.service.on('tool', () => this.updateState({ tools: this.service.getTools() }));
+        this.service.on('controller', () => this.notify());
         this.service.on('fetch', () => this.onFetch());
         this.service.fetchAnnouncements();
     }
@@ -35,6 +35,26 @@ class ViewHandler extends StateHandler {
         this.updateState(newState);
     }
 
+    getToolController () {
+        const controller = this.service.getAdminController();
+        if (controller) {
+            controller.preview = (id) => this.preview(id);
+        }
+        return controller;
+    }
+
+    preview (id) {
+        const ann = this.service.getAnnouncement(id);
+        if (!ann) {
+            return;
+        }
+        if (ann.options.showAsPopup) {
+            this.updateState({ popupAnnouncements: [ann] });
+        } else {
+            this.updateState({ bannerAnnouncements: [ann] });
+        }
+    }
+
     setShowAgain (id, dontShow) {
         if (dontShow) {
             this.service.addToLocalStorage(id);
@@ -53,11 +73,15 @@ class ViewHandler extends StateHandler {
         this.updateState({ bannerAnnouncements: [] });
     }
 
+    onBannerChange (currentBanner) {
+        this.updateState({ currentBanner });
+    }
+
     onPopupChange (currentPopup) {
         this.updateState({ currentPopup });
     }
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose'
+    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'onBannerChange', 'getToolController'
 ]);

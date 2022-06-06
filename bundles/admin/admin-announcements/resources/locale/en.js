@@ -8,11 +8,6 @@ Oskari.registerLocalization(
         "popup": {
             "title": "Announcement"
         },
-        "tools": {
-            "add": "Add new announcement",
-            "edit": "Edit announcement",
-            "delete": "Delete announcement"
-        },
         "fields": {
             "date": "Date range",
             "show": {
@@ -27,6 +22,7 @@ Oskari.registerLocalization(
                 "link": "Title and external link"
             },
             "locale": {
+                "link": "External link",
                 "generic": {
                     "title": "Title in {0}",
                     "content": "Content in {0}"

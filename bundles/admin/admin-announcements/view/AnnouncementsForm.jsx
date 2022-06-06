@@ -90,7 +90,7 @@ const getLabels = () => {
         labels[language] = {
             title: getMsg(`fields.locale.${langPrefix}.title`, [language]),
             content: getMsg(`fields.locale.${langPrefix}.content`, [language]),
-            link: getMsg('fields.type.link')
+            link: getMsg('fields.locale.link')
         };
     });
     return labels;
