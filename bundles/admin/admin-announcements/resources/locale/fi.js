@@ -22,6 +22,7 @@ Oskari.registerLocalization(
                     "link": "Otsikko ja lisätietolinkki"
                 },
                 "locale": {
+                    "link": "Lisätietolinkki",
                     "generic": {
                         "title": "Otsikko kielellä {0}",
                         "content": "Sisältö kielellä {0}"
