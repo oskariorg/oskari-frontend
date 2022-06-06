@@ -23,22 +23,8 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "link": "Extern länk",
-                    "generic": {
-                        "title": "Titel på {0}",
-                        "content": "Innehåll på {0}"
-                    },
-                    "en": {
-                        "title": "Titel på engelska",
-                        "content": "Innehåll på engelska"
-                    },
-                    "fi": {
-                        "title": "Titel på finska",
-                        "content": "Innehåll på finska"
-                    },
-                    "sv": {
-                        "title": "Titel på svenska",
-                        "content": "Innehåll på svenska"
-                    }
+                    "title": "Titel",
+                    "content": "Innehåll"
                 },
                 "validate": {
                     "title": "Lägg till en titel!",
