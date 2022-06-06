@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, Message, Divider, Tooltip } from 'oskari-ui';
-import { MandatoryIcon } from 'oskari-ui/components/icons';
-import styled from 'styled-components';
+import { Label } from './Label';
+import { getMandatoryIcon } from '../util/validators';
 import { QuestionCircleOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const BUNDLE_KEY = 'oskariui';
 const COMPONENT_KEY = 'LocalizationComponent';
-
-const Label = styled('div')`
-    display: inline-block;
-`;
 
 const StyledTooltip = styled(Tooltip)`
     float: right;
@@ -27,52 +24,38 @@ const getLangSuffix = lang => {
     return suffix;
 };
 
-const getInitialValue = (languages, value, isSingle) => {
+const getInitialValue = (languages, value) => {
     const initialValue = value || {};
     languages.forEach(lang => {
         if (!initialValue[lang]) {
-            initialValue[lang] = isSingle ? '' : {};
-        }
-        if (isSingle && typeof initialValue[lang] === 'object') {
-            initialValue[lang] = Object.values(initialValue[lang]).shift();
+            initialValue[lang] = {};
         }
     });
     return initialValue;
 };
 
-const getLabel = (labels, lang, elementName, isSingle) => {
-    if (!labels) {
-        return;
-    }
-    let label = labels[lang];
-    if (label) {
-        label = isSingle ? label : (elementName && label[elementName]);
-    }
-    if (label) {
-        const isReactComponent = label.$$typeof === Symbol.for('react.element');
-        if (!isReactComponent && typeof label === 'object') {
-            label = Object.values(label).shift();
-        }
-    }
-    return label;
-};
-const getPlaceholderWithLangSuffix = (placeholder, lang) => {
-    if (!placeholder) {
+const getPlaceholderWithLangSuffix = (label, lang) => {
+    if (!label) {
         return '';
     }
-    return placeholder + ' ' + getLangSuffix(lang);
+    if (typeof label ==='string') {
+        return label + ' ' + getLangSuffix(lang);
+    }
+    else if (React.isValidElement(label)) {
+        // Works with <Message />
+        return (<label.type {...label.props}>
+            {getLangSuffix(lang)}
+        </label.type>);
+    }
+    return '';
 };
-const getElementValueChangeHandler = (values, lang, elementName, isSingle, setValue, onChange) => {
-    if (!isSingle && !elementName) {
+const getElementValueChangeHandler = (values, lang, elementName, setValue, onChange) => {
+    if (!elementName) {
         return;
     }
     return event => {
         const clone = { ...values };
-        if (isSingle) {
-            clone[lang] = event.target.value;
-        } else {
-            clone[lang][elementName] = event.target.value;
-        }
+        clone[lang][elementName] = event.target.value;
         setValue(clone);
         if (typeof onChange === 'function') {
             onChange(clone);
@@ -99,27 +82,42 @@ const getCollapseHeader = () => {
     );
 };
 
-const validateMandatory = value => typeof value === 'string' && value.trim().length > 0;
-
+            {/*
+                The inputs have to be on direct children for LocalizationComponent.
+                Can't wrap them to <StyledFormField>.
+            */}
+/**
+ * 
+ * @param {String[]} languages käytössä olevat kielet
+ * @param {Function} onChange 
+ * @param {Object} value "locale" object if single { [lang]: [value] } else { [lang]: { key: [value] }}
+ * @param {Object} labels samanmallinen object kuin value == vaikuttaa onko single vai ei (placeholder tulee silti children propsina)
+ * @param {ReactElement} LabelComponent labelille wrapper
+ * @param {Boolean} collapse disabling "other languages" collapse with false
+ * @param {Boolean} defaultOpen have "other languages" collapse open by default with true
+ * @param {Boolean} showDivider have lang fields separated by divider in "other languages" collapse (useful for grouping languages when there are 3+ fields to localize)
+ * @param {ReactElement[]} children name, value, onChange, placeholder, autoComplete, suffix, mandatory
+ * 
+ * @returns 
+ */
 export const LocalizationComponent = ({
     languages,
     onChange,
     value,
-    labels,
+    mandatoryLanguages = [languages[0]],
     LabelComponent = Label,
     collapse = true,
     defaultOpen = false,
-    single = false,
     showDivider = false,
     children }) => {
     if (!Array.isArray(languages) || languages.length === 0) {
         return null;
     }
-    const [internalValue, setInternalValue] = useState(getInitialValue(languages, value, single));
+    const [internalValue, setInternalValue] = useState(getInitialValue(languages, value));
 
     useEffect(() => {
-        setInternalValue(getInitialValue(languages, value, single));
-    }, [languages, value, single]);
+        setInternalValue(getInitialValue(languages, value));
+    }, [languages, value]);
 
     const localizedElements = languages.map((lang, index) => {
         const isDefaultLang = index === 0;
@@ -129,26 +127,36 @@ export const LocalizationComponent = ({
                 // Text or some other non-react node.
                 return element;
             }
+            // TODO: specify fields that we require from inputs for localized content: name, label?, mandatory?, onChange? etc
             const { name } = element.props;
             const onElementValueChange =
-                getElementValueChangeHandler(internalValue, lang, name, single, setInternalValue, onChange);
-            let elementValue = single ? internalValue[lang] : internalValue[lang][name];
-            let label = getLabel(labels, lang, name, single);
+                getElementValueChangeHandler(internalValue, lang, name, setInternalValue, onChange);
+            let elementValue = internalValue[lang][name];
 
-            const { mandatory = [], placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
-            const placeholderWithSuffix = isDefaultLang ? placeholder : getPlaceholderWithLangSuffix(placeholder, lang);
-            let suffix;
-            if (mandatory.includes(lang)) {
-                suffix = <MandatoryIcon isValid={validateMandatory(elementValue)} />;
+            const { mandatory = false, label, placeholder = '', ...restProps } = element.props; // don't pass mandatory and placeholder to element node
+            
+            let fieldLabel = isDefaultLang ? label : getPlaceholderWithLangSuffix(label, lang);
+            const currentMandatory = mandatory && mandatoryLanguages.includes(lang);
+            const elProps = {
+                label: fieldLabel,
+                value: elementValue,
+                onChange: onElementValueChange,
+                autoComplete: 'off',
+                ...restProps
+            };
+            const elementDeclaredProps = {...element.type.propTypes};
+            const elementRendersLabel = !!elementDeclaredProps.label;
+            if (!elementRendersLabel && currentMandatory) {
+                elProps.suffix = getMandatoryIcon(mandatory, elementValue);
+            }
+            // detect if the element we are rendering declares supporting "mandatory" as prop.
+            if (elementDeclaredProps.mandatory && currentMandatory) {
+                elProps.mandatory = mandatory;
             }
             return (
                 <React.Fragment key={`${lang}_${index}`}>
-                    { label &&
-                        <LabelComponent>{ label }</LabelComponent>
-                    }
-                    <Tooltip key={ `${lang}_${index}_tooltip` } title={ placeholderWithSuffix } trigger={ ['focus', 'hover'] }>
-                        <element.type {...restProps} value={elementValue} onChange={onElementValueChange} placeholder={placeholderWithSuffix} autoComplete='off' suffix={suffix}/>
-                    </Tooltip>
+                    { !elementRendersLabel && <LabelComponent>{ fieldLabel }</LabelComponent>}
+                    <element.type {...elProps} />
                 </React.Fragment>
             );
         });
@@ -160,6 +168,8 @@ export const LocalizationComponent = ({
             </div>
         );
     });
+
+    // only one language OR "other languages" collapse disabled -> write localizable fields in "one view"
     if (localizedElements.length === 1 || !collapse) {
         return (
             <React.Fragment>
@@ -183,12 +193,11 @@ export const LocalizationComponent = ({
 
 LocalizationComponent.propTypes = {
     languages: PropTypes.arrayOf(PropTypes.string).isRequired,
+    mandatoryLanguages: PropTypes.arrayOf(PropTypes.string),
     onChange: PropTypes.func,
     value: PropTypes.object,
-    labels: PropTypes.object,
     LabelComponent: PropTypes.elementType,
     collapse: PropTypes.bool,
-    single: PropTypes.bool,
     defaultOpen: PropTypes.bool,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
