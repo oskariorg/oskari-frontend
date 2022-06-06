@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Divider, LocalizationComponent, TextInput, Tooltip } from 'oskari-ui';
+import { Message, Divider, TextInput, Tooltip } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleProvider } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
