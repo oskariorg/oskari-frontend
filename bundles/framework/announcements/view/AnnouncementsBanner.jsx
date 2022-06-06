@@ -14,7 +14,7 @@ const StyledPagination = styled(Pagination)`
 
 const ActionContainer = styled('div')`
     display: flex;
-    flex-direction: row;
+    flex-direction: inherit;
     align-items: end;
 `;
 
@@ -80,7 +80,7 @@ const getContent = (state, controller, onClose, renderDescriptionPopup) => {
         action,
         closable: bannerAnnouncements.length > 1 ? false : true,
         content: description,
-        icon: <InfoCircleOutlined style={{color: '#5e2c00'}} />
+        icon: <InfoCircleOutlined style={{color: '#3c3c3c'}} />
     }
 };
 
