@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, LabeledInput, LocalizationComponent } from 'oskari-ui';
+import { Message, LabeledInput } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { FileInput } from 'oskari-ui/components/FileInput';
-import { BUNDLE_NAME, FILE_INPUT_PROPS } from '../../constants';
+import { FILE_INPUT_PROPS } from '../../constants';
 
 const Description = styled.div`
     padding-bottom: 20px;
