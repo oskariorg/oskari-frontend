@@ -16,15 +16,21 @@ export const FlyoutContent = ({
     // Flyout content with tools, outdated and upcoming announcements for admin users
     return (
         <div>
-            <FlyoutCollapse announcements={active} toolController={toolController}/>
             <Divider orientation='left'>
-                <Message messageKey='flyout.outdated'/>
+                <Message messageKey='flyout.active'/>
             </Divider>
-            <FlyoutCollapse announcements={outdated} toolController={toolController}/>
+            <FlyoutCollapse announcements={active} toolController={toolController}/>
+
             <Divider orientation='left'>
                 <Message messageKey='flyout.upcoming'/>
             </Divider>
             <FlyoutCollapse announcements={upcoming} toolController={toolController}/>
+
+            <Divider orientation='left'>
+                <Message messageKey='flyout.outdated'/>
+            </Divider>
+            <FlyoutCollapse announcements={outdated} toolController={toolController}/>
+
             <FlyoutFooter toolController={toolController} />
         </div>
     );
