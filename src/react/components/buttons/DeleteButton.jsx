@@ -14,13 +14,17 @@ const DeleteIcon = styled(DeleteOutlined)`
 
 
 const getButton = (type, disabled ) => {
+    const props = {
+        className: 't_button t_delete',
+        disabled
+    }
     if (type === 'icon') {
-        return <DeleteIcon/>;
+        return <DeleteIcon {...props}/>;
     }
     if (type === 'button') {
-        return <Button disabled={disabled}><DeleteIcon/></Button>;
+        return <Button  {...props}><DeleteIcon/></Button>;
     }
-    return <SecondaryButton disabled={disabled} danger type="delete"/>;
+    return <SecondaryButton {...props} danger type="delete"/>;
 };
 const getMsg = key => <Message messageKey={key} bundleKey='oskariui'/>
 
