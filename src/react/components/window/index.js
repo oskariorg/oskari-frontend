@@ -203,9 +203,9 @@ export const showBanner = (content, onClose, options = {}) => {
 
     const render = (props) => {
         ReactDOM.render(
-            <Banner
-                {...props}
-            />, element);
+            <Banner onClose={removeWindow} options={options}>
+                {content}
+            </Banner>, element);
     };
     render({content, onClose, options});
     return  {

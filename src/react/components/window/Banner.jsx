@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
 const COLOR = '#fdf8d9'
 
-const StyledBanner = styled('div')`
+const Container = styled('div')`
     position: fixed;
     top: 0;
     background-color: ${COLOR};
@@ -19,11 +20,12 @@ const StyledBanner = styled('div')`
         width: 100%
     }
     z-index: 999999;
-`;
-
-const Container = styled('div')`
     display: flex;
     flex-direction: row;
+`;
+
+const Content = styled('div')`
+    margin-right: auto;
     width: 100%;
     @media only screen and (max-width: 1025px) {
         flex-direction: column;
@@ -37,28 +39,22 @@ const CloseIcon = styled(CloseCircleOutlined)`
     align-self: center;
 `;
 
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-`;
-
-
-
-
-
-export const Banner = ({ content, onClose, options }) => {
+export const Banner = ({ children, onClose, options }) => {
     const containerProps = {
         className: `t_banner t_${options.id}`
     };
     return (
-        <StyledBanner>
-            <Container {...containerProps}>
-                <Content>
-                    {content}
-                </Content>
-                <CloseIcon className='t_button t_close' onClick={onClose} />
-            </Container>
-        </StyledBanner>
+        <Container {...containerProps}>
+            <Content>
+                {children}
+            </Content>
+            <CloseIcon className='t_button t_close' onClick={onClose} />
+        </Container>
     );
+};
+
+Banner.propTypes = {
+    children: PropTypes.any,
+    onClose: PropTypes.func.isRequired,
+    options: PropTypes.object
 };
