@@ -156,7 +156,6 @@ class PlaceHandler extends StateHandler {
         }
         // focus on map
         this.addLayerAndFocus(place);
-        this.instance.getDrawHandler().startModify(place.getGeometry());
         this.openPlacePopup(place);
     }
 
@@ -168,9 +167,15 @@ class PlaceHandler extends StateHandler {
                 this.placeControls.bringToTop();
                 return;
             }
-            // remove previous popup
+            // remove previous popup and drawing
             this.placePopupCleanup();
         }
+
+        if (id) {
+            // start modify after possible placePopupCleanup
+            this.instance.getDrawHandler().startModify(place.getGeometry());
+        }
+
         const categoryId = place.getCategoryId();
         const { categories } = this.state;
 
