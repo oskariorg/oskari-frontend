@@ -6,7 +6,6 @@ import { Message, Confirm, Button,Tooltip } from 'oskari-ui';
 import { SecondaryButton } from './';
 import { DeleteOutlined } from '@ant-design/icons';
 import { red } from '@ant-design/colors'
-import { Tooltip } from 'antd';
 
 const DeleteIcon = styled(DeleteOutlined)`
     color: ${red.primary};
@@ -14,14 +13,14 @@ const DeleteIcon = styled(DeleteOutlined)`
 `;
 
 
-const getButton = type => {
+const getButton = (type, disabled ) => {
     if (type === 'icon') {
         return <DeleteIcon/>;
     }
     if (type === 'button') {
-        return <Button><DeleteIcon/></Button>;
+        return <Button disabled={disabled}><DeleteIcon/></Button>;
     }
-    return <SecondaryButton danger type="delete"/>;
+    return <SecondaryButton disabled={disabled} danger type="delete"/>;
 };
 const getMsg = key => <Message messageKey={key} bundleKey='oskariui'/>
 
@@ -33,7 +32,7 @@ export const DeleteButton = ({
     type = icon ? 'icon' : '',
     title = <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
     tooltip = getMsg('buttons.delete'),
-    disabled
+    disabled = false
 }) => {
     const placement = tooltip ? 'bottom' : 'top';
     return (
@@ -45,7 +44,7 @@ export const DeleteButton = ({
             cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
             placement={placement}>
             <Tooltip title={tooltip}>
-                {getButton(type)}
+                {getButton(type, disabled)}
             </Tooltip>
         </Confirm>
     );
@@ -57,5 +56,4 @@ DeleteButton.propTypes = {
     tooltip: PropTypes.node,
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['icon', 'button', 'text'])
-
 };
