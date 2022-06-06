@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Confirm, Button } from 'oskari-ui';
+import { Message, Confirm, Button,Tooltip } from 'oskari-ui';
+
 import { SecondaryButton } from './';
 import { DeleteOutlined } from '@ant-design/icons';
 import { red } from '@ant-design/colors'
@@ -12,6 +13,7 @@ const DeleteIcon = styled(DeleteOutlined)`
     cursor: pointer;
 `;
 
+
 const getButton = type => {
     if (type === 'icon') {
         return <DeleteIcon/>;
@@ -21,6 +23,8 @@ const getButton = type => {
     }
     return <SecondaryButton danger type="delete"/>;
 };
+const getMsg = key => <Message messageKey={key} bundleKey='oskariui'/>
+
 
 // TODO: update bundles to use type and remove icon
 export const DeleteButton = ({ 
@@ -28,7 +32,7 @@ export const DeleteButton = ({
     icon,
     type = icon ? 'icon' : '',
     title = <Message messageKey='messages.confirmDelete' bundleKey='oskariui'/>,
-    tooltip,
+    tooltip = getMsg('buttons.delete'),
     disabled
 }) => {
     const placement = tooltip ? 'bottom' : 'top';
@@ -53,4 +57,5 @@ DeleteButton.propTypes = {
     tooltip: PropTypes.node,
     disabled: PropTypes.bool,
     type: PropTypes.oneOf(['icon', 'button', 'text'])
+
 };
