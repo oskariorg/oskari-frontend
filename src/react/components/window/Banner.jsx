@@ -2,10 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import { CloseCircleOutlined } from '@ant-design/icons';
 
+const COLOR = '#fdf8d9'
+
 const StyledBanner = styled('div')`
     position: fixed;
     top: 0;
-    background-color: #fdf8d9;
+    background-color: ${COLOR};
     box-shadow: 0 5px 10px 0 #888888;
     height: auto;
     padding: 10px 15px 10px 15px;
@@ -28,11 +30,6 @@ const Container = styled('div')`
     }
 `;
 
-const StyledTitle = styled('span')`
-    font-weight: bold;
-    color: #3c3c3c;
-`;
-
 const CloseIcon = styled(CloseCircleOutlined)`
     cursor: pointer;
     color: #3c3c3c;
@@ -46,38 +43,21 @@ const Content = styled('div')`
     flex-grow: 1;
 `;
 
-const Actions = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin: 0 20px 0 10px;
-    @media only screen and (max-width: 1025px) {
-        flex-direction: column;
-    }
-`;
 
-const Icon = styled('div')`
-    font-size: 24px;
-    margin-right: 10px;
-`;
 
-export const Banner = ({ icon, title, content, action, onClose, closable }) => {
 
+
+export const Banner = ({ content, onClose, options }) => {
+    const containerProps = {
+        className: `t_banner t_${options.id}`
+    };
     return (
         <StyledBanner>
-            <Container>
-                <Icon>
-                    {icon}
-                </Icon>
+            <Container {...containerProps}>
                 <Content>
-                    <StyledTitle>{title}</StyledTitle>
-                    <Content>{content}</Content>
+                    {content}
                 </Content>
-                <Actions>
-                    {action}
-                </Actions>
-                {closable && (
-                    <CloseIcon onClick={onClose} />
-                )}
+                <CloseIcon className='t_button t_close' onClick={onClose} />
             </Container>
         </StyledBanner>
     );

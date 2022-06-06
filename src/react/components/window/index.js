@@ -1,6 +1,5 @@
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
-import styled from 'styled-components';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 import { Banner } from './Banner';
@@ -191,15 +190,13 @@ export const showFlyout = (title, content, onClose, options = {}) => {
 
 /**
  * 
- * @param {ReactElement} icon
- * @param {String} title
  * @param {ReactNode} content
- * @param {ReactNode} action
  * @param {Function} onClose 
  * @param {boolean} closable 
  * @returns {object} that provides functions that can be used to close/update the banner
  */
-export const showBanner = (icon, title, content, onClose, closable, action) => {
+export const showBanner = (content, onClose, options = {}) => {
+    validate(options);
     const element = createTmpContainer();
     const removeWindow = createRemoveFn(element, onClose);
     const bringToTop = createBringToTop(element);
@@ -210,7 +207,7 @@ export const showBanner = (icon, title, content, onClose, closable, action) => {
                 {...props}
             />, element);
     };
-    render({icon, title, content, action, onClose, closable});
+    render({content, onClose, options});
     return  {
         update: render,
         close: removeWindow,
