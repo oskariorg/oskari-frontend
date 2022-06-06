@@ -482,7 +482,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             }
             const allLayers = this.getAllLayers();
-            const isLayerInGroup = (layer) => layer.getGroups().filter(g => g.getId() === id).length > 0;
+            const isLayerInGroup = (layer) => layer.getGroups().filter(g => g.id === id).length > 0;
             const layersInDeletedGroup = allLayers.filter(isLayerInGroup).map(l => l.getId());
 
             if (deleteLayers) {
