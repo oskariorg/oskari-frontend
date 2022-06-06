@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "desc": "",
             "flyout": {
                 "title": "Aviseringar",
-                "noAnnouncements": "Inga aktiva aviseringar",
+                "noAnnouncements": "Inga aviseringar",
+                "active": "Aktuella aviseringar",
                 "outdated": "Föråldrade aviseringar",
                 "upcoming": "Framtida aviseringar"
             },
