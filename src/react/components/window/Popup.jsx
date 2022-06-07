@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
 
 const Container = styled.div`
     position: absolute;
@@ -41,7 +41,7 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: #FDF8D9;
+    background-color: ${HEADER_COLOR};
     padding: 8px 10px;
     display: flex;
 `;

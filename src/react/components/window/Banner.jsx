@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
-
+// HEADER_COLOR in constants should but we should enable transparency for banner
 const COLOR = '#fdf8d9'
 
 const Container = styled('div')`

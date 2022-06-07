@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
 
 const Container = styled.div`
     position: absolute;
@@ -21,12 +21,12 @@ const Container = styled.div`
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
-    background-color: #fdf8d9;
+    background-color: ${HEADER_COLOR};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
 `;
 const HeaderBand = styled.div`
-    background-color: #ffd400;
+    background-color: ${ICON_COLOR_HOVER};
     border-top: 1px solid #ffdf00;
     border-bottom: 1px solid #ebb819;
     height: 14px;
