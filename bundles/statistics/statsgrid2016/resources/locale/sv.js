@@ -228,7 +228,8 @@ Oskari.registerLocalization({
                 'edit': 'Redigera',
                 'delete': 'Ta bort',
                 'actions': 'Handlingar',
-                'createDate': 'Skapad'
+                'createDate': 'Skapad',
+                'updateDate': 'Uppdaterad',
             },
             'popup': {
                 'deletetitle': 'Ta bort indikatorn',

@@ -48,6 +48,15 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
             sorter: getSorterFor('created'),
+            width: 135,
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            dataIndex: 'updated',
+            align: 'left',
+            title: <Message messageKey='tab.grid.updateDate' bundleKey={BUNDLE_KEY} />,
+            sorter: getSorterFor('updated'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
         },
         {

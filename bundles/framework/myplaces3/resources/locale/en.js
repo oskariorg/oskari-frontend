@@ -186,6 +186,7 @@ Oskari.registerLocalization(
             "categoryName": "A map layer name is missing",
             "placeNameIllegal": "The place name contains illegal characters",
             "descIllegal": "The place description contains illegal characters",
+            "descLength": "Maximum length allowed is 150 characters.",
             "categoryNameIllegal": "The map layer name contains illegal characters"
         }
     }

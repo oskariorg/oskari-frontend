@@ -33,7 +33,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.default' />,
             dataIndex: 'isDefault',
-            sorter: getSorterFor('isDefault'),
+            width: 60,
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => controller.setDefaultView(item)} />
@@ -63,6 +63,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             title: <Message messageKey='tabs.myviews.grid.createDate' />,
             dataIndex: 'created',
             sorter: getSorterFor('created'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
         },
         {

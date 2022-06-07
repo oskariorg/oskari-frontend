@@ -48,16 +48,17 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
         },
         {
             align: 'left',
-            title: <Message messageKey='tab.grid.createDate' />,
-            dataIndex: 'created',
-            sorter: getSorterFor('created'),
-            render: title => Oskari.util.formatDate(title)
-        },
-        {
-            align: 'left',
             title: <Message messageKey='tab.grid.source' />,
             dataIndex: 'source',
             sorter: getSorterFor('source')
+        },
+        {
+            align: 'left',
+            title: <Message messageKey='tab.grid.createDate' />,
+            dataIndex: 'created',
+            sorter: getSorterFor('created'),
+            width: 135,
+            render: title => Oskari.util.formatDate(title)
         },
         {
             align: 'left',

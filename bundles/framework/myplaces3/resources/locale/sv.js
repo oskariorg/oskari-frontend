@@ -186,6 +186,7 @@ Oskari.registerLocalization(
             "categoryName": "Kartlagrets namn saknas",
             "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken",
             "descIllegal": "Platsens beskrivning innehåller otillåtna tecken",
+            "descLength": "Högsta tillåtna längd är 150 tecken.",
             "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken"
         }
     }

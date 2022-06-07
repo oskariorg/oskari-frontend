@@ -1,7 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
+import styled from 'styled-components';
 
+const StyledTable = styled('table')`
+    tbody {
+        tr {
+            th {
+                padding: 8px;
+                width: 30%;
+            }
+            td {
+                padding: 8px;
+            }
+        }
+    }
+`;
 
 export const AccountTab = ({ state, controller }) => {
 
@@ -23,7 +37,7 @@ export const AccountTab = ({ state, controller }) => {
 
     return (
         <div className="account">
-            <table className="info oskari-grid">
+            <StyledTable className="info oskari-grid">
                 <tbody>
                     {accountData.map((data, i) => (
                         <tr key={`account-data-${i}`} className='dataField'>
@@ -32,7 +46,7 @@ export const AccountTab = ({ state, controller }) => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+            </StyledTable>
             <div className="bottomlinks">
                 {changeInfoUrl && (
                     <span><a href={changeInfoUrl}><Message messageKey='tabs.account.changeInfo'></Message></a></span>

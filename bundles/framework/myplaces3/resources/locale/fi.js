@@ -186,6 +186,7 @@ Oskari.registerLocalization(
             "categoryName": "Karttatason nimi puuttuu",
             "placeNameIllegal": "Kohteen nimessä on kiellettyjä merkkejä",
             "descIllegal": "Kohteen kuvauksessa on kiellettyjä merkkejä",
+            "descLength": "Suurin sallittu pituus 150 merkkiä.",
             "categoryNameIllegal": "Karttatason nimessä on kiellettyjä merkkejä"
         }
     }

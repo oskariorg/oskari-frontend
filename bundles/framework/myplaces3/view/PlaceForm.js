@@ -43,8 +43,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
         ];
 
         this.PLACE_NAME_MAX_LENGTH = 256;
+        this.PLACE_DESCRIPTION_MAX_LENGTH = 150;
 
-        // Rules for description field
+        // Rules for name field
         this.nameRules = [
             {
                 required: true,
@@ -54,6 +55,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 validator: (_, value) => {
                     if (Oskari.util.sanitize(value) !== value) {
                         return Promise.reject(new Error(this.loc('validation.placeNameIllegal')));
+                    }
+
+                    return Promise.resolve(value);
+                }
+            })
+        ];
+        // Rules for description field
+        this.descRules = [
+            {
+                required: false
+            },
+            () => ({
+                validator: (_, value) => {
+                    if (Oskari.util.sanitize(value) !== value) {
+                        return Promise.reject(new Error(this.loc('validation.descIllegal')));
+                    }
+
+                    if (value.length > this.PLACE_DESCRIPTION_MAX_LENGTH) {
+                        return Promise.reject(new Error(this.loc('validation.descLength')));
                     }
 
                     return Promise.resolve(value);
@@ -342,7 +362,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                     type: 'textarea',
                     label: '',
                     placeholder: this.loc('placeform.placedesc.placeholder'),
+                    rules: this.descRules,
                     value: description !== '' ? description : '',
+                    maxLength: this.PLACE_DESCRIPTION_MAX_LENGTH,
                     tooltip: this.loc('placeform.placedesc.placeholder')
                 },
                 {
