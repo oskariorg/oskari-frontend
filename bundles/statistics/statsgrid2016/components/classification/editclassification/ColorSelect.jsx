@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ColorPicker, Select } from 'oskari-ui';
+import { Select } from 'oskari-ui';
+import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const StyledSelect = styled(Select)`
     width: 120px;
