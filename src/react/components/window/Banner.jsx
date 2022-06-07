@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseCircleFilled } from '@ant-design/icons';
 
-const COLOR = '#fdf8d9'
+const COLOR = 'rgba(253, 248, 217, 0.9)' // #fdf8d9
 
 const Container = styled('div')`
     position: fixed;

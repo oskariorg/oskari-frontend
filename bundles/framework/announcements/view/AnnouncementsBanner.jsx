@@ -22,7 +22,7 @@ const InfoIcon = styled(InfoCircleOutlined)`
 
 const StyledCheckbox = styled(Checkbox)`
     margin-left: 10px;
-    white-space: nowrap;
+    margin-bottom: 10px;
 `;
 const StyledTitle = styled.span`
     font-weight: bold;
@@ -74,7 +74,7 @@ const getContent = (state, controller, renderDescriptionPopup) => {
                 </span>
             </Column>
             <Margin/>
-            <Column>
+            <Column style={{ whiteSpace: 'nowrap' }}>
                 <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
                     <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
                 </StyledCheckbox>
