@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
 
 const Container = styled.div`
     position: absolute;
@@ -57,10 +58,10 @@ const ToolsContainer = styled.div`
     height: 16px;
     display: inline-block;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
+    font-size: ${ICON_SIZE}px;
+    color: ${ICON_COLOR};
     > span:hover {
-        color: #ffd400;
+        color: ${ICON_COLOR_HOVER};
     }
 `;
 

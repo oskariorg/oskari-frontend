@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CloseCircleFilled } from '@ant-design/icons';
+import styled from 'styled-components';
+
+// Note! Colors/hover and size are configured for tools container on popup/flyout and separately for banner
+const StyledCloseIcon = styled(CloseCircleFilled)`
+    cursor: pointer;
+`;
 
 /**
  * Close icon for popups and flyouts.
@@ -11,7 +17,7 @@ import { CloseCircleFilled } from '@ant-design/icons';
 // For some reason this problem doesn't seem to trigger right after showing/before updating.
 export const CloseIcon = ({onClose}) => {
     return (
-        <CloseCircleFilled
+        <StyledCloseIcon
             className="t_icon t_close"
             onMouseDown={e => e.stopPropagation()}
             onTouchStart={e => e.stopPropagation()}

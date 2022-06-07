@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
 
 const COLOR = '#fdf8d9'
 
@@ -33,10 +34,12 @@ const Content = styled('div')`
     }
 `;
 
-const CloseIcon = styled(CloseCircleFilled)`
-    cursor: pointer;
-    color: #3c3c3c;
-    font-size: 18px;
+const StyledCloseIcon = styled(CloseIcon)`
+    font-size: ${ICON_SIZE}px;
+    color: ${ICON_COLOR};
+    :hover {
+        color: ${ICON_COLOR_HOVER};
+    }
     align-self: center;
     margin-left: 10px;
 `;
@@ -50,7 +53,7 @@ export const Banner = ({ children, onClose, options }) => {
             <Content>
                 {children}
             </Content>
-            <CloseIcon className='t_icon t_close' onClick={onClose} />
+            <StyledCloseIcon onClick={onClose} />
         </Container>
     );
 };
