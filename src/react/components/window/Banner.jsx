@@ -37,7 +37,7 @@ const Content = styled('div')`
 const IconContainer = styled.span`
     font-size: ${ICON_SIZE}px;
     color: ${ICON_COLOR};
-    :hover {
+    > span:hover {
         color: ${ICON_COLOR_HOVER};
     }
     align-self: center;
@@ -53,7 +53,7 @@ export const Banner = ({ children, onClose, options }) => {
             <Content>
                 {children}
             </Content>
-            <IconContainer><CloseIcon onClick={onClose} /></IconContainer>
+            <IconContainer><CloseIcon onClose={onClose} /></IconContainer>
         </Container>
     );
 };
