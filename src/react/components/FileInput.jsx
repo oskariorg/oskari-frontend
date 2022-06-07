@@ -120,37 +120,39 @@ export const FileInput = ({
 
     return (
         <Tooltip title={ tooltip } trigger={ ['focus', 'hover'] }>
-            <Border
-                className="t_fileinput_dropzone"
-                onDrop={onDrop}
-                onDragOver={prevent}
-                onDragEnter={prevent}
-                onDragLeave={prevent}
-            >
-                <StyledLabel>
-                    <HiddenFileInput
-                        type="file"
-                        multiple= {multiple}
-                        accept={allowedTypes.join(',')}
-                        onChange={e => handleInputFiles(e.target.files)}
-                    />
-                    <StyledUploadIcon className="t_fileinput_btn" />
-                    { getMsg('drag',{ maxCount }) }
-                    { mandatory && <MandatoryIcon isValid={currentFiles.length > 0}/>}
-                </StyledLabel>
-            </Border>
-            <StyledFileList className="t_fileinput_list">
-                { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
-            </StyledFileList>
+            <div className='t_fileinput'>
+                <Border
+                    className="t_dropzone"
+                    onDrop={onDrop}
+                    onDragOver={prevent}
+                    onDragEnter={prevent}
+                    onDragLeave={prevent}
+                >
+                    <StyledLabel>
+                        <HiddenFileInput
+                            type="file"
+                            multiple= {multiple}
+                            accept={allowedTypes.join(',')}
+                            onChange={e => handleInputFiles(e.target.files)}
+                        />
+                        <StyledUploadIcon className="t_button t_add" />
+                        { getMsg('drag',{ maxCount }) }
+                        { mandatory && <MandatoryIcon isValid={currentFiles.length > 0}/>}
+                    </StyledLabel>
+                </Border>
+                <StyledFileList className="t_filelist">
+                    { currentFiles.map( ({name}) => <FileListItem name={name} onRemoveClick={onFileRemove} key={name} />) }
+                </StyledFileList>
+            </div>
         </Tooltip>
     );
 };
 
 const FileListItem = ({name, onRemoveClick}) => {
     return (
-        <StyledListItem>
+        <StyledListItem className={`t_${name}`}>
             <StyledName>{ name }</StyledName>
-            <CloseCircleOutlined className="t_fileinput_remove" onClick={()=>onRemoveClick(name)}/>
+            <CloseCircleOutlined className="t_button t_remove" onClick={()=>onRemoveClick(name)}/>
         </StyledListItem>
     );
 };
