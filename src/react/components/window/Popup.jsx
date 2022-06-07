@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 
@@ -129,7 +129,7 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
         <PopupHeader {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
             <ToolsContainer>
-                <CloseCircleFilled className="t_icon t_close" onClick={onClose}/>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
         <PopupBody className="t_body">

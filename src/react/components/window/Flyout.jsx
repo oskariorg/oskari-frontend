@@ -1,7 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
 
 const Container = styled.div`
@@ -79,7 +79,7 @@ export const Flyout = ({title = '', children, onClose, bringToTop, options}) => 
             <HeaderBand />
             <Title>{title}</Title>
             <ToolsContainer>
-                <CloseCircleFilled className="oskari-flyouttool-close" onClick={onClose}/>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>
         <div>
