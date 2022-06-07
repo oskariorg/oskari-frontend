@@ -22,6 +22,7 @@ const InfoIcon = styled(InfoCircleOutlined)`
 
 const StyledCheckbox = styled(Checkbox)`
     margin-left: 10px;
+    white-space: nowrap;
 `;
 const StyledTitle = styled.span`
     font-weight: bold;
