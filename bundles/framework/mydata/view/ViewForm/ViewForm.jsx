@@ -6,6 +6,7 @@ import { showPopup } from 'oskari-ui/components/window';
 import { ViewFormContent } from './ViewFormContent';
 
 export const BUNDLE_NAME = 'MyData';
+const POPUP_ID = BUNDLE_NAME + '-myview';
 
 export const showViewForm = (view, onOk, onClose) => {
     const { id, ...values } = view || {};
@@ -16,7 +17,7 @@ export const showViewForm = (view, onOk, onClose) => {
     );
     const titleKey = id ? 'edit' : 'save';
     const title = <Message messageKey={`tabs.myviews.popup.title.${titleKey}`} bundleKey={BUNDLE_NAME} />;
-    const controls = showPopup(title, content, onClose);
+    const controls = showPopup(title, content, onClose, { id: POPUP_ID });
     return {
         id,
         ...controls

@@ -8,6 +8,9 @@ import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 
 const BUNDLE_NAME = 'MyData';
+const POPUP_OPTIONS = {
+    id: BUNDLE_NAME + '-snippet'
+};
 
 const Content = styled.div`
     margin: 12px 24px 24px;
@@ -63,7 +66,7 @@ export const showSnippetPopup = (view, onClose) => {
             <SnippetPopup html={iframeCode} onClose={onClose} />
         </LocaleProvider>
     );
-    return showPopup(title, content, onClose);
+    return showPopup(title, content, onClose, POPUP_OPTIONS);
 }
 
 showSnippetPopup.propTypes = {

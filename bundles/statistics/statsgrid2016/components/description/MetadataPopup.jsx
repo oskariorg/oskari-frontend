@@ -5,6 +5,11 @@ import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 import { MetadataCollapse } from './MetadataCollapse';
 
+const BUNDLE_KEY = 'StatsGrid';
+const POPUP_OPTIONS = {
+    id: BUNDLE_KEY + '-metadata'
+};
+
 export const prepareData = (service, datasource, indicators, done) => {
     let counter = 0;
     const result = [];
@@ -35,16 +40,16 @@ export const prepareData = (service, datasource, indicators, done) => {
 
 export const showMedataPopup = (data = [], onClose) => {
     const controls = showPopup(
-        <Message messageKey="metadataPopup.title" bundleKey="StatsGrid" messageArgs={{indicators: data.length}}/>,
-        (<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+        <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: data.length}}/>,
+        (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <MetadataCollapse data={data} />
-        </LocaleProvider>), onClose);
+        </LocaleProvider>), onClose, POPUP_OPTIONS);
     return {
         ...controls,
         update: (data) => {
             controls.update(
-                <Message messageKey="metadataPopup.title" bundleKey="StatsGrid" messageArgs={{indicators: data.length}}/>,
-                (<LocaleProvider value={{ bundleKey: 'StatsGrid' }}>
+                <Message messageKey="metadataPopup.title" bundleKey={BUNDLE_KEY} messageArgs={{indicators: data.length}}/>,
+                (<LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
                     <MetadataCollapse data={data} />
                 </LocaleProvider>)
             );
