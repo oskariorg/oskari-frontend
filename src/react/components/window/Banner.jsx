@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleFilled } from '@ant-design/icons';
 
 const COLOR = '#fdf8d9'
 
@@ -27,16 +27,18 @@ const Container = styled('div')`
 const Content = styled('div')`
     margin-right: auto;
     width: 100%;
+    display: flex;
     @media only screen and (max-width: 1025px) {
         flex-direction: column;
     }
 `;
 
-const CloseIcon = styled(CloseCircleOutlined)`
+const CloseIcon = styled(CloseCircleFilled)`
     cursor: pointer;
     color: #3c3c3c;
     font-size: 18px;
     align-self: center;
+    margin-left: 10px;
 `;
 
 export const Banner = ({ children, onClose, options }) => {
@@ -48,7 +50,7 @@ export const Banner = ({ children, onClose, options }) => {
             <Content>
                 {children}
             </Content>
-            <CloseIcon className='t_button t_close' onClick={onClose} />
+            <CloseIcon className='t_icon t_close' onClick={onClose} />
         </Container>
     );
 };

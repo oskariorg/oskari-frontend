@@ -201,13 +201,13 @@ export const showBanner = (content, onClose, options = {}) => {
     const removeWindow = createRemoveFn(element, onClose);
     const bringToTop = createBringToTop(element);
 
-    const render = (props) => {
+    const render = (content) => {
         ReactDOM.render(
             <Banner onClose={removeWindow} options={options}>
                 {content}
             </Banner>, element);
     };
-    render({content, onClose, options});
+    render(content);
     return  {
         update: render,
         close: removeWindow,

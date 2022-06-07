@@ -129,10 +129,10 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
         <PopupHeader {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
             <ToolsContainer>
-                <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
+                <CloseCircleFilled className="t_icon t_close" onClick={onClose}/>
             </ToolsContainer>
         </PopupHeader>
-        <PopupBody className="t_popup-body">
+        <PopupBody className="t_body">
             {children}
         </PopupBody>
     </Container>)
