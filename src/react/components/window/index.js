@@ -72,9 +72,14 @@ const createTmpContainer = () => {
  * @returns {Function}
  */
 const createRemoveFn = (element, onClose) => {
+    let alreadyRemoved = false;
     const removeFn = () => {
+        if (alreadyRemoved) {
+            return;
+        }
         unmountComponentAtNode(element);
         document.body.removeChild(element);
+        alreadyRemoved = true;
         if (typeof onClose === 'function') {
             onClose();
         }
