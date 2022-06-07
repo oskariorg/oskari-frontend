@@ -1,8 +1,9 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
 
 const Container = styled.div`
     position: absolute;
@@ -20,12 +21,12 @@ const Container = styled.div`
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
-    background-color: #fdf8d9;
+    background-color: ${HEADER_COLOR};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
 `;
 const HeaderBand = styled.div`
-    background-color: #ffd400;
+    background-color: ${ICON_COLOR_HOVER};
     border-top: 1px solid #ffdf00;
     border-bottom: 1px solid #ebb819;
     height: 14px;
@@ -47,10 +48,10 @@ const ToolsContainer = styled.div`
     display: inline-block;
     margin-top: 12px;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
+    font-size: ${ICON_SIZE}px;
+    color: ${ICON_COLOR};
     > span:hover {
-        color: #ffd400;
+        color: ${ICON_COLOR_HOVER};
     }
 `;
 
@@ -79,7 +80,7 @@ export const Flyout = ({title = '', children, onClose, bringToTop, options}) => 
             <HeaderBand />
             <Title>{title}</Title>
             <ToolsContainer>
-                <CloseCircleFilled className="oskari-flyouttool-close" onClick={onClose}/>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>
         <div>

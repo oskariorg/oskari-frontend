@@ -1,9 +1,10 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
+import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
 
 const Container = styled.div`
     position: absolute;
@@ -40,7 +41,7 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: #FDF8D9;
+    background-color: ${HEADER_COLOR};
     padding: 8px 10px;
     display: flex;
 `;
@@ -57,10 +58,10 @@ const ToolsContainer = styled.div`
     height: 16px;
     display: inline-block;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
+    font-size: ${ICON_SIZE}px;
+    color: ${ICON_COLOR};
     > span:hover {
-        color: #ffd400;
+        color: ${ICON_COLOR_HOVER};
     }
 `;
 
@@ -129,10 +130,10 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
         <PopupHeader {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
             <ToolsContainer>
-                <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
-        <PopupBody className="t_popup-body">
+        <PopupBody className="t_body">
             {children}
         </PopupBody>
     </Container>)

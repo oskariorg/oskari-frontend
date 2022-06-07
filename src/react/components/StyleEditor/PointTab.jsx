@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
+import { ColorPicker } from '../ColorPicker';
+import { Message } from '../Message';
 import { SvgRadioButton, SizeControl, PreviewCol, constants } from './index';
 import { Form, Row, Col } from 'antd';
 

@@ -88,18 +88,18 @@ Oskari.clazz.define('Oskari.framework.bundle.announcements.AnnouncementsBundleIn
                 controller.onBannerClose();
                 this.bannerCleanup();
             };
-            this.bannerControls = showAnnouncementsBanner(state, controller, onClose, (title, description) => this.renderDescriptionPopup(title, description));
+            const renderDescriptionPopup = (announcement) => this.renderDescriptionPopup(announcement);
+            this.bannerControls = showAnnouncementsBanner(state, controller, onClose, renderDescriptionPopup);
         },
-        renderDescriptionPopup: function (title, description) {
+        renderDescriptionPopup: function (announcement) {
             if (this.descriptionPopupControls) {
-                this.descriptionPopupControls.update(title, description);
-                return;
+                this.descriptionPopupControls.close();
             }
 
             const onClose = () => {
                 this.descriptionPopupCleanup();
             };
-            this.descriptionPopupControls = showBannerDescriptionPopup(title, description, onClose);
+            this.descriptionPopupControls = showBannerDescriptionPopup(announcement, onClose);
         },
         popupCleanup: function () {
             if (this.popupControls) {

@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Message, Divider, LocalizationComponent, TextInput, Tooltip } from 'oskari-ui';
+import { Message, Divider, LabeledInput, Tooltip } from 'oskari-ui';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
 import { LocaleProvider } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
-import { LOCALE_KEY } from './constants';
+import { LOCALE_KEY, LAYER_FORM } from './constants';
 
 const Content = styled.div`
     padding: 24px;
     width: 500px;
-`;
-
-const PaddedInput = styled(TextInput)`
-    margin-bottom: 10px;
 `;
 
 const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCancel }) => {
@@ -38,7 +35,7 @@ const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCan
                 languages={ Oskari.getSupportedLanguages() }
                 onChange={ updateLocale }
             >
-                <PaddedInput type='text' name='name' placeholder={placeholder} mandatory={[defaultLang]} />
+                <LabeledInput type='text' name='name' label={placeholder} minimal={true} mandatory={true} />
             </LocalizationComponent>
             <Divider orientation="left"><Message messageKey={ 'categoryform.styleTitle' } /></Divider>
             <StyleEditor
@@ -68,6 +65,6 @@ export const showLayerPopup = (locale, style, saveLayer, onClose) => {
             <MyPlacesLayerForm style={style} locale={locale} onSave={saveLayer} onCancel={onClose}/>
         </LocaleProvider>),
         onClose,
-        { id: LOCALE_KEY }
+        { id: LAYER_FORM }
     );
 };

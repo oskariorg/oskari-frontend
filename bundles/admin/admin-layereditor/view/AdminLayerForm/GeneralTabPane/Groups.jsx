@@ -22,7 +22,7 @@ const SubGroupsListItem = ({ group, layer, controller }) => {
                 onChange={evt => controller.setGroup(evt.target.checked, subgroup)}
                 checked={!!layer.groups.find(cur => cur === subgroup.id)}
             >
-                {subgroup.name[Oskari.getLang()]}
+                {subgroup.getName()}
             </Checkbox>
         </StyledListItem>
         {subgroup.groups.length > 0 && <SubGroupsListItem group={subgroup} layer={layer} controller={controller}/>}
@@ -38,7 +38,7 @@ export const Groups = ({ layer, groups, controller }) => {
                     onChange={evt => controller.setGroup(evt.target.checked, group)}
                     checked={!!layer.groups.find(cur => cur === group.id)}
                 >
-                    {group.name[Oskari.getLang()]}
+                    {group.getName()}
                 </Checkbox>
             </StyledListItem> 
             {group.groups.length > 0 && <SubGroupsListItem group={group} layer={layer} controller={controller}/>}
