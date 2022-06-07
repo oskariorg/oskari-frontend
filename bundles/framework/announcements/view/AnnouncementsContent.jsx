@@ -12,10 +12,13 @@ export const AnnouncementsContent = ({ announcement }) => {
             </Link>
         );
     }
-    return (
-        <div className="announcements-content"
-            dangerouslySetInnerHTML={{ __html: content }}/>
-    );
+    if (content) {
+        return (
+            <div className="announcements-content"
+                dangerouslySetInnerHTML={{ __html: content }}/>
+        );
+    }
+    return null;
 };
 AnnouncementsContent.propTypes = {
     announcement: PropTypes.object.isRequired
