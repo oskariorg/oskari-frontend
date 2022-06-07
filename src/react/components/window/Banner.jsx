@@ -53,7 +53,7 @@ export const Banner = ({ children, onClose, options }) => {
             <Content>
                 {children}
             </Content>
-            <IconContainer><CloseIcon onClick={onClose} /></IconContainer>
+            <IconContainer><CloseIcon onClose={onClose} /></IconContainer>
         </Container>
     );
 };
