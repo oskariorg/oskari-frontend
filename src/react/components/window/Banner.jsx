@@ -1,11 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseCircleFilled } from '@ant-design/icons';
 
-const StyledBanner = styled('div')`
+const COLOR = '#fdf8d9'
+
+const Container = styled('div')`
     position: fixed;
     top: 0;
-    background-color: #fdf8d9;
+    background-color: ${COLOR};
     box-shadow: 0 5px 10px 0 #888888;
     height: auto;
     padding: 10px 15px 10px 15px;
@@ -17,68 +20,43 @@ const StyledBanner = styled('div')`
         width: 100%
     }
     z-index: 999999;
-`;
-
-const Container = styled('div')`
     display: flex;
     flex-direction: row;
+`;
+
+const Content = styled('div')`
+    margin-right: auto;
     width: 100%;
+    display: flex;
     @media only screen and (max-width: 1025px) {
         flex-direction: column;
     }
 `;
 
-const StyledTitle = styled('span')`
-    font-weight: bold;
-    color: #3c3c3c;
-`;
-
-const CloseIcon = styled(CloseCircleOutlined)`
+const CloseIcon = styled(CloseCircleFilled)`
     cursor: pointer;
     color: #3c3c3c;
     font-size: 18px;
     align-self: center;
+    margin-left: 10px;
 `;
 
-const Content = styled('div')`
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-`;
-
-const Actions = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin: 0 20px 0 10px;
-    @media only screen and (max-width: 1025px) {
-        flex-direction: column;
-    }
-`;
-
-const Icon = styled('div')`
-    font-size: 24px;
-    margin-right: 10px;
-`;
-
-export const Banner = ({ icon, title, content, action, onClose, closable }) => {
-
+export const Banner = ({ children, onClose, options }) => {
+    const containerProps = {
+        className: `t_banner t_${options.id}`
+    };
     return (
-        <StyledBanner>
-            <Container>
-                <Icon>
-                    {icon}
-                </Icon>
-                <Content>
-                    <StyledTitle>{title}</StyledTitle>
-                    <Content>{content}</Content>
-                </Content>
-                <Actions>
-                    {action}
-                </Actions>
-                {closable && (
-                    <CloseIcon onClick={onClose} />
-                )}
-            </Container>
-        </StyledBanner>
+        <Container {...containerProps}>
+            <Content>
+                {children}
+            </Content>
+            <CloseIcon className='t_icon t_close' onClick={onClose} />
+        </Container>
     );
+};
+
+Banner.propTypes = {
+    children: PropTypes.any,
+    onClose: PropTypes.func.isRequired,
+    options: PropTypes.object
 };

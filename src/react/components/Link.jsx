@@ -12,13 +12,12 @@ export const Link = ({
     url,
     external = true,
     label,
-    tooltip,
+    tooltip = url,
     children
 }) => {
     const target = external ? '_blank' : '_self';
-    const title = typeof tooltip === 'undefined' ? url : tooltip;
     return (
-        <Tooltip title={title}>
+        <Tooltip title={tooltip}>
             {label}
             <a href={url} target={target} rel="noreferrer noopener">
                 {children}
