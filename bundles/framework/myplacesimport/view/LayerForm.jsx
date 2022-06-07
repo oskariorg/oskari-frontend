@@ -18,7 +18,7 @@ export const showLayerForm = (values, config, onOk, onClose) => {
             <LayerFormContent values={values} config={config} onOk={onOk} onCancel={onClose}/>
         </LocaleProvider>
     );
-    const controls = showPopup(getTitle(config), content, onClose);
+    const controls = showPopup(getTitle(config), content, onClose, { id: BUNDLE_NAME });
     return {
         id,
         ...controls,

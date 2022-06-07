@@ -150,7 +150,7 @@ export const FileInput = ({
 
 const FileListItem = ({name, onRemoveClick}) => {
     return (
-        <StyledListItem className={`t_${name}`}>
+        <StyledListItem className={`t_item-${name}`}>
             <StyledName>{ name }</StyledName>
             <CloseCircleOutlined className="t_button t_remove" onClick={()=>onRemoveClick(name)}/>
         </StyledListItem>
