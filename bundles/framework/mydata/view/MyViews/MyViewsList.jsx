@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm, Button, Tooltip } from 'oskari-ui';
+import { Message, Checkbox, Confirm } from 'oskari-ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { red } from '@ant-design/colors';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
     fontSize: '16px'
@@ -33,7 +34,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             align: 'left',
             title: <Message messageKey='tabs.myviews.grid.default' />,
             dataIndex: 'isDefault',
-            sorter: getSorterFor('isDefault'),
+            width: 60,
             render: (title, item) => {
                 return (
                     <Checkbox checked={item.isDefault} onChange={() => controller.setDefaultView(item)} />
@@ -63,6 +64,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             title: <Message messageKey='tabs.myviews.grid.createDate' />,
             dataIndex: 'created',
             sorter: getSorterFor('created'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
         },
         {
@@ -73,9 +75,12 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.myviews.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editView(item)}><EditOutlined style={ EDIT_ICON_STYLE } /></div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_edit'
+                            title={<Message messageKey='tabs.myviews.grid.edit' />}
+                            icon={<EditOutlined style={EDIT_ICON_STYLE} />}
+                            onClick={() => controller.editView(item)}
+                        />
                         <Confirm
                             title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
@@ -83,9 +88,11 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
                             cancelText={<Message messageKey='tabs.myviews.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message messageKey='tabs.myviews.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_delete'
+                                title={<Message messageKey='tabs.myviews.grid.delete' />}
+                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
+                            />
                         </Confirm>
                     </ToolsContainer>
                 )

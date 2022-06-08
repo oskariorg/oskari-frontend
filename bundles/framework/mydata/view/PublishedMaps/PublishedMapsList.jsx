@@ -1,19 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Message, Confirm, Tooltip } from 'oskari-ui'
+import { Message, Confirm } from 'oskari-ui'
+import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
 
 const DELETE_ICON_STYLE = {
     color: red.primary,
-    fontSize: '14px'
+    fontSize: '16px'
 };
 
-const EDIT_ICON_STYLE = {
-    fontSize: '14px'
+const ICON_STYLE = {
+    fontSize: '16px'
 };
+
+
 
 const StyledTable = styled(Table)`
     tr {
@@ -51,9 +54,16 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
         },
         {
             align: 'left',
+            title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
+            dataIndex: 'pubDomain',
+            sorter: getSorterFor('pubDomain'),
+        },
+        {
+            align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.createDate' />,
             dataIndex: 'created',
             sorter: getSorterFor('created'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
         },
         {
@@ -61,71 +71,57 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             title: <Message messageKey='tabs.publishedmaps.grid.updateDate' />,
             dataIndex: 'updated',
             sorter: getSorterFor('updated'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
-        },
-        {
-            align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
-            dataIndex: 'pubDomain',
-            sorter: getSorterFor('pubDomain'),
-        },
-        {
-            align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.publish' />,
-            dataIndex: 'isPublic',
-            sorter: getSorterFor('isPublic'),
-            render: (title, item) => {
-                if (item.isPublic) {
-                    return (
-                        <Confirm
-                            title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} />}
-                            onConfirm={() => controller.setPublished(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <a><Message messageKey='tabs.publishedmaps.unpublish' /></a>
-                        </Confirm>
-                    )
-                } else {
-                    return (
-                        <a onClick={() => controller.setPublished(item)}><Message messageKey='tabs.publishedmaps.publish' /></a>
-                    )
-                }
-            }
-        },
-        {
-            align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.show' />,
-            render: (title, item) => {
-                return (
-                    <a onClick={() => controller.showOnMap(item)}><Message messageKey='tabs.publishedmaps.show' /></a>
-                );
-            }
-        },
-        {
-            align: 'left',
-            title: <Message messageKey='tabs.publishedmaps.grid.html' />,
-            dataIndex: 'id',
-            render: (title, item) => {
-                return (
-                    <a onClick={() => controller.showHtml(item)}><Message messageKey='tabs.publishedmaps.grid.html' /></a>
-                );
-            }
         },
         {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.actions' />,
             dataIndex: 'id',
-            width: 100,
+            width: 150,
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editView(item)}>
-                                <EditOutlined style={ EDIT_ICON_STYLE } />
-                            </div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_show'
+                            icon={<PictureOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.show' />}
+                            onClick={() => controller.showOnMap(item)}
+                        />
+                        <IconButton
+                            className='t_icon t_html'
+                            icon={<CopyOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.grid.html' />}
+                            onClick={() => controller.showhtml(item)}
+                        />
+                        {item.isPublic ? (
+                            <Confirm
+                                title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} />}
+                                onConfirm={() => controller.setPublished(item)}
+                                okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
+                                cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
+                                placement='bottomLeft'
+                            >
+                                <IconButton
+                                    className='t_icon t_publish'
+                                    icon={<EyeInvisibleOutlined style={ICON_STYLE} />}
+                                    title={<Message messageKey='tabs.publishedmaps.unpublish' />}
+                                />
+                            </Confirm>
+                        ) : (
+                            <IconButton
+                                className='t_icon t_publish'
+                                icon={<EyeOutlined style={ICON_STYLE} />}
+                                title={<Message messageKey='tabs.publishedmaps.publish' />}
+                                onClick={() => controller.setPublished(item)}
+                            />
+                        )}
+                        <IconButton
+                            className='t_icon t_edit'
+                            icon={<EditOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.grid.edit' />}
+                            onClick={() => controller.editView(item)}
+                        />
                         <Confirm
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
@@ -133,9 +129,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                             cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_delete'
+                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
+                                title={<Message messageKey='tabs.publishedmaps.grid.delete' />}
+                            />
                         </Confirm>
                     </ToolsContainer>
                 );

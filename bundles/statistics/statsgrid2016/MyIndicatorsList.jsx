@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Confirm, Message, Button, Tooltip } from 'oskari-ui';
+import { Confirm, Message, Button } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors';
 import styled from 'styled-components';
-
-const BUNDLE_KEY = 'StatsGrid';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const StyledTable = styled(Table)`
     tr {
@@ -39,42 +38,52 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
         {
             dataIndex: 'name',
             align: 'left',
-            title: <Message messageKey='tab.grid.name' bundleKey={BUNDLE_KEY} />,
+            title: <Message messageKey='tab.grid.name' />,
             sorter: getSorterFor('name'),
             defaultSortOrder: 'ascend'
         },
         {
             dataIndex: 'created',
             align: 'left',
-            title: <Message messageKey='tab.grid.createDate' bundleKey={BUNDLE_KEY} />,
+            title: <Message messageKey='tab.grid.createDate' />,
             sorter: getSorterFor('created'),
+            width: 135,
+            render: title => Oskari.util.formatDate(title)
+        },
+        {
+            dataIndex: 'updated',
+            align: 'left',
+            title: <Message messageKey='tab.grid.updateDate' />,
+            sorter: getSorterFor('updated'),
+            width: 135,
             render: title => Oskari.util.formatDate(title)
         },
         {
             dataIndex: 'id',
             align: 'left',
-            title: <Message messageKey='tab.grid.actions' bundleKey={BUNDLE_KEY} />,
+            title: <Message messageKey='tab.grid.actions' />,
             width: 100,
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message bundleKey={BUNDLE_KEY} messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editIndicator(item)}>
-                                <EditOutlined style={editIconStyle} />
-                            </div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_edit'
+                            title={<Message messageKey='tab.grid.edit' />}
+                            icon={<EditOutlined style={editIconStyle} />}
+                            onClick={() => controller.editIndicator(item)}
+                        />
                         <Confirm
-                            title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_KEY} />}
+                            title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteIndicator(item)}
-                            okText={<Message messageKey='tab.button.ok' bundleKey={BUNDLE_KEY} />}
-                            cancelText={<Message messageKey='tab.button.cancel' bundleKey={BUNDLE_KEY} />}
+                            okText={<Message messageKey='tab.button.ok' />}
+                            cancelText={<Message messageKey='tab.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message bundleKey={BUNDLE_KEY} messageKey='tab.grid.delete' />}>
-                                <div className='icon t_delete'>
-                                    <DeleteOutlined style={deleteIconStyle} />
-                                </div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_delete'
+                                title={<Message messageKey='tab.grid.delete' />}
+                                icon={<DeleteOutlined style={deleteIconStyle} />}
+                            />
                         </Confirm>
                     </ToolsContainer>
                 )
@@ -86,7 +95,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
         <>
             <ButtonContainer>
                 <Button type='primary' onClick={() => controller.addNewIndicator()}>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='userIndicators.buttonTitle' />
+                    <Message messageKey='userIndicators.buttonTitle' />
                 </Button>
             </ButtonContainer>
             <StyledTable
