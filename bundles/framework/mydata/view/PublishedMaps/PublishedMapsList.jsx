@@ -92,7 +92,7 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                             className='t_icon t_html'
                             icon={<CopyOutlined style={ICON_STYLE} />}
                             title={<Message messageKey='tabs.publishedmaps.grid.html' />}
-                            onClick={() => controller.showhtml(item)}
+                            onClick={() => controller.showHtml(item)}
                         />
                         {item.isPublic ? (
                             <Confirm
