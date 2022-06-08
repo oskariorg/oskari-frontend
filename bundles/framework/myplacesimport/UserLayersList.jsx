@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Tooltip, Confirm } from 'oskari-ui';
+import { Message, Confirm } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
 import styled from 'styled-components';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const StyledTable = styled(Table)`
     tr {
@@ -68,11 +69,12 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tab.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editUserLayer(item.key)}>
-                                <EditOutlined style={ EDIT_ICON_STYLE } />
-                            </div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_edit'
+                            title={<Message messageKey='tab.grid.edit' />}
+                            icon={<EditOutlined style={EDIT_ICON_STYLE} />}
+                            onClick={() => controller.editUserLayer(item.key)}
+                        />
                         <Confirm
                             title={<Message messageKey='tab.confirmDeleteMsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteUserLayer(item.key)}
@@ -80,9 +82,11 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                             cancelText={<Message messageKey='tab.buttons.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message messageKey='tab.grid.remove' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_delete'
+                                title={<Message messageKey='tab.grid.remove' />}
+                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
+                            />
                         </Confirm>
                     </ToolsContainer>
                 );

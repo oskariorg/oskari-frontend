@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Message, Confirm, Tooltip } from 'oskari-ui'
+import { Message, Confirm } from 'oskari-ui'
+import { IconButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
 import { DeleteOutlined, EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons'
 import { red } from '@ant-design/colors'
@@ -81,16 +82,18 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             render: (title, item) => {
                 return (
                     <ToolsContainer>
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.show' />}>
-                            <div className='icon t_show' onClick={() => controller.showOnMap(item)}>
-                                <PictureOutlined style={ ICON_STYLE } />
-                            </div>
-                        </Tooltip>
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.html' />}>
-                            <div className='icon t_html' onClick={() => controller.showHtml(item)}>
-                                <CopyOutlined style={ ICON_STYLE } />
-                            </div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_show'
+                            icon={<PictureOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.show' />}
+                            onClick={() => controller.showOnMap(item)}
+                        />
+                        <IconButton
+                            className='t_icon t_html'
+                            icon={<CopyOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.grid.html' />}
+                            onClick={() => controller.showhtml(item)}
+                        />
                         {item.isPublic ? (
                             <Confirm
                                 title={<Message messageKey='tabs.publishedmaps.popup.unpublishmsg' messageArgs={{ name: item.name }} />}
@@ -99,24 +102,26 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                                 cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
                                 placement='bottomLeft'
                             >
-                                <Tooltip title={<Message messageKey='tabs.publishedmaps.unpublish' />}>
-                                    <div className='icon t_unpublish'>
-                                        <EyeInvisibleOutlined style={ ICON_STYLE } />
-                                    </div>
-                                </Tooltip>
+                                <IconButton
+                                    className='t_icon t_publish'
+                                    icon={<EyeInvisibleOutlined style={ICON_STYLE} />}
+                                    title={<Message messageKey='tabs.publishedmaps.unpublish' />}
+                                />
                             </Confirm>
                         ) : (
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.publish' />}>
-                                <div className='icon t_publish' onClick={() => controller.setPublished(item)}>
-                                    <EyeOutlined style={ ICON_STYLE } />
-                                </div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_publish'
+                                icon={<EyeOutlined style={ICON_STYLE} />}
+                                title={<Message messageKey='tabs.publishedmaps.publish' />}
+                                onClick={() => controller.setPublished(item)}
+                            />
                         )}
-                        <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.edit' />}>
-                            <div className='icon t_edit' onClick={() => controller.editView(item)}>
-                                <EditOutlined style={ ICON_STYLE } />
-                            </div>
-                        </Tooltip>
+                        <IconButton
+                            className='t_icon t_edit'
+                            icon={<EditOutlined style={ICON_STYLE} />}
+                            title={<Message messageKey='tabs.publishedmaps.grid.edit' />}
+                            onClick={() => controller.editView(item)}
+                        />
                         <Confirm
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
@@ -124,9 +129,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                             cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
                             placement='bottomLeft'
                         >
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
+                            <IconButton
+                                className='t_icon t_delete'
+                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
+                                title={<Message messageKey='tabs.publishedmaps.grid.delete' />}
+                            />
                         </Confirm>
                     </ToolsContainer>
                 );
