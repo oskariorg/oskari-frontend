@@ -75,6 +75,10 @@ export class MapModule extends AbstractMapModule {
         });
 
         var map = new olMap({
+            // Chrome on Android crashes at times when for example:
+            // - pinchzooming the map out so a WFS-layer scale limit is hit midpinch (layer is hidden while pinching)
+            // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
+            pixelRatio: 1,
             keyboardEventTarget: document,
             target: this.getMapElementId(),
             controls: controls,
