@@ -43,7 +43,7 @@ export const Table = ({ ...other }) => {
 
 export const ToolsContainer = ({ children }) => {
     return (
-        <StyledToolsContainer>
+        <StyledToolsContainer className='t_table t_tools'>
             {children}
         </StyledToolsContainer>
     )
