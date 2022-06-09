@@ -91,7 +91,7 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_icon t_edit'
+                            className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editPlace(item.key)}
@@ -104,7 +104,7 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                             placement='bottomLeft'
                         >
                             <IconButton
-                                className='t_icon t_delete'
+                                className='t_delete'
                                 title={<Message messageKey='tab.grid.delete' />}
                                 icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
                             />
