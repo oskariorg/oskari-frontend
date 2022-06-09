@@ -70,7 +70,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_icon t_edit'
+                            className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editUserLayer(item.key)}
@@ -83,7 +83,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                             placement='bottomLeft'
                         >
                             <IconButton
-                                className='t_icon t_delete'
+                                className='t_delete'
                                 title={<Message messageKey='tab.grid.remove' />}
                                 icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
                             />

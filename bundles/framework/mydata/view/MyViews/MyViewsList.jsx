@@ -76,7 +76,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_icon t_edit'
+                            className='t_edit'
                             title={<Message messageKey='tabs.myviews.grid.edit' />}
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editView(item)}
@@ -89,7 +89,7 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
                             placement='bottomLeft'
                         >
                             <IconButton
-                                className='t_icon t_delete'
+                                className='t_delete'
                                 title={<Message messageKey='tabs.myviews.grid.delete' />}
                                 icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
                             />

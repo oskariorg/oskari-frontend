@@ -83,13 +83,13 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_icon t_show'
+                            className='t_show'
                             icon={<PictureOutlined style={ICON_STYLE} />}
                             title={<Message messageKey='tabs.publishedmaps.show' />}
                             onClick={() => controller.showOnMap(item)}
                         />
                         <IconButton
-                            className='t_icon t_html'
+                            className='t_html'
                             icon={<CopyOutlined style={ICON_STYLE} />}
                             title={<Message messageKey='tabs.publishedmaps.grid.html' />}
                             onClick={() => controller.showHtml(item)}
@@ -103,21 +103,21 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                                 placement='bottomLeft'
                             >
                                 <IconButton
-                                    className='t_icon t_publish'
+                                    className='t_publish t_public'
                                     icon={<EyeInvisibleOutlined style={ICON_STYLE} />}
                                     title={<Message messageKey='tabs.publishedmaps.unpublish' />}
                                 />
                             </Confirm>
                         ) : (
                             <IconButton
-                                className='t_icon t_publish'
+                                className='t_publish t_private'
                                 icon={<EyeOutlined style={ICON_STYLE} />}
                                 title={<Message messageKey='tabs.publishedmaps.publish' />}
                                 onClick={() => controller.setPublished(item)}
                             />
                         )}
                         <IconButton
-                            className='t_icon t_edit'
+                            className='t_edit'
                             icon={<EditOutlined style={ICON_STYLE} />}
                             title={<Message messageKey='tabs.publishedmaps.grid.edit' />}
                             onClick={() => controller.editView(item)}
@@ -130,7 +130,7 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                             placement='bottomLeft'
                         >
                             <IconButton
-                                className='t_icon t_delete'
+                                className='t_delete'
                                 icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
                                 title={<Message messageKey='tabs.publishedmaps.grid.delete' />}
                             />

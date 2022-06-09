@@ -67,7 +67,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                 return (
                     <ToolsContainer>
                         <IconButton
-                            className='t_icon t_edit'
+                            className='t_edit'
                             title={<Message messageKey='tab.grid.edit' />}
                             icon={<EditOutlined style={editIconStyle} />}
                             onClick={() => controller.editIndicator(item)}
@@ -80,7 +80,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                             placement='bottomLeft'
                         >
                             <IconButton
-                                className='t_icon t_delete'
+                                className='t_delete'
                                 title={<Message messageKey='tab.grid.delete' />}
                                 icon={<DeleteOutlined style={deleteIconStyle} />}
                             />

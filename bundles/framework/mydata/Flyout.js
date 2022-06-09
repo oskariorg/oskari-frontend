@@ -155,7 +155,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                     <FlyoutContent loginStatus={this.getLoginStatus()}>
                         <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
                             {tabs.map(t => (
-                                <TabPane tab={t.title} key={t.id}>
+                                <TabPane tab={<span className={ 't_tab t_' + t.id }>{t.title}</span>} key={t.id}>
                                     <t.component
                                         state={t.handler.getState()}
                                         controller={t.handler.getController()}
