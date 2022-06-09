@@ -15,7 +15,7 @@ export const MyViewsTab = ({ controller, state }) => {
     return (
         <React.Fragment>
             <ButtonContainer>
-                <Button type='primary' onClick={controller.saveCurrent}>
+                <Button type='primary' className='t_button t_save' onClick={controller.saveCurrent}>
                     <Message messageKey='tabs.myviews.button.saveCurrent' />
                 </Button>
             </ButtonContainer>
