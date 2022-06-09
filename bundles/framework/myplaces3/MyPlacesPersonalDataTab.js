@@ -67,6 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
             'MyPlaces.MyPlacesChangedEvent': function () {
                 const service = this.instance.getService();
                 const categories = service.getAllCategories();
+                const sb = this.instance.sandbox;
                 categories.forEach(({ name: rawName, categoryId }) => {
                     const name = Oskari.util.sanitize(rawName);
                     var panel = this.tabPanels[categoryId];
@@ -95,15 +96,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
                             <MyPlacesList
                                 data={places}
                                 controller={{
-                                    deletePlace: (data) => this.deletePlace(data),
-                                    editPlace: (data) => this.editPlace(data),
-                                    showPlace: (geometry, categoryId) => this.showPlace(geometry, categoryId)
+                                    deletePlace: (id) => sb.postRequestByName('MyPlaces.DeletePlaceRequest', [id]),
+                                    editPlace: (id) => sb.postRequestByName('MyPlaces.EditPlaceRequest', [id]),
+                                    showPlace: (id) => this.showPlace(id)
                                 }}
                             />
                             <MyPlacesLegacyLayerControls
                                 layer={{ ...values, categoryId: categoryId }}
                                 controller={{
-                                    editCategory: () => this.instance.sandbox.postRequestByName('MyPlaces.EditCategoryRequest', [categoryId]),
+                                    editCategory: () => sb.postRequestByName('MyPlaces.EditCategoryRequest', [categoryId]),
                                     deleteCategory: (category) => this.confirmDeleteCategory(category),
                                     exportCategory: (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }
                                 }}
@@ -131,31 +132,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
          * @param {OpenLayers.Geometry} geometry place geometry to move map to
          * @param {Number} categoryId categoryId for the place so we can add it's layer to map
          */
-        showPlace: function (geometry, categoryId) {
+        showPlace: function (id) {
+            const service = this.instance.getService();
+            const { geometry, categoryId } = service.findMyPlace(id);
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);
             var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.lon, center.lat, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
-            this.service.addLayerToMap(categoryId);
-        },
-        /**
-         * @method editPlace
-         * Requests for given place to be opened for editing
-         * @param {Object} data grid data object for place
-         */
-        editPlace: function (data) {
-            this.instance.sandbox.postRequestByName('MyPlaces.EditPlaceRequest', [data.id]);
-        },
-        /**
-         * @method deletePlace
-         * Confirms delete for given place and deletes it if confirmed. Also shows
-         * notification about cancel, deleted or error on delete.
-         * @param {Object} data grid data object for place
-         */
-        deletePlace: function (data) {
-            this.instance.sandbox.postRequestByName('MyPlaces.DeletePlaceRequest', [data.id]);
+            service.addLayerToMap(categoryId);
         },
         confirmDeleteCategory: function (category) {
             const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -204,7 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
                 buttons = dialog.createConfirmButtons(onDelete);
                 content = this.loc('tab.confirm.deleteCategory', { name });
             }
-            dialog.show(this.loc('notification.categoryDelete'), content, buttons);
+            dialog.show(this.loc('tab.deleteCategory'), content, buttons);
         },
         /**
          * @method _createLayerTab
