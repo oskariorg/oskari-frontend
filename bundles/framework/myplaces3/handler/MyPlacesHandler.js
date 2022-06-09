@@ -151,7 +151,7 @@ class PlaceHandler extends StateHandler {
     editPlace (id) {
         const place = this.service.findMyPlace(id);
         if (!place) {
-            Messaging.error(this.loc('notification.error.generic'));
+            Messaging.error(this.loc('error.generic'));
             return;
         }
         // focus on map
