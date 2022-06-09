@@ -44,22 +44,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
             return this.tabsContainer.ui;
         },
         initContainer: function () {
-            this.addAddLayerButton();
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc('tab.nocategories'), this.addLayerButton);
+            const button = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            button.setTitle(this.loc('tab.addCategoryFormButton'));
+            button.setHandler(() => this.instance.getMyPlacesHandler().openLayerDialog());
+            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc('tab.nocategories'), button);
             this.tabsContainer.addTabChangeListener((prevTab, newTab) => newTab.handleSelection(true));
         },
-
-        addAddLayerButton: function () {
-            var me = this;
-            me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            // TODO I18N
-            me.addLayerButton.setTitle(me.loc('tab.addCategoryFormButton'));
-            me.addLayerButton.setHandler(function () {
-                me.instance.openLayerDialog();
-            });
-            return me.addLayerButton;
-        },
-
         addTabContent: function (container) {
             var me = this;
             me.initTabContent();
