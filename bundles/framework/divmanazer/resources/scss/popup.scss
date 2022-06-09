@@ -36,6 +36,10 @@
     border-radius: 7px;
     z-index: 50000;
 
+    &.ui-draggable h3.popupHeader {
+        cursor: grab;
+    }
+
     &.no_resize div.content textarea {
         resize: none;
     }

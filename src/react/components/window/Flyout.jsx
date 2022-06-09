@@ -24,6 +24,7 @@ const FlyoutHeader = styled.div`
     background-color: ${HEADER_COLOR};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
+    cursor: grab;
 `;
 const HeaderBand = styled.div`
     background-color: ${ICON_COLOR_HOVER};

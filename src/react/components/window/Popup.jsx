@@ -44,6 +44,7 @@ const PopupHeader = styled.h3`
     background-color: ${HEADER_COLOR};
     padding: 8px 10px;
     display: flex;
+    cursor: ${props => props.isDraggable ? 'grab' : undefined}
 `;
 const PopupTitle = styled.span`
     margin-right: auto;
@@ -76,7 +77,9 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
         className: `t_popup t_${options.id}`
     };
     const elementRef = useRef();
-    const headerProps = {};
+    const headerProps = {
+        isDraggable: !!options.isDraggable
+    };
     const headerFuncs = [];
     if (typeof bringToTop === 'function') {
         headerFuncs.push(bringToTop);
