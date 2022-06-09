@@ -44,7 +44,7 @@ const MyPlacesLayerForm = ({ locale: initLocale, style: initStyle, onSave, onCan
             />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={onCancel}/>
-                <Tooltip key="okButtonTooltip" title={!hasName && <Message messageKey='validation.categoryName' /> }>
+                <Tooltip key="okButtonTooltip" title={!hasName && <Message messageKey='categoryform.validation.mandatoryName' /> }>
                     <PrimaryButton disabled={!hasName} type='save' onClick={() => onSave(locale, style) }/>
                 </Tooltip>
             </ButtonContainer>
