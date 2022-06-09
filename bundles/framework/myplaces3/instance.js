@@ -170,7 +170,7 @@ Oskari.clazz.define(
         },
         // PersonalData removal
         addTabToPersonalData: function () {
-            const MyPlacesTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab', this, this.getMainView().sendStopDrawRequest);
+            const MyPlacesTab = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTab', this);
             this.tab = MyPlacesTab;
             this.tab.initContainer();
             // binds tab to events

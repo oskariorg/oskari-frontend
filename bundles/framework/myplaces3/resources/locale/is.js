@@ -32,6 +32,7 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteConfirm": "Eyða kortalagi {name}?",
+                "deleteConfirmMove": "Kortalag {0} inniheldur {1} hluti. Viltu eyða kortalaginu og færa staðina á því í sjálfgefna kortalagið {2}?", // PersonalData removal
                 "categoryToPrivate": "Þú ert að gera kortalag {name} að einkakortalagi. Eftir þetta mun ekki lengur vera mögulegt að deila því með öðrum notendum eða fella það inn í aðra vefsíðu. Aðrir notendur geta ekki lengur skoðað kortalagið.",
                 "categoryToPublic": "Þú ert að gera kortalag {name} opinbert. Þú getur deilt hlekkjum á opinbert kortalag með öðrum netnotendum eða fellt kortalagið inn í eins og kortasjá á annarri vefsíðu. Aðrir notendur geta líka séð kortalagið.",
                 "deletePlace": "Viltu eyða þessum stað \"{name}\"?"

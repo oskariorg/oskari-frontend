@@ -18,9 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
      *      reference to component that created the tile
      */
 
-    function (instance, stopDrawingCallback) {
+    function (instance) {
         this.instance = instance;
-        this.stopDrawingCallback = stopDrawingCallback;
         this.loc = Oskari.getMsg.bind(null, LOCALE_KEY);
         this.tabsContainer = undefined;
         this.tabPanels = {};
@@ -45,22 +44,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
             return this.tabsContainer.ui;
         },
         initContainer: function () {
-            this.addAddLayerButton();
-            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc('tab.nocategories'), this.addLayerButton);
+            const button = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            button.setTitle(this.loc('tab.addCategoryFormButton'));
+            button.setHandler(() => this.instance.getMyPlacesHandler().openLayerDialog());
+            this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc('tab.nocategories'), button);
             this.tabsContainer.addTabChangeListener((prevTab, newTab) => newTab.handleSelection(true));
         },
-
-        addAddLayerButton: function () {
-            var me = this;
-            me.addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            // TODO I18N
-            me.addLayerButton.setTitle(me.loc('tab.addCategoryFormButton'));
-            me.addLayerButton.setHandler(function () {
-                me.instance.openLayerDialog();
-            });
-            return me.addLayerButton;
-        },
-
         addTabContent: function (container) {
             var me = this;
             me.initTabContent();
@@ -76,10 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
              * Updates the category tabs and grids inside them with current data
              */
             'MyPlaces.MyPlacesChangedEvent': function () {
-                var sandbox = this.instance.sandbox;
-                var deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
-                var categoryHandler = this.instance.getCategoryHandler();
-                const categories = categoryHandler.getAllCategories();
+                const service = this.instance.getService();
+                const categories = service.getAllCategories();
+                const sb = this.instance.sandbox;
                 categories.forEach(({ name: rawName, categoryId }) => {
                     const name = Oskari.util.sanitize(rawName);
                     var panel = this.tabPanels[categoryId];
@@ -100,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
                     const modalWrapper = jQuery('<div class="myplaces-modal-wrapper"></div>');
                     panel.getContainer().append(modalWrapper);
 
-                    const values = categoryHandler.getCategory(categoryId);
+                    const values = service.getCategoryForEdit(categoryId);
                     const container = jQuery(modalWrapper)[0];
 
                     ReactDOM.render(
@@ -108,17 +96,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
                             <MyPlacesList
                                 data={places}
                                 controller={{
-                                    deletePlace: (data) => this.deletePlace(data),
-                                    editPlace: (data) => this.editPlace(data),
-                                    showPlace: (geometry, categoryId) => this.showPlace(geometry, categoryId),
-                                    getGeometryIcon: (geometry) => this.instance.getService().getDrawModeFromGeometry(geometry)
+                                    deletePlace: (id) => sb.postRequestByName('MyPlaces.DeletePlaceRequest', [id]),
+                                    editPlace: (id) => sb.postRequestByName('MyPlaces.EditPlaceRequest', [id]),
+                                    showPlace: (id) => this.showPlace(id)
                                 }}
                             />
                             <MyPlacesLegacyLayerControls
                                 layer={{ ...values, categoryId: categoryId }}
                                 controller={{
-                                    editCategory: () => categoryHandler.editCategory(categoryId),
-                                    deleteCategory: (categoryId) => sandbox.request(this.instance, deleteReqBuilder(categoryId)),
+                                    editCategory: () => sb.postRequestByName('MyPlaces.EditCategoryRequest', [categoryId]),
+                                    deleteCategory: (category) => this.confirmDeleteCategory(category),
                                     exportCategory: (categoryId) => { window.location.href = this.instance.getService().getExportCategoryUrl(categoryId); }
                                 }}
                             />
@@ -145,47 +132,66 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesPersonalDataTa
          * @param {OpenLayers.Geometry} geometry place geometry to move map to
          * @param {Number} categoryId categoryId for the place so we can add it's layer to map
          */
-        showPlace: function (geometry, categoryId) {
+        showPlace: function (id) {
+            const service = this.instance.getService();
+            const { geometry, categoryId } = service.findMyPlace(id);
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);
             var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.lon, center.lat, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
-            this.instance.getCategoryHandler().addLayerToMap(categoryId);
+            service.addLayerToMap(categoryId);
         },
-        /**
-         * @method editPlace
-         * Requests for given place to be opened for editing
-         * @param {Object} data grid data object for place
-         */
-        editPlace: function (data) {
-            // focus on map
-            this.showPlace(data.geometry, data.categoryId);
-            // request form
-            var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
-            this.instance.sandbox.request(this.instance, request);
-        },
-        /**
-         * @method deletePlace
-         * Confirms delete for given place and deletes it if confirmed. Also shows
-         * notification about cancel, deleted or error on delete.
-         * @param {Object} data grid data object for place
-         */
-        deletePlace: function (data) {
-            var me = this;
-            var callback = function (isSuccess) {
-                const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                if (isSuccess) {
-                    popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                    popup.fadeout();
-                } else {
-                    popup.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.error'), [popup.createCloseButton()]);
-                }
-            };
-            me.instance.getService().deleteMyPlace(data.id, callback);
-        },
+        confirmDeleteCategory: function (category) {
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (!category) {
+                dialog.show(null, this.loc('error.deleteCategory'), [dialog.createCloseButton()]);
+                return;
+            }
+            dialog.makeModal();
 
+            const { name, isDefault, categoryId } = category;
+            if (isDefault) {
+                // cannot delete default category
+                dialog.show(null, this.loc('tab.deleteDefault'), [dialog.createCloseButton()]);
+                return;
+            }
+            const service = this.instance.getService();
+            const placesCount = service.getPlacesInCategory(categoryId).length;
+            const onDelete = (moveToId) => service.deleteCategoryWithPlaces(categoryId, moveToId);
+
+            let content = '';
+            let buttons = [];
+            if (placesCount > 0) {
+                const defaultCategory = service.getAllCategories().find(c => c.isDefault);
+                buttons.push(dialog.createCloseButton());
+
+                const deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                deleteBtn.setTitle(this.loc('buttons.deleteCategoryAndPlaces'));
+                deleteBtn.setHandler(() => {
+                    dialog.close();
+                    // delete category and each place in it
+                    onDelete();
+                });
+                buttons.push(deleteBtn);
+
+                const moveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                moveBtn.setTitle(this.loc('buttons.movePlaces'));
+                moveBtn.addClass('primary');
+                moveBtn.setHandler(function () {
+                    dialog.close();
+                    // move the places in the category to default category
+                    onDelete(defaultCategory.categoryId);
+                });
+                buttons.push(moveBtn);
+                content = this.loc('tab.confirm.deleteConfirmMove', [name, placesCount, defaultCategory.name]);
+            } else {
+                buttons = dialog.createConfirmButtons(onDelete);
+                content = this.loc('tab.confirm.deleteCategory', { name });
+            }
+            dialog.show(this.loc('tab.deleteCategory'), content, buttons);
+        },
         /**
          * @method _createLayerTab
          * Populates given categorys grid

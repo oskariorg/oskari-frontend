@@ -238,12 +238,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
             });
         },
+        saveCategory: function (category) {
+            if (category.categoryId) {
+                this._updateCategory(category);
+            } else {
+                this._addCategory(category);
+            }
+        },
         /**
          * @method commitCategories
          *
          * handles insert & update (NO delete)
          */
-        updateCategory: function (category) {
+        _updateCategory: function (category) {
             const data = {
                 id: category.categoryId,
                 isDefault: category.isDefault,
@@ -264,7 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
             });
         },
-        saveCategory: function (category) {
+        _addCategory: function (category) {
             const data = {
                 locale: JSON.stringify(category.locale),
                 style: JSON.stringify(category.style)

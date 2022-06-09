@@ -38,6 +38,7 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteConfirm": "Vill du ta bort kartlagret \"{name}\"?",
+                "deleteConfirmMove": "Kartlager \"{0}\" innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret \"{2}\" eller vill du ta bort kartlagret och dess platser?", // PersonalData removal
                 "categoryToPrivate": "Du håller på att avpublicera kartlagret \"{name}\". Efter detta kan du inte längre dela kart-lagret eller inbädda det som en karta. Andra användare kan inte heller titta på det i Paikkatietoikkuna.",
                 "categoryToPublic": "Du publicerar kartlagret \"{name}\". Du kan dela ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna.",
                 "deletePlace": "Vill du ta bort denna plats \"{name}\"?"
