@@ -1,12 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { IconButton } from 'oskari-ui/components/buttons';
 import { CloseCircleFilled } from '@ant-design/icons';
-import styled from 'styled-components';
-
-// Note! Colors/hover and size are configured for tools container on popup/flyout and separately for banner
-const StyledCloseIcon = styled(CloseCircleFilled)`
-    cursor: pointer;
-`;
 
 /**
  * Close icon for popups and flyouts.
@@ -15,10 +10,12 @@ const StyledCloseIcon = styled(CloseCircleFilled)`
 // Otherwise a draggable operation is started that we DON'T want if the user does mousedown/touchstart ON THE ICON.
 // Doing the draggable on mousedown seems to create problems with clickhandler IF the window has been updated AFTER rendering (doing showPopup(title, content).update(newTitle, newContent)).
 // For some reason this problem doesn't seem to trigger right after showing/before updating.
+// Note! Colors/hover and size are configured for tools container on popup/flyout and separately for banner
 export const CloseIcon = ({onClose}) => {
     return (
-        <StyledCloseIcon
-            className="t_icon t_close"
+        <IconButton
+            className="t_close"
+            icon={<CloseCircleFilled />}
             onMouseDown={e => e.stopPropagation()}
             onTouchStart={e => e.stopPropagation()}
             onClick={onClose}/>);

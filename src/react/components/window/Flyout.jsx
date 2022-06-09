@@ -24,6 +24,7 @@ const FlyoutHeader = styled.div`
     background-color: ${HEADER_COLOR};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
+    cursor: grab;
 `;
 const HeaderBand = styled.div`
     background-color: ${ICON_COLOR_HOVER};
@@ -50,7 +51,7 @@ const ToolsContainer = styled.div`
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
     color: ${ICON_COLOR};
-    > span:hover {
+    > button:hover {
         color: ${ICON_COLOR_HOVER};
     }
 `;
