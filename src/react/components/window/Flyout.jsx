@@ -51,7 +51,7 @@ const ToolsContainer = styled.div`
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
     color: ${ICON_COLOR};
-    > span:hover {
+    > button:hover {
         color: ${ICON_COLOR_HOVER};
     }
 `;

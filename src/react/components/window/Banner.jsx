@@ -37,7 +37,7 @@ const Content = styled('div')`
 const IconContainer = styled.span`
     font-size: ${ICON_SIZE}px;
     color: ${ICON_COLOR};
-    > span:hover {
+    > button:hover {
         color: ${ICON_COLOR_HOVER};
     }
     align-self: center;
