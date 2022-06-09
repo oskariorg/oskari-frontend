@@ -13,11 +13,11 @@ const StyledButton = styled(Button)`
     }
 `;
 
-export const IconButton = ({ title, icon, onClick }) => {
+export const IconButton = ({ title, icon, onClick, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
-                <StyledButton icon={icon} onClick={onClick} />
+                <StyledButton icon={icon} onClick={onClick} { ...rest }/>
             </Tooltip>
         );
     } else {
@@ -25,6 +25,7 @@ export const IconButton = ({ title, icon, onClick }) => {
             <StyledButton
                 icon={icon}
                 onClick={onClick}
+                { ...rest }
             />
         );
     }
