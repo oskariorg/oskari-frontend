@@ -38,6 +38,7 @@ Oskari.registerLocalization(
             },
             "confirm": {
                 "deleteCategory": "Haluatko poistaa karttatason {name}?",
+                "deleteConfirmMove": "Olet poistamassa karttatasoa \"{0}\". Karttatasolla on {1, plural, one {# kohde} other {# kohdetta}}. Haluatko: <br/> 1. poistaa karttatason kohteineen <br/> 2. siirtää {1, plural, one {kohteen} other {kohteet}} oletuskarttatasolle \"{2}\" ennen karttatason poistoa?", // PersonalData removal
                 "categoryToPrivate": "Olet muuttamassa karttatasoa {name} yksityiseksi. Karttataso ei ole enää julkisesti jaettavissa ja sitä ei voi liittää toiseen verkkopalveluun. Karttataso ei ole enää muiden palvelun käyttäjien nähtävissä.",
                 "categoryToPublic": "Olet muuttamassa karttatasoa {name} julkiseksi. Karttataso on tämän jälkeen julkisesti jaettavissa ja sen voi liittää toiseen verkkopalveluun. Karttataso on myös muiden palvelun käyttäjien nähtävissä.",
                 "deletePlace": "Haluatko poistaa kohteen \"{name}\"?"
