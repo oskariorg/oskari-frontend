@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tooltip, Button } from 'antd';
+import { Button } from '../Button';
+import { Tooltip } from '../Tooltip';
 import styled from 'styled-components';
 
 const StyledButton = styled(Button)`
