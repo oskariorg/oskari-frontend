@@ -35,23 +35,29 @@ const getType = ({ locale }) => {
     }
     return TYPE.TITLE;
 };
-const getMandatoryFields = type => {
+const getFields = type => {
     const fields = ['title'];
     if (type !== TYPE.TITLE) {
         fields.push(type);
     }
     return fields;
 };
+const getMandatoryFields = () => {
+    return ['title'];
+};
 const getLocaleForSubmit = (state) => {
     const { type, locale } = state;
     // Announcement bundle uses getLocalized so add languages only if set to get fallback to default language
     const langs = Object.keys(locale).filter(lang => locale[lang].title);
-    const fields = getMandatoryFields(type);
+    const fields = getFields(type);
     const values = {};
     langs.forEach(lang => {
         values[lang] = {};
         fields.forEach(field => {
-            values[lang][field] = locale[lang][field] || '';
+            const value = locale[lang][field];
+            if (value !== '' && value !== '<p><br></p>') {
+                values[lang][field] = locale[lang][field];
+            }
         });
     });
     return values;
@@ -166,8 +172,8 @@ export const AnnouncementsForm = LocaleConsumer(({
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}>
                 <LabeledInput type='text' name='title' label={getMessage('fields.locale.title')} mandatory={true}/>
-                { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={true}/> }
-                { state.type === 'content' && <RichEditor label={getMessage('fields.locale.content')} name='content' mandatory={true}/> }
+                { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={false}/> }
+                { state.type === 'content' && <RichEditor label={getMessage('fields.locale.content')} name='content' mandatory={false}/> }
                 { state.type === 'content' && <PaddingTop/> }
             </LocalizationComponent>
 
