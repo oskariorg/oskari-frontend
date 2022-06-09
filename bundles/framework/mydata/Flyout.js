@@ -68,25 +68,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                 this.myDataService = Oskari.clazz.create('Oskari.mapframework.bundle.mydata.service.MyDataService', this.uiHandler);
                 Oskari.getSandbox().registerService(this.myDataService);
 
-                this.myDataService.addTab(
-                    'account',
-                    Oskari.getMsg('MyData', 'tabs.account.title'),
-                    AccountTab,
-                    {
-                        getState: () => ({
-                            user: Oskari.user(),
-                            changeInfoUrl: Oskari.urls.getLocation('profile')
-                        }),
-                        getController: () => null,
-                        addStateListener: () => null
-                    }
-                );
-                this.myDataService.addTab(
-                    'myviews',
-                    Oskari.getMsg('MyData', 'tabs.myviews.title'),
-                    MyViewsTab,
-                    new MyViewsHandler(this.instance)
-                );
+                if (this.instance.conf && this.instance.conf.showUser) {
+                    this.myDataService.addTab(
+                        'account',
+                        Oskari.getMsg('MyData', 'tabs.account.title'),
+                        AccountTab,
+                        {
+                            getState: () => ({
+                                user: Oskari.user(),
+                                changeInfoUrl: Oskari.urls.getLocation('profile')
+                            }),
+                            getController: () => null,
+                            addStateListener: () => null
+                        }
+                    );
+                }
+                if (this.instance.conf && this.instance.conf.showViews) {
+                    this.myDataService.addTab(
+                        'myviews',
+                        Oskari.getMsg('MyData', 'tabs.myviews.title'),
+                        MyViewsTab,
+                        new MyViewsHandler(this.instance)
+                    );
+                }
                 this.myDataService.addTab(
                     'publishedmaps',
                     Oskari.getMsg('MyData', 'tabs.publishedmaps.title'),
