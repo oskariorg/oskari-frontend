@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Message } from 'oskari-ui';
-import { Form, Card } from 'antd';
+import { Card } from 'antd';
+import { Form, FormItem } from '../Form';
 import { ANTD_FORMLAYOUT, LOCALIZATION_BUNDLE } from './constants';
 import styled from 'styled-components';
 
@@ -18,7 +19,7 @@ export const StyleSelector = (props) => {
     return (
         <SelectorForm>
             <Card>
-                <Form.Item label={<Message bundleKey={ LOCALIZATION_BUNDLE } messageKey='StyleEditor.subheaders.name' />} { ...ANTD_FORMLAYOUT } name={ 'styleListSelector' }>
+                <FormItem label={<Message bundleKey={ LOCALIZATION_BUNDLE } messageKey='StyleEditor.subheaders.name' />} { ...ANTD_FORMLAYOUT } name={ 'styleListSelector' }>
                     <Select onChange={ (name) => props.onChange(name) }>
                         { props.styleList.map((singleOption) => {
                             return (
@@ -31,7 +32,7 @@ export const StyleSelector = (props) => {
                             );
                         }) }
                     </Select>
-                </Form.Item>
+                </FormItem>
             </Card>
         </SelectorForm>
     );
