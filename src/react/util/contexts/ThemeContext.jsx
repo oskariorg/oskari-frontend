@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ThemeContext = React.createContext();
 
@@ -19,38 +19,38 @@ const ThemeContext = React.createContext();
 export const ThemeProvider = ThemeContext.Provider;
 
 /**
- * @class LocaleConsumer
+ * @class ThemeConsumer
  * @classdesc
  * A higher order component utilizing messaging context to the component it wraps.
- * Using LocaleConsumer and getMessage function directly should be avoided.
- * Using oskari-ui/Message component instead is encouraged.
  *
- * The context provides bundleKey string and getMessage function.
- * The getMessage function may be used when an element can't use a ReactNode as a prop. (e.g. placeholder in TextInput)
- * @see {@link LocaleProvider}
- * @param {ReactElement} Component The component to pass localizations to
+ * The context provides a theme object and monitors changes to it using state.
+ * @see {@link ThemeProvider}
+ * @param {ReactElement} Component The component to pass theme to
  *
  * @example <caption>Modified TextInput</caption>
  * import { TextInput } from 'oskari-ui';
- * import { LocaleConsumer } from 'oskari-ui/util';
+ * import { ThemeConsumer } from 'oskari-ui/util';
  *
- * const NameInput = LocaleConsumer(({ getMessage }) => (
- *     <TextInput placeholder={getMessage('placeholders.name')} />
+ * const ColoredInput = ThemeConsumer(({ theme }) => (
+ *     <TextInput style={{ background-color: theme.color.primary }}/>
  * ));
- * 
- * 
- * 
-            <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
+ *
  */
 export function ThemeConsumer (Component) {
-    const ThemeComponent = (props, ref) => {
+    const ThemeComponent = (props) => {
+        const theming = Oskari.app.getTheming();
+        const [theme, setTheme] = useState(theming.getTheme());
+        useEffect(() => {
+            // start listening changes and return listener removal fn for cleanup on unmount (so we don't keep adding listeners)
+            return Oskari.app.getTheming().addListener((newTheme) => setTheme(newTheme));
+        })
         return (
             <ThemeContext.Consumer>
-                { value => (<Component {...props} theme={value} />)}
+                { ignored => (<Component {...props} theme={theme} />)}
             </ThemeContext.Consumer>
         );
     };
     const name = Component.displayName || Component.name;
     ThemeComponent.displayName = `ThemeConsumer(${name})`;
-    return React.forwardRef(ThemeComponent);
+    return ThemeComponent;
 }
