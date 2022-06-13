@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
 
 const Container = styled.div`
     position: absolute;
@@ -21,13 +22,13 @@ const Container = styled.div`
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
-    background-color: ${HEADER_COLOR};
+    background-color: ${props => props.color};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
     cursor: grab;
 `;
 const HeaderBand = styled.div`
-    background-color: ${ICON_COLOR_HOVER};
+    background-color: ${props => props.color};
     border-top: 1px solid #ffdf00;
     border-bottom: 1px solid #ebb819;
     height: 14px;
@@ -50,14 +51,14 @@ const ToolsContainer = styled.div`
     margin-top: 12px;
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
-    color: ${ICON_COLOR};
+    color: ${props => props.iconColor};
     > button:hover {
-        color: ${ICON_COLOR_HOVER};
+        color: ${props => props.hoverColor};
     }
 `;
 
 
-export const Flyout = ({title = '', children, onClose, bringToTop, options}) => {
+export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop, options, theme}) => {
     const [position, setPosition] = useState({ x: 210, y: 30 });
     const elementRef = useRef();
     const containerClass = `t_flyout t_${options.id}`
@@ -77,10 +78,10 @@ export const Flyout = ({title = '', children, onClose, bringToTop, options}) => 
     Maybe allow passing tools from caller?
     */
     return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand />
+        <FlyoutHeader color={theme.color.primary} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+            <HeaderBand color={theme.color.accent}/>
             <Title>{title}</Title>
-            <ToolsContainer>
+            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>
@@ -88,7 +89,7 @@ export const Flyout = ({title = '', children, onClose, bringToTop, options}) => 
             {children}
         </div>
     </Container>)
-};
+});
 
 Flyout.propTypes = {
     children: PropTypes.any,

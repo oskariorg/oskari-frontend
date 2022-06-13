@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
+import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
 
 const Container = styled.div`
@@ -42,7 +42,7 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: ${props => props.theme.color.primary};
+    background-color: ${props => props.color};
     padding: 8px 10px;
     display: flex;
     cursor: ${props => props.isDraggable ? 'grab' : undefined}
@@ -61,9 +61,9 @@ const ToolsContainer = styled.div`
     display: inline-block;
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
-    color: ${ICON_COLOR};
+    color: ${props => props.iconColor};
     > button:hover {
-        color: ${ICON_COLOR_HOVER};
+        color: ${props => props.hoverColor};
     }
 `;
 
@@ -131,9 +131,9 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
     </div>
     */
     return (<Container {...containerProps}>
-        <PopupHeader {...headerProps} theme={theme}>
+        <PopupHeader color={theme.color.primary} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer theme={theme}>
+            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
