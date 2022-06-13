@@ -18,9 +18,9 @@ export const THEMING = {
     getTheme () {
         return cloneDeep(theme);
     },
-    setTheme (newTheme = DEFAULT_THEME) {
-        // spread so we bust any memoized value for listeners
-        theme = {...merge(DEFAULT_THEME, newTheme)};
+    setTheme (newTheme = {}) {
+        // start with new object so we bust any memoized value for listeners and get a good value for reset as well
+        theme = merge({}, DEFAULT_THEME, newTheme);
         listeners.forEach(l => l(theme));
     },
     /**
