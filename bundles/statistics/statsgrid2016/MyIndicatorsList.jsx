@@ -40,7 +40,12 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tab.grid.name' />,
             sorter: getSorterFor('name'),
-            defaultSortOrder: 'ascend'
+            defaultSortOrder: 'ascend',
+            render: (title, item) => {
+                return (
+                    <a onClick={() => controller.openIndicator(item)} >{title}</a>
+                )
+            }
         },
         {
             dataIndex: 'created',
