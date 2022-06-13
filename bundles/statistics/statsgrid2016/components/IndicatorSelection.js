@@ -13,6 +13,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         this.popupControls = null;
     };
     this.selectClassRef = [];
+    this.indSelect = null;
+    this.dsSelect = null;
     Oskari.makeObservable(this);
 }, {
     __templates: {
@@ -164,6 +166,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             search: false
         };
         var dsSelect = new SelectList();
+        this.dsSelect = dsSelect;
         var dropdown = dsSelect.create(sources, options);
         dropdown.css({ width: '100%' });
         dsSelector.append(dropdown);
@@ -179,6 +182,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             allowOverflow: true
         };
         var indicSelect = new SelectList();
+        this.indSelect = indicSelect;
         var indicDropdown = indicSelect.create(null, indicOptions);
         indicDropdown.css({ width: '100%' });
         indicatorSelector.append(indicDropdown);
@@ -354,6 +358,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }
 
         return this._params.getValues();
+    },
+    setIndicatorData: function (datasourceId, indicatorId) {
+        this._params.indicatorSelected(`${datasourceId}`, [indicatorId], [], false);
+        this.dsSelect.setValue(datasourceId);
+        this.indSelect.setValue(indicatorId);
     },
     getIndicatorSelector: function () {
         var el = this.getElement();
