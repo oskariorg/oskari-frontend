@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.searchPending = false;
     this.searchParametersSelected = false;
     this.zeroIndicatorsNotification = null;
+    this.indicatorSelection = null;
     var me = this;
     this.on('show', function () {
         if (!me.getUiElement()) {
@@ -73,6 +74,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var me = this;
         var container = jQuery('<div></div>');
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
+        this.indicatorSelection = selectionComponent;
         container.append(selectionComponent.getPanelContent());
 
         var buttonContainer = jQuery('<div></div>');
@@ -547,6 +549,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (this.getSpinner()) {
             this.getSpinner().stop();
         }
+    },
+
+    getIndicatorSelectionComponent: function () {
+        return this.indicatorSelection;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

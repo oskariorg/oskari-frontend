@@ -9,7 +9,6 @@ class IndicatorsHandler extends StateHandler {
             data: [],
             loading: false
         });
-        this.updater = null;
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
@@ -93,6 +92,14 @@ class IndicatorsHandler extends StateHandler {
         formFlyout.showForm(this.userDsId, data.id);
     }
 
+    openIndicator (item) {
+        const flyoutManager = this.instance.getFlyoutManager();
+        flyoutManager.open('search');
+        const searchFlyout = flyoutManager.getFlyout('search');
+        const indicatorSelector = searchFlyout.getIndicatorSelectionComponent();
+        indicatorSelector.setIndicatorData(this.userDsId, item.id);
+    }
+
     createEventHandlers () {
         const handlers = {
             'StatsGrid.DatasourceEvent': (event) => {
@@ -113,16 +120,13 @@ class IndicatorsHandler extends StateHandler {
 
         return handler.apply(this, [e]);
     }
-
-    setUpdateFunc (update) {
-        this.updater = update;
-    }
 }
 
 const wrapped = controllerMixin(IndicatorsHandler, [
     'addNewIndicator',
     'editIndicator',
-    'deleteIndicator'
+    'deleteIndicator',
+    'openIndicator'
 ]);
 
 export { wrapped as MyIndicatorsHandler };
