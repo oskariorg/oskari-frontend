@@ -61,7 +61,9 @@ const ToolsContainer = styled.div`
     display: inline-block;
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
-    color: ${props => props.iconColor};
+    > button {
+        color: ${props => props.iconColor};
+    }
     > button:hover {
         color: ${props => props.hoverColor};
     }

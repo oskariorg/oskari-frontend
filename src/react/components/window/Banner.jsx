@@ -36,7 +36,9 @@ const Content = styled('div')`
 
 const IconContainer = styled.span`
     font-size: ${ICON_SIZE}px;
-    color: ${props => props.iconColor};
+    > button {
+        color: ${props => props.iconColor};
+    }
     > button:hover {
         color: ${props => props.hoverColor};
     }
