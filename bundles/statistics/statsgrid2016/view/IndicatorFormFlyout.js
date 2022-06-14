@@ -32,9 +32,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 
     this.indicatorDataForm.on('cancel', function () {
-        me.genericInfoPanel.open();
+        me.genericInfoPanel.close();
         me.dataPanel.open();
-        me.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
+        me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
     });
 }, {
     _templates: {
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      */
     showForm: function (datasourceId, indicatorId) {
         if (!datasourceId) {
-            this.errorService.show(this.locale('errors.title'), this.locale('errors.myIndicatorDatasource'));
+            this.errorService.error(this.locale('errors.myIndicatorDatasource'));
             return;
         }
         if (this.isVisible()) {
@@ -162,14 +162,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             'float': 'right',
             'clear': 'both'
         });
-        const onSuccess = (indicator, data) => {
+        const onSuccess = () => {
             me.genericInfoPanel.close();
             me.dataPanel.open();
             me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
             me.indicatorDataForm.clearUi();
             me.updateDatasetList();
-            me.selectSavedIndicator(indicator, data);
-            me.showSuccessPopup();
+
+            Messaging.success(this.locale('userIndicators.dialog.successMsg'));
         };
         saveBtn.setHandler(function () {
             const dataForm = me.indicatorForm.getValues();
@@ -182,26 +182,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 }
             });
 
-            const formValidates = me.validateFormValues(dataForm, valuesForm);
-
-            if (!formValidates) {
-                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                return;
-            }
-
             me.saveIndicator(dataForm, function (err, indicator) {
                 if (err) {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                    me.genericInfoPanel.open();
                     return;
                 }
                 if (valuesForm.values.length) {
                     me.saveIndicatorData(valuesForm, function (err, someData) {
                         if (err) {
-                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                            Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
                         onSuccess(indicator, valuesForm);
+                        me.selectSavedIndicator(indicator, valuesForm);
                     });
                 } else {
                     onSuccess(indicator, valuesForm);
@@ -276,17 +268,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
     },
-    validateFormValues: function (data, regionValues) {
-        if (typeof (data.name) !== 'string' || data.name.length === 0) {
+    validateIndicator: function (data) {
+        const { name } = data;
+        if (typeof name !== 'string' || name.trim().length === 0) {
+            this.errorService.warn(this.locale('errors.myIndicatorNameInput'));
             return false;
         }
-
-        if (typeof regionValues.values === 'undefined' || regionValues.values.length === 0) {
-            return false;
-        }
-
+        return true;
+    },
+    validateIndicatorData: function (regionValues) {
         for (const singleRegion of regionValues.values) {
             if (typeof singleRegion.value === 'undefined' || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
+                this.errorService.warn(this.locale('errors.myIndicatorInvalidData'));
                 return false;
             }
         }
@@ -297,17 +290,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Saves the indicator name, description etc
      */
     saveIndicator: function (data, callback) {
-        var me = this;
-
+        if (!this.validateIndicator(data)) {
+            callback(new Error('Error in indicator validation'));
+            return;
+        }
         // inject possible id for indicator
-        data.id = me.indicatorId;
-        me.service.saveIndicator(me.datasourceId, data, function (err, indicator) {
+        data.id = this.indicatorId;
+        this.service.saveIndicator(this.datasourceId, data, (err, indicator) => {
             if (err) {
+                this.errorService.error(this.locale('errors.indicatorSave'));
+                Oskari.log('IndicatorFormFlyout').error(err);
                 callback(err);
                 return;
             }
             // update the indicator id we are operating on
-            me.indicatorId = indicator.id;
+            this.indicatorId = indicator.id;
             Oskari.log('IndicatorFormFlyout').info('Saved indicator', data, 'Indicator: ' + indicator.id);
             callback(null, indicator);
         });
@@ -316,37 +313,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Adds/edits a year/regionset dataset for an indicator
      */
     saveIndicatorData: function (data, callback) {
-        var me = this;
-        if (!this.indicatorId) {
-            // new indicator, we need to save it first!
-            this.saveIndicator(this.indicatorForm.getValues(), function (err, indicator) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                // call self again now that we have an indicator we can attach the dataset to
-                me.saveIndicatorData(data, callback);
-            });
+        if (!this.validateIndicatorData(data)) {
+            callback(new Error('Error in data validation'));
             return;
         }
 
         // save dataset
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.indicatorId);
-        var values = {};
+        const values = {};
         data.values.forEach(function (regionData) {
             values[regionData.id] = regionData.value;
         });
 
-        me.service.saveIndicatorData(me.datasourceId, this.indicatorId, data.selectors, values, function (err, someData) {
+        this.service.saveIndicatorData(this.datasourceId, this.indicatorId, data.selectors, values, (err, someData) => {
             if (err) {
+                this.errorService.error(this.locale('errors.indicatorSave'));
                 callback(err);
                 return;
             }
             callback(null, someData);
         });
-    },
-    showSuccessPopup: function () {
-        Messaging.success(this.locale('userIndicators.dialog.successMsg'));
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
