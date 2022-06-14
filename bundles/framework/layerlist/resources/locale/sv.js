@@ -48,7 +48,9 @@ Oskari.registerLocalization(
                 'moveToScale': 'Gå till en lämplig skalnivå',
                 'moveToContentArea': 'Flytta till en lämplig plats',
                 'publishable': 'Får publiceras',
-                'hidden': 'Kartlagret är tillfälligt dolt.'
+                'hidden': 'Kartlagret är tillfälligt dolt.',
+                'hide': 'Dölja kartlaget',
+                'show': 'Visa kartlaget'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',
