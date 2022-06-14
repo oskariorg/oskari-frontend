@@ -4,6 +4,7 @@ import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 import { Banner } from './Banner';
 import { REGISTER, TYPE } from './register';
+import { ThemeProvider } from '../../util/contexts';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
@@ -129,11 +130,14 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
+    const THEMING = Oskari.app.getTheming();
     const render = (title, content) => {
         ReactDOM.render(
-            <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
-                {content}
-            </Popup>, element);
+            <ThemeProvider value={THEMING.getTheme()}>
+                <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
+                    {content}
+                </Popup>
+            </ThemeProvider>, element);
     };
     render(title, content);
     return {

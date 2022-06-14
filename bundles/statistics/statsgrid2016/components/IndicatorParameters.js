@@ -69,7 +69,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
      */
     indicatorSelected: function (datasrc, indId, regionsetRestriction, series) {
         var me = this;
-
         this.clean();
 
         if (!datasrc || !indId || !indId.length || !indId[0]) {

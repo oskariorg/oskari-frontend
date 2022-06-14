@@ -41,21 +41,24 @@ const getAreaPropsFromStyle = (style) => {
     };
 };
 
-const getLinePropsFromStyle = (style) => {
+const getLinePropsFromStyle = (style = {}) => {
+    const {stroke = {}} = style;
     return {
-        color: style.stroke.color,
-        size: style.stroke.width,
-        linecap: style.stroke.lineCap,
-        linedash: style.stroke.lineDash,
-        linejoin: style.stroke.lineJoin
+        color: stroke.color,
+        size: stroke.width,
+        linecap: stroke.lineCap,
+        linedash: stroke.lineDash,
+        linejoin: stroke.lineJoin
     };
 };
 
-const getPointPropsFromStyle = (style) => {
+const getPointPropsFromStyle = (style = {}) => {
+    const {image = {}} = style;
+    const {fill = {}} = image;
     return {
-        color: style.image.fill.color,
-        size: style.image.size,
-        shape: style.image.shape
+        color: fill.color,
+        size: image.size,
+        shape: image.shape
     };
 };
 

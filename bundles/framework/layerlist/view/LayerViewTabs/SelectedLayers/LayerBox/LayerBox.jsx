@@ -57,14 +57,16 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                 <div ref={provided.innerRef} {...provided.draggableProps}>
                     <Row style={{ backgroundColor: '#fafafa', padding: '0px' }}>
                         <ColAuto style={{ padding: '0px' }}>
-                            <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
+                            <Tooltip title={<Message messageKey='layer.drag' />} placement='topRight'>
+                                <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
+                            </Tooltip>
                         </ColAuto>
                         <Col style={{ paddingRight: '0px' }}>
                             <StyledBox>
                                 <Row>
                                     <ColAuto>
-                                        {visible ? <EyeOpen onClick={handleToggleVisibility} />
-                                            : <EyeShut onClick={handleToggleVisibility} />}
+                                        {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
+                                            : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
                                     </ColAuto>
                                     <Col>
                                         <Row style={{ padding: '0px' }}>
