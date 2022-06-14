@@ -75,7 +75,7 @@ const DeletePlaces = ({
         setVisible(false);
     };
     const content = (
-        <Content>
+        <Content className='t_confirm'>
             <b><Message messageKey='tab.deleteWithMove.name'/></b>
             <MarginLeft/>
             {name}
@@ -103,7 +103,7 @@ const DeletePlaces = ({
         </Content>
     );
     return (
-        <Popover className='t_confirm' trigger="click" placement="bottom" visible={visible} content={content} >
+        <Popover trigger="click" placement="bottom" visible={visible} content={content} >
             <Tooltip title={<Message messageKey={deleteTooltip}/>}>
                 <Button disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteOutlined style={DELETE_ICON_STYLE} /></Button>
             </Tooltip>
