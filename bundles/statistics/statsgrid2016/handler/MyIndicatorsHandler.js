@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class IndicatorsHandler extends StateHandler {
-    constructor (sandbox, instance, configuration) {
+    constructor (sandbox, instance) {
         super();
         this.instance = instance;
         this.sandbox = sandbox;
@@ -13,11 +13,7 @@ class IndicatorsHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
-        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService', this.sandbox, this.loc);
-        const conf = configuration;
-        this.sandbox.registerService(this.service);
-        this.service.addDatasource(conf.sources);
-        this.service.addRegionset(conf.regionsets);
+        this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         const dataSource = this.service.getUserDatasource();
         this.userDsId = dataSource ? dataSource.id : null;
         this.eventHandlers = this.createEventHandlers();
