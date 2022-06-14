@@ -116,7 +116,7 @@ const getCollapseHeader = () => {
  * @returns an input collection where child inputs are duplicated for each of the languages
  */
 export const LocalizationComponent = ({
-    languages,
+    languages = Oskari.getSupportedLanguages(),
     onChange,
     value,
     mandatoryLanguages = [languages[0]],
@@ -133,9 +133,11 @@ export const LocalizationComponent = ({
     useEffect(() => {
         setInternalValue(getInitialValue(languages, value));
     }, [languages, value]);
+    const CURRENT_LANG = Oskari.getLang();
+    const DEFAULT_LANG = languages[0];
 
     const localizedElements = languages.map((lang, index) => {
-        const isDefaultLang = index === 0;
+        const isDefaultLang = DEFAULT_LANG === lang;
         const addDivider = showDivider && !isDefaultLang; // add dividers only to CollapsePanel
         const nodes = React.Children.toArray(children).map((element, index) => {
             if (!React.isValidElement(element)) {
@@ -149,8 +151,8 @@ export const LocalizationComponent = ({
             let elementValue = internalValue[lang][name];
 
             const { mandatory = false, label = name, ...restProps } = element.props; // don't pass mandatory and placeholder to element node
-
-            let fieldLabel = isDefaultLang ? label : getWithLangSuffix(label, lang);
+            const attachSuffix = !isDefaultLang || CURRENT_LANG !== DEFAULT_LANG;
+            const fieldLabel = attachSuffix ? getWithLangSuffix(label, lang) : label;
             const currentMandatory = mandatory && mandatoryLanguages.includes(lang);
             const elProps = {
                 label: fieldLabel,
