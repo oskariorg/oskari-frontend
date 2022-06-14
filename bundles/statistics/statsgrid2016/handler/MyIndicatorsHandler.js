@@ -13,7 +13,7 @@ class IndicatorsHandler extends StateHandler {
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
-        this.service = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', this.sandbox, this.loc);
+        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService', this.sandbox, this.loc);
         const conf = configuration;
         this.sandbox.registerService(this.service);
         this.service.addDatasource(conf.sources);
