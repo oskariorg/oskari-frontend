@@ -1,3 +1,4 @@
+import '../event/StateChangedEvent';
 /**
  * @class Oskari.Sandbox.stateMethods
  *
@@ -101,7 +102,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
         }
         // trigger an event letting bundles know that the whole UI has changed to clean functionalities
         this.notifyAll(Oskari.eventBuilder('UIChangeEvent')('sandbox'));
-
+        const previousState = this.getCurrentState();
         var newStateConfig = jQuery.extend(true, {}, initialConf);
         var components = this.getStatefulComponents();
         var bundleState;
@@ -126,6 +127,7 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
             // reset to the default state
             bundle.setState(bundleState);
         }
+        this.notifyAll(Oskari.eventBuilder('StateChangedEvent')(this.getCurrentState(), previousState));
     },
     setSessionExpiring: function (minutes, callback) {
         if (typeof minutes !== 'number' || typeof callback !== 'function') {
