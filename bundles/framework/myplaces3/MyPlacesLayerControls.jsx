@@ -93,19 +93,19 @@ const DeletePlaces = ({
             </Select>
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => setVisible(false)}/>
-                <Button onClick={() => onConfirm(false)}>
+                <Button className='t_delete_all' onClick={() => onConfirm(false)}>
                     <Message messageKey='buttons.deleteCategoryAndPlaces'/>
                 </Button>
-                <Button type='primary' onClick={() => onConfirm(true)}>
+                <Button className='t_delete' type='primary' onClick={() => onConfirm(true)}>
                     <Message messageKey='buttons.movePlaces'/>
                 </Button>
             </ButtonContainer>
         </Content>
     );
     return (
-        <Popover trigger="click" placement="bottom" visible={visible} content={content} >
+        <Popover className='t_confirm' trigger="click" placement="bottom" visible={visible} content={content} >
             <Tooltip title={<Message messageKey={deleteTooltip}/>}>
-                <Button disabled={isDefault} className='icon category_delete' onClick={() => setVisible(true)}><DeleteOutlined style={DELETE_ICON_STYLE} /></Button>
+                <Button disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteOutlined style={DELETE_ICON_STYLE} /></Button>
             </Tooltip>
         </Popover>
     );
