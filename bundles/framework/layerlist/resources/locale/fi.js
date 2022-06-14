@@ -51,7 +51,8 @@ Oskari.registerLocalization(
                 'publishable': 'Julkaistavissa',
                 'hidden': 'Karttataso on tilapäisesti piilotettu.',
                 'hide': 'Piilota karttataso',
-                'show': 'Näytä karttataso'
+                'show': 'Näytä karttataso',
+                'drag': 'Raahaa karttatasoa ylemmäs tai alemmas: järjestys kartalla määräytyy tämän mukaisesti.'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',

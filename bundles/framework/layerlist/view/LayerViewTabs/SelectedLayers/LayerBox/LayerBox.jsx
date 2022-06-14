@@ -57,7 +57,9 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                 <div ref={provided.innerRef} {...provided.draggableProps}>
                     <Row style={{ backgroundColor: '#fafafa', padding: '0px' }}>
                         <ColAuto style={{ padding: '0px' }}>
-                            <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
+                            <Tooltip title={<Message messageKey='layer.drag' />} placement='topRight'>
+                                <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
+                            </Tooltip>
                         </ColAuto>
                         <Col style={{ paddingRight: '0px' }}>
                             <StyledBox>
