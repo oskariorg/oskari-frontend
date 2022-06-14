@@ -166,9 +166,11 @@ Oskari.registerLocalization({
             'datasetSave': 'Ett fel uppstod vid sparning av data.',
             'datasetDelete': 'Ett fel uppstod vid radering av data.',
             'indicatorSave': 'Ett fel uppstod vid sparning av egen indikator.',
+            'myIndicatorNameInput': 'Namnfält kan inte vara tom.',
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
             'myIndicatorDatasource': 'Datakällan är tom.',
+            'myIndicatorInvalidData': 'Datamängder har ogiltiga värden.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
             'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
