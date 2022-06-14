@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER, HEADER_COLOR } from './constants';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
 
 const Container = styled.div`
     position: absolute;
@@ -41,7 +42,7 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: ${HEADER_COLOR};
+    background-color: ${props => props.color};
     padding: 8px 10px;
     display: flex;
     cursor: ${props => props.isDraggable ? 'grab' : undefined}
@@ -60,14 +61,16 @@ const ToolsContainer = styled.div`
     display: inline-block;
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
-    color: ${ICON_COLOR};
+    > button {
+        color: ${props => props.iconColor};
+    }
     > button:hover {
-        color: ${ICON_COLOR_HOVER};
+        color: ${props => props.hoverColor};
     }
 `;
 
 
-export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
+export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop, options, theme={}}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
@@ -130,9 +133,9 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
     </div>
     */
     return (<Container {...containerProps}>
-        <PopupHeader {...headerProps}>
+        <PopupHeader color={theme.color.primary} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer>
+            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
@@ -140,7 +143,7 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
             {children}
         </PopupBody>
     </Container>)
-};
+});
 
 Popup.propTypes = {
     children: PropTypes.any,

@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
-import { ICON_SIZE, ICON_COLOR, ICON_COLOR_HOVER } from './constants';
-// HEADER_COLOR in constants should but we should enable transparency for banner
-const COLOR = 'rgba(253, 248, 217, 0.9)' // #fdf8d9
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
 
 const Container = styled('div')`
     position: fixed;
     top: 0;
-    background-color: ${COLOR};
+    opacity: 0.9;
+    background-color: ${props => props.color};
     box-shadow: 0 5px 10px 0 #888888;
     height: auto;
     padding: 10px 15px 10px 15px;
@@ -36,27 +36,34 @@ const Content = styled('div')`
 
 const IconContainer = styled.span`
     font-size: ${ICON_SIZE}px;
-    color: ${ICON_COLOR};
+    > button {
+        color: ${props => props.iconColor};
+    }
     > button:hover {
-        color: ${ICON_COLOR_HOVER};
+        color: ${props => props.hoverColor};
     }
     align-self: center;
     margin-left: 10px;
 `;
 
-export const Banner = ({ children, onClose, options }) => {
+export const Banner = ThemeConsumer(({ children, onClose, options, theme }) => {
     const containerProps = {
-        className: `t_banner t_${options.id}`
+        className: `t_banner t_${options.id}`,
+        color: theme.color.primary
+    };
+    const iconContainerProps = {
+        iconColor: theme.color.icon,
+        hoverColor: theme.color.accent,
     };
     return (
         <Container {...containerProps}>
             <Content>
                 {children}
             </Content>
-            <IconContainer><CloseIcon onClose={onClose} /></IconContainer>
+            <IconContainer {...iconContainerProps}><CloseIcon onClose={onClose} /></IconContainer>
         </Container>
     );
-};
+});
 
 Banner.propTypes = {
     children: PropTypes.any,
