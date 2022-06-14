@@ -3,6 +3,6 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "DrawTools",
     "value": {
-        "intersectionNotAllowed": "Alue ei saa muodostaa silmukkaa. Piirrä uusi risteämätön alue."
+        "intersectionNotAllowed": "Alue ei saa muodostaa silmukkaa. Muokkaa aluetta tai piirrä uusi."
     }
 });
