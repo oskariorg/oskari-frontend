@@ -49,6 +49,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         me.service.on('StatsGrid.StateChangedEvent', function (event) {
             me._updateIndicatorList();
         });
+        me.service.on('StatsGrid.DatasourceEvent', () => this._updateIndicatorList());
     },
     /**
      * @method _getIndicators

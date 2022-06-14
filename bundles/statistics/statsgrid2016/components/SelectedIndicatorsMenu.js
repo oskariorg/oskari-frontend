@@ -115,6 +115,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             });
         });
     },
+    updateOptions: function () {
+        if (!this._select) {
+            return;
+        }
+        this._getIndicatorUILabels((options, value) => this._select.updateOptions(options, value));
+    },
 
     addEventHandlers: function () {
         var me = this;
@@ -149,13 +155,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                 });
             });
         });
-        this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
-            if (me._select) {
-                me._getIndicatorUILabels(function (options, value) {
-                    me._select.updateOptions(options, value);
-                });
-            }
-        });
+        this.service.on('StatsGrid.ParameterChangedEvent', () => this.updateOptions());
+        this.service.on('StatsGrid.DatasourceEvent', () => this.updateOptions());
+
         this.service.on('StatsGrid.StateChangedEvent', function (event) {
             if (event.isReset() && me._select) {
                 me._select.clearOptions();
