@@ -63,8 +63,8 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                             <StyledBox>
                                 <Row>
                                     <ColAuto>
-                                        {visible ? <EyeOpen onClick={handleToggleVisibility} />
-                                            : <EyeShut onClick={handleToggleVisibility} />}
+                                        {visible ? <Tooltip title={<Message messageKey='layer.hide' />}><EyeOpen onClick={handleToggleVisibility} /></Tooltip>
+                                            : <Tooltip title={<Message messageKey='layer.show' />}><EyeShut onClick={handleToggleVisibility} /></Tooltip>}
                                     </ColAuto>
                                     <Col>
                                         <Row style={{ padding: '0px' }}>
