@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
+import { getHeaderTheme } from '../../util/ThemeHelper';
 
 const Container = styled('div')`
     position: fixed;
@@ -47,13 +48,14 @@ const IconContainer = styled.span`
 `;
 
 export const Banner = ThemeConsumer(({ children, onClose, options, theme }) => {
+    const headerTheme = getHeaderTheme(theme);
     const containerProps = {
         className: `t_banner t_${options.id}`,
-        color: theme.color.primary
+        color: headerTheme.getBgColor()
     };
     const iconContainerProps = {
-        iconColor: theme.color.icon,
-        hoverColor: theme.color.accent,
+        iconColor: headerTheme.getToolIconColor(),
+        hoverColor: headerTheme.getToolIconHoverColor(),
     };
     return (
         <Container {...containerProps}>
