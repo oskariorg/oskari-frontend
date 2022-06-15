@@ -254,7 +254,7 @@ jQuery.ajaxSetup({ cache: false });
         },
         getTheming: function () {
             return THEMING;
-        },
+        }
     };
     o.app = new App();
 }(Oskari));
