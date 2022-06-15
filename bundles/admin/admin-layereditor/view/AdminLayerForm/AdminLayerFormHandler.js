@@ -8,6 +8,7 @@ import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
+const COVERAGE_LAYER = 'AdminLayerEditorCoverage';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
@@ -1131,6 +1132,35 @@ class UIHandler extends StateHandler {
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
             { uuid }
         ]);
+    }
+
+    clearLayerCoverage () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
+    }
+
+    showLayerCoverage (id) {
+        const srs = Oskari.getSandbox().getMap().getSrsName();
+        fetch(Oskari.urls.getRoute('DescribeLayer', { id, srs }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(({ coverage }) => {
+                if (!coverage) {
+                    this.clearLayerCoverage();
+                    return;
+                }
+                const opts = {
+                    centerTo: true,
+                    clearPrevious: true,
+                    layerId: COVERAGE_LAYER
+                };
+                Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
+            }).catch(() => {
+                this.clearLayerCoverage();
+                this.log.warn(`Failed to get layer coverage for id: ${id}`);
+            });
     }
 }
 
