@@ -5,37 +5,56 @@ import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
-import { getHeaderTheme } from '../../util/ThemeHelper';
+import { getHeaderTheme } from '../../theme/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
     left: 0;
     top: 0;
     z-index: 20009;
-    background:white;
+    background: #fafafa;
     min-width: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
 
     &.outofviewport {
-        border: 2px solid rgba(255, 0, 0);
+        border: 1px solid rgba(255, 0, 0, 0.5);
+        h3.flyout-title {
+            animation:vibrate 0.5s linear;
+            @keyframes vibrate {
+                25%, 75% {
+                    transform:rotate(2deg);
+                }
+                50% {
+                    transform:rotate(-2deg);
+                }
+                100% {
+                    transform:rotate(0deg);
+                }
+            }
+        }
     }
 `;
 
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
-    background-color: ${props => props.color};
+    background-color: ${props => props.theme.getBgColor()};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
     cursor: grab;
 `;
+
+// border-top: 1px solid #ffdf00;
+// border-bottom: 5px solid #ebb819;
 const HeaderBand = styled.div`
-    background-color: ${props => props.color};
-    border-top: 1px solid #ffdf00;
-    border-bottom: 1px solid #ebb819;
+    background-color: ${props => props.theme.getAccentColor()};
+    border-top: 1px solid ${props => props.theme.getBgBorderColor()};
+    border-bottom: 1px solid ${props => props.theme.getAccentBottomColor()};
     height: 14px;
     width: 100%;
 `;
-const Title = styled.div`
+const Title = styled.h3`
     float: left;
     margin-left: 20px;
     margin-top: 12px;
@@ -82,9 +101,9 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
     */
     const headerTheme = getHeaderTheme(theme);
     return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader color={headerTheme.getBgColor()} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand color={headerTheme.getAccentColor()}/>
-            <Title>{title}</Title>
+        <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+            <HeaderBand theme={headerTheme}/>
+            <Title className='flyout-title'>{title}</Title>
             <ToolsContainer iconColor={headerTheme.getToolIconColor()} hoverColor={headerTheme.getToolIconHoverColor()}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
@@ -97,7 +116,7 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
 
 Flyout.propTypes = {
     children: PropTypes.any,
-    title: PropTypes.string,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onClose: PropTypes.func.isRequired,
     bringToTop: PropTypes.func,
     options: PropTypes.object
