@@ -29,7 +29,10 @@ const getValidationMessage = keys => {
 const getGeneralTabTitle = isValid => (
     <Fragment>
         <Message messageKey='flyout.tabs.general'/>
-        <MandatoryIcon isValid={isValid} />
+        <MandatoryIcon isValid={isValid} style={{
+            verticalAlign: '-0.25em',
+            paddingLeft: '0.5em'
+        }}/>
     </Fragment>
 );
 

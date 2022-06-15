@@ -1,11 +1,14 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, DateRange, LocalizationComponent, TextInput, Radio, Tooltip } from 'oskari-ui';
+import { Message, Label, LabeledInput, Radio, Tooltip } from 'oskari-ui';
 import { SecondaryButton, PrimaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
+import { DateRange } from 'oskari-ui/components/DateRange';
+import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 import moment from 'moment';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
-import { BUNDLE_KEY, DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
+import { DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
 import 'draft-js/dist/Draft.css';
 
 /*
@@ -15,10 +18,6 @@ This is the main file for creating and editing announcements.
 
 const PaddingTop = styled.div`
     padding-top: 16px;
-`;
-
-const Label = styled.div`
-    padding-bottom: 8px;
 `;
 
 // TODO: should type be stored to options??
@@ -36,23 +35,29 @@ const getType = ({ locale }) => {
     }
     return TYPE.TITLE;
 };
-const getMandatoryFields = type => {
+const getFields = type => {
     const fields = ['title'];
     if (type !== TYPE.TITLE) {
         fields.push(type);
     }
     return fields;
 };
+const getMandatoryFields = () => {
+    return ['title'];
+};
 const getLocaleForSubmit = (state) => {
     const { type, locale } = state;
     // Announcement bundle uses getLocalized so add languages only if set to get fallback to default language
     const langs = Object.keys(locale).filter(lang => locale[lang].title);
-    const fields = getMandatoryFields(type);
+    const fields = getFields(type);
     const values = {};
     langs.forEach(lang => {
         values[lang] = {};
         fields.forEach(field => {
-            values[lang][field] = locale[lang][field] || '';
+            const value = locale[lang][field];
+            if (value !== '' && value !== '<p><br></p>') {
+                values[lang][field] = locale[lang][field];
+            }
         });
     });
     return values;
@@ -81,26 +86,12 @@ const initState = announcement => {
     };
 };
 
-// Return localized labels
-const getLabels = () => {
-    const getMsg = Oskari.getMsg.bind(null, BUNDLE_KEY);
-    const labels = {};
-    Oskari.getSupportedLanguages().forEach(language => {
-        const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
-        labels[language] = {
-            title: getMsg(`fields.locale.${langPrefix}.title`, [language]),
-            content: getMsg(`fields.locale.${langPrefix}.content`, [language]),
-            link: getMsg('fields.locale.link')
-        };
-    });
-    return labels;
-};
-
-export const AnnouncementsForm = ({
+export const AnnouncementsForm = LocaleConsumer(({
     announcement = {},
     onSubmit,
     onDelete,
-    onClose
+    onClose,
+    getMessage
 }) => {
     const [state, setState] = useState(initState(announcement));
 
@@ -177,16 +168,13 @@ export const AnnouncementsForm = ({
             </Radio.Group>
             <PaddingTop/>
             <LocalizationComponent
-                labels={getLabels()}
                 languages={languages}
-                LabelComponent={Label}
                 onChange={(locale) => setState({ ...state, locale })}
                 value={state.locale}>
-                <TextInput type='text' name='title' mandatory={[defaultLang]}/>
-                <PaddingTop/>
-                { state.type === 'link' && <TextInput name='link' mandatory={[defaultLang]}/> }
-                { state.type === 'content' && <RichEditor name='content' mandatory={[defaultLang]}/> }
-                { state.type !== 'title' && <PaddingTop/>}
+                <LabeledInput type='text' name='title' label={getMessage('fields.locale.title')} mandatory={true}/>
+                { state.type === 'link' && <LabeledInput label={getMessage('fields.locale.link')} name='link' mandatory={false}/> }
+                { state.type === 'content' && <RichEditor label={getMessage('fields.locale.content')} name='content' mandatory={false}/> }
+                { state.type === 'content' && <PaddingTop/> }
             </LocalizationComponent>
 
             <ButtonContainer>
@@ -198,7 +186,7 @@ export const AnnouncementsForm = ({
             </ButtonContainer>
         </Fragment>
     );
-};
+});
 
 AnnouncementsForm.propTypes = {
     onSubmit: PropTypes.func.isRequired,

@@ -1,3 +1,4 @@
+import { THEMING } from './theming';
 // So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
 jQuery.ajaxSetup({ cache: false });
 
@@ -250,7 +251,10 @@ jQuery.ajaxSetup({ cache: false });
          */
         getSystemDefaultViews: function () {
             return this.appSetup.env.defaultApps || [];
-        }
+        },
+        getTheming: function () {
+            return THEMING;
+        },
     };
     o.app = new App();
 }(Oskari));

@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MyIndicatorsList } from './MyIndicatorsList';
+import { LocaleProvider } from 'oskari-ui/util';
 
+const BUNDLE_KEY = 'StatsGrid';
 /**
  * @class Oskari.mapframework.bundle.statsgrid.PersonalDataIndicatorsTab
  * Renders the "personal data" statsgrid indicators tab.
@@ -60,14 +62,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab',
             this.indicatorData = indicators;
 
             ReactDOM.render(
-                <MyIndicatorsList
-                    data={indicators}
-                    controller={{
-                        deleteIndicator: (item) => this.deleteIndicator(item),
-                        editIndicator: (item) => this.editIndicator(item),
-                        addNewIndicator: () => this.addNewIndicator()
-                    }}
-                />
+                <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
+                    <MyIndicatorsList
+                        data={indicators}
+                        controller={{
+                            deleteIndicator: (item) => this.deleteIndicator(item),
+                            editIndicator: (item) => this.editIndicator(item),
+                            addNewIndicator: () => this.addNewIndicator()
+                        }}
+                    />
+                </LocaleProvider>
                 ,
                 this.listContainer[0]
             );

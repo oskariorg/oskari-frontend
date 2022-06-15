@@ -169,9 +169,11 @@ Oskari.registerLocalization({
             'datasetSave': 'Error saving dataset.',
             'datasetDelete': 'Error deleting dataset.',
             'indicatorSave': 'Error saving indicator',
+            'myIndicatorNameInput': 'Name field cannot be empty.',
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
+            'myIndicatorInvalidData': 'Data has invalid values.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
             'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
             'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
@@ -231,7 +233,8 @@ Oskari.registerLocalization({
                 'edit': 'Edit',
                 'delete': 'Delete',
                 'actions': 'Actions',
-                'createDate': 'Created'
+                'createDate': 'Created',
+                'updateDate': 'Updated'
             },
             'popup': {
                 'deletetitle': 'Delete Indicator',

@@ -23,22 +23,8 @@ Oskari.registerLocalization(
                 },
                 "locale": {
                     "link": "Lisätietolinkki",
-                    "generic": {
-                        "title": "Otsikko kielellä {0}",
-                        "content": "Sisältö kielellä {0}"
-                    },
-                    "en": {
-                        "title": "Otsikko englanniksi",
-                        "content": "Sisältö englanniksi"
-                    },
-                    "fi": {
-                        "title": "Otsikko suomeksi",
-                        "content": "Sisältö suomeksi"
-                    },
-                    "sv": {
-                        "title": "Otsikko ruotsiksi",
-                        "content": "Sisältö ruotsiksi"
-                    }
+                    "title": "Otsikko",
+                    "content": "Sisältö"
                 },
                 "validate": {
                     "title": "Lisää otsikko!",

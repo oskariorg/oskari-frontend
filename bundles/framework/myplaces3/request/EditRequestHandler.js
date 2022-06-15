@@ -41,62 +41,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
             }
         },
         _handleEditPlace: function (sandbox, request) {
-            this.log.debug('edit requested for place' + request.getId());
-            var service = this.instance.getService();
-            var place = service.findMyPlace(request.getId());
-            var mainMapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-            var geometry, center, shape;
-            if (place) {
-                geometry = place.getGeometry();
-                center = mainMapModule.getCentroidFromGeoJSON(geometry);
-                shape = geometry.type.replace('Multi', '');
-                this.instance.myPlaceSelected();
-                this.instance.setIsEditPlace(true);
-                this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), shape, { allowMultipleDrawing: 'multiGeom', geojson: JSON.stringify(geometry), drawControl: false, showMeasureOnMap: true, style: this.instance.getDrawStyle() }]);
-                this.instance.getMainView().showPlaceForm(center, place);
-            } else {
-                // should not happen
-                /*
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                dialog.show('Virhe!', 'Kohdetta ei löytynyt!');
-                dialog.fadeout();
-                */
+            const id = request.getId();
+            this.log.debug('edit requested for place' + id);
+            const handler = this.instance.getMyPlacesHandler();
+            if (!handler) {
+                return;
             }
+            handler.editPlace(id);
         },
         _handleDeletePlace: function (sandbox, request) {
-            this.log.debug('delete requested for place ' + request.getId());
-            /* let's refresh map also if there */
-            var categoryId = request.getId();
-            var layerId = 'myplaces_' + categoryId;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-
-            if (layer) {
-                var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-                var updateRequest = updateRequestBuilder(layerId, true);
-                sandbox.request(this.instance, updateRequest);
-                // Update myplaces extra layers
-                var eventBuilder = Oskari.eventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
-                if (eventBuilder) {
-                    var event = eventBuilder(layerId, true);
-                    sandbox.notifyAll(event);
-                }
+            const id = request.getId();
+            this.log.debug('delete requested for place ' + id);
+            const handler = this.instance.getMyPlacesHandler();
+            if (!handler) {
+                return;
             }
-            this.instance.getMainView().cleanupPopup();
+            handler.deletePlace(id);
         },
         _handleEditCategory: function (sandbox, request) {
             const id = request.getId();
             this.log.debug('edit requested for category ' + id);
-            this.instance.getCategoryHandler().editCategory(id);
+            const handler = this.instance.getMyPlacesHandler();
+            if (!handler) {
+                return;
+            }
+            handler.editCategory(id);
         },
         _handleDeleteCategory: function (sandbox, request) {
             const id = request.getId();
-            this.log.debug('delete requested for category ' + id);
-            this.instance.getCategoryHandler().confirmDeleteCategory(id);
+            this.log.warn(`Delete requested for category: ${id}. This handler doesn't ask for move places or confirm. Skipping!`);
         },
         _handlePublishCategory: function (sandbox, request) {
             const id = request.getId();
             this.log.debug('(un/)publish requested for category ' + id);
-            this.instance.getCategoryHandler().confirmPublishCategory(id, request.isPublic());
+            const service = this.instance.getService();
+            if (!service) {
+                return;
+            }
+            service.publishCategory(id, request.isPublic());
         }
     }, {
         /**

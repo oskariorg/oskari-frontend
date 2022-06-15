@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class IndicatorsHandler extends StateHandler {
-    constructor (sandbox, instance, configuration) {
+    constructor (sandbox, instance) {
         super();
         this.instance = instance;
         this.sandbox = sandbox;
@@ -9,15 +9,10 @@ class IndicatorsHandler extends StateHandler {
             data: [],
             loading: false
         });
-        this.updater = null;
         this.popupControls = null;
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
         this.log = Oskari.log('Oskari.statistics.statsgrid.MyIndicatorsTab');
-        this.service = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', this.sandbox, this.loc);
-        const conf = configuration;
-        this.sandbox.registerService(this.service);
-        this.service.addDatasource(conf.sources);
-        this.service.addRegionset(conf.regionsets);
+        this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         const dataSource = this.service.getUserDatasource();
         this.userDsId = dataSource ? dataSource.id : null;
         this.eventHandlers = this.createEventHandlers();
@@ -93,6 +88,14 @@ class IndicatorsHandler extends StateHandler {
         formFlyout.showForm(this.userDsId, data.id);
     }
 
+    openIndicator (item) {
+        const flyoutManager = this.instance.getFlyoutManager();
+        flyoutManager.open('search');
+        const searchFlyout = flyoutManager.getFlyout('search');
+        const indicatorSelector = searchFlyout.getIndicatorSelectionComponent();
+        indicatorSelector.setIndicatorData(this.userDsId, item.id);
+    }
+
     createEventHandlers () {
         const handlers = {
             'StatsGrid.DatasourceEvent': (event) => {
@@ -113,16 +116,13 @@ class IndicatorsHandler extends StateHandler {
 
         return handler.apply(this, [e]);
     }
-
-    setUpdateFunc (update) {
-        this.updater = update;
-    }
 }
 
 const wrapped = controllerMixin(IndicatorsHandler, [
     'addNewIndicator',
     'editIndicator',
-    'deleteIndicator'
+    'deleteIndicator',
+    'openIndicator'
 ]);
 
 export { wrapped as MyIndicatorsHandler };

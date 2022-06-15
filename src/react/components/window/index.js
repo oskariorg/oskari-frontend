@@ -1,9 +1,10 @@
 import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
-import styled from 'styled-components';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 import { Banner } from './Banner';
+import { REGISTER, TYPE } from './register';
+import { ThemeProvider } from '../../util/contexts';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
@@ -34,28 +35,23 @@ const DEFAULT_POPUP_OPTIONS = {
             return NAME;
         },
         onEvent: function () {
-            Object.values(active).forEach(o => typeof o === 'function' && o());
-            active = {};
+            REGISTER.clear();
         }
     };
 
     sb.register(module);
 })(Oskari.getSandbox());
 
-let active = {}; // id: removeFn
-
-const validate = (options) => {
+const validate = (options, type) => {
     const { id } = options;
     const seq = Oskari.getSeq(NAME);
-    if (active[id]) {
+    if (!id) {
+        options.id = ID_PREFIX + seq.nextVal();
+    } else if (REGISTER.getExistingWindow(id, type)) {
+        // attach a rolling number if we already have a window of same type and id
         const newId = id + '-' + seq.nextVal();
         options.id = newId;
         Oskari.log(NAME).warn(`Popup or flyout is already added with id: ${id}, changed to: ${newId}`);
-        return;
-    }
-
-    if (!id) {
-        options.id = ID_PREFIX + seq.nextVal();
     }
 };
 
@@ -76,19 +72,19 @@ const createTmpContainer = () => {
  * @param {Function} optional function to call when window is closed
  * @returns {Function}
  */
-const createRemoveFn = (element, onClose, id) => {
+const createRemoveFn = (element, onClose) => {
+    let alreadyRemoved = false;
     const removeFn = () => {
-        if (!active[id]) {
+        if (alreadyRemoved) {
             return;
         }
         unmountComponentAtNode(element);
         document.body.removeChild(element);
-        delete active[id];
+        alreadyRemoved = true;
         if (typeof onClose === 'function') {
             onClose();
         }
     };
-    active[id] = removeFn;
     return removeFn;
 };
 
@@ -128,16 +124,20 @@ const createBringToTop = (element) => {
  * @returns {Object} that provides functions that can be used to close/update the flyout
  */
 export const showPopup = (title, content, onClose, options = {}) => {
-    validate(options);
+    validate(options, TYPE.POPUP);
     const element = createTmpContainer();
-    const removeWindow = createRemoveFn(element, onClose, options.id);
+    const key = REGISTER.registerWindow(options.id, TYPE.POPUP, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
+    const THEMING = Oskari.app.getTheming();
     const render = (title, content) => {
         ReactDOM.render(
-            <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
-                {content}
-            </Popup>, element);
+            <ThemeProvider value={THEMING.getTheme()}>
+                <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
+                    {content}
+                </Popup>
+            </ThemeProvider>, element);
     };
     render(title, content);
     return {
@@ -170,9 +170,10 @@ export const showPopup = (title, content, onClose, options = {}) => {
  * @returns {Object} that provides functions that can be used to close/update the flyout
  */
 export const showFlyout = (title, content, onClose, options = {}) => {
-    validate(options);
+    validate(options, TYPE.FLYOUT);
     const element = createTmpContainer();
-    const removeWindow = createRemoveFn(element, onClose, options.id);
+    const key = REGISTER.registerWindow(options.id, TYPE.FLYOUT, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
         ReactDOM.render(
@@ -191,26 +192,25 @@ export const showFlyout = (title, content, onClose, options = {}) => {
 
 /**
  * 
- * @param {ReactElement} icon
- * @param {String} title
  * @param {ReactNode} content
- * @param {ReactNode} action
  * @param {Function} onClose 
  * @param {boolean} closable 
  * @returns {object} that provides functions that can be used to close/update the banner
  */
-export const showBanner = (icon, title, content, onClose, closable, action) => {
+export const showBanner = (content, onClose, options = {}) => {
+    validate(options, TYPE.BANNER);
     const element = createTmpContainer();
-    const removeWindow = createRemoveFn(element, onClose);
+    const key = REGISTER.registerWindow(options.id, TYPE.BANNER, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
 
-    const render = (props) => {
+    const render = (content) => {
         ReactDOM.render(
-            <Banner
-                {...props}
-            />, element);
+            <Banner onClose={removeWindow} options={options}>
+                {content}
+            </Banner>, element);
     };
-    render({icon, title, content, action, onClose, closable});
+    render(content);
     return  {
         update: render,
         close: removeWindow,

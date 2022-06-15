@@ -1,5 +1,6 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showLayerPopup } from '../MyPlacesLayerForm';
+import { showPlacePopup } from '../view/PlaceForm.jsx';
 
 class PlaceHandler extends StateHandler {
     constructor (instance) {
@@ -9,125 +10,198 @@ class PlaceHandler extends StateHandler {
         this.setState({
             places: [],
             categories: [],
-            selectedCategory: null,
+            selectedCategoryId: null,
             loading: false
         });
-        this.popupControls = null;
-        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
-        this.categoryHandler = this.instance.getCategoryHandler();
-        this.service = this.instance.getService();
-        this.eventHandlers = this.createEventHandlers();
-        this.refreshCategoryList();
-    };
+        this.layerControls = null;
+        this.placeControls = null;
 
-    popupCleanup () {
-        if (this.popupControls) this.popupControls.close();
-        this.popupControls = null;
-    }
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
+        this.service = this.instance.getService();
+        this.eventHandlers = this.bindEvents();
+    };
 
     getName () {
         return 'MyPlacesHandler';
     }
 
+    bindEvents () {
+        this.service.on('place', () => this.populatePlaces());
+        this.service.on('category', (addedId) => {
+            this.refreshCategoryList(addedId);
+            if (this.placeControls) {
+                this.placeControls.update(addedId, this.state.categories);
+            }
+        });
+        this.refreshCategoryList();
+    }
+
+    layerPopupCleanup () {
+        if (this.layerControls) {
+            this.layerControls.close();
+        }
+        this.layerControls = null;
+    }
+
+    placePopupCleanup () {
+        if (this.placeControls) {
+            this.placeControls.close();
+        }
+        this.instance.getDrawHandler().stopDrawing();
+        this.placeControls = null;
+    }
+
     openLayerDialog (categoryId, locale, style) {
-        if (this.popupControls) {
+        if (this.layerControls) {
             // already opened, do nothing
             return;
         }
         // create popup
         const saveLayer = (locale, style) => {
-            this.categoryHandler.saveCategory({
+            this.service.saveCategory({
                 categoryId,
                 locale,
                 style
             });
-            this.popupCleanup();
+            this.layerPopupCleanup();
         };
-        this.popupControls = showLayerPopup(locale, style, saveLayer, () => this.popupCleanup());
+        this.layerControls = showLayerPopup(locale, style, saveLayer, () => this.layerPopupCleanup());
     }
 
     populatePlaces () {
-        if (this.state.selectedCategory && this.state.selectedCategory.categoryId) {
-            this.updateState({
-                places: this.service.getPlacesInCategory(this.state.selectedCategory.categoryId)
-            });
-        } else {
-            this.updateState({
-                places: []
-            });
+        let places = [];
+        if (this.state.selectedCategoryId) {
+            places = this.service.getPlacesInCategory(this.state.selectedCategoryId);
         }
         this.updateState({
+            places,
             loading: false
         });
     }
 
-    refreshCategoryList () {
+    refreshCategoryList (addedId) {
         this.updateState({
             loading: true
         });
-        const categories = this.categoryHandler.getAllCategories();
+        const categories = this.service.getAllCategories();
+        // select added category if given, fallback to first
+        let selectedCategoryId = addedId || this.state.selectedCategoryId;
+        if (!selectedCategoryId && categories.length) {
+            selectedCategoryId = categories[0].categoryId;
+        }
+        this.service.loadPlaces(selectedCategoryId);
         this.updateState({
-            categories: categories
+            categories,
+            selectedCategoryId
         });
-        if (!this.state.selectedCategory && categories && categories.length > 0) {
-            this.updateState({
-                selectedCategory: categories[0]
-            });
-            this.service.loadPlaces(categories[0].categoryId);
-        }
-        if (this.state.selectedCategory && this.state.categories.findIndex(c => c.categoryId === this.state.selectedCategory.categoryId) < 0) {
-            if (categories.length > 0) {
-                this.updateState({
-                    selectedCategory: categories[0]
-                });
-                this.service.loadPlaces(categories[0].categoryId);
-            } else {
-                this.updateState({
-                    selectedCategory: null
-                });
-            }
-        }
     }
 
-    selectCategory (categoryId) {
-        this.updateState({
-            loading: true
-        });
-        const category = this.state.categories.find(c => c.categoryId === categoryId);
-        this.updateState({
-            selectedCategory: category
-        });
-        this.service.loadPlaces(categoryId);
+    selectCategory (id) {
+        const newState = {
+            selectedCategoryId: id
+        };
+
+        if (this.service.placesLoaded(id)) {
+            newState.places = this.service.getPlacesInCategory(id);
+        } else {
+            newState.loading = true;
+            this.service.loadPlaces(id);
+        }
+        this.updateState(newState);
     }
 
     /**
-     * @method showPlace
+     * @method addAndFocus
      * Moves the map so the given geometry is visible on viewport. Adds the myplaces
      * layer to map if its not already selected.
-     * @param {OpenLayers.Geometry} geometry place geometry to move map to
-     * @param {Number} categoryId categoryId for the place so we can add it's layer to map
+     * @param {MyPlace} place place to move map to
      */
-    showPlace (geometry, categoryId) {
+    addLayerAndFocus (place) {
+        if (!place) {
+            return;
+        }
+        const geometry = place.getGeometry();
         const mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         const center = mapModule.getCentroidFromGeoJSON(geometry);
         const bounds = mapModule.getBoundsFromGeoJSON(geometry);
         const mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.lon, center.lat, bounds);
         this.sandbox.request(this.instance, mapmoveRequest);
-        // add the myplaces layer to map
-        this.instance.getCategoryHandler().addLayerToMap(categoryId);
+        this.service.addLayerToMap(place.getCategoryId());
     }
 
-    /**
-     * @method editPlace
-     * Requests for given place to be opened for editing
-     * @param {Object} data grid data object for place
-     */
-    editPlace (data) {
+    showPlace (id) {
+        const place = this.service.findMyPlace(id);
+        this.addLayerAndFocus(place);
+    }
+
+    addPlace () {
+        const place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
+        // init category from selected
+        place.setCategoryId(this.state.selectedCategoryId);
+        const drawHandler = this.instance.getDrawHandler();
+        if (!drawHandler.hasValidGeometry()) {
+            // no features, user clicks save my new place without valid geometry drawn
+            Messaging.error(this.loc('error.savePlace'));
+            drawHandler.stopDrawing();
+            return;
+        }
+        this.openPlacePopup(place);
+    }
+
+    editPlace (id) {
+        const place = this.service.findMyPlace(id);
+        if (!place) {
+            Messaging.error(this.loc('error.generic'));
+            return;
+        }
         // focus on map
-        this.showPlace(data.geometry, data.categoryId);
-        // request form
-        const request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
-        this.sandbox.request(this.instance, request);
+        this.addLayerAndFocus(place);
+        this.openPlacePopup(place);
+    }
+
+    openPlacePopup (place) {
+        const id = place.getId();
+        if (this.placeControls) {
+            // already opened
+            if (this.placeControls.id === id) {
+                this.placeControls.bringToTop();
+                return;
+            }
+            // remove previous popup and drawing
+            this.placePopupCleanup();
+        }
+
+        if (id) {
+            // start modify after possible placePopupCleanup
+            this.instance.getDrawHandler().startModify(place.getGeometry());
+        }
+
+        const categoryId = place.getCategoryId();
+        const { categories } = this.state;
+
+        const controller = {
+            onClose: () => this.placePopupCleanup(),
+            handleCategoryId: (id) => this.placeControls && this.placeControls.update(id, categories),
+            onSave: (values, newCatId) => {
+                place.setProperties(values);
+                place.setCategoryId(newCatId);
+                this.instance.getDrawHandler().setPlaceGeometry(place);
+                const oldCategoryId = categoryId && categoryId !== newCatId ? categoryId : null;
+                this.service.saveMyPlace(place, oldCategoryId);
+                this.placePopupCleanup();
+            }
+        };
+
+        const values = {
+            id,
+            ...place.getProperties()
+        };
+
+        this.placeControls = showPlacePopup(values, categoryId, categories, controller);
+    }
+
+    isPlacePopupActive () {
+        return !!this.placeControls;
     }
 
     /**
@@ -136,55 +210,27 @@ class PlaceHandler extends StateHandler {
      * notification about cancel, deleted or error on delete.
      * @param {Object} data grid data object for place
      */
-    deletePlace (data) {
-        const callback = (isSuccess) => {
-            if (isSuccess) {
-                Messaging.success(this.loc('tab.notification.delete.success'));
-            } else {
-                Messaging.error(this.loc('tab.notification.delete.error'));
-            }
-        };
-        this.service.deleteMyPlace(data.id, callback);
+    deletePlace (id) {
+        const place = this.service.findMyPlace(id);
+        this.service.deletePlaces([place]);
     }
 
-    deleteCategory (categoryId) {
-        const deleteReqBuilder = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest');
-        this.sandbox.request(this.instance, deleteReqBuilder(categoryId));
+    deleteCategory (categoryId, moveToId) {
+        // Select category where places is moved, if not given refreshCategoryList will select
+        this.updateState({
+            loading: true,
+            selectedCategoryId: moveToId
+        });
+        this.service.deleteCategoryWithPlaces(categoryId, moveToId);
     }
 
     editCategory (categoryId) {
-        const layer = this.categoryHandler.mapLayerService.findMapLayer(this.categoryHandler.getMapLayerId(categoryId));
-        const locale = layer.getLocale();
-        const style = layer.getCurrentStyle().getFeatureStyle();
+        const { locale, style } = this.service.getCategoryForEdit(categoryId) || {};
         this.openLayerDialog(categoryId, locale, style);
     }
 
     exportCategory (categoryId) {
         window.location.href = this.service.getExportCategoryUrl(categoryId);
-    }
-
-    getGeometryIcon (geometry) {
-        return this.service.getDrawModeFromGeometry(geometry);
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            'MyPlaces.MyPlacesChangedEvent': event => {
-                this.refreshCategoryList();
-                this.populatePlaces();
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 
@@ -192,7 +238,6 @@ const wrapped = controllerMixin(PlaceHandler, [
     'showPlace',
     'editPlace',
     'deletePlace',
-    'getGeometryIcon',
     'deleteCategory',
     'editCategory',
     'exportCategory',

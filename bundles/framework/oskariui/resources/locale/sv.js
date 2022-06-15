@@ -90,7 +90,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Andra språk',
-            othersTip: '',
+            othersTip: 'Översättningar kommer att visas när tjänsten används på olika språk',
             locale: {
                 generic: 'på ({0})',
                 fi: 'på finska',

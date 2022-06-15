@@ -1,9 +1,11 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
 
 const Container = styled.div`
     position: absolute;
@@ -40,9 +42,10 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: #FDF8D9;
+    background-color: ${props => props.color};
     padding: 8px 10px;
     display: flex;
+    cursor: ${props => props.isDraggable ? 'grab' : undefined}
 `;
 const PopupTitle = styled.span`
     margin-right: auto;
@@ -57,15 +60,17 @@ const ToolsContainer = styled.div`
     height: 16px;
     display: inline-block;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
-    > span:hover {
-        color: #ffd400;
+    font-size: ${ICON_SIZE}px;
+    > button {
+        color: ${props => props.iconColor};
+    }
+    > button:hover {
+        color: ${props => props.hoverColor};
     }
 `;
 
 
-export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
+export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop, options, theme={}}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
@@ -75,7 +80,9 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
         className: `t_popup t_${options.id}`
     };
     const elementRef = useRef();
-    const headerProps = {};
+    const headerProps = {
+        isDraggable: !!options.isDraggable
+    };
     const headerFuncs = [];
     if (typeof bringToTop === 'function') {
         headerFuncs.push(bringToTop);
@@ -126,17 +133,17 @@ export const Popup = ({title = '', children, onClose, bringToTop, options}) => {
     </div>
     */
     return (<Container {...containerProps}>
-        <PopupHeader {...headerProps}>
+        <PopupHeader color={theme.color.primary} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer>
-                <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
+            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
-        <PopupBody className="t_popup-body">
+        <PopupBody className="t_body">
             {children}
         </PopupBody>
     </Container>)
-};
+});
 
 Popup.propTypes = {
     children: PropTypes.any,

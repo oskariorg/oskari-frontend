@@ -1,72 +1,72 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
 
-const StyledBanner = styled('div')`
-    position: absolute;
+const Container = styled('div')`
+    position: fixed;
     top: 0;
-    left: 270px;
-    right: 250px;
-    background-color: #fff0e2;
+    opacity: 0.9;
+    background-color: ${props => props.color};
     box-shadow: 0 5px 10px 0 #888888;
     height: auto;
     padding: 10px 15px 10px 15px;
-`;
-
-const Container = styled('div')`
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 950px;
+    @media only screen and (max-width: 1025px) {
+        min-width: 0;
+        width: 100%
+    }
+    z-index: 999999;
     display: flex;
     flex-direction: row;
-    width: 100%;
-`;
-
-const StyledTitle = styled('span')`
-    font-weight: bold;
-    color: #5e2c00;
-`;
-
-const CloseIcon = styled(CloseCircleOutlined)`
-    cursor: pointer;
-    color: #5e2c00;
-    font-size: 18px;
-    align-self: center;
 `;
 
 const Content = styled('div')`
+    margin-right: auto;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    @media only screen and (max-width: 1025px) {
+        flex-direction: column;
+    }
 `;
 
-const Actions = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin: 0 20px 0 10px;
+const IconContainer = styled.span`
+    font-size: ${ICON_SIZE}px;
+    > button {
+        color: ${props => props.iconColor};
+    }
+    > button:hover {
+        color: ${props => props.hoverColor};
+    }
+    align-self: center;
+    margin-left: 10px;
 `;
 
-const Icon = styled('div')`
-    font-size: 24px;
-    margin-right: 10px;
-`;
-
-export const Banner = ({ icon, title, content, action, onClose, closable }) => {
-
+export const Banner = ThemeConsumer(({ children, onClose, options, theme }) => {
+    const containerProps = {
+        className: `t_banner t_${options.id}`,
+        color: theme.color.primary
+    };
+    const iconContainerProps = {
+        iconColor: theme.color.icon,
+        hoverColor: theme.color.accent,
+    };
     return (
-        <StyledBanner>
-            <Container>
-                <Icon>
-                    {icon}
-                </Icon>
-                <Content>
-                    <StyledTitle>{title}</StyledTitle>
-                    <Content>{content}</Content>
-                </Content>
-                <Actions>
-                    {action}
-                </Actions>
-                {closable && (
-                    <CloseIcon onClick={onClose} />
-                )}
-            </Container>
-        </StyledBanner>
+        <Container {...containerProps}>
+            <Content>
+                {children}
+            </Content>
+            <IconContainer {...iconContainerProps}><CloseIcon onClose={onClose} /></IconContainer>
+        </Container>
     );
+});
+
+Banner.propTypes = {
+    children: PropTypes.any,
+    onClose: PropTypes.func.isRequired,
+    options: PropTypes.object
 };

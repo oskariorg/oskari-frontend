@@ -10,6 +10,10 @@ import { PaginatedContent, SingleContent } from './';
 
 // Pop-up functionality for announcements
 
+const POPUP_OPTIONS = {
+    id: BUNDLE_KEY
+};
+
 const Content = styled.div`
     margin: 12px 24px 24px;
     min-width: 300px;
@@ -43,7 +47,7 @@ const getContent = (state, controller, onClose) => {
 
 export const showAnnouncementsPopup = (state, controller, onClose) => {
     const { title, content } = getContent(state, controller, onClose);
-    const controls = showPopup(title, content, onClose, { id: BUNDLE_KEY });
+    const controls = showPopup(title, content, onClose, POPUP_OPTIONS);
     return {
         ...controls,
         update: (state) => {

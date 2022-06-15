@@ -269,7 +269,9 @@ class MapsHandler extends StateHandler {
                 const req = setStateRequestBuilder(data.state);
                 req.setCurrentViewId(data.id);
                 sandbox.request(this.instance, req);
+                return true;
             }
+            return false;
         }
         this.confirmSetState(confirmCallback, resp.msg === 'missing');
     }

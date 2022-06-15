@@ -75,6 +75,10 @@ export class MapModule extends AbstractMapModule {
         });
 
         var map = new olMap({
+            // Chrome on Android crashes at times when for example:
+            // - pinchzooming the map out so a WFS-layer scale limit is hit midpinch (layer is hidden while pinching) AND only when the map is in an iframe (not directly on the page)
+            // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
+            pixelRatio: 1,
             keyboardEventTarget: document,
             target: this.getMapElementId(),
             controls: controls,
@@ -440,19 +444,21 @@ export class MapModule extends AbstractMapModule {
         }
     }
 
-    getMeasurementResult (geometry) {
+    getMeasurementResult (geometry, format) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geometry);
         var sum = 0;
         if (olGeometry.getType() === 'LineString') {
-            return this.getGeomLength(olGeometry);
+            const line = this.getGeomLength(olGeometry);
+            return format ? this.formatMeasurementResult(line, 'line') : line;
         } else if (olGeometry.getType() === 'MultiLineString') {
             var lineStrings = olGeometry.getLineStrings();
             for (var i = 0; i < lineStrings.length; i++) {
                 sum += this.getGeomLength(lineStrings[i]);
             }
-            return sum;
+            return format ? this.formatMeasurementResult(sum, 'line') : sum;
         } else if (olGeometry.getType() === 'Polygon' || olGeometry.getType() === 'MultiPolygon') {
-            return this.getGeomArea(olGeometry);
+            const area = this.getGeomArea(olGeometry);
+            return format ? this.formatMeasurementResult(area, 'area') : area;
         }
     }
 

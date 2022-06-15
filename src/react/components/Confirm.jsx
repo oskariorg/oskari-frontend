@@ -29,8 +29,17 @@ Check the render method of `styled__IconButton`.
 There seems to be a problem with tooltips with styled-components as direct children:
 https://stackoverflow.com/questions/61450739/understanding-warning-function-components-cannot-be-given-refs
 */
-export const Confirm = ({ children, ...other }) => (
-    <Popconfirm {...other}><span>{children}</span></Popconfirm>
+export const Confirm = ({ children, cancelButtonProps = {}, okButtonProps = {}, ...other }) => (
+    <Popconfirm
+        overlayClassName='t_confirm'
+        okButtonProps={{
+            className: 't_button t_ok',
+            ...okButtonProps }}
+        cancelButtonProps={{
+            className: 't_button t_cancel',
+            ...cancelButtonProps }}
+        {...other}
+        ><span>{children}</span></Popconfirm>
 );
 
 Confirm.propTypes = {
