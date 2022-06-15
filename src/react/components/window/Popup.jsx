@@ -6,7 +6,7 @@ import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from 
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
-import { getHeaderTheme } from '../../util/ThemeHelper';
+import { getHeaderTheme } from '../../theme/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;

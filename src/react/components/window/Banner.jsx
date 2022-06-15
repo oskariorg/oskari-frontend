@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
-import { getHeaderTheme } from '../../util/ThemeHelper';
+import { getHeaderTheme } from '../../theme/ThemeHelper';
 
 const Container = styled('div')`
     position: fixed;
