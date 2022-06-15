@@ -298,6 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('MapSizeChangedEvent', () => this.render());
             // need to update labels
             this.service.on('StatsGrid.ParameterChangedEvent', () => this.render());
+            this.service.on('StatsGrid.DatasourceEvent', () => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -110,7 +110,7 @@ Oskari.clazz.define(
 
             const reqName = 'PersonalData.AddTabRequest';
             if (myDataService) {
-                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this, this.getConfiguration()));
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this));
             } else if (sandbox.hasHandler(reqName)) {
                 // fallback to old personaldata tabs
                 this._addIndicatorsTabToPersonalData(sandbox);

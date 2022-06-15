@@ -170,9 +170,11 @@ Oskari.registerLocalization({
             'datasetDelete': 'Virhe poistaessa aineistoa.',
             'indicatorSave': 'Virhe tallennettaessa muuttujaa.',
             'indicatorDelete': 'Virhe poistaessa muuttujaa.',
+            'myIndicatorNameInput': 'Nimi kenttä ei voi olla tyhjä.',
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
+            'myIndicatorInvalidData': 'Aineistossa on virheellisiä arvoja.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
             'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
             'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
