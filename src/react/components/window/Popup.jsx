@@ -6,6 +6,7 @@ import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from 
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
+import { getHeaderTheme } from '../../util/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
@@ -132,10 +133,12 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
         <div class="popup-body">content</div>
     </div>
     */
+
+    const headerTheme = getHeaderTheme(theme);
     return (<Container {...containerProps}>
-        <PopupHeader color={theme.color.primary} {...headerProps}>
+        <PopupHeader color={headerTheme.getBgColor()} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
+            <ToolsContainer iconColor={headerTheme.getToolIconColor()} hoverColor={headerTheme.getToolIconHoverColor()}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>

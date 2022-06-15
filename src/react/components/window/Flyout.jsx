@@ -5,6 +5,7 @@ import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
+import { getHeaderTheme } from '../../util/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
@@ -79,11 +80,12 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
         <div className="oskari-flyouttool-restore"></div>
     Maybe allow passing tools from caller?
     */
+    const headerTheme = getHeaderTheme(theme);
     return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader color={theme.color.primary} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand color={theme.color.accent}/>
+        <FlyoutHeader color={headerTheme.getBgColor()} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+            <HeaderBand color={headerTheme.getAccentColor()}/>
             <Title>{title}</Title>
-            <ToolsContainer iconColor={theme.color.icon} hoverColor={theme.color.accent}>
+            <ToolsContainer iconColor={headerTheme.getToolIconColor()} hoverColor={headerTheme.getToolIconHoverColor()}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>
