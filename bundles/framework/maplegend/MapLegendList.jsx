@@ -2,21 +2,15 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel } from 'oskari-ui';
 import { LegendImage } from './LegendImage';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
-const MetadataIcon = styled(InfoCircleOutlined)`
-    & {
-        margin: 0 0 0 10px;
-    }
-`;
 
 export const MapLegendList = ({ legendList }) => {
     const composeHeader = (title, uuid, callback) => {
         return (
             <Fragment>
                 { title }
-                { uuid && <MetadataIcon onClick={ (event) => callback(event, uuid) } /> }
+                { uuid && <InfoIcon onClick={(e) => callback(e, uuid)} style={{ margin: '0 0 0 10px' }} /> }
             </Fragment>
         );
     };

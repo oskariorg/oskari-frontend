@@ -4,12 +4,7 @@ import styled from 'styled-components';
 import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerIcon } from '../../../LayerIcon';
-
-const SpriteIcon = styled('div')`
-    width: 16px;
-    height: 16px;
-    background-repeat: no-repeat;
-`;
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 const Tools = styled('div')`
     display: flex;
@@ -51,12 +46,6 @@ const getStatusColor = (status) => {
 };
 
 const LayerTools = ({ model, controller }) => {
-    const infoIcon = {
-        classes: ['layer-info']
-    };
-    if (model.getMetadataIdentifier() || hasSubLayerMetadata(model)) {
-        infoIcon.classes.push('icon-info');
-    }
     const map = Oskari.getSandbox().getMap();
     const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
@@ -68,7 +57,11 @@ const LayerTools = ({ model, controller }) => {
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
-            <SpriteIcon className={infoIcon.classes.join(' ')} onClick={() => controller.showLayerMetadata(model)} />
+            {(model.getMetadataIdentifier() || hasSubLayerMetadata(model)) && (
+                <InfoIcon
+                    onClick={() => controller.showLayerMetadata(model)}
+                />
+            )}
         </Tools>
     );
 };
