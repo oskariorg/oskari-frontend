@@ -50,7 +50,7 @@ const FlyoutHeader = styled.div`
 const HeaderBand = styled.div`
     background-color: ${props => props.theme.getAccentColor()};
     border-top: 1px solid ${props => props.theme.getBgBorderColor()};
-    border-bottom: 1px solid ${props => props.theme.getAccentBottomColor()};
+    border-bottom: 1px solid ${props => props.theme.getBgBorderBottomColor()};
     height: 14px;
     width: 100%;
 `;
@@ -104,7 +104,7 @@ export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop,
         <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
             <HeaderBand theme={headerTheme}/>
             <Title className='flyout-title'>{title}</Title>
-            <ToolsContainer iconColor={headerTheme.getToolIconColor()} hoverColor={headerTheme.getToolIconHoverColor()}>
+            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>

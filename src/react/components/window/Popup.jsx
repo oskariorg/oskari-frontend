@@ -43,7 +43,8 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: ${props => props.color};
+    background-color: ${props => props.theme.getBgColor()};
+    color:  ${props => props.theme.getTextColor()};
     padding: 8px 10px;
     display: flex;
     cursor: ${props => props.isDraggable ? 'grab' : undefined}
@@ -136,9 +137,9 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
 
     const headerTheme = getHeaderTheme(theme);
     return (<Container {...containerProps}>
-        <PopupHeader color={headerTheme.getBgColor()} {...headerProps}>
+        <PopupHeader theme={headerTheme} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer iconColor={headerTheme.getToolIconColor()} hoverColor={headerTheme.getToolIconHoverColor()}>
+            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
                 <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>

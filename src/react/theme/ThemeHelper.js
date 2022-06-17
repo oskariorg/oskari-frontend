@@ -2,14 +2,18 @@
 import { EFFECT } from './constants';
 
 export const getHeaderTheme = (theme) => {
-    return {
+    const isDark = Oskari.util.isDarkColor(theme.color.primary);
+    const headerColor = isDark ? "#FFFFFF" : '#000000';
+    const funcs = {
         getBgColor: () => theme.color.primary,
-        getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getAccentColor: () => theme.color.accent,
-        getAccentBottomColor: () => getColorEffect(theme.color.accent, 20),
-        getToolIconColor: () => theme.color.icon,
-        getToolIconHoverColor: () => theme.color.accent
+        getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
+        getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
+        getTextColor: () => theme.color.header?.text || headerColor,
+        getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
+        getToolHoverColor: () => theme.color.accent
     };
+    return funcs;
 };
 
 /* ------------------------------------------------------------------------------ */
