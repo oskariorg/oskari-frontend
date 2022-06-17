@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { ThemeConsumer } from 'oskari-ui/util';
 import styled, { css, keyframes } from 'styled-components';
+import { getTextColor } from 'oskari-ui/theme/ThemeHelper';
 
 const animation = keyframes`
     0% {opacity: 1;}
@@ -17,8 +18,8 @@ const StyledBadge = styled.div`
     opacity: 1;
     min-width: 20px;
     height: 20px;
-    color: #000;
-    background: #ffd400;
+    color: ${props => getTextColor(props.color)};
+    background: ${props => props.color};
     border-radius: 4px;
     text-align: center;
     padding: 2px 10px;
@@ -31,8 +32,13 @@ const StyledBadge = styled.div`
         animation: ${animation} ${BLINK_DURATION_IN_SECONDS}s;
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
+const NumberBadge = ThemeConsumer(({theme, isBlinking, count}) => {
+    return (<StyledBadge color={theme?.color?.accent || '#ffd400'} blink={isBlinking}>
+                {count}
+            </StyledBadge>);
+});
 
-export const SelectedTab = LocaleConsumer(({ num, messageKey }) => {
+export const SelectedTab = ({ num, messageKey }) => {
     const [isBlinking, setBlinking] = useState(true);
     // Prevents blinking when flyout is hidden and shown again.
     useEffect(() => {
@@ -43,12 +49,10 @@ export const SelectedTab = LocaleConsumer(({ num, messageKey }) => {
     return (
         <React.Fragment>
             <Message messageKey={messageKey} />
-            <StyledBadge blink={isBlinking}>
-                {num}
-            </StyledBadge>
+            <NumberBadge isBlinking={isBlinking} count={num} />
         </React.Fragment>
     );
-});
+};
 
 SelectedTab.propTypes = {
     num: PropTypes.number.isRequired,
