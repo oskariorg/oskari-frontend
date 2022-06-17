@@ -19,17 +19,15 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {String} title Icon tooltip
  * @param {Number} size Font size in pixels
  * @param {Object} style Additional styles
- * @param {Function} onClick onClick
  * @returns 
  */
-export const Info = ({ children, title, size = 16, style, onClick }) => {
+export const Info = ({ children, title, size = 16, style }) => {
 
     return (
         <Tooltip title={title || children}>
             <StyledInfoIcon
                 className='t_icon t_info'
                 style={{ fontSize: `${size}px`, ...style }}
-                onClick={onClick}
             />
         </Tooltip>
     );
@@ -38,6 +36,5 @@ export const Info = ({ children, title, size = 16, style, onClick }) => {
 Info.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     size: PropTypes.number,
-    style: PropTypes.object,
-    onClick: PropTypes.func
+    style: PropTypes.object
 };
