@@ -15,6 +15,9 @@ const ThemeContext = React.createContext();
  *         <SomeThemeConsumerComponent />
  *     </ThemeProvider>
  * );
+ * 
+ * The value can be omitted for provider. 
+ * This makes the provider use Oskari.app.getTheming().getTheme() AND listen to changes at runtime.
  */
 export const ThemeProvider = ({value, children}) => {
     if (value) {

@@ -130,10 +130,9 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const removeWindow = () => REGISTER.clear(key);
     const bringToTop = createBringToTop(element);
     const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
-    const THEMING = Oskari.app.getTheming();
     const render = (title, content) => {
         ReactDOM.render(
-            <ThemeProvider value={THEMING.getTheme()}>
+            <ThemeProvider>
                 <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
                 </Popup>
@@ -177,9 +176,11 @@ export const showFlyout = (title, content, onClose, options = {}) => {
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
         ReactDOM.render(
-            <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
-                {content}
-            </Flyout>, element);
+            <ThemeProvider>
+                <Flyout title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
+                    {content}
+                </Flyout>
+            </ThemeProvider>, element);
     };
     render(title, content);
     return  {
@@ -206,9 +207,11 @@ export const showBanner = (content, onClose, options = {}) => {
 
     const render = (content) => {
         ReactDOM.render(
-            <Banner onClose={removeWindow} options={options}>
-                {content}
-            </Banner>, element);
+            <ThemeProvider>
+                <Banner onClose={removeWindow} options={options}>
+                    {content}
+                </Banner>
+            </ThemeProvider>, element);
     };
     render(content);
     return  {
