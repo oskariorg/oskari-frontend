@@ -53,24 +53,12 @@ const LayerTools = ({ model, controller }) => {
     const statusOnClick =
         backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
 
-    const metadataUuid = model.getMetadataIdentifier();
-    const subMetadataUuids = [];
-    if (model.getSubLayers()) {
-        model.getSubLayers().forEach(subLayer => {
-            const subUuid = subLayer.getMetadataIdentifier();
-            if (subUuid && subUuid !== metadataUuid && !subMetadataUuids.includes[subUuid]) {
-                subMetadataUuids.push(subUuid);
-            }
-        });
-    }
-
     return (
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <MetadataIcon
-                metadataId={metadataUuid}
-                subMetadataIds={subMetadataUuids}
+                metadataId={model.getMetadataIdentifier()}
             />
         </Tools>
     );

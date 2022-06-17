@@ -16,24 +16,18 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
 
 /**
  * @param {Number} metadataId Metadata ID
- * @param {Array} subMetadataIds
  * @param {String} title Icon tooltip
  * @param {Number} size Font size in pixels
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Metadata = ({ metadataId, subMetadataIds, title, size = 16, style }) => {
+export const Metadata = ({ metadataId, title, size = 16, style }) => {
 
     if (!metadataId) return null;
 
     const onClick = () => {
-        const subMetadata = [];
-        if (subMetadataIds && subMetadataIds.length > 0) {
-            subMetadata = subMetadataIds.map(sub => ({uuid: sub}));
-        }
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
-            {uuid: metadataId},
-            subMetadata
+            {uuid: metadataId}
     ]);
     };
 
@@ -50,7 +44,6 @@ export const Metadata = ({ metadataId, subMetadataIds, title, size = 16, style }
 
 Metadata.propTypes = {
     metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    subMetadataIds: PropTypes.array,
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     size: PropTypes.number,
     style: PropTypes.object
