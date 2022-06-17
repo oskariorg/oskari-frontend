@@ -22,10 +22,10 @@ const StyledInfoIcon = styled(QuestionCircleOutlined)`
  * @param {Function} onClick onClick
  * @returns 
  */
-export const Info = ({ title, size = 16, style, onClick }) => {
+export const Info = ({ children, title, size = 16, style, onClick }) => {
 
     return (
-        <Tooltip title={title}>
+        <Tooltip title={title || children}>
             <StyledInfoIcon
                 className='t_icon t_info'
                 style={{ fontSize: `${size}px`, ...style }}

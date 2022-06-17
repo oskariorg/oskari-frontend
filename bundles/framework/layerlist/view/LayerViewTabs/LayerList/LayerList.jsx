@@ -85,7 +85,9 @@ const LayerList = React.forwardRef((props, ref) => {
                 </Column>
                 <div>
                     <InfoContainer>
-                        <InfoIcon title={<Message messageKey='filter.search.tooltip'/>} size={20} />
+                        <InfoIcon size={20}>
+                            <Message messageKey='filter.search.tooltip'/>
+                        </InfoIcon>
                     </InfoContainer>
                 </div>
                 <div>

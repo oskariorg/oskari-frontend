@@ -16,12 +16,11 @@ const StyledMetadataIcon = styled(InfoCircleOutlined)`
 
 /**
  * @param {Number} metadataId Metadata ID
- * @param {String} title Icon tooltip
  * @param {Number} size Font size in pixels
  * @param {Object} style Additional styles
  * @returns 
  */
-export const Metadata = ({ metadataId, title, size = 16, style }) => {
+export const Metadata = ({ metadataId, size = 16, style }) => {
 
     if (!metadataId) return null;
 
@@ -32,19 +31,16 @@ export const Metadata = ({ metadataId, title, size = 16, style }) => {
     };
 
     return (
-        <Tooltip title={title}>
-            <StyledMetadataIcon
-                className='t_icon t_metadata'
-                style={{ fontSize: `${size}px`, ...style }}
-                onClick={onClick}
-            />
-        </Tooltip>
+        <StyledMetadataIcon
+            className='t_icon t_metadata'
+            style={{ fontSize: `${size}px`, ...style }}
+            onClick={onClick}
+        />
     );
 };
 
 Metadata.propTypes = {
     metadataId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     size: PropTypes.number,
     style: PropTypes.object
 };
