@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { WarningIcon } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerIcon } from '../../../LayerIcon';
-import { InfoIcon } from 'oskari-ui/components/icons';
+import { MetadataIcon } from 'oskari-ui/components/icons';
 
 const Tools = styled('div')`
     display: flex;
@@ -53,15 +53,25 @@ const LayerTools = ({ model, controller }) => {
     const statusOnClick =
         backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
 
+    const metadataUuid = model.getMetadataIdentifier();
+    const subMetadataUuids = [];
+    if (model.getSubLayers()) {
+        model.getSubLayers().forEach(subLayer => {
+            const subUuid = subLayer.getMetadataIdentifier();
+            if (subUuid && subUuid !== metadataUuid && !subMetadataUuids.includes[subUuid]) {
+                subMetadataUuids.push(subUuid);
+            }
+        });
+    }
+
     return (
         <Tools className="layer-tools">
             {reason && <WarningIcon tooltip={reason.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
-            {(model.getMetadataIdentifier() || hasSubLayerMetadata(model)) && (
-                <InfoIcon
-                    onClick={() => controller.showLayerMetadata(model)}
-                />
-            )}
+            <MetadataIcon
+                metadataId={metadataUuid}
+                subMetadataIds={subMetadataUuids}
+            />
         </Tools>
     );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 
 
-const StyledInfoIcon = styled(InfoCircleOutlined)`
+const StyledInfoIcon = styled(QuestionCircleOutlined)`
     cursor: pointer;
     color: #0290ff;
     border-radius: 50%;
