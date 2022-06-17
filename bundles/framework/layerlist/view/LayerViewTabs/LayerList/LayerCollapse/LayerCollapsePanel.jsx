@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
-import { QuestionCircleOutlined } from '@ant-design/icons';
 import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import { LayerCountBadge } from './LayerCountBadge';
@@ -9,18 +8,13 @@ import { AllLayersSwitch } from './AllLayersSwitch';
 import { GroupToolRow } from './GroupToolRow';
 import { LAYER_GROUP_TOGGLE_LIMIT } from '../../../../constants';
 import styled from 'styled-components';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 /* ----- Group tools ------------- */
 const StyledCollapsePanelTools = styled.div`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-`;
-
-const StyledInfoIcon = styled(QuestionCircleOutlined)`
-    font-size: 20px;
-    margin-right: 5px;
-    color: #979797;
 `;
 
 // Memoed based on layerCount, allLayersOnMap and group.unfilteredLayerCount
@@ -40,9 +34,11 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
     return (
         <StyledCollapsePanelTools>
             {group.description && (
-                <Tooltip title={group.description}>
-                    <StyledInfoIcon />
-                </Tooltip>
+                <InfoIcon
+                    title={group.description}
+                    size={20}
+                    style={{ marginRight: '5px', marginTop: '2px' }}
+                />
             )}
             <LayerCountBadge
                 layerCount={layerCount}

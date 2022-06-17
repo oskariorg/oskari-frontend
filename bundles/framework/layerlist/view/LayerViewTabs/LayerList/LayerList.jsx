@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
-import { Spin, Tooltip, Message } from 'oskari-ui';
+import { Spin, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
@@ -12,7 +12,7 @@ import { Alert } from './Alert';
 import { CreateTools } from './CreateTools';
 import { GroupingOption } from '../../../model/GroupingOption';
 import styled from 'styled-components';
-import { QuestionCircleOutlined } from '@ant-design/icons';
+import { InfoIcon } from 'oskari-ui/components/icons';
 
 const Column = styled('div')`
     display: flex;
@@ -40,9 +40,7 @@ const ControlsRow = styled(Row)`
     }
 `;
 
-const InfoIcon = styled(QuestionCircleOutlined)`
-    color: #979797;
-    font-size: 20px;
+const InfoContainer = styled('div')`
     margin-top: 5px;
 `;
 
@@ -86,9 +84,11 @@ const LayerList = React.forwardRef((props, ref) => {
                     </ControlsRow>
                 </Column>
                 <div>
-                    <Tooltip title={<Message messageKey='filter.search.tooltip'/>}>
-                        <InfoIcon />
-                    </Tooltip>
+                    <InfoContainer>
+                        <InfoIcon size={20}>
+                            <Message messageKey='filter.search.tooltip'/>
+                        </InfoIcon>
+                    </InfoContainer>
                 </div>
                 <div>
                     <CreateTools tools={createTools} />
