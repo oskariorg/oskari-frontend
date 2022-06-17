@@ -29,7 +29,7 @@ export const Metadata = ({ metadataId, subMetadataIds, title, size = 16, style }
     const onClick = () => {
         const subMetadata = [];
         if (subMetadataIds && subMetadataIds.length > 0) {
-            subMetadataIds.map(sub => ({uuid: sub}));
+            subMetadata = subMetadataIds.map(sub => ({uuid: sub}));
         }
         Oskari.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [
             {uuid: metadataId},
