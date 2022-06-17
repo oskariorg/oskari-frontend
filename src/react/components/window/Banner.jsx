@@ -54,8 +54,8 @@ export const Banner = ThemeConsumer(({ children, onClose, options, theme }) => {
         color: headerTheme.getBgColor()
     };
     const iconContainerProps = {
-        iconColor: headerTheme.getToolIconColor(),
-        hoverColor: headerTheme.getToolIconHoverColor(),
+        iconColor: headerTheme.getToolColor(),
+        hoverColor: headerTheme.getToolHoverColor(),
     };
     return (
         <Container {...containerProps}>
