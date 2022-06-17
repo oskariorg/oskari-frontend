@@ -12,11 +12,23 @@ const ThemeContext = React.createContext();
  *
  * const Greeting = () => (
  *     <ThemeProvider value={Oskari.app.getTheming().getTheme()}>
- *         <SomeComponentUsingThemeProp />
+ *         <SomeThemeConsumerComponent />
  *     </ThemeProvider>
  * );
  */
-export const ThemeProvider = ThemeContext.Provider;
+export const ThemeProvider = ({value, children}) => {
+    if (value) {
+        return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    }
+    // default to Oskari.app.getTheming() and listening to changes
+    const theming = Oskari.app.getTheming();
+    const [theme, setTheme] = useState(theming.getTheme());
+    useEffect(() => {
+        // start listening changes and return listener removal fn for cleanup on unmount (so we don't keep adding listeners)
+        return Oskari.app.getTheming().addListener((newTheme) => setTheme(newTheme));
+    });
+    return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+};
 
 /**
  * @class ThemeConsumer
@@ -38,19 +50,13 @@ export const ThemeProvider = ThemeContext.Provider;
  */
 export function ThemeConsumer (Component) {
     const ThemeComponent = (props) => {
-        const theming = Oskari.app.getTheming();
-        const [theme, setTheme] = useState(theming.getTheme());
-        useEffect(() => {
-            // start listening changes and return listener removal fn for cleanup on unmount (so we don't keep adding listeners)
-            return Oskari.app.getTheming().addListener((newTheme) => setTheme(newTheme));
-        })
         return (
             <ThemeContext.Consumer>
-                { ignored => (<Component {...props} theme={theme} />)}
+                { value => (<Component {...props} theme={value} />)}
             </ThemeContext.Consumer>
         );
     };
     const name = Component.displayName || Component.name;
     ThemeComponent.displayName = `ThemeConsumer(${name})`;
     return ThemeComponent;
-}
+};
