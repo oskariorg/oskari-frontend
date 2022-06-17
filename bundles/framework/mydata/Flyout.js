@@ -8,7 +8,7 @@ import { FlyoutContent } from './FlyoutContent';
 import { PublishedMapsHandler } from './handler/PublishedMapsHandler';
 import { MyViewsHandler } from './handler/MyViewsHandler';
 import { PublishedMapsTab } from './view/PublishedMaps/PublishedMapsTab';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import './service/MyDataService';
 
 /**
@@ -152,18 +152,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
 
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'MyData' }}>
-                    <FlyoutContent loginStatus={this.getLoginStatus()}>
-                        <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
-                            {tabs.map(t => (
-                                <TabPane tab={<span className={ 't_tab t_' + t.id }>{t.title}</span>} key={t.id}>
-                                    <t.component
-                                        state={t.handler.getState()}
-                                        controller={t.handler.getController()}
-                                    />
-                                </TabPane>
-                            ))}
-                        </Tabs>
-                    </FlyoutContent>
+                    <ThemeProvider>
+                        <FlyoutContent loginStatus={this.getLoginStatus()}>
+                            <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
+                                {tabs.map(t => (
+                                    <TabPane tab={<span className={ 't_tab t_' + t.id }>{t.title}</span>} key={t.id}>
+                                        <t.component
+                                            state={t.handler.getState()}
+                                            controller={t.handler.getController()}
+                                        />
+                                    </TabPane>
+                                ))}
+                            </Tabs>
+                        </FlyoutContent>
+                    </ThemeProvider>
                 </LocaleProvider>
                 ,
                 flyout[0]
