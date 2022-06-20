@@ -37,7 +37,7 @@ const PanelToolContainer = React.memo(({group, layerCount, allLayersOnMap, opts 
                 <InfoIcon
                     title={group.description}
                     size={20}
-                    style={{ marginRight: '5px', marginTop: '2px' }}
+                    style={{ marginRight: '5px', marginTop: '3px' }}
                 />
             )}
             <LayerCountBadge
