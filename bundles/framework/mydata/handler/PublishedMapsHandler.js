@@ -27,6 +27,9 @@ class MapsHandler extends StateHandler {
     }
 
     showHtml (view) {
+        if (this.popupControls) {
+            this.popupCleanup();
+        }
         this.popupControls = showSnippetPopup(view, () => this.popupCleanup());
     }
 
