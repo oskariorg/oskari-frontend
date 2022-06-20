@@ -99,8 +99,8 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                         <Confirm
                             title={<Message messageKey='tab.confirm.deletePlace' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deletePlace(item.key)}
-                            okText={<Message messageKey='buttons.ok' />}
-                            cancelText={<Message messageKey='buttons.cancel' />}
+                            okText={<Message messageKey='buttons.delete' bundleKey='oskariui' />}
+                            cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui' />}
                             placement='bottomLeft'
                         >
                             <IconButton
