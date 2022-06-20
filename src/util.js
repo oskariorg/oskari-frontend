@@ -392,9 +392,6 @@ Oskari.util = (function () {
 
     util.getColorBrightness = function (color) {
         var r, g, b, brightness;
-        if (!color) {
-            return;
-        }
 
         if (color.match(/^rgb/)) {
             color = color.match(/rgba?\(([^)]+)\)/)[1];
