@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS } from './constants';
 
@@ -117,10 +117,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             }
             const content = (
                 <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                    <LayerViewTabs
-                        {...this.tabsHandler.getState()}
-                        opts={this.optsForUI}
-                        controller={this.tabsHandler.getController()}/>
+                    <ThemeProvider>
+                        <LayerViewTabs
+                            {...this.tabsHandler.getState()}
+                            opts={this.optsForUI}
+                            controller={this.tabsHandler.getController()}/>
+                    </ThemeProvider>
                 </LocaleProvider>
             );
             ReactDOM.render(content, this.container);
