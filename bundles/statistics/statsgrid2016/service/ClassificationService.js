@@ -228,6 +228,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 bounds = stats.getEqInterval(count);
             } else if (method === 'manual') {
                 bounds = this.getBoundsFallback(manualBounds, count, stats.min(), stats.max());
+                // TODO: handle base bound drag
+                return bounds;
             }
             const potentialBaseIndex = bounds.findIndex(bound => bound > base);
             const lastIndex = bounds.length - 1;
