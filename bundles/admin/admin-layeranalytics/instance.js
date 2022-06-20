@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
          */
         produceAnalyticsListData () {
             this.fetchLayerAnalytics(null, (result) => {
-                this.analyticsListData = []
+                this.analyticsListData = [];
                 for (const item in result) {
                     const itemLayer = this.mapLayerService.findMapLayer(item);
                     const title = itemLayer !== null ? itemLayer.getName() : item;
