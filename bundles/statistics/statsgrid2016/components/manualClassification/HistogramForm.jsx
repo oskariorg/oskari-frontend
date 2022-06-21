@@ -30,10 +30,10 @@ const Form = ({
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
-        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, onBoundChange);
+        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, onBoundChange, fractionDigits);
     });
     const { activeIndicator: { classification }, seriesStats, controller } = state;
-    const { method } = classification;
+    const { method, fractionDigits } = classification;
     const { methods } = editOptions;
     const { groups, bounds } = classifiedDataset;
 
