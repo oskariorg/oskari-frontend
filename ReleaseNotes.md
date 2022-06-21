@@ -1,5 +1,117 @@
 # Release Notes
 
+## 2.8.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/37?closed=1
+
+### Announcement functionality improvements
+
+- Announcements can now be localized by the admin
+- Announcement description content is now edited with a rich text editor instead of a plain text area
+- Admin can now select 3 types of announcements: title only, with description, with external link
+- Admin can select hour for the announcement date range (previously only dates)
+- Admin UI has been integrated to the end-user UI similar to map layer admin
+- Announcements that are not shown as popups are now shown with a new banner UI-component (previously user needed to browse the listing to see if there's anything new)
+- Announcements are now shown in Oskari-style popups instead of AntD-modals so they look more consistent compared to other UI-elements
+- Admin can now preview announcements
+
+### Map layers
+
+- Data providers are now handled in a similar way as layer groups and are available in `Oskari.mapframework.service.MapLayerService`
+- Data providers/layer groups can now have descriptions (improved admin UI and added tooltips for end-users)
+- Improved error handling in layerlist bundle
+- Implementation changed for how features are highlighted as hover effect (https://github.com/oskariorg/oskari-frontend/pull/1799)
+- Hover style is now inherited from feature style instead of defaulting to a hard-coded one
+
+### User generated data listings
+
+- New bundle `mydata` is a drop-in replacement for `personaldata` as a React-based rewrite (the "My data" functionality)
+- If your app pushed customized content to `personaldata` you will need to migrate to the new API but `personaldata` is still available (but is deprecated and will be removed in a future release)
+- Added created/updated fields for user generated items
+- User views and user account tabs can now be hidden by config. Also my indicators is no longer shown if the datasource for my indicators is not used by the instance.
+- API changed! Instead of using `PersonalData.AddTabRequest` you now use a service provided by the `mydata` bundle:
+
+```
+    const myDataService = Oskari.getSandbox().getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+    myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, new UserLayersHandler(this));
+```
+
+Where:
+- `userlayers` is the id for the tab
+- `this.loc('tab.title')` is the label for the tab that is shown to end-users
+- `UserLayersTab` is a React-component that handles state and controller props
+- `new UserLayersHandler(this)` is a class extending StateHandler from `oskari-ui/util` that will provide the state and controller props for the previous parameter
+
+See https://github.com/oskariorg/oskari-frontend/blob/12dba2584287985026eec3e7eb3a453a855d1d04/bundles/framework/myplacesimport/instance.js#L144-L160 for an example.
+
+### Thematic maps
+
+- Classification UI has been refactored
+- Metadata handling for indicators has been improved
+- Reset state now clears thematic maps properly
+- Improvements in data parsing for adding user generated indicators
+- Removing data from user generated indicator now updates UI choices for that indicator
+- My indicators tab in My data: indicator name now opens thematic maps so user can more easily add the indicator on the map.
+
+### Usability
+
+- Some clickable elements have been changed to buttons in DOM and cursors are changed for draggable windows, clickable buttons/icons.
+- Major state change in application (like reset/useState for whole app) now triggers `UIChangeEvent` (for cleanup before state is changed) and a new event `StateChangedEvent` after state has been changed. This can be used by RPC-applications to detect state reset by built-in buttons: https://github.com/oskariorg/oskari-frontend/pull/1874
+
+### Bug fixes
+
+- `layeranalytics` data is no longer duplicated on UI when reopening the flyout
+- Duplicated id-parameter on proxied WMS-urls has been removed
+- GFI is no longer queried for layers with opacity 0
+- Fixed an issue where editing a measurement feature could result in multiple measurement result windows for a single geometry
+
+### Theming
+
+Initial theming support for React-based UI-components like Flyout/Popup/Banner (Note! Most flyouts are still jQuery-based).
+Also affects the "selected layers badge" for layer count and tool hover-color in `mydata`.
+This is still very much work-in-progress and subject to change as we fine-tune what can be customized by theming etc.
+We would also appreciate any input and feedback for this.
+
+For testing you can add this kind of snippet in your apps main.js or run this in the browser dev-console:
+```
+Oskari.app.getTheming().setTheme({
+    color: {
+        icon: '#FFFFFF',
+        accent: '#0c3c62',
+        primary: '#009fe3'
+    }
+});
+```
+
+At this point most of the structure can be omitted (using default values instead) and reseting to default can be done by calling `setTheme()`.
+The goal is to make the theme serializable as JSON so it could be saved to DB/given through RPC etc.
+But to make it easier to use in code there's a helper that is currently located in `oskari-ui/theme/ThemeHelper`
+that can for example generate a sensible header text color based on the primary color etc.
+
+An example for making React-components "theme-aware": https://github.com/oskariorg/oskari-frontend/pull/1886
+
+### New components to be used in apps (under `oskari-ui`)
+
+- `TextEditor` (draft.js based rich text editor)
+- `PrimaryButton`/`SecondaryButton` that include localization for common buttons
+- `DeleteButton` (includes confirmation popup/reduces boilerplate in actual code)
+- `IconButton` for replacing clickable divs that hold an icon with button
+- `Link` for showing links in a consistent way across the UI
+- `Pagination`
+- icons: `InfoIcon`, `MetadataIcon` from `oskari-ui/components/icons`
+
+### Improvements to components
+- New `showBanner()` has been added next to `showPopup()` and `showFlyout()` in `oskari-ui/components/window`.
+- These React-based window-instances are now "managed" so they can be closed externally.
+- React-based windows are now closed automatically when `UIChangeEvent` is triggered.
+- React popup now handles long titles properly
+- React popup now recognizes positional flags instead of always opening centered on screen: https://github.com/oskariorg/oskari-frontend/pull/1836
+- ErrorBoundary can now include debug info controlled by the developer
+- LocalizationComponent is now much easier to use and required less boilerplate code
+- Added a bunch of CSS-selector classes for Selenium testing (prefixed by `t_`) that are always added when using the common components.
+- `GenericForm`, `DateRange`, `ColorPicker`, `Modal` are no longer direct exports of `oskari-ui` to reduce amount of referenced code/optimize min.js. When needed import them with `oskari-ui/components/ColorPicker` etc.
+
 ## 2.7.1
 
 For a full list of changes see:
