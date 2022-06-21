@@ -43,7 +43,7 @@ Where:
 - `UserLayersTab` is a React-component that handles state and controller props
 - `new UserLayersHandler(this)` is a class extending StateHandler from `oskari-ui/util` that will provide the state and controller props for the previous parameter
 
-See https://github.com/oskariorg/oskari-frontend/blob/12dba2584287985026eec3e7eb3a453a855d1d04/bundles/framework/myplacesimport/instance.js#L144-L160 for an example.
+See example: https://github.com/oskariorg/oskari-frontend/blob/12dba2584287985026eec3e7eb3a453a855d1d04/bundles/framework/myplacesimport/instance.js#L144-L160
 
 ### Thematic maps
 
@@ -107,8 +107,8 @@ An example for making React-components "theme-aware": https://github.com/oskario
 - React-based windows are now closed automatically when `UIChangeEvent` is triggered.
 - React popup now handles long titles properly
 - React popup now recognizes positional flags instead of always opening centered on screen: https://github.com/oskariorg/oskari-frontend/pull/1836
-- ErrorBoundary can now include debug info controlled by the developer
-- LocalizationComponent is now much easier to use and required less boilerplate code
+- `ErrorBoundary` can now include debug info controlled by the developer
+- `LocalizationComponent` is now much easier to use and required less boilerplate code
 - Added a bunch of CSS-selector classes for Selenium testing (prefixed by `t_`) that are always added when using the common components.
 - `GenericForm`, `DateRange`, `ColorPicker`, `Modal` are no longer direct exports of `oskari-ui` to reduce amount of referenced code/optimize min.js. When needed import them with `oskari-ui/components/ColorPicker` etc.
 
