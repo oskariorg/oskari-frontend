@@ -17,7 +17,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, changeCallback) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, changeCallback, fractionDigits) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -83,10 +83,10 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
             return null;
         }
         if (parsed < x.domain()[0]) {
-            return x.domain()[0];
+            return null;
         }
         if (parsed > x.domain()[1]) {
-            return x.domain()[1];
+            return null;
         }
         return parsed;
     };
@@ -102,12 +102,12 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
             if (validated === null) {
                 return;
             }
-            handlesData.find(isSelected).value = validated;
+            selected.value = validated;
             update(true);
-            notify();
         })
         .on('blur', () => {
             update();
+            notify();
         });
 
     function update (skipInput) {
@@ -119,11 +119,12 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         }
 
         // VALUE INPUT
-        const selectedvalue = handlesData.find(isSelected).value;
-        valueInput.property('value', selectedvalue).classed('fail', false);
+        const { value } = selected;
+        const fixed = typeof value === 'number' ? value.toFixed(fractionDigits) : value;
+        valueInput.property('value', fixed).classed('fail', false);
 
         // VALUE INPUT GUIDE BOX
-        inputGuide(guide, x, 50, histoHeight + 50, x(selectedvalue));
+        inputGuide(guide, x, 50, histoHeight + 50, x(value));
     }
     update();
 }
