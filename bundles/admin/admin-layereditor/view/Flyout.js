@@ -42,9 +42,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!layer) {
             this.uiHandler.resetForm();
         } else {
-            const id = layer.getId();
-            this.uiHandler.fetchLayer(id);
-            this.uiHandler.showLayerCoverage(id);
+            this.uiHandler.fetchLayer(layer.getId());
         }
     }
     setDataProviders (dataProviders) {
@@ -119,6 +117,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
-        this.uiHandler.clearLayerCoverage();
+        this.uiHandler.resetMap();
     }
 }

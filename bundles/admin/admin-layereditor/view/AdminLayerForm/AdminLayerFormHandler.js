@@ -488,6 +488,7 @@ class UIHandler extends StateHandler {
     }
 
     resetForm () {
+        this.resetMap();
         const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -499,6 +500,7 @@ class UIHandler extends StateHandler {
     }
 
     resetLayer (keepCapabilities) {
+        this.resetMap();
         const typesAndRoles = this.getAdminMetadata();
         const newState = {
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -509,6 +511,10 @@ class UIHandler extends StateHandler {
             newState.capabilities = {};
         }
         this.updateState(newState);
+    }
+
+    resetMap () {
+        this.clearLayerCoverage();
     }
 
     ajaxStarted () {
@@ -1148,6 +1154,7 @@ class UIHandler extends StateHandler {
         }).then(response => response.json())
             .then(({ coverage }) => {
                 if (!coverage) {
+                    Messaging.info(getMessage('messages.noCoverage'));
                     this.clearLayerCoverage();
                     return;
                 }
@@ -1157,9 +1164,10 @@ class UIHandler extends StateHandler {
                     layerId: COVERAGE_LAYER
                 };
                 Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
-            }).catch(() => {
+            }).catch((error) => {
+                Messaging.error(getMessage('messages.errorFetchCoverage'));
+                this.log.error(`Failed to get layer coverage for id: ${id}`, error);
                 this.clearLayerCoverage();
-                this.log.warn(`Failed to get layer coverage for id: ${id}`);
             });
     }
 }
@@ -1212,6 +1220,8 @@ const wrapped = controllerMixin(UIHandler, [
     'togglePermission',
     'updateCapabilities',
     'versionSelected',
-    'showLayerMetadata'
+    'showLayerMetadata',
+    'clearLayerCoverage',
+    'showLayerCoverage'
 ]);
 export { wrapped as AdminLayerFormHandler };
