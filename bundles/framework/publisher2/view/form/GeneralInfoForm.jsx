@@ -33,6 +33,7 @@ export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
                         setName(e.target.value)
                         onChange(e)
                     }}
+                    placeholder={data.name.placeholder}
                 />
                 <InfoIcon><Message messageKey='BasicView.name.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
             </FieldWithInfo>
@@ -46,6 +47,7 @@ export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
                         setDomain(e.target.value)
                         onChange(e)
                     }}
+                    placeholder={data.domain.placeholder}
                 />
                 <InfoIcon><Message messageKey='BasicView.domain.tooltip' bundleKey={BUNDLE_KEY} /></InfoIcon>
             </FieldWithInfo>
