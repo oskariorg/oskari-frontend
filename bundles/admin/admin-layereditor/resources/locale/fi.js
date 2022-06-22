@@ -44,6 +44,7 @@ Oskari.registerLocalization(
                 "realtime": "Reaaliaikataso",
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
+                "coverage":"Näytä karttatason kattavuusalue kartalla",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
@@ -199,7 +200,9 @@ Oskari.registerLocalization(
                 "updateCapabilitiesFail": "Rajapinnan tietojen haku epäonnistui. Tason osoite, tyyppi tai versio voi olla väärin tai rajapinta on tällä hetkellä pois käytöstä.",
                 "errorFetchLayerFailed": "Tason tietojen haku epäonnistui. Taso on mahdollisesti poistettu tai sinulla ei ole siihen oikeuksia.",
                 "errorFetchLayerEnduserFailed": "Tason tietojen haku listauksen päivittämistä varten epäonnistui. Tallensithan katseluoikeuden roolille joka sinulla on?",
-                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät."
+                "deleteErrorGroupHasSubgroups": "Ryhmä jota yrität poistaa sisältää aliryhmiä. Poista ensin aliryhmät.",
+                "errorFetchCoverage": "Palvelusta ei saatu haettua karttatason kattavuusaluetta.",
+                "noCoverage": "Karttatason kattavuutta ei ole rajoitettu."
             },
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
