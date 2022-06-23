@@ -12,11 +12,13 @@ const FieldWithInfo = styled('div')`
 
 const BUNDLE_KEY = 'Publisher2';
 
-export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
+export const GeneralInfoForm = ({ onChange, data }) => {
 
-    const [name, setName] = useState(data.name.value ? data.name.value : null);
-    const [domain, setDomain] = useState(data.domain.value ? data.domain.value : null);
-    const [language, setLanguage] = useState( data.language.value ? data.language.value : Oskari.getLang());
+    const [state, setState] = useState({
+        name: data.name.value ? data.name.value : null,
+        domain: data.domain.value ? data.domain.value : null,
+        language: data.language.value ? data.language.value : Oskari.getLang()
+    })
 
     const languages = Oskari.getSupportedLanguages();
 
@@ -27,11 +29,14 @@ export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
                     type='text'
                     label={<Message messageKey='BasicView.name.label' bundleKey={BUNDLE_KEY} />}
                     name='name'
-                    value={name}
+                    value={state.name}
                     mandatory={true}
                     onChange={(e) => {
-                        setName(e.target.value)
-                        onChange(e)
+                        setState({
+                            ...state,
+                            name: e.target.value
+                        });
+                        onChange('name', e.target.value);
                     }}
                     placeholder={data.name.placeholder}
                 />
@@ -42,10 +47,13 @@ export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
                     type='text'
                     label={<Message messageKey='BasicView.domain.label' bundleKey={BUNDLE_KEY} />}
                     name='domain'
-                    value={domain}
+                    value={state.domain}
                     onChange={(e) => {
-                        setDomain(e.target.value)
-                        onChange(e)
+                        setState({
+                            ...state,
+                            domain: e.target.value
+                        });
+                        onChange('domain', e.target.value);
                     }}
                     placeholder={data.domain.placeholder}
                 />
@@ -57,10 +65,13 @@ export const GeneralInfoForm = ({ languageChange, onChange, data }) => {
             <FieldWithInfo>
                 <Select
                     name='language'
-                    value={language}
+                    value={state.language}
                     onChange={(lang) => {
-                        setLanguage(lang)
-                        languageChange(lang)
+                        setState({
+                            ...state,
+                            language: lang
+                        });
+                        onChange('language', lang);
                     }}
                 >
                     {languages.map(lang => (

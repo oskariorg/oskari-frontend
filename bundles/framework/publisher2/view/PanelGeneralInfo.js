@@ -97,11 +97,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 me.fields.language.value = selectedLang;
             }
         },
-        languageChange: function (lang) {
-            this.fields.language.value = lang;
-        },
-        onChange: function (e) {
-            this.fields[e.target.name].value = e.target.value;
+        onChange: function (key, value) {
+            this.fields[key].value = value;
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -117,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 contentPanel = panel.getContainer();
 
             ReactDOM.render(
-                <GeneralInfoForm languageChange={(lang) => this.languageChange(lang)} onChange={(e) => this.onChange(e)} data={this.fields} />,
+                <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />,
                 contentPanel[0]
             );
 
