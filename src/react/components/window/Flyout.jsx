@@ -65,13 +65,14 @@ const Title = styled.h3`
 `;
 const ToolsContainer = styled.div`
     float: right;
-    margin-right: 25px;
+    margin-right: 15px;
     height: 16px;
     display: inline-block;
-    margin-top: 12px;
+    margin-top: 6px;
     /* Size and color for tool icons from AntD: */
     font-size: ${ICON_SIZE}px;
     > button {
+        margin-top: -5px;
         color: ${props => props.iconColor};
     }
     > button:hover {

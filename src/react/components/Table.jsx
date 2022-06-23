@@ -13,6 +13,10 @@ const StyledToolsContainer = styled('div')`
     a {
         cursor: pointer;
     }
+    button {
+        width: 24px;
+        height: 24px;
+    }
 `;
 
 const StyledTable = styled(AntTable)`

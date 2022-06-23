@@ -6,11 +6,12 @@ import { ThemeConsumer } from '../../util';
 import { getColorEffect } from '../../theme/ThemeHelper';
 import styled from 'styled-components';
 
+// Note! AntD buttons default at 32x32px
+//  If the font-size of the icon is > 32px it will be clipped by at least Safari
+//  Let the user of this component define the size of the button instead of doing it here.
 const StyledButton = styled(Button)`
     border: none;
     background: none;
-    width: 16px;
-    height: 16px;
     &:hover {
         color: ${props => props.color};
         background: none;
