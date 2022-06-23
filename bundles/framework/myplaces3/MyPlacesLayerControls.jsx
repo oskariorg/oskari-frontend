@@ -26,7 +26,7 @@ const StyledSelect = styled(Select)`
 
 const StyledActions = styled('div')`
     display: flex;
-    button: {
+    button {
         margin-left: 5px;
     }
 `;
