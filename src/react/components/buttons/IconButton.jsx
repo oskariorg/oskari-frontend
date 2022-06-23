@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '../Button';
 import { Tooltip } from '../Tooltip';
 import { ThemeConsumer } from '../../util';
-import { getColorEffect } from '../../theme/ThemeHelper';
+import { getColorEffect, EFFECT } from '../../theme';
 import styled from 'styled-components';
 
 // Note! AntD buttons default at 32x32px
@@ -26,7 +26,7 @@ const ThemeButton = ThemeConsumer(({ theme, ...rest }) => {
     if (!color) {
         color = '#ffd400';
     } else if (Oskari.util.isDarkColor(color)) {
-        color = getColorEffect(color);
+        color = getColorEffect(color, EFFECT.LIGHTEN);
     }
     return <StyledButton color={color} { ...rest }/>
 });

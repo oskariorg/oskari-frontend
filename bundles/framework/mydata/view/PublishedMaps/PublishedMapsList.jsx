@@ -1,22 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Message, Confirm } from 'oskari-ui'
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
+import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons'
 import styled from 'styled-components';
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '16px'
-};
 
 const ICON_STYLE = {
     fontSize: '16px'
 };
-
-
 
 const StyledTable = styled(Table)`
     tr {
@@ -122,19 +114,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
                             title={<Message messageKey='tabs.publishedmaps.grid.edit' />}
                             onClick={() => controller.editView(item)}
                         />
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <IconButton
-                                className='t_delete'
-                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
-                                title={<Message messageKey='tabs.publishedmaps.grid.delete' />}
-                            />
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 );
             }

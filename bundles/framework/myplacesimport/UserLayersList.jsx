@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, Confirm } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
+import { EditOutlined } from '@ant-design/icons'
 import styled from 'styled-components';
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 const StyledTable = styled(Table)`
     tr {
@@ -17,11 +16,6 @@ const StyledTable = styled(Table)`
         }
     }
 `;
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '16px'
-};
 
 const EDIT_ICON_STYLE = {
     fontSize: '16px'
@@ -75,19 +69,11 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editUserLayer(item.key)}
                         />
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tab.confirmDeleteMsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteUserLayer(item.key)}
-                            okText={<Message messageKey='tab.buttons.ok' />}
-                            cancelText={<Message messageKey='tab.buttons.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <IconButton
-                                className='t_delete'
-                                title={<Message messageKey='tab.grid.remove' />}
-                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
-                            />
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 );
             }

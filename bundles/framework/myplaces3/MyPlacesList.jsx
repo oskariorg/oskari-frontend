@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Confirm } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { red } from '@ant-design/colors';
-import { IconButton } from 'oskari-ui/components/buttons';
-
-
-const DELETE_ICON_STYLE = {
-    fontSize: '16px',
-    color: red.primary
-};
+import { EditOutlined } from '@ant-design/icons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
     fontSize: '16px'
@@ -96,19 +89,11 @@ export const MyPlacesList = ({data = [], loading, controller }) => {
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editPlace(item.key)}
                         />
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tab.confirm.deletePlace' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deletePlace(item.key)}
-                            okText={<Message messageKey='buttons.delete' bundleKey='oskariui' />}
-                            cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui' />}
-                            placement='bottomLeft'
-                        >
-                            <IconButton
-                                className='t_delete'
-                                title={<Message messageKey='tab.grid.delete' />}
-                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
-                            />
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 );
             }

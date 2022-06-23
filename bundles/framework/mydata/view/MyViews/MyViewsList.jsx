@@ -1,18 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm } from 'oskari-ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Message, Checkbox } from 'oskari-ui';
+import { EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { red } from '@ant-design/colors';
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
     fontSize: '16px'
 };
 
@@ -81,19 +75,11 @@ export const MyViewsList = ({ controller, loading, data = [] }) => {
                             icon={<EditOutlined style={EDIT_ICON_STYLE} />}
                             onClick={() => controller.editView(item)}
                         />
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteView(item)}
-                            okText={<Message messageKey='tabs.myviews.button.ok' />}
-                            cancelText={<Message messageKey='tabs.myviews.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <IconButton
-                                className='t_delete'
-                                title={<Message messageKey='tabs.myviews.grid.delete' />}
-                                icon={<DeleteOutlined style={DELETE_ICON_STYLE} />}
-                            />
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 )
             }

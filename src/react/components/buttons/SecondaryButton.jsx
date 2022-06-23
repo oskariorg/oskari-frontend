@@ -9,5 +9,5 @@ export const SecondaryButton = ({ type, ...other }) => (
 );
 
 SecondaryButton.propTypes = {
-    type: PropTypes.oneOf(['close', 'no', 'cancel', 'previous', 'delete']),
+    type: PropTypes.oneOf(['close', 'no', 'cancel', 'previous', 'delete']).isRequired
 };

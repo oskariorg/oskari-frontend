@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Confirm, Message, Button } from 'oskari-ui';
+import { Message, Button } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors';
+import { EditOutlined } from '@ant-design/icons'
 import styled from 'styled-components';
-import { IconButton } from 'oskari-ui/components/buttons';
+import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
 
 const StyledTable = styled(Table)`
     tr {
@@ -23,11 +22,6 @@ const ButtonContainer = styled.div`
     display: flex;
     justify-content: flex-end;
 `;
-
-const deleteIconStyle = {
-    fontSize: '16px',
-    color: red.primary
-};
 
 const editIconStyle = {
     fontSize: '16px'
@@ -77,19 +71,11 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                             icon={<EditOutlined style={editIconStyle} />}
                             onClick={() => controller.editIndicator(item)}
                         />
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tab.popup.deletemsg' messageArgs={{ name: item.name }} />}
                             onConfirm={() => controller.deleteIndicator(item)}
-                            okText={<Message messageKey='tab.button.ok' />}
-                            cancelText={<Message messageKey='tab.button.cancel' />}
-                            placement='bottomLeft'
-                        >
-                            <IconButton
-                                className='t_delete'
-                                title={<Message messageKey='tab.grid.delete' />}
-                                icon={<DeleteOutlined style={deleteIconStyle} />}
-                            />
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 )
             }
