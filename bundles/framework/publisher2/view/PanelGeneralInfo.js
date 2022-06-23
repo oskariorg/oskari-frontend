@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { GeneralInfoForm } from './form/GeneralInfoForm';
+
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
  *
@@ -21,24 +25,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 label: localization.name.label,
                 placeholder: localization.name.placeholder,
                 helptags: 'portti,help,publisher,name',
-                tooltip: localization.name.tooltip
+                tooltip: localization.name.tooltip,
+                value: null
             },
             domain: {
                 label: localization.domain.label,
                 placeholder: localization.domain.placeholder,
                 helptags: 'portti,help,publisher,domain',
-                tooltip: localization.domain.tooltip
+                tooltip: localization.domain.tooltip,
+                value: null
+            },
+            language: {
+                value: null
             }
         };
-        this.langField = {
-            template: jQuery('<div class="field">' +
-                    '<div class="help icon-info" title="' + localization.language.tooltip + '" helptags="portti,help,publisher,language"></div>' +
-                    '<div class="language-select-wrapper"></div>' +
-                    '<div class="info-label"></div>' +
-                '</div>')
-        };
         this.panel = null;
-        this.domainWarningTemplate = jQuery('<div class="domain-warning"><div class="icon-warning-light"></div><div>' + this.loc.domain.inputWarning + '</div></div>');
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -51,48 +52,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             const me = this;
             let selectedLang = Oskari.getLang();
 
-            const domainValidatorKeyUpHandler = Oskari.util.throttle((event) => {
-                const domainWarningDivs = jQuery('.domain-warning');
-                if (domainWarningDivs.length === 0) {
-                    const domainWarning = me.domainWarningTemplate.clone();
-                    const fieldDivs = jQuery('.basic_publisher').find('.oskarifield');
-                    // if user clicks save/cancel before throttled function triggers
-                    // there will be no fields so we need to check for that
-                    if (fieldDivs.length > 1) {
-                        // domain field is the second one
-                        fieldDivs[1].append(domainWarning[0]);
-                    }
-                }
-                if (!event.target.value || Oskari.util.isValidDomain(event.target.value)) {
-                    jQuery('.domain-warning').hide();
-                } else {
-                    jQuery('.domain-warning').show();
-                }
-            }, 1000, { leading: false });
-
-            for (const fkey in me.fields) {
-                if (me.fields.hasOwnProperty(fkey)) {
-                    const data = me.fields[fkey];
-                    const field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
-                    field.getField().find('input').before('<br />');
-                    field.setLabel(data.label);
-                    field.setTooltip(data.tooltip, data.helptags);
-                    field.setPlaceholder(data.placeholder);
-
-                    if (fkey === 'domain') {
-                        field.bindUpKey(domainValidatorKeyUpHandler);
-                    }
-                    data.field = field;
-                }
-            }
-
-            me.fields.name.field.setRequired(true, me.loc.error.name);
-            me.fields.name.field.setValidator(function (inputField) {
-                const value = inputField.getValue();
-                const name = inputField.getName();
+            me.fields.name.validator = function (value) {
+                const name = 'name';
                 const errors = [];
-                inputField.setValue(value);
                 const sanitizedValue = Oskari.util.sanitize(value);
+                if (!value || !value.trim().length) {
+                    errors.push({
+                        field: name,
+                        error: me.loc.error.name
+                    });
+                    return errors;
+                }
                 if (sanitizedValue !== value) {
                     errors.push({
                         field: name,
@@ -101,14 +71,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     return errors;
                 }
                 return errors;
-            });
+            };
 
-            me.fields.domain.field.setContentCheck(true, me.loc.error.domainIllegalCharacters);
-            me.fields.domain.field.setValidator(function (inputField) {
-                const value = inputField.getValue();
-                const name = inputField.getName();
+            me.fields.domain.validator = function (value) {
+                const name = 'domain';
                 const errors = [];
-                if (value.indexOf('://') !== -1) {
+                if (value && value.indexOf('://') !== -1) {
                     errors.push({
                         field: name,
                         error: me.loc.error.domainStart
@@ -116,38 +84,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     return errors;
                 }
                 return errors;
-            });
-            me.fields.domain.field.getField().find('input').change(function () {
-                const input = jQuery(this);
-                if (input.val().indexOf('://') !== -1) {
-                    input.val(input.val().replace(/(^\w+:|^)\/\//, ''));
-                }
-            });
+            };
 
             if (pData.metadata) {
                 // set initial values
-                me.fields.domain.field.setValue(pData.metadata.domain);
-                me.fields.name.field.setValue(pData.metadata.name);
+                me.fields.domain.value = pData.metadata.domain;
+                me.fields.name.value = pData.metadata.name;
                 if (pData.metadata.language) {
                     // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
                     selectedLang = pData.metadata.language;
                 }
+                me.fields.language.value = selectedLang;
             }
-
-            // Create language select
-            const langField = Oskari.clazz.create('Oskari.userinterface.component.LanguageSelect');
-            const langElement = me.langField.template.clone();
-
-            langField.setValue(selectedLang);
-            // plugins should change language when user changes selection
-            langField.setHandler(function (value) {
-                me._languageChanged(value);
-            });
-            langElement.find('.language-select-wrapper').append(langField.getElement());
-            me.langField.field = langField;
-            me.langField.element = langElement;
-
-            me._languageChanged(selectedLang);
+        },
+        onChange: function (key, value) {
+            this.fields[key].value = value;
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -160,29 +111,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 return this.panel;
             }
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
-                contentPanel = panel.getContainer(),
-                fkey,
-                data;
+                contentPanel = panel.getContainer();
+
+            ReactDOM.render(
+                <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />,
+                contentPanel[0]
+            );
 
             panel.setTitle(this.loc.domain.title);
-            for (fkey in this.fields) {
-                if (this.fields.hasOwnProperty(fkey)) {
-                    data = this.fields[fkey];
-                    contentPanel.append(data.field.getField());
-                }
-            }
-            contentPanel.append(this.langField.element);
             this.panel = panel;
             return panel;
-        },
-        /**
-         * Show notification if selected language is different from the oskari's main language selection
-         * @param {String} value
-         */
-        _languageChanged: function (value) {
-            var me = this,
-                message = (value !== Oskari.getLang() ? me.loc.language.languageChangedDisclaimer : '');
-            jQuery(me.langField.element).find('div.info-label').html(message);
         },
         /**
          * Returns the selections the user has done with the form inputs.
@@ -205,10 +143,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {
                     data = this.fields[fkey];
-                    values.metadata[fkey] = data.field.getValue();
+                    values.metadata[fkey] = data.value;
                 }
             }
-            values.metadata.language = this.langField.field.getValue();
             return values;
         },
 
@@ -228,7 +165,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             for (fkey in this.fields) {
                 if (this.fields.hasOwnProperty(fkey)) {
                     data = this.fields[fkey];
-                    errors = errors.concat(data.field.validate());
+                    if (data.validator) {
+                        errors = errors.concat(data.validator(data.value));
+                    }
                 }
             }
             return errors;
