@@ -4,7 +4,6 @@ import { Table } from 'oskari-ui/components/Table';
 import { Button, Message, Space, Spin, Tooltip } from 'oskari-ui';
 import { DeleteButton } from 'oskari-ui/components/buttons';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { red } from '@ant-design/colors'
 
 const dateLocale = 'fi-FI';
 const localeDateOptions = {
