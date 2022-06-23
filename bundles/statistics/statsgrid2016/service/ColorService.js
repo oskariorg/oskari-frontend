@@ -64,21 +64,59 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return reverseColors ? [...set].reverse() : set;
         },
         getDividedColors: function (classification, bounds) {
-            const { count, color, reverseColors, base = 0 } = classification;
+            const { mapStyle, base = 0 } = classification;
+            const baseIndex = bounds.findIndex(bound => bound >= base);
+
+            if (mapStyle === 'points') {
+                return this._getDividedPoints(classification, baseIndex);
+            }
+            return this._getDividedChoropleth(classification, baseIndex);
+        },
+        _getDividedChoropleth: function (classification, baseIndex) {
+            const { count, color, reverseColors } = classification;
+
+            const neutral = count % 2; // has neutral color: 1 else: 0
+            const underBase = baseIndex;
+            const overBase = count - baseIndex - neutral;
+
+            const colorCount = Math.max(underBase, overBase) * 2 + neutral;
+            const colorset = [...this.getColorset(colorCount, color)];
+            if (reverseColors) {
+                colorset.reverse();
+            }
+            // colorset: dark - light - (neutral) - light - dark
+            // use darker colors
+            const colors = [];
+            for (let i = 0; i < underBase; i++) {
+                colors[i] = colorset[i];
+            }
+            if (neutral === 1) {
+                const neutralColorIndex = Math.floor(colorCount / 2);
+                colors[baseIndex] = colorset[neutralColorIndex];
+            }
+            const colorsCount = colorset.length;
+            for (let i = 1; i <= overBase; i++) {
+                colors[count - i] = colorset[colorsCount - i];
+            }
+            return colors;
+        },
+        _getDividedPoints: function (classification, baseIndex) {
+            const { count, color, reverseColors } = classification;
             const isEven = count % 2 === 0;
+
             const colorCount = isEven ? 2 : 3;
             const colorset = [...this.getColorset(colorCount, color)];
             if (reverseColors) {
                 colorset.reverse();
             }
-            const baseIndex = bounds.findIndex(bound => bound >= base);
+
             const colors = [];
             if (isEven) {
-                for (let i = 0; i < bounds.length - 1; i++) {
+                for (let i = 0; i < count; i++) {
                     colors[i] = i < baseIndex ? colorset[0] : colorset[1];
                 }
             } else {
-                for (let i = 0; i < bounds.length - 1; i++) {
+                for (let i = 0; i < count; i++) {
                     if (i === baseIndex) {
                         colors[i] = colorset[1];
                     } else {

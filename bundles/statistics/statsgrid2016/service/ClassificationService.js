@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < minData) {
                 return { error: 'noEnough' };
             }
-            const isDivided = opts.mapStyle === 'points' && opts.type === 'div';
+            const isDivided = opts.type === 'div';
             const { format } = Oskari.getNumberFormatter(opts.fractionDigits);
             var stats = new geostats(dataAsList);
             stats.silent = true;
