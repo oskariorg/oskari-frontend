@@ -44,6 +44,7 @@ Oskari.registerLocalization(
                 "realtime": "Real time layer",
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
+                "coverage":"Show map layer coverage on the map",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
@@ -198,7 +199,9 @@ Oskari.registerLocalization(
                 "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
                 "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
                 "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?",
-                "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first."
+                "deleteErrorGroupHasSubgroups": "The group you are trying to remove contains subgroups. Delete the subgroups first.",
+                "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
+                "noCoverage": "The map layer coverage isn't restricted."
             },
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
