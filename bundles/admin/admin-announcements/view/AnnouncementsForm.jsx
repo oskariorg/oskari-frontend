@@ -179,7 +179,7 @@ export const AnnouncementsForm = LocaleConsumer(({
 
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => onClose()}/>
-                {isEdit && <DeleteButton onConfirm={onDelete}/>}
+                {isEdit && <DeleteButton type='label' onConfirm={onDelete}/>}
                 <Tooltip title={tooltip}>
                     <PrimaryButton disabled={errorKeys.length > 0} type="save" onClick={onSubmitClick}/>
                 </Tooltip>

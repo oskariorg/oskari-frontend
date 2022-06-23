@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table } from 'oskari-ui/components/Table';
-import { Button, Confirm, Message, Space, Spin, Tooltip } from 'oskari-ui';
-import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Message, Space, Spin, Tooltip } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { red } from '@ant-design/colors'
 
 const dateLocale = 'fi-FI';
@@ -10,10 +11,6 @@ const localeDateOptions = {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit'
-};
-
-export const DELETE_ICON_STYLE = {
-    color: red.primary
 };
 
 const sorterTooltipOptions = {
@@ -104,14 +101,11 @@ export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallba
             title: '',
             key: 'remove',
             render: (text, entry, index) => (
-                <Confirm
+                <DeleteButton
+                    type='icon'
                     title={<Message messageKey='flyout.removeSingleDataForLayer' />}
-                    onConfirm={() => removeAnalyticsCallback(layerData.id, entry.time)}
-                    okText={<Message messageKey='flyout.delete' />}
-                    cancelText={<Message messageKey='flyout.cancel' />}
-                    placement='bottomLeft'>
-                    <DeleteOutlined style={ DELETE_ICON_STYLE } />
-                </Confirm>)
+                    onConfirm={() => removeAnalyticsCallback(layerData.id, entry.time)} />
+            )
         }
     ];
 

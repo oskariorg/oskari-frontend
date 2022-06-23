@@ -4,26 +4,13 @@ import { Message, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 import { Select, Button, Popover, Option } from 'oskari-ui';
 import { SecondaryButton, ButtonContainer, DeleteButton } from 'oskari-ui/components/buttons';
-import { DeleteOutlined, EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons'
-import { red, green } from '@ant-design/colors'
+import { EditOutlined, PlusCircleOutlined, ExportOutlined } from '@ant-design/icons';
+import { green } from '@ant-design/colors';
+import { DeleteIcon } from 'oskari-ui/components/icons';
 
-const DELETE_ICON_STYLE = {
-    fontSize: '16px',
-    color: red.primary
-};
-
-const EDIT_ICON_STYLE = {
-    fontSize: '16px'
-};
-
-const ADD_ICON_STYLE = {
-    fontSize: '16px',
-    color: green.primary
-};
-
-const EXPORT_ICON_STYLE = {
-    fontSize: '16px'
-};
+const AddIcon = styled(PlusCircleOutlined)`
+    color: ${green.primary}
+`;
 
 const StyledControls = styled('div')`
     display: flex;
@@ -39,11 +26,14 @@ const StyledSelect = styled(Select)`
 
 const StyledActions = styled('div')`
     display: flex;
+    button: {
+        margin-left: 5px;
+    }
 `;
 
 const IconButton = styled(Button)`
     cursor: pointer;
-    margin-left: 5px;
+    font-size: 16px;
 `;
 
 const MarginLeft = styled.span`
@@ -105,7 +95,7 @@ const DeletePlaces = ({
     return (
         <Popover trigger="click" placement="bottom" visible={visible} content={content} >
             <Tooltip title={<Message messageKey={deleteTooltip}/>}>
-                <Button disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteOutlined style={DELETE_ICON_STYLE} /></Button>
+                <IconButton disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteIcon/></IconButton>
             </Tooltip>
         </Popover>
     );
@@ -135,17 +125,16 @@ export const MyPlacesLayerControls = (props) => {
                 </StyledSelect>
                 <StyledActions className='t_layer'>
                     <Tooltip title={<Message messageKey='tab.addCategory' />}>
-                        <IconButton className='t_add' onClick={() => controller.openLayerDialog()}><PlusCircleOutlined style={ADD_ICON_STYLE} /></IconButton>
+                        <IconButton className='t_add' onClick={() => controller.openLayerDialog()}><AddIcon /></IconButton>
                     </Tooltip>
                     {selectedCategoryId && (
                         <React.Fragment>
                             <Tooltip title={<Message messageKey='tab.editCategory' />}>
-                                <IconButton className='t_edit' onClick={() => controller.editCategory(selectedCategoryId)}><EditOutlined style={EDIT_ICON_STYLE} /></IconButton>
+                                <IconButton className='t_edit' onClick={() => controller.editCategory(selectedCategoryId)}><EditOutlined/></IconButton>
                             </Tooltip>
                             <Tooltip title={<Message messageKey='tab.export.tooltip' />}>
-                                <IconButton className='t_export' onClick={() => controller.exportCategory(selectedCategoryId)}><ExportOutlined style={EXPORT_ICON_STYLE} /></IconButton>
+                                <IconButton className='t_export' onClick={() => controller.exportCategory(selectedCategoryId)}><ExportOutlined/></IconButton>
                             </Tooltip>
-                            <MarginLeft/>
                             { !hasPlaces && <DeleteButton type='button' disabled={isDefault}
                                 tooltip={<Message messageKey={deleteTooltip}/>}
                                 title={<Message messageKey='tab.confirm.deleteCategory' messageArgs={{ name }}/>}

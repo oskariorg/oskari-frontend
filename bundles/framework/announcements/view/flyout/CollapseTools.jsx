@@ -32,7 +32,8 @@ export const CollapseTools = ({ announcementId, toolController }) => {
                 </Tooltip>
             </StyledTool>
             <StyledTool>
-                <DeleteButton icon
+                <DeleteButton
+                    type='icon'
                     onConfirm = { () => toolController.deleteAnnouncement(announcementId) }
                     tooltip={<Message messageKey={'tools.delete'}/>}/>
             </StyledTool>

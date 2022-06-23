@@ -1,19 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
-import { Message, Checkbox, Confirm, Button, Tooltip } from 'oskari-ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Message, Checkbox, Button, Tooltip } from 'oskari-ui';
+import { EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { red } from '@ant-design/colors';
+import { DeleteButton } from 'oskari-ui/components/buttons';
 
 const BUNDLE_NAME = 'PersonalData';
 
 const EDIT_ICON_STYLE = {
-    fontSize: '14px'
-};
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
     fontSize: '14px'
 };
 
@@ -75,17 +70,11 @@ export const MyViewsList = ({ data = [], handleEdit, handleDelete, openView, set
                         <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.edit' />}>
                             <div className='icon t_edit' onClick={() => handleEdit(item)}><EditOutlined style={ EDIT_ICON_STYLE } /></div>
                         </Tooltip>
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tabs.myviews.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
                             onConfirm={() => handleDelete(item)}
-                            okText={<Message messageKey='tabs.myviews.button.ok' bundleKey={BUNDLE_NAME} />}
-                            cancelText={<Message messageKey='tabs.myviews.button.cancel' bundleKey={BUNDLE_NAME} />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message bundleKey={BUNDLE_NAME} messageKey='tabs.myviews.grid.delete' />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 )
             }

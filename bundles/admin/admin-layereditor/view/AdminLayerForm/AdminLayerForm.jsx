@@ -5,8 +5,9 @@ import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Confirm, Button, Tabs, TabPane, Message, Tooltip } from 'oskari-ui';
-import { StyledRoot, StyledAlert, StyledButton } from './styled';
+import { Button, Tabs, TabPane, Message, Tooltip } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { StyledRoot, StyledButton } from './styled';
 import { Mandatory, MandatoryIcon } from './Mandatory';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -99,17 +100,11 @@ const AdminLayerForm = ({
         { isLayerTypeSupported && <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} /> }
         { !layer.isNew &&
             <React.Fragment>
-                <Confirm
+                <DeleteButton
+                    type='label'
                     title={<Message messageKey='messages.confirmDeleteLayer'/>}
                     onConfirm={() => onDelete()}
-                    okText={getMessage('ok')}
-                    cancelText={getMessage('cancel')}
-                    placement='bottomLeft'
-                >
-                    <StyledButton danger>
-                        <Message messageKey='delete'/>
-                    </StyledButton>
-                </Confirm>
+                />
                 { hasCapabilitiesSupport &&
                     <StyledButton onClick={() => controller.addNewFromSameService() }>
                         <Message messageKey='addNewFromSameService'/>

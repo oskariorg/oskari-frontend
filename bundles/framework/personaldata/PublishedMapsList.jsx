@@ -1,16 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Message, Confirm, Tooltip } from 'oskari-ui'
+import { Message, Tooltip, Confirm } from 'oskari-ui'
 import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'
-import { red } from '@ant-design/colors'
+import { EditOutlined } from '@ant-design/icons'
 import styled from 'styled-components';
 import { showSnippetPopup } from './view/embedded/SnippetPopup'
-
-const DELETE_ICON_STYLE = {
-    color: red.primary,
-    fontSize: '14px'
-};
+import { DeleteButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
     fontSize: '14px'
@@ -119,17 +114,11 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                                 <EditOutlined style={ EDIT_ICON_STYLE } />
                             </div>
                         </Tooltip>
-                        <Confirm
+                        <DeleteButton
+                            type='icon'
                             title={<Message messageKey='tabs.publishedmaps.popup.deletemsg' messageArgs={{ name: item.name }} bundleKey={BUNDLE_NAME} />}
                             onConfirm={() => handleDelete(item)}
-                            okText={<Message messageKey='tabs.publishedmaps.button.ok' bundleKey={BUNDLE_NAME} />}
-                            cancelText={<Message messageKey='tabs.publishedmaps.button.cancel' bundleKey={BUNDLE_NAME} />}
-                            placement='bottomLeft'
-                        >
-                            <Tooltip title={<Message messageKey='tabs.publishedmaps.grid.delete' bundleKey="PersonalData" />}>
-                                <div className='icon t_delete'><DeleteOutlined style={ DELETE_ICON_STYLE } /></div>
-                            </Tooltip>
-                        </Confirm>
+                        />
                     </ToolsContainer>
                 );
             }
