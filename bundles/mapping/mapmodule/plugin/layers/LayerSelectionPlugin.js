@@ -1,3 +1,4 @@
+import { showLayerSelectionPopup } from './LayerSelectionPopup';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
  *
@@ -38,6 +39,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             buttonGroup: 'mobile-toolbar'
         };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
+        me._showMetadata = false;
+        me._layers = [];
     }, {
         _toggleToolState: function () {
             var el = this.getElement();
@@ -53,6 +56,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
                 this.openSelection(true);
             }
+        },
+        popupCleanup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
         },
         /**
          * @private @method _initImpl
@@ -231,6 +240,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this._checkSelectable();
         },
         /**
+         * @method setShowMetadata
+         * @param {Boolean} showMetadata
+         */
+        setShowMetadata: function (showMetadata) {
+            this._showMetadata = showMetadata;
+        },
+        /**
          * @method getStyleSelectable
          * @return {Boolean} can layer styles be selectable by user
          */
@@ -264,6 +280,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
 
             var me = this;
+
+            me._layers.push(layer);
 
             if (!me.layerContent) {
                 me.layerContent = me.templates.layerContent.clone();
@@ -414,6 +432,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 request = visibilityRequestBuilder(layer.getId(), blnVisible);
 
             sandbox.request(this, request);
+            if (this.popupControls) {
+                this.popupControls.update(this._layers, this._showMetadata, (l, visible) => this._setLayerVisible(l, visible));
+            }
         },
         /**
          * @method removeLayer
@@ -745,14 +766,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this;
 
             header.on('click', function () {
-                if (me.popup && me.popup.isVisible()) {
-                    me.popup.getJqueryContent().detach();
-                    me.popup.close(true);
-                    me.popup = null;
-                } else if (me.getElement().find('.content')[0]) {
-                    me.closeSelection();
+                if (me.popupControls) {
+                    me.popupCleanup();
                 } else {
-                    me.openSelection();
+                    me.popupControls = showLayerSelectionPopup(me._layers, () => me.popupCleanup(), me._showMetadata, (layer, visible) => me._setLayerVisible(layer, visible));
                 }
             });
         },

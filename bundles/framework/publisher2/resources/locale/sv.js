@@ -110,7 +110,8 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
-                    "allowStyleChange": "Tillåta stiländring"
+                    "allowStyleChange": "Tillåta stiländring",
+                    "showMetadata": "Visa länkar för metadata"
                 },
                 "mylocation": {
                     "modes": {
