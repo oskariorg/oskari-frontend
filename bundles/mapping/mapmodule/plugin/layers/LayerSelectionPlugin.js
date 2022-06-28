@@ -41,6 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
         me._showMetadata = false;
         me._layers = [];
+        me._baseLayers = [];
     }, {
         _toggleToolState: function () {
             var el = this.getElement();
@@ -424,7 +425,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} blnVisible true to show, false to hide
          * @private
          */
-        _setLayerVisible: function (layer, blnVisible) {
+        _setLayerVisible: function (layer, blnVisible, isBaseLayer = false) {
             var sandbox = this.getSandbox(),
                 visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
@@ -432,8 +433,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 request = visibilityRequestBuilder(layer.getId(), blnVisible);
 
             sandbox.request(this, request);
+            if (isBaseLayer) {
+                this._changedBaseLayer();
+            }
             if (this.popupControls) {
-                this.popupControls.update(this._layers, this._showMetadata, (l, visible) => this._setLayerVisible(l, visible));
+                this._updateLayerSelectionPopup();
             }
         },
         /**
@@ -458,6 +462,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!layer || !layer.getId) {
                 return;
             }
+
+            me._baseLayers.push(layer);
+
             var div = me.layerRefs[layer.getId()];
             if (!div) {
                 return;
@@ -769,9 +776,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if (me.popupControls) {
                     me.popupCleanup();
                 } else {
-                    me.popupControls = showLayerSelectionPopup(me._layers, () => me.popupCleanup(), me._showMetadata, (layer, visible) => me._setLayerVisible(layer, visible));
+                    me.popupControls = showLayerSelectionPopup(me._baseLayers, me._layers, () => me.popupCleanup(), me._showMetadata, (layer, visible, isBaseLayer) => me._setLayerVisible(layer, visible, isBaseLayer));
                 }
             });
+        },
+
+        _updateLayerSelectionPopup: function () {
+            this.popupControls.update(this._baseLayers, this._layers, this._showMetadata, (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer));
         },
 
         /**
