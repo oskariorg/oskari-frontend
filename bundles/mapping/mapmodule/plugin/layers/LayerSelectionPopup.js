@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { showPopup } from 'oskari-ui/components/window';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { Checkbox, Message, Radio } from 'oskari-ui';
+import { Checkbox, Message, Radio, Select, Option, Label } from 'oskari-ui';
 
 const BUNDLE_NAME = 'MapModule';
 
@@ -42,7 +42,17 @@ const StyledCheckbox = styled(Checkbox)`
     margin-right: 5px;
 `;
 
-const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, setLayerVisibility }) => {
+const StyleSelection = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const StyledSelect = styled(Select)`
+    margin-left: 10px;
+`;
+
+const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable, setLayerVisibility, selectStyle }) => {
     const normalLayers = layers.filter(layer => baseLayers.findIndex(bl => bl.getId() === layer.getId()) < 0);
     return (
         <Content>
@@ -52,6 +62,12 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, setLayerVisibil
                 onChange={e => setLayerVisibility(e.target.value, e.target.checked, true)}
             >
                 {baseLayers.map(layer => {
+                    let styles;
+                    let currentStyle;
+                    if (styleSelectable) {
+                        styles = layer.getStyles();
+                        currentStyle = layer.getCurrentStyle() ? layer.getCurrentStyle().getName() : null;
+                    }
                     return (
                         <div key={layer.getId()}>
                             <LayerRow>
@@ -60,30 +76,62 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, setLayerVisibil
                                 </Radio.Choice>
                                 {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
                             </LayerRow>
+                            {styleSelectable && styles && styles.length > 1 && (
+                                <StyleSelection>
+                                    <Label><Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.style' /></Label>
+                                    <StyledSelect value={currentStyle} onChange={(s) => selectStyle(layer.getId(), s)} className="t_style">
+                                        {styles.map(style => (
+                                            <Option key={style.getName()} value={style.getName()}>
+                                                {style.getTitle()}
+                                            </Option>
+                                        ))}
+                                    </StyledSelect>
+                                </StyleSelection>
+                            )}
                         </div>
                     );
                 })}
             </RadioGroup>
             <h3><Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3>
             {normalLayers.map(layer => {
+                let styles;
+                let currentStyle;
+                if (styleSelectable) {
+                    styles = layer.getStyles();
+                    currentStyle = layer.getCurrentStyle() ? layer.getCurrentStyle().getName() : null;
+                }
                 return (
-                    <LayerRow key={layer.getId()}>
-                        <div>
-                            <StyledCheckbox
-                                checked={layer.isVisible()}
-                                onChange={e => setLayerVisibility(layer, e.target.checked, false)}
-                            />
-                            <span>{layer.getName()}</span>
-                        </div>
-                        {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
-                    </LayerRow>
+                    <div key={layer.getId()}>
+                        <LayerRow>
+                            <div>
+                                <StyledCheckbox
+                                    checked={layer.isVisible()}
+                                    onChange={e => setLayerVisibility(layer, e.target.checked, false)}
+                                />
+                                <span>{layer.getName()}</span>
+                            </div>
+                            {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
+                        </LayerRow>
+                        {styleSelectable && styles && styles.length > 1 && (
+                            <StyleSelection>
+                                <Label><Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.style' /></Label>
+                                <StyledSelect value={currentStyle} onChange={(s) => selectStyle(layer.getId(), s)} className="t_style">
+                                    {styles.map(style => (
+                                        <Option key={style.getName()} value={style.getName()}>
+                                            {style.getTitle()}
+                                        </Option>
+                                    ))}
+                                </StyledSelect>
+                            </StyleSelection>
+                        )}
+                    </div>
                 );
             })}
         </Content>
     );
 };
 
-export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, setLayerVisibility, themeConf) => {
+export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, themeConf) => {
     let font = null;
     if (themeConf.font === 'arial') font = 'Arial, Helvetica, sans-serif';
     if (themeConf.font === 'georgia') font = 'Georgia, Times, "Times New Roman"';
@@ -100,16 +148,30 @@ export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadat
 
     const controls = showPopup(
         <Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.title' />,
-        <LayerSelectionPopup baseLayers={baseLayers} layers={layers} showMetadata={showMetadata} setLayerVisibility={setLayerVisibility} />,
+        <LayerSelectionPopup
+            baseLayers={baseLayers}
+            layers={layers}
+            showMetadata={showMetadata}
+            styleSelectable={styleSelectable}
+            setLayerVisibility={setLayerVisibility}
+            selectStyle={selectStyle}
+        />,
         onClose,
         options
     );
 
     return {
         ...controls,
-        update: (baseLayerData, layerData, showMetadata, setLayerVisibility) => controls.update(
+        update: (baseLayerData, layerData, showMetadata, styleSelectable, setLayerVisibility, selectStyle) => controls.update(
             <Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.title' />,
-            <LayerSelectionPopup baseLayers={baseLayerData} layers={layerData} showMetadata={showMetadata} setLayerVisibility={setLayerVisibility} />
+            <LayerSelectionPopup
+                baseLayers={baseLayerData}
+                layers={layerData}
+                showMetadata={showMetadata}
+                styleSelectable={styleSelectable}
+                setLayerVisibility={setLayerVisibility}
+                selectStyle={selectStyle}
+            />
         )
     };
 };
@@ -119,5 +181,7 @@ LayerSelectionPopup.propTypes = {
     layers: PropTypes.arrayOf(PropTypes.object),
     showMetadata: PropTypes.bool.isRequired,
     setLayerVisibility: PropTypes.func.isRequired,
-    theme: PropTypes.string
+    theme: PropTypes.string,
+    selectStyle: PropTypes.func.isRequired,
+    styleSelectable: PropTypes.bool.isRequired
 };

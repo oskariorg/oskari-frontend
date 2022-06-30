@@ -346,6 +346,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 selectorDiv.hide();
             }
         },
+        _selectStyle: function (layerId, style) {
+            this.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layerId, style]);
+            if (this.popupControls) {
+                this._updateLayerSelectionPopup();
+            }
+        },
         /**
          * @method updateLayer
          * Updates input state (checked or not) for the layer according to layer visibility
@@ -785,7 +791,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         me._layers,
                         () => me.popupCleanup(),
                         me._showMetadata,
+                        me._styleSelectable,
                         (layer, visible, isBaseLayer) => me._setLayerVisible(layer, visible, isBaseLayer),
+                        (layerId, style) => me._selectStyle(layerId, style),
                         {
                             theme: mapModule.getTheme(),
                             font: me.getToolFontFromMapModule()
@@ -796,7 +804,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
 
         _updateLayerSelectionPopup: function () {
-            this.popupControls.update(this._baseLayers, this._layers, this._showMetadata, (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer));
+            this.popupControls.update(
+                this._baseLayers,
+                this._layers,
+                this._showMetadata,
+                this._styleSelectable,
+                (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer),
+                (layerId, style) => this._selectStyle(layerId, style)
+            );
         },
 
         /**
