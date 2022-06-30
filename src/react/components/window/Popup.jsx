@@ -135,8 +135,14 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
     </div>
     */
 
-    const headerTheme = getHeaderTheme(theme);
-    return (<Container {...containerProps}>
+    let headerTheme;
+    if (options.customTheme) {
+        headerTheme = getHeaderTheme(options.customTheme);
+    } else {
+        headerTheme = getHeaderTheme(theme);
+    }
+    
+    return (<Container {...containerProps} style={headerTheme.getOtherStyles()}>
         <PopupHeader theme={headerTheme} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
             <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>

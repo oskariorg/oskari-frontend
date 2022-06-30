@@ -125,6 +125,7 @@ const createBringToTop = (element) => {
  */
 export const showPopup = (title, content, onClose, options = {}) => {
     validate(options, TYPE.POPUP);
+
     const element = createTmpContainer();
     const key = REGISTER.registerWindow(options.id, TYPE.POPUP, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);

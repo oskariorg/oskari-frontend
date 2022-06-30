@@ -10,7 +10,8 @@ export const getHeaderTheme = (theme) => {
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
         getTextColor: () => theme.color.header?.text || headerTextColor,
         getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
-        getToolHoverColor: () => theme.color.accent
+        getToolHoverColor: () => theme.color.accent,
+        getOtherStyles: () => theme.otherStyles
     };
     return funcs;
 };

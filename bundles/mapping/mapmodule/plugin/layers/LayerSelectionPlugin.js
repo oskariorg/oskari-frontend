@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             buttonGroup: 'mobile-toolbar'
         };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
-        me._showMetadata = false;
+        me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
     }, {
@@ -253,6 +253,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         getStyleSelectable: function () {
             return this._styleSelectable;
+        },
+        getShowMetadata: function () {
+            return this._showMetadata;
         },
         /**
          * @private @method _checkSelectable
@@ -776,7 +779,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if (me.popupControls) {
                     me.popupCleanup();
                 } else {
-                    me.popupControls = showLayerSelectionPopup(me._baseLayers, me._layers, () => me.popupCleanup(), me._showMetadata, (layer, visible, isBaseLayer) => me._setLayerVisible(layer, visible, isBaseLayer));
+                    const mapModule = me.getMapModule();
+                    me.popupControls = showLayerSelectionPopup(
+                        me._baseLayers,
+                        me._layers,
+                        () => me.popupCleanup(),
+                        me._showMetadata,
+                        (layer, visible, isBaseLayer) => me._setLayerVisible(layer, visible, isBaseLayer),
+                        {
+                            theme: mapModule.getTheme(),
+                            font: me.getToolFontFromMapModule()
+                        }
+                    );
                 }
             });
         },
