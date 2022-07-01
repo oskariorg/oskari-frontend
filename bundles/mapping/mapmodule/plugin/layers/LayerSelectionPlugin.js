@@ -527,6 +527,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         removeBaseLayer: function (layer) {
+            if (this._baseLayers.findIndex(l => l.getId() === layer.getId()) > -1) {
+                this._baseLayers.splice(this._baseLayers.findIndex(l => l.getId() === layer.getId()), 1);
+            }
+
             var div = this.layerRefs[layer.getId()];
             div.detach();
 
