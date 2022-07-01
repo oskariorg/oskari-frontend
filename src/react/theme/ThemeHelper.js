@@ -10,8 +10,7 @@ export const getHeaderTheme = (theme) => {
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
         getTextColor: () => theme.color.header?.text || headerTextColor,
         getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
-        getToolHoverColor: () => theme.color.accent,
-        getOtherStyles: () => theme.otherStyles
+        getToolHoverColor: () => theme.color.accent
     };
     return funcs;
 };
@@ -21,6 +20,12 @@ export const getTextColor = (bgColor) => {
         return '#FFFFFF';
     };
     return '#000000';
+};
+
+export const getFont = (theme) => {
+    if (theme.font === 'arial') return 'Arial, Helvetica, sans-serif';
+    if (theme.font === 'georgia') return 'Georgia, Times, "Times New Roman"';
+    return theme.font ||  'Arial, Helvetica, sans-serif';
 };
 
 /* ------------------------------------------------------------------------------ */

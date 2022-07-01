@@ -133,7 +133,7 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
     const render = (title, content) => {
         ReactDOM.render(
-            <ThemeProvider>
+            <ThemeProvider value={options.theme}>
                 <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
                 </Popup>

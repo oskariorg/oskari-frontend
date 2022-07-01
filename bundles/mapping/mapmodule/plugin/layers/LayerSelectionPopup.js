@@ -132,17 +132,11 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
 };
 
 export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, themeConf) => {
-    let font = null;
-    if (themeConf.font === 'arial') font = 'Arial, Helvetica, sans-serif';
-    if (themeConf.font === 'georgia') font = 'Georgia, Times, "Times New Roman"';
-
     const options = {
         id: POPUP_ID,
-        customTheme: {
+        theme: {
             ...themeConf.theme === 'light' ? THEME_LIGHT : THEME_DARK,
-            otherStyles: {
-                fontFamily: font
-            }
+            font: themeConf.font
         }
     };
 

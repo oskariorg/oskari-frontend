@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 }
                 pluginConfig.config.isStyleSelectable = me.__plugin.getStyleSelectable();
                 pluginConfig.config.showMetadata = me.__plugin.getShowMetadata();
-                return {
+                let conf = {
                     configuration: {
                         mapfull: {
                             conf: {
@@ -72,6 +72,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                         }
                     }
                 };
+                if (me.__plugin.getShowMetadata()) conf.configuration.metadataflyout = {};
+                return conf;
             } else {
                 return null;
             }
