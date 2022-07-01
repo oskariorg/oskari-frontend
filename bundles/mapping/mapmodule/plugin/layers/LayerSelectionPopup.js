@@ -53,7 +53,6 @@ const StyledSelect = styled(Select)`
 `;
 
 const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable, setLayerVisibility, selectStyle }) => {
-    const normalLayers = layers.filter(layer => baseLayers.findIndex(bl => bl.getId() === layer.getId()) < 0);
     return (
         <Content>
             <h3><Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3>
@@ -93,7 +92,7 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
                 })}
             </RadioGroup>
             <h3><Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3>
-            {normalLayers.map(layer => {
+            {layers.map(layer => {
                 let styles;
                 let currentStyle;
                 if (styleSelectable) {

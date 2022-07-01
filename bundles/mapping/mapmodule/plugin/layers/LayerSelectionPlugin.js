@@ -472,7 +472,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            me._baseLayers.push(layer);
+            if (me._baseLayers.findIndex(l => l.getId() === layer.getId()) < 0) {
+                me._baseLayers.push(layer);
+            }
+
+            if (me._layers.findIndex(l => l.getId() === layer.getId()) > -1) {
+                me._layers.splice(me._layers.findIndex(l => l.getId() === layer.getId()), 1);
+            }
 
             var div = me.layerRefs[layer.getId()];
             if (!div) {
@@ -780,7 +786,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         _bindHeader: function (header) {
             var me = this;
-
             header.on('click', function () {
                 if (me.popupControls) {
                     me.popupCleanup();
