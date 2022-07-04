@@ -14,6 +14,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         _templates: {
             extraOptions: jQuery(`
             <div class="publisher2 background-layer-selector tool-options">
+                <div class="metadata-selection">
+                    <label><input type="checkbox"/><span></span></label>
+                </div>
                 <div class="style-selection">
                     <label><input type="checkbox"/><span></span></label>
                 </div>
@@ -59,7 +62,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                     pluginConfig.config.defaultBaseLayer = layerSelection.defaultBaseLayer;
                 }
                 pluginConfig.config.isStyleSelectable = me.__plugin.getStyleSelectable();
-                return {
+                pluginConfig.config.showMetadata = me.__plugin.getShowMetadata();
+                let conf = {
                     configuration: {
                         mapfull: {
                             conf: {
@@ -68,6 +72,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                         }
                     }
                 };
+                if (me.__plugin.getShowMetadata()) conf.configuration.metadataflyout = {};
+                return conf;
             } else {
                 return null;
             }
@@ -111,15 +117,26 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             if (!me._extraOptions) {
                 const initialConf = me._getToolPluginMapfullConf();
                 const isAllowStyleChange = initialConf && initialConf.config && initialConf.config.isStyleSelectable;
+                const showMetadata = initialConf && initialConf.config && initialConf.config.showMetadata;
                 const extraOptions = me._templates.extraOptions.clone();
                 extraOptions.find('.style-selection label span').append(me.__loc.layerselection.allowStyleChange);
+                extraOptions.find('.metadata-selection label span').append(me.__loc.layerselection.showMetadata);
                 const allowCheckbox = extraOptions.find('.style-selection label input')
                     .on('change', function () {
                         const isChecked = jQuery(this).is(':checked');
                         me.__plugin.setStyleSelectable(isChecked);
                     });
+                const metadataCheckBox = extraOptions.find('.metadata-selection label input')
+                    .on('change', function () {
+                        const isChecked = jQuery(this).is(':checked');
+                        me.__plugin.setShowMetadata(isChecked);
+                    });
                 if (isAllowStyleChange) {
                     allowCheckbox.prop('checked', true).change();
+                }
+                if (showMetadata) {
+                    metadataCheckBox.prop('checked', true).change();
+                    me.__plugin.setShowMetadata(true);
                 }
                 extraOptions.find('.info').html(me.__loc.layerselection.info);
                 me._extraOptions = extraOptions;
@@ -128,9 +145,21 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                     var layer = layers[i];
                     me._addLayer(layer);
                 }
+                me._metadataAvailable(layers);
                 me._checkCanChangeStyle(layers);
             }
             return me._extraOptions;
+        },
+        _metadataAvailable: function (layers = this._getLayersList()) {
+            if (!this._extraOptions) {
+                return;
+            }
+            let noMetadata = true;
+            for (const layer of layers) {
+                if (layer.getMetadataIdentifier()) noMetadata = false;
+            }
+            const input = this._extraOptions.find('.metadata-selection label input');
+            input.prop('disabled', noMetadata);
         },
         /**
      * @method hasPublishRight
@@ -276,6 +305,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             var me = this;
             me._addLayer(layer);
             me._checkCanChangeStyle();
+            me._metadataAvailable();
         },
         /**
      * Handle remove map layer event
@@ -288,6 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             // TODO checked handling
             layerDiv.remove();
             me._checkCanChangeStyle();
+            me._metadataAvailable();
         },
         /**
          * @private @method _checkCanChangeStyle

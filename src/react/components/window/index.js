@@ -125,6 +125,7 @@ const createBringToTop = (element) => {
  */
 export const showPopup = (title, content, onClose, options = {}) => {
     validate(options, TYPE.POPUP);
+
     const element = createTmpContainer();
     const key = REGISTER.registerWindow(options.id, TYPE.POPUP, createRemoveFn(element, onClose));
     const removeWindow = () => REGISTER.clear(key);
@@ -132,7 +133,7 @@ export const showPopup = (title, content, onClose, options = {}) => {
     const opts = {...DEFAULT_POPUP_OPTIONS, ...options };
     const render = (title, content) => {
         ReactDOM.render(
-            <ThemeProvider>
+            <ThemeProvider value={options.theme}>
                 <Popup title={title} onClose={removeWindow} bringToTop={bringToTop} options={opts}>
                     {content}
                 </Popup>

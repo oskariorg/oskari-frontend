@@ -1,3 +1,4 @@
+import { showLayerSelectionPopup } from './LayerSelectionPopup';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
  *
@@ -38,6 +39,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             buttonGroup: 'mobile-toolbar'
         };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
+        me._showMetadata = !!this.getConfig().showMetadata;
+        me._layers = [];
+        me._baseLayers = [];
     }, {
         _toggleToolState: function () {
             var el = this.getElement();
@@ -53,6 +57,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
                 this.openSelection(true);
             }
+        },
+        popupCleanup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
         },
         /**
          * @private @method _initImpl
@@ -231,11 +241,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this._checkSelectable();
         },
         /**
+         * @method setShowMetadata
+         * @param {Boolean} showMetadata
+         */
+        setShowMetadata: function (showMetadata) {
+            this._showMetadata = showMetadata;
+        },
+        /**
          * @method getStyleSelectable
          * @return {Boolean} can layer styles be selectable by user
          */
         getStyleSelectable: function () {
             return this._styleSelectable;
+        },
+        getShowMetadata: function () {
+            return this._showMetadata;
         },
         /**
          * @private @method _checkSelectable
@@ -264,6 +284,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
 
             var me = this;
+
+            me._layers.push(layer);
 
             if (!me.layerContent) {
                 me.layerContent = me.templates.layerContent.clone();
@@ -322,6 +344,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
             if (!this.getStyleSelectable()) {
                 selectorDiv.hide();
+            }
+        },
+        _selectStyle: function (layerId, style) {
+            this.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layerId, style]);
+            if (this.popupControls) {
+                this._updateLayerSelectionPopup();
             }
         },
         /**
@@ -406,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} blnVisible true to show, false to hide
          * @private
          */
-        _setLayerVisible: function (layer, blnVisible) {
+        _setLayerVisible: function (layer, blnVisible, isBaseLayer = false) {
             var sandbox = this.getSandbox(),
                 visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
@@ -414,6 +442,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 request = visibilityRequestBuilder(layer.getId(), blnVisible);
 
             sandbox.request(this, request);
+            if (isBaseLayer) {
+                this._changedBaseLayer();
+            }
+            if (this.popupControls) {
+                this._updateLayerSelectionPopup();
+            }
         },
         /**
          * @method removeLayer
@@ -437,6 +471,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!layer || !layer.getId) {
                 return;
             }
+
+            if (me._baseLayers.findIndex(l => l.getId() === layer.getId()) < 0) {
+                me._baseLayers.push(layer);
+            }
+
+            if (me._layers.findIndex(l => l.getId() === layer.getId()) > -1) {
+                me._layers.splice(me._layers.findIndex(l => l.getId() === layer.getId()), 1);
+            }
+
             var div = me.layerRefs[layer.getId()];
             if (!div) {
                 return;
@@ -484,6 +527,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         removeBaseLayer: function (layer) {
+            if (this._baseLayers.findIndex(l => l.getId() === layer.getId()) > -1) {
+                this._baseLayers.splice(this._baseLayers.findIndex(l => l.getId() === layer.getId()), 1);
+            }
+
             var div = this.layerRefs[layer.getId()];
             div.detach();
 
@@ -743,18 +790,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         _bindHeader: function (header) {
             var me = this;
-
             header.on('click', function () {
-                if (me.popup && me.popup.isVisible()) {
-                    me.popup.getJqueryContent().detach();
-                    me.popup.close(true);
-                    me.popup = null;
-                } else if (me.getElement().find('.content')[0]) {
-                    me.closeSelection();
+                if (me.popupControls) {
+                    me.popupCleanup();
                 } else {
-                    me.openSelection();
+                    const mapModule = me.getMapModule();
+                    me.popupControls = showLayerSelectionPopup(
+                        me._baseLayers,
+                        me._layers,
+                        () => me.popupCleanup(),
+                        me._showMetadata,
+                        me._styleSelectable,
+                        (layer, visible, isBaseLayer) => me._setLayerVisible(layer, visible, isBaseLayer),
+                        (layerId, style) => me._selectStyle(layerId, style),
+                        {
+                            theme: mapModule.getTheme(),
+                            font: me.getToolFontFromMapModule()
+                        }
+                    );
                 }
             });
+        },
+
+        _updateLayerSelectionPopup: function () {
+            this.popupControls.update(
+                this._baseLayers,
+                this._layers,
+                this._showMetadata,
+                this._styleSelectable,
+                (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer),
+                (layerId, style) => this._selectStyle(layerId, style)
+            );
         },
 
         /**
