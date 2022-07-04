@@ -50,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this.showPopup();
             }
         },
+        
         showPopup: function () {
             const mapModule = this.getMapModule();
             // TODO: set default baselayer!!
@@ -57,8 +58,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this._baseLayers,
                 this._layers,
                 () => this.popupCleanup(),
-                this._showMetadata,
-                this._styleSelectable,
+                this.getShowMetadata(),
+                this.getStyleSelectable(),
                 (layer, visible, isBaseLayer) => this._setLayerVisible(layer, visible, isBaseLayer),
                 (layerId, style) => this._selectStyle(layerId, style),
                 {
@@ -414,8 +415,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.popupControls.update(
                 this._baseLayers,
                 this._layers,
-                this._showMetadata,
-                this._styleSelectable,
+                this.getShowMetadata(),
+                this.getStyleSelectable(),
                 (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer),
                 (layerId, style) => this._selectStyle(layerId, style)
             );
