@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
     * @returns {Object} tool value object
     */
     getValues: function () {
-        if (!me.state.enabled) {
+        if (!this.state.enabled) {
             return null;
         }
         const plugin = this.getPlugin();
@@ -386,21 +386,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
      * @public
      **/
     stop: function () {
-        var me = this;
+        if (this._extraOptions) {
+            this._extraOptions.find('.background-layers input:checked').prop('checked', false);
+        }
+        const sandbox = this.getSandbox();
+        const plugin = this.getPlugin();
 
-        jQuery('.background-layers input:checked').prop('checked', false);
-        jQuery('.publisher2.background-layer-selector').parents('.extraOptions').hide();
-
-        for (var p in me.eventHandlers) {
-            if (me.eventHandlers.hasOwnProperty(p)) {
-                me.getSandbox().unregisterFromEventByName(me, p);
+        for (var p in this.eventHandlers) {
+            if (this.eventHandlers.hasOwnProperty(p)) {
+                sandbox.unregisterFromEventByName(this, p);
             }
         }
-        if (me.__plugin) {
-            if (me.getSandbox()) {
-                me.__plugin.stopPlugin(me.getSandbox());
+        if (plugin) {
+            if (sandbox) {
+                plugin.stopPlugin(sandbox);
             }
-            me.__mapmodule.unregisterPlugin(me.__plugin);
+            this.getMapModule().unregisterPlugin(plugin);
         }
     }
 }, {
