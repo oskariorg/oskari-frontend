@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, Message } from 'oskari-ui';
+import { MetadataIcon } from 'oskari-ui/components/icons';
 import { StyleSelect } from './StyleSelect';
 
 export const LayerRow = styled('div')`

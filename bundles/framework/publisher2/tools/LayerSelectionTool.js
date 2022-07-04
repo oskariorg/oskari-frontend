@@ -1,3 +1,4 @@
+const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', function () {
 }, {
     index: 1,
@@ -36,10 +37,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
     * @returns {Object} tool description
     */
     getTool: function () {
+        const plug = this._getToolPluginMapfullConf() || {};
         return {
-            id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+            id: TOOL_ID,
             title: 'LayerSelectionPlugin',
-            config: {}
+            config: plug.config || {}
         };
     },
     /**
@@ -288,7 +290,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             var plugins = me.data.configuration.mapfull.conf.plugins;
             for (var i = 0; i < plugins.length; i++) {
                 var plugin = plugins[i];
-                if (plugin.id === me.getTool().id) {
+                if (plugin.id === TOOL_ID) {
                     toolPlugin = plugin;
                     break;
                 }
@@ -401,7 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             if (sandbox) {
                 plugin.stopPlugin(sandbox);
             }
-            this.getMapModule().unregisterPlugin(plugin);
+            this.__mapmodule.unregisterPlugin(plugin);
         }
     }
 }, {
