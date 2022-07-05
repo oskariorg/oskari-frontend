@@ -220,6 +220,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             return;
         }
 
+
+        const existingLayerDiv = this._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
+        if (existingLayerDiv.length > 0) {
+            // layer already added
+            return;
+        }
+        const layerDiv = this._templates.backgroundCheckbox.clone();
         // if layer selection = ON -> show content
         var closureMagic = function (layer) {
             return function () {
@@ -234,13 +241,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
                 }
             };
         };
-
-        var layerDiv = me._templates.backgroundCheckbox.clone(),
-            foundedLayerDiv = me._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
-
-        if (foundedLayerDiv.length > 0) {
-            return;
-        }
 
         layerDiv.find('label').append(Oskari.util.sanitize(layer.getName()));
         layerDiv.attr('data-id', layer.getId());
@@ -262,18 +262,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
      */
     shouldPreselectLayer: function (id) {
         const toolPluginMapfullConf = this._getToolPluginMapfullConf();
-        if (toolPluginMapfullConf) {
-            var isPluginConfig = !!((toolPluginMapfullConf && toolPluginMapfullConf.config &&
-                toolPluginMapfullConf.config.baseLayers));
-
-            if (isPluginConfig) {
-                return toolPluginMapfullConf.config.baseLayers.includes('' + id);
-            } else {
-                return false;
-            }
-        } else {
+        if (!toolPluginMapfullConf) {
             return false;
         }
+        const { baseLayers = [] } = toolPluginMapfullConf.config;
+        return baseLayers.some(layerId => '' + layerId === '' + id);
     },
     /**
      * @private @method _getToolPluginMapfullConf
