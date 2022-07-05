@@ -2,26 +2,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Message, Radio } from 'oskari-ui';
+import { MetadataIcon } from 'oskari-ui/components/icons';
 import { StyleSelect } from './StyleSelect';
 import { LayerRow } from './LayerList';
 
 const RadioGroup = styled(Radio.Group)`
     margin-bottom: 20px;
 `;
+const getBaseLayers = (layers) => {
+    const baseLayers = [...layers];
+    baseLayers.sort(function (a, b) {
+        return Oskari.util.naturalSort(a.getName(), b.getName());
+    });
+    return baseLayers;
+}
 
 export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLayer, selectStyle }) => {
     if (!layers || !layers.length) {
         return null;
     }
-    const selected = layers.find(l => l.isVisible()) || layers[0];
+    const baseLayers = getBaseLayers(layers);
+    const selected = baseLayers.find(l => l.isVisible()) || baseLayers[0];
+
     return (
         <React.Fragment>
             <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3>
             <RadioGroup
                 value={selected.getId()}
-                onChange={e => selectLayer(layers.find(l => '' + l.getId() === '' + e.target.value))}
+                onChange={e => selectLayer(baseLayers.find(l => '' + l.getId() === '' + e.target.value))}
             >
-                {layers.map(layer => {
+                {baseLayers.map(layer => {
                     return (
                         <div key={layer.getId()}>
                             <LayerRow>
