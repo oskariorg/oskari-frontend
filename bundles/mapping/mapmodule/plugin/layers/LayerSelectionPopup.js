@@ -66,7 +66,7 @@ export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadat
 
     return {
         ...controls,
-        update: (baseLayerData, layerData, showMetadata, styleSelectable, setLayerVisibility, selectStyle) => controls.update(
+        update: (baseLayerData, layerData, showMetadata, styleSelectable) => controls.update(
             <Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.title' />,
             <LayerSelectionPopup
                 baseLayers={baseLayerData}
