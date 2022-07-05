@@ -213,12 +213,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
                 this.deleteCategory(categoryId);
             };
+            const isLayerRemoval = true;
             if (moveToId) {
                 places.forEach(place => place.setCategoryId(moveToId));
                 // TODO: old categoryId use refresh but here is remove needed, TEST is its ok to load empty places before category is removed
-                this._commitMyPlaces(places, false, categoryId, callback);
+                this._commitMyPlaces(places, false, categoryId, callback, isLayerRemoval);
             } else {
-                this.deletePlaces(places, callback);
+                this.deletePlaces(places, callback, isLayerRemoval);
             }
         },
 
@@ -229,6 +230,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 url: Oskari.urls.getRoute('MyPlacesLayers') + '&id=' + categoryId,
                 success: () => {
                     const layerId = getLayerId(categoryId);
+                    // remove layer if it was on map (not a problem if layer is not on map so we can trigger it anyway)
+                    this.sandbox.postRequestByName('RemoveMapLayerRequest', [layerId]);
                     this.mapLayerService.removeLayer(layerId);
                     this._notifyCategory();
                     Messaging.success(this.loc('notification.category.deleted'));
@@ -296,14 +299,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             this.sandbox.notifyAll(Oskari.eventBuilder('MyPlaces.MyPlacesChangedEvent')());
         },
 
-        deletePlaces: function (places, successCb) {
+        deletePlaces: function (places, successCb, isLayerRemoval) {
             const features = places.map(p => p.getId()).join();
             jQuery.ajax({
                 type: 'DELETE',
                 url: Oskari.urls.getRoute('MyPlacesFeatures', { features }),
                 success: () => {
                     Messaging.success(this.loc('notification.place.deleted'));
-                    this._handlePlacesChange(places);
+                    if (!isLayerRemoval) {
+                        // skip if removing the whole layer to prevent fetching errors from soon-to-be-removed layer
+                        // if this is called the layer requests will go off while we are removing the layer because timing/parallel requests
+                        this._handlePlacesChange(places, undefined, isLayerRemoval);
+                    }
                     if (typeof successCb === 'function') {
                         successCb(true);
                     }
@@ -333,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
          *
          * handles insert & update (NO delete)
          */
-        _commitMyPlaces: function (places, isAdd, oldCategoryId, successCb) {
+        _commitMyPlaces: function (places, isAdd, oldCategoryId, successCb, isLayerRemoval) {
             const features = places.map(place => createFeature(place));
             const crs = this.srsName;
             jQuery.ajax({
@@ -347,7 +354,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 url: Oskari.urls.getRoute('MyPlacesFeatures', { crs }),
                 success: () => {
                     Messaging.success(this.loc('notification.place.saved'));
-                    this._handlePlacesChange(places, oldCategoryId);
+                    this._handlePlacesChange(places, oldCategoryId, isLayerRemoval);
                     if (typeof successCb === 'function') {
                         successCb(true);
                     }
@@ -360,7 +367,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 }
             });
         },
-        _handlePlacesChange: function (places, oldCategoryId) {
+        _handlePlacesChange: function (places, oldCategoryId, isLayerRemoval) {
             if (places.length === 0) {
                 return;
             }
@@ -368,8 +375,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
             // refresh cached places
             this._refreshPlaces(categoryId);
             this._refreshLayerIfSelected(categoryId);
-            // if places is moved refresh old category
-            if (oldCategoryId) {
+            // if places are moved refresh old category (if layer is not being removed at the same time)
+            if (oldCategoryId && !isLayerRemoval) {
+                // skip if removing the whole layer to prevent fetching errors from soon-to-be-removed layer
+                // if this is called the layer requests will go off while we are removing the layer because timing/parallel requests
                 this._refreshPlaces(oldCategoryId);
                 this._refreshLayerIfSelected(oldCategoryId);
             }

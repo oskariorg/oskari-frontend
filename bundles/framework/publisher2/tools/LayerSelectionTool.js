@@ -56,28 +56,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             return null;
         }
         const plugin = this.getPlugin();
-        const pluginConfig = {
-            id: this.getTool().id,
-            config: plugin.getConfig()
-        };
-        const layerSelection = this._getLayerSelection();
-
-        if (layerSelection) {
-            pluginConfig.config.baseLayers = layerSelection.baseLayers;
-            pluginConfig.config.defaultBaseLayer = layerSelection.defaultBaseLayer;
-        }
-        pluginConfig.config.isStyleSelectable = plugin.getStyleSelectable();
-        pluginConfig.config.showMetadata = plugin.getShowMetadata();
-        let conf = {
+        const conf = {
             configuration: {
                 mapfull: {
                     conf: {
-                        plugins: [pluginConfig]
+                        plugins: [{
+                            id: TOOL_ID,
+                            config: plugin.getConfig()
+                        }]
                     }
                 }
             }
         };
         if (plugin.getShowMetadata()) {
+            // published map needs to also include 'metadataflyout' bundle if we want to show metadata
             conf.configuration.metadataflyout = {};
         }
         return conf;
@@ -220,60 +212,46 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             return;
         }
 
-        // if layer selection = ON -> show content
-        var closureMagic = function (layer) {
-            return function () {
-                var checkbox = jQuery(this),
-                    isChecked = checkbox.is(':checked');
 
-                layer.selected = isChecked;
-                if (isChecked) {
-                    me.__plugin.addBaseLayer(layer);
-                } else {
-                    me.__plugin.removeBaseLayer(layer);
-                }
-            };
-        };
-
-        var layerDiv = me._templates.backgroundCheckbox.clone(),
-            foundedLayerDiv = me._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
-
-        if (foundedLayerDiv.length > 0) {
+        const existingLayerDiv = this._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
+        if (existingLayerDiv.length > 0) {
+            // layer already added
             return;
         }
-
+        const layerDiv = this._templates.backgroundCheckbox.clone();
         layerDiv.find('label').append(Oskari.util.sanitize(layer.getName()));
         layerDiv.attr('data-id', layer.getId());
-        var input = layerDiv.find('input');
-        input.attr('id', 'checkbox' + layer.getId());
+        const input = layerDiv.find('input');
 
         if (me.shouldPreselectLayer(layer.getId())) {
             input.prop('checked', true);
             layer.selected = true;
         }
-        input.on('change', closureMagic(layer));
+        input.on('change', function() {
+            const checkbox = jQuery(this);
+            const isChecked = checkbox.is(':checked');
+            layer.selected = isChecked;
+            if (isChecked) {
+                me.__plugin.addBaseLayer(layer);
+            } else {
+                me.__plugin.removeBaseLayer(layer);
+            }
+        });
         me._extraOptions.find('.layers').append(layerDiv);
     },
     /**
-     * Should preselt layer.
+     * Should preselect layer.
      * @method @private shouldPreselectLayer
      * @param  {Integer} id layer id
      * @return {Boolean} true if layer must be preselect, other false
      */
     shouldPreselectLayer: function (id) {
         const toolPluginMapfullConf = this._getToolPluginMapfullConf();
-        if (toolPluginMapfullConf) {
-            var isPluginConfig = !!((toolPluginMapfullConf && toolPluginMapfullConf.config &&
-                toolPluginMapfullConf.config.baseLayers));
-
-            if (isPluginConfig) {
-                return toolPluginMapfullConf.config.baseLayers.includes('' + id);
-            } else {
-                return false;
-            }
-        } else {
+        if (!toolPluginMapfullConf) {
             return false;
         }
+        const { baseLayers = [] } = toolPluginMapfullConf.config;
+        return baseLayers.some(layerId => '' + layerId === '' + id);
     },
     /**
      * @private @method _getToolPluginMapfullConf
@@ -281,22 +259,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
      * @return {Object / null} config or null if not found
      */
     _getToolPluginMapfullConf: function () {
-        var me = this;
-        var isConfig = !!((me.data && me.data.configuration));
-        var isPlugins = !!((isConfig && me.data.configuration.mapfull &&
-            me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins));
-        var toolPlugin = null;
-        if (isPlugins) {
-            var plugins = me.data.configuration.mapfull.conf.plugins;
-            for (var i = 0; i < plugins.length; i++) {
-                var plugin = plugins[i];
-                if (plugin.id === TOOL_ID) {
-                    toolPlugin = plugin;
-                    break;
-                }
-            }
+        const { configuration } = this.data || {};
+        if (!configuration) {
+            return null;
         }
-        return toolPlugin;
+        const { mapfull = {} } = configuration;
+        const { conf = {} } = mapfull;
+        const { plugins = [] } = conf;
+        // data.configuration.mapfull.conf.plugins
+        return plugins.find(plug => plug.id === TOOL_ID);
     },
     /**
      * Handle add map layer event
@@ -304,10 +275,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
      * @param  {Object} layer added layer
      */
     _handleMapLayerAdd: function (layer) {
-        var me = this;
-        me._addLayer(layer);
-        me._checkCanChangeStyle();
-        me._metadataAvailable();
+        this._addLayer(layer);
+        this._checkCanChangeStyle();
+        this._metadataAvailable();
     },
     /**
      * Handle remove map layer event
@@ -315,12 +285,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
      * @param  {Object} layer removed layer
      */
     _handleMapLayerRemove: function (layer) {
-        var me = this,
-            layerDiv = me._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
-        // TODO checked handling
+        const layerDiv = this._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
         layerDiv.remove();
-        me._checkCanChangeStyle();
-        me._metadataAvailable();
+        this._checkCanChangeStyle();
+        this._metadataAvailable();
     },
     /**
      * @private @method _checkCanChangeStyle

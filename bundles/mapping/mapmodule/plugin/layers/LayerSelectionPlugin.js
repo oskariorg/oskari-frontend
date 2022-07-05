@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this.showPopup();
             }
         },
-        
         showPopup: function () {
             const mapModule = this.getMapModule();
             // TODO: set default baselayer!!
@@ -60,12 +59,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 () => this.popupCleanup(),
                 this.getShowMetadata(),
                 this.getStyleSelectable(),
-                (layer, visible, isBaseLayer) => this._setLayerVisible(layer, visible, isBaseLayer),
+                (layer, visible, isBaseLayer) => {
+                    if (isBaseLayer) {
+                        this.selectBaseLayer(layer.getId())
+                    } else {
+                        this._setLayerVisible(layer, visible)
+                    }
+                },
                 (layerId, style) => this._selectStyle(layerId, style),
                 {
                     theme: mapModule.getTheme(),
                     font: this.getToolFontFromMapModule()
                 }
+            );
+        },
+        _updateLayerSelectionPopup: function () {
+            if (!this.popupControls) {
+                return;
+            }
+            this.popupControls.update(
+                this._baseLayers,
+                this._layers,
+                this.getShowMetadata(),
+                this.getStyleSelectable()
             );
         },
         popupCleanup: function () {
@@ -128,7 +144,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 MapLayerVisibilityChangedEvent: function () {
                     this.updateLayers();
                 },
-
+                AfterChangeMapLayerStyleEvent: function () {
+                    this.updateLayers();
+                },
                 /**
                  * @method AfterRearrangeSelectedMapLayerEvent
                  * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
@@ -136,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                  * Rearranges layers
                  */
                 AfterRearrangeSelectedMapLayerEvent: function (event) {
-                    // Layer order has been changed by someone, resort layers
+                    // Layer order has been changed by someone, re-sort layers
                     if (event._creator !== this.getName()) {
                         this.updateLayers();
                     }
@@ -172,19 +190,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         preselectLayers: function () {},
 
-        /**
-         * @method selectBaseLayer
-         * Tries to find given layer from baselayers and select it programmatically
-         * @param {String} layerId id for layer to select
-         */
-        selectBaseLayer: function (layerId) {
-            const old = this.getConfig();
-            this.setConfig({
-                ...old,
-                defaultBaseLayer: layerId || old.baseLayers[0]
-            });
-            this._changedBaseLayer();
-        },
         /**
          * @method setStyleSelectable
          * Set if layer styles should be selectable by user
@@ -226,8 +231,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
         _selectStyle: function (layerId, style) {
             this.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layerId, style]);
-            // TODO: don't update here but listen to style update event
-            this._updateLayerSelectionPopup();
         },
 
         /**
@@ -237,18 +240,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} blnVisible true to show, false to hide
          * @private
          */
-        _setLayerVisible: function (layer, blnVisible, isBaseLayer = false) {
-            var sandbox = this.getSandbox(),
-                visibilityRequestBuilder = Oskari.requestBuilder(
-                    'MapModulePlugin.MapLayerVisibilityRequest'
-                ),
-                request = visibilityRequestBuilder(layer.getId(), blnVisible);
-
-            sandbox.request(this, request);
-            if (isBaseLayer && blnVisible) {
-                this.selectBaseLayer(layer.getId());
-            }
-            this._updateLayerSelectionPopup();
+        _setLayerVisible: function (layer, blnVisible) {
+            const layerId = layer.getId();
+            this.getSandbox().postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layerId, blnVisible]);
         },
         /**
          * @method addBaseLayer
@@ -256,21 +250,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
          */
         addBaseLayer: function (layer) {
-            var me = this;
             if (!layer || !layer.getId) {
                 return;
             }
             const alreadyAdded = this._baseLayers.some(l => '' + l.getId() === '' + layer.getId());
-            if (!alreadyAdded) {
-                this._baseLayers.push(layer);
+            if (alreadyAdded) {
+                return;
             }
+            this._baseLayers.push(layer);
             this.setConfig({
                 ...this.getConfig(),
                 baseLayers: this._baseLayers.map(l => l.getId())
             });
+            this._changedBaseLayer();
             this.updateLayers();
-
-            me._changedBaseLayer();
         },
         /**
          * @method removeBaseLayer
@@ -279,17 +272,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         removeBaseLayer: function (layer) {
             const old = this.getConfig();
-            this.setConfig({
+            const newConfig = {
                 ...old,
                 baseLayers: old.baseLayers.filter(id => '' + id !== '' + layer.getId())
-            });
-            if ('' + old.defaultBaseLayer === '' + layer.getId()) {
-                this.selectBaseLayer();
+            };
+            if (layer.getId() + '' === old.defaultBaseLayer + '') {
+                // removed the currently selected base layer
+                newConfig.defaultBaseLayer = newConfig.baseLayers[0];
             }
-            // update selection so base layer will be listed under other layers
+            this.setConfig(newConfig);
+            this._changedBaseLayer();
             this.updateLayers();
             // make layer visible by default when toggled out of base layers
             this._setLayerVisible(layer, true);
+        },
+        /**
+         * @method selectBaseLayer
+         * Tries to find given layer from baselayers and select it programmatically
+         * @param {String} layerId id for layer to select
+         */
+        selectBaseLayer: function (layerId) {
+            const old = this.getConfig();
+            this.setConfig({
+                ...old,
+                defaultBaseLayer: layerId || old.baseLayers[0]
+            });
+            this._changedBaseLayer();
+        },
+        /**
+         * @method getBaseLayers
+         * Returns list of the current base layers and which one is selected
+         * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and
+         * {String} defaultBase as the selected base layers id
+         */
+         getBaseLayers: function () {
+            const config = this.getConfig();
+            return {
+                baseLayers: config.baseLayers,
+                defaultBaseLayer: config.defaultBaseLayer || config.baseLayers[0]
+            };
         },
         /**
          * @method _changedBaseLayer
@@ -297,31 +318,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @private
          */
         _changedBaseLayer: function () {
-            var me = this,
-                sandbox = me.getSandbox(),
-                values = me.getBaseLayers(),
-                i,
-                layerId,
-                layer;
-
-            for (i = 0; i < values.baseLayers.length; i += 1) {
-                layerId = values.baseLayers[i];
-                layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-                if (layer !== null && layer !== undefined) {
-                    // Numeric layer IDs are Numbers for some reason...
-                    me._setLayerVisible(
-                        layer,
-                        ((values.defaultBaseLayer + '') === (layerId + ''))
-                    );
+            const sandbox = this.getSandbox();
+            const values = this.getBaseLayers();
+            const selectedBaseLayerId = values.defaultBaseLayer;
+            values.baseLayers.forEach(layerId => {
+                const layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+                if (!layer) {
+                    return;
                 }
-            }
-            // FIXME values.defaultBaseLayer is sometimes empty...
+                const isSelectedBaseLayer = '' + selectedBaseLayerId === '' + layerId;
+                this._setLayerVisible(layer, isSelectedBaseLayer);
+            });
             // send Request to rearrange layers
-            var reqName = 'RearrangeSelectedMapLayerRequest',
-                builder = Oskari.requestBuilder(reqName),
-                request = builder(values.defaultBaseLayer, 0);
-
-            sandbox.request(me, request);
+            sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [selectedBaseLayerId, 0]);
         },
 
         /**
@@ -383,19 +392,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me._handleMapSizeChanged(size, false);
             }
         },
-        /**
-         * @method getBaseLayers
-         * Returns list of the current base layers and which one is selected
-         * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and
-         * {String} defaultBase as the selected base layers id
-         */
-        getBaseLayers: function () {
-            const config = this.getConfig();
-            return {
-                baseLayers: config.baseLayers,
-                defaultBaseLayer: config.defaultBaseLayer || config.baseLayers[0]
-            };
-        },
 
         _bindHeader: function (header) {
             var me = this;
@@ -406,20 +402,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.showPopup();
                 }
             });
-        },
-
-        _updateLayerSelectionPopup: function () {
-            if (!this.popupControls) {
-                return;
-            }
-            this.popupControls.update(
-                this._baseLayers,
-                this._layers,
-                this.getShowMetadata(),
-                this.getStyleSelectable(),
-                (l, visible, isBaseLayer) => this._setLayerVisible(l, visible, isBaseLayer),
-                (layerId, style) => this._selectStyle(layerId, style)
-            );
         },
 
         /**
