@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this,
                 values = {};
 
-            _.each(me.tools, function (tool) {
+            this.tools.forEach(tool => {
                 if (tool.isDisplayed(me.data)) {
                     var value = tool.getValues();
                     if (value !== undefined && value !== null) {
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         _toggleAdditionalTools: function () {
             var me = this;
-            _.each(me.tools, function (tool) {
+            this.tools.forEach(tool => {
                 // don't call for tools that already have been set enabled (=plugin has already been created.)
                 if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && !tool.state.enabled) {
                     tool.setEnabled(true);
@@ -303,31 +303,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @method _initToolLayout
          */
         _initUserLayout: function () {
-            var me = this,
-                tools = this.tools,
-                pluginConfigs;
-            // gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
-            try {
-                pluginConfigs = me.data.configuration.mapfull.conf.plugins;
-            } catch (e) {
-                pluginConfigs = null;
-            }
-            if (pluginConfigs && pluginConfigs.length) {
-                var pluginConfig = null;
-                _.each(tools, function (tool) {
-                    for (var i = 0; i < pluginConfigs.length; i++) {
-                        pluginConfig = pluginConfigs[i];
-                        if (tool.getTool().id === pluginConfig.id) {
-                            if (pluginConfig.config && pluginConfig.config.location && pluginConfig.config.location.classes) {
-                                tool.getTool().config.location = pluginConfig.config.location;
-                                if (tool.getPlugin() && tool.getPlugin().setLocation) {
-                                    tool.getPlugin().setLocation(pluginConfig.config.location.classes);
-                                }
-                            }
-                        }
+            const data = this.data;
+            const pluginsConfigExists = Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins');
+            const pluginConfigs = pluginsConfigExists ? data.configuration.mapfull.conf.plugins : [];
+            this.tools.forEach(tool => {
+                pluginConfigs.forEach(plugin => {
+                    if (tool.getTool().id !== plugin.id || !plugin.config) {
+                        return;
+                    }
+                    const { location = {} } = plugin.config;
+                    if (!location.classes) {
+                        return;
+                    }
+                    tool.getTool().config.location = location;
+                    if (tool.getPlugin() && tool.getPlugin().setLocation) {
+                        tool.getPlugin().setLocation(plugin.config.location.classes);
                     }
                 });
-            }
+            });
         },
         /**
          * @private @method _editToolLayoutOn
@@ -537,9 +530,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         * @public
         **/
         stop: function () {
-            var me = this;
             this._editToolLayoutOff();
-            _.each(me.tools, function (tool) {
+            this.tools.forEach(tool => {
                 // just call stop for the tools that haven't already been shut down by the tool panel
                 if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
                     tool.stop();
@@ -547,11 +539,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 }
             });
 
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.unregisterFromEventByName(me, p);
-                }
-            }
+            Object.keys(this.eventHandlers)
+                .forEach(eventName => this.sandbox.unregisterFromEventByName(this, eventName));
         },
 
         /**
@@ -668,10 +657,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          *
          */
         _restartActivePlugins: function () {
-            var me = this;
-
-            _.each(me.tools, function (tool) {
-                if (tool.isDisplayed(me.data) && tool.isStarted()) {
+            this.tools.forEach(tool => {
+                if (tool.isDisplayed(this.data) && tool.isStarted()) {
                     // reset
                     tool.setEnabled(false);
                     tool.setEnabled(true);
