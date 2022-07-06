@@ -1,3 +1,12 @@
+const toolSortFn = (a, b) => {
+    if (a.getIndex() < b.getIndex()) {
+        return -1;
+    }
+    if (a.getIndex() > b.getIndex()) {
+        return 1;
+    }
+    return 0;
+};
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelMapTools
  *
@@ -93,17 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         * @private
         */
         _sortTools: function () {
-            const sortFunc = function (a, b) {
-                    if (a.getIndex() < b.getIndex()) {
-                        return -1;
-                    }
-                    if (a.getIndex() > b.getIndex()) {
-                        return 1;
-                    }
-                    return 0;
-                };
-
-            this.tools.sort(sortFunc);
+            this.tools.sort(toolSortFn);
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.

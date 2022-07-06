@@ -125,7 +125,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 panel.addClass('t_tools');
                 panel.addClass('t_' + group);
                 accordion.addPanel(panel);
-
             });
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
