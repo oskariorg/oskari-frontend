@@ -17,14 +17,15 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
         return null;
     }
     return (
-        <React.Fragment>
+        <div className='t_otherlayers'>
             <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3>
             {layers.map(layer => {
                 return (
-                    <div key={layer.getId()}>
+                    <div key={layer.getId()} className='t_layer' data-id={layer.getId()} data-checked={layer.isVisible()}>
                         <LayerRow>
                             <Checkbox
                                 checked={layer.isVisible()}
+                                value={layer.getId()}
                                 onChange={e => setLayerVisibility(layer, e.target.checked, false)}
                                 >{layer.getName()}</Checkbox>
                             {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
@@ -33,7 +34,7 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
                     </div>
                 );
             })}
-        </React.Fragment>
+        </div>
     );
 };
 
