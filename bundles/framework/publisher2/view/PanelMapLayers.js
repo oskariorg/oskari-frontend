@@ -140,28 +140,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     event.isInScale(),
                     event.isGeometryMatch()
                 );
-            },
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                var me = this;
-                if (event && event.getTool() && event.getTool().getTool() && event.getTool().getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
-                    if (event.getTool().state.enabled === true) {
-                        me._plugin = event.getTool().getPlugin();
-                        // update the plugin's baselayer info in case some of the layers have that ticked.
-                        var contentPanel = me.getPanel().getContainer();
-                        // find checked baselayerinputs
-                        var checkedBaseLayers = contentPanel.find('input.baselayer:checked');
-
-                        _.each(checkedBaseLayers, function (checkbox) {
-                            var id = checkbox.id.replace('checkbox', '');
-                            var layer = me.sandbox.findMapLayerFromSelectedMapLayers(id);
-                            if (layer) {
-                                me.getPlugin().addBaseLayer(layer);
-                            }
-                        });
-                    } else {
-                        me._plugin = null;
-                    }
-                }
             }
         },
         /**
@@ -196,9 +174,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 return;
             }
             return handler.apply(this, [event]);
-        },
-        getPlugin: function () {
-            return this._plugin;
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelMapLayers';
@@ -302,15 +277,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                             isChecked = checkbox.is(':checked');
 
                         layer.selected = isChecked;
-                        if (isChecked) {
-                            me.getPlugin().removeBaseLayer(layer);
-                        }
                         sandbox.request(me.instance.getName(), request);
                     });
                 }
 
                 // footer tools
-                me._appendLayerFooter(layerContainer, layer, layer.selected);
+                me._appendLayerFooter(layerContainer, layer);
                 input = layerContainer.find('input.baselayer');
                 input.attr('id', 'checkbox' + layer.getId());
 
@@ -367,8 +339,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                                 me.instance,
                                 addRequestBuilder(layer.getId(), true)
                             );
-                            // promoted layers go directly to baselayers
-                            me.getPlugin().addBaseLayer(layer);
                         } else {
                             sandbox.request(
                                 me.instance,
@@ -563,8 +533,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
             var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
-                footer = layerDiv.find('div.layer-tools'), // teardown previous footer & layer state classes
-                isChecked = footer.find('.baselayer').is(':checked');
+                footer = layerDiv.find('div.layer-tools'); // teardown previous footer & layer state classes
 
             footer.empty();
 
@@ -572,7 +541,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
             this._sliders[layer.getId()] = null;
 
-            this._appendLayerFooter(layerDiv, layer, isChecked);
+            this._appendLayerFooter(layerDiv, layer);
         },
         /**
          * @method _createLayerFooter
@@ -584,7 +553,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          *
          * Creates a footer for the given layer with the usual tools (opacity etc)
          */
-        _createLayerFooter: function (layer, layerDiv, isChecked) {
+        _createLayerFooter: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 tools = this.templateLayerFooterTools.clone(), // layer footer
@@ -598,26 +567,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 sandbox.request(me.instance.getName(), request);
                 return false;
             });
-
-            // if layer selection = ON -> show content
-            var closureMagic = function (layer) {
-                return function () {
-                    var checkbox = jQuery(this),
-                        isChecked = checkbox.is(':checked');
-
-                    layer.selected = isChecked;
-                    if (isChecked && me.getPlugin()) {
-                        me.getPlugin().addBaseLayer(layer);
-                    } else if (me.getPlugin()) {
-                        me.getPlugin().removeBaseLayer(layer);
-                    }
-                };
-            };
-
-            var input = tools.find('input.baselayer');
-            input.attr('id', 'checkbox' + layer.getId());
-            input.prop('checked', !!isChecked);
-            input.on('change', closureMagic(layer));
 
             return tools;
         },
@@ -660,11 +609,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          *
          * Appends layer footer to layer in publisher's manipulation panel
          */
-        _appendLayerFooter: function (layerDiv, layer, isChecked) {
+        _appendLayerFooter: function (layerDiv, layer) {
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             /* fix: we need this at anytime for slider to work */
-            var footer = this._createLayerFooter(layer, layerDiv, isChecked);
+            var footer = this._createLayerFooter(layer);
 
             if (!layer.isVisible()) {
                 toolsDiv.addClass('hidden-layer');
