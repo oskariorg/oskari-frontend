@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             var grouping = {};
             var allTools = [];
             // group tools per tool-group
-            _.each(definedTools, function (toolname) {
+            definedTools.forEach(toolname => {
                 var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
                 if (tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
                     var group = tool.getGroup();
@@ -517,17 +517,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         _enablePreview: function () {
-            var me = this,
-                mapModule = me.instance.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                );
-            _.each(mapModule.getPluginInstances(), function (plugin) {
-                if (plugin.hasUI && plugin.hasUI()) {
-                    plugin.stopPlugin(me.instance.sandbox);
+            const sandbox = this.instance.sandbox;
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            Object.values(mapModule.getPluginInstances())
+                .filter(plugin => plugin.hasUI && plugin.hasUI())
+                .forEach(plugin => {
+                    plugin.stopPlugin(sandbox);
                     mapModule.unregisterPlugin(plugin);
-                    me.normalMapPlugins.push(plugin);
-                }
-            });
+                    this.normalMapPlugins.push(plugin);
+                });
         },
 
         /**
@@ -536,29 +534,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         _disablePreview: function () {
-            var me = this;
-            var mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
-            var plugin;
+            const sandbox = this.instance.sandbox;
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             // Remove plugins added during publishing session
-            _.each(mapModule.getPluginInstances(), function (plugin) {
-                if (plugin.hasUI && plugin.hasUI()) {
-                    plugin.stopPlugin(me.instance.sandbox);
+            Object.values(mapModule.getPluginInstances())
+                .filter(plugin => plugin.hasUI && plugin.hasUI())
+                .forEach(plugin => {
+                    plugin.stopPlugin(sandbox);
                     mapModule.unregisterPlugin(plugin);
-                }
-            });
+                });
 
             // resume normal plugins
-            for (var i = 0; i < me.normalMapPlugins.length; i += 1) {
-                plugin = me.normalMapPlugins[i];
+            this.normalMapPlugins.forEach(plugin => {
                 mapModule.registerPlugin(plugin);
-                plugin.startPlugin(me.instance.sandbox);
+                plugin.startPlugin(sandbox);
                 if (plugin.refresh) {
                     plugin.refresh();
                 }
-            }
+            });
             // reset listing
-            me.normalMapPlugins = [];
+            this.normalMapPlugins = [];
         },
         /**
          * @private @method _showValidationErrorMessage
