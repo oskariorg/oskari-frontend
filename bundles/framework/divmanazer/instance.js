@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             me.sandbox = sandbox;
 
-            //me.flyoutContainer = jQuery(document.body);
+            // me.flyoutContainer = jQuery(document.body);
             me.flyoutContainer = jQuery(Oskari.getRootEl());
 
             me.tileContainer = jQuery(me.menubarContainerId);

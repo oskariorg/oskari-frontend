@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     .width(me.conf.size.width)
                     .height(me.conf.size.height);
                 // TODO check if we need to set mapDiv size at all here...
-                //jQuery('#' + me.mapDivId).height(me.conf.size.height);
+                // jQuery('#' + me.mapDivId).height(me.conf.size.height);
             }
 
             // react to window resize with timer so app stays responsive
