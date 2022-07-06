@@ -113,12 +113,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
-            var sandbox = this.instance.getSandbox();
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
                 const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, sandbox, me.loc, me.instance
+                    group, tools, me.instance, me.loc
                 );
                 toolPanel.init(me.data);
                 me.panels.push(toolPanel);
