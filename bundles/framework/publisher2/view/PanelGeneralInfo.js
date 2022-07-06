@@ -110,8 +110,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             if (this.panel) {
                 return this.panel;
             }
-            var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
-                contentPanel = panel.getContainer();
+            const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            const contentPanel = panel.getContainer();
 
             ReactDOM.render(
                 <GeneralInfoForm onChange={(key, value) => this.onChange(key, value)} data={this.fields} />,
