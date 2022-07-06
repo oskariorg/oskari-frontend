@@ -1,3 +1,4 @@
+const hasSizeUpdateFn = panel => typeof panel.updateMapSize === 'function';
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
@@ -96,34 +97,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // -- create panels --
             var genericInfoPanel = me._createGeneralInfoPanel();
+            genericInfoPanel.getPanel().addClass('t_generalInfo');
             me.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
             var publisherTools = me._createToolGroupings(accordion);
 
             var mapPreviewPanel = me._createMapPreviewPanel(publisherTools.tools);
+            mapPreviewPanel.getPanel().addClass('t_size');
             me.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
             var mapLayersPanel = me._createMapLayersPanel();
+            mapLayersPanel.getPanel().addClass('t_layers');
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
             var sandbox = this.instance.getSandbox();
             // create panel for each tool group
-            _.each(publisherTools.groups, function (tools, group) {
-                var panel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+            Object.keys(publisherTools.groups).forEach(group => {
+                const tools = publisherTools.groups[group];
+                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     group, tools, sandbox, me.loc, me.instance
                 );
-                panel.init(me.data);
-                me.panels.push(panel);
-                accordion.addPanel(panel.getPanel());
+                toolPanel.init(me.data);
+                me.panels.push(toolPanel);
+                const panel = toolPanel.getPanel();
+                panel.addClass('t_tools');
+                panel.addClass('t_' + group);
+                accordion.addPanel(panel);
+
             });
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
+            toolLayoutPanel.getPanel().addClass('t_toollayout');
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
 
             var layoutPanel = me._createLayoutPanel();
+            layoutPanel.getPanel().addClass('t_style');
             me.panels.push(layoutPanel);
             accordion.addPanel(layoutPanel.getPanel());
 
@@ -144,30 +155,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
             });
         },
-        /**
-        * Initialize panels.
-        * @method @public initPanels
-        */
-        initPanels: function () {
-            var me = this;
-            _.each(me.panels, function (panel) {
-                if (panel.init) {
-                    panel.init(me.data);
-                }
-            });
-        },
 
         /**
         * Handles panels update map size changes
         * @method @private _handleMapSizeChange
         */
         _handleMapSizeChange: function () {
-            var me = this;
-            _.each(me.panels, function (panel) {
-                if (typeof panel.updateMapSize === 'function') {
-                    panel.updateMapSize();
-                }
-            });
+            this.panels
+                .filter(hasSizeUpdateFn)
+                .forEach(panel => panel.updateMapSize());
         },
         /**
          * @private @method _createGeneralInfoPanel
