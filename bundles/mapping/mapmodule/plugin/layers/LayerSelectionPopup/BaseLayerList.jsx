@@ -25,15 +25,16 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
     const selected = baseLayers.find(l => l.isVisible()) || baseLayers[0];
 
     return (
-        <React.Fragment>
+        <div className='t_baselayers'>
             <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3>
             <RadioGroup
                 value={selected.getId()}
                 onChange={e => selectLayer(baseLayers.find(l => '' + l.getId() === '' + e.target.value))}
             >
                 {baseLayers.map(layer => {
+                    const isChecked = '' + selected.getId() === '' + layer.getId();
                     return (
-                        <div key={layer.getId()}>
+                        <div key={layer.getId()} className='t_layer' data-id={layer.getId()} data-checked={isChecked}>
                             <LayerRow>
                                 <Radio.Choice value={layer.getId()}>
                                     {layer.getName()}
@@ -45,7 +46,7 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
                     );
                 })}
             </RadioGroup>
-        </React.Fragment>
+        </div>
     );
 };
 
