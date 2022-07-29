@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             triggerAjaxBln = true;
         }
         this.requestsMap[url].push(arguments);
-
         if (triggerAjaxBln) {
             jQuery.ajax({
                 dataType: 'json',
@@ -99,6 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 successCB(this.__createWMTSLayer(caps, layer));
                 return;
             }
+            Oskari.log('WMTSLayerService').error(`Failed to set capabilities for: ${layer.getName()}`);
             if (typeof errorCB === 'function') {
                 errorCB();
             }
@@ -148,29 +148,34 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
 
     // see https://github.com/openlayers/openlayers/blob/v6.6.1/src/ol/source/WMTS.js#L341-L588
     // for how OL parses the JSON and what it expects to find in it
-    __formatCapabilitiesForOpenLayers: function (layerCapabilities) {
-        // server always just gives one for frontend (one matching the map srs)
-        var tileMatrixSet = layerCapabilities.tileMatrixSet;
+    __formatCapabilitiesForOpenLayers: function ({
+        tileMatrixSet, // server always just gives one for frontend (one matching the map srs)
+        id,
+        name,
+        formats,
+        styles = [],
+        resourceUrls = []
+    }) {
         return {
             Contents: {
                 Layer: [{
-                    Identifier: layerCapabilities.id || layerCapabilities.name,
+                    Identifier: id || name,
                     TileMatrixSetLink: [{
                         TileMatrixSet: tileMatrixSet.identifier
                     }],
-                    Style: layerCapabilities.styles.map(s => {
+                    Style: styles.map(s => {
                         return {
                             Identifier: s.name
                         };
                     }),
-                    ResourceURL: layerCapabilities.resourceUrls.map(item => {
+                    ResourceURL: resourceUrls.map(item => {
                         const { type, ...rest } = item;
                         return {
                             ...rest,
                             resourceType: type
                         };
                     }),
-                    Format: layerCapabilities.formats
+                    Format: formats
                 }],
                 TileMatrixSet: [{
                     Identifier: tileMatrixSet.identifier,
