@@ -27,6 +27,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             this.layerTypeHandlers = {};
             this.defaultHandlers = {};
             this.hoverHandler = new HoverHandler(mapmodule);
+            this._hoverEnabled = true;
             this._registerEventHandlers();
         }
 
@@ -222,8 +223,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (this._sandbox.getMap().isMoving()) {
                 return;
             }
-            this.hoverHandler.onMapHover(event);
-            this._hoverFeature(event);
+
+            if (this._hoverEnabled) {
+                this.hoverHandler.onMapHover(event);
+                this._hoverFeature(event);
+            }
         }
 
         _hoverFeature (event) {
@@ -327,6 +331,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 });
                 me.getSandbox().notifyAll(clickEvent);
             }
+        }
+
+        setHoverEnabled (bln) {
+            this._hoverEnabled = !!bln;
         }
 
         /**
