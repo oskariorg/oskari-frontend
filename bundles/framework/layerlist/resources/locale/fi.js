@@ -69,6 +69,7 @@ Oskari.registerLocalization(
                 'arcgis': 'Rasteritaso',
                 'wfs': 'Vektoritaso',
                 'vectortile': 'Vektoritaso',
+                'vector': 'Vektoritaso',
                 'userlayer': '',
                 'myplaces': '',
                 'analysislayer': '',
