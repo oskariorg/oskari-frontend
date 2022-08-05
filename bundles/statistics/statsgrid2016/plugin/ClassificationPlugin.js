@@ -138,14 +138,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (uniqueCount < 3) {
                 disabled.push('jenks');
             }
-            if (mapStyle === 'points') {
-                // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
-                const dividable = minMax.min < 0 && minMax.max > 0;
-                if (typeof base !== 'number' && !dividable) {
-                    // disable option if base isn't given in metadata or dataset isn't dividable
-                    disabled.push('div');
-                }
+
+            // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
+            const dividable = minMax.min < 0 && minMax.max > 0;
+            if (typeof base !== 'number' && !dividable) {
+                // disable option if base isn't given in metadata or dataset isn't dividable
+                disabled.push('div');
             }
+
             const toOption = (option, value) => ({
                 value,
                 label: this._locale(`classify.${option}.${value}`),
