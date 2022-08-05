@@ -89,16 +89,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             const datasets = [];
             ind.selectors.forEach(function (sel) {
                 ind.regionsets.forEach(function (regionset) {
-                    sel.allowedValues.forEach(function (value) {
-                        const data = {};
-                        if (typeof value === 'object') {
-                            data[sel.id] = value.id;
-                        } else {
-                            data[sel.id] = value;
-                        }
-                        data.regionset = regionset;
-                        datasets.push(data);
-                    });
+                    // Has data
+                    if (regionset !== 0) {
+                        sel.allowedValues.forEach(function (value) {
+                            const data = {};
+                            if (typeof value === 'object') {
+                                data[sel.id] = value.id;
+                            } else {
+                                data[sel.id] = value;
+                            }
+                            data.regionset = regionset;
+                            datasets.push(data);
+                        });
+                    }
                 });
             });
             me.indicatorParamsList.setDatasets(datasets); // [{ year : 2017, regionset: 1850}]
