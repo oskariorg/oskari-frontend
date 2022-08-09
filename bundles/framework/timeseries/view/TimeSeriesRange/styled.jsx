@@ -52,7 +52,6 @@ export const Row = styled.div`
 
 export const Col = styled.div`
     flex-basis: 0;
-    flex-grow: 1;
     max-width: 100%;
     position: relative;
 
@@ -74,6 +73,8 @@ export const ColFixed = styled.div`
     width: auto;
     max-width: 100%;
     position: relative;
+    flex-grow: 1;
+    padding: 0 20px;
 `;
 
 export const YearInput = styled(NumberInput)`
@@ -99,7 +100,7 @@ const getDataYearStyles = (props) => {
                 border: 2px solid #ffffff;
                 width: 8px;
                 height: 8px;
-                margin-left: -4px;
+                margin-left: -2px;
                 top: -2px;
                 &.ant-slider-dot-active {
                     border: 2px solid ${primaryColor};
@@ -144,7 +145,7 @@ export const StyledRangeSlider = styled(Slider)`
         ${(props) => getDataYearStyles(props)}
     }
     .ant-slider-dot:last-child {
-        margin-left: 0px;
+        margin-left: -2px;
     }
     .ant-slider-rail {
         background-color: #ffffff;
@@ -158,6 +159,7 @@ export const StyledRangeSlider = styled(Slider)`
         border-radius: 6px;
         border: solid 1px ${borderColor};
         background-color: ${primaryColor};
+        margin-left: 2px;
         &:focus,
         &:active,
         &:hover {
