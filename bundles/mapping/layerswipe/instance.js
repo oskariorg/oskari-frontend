@@ -16,6 +16,7 @@ Oskari.clazz.define(
         this.cropSize = null;
         this.mapModule = null;
         this.layer = null; // ol layer
+        this.oskariLayer = null;
         this.popupService = null;
         this.popup = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
@@ -71,6 +72,7 @@ Oskari.clazz.define(
                 this.unregisterEventListeners();
                 this.hideSplitter();
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
+                this.mapModule.setSwipeStatus(false, null, null);
             }
             this.active = active;
             this.mapModule.getMap().render();
@@ -78,7 +80,13 @@ Oskari.clazz.define(
 
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
-            this.layer = this.getTopmostLayer();
+            const topLayer = this.getTopmostLayer();
+            this.layer = topLayer.ol;
+            this.oskariLayer = topLayer.layerId;
+
+            if (this.oskariLayer !== null) {
+                this.mapModule.setSwipeStatus(true, this.cropSize, this.oskariLayer);
+            }
 
             if (this.alertTimer) {
                 clearTimeout(this.alertTimer);
@@ -153,7 +161,10 @@ Oskari.clazz.define(
                 this.showNotVisibleAlert(layerId, !isInGeometry);
             }
             const olLayers = this.mapModule.getOLMapLayers(layerId);
-            return olLayers.length !== 0 ? olLayers[0] : null;
+            return {
+                ol: olLayers.length !== 0 ? olLayers[0] : null,
+                layerId: layerId
+            };
         },
 
         registerEventListeners: function () {
@@ -223,6 +234,7 @@ Oskari.clazz.define(
             const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
             this.mapModule.getMap().render();
+            this.mapModule.setSwipeStatus(true, this.cropSize, this.oskariLayer);
         },
 
         showSplitter: function () {

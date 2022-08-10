@@ -300,9 +300,15 @@ Oskari.clazz.define(
             const me = this;
             const dteMs = (new Date()).getTime();
             const requestedLayers = layers || me.getSandbox().findAllSelectedMapLayers();
-            const layerIds = me._buildLayerIdList(requestedLayers);
+            let layerIds = me._buildLayerIdList(requestedLayers);
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
+
+            const swipeStatus = this.getMapModule().getSwipeStatus();
+
+            if (swipeStatus.active && swipeStatus.x && swipeStatus.layerId) {
+                layerIds = layerIds.filter(l => l !== swipeStatus.layerId || px.x < swipeStatus.x);
+            }
 
             if (layerIds.length === 0) {
                 return;

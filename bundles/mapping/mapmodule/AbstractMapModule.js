@@ -183,6 +183,11 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
         me._supports3D = false;
+        me._swipeStatus = {
+            active: false,
+            x: null,
+            layerId: null
+        };
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -1411,6 +1416,18 @@ Oskari.clazz.define(
                 }
             }
             this.updateSize();
+        },
+
+        setSwipeStatus: function (active, x, layerId) {
+            this._swipeStatus = {
+                active,
+                x,
+                layerId
+            };
+        },
+
+        getSwipeStatus: function () {
+            return this._swipeStatus;
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
