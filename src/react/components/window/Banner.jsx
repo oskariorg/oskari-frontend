@@ -21,7 +21,7 @@ const Container = styled('div')`
         min-width: 0;
         width: 100%
     }
-    z-index: 999999;
+    z-index: 18000;
     display: flex;
     flex-direction: row;
 `;
