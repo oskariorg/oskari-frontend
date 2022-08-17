@@ -72,10 +72,15 @@ Oskari.clazz.define(
                 this.unregisterEventListeners();
                 this.hideSplitter();
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
-                this.mapModule.setSwipeStatus(false, null, null);
+                this.setSwipeStatus(null, false, null);
             }
             this.active = active;
             this.mapModule.getMap().render();
+        },
+
+        setSwipeStatus: function (layerId, active, cropX) {
+            const reqSwipeStatus = Oskari.requestBuilder('GetInfoPlugin.SwipeStatusRequest')(layerId, active, cropX);
+            Oskari.getSandbox().request(this, reqSwipeStatus);
         },
 
         updateSwipeLayer: function () {
@@ -85,7 +90,7 @@ Oskari.clazz.define(
             this.oskariLayer = topLayer.layerId;
 
             if (this.oskariLayer !== null) {
-                this.mapModule.setSwipeStatus(true, this.cropSize, this.oskariLayer);
+                this.setSwipeStatus(this.oskariLayer, true, this.cropSize);
             }
 
             if (this.alertTimer) {
@@ -234,7 +239,7 @@ Oskari.clazz.define(
             const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
             this.mapModule.getMap().render();
-            this.mapModule.setSwipeStatus(true, this.cropSize, this.oskariLayer);
+            this.setSwipeStatus(this.oskariLayer, true, this.cropSize);
         },
 
         showSplitter: function () {
