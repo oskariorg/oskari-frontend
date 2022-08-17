@@ -30,32 +30,43 @@ export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
     const styleTool = layer.getTool('ownStyle');
     const currentStyle = layer.getCurrentStyle();
-    if (styles.length < 2 && !styleTool) {
+    const layerType = layer.getLayerType();
+    const isOwnLayer = layerType === 'userlayer' || layerType === 'myplaces';
+    if ((isOwnLayer && !styleTool) || (!isOwnLayer && styles.length < 2 && !styleTool)) {
         return null;
     }
     return (
         <Fragment>
             <Message messageKey={'layer.styles.title'} LabelComponent={Label} />
             <InputGroup compact>
-                <StyledSelect
-                    value={currentStyle.getName()}
-                    disabled={styles.length < 2}
-                    onChange={onChange}
-                    dropdownMatchSelectWidth={false}
-                >
-                    { styles.length < 2 &&
-                        getOption(currentStyle)
-                    }
-                    { styles.length >= 2 &&
-                        styles.map(getOption)
-                    }
-                </StyledSelect>
-                { styleTool &&
-                    <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
-                        onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
-                        <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
-                    </Button>
-                }
+                    {isOwnLayer ? (
+                         <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
+                            onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
+                            <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
+                        </Button>
+                    ) : (
+                        <div>
+                            <StyledSelect
+                                value={currentStyle.getName()}
+                                disabled={styles.length < 2}
+                                onChange={onChange}
+                                dropdownMatchSelectWidth={false}
+                            >
+                                { styles.length < 2 &&
+                                    getOption(currentStyle)
+                                }
+                                { styles.length >= 2 &&
+                                    styles.map(getOption)
+                                }
+                            </StyledSelect>
+                            { styleTool &&
+                                <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
+                                    onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
+                                    <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
+                                </Button>
+                            }
+                        </div>
+                    )}
             </InputGroup>
         </Fragment>
     );
