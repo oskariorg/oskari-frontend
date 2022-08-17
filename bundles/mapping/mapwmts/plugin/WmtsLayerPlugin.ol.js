@@ -84,6 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 me.setOLMapLayers(layer.getId(), wmtsLayer);
                 me._updateLayer(layer);
             }, function () {
+                // TODO: should we notify user (error callback) that replacing placeholder layer failures and layer doesn't work
             });
         },
         /**
