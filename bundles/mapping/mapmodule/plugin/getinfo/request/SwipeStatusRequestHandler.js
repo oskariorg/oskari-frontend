@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.getinfoplugin.request.SwipeSt
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.instance.setSwipeStatus(request.getLayerId(), request.getActive(), request.getCropX());
+            this.instance.setSwipeStatus(request.getLayerId(), request.getCropX());
         }
     }, {
         /**

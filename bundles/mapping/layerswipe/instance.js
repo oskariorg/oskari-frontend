@@ -16,7 +16,7 @@ Oskari.clazz.define(
         this.cropSize = null;
         this.mapModule = null;
         this.layer = null; // ol layer
-        this.oskariLayer = null;
+        this.oskariLayerId = null;
         this.popupService = null;
         this.popup = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
@@ -72,14 +72,15 @@ Oskari.clazz.define(
                 this.unregisterEventListeners();
                 this.hideSplitter();
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
-                this.setSwipeStatus(null, false, null);
+                this.setSwipeStatus(null, null);
             }
             this.active = active;
             this.mapModule.getMap().render();
         },
 
-        setSwipeStatus: function (layerId, active, cropX) {
-            const reqSwipeStatus = Oskari.requestBuilder('GetInfoPlugin.SwipeStatusRequest')(layerId, active, cropX);
+        setSwipeStatus: function (layerId, cropX) {
+            this.oskariLayerId = layerId;
+            const reqSwipeStatus = Oskari.requestBuilder('GetInfoPlugin.SwipeStatusRequest')(layerId, cropX);
             Oskari.getSandbox().request(this, reqSwipeStatus);
         },
 
@@ -87,10 +88,9 @@ Oskari.clazz.define(
             this.unregisterEventListeners();
             const topLayer = this.getTopmostLayer();
             this.layer = topLayer.ol;
-            this.oskariLayer = topLayer.layerId;
 
-            if (this.oskariLayer !== null) {
-                this.setSwipeStatus(this.oskariLayer, true, this.cropSize);
+            if (topLayer.layerId !== null) {
+                this.setSwipeStatus(topLayer.layerId, this.cropSize);
             }
 
             if (this.alertTimer) {
@@ -239,7 +239,7 @@ Oskari.clazz.define(
             const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
             this.mapModule.getMap().render();
-            this.setSwipeStatus(this.oskariLayer, true, this.cropSize);
+            this.setSwipeStatus(this.oskariLayerId, this.cropSize);
         },
 
         showSplitter: function () {

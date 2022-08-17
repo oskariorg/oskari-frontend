@@ -12,12 +12,10 @@ Oskari.clazz
          * @static
          *
          * @param {Number} layerId layer ID
-         * @param {Boolean} active swipe active
          * @param {Number} cropX swipe tool X position
          */
-        function (layerId, active, cropX) {
+        function (layerId, cropX) {
             this._layerId = layerId;
-            this._active = active;
             this._cropX = cropX;
         }, {
             /** @static @property __name request name */
@@ -35,13 +33,6 @@ Oskari.clazz
              */
             getLayerId: function () {
                 return this._layerId;
-            },
-            /**
-             * @method getActive
-             * @return {Boolean} swipe active
-             */
-            getActive: function () {
-                return this._active;
             },
             /**
              * @method getCropX
