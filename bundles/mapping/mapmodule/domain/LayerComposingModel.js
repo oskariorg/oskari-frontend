@@ -22,6 +22,7 @@ const PROPERTY_FIELDS = [
     'SINGLE_TILE',
     'REFRESH_RATE',
     'SCALE',
+    'COVERAGE',
     'SELECTED_TIME',
     'SRS',
     'STYLE',
@@ -42,7 +43,8 @@ const COMMON_PROPERTY_FIELDS = [
     'NAME',
     'OPACITY',
     'ORGANIZATION_NAME',
-    'SCALE'
+    'SCALE',
+    'COVERAGE'
 ];
 
 const ALL_VERSIONS = 'all';

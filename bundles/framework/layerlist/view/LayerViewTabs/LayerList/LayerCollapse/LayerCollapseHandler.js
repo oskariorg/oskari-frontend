@@ -15,7 +15,8 @@ const getLayerGroups = (groups = []) => {
     return groups.map(group => {
         return {
             id: group.id,
-            name: Oskari.getLocalized(group.name),
+            name: group.getName(),
+            description: group.getDescription(),
             layers: group.getChildren().filter(c => c.type === 'layer') || [],
             groups: getLayerGroups(group.getGroups())
         };
@@ -23,41 +24,30 @@ const getLayerGroups = (groups = []) => {
 };
 
 const providerReducer = (accumulator, currentLayer) => {
-    // TODO: once we have id, use it
-    const org = Oskari.getLocalized(currentLayer.getOrganizationName());
-    if (!org) {
+    const id = currentLayer.getDataProviderId();
+    if (!id) {
         return accumulator;
     }
-    let orgLayers = accumulator[org] || [];
+    const dataProviderId = '' + id;
+    let orgLayers = accumulator[dataProviderId] || [];
     if (!orgLayers.length) {
-        accumulator[org] = orgLayers;
+        accumulator[dataProviderId] = orgLayers;
     }
     orgLayers.push({ id: currentLayer.getId() });
     return accumulator;
 };
 
-const getDataProviders = (fromService = [], layers = []) => {
-    // Note! fromService will be an empty array if admin-layereditor is not started on the appsetup
-    // TODO: determine map provider -> layers list mapping with reduce
-    const providerMapping = layers.reduce(providerReducer, {});
-    if (!fromService.length) {
-        return Object.keys(providerMapping).map(name => {
-            return {
-                // generate an id when we don't have the id (== when admin-layereditor is not on the appsetup)
-                // use negative number just in case to make it "non-editable"
-                id: -Oskari.seq.nextVal('dummyProviders'),
-                name,
-                layers: providerMapping[name] || [],
-                groups: []
-            };
-        });
-    }
-    return fromService.map(dataProvider => {
+const getDataProviders = (providers = [], layers = []) => {
+    // Note! providers will be an empty array before layer listing has been loaded/populated
+    // get layers by provider { providerId: [... list of layer ids for provider...]}
+    const layersByProvider = layers.reduce(providerReducer, {});
+    return providers.map(dataProvider => {
         const name = dataProvider.name;
         return {
             id: dataProvider.id,
             name,
-            layers: providerMapping[name] || [],
+            description: dataProvider.desc,
+            layers: layersByProvider['' + dataProvider.id] || [],
             groups: []
         };
     });

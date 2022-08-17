@@ -27,7 +27,8 @@ Oskari.registerLocalization(
                     "publish": "Publicerad",
                     "edit": "Redigera",
                     "delete": "Ta bort",
-                    "default": "" // Förval
+                    "default": "Förvald",
+                    "actions": "Handlingar",
                 },
                 "popup": {
                     "title" : {
@@ -37,9 +38,9 @@ Oskari.registerLocalization(
                     "label": {
                         "name": "Namnge kartvyn",
                         "description": "Beskriv kartvyn",
-                        "default": "" //Förvalt kartvyn
+                        "default": "Förvalt kartvyn"
                     },
-                    "defaultName": "{now, date} {now, time, short}", // Egna kartvyn
+                    "defaultName": "Egna kartvyn {now, date} {now, time, short}",
                     "noName": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
                     "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
@@ -84,7 +85,8 @@ Oskari.registerLocalization(
                     "show": "Åtgärder",
                     "html": "HTML-kod",
                     "edit": "Redigera",
-                    "delete": "Ta bort"
+                    "delete": "Ta bort",
+                    "actions": "Handlingar"
                 },
                 "published": {
                     "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",

@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "vložit název mapy"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Přidat logo Paikkatietoikkuna",
-                    "tooltip": "Je-li to nezbytné, lze logo skrýt"
-                },
                 "pageScale": {
                     "label": "Vložit do mapy měřítko",
                     "tooltip": "Vložit do mapy měřítko"

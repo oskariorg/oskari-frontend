@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Bættu við heiti korts"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Sýna merki Landmælinga Íslands í útprentuninni.",
-                    "tooltip": "Þú getur falið merki Landmælinga Íslands ef það er nauðsynlegt."
-                },
                 "pageScale": {
                     "label": "Bæta mælikvarða við útprentun á korti.",
                     "tooltip": "Ef þú vilt geturðu bætt mælikvarða við útprentun á korti."

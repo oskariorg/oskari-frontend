@@ -2,12 +2,23 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Slider, Message } from 'oskari-ui';
 
+// Overrride -50% translateX
 const SLIDER_PROPS = {
     min: 10,
     max: 120,
     step: 5,
     range: true,
-    tooltipVisible: false
+    tipFormatter: val => `${val}px`,
+    marks: {
+        10: {
+            style: { transform: 'translateX(-20%)' },
+            label: <Message messageKey="classify.pointSizes.min"/>
+        },
+        120: {
+            style: { transform: 'translateX(-80%)' },
+            label: <Message messageKey="classify.pointSizes.max"/>
+        }
+    }
 };
 
 export const SizeSlider = ({
@@ -28,10 +39,8 @@ export const SizeSlider = ({
         controller.updateClassificationObj({ min: range[0], max: range[1] });
     };
     return (
-        <div className="classification-pointSize option">
-            <div className="select-label">
-                <Message messageKey="classify.labels.pointSize"/>
-            </div>
+        <div>
+            <Message messageKey="classify.labels.pointSize"/>
             <Slider
                 value = {range}
                 disabled = {disabled}

@@ -23,7 +23,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
             'imageLink': undefined,
             'attentionText': undefined
         };
-        this.measurement = undefined;
+        // extra
+        this.measurement = undefined; // extension
+        this.drawMode = undefined; // extension
     }, {
         /**
          * @method getType
@@ -138,14 +140,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
             this.geometry.type = value.type;
             this.geometry.coordinates = value.coordinates;
         },
-
-        setDrawToolsMultiGeometry: function (value) {
-            if (value.type === 'FeatureCollection' && value.features.length) { // features array
-                var feature = value.features[0]; // DrawTools multiGeom returns only one feature
-                this.geometry.type = feature.geometry.type;
-                this.geometry.coordinates = feature.geometry.coordinates;
-            }
-        },
         /**
          * @method getGeometry
          * @return {Object} geojson geometry
@@ -208,5 +202,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.model.MyPlace',
         },
         getMeasurement: function () {
             return this.measurement;
+        },
+        setDrawMode: function (mode) {
+            this.drawMode = mode;
+        },
+        getDrawMode: function () {
+            return this.drawMode;
+        },
+        getProperties: function () {
+            return this.properties;
+        },
+        setProperties: function (properties) {
+            this.properties = properties;
         }
     });

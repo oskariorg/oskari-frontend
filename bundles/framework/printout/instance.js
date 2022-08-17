@@ -1,3 +1,6 @@
+import { Messaging } from 'oskari-ui/util';
+import { showTooManyLayersPopup } from './view/TooManyLayersPopup';
+
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
  *
@@ -38,6 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 'image/png': ''
             }
         };
+        this.popupControls = null;
         this._log = Oskari.log(this.getName());
     }, {
         /**
@@ -58,6 +62,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         getSandbox: function () {
             return this.sandbox;
+        },
+        popupCleanup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
         },
         /**
          * @method getLocalization
@@ -127,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 tooltip: this.localization.btnTooltip,
                 sticky: false,
                 callback: function () {
-                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
+                    me.continueToPrint();
                 }
             };
             sandbox.request(this, addToolButtonBuilder('print', this.buttonGroup, buttonConf));
@@ -316,6 +326,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             this.sandbox.unregister(this);
             this.started = false;
         },
+        continueToPrint: function () {
+            if (this._isManyLayers()) {
+                if (this._isTooManyLayers()) {
+                    if (!this.popupControls) {
+                        this.popupControls = showTooManyLayersPopup(() => this.popupCleanup());
+                    }
+                } else {
+                    Messaging.notify(Oskari.getMsg('Printout', 'StartView.info.printoutProcessingTime'));
+                    this.setPublishMode(true);
+                }
+            } else {
+                this.setPublishMode(true);
+            }
+        },
         /**
          * @method startExtension
          * implements Oskari.userinterface.Extension protocol startExtension method
@@ -408,7 +432,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (this.printout) {
                     this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
                     this.printout.setEnabled(false);
-                    this.printout.hide();
+                    this.printout.destroy();
                 }
                 var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
                 this.sandbox.request(this, builder());
@@ -462,6 +486,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
 
             return state;
+        },
+        _isTooManyLayers: function () {
+            const layerCount = this._getVisibleLayersCount();
+            const isMaxLayersExceeded = layerCount > 7;
+            return isMaxLayersExceeded;
+        },
+        _isManyLayers: function () {
+            const layerCount = this._getVisibleLayersCount();
+            const isManyLayersExceeded = layerCount > 3;
+            return isManyLayersExceeded;
+        },
+        _getVisibleLayersCount: function () {
+            const layers = this.getSandbox().findAllSelectedMapLayers();
+            return layers.filter(layer => layer.isVisible()).length;
         }
     }, {
         /**

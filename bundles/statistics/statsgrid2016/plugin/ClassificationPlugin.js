@@ -2,19 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
-import { ManualClassificationView } from '../components/manualClassification/View';
+import { showHistogramPopup } from '../components/manualClassification/HistogramForm';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
-    function (instance, config, locale, sandbox) {
-        var me = this;
-        me._locale = locale;
-        me._config = config || {};
-        me._sandbox = sandbox;
+    function (instance, config) {
+        const me = this;
         me._instance = instance;
+        me._config = config || {};
+        me._sandbox = instance.getSandbox();
+        this.service = instance.getStatisticsService();
+        me._locale = Oskari.getMsg.bind(null, 'StatsGrid');
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
         this._defaultLocation = me._config.legendLocation || 'right bottom';
@@ -35,13 +36,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
 
-        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;
         this.indicatorData = {};
         this._bindToEvents();
         this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
+        this.histogramControls = null;
     }, {
         _createControlElement: function () {
             if (this.element !== null) {
@@ -69,11 +70,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             const { error, ...state } = this.service.getStateService().getStateForClassification();
             if (error) return;
-            const { data, status, validDataCount } = this.getIndicatorData(state);
+            const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
-            const editOptions = this.getEditOptions(state, validDataCount);
+            const editOptions = this.getEditOptions(state, uniqueCount, minMax);
             const classifiedDataset = this.classifyDataset(state, data);
-            const manualView = this.getManualViewProps(state);
+            // Histogram doesn't need to be updated on every events but props are gathered here
+            // and histogram is updated only if it's opened, so update here for now
+            this.updateHistogram(state, classifiedDataset, data, editOptions);
 
             ReactDOM.render((
                 <LocaleProvider value={{ bundleKey: this._instance.getName() }}>
@@ -81,8 +84,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         { ...state }
                         editOptions = {editOptions}
                         classifiedDataset = {classifiedDataset}
-                        manualView = {manualView}
-                        data = {data}
+                        startHistogramView = {() => this.startHistogramView(state, classifiedDataset, data, editOptions)}
                         onRenderChange = {this.rendered.bind(this)}
                     />
                 </LocaleProvider>
@@ -102,15 +104,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 hash: activeIndicator.hash,
                 regionset: activeRegionset,
                 data: {},
-                validDataCount: 0,
+                uniqueCount: 0,
                 serieSelection,
                 status: 'PENDING'
             };
             this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
                 if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
-                    this.indicatorData.validDataCount = Object.values(data).filter(val => val !== undefined).length;
+                    const validData = Object.fromEntries(Object.entries(data).filter(([key, val]) => val !== null && val !== undefined));
+                    const uniqueValues = [...new Set(Object.values(validData))].sort((a, b) => a - b);
+                    this.indicatorData.uniqueCount = uniqueValues.length;
                     this.indicatorData.data = data;
+                    this.indicatorData.minMax = { min: uniqueValues[0], max: uniqueValues[uniqueValues.length - 1] };
                     this.indicatorData.status = 'DONE';
                 }
                 if (err) {
@@ -121,47 +126,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             });
             return this.indicatorData;
         },
-        getEditOptions: function (state, validDataCount) {
-            // TODO validate values here or in controller
+        getEditOptions: function (state, uniqueCount, minMax) {
             const { activeIndicator } = state;
-            const { type, count, reverseColors, mapStyle } = activeIndicator.classification;
-            const { count: minmax, methods, modes, mapStyles } = this.service.getClassificationService().getLimits();
-            const colorsService = this.service.getColorService();
-            const types = colorsService.getAvailableTypes();
+            const { type, count, reverseColors, mapStyle, base } = activeIndicator.classification;
+            const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
 
-            let colorsets = [];
-            let max = minmax.max;
-            if (mapStyle !== 'points') {
-                colorsets = colorsService.getOptionsForType(type, count, reverseColors);
-                const { max: colorMax } = colorsService.getRange(type);
-                max = colorMax;
-            }
-            const dataMax = validDataCount - 1;
-            const counts = [];
-            // TODO disable invalid counts?
-            for (let i = minmax.min; i <= Math.min(dataMax, max); i++) {
-                counts.push({ value: i });
-            }
+            const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
+            const colorsets = mapStyle === 'points' && type !== 'div' ? [] : this.service.getColorService().getOptionsForType(type, colorCount, reverseColors);
+
             const disabled = [];
-            if (validDataCount < 3) {
+            if (uniqueCount < 3) {
                 disabled.push('jenks');
             }
-            if (activeIndicator.series) {
-                // Discontinous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
-                disabled.push('discontinuous');
+
+            // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
+            const dividable = minMax.min < 0 && minMax.max > 0;
+            if (typeof base !== 'number' && !dividable) {
+                // disable option if base isn't given in metadata or dataset isn't dividable
+                disabled.push('div');
             }
+
             const toOption = (option, value) => ({
                 value,
-                title: this._locale(`classify.${option}.${value}`),
+                label: this._locale(`classify.${option}.${value}`),
                 disabled: disabled.includes(value)
             });
-
+            const getNumberOptions = (min, max) => Array.from({ length: max - min + 1 }, (v, i) => i + min).map(i => ({ value: i, label: `${i}` }));
             return {
                 methods: methods.map(val => toOption('methods', val)),
                 modes: modes.map(val => toOption('modes', val)),
                 mapStyles: mapStyles.map(val => toOption('mapStyles', val)),
                 types: types.map(val => toOption('types', val)),
-                counts,
+                counts: getNumberOptions(min, Math.min(uniqueCount, max)),
+                fractionDigits: getNumberOptions(0, fractionDigits),
                 colorsets
             };
         },
@@ -169,17 +166,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const { activeIndicator: { classification }, seriesStats } = state;
             return this.service.getClassificationService().getClassification(data, classification, seriesStats);
         },
-        getManualViewProps: function (state) {
-            const { classification } = state.activeIndicator;
-            if (classification.method !== 'manual') return;
-            const { seriesService, classificationService, colorService } = this.service.getAllServices();
-            return {
-                view: new ManualClassificationView(classificationService, colorService, classification),
-                setAnimating: seriesService.setAnimating,
-                btnLabel: this._locale('classify.edit.title')
-            };
+        startHistogramView: function (state, classifiedDataset, data, editOptions) {
+            if (this.histogramControls) {
+                // already opened, do nothing
+                return;
+            }
+            this.service.getSeriesService().setAnimating(false);
+            const onClose = () => this.histogramCleanup();
+            this.histogramControls = showHistogramPopup(state, classifiedDataset, data, editOptions, onClose);
         },
-
+        histogramCleanup: function () {
+            if (this.histogramControls) {
+                this.histogramControls.close();
+            }
+            this.histogramControls = null;
+        },
+        updateHistogram: function (state, classifiedDataset, data, editOptions) {
+            if (!this.histogramControls) {
+                return;
+            }
+            this.histogramControls.update(state, classifiedDataset, data, editOptions);
+        },
         redrawUI: function () {
             // No need to redraw because mobile & desktop is same
             return false;
@@ -211,7 +218,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         _makeDraggable: function () {
             this.getElement().draggable({
-                handle: '.active-header,.statsgrid-svg-legend'
+                handle: '.classification-header,.classification-legend'
             });
         },
         getElement: function () {
@@ -283,7 +290,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.RegionsetChangedEvent', () => this.render());
 
             this.service.on('StatsGrid.ClassificationChangedEvent', () => this.render());
-
             // UI styling changes e.g. disable classification editing, make transparent
             this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
             // need to update transparency select
@@ -292,6 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('MapSizeChangedEvent', () => this.render());
             // need to update labels
             this.service.on('StatsGrid.ParameterChangedEvent', () => this.render());
+            this.service.on('StatsGrid.DatasourceEvent', () => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

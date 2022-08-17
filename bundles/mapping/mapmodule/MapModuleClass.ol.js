@@ -30,6 +30,7 @@ import './AbstractMapModule';
 import './plugin/BasicMapModulePlugin';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
+const INTERNAL_LAYER_Z_INDEX = 1;
 
 if (!window.proj4) {
     window.proj4 = proj4;
@@ -74,6 +75,10 @@ export class MapModule extends AbstractMapModule {
         });
 
         var map = new olMap({
+            // Chrome on Android crashes at times when for example:
+            // - pinchzooming the map out so a WFS-layer scale limit is hit midpinch (layer is hidden while pinching) AND only when the map is in an iframe (not directly on the page)
+            // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
+            pixelRatio: 1,
             keyboardEventTarget: document,
             target: this.getMapElementId(),
             controls: controls,
@@ -439,19 +444,21 @@ export class MapModule extends AbstractMapModule {
         }
     }
 
-    getMeasurementResult (geometry) {
+    getMeasurementResult (geometry, format) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geometry);
         var sum = 0;
         if (olGeometry.getType() === 'LineString') {
-            return this.getGeomLength(olGeometry);
+            const line = this.getGeomLength(olGeometry);
+            return format ? this.formatMeasurementResult(line, 'line') : line;
         } else if (olGeometry.getType() === 'MultiLineString') {
             var lineStrings = olGeometry.getLineStrings();
             for (var i = 0; i < lineStrings.length; i++) {
                 sum += this.getGeomLength(lineStrings[i]);
             }
-            return sum;
+            return format ? this.formatMeasurementResult(sum, 'line') : sum;
         } else if (olGeometry.getType() === 'Polygon' || olGeometry.getType() === 'MultiPolygon') {
-            return this.getGeomArea(olGeometry);
+            const area = this.getGeomArea(olGeometry);
+            return format ? this.formatMeasurementResult(area, 'area') : area;
         }
     }
 
@@ -1124,7 +1131,7 @@ export class MapModule extends AbstractMapModule {
 ------------------------------------------------------------------> */
 
     /**
-     * @param {ol/layer/Layer} layer ol3 specific!
+     * @param {ol/layer/Layer} layer ol specific!
      * @param {Boolean} toBottom if false or missing adds the layer to the top, if true adds it to the bottom of the layer stack
      */
     addLayer (layerImpl, toBottom) {
@@ -1136,6 +1143,20 @@ export class MapModule extends AbstractMapModule {
         if (toBottom === true) {
             this.setLayerIndex(layerImpl, 0);
         }
+        this.orderLayersByZIndex();
+    }
+
+    /**
+     * Adds overlay layer to map. These layers aren't listed in selected layers and are always above those.
+     * @method addOverlayLayer
+     * @param {ol/layer/Layer} layer ol specific!
+     */
+    addOverlayLayer (layerImpl) {
+        if (!layerImpl) {
+            return;
+        }
+        layerImpl.setZIndex(INTERNAL_LAYER_Z_INDEX);
+        this.getMap().addLayer(layerImpl);
     }
 
     /**
@@ -1162,6 +1183,7 @@ export class MapModule extends AbstractMapModule {
         var list = map.getLayers();
         list.remove(layer);
         list.push(layer);
+        this.orderLayersByZIndex();
     }
 
     /**

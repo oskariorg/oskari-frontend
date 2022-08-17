@@ -5,22 +5,33 @@ Oskari.registerLocalization(
     "value": {
         "title": "Admin-announcements",
         "desc": "",
-        "flyout": {
-            "title": "Admin-announcements"
+        "popup": {
+            "title": "Announcement"
         },
-        "tile": {
-            "title": "A: Announcements"
-        },
-        "addNewForm": "New Announcement",
-        "delete": "Delete",
-        "save": "Save",
-        "yes": "Yes",
-        "cancel": "Cancel",
-        "newAnnouncement": {
-            "title": "Title",
-            "content": "Content",
-            "date-range": "Date range",
-            "show-popup": "Show pop-up"
+        "fields": {
+            "date": "Date range",
+            "show": {
+                "label": "Show announcement as",
+                "popup": "Popup-window",
+                "banner": "Banner"
+            },
+            "type": {
+                "label": "Type",
+                "title": "Title only",
+                "content": "Title and contents",
+                "link": "Title and external link"
+            },
+            "locale": {
+                "link": "External link",
+                "title": "Title",
+                "content": "Content"
+            },
+            "validate": {
+                "title": "Add title",
+                "content": "Add content!",
+                "link": "Add external link!",
+                "date": "Add daterange!"
+            }
         },
         "messages": {
             "saveSuccess": "Announcement saved",
@@ -39,11 +50,8 @@ Oskari.registerLocalization(
                 "title": "Announcements",
                 "close": "Close"
             },
-            "announcementsName": "Name",
+            "announcementsName": "Title",
             "announcementsTime": "Valid"
-        },
-        "titleError": "Add title",
-        "contentError": "Add content!",
-        "dateError": "Add daterange!"
+        }
     }
 });

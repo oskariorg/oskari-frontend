@@ -10,22 +10,22 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Places",
-            "nocategories": "You do not have any saved places yet.",
-            "maxFeaturesExceeded": "You have too many own places. Please remove some places.",
+            "categoryTitle": "Map layer",
+            "nocategories": "You do not have any saved places yet.", // PersonalData removal
+            "maxFeaturesExceeded": "You have too many own places. Please remove some places.", // PersonalData removal
             "publishCategory": {
                 "privateTooltip": "This map layer is private. Click here to publish it.",
                 "publicTooltip": "This map layer is public. Click here to unpublish it."
             },
             "export": {
                 "title":"Export features",
-                "tooltip": "You can download the layer's features as GeoJSON"
+                "tooltip": "Download layer features in GeoJSON-format."
             },
-            "addCategoryFormButton": "New map layer",
+            "addCategoryFormButton": "New map layer", // PersonalData removal
             "addCategory": "Add map layer",
             "editCategory": "Edit map layer",
             "deleteCategory": "Delete map layer",
-            "edit": "Edit",
-            "delete": "Delete",
+            "deleteDefault": "The default map layer cannot be deleted.",
             "grid": {
                 "name": "Place name",
                 "desc": "Place description",
@@ -33,44 +33,30 @@ Oskari.registerLocalization(
                 "updateDate": "Updated",
                 "measurement": "Size",
                 "edit": "Edit",
-                "delete": "Delete"
+                "delete": "Delete",
+                "actions": "Actions"
             },
-            "notification": {
-                "delete": {
-                    "title": "Delete Place",
-                    "confirm": "Do you want to delete place \"{name}\"?",
-                    "btnDelete": "Delete",
-                    "btnCancel": "Cancel",
-                    "success": "The place has been deleted.",
-                    "error": "The place could not be deleted. Please try gain later.",
-                    "cancel": "The place has not been deleted."
-                }
+            "confirm": {
+                "deleteCategory": "Do you want to delete the map layer \"{name}\"?",
+                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer \"{2}\" before deleting the map layer?", // PersonalData removal
+                "categoryToPrivate": "You are unpublishing the map layer {name}. After that the map layer cannot be shared in public and embedded in another map service. Also other users cannot view the map layer anymore.",
+                "categoryToPublic": "You are publishing the map layer {name}. After that the map layer can be shared in public and embedded in another map service. Also other users can view the map layer.",
+                "deletePlace": "Do you want to delete place \"{name}\"?"
+            },
+            "deleteWithMove": {
+                "name": "You are deleting the map layer:",
+                "count": "There {count, plural, one {is # place} other {are # places}} on the map layer. Do you want to:",
+                "delete": "1. delete the map layer and its {count, plural, one {place} other {places}}",
+                "move": "2. move the {count, plural, one {place} other {places}} to the map layer:"
             }
         },
         "tools": {
-            "measureline": {
-                "title": "Measure Distance",
-                "tooltip": "Click breakpoints and measure a total distance between them.",
-                "add": "Add line",
-                "next": "Next",
-                "edit": "Click a starting point and breaking points. Finally double-click an ending point. You can drag points to another location by mouse. If you draw several lines, distances are summed up.",
-                "noResult": "0 m"
-            },
-            "measurearea": {
-                "title": "Measure Area",
-                "tooltip": "Draw an area and measure it.",
-                "add": "Add area",
-                "next": "Next",
-                "edit": "Click corner points. Finally double-click an ending point. You can drag points to another location by mouse. If you draw several areas, areas are summed up.",
-                "noResult": "0 m²"
-            },
             "point": {
                 "title": "Add Point",
                 "tooltip": "Draw a point and add it to your own places. There can be several points in one feature.",
                 "add": "Draw a point by clicking the map.",
                 "next": "You can draw several points in one feature.",
-                "edit": "You can move points to another location by clicking them with a mouse.",
-                "save": "Save My Place"
+                "edit": "You can move points to another location by clicking them with a mouse."
             },
             "line": {
                 "title": "Add Line to Own Places",
@@ -78,7 +64,6 @@ Oskari.registerLocalization(
                 "add": "Draw a line to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\".",
                 "next": "You can move breaking points to another location by clicking them with a mouse.",
                 "edit": "You can move breaking points to another location by clicking them with a mouse.",
-                "save": "Save My Place",
                 "noResult": "0 m"
             },
             "area": {
@@ -87,19 +72,12 @@ Oskari.registerLocalization(
                 "add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\".",
                 "next": "You can draw several areas in one feature.",
                 "edit": "You can move breaking points to another location by clicking them with a mouse.",
-                "save": "Save My Place",
                 "noResult": "0 m²"
             }
         },
         "buttons": {
-            "ok": "OK",
-            "cancel": "Cancel",
-            "close": "Cancel",
-            "finish": "Save My Place",
-            "save": "Save",
-            "saveAsMyPlace": "Save My Place",
+            "savePlace": "Save My Place",
             "movePlaces": "Move places and delete",
-            "deleteCategory": "Delete",
             "deleteCategoryAndPlaces": "Delete with places",
             "changeToPublic": "Publish",
             "changeToPrivate": "Unpublish"
@@ -107,84 +85,52 @@ Oskari.registerLocalization(
         "placeform": {
             "title": "Place data",
             "tooltip": "Save the feature as your own place. Please give at least a name and a description. Finally select a map layer where the feature will be saved or create a new map layer. Later you can find your own places in the My Data menu.",
-            "placename": {
-                "placeholder": "Place name"
-            },
-            "placelink": {
-                "placeholder": "Link to additional information"
-            },
-            "placedesc": {
-                "placeholder": "Place description"
-            },
-            "placeAttention": {
-                "placeholder": "Text visible on map"
-            },
-            "measurement": {
-                "line": "Line length:",
-                "area": "Area size:"
+            "previewLabel": "Image preview",
+            "fields": {
+                "name": "Place name",
+                "description": "Place description",
+                "attentionText": "Text visible on map",
+                "link": "Link to additional information",
+                "imagelink": "Link to feature image"
             },
             "category": {
                 "label": "Map layer",
                 "newLayer": "Create new layer",
-                "choose": "Select layer for the place:",
-                "creatingNew": "A new map layer is created using My data",
+                "choose": "Select layer for the place:"
             },
-            "imagelink": {
-                "placeholder": "Link to feature image",
-                "previewLabel": "Image preview"
-            },
-            "rendering": {
-                "label": "Styles for places at map layer",
-                "point": {
-                    "tooltip": "Point"
-                }
+            "validation": {
+                "mandatoryName": "A place name is missing",
+                "invalidName": "The place name contains illegal characters",
+                "invalidDesc": "The place description contains illegal characters",
             }
         },
         "categoryform": {
             "title": "Map layer details",
             "layerName": "Map layer name",
-            "styleTitle": "Styling"
-        },
-        "notification": {
-            "placeAdded": {
-                "title": "The place has been saved.",
-                "message": "You can find the place in the menu \"My data\"."
-            },
-            "categorySaved": {
-                "title": "The map layer has been saved.",
-                "message": "The map layer has been updated."
-            },
-            "categoryDelete": {
-                "title": "Delete Map Layer",
-                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer \"{2}\" before deleting the map layer?",
-                "deleteConfirm": "Do you want to delete the map layer \"{0}\"?",
-                "deleted": "The map layer has been deleted."
-            },
-            "categoryToPublic": {
-                "title": "Publish Map Layer",
-                "message": "You are publishing the map layer {0}. After that the map layer can be shared in public and embedded in another map service. Also other users can view the map layer."
-            },
-            "categoryToPrivate": {
-                "title": "Unpublish Map Layer",
-                "message": "You are unpublishing the map layer {0}. After that the map layer cannot be shared in public and embedded in another map service. Also other users cannot view the map layer anymore."
-            },
-            "error": {
-                "addCategory": "The map layer and its places could not be saved.",
-                "editCategory": "The map layer could not be saved.",
-                "savePlace": "The place could not be saved.",
-                "title": "Error",
-                "generic": "A system error occurred.",
-                "deleteCategory": "The map layer could not be deleted.",
-                "deleteDefault": "The default map layer cannot be deleted."
+            "styleTitle": "Styling",
+            "validation": {
+                "mandatoryName": "A map layer name is missing",
+                "invalidName": "The map layer name contains illegal characters"
             }
         },
-        "validation": {
-            "title": "The given data are invalid:",
-            "placeName": "A place name is missing",
-            "categoryName": "A map layer name is missing",
-            "placeNameIllegal": "The place name contains illegal characters",
-            "descIllegal": "The place description contains illegal characters",
-            "categoryNameIllegal": "The map layer name contains illegal characters"
+        "notification": {
+            "place": {
+                "saved": "The place has been saved.",
+                "deleted": "The place has been deleted.",
+                "info": "You can find the place in the menu \"My data\"."
+            },
+            "category": {
+                "saved": "The map layer has been saved.",
+                "updated": "The map layer has been updated.",
+                "deleted": "The map layer has been deleted."
+            }
+        },
+        "error": {
+            "generic": "A system error occurred.",
+            "saveCategory": "The map layer could not be saved.",
+            "deleteCategory": "The map layer could not be deleted.",
+            "savePlace": "The place could not be saved.",
+            "deletePlace": "The place could not be deleted. Please try gain later."
         }
     }
 });

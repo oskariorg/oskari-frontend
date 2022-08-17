@@ -110,11 +110,13 @@ export class LayerEditorFlyout extends ExtraFlyout {
             </LocaleProvider>
         );
     }
+
     cleanUp () {
         const el = this.getElement();
         if (!el) {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
+        this.uiHandler.resetMap();
     }
 }

@@ -1,3 +1,5 @@
+import { Messaging } from 'oskari-ui/util';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', function (title, options, instance) {
     this.instance = instance;
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -8,7 +10,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
     this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-    var me = this;
+    const me = this;
     this.errorService = this.service.getErrorService();
     me.on('hide', function () {
         me.reset();
@@ -19,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 
     this.indicatorParamsList.on('delete.data', function (selectors) {
-        me.service.deleteIndicator(me.datasourceId, me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
+        me.service.deleteIndicator(Number(me.datasourceId), me.indicatorId, { year: selectors.year }, selectors.regionset, function (err) {
             if (err) {
                 me.errorService.show(me.locale('errors.title'), me.locale('errors.datasetDelete'));
                 return;
@@ -30,9 +32,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 
     this.indicatorDataForm.on('cancel', function () {
-        me.genericInfoPanel.open();
+        me.genericInfoPanel.close();
         me.dataPanel.open();
-        me.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
+        me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
     });
 }, {
     _templates: {
@@ -45,7 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      */
     showForm: function (datasourceId, indicatorId) {
         if (!datasourceId) {
-            this.errorService.show(this.locale('errors.title'), this.locale('errors.myIndicatorDatasource'));
+            this.errorService.error(this.locale('errors.myIndicatorDatasource'));
             return;
         }
         if (this.isVisible()) {
@@ -59,8 +61,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         // set empty values to focus on name field
         this.indicatorForm.setValues();
         // pass available regionsets if user wants to add another year/regionset dataset
-        var datasrc = this.service.getDatasource(datasourceId);
-        var regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
+        const datasrc = this.service.getDatasource(datasourceId);
+        const regionsetsForDatasource = this.service.getRegionsets(datasrc.regionsets);
         this.indicatorParamsList.setRegionsets(regionsetsForDatasource);
         this.indicatorParamsList.showAddDatasetForm(!this.indicatorId);
         this.saveBtn.setPrimary(!!this.indicatorId);
@@ -71,19 +73,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     },
     updateDatasetList: function () {
         // call this.indicatorForm.setValues() based on datasourceId, indicatorId passing existing datasets
-        var me = this;
-        var locale = this.locale;
+        if (!this.isVisible()) {
+            return;
+        }
+
+        const me = this;
+        const locale = this.locale;
+
         this.service.getIndicatorMetadata(me.datasourceId, me.indicatorId, function (err, ind) {
             if (err) {
                 me.errorService.show(locale('errors.title'), locale('errors.indicatorMetadataError'));
                 return;
             }
             me.indicatorForm.setValues(ind.name, ind.description, ind.source);
-            var datasets = [];
+            const datasets = [];
             ind.selectors.forEach(function (sel) {
                 ind.regionsets.forEach(function (regionset) {
                     sel.allowedValues.forEach(function (value) {
-                        var data = {};
+                        const data = {};
                         if (typeof value === 'object') {
                             data[sel.id] = value.id;
                         } else {
@@ -111,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Internal function to create the baseline UI
      */
     createUi: function () {
-        var me = this;
+        const me = this;
         if (this.getUiElement()) {
             return;
         }
@@ -119,8 +126,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.addClassForContent('stats-user-indicator-form');
 
         if (!Oskari.user().isLoggedIn()) {
-            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var content = jQuery(this._templates.notLoggedIn({
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const content = jQuery(this._templates.notLoggedIn({
                 warning: this.locale('userIndicators.notLoggedInWarning')
             }));
             popup.show(me.locale('userIndicators.notLoggedInTitle'), content);
@@ -128,7 +135,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         }
 
         // generic info
-        var genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        const genericInfoPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         genericInfoPanel.setTitle(this.locale('userIndicators.panelGeneric.title'));
         genericInfoPanel.open();
         genericInfoPanel.setContent(this.indicatorForm.createForm());
@@ -136,7 +143,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(genericInfoPanel);
 
         // statistical data
-        var dataPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        const dataPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         dataPanel.setTitle(this.locale('userIndicators.panelData.title'));
         dataPanel.setContent(this.indicatorParamsList.createUi());
         dataPanel.open();
@@ -144,7 +151,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.uiElement);
 
-        var spinnerHolder = jQuery(this._templates.spinner);
+        const spinnerHolder = jQuery(this._templates.spinner);
         this.uiElement.append(spinnerHolder);
         this.spinner.insertTo(spinnerHolder);
         this.uiElement.append(this.indicatorDataForm.createUi());
@@ -153,21 +160,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             btn.insertTo(me.uiElement);
         });
 
-        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+        const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         this.saveBtn = saveBtn;
         saveBtn.insertTo(this.uiElement);
         jQuery(saveBtn.getElement()).css({
-            'float': 'right',
-            'clear': 'both'
+            float: 'right',
+            clear: 'both'
         });
-        const onSuccess = (indicator, data) => {
+        const onSuccess = () => {
             me.genericInfoPanel.close();
             me.dataPanel.open();
             me.indicatorParamsList.showAddDatasetForm(!me.indicatorId);
             me.indicatorDataForm.clearUi();
             me.updateDatasetList();
-            me.selectSavedIndicator(indicator, data);
-            me.showSuccessPopup();
+
+            Messaging.success(this.locale('userIndicators.dialog.successMsg'));
         };
         saveBtn.setHandler(function () {
             const dataForm = me.indicatorForm.getValues();
@@ -180,26 +187,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 }
             });
 
-            const formValidates = me.validateFormValues(dataForm, valuesForm);
-
-            if (!formValidates) {
-                me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                return;
-            }
-
             me.saveIndicator(dataForm, function (err, indicator) {
                 if (err) {
-                    me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
+                    me.genericInfoPanel.open();
                     return;
                 }
                 if (valuesForm.values.length) {
                     me.saveIndicatorData(valuesForm, function (err, someData) {
                         if (err) {
-                            me.errorService.show(me.locale('errors.title'), me.locale('errors.indicatorSave'));
-                            Oskari.log('IndicatorFormFlyout').error(err);
                             return;
                         }
                         onSuccess(indicator, valuesForm);
+                        me.selectSavedIndicator(indicator, valuesForm);
                     });
                 } else {
                     onSuccess(indicator, valuesForm);
@@ -226,14 +225,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Opens a form for user to add or edit data for indicators year/regionset
      */
     showDatasetForm: function (selectors) {
-        var me = this;
-        var locale = this.locale;
+        const me = this;
+        const locale = this.locale;
         me.genericInfoPanel.close();
         me.dataPanel.close();
 
         // overwrite id with name as it's displayed on the UI
-        var regionset = me.service.getRegionsets(selectors.regionset);
-        var labels = {};
+        const regionset = me.service.getRegionsets(selectors.regionset);
+        const labels = {};
         labels[selectors.regionset] = regionset.name;
 
         me.setSpinnerVisible(true);
@@ -243,9 +242,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 me.errorService.show(locale('errors.title'), locale('errors.regionsDataError'));
                 return;
             }
-            var showDataForm = function (regions, data) {
+            const showDataForm = function (regions, data) {
                 data = data || {};
-                var formRegions = regions.map(function (region) {
+                const formRegions = regions.map(function (region) {
                     // TODO: include existing values per region when editing existing dataset
                     return {
                         id: region.id,
@@ -274,17 +273,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
     },
-    validateFormValues: function (data, regionValues) {
-        if (typeof (data.name) !== 'string' || data.name.length === 0) {
+    validateIndicator: function (data) {
+        const { name } = data;
+        if (typeof name !== 'string' || name.trim().length === 0) {
+            this.errorService.warn(this.locale('errors.myIndicatorNameInput'));
             return false;
         }
-
-        if (typeof regionValues.values === 'undefined' || regionValues.values.length === 0) {
-            return false;
-        }
-
+        return true;
+    },
+    validateIndicatorData: function (regionValues) {
         for (const singleRegion of regionValues.values) {
             if (typeof singleRegion.value === 'undefined' || isNaN(singleRegion.value) || typeof singleRegion.value !== 'number') {
+                this.errorService.warn(this.locale('errors.myIndicatorInvalidData'));
                 return false;
             }
         }
@@ -295,17 +295,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Saves the indicator name, description etc
      */
     saveIndicator: function (data, callback) {
-        var me = this;
-
+        if (!this.validateIndicator(data)) {
+            callback(new Error('Error in indicator validation'));
+            return;
+        }
         // inject possible id for indicator
-        data.id = me.indicatorId;
-        me.service.saveIndicator(me.datasourceId, data, function (err, indicator) {
+        data.id = this.indicatorId;
+        this.service.saveIndicator(this.datasourceId, data, (err, indicator) => {
             if (err) {
+                this.errorService.error(this.locale('errors.indicatorSave'));
+                Oskari.log('IndicatorFormFlyout').error(err);
                 callback(err);
                 return;
             }
             // update the indicator id we are operating on
-            me.indicatorId = indicator.id;
+            this.indicatorId = indicator.id;
             Oskari.log('IndicatorFormFlyout').info('Saved indicator', data, 'Indicator: ' + indicator.id);
             callback(null, indicator);
         });
@@ -314,42 +318,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      * Adds/edits a year/regionset dataset for an indicator
      */
     saveIndicatorData: function (data, callback) {
-        var me = this;
-        if (!this.indicatorId) {
-            // new indicator, we need to save it first!
-            this.saveIndicator(this.indicatorForm.getValues(), function (err, indicator) {
-                if (err) {
-                    callback(err);
-                    return;
-                }
-                // call self again now that we have an indicator we can attach the dataset to
-                me.saveIndicatorData(data, callback);
-            });
+        if (!this.validateIndicatorData(data)) {
+            callback(new Error('Error in data validation'));
             return;
         }
 
         // save dataset
         Oskari.log('IndicatorFormFlyout').info('Save data form values', data, 'Indicator: ' + this.indicatorId);
-        var values = {};
+        const values = {};
         data.values.forEach(function (regionData) {
             values[regionData.id] = regionData.value;
         });
 
-        me.service.saveIndicatorData(me.datasourceId, this.indicatorId, data.selectors, values, function (err, someData) {
+        this.service.saveIndicatorData(this.datasourceId, this.indicatorId, data.selectors, values, (err, someData) => {
             if (err) {
+                this.errorService.error(this.locale('errors.indicatorSave'));
                 callback(err);
                 return;
             }
             callback(null, someData);
         });
-    },
-    showSuccessPopup: function () {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        // TODO: add the name of the indicator and/or year/regionset that was added/modified?
-        var title = this.locale('userIndicators.dialog.successTitle');
-        var content = this.locale('userIndicators.dialog.successMsg');
-        dialog.show(title, content, [dialog.createCloseButton()]);
-        dialog.fadeout();
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

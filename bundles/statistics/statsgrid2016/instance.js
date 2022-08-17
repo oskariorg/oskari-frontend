@@ -1,3 +1,6 @@
+import { MyIndicatorsHandler } from './handler/MyIndicatorsHandler';
+import { MyIndicatorsTab } from './MyIndicatorsTab';
+
 const TOGGLE_TOOL_SERIES = 'series';
 const TOGGLE_TOOL_CLASSIFICATION = 'classification';
 
@@ -35,6 +38,7 @@ Oskari.clazz.define(
         this.regionsetViewer = null;
         this.flyoutManager = null;
         this._layerId = 'STATS_LAYER';
+        this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -89,18 +93,7 @@ Oskari.clazz.define(
 
             // Check that user has own indicators datasource
             if (statsService.getUserDatasource()) {
-                // Crete indicators tab to personal data view if personaldata bundle exists
-                var reqName = 'PersonalData.AddTabRequest';
-                if (sandbox.hasHandler(reqName)) {
-                    me._addIndicatorsTabToPersonalData(sandbox);
-                } else {
-                    // Wait for the application to load all bundles and try again
-                    Oskari.on('app.start', function (details) {
-                        if (sandbox.hasHandler(reqName)) {
-                            me._addIndicatorsTabToPersonalData(sandbox);
-                        }
-                    });
-                }
+                me._addIndicatorsTabToMyData(sandbox);
             }
             // setup initial state
             this.setState();
@@ -111,6 +104,32 @@ Oskari.clazz.define(
                     this._removeStatsLayer();
                 }
             });
+        },
+        _addIndicatorsTabToMyData: function (sandbox, appStarted) {
+            let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+            const reqName = 'PersonalData.AddTabRequest';
+            if (myDataService) {
+                myDataService.addTab('indicators', this.loc('tab.title'), MyIndicatorsTab, new MyIndicatorsHandler(sandbox, this));
+            } else if (sandbox.hasHandler(reqName)) {
+                // fallback to old personaldata tabs
+                this._addIndicatorsTabToPersonalData(sandbox);
+            } else if (!appStarted) {
+                // Wait for the application to load all bundles and try again
+                Oskari.on('app.start', () => {
+                    this._addIndicatorsTabToMyData(sandbox, true);
+                });
+            }
+        },
+        _addIndicatorsTabToPersonalData: function (sandbox) {
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
+            if (typeof reqBuilder === 'function') {
+                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.PersonalDataIndicatorsTab', this);
+                tab.bindEvents();
+                var addAsFirstTab = false;
+                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
+                sandbox.request(this, req);
+            }
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
@@ -133,16 +152,6 @@ Oskari.clazz.define(
             });
             const visible = this[plugin] && !!this[plugin].getElement();
             this.togglePlugin.toggleTool(tool, visible);
-        },
-        _addIndicatorsTabToPersonalData: function (sandbox) {
-            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
-            if (typeof reqBuilder === 'function') {
-                var tab = Oskari.clazz.create('Oskari.statistics.statsgrid.MyIndicatorsTab', this);
-                tab.bindEvents();
-                var addAsFirstTab = false;
-                var req = reqBuilder(tab.getTitle(), tab.getContent(), addAsFirstTab, tab.getId());
-                sandbox.request(this, req);
-            }
         },
         isEmbedded: function () {
             return jQuery('#contentMap').hasClass('published');
@@ -269,10 +278,7 @@ Oskari.clazz.define(
         eventHandlers: {
             'StatsGrid.StateChangedEvent': function (evt) {
                 if (evt.isReset()) {
-                    this.clearDataProviderInfo();
                     this._removeStatsLayer();
-                    this._setClassificationViewVisible(false);
-                    this._setSeriesControlVisible(false);
                     this.flyoutManager.hideFlyouts();
                 } else {
                     this.statsService.getStateService().getIndicators().forEach(ind => {
@@ -332,13 +338,9 @@ Oskari.clazz.define(
                 if (event.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
-                if (!this.getTile().isAttached()) {
-                    // clear ui if statsgrid isn't active
-                    this.clearDataProviderInfo();
-                    this._setClassificationViewVisible(false);
-                    this._setSeriesControlVisible(false);
-                    this.flyoutManager.hideFlyouts();
-                }
+                this.clearDataProviderInfo();
+                this._setClassificationViewVisible(false);
+                this._setSeriesControlVisible(false);
                 this.statsService.notifyOskariEvent(event);
             },
             /**
@@ -444,11 +446,21 @@ Oskari.clazz.define(
          * bundle documentation for details.
          *
          * @method setState
-         * @param {Object} state bundle state as JSON
+         * @param {Object} newState bundle state as JSON
          */
-        setState: function (state) {
-            state = state || this.state || {};
-            this.statsService.getStateService().setState(state);
+        setState: function (newState) {
+            const state = newState || this.state || {};
+            const stateService = this.statsService.getStateService();
+            if (state.indicators && state.indicators.length) {
+                stateService.setState(state);
+            } else {
+                // if state doesn't have indicators, reset state
+                stateService.resetState();
+                if (this.flyoutManager) {
+                    // teardown ui to get cleaned search flyout on show
+                    this.flyoutManager.getFlyout('search').teardownUI();
+                }
+            }
             // if state says view was visible fire up the UI, otherwise close it
             var uimode = state.view ? 'attach' : 'close';
             this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
@@ -468,12 +480,10 @@ Oskari.clazz.define(
             };
         },
         createClassficationView: function () {
-            var config = jQuery.extend(true, {}, this.getConfiguration());
-            var sandbox = this.getSandbox();
-            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const config = jQuery.extend(true, {}, this.getConfiguration());
+            const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
 
-            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config);
             this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
             this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
             mapModule.registerPlugin(this.classificationPlugin);

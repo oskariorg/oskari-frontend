@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Додати заголовок на карту"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Додати логотип Oskari",
-                    "tooltip": "Ви можете приховати логотип, якщо це необхідно"
-                },
                 "pageScale": {
                     "label": "Додати масштаб на карту",
                     "tooltip": "Додати масштаб на карту"

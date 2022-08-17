@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
-import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller, Messaging  } from 'oskari-ui/util';
+import { Spin, LabeledInput, Message, Checkbox } from 'oskari-ui';
+import { ButtonContainer, PrimaryButton, SecondaryButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponent';
+import { LocaleProvider, LocaleConsumer, handleBinder, StateHandler, controllerMixin, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-
-const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -84,21 +84,10 @@ export class LocalizingFlyout extends ExtraFlyout {
 class UIService extends StateHandler {
     constructor(instance, id, parentId) {
         super();
-        const getMsg = Oskari.getMsg.bind(null, instance.getName());
-        const labels = {};
-        Oskari.getSupportedLanguages().forEach(lang => {
-            const locale = getMsg(`fields.locale.${lang}`);
-            if (typeof locale === 'object') {
-                labels[lang] = locale.lang || lang;
-            } else {
-                labels[lang] = lang;
-            }
-        });
         this.initialState = {
             loading: false,
             headerMessageKey: null,
             value: {},
-            labels,
             deleteLayers: false,
             deleteGroups: false
         };
@@ -144,9 +133,6 @@ class UIService extends StateHandler {
         }
         this.deleteAction(this.id, this.getState().deleteLayers);
     }
-    subgroupError() {
-        Messaging.error(getMessage('messages.deleteErrorGroupHasSubgroups'));
-    }
     reset() {
         this.setState(this.initialState);
     }
@@ -171,105 +157,78 @@ const Container = styled('div')`
 const Header = styled('div')`
     font-weight: bold;
 `;
-const Label = styled('div')`
-    margin-top: 8px;
-`;
-const Buttons = styled('div')`
-    display: flex;
-    justify-content: space-between;
-    padding-top: 15px;
-`;
 
 const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups }) => {
+const hasMandatoryValues = (current, defaultLang) => {
+    if (!current) {
+        return false;
+    }
+    const langValue = current[defaultLang] || {};
+    const curName = langValue.name || '';
+    return curName.trim().length > 0;
+};
+const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers, hasSubgroups, getMessage }) => {
     const RemoveGroupButton = () => {
         if (isNew) {
             // we are adding a group so we don't want to show Delete button
             return null;
         }
-        if (hasSubgroups) {
-            return (
-                <Button danger type="dashed" onClick={() => controller.subgroupError()}>
-                    <Message messageKey='delete' />
-                </Button>
-            );
-        }
+        // FIXME: setDeleteLayer closes confirm. set visible to components state??
+        const title = (
+            <React.Fragment>
+                <div>
+                    <Message messageKey='messages.confirmDeleteGroup' />
+                </div>
+                {layerCountInGroup > 0 &&
+                    <DeleteLayersCheckbox checked={deleteLayers} onChange={evt => controller.setDeleteLayers(evt.target.checked)}>
+                        {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
+                    </DeleteLayersCheckbox>}
+            </React.Fragment>
+        );
+        const tooltip = hasSubgroups ? <Message messageKey='messages.deleteErrorGroupHasSubgroups' /> : null;
         return (
             <DeleteButton
-                controller={controller}
-                deleteMapLayersText={deleteMapLayersText}
-                layerCountInGroup={layerCountInGroup}
-                deleteLayers={deleteLayers} />
+                type='label'
+                disabled={hasSubgroups}
+                title={title}
+                tooltip={tooltip}
+                onConfirm={() => controller.delete()}/>
         );
     };
+    const languages = Oskari.getSupportedLanguages();
+    const isValid = hasMandatoryValues(value, languages[0]);
     const Component = (
         <Container>
             <Header>
                 <Message messageKey={headerMessageKey} />
             </Header>
             <LocalizationComponent
-                labels={labels}
-                collapse={false}
-                single={true}
                 value={value}
-                languages={Oskari.getSupportedLanguages()}
+                languages={languages}
                 onChange={controller.setValue}
-                LabelComponent={Label}
             >
-                <TextInput />
+                <LabeledInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
+                <LabeledInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
             </LocalizationComponent>
-            <Buttons>
-                <Button onClick={() => controller.cancel()}>
-                    <Message messageKey='cancel' />
-                </Button>
+            <ButtonContainer>
+                <SecondaryButton type='cancel' onClick={() => controller.cancel()} />
                 <RemoveGroupButton />
-                <Button onClick={() => controller.save()} type='primary'>
-                    <Message messageKey='save' />
-                </Button>
-            </Buttons>
+                <PrimaryButton type='save' onClick={() => controller.save()} disabled={!isValid} />
+            </ButtonContainer>
         </Container>
     );
     if (loading) {
         return <Spin>{Component}</Spin>;
     }
     return Component;
-};
+});
 LocalizedContent.propTypes = {
     loading: PropTypes.bool,
     labels: PropTypes.object,
     value: PropTypes.object,
     isNew: PropTypes.bool,
     headerMessageKey: PropTypes.string,
-    controller: PropTypes.instanceOf(Controller)
-};
-
-const DeleteButton = ({ controller, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
-    return (
-    <Confirm
-        title={<React.Fragment>
-            <div>
-                <Message messageKey='messages.confirmDeleteGroup' />
-            </div>
-            {layerCountInGroup > 0 &&
-                <DeleteLayersCheckbox checked={deleteLayers} onChange={evt => controller.setDeleteLayers(evt.target.checked)}>
-                    {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
-                </DeleteLayersCheckbox>
-            }
-        </React.Fragment>}
-        onConfirm={() => controller.delete()}
-        okText={<Message messageKey='ok' />}
-        cancelText={<Message messageKey='cancel' />}
-        placement='bottomLeft'>
-        <Button danger>
-            <Message messageKey='delete' />
-        </Button>
-    </Confirm>);
-};
-DeleteButton.propTypes = {
-    deleteMapLayersText: PropTypes.string,
-    layerCountInGroup: PropTypes.number,
-    deleteLayers: PropTypes.bool,
     controller: PropTypes.instanceOf(Controller)
 };

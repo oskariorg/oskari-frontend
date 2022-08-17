@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ColorPicker, Message } from 'oskari-ui';
+import { ColorPicker } from '../ColorPicker';
+import { Message } from '../Message';
 import { SvgRadioButton, SizeControl, constants, PreviewCol } from './index';
-import { Form, Row, Col, Tooltip } from 'antd';
+import { Row, Col, Tooltip } from 'antd';
+import { FormItem } from '../Form';
 import { FillPattern, isSolid } from './FillPattern';
 
 const { FILLS, FILL_ORDER } = constants;
@@ -47,50 +49,50 @@ export const AreaTab = ({oskariStyle, showPreview}) => {
         <React.Fragment>
             <Row>
                 <Col span={ 12 }>
-                    <Form.Item
+                    <FormItem
                         { ...constants.ANTD_FORMLAYOUT }
                         name='stroke.area.color'
                         label={ <Message messageKey='StyleEditor.stroke.area.color' /> }
                         >
                         <ColorPicker />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
 
                 <Col span={ 12 } >
-                    <Form.Item
+                    <FormItem
                         { ...constants.ANTD_FORMLAYOUT }
                         name='fill.color'
                         label={ <Message messageKey='StyleEditor.fill.color' /> }
                         >
                         <ColorPicker />
-                    </Form.Item>
+                    </FormItem>
                 </Col>
             </Row>
 
             <Row>
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineDash'
                     label={ <Message messageKey='StyleEditor.stroke.area.lineDash' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.lineDash } />
-                </Form.Item>
+                </FormItem>
 
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='stroke.area.lineJoin'
                     label={ <Message messageKey='StyleEditor.stroke.area.lineJoin' /> }
                 >
                     <SvgRadioButton options={ constants.LINE_STYLES.corners } />
-                </Form.Item>
+                </FormItem>
 
-                <Form.Item
+                <FormItem
                     { ...constants.ANTD_FORMLAYOUT }
                     name='fill.area.pattern'
                     label={ <Message messageKey='StyleEditor.fill.area.pattern' /> }
                 >
                     <SvgRadioButton options={ areaFillOptions } />
-                </Form.Item>
+                </FormItem>
             </Row>
 
             <Row>

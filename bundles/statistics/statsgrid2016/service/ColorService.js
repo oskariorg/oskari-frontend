@@ -12,8 +12,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
 
     function () {
         this._defaults = {
-            color: '#00ff01',
-            colorSet: 'Blues'
+            points: '#2ba7ff',
+            divPoints: 'RdBu',
+            seq: 'Blues',
+            div: 'BrBG',
+            qual: 'Paired'
+
         };
         this._limits = {
             types: ['div', 'seq', 'qual'],
@@ -42,12 +46,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         getAvailableTypes: function () {
             return [...this._limits.types];
         },
-        getDefaultColor: function (mapStyle) {
-            if (mapStyle === 'points') {
-                return this._defaults.color;
-            }
-            return this._defaults.colorSet;
-        },
         /**
          * [getColorsForClassification description]
          * @param  {Object} classification object with count as number, type as string, name as string and optional reverseColors boolean
@@ -64,6 +62,69 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 set = this.getColorset(count, color);
             }
             return reverseColors ? [...set].reverse() : set;
+        },
+        getDividedColors: function (classification, bounds) {
+            const { mapStyle, base = 0 } = classification;
+            const baseIndex = bounds.findIndex(bound => bound >= base);
+
+            if (mapStyle === 'points') {
+                return this._getDividedPoints(classification, baseIndex);
+            }
+            return this._getDividedChoropleth(classification, baseIndex);
+        },
+        _getDividedChoropleth: function (classification, baseIndex) {
+            const { count, color, reverseColors } = classification;
+
+            const neutral = count % 2; // has neutral color: 1 else: 0
+            const underBase = baseIndex;
+            const overBase = count - baseIndex - neutral;
+
+            const colorCount = Math.max(underBase, overBase) * 2 + neutral;
+            const colorset = [...this.getColorset(colorCount, color)];
+            if (reverseColors) {
+                colorset.reverse();
+            }
+            // colorset: dark - light - (neutral) - light - dark
+            // use darker colors
+            const colors = [];
+            for (let i = 0; i < underBase; i++) {
+                colors[i] = colorset[i];
+            }
+            if (neutral === 1) {
+                const neutralColorIndex = Math.floor(colorCount / 2);
+                colors[baseIndex] = colorset[neutralColorIndex];
+            }
+            const colorsCount = colorset.length;
+            for (let i = 1; i <= overBase; i++) {
+                colors[count - i] = colorset[colorsCount - i];
+            }
+            return colors;
+        },
+        _getDividedPoints: function (classification, baseIndex) {
+            const { count, color, reverseColors } = classification;
+            const isEven = count % 2 === 0;
+
+            const colorCount = isEven ? 2 : 3;
+            const colorset = [...this.getColorset(colorCount, color)];
+            if (reverseColors) {
+                colorset.reverse();
+            }
+
+            const colors = [];
+            if (isEven) {
+                for (let i = 0; i < count; i++) {
+                    colors[i] = i < baseIndex ? colorset[0] : colorset[1];
+                }
+            } else {
+                for (let i = 0; i < count; i++) {
+                    if (i === baseIndex) {
+                        colors[i] = colorset[1];
+                    } else {
+                        colors[i] = i < baseIndex ? colorset[0] : colorset[2];
+                    }
+                }
+            }
+            return colors;
         },
         /**
          * Tries to return an array of colors where length equals count parameter.
@@ -94,11 +155,44 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object} with keys min and max { min : 2, max : 9 }
          */
         getRange: function (type) {
-            // 2 colors is in the colors[0], assume that every next item has one color more
             const max = this.colorsets.filter(set => set.type === type)
-                .map(set => set.colors.length)
+                .map(({ colors }) => colors[colors.length - 1].length)
                 .reduce((max, size) => max > size ? max : size);
-            return { min: 2, max: max + 2 };
+            return { min: 2, max };
+        },
+        getRangeForColor: function (color) {
+            const { colors } = this.colorsets.find(set => set.name === color) || {};
+            if (!colors) {
+                throw new Error(`Couldn't get count range for color: ${color}`);
+            }
+            const max = colors[colors.length - 1].length;
+            return { min: 2, max };
+        },
+        validateColor: function (classification) {
+            const { mapStyle, color, type } = classification;
+            if (typeof color !== 'string') {
+                return false;
+            }
+            if (mapStyle === 'points' && type !== 'div') {
+                return !!Oskari.util.hexToRgb(color);
+            }
+            const colorset = this.colorsets.find(set => set.name === color);
+            const { type: setType } = colorset || {};
+            return setType === type;
+        },
+        getDefaultColor: function (classification) {
+            const { mapStyle, type } = classification;
+            if (mapStyle === 'points') {
+                if (type === 'div') {
+                    return this._defaults.divPoints;
+                }
+                return this._defaults.points;
+            }
+            const colorset = this._defaults[type];
+            if (!colorset) {
+                throw new Error(`No default color for type: ${type}`);
+            }
+            return colorset;
         },
         /**
          * Options to show in classification UI for selected type and count
@@ -107,11 +201,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object[]} Returns an array of objects like { name : "nameOfSet", colors : [.. array of hex colors...]}
          */
         getOptionsForType: function (type, count, reverse) {
-            const range = this.getRange(type);
-            if (typeof count !== 'number' || range.min > count || range.max < count) {
-                throw new Error('Invalid color count provided: ' + count +
-                    '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
-            }
             // 2 colors is the first set and index starts at 0 -> -2
             const arrayIndex = count - 2;
 

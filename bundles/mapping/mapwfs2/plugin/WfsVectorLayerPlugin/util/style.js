@@ -22,29 +22,9 @@ const defaults = {
             }
         }
     },
-    selected: {
-        inherit: true,
-        effect: 'auto major',
-        stroke: {
-            area: {
-                effect: 'none',
-                color: '#000000',
-                width: 4
-            },
-            width: 3
-        }
-    },
     hover: {
         inherit: true,
-        effect: 'auto minor',
-        stroke: {
-            area: {
-                effect: 'none',
-                color: '#000000',
-                width: 2
-            },
-            width: 2
-        }
+        effect: 'auto minor'
     }
 };
 export const DEFAULT_STYLES = { ...defaults };

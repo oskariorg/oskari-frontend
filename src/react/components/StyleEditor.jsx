@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { LocaleProvider } from '../util';
 import { Form, Card, Space, Radio } from 'antd';
 import styled from 'styled-components';
+import 'antd/es/form/style/index.js';
 
 import { constants, PointTab, LineTab, AreaTab, OSKARI_BLANK_STYLE, PreviewButton } from './StyleEditor/';
 import { FormToOskariMapper } from './StyleEditor/FormToOskariMapper';

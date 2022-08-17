@@ -392,6 +392,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me._handleIndicatorAdded(event.getDatasource(), event.getIndicator(), event.getSelections());
             }
         });
+        this.service.on('StatsGrid.DatasourceEvent', () => this._handleRegionsetChanged());
         this.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             log.debug('Region changed! ', event.getRegionset());
             me._handleRegionsetChanged(event.getRegionset());

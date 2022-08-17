@@ -56,8 +56,7 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     return (
         <LabelComponent 
             onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
-                { message }
-                { children }
+                { message } { children }
         </LabelComponent>
     );
 };

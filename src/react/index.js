@@ -6,6 +6,7 @@ export { Collapse, Panel as CollapsePanel } from './components/Collapse';
 export { Confirm } from './components/Confirm';
 export { Divider } from './components/Divider';
 export { Dropdown } from './components/Dropdown';
+export { Label } from './components/Label';
 export { List, ListItem } from './components/List';
 export { Message } from './components/Message';
 export { NumberInput } from './components/NumberInput';
@@ -28,11 +29,8 @@ export { Icon } from './components/Icon';
 export { WarningIcon } from './components/WarningIcon';
 export { Tooltip } from './components/Tooltip';
 export { LabeledInput } from './components/LabeledInput';
+export { Pagination } from './components/Pagination';
+export { Link } from './components/Link';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';
-export { LocalizationComponent } from './components/LocalizationComponent';
-export { GenericForm } from './components/GenericForm';
-export { DateRange } from './components/DateRange';
-export { ColorPicker } from './components/ColorPicker';
-export { Modal } from './components/Modal';

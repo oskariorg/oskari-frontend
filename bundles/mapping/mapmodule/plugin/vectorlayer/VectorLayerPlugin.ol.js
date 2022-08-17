@@ -126,8 +126,7 @@ Oskari.clazz.define(
                     olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
-                    me._map.addLayer(olLayer);
-                    me.raiseVectorLayer(olLayer);
+                    me.getMapModule().addLayer(olLayer);
                     me._olLayers[layerId] = olLayer;
                     me._layerStyles[layerId] = layerStyle;
                 }
@@ -454,8 +453,7 @@ Oskari.clazz.define(
                 const zoomLevelHelper = getZoomLevelHelper(this.getMapModule().getScaleArray());
                 // Set min max zoom levels that layer should be visible in
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
-                me._map.addLayer(olLayer);
-                me.raiseVectorLayer(olLayer);
+                me.getMapModule().addLayer(olLayer);
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
             olLayer.setVisible(layer.isVisible());
@@ -558,9 +556,7 @@ Oskari.clazz.define(
                     if (!mapLayerGroup) {
                         const group = {
                             id: groupForLayer.id,
-                            name: {
-                                [Oskari.getLang()]: groupForLayer.name
-                            }
+                            name: groupForLayer.name
                         };
                         mapLayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                     }
@@ -596,7 +592,6 @@ Oskari.clazz.define(
             }
             const sandbox = this.getSandbox();
             const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            let layerUpdate = false;
 
             if (options.remove) {
                 const request = Oskari.requestBuilder('RemoveMapLayerRequest')(layer.getId());
@@ -609,12 +604,18 @@ Oskari.clazz.define(
 
                 return layer;
             }
-            if (options.layerName) {
-                layer.setName(options.layerName);
+            let layerUpdate = false;
+            const { layerName, layerOrganizationName, layerDescription } = options;
+            if (layerName && layer.getName() !== layerName) {
+                layer.setName(layerName);
                 layerUpdate = true;
             }
-            if (options.layerOrganizationName) {
-                layer.setOrganizationName(options.layerOrganizationName);
+            if (layerOrganizationName && layer.getOrganizationName() !== layerOrganizationName) {
+                layer.setOrganizationName(layerOrganizationName);
+                layerUpdate = true;
+            }
+            if (layerDescription && layer.getDescription() !== layerDescription) {
+                layer.setDescription(layerDescription);
                 layerUpdate = true;
             }
             if (typeof options.opacity !== 'undefined') {
@@ -623,10 +624,6 @@ Oskari.clazz.define(
                 this._getOlLayer(layer);
             }
             this._setHoverOptions(layer, options);
-            if (options.layerDescription) {
-                layer.setDescription(options.layerDescription);
-                layerUpdate = true;
-            }
             var lyrInService = mapLayerService.findMapLayer(layer.getId());
             if (lyrInService && layerUpdate) {
                 // Send layer updated notification
@@ -960,15 +957,6 @@ Oskari.clazz.define(
             }
             // Start animation
             map.render();
-        },
-        /**
-         * Raises the marker layer above the other layers
-         *
-         * @param markerLayer
-         */
-        raiseVectorLayer: function (layer) {
-            this.getMapModule().bringToTop(layer);
-            layer.setVisible(true);
         },
         /**
          * @method _createRequestHandlers

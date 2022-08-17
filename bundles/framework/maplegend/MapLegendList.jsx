@@ -2,21 +2,15 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel } from 'oskari-ui';
 import { LegendImage } from './LegendImage';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
+import { MetadataIcon } from 'oskari-ui/components/icons';
 
-const MetadataIcon = styled(InfoCircleOutlined)`
-    & {
-        margin: 0 0 0 10px;
-    }
-`;
 
 export const MapLegendList = ({ legendList }) => {
-    const composeHeader = (title, uuid, callback) => {
+    const composeHeader = (title, uuid) => {
         return (
             <Fragment>
                 { title }
-                { uuid && <MetadataIcon onClick={ (event) => callback(event, uuid) } /> }
+                <MetadataIcon metadataId={uuid} style={{ margin: '0 0 0 10px' }} />
             </Fragment>
         );
     };
@@ -25,7 +19,7 @@ export const MapLegendList = ({ legendList }) => {
         <Collapse>
             { legendList.length > 0 && legendList.map((item) => {
                 return (
-                    <CollapsePanel key={ item.title } header={ composeHeader(item.title, item.uuid, item.showMetadataCallback) }>
+                    <CollapsePanel key={ item.title } header={ composeHeader(item.title, item.uuid) }>
                         <LegendImage url={ item.legendImageURL } />
                     </CollapsePanel>
                 );

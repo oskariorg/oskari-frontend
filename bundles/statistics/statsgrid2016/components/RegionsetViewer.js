@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const me = this;
         const { activeIndicator, regionset, error, seriesStats } = this.service.getStateService().getStateForRender();
         if (error) {
-            this.log.warn('Error getting state', error);
+            this.log.debug('Error getting state', error);
             me._clearRegions();
             return;
         }
@@ -216,7 +216,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         return style;
     },
     _getPointStyle: function (strokeWidth, color, size) {
-        const strokeColor = Oskari.util.isDarkColor(color) ? '#ffffff' : '#000000';
         return {
             fill: { color: null },
             image: {
@@ -224,7 +223,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 fill: { color }
             },
             stroke: {
-                color: strokeColor,
+                color: '#000000',
                 width: strokeWidth
             }
         };

@@ -17,7 +17,7 @@ const StyledSlider = styled(Slider)`
 `;
 
 const StyledNumberInput = styled(NumberInput)`
-    width: 60px !important;
+    width: 80px !important;
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
     height: 34px !important;

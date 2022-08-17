@@ -1,37 +1,60 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable } from './util';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
+import { getHeaderTheme } from '../../theme/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
     left: 0;
     top: 0;
     z-index: 20009;
-    background:white;
+    background: #fafafa;
     min-width: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+
 
     &.outofviewport {
-        border: 2px solid rgba(255, 0, 0);
+        border: 1px solid rgba(255, 0, 0, 0.5);
+        h3.flyout-title {
+            animation:vibrate 0.5s linear;
+            @keyframes vibrate {
+                25%, 75% {
+                    transform:rotate(2deg);
+                }
+                50% {
+                    transform:rotate(-2deg);
+                }
+                100% {
+                    transform:rotate(0deg);
+                }
+            }
+        }
     }
 `;
 
 const FlyoutHeader = styled.div`
     height: 57px;
     width: 100%;
-    background-color: #fdf8d9;
+    background-color: ${props => props.theme.getBgColor()};
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
+    cursor: grab;
 `;
+
+// border-top: 1px solid #ffdf00;
+// border-bottom: 5px solid #ebb819;
 const HeaderBand = styled.div`
-    background-color: #ffd400;
-    border-top: 1px solid #ffdf00;
-    border-bottom: 1px solid #ebb819;
+    background-color: ${props => props.theme.getAccentColor()};
+    border-top: 1px solid ${props => props.theme.getBgBorderColor()};
+    border-bottom: 1px solid ${props => props.theme.getBgBorderBottomColor()};
     height: 14px;
     width: 100%;
 `;
-const Title = styled.div`
+const Title = styled.h3`
     float: left;
     margin-left: 20px;
     margin-top: 12px;
@@ -42,23 +65,26 @@ const Title = styled.div`
 `;
 const ToolsContainer = styled.div`
     float: right;
-    margin-right: 25px;
+    margin-right: 15px;
     height: 16px;
     display: inline-block;
-    margin-top: 12px;
+    margin-top: 6px;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
-    > span:hover {
-        color: #ffd400;
+    font-size: ${ICON_SIZE}px;
+    > button {
+        margin-top: -5px;
+        color: ${props => props.iconColor};
+    }
+    > button:hover {
+        color: ${props => props.hoverColor};
     }
 `;
 
 
-export const Flyout = ({title = '', children, onClose, bringToTop, options = {}}) => {
+export const Flyout = ThemeConsumer(({title = '', children, onClose, bringToTop, options, theme}) => {
     const [position, setPosition] = useState({ x: 210, y: 30 });
     const elementRef = useRef();
-    const containerClass = options.id ? `t_flyout t_${options.id}` : 't_flyout'
+    const containerClass = `t_flyout t_${options.id}`
     const onMouseDown = useCallback(() => {
         if (typeof bringToTop === 'function') {
             bringToTop();
@@ -74,23 +100,24 @@ export const Flyout = ({title = '', children, onClose, bringToTop, options = {}}
         <div className="oskari-flyouttool-restore"></div>
     Maybe allow passing tools from caller?
     */
+    const headerTheme = getHeaderTheme(theme);
     return (<Container className={containerClass} ref={elementRef} style={{transform: `translate(${position.x}px, ${position.y}px)`}}>
-        <FlyoutHeader className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
-            <HeaderBand />
-            <Title>{title}</Title>
-            <ToolsContainer>
-                <CloseCircleFilled className="oskari-flyouttool-close" onClick={onClose}/>
+        <FlyoutHeader theme={headerTheme} className="oskari-flyouttoolbar" onMouseDown={onMouseDown} onTouchStart={onMouseDown}>
+            <HeaderBand theme={headerTheme}/>
+            <Title className='flyout-title'>{title}</Title>
+            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </FlyoutHeader>
         <div>
             {children}
         </div>
     </Container>)
-};
+});
 
 Flyout.propTypes = {
     children: PropTypes.any,
-    title: PropTypes.string,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     onClose: PropTypes.func.isRequired,
     bringToTop: PropTypes.func,
     options: PropTypes.object

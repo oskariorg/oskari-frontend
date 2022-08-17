@@ -155,16 +155,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.regionset = null;
             this.indicators = [];
             this.activeRegion = null;
+            this.lastSelectedClassification = {};
             const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
             this.sandbox.notifyAll(eventBuilder(true));
         },
-        setState: function (state = {}) {
-            const { regionset, indicators = [], active: activeHash, activeRegion } = state;
+        setState: function (state) {
+            const { regionset, indicators = [], active: activeHash, activeRegion } = state || {};
             this.regionset = regionset;
             this.activeRegion = activeRegion;
             // map to keep stored states work properly
             this.indicators = indicators.map(ind => {
                 const hash = ind.hash || this.getHash(ind.ds, ind.id, ind.selections, ind.series);
+                if (ind.classification) {
+                    this.validateClassification(ind.classification);
+                }
                 return {
                     datasource: Number(ind.ds),
                     indicator: ind.id,
@@ -278,6 +282,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             const lastSelected = { ...this.lastSelectedClassification };
             delete lastSelected.manualBounds;
             delete lastSelected.fractionDigits;
+            delete lastSelected.base;
 
             const metadataClassification = {};
             // Note! Assumes that the metadata has been loaded when selecting the indicator from the list to get a sync response
@@ -290,34 +295,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 const metadata = data.metadata || {};
                 if (typeof metadata.isRatio === 'boolean') {
                     metadataClassification.mapStyle = metadata.isRatio ? 'choropleth' : 'points';
-                } else {
-                    // we have no metadata, default to last used or 'choropleth'
-                    metadataClassification.mapStyle = lastSelected.mapStyle || 'choropleth';
                 }
-                let decimalCount = metadata.decimalCount;
-                if (typeof decimalCount !== 'number') {
-                    decimalCount = lastSelected.fractionDigits;
+                if (typeof metadata.decimalCount === 'number') {
+                    metadataClassification.fractionDigits = metadata.decimalCount;
                 }
-                metadataClassification.fractionDigits = decimalCount;
                 if (typeof metadata.base === 'number') {
                     // if there is a base value the data is divided at base value
                     // TODO: other stuff based on this
+                    metadataClassification.base = metadata.base;
                     metadataClassification.type = 'div';
-                } else {
-                    // we have no metadata, default to last used or 'seq'
-                    metadataClassification.type = lastSelected.type || 'seq';
                 }
             });
-            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification, indicator.classification || {});
+            const result = jQuery.extend({}, this._defaults.classification, lastSelected, metadataClassification);
             this.validateClassification(result);
             return result;
         },
         validateClassification: function (classification) {
-            const { mapStyle, color } = classification;
-            const isHex = !!Oskari.util.hexToRgb(color);
-            const isPoints = mapStyle === 'points';
-            if ((isPoints && !isHex) || (!isPoints && isHex)) {
-                classification.color = this.service.getColorService().getDefaultColor(mapStyle);
+            const colorService = this.service.getColorService();
+            if (!colorService.validateColor(classification)) {
+                classification.color = colorService.getDefaultColor(classification);
+            }
+            const { max } = classification.mapStyle === 'points'
+                ? this.service.getClassificationService().getRangeForPoints()
+                : colorService.getRangeForColor(classification.color);
+            if (classification.count > max) {
+                classification.count = max;
             }
         },
         /**
@@ -513,7 +515,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
             } else {
                 // if no indicators then reset state
-                // last indicator removal should act like all indicators or layer was removed
+                // last indicator removal should act like all indicators was removed
                 this.resetState();
             }
 

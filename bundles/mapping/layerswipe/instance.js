@@ -66,9 +66,11 @@ Oskari.clazz.define(
                 if (this.cropSize === null) {
                     this.resetMapCropping();
                 }
+                Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(false);
             } else {
                 this.unregisterEventListeners();
                 this.hideSplitter();
+                Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
             }
             this.active = active;
             this.mapModule.getMap().render();

@@ -12,7 +12,12 @@ Oskari.registerLocalization({
             submit: 'Skicka',
             import: 'Importera',
             yes: 'Ja',
-            no: 'Nej'
+            no: 'Nej',
+            next: 'Nästa',
+            previous: 'Föregående'
+        },
+        messages: {
+            confirmDelete: 'Vill du säkert ta bort?'
         },
         error: {
             generic: 'Something went wrong'
@@ -22,7 +27,8 @@ Oskari.registerLocalization({
                 desc: 'Sortera i fallande ordning',
                 asc: 'Sortera i stigande ordning',
                 cancel: 'Annullera sorteringen'
-            }
+            },
+            emptyText: 'Inga data.'
         },
         ColorPicker: {
             tooltip: 'Välj färg',
@@ -84,7 +90,7 @@ Oskari.registerLocalization({
         },
         LocalizationComponent: {
             otherLanguages: 'Andra språk',
-            othersTip: '',
+            othersTip: 'Översättningar kommer att visas när tjänsten används på olika språk',
             locale: {
                 generic: 'på ({0})',
                 fi: 'på finska',

@@ -5,6 +5,8 @@ import olLayerVector from 'ol/layer/Vector';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import { Vector as olSourceVector } from 'ol/source';
 
+const STROKE_ADDITION = 2;
+
 export class HoverHandler {
     constructor (mapmodule) {
         this._mapmodule = mapmodule;
@@ -26,7 +28,6 @@ export class HoverHandler {
         this._styleFactory = this._mapmodule.getGeomTypedStyles.bind(this._mapmodule);
         const olLayer = new olLayerVector({ source: new olSourceVector() });
         olLayer.set(LAYER_HOVER, true, true);
-        olLayer.setZIndex(1); // TODO: how to handle layer ordering
         this._mapmodule.addLayer(olLayer);
         this._hoverLayer = olLayer;
     }
@@ -70,14 +71,7 @@ export class HoverHandler {
             return;
         }
         if (layerChanged) {
-            const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            if (!layer) {
-                // this happens when reseting the map state while a feature is being hovered on
-                return;
-            }
-            this._hoverLayer.setOpacity(layer.getOpacity() / 100);
-            this._hoverLayer.setStyle(this.getCachedStyle(layerId));
-            this._hoverLayer.changed();
+            this.onLayerChange(layerId);
         }
         this._hoverLayer.getSource().addFeature(feature);
     }
@@ -98,6 +92,24 @@ export class HoverHandler {
         this._hoverLayer.setOpacity(layer.getOpacity() / 100);
     }
 
+    onLayerChange (layerId) {
+        const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+        if (!layer) {
+            // this happens when reseting the map state while a feature is being hovered on
+            return;
+        }
+        const mapmodule = this._mapmodule;
+        const hoverLayer = this._hoverLayer;
+        const olLayers = mapmodule.getOLMapLayers(layerId);
+        // assumes that first layer is main layer and others are straight over main layer
+        const topLayer = olLayers[olLayers.length - 1];
+        const index = mapmodule.getLayerIndex(topLayer);
+        mapmodule.setLayerIndex(hoverLayer, index + 1);
+        hoverLayer.setOpacity(layer.getOpacity() / 100);
+        hoverLayer.setStyle(this.getCachedStyle(layerId));
+        hoverLayer.changed();
+    }
+
     // VectorTile uses lightweight and read-only RenderFeature
     // create copy with same source and hover style
     createVectorTileLayer (layer, source) {
@@ -106,7 +118,6 @@ export class HoverHandler {
         olLayer.setVisible(layer.isVisible());
         olLayer.set(LAYER_HOVER, true, true);
         olLayer.setStyle(this._styleGenerator(layer, true));
-        olLayer.setZIndex(1);
         this._vectorTileLayers[layer.getId()] = olLayer;
         this.setTooltipContent(layer);
         return olLayer;
@@ -161,14 +172,13 @@ export class HoverHandler {
 
     _styleGenerator (layer, isVectorTile) {
         const { featureStyle: layerHoverDef } = layer.getHoverOptions() || {};
-        const { featureStyle: defaultFeatureStyle, hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
+        const { hover: defaultHoverDef } = this._defaultStyles[layer.getLayerType()] || {};
         let hoverDef = layerHoverDef || defaultHoverDef;
         if (!hoverDef) {
             return null;
         }
         if (hoverDef.inherit === true) {
-            const featureStyle = layer.getCurrentStyle().getFeatureStyle();
-            hoverDef = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle, hoverDef);
+            hoverDef = this._getInheritedStyle(layer, hoverDef);
         }
         // TODO: if layer contains only one geometry type return olStyle (hoverDef) instead of function
         const olStyles = this._styleFactory(hoverDef);
@@ -184,6 +194,19 @@ export class HoverHandler {
         return feature => {
             return getStylesForGeometry(feature.getGeometry(), olStyles);
         };
+    }
+
+    _getInheritedStyle (layer, hoverDef) {
+        const { featureStyle: defaultFeatureStyle } = this._defaultStyles[layer.getLayerType()] || {};
+        const featureStyle = layer.getCurrentStyle().getFeatureStyle();
+        const base = jQuery.extend(true, {}, defaultFeatureStyle, featureStyle);
+        if (Oskari.util.keyExists(base, 'stroke.width')) {
+            base.stroke.width = base.stroke.width + STROKE_ADDITION;
+        }
+        if (Oskari.util.keyExists(base, 'stroke.area.width')) {
+            base.stroke.area.width = base.stroke.area.width + STROKE_ADDITION;
+        }
+        return jQuery.extend(true, {}, base, hoverDef);
     }
 
     _clearState (clearLayerId) {

@@ -49,7 +49,10 @@ Oskari.registerLocalization(
                 'moveToScale': 'Move to a suitable map level',
                 'moveToContentArea': 'Move to a suitable location',
                 'publishable': 'Publishable',
-                'hidden': 'The map layer is temporarily hidden.'
+                'hidden': 'The map layer is temporarily hidden.',
+                'hide': 'Hide map layer',
+                'show': 'Show map layer',
+                'drag': 'Drag the map layer up/down in the list: layers listed nearer the top are shown on the map over layers listed lower.'
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',
@@ -66,6 +69,7 @@ Oskari.registerLocalization(
                 'arcgis': 'Raster layer',
                 'wfs': 'Vector layer',
                 'vectortile': 'Vector layer',
+                'vector': 'Vector layer',
                 'userlayer': '',
                 'myplaces': '',
                 'analysislayer': '',

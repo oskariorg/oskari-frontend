@@ -1,101 +1,87 @@
-import React from 'react';
-import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { Message } from 'oskari-ui';
-import { ANNOUNCEMENTS_LOCALSTORAGE } from './Constants';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { isUpcoming, isOutdated, isActive } from '../service/util';
 
 // Handler for announcements. Handles state and service calls.
-
-const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='announcements' />;
-
 class ViewHandler extends StateHandler {
     constructor (service) {
         super();
         this.service = service;
-        this.fetchAnnouncements();
-        this.state = {
-            modals: [],
-            announcements: [],
-            checked: false
+        this.service.on('controller', () => this.notify());
+        this.service.on('fetch', () => this.onFetch());
+        this.service.fetchAnnouncements();
+    }
+
+    onFetch () {
+        const announcements = this.service.getAnnouncements();
+        const dontShowAgain = this.service.getIdsFromLocalStorage();
+
+        // Admin gets all announcements
+        const active = announcements.filter(a => isActive(a));
+
+        const newState = {
+            outdated: announcements.filter(a => isOutdated(a)),
+            upcoming: announcements.filter(a => isUpcoming(a)),
+            active,
+            dontShowAgain
         };
-    }
-
-    fetchAnnouncements () {
-        this.service.fetchAnnouncements(function (err, data) {
-            if (err) {
-                Messaging.error(getMessage('messages.getAdminAnnouncementsFailed'));
-            } else {
-                this.updateState({
-                    announcements: data
-                });
-            }
-        }.bind(this));
-    }
-
-    updateModals () {
-        var modals = [];
-        this.state.announcements.forEach((announcement) => {
-            if (this.isAnnouncementShown(announcement)) {
-                // if announcement is active, then show pop-up of the content
-                modals.push(announcement);
-            }
-        });
-        this.updateState({
-            modals: modals
-        });
-    }
-
-    setAnnouncementAsSeen (dontShowAgain, id) {
-        if (dontShowAgain) {
-            this.addToLocalStorageArray(ANNOUNCEMENTS_LOCALSTORAGE, id);
-            this.updateState({
-                checked: false
-            });
+        // Filter active announcements to show in banner or popup
+        // Empty array in state -> already shown, don't populate array more than once
+        if (!this.state.popupAnnouncements) {
+            newState.popupAnnouncements = active.filter(ann => ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
         }
-        const newList = [...this.state.modals];
-        newList.splice(newList.findIndex(a => a.id === id), 1);
-        this.updateState({
-            modals: newList
-        });
+        if (!this.state.bannerAnnouncements) {
+            newState.bannerAnnouncements = active.filter(ann => !ann.options.showAsPopup && !dontShowAgain.includes(ann.id));
+        }
+        this.updateState(newState);
     }
 
-    isAnnouncementShown (announcement) {
-        var localStorageAnnouncements = localStorage.getItem(ANNOUNCEMENTS_LOCALSTORAGE);
-        // is the modal stored in the localstorage aka has it been set to not show again
-        if ((announcement.active && localStorageAnnouncements && localStorageAnnouncements.includes(announcement.id)) || !announcement.active) {
-            return false;
+    getToolController () {
+        const controller = this.service.getAdminController();
+        if (controller) {
+            controller.preview = (id) => this.preview(id);
+        }
+        return controller;
+    }
+
+    preview (id) {
+        const ann = this.service.getAnnouncement(id);
+        if (!ann) {
+            return;
+        }
+        if (ann.options.showAsPopup) {
+            this.updateState({ popupAnnouncements: [ann] });
         } else {
-            return true;
+            this.updateState({ bannerAnnouncements: [ann] });
         }
     }
 
-    // Is modal's checkbox checked
-    onCheckboxChange (checked) {
-        this.updateState({
-            checked: checked
-        });
+    setShowAgain (id, dontShow) {
+        if (dontShow) {
+            this.service.addToLocalStorage(id);
+        } else {
+            this.service.removeFromLocalStorage(id);
+        }
+        const dontShowAgain = this.service.getIdsFromLocalStorage();
+        this.updateState({ dontShowAgain });
     }
 
-    /**
-     * Add an item to a localStorage() array
-     * @param {String} name  The localStorage() key
-     * @param {String} value The localStorage() value
-     */
-    addToLocalStorageArray (name, value) {
-        // Get the existing data
-        var existing = localStorage.getItem(name);
+    onPopupClose () {
+        this.updateState({ popupAnnouncements: [] });
+    }
 
-        // If no existing data, create an array
-        // Otherwise, convert the localStorage string to an array
-        existing = existing ? existing.split(',') : [];
+    onBannerClose () {
+        this.updateState({ bannerAnnouncements: [] });
+    }
 
-        // Add new data to localStorage Array
-        existing.push(value);
+    onBannerChange (currentBanner) {
+        this.updateState({ currentBanner });
+    }
 
-        // Save back to localStorage
-        localStorage.setItem(name, existing.toString());
+    onPopupChange (currentPopup) {
+        this.updateState({ currentPopup });
     }
 }
 
 export const AnnouncementsHandler = controllerMixin(ViewHandler, [
-    'setAnnouncementAsSeen', 'onCheckboxChange'
+    'setShowAgain', 'onPopupClose', 'onPopupChange', 'onBannerClose', 'onBannerChange', 'getToolController'
 ]);

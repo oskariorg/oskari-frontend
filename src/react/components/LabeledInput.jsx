@@ -2,15 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Tooltip } from 'oskari-ui';
-import { MandatoryIcon } from 'oskari-ui/components/icons';
+import { Label } from './Label';
+import { getMandatoryIcon } from '../util/validators';
 import { Input } from 'antd';
 
-const Label = styled.div`
-    display: inline-block;
-`;
 const Component = styled.div`
     margin-bottom: 10px;
 `;
+const Textarea = styled(Input.TextArea)`
+    font-family: inherit;
+`
+
 export const LabeledInput = ({
     label,
     mandatory,
@@ -18,14 +20,20 @@ export const LabeledInput = ({
     ...inputProps
 }) => {
     const { value, type } = inputProps;
-    const InputNode = type === 'textarea' ? Input.TextArea : Input;
-    const isValid = mandatory ? typeof value !== 'undefined' && value.trim().length > 0 : true;
+    const InputNode = type === 'textarea' ? Textarea : Input;
     if (minimal) {
-        const suffix = mandatory ? <MandatoryIcon isValid={isValid}/> : <span />;
+        let labelStr = label;
+        if (typeof label !== 'string') {
+            labelStr = '';
+            Oskari.log('React/LabeledInput').error('Minimal input requires label as string. Got:', label);
+        }
+        if (mandatory) {
+            inputProps.suffix = getMandatoryIcon(mandatory, value);
+        }
         return (
             <Component>
-                <Tooltip title={ label } trigger={ ['focus', 'hover'] }>
-                    <InputNode placeholder={label} suffix={suffix} {...inputProps}/>
+                <Tooltip title={ labelStr } trigger={ ['focus', 'hover'] }>
+                    <InputNode placeholder={labelStr} {...inputProps}/>
                 </Tooltip>
             </Component>
         );
@@ -33,8 +41,7 @@ export const LabeledInput = ({
     return (
         <Component>
             <Label>
-                {label}
-                { mandatory && <MandatoryIcon isValid={isValid}/> }
+                {label} { mandatory && getMandatoryIcon(mandatory, value) }
             </Label>
             <InputNode {...inputProps}/>
         </Component>
@@ -42,7 +49,17 @@ export const LabeledInput = ({
 };
 
 LabeledInput.propTypes = {
-    label: PropTypes.string.isRequired,
-    mandatory: PropTypes.bool,
+    // label MUST be string IF minimal=true as it's placed on the field placeholder
+    label: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node
+    ]).isRequired,
+    // boolean to have simple String.isEmpty() validation, component for controlling isValid-check for more complex validation
+    mandatory: PropTypes.oneOfType([
+        PropTypes.node,
+        PropTypes.bool
+    ]),
+    // true to show label as placeholder inside the field instead of on top of the field
     minimal: PropTypes.bool
 };

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Confirm, Message, Space, Spin, Tooltip } from 'oskari-ui';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { DELETE_ICON_STYLE } from './LayerAnalyticsDetails';
+import { Message, Space, Spin, Tooltip } from 'oskari-ui';
+import { DeleteButton } from 'oskari-ui/components/buttons';
+import { EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const TitleArea = styled.span`
@@ -107,14 +107,10 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
                                 <Tooltip title={ <Message messageKey='flyout.editLayerTooltip' /> }>
                                     <EditOutlined onClick={ () => layerEditorCallback(item.id) } />
                                 </Tooltip>
-                                <Confirm
+                                <DeleteButton
+                                    type='icon'
                                     title={<Message messageKey='flyout.removeAllDataForLayer' />}
-                                    onConfirm={() => removeAnalyticsCallback(item.id)}
-                                    okText={<Message messageKey='flyout.delete' />}
-                                    cancelText={<Message messageKey='flyout.cancel' />}
-                                    placement='bottomLeft'>
-                                    <DeleteOutlined style={ DELETE_ICON_STYLE } />
-                                </Confirm>
+                                    onConfirm={() => removeAnalyticsCallback(item.id)}/>
                             </Space>
                         </TitleArea>
                     </React.Fragment>

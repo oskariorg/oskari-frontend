@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "tilføj en titel til kortet"
             },
             "content": {
-                "pageLogo": {
-                    "label": "Tilføj Oskari logo",
-                    "tooltip": "Det er muligt at skjule logoet om nødvendigt"
-                },
                 "pageScale" : {
                     "label": "Tilføj skalering til kortet",
                     "tooltip": "Tilføj skalering til kortet"

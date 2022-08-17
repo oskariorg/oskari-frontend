@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { PointsLegend, ChoroplethLegend, InactiveLegend } from './legend/';
-import './legend.scss';
+import styled from 'styled-components';
+import { InactiveLegend } from './legend/InactiveLegend';
+import { LegendRow } from './legend/LegendRow';
+
+const Container = styled.div`
+    margin: 0 auto;
+    width: 90%;
+    overflow: hidden;
+`;
 
 export const Legend = ({
     transparency,
@@ -13,13 +20,20 @@ export const Legend = ({
         const errorKey = error === 'general' ? 'cannotCreateLegend' : error;
         return (<InactiveLegend error = {errorKey} />);
     }
-    if (mapStyle === 'points') {
-        return (
-            <PointsLegend classifiedDataset={classifiedDataset} transparency={transparency}/>
-        );
-    }
+    const opacity = transparency / 100 || 1;
+    const { groups } = classifiedDataset;
+    const maxSizePx = groups.map(g => g.sizePx).reduce((max, val) => max < val ? val : max);
     return (
-        <ChoroplethLegend classifiedDataset={classifiedDataset} transparency={transparency}/>
+        <Container>
+            { groups.map((group, i) =>
+                <LegendRow key={`item-${i}`}
+                    opacity={opacity}
+                    mapStyle={mapStyle}
+                    maxSizePx={maxSizePx}
+                    { ...group }
+                />
+            )}
+        </Container>
     );
 };
 

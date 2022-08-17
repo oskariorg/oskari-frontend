@@ -1,9 +1,12 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseIcon } from './CloseIcon';
 import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
+import { ICON_SIZE } from './constants';
+import { ThemeConsumer } from '../../util/contexts';
+import { getHeaderTheme } from '../../theme/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
@@ -17,7 +20,7 @@ const Container = styled.div`
     background-clip: content-box;
     border: 5px solid rgba(0, 0, 0, 0.2);
     border-radius: 7px;
-    z-index: 50000;
+    z-index: 30000;
 
     &.outofviewport {
         border: 5px solid rgba(100, 0, 0, 0.5);
@@ -40,11 +43,14 @@ const Container = styled.div`
 `;
 
 const PopupHeader = styled.h3`
-    background-color: #FDF8D9;
+    background-color: ${props => props.theme.getBgColor()};
+    color:  ${props => props.theme.getTextColor()};
     padding: 8px 10px;
+    display: flex;
+    cursor: ${props => props.isDraggable ? 'grab' : undefined}
 `;
 const PopupTitle = styled.span`
-    margin-right: 5px;
+    margin-right: auto;
 `;
 // Note! max-height isn't recalculated when window size changes :(
 const PopupBody = styled.div`
@@ -52,29 +58,34 @@ const PopupBody = styled.div`
     overflow: auto;
 `;
 const ToolsContainer = styled.div`
-    float: right;
+    margin-left: 10px;
     height: 16px;
     display: inline-block;
     /* Size and color for tool icons from AntD: */
-    font-size: 18px;
-    color: black;
-    > span:hover {
-        color: #ffd400;
+    font-size: ${ICON_SIZE}px;
+    > button {
+        margin-top: -5px;
+        color: ${props => props.iconColor};
+    }
+    > button:hover {
+        color: ${props => props.hoverColor};
     }
 `;
 
 
-export const Popup = ({title = '', children, onClose, bringToTop, options = {}}) => {
+export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop, options, theme={}}) => {
     // hide before we can calculate centering coordinates
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
         style: {
             transform: `translate(${position.x}px, ${position.y}px)`
         },
-        className: options.id ? `t_popup t_${options.id}` : 't_popup'
+        className: `t_popup t_${options.id}`
     };
     const elementRef = useRef();
-    const headerProps = {};
+    const headerProps = {
+        isDraggable: !!options.isDraggable
+    };
     const headerFuncs = [];
     if (typeof bringToTop === 'function') {
         headerFuncs.push(bringToTop);
@@ -112,7 +123,7 @@ export const Popup = ({title = '', children, onClose, bringToTop, options = {}})
         }
         // center after content has been rendered
         setPosition({
-            ...getPositionForCentering(elementRef),
+            ...getPositionForCentering(elementRef, options.placement),
             centered: true
         });
         return handleUnmounting;
@@ -124,18 +135,20 @@ export const Popup = ({title = '', children, onClose, bringToTop, options = {}})
         <div class="popup-body">content</div>
     </div>
     */
+
+    const headerTheme = getHeaderTheme(theme);
     return (<Container {...containerProps}>
-        <PopupHeader {...headerProps}>
+        <PopupHeader theme={headerTheme} {...headerProps}>
             <PopupTitle>{title}</PopupTitle>
-            <ToolsContainer>
-                <CloseCircleFilled className="t_popup-close" onClick={onClose}/>
+            <ToolsContainer iconColor={headerTheme.getToolColor()} hoverColor={headerTheme.getToolHoverColor()}>
+                <CloseIcon onClose={onClose}/>
             </ToolsContainer>
         </PopupHeader>
-        <PopupBody className="t_popup-body">
+        <PopupBody className="t_body">
             {children}
         </PopupBody>
     </Container>)
-};
+});
 
 Popup.propTypes = {
     children: PropTypes.any,

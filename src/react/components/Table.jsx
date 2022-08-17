@@ -2,6 +2,33 @@ import React from 'react';
 import { Table as AntTable } from 'antd';
 import 'antd/es/table/style/index.js';
 import { getMsg } from '../util/locale';
+import styled from 'styled-components';
+
+const StyledToolsContainer = styled('div')`
+    display: flex;
+    justify-content: space-evenly;
+    .icon {
+        cursor: pointer;
+    }
+    a {
+        cursor: pointer;
+    }
+    button {
+        width: 24px;
+        height: 24px;
+    }
+`;
+
+// AntD defines overflow-wrap: break word for tr td
+//  but for some reason we still need word-break so long texts in the table don't break layout
+const StyledTable = styled(AntTable)`
+    tr td {
+        word-break: break-word;
+    }
+    a {
+        cursor: pointer;
+    }
+`;
 
 export const getSorterFor = key => (a, b) => Oskari.util.naturalSort(a[key], b[key]);
 
@@ -17,7 +44,16 @@ export const Table = ({ ...other }) => {
     const locale = {
         triggerDesc: getMsg('table.sort.desc'), // 'Click to sort descending',
         triggerAsc: getMsg('table.sort.asc'), //'Click to sort ascending',
-        cancelSort: getMsg('table.sort.cancel') // 'Click to cancel sorting'
+        cancelSort: getMsg('table.sort.cancel'), // 'Click to cancel sorting',
+        emptyText: getMsg('table.emptyText') // Show when table is empty
     };
-    return (<AntTable locale={locale} {...other} />);
+    return (<StyledTable locale={locale} {...other} />);
+};
+
+export const ToolsContainer = ({ children }) => {
+    return (
+        <StyledToolsContainer className='t_table t_tools'>
+            {children}
+        </StyledToolsContainer>
+    )
 };

@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
             /* plugin */
             {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/MyPlacesTab.js"
+                "src": "../../../../bundles/framework/myplaces3/MyPlacesPersonalDataTab.js"
             },
             /* request */
             {
@@ -64,16 +64,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
             /* ui */
             {
                 "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/view/MainView.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/view/PlaceForm.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../../bundles/framework/myplaces3/ButtonHandler.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/myplaces3/CategoryHandler.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/myplaces3/instance.js"

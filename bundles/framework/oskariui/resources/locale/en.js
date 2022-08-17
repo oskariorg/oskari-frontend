@@ -12,7 +12,12 @@ Oskari.registerLocalization({
             submit: 'Submit',
             import: 'Import',
             yes: 'Yes',
-            no: 'No'
+            no: 'No',
+            next: 'Next',
+            previous: 'Previous'
+        },
+        messages: {
+            confirmDelete: 'Are you sure you wish to delete?'
         },
         error: {
             generic: 'Something went wrong'
@@ -22,7 +27,8 @@ Oskari.registerLocalization({
                 desc: 'Click to sort descending',
                 asc: 'Click to sort ascending',
                 cancel: 'Click to cancel sorting'
-            }
+            },
+            emptyText: 'No data.'
         },
         ColorPicker: {
             tooltip: 'Choose color',

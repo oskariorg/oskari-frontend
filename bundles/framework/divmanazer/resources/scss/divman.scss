@@ -33,6 +33,7 @@ body {
     background-color: #fdf8d9;
     border-top: #fdfdfd;
     border-bottom: #fef2ba;
+    cursor: grab;
 }
 
 .oskari-flyout-title {
@@ -58,6 +59,9 @@ body {
     height: 16px;
     display: inline-block;
     margin-top: 15px;
+    > div {
+        cursor: pointer;
+    }
 }
 
 .oskari-flyouttool-detach {

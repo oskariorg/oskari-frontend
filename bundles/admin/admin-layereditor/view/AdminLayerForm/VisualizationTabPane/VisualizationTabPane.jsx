@@ -8,6 +8,7 @@ import { ExternalStyleJson } from './ExternalStyleJson';
 import { Hover } from './Hover';
 import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
+import { Coverage } from './Coverage';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 import { StyledColumn } from './styled';
@@ -26,6 +27,7 @@ const {
     EXTERNAL_STYLES_JSON,
     HOVER,
     SCALE,
+    COVERAGE,
     TIMES,
     CESIUM_ION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -40,7 +42,10 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
             }
-            { (propertyFields.includes(TIMES) && layer.capabilities.typeSpecific && layer.capabilities.typeSpecific.times) &&
+            { propertyFields.includes(COVERAGE) &&
+                <Coverage id={layer.id} controller={controller} />
+            }
+            { (propertyFields.includes(TIMES) && layer.capabilities.times) &&
                 <TimeSeries layer={layer} scales={scales} controller={controller} />
             }
             { propertyFields.includes(CLUSTERING_DISTANCE) &&

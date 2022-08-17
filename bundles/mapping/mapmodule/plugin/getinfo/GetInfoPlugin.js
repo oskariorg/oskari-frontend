@@ -224,7 +224,8 @@ Oskari.clazz.define(
                 layer.getQueryable &&
                 layer.getQueryable() &&
                 layer.isInScale(this.getSandbox().getMap().getScale()) &&
-                layer.isVisible());
+                layer.isVisible() &&
+                layer.getOpacity() !== 0);
         },
 
         /**

@@ -12,7 +12,12 @@ Oskari.registerLocalization({
             submit: 'Lähetä',
             import: 'Tuo',
             yes: 'Kyllä',
-            no: 'Ei'
+            no: 'Ei',
+            next: 'Seuraava',
+            previous: 'Edellinen'
+        },
+        messages: {
+            confirmDelete: 'Haluatko varmasti poistaa?'
         },
         error: {
             generic: 'Tapahtui odottamaton virhe'
@@ -22,7 +27,8 @@ Oskari.registerLocalization({
                 desc: 'Lajittele laskevasti',
                 asc: 'Lajittele nousevasti',
                 cancel: 'Peruuta lajittelu'
-            }
+            },
+            emptyText: 'Ei tuloksia.'
         },
         ColorPicker: {
             tooltip: 'Valitse väri',

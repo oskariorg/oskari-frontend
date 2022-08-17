@@ -8,6 +8,7 @@ import { TIME_SERIES_UI } from './VisualizationTabPane/TimeSeries';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
+const COVERAGE_LAYER = 'AdminLayerEditorCoverage';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
@@ -487,6 +488,7 @@ class UIHandler extends StateHandler {
     }
 
     resetForm () {
+        this.resetMap();
         const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -498,6 +500,7 @@ class UIHandler extends StateHandler {
     }
 
     resetLayer (keepCapabilities) {
+        this.resetMap();
         const typesAndRoles = this.getAdminMetadata();
         const newState = {
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
@@ -508,6 +511,10 @@ class UIHandler extends StateHandler {
             newState.capabilities = {};
         }
         this.updateState(newState);
+    }
+
+    resetMap () {
+        this.clearLayerCoverage();
     }
 
     ajaxStarted () {
@@ -1132,6 +1139,37 @@ class UIHandler extends StateHandler {
             { uuid }
         ]);
     }
+
+    clearLayerCoverage () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, COVERAGE_LAYER]);
+    }
+
+    showLayerCoverage (id) {
+        const srs = Oskari.getSandbox().getMap().getSrsName();
+        fetch(Oskari.urls.getRoute('DescribeLayer', { id, srs }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(({ coverage }) => {
+                if (!coverage) {
+                    Messaging.info(getMessage('messages.noCoverage'));
+                    this.clearLayerCoverage();
+                    return;
+                }
+                const opts = {
+                    centerTo: true,
+                    clearPrevious: true,
+                    layerId: COVERAGE_LAYER
+                };
+                Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [coverage, opts]);
+            }).catch((error) => {
+                Messaging.error(getMessage('messages.errorFetchCoverage'));
+                this.log.error(`Failed to get layer coverage for id: ${id}`, error);
+                this.clearLayerCoverage();
+            });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -1182,6 +1220,8 @@ const wrapped = controllerMixin(UIHandler, [
     'togglePermission',
     'updateCapabilities',
     'versionSelected',
-    'showLayerMetadata'
+    'showLayerMetadata',
+    'clearLayerCoverage',
+    'showLayerCoverage'
 ]);
 export { wrapped as AdminLayerFormHandler };

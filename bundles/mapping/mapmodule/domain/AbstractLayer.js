@@ -67,6 +67,7 @@ Oskari.clazz.define(
         me._isLinkedLayer = null;
 
         me._organizationName = null;
+        me._dataproviderId = null;
         me._dataUrl = null;
 
         /*
@@ -251,6 +252,20 @@ Oskari.clazz.define(
          */
         getDataUrl: function () {
             return this._dataUrl;
+        },
+        /**
+         * Dataprovider id (matching organization name)
+         * @param {Number} id
+         */
+        setDataProviderId: function (id) {
+            this._dataproviderId = id;
+        },
+        /**
+         * Dataprovider id (matching organization name)
+         * @param {Number} id
+         */
+        getDataProviderId: function () {
+            return this._dataproviderId;
         },
         /**
          * @method setOrganizationName

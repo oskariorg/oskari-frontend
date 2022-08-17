@@ -23,6 +23,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ErrorService',
         show: function (title, content, duration = 5) {
             // all components uses 'Error' as title, doesn't make sense to use it with Messaging API
             Messaging.warn({ content, duration });
+        },
+        warn: function (message) {
+            Messaging.warn({ content: message });
+        },
+        error: function (message) {
+            Messaging.error({ content: message });
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

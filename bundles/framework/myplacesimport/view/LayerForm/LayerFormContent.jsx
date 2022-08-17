@@ -29,12 +29,15 @@ const getValidationMessage = keys => {
 const getGeneralTabTitle = isValid => (
     <Fragment>
         <Message messageKey='flyout.tabs.general'/>
-        <MandatoryIcon isValid={isValid} />
+        <MandatoryIcon isValid={isValid} style={{
+            verticalAlign: '-0.25em',
+            paddingLeft: '0.5em'
+        }}/>
     </Fragment>
 );
 
 export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
-    const { maxSize, isImport } = config;
+    const { maxSize, unzippedMaxSize, isImport } = config;
     const { style = OSKARI_BLANK_STYLE, locale = {} } = values || {};
     const [state, setState] = useState({ style, locale, loading: false, tab: 'general' });
 
@@ -85,6 +88,7 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
                         sourceSrs = {state.sourceSrs}
                         isImport = {isImport}
                         maxSize = {maxSize}
+                        unzippedMaxSize = {unzippedMaxSize}
                         showSrs = {showSrs}
                         updateState = {updateState}
                     />

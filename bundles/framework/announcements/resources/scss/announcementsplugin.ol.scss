@@ -1,4 +1,30 @@
 /* Mixins */
+div.announcements-content {
+  blockquote {
+    border-left: 5px solid #eee;
+    color: #666;
+    font-family: 'Hoefler Text', 'Georgia', serif;
+    font-style: italic;
+    margin: 16px 0;
+    padding: 10px 20px;
+  }
+
+  ol {
+    margin: 16px;
+  }
+
+  ul {
+    margin: 16px;
+  }
+
+  code {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: Inconsolata, Menlo, Consolas, monospace;
+    font-size: 16px;
+    padding: 2px;
+  }
+}
+
 div.mapplugin.announcements {
     clear:both;
     height: 37px;
@@ -143,13 +169,6 @@ div.mapplugin.announcements {
   
     div.announcements-header:hover {
       color: #ff9100;
-    }
-  
-    div.announcements-styled-content {
-        width: 200px;
-        div.styled-header-arrow {
-          margin-left: 10px;
-        }
     }
   
     .oskari-publisher-layers-rounded-dark, .oskari-publisher-layers-rounded-light {

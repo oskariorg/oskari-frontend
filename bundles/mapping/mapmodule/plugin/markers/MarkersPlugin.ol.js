@@ -65,7 +65,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             return {
                 MapClickedEvent: event => this._mapClick(event),
                 'Toolbar.ToolbarLoadedEvent': () => this._registerTools(),
-                AfterRearrangeSelectedMapLayerEvent: () => this.raiseMarkerLayer(),
                 'Toolbar.ToolSelectedEvent': event => {
                     if (event.getToolId() !== 'addMarker' && event.getSticky()) {
                         this.stopMarkerAdd(false);
@@ -159,13 +158,18 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
         _mapClick: function (event) {
-            const { lon, lat } = event.getLonLat();
-            const coord = [lon, lat];
             if (!this._showAddMarkerPopupOnMapClick) {
-                this.getMarkersLayer().getSource().getFeaturesAtCoordinate(coord).forEach(feat => this._markerClicked(feat.getId()));
+                // get markers from layer by pixel so we get result based on visualization and not the coordinate for the point
+                const pixels = [event.getMouseX(), event.getMouseY()];
+                this.getMarkersLayer()
+                    .getFeatures(pixels)
+                    .then(featureList => featureList
+                        .forEach((feature) => this._markerClicked(feature.getId())));
                 return;
             }
             // adding a marker
+            const { lon, lat } = event.getLonLat();
+            const coord = [lon, lat];
             this._showAddMarkerPopupOnMapClick = false;
             const onAdd = style => {
                 this.popupCleanup();
@@ -183,16 +187,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             const clickEvent = Oskari.eventBuilder('MarkerClickEvent')(markerId);
             this.getSandbox().notifyAll(clickEvent);
         },
-        addMapLayerToMap: function () {
-            return () => this.raiseMarkerLayer();
-        },
-        raiseMarkerLayer: function () {
-            this.getMapModule().bringToTop(this.getMarkersLayer());
-        },
         getMarkersLayer: function () {
             if (!this._layer) {
                 this._layer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
-                this.getMap().addLayer(this._layer);
+                this.getMapModule().addOverlayLayer(this._layer);
             }
             return this._layer;
         },
@@ -351,7 +349,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             } else {
                 layerSource.addFeature(feature);
             }
-            this.raiseMarkerLayer();
             const data = this._featureToMarkerData(feature);
             const addEvent = Oskari.eventBuilder('AfterAddMarkerEvent')(data, id);
             this.getSandbox().notifyAll(addEvent);

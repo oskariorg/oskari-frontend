@@ -9,30 +9,6 @@ import '../../../bundles/framework/oskariui/resources/locale/fi';
 import '../../../bundles/framework/oskariui/resources/locale/en';
 import '../../../bundles/framework/oskariui/resources/locale/sv';
 
-const labels = {
-    fi: {
-        title: 'Title in finnish',
-        subtitle: 'Subtitle in finnish'
-    },
-    sv: {
-        title: 'Title in swedish',
-        subtitle: 'Subtitle in swedish'
-    },
-    en: {
-        title: 'Title in english',
-        subtitle: 'Subtitle in english'
-    },
-    it: {
-        title: 'italian'
-    },
-    fr: {
-        title: 'french'
-    },
-    de: {
-        title: 'german'
-    }
-};
-
 const value = {
     fi: {
         title: 'Otsikko',
@@ -56,12 +32,6 @@ const value = {
         title: 'Title in german'
     }
 };
-const singleValue = {
-    fi: 'Otsikko',
-    sv: 'Titel',
-    en: 'Title',
-    it: 'Title in italian'
-};
 
 const Label = styled('div')`
     color: red;
@@ -76,12 +46,11 @@ storiesOf('LocalizationComponent', module)
             <LocalizationComponent
                 languages={['en', 'fi', 'sv']}
                 value={value}
-                labels={labels}
                 onChange={console.log}
                 defaultOpen={false}
             >
-                <TextInput name="title"/>
-                <TextInput name="subtitle"/>
+                <TextInput name="title" label="Title" />
+                <TextInput name="subtitle" label="Description"/>
             </LocalizationComponent>
         );
     })
@@ -89,39 +58,24 @@ storiesOf('LocalizationComponent', module)
         <LocalizationComponent
             languages={Oskari.getSupportedLanguages()}
             value={value}
-            labels={labels}
             onChange={console.log}
             defaultOpen
             LabelComponent={Label}
         >
-            <TextInput name="title"/>
-            <TextInput name="subtitle"/>
-        </LocalizationComponent>
-    ))
-    .add('Single value', () => (
-        <LocalizationComponent
-            languages={Oskari.getSupportedLanguages()}
-            value={singleValue}
-            labels={labels}
-            onChange={console.log}
-            defaultOpen
-            single
-            LabelComponent={Label}
-        >
-            <TextInput/>
+            <TextInput name="title" label="Title" />
+            <TextInput name="subtitle" label="Description"/>
         </LocalizationComponent>
     ))
     .add('With inline content', () => (
         <LocalizationComponent
             languages={Oskari.getSupportedLanguages()}
             value={value}
-            labels={labels}
             onChange={console.log}
             defaultOpen
         >
-            <input name="title"/>
+            <input name="title" label="Title"/>
             followed by a&nbsp;
-            <input name="subtitle"/>
+            <input name="subtitle" label="Description"/>
             <br/>
         </LocalizationComponent>
     ))
@@ -129,12 +83,11 @@ storiesOf('LocalizationComponent', module)
         <LocalizationComponent
             languages={Oskari.getSupportedLanguages()}
             value={value}
-            labels={labels}
             onChange={console.log}
             defaultOpen
         >
-            <TextInput name="title"/>
-            <TextInput name="subtitle"/>
+            <TextInput name="title" label="Title" />
+            <TextInput name="subtitle" label="Description"/>
         </LocalizationComponent>
     ))
     .add('More languages', () => {
@@ -143,12 +96,11 @@ storiesOf('LocalizationComponent', module)
             <LocalizationComponent
                 languages={Oskari.getSupportedLanguages()}
                 value={value}
-                labels={labels}
                 onChange={console.log}
                 defaultOpen
             >
-                <TextInput name="title"/>
-                <TextInput name="subtitle"/>
+                <TextInput name="title" label="Title" />
+                <TextInput name="subtitle" label="Description"/>
             </LocalizationComponent>
         );
     })
@@ -158,12 +110,11 @@ storiesOf('LocalizationComponent', module)
             <LocalizationComponent
                 languages={Oskari.getSupportedLanguages()}
                 value={value}
-                labels={labels}
                 onChange={console.log}
                 defaultOpen
             >
-                <TextInput name="title"/>
-                <TextInput name="subtitle"/>
+                <TextInput name="title" label="Title" />
+                <TextInput name="subtitle" label="Description"/>
             </LocalizationComponent>
         );
     });

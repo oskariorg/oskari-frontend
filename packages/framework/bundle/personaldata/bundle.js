@@ -32,15 +32,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/events/PersonaldataLoadedEvent.js"
-        },{
+        }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/MyViewsTab.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/personaldata/service/ViewService.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/PublishedMapsTab.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/personaldata/service/ViewService.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/personaldata/AccountTab.jsx"

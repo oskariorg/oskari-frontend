@@ -514,6 +514,7 @@ Oskari.clazz.define(
         /* Impl specific - found in ol2, ol3 and olCesium modules BUT parameters and/or return value differ!!
 ------------------------------------------------------------------> */
         addLayer: Oskari.AbstractFunc('addLayer'),
+        addOverlayLayer: Oskari.AbstractFunc('addOverlayLayer'),
         removeLayer: Oskari.AbstractFunc('removeLayer'),
         bringToTop: Oskari.AbstractFunc('bringToTop'),
         getLayerIndex: Oskari.AbstractFunc('getLayerIndex'),
@@ -1905,7 +1906,6 @@ Oskari.clazz.define(
             var marker = this._markerTemplate.clone();
             var svgObject = null;
             var isWellknownMarker = false;
-
             // marker shape is number --> find it from Oskari.getMarkers()
             if (!isNaN(style.shape)) {
                 var markers = Oskari.getMarkers();

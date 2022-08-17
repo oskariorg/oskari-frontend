@@ -49,7 +49,10 @@ Oskari.registerLocalization(
                 'moveToScale': 'Siirry soveltuvalle mittakaavatasolle',
                 'moveToContentArea': 'Paikanna kohteet',
                 'publishable': 'Julkaistavissa',
-                'hidden': 'Karttataso on tilapäisesti piilotettu.'
+                'hidden': 'Karttataso on tilapäisesti piilotettu.',
+                'hide': 'Piilota karttataso',
+                'show': 'Näytä karttataso',
+                'drag': 'Raahaa karttatasoa ylemmäs tai alemmas: järjestys kartalla määräytyy tämän mukaisesti.'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',
@@ -66,6 +69,7 @@ Oskari.registerLocalization(
                 'arcgis': 'Rasteritaso',
                 'wfs': 'Vektoritaso',
                 'vectortile': 'Vektoritaso',
+                'vector': 'Vektoritaso',
                 'userlayer': '',
                 'myplaces': '',
                 'analysislayer': '',

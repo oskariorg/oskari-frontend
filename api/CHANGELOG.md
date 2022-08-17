@@ -9,6 +9,13 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.8.0
+
+### [add] [rpc] StateChangedEvent
+
+Event is sent when a massive application state change occurs like user clicks on the "reset map to default".
+This allows RPC-based apps to detect such occurance and re-add for example markers that they need after such reset.
+
 ## 2.6.0
 
 ### [add] [rpc] MetadataSearchRequest

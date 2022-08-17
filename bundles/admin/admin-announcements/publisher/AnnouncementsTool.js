@@ -1,6 +1,10 @@
+import { Messaging } from 'oskari-ui/util';
+import { getDateRange, isOutdated } from '../../../framework/announcements/service/util';
+
 Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.AnnouncementsTool',
     function () {
         this.sandbox = Oskari.getSandbox();
+        this.lang = Oskari.getLang();
         this.localization = Oskari.getLocalization('admin-announcements');
         this.announcements = {};
         this.allowedLocations = ['top left', 'top center', 'top right'];
@@ -62,9 +66,9 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
             }
 
-            service.fetchAdminAnnouncements((err, data) => {
+            service.fetchAnnouncements((err, data) => {
                 if (err) {
-                    alert('Error loading announcements');
+                    Messaging.error(this.localization.messages.getAdminAnnouncementsFailed);
                     return;
                 }
                 me.announcements = data;
@@ -78,9 +82,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                         }
                     });
                 }
-
-                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                me.updateSelectedInput();
             });
         },
 
@@ -113,17 +115,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 title: 'AnnouncementsPlugin',
                 config: {}
             };
-        },
-
-        /**
-        * Is the tool toggled on by default.
-        * @method isDefaultTool
-        * @public
-        *
-        * @returns {Boolean} is the tool toggled on by default.
-        */
-        isDefaultTool: function () {
-            return false;
         },
 
         /**
@@ -167,81 +158,56 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
             });
 
             me.announcements.forEach(announcement => {
-                const announcementInput = me.templates.inputCheckbox.clone();
-                const annName = announcement.title;
-                const annTime = announcement.begin_date.replace(/-/g, '/') + ' - ' + announcement.end_date.replace(/-/g, '/');
+                const { title } = Oskari.getLocalized(announcement.locale);
+                const dateRange = getDateRange(announcement);
 
+                const announcementInput = me.templates.inputCheckbox.clone();
                 const idPrefix = 'oskari_announcement_select_';
                 announcementInput.find('input[type=checkbox]').attr({
-                    'id': idPrefix + announcement.id,
-                    'value': announcement.title
+                    id: idPrefix + announcement.id,
+                    value: announcement.id
                 });
-                announcementInput.find('label').html(annName).attr({
+                announcementInput.find('label').html(title).attr({
                     'for': idPrefix + announcement.id
                 });
 
-                if (me.isAnnouncementValid(announcement)) {
-                    content.find('div.ann-time').append('<div>' + annTime + '</div>');
-                    if (me.shouldPreselectAnnouncement(announcement)) {
-                        announcementInput.find('input[type=checkbox]').prop('checked', true);
-                    }
+                if (isOutdated(announcement)) {
+                    content.find('div.ann-time').append('<div>' + dateRange + '<div class="icon-warning-light"></div></div>');
+                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
                     content.find('div.ann-title').append(announcementInput);
                 } else {
-                    content.find('div.ann-time').append('<div>' + annTime + '<div class="icon-warning-light"></div></div>');
-                    announcementInput.find('input[type=checkbox]').prop('disabled', true);
+                    content.find('div.ann-time').append('<div>' + dateRange + '</div>');
+                    me.selectedAnnouncements.forEach(ann => {
+                        if (ann.id === announcement.id) {
+                            announcementInput.find('input[type=checkbox]').prop('checked', true);
+                        }
+                    });
                     content.find('div.ann-title').append(announcementInput);
                 }
             });
 
             // Announcement is selected
             content.find('input[name=announcement]').on('change', function () {
-                var announcement = me.announcements.find(item => item.title === jQuery(this).val());
+                const selectedId = parseInt(this.value);
+                const announcement = me.announcements.find(item => item.id === selectedId);
                 // check if announcement is already checked, if is, add/remove accordingly
                 if (!this.checked) {
                     me.selectedAnnouncements = me.selectedAnnouncements.filter(function (ann) {
-                        return ann.title !== announcement.title;
+                        return ann.id !== announcement.id;
                     });
                 } else {
                     me.selectedAnnouncements.push(announcement);
                 }
                 me.getPlugin().updateAnnouncements(me.selectedAnnouncements);
-
-                // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
-                jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(me.selectedAnnouncements.map(i => i.title).toString());
+                me.updateSelectedInput();
             });
 
             popup.show(title, content, [closeButton]);
             me.announcementsPopup = popup;
         },
-
-        /**
-         * Check if Announcement is inside the given timeframe
-         * @method @private isAnnouncementValid
-         * @param  {Object} announcement announcement
-         * @return {Boolean} true if announcement is valid
-         */
-        isAnnouncementValid: function (announcement) {
-            const announcementEnd = new Date(announcement.end_date);
-            const currentDate = new Date();
-            return currentDate.getTime() <= announcementEnd.getTime();
-        },
-
-        /**
-         * Should preselect announcement for tool popup.
-         * @method @private shouldPreselectAnnouncement
-         * @param  {Integer} id announcement id
-         * @return {Boolean} true if announcement must be preselect
-         */
-        shouldPreselectAnnouncement: function (announcement) {
-            const toolPluginAnnouncementsConf = this._getToolPluginAnnouncementsConf();
-            if (!toolPluginAnnouncementsConf || !toolPluginAnnouncementsConf.config) {
-                return false;
-            }
-            const announcementSelection = toolPluginAnnouncementsConf.config.announcements;
-            if (!Array.isArray(announcementSelection)) {
-                return false;
-            }
-            return announcementSelection.includes(announcement.id);
+        // Shows user the currently selected announcement titles next to the tool (informative input/non-functional)
+        updateSelectedInput: function () {
+            jQuery('div.basic_publisher').find('input[name=publisher-announcements]').val(this.selectedAnnouncements.map(i => i.locale[this.lang].title).toString());
         },
 
         /**

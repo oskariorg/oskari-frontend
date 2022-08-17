@@ -68,10 +68,6 @@ Oskari.registerLocalization(
                 "tooltip": "Ajoutez un titre à la carte."
             },
             "content": {
-                "pageLogo" : {
-                    "label": "Afficher le logo du géoportail finlandais Paikkatietoikkuna sur l'impression.",
-                    "tooltip": "Vous pouvez cacher le logo du géoportail finlandais Paikkatietoikkuna si nécessaire."
-                },
                 "pageScale": {                    
                     "label": "Ajoutez une échelle à l'impression.",
                     "tooltip": "Ajoutez une échelle à la carte, si vous le voulez."

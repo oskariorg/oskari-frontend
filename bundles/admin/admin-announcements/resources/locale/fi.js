@@ -5,22 +5,33 @@ Oskari.registerLocalization(
         "value": {
             "title": "Admin-ilmoitukset",
             "desc": "",
-            "flyout": {
-                "title": "Admin-ilmoitukset"
+            "popup": {
+                "title": "Ilmoitus"
             },
-            "tile": {
-                "title": "A: Ilmoitukset"
-            },
-            "addNewForm": "Uusi Ilmoitus",
-            "delete": "Poista",
-            "save": "Tallenna",
-            "yes": "Kyllä",
-            "cancel": "Peruuta",
-            "newAnnouncement": {
-                "title": "Otsikko",
-                "content": "Sisältö",
-                "date-range": "Aikaväli",
-                "show-popup": "Näytä ponnahdusikkuna"
+            "fields": {
+                "date": "Aikaväli",
+                "show": {
+                    "label": "Näytä ilmoitus",
+                    "popup": "Ponnahdusikkunassa",
+                    "banner": "Yläpalkissa"
+                },
+                "type": {
+                    "label": "Ilmoituksen tyyppi",
+                    "title": "Vain otsikko",
+                    "content": "Otsikko ja sisältö",
+                    "link": "Otsikko ja lisätietolinkki"
+                },
+                "locale": {
+                    "link": "Lisätietolinkki",
+                    "title": "Otsikko",
+                    "content": "Sisältö"
+                },
+                "validate": {
+                    "title": "Lisää otsikko!",
+                    "content": "Lisää sisältö!",
+                    "link": "Lisää lisätietolinkki!",
+                    "date": "Lisää aikaväli!"
+                }
             },
             "messages": {
                 "saveSuccess": "Ilmoitus tallennettu.",
@@ -39,11 +50,8 @@ Oskari.registerLocalization(
                     "title": "Ilmoitukset",
                     "close": "Sulje"
                 },
-                "announcementsName": "Nimi",
+                "announcementsName": "Otsikko",
                 "announcementsTime": "Voimasssa"
-            },
-            "titleError": "Lisää otsikko!",
-            "contentError": "Lisää sisältö!",
-            "dateError": "Lisää aikaväli!"
+            }
         }
     });

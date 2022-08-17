@@ -63,6 +63,9 @@ Oskari.clazz.define(
                 // Update min max Resolutions
                 zoomLevelHelper.setOLZoomLimits(olLayer, layer.getMinScale(), layer.getMaxScale());
             });
+        },
+        _afterChangeMapLayerStyleEvent: function () {
+            // WFS plugin handles
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
