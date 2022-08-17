@@ -16,6 +16,7 @@ Oskari.clazz.define(
         this.cropSize = null;
         this.mapModule = null;
         this.layer = null; // ol layer
+        this.oskariLayerId = null;
         this.popupService = null;
         this.popup = null;
         this.loc = Oskari.getMsg.bind(null, 'LayerSwipe');
@@ -71,14 +72,26 @@ Oskari.clazz.define(
                 this.unregisterEventListeners();
                 this.hideSplitter();
                 Oskari.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
+                this.setSwipeStatus(null, null);
             }
             this.active = active;
             this.mapModule.getMap().render();
         },
 
+        setSwipeStatus: function (layerId, cropX) {
+            this.oskariLayerId = layerId;
+            const reqSwipeStatus = Oskari.requestBuilder('GetInfoPlugin.SwipeStatusRequest')(layerId, cropX);
+            Oskari.getSandbox().request(this, reqSwipeStatus);
+        },
+
         updateSwipeLayer: function () {
             this.unregisterEventListeners();
-            this.layer = this.getTopmostLayer();
+            const topLayer = this.getTopmostLayer();
+            this.layer = topLayer.ol;
+
+            if (topLayer.layerId !== null) {
+                this.setSwipeStatus(topLayer.layerId, this.cropSize);
+            }
 
             if (this.alertTimer) {
                 clearTimeout(this.alertTimer);
@@ -153,7 +166,10 @@ Oskari.clazz.define(
                 this.showNotVisibleAlert(layerId, !isInGeometry);
             }
             const olLayers = this.mapModule.getOLMapLayers(layerId);
-            return olLayers.length !== 0 ? olLayers[0] : null;
+            return {
+                ol: olLayers.length !== 0 ? olLayers[0] : null,
+                layerId: layerId
+            };
         },
 
         registerEventListeners: function () {
@@ -223,6 +239,7 @@ Oskari.clazz.define(
             const splitterOffset = this.getSplitterElement().offset();
             this.cropSize = splitterOffset.left - mapOffset.left + this.splitterWidth / 2;
             this.mapModule.getMap().render();
+            this.setSwipeStatus(this.oskariLayerId, this.cropSize);
         },
 
         showSplitter: function () {

@@ -45,6 +45,10 @@ Oskari.clazz.define(
             }
         }
         this._requestedDisabled = new Set(); // ids that requested plugin to be disabled
+        this._swipeStatus = {
+            cropX: null,
+            layerId: null
+        };
     }, {
 
         /**
@@ -170,6 +174,10 @@ Oskari.clazz.define(
                 'MapModulePlugin.GetFeatureInfoActivationRequest': handler,
                 'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
                     'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
+                    this
+                ),
+                'GetInfoPlugin.SwipeStatusRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.SwipeStatusRequestHandler',
                     this
                 )
             };
@@ -300,9 +308,13 @@ Oskari.clazz.define(
             const me = this;
             const dteMs = (new Date()).getTime();
             const requestedLayers = layers || me.getSandbox().findAllSelectedMapLayers();
-            const layerIds = me._buildLayerIdList(requestedLayers);
+            let layerIds = me._buildLayerIdList(requestedLayers);
             const mapVO = me.getSandbox().getMap();
             const px = me.getMapModule().getPixelFromCoordinate(lonlat);
+
+            if (this._swipeStatus.cropX && this._swipeStatus.layerId) {
+                layerIds = layerIds.filter(l => l !== this._swipeStatus.layerId || px.x < this._swipeStatus.cropX);
+            }
 
             if (layerIds.length === 0) {
                 return;
@@ -390,6 +402,13 @@ Oskari.clazz.define(
         addInfoResultHandler: function (callback) {
             var me = this;
             me._showGfiInfo = callback;
+        },
+
+        setSwipeStatus: function (layerId, cropX) {
+            this._swipeStatus = {
+                layerId,
+                cropX
+            };
         },
 
         /**
