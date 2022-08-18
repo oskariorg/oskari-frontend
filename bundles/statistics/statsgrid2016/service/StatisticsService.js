@@ -170,6 +170,9 @@
                 });
             });
         },
+        getDatasources: function () {
+            return this.datasources.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+        },
         /**
          * Returns datasource {id, name, type} as object.
          * If id omitted returns all datasources as array.
