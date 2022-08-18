@@ -11,10 +11,8 @@ export const BUNDLE_KEY = 'userstyle';
 const getContent = (service, styles, values, showStyleForm, onClose) => {
     const { layerId, styleName } = values;
     let content;
-
     if (showStyleForm) {
         const style = service.getUserStyle(layerId, styleName) || new VectorStyle('', '', 'user');
-
         const onAdd = ({ featureStyle, title }) => {
             style.setFeatureStyle(featureStyle);
             style.setTitle(title);
