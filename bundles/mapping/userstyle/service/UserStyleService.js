@@ -73,4 +73,10 @@ export class UserStyleService {
         const layerStyles = this.getUserStylesForLayer(layerId);
         return layerStyles.find(s => s.getName() === name);
     }
+
+    getUserStyle (layerId) {
+        const layerStyles = this.getUserStylesForLayer(layerId);
+        console.log(layerStyles)
+        return layerStyles.length > 0 ? layerStyles[0] : null;
+    }
 }

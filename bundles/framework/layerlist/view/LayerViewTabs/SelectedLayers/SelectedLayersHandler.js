@@ -61,7 +61,7 @@ class ViewHandler extends StateHandler {
                 //toolOwnStyle.setTitle(locOwnStyle);
                 toolOwnStyle.setIconCls('show-own-style-tool');
                 //toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [id, true]));
+                toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [id, true, null, layer.getLayerType()]));
                 layer.addTool(toolOwnStyle);
             }
         });

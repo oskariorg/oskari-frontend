@@ -9,10 +9,28 @@ import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
 export const BUNDLE_KEY = 'userstyle';
 
 const getContent = (service, styles, values, showStyleForm, onClose) => {
-    const { layerId, styleName } = values;
+    const { layerId, styleName, layerType } = values;
     let content;
-    if (showStyleForm) {
+
+    if (layerType === 'userlayer' || layerType === 'myplaces') {
+        const style = service.getUserStyle(layerId) || new VectorStyle('', '', 'user');
+        console.log(style)
+        const onAdd = ({ featureStyle, title }) => {
+            style.setFeatureStyle(featureStyle);
+            style.setTitle(title);
+            service.saveUserStyle(layerId, style);
+        };
+        const onCancel = () => {
+            if (styles.length > 0) {
+                service.notify(layerId);
+            } else {
+                onClose();
+            }
+        };
+        content = <StyleForm vectorStyle={ style } onAdd={ onAdd } onCancel={ onCancel }/>;
+    } else if (showStyleForm) {
         const style = service.getUserStyle(layerId, styleName) || new VectorStyle('', '', 'user');
+        console.log(style)
         const onAdd = ({ featureStyle, title }) => {
             style.setFeatureStyle(featureStyle);
             style.setTitle(title);

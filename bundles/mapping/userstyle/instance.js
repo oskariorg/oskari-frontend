@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
             this.popupController.update(values);
         } else {
             this.popupController = showStylesPopup(this.service, values, onClose);
+            console.log(values)
         }
     }
 }, {
