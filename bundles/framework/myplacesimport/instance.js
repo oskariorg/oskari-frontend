@@ -37,6 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             this.createService();
             this.getService().getUserLayers();
             this.addTab();
+            this.requestHandlers = {
+                showUserLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.request.ShowUserLayerDialogRequestHandler', this)
+            };
+            Oskari.getSandbox().requestHandler('MyPlacesImport.ShowUserLayerDialogRequest', this.requestHandlers.showUserLayerDialogRequestHandler);
         }
         this.registerTool();
     },

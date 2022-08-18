@@ -45,26 +45,6 @@ class ViewHandler extends StateHandler {
     updateLayers () {
         const layers = this._getLayers();
         const visibilityInfo = layers.map(layer => this._refreshVisibilityInfoForLayer(layer));
-        layers.forEach(layer => {
-            const type = layer.getLayerType();
-            if (type === 'userlayer' || type === 'myplaces') {
-                const layerId = layer.getId();
-                let id;
-                if (typeof layerId === 'string') {
-                    const tokenIndex = layerId.lastIndexOf('_') + 1;
-                    id = Number.parseInt(layerId.substring(tokenIndex), 10);
-                } else {
-                    id = layerId;
-                }
-                const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                toolOwnStyle.setName('ownStyle');
-                //toolOwnStyle.setTitle(locOwnStyle);
-                toolOwnStyle.setIconCls('show-own-style-tool');
-                //toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [id, true, null, layer.getLayerType()]));
-                layer.addTool(toolOwnStyle);
-            }
-        });
         this.updateState({ layers, visibilityInfo });
     }
 
