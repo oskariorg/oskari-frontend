@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         regionsetFilterElement.append(regionFilterDropdown);
         regionFilterSelect.update();
 
-        var datasources = this.service.getDatasource();
+        var datasources = this.service.getDatasources();
         var sources = [];
         datasources.forEach(function (ds) {
             var dataObj = {
