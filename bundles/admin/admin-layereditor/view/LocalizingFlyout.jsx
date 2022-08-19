@@ -210,7 +210,7 @@ const LocalizedContent = LocaleConsumer(({ loading, value, headerMessageKey, con
                 onChange={controller.setValue}
             >
                 <LabeledInput type="text" name="name" label={getMessage(`fields.locale.name`)} mandatory={true}/>
-                <LabeledInput type="text" name="desc" label={getMessage(`fields.locale.description`)} />
+                <LabeledInput type="textarea" name="desc" label={getMessage(`fields.locale.description`)} />
             </LocalizationComponent>
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => controller.cancel()} />
