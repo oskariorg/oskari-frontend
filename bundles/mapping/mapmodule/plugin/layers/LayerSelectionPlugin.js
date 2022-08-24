@@ -61,16 +61,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 this.getStyleSelectable(),
                 (layer, visible, isBaseLayer) => {
                     if (isBaseLayer) {
-                        this.selectBaseLayer(layer.getId())
+                        this.selectBaseLayer(layer.getId());
                     } else {
-                        this._setLayerVisible(layer, visible)
+                        this._setLayerVisible(layer, visible);
                     }
                 },
                 (layerId, style) => this._selectStyle(layerId, style),
                 {
                     theme: mapModule.getTheme(),
                     font: this.getToolFontFromMapModule()
-                }
+                },
+                this.getLocation()
             );
         },
         _updateLayerSelectionPopup: function () {
@@ -101,12 +102,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             me.templates.main = jQuery(
                 '<div class="mapplugin layerselection">' +
                 '  <div class="header">' +
-                '    <div class="header-icon icon-arrow-white-right"></div>' +
                 '  </div>' +
                 '</div>');
-
-            // same as in main, only used when returning from some other layout to default (publisher)
-            me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             this.updateLayers();
         },
         /**
@@ -305,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and
          * {String} defaultBase as the selected base layers id
          */
-         getBaseLayers: function () {
+        getBaseLayers: function () {
             const config = this.getConfig();
             return {
                 baseLayers: config.baseLayers,
@@ -331,66 +328,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             });
             // send Request to rearrange layers
             sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [selectedBaseLayerId, 0]);
-        },
-
-        /**
-         * @method openSelection
-         * Programmatically opens the plugins interface as if user had clicked it open
-// FIXME!!! assumes the jquery based popup. Now using React-based... this isn't called anymore
-         */
-        openSelection: function (isMobile) {
-            var me = this,
-                conf = me.getConfig(),
-                mapmodule = me.getMapModule(),
-                div = this.getElement(),
-                popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
-            if (isMobile || div.hasClass('published-styled-layerselector')) {
-                var popupTitle = me._loc.title,
-                    el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
-                    topOffsetElement = jQuery('div.mobileToolbarDiv'),
-                    themeColours = mapmodule.getThemeColours();
-                var popupCloseIcon;
-
-                me.popup = popupService.createPopup();
-                popupService.closeAllPopups(true);
-                me.popup.createCloseIcon();
-
-                me.popup.show(popupTitle, me.layerContent);
-                me.popup.addClass('mapplugin layerselectionpopup');
-                if (isMobile && el.length) {
-                    me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                    me.popup.onClose(function () {
-                        me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
-                    });
-                    popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
-                    me.popup.setColourScheme({
-                        'bgColour': themeColours.activeColour,
-                        'titleColour': themeColours.activeTextColour,
-                        'iconCls': popupCloseIcon
-                    });
-
-                    me.popup.addClass('mobile-popup');
-                } else {
-                    me.popup.moveTo(me.getElement(), 'bottom', true);
-                    popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
-                    me.popup.setColourScheme({
-                        'bgColour': themeColours.backgroundColour,
-                        'titleColour': themeColours.textColour,
-                        'iconCls': popupCloseIcon
-                    });
-                }
-                me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
-            } else {
-                var icon = div.find('div.header div.header-icon'),
-                    size = mapmodule.getSize();
-
-                icon.removeClass('icon-arrow-white-right');
-                icon.addClass('icon-arrow-white-down');
-                div.append(me.layerContent);
-
-                // fix layers content height
-                me._handleMapSizeChanged(size, false);
-            }
         },
 
         _bindHeader: function (header) {
@@ -516,15 +453,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     'background-image': 'url("' + bgImg + '")'
                 });
             } else {
-                header.append(me.templates.defaultArrow.clone());
-                header.append(me._loc.title);
+                div.addClass('published-styled-layerselector');
 
-                div.removeClass('published-styled-layerselector');
+                header.addClass('published-styled-layerselector-header');
 
-                header.removeClass('published-styled-layerselector-header');
-
+                let bgImg = this.getMapModule().getImageUrl('map-layer-button-rounded-dark.png');
                 header.css({
-                    'background-image': ''
+                    'background-image': 'url("' + bgImg + '")'
                 });
             }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { showPopup } from 'oskari-ui/components/window';
+import { showPopup, PLACEMENTS } from 'oskari-ui/components/window';
 import { BaseLayerList } from './LayerSelectionPopup/BaseLayerList';
 import { LayerList } from './LayerSelectionPopup/LayerList';
 import { Message } from 'oskari-ui';
@@ -13,15 +13,15 @@ const POPUP_ID = 'LayerSelection';
 
 const THEME_LIGHT = {
     color: {
-        primary: '#fffbf3',
-        accent: '#ffd622'
+        primary: '#ffffff',
+        accent: '#000000'
     }
 };
 
 const THEME_DARK = {
     color: {
-        primary: '#47484c',
-        accent: '#ffd622'
+        primary: '#3c3c3c',
+        accent: '#ffffff'
     }
 };
 
@@ -41,13 +41,30 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
     );
 };
 
-export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, themeConf) => {
+export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, themeConf, pluginPosition) => {
+    let position;
+    switch (pluginPosition) {
+    case 'top right':
+        position = PLACEMENTS.TR;
+        break;
+    case 'top left':
+        position = PLACEMENTS.TL;
+        break;
+    case 'center top':
+        position = PLACEMENTS.TOP;
+        break;
+    default:
+        position = PLACEMENTS.TL;
+        break;
+    }
+
     const options = {
         id: POPUP_ID,
         theme: {
             ...themeConf.theme === 'light' ? THEME_LIGHT : THEME_DARK,
             font: themeConf.font
-        }
+        },
+        placement: position
     };
 
     const controls = showPopup(

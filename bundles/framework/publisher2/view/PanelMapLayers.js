@@ -252,7 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             const removeLayerFn = (e) => {
                 const layerId = jQuery(e.currentTarget).parents('.layer').attr('data-id');
                 sandbox.request(me.instance.getName(), builder(layerId));
-            }
+            };
 
             const listContainer = this.templateList.clone();
             this._getLayersList().forEach(layer => {
