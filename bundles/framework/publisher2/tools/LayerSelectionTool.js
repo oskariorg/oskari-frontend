@@ -212,7 +212,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             return;
         }
 
-
         const existingLayerDiv = this._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
         if (existingLayerDiv.length > 0) {
             // layer already added
@@ -227,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', fun
             input.prop('checked', true);
             layer.selected = true;
         }
-        input.on('change', function() {
+        input.on('change', function () {
             const checkbox = jQuery(this);
             const isChecked = checkbox.is(':checked');
             layer.selected = isChecked;
