@@ -21,6 +21,9 @@ export const LabeledInput = ({
 }) => {
     const { value, type } = inputProps;
     const InputNode = type === 'textarea' ? Textarea : Input;
+    if (type === 'textarea') {
+        inputProps.autoSize = {minRows: 2, maxRows: 10};
+    }
     if (minimal) {
         let labelStr = label;
         if (typeof label !== 'string') {
