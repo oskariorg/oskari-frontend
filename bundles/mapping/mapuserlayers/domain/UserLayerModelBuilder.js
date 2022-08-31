@@ -22,6 +22,14 @@ Oskari.clazz.define(
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             layer.setLocale(mapLayerJson.locale);
+
+            const loc = Oskari.getLocalization('MapWfs2')['own-style'];
+            const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('editStyle');
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(loc);
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('MyPlacesImport.ShowUserLayerDialogRequest', [layer.getId()]));
+            layer.addTool(toolOwnStyle);
         }
     }
 );

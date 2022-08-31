@@ -1,3 +1,5 @@
+import { getCategoryId } from '../../../framework/myplaces3/service/LayerHelper';
+
 /*
  * @class Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder
  * JSON-parsing for myplaces layer
@@ -44,5 +46,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                     name: loclayer.inspire
                 }]);
             }
+
+            const loc = Oskari.getLocalization('MapWfs2')['own-style'];
+            const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('editStyle');
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(loc);
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('MyPlaces.EditCategoryRequest', [getCategoryId(layer.getId())]));
+            layer.addTool(toolOwnStyle);
         }
     });

@@ -37,6 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             this.createService();
             this.getService().getUserLayers();
             this.addTab();
+            this.requestHandlers = {
+                showUserLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.request.ShowUserLayerDialogRequestHandler', this)
+            };
+            Oskari.getSandbox().requestHandler('MyPlacesImport.ShowUserLayerDialogRequest', this.requestHandlers.showUserLayerDialogRequestHandler);
         }
         this.registerTool();
     },
@@ -77,6 +81,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         }
         return this.mapLayerService;
+    },
+    showLayerDialog: function (id) {
+        const layer = this.getMapLayerService().findMapLayer(id);
+        if (layer) {
+            this.openLayerDialog({
+                id: id,
+                locale: layer.getLocale(),
+                style: layer.getCurrentStyle().getFeatureStyle()
+            });
+        }
     },
     openLayerDialog: function (values = {}) {
         const { id } = values;
