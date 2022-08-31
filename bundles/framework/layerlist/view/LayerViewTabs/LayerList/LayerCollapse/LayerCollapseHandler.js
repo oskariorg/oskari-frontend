@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 import { GROUPING_PRESET, GROUPING_DATAPROVIDER } from '../preset';
+import { Messaging } from 'oskari-ui/util';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -142,6 +143,12 @@ class ViewHandler extends StateHandler {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
         }
+
+        const layer = this.mapLayerService.findMapLayer(id);
+        if (layer && !layer.isVisible()) {
+            Messaging.notify(this.loc.layer.hiddenNotification);
+        }
+
         const selectedLayerIds = [...this.state.selectedLayerIds, id];
         this.updateState({ selectedLayerIds });
         // Adding a map layer can be a resource exhausting task.

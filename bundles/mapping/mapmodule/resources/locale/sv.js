@@ -120,6 +120,10 @@ Oskari.registerLocalization(
                 }
             }
         },
+        "layerVisibility": {
+            "notInScale": "\"{name}\" kartlagrets objekter kan inte visas i denna skala. Välj en lämplig skalnivå.",
+            "notInGeometry": "Kartlagret \"{name}\" har inga objekter i detta område. Gå till en annan vy på kartan."
+        },
         "guidedTour": {
             "help1": {
                 "title": "Panorera kartvyn",
