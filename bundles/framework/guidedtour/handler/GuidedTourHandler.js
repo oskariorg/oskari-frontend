@@ -90,7 +90,7 @@ class TourHandler extends StateHandler {
         }
         const step = this.state.steps[stepIndex];
         const content = step.getContent();
-        const title = step.getTitle()
+        const title = step.getTitle();
         let links = [];
         if (typeof step.getLinks === 'function' && step.getLinks() !== null) {
             links = step.getLinks();
@@ -150,7 +150,7 @@ class TourHandler extends StateHandler {
             step.hide();
         }
     }
-    
+
     next () {
         this.hide();
         this._showGuideContentForStep(++this.state.step);
@@ -168,7 +168,8 @@ class TourHandler extends StateHandler {
                 content,
                 links,
                 this.state,
-                this.getController()
+                this.getController(),
+                (dontShowAgain) => this.popupCleanup(dontShowAgain)
             );
         } else {
             this.popupControls = showGuidedTourPopup(
@@ -176,10 +177,10 @@ class TourHandler extends StateHandler {
                 content,
                 links,
                 this.state,
-                this.getController()
+                this.getController(),
+                (dontShowAgain) => this.popupCleanup(dontShowAgain)
             );
         }
-
     }
 }
 

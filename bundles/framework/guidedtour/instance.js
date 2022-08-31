@@ -147,7 +147,7 @@ Oskari.clazz.define(
         stop: function () {
             // unregister module from sandbox
             this.sandbox.unregister(this);
-        },
+        }
     }, {
         protocol: ['Oskari.bundle.BundleInstance',
             'Oskari.mapframework.module.Module'

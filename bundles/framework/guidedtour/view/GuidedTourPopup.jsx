@@ -20,7 +20,24 @@ const StyledLink = styled(Button)`
     margin: 10px 0 10px;
 `;
 
-const GuidedTourContent = ({ content, links, step, steps, controller }) => {
+const StyledTitle = styled('div')`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+`;
+
+const getTitle = (title, state) => {
+    let popupTitle = title;
+    if (state.step > 0) {
+        popupTitle = <StyledTitle>
+            <span>{title}</span>
+            <span>{state.step} / {state.steps.length - 1}</span>
+        </StyledTitle>;
+    }
+    return popupTitle;
+}
+
+const GuidedTourContent = ({ content, links, step, steps, controller, onClose }) => {
     const [dontShowAgain, setDontShowAgain] = useState(false);
     const [contentLinks, setContentLinks] = useState([]);
     
@@ -57,7 +74,7 @@ const GuidedTourContent = ({ content, links, step, steps, controller }) => {
                     </Checkbox>
                 )}
                 {step === 0 && (
-                    <SecondaryButton type='close' onClick={() => controller.onClose(dontShowAgain)} />
+                    <SecondaryButton type='close' onClick={() => onClose(dontShowAgain)} />
                 )}
                 {step > 0 && (
                     <SecondaryButton type='previous' onClick={controller.previous} />
@@ -66,33 +83,36 @@ const GuidedTourContent = ({ content, links, step, steps, controller }) => {
                     <PrimaryButton type='next' onClick={controller.next} />
                 )}
                 {step === steps.length - 1 && (
-                    <PrimaryButton type='close' onClick={() => controller.onClose(dontShowAgain)} />
+                    <PrimaryButton type='close' onClick={() => onClose(dontShowAgain)} />
                 )}
             </ButtonContainer>
         </StyledContent>
     );
 };
 
-export const showGuidedTourPopup = (title, popupContent, links, state, controller) => {
+export const showGuidedTourPopup = (title, popupContent, links, state, controller, onClose) => {
     const guidedTourContent = <GuidedTourContent
         content={popupContent}
         links={links}
         step={state.step}
         steps={state.steps}
         controller={controller}
-    />; 
-    const controls = showPopup(title, guidedTourContent, controller, POPUP_OPTIONS);
+        onClose={onClose}
+    />;
+
+    const controls = showPopup(getTitle(title, state), guidedTourContent, onClose, POPUP_OPTIONS);
     return {
         ...controls,
-        update: (title, content, links, state, controller) => {
+        update: (title, content, links, state, controller, onClose) => {
             controls.update(
-                title,
+                getTitle(title, state),
                 <GuidedTourContent
                     content={content}
                     links={links}
                     step={state.step}
                     steps={state.steps}
                     controller={controller}
+                    onClose={onClose}
                 />
             );
         }

@@ -351,7 +351,7 @@ Oskari.clazz.define(
                 return this.localization.guidedTour.title;
             },
             getContent: function () {
-                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 var me = this;
