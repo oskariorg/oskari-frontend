@@ -6,6 +6,8 @@ import './request/ShowFilteredLayerListRequest';
 import './request/ShowFilteredLayerListRequestHandler';
 import './request/AddLayerListFilterRequest';
 import './request/AddLayerListFilterRequestHandler';
+import React from 'react';
+import { Message } from 'oskari-ui';
 
 const FILTER_NEWEST_COUNT = 20;
 
@@ -275,33 +277,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 return this.getLocalization('guidedTour').title;
             },
             getContent: function () {
-                const content = jQuery('<div></div>');
-                content.append(this.getLocalization('guidedTour').message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 const me = this;
                 const loc = this.getLocalization('guidedTour');
-                const linkTemplate = jQuery('<a href="#"></a>');
-                const openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', me.getName()]);
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                const closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', me.getName()]);
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
+                return [
+                    {
+                        title: loc.openLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', me.getName()]),
+                        visible: false
+                    },
+                    {
+                        title: loc.closeLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', me.getName()]),
+                        visible: true
+                    }
+                ];
             }
         },
         _registerFilterButtons: function (service) {

@@ -1,3 +1,5 @@
+import React from 'react';
+import { Message } from 'oskari-ui';
 /**
  * @class Oskari.mapframework.bundle.publisher2.PublisherBundleInstance
  *
@@ -422,33 +424,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization().guidedTour;
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
+                return [
+                    {
+                        title: loc.openLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']),
+                        visible: false
+                    },
+                    {
+                        title: loc.closeLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']),
+                        visible: true
+                    }
+                ];
             }
         },
 

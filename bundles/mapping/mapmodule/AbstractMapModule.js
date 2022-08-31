@@ -1,5 +1,8 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 
+import React from 'react';
+import { Message } from 'oskari-ui';
+
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
 import './domain/style';
@@ -2575,9 +2578,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help1.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.help1.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.help1.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.panbuttonDiv');
@@ -2590,9 +2591,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help2.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.help2.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.help2.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.pzbDiv');
