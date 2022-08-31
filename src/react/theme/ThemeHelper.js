@@ -22,6 +22,12 @@ export const getTextColor = (bgColor) => {
     return '#000000';
 };
 
+export const getFont = (theme) => {
+    if (theme.font === 'arial') return 'Arial, Helvetica, sans-serif';
+    if (theme.font === 'georgia') return 'Georgia, Times, "Times New Roman"';
+    return theme.font ||  'Arial, Helvetica, sans-serif';
+};
+
 /* ------------------------------------------------------------------------------ */
 // Note! Copy-pasted from bundles/mapping/mapmodule/oskariStyle!
 // TODO: figure out if these should be shared and from map or src
