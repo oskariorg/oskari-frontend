@@ -15,7 +15,7 @@ Oskari.clazz
      * @param {Boolean} showStyle flag indicating that visualization form should be opened to create/edit style
      * @param {String} styleName style identifier so we can initialize visualization form with correct style, if undefined new style is created
      */
-        function (layerId, showStyle, styleName, layerType) {
+        function (layerId, showStyle, styleName) {
             this._layerId = layerId;
             this._showStyle = showStyle;
             this._styleName = styleName;

@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.request.ShowUserL
      *      request to handle
      */
         handleRequest: function (core, request) {
-            this.instance.openLayerDialog(request.getValues());
+            this.instance.showLayerDialog(request.getId());
         }
     }, {
     /**

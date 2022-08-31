@@ -9,10 +9,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.request.ShowUserL
     /**
      * @method create called automatically on construction
      * @static
-     * @param {Object} values User layer values
+     * @param {Object} id User layer id
      */
-    function (values) {
-        this._values = values;
+    function (id) {
+        this._id = id;
     }, {
         /** @static @property __name request name */
         __name: 'MyPlacesImport.ShowUserLayerDialogRequest',
@@ -27,8 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.request.ShowUserL
          * @method getId
          * @return {String} tab title
          */
-        getValues: function () {
-            return this._values;
+        getId: function () {
+            return this._id;
         }
     }, {
         /**
