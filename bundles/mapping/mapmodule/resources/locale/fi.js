@@ -118,6 +118,10 @@ Oskari.registerLocalization(
                 }
             }
         },
+        "layerVisibility": {
+            "notInScale": "Karttatason \"{name}\" kohteet eivät näy tässä mittakaavassa. Siirry soveltuvalle mittakaavatasolle.",
+            "notInGeometry": "Karttatasolla \"{name}\" ei ole kohteita tällä alueella. Siirry kohteeseen kartalla."
+        },
         "guidedTour": {
             "help1": {
                 "title": "Kartan liikuttaminen",
