@@ -186,8 +186,7 @@ class TourHandler extends StateHandler {
 
 const wrapped = controllerMixin(TourHandler, [
     'next',
-    'previous',
-    'popupCleanup'
+    'previous'
 ]);
 
 export { wrapped as GuidedTourHandler };
