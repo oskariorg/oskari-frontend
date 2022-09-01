@@ -1,5 +1,4 @@
 import olFormatWKT from 'ol/format/WKT';
-import { Messaging } from 'oskari-ui/util';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
