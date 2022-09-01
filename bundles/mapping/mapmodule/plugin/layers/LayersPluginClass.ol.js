@@ -1,5 +1,4 @@
 import olFormatWKT from 'ol/format/WKT';
-import { Messaging } from 'oskari-ui/util';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
@@ -322,16 +321,6 @@ export class LayersPlugin extends AbstractMapModulePlugin {
     }
     notifyLayerVisibilityChanged (layer, inScale, geometryMatch) {
         var event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, inScale, geometryMatch);
-
-        if (layer.isVisible()) {
-            if (!inScale) {
-                Messaging.notify(Oskari.getMsg('MapModule', 'layerVisibility.notInScale', { name: layer.getName() }));
-            }
-            if (!geometryMatch) {
-                Messaging.notify(Oskari.getMsg('MapModule', 'layerVisibility.notInGeometry', { name: layer.getName() }));
-            }
-        }
-
         this._sandbox.notifyAll(event);
     }
 }
