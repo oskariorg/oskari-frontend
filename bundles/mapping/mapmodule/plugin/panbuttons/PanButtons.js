@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     'StateHandler.SetStateRequest'
                 );
                 if (requestBuilder) {
-                    this.getSandbox().request(this, requestBuilder());
+                    this.getSandbox().postRequestByName('StateHandler.SetStateRequest');
                 } else {
                     this.getSandbox().resetState();
                 }
