@@ -2578,7 +2578,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help1.title;
             },
             getContent: function () {
-                return <Message bundleKey={this.getName()} messageKey='guidedTour.help1.message' allowHTML />;
+                return <Message bundleKey='MapModule' messageKey='guidedTour.help1.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.panbuttonDiv');
@@ -2591,7 +2591,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help2.title;
             },
             getContent: function () {
-                return <Message bundleKey={this.getName()} messageKey='guidedTour.help2.message' allowHTML />;
+                return <Message bundleKey='MapModule' messageKey='guidedTour.help2.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.pzbDiv');

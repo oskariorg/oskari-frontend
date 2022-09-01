@@ -13,7 +13,6 @@ class TourHandler extends StateHandler {
             loading: false
         });
         this.popupControls = null;
-        this._localization = Oskari.getLocalization('GuidedTour');
         this.initSteps();
     };
 
@@ -26,48 +25,25 @@ class TourHandler extends StateHandler {
             bundleName: this.instance.getName(),
             priority: 0,
             getTitle: () => {
-                return this._localization.page1.title;
+                return Oskari.getMsg('GuidedTour', 'page1.title');
             },
             getContent: () => {
-                return this._localization.page1.message;
+                return Oskari.getMsg('GuidedTour', 'page1.message');
             }
         };
         this.addStep(delegate);
     }
 
-    addStep (delegate) {
-        if (this.instance.conf && this.instance.conf.steps) {
-            // step ordering
-            const stepSpec = this.instance.conf.steps;
-            const index = stepSpec.map((s) => s.bundleName).indexOf(delegate.bundleName);
-            if (delegate.bundleName !== this.instance.getName()) {
-                if (index < 0) {
-                    return;
-                }
-                delegate.priority = index + 1;
-            }
+    addStep (stepDelegate) {
+        let delegate = stepDelegate;
 
-            // custom content
-            if (index >= 0) {
-                const content = stepSpec[index].content;
-                if (content) {
-                    delegate.getContent = () => { // empty placeholder while loading
-                        return '';
-                    };
-                    this.getGuideContent(content, (success, response) => {
-                        if (success) {
-                            delegate.getContent = () => { return response.body; };
-                            delegate.getTitle = () => { return response.title; };
-                        } else {
-                            Oskari.log(this.instance.getName()).error('Failed to load guided tour content for step "' + stepSpec[index].bundleName + '" with tags: ' + content);
-                        }
-                    });
-                }
-            }
+        if (this.instance.conf && this.instance.conf.steps) {
+            delegate = this.handleDelegateConf(delegate, this.instance.conf.steps);
         }
+
         if (typeof delegate.priority === 'number') {
             const priorities = this.state.steps.map((d) => d.priority);
-            const insertLocation = _.sortedIndex(priorities, delegate.priority);
+            const insertLocation = this.getPriorityIndex(priorities, delegate.priority);
             this.state.steps.splice(insertLocation, 0, delegate);
             if (this.state.step >= insertLocation && this.state.steps.length !== 1) { // correct current location
                 this.updateState({ step: this.state.step++ });
@@ -80,6 +56,49 @@ class TourHandler extends StateHandler {
         }
 
         this._showGuideContentForStep(this.state.step);
+    }
+
+    getPriorityIndex (priorities, newPriority) {
+        let index = 0;
+        if (priorities.length === 0) return 0;
+        const length = priorities.length === 1 ? 1 : priorities.length - 1;
+        while (index <= length) {
+            if (newPriority <= priorities[index]) {
+                return index;
+            }
+            index++;
+        }
+        return index;
+    }
+
+    handleDelegateConf (delegate, steps) {
+        // step ordering
+        const index = steps.map((s) => s.bundleName).indexOf(delegate.bundleName);
+        if (delegate.bundleName !== this.instance.getName()) {
+            if (index < 0) {
+                return;
+            }
+            delegate.priority = index + 1;
+        }
+
+        // custom content
+        if (index >= 0) {
+            const content = steps[index].content;
+            if (content) {
+                delegate.getContent = () => { // empty placeholder while loading
+                    return '';
+                };
+                this.getGuideContent(content, (success, response) => {
+                    if (success) {
+                        delegate.getContent = () => { return response.body; };
+                        delegate.getTitle = () => { return response.title; };
+                    } else {
+                        Oskari.log(this.instance.getName()).error('Failed to load guided tour content for step "' + steps[index].bundleName + '" with tags: ' + content);
+                    }
+                });
+            }
+        }
+        return delegate;
     }
 
     _showGuideContentForStep (stepIndex) {
