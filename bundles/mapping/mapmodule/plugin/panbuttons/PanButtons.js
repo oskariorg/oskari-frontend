@@ -141,10 +141,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             }
             const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const cb = () => {
-                const requestBuilder = Oskari.requestBuilder(
-                    'StateHandler.SetStateRequest'
-                );
-                if (requestBuilder) {
+                if (this.getSandbox().hasHandler('StateHandler.SetStateRequest')) {
                     this.getSandbox().postRequestByName('StateHandler.SetStateRequest');
                 } else {
                     this.getSandbox().resetState();
