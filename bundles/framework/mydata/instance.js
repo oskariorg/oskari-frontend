@@ -1,6 +1,8 @@
 import './Tile';
 import './Flyout';
 import './service/ViewService';
+import React from 'react';
+import { Message } from 'oskari-ui';
 
 /**
  * @class Oskari.mapframework.bundle.mydata.MyDataBundleInstance
@@ -236,33 +238,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.MyDataBundleInstance',
                 return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization().guidedTour;
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
-                openLink.append(loc.openLink);
-                openLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']);
-                        openLink.hide();
-                        closeLink.show();
-                    });
-                var closeLink = linkTemplate.clone();
-                closeLink.append(loc.closeLink);
-                closeLink.on('click',
-                    function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']);
-                        openLink.show();
-                        closeLink.hide();
-                    });
-                closeLink.show();
-                openLink.hide();
-                return [openLink, closeLink];
+                return [
+                    {
+                        title: loc.openLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'MyData']),
+                        visible: false
+                    },
+                    {
+                        title: loc.closeLink,
+                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'MyData']),
+                        visible: true
+                    }
+                ];
             }
         },
 

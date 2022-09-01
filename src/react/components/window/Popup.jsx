@@ -51,6 +51,7 @@ const PopupHeader = styled.h3`
 `;
 const PopupTitle = styled.span`
     margin-right: auto;
+    width: 100%;
 `;
 // Note! max-height isn't recalculated when window size changes :(
 const PopupBody = styled.div`
