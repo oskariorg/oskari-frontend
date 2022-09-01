@@ -13,6 +13,7 @@ export const ToolMenu = ({ tools }) => {
     const items = tools
         .filter(tool => tool.getName() !== 'ownStyle')
         .map(tool => ({ title: getToolTitle(tool), action: tool.getCallback() }));
+    console.log(tools)
     return (
         <Dropdown items={items} placement="bottomRight">
             <MoreOutlined style={{ color: THEME_COLOR, fontSize: '24px' }} />

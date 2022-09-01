@@ -6,6 +6,7 @@ Oskari.registerLocalization(
         "title": "MapMyPlaces",
         "desc": "",
         "object-data": "Kohdetiedot",
+        "editLayer": "Muokkaa tasoa",
         "layer": {
             "defaultName": "Oma karttataso",
             "organization": "Omat kohteet",
