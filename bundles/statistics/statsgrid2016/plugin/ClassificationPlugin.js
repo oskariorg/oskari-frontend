@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
             const editOptions = this.getEditOptions(state, uniqueCount, minMax);
-            const classifiedDataset = this.classifyDataset(state, data);
+            const classifiedDataset = this.classifyDataset(state, data, uniqueCount);
             // Histogram doesn't need to be updated on every events but props are gathered here
             // and histogram is updated only if it's opened, so update here for now
             this.updateHistogram(state, classifiedDataset, data, editOptions);
@@ -162,9 +162,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 colorsets
             };
         },
-        classifyDataset: function (state, data) {
+        classifyDataset: function (state, data, uniqueCount) {
             const { activeIndicator: { classification }, seriesStats } = state;
-            return this.service.getClassificationService().getClassification(data, classification, seriesStats);
+            return this.service.getClassificationService().getClassification(data, classification, seriesStats, uniqueCount);
         },
         startHistogramView: function (state, classifiedDataset, data, editOptions) {
             if (this.histogramControls) {
