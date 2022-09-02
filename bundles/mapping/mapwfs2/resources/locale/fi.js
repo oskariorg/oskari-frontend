@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "refresh": "Päivitä",
         "refresh_title": "Päivitä vektoritasot, jotka eivät päivity automaattisesti kartalla.",
+        "editLayer": "Muokkaa tasoa",
         "tile": {
             "title": "Vektoritasojen (WFS) yläpito"
         },
