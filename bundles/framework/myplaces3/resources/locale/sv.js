@@ -19,7 +19,7 @@ Oskari.registerLocalization(
             },
             "export": {
                 "title":"Exportera objekt",
-                "tooltip": "Du kan exportera kartlagrets egenskaper i GeoJSON"
+                "tooltip": "Ladda kartlagets objekt som GeoJSON."
             },
             "addCategoryFormButton": "Nytt kartlager", // PersonalData removal
             "addCategory": "Lägg till kartlagret",
