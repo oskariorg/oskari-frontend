@@ -6,6 +6,7 @@ Oskari.registerLocalization({
         "desc": "",
         "refresh": "Refresh",
         "refresh_title": "Refresh WFS-layers, which are not rendered automatically on a map",
+        "editLayer": "Editera kartlager",
         "tile": {
             "title": "MapWfs2"
         },

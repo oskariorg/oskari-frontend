@@ -47,11 +47,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                 }]);
             }
 
-            const loc = Oskari.getLocalization('MapWfs2')['own-style'];
+            const toolName = Oskari.getMsg('MapWfs2', 'editLayer');
             const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             toolOwnStyle.setName('editStyle');
             toolOwnStyle.setIconCls('show-own-style-tool');
-            toolOwnStyle.setTooltip(loc);
+            toolOwnStyle.setTooltip(toolName);
+            toolOwnStyle.setTitle(toolName);
             toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('MyPlaces.EditCategoryRequest', [getCategoryId(layer.getId())]));
             layer.addTool(toolOwnStyle);
         }

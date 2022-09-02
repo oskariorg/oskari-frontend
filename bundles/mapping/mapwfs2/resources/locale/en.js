@@ -7,6 +7,7 @@ Oskari.registerLocalization({
         "none-style": "None",
         "refresh": "Refresh",
         "refresh_title": "Refresh data products not rendering automatically on the map.",
+        "editLayer": "Edit map layer",
         "tile": {
             "title": "Data Products (WFS) Management"
         },
