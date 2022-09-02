@@ -30,12 +30,15 @@ const Form = ({
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
+        if (error) {
+            return;
+        }
         manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, onBoundChange, fractionDigits);
     });
     const { activeIndicator: { classification }, seriesStats, controller } = state;
     const { method, fractionDigits } = classification;
     const { methods } = editOptions;
-    const { groups, bounds } = classifiedDataset;
+    const { groups = [], bounds, error } = classifiedDataset;
 
     const colors = groups.map(group => group.color);
     const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
@@ -62,6 +65,7 @@ const Form = ({
                 ))}
             </StyledSelect>
             <div ref={ref} className="manual-class-view"/>
+            {error && <Message messageKey={'legend.noEnough' } bundleKey={BUNDLE_KEY} />}
             <ButtonContainer>
                 <PrimaryButton type='close' onClick={onClose}/>
             </ButtonContainer>
