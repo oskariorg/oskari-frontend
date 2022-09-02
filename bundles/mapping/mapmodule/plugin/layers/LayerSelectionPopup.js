@@ -47,10 +47,19 @@ export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadat
     case 'top right':
         position = PLACEMENTS.TR;
         break;
+    case 'right top':
+        position = PLACEMENTS.TR;
+        break;
     case 'top left':
         position = PLACEMENTS.TL;
         break;
+    case 'left top':
+        position = PLACEMENTS.TL;
+        break;
     case 'center top':
+        position = PLACEMENTS.TOP;
+        break;
+    case 'top center':
         position = PLACEMENTS.TOP;
         break;
     default:
