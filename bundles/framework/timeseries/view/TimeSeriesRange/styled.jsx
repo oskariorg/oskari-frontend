@@ -144,9 +144,6 @@ export const StyledRangeSlider = styled(Slider)`
         height: 4px;
         ${(props) => getDataYearStyles(props)}
     }
-    .ant-slider-dot:last-child {
-        margin-left: -2px;
-    }
     .ant-slider-rail {
         background-color: #ffffff;
     }
