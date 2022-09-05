@@ -43,7 +43,8 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLES_JSON,
                 LayerComposingModel.TILE_GRID,
-                LayerComposingModel.URL
+                LayerComposingModel.URL,
+                LayerComposingModel.DECLUTTER
             ], null, [LayerComposingModel.NAME]); // common field name is not used in vectortilelayers so it is skipped on LayerComposingModel
 
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);

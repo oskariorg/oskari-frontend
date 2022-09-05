@@ -45,6 +45,7 @@ Oskari.registerLocalization(
                 "refreshRate": "Uppdateringsfrekvens (i sekunder)",
                 "scale": "Skala",
                 "coverage":"Visa kartlagrets täckningsområde på kartan",
+                "declutter": "Rita objektnamn separat (declutter).",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
