@@ -155,25 +155,47 @@ export const StyledRangeSlider = styled(Slider)`
         height: 16px;
         border-radius: 6px;
         border: solid 1px ${borderColor};
-        background-color: ${primaryColor};
         margin-left: 2px;
-        &:focus,
-        &:active,
-        &:hover {
-            border: solid 1px ${borderColor} !important;
-            background-color: ${primaryColor} !important;
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value)) {
+                handleColor = '#FF0000';
+            }
+            return `
+                background-color: ${handleColor};
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    ${(props => {
+        let handleColor = primaryColor;
+        if (!props.dataYears.includes(props.value)) {
+            handleColor = '#FF0000';
         }
-        &:focus .ant-slider-track,
-        &:active .ant-slider-track,
-        &:hover .ant-slider-track {
-            background-color: ${primaryColor} !important;
-        }
-    }
-    &:hover .ant-slider-track {
-        background-color: ${primaryColor} !important;
-    }
-    &:hover .ant-slider-handle {
-        border: solid 1px ${borderColor} !important;
-        background-color: ${primaryColor} !important;
-    }
+        return `
+            &:hover .ant-slider-track {
+                background-color: ${handleColor} !important;
+                border: solid 1px ${borderColor} !important;
+            }
+            &:hover .ant-slider-handle {
+                border: solid 1px ${borderColor} !important;
+                background-color: ${handleColor} !important;
+            }
+        `;
+    })}
 `;
