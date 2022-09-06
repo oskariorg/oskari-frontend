@@ -45,6 +45,7 @@ Oskari.registerLocalization(
                 "refreshRate": "Refresh rate in seconds",
                 "scale": "Scale",
                 "coverage":"Show map layer coverage on the map",
+                "declutter": "Draw object names separately (declutter).",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",

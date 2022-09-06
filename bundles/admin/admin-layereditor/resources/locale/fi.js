@@ -45,6 +45,7 @@ Oskari.registerLocalization(
                 "refreshRate": " Virkistystaajuus sekunteina",
                 "scale": "Mittakaava",
                 "coverage":"Näytä karttatason kattavuusalue kartalla",
+                "declutter": "Piirrä kohteiden nimet erikseen (declutter).",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",

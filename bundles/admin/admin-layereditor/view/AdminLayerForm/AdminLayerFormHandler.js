@@ -1170,6 +1170,12 @@ class UIHandler extends StateHandler {
                 this.clearLayerCoverage();
             });
     }
+
+    toggleDeclutter (checked) {
+        const layer = this.getState().layer;
+        layer.options.declutter = checked;
+        this.updateState({ layer: layer });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -1222,6 +1228,7 @@ const wrapped = controllerMixin(UIHandler, [
     'versionSelected',
     'showLayerMetadata',
     'clearLayerCoverage',
-    'showLayerCoverage'
+    'showLayerCoverage',
+    'toggleDeclutter'
 ]);
 export { wrapped as AdminLayerFormHandler };
