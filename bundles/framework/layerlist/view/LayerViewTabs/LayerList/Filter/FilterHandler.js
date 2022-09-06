@@ -64,7 +64,9 @@ class ViewHandler extends StateHandler {
     }
 
     setSearchText (searchText) {
-        this.updateState({ searchText });
+        const regex = /\**\b\**/g;
+        const validated = searchText.replace(regex, '');
+        this.updateState({ searchText: validated });
     }
 
     getFiltersProvidingResults (filters) {
