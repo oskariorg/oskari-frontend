@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const primaryColor = '#ecb900';
 const backgroundColor = '#3c3c3c';
 const borderColor = '#3c3c3c';
+const noDataColor = '#FF0000';
 
 export const Background = styled.div(({ isMobile }) => ({
     minHeight: isMobile ? '120px !important' : '90px !imoprtant',
@@ -159,7 +160,7 @@ export const StyledRangeSlider = styled(Slider)`
         ${(props => {
             let handleColor = primaryColor;
             if (!props.dataYears.includes(props.value)) {
-                handleColor = '#FF0000';
+                handleColor = noDataColor;
             }
             return `
                 background-color: ${handleColor};
@@ -182,20 +183,66 @@ export const StyledRangeSlider = styled(Slider)`
             `;
         })}
     }
-    ${(props => {
-        let handleColor = primaryColor;
-        if (!props.dataYears.includes(props.value)) {
-            handleColor = '#FF0000';
-        }
-        return `
-            &:hover .ant-slider-track {
-                background-color: ${handleColor} !important;
-                border: solid 1px ${borderColor} !important;
+    .ant-slider-handle-1 {
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value[0])) {
+                handleColor = noDataColor;
             }
-            &:hover .ant-slider-handle {
-                border: solid 1px ${borderColor} !important;
+            return `
                 background-color: ${handleColor} !important;
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    .ant-slider-handle-2 {
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value[1])) {
+                handleColor = noDataColor;
             }
-        `;
-    })}
+            return `
+                background-color: ${handleColor} !important;
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    &:hover .ant-slider-track {
+        background-color: ${primaryColor} !important;
+        border: solid 1px ${borderColor} !important;
+    }
+    &:hover .ant-slider-handle {
+        border: solid 1px ${borderColor} !important;
+        background-color: ${(props) => props.dataYears.includes(props.value) ? `${primaryColor};` : `${noDataColor};`} !important;
+    }
 `;

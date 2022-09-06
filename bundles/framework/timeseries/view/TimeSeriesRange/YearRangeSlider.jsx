@@ -3,7 +3,7 @@ import React from 'react';
 import { StyledRangeSlider } from './styled';
 
 export const YearRangeSlider = (props) => {
-    const { start, end, dataYears, isMobile, value } = props;
+    const { start, end, dataYears, isMobile } = props;
     const marks = {
         [start]: start,
         [end]: end
@@ -19,11 +19,6 @@ export const YearRangeSlider = (props) => {
         }
     }
 
-    let selectionHasData = false;
-    if (dataYears.includes(value)) {
-        selectionHasData = true;
-    }
-
     // data years are those years that has timeseries photos in current map view
     // data years are also marks on the range slider but they are represented
     // as small circles on the timeline (via css styling)
@@ -36,7 +31,6 @@ export const YearRangeSlider = (props) => {
             marks={marks}
             min={start}
             max={end}
-            selectionHasData={selectionHasData}
         />
     );
 };
