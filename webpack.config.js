@@ -14,7 +14,7 @@ const CopywebpackPlugin = require('copy-webpack-plugin');
 // the global styles include margins, fonts, font-weights to body, h and p tags etc.
 // Using solution from:
 // https://github.com/ant-design/ant-design/issues/9363#issuecomment-1221309386
-const fs = require('fs')
+const fs = require('fs');
 fs.writeFileSync(require.resolve('antd/es/style/core/global.less'), '');
 fs.writeFileSync(require.resolve('antd/lib/style/core/global.less'), '');
 // /ANTD HACK!!
