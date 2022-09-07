@@ -5,7 +5,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
-import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
+import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
 import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
