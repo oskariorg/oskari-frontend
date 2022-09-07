@@ -2677,13 +2677,13 @@ Oskari.clazz.define(
                     if (layer.getMaxScale() || layer.getMinScale()) {
                         const layerResolutions = me.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
                         const minRes = layerResolutions[0];
-                        const maxRes = layerResolutions[layerResolutions.length - 1]
+                        const maxRes = layerResolutions[layerResolutions.length - 1];
                         // only set if limiting
                         if (mapResolutions[0] !== layerResolutions[0]) {
                             layerObject.minZoom = mapResolutions.indexOf(minRes);
                         }
                         if (mapResolutions[mapResolutions.length - 1] !== layerResolutions[layerResolutions.length - 1]) {
-                            layerObject.maxZoom = mapResolutions.indexOf(maxRes);;
+                            layerObject.maxZoom = mapResolutions.indexOf(maxRes);
                         }
                     };
 
