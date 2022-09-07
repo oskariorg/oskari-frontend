@@ -9,7 +9,18 @@ const generateEntries = require('./webpack/generateEntries.js');
 const { DefinePlugin, NormalModuleReplacementPlugin } = require('webpack');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 
+// ANTD HACK!!
+// pretty hard-core hack to overwrite the global styles that AntD tries to push through
+// the global styles include margins, fonts, font-weights to body, h and p tags etc.
+// Using solution from:
+// https://github.com/ant-design/ant-design/issues/9363#issuecomment-1221309386
+const fs = require('fs')
+fs.writeFileSync(require.resolve('antd/es/style/core/global.less'), '');
+fs.writeFileSync(require.resolve('antd/lib/style/core/global.less'), '');
+// /ANTD HACK!!
+
 const proxyPort = 8081;
+
 // helpers
 const isDirectory = source => lstatSync(source).isDirectory();
 const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
@@ -32,6 +43,7 @@ module.exports = (env, argv) => {
     }));
 
     // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
+    // Note: probably unnecessary after the "ANTD HACK!!" above
     const replacement = path.join(__dirname, 'src/react/ant-globals.less');
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
