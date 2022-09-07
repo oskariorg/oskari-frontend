@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle" : "Oletustyyli"
         },
+        "mapLayerUnavailable": `Karttatasoa \"{name}"\ ei voida näyttää.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
