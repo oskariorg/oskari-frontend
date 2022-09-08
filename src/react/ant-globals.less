@@ -1,7 +1,8 @@
 // modified content of ~antd/es/style/core/index.less
 // Removed global styles by commenting 'global' out.
 // NOTE!! THIS NEEDS TO BE MANUALLY MAINTAINED AND CHANGED WHEN ANTD IS UPGRADED!!
-
+// NOTE2!! This isn't preventing the global styles from being injected anymore when bumping from 4.16.13 -> 4.23.0
+//  See "ANTD HACK" for overwriting the global CSS in webpack.config.js
 @import '~antd/es/style/mixins/index';
 @import '~antd/es/style/core/base';
 // @import '~antd/es/style/core/global'; // @import 'global';
