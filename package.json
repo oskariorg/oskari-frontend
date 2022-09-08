@@ -32,13 +32,13 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
-    "@ant-design/icons": "4.7.0",
+    "@ant-design/icons": "4.6.3",
     "@babel/core": "7.9.0",
     "@babel/preset-env": "7.9.5",
     "@babel/preset-react": "7.9.4",
     "@babel/runtime-corejs3": "7.9.2",
     "@storybook/react": "6.3.7",
-    "antd": "4.23.0",
+    "antd": "4.16.13",
     "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "1.10.7",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
