@@ -49,7 +49,7 @@ Oskari.clazz.define(
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
-        this._showIntersectionWarning = false;
+        this._showIntersectionWarning = true;
         this._circleHasGeom = false;
         this._defaultStyle = {
             fill: {
@@ -197,67 +197,53 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         drawShape: function (shape, options) {
-            var me = this;
-            var optionalFeatureForEditing = options.geojson;
+            const optionalFeatureForEditing = options.geojson;
             if (optionalFeatureForEditing) {
-                var jsonFormat = new olFormatGeoJSON();
-                var featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
+                const jsonFormat = new olFormatGeoJSON();
+                let featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
                 // parse multi geometries to single geometries
-                if (me.drawMultiGeom) {
-                    var parsedFeatures = me.parseMultiGeometries(featuresFromJson);
-                    me.getCurrentDrawLayer().getSource().addFeatures(parsedFeatures);
-                } else {
-                    me.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
+                if (this.drawMultiGeom) {
+                    featuresFromJson = this.parseMultiGeometries(featuresFromJson);
                 }
+                if (options.showMeasureOnMap) {
+                    featuresFromJson.forEach(f => {
+                        if (!f.getId()) {
+                            f.setId(this.generateNewFeatureId());
+                        }
+                        if (f.getGeometry().getType() === 'Polygon') {
+                            this.checkIntersection(f);
+                        };
+                        this.createDrawingTooltip(f.getId());
+                        this.updateDrawingTooltip(f);
+                    });
+                }
+                this.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
             }
             if (options.drawControl !== false) {
-                me.addDrawInteraction(me.getCurrentLayerId(), shape, options);
+                this.addDrawInteraction(this.getCurrentLayerId(), shape, options);
             }
             if (options.modifyControl !== false) {
-                me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
+                this.addModifyInteraction(this.getCurrentLayerId(), shape, options);
             }
         },
         // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
         parseMultiGeometries: function (features) {
-            var geom,
-                geoms,
-                feat,
-                feats = [];
-            for (var i = 0; i < features.length; i++) {
-                feat = features[i];
-                geom = feat.getGeometry();
+            const createFeatures = geometries => geometries.map(geometry => new olFeature({ geometry }));
 
-                if (geom.getType() === 'MultiPoint') {
-                    geoms = geom.getPoints();
-                    feats = feats.concat(this.createFeatures(geoms, false));
-                } else if (geom.getType() === 'MultiLineString') {
-                    geoms = geom.getLineStrings();
-                    feats = feats.concat(this.createFeatures(geoms, false));
-                } else if (geom.getType() === 'MultiPolygon') {
-                    geoms = geom.getPolygons();
-                    feats = feats.concat(this.createFeatures(geoms, true));
-                } else {
-                    feats.push(feat);
+            return features.flatMap(feat => {
+                const geom = feat.getGeometry();
+                const type = geom.getType();
+                if (type === 'MultiPoint') {
+                    return createFeatures(geom.getPoints());
                 }
-            }
-            return feats;
-        },
-        // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
-        createFeatures: function (geometries, checkIntersection) {
-            var me = this,
-                feat,
-                feats = [];
-            geometries.forEach(function (geom) {
-                feat = new olFeature({ geometry: geom });
-                feat.setId(me.generateNewFeatureId());
-                feats.push(feat);
-                if (checkIntersection) {
-                    me._sketch = feat;
-                    me.checkIntersection(geom);
+                if (type === 'MultiLineString') {
+                    return createFeatures(geom.getLineStrings());
                 }
+                if (type === 'MultiPolygon') {
+                    return createFeatures(geom.getPolygons());
+                }
+                return feat;
             });
-            me._sketch = null;
-            return feats;
         },
         /**
          * This is the shape type that is currently being drawn
@@ -843,9 +829,7 @@ Oskari.clazz.define(
                     } else {
                         geometry.setCoordinates(coords);
                     }
-                    if (options.selfIntersection !== false) {
-                        me.checkIntersection(geometry);
-                    }
+                    me.checkIntersection();
                     me.pointerMoveHandler();
                     me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
                     return geometry;
@@ -933,18 +917,19 @@ Oskari.clazz.define(
         },
         /**
          * @method checkIntersection
-         * -  checks if geometry intersects itself
-         * @param {ol/geom/Geometry} geometry
+         * -  checks if feature's geometry intersects itself
+         * @param {ol/Feature} feature
          * @param {Object} options
          */
-        checkIntersection: function (geometry) {
-            var me = this;
-            var currentDrawing = me._sketch;
-            if (!currentDrawing) {
-                // intersection is allowed or geometry isn't being drawn currently
+        checkIntersection: function (feature) {
+            if (this.getOpts('selfIntersection') === false) {
                 return;
             }
-
+            const currentDrawing = feature || this._sketch;
+            if (!currentDrawing) {
+                return;
+            }
+            const geometry = currentDrawing.getGeometry();
             const coordinates = geometry.getCoordinates()[0];
             // This function is called twice when modifying geometry from the point where the drawing initially began
             // That is because the first and the last point of the geometry are being modified at the same time
@@ -953,19 +938,19 @@ Oskari.clazz.define(
             if (hasEnoughCoordinatesForArea(coordinates) && firstAndLastCoordinatesEqual(coordinates)) {
                 if (!isValidOp.isValid(olParser.read(geometry))) {
                     // lines intersect -> problem!!
-                    currentDrawing.setStyle(me._styles.intersect);
-                    me._featuresValidity[currentDrawing.getId()] = false;
+                    currentDrawing.setStyle(this._styles.intersect);
+                    this._featuresValidity[currentDrawing.getId()] = false;
                     return;
                 }
             }
             // geometry is valid
             if (geometry.getArea() > 0) {
-                if (me.isCurrentlyDrawing()) {
-                    currentDrawing.setStyle(me._styles.draw);
+                if (this.isCurrentlyDrawing()) {
+                    currentDrawing.setStyle(this._styles.draw);
                 } else {
-                    currentDrawing.setStyle(me._styles.modify);
+                    currentDrawing.setStyle(this._styles.modify);
                 }
-                me._featuresValidity[currentDrawing.getId()] = true;
+                this._featuresValidity[currentDrawing.getId()] = true;
             }
         },
         /**
@@ -1039,12 +1024,6 @@ Oskari.clazz.define(
                         return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
                     }
                 });
-                if (options.showMeasureOnMap) {
-                    layer.getSource().forEachFeature(f => {
-                        this.createDrawingTooltip(f.getId());
-                        this.updateDrawingTooltip(f);
-                    });
-                }
             }
             me.modifyStartEvent(shape, options);
             me.getMap().on('pointermove', me.pointerMoveHandler, me);
@@ -1090,8 +1069,8 @@ Oskari.clazz.define(
                         }
                     } else if (shape === 'Point' && options.buffer > 0) {
                         me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
-                    } else if (shape === 'Polygon' && options.selfIntersection !== false) {
-                        me.checkIntersection(me._sketch.getGeometry());
+                    } else if (shape === 'Polygon') {
+                        me.checkIntersection();
                     }
                     me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, options);
@@ -1102,6 +1081,7 @@ Oskari.clazz.define(
             });
             me._modify[me._id].on('modifyend', function () {
                 me._showIntersectionWarning = true;
+                me.pointerMoveHandler();
                 me._mode = '';
                 me._sketch = null;
 
