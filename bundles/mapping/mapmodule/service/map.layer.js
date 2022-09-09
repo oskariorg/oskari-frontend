@@ -742,10 +742,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     desc: pResp.providers[id].desc
                 };
             });
-            providers.push({ id: 'analysis', name: Oskari.getMsg('LayerList', 'grouping.providers.analysis') });
-            providers.push({ id: 'myplaces', name: Oskari.getMsg('LayerList', 'grouping.providers.myplaces') });
-            providers.push({ id: 'userlayer', name: Oskari.getMsg('LayerList', 'grouping.providers.userlayer') });
-            this.setDataProviders(providers);
+            /* providers.push({ id: 'analysis', name: Oskari.getMsg('LayerList', 'grouping.providers.analysis') });
+            providers.push({ id: 'userlayer', name: Oskari.getMsg('LayerList', 'grouping.providers.userlayer') }); */
+            this.setDataProviders([...this._dataProviders, ...providers]);
 
             const flatLayerGroups = [];
             const gatherFlatGroups = (groups = []) => {

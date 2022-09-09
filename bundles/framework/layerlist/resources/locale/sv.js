@@ -38,8 +38,6 @@ Oskari.registerLocalization(
                 'organization': 'Enligt dataproducent',
                 'noGroup' : 'Ingen grupp',
                 'providers': {
-                    'myplaces': 'Mina kartlager',
-                    'analysis': 'Mina analyser',
                     'userlayer': 'Egna dataset'
                 }
             },

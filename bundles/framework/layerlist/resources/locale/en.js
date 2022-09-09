@@ -39,8 +39,6 @@ Oskari.registerLocalization(
                 'noGroup' : 'No group',
                 'manyLayersWarn': 'Warning, you are adding 10 or more layers to the map. Continue?',
                 'providers': {
-                    'myplaces': 'My map layers',
-                    'analysis': 'Own analysis',
                     'userlayer': 'Own datasets'
                 }
             },

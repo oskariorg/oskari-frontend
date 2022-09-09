@@ -39,8 +39,6 @@ Oskari.registerLocalization(
                 'noGroup' : 'Ei ryhmää',
                 'manyLayersWarn': 'Olet lisäämässä kartalle 10 tai enemmän karttasoa. Jatketaanko?',
                 'providers': {
-                    'myplaces': 'Omat karttatasot',
-                    'analysis': 'Omat analyysit',
                     'userlayer': 'Omat aineistot'
                 }
             },

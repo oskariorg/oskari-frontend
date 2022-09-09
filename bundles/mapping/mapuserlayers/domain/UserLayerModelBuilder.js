@@ -10,6 +10,7 @@ Oskari.clazz.define(
             'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
             sandbox
         );
+        this.dataProviderId = null;
     }, {
         /**
          * Parses any additional fields to model
@@ -31,6 +32,18 @@ Oskari.clazz.define(
             toolOwnStyle.setTitle(toolName);
             toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('MyPlacesImport.ShowUserLayerDialogRequest', [layer.getId()]));
             layer.addTool(toolOwnStyle);
+
+            if (!this.dataProviderId) {
+                this.dataProviderId = 'userlayer';
+                const dataProvider = maplayerService.getDataProviderById(this.dataProviderId);
+                if (!dataProvider) {
+                    const provider = {
+                        id: this.dataProviderId,
+                        name: Oskari.getMsg('LayerList', 'grouping.providers.userlayer')
+                    };
+                    maplayerService.addDataProvider(provider);
+                }
+            }
         }
     }
 );
