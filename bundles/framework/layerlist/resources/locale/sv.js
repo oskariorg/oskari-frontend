@@ -36,7 +36,12 @@ Oskari.registerLocalization(
                 'title': 'Gruppering',
                 'inspire': 'Enligt tema',
                 'organization': 'Enligt dataproducent',
-                'noGroup' : 'Ingen grupp'
+                'noGroup' : 'Ingen grupp',
+                'providers': {
+                    'myplaces': 'Mina kartlager',
+                    'analysis': 'Mina analyser',
+                    'userlayer': 'Egna dataset'
+                }
             },
             'layer': {
                 'tooltip': {
