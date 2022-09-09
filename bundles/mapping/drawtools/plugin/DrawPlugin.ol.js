@@ -382,7 +382,6 @@ Oskari.clazz.define(
             me.removeInteractions(me._draw, id);
             me.removeInteractions(me._modify, id);
             me._cleanupInternalState();
-            me.getMap().un('pointermove', me.pointerMoveHandler, me);
             // enable gfi
             me._gfiTimeout = setTimeout(function () {
                 me.getMapModule().setDrawingMode(false);
@@ -394,41 +393,35 @@ Oskari.clazz.define(
          * Updates measurement on map and cleans sketch
          */
         forceFinishDrawing: function () {
-            if (this._sketch === null || this._sketch === undefined) {
+            if (!this._sketch) {
                 return;
             }
-            var feature = this._sketch,
-                geom = feature.getGeometry(),
-                source = this.getCurrentDrawLayer().getSource(),
-                coords,
-                parsedCoords;
+            const feature = this._sketch;
+            const geom = feature.getGeometry();
+            const source = this.getCurrentDrawLayer().getSource();
 
             if (geom.getType() === 'LineString') {
-                coords = geom.getCoordinates();
+                const coords = geom.getCoordinates();
                 if (coords.length > 2) {
-                    parsedCoords = coords.slice(0, coords.length - 1); // remove last point
+                    const parsedCoords = coords.slice(0, coords.length - 1); // remove last point
                     geom.setCoordinates(parsedCoords);
                     feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    // update measurement result on map
-                    this._sketch = feature;
-                    this.pointerMoveHandler();
+                    this.updateDrawingTooltip(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
                     this._cleanupInternalState();
                 }
             } else if (geom.getType() === 'Polygon') {
                 // only for exterior linear ring, drawtools doesn't support linear rings (holes)
-                coords = geom.getCoordinates()[0];
+                const coords = geom.getCoordinates()[0];
                 if (coords.length > 4) {
-                    parsedCoords = coords.slice(0, coords.length - 2); // remove second last point
+                    const parsedCoords = coords.slice(0, coords.length - 2); // remove second last point
                     parsedCoords.push(coords[coords.length - 1]); // add last point to close linear ring
                     geom.setCoordinates([parsedCoords]); // add parsed exterior linear ring
                     feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    // update measurement result on map
-                    this._sketch = feature;
-                    this.pointerMoveHandler();
+                    this.updateDrawingTooltip(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
                     this._cleanupInternalState();
@@ -761,6 +754,10 @@ Oskari.clazz.define(
                     return ring;
                 });
             }
+            const notifyChange = () => {
+                this.updateDrawingTooltip();
+                this.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+            };
             if (shape === 'LineString') {
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
@@ -771,8 +768,7 @@ Oskari.clazz.define(
                     if (options.buffer > 0) {
                         me.drawBufferedGeometry(geometry, options.buffer);
                     }
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Box') {
@@ -787,9 +783,7 @@ Oskari.clazz.define(
                     } else {
                         geometry.setCoordinates(coords);
                     }
-
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Point') {
@@ -800,8 +794,7 @@ Oskari.clazz.define(
                     if (options.buffer > 0) {
                         me.drawBufferedGeometry(geometry, options.buffer);
                     }
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(me._id, optionsForDrawingEvent);
+                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Square') {
@@ -814,8 +807,7 @@ Oskari.clazz.define(
                     if (!geometry) {
                         geometry = new olGeom.Circle(coordinates, options.buffer);
                     }
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Circle' && !options.buffer) {
@@ -830,8 +822,7 @@ Oskari.clazz.define(
                         geometry.setCoordinates(coords);
                     }
                     me.checkIntersection();
-                    me.pointerMoveHandler();
-                    me.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                    notifyChange();
                     return geometry;
                 };
             }
@@ -855,10 +846,6 @@ Oskari.clazz.define(
 
             me.bindDrawStartEvent(drawInteraction, options);
             me.bindDrawEndEvent(drawInteraction, options, shape);
-
-            if (options.showMeasureOnMap) {
-                me.getMap().on('pointermove', me.pointerMoveHandler, me);
-            }
         },
         /**
          * @method bindDrawStartEvent
@@ -894,7 +881,7 @@ Oskari.clazz.define(
                 };
                 me.sendDrawingEvent(me._id, eventOptions);
                 me._showIntersectionWarning = true;
-                me.pointerMoveHandler();
+                me.updateDrawingTooltip();
                 me._mode = '';
 
                 // stop drawing without modifying
@@ -953,19 +940,10 @@ Oskari.clazz.define(
                 this._featuresValidity[currentDrawing.getId()] = true;
             }
         },
-        /**
-         * @method pointerMoveHandler - pointer moving handler for displaying
-         * - displays measurement result on feature
-         * @param {ol/MapBrowserEvent} evt
-         */
-        pointerMoveHandler: function (evt) {
-            if (!this._sketch || !this.getOpts('showMeasureOnMap')) {
-                // if no drawing of we don't want to show it on map -> skip
+        updateDrawingTooltip: function (feature = this._sketch) {
+            if (!feature || !this.getOpts('showMeasureOnMap')) {
                 return;
             }
-            this.updateDrawingTooltip(this._sketch);
-        },
-        updateDrawingTooltip: function (feature) {
             const id = feature.getId();
             const overlay = this._overlays[id];
             if (!overlay) {
@@ -1026,7 +1004,6 @@ Oskari.clazz.define(
                 });
             }
             me.modifyStartEvent(shape, options);
-            me.getMap().on('pointermove', me.pointerMoveHandler, me);
             me.getMap().addInteraction(me._modify[me._id]);
         },
         /**
@@ -1072,7 +1049,7 @@ Oskari.clazz.define(
                     } else if (shape === 'Polygon') {
                         me.checkIntersection();
                     }
-                    me.pointerMoveHandler();
+                    me.updateDrawingTooltip();
                     me.sendDrawingEvent(me._id, options);
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);
@@ -1081,7 +1058,7 @@ Oskari.clazz.define(
             });
             me._modify[me._id].on('modifyend', function () {
                 me._showIntersectionWarning = true;
-                me.pointerMoveHandler();
+                me.updateDrawingTooltip();
                 me._mode = '';
                 me._sketch = null;
 
