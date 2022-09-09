@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle": "Standard stil"
         },
+        "mapLayerUnavailable": `Kartlagret \"{name}"\ kan inte visas.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",

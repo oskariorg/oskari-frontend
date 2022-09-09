@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle": "Default style"
         },
+        "mapLayerUnavailable": `Map layer \"{name}"\ can not be shown.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
