@@ -60,6 +60,14 @@ const markers = [{
     transient: true,
     offsetX: 12,
     offsetY: 8
+}, {
+    x: 4,
+    y: 4,
+    shape: 'image_url',
+    size: 9,
+    transient: true,
+    offsetX: 12,
+    offsetY: 8
 }];
 
 describe('MarkersPlugin', () => {
@@ -173,6 +181,20 @@ describe('MarkersPlugin', () => {
             // looks like getter returns top-left anchor even it is set and stored as bottom-left
             expect(style.getAnchor()).toEqual([offsetX, size - offsetY]);
             expect(style.getSize()).toEqual([size, size]);
+        });
+        test('external with lower than expected size (workaround backwards compatibility)', () => {
+            const id = 'marker2workaround';
+            const marker = markers[4];
+            plugin.addMapMarker(marker, id);
+            const style = getImageStyle(id);
+            const { size, offsetX, offsetY, shape } = marker;
+            // size is 9 here, but with external graphic values under 10 are multiplied -> should result in 130 actual size
+            expect(size).toEqual(9);
+            expect(style.getSrc()).toEqual(shape);
+            const expectedSize = 130;
+            expect(style.getSize()).toEqual([expectedSize, expectedSize]);
+            // looks like getter returns top-left anchor even it is set and stored as bottom-left
+            expect(style.getAnchor()).toEqual([offsetX, expectedSize - offsetY]);
         });
         afterAll(() => {
             // remove markers to normalize state for other tests
