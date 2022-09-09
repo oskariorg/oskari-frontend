@@ -65,10 +65,12 @@ const filterGroups = (groups = [], searchText) => {
     if (!searchText || !searchText.trim()) {
         return groups;
     }
+    const regex = /\**\b\**/g;
+    const validated = searchText.replace(regex, '');
     return groups.map(group => {
         group.unfilteredLayerCount = group.getLayerCount();
-        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-        group.groups = filterGroups(group.groups, searchText);
+        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), validated));
+        group.groups = filterGroups(group.groups, validated);
         if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
             return null;
