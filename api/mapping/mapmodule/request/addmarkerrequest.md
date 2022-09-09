@@ -66,7 +66,7 @@ Recognized keys in data-object:
 </tr>
 <tr>
   <td> size </td><td> Number </td><td> size of the marker. For built-in symbols this is usually between `1` and `5` (actual size calculated with `size * 10 + 40`). 
-  For symbols that are NOT built-in the size is assumed to be in pixels (defaults to 32x32px, only square icons supported) </td><td> 1 </td>
+  For symbols that are NOT built-in the size is assumed to be in pixels (defaults to 32x32px, only square icons supported). Exception is when the pixel size is below 10 - Then the above formula is used for size calculation (for backwards compatibility). </td><td> 1 </td>
 </tr>
 
 <tr>
