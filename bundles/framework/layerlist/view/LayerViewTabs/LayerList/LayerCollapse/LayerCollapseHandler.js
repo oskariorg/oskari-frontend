@@ -26,21 +26,10 @@ const getLayerGroups = (groups = []) => {
 
 const providerReducer = (accumulator, currentLayer) => {
     const id = currentLayer.getDataProviderId();
-    let dataProviderId;
-    if (typeof currentLayer.getId() === 'string') {
-        if (currentLayer.getId().includes('myplaces')) {
-            dataProviderId = 'myplaces';
-        } else if (currentLayer.getId().includes('analysis')) {
-            dataProviderId = 'analysis';
-        } else if (currentLayer.getId().includes('userlayer')) {
-            dataProviderId = 'userlayer';
-        }
-    } else {
-        if (!id) {
-            return accumulator;
-        }
-        dataProviderId = '' + id;
+    if (!id) {
+        return accumulator;
     }
+    let dataProviderId = '' + id;
     let orgLayers = accumulator[dataProviderId] || [];
     if (!orgLayers.length) {
         accumulator[dataProviderId] = orgLayers;

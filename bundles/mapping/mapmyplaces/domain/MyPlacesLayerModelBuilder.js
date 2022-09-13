@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                 }
             }
             if (!this.dataProviderId) {
-                this.dataProviderId = 'myplaces';
+                this.dataProviderId = -10 * Oskari.getSeq('usergeneratedDataProvider').nextVal();
                 const dataProvider = maplayerService.getDataProviderById(this.dataProviderId);
                 if (!dataProvider) {
                     const provider = {
@@ -51,6 +51,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                     };
                     maplayerService.addDataProvider(provider);
                 }
+            }
+
+            if (this.dataProviderId) {
+                layer.setDataProviderId(this.dataProviderId);
             }
 
             if (loclayer.inspire) {

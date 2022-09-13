@@ -34,15 +34,18 @@ Oskari.clazz.define(
             layer.addTool(toolOwnStyle);
 
             if (!this.dataProviderId) {
-                this.dataProviderId = 'userlayer';
+                this.dataProviderId = -10 * Oskari.getSeq('usergeneratedDataProvider').nextVal();
                 const dataProvider = maplayerService.getDataProviderById(this.dataProviderId);
                 if (!dataProvider) {
                     const provider = {
                         id: this.dataProviderId,
-                        name: Oskari.getMsg('LayerList', 'grouping.providers.userlayer')
+                        name: Oskari.getMsg('MyPlacesImport', 'layer.organization')
                     };
                     maplayerService.addDataProvider(provider);
                 }
+            }
+            if (this.dataProviderId) {
+                layer.setDataProviderId(this.dataProviderId);
             }
         }
     }

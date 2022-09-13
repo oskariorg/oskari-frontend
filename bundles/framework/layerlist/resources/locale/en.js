@@ -37,10 +37,7 @@ Oskari.registerLocalization(
                 'inspire': 'By Theme',
                 'organization': 'By Data Provider',
                 'noGroup' : 'No group',
-                'manyLayersWarn': 'Warning, you are adding 10 or more layers to the map. Continue?',
-                'providers': {
-                    'userlayer': 'Own datasets'
-                }
+                'manyLayersWarn': 'Warning, you are adding 10 or more layers to the map. Continue?'
             },
             'layer': {
                 'tooltip': {
