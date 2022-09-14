@@ -29,7 +29,7 @@ const providerReducer = (accumulator, currentLayer) => {
     if (!id) {
         return accumulator;
     }
-    const dataProviderId = '' + id;
+    let dataProviderId = '' + id;
     let orgLayers = accumulator[dataProviderId] || [];
     if (!orgLayers.length) {
         accumulator[dataProviderId] = orgLayers;

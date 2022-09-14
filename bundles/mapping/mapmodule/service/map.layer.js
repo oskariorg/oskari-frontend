@@ -742,7 +742,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     desc: pResp.providers[id].desc
                 };
             });
-            this.setDataProviders(providers);
+            this.setDataProviders([...this.getDataProviders(), ...providers]);
 
             const flatLayerGroups = [];
             const gatherFlatGroups = (groups = []) => {

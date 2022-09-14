@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
         this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
         // created in parseLayer so it can be used to detect if we have already done it
         this.groupId = null;
+        this.dataProviderId = null;
     }, {
         /**
          * parses any additional fields to model
@@ -40,6 +41,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
                     maplayerService.addLayerGroup(Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', group));
                 }
             }
+            if (!this.dataProviderId) {
+                this.dataProviderId = -10 * Oskari.getSeq('usergeneratedDataProvider').nextVal();
+                const dataProvider = maplayerService.getDataProviderById(this.dataProviderId);
+                if (!dataProvider) {
+                    const provider = {
+                        id: this.dataProviderId,
+                        name: loclayer.inspire
+                    };
+                    maplayerService.addDataProvider(provider);
+                }
+            }
+
+            if (this.dataProviderId) {
+                layer.setDataProviderId(this.dataProviderId);
+            }
+
             if (loclayer.inspire) {
                 layer.setGroups([{
                     id: this.groupId,
