@@ -491,7 +491,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         stop: function () {
             // restore "fill" as default size setting
             this.sizeOptions.forEach(item => {
-                item.selected = item.id === 'fill'
+                item.selected = item.id === 'fill';
             });
             this._unregisterEventHandlers();
 
