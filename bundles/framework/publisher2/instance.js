@@ -277,13 +277,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var me = this;
             var map = jQuery('#contentMap');
             data = data || this.getDefaultData();
-            // trigger an event letting other bundles know we require the whole UI
-            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
-            this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
+                // trigger an event letting other bundles know we require the whole UI
+                var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+                this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
+
                 me.getService().setIsActive(true);
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));
