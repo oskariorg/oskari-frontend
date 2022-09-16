@@ -44,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popupCleanup();
             } else {
                 this.showPopup();
@@ -87,6 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
         popupCleanup: function () {
             if (this.popupControls) {
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popupControls.close();
             }
             this.popupControls = null;
