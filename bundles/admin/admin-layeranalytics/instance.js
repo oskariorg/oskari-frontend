@@ -230,7 +230,10 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
                     const itemLayer = this.mapLayerService.findMapLayer(item);
                     const title = itemLayer !== null ? itemLayer.getName() : item;
                     const dataProducer = itemLayer !== null ? itemLayer.getOrganizationName() : '';
-                    const layerType = itemLayer !== null ? itemLayer.getLayerType() : '';
+                    let layerType = itemLayer !== null ? itemLayer.getLayerType() : '';
+                    if (itemLayer.hasTimeseries()) {
+                        layerType += '-t';
+                    }
                     const totalDisplays = result[item].success + result[item].errors;
                     const failurePercentage = Math.round(result[item].errors / totalDisplays * 100);
 
