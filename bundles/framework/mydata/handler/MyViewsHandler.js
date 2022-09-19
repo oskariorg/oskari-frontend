@@ -170,14 +170,13 @@ class ViewsHandler extends StateHandler {
     }
 
     getDefaultViewUrlWithCurrentMapParams (srsName) {
-        let uuid;
-        const defaultViews = Oskari.app.getSystemDefaultViews();
-        defaultViews.forEach((defaultView) => {
-            if (defaultView.srsName === srsName) {
-                uuid = defaultView.uuid;
-            }
-        });
-        let url = this.sandbox.createURL('/?uuid=' + uuid, true);
+        const systemDefault = Oskari.app.getSystemDefaultViews()
+            .find((defaultView) => defaultView.srsName === srsName);
+        let url = this.sandbox.createURL('/?', true);
+        if (systemDefault) {
+            // use uuid if available so server doesn't need to provide the global default
+            url += 'uuid=' + systemDefault.uuid + '&';
+        }
         url += this.sandbox.generateMapLinkParameters();
         return url;
     }
