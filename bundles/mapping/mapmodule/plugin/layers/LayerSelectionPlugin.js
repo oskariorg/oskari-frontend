@@ -373,55 +373,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            if (!this.isVisible()) {
+            if (!this.isVisible() || !this.isEnabled()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
-            var me = this;
-            var mobileDefs = this.getMobileDefs();
 
+            const mobileDefs = this.getMobileDefs();
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            const toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
-            if (!toolbarNotReady && isMobile) {
+            if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
                 // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                me._element = me._createControlElement();
-                me.changeToolStyle(null, me._element);
-                me.refresh();
-                this.addToPluginContainer(me._element);
+                this._element = this._createControlElement();
+                this.changeToolStyle(null, this._element);
+                this.refresh();
+                this.addToPluginContainer(this._element);
             }
         },
 
         refresh: function () {
-            var me = this,
-                conf = me.getConfig(),
-                element = me.getElement();
+            const me = this;
+            const conf = me.getConfig();
+            const element = me.getElement();
             this._updateLayerSelectionPopup();
-            if (conf) {
-                if (conf.toolStyle) {
-                    me.changeToolStyle(conf.toolStyle, element);
-                } else {
-                    // not found -> use the style config obtained from the mapmodule.
-                    var toolStyle = me.getToolStyleFromMapModule();
-                    if (toolStyle !== null && toolStyle !== undefined) {
-                        me.changeToolStyle(toolStyle, me.getElement());
-                    }
+            if (!conf) {
+                return;
+            }
+            if (conf.toolStyle) {
+                me.changeToolStyle(conf.toolStyle, element);
+            } else {
+                // not found -> use the style config obtained from the mapmodule.
+                var toolStyle = me.getToolStyleFromMapModule();
+                if (toolStyle !== null && toolStyle !== undefined) {
+                    me.changeToolStyle(toolStyle, me.getElement());
                 }
+            }
 
-                if (conf.font) {
-                    me.changeFont(conf.font, element);
-                } else {
-                    var font = me.getToolFontFromMapModule();
-                    if (font !== null && font !== undefined) {
-                        me.changeFont(font, element);
-                    }
+            if (conf.font) {
+                me.changeFont(conf.font, element);
+            } else {
+                var font = me.getToolFontFromMapModule();
+                if (font !== null && font !== undefined) {
+                    me.changeFont(font, element);
                 }
             }
         },
