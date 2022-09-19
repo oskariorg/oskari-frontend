@@ -1379,7 +1379,7 @@ Oskari.clazz.define(
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
         },
-
+        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
         _adjustMobileMapSize: function () {
             var mapDivHeight = this.getMapEl().height();
             var mobileDiv = this.getMobileDiv();
