@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /*
          * Layer filters
          */
-        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93'];
+        const rasterLayerTypes = ['wmts', 'bingmaps', 'arcgis', 'wms', 'arcgis93', 'vectortile'];
         this.layerFilters = {
             featuredata: function (layer) {
                 return layer.hasFeatureData();
