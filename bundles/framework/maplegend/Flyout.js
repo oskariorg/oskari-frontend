@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
-import { LocaleProvider } from 'oskari-ui/util';
+import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { MapLegendList } from './MapLegendList';
 
 /**
@@ -134,10 +134,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'maplegend' }}>
-                    { legends.length === 0
-                        ? <Message messageKey='noLegendsText' />
-                        : <MapLegendList legendList={ legends } />
-                    }
+                    <ThemeProvider>
+                        { legends.length === 0
+                            ? <Message messageKey='noLegendsText' />
+                            : <MapLegendList legendList={ legends } />
+                        }
+                    </ThemeProvider>
                 </LocaleProvider>,
                 this.container
             );
