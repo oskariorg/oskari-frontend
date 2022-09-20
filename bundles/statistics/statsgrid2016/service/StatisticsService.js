@@ -345,6 +345,7 @@
                 },
                 url: Oskari.urls.getRoute('GetIndicatorList'),
                 success: function (pResp) {
+                    pResp.indicators.forEach(item => me._modifyUserIndicators(item));
                     me.cache.respondToQueue(cacheKey, null, pResp);
                     if (!pResp.complete) {
                         // wasn't complete dataset - remove from cache and poll for more
@@ -355,6 +356,14 @@
                     me.cache.respondToQueue(cacheKey, 'Error loading indicators');
                 }
             });
+        },
+        _modifyUserIndicators: function (indicator) {
+            if (!indicator || !Array.isArray(indicator.regionsets)) {
+                return;
+            }
+            // user indicators can have region set id as -1 if there is no data saved but we still have the indicator metadata
+            // remove the -1 region sets as they are needed to pass the indicator metadata through but unusable in the frontend
+            indicator.regionsets = indicator.regionsets.filter(id => id !== -1);
         },
         /**
          * Calls callback with a list of indicators for the datasource.
@@ -393,6 +402,7 @@
                 },
                 url: Oskari.urls.getRoute('GetIndicatorMetadata'),
                 success: function (pResp) {
+                    me._modifyUserIndicators(pResp);
                     me.cache.respondToQueue(cacheKey, null, pResp);
                 },
                 error: function (jqXHR, textStatus) {
