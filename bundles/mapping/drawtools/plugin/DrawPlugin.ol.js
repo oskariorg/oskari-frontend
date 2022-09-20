@@ -866,10 +866,12 @@ Oskari.clazz.define(
         },
         handleFinishedDrawing: function (feature = this._sketch, suppressEvent) {
             this._mode = '';
-            if (this.validateGeometry(feature)) {
+            if (!this.validateGeometry(feature)) {
                 this.updateTooltip(feature, this.getInvalidReasonMessage(feature.getId()));
-            } else {
+            } else if (this.getOpts('showMeasureOnMap')) {
                 this.updateMeasurementTooltip(feature);
+            } else {
+                this.updateTooltip(feature);
             }
             if (!suppressEvent) {
                 this.sendDrawingEvent(true);
@@ -933,7 +935,7 @@ Oskari.clazz.define(
                 }
             }
             this.setFeatureValidity(id, invalidReason);
-            return !!invalidReason;
+            return !invalidReason;
         },
         /**
          * @method checkIntersection
@@ -979,8 +981,8 @@ Oskari.clazz.define(
             if (!feature || !this.getOpts('showMeasureOnMap')) {
                 return;
             }
-            if (!this.isFeatureValid(feature.getId())) {
-                // remove measurement for invalid feature while drawing/modifying
+            if (this._invalidFeatures[feature.getId()] === INVALID_REASONS.INTERSECTION) {
+                // remove measurement for self intersecting geometries while drawing/modifying
                 if (this.isCurrentlyDrawing() || this.isCurrentlyModifying()) {
                     this.updateTooltip(feature);
                 }
