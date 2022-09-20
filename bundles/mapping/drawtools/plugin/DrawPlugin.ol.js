@@ -21,6 +21,20 @@ olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olG
 const arrayValuesEqual = (array1, array2) => array1.length === array2.length && array1.every((value, index) => value === array2[index]);
 const firstAndLastCoordinatesEqual = (coordinates) => coordinates.length > 1 && arrayValuesEqual(coordinates[0], coordinates[coordinates.length - 1]);
 const hasEnoughCoordinatesForArea = (coordinates) => coordinates.length > 3;
+
+const INVALID_REASONS = {
+    INTERSECTION: 'intersectionNotAllowed',
+    AREA_SIZE: 'invalidAreaSize',
+    LINE_LENGTH: 'invalidLineLenght'
+};
+const OPTIONS = {
+    drawControl: true,
+    modifyControl: true,
+    allowMultipleDrawing: true,
+    showMeasureOnMap: false,
+    buffer: 0,
+    bufferAccuracy: 10 // is number of line segments used to represent a quadrant circle
+};
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  * Map engine specific implementation for draw tools
@@ -35,21 +49,19 @@ Oskari.clazz.define(
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
         this._bufferedFeatureLayerId = 'BufferedFeatureDrawLayer';
-        this._styleTypes = ['draw', 'modify', 'intersect'];
         this._styles = {};
         this._drawLayers = {};
         this._overlays = {};
         this._drawFeatureIdSequence = 0;
         this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
         this._mode = '';
-        this._featuresValidity = {};
+        this._invalidFeatures = {}; // id: INVALID_REASON
         // TODO: figure out why we have some variables that are "globally reset" and some that are functionality id specific.
         // As some are "global"/shared between functionalities resuming a previous id will probably NOT work the way expected
         //  and storing these for each id is probably not needed.
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
-        this._showIntersectionWarning = true;
         this._circleHasGeom = false;
         this._defaultStyle = {
             fill: {
@@ -76,25 +88,26 @@ Oskari.clazz.define(
                 }
             }
         };
-        this._loc = Oskari.getLocalization('DrawTools');
+        this.loc = Oskari.getMsg.bind(null, 'DrawTools');
     },
     {
         /**
-         * @method setDefaultStyle
-         * - set styles for draw, modify and intersect mode
+         * @method setDefaultStyles
+         * - set styles for draw, modify and invalid
          *
          * @param {Object} styles. If not given, will set default styles
          */
-        setDefaultStyle: function (styles) {
-            var me = this;
-            styles = styles || {};
-            // setting defaultStyles
-            me._styleTypes.forEach(function (type) {
+        setDefaultStyles: function (styles = {}) {
+            const setStyle = (type, defForType = {}) => {
                 // overriding default style configured style
-                var styleForType = styles[type] || {};
-                var styleDef = jQuery.extend({}, me._defaultStyle, styleForType);
-                me._styles[type] = me.getMapModule().getStyle(styleDef);
-            });
+                const styleDef = jQuery.extend({}, this._defaultStyle, defForType);
+                this._styles[type] = this.getMapModule().getStyle(styleDef);
+            };
+            // setting default style for draw, modify and invalid
+            ['draw', 'modify'].forEach(type => setStyle(type, styles[type]));
+            // style def for invalid can be intersect or invalid in request
+            const invalid = styles.invalid || styles.intersect;
+            setStyle('invalid', invalid);
         },
         /**
          * @Return{String} reference system as defined in GeoJSON format
@@ -131,13 +144,11 @@ Oskari.clazz.define(
          *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.
          *                                                        'single' - selection will be removed before drawing a new selection.
          *                                                        'multiGeom' - form multigeometry from drawn features.
-         *                                                         Default is false.
-         *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature. Default is false.
-         *                  {Boolean} drawControl: true - will activate draw control, false - will not activate. Default is true.
-         *                  {Boolean} modifyControl: true - will activate modify control, false, will not activate. Default is true.
+         *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature.
+         *                  {Boolean} drawControl: true - will activate draw control, false - will not activate.
+         *                  {Boolean} modifyControl: true - will activate modify control, false, will not activate.
          *                  {String} geojson: geojson for editing. If not given, will activate draw/modify control according to given shape.
-         *                  {Boolean} selfIntersection: true - user will see warning text if polygon has self-intersection. Features will be not sended to event before polygon is valid. false - itself intersection will be not checked. By default intersections are not allowed.
-         *                  {Number} maxSize: max size = perimeter of feature's boundbox. User can't continue drawing after feature's max bbox is achieved. Default is null.
+         *                  {Boolean} selfIntersection: true - user will see warning text if polygon has self-intersection. Features will be not sended to event before polygon is valid. false - itself intersection will be not checked.
          */
         draw: function (id, shape, options) {
             // TODO: implementations
@@ -152,10 +163,6 @@ Oskari.clazz.define(
             if (me._gfiTimeout) {
                 clearTimeout(me._gfiTimeout);
             }
-            // set default accuracy for buffer.
-            // bufferAccuracy is number of line segments used to represent a quadrant circle
-            options.bufferAccuracy = options.bufferAccuracy || 10;
-
             // disable gfi
             me.getMapModule().setDrawingMode(true);
 
@@ -168,9 +175,10 @@ Oskari.clazz.define(
             // setup functionality id
             me._id = id;
             // setup options
-            me._options = options;
+            const { geojson, style, ...opts } = options;
+            this.initOptions(opts);
             // this sets styles for this and all the following requests (not functionality id specific, written to "class variables")
-            me.setDefaultStyle(this.getOpts('style'));
+            me.setDefaultStyles(style);
 
             // creating layer for drawing (if layer not already added)
             if (!me.getCurrentDrawLayer()) {
@@ -184,46 +192,48 @@ Oskari.clazz.define(
 
             // activate drawcontrols
             if (shape) {
-                me.drawShape(shape, options);
+                me.drawShape(shape, geojson);
             } else {
                 // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
             }
+        },
+        initOptions: function (options) {
+            const { selfIntersection = true, limits: optLimits = {}, ...rest } = options;
+            const limits = {
+                selfIntersection,
+                ...optLimits
+            };
+            this._options = { ...OPTIONS, ...rest, limits };
         },
         /**
          * @method drawShape
          * - activates draw/modify controls. If geojson is given, setup editing it
          *
          * @param {String} shape
-         * @param {Object} options
+         * @param {Object} geojson optional feature for editing
          */
-        drawShape: function (shape, options) {
-            const optionalFeatureForEditing = options.geojson;
-            if (optionalFeatureForEditing) {
+        drawShape: function (shape, geojson) {
+            if (geojson) {
                 const jsonFormat = new olFormatGeoJSON();
-                let featuresFromJson = jsonFormat.readFeatures(optionalFeatureForEditing);
+                let featuresFromJson = jsonFormat.readFeatures(geojson);
                 // parse multi geometries to single geometries
                 if (this.drawMultiGeom) {
                     featuresFromJson = this.parseMultiGeometries(featuresFromJson);
                 }
-                if (options.showMeasureOnMap) {
-                    featuresFromJson.forEach(f => {
-                        if (!f.getId()) {
-                            f.setId(this.generateNewFeatureId());
-                        }
-                        if (f.getGeometry().getType() === 'Polygon') {
-                            this.checkIntersection(f);
-                        };
-                        this.createDrawingTooltip(f.getId());
-                        this.updateDrawingTooltip(f);
-                    });
-                }
+                featuresFromJson.forEach(f => {
+                    if (!f.getId()) {
+                        f.setId(this.generateNewFeatureId());
+                    }
+                    this.handleFinishedDrawing(f, true);
+                });
                 this.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
             }
-            if (options.drawControl !== false) {
-                this.addDrawInteraction(this.getCurrentLayerId(), shape, options);
+            const { drawControl, modifyControl } = this.getOpts();
+            if (drawControl) {
+                this.addDrawInteraction(this.getCurrentLayerId(), shape);
             }
-            if (options.modifyControl !== false) {
-                this.addModifyInteraction(this.getCurrentLayerId(), shape, options);
+            if (modifyControl) {
+                this.addModifyInteraction(this.getCurrentLayerId(), shape);
             }
         },
         // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
@@ -311,19 +321,13 @@ Oskari.clazz.define(
         /**
          * Returns a value in the options.
          * @param  {String} key  key for the value inside options
-         * @param  {Object} options optional options object, defaults to options in the startdrawing request if not given
          * @return {Any}
          */
-        getOpts: function (key, options) {
-            var opts = options || this._options || {};
-            if (key == 'modifyControl' && typeof opts[key] === 'undefined') {
-                // default for modifyControl key
-                return true;
-            }
+        getOpts: function (key) {
             if (key) {
-                return opts[key];
+                return this._options[key];
             }
-            return opts;
+            return this._options;
         },
         /**
          * Returns true if the user has an unfinished sketch in the works (started drawing a geometry, but not yet finished it)
@@ -344,17 +348,9 @@ Oskari.clazz.define(
          * -  sends DrawingEvent and removes draw and modify controls
          *
          * @param {String} id
-         * @param {boolean} clearCurrent: if true, all selection will be removed from the map
          */
         stopDrawing: function (id, clearCurrent, supressEvent) {
-            var me = this;
-            if (typeof supressEvent === 'undefined') {
-                supressEvent = false;
-            }
-            var options = {
-                clearCurrent: clearCurrent,
-                isFinished: true
-            };
+            const me = this;
 
             if (!me.getLayerIdForFunctionality(id)) {
                 // layer not found for functionality id
@@ -362,7 +358,7 @@ Oskari.clazz.define(
                 me.clearDrawing();
                 return;
             }
-            if (supressEvent === true) {
+            if (clearCurrent) {
                 // another bundle sends StopDrawingRequest to clear own drawing (e.g. toolselected)
                 // skip deactivate draw and modify controls
                 // should be also with suppressEvent !== true ??
@@ -376,7 +372,9 @@ Oskari.clazz.define(
             } else {
                 // try to finish unfinished (currently drawn) feature
                 me.forceFinishDrawing();
-                me.sendDrawingEvent(id, options);
+            }
+            if (!supressEvent) {
+                me.sendDrawingEvent(true);
             }
             // deactivate draw and modify controls
             me.removeInteractions(me._draw, id);
@@ -407,7 +405,7 @@ Oskari.clazz.define(
                     geom.setCoordinates(parsedCoords);
                     feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    this.updateDrawingTooltip(feature);
+                    this.updateMeasurementTooltip(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
                     this._cleanupInternalState();
@@ -421,7 +419,7 @@ Oskari.clazz.define(
                     geom.setCoordinates([parsedCoords]); // add parsed exterior linear ring
                     feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    this.updateDrawingTooltip(feature);
+                    this.updateMeasurementTooltip(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
                     this._cleanupInternalState();
@@ -465,20 +463,14 @@ Oskari.clazz.define(
          * @method sendDrawingEvent
          * -  sends DrawingEvent
          *
-         * @param {String} id
-         * @param {object} options include:
-         *                  {Boolean} clearCurrent: true - all selection will be removed from the map after stopping plugin, false - will keep selection on the map. Default is false.
-         *                  {Boolean} isFinished: true - if drawing is completed. Default is false.
+         * @param {Boolean} isFinished  true - if drawing is completed. Default is false.
          */
-        sendDrawingEvent: function (id, options) {
-            var me = this,
-                features = null,
-                bufferedFeatures = [],
-                layerId = me.getLayerIdForFunctionality(id),
-                isFinished = false;
-            var requestedBuffer = me.getOpts('buffer') || 0;
-
-            features = me.getFeatures(layerId);
+        sendDrawingEvent: function (isFinished = false) {
+            let bufferedFeatures = [];
+            const id = this.getCurrentFunctionalityId();
+            const layerId = this.getLayerIdForFunctionality(id);
+            const requestedBuffer = this.getOpts('buffer');
+            let features = this.getFeatures(layerId);
 
             if (!features) {
                 Oskari.log('DrawPlugin').debug('Layer "' + layerId + '" has no features, not send drawing event.');
@@ -488,43 +480,37 @@ Oskari.clazz.define(
             if (requestedBuffer > 0) {
                 // TODO: check the ifs below if they should only be run if buffer is used
                 // TODO: doesn't work for multi drawing because buffered layer contains only currently drawn feature
-                bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
+                bufferedFeatures = this.getFeatures(this._bufferedFeatureLayerId);
             }
 
-            switch (me.getCurrentDrawShape()) {
+            switch (this.getCurrentDrawShape()) {
             case 'Point':
             case 'LineString':
                 if (requestedBuffer > 0) {
-                    me.addBufferPropertyToFeatures(features, requestedBuffer);
+                    this.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
-                break;
-            case 'Box':
-            case 'Square':
-                features.forEach(function (f) {
-                    me._featuresValidity[f.getId()] = true;
-                });
                 break;
             case 'Circle':
                 // Do common stuff
                 // buffer is used for circle's radius
                 if (requestedBuffer > 0) {
-                    features = me.getCircleAsPolygonFeature(features, requestedBuffer);
+                    features = this.getCircleAsPolygonFeature(features, requestedBuffer);
                     bufferedFeatures = features; // or = [];
                 } else {
-                    features = me.getCircleAsPolygonFeature(features);
+                    features = this.getCircleAsPolygonFeature(features);
                 }
                 break;
             }
 
-            var geojson = me.getFeaturesAsGeoJSON(features);
-            geojson.crs = me._getSRS();
-            var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
+            const geojson = this.getFeaturesAsGeoJSON(features);
+            const bufferedGeoJson = this.getFeaturesAsGeoJSON(bufferedFeatures);
 
-            var measures = me.sumMeasurements(features);
-            var data = {
+            const measures = this.sumMeasurements(features);
+            const data = {
                 buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
-                shape: me.getCurrentDrawShape()
+                shape: this.getCurrentDrawShape(),
+                showMeasureOnMap: this.getOpts('showMeasureOnMap')
             };
 
             if (measures.length) {
@@ -533,19 +519,8 @@ Oskari.clazz.define(
             if (measures.area) {
                 data.area = measures.area;
             }
-
-            var showMeasureUI = !!me.getOpts('showMeasureOnMap');
-            if (showMeasureUI) {
-                data.showMeasureOnMap = showMeasureUI;
-            }
-            if (options.clearCurrent) {
-                me.clearDrawing(id);
-            }
-            if (options.isFinished) {
-                isFinished = options.isFinished;
-            }
-            var event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-            me.getSandbox().notifyAll(event);
+            const event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data, isFinished);
+            this.getSandbox().notifyAll(event);
         },
         /**
          * @method getFeatures
@@ -595,6 +570,7 @@ Oskari.clazz.define(
             var me = this,
                 geoJsonObject = {
                     type: 'FeatureCollection',
+                    crs: this._getSRS(),
                     features: []
                 },
                 measures,
@@ -633,10 +609,6 @@ Oskari.clazz.define(
                         buffer = feature.buffer;
                     }
                     measures = me.sumMeasurements([feature]);
-
-                    if (!me._featuresValidity[feature.getId()]) {
-                        measures.area = me._loc.intersectionNotAllowed;
-                    }
                     jsonObject = me.formJsonObject(feature, measures, buffer);
                     geoJsonObject.features.push(jsonObject);
                 });
@@ -670,22 +642,25 @@ Oskari.clazz.define(
         },
 
         formJsonObject: function (feature, measures, buffer) {
-            var me = this,
-                geoJSONformatter = new olFormatGeoJSON(),
-                jsonObject = geoJSONformatter.writeFeatureObject(feature);
-            jsonObject.properties = {};
+            const geoJSONformatter = new olFormatGeoJSON();
+            const jsonObject = geoJSONformatter.writeFeatureObject(feature);
+
+            const id = feature.getId();
+            const valid = this.isFeatureValid(id);
+            const invalidReason = this.getInvalidReasonMessage(id);
+            const properties = { valid };
 
             if (measures.length) {
-                jsonObject.properties.length = measures.length;
+                properties.length = valid ? measures.length : invalidReason;
             }
-            if (!me._featuresValidity[feature.getId()]) {
-                jsonObject.properties.area = me._loc.intersectionNotAllowed;
-            } else if (measures.area) {
-                jsonObject.properties.area = measures.area;
+            if (measures.area) {
+                properties.area = valid ? measures.area : invalidReason;
             }
             if (buffer) {
-                jsonObject.properties.buffer = buffer;
+                properties.buffer = buffer;
             }
+
+            jsonObject.properties = properties;
             return jsonObject;
         },
 
@@ -695,9 +670,8 @@ Oskari.clazz.define(
          * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
          */
         sumMeasurements: function (features) {
-            var me = this;
-            var value = {};
-            var mapmodule = this.getMapModule();
+            const value = {};
+            const mapmodule = this.getMapModule();
             features.forEach(function (f) {
                 const geomType = f.getGeometry().getType();
                 if (geomType === 'LineString' || geomType === 'Polygon') {
@@ -706,7 +680,7 @@ Oskari.clazz.define(
                     }
                     value.length += mapmodule.getGeomLength(f.getGeometry());
                 }
-                if (me._featuresValidity[f.getId()] && geomType === 'Polygon') {
+                if (geomType === 'Polygon') {
                     if (!value.area) {
                         value.area = 0;
                     }
@@ -738,14 +712,12 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        addDrawInteraction: function (layerId, shape, options) {
+        addDrawInteraction: function (layerId, shape) {
+            const options = this.getOpts();
             var me = this;
             var geometryFunction, maxPoints;
             var functionalityId = this.getCurrentFunctionalityId();
             var geometryType = shape;
-            var optionsForDrawingEvent = {
-                isFinished: false
-            };
 
             function makeClosedPolygonCoords (coords) {
                 return coords.map(function (ring) {
@@ -755,8 +727,8 @@ Oskari.clazz.define(
                 });
             }
             const notifyChange = () => {
-                this.updateDrawingTooltip();
-                this.sendDrawingEvent(functionalityId, optionsForDrawingEvent);
+                this.updateMeasurementTooltip();
+                this.sendDrawingEvent();
             };
             if (shape === 'LineString') {
                 geometryFunction = function (coordinates, geometry) {
@@ -826,7 +798,7 @@ Oskari.clazz.define(
                     return geometry;
                 };
             }
-            const opts = {
+            const drawOpts = {
                 features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
                 type: geometryType,
                 style: me._styles.draw,
@@ -836,36 +808,32 @@ Oskari.clazz.define(
 
             if (!Oskari.util.isMobile(true)) {
                 // use smaller snap tolerance on desktop
-                opts.snapTolerance = 3;
+                drawOpts.snapTolerance = 3;
             }
-            var drawInteraction = new olInteractionDraw(opts);
+            var drawInteraction = new olInteractionDraw(drawOpts);
             // does this need to be registered here and/or for each functionalityId?
             me._draw[functionalityId] = drawInteraction;
 
             me.getMap().addInteraction(drawInteraction);
 
-            me.bindDrawStartEvent(drawInteraction, options);
-            me.bindDrawEndEvent(drawInteraction, options, shape);
+            me.bindDrawStartEvent(drawInteraction);
+            me.bindDrawEndEvent(drawInteraction, shape);
         },
         /**
          * @method bindDrawStartEvent
          * -  binds drawstart event handling to interaction
-         * @param {Object} options
          */
-        bindDrawStartEvent: function (interaction, options) {
+        bindDrawStartEvent: function (interaction) {
             var me = this;
             interaction.on('drawstart', function (evt) {
-                me._showIntersectionWarning = false;
                 // stop modify interaction while draw-mode is active
                 me.removeInteractions(me._modify, me._id);
                 me._mode = 'draw';
-                var id = me.generateNewFeatureId();
-                evt.feature.setId(id);
+                evt.feature.setId(me.generateNewFeatureId());
                 me._sketch = evt.feature;
-                if (options.allowMultipleDrawing === 'single') {
+                if (me.getOpts('allowMultipleDrawing') === 'single') {
                     me.clearDrawing();
                 }
-                me.createDrawingTooltip(id);
             });
         },
         /**
@@ -873,34 +841,101 @@ Oskari.clazz.define(
          * -  binds drawend event handling to interaction
          * @param {Object} options
          */
-        bindDrawEndEvent: function (interaction, options, shape) {
-            var me = this;
+        bindDrawEndEvent: function (interaction, shape) {
+            const me = this;
+            const { modifyControl, allowMultipleDrawing } = this.getOpts();
             interaction.on('drawend', function (evt) {
-                var eventOptions = {
-                    isFinished: true
-                };
-                me.sendDrawingEvent(me._id, eventOptions);
-                me._showIntersectionWarning = true;
-                me.updateDrawingTooltip();
-                me._mode = '';
+                me.handleFinishedDrawing();
 
-                // stop drawing without modifying
-                if (options.allowMultipleDrawing === false && options.modifyControl === false) {
-                    // sketch needs to be nulled here if modify is not selected or the geometry loses the last drawn point
-                    me._sketch = null;
-                    me.stopDrawing(me._id, false);
-                } else if (options.allowMultipleDrawing === false) {
+                if (allowMultipleDrawing === false && !modifyControl) {
+                    // stop drawing without modifying
+                    me.stopDrawing(me.getCurrentFunctionalityId());
+                    return;
+                }
+                if (allowMultipleDrawing === false) {
                     // stop drawing and start modifying
                     me.removeInteractions(me._draw, me._id);
                 }
 
                 evt.feature.setStyle(me._styles.modify);
                 // activate modify interaction after new drawing is finished
-                if (options.modifyControl !== false) {
-                    me.addModifyInteraction(me.getCurrentLayerId(), shape, options);
+                if (modifyControl !== false) {
+                    me.addModifyInteraction(me.getCurrentLayerId(), shape);
                 }
-                me._sketch = null;
             });
+        },
+        handleFinishedDrawing: function (feature = this._sketch, suppressEvent) {
+            this._mode = '';
+            if (!this.validateGeometry(feature)) {
+                this.updateTooltip(feature, this.getInvalidReasonMessage(feature.getId()));
+            } else if (this.getOpts('showMeasureOnMap')) {
+                this.updateMeasurementTooltip(feature);
+            } else {
+                this.updateTooltip(feature);
+            }
+            if (!suppressEvent) {
+                this.sendDrawingEvent(true);
+            }
+            this._sketch = null;
+        },
+        setFeatureValidity: function (id, invalidReason) {
+            // For now handles only one reason in order: intersection, size/length
+            if (invalidReason) {
+                this._invalidFeatures[id] = invalidReason;
+                return;
+            }
+            delete this._invalidFeatures[id];
+        },
+        isFeatureValid: function (id) {
+            return !this._invalidFeatures[id];
+        },
+        getInvalidReasonMessage: function (id) {
+            const reason = this._invalidFeatures[id];
+            if (!reason) {
+                return '';
+            }
+            if (reason === INVALID_REASONS.LINE_LENGTH) {
+                const { line } = this.getOpts('limits');
+                const length = this.getMapModule().formatMeasurementResult(line, 'line');
+                return this.loc(reason, { length });
+            }
+            if (reason === INVALID_REASONS.AREA_SIZE) {
+                const { area } = this.getOpts('limits');
+                const size = this.getMapModule().formatMeasurementResult(area, 'area');
+                return this.loc(reason, { size });
+            }
+            return this.loc(reason);
+        },
+        validateGeometry: function (feature) {
+            const limits = this.getOpts('limits');
+            if (!limits || !feature) {
+                return;
+            }
+
+            const id = feature.getId();
+            const geometry = feature.getGeometry();
+            const type = geometry.getType();
+            const mapmodule = this.getMapModule();
+
+            let invalidReason;
+            if (type === 'Polygon') {
+                if (this.checkIntersection()) {
+                    invalidReason = INVALID_REASONS.INTERSECTION;
+                } else if (limits.area) {
+                    const area = mapmodule.getGeomArea(geometry);
+                    if (area > limits.area) {
+                        invalidReason = INVALID_REASONS.AREA_SIZE;
+                    }
+                }
+            }
+            if (limits.line && type === 'LineString') {
+                const length = mapmodule.getGeomLength(geometry);
+                if (length > limits.line) {
+                    invalidReason = INVALID_REASONS.LINE_LENGTH;
+                }
+            }
+            this.setFeatureValidity(id, invalidReason);
+            return !invalidReason;
         },
         /**
          * @method checkIntersection
@@ -909,15 +944,16 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         checkIntersection: function (feature) {
-            if (this.getOpts('selfIntersection') === false) {
-                return;
+            if (!this.getOpts('limits').selfIntersection) {
+                return false;
             }
             const currentDrawing = feature || this._sketch;
             if (!currentDrawing) {
-                return;
+                return false;
             }
             const geometry = currentDrawing.getGeometry();
             const coordinates = geometry.getCoordinates()[0];
+            const id = currentDrawing.getId();
             // This function is called twice when modifying geometry from the point where the drawing initially began
             // That is because the first and the last point of the geometry are being modified at the same time
             // The points should have identical values but in the first call they don't
@@ -926,8 +962,8 @@ Oskari.clazz.define(
                 if (!isValidOp.isValid(olParser.read(geometry))) {
                     // lines intersect -> problem!!
                     currentDrawing.setStyle(this._styles.intersect);
-                    this._featuresValidity[currentDrawing.getId()] = false;
-                    return;
+                    this.setFeatureValidity(id, INVALID_REASONS.INTERSECTION);
+                    return true;
                 }
             }
             // geometry is valid
@@ -937,52 +973,56 @@ Oskari.clazz.define(
                 } else {
                     currentDrawing.setStyle(this._styles.modify);
                 }
-                this._featuresValidity[currentDrawing.getId()] = true;
+                this.setFeatureValidity(id);
             }
+            return false;
         },
-        updateDrawingTooltip: function (feature = this._sketch) {
+        updateMeasurementTooltip: function (feature = this._sketch) {
             if (!feature || !this.getOpts('showMeasureOnMap')) {
                 return;
             }
-            const id = feature.getId();
-            const overlay = this._overlays[id];
-            if (!overlay) {
-                // no overlay to update
+            if (this._invalidFeatures[feature.getId()] === INVALID_REASONS.INTERSECTION) {
+                // remove measurement for self intersecting geometries while drawing/modifying
+                if (this.isCurrentlyDrawing() || this.isCurrentlyModifying()) {
+                    this.updateTooltip(feature);
+                }
                 return;
             }
-            const geom = feature.getGeometry();
+
             const mapmodule = this.getMapModule();
+            const geom = feature.getGeometry();
             let output = '';
-            let tooltipCoord;
             if (geom instanceof olGeom.Polygon) {
-                tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                // for Polygon-drawing checking itself-intersection
-                if (this._featuresValidity[id] === false) {
-                    if (this._showIntersectionWarning) {
-                        output = this._loc.intersectionNotAllowed;
-                    }
-                } else {
-                    // all good - get actual measurement
-                    const area = mapmodule.getGeomArea(geom);
-                    output = mapmodule.formatMeasurementResult(area, 'area');
-                }
+                const area = mapmodule.getGeomArea(geom);
+                output = mapmodule.formatMeasurementResult(area, 'area');
             } else if (geom instanceof olGeom.LineString) {
                 const length = mapmodule.getGeomLength(geom);
                 output = mapmodule.formatMeasurementResult(length, 'line');
-                tooltipCoord = geom.getLastCoordinate();
             }
-            if (!tooltipCoord) {
-                // we don't know where we should show this
+            this.updateTooltip(feature, output);
+        },
+        updateTooltip: function (feature = this._sketch, text = '') {
+            if (!feature) {
                 return;
             }
-            const elem = overlay.getElement();
-            elem.innerHTML = output;
-            if (output === '') {
-                elem.classList.add('withoutText');
-            } else {
-                elem.classList.remove('withoutText');
+            const overlay = this.getDrawingTooltip(feature.getId());
+            const geom = feature.getGeometry();
+            let tooltipCoord;
+            if (geom instanceof olGeom.Polygon) {
+                tooltipCoord = geom.getInteriorPoint().getCoordinates();
+            } else if (geom instanceof olGeom.LineString) {
+                tooltipCoord = geom.getLastCoordinate();
             }
-            overlay.setPosition(tooltipCoord);
+            if (tooltipCoord) {
+                overlay.setPosition(tooltipCoord);
+            }
+            const elem = overlay.getElement();
+            elem.innerHTML = text;
+            if (text) {
+                elem.classList.remove('withoutText');
+            } else {
+                elem.classList.add('withoutText');
+            }
         },
         /**
          * @method addModifyInteraction
@@ -991,7 +1031,7 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        addModifyInteraction: function (layerId, shape, options) {
+        addModifyInteraction: function (layerId, shape) {
             const me = this;
             const layer = me.getLayer(layerId);
             if (layer) {
@@ -1003,7 +1043,7 @@ Oskari.clazz.define(
                     }
                 });
             }
-            me.modifyStartEvent(shape, options);
+            me.modifyStartEvent(shape);
             me.getMap().addInteraction(me._modify[me._id]);
         },
         /**
@@ -1024,7 +1064,7 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        modifyStartEvent: function (shape, options) {
+        modifyStartEvent: function (shape) {
             var me = this;
 
             // if modifyend didn't get called for some reason, nullify the old listeners to be on the safe side
@@ -1032,8 +1072,8 @@ Oskari.clazz.define(
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             }
+            const { buffer } = this.getOpts();
             me._modify[me._id].on('modifystart', function () {
-                me._showIntersectionWarning = false;
                 me._mode = 'modify';
 
                 me.modifyFeatureChangeEventCallback = function (evt) {
@@ -1041,33 +1081,23 @@ Oskari.clazz.define(
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
                     me._sketch = evt.feature;
                     if (shape === 'LineString') {
-                        if (options.buffer > 0) {
-                            me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
+                        if (buffer > 0) {
+                            me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
                         }
-                    } else if (shape === 'Point' && options.buffer > 0) {
-                        me.drawBufferedGeometry(evt.feature.getGeometry(), options.buffer);
+                    } else if (shape === 'Point' && buffer > 0) {
+                        me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
                     } else if (shape === 'Polygon') {
                         me.checkIntersection();
                     }
-                    me.updateDrawingTooltip();
-                    me.sendDrawingEvent(me._id, options);
+                    me.updateMeasurementTooltip();
+                    me.sendDrawingEvent();
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);
                 };
                 me.toggleDrawLayerChangeFeatureEventHandler(true);
             });
             me._modify[me._id].on('modifyend', function () {
-                me._showIntersectionWarning = true;
-                me.updateDrawingTooltip();
-                me._mode = '';
-                me._sketch = null;
-
-                // send isFinished when user stops modifying the feature
-                // (the user might make another edit, but at least he/she let go of the mouse button etc)
-                var opts = jQuery.extend({}, options);
-                opts.isFinished = true;
-                me.sendDrawingEvent(me._id, opts);
-
+                me.handleFinishedDrawing();
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             });
@@ -1210,7 +1240,6 @@ Oskari.clazz.define(
                 var bufferedFeature = me.getBufferedFeature(pointFeature, buffer, me._styles.draw, me._options.bufferAccuracy);
                 var id = me.generateNewFeatureId();
                 bufferedFeature.setId(id);
-                me._featuresValidity[id] = true;
                 polygonFeatures.push(bufferedFeature);
             });
             return polygonFeatures;
@@ -1251,18 +1280,17 @@ Oskari.clazz.define(
                 });
             }
         },
-        /** @method createDrawingTooltip
-       * - creates a new tooltip on drawing
+        /** @method getDrawingTooltip
+       * - returns tooltip and creates a new tooltip if not exist
        */
-        createDrawingTooltip: function (id) {
+        getDrawingTooltip: function (id) {
             if (this._overlays[id]) {
-                // already added to map
-                return;
+                return this._overlays[id];
             }
             const tooltipClass = this._tooltipClassForMeasure + ' ' + this.getCurrentDrawShape() + ' ' + id;
-            var tooltipElement = document.createElement('div');
+            const tooltipElement = document.createElement('div');
             tooltipElement.className = tooltipClass;
-            var tooltip = new olOverlay({
+            const tooltip = new olOverlay({
                 element: tooltipElement,
                 offset: [0, -5],
                 positioning: 'bottom-center',
@@ -1272,6 +1300,7 @@ Oskari.clazz.define(
             tooltip.id = id;
             this.getMap().addOverlay(tooltip);
             this._overlays[id] = tooltip;
+            return tooltip;
         },
         removeDrawingTooltip: function (id) {
             const overlay = this._overlays[id];
