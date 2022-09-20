@@ -670,9 +670,8 @@ Oskari.clazz.define(
          * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
          */
         sumMeasurements: function (features) {
-            var me = this;
-            var value = {};
-            var mapmodule = this.getMapModule();
+            const value = {};
+            const mapmodule = this.getMapModule();
             features.forEach(function (f) {
                 const geomType = f.getGeometry().getType();
                 if (geomType === 'LineString' || geomType === 'Polygon') {
