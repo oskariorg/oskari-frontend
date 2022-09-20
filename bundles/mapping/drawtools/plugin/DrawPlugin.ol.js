@@ -503,7 +503,6 @@ Oskari.clazz.define(
             }
 
             const geojson = this.getFeaturesAsGeoJSON(features);
-            geojson.crs = this._getSRS();
             const bufferedGeoJson = this.getFeaturesAsGeoJSON(bufferedFeatures);
 
             const measures = this.sumMeasurements(features);
@@ -571,6 +570,7 @@ Oskari.clazz.define(
             var me = this,
                 geoJsonObject = {
                     type: 'FeatureCollection',
+                    crs: this._getSRS(),
                     features: []
                 },
                 measures,
