@@ -964,7 +964,7 @@ Oskari.clazz.define(
             if (hasEnoughCoordinatesForArea(coordinates) && firstAndLastCoordinatesEqual(coordinates)) {
                 if (!isValidOp.isValid(olParser.read(geometry))) {
                     // lines intersect -> problem!!
-                    currentDrawing.setStyle(this._styles.intersect);
+                    currentDrawing.setStyle(this._styles.invalid);
                     this.setFeatureValidity(id, INVALID_REASONS.INTERSECTION);
                     return true;
                 }
