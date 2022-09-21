@@ -61,16 +61,14 @@ const getDataProviders = (providers = [], layers = []) => {
  * @param {String} searchText input to filter by. If empty or "falsy" the groups param is returned as-is.
  * @returns Removes any groups/subgroups that don't have layers matching the searchText.
  */
-const filterGroups = (groups = [], searchText) => {
-    if (!searchText || !searchText.trim()) {
+const filterGroups = (groups = [], searchTerms = []) => {
+    if (!searchTerms.length) {
         return groups;
     }
-    const regex = /\**\b\**/g;
-    const validated = searchText.replace(regex, '');
     return groups.map(group => {
         group.unfilteredLayerCount = group.getLayerCount();
-        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), validated));
-        group.groups = filterGroups(group.groups, validated);
+        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchTerms));
+        group.groups = filterGroups(group.groups, searchTerms);
         if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
             return null;
@@ -117,9 +115,19 @@ class ViewHandler extends StateHandler {
         this.groupingType = groupingType;
         this.updateLayerGroups();
     }
-    setFilter (activeId, searchText) {
+    setFilter (activeId, searchText = '') {
         const previousSearchText = this.filter.searchText;
-        this.filter = { activeId, searchText };
+        // generate search terms by splitting by * and space
+        const terms = searchText
+            .replace('*', ' ')
+            .split(' ')
+            .filter(item => item !== '');
+        this.filter = {
+            activeId,
+            searchText,
+            terms
+        };
+
         this.updateLayerGroups();
 
         if (searchText !== previousSearchText) {
@@ -196,7 +204,7 @@ class ViewHandler extends StateHandler {
     }
 
     updateLayerGroups () {
-        const { searchText, activeId: filterId } = this.filter;
+        const { terms, activeId: filterId } = this.filter;
         const isPresetFiltered = filterId !== FILTER_ALL_LAYERS;
         const layers = !isPresetFiltered ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
@@ -213,7 +221,7 @@ class ViewHandler extends StateHandler {
         }
 
         const groups = groupLayers([...layers], GROUPING_METHODS[this.groupingType], tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
-        this.updateState({ groups: filterGroups(groups, searchText) });
+        this.updateState({ groups: filterGroups(groups, terms) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {

@@ -111,8 +111,12 @@ export class LayerGroup {
         return val.toLowerCase();
     }
     matchesKeyword (layerId, keyword) {
-        var searchableIndex = this.searchIndex[layerId];
-        return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
+        const searchableIndex = this.searchIndex[layerId];
+        let terms = keyword;
+        if (!Array.isArray(terms)) {
+            terms = [terms];
+        }
+        return terms.every(key => searchableIndex.indexOf(key.toLowerCase()) !== -1);
     }
     clone () {
         const clone = new LayerGroup(this.id, this.groupMethod, this.name, this.description, this.parentId);
