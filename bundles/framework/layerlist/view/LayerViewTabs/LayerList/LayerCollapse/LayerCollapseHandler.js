@@ -119,7 +119,8 @@ class ViewHandler extends StateHandler {
         const previousSearchText = this.filter.searchText;
         // generate search terms by splitting by * and space
         const terms = searchText
-            .replace('*', ' ')
+            .replaceAll('*', ' ')
+            .replaceAll(',', ' ')
             .split(' ')
             .filter(item => item !== '');
         this.filter = {
