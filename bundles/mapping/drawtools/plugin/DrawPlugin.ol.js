@@ -92,12 +92,12 @@ Oskari.clazz.define(
     },
     {
         /**
-         * @method setDefaultStyles
+         * @method setStyles
          * - set styles for draw, modify and invalid
          *
          * @param {Object} styles. If not given, will set default styles
          */
-        setDefaultStyles: function (styles = {}) {
+        setStyles: function (styles = {}) {
             const setStyle = (type, defForType = {}) => {
                 // overriding default style configured style
                 const styleDef = jQuery.extend({}, this._defaultStyle, defForType);
@@ -108,6 +108,9 @@ Oskari.clazz.define(
             // style def for invalid can be intersect or invalid in request
             const invalid = styles.invalid || styles.intersect;
             setStyle('invalid', invalid);
+        },
+        setDefaultStyle: function (style) {
+            this._defaultStyle = style;
         },
         /**
          * @Return{String} reference system as defined in GeoJSON format
@@ -178,7 +181,7 @@ Oskari.clazz.define(
             const { geojson, style, ...opts } = options;
             this.initOptions(opts);
             // this sets styles for this and all the following requests (not functionality id specific, written to "class variables")
-            me.setDefaultStyles(style);
+            this.setStyles(style);
 
             // creating layer for drawing (if layer not already added)
             if (!me.getCurrentDrawLayer()) {
