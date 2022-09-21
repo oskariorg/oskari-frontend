@@ -17,7 +17,7 @@ describe('FilterHandler', () => {
         expect.assertions(3);
         const { searchText, activeFilterId, filters } = handler.getState();
         expect(activeFilterId).toBe(FILTER_ALL_LAYERS);
-        expect(searchText).toBe(null);
+        expect(searchText).toBe('');
         expect(filters[0].id).toBe(FILTER_ALL_LAYERS);
     });
 
