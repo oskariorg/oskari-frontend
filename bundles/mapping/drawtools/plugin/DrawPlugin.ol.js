@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw, { createRegularPolygon } from 'ol/interaction/Draw';
+import olInteractionDraw, { createRegularPolygon, createBox } from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -35,6 +35,8 @@ const OPTIONS = {
     buffer: 0,
     bufferAccuracy: 10 // is number of line segments used to represent a quadrant circle
 };
+const isModifyLimited = shape => ['Square', 'Circle', 'Box'].some(s => s === shape);
+
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  * Map engine specific implementation for draw tools
@@ -108,6 +110,7 @@ Oskari.clazz.define(
             // style def for invalid can be intersect or invalid in request
             const invalid = styles.invalid || styles.intersect;
             setStyle('invalid', invalid);
+            setStyle('temp', styles.modify);
         },
         setDefaultStyle: function (style) {
             this._defaultStyle = style;
@@ -1075,14 +1078,38 @@ Oskari.clazz.define(
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             }
+
+            let dragPoint;
+            let startCoord;
+            const updateDragPoint = evt => (dragPoint = evt.coordinate);
+            const tempStyle = this._styles.temp[0];
+
             const { buffer } = this.getOpts();
-            me._modify[me._id].on('modifystart', function () {
+            me._modify[me._id].on('modifystart', function (evt) {
+                me._sketch = evt.features.item(0);
                 me._mode = 'modify';
+                if (isModifyLimited(shape)) {
+                    if (shape === 'Box') {
+                        const dragCoord = evt.mapBrowserEvent.coordinate;
+                        const coords = me._sketch.getGeometry().getCoordinates()[0].slice(0, 4);
+                        const mapmodule = me.getMapModule();
+                        let maxDistance = 0;
+                        coords.forEach(coord => {
+                            const dist = mapmodule.getGeomLength(new olGeom.LineString([coord, dragCoord]));
+                            if (dist > maxDistance) {
+                                maxDistance = dist;
+                                startCoord = coord;
+                            }
+                        });
+                    } else {
+                        startCoord = me._getFeatureCenter(me._sketch);
+                    }
+                    me.getMap().on('pointerdrag', updateDragPoint);
+                }
 
                 me.modifyFeatureChangeEventCallback = function (evt) {
                     // turn off changehandler in case something we touch here triggers a change event -> avoid eternal loop
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
-                    me._sketch = evt.feature;
                     if (shape === 'LineString') {
                         if (buffer > 0) {
                             me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
@@ -1091,6 +1118,10 @@ Oskari.clazz.define(
                         me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
                     } else if (shape === 'Polygon') {
                         me.checkIntersection();
+                    } else if (isModifyLimited(shape)) {
+                        const geomToRender = me.getModifiedGeometry(startCoord, dragPoint);
+                        tempStyle.setGeometry(geomToRender);
+                        me._sketch.setStyle(tempStyle);
                     }
                     me.updateMeasurementTooltip();
                     me.sendDrawingEvent();
@@ -1099,10 +1130,17 @@ Oskari.clazz.define(
                 };
                 me.toggleDrawLayerChangeFeatureEventHandler(true);
             });
-            me._modify[me._id].on('modifyend', function () {
-                me.handleFinishedDrawing();
+            me._modify[me._id].on('modifyend', function (evt) {
+                me.getMap().un('pointerdrag', updateDragPoint);
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
+
+                const newGeom = me.getModifiedGeometry(startCoord, evt.mapBrowserEvent.coordinate);
+                me._sketch.setStyle(me._styles.modify);
+                if (newGeom) {
+                    me._sketch.setGeometry(newGeom);
+                }
+                me.handleFinishedDrawing();
             });
         },
         toggleDrawLayerChangeFeatureEventHandler: function (enable) {
@@ -1114,6 +1152,22 @@ Oskari.clazz.define(
                 } else {
                     layer.getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
                 }
+            }
+        },
+        getModifiedGeometry: function (start, end) {
+            if (!start || !end) {
+                return;
+            }
+            const coords = [start, end];
+            const shape = this.getCurrentDrawShape();
+            if (shape === 'Circle') {
+                return createRegularPolygon(50)(coords);
+            }
+            if (shape === 'Square') {
+                return createRegularPolygon(4)(coords);
+            }
+            if (shape === 'Box') {
+                return createBox()(coords);
             }
         },
         /**
