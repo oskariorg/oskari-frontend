@@ -1044,6 +1044,7 @@ Oskari.clazz.define(
                 me._modify[me._id] = new olInteractionModify({
                     features: layer.getSource().getFeaturesCollection(),
                     style: me._styles.modify,
+                    insertVertexCondition: isModifyLimited(shape) ? olEventsCondition.never : olEventsCondition.always,
                     deleteCondition: function (event) {
                         return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
                     }
