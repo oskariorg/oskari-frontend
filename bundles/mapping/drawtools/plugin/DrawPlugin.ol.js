@@ -730,6 +730,14 @@ Oskari.clazz.define(
                 this.updateMeasurementTooltip();
                 this.sendDrawingEvent();
             };
+            const getReqularPolygonGeometryFunction = sides => {
+                const geometryFunction = createRegularPolygon(sides);
+                return (...args) => {
+                    const geometry = geometryFunction(...args);
+                    notifyChange();
+                    return geometry;
+                };
+            };
             if (shape === 'LineString') {
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
@@ -771,7 +779,7 @@ Oskari.clazz.define(
                 };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = createRegularPolygon(4);
+                geometryFunction = getReqularPolygonGeometryFunction(4);
             } else if (shape === 'Circle' && buffer > 0) {
                 geometryType = 'Point';
                 geometryFunction = function (coordinates, geometry) {
@@ -783,7 +791,7 @@ Oskari.clazz.define(
                 };
             } else if (shape === 'Circle' && !buffer) {
                 geometryType = 'Circle';
-                geometryFunction = createRegularPolygon(50);
+                geometryFunction = getReqularPolygonGeometryFunction(50);
             } else if (shape === 'Polygon') {
                 geometryFunction = function (coordinates, geometry) {
                     var coords = makeClosedPolygonCoords(coordinates);
