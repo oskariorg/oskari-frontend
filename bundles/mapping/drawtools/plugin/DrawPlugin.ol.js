@@ -673,24 +673,21 @@ Oskari.clazz.define(
          * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
          */
         sumMeasurements: function (features) {
-            const value = {};
+            let area = 0;
+            let length = 0;
             const mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                const geomType = f.getGeometry().getType();
-                if (geomType === 'LineString' || geomType === 'Polygon') {
-                    if (!value.length) {
-                        value.length = 0;
-                    }
-                    value.length += mapmodule.getGeomLength(f.getGeometry());
-                }
-                if (geomType === 'Polygon') {
-                    if (!value.area) {
-                        value.area = 0;
-                    }
-                    value.area += mapmodule.getGeomArea(f.getGeometry());
+                const geom = f.getGeometry();
+                const geomType = geom.getType();
+                if (geomType === 'LineString') {
+                    length += mapmodule.getGeomLength(geom);
+                } else if (geomType === 'Polygon') {
+                    const line = new olGeom.LineString(geom.getCoordinates()[0]);
+                    length += mapmodule.getGeomLength(line);
+                    area += mapmodule.getGeomArea(geom);
                 }
             });
-            return value;
+            return { area, length };
         },
         /**
          * @method addVectorLayer
