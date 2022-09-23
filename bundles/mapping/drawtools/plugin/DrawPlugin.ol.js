@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw, { createRegularPolygon } from 'ol/interaction/Draw';
+import olInteractionDraw, { createRegularPolygon, createBox } from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -35,6 +35,8 @@ const OPTIONS = {
     buffer: 0,
     bufferAccuracy: 10 // is number of line segments used to represent a quadrant circle
 };
+const isModifyLimited = shape => ['Square', 'Circle', 'Box'].some(s => s === shape);
+
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
  * Map engine specific implementation for draw tools
@@ -108,6 +110,7 @@ Oskari.clazz.define(
             // style def for invalid can be intersect or invalid in request
             const invalid = styles.invalid || styles.intersect;
             setStyle('invalid', invalid);
+            setStyle('temp', styles.modify);
         },
         setDefaultStyle: function (style) {
             this._defaultStyle = style;
@@ -474,6 +477,11 @@ Oskari.clazz.define(
             const layerId = this.getLayerIdForFunctionality(id);
             const requestedBuffer = this.getOpts('buffer');
             let features = this.getFeatures(layerId);
+            if (!isFinished && this._sketch) {
+                const id = this._sketch.getId();
+                features = features.filter(f => f.getId() !== id);
+                features.push(this._sketch);
+            }
 
             if (!features) {
                 Oskari.log('DrawPlugin').debug('Layer "' + layerId + '" has no features, not send drawing event.');
@@ -1041,6 +1049,7 @@ Oskari.clazz.define(
                 me._modify[me._id] = new olInteractionModify({
                     features: layer.getSource().getFeaturesCollection(),
                     style: me._styles.modify,
+                    insertVertexCondition: isModifyLimited(shape) ? olEventsCondition.never : olEventsCondition.always,
                     deleteCondition: function (event) {
                         return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
                     }
@@ -1075,22 +1084,59 @@ Oskari.clazz.define(
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
             }
-            const { buffer } = this.getOpts();
-            me._modify[me._id].on('modifystart', function () {
-                me._mode = 'modify';
 
-                me.modifyFeatureChangeEventCallback = function (evt) {
+            let dragCoord;
+            let startCoord;
+            const updateDragCoord = evt => (dragCoord = evt.coordinate);
+            const tempStyle = this._styles.temp[0];
+            const { buffer } = this.getOpts();
+            me._modify[me._id].on('modifystart', function (evt) {
+                const feature = evt.features.item(0);
+                me._mode = 'modify';
+                if (isModifyLimited(shape)) {
+                    dragCoord = evt.mapBrowserEvent.coordinate;
+                    if (shape === 'Box') {
+                        const coords = feature.getGeometry().getCoordinates()[0].slice(0, 4);
+                        const mapmodule = me.getMapModule();
+                        let maxDistance = 0;
+                        coords.forEach(coord => {
+                            const dist = mapmodule.getGeomLength(new olGeom.LineString([coord, dragCoord]));
+                            if (dist > maxDistance) {
+                                maxDistance = dist;
+                                startCoord = coord;
+                            }
+                        });
+                    } else {
+                        startCoord = me._getFeatureCenter(feature);
+                    }
+                    const tempFeature = new olFeature();
+                    tempFeature.setId(feature.getId());
+                    // use temp feature as sketch to get correct measurements and geojson to unfinished event
+                    me._sketch = tempFeature;
+                    me.getMap().on('pointerdrag', updateDragCoord);
+                } else {
+                    me._sketch = feature;
+                }
+
+                me.modifyFeatureChangeEventCallback = function ({ feature }) {
                     // turn off changehandler in case something we touch here triggers a change event -> avoid eternal loop
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
-                    me._sketch = evt.feature;
                     if (shape === 'LineString') {
                         if (buffer > 0) {
-                            me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
+                            me.drawBufferedGeometry(feature.getGeometry(), buffer);
                         }
                     } else if (shape === 'Point' && buffer > 0) {
-                        me.drawBufferedGeometry(evt.feature.getGeometry(), buffer);
+                        me.drawBufferedGeometry(feature.getGeometry(), buffer);
                     } else if (shape === 'Polygon') {
                         me.checkIntersection();
+                    } else if (isModifyLimited(shape)) {
+                        const geomToRender = me.getModifiedGeometry(startCoord, dragCoord);
+                        // set rendered geometry to sketch to get correct measurements and geojson to unfinished event
+                        me._sketch.setGeometry(geomToRender);
+                        // modify interaction updates feature geometry so we can't set new geometry to feature
+                        // use style to render new geometry instead of actual
+                        tempStyle.setGeometry(geomToRender);
+                        feature.setStyle(tempStyle);
                     }
                     me.updateMeasurementTooltip();
                     me.sendDrawingEvent();
@@ -1099,10 +1145,17 @@ Oskari.clazz.define(
                 };
                 me.toggleDrawLayerChangeFeatureEventHandler(true);
             });
-            me._modify[me._id].on('modifyend', function () {
-                me.handleFinishedDrawing();
+            me._modify[me._id].on('modifyend', function (evt) {
+                me.getMap().un('pointerdrag', updateDragCoord);
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
+                me._sketch = evt.features.item(0);
+                const newGeom = me.getModifiedGeometry(startCoord, evt.mapBrowserEvent.coordinate);
+                me._sketch.setStyle(me._styles.modify);
+                if (newGeom) {
+                    me._sketch.setGeometry(newGeom);
+                }
+                me.handleFinishedDrawing();
             });
         },
         toggleDrawLayerChangeFeatureEventHandler: function (enable) {
@@ -1114,6 +1167,22 @@ Oskari.clazz.define(
                 } else {
                     layer.getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
                 }
+            }
+        },
+        getModifiedGeometry: function (start, end) {
+            if (!start || !end) {
+                return;
+            }
+            const coords = [start, end];
+            const shape = this.getCurrentDrawShape();
+            if (shape === 'Circle') {
+                return createRegularPolygon(50)(coords);
+            }
+            if (shape === 'Square') {
+                return createRegularPolygon(4)(coords);
+            }
+            if (shape === 'Box') {
+                return createBox()(coords);
             }
         },
         /**
