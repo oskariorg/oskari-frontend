@@ -56,7 +56,7 @@ Parameters for options-object:
   <td> buffer</td><td> Number</td><td> Buffer for drawing buffered line and dot.</td><td> null</td>
 </tr>
 <tr>
-  <td> limits </td><td> Object </td><td>Optional limits for validating drawn or modified geometry.</td><td>`{selfIntersection: true}`</td>
+  <td> limits </td><td> Object </td><td>Optional limits for validating drawn or modified geometry.</td><td>{selfIntersection: true}</td>
 </tr>
 <tr>
   <td> style</td> <td> Object</td> <td> Styles for draw, modify and intersect mode. If options don't include custom style, sets default styles. See styling example at the last example of this page.</td>
@@ -137,7 +137,7 @@ DrawingEvent's bufferedGeoJson can be used for selection.
 
 Start to draw a polygon for 'myplaces' functionality with specific style and area size limit:
 ```javascript
- var style = {
+ const style = {
 	    draw : {
 	        fill : {
 	             color: 'rgba(238,0,0,0.3)'
@@ -208,7 +208,7 @@ const geometry = {
 };
 
 Oskari.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', ['myplaces', 'Polygon', {
-    showMeasureOnMap: true,
+	showMeasureOnMap: true,
 	drawControl: false,
 	geojson: geometry
 }]);
