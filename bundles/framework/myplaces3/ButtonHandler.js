@@ -159,12 +159,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                 this.drawMode = null;
                 this.instance.getDrawHandler().stopDrawing();
                 // Select default tool
-                this.instance.getSandbox().request(this, Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')());
+                this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
                 return;
             }
             // finish sketch and proceed with saving
             this.instance.getDrawHandler().finishDrawing((geojson) => {
                 this.instance.getMyPlacesHandler().addPlace(geojson);
+                if (!geojson) {
+                    // geometry error, reset toolbar to default tool
+                    this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                }
             });
         },
         /**

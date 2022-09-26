@@ -142,7 +142,7 @@ class PlaceHandler extends StateHandler {
         if (!geojson) {
             // no features, user clicks save my new place without valid geometry drawn
             Messaging.error(this.loc('error.savePlace'));
-            drawHandler.stopDrawing();
+            this.instance.getDrawHandler().stopDrawing();
             return;
         }
         const place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
