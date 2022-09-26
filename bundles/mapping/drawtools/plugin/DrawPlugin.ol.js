@@ -906,9 +906,9 @@ Oskari.clazz.define(
                 return '';
             }
             if (reason === INVALID_REASONS.LINE_LENGTH) {
-                const { line } = this.getOpts('limits');
-                const length = this.getMapModule().formatMeasurementResult(line, 'line');
-                return this.loc(reason, { length });
+                const { length } = this.getOpts('limits');
+                const formatted = this.getMapModule().formatMeasurementResult(length, 'line');
+                return this.loc(reason, { length: formatted });
             }
             if (reason === INVALID_REASONS.AREA_SIZE) {
                 const { area } = this.getOpts('limits');
@@ -939,9 +939,9 @@ Oskari.clazz.define(
                     }
                 }
             }
-            if (limits.line && type === 'LineString') {
+            if (limits.length && type === 'LineString') {
                 const length = mapmodule.getGeomLength(geometry);
-                if (length > limits.line) {
+                if (length > limits.length) {
                     invalidReason = INVALID_REASONS.LINE_LENGTH;
                 }
             }
