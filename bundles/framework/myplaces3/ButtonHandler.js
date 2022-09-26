@@ -156,20 +156,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
         stopDrawing: function (isCancel) {
             this.closeDialog();
             if (isCancel) {
+                this.drawMode = null;
                 this.instance.getDrawHandler().stopDrawing();
-            } else {
-                this.instance.getDrawHandler().finishDrawing();
-                this.instance.getMyPlacesHandler().addPlace();
+                // Select default tool
+                this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                return;
             }
-            // Select default tool
-            this.instance.getSandbox().request(this, Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')());
+            // finish sketch and proceed with saving
+            this.instance.getDrawHandler().finishDrawing((geojson) => {
+                this.instance.getMyPlacesHandler().addPlace(geojson);
+                if (!geojson) {
+                    // geometry error, reset toolbar to default tool
+                    this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+                }
+            });
         },
-        toolSelected: function () {
-            // changed tool -> cancel any drawing and close helper
+        /**
+         * Setup state and UI-buttons when editing a myplaces feature
+         * @param {String} type the draw mode that we are starting based on feature geometry type
+         */
+        setupModifyMode: function (type) {
+            // set drawMode so we know to reset functionality when another toolbar buttons is pressed while editing
+            this.drawMode = type;
+            if (this.drawMode) {
+                // make the button for myplaces draw functionality go "selected" when editing a feature
+                const buttonId = this.drawMode;
+                const buttonGroup = 'default-' + this.buttonGroup;
+                this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [buttonId, buttonGroup]);
+            }
+        },
+        someOtherToolSelected: function () {
+            // changed tool -> cancel any drawing and close popups
+            this.drawMode = null;
             this.closeDialog();
+            this.instance.getMyPlacesHandler().placePopupCleanup(false);
             this.instance.getDrawHandler().stopDrawing();
         },
         startDrawing: function (drawMode, shape) {
+            if (this.drawMode === drawMode) {
+                // already in progress
+                return;
+            }
             this.drawMode = drawMode;
             this.instance.getDrawHandler().startDrawing(shape);
             this.showDrawHelper();
@@ -241,14 +268,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
              * @method Toolbar.ToolSelectedEvent
              */
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (this.drawMode === event.getToolId() || !event.getSticky()) {
+                if (['point', 'area', 'line'].includes(event.getToolId())) {
+                    // it's me
                     return;
                 }
-                if (this.instance.getMyPlacesHandler().isPlacePopupActive()) {
-                    // do not trigger when placeform is shown
-                    return;
+                if (this.drawMode) {
+                    // draw mode is set when functionality is activated
+                    // reset tool if user was drawing and clicked on another tool
+                    this.someOtherToolSelected();
                 }
-                this.toolSelected();
             },
 
             /**
