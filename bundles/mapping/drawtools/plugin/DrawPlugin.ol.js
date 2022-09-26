@@ -930,7 +930,7 @@ Oskari.clazz.define(
 
             let invalidReason;
             if (type === 'Polygon') {
-                if (this.checkIntersection()) {
+                if (this.checkIntersection(feature)) {
                     invalidReason = INVALID_REASONS.INTERSECTION;
                 } else if (limits.area) {
                     const area = mapmodule.getGeomArea(geometry);
