@@ -83,10 +83,27 @@ Parameters for options-object:
   <td> showMeasureOnMap </td><td> Boolean </td><td> Use this parameter for displaying measurement result on line or polygon.<br> true - if measure result should be displayed on drawing feature.</td><td> false</td>
 </tr>
 <tr>
-  <td> selfIntersection </td><td> Boolean </td><td> true - user will see warning text if polygon has self-intersection. <br> false - polygon's itself intersection will be not checked. </td><td> true</td>
+  <td> limits </td><td> Object </td><td>Optional limits for validating drawn or modified geometry.</td><td>{ selfIntersection: true }</td>
 </tr>
 <tr>
   <td> geojson </td><td> String</td> <td> Geojson for editing. If not given, will activate draw/modify control according to given shape.</td><td> null</td>
+</tr>
+</table>
+
+Limits are used for validating finished geometry. If geometry is invalid, user will see warning text. Parameters for limits-object:
+
+<table class="table">
+<tr>
+  <th>Name</th><th>Type</th><th>Description</th><th>Default value</th>
+</tr>
+<tr>
+  <td>selfIntersection</td><td>Boolean</td><td>Self-intersecting polygons are not allowed.</td><td> true</td>
+</tr>
+<tr>
+  <td>area</td><td>Number</td><td>Maximum size for valid area in m2.</td><td>undefined</td>
+</tr>
+<tr>
+  <td>length</td><td>Number</td><td>Maximum length for valid line in meters.</td><td>undefined</td>
 </tr>
 </table>
 
