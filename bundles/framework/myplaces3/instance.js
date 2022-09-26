@@ -150,7 +150,9 @@ Oskari.clazz.define(
         stop: function () {
             this.sandbox = null;
         },
-
+        setupModifyMode: function (type) {
+            this.buttons.setupModifyMode(type);
+        },
         addTab: function (appStarted) {
             const sandbox = Oskari.getSandbox();
             let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
