@@ -231,7 +231,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layeranalytics.AdminLayerAnal
                     const title = itemLayer !== null ? itemLayer.getName() : item;
                     const dataProducer = itemLayer !== null ? itemLayer.getOrganizationName() : '';
                     let layerType = itemLayer !== null ? itemLayer.getLayerType() : '';
-                    if (itemLayer.hasTimeseries()) {
+                    if (layerType && itemLayer.hasTimeseries()) {
                         layerType += '-t';
                     }
                     const totalDisplays = result[item].success + result[item].errors;
