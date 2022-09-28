@@ -10,6 +10,9 @@ const StyledButton = styled(Button)`
     border: none;
     border-radius: ${props => props.rounding};
     color: ${props => props.accent};
+    path {
+        fill: ${props => props.accent}
+    }
     background: ${props => props.primary};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     &:hover {
@@ -36,7 +39,7 @@ const ThemeButton = ThemeConsumer(({ theme = {}, ...rest }) => {
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
