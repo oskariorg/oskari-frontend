@@ -448,7 +448,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             ReactDOM.render(
                 <MapModuleButton
-                    className='t_layerselect ui-draggable ui-draggable-handle'
+                    className='t_layerselect'
                     styleName={styleName}
                     icon={<ButtonIcon />}
                     title={this._loc.title}
