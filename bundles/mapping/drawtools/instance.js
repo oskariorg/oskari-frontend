@@ -2,25 +2,16 @@
  * @class Oskari.mapping.drawtools.DrawToolsBundleInstance
  *
  * Main component and starting point for the "drawtools" functionality.
- * Provides functionality for other bundles (my places/analysis/measuretools)
- * for drawing on the map.
+ * Provides functionality for other bundles for drawing on the map.
  *
- * Drawing can be started with a request (DrawTools.StartDrawingRequest).
- * The request specifies:
- *  - an id for the drawing (like 'myplaces')
- *  - type of shape to be drawn or a geojson that should be opened for editing
- *  - options that might include buffer (for dot/line), style, etc
- *  Drawing can be forced to complete/canceled with DrawTools.StopDrawingRequest.
- *  Other components are notified that a drawing has been completed by DrawingEvent.
- *  The event includes:
- *   - id for the drawing
- *   - the geometry as geojson
- *   - possible additional info like area size/line length
+ * Drawing can be started with a DrawTools.StartDrawingRequest.
  *
- * Bundle config can be used to define draw style. Requests can also specify
- * styles in the same format to be used instead of the default for that specific drawing.
+ * Drawing can be forced to complete/canceled with DrawTools.StopDrawingRequest.
+ * Other components are notified that a drawing has been completed by DrawingEvent.
  *
- * See Oskari.mapframework.bundle.infobox.InfoBoxBundle for bundle definition.
+ * Bundle config can be used to define default style.
+ * Requests can specify draw, modify and/or invalid styles to override default style used for drawing.
+ *
  */
 Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
 
