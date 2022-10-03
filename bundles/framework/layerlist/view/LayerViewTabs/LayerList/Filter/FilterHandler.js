@@ -11,7 +11,7 @@ class ViewHandler extends StateHandler {
 
         this.state = {
             activeFilterId: FILTER_ALL_LAYERS,
-            searchText: null,
+            searchText: '',
             filters: this.getFiltersProvidingResults(this.initFilters())
         };
         this.layerlistService.on('Layerlist.Filter.Button.Add',

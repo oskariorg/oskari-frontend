@@ -86,10 +86,15 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
             mapModule.registerPlugin(this.drawPlugin);
             mapModule.startPlugin(this.drawPlugin);
 
-            var conf = this.conf || {};
+            const { style } = this.conf || {};
             // TODO: is there need for multiple styles? style.default, style.edit?
-            if (conf.style) {
-                this.drawPlugin.setDefaultStyle(conf.style);
+            if (style) {
+                // safety check, if conf is used for setting draw, modify and/or intersect styles intead of one default base style.
+                if (['draw', 'modify', 'intersect', 'invalid'].some(type => style[type])) {
+                    this.drawPlugin.setStyles(style);
+                } else {
+                    this.drawPlugin.setDefaultStyle(style);
+                }
             }
 
             // handleRequest is being called for these

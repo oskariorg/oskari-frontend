@@ -18,95 +18,46 @@ Used to notify that sketch is changed or drawing finished. Event is sent every t
   <td> \* id </td><td> String</td><td> drawing id as given in StartDrawingRequest</td><td> </td>
 </tr>
 <tr>
-  <td> \* geojson </td><td> Object</td><td> Drawn shape. Length and area are always in meters. </td><td> </td>
+  <td> \* geojson </td><td> Object</td><td> Drawn features in GeoJson format </td><td> </td>
 </tr>
 <tr>
-  <td> \* data </td><td> Object</td><td> additional info, like bufferedGeoJson and shape</td><td> </td>
+  <td> \* data </td><td> Object</td><td> additional info</td><td> </td>
 </tr>
 <tr>
-  <td> \* isFinished </td><td> Boolean</td><td> True if feature or drawing is finished</td><td> </td>
+  <td> \* isFinished </td><td> Boolean</td><td> True if drawing is finished</td><td> </td>
 </tr>
 </table>
 
 ## RPC
 
-Event occurs after every click while drawing feature. 
-
-The next occurs before drawing is finished.
+Unfinished event is sent every time that sketch changes. 
 <pre class="event-code-block">
 <code>
 {
   "name": "DrawingEvent",
   "id": "my functionality id",
-  "geojson": {
-    "type": "FeatureCollection",
-    "features": []
-  },
+  "geojson": {...},
   "data": {
-    "bufferedGeoJson": {
-      "type": "FeatureCollection",
-      "features": []
-    },
-    "shape": "Polygon"
+    "area": 594933884.35, // The sum of all areas in square meters
+    "buffer": 0, // requested buffer
+    "bufferedGeoJson": {...}, // contains buffered features if buffer is requested
+    "length": 264071.08700662444, // The sum of all line lengths in meters
+    "showMeasureOnMap": true,
+    "shape": "Polygon" // requested shape
   },
   "isFinished": false
 }
 </code>
 </pre>
 
-The next occurs when drawing is finished, for example after StopDrawingRequest.
+Finished event occurs when sketch is finished. For example after `StopDrawingRequest`, double-click or end drag on modify.
 <pre class="event-code-block">
 <code>
 {
   "name": "DrawingEvent",
   "id": "my functionality id",
-  "geojson": {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "id": "drawFeature0",
-        "geometry": {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [
-                350208,
-                7011328
-              ],
-              [
-                385024,
-                6982144
-              ],
-              [
-                330240,
-                6947328
-              ],
-              [
-                386560,
-                6924800
-              ],
-              [
-                350208,
-                7011328
-              ]
-            ]
-          ]
-        },
-        "properties": {
-          "area": "Alue ei saa muodostaa silmukkaa. Nähdäkseen mittaustuloksen piirrä validi alue."
-        }
-      }
-    ]
-  },
-  "data": {
-    "area": "Alue ei saa muodostaa silmukkaa. Nähdäkseen mittaustuloksen piirrä validi alue.",
-    "bufferedGeoJson": {
-      "type": "FeatureCollection",
-      "features": []
-    },
-    "shape": "Polygon"
-  },
+  "geojson": { ... },
+  "data": { ... },
   "isFinished": true
 }
 </code>
@@ -145,49 +96,108 @@ Returns all the params of the event.
 
 ## Examples
 
-DrawPlugin.ol sends DrawingEvent:
+Event handler for own finished drawings:
+```javascript
+    handleDrawingEvent (event) {
+        if (event.getId() === MY_ID && event.getIsFinished()) {
+            const geojson = event.getGeoJson();
+            const data = event.getData();
+            // do something with data and features
+        }
+    }
+```
+
+`DrawTools.StartDrawingRequest` with id `measure` and shape `Polygon`. Event for valid finished drawing:
 <pre class="event-code-block">
 <code>
-/**
- * @method sendDrawingEvent
- * -  sends DrawingEvent
- *
- * @param {String} id
- * @param {object} options include:
- *                  {Boolean} clearCurrent: true - all selection will be removed from the map after stopping plugin, false - will keep selection on the map. Default is false.
- *                  {Boolean} isFinished: true - if drawing is completed. Default is false.
- */
-sendDrawingEvent: function(id, options) {
-    var me = this;
-    var features = me.getFeatures(me._layerId);
-    var bufferedFeatures = me.getFeatures(me._bufferedFeatureLayerId);
-    var isFinished = false;
+{
+  "name": "DrawingEvent",
+  "id": "measure",
+  "isFinished": true,
+  "data": {
+      "area": 10527600800.565893,
+      "buffer": 0,
+      "shape": "Polygon",
+      "showMeasureOnMap": false,
+      "bufferedGeoJson": {
+        "type": "FeatureCollection",
+        "crs": "EPSG:3067",
+        "features": []
+      }
+    },
+  "geojson": {
+    "type": "FeatureCollection",
+    "crs": "EPSG:3067",
+    "features": [
+      {
+        "type": "Feature",
+        "id": "drawFeature0",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [330356.9714432531,6903137.5567356525],
+            [328820.9714432531,6823265.5567356525],
+            [422004.9714432531,6818145.5567356525],
+            [439924.9714432531,6875489.5567356525],
+            [383352.9611277134,6932447.561893423],
+            [335224.9611277134,6934495.561893423],
+            [310136.9611277134,6924767.561893423],
+            [330356.9714432531,6903137.5567356525]
+          ]
+        },
+        "properties": {
+          "area": 10527600800.565893,
+          "valid": true
+        }
+      }
+    ]
+  }
+}
+</code>
+</pre>
 
-    if(me._shape === 'Circle') {
-        bufferedFeatures = me.getCircleAsPolygonFeature(features);
-        features = me.getCircleAsPointFeature(features);
-    } else if(me._shape === 'LineString' && me._buffer > 0) {
-        me.addBufferPropertyToFeatures(features, me._buffer);
-    }
-    // TODO: get geojson for matching id
-    var geojson = me.getFeaturesAsGeoJSON(features);
-    var bufferedGeoJson = me.getFeaturesAsGeoJSON(bufferedFeatures);
-
-    var data = {
-        lenght : me._length,
-        area : me._area,
-        buffer: me._buffer,
-        bufferedGeoJson: bufferedGeoJson,
-        shape: me._shape
-    };
-    if(options.clearCurrent) {
-        me.clearDrawing();
-    }
-    if(options.isFinished) {
-        isFinished = options.isFinished;
-    }
-    var event = me._sandbox.getEventBuilder('DrawingEvent')(id, geojson, data, isFinished);
-    me._sandbox.notifyAll(event);
-},
+`DrawTools.StartDrawingRequest` with id `measure` and shape `Polygon`. Event for invalid finished drawing:
+<pre class="event-code-block">
+<code>
+{
+  "name": "DrawingEvent",
+  "id": "measure",
+  "isFinished": true,
+  "data": {
+      "area": 594933884.3552058,
+      "buffer": 0,
+      "shape": "Polygon",
+      "showMeasureOnMap": false,
+      "bufferedGeoJson": {
+        "type": "FeatureCollection",
+        "crs": "EPSG:3067",
+        "features": []
+      }
+    },
+  "geojson": {
+    "type": "FeatureCollection",
+    "crs": "EPSG:3067",
+    "features": [
+      {
+        "type": "Feature",
+        "id": "drawFeature0",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+              [350208,7011328],
+              [385024,6982144],
+              [330240,6947328],
+              [386560,6924800],
+              [350208,7011328]
+          ]
+        },
+        "properties": {
+          "area": "Polygon self-intersection is not allowed. Edit current polygon or draw a new polygon.",
+          "valid": false
+        }
+      }
+    ]
+  }
+}
 </code>
 </pre>

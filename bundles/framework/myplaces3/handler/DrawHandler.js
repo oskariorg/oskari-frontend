@@ -1,5 +1,21 @@
 import { EDIT_OPTIONS, DRAW_OPTIONS, DRAW_ID } from '../constants';
 
+/**
+ * Maps geojson geometry type to a specific button id/"drawMode" in myplaces.
+ * @param {String} shape geometry type from geojson
+ * @returns drawmode to use for geometry in myplaces
+ */
+const getDrawModeFromGeometryType = (shape) => {
+    if (shape === 'Polygon') {
+        return 'area';
+    } else if (shape === 'LineString') {
+        return 'line';
+    } else if (shape === 'Point') {
+        return 'point';
+    }
+    return null;
+};
+
 export class DrawHandler {
     constructor (instance) {
         this.instance = instance;
@@ -30,8 +46,22 @@ export class DrawHandler {
     }
 
     handleDrawingEvent (event) {
-        if (event.getId() === DRAW_ID && event.getIsFinished()) {
-            this._drawing = event.getGeoJson();
+        if (event.getId() !== DRAW_ID) {
+            // not our drawing
+            return;
+        }
+        if (!event.getIsFinished()) {
+            // not finished yet
+            return;
+        }
+        this._drawing = event.getGeoJson();
+        if (typeof this._callback === 'function') {
+            let geojson = this._drawing;
+            if (!this.hasValidGeometry()) {
+                geojson = undefined;
+            }
+            this._callback(geojson);
+            this._callback = null;
         }
     }
 
@@ -63,6 +93,7 @@ export class DrawHandler {
 
     startModify (geometry) {
         const shape = geometry.type.replace('Multi', '');
+        this.instance.setupModifyMode(getDrawModeFromGeometryType(shape));
         const options = {
             ...EDIT_OPTIONS,
             geojson: JSON.stringify(geometry)
@@ -75,8 +106,12 @@ export class DrawHandler {
         this.clearDrawing();
         this.instance.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', [DRAW_ID, shape, DRAW_OPTIONS]);
     }
-
-    finishDrawing () {
+    /**
+     * Finish a possible sketch from button press and call callback with finished geometry
+     * @param {Function} callback function to call when we get the finished geometry
+     */
+    finishDrawing (callback) {
+        this._callback = callback;
         this.instance.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [DRAW_ID, false]);
     }
 }

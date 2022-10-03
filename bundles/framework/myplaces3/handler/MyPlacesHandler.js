@@ -43,12 +43,16 @@ class PlaceHandler extends StateHandler {
         this.layerControls = null;
     }
 
-    placePopupCleanup () {
+    placePopupCleanup (resetTool = true) {
         if (this.placeControls) {
             this.placeControls.close();
         }
         this.instance.getDrawHandler().stopDrawing();
         this.placeControls = null;
+        if (resetTool) {
+            // Select default tool
+            this.instance.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', []);
+        }
     }
 
     openLayerDialog (categoryId, locale, style) {
@@ -134,17 +138,16 @@ class PlaceHandler extends StateHandler {
         this.addLayerAndFocus(place);
     }
 
-    addPlace () {
+    addPlace (geojson) {
+        if (!geojson) {
+            // no features, user clicks save my new place without valid geometry drawn
+            Messaging.error(this.loc('error.savePlace'));
+            this.instance.getDrawHandler().stopDrawing();
+            return;
+        }
         const place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlace');
         // init category from selected
         place.setCategoryId(this.state.selectedCategoryId);
-        const drawHandler = this.instance.getDrawHandler();
-        if (!drawHandler.hasValidGeometry()) {
-            // no features, user clicks save my new place without valid geometry drawn
-            Messaging.error(this.loc('error.savePlace'));
-            drawHandler.stopDrawing();
-            return;
-        }
         this.openPlacePopup(place);
     }
 
