@@ -4,6 +4,15 @@ $iconShadow: 1px 1px 2px rgba(0,0,0,0.6);
 $darkIcon: url("../images/mobile-xy-dark.png");
 $lightIcon: url("../images/mobile-xy-light.png");
 
+div.mapplugin.coordinatetool {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  margin: 0 auto;
+  z-index: 15000;
+  margin-bottom: 10px !important;
+}
+
 .projection-transformation {
     width: 252px;
 }

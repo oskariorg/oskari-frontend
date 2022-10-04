@@ -1,4 +1,12 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import olInteractionDragRotate from 'ol/interaction/DragRotate';
+import styled from 'styled-components';
+
+const StyledIcon = styled('div')`
+    transform: rotate(${(props) => props.degrees}deg)
+`;
 
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
     function (config) {
@@ -11,7 +19,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         me._currentRot = null;
         me.previousDegrees = null;
         me._templates = {
-            maprotatortool: jQuery('<div class="mapplugin maprotator"><div class="icon"></div></div>')
+            maprotatortool: jQuery('<div class="mapplugin maprotator"></div>')
         };
         me._mobileDefs = {
             buttons: {
@@ -36,12 +44,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this._map.addInteraction(DragRotate);
             var degrees;
             var eventBuilder = Oskari.eventBuilder('map.rotated');
-
-            this.getElement().on('click', function () {
-                if (!me.inLayerToolsEditMode()) {
-                    me.setRotation(0);
-                }
-            });
 
             this._map.on('pointerdrag', function (e) {
                 degrees = me.getRotation();
@@ -71,16 +73,30 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
-            compass.attr('title', this._locale.tooltip.tool);
-
             if (!this.hasUi()) {
                 return null;
             }
             return compass;
         },
         rotateIcon: function (degrees) {
-            if (this.getElement()) {
-                this.getElement().find('.icon').css({ transform: 'rotate(' + degrees + 'deg)' });
+            const el = this.getElement();
+            if (el) {
+                const conf = this._config;
+                const styleClass = conf && conf.toolStyle ? conf.toolStyle : 'rounded-dark';
+                ReactDOM.render(
+                    <MapModuleButton
+                        className='t_maprotator'
+                        title={this._locale.tooltip.tool}
+                        icon={<StyledIcon degrees={degrees}>I</StyledIcon>}
+                        styleName={styleClass}
+                        onClick={() => {
+                            if (!this.inLayerToolsEditMode()) {
+                                this.setRotation(0);
+                            }
+                        }}
+                    />,
+                    el[0]
+                );
             }
         },
         _createUI: function () {
@@ -95,6 +111,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.handleEvents();
         },
         setRotation: function (deg) {
+            const me = this;
             // if deg is number then transform degrees to radians otherwise use 0
             var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
             // if deg is number use it for degrees otherwise use 0
@@ -124,16 +141,22 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
+            const styleClass = style || 'rounded-dark';
 
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
-                }
-            }
-            el.addClass(styleClass);
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_maprotator'
+                    title={me._locale.tooltip.tool}
+                    icon={<StyledIcon degrees={this.getDegrees() || 0}>I</StyledIcon>}
+                    styleName={styleClass}
+                    onClick={() => {
+                        if (!me.inLayerToolsEditMode()) {
+                            me.setRotation(0);
+                        }
+                    }}
+                />,
+                el[0]
+            );
         },
         /**
          * Create event handlers.

@@ -5,6 +5,12 @@ $darkIcon: url("../images/Question-mark-dark.png");
 $lightIcon: url("../images/Question-mark-light.png");
 
 .maplegend .maplegend {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  position: relative;
+  z-index: 15000;
+  margin-bottom: 10px !important;
   .maplegend-layer-title {
     display: flex;
 
