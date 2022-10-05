@@ -77,6 +77,8 @@ const getOverlayText = feature => {
     return overlay.getElement().innerHTML;
 };
 
+const getDrawInteraction = () => plugin._draw[NAME];
+
 const draw = (shape, opts = {}, id = NAME) => {
     sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, shape, { ...OPTIONS, ...opts }]);
     jest.runAllTimers();
@@ -249,14 +251,95 @@ describe('DrawPlugin', () => {
         test('LineString', done => {
             draw('LineString', { buffer: 1000, geojson: COLLECTION });
             eventCallback = event => {
-                expect(event.getGeoJson().features.length).toBe(2);
                 const { crs, features } = event.getData().bufferedGeoJson;
-                expect(crs).toEqual('EPSG:3067');
-                // FIXME: plugin should return buffered features for all, not just for sketch
-                expect(features.length).toBe(0); // should be 2
-                done();
+                try {
+                    expect(event.getGeoJson().features.length).toBe(2);
+                    expect(crs).toEqual('EPSG:3067');
+                    // FIXME: plugin should return buffered features for all, not just for sketch
+                    expect(features.length).toBe(0); // should be 2
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
             finish();
+        });
+        afterAll(() => {
+            clear();
+        });
+    });
+    describe('drawInteraction', () => {
+        test('LineString', done => {
+            const coords = [[350208, 7011328], [385024, 6982144]];
+            const length = 45289.70928296261;
+
+            draw('LineString', { drawControl: true });
+            eventCallback = event => {
+                const { features } = event.getGeoJson();
+                try {
+                    expect(features.length).toBe(1);
+                    expect(event.getData().length).toBe(length);
+                    expect(features[0].properties.length).toBe(length);
+                } catch (error) {
+                    done(error);
+                }
+            };
+            const interaction = getDrawInteraction();
+            interaction.appendCoordinates(coords);
+            // should trigger finished DrawingEvent
+            interaction.finishDrawing();
+
+            eventCallback = event => {
+                const { features } = event.getGeoJson();
+                try {
+                    expect(features.length).toBe(2);
+                    expect(event.getData().length).toBe(length * 2);
+                    features.forEach(feat => expect(feat.properties.length).toBe(length));
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            };
+            interaction.appendCoordinates(coords);
+            // stop drawing should finish sketch
+            finish();
+        });
+        test('Buffer', done => {
+            const buffer = 1000;
+            draw('Point', { drawControl: true, buffer });
+            eventCallback = event => {
+                const data = event.getData();
+                const buffered = data.bufferedGeoJson.features;
+                try {
+                    expect(event.getGeoJson().features.length).toBe(1);
+                    expect(buffered.length).toBe(1);
+                    const { properties, geometry } = buffered[0];
+                    expect(geometry.type).toBe('Polygon');
+                    expect(properties.valid).toBe(true);
+                    expect(properties.buffer).toBe(buffer);
+                    expect(properties.area).toBe(3110083.444244218);
+                    expect(properties.length).toBe(6258.038619283929);
+                    expect(data.buffer).toBe(buffer);
+                } catch (error) {
+                    done(error);
+                }
+            };
+            const interaction = getDrawInteraction();
+            interaction.appendCoordinates([[350208, 7011328]]);
+            interaction.finishDrawing();
+
+            eventCallback = event => {
+                try {
+                    expect(event.getGeoJson().features.length).toBe(2);
+                    // FIXME: plugin should return buffered features for all, not just for sketch
+                    expect(event.getData().bufferedGeoJson.features.length).toBe(1); // should be 2
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            };
+            interaction.appendCoordinates([[385024, 6982144]]);
+            interaction.finishDrawing();
         });
         afterAll(() => {
             clear();
