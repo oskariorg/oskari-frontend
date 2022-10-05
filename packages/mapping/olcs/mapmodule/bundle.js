@@ -85,6 +85,12 @@ Oskari.clazz.define(
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/getinfo/request/ResultHandlerRequestHandler.js'
                 }, {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/getinfo/request/SwipeStatusRequest.js'
+                }, {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/getinfo/request/SwipeStatusRequestHandler.js'
+                }, {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/getinfo.scss'
                 },
