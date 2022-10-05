@@ -107,7 +107,7 @@ describe('DrawPlugin', () => {
                 type: 'MultiPoint',
                 coordinates: [[350208, 7011328], [385024, 6982144], [330240, 6947328]]
             };
-            plugin.draw(NAME, 'Point', { ...OPTIONS, allowMultipleDrawing: 'multiGeom', geojson });
+            draw('Point', { allowMultipleDrawing: 'multiGeom', geojson });
             const layerId = plugin.getLayerIdForFunctionality(NAME);
             const olFeatures = plugin.getFeatures(layerId);
             // drawtools doesn't handle multi geoms
@@ -127,7 +127,7 @@ describe('DrawPlugin', () => {
                 type: 'Polygon',
                 coordinates: [[[350208, 7011328], [385024, 6982144], [330240, 6947328], [386560, 6924800], [350208, 7011328]]]
             };
-            plugin.draw(NAME, 'Polygon', { ...OPTIONS, geojson });
+            draw('Polygon', { geojson });
             const layerId = plugin.getLayerIdForFunctionality(NAME);
             const olFeatures = plugin.getFeatures(layerId);
             const { valid, area } = plugin.getFeaturesAsGeoJSON(olFeatures).features[0].properties;
@@ -144,7 +144,7 @@ describe('DrawPlugin', () => {
                 coordinates: [[350208, 7011328], [385024, 6982144]]
             };
             const limits = { length: 1000 };
-            plugin.draw(NAME, 'LineString', { ...OPTIONS, limits, geojson });
+            draw('LineString', { limits, geojson });
             const layerId = plugin.getLayerIdForFunctionality(NAME);
             const olFeatures = plugin.getFeatures(layerId);
             const { valid, length } = plugin.getFeaturesAsGeoJSON(olFeatures).features[0].properties;
