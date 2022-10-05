@@ -170,17 +170,21 @@ describe('DrawPlugin', () => {
             expect(olFeatures.map(getOverlayText)).toEqual(['105,459 km', '72,470 km']);
 
             eventCallback = event => {
-                const { features } = event.getGeoJson();
-                const data = event.getData();
-                expect(features.length).toBe(2);
-                const lengths = features.map(f => f.properties.length);
-                expect(lengths).toEqual([105459.38565591227, 72469.86192228278]);
-                const sum = lengths.reduce((a, b) => a + b, 0);
-                expect(sum).toEqual(plugin.sumMeasurements(olFeatures).length);
-                expect(sum).toEqual(data.length);
-                const allValid = features.map(f => f.properties.valid).every(v => v === true);
-                expect(allValid).toBe(true);
-                done();
+                try {
+                    const { features } = event.getGeoJson();
+                    const data = event.getData();
+                    expect(features.length).toBe(2);
+                    const lengths = features.map(f => f.properties.length);
+                    expect(lengths).toEqual([105459.38565591227, 72469.86192228278]);
+                    const sum = lengths.reduce((a, b) => a + b, 0);
+                    expect(sum).toEqual(plugin.sumMeasurements(olFeatures).length);
+                    expect(sum).toEqual(data.length);
+                    const allValid = features.map(f => f.properties.valid).every(v => v === true);
+                    expect(allValid).toBe(true);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
             finish();
         });
@@ -202,8 +206,12 @@ describe('DrawPlugin', () => {
                 const { features } = event.getGeoJson();
                 // FIXME: event has features from 'other' functionality
                 // The problem is that features are gathered from shape related layer and these aren't filtered by functionality/id
-                expect(features.length).toBe(2); // should be 0
-                done();
+                try {
+                    expect(features.length).toBe(2); // should be 0
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
             finish();
         });
@@ -219,18 +227,22 @@ describe('DrawPlugin', () => {
             };
             draw('Polygon', { showMeasureOnMap: true, geojson });
             eventCallback = event => {
-                const { features } = event.getGeoJson();
-                const data = event.getData();
-                expect(features.length).toBe(1);
-                const area = mapModule.getGeomArea(new Polygon(geojson.coordinates));
-                const length = mapModule.getGeomLength(new LineString(geojson.coordinates[0]));
-                const { properties } = features[0];
-                expect(properties.area).toBe(area);
-                expect(data.area).toBe(area);
-                expect(properties.length).toBe(length);
-                expect(data.length).toBe(length);
-                expect(properties.valid).toBe(true);
-                done();
+                try {
+                    const { features } = event.getGeoJson();
+                    const data = event.getData();
+                    expect(features.length).toBe(1);
+                    const area = mapModule.getGeomArea(new Polygon(geojson.coordinates));
+                    const length = mapModule.getGeomLength(new LineString(geojson.coordinates[0]));
+                    const { properties } = features[0];
+                    expect(properties.area).toBe(area);
+                    expect(data.area).toBe(area);
+                    expect(properties.length).toBe(length);
+                    expect(data.length).toBe(length);
+                    expect(properties.valid).toBe(true);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
             finish();
         });
