@@ -77,10 +77,18 @@ const getOverlayText = feature => {
     return overlay.getElement().innerHTML;
 };
 
-// TODO: problem with async post. use syncDoNotUseWillBeRemoved => fix later.
-const draw = (shape, opts = {}, id = NAME) => sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, shape, { ...OPTIONS, ...opts }], true);
-const finish = (id = NAME) => sandbox.postRequestByName('DrawTools.StopDrawingRequest', [id], true);
-const clear = (id = NAME) => sandbox.postRequestByName('DrawTools.StopDrawingRequest', [id, true, true], true);
+const draw = (shape, opts = {}, id = NAME) => {
+    sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, shape, { ...OPTIONS, ...opts }]);
+    jest.runAllTimers();
+};
+const finish = (id = NAME) => {
+    sandbox.postRequestByName('DrawTools.StopDrawingRequest', [id]);
+    jest.runAllTimers();
+};
+const clear = (id = NAME) => {
+    sandbox.postRequestByName('DrawTools.StopDrawingRequest', [id, true, true]);
+    jest.runAllTimers();
+};
 
 afterAll(() => {
     mapModule.stop();
