@@ -638,7 +638,7 @@ Oskari.clazz.define(
                 });
                 // We could filter out "bad values" here, but its easier to find them and fix at source if they are present in the lists
                 // .filter(opt => !opt.label.startsWith('--'));
-                options.sort((a,b) => Oskari.util.naturalSort(a.label, b.label));
+                options.sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
                 // Checkbox
                 if (dataField.multi) {
                     newRow = me.templates.checkboxRow.clone();
