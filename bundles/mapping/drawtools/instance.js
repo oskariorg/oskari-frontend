@@ -82,6 +82,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
             this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
 
             // register plugin for map (drawing for my places)
+            // Note! this.mapModule is used and injected in Jest-test
             const mapModule = this.mapModule || sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.drawPlugin);
             mapModule.startPlugin(this.drawPlugin);
