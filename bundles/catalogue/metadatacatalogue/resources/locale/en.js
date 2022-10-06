@@ -35,6 +35,8 @@ Oskari.registerLocalization(
         "service-other": "Other service",
         "service-transformation": "Transformation service",
         "service-view": "View service",
+        "service-OGC:WMS": "WMS service",
+        "service-OGC:WFS": "WFS service",
         "Language": "Metadata language",
         "ResourceLanguage": "Resource language",
         "modifySearch": "Edit search options",

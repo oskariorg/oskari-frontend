@@ -35,6 +35,8 @@ Oskari.registerLocalization(
         "service-other": "Muu palvelu",
         "service-transformation": "Muunnospalvelu",
         "service-view": "Katselupalvelu",
+        "service-OGC:WMS": "WMS-palvelu",
+        "service-OGC:WFS": "WFS-palvelu",
         "Language": "Metatiedon kieli",
         "ResourceLanguage": "Resurssin kieli",
         "modifySearch": "Muokkaa hakuehtoja",
