@@ -1,5 +1,6 @@
 import { watchUserLocation, stopUserLocationWatch,
     clearLocationCoords, getLocationCoords } from '../LocationModule';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler
  * Handles StartUserLocationTrackingRequest requests
@@ -32,11 +33,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
                 mapmodule.zoomToFitMeters(pos.accuracy * 4);
             }
             if (opts.addToMap === 'point') {
-                me._addLocationToMap(pos, false);
+                me._addLocationToMap(pos, false, {
+                    featureStyle: opts.featureStyle,
+                    optionalStyles: opts.optionalStyles
+                });
             } else if (opts.addToMap === 'path') {
                 me._addPathToMap();
             } else if (opts.addToMap === 'location') {
-                me._addLocationToMap(pos);
+                me._addLocationToMap(pos, true, {
+                    featureStyle: opts.featureStyle,
+                    optionalStyles: opts.optionalStyles
+                });
             }
         };
         var errorCb = function (error) {
@@ -47,27 +54,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
         };
         watchUserLocation(succesCb, errorCb, opts);
     },
-    _addLocationToMap: function (pos, addAccuracy) {
+    // styles is undocumented "hidden feature" for testing purposes
+    _addLocationToMap: function (pos, addAccuracy = true, styles = {}) {
         const features = this.mapmodule.getLocationGeoJSON(pos, addAccuracy);
-        const featureStyle = {
-            fill: {
-                color: 'rgba(57, 150, 237, 0.3)'
-            },
-            stroke: {
-                color: 'rgba(38, 112, 181, 0.3)'
-            },
-            image: {
-                radius: 5,
-                fill: {
-                    color: '#2670b5'
-                }
-            }
-        };
+        const { featureStyle: requestedStyle = {}, optionalStyles: requestedAccuracyStyle = {} } = styles;
         const layerOptions = {
             layerId: 'USER_LOCATION_LAYER',
             clearPrevious: true,
-            featureStyle: featureStyle
+            featureStyle: {
+                fill: {
+                    color: 'rgba(57, 150, 237, 0.3)'
+                },
+                stroke: {
+                    color: '#0fd1fe',
+                    width: 2
+                },
+                image: {
+                    radius: 5,
+                    fill: {
+                        color: '#004d7f'
+                    }
+                },
+                ...requestedStyle
+            }
         };
+        if (addAccuracy) {
+            const accuracyStyle = {
+                property: {
+                    key: 'name',
+                    value: 'accuracy'
+                },
+                stroke: {
+                    color: 'rgba(38, 112, 181, 0.3)',
+                    width: 1,
+                },
+                // without null image we get the default image
+                image: null,
+                ...requestedAccuracyStyle
+            };
+            layerOptions.optionalStyles = [accuracyStyle];
+        }
         Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [features, layerOptions]);
     },
     _clearLocationFromMap: function () {
