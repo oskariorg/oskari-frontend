@@ -118,14 +118,6 @@ import './request/MapMoveByLayerContentRequestHandler';
 import './request/ToggleFullScreenControlRequest';
 import './request/ToggleFullScreenControlRequestHandler';
 
-// controls
-import './request/ShowMapMeasurementRequest';
-import './request/DisableMapKeyboardMovementRequest';
-import './request/DisableMapMouseMovementRequest';
-import './request/EnableMapKeyboardMovementRequest';
-import './request/EnableMapMouseMovementRequest';
-import './request/MapMovementControlsRequestHandler';
-
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 
