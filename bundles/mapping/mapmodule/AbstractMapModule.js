@@ -40,11 +40,6 @@ import './plugin/vectorlayer/VectorLayerPlugin.ol';
 import './plugin/vectortilelayer/VectorTileLayerPlugin';
 import './plugin/bingmapslayer/BingMapsLayerPlugin';
 
-// layers
-import './plugin/wmslayer/wmslayer';
-import './plugin/vectortilelayer/VectorTileLayer';
-import './plugin/bingmapslayer/BingMapsLayer';
-
 import './event/MapClickedEvent';
 import './event/MapMoveStartEvent';
 import './event/map.layer.activation';
