@@ -1,3 +1,7 @@
+import './plugin/DrawPlugin.ol';
+import './request/StartDrawingRequest';
+import './request/StopDrawingRequest';
+import './event/DrawingEvent';
 /**
  * @class Oskari.mapping.drawtools.DrawToolsBundleInstance
  *
@@ -41,19 +45,14 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
             return this.__name;
         },
         /**
-     * @method setSandbox
-     * @param {Oskari.Sandbox} sandbox
-     * Sets the sandbox reference to this component
-     */
-        setSandbox: function (sbx) {
-            this.sandbox = sbx;
-        },
-        /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
         getSandbox: function () {
             return this.sandbox;
+        },
+        getPlugin: function () {
+            return this.drawPlugin;
         },
         /**
      * @method update
@@ -65,15 +64,17 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        start: function () {
-            var me = this;
-            // Should this not come as a param?
-            var sandbox = Oskari.getSandbox();
-            sandbox.register(me);
-            me.setSandbox(sandbox);
+        start: function (sandbox) {
+            this.sandbox = sandbox;
+
+            sandbox.register(this);
+
+            // initialize drawPlugin
+            this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
 
             // register plugin for map (drawing for my places)
-            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            // Note! this.mapModule is used and injected in Jest-test
+            const mapModule = this.mapModule || sandbox.findRegisteredModuleInstance('MainMapModule');
             mapModule.registerPlugin(this.drawPlugin);
             mapModule.startPlugin(this.drawPlugin);
 
@@ -96,11 +97,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method init
      * implements Module protocol init method - initializes request handlers
      */
-        init: function () {
-        // initialize drawPlugin
-            this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
-            return null;
-        },
+        init: function () {},
         /**
      *
      * @param {Oskari.mapframework.core.Core} core
