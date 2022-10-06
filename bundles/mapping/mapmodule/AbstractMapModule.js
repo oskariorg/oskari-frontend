@@ -63,10 +63,6 @@ import './event/GetInfoResultEvent';
 import './event/MapSizeChangedEvent';
 import './event/FeatureEvent';
 
-// TODO: should be moved to controls?
-import './request/ToolSelectionRequest';
-// TODO: import in controls
-import './plugin/controls/ToolSelectionHandler';
 import './request/activate.map.layer';
 import './request/add.map.layer';
 import './request/remove.map.layer';
