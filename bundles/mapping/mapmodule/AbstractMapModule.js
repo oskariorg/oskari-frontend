@@ -106,10 +106,6 @@ import './request/GetUserLocationRequest';
 import './request/GetUserLocationRequestHandler';
 import './event/UserLocationEvent';
 
-// Fullscreen
-import './request/ToggleFullScreenControlRequest';
-import './request/ToggleFullScreenControlRequestHandler';
-
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 

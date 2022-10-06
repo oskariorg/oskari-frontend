@@ -1,3 +1,6 @@
+import './request/ToggleFullScreenControlRequest';
+import './request/ToggleFullScreenControlRequestHandler';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin
  * Displays a full screen toggle button on the map.
