@@ -659,14 +659,20 @@ Oskari.clazz.define(
                     emptyOption.attr('value', '');
                     emptyOption.text(me.loc('emptyOption'));
                     dropdownDef.append(emptyOption);
-                    for (j = 0; j < dataField.values.length; j += 1) {
-                        value = dataField.values[j];
-                        text = me._getOptionLocalization(value);
-                        newOption = me.templates.dropdownOption.clone();
-                        newOption.attr('value', value.val);
-                        newOption.text(text);
+                    const options = dataField.values.map(value => {
+                        const label = me._getOptionLocalization(value);
+                        return {
+                            label,
+                            val: value.val
+                        };
+                    });
+                    options.sort((a,b) => Oskari.util.naturalSort(a.label, b.label));
+                    options.forEach(opt => {
+                        const newOption = me.templates.dropdownOption.clone();
+                        newOption.attr('value', opt.val);
+                        newOption.text(opt.label);
                         dropdownDef.append(newOption);
-                    }
+                    });
                     newDropdown.find('.metadataDef').on('change', checkboxChange);
                     newRow.append(newDropdown);
                 }
