@@ -106,14 +106,6 @@ import './request/GetUserLocationRequest';
 import './request/GetUserLocationRequestHandler';
 import './event/UserLocationEvent';
 
-// TODO:
-// LayersPlugin
-import './request/MapLayerVisibilityRequest';
-import './request/MapLayerVisibilityRequestHandler.ol';
-import './event/MapLayerVisibilityChangedEvent';
-import './request/MapMoveByLayerContentRequest';
-import './request/MapMoveByLayerContentRequestHandler';
-
 // Fullscreen
 import './request/ToggleFullScreenControlRequest';
 import './request/ToggleFullScreenControlRequestHandler';
