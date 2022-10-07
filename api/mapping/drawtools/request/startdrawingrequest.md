@@ -27,7 +27,7 @@ Activates draw control on map.
   <td> \* shape</td><td> String</td><td> Point|LineString|Polygon|Circle|Box|Square</td><td> </td>
 </tr>
 <tr>
-  <td> \* options</td><td> Object</td><td> Parameters for options-object are listed in the next table</td><td> null</td>
+  <td> options</td><td> Object</td><td> Parameters for options-object are listed in the next table</td><td> null</td>
 </tr>
 </table>
 
