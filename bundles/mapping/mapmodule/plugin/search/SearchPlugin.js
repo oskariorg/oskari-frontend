@@ -1,5 +1,4 @@
 import '../../../../service/search/searchservice';
-import '../../resources/scss/search.scss';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin

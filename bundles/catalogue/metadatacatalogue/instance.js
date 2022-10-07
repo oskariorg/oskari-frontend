@@ -608,15 +608,10 @@ Oskari.clazz.define(
                 dataField,
                 newRow,
                 newLabel,
-                j,
-                value,
-                text,
-                newCheckbox,
                 newCheckboxDef,
                 newDropdown,
                 dropdownDef,
                 emptyOption,
-                newOption,
                 renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
@@ -633,21 +628,30 @@ Oskari.clazz.define(
                 if (typeof newLabel !== 'string') {
                     newLabel = dataField.field;
                 }
+
+                const options = dataField.values.map(value => {
+                    const label = me._getOptionLocalization(value);
+                    return {
+                        label,
+                        val: value.val
+                    };
+                });
+                // We could filter out "bad values" here, but its easier to find them and fix at source if they are present in the lists
+                // .filter(opt => !opt.label.startsWith('--'));
+                options.sort((a, b) => Oskari.util.naturalSort(a.label, b.label));
                 // Checkbox
                 if (dataField.multi) {
                     newRow = me.templates.checkboxRow.clone();
                     newRow.find('div.rowLabel').text(newLabel);
-                    for (j = 0; j < dataField.values.length; j += 1) {
-                        value = dataField.values[j];
-                        text = me._getOptionLocalization(value);
-                        newCheckbox = me.templates.metadataCheckbox.clone();
+                    options.forEach(opt => {
+                        const newCheckbox = me.templates.metadataCheckbox.clone();
                         newCheckboxDef = newCheckbox.find(':checkbox');
                         newCheckboxDef.attr('name', dataField.field);
-                        newCheckboxDef.attr('value', value.val);
-                        newCheckbox.find('label.metadataTypeText').append(text);
+                        newCheckboxDef.attr('value', opt.val);
+                        newCheckbox.find('label.metadataTypeText').append(opt.label);
                         newCheckbox.on('change', checkboxChange);
                         newRow.find('.checkboxes').append(newCheckbox);
-                    }
+                    });
                     // Dropdown list
                 } else {
                     newRow = me.templates.dropdownRow.clone();
@@ -659,14 +663,12 @@ Oskari.clazz.define(
                     emptyOption.attr('value', '');
                     emptyOption.text(me.loc('emptyOption'));
                     dropdownDef.append(emptyOption);
-                    for (j = 0; j < dataField.values.length; j += 1) {
-                        value = dataField.values[j];
-                        text = me._getOptionLocalization(value);
-                        newOption = me.templates.dropdownOption.clone();
-                        newOption.attr('value', value.val);
-                        newOption.text(text);
+                    options.forEach(opt => {
+                        const newOption = me.templates.dropdownOption.clone();
+                        newOption.attr('value', opt.val);
+                        newOption.text(opt.label);
                         dropdownDef.append(newOption);
-                    }
+                    });
                     newDropdown.find('.metadataDef').on('change', checkboxChange);
                     newRow.append(newDropdown);
                 }
@@ -814,7 +816,7 @@ Oskari.clazz.define(
             resultHeader.find('.resultTitle').text(me.loc('metadataCatalogueResults'));
             var showLink = resultHeader.find('.showLink');
             showLink.hide();
-            showLink.html(me.loc('showSearch'));
+            showLink.text(me.loc('showSearch'));
             showLink.on('click', function () {
                 jQuery('table.metadataSearchResult tr').show();
                 showLink.hide();
@@ -836,10 +838,10 @@ Oskari.clazz.define(
             }
 
             var showDatasetsLink = resultHeader.find('.showDatasets');
-            showDatasetsLink.html(me.loc('showDatasets'));
+            showDatasetsLink.text(me.loc('showDatasets'));
 
             var showServicessLink = resultHeader.find('.showServices');
-            showServicessLink.html(me.loc('showServices'));
+            showServicessLink.text(me.loc('showServices'));
 
             // render results
             var table = me.templates.resultTable.clone();

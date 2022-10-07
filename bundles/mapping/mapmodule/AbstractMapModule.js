@@ -12,6 +12,34 @@ import './service/map.layer';
 import './service/map.state';
 import './service/VectorFeatureService.ol';
 
+// plugins
+import './plugin/Plugin';
+import './plugin/fullscreen/FullScreen';
+import './plugin/getinfo/GetInfoPlugin';
+import './plugin/search/SearchPlugin';
+import './plugin/logo/LogoPlugin';
+import './plugin/datasource/DataSourcePlugin';
+import './plugin/layers/LayerSelectionPlugin';
+import './plugin/layers/BackgroundLayerSelectionPlugin';
+import './plugin/location/GeoLocationPlugin';
+import './plugin/publishertoolbar/PublisherToolbarPlugin';
+import './plugin/realtime/RealtimePlugin';
+import './plugin/mylocation/MyLocationPlugin';
+import './plugin/zoombar/Portti2Zoombar';
+import './plugin/panbuttons/PanButtons';
+
+import './plugin/controls/ControlsPlugin.ol';
+import './plugin/indexmap/IndexMapPlugin.ol';
+import './plugin/scalebar/ScaleBarPlugin.ol';
+import './plugin/markers/MarkersPlugin.ol';
+
+// layer plugins
+import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
+import './plugin/wmslayer/WmsLayerPlugin.ol';
+import './plugin/vectorlayer/VectorLayerPlugin.ol';
+import './plugin/vectortilelayer/VectorTileLayerPlugin';
+import './plugin/bingmapslayer/BingMapsLayerPlugin';
+
 import './event/MapClickedEvent';
 import './event/MapMoveStartEvent';
 import './event/map.layer.activation';
@@ -30,8 +58,6 @@ import './event/GetInfoResultEvent';
 import './event/MapSizeChangedEvent';
 import './event/FeatureEvent';
 
-import './request/ToolSelectionRequest';
-import './plugin/controls/ToolSelectionHandler';
 import './request/activate.map.layer';
 import './request/add.map.layer';
 import './request/remove.map.layer';
@@ -71,7 +97,6 @@ import './request/GetUserLocationRequest';
 import './request/GetUserLocationRequestHandler';
 import './event/UserLocationEvent';
 
-import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 

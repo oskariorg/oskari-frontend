@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../MapModuleButton';
 import { MenuOutlined } from '@ant-design/icons';
+import './request/ToolContainerRequest';
+import './request/ToolContainerRequestHandler';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
