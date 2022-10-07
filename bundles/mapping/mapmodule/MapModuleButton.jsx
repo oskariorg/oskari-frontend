@@ -1,5 +1,13 @@
 import React from 'react';
 import { MapButton } from 'oskari-ui/components/buttons';
+import styled from 'styled-components';
+
+const Container = styled('div')`
+    margin: 0 0 10px 30px;
+    width: 32px;
+    height: 32px;
+    z-index: 15000;
+`;
 
 const THEME_LIGHT = {
     color: {
@@ -59,11 +67,13 @@ export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
     }
 
     return (
-        <MapButton
-            onClick={onClick}
-            icon={icon}
-            theme={{ ...color, roundingPercent }}
-            title={title}
-        />
+        <Container>         
+            <MapButton
+                onClick={onClick}
+                icon={icon}
+                theme={{ ...color, roundingPercent }}
+                title={title}
+            />
+        </Container>
     );
 };
