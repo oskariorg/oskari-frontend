@@ -1,3 +1,10 @@
+import './request/MapLayerVisibilityRequest';
+import './request/MapLayerVisibilityRequestHandler.ol';
+import './event/MapLayerVisibilityChangedEvent';
+
+import './request/MapMoveByLayerContentRequest';
+import './request/MapMoveByLayerContentRequestHandler';
+
 import olFormatWKT from 'ol/format/WKT';
 
 const WKT_READER = new olFormatWKT();

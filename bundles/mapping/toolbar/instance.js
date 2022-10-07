@@ -1,5 +1,23 @@
 import React from 'react';
 import { Message } from 'oskari-ui';
+
+import './button-methods';
+import './default-buttons';
+
+import './request/ShowMapMeasurementRequest';
+import './request/ShowMapMeasurementRequestHandler.ol';
+
+import './request/ToolbarRequest';
+import './request/ToolbarRequestHandler';
+import './event/ToolbarLoadedEvent';
+
+import './request/AddToolButtonRequest';
+import './request/RemoveToolButtonRequest';
+import './request/ToolButtonStateRequest';
+import './request/SelectToolButtonRequest';
+import './request/ToolButtonRequestHandler';
+import './event/ToolSelectedEvent';
+
 /**
  * @class Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance
  *

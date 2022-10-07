@@ -1,3 +1,5 @@
+import './wmslayer';
+
 import olLayerTile from 'ol/layer/Tile';
 import olLayerImage from 'ol/layer/Image';
 import olProjProjection from 'ol/proj/Projection';

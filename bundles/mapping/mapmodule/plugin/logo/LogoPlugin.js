@@ -1,3 +1,6 @@
+import './DataProviderInfoService';
+import './logo.service';
+
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
  * Displays the NLS logo and provides a link to terms of use on top of the map.
