@@ -803,6 +803,8 @@ Oskari.clazz.define(
          */
         _showResults: function (results) {
             var me = this;
+            // make sure we have an array as results. Otherwise the UI breaks when we check for length etc
+            results = results || [];
             me.lastResult = results;
             var resultPanel = me.metadataCatalogueContainer.find('.metadataResults');
             var searchPanel = me.metadataCatalogueContainer.find('.metadataSearching');
