@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import { LocaleProvider } from 'oskari-ui/util';
-import { TimeControl3d, TimeControl3dHandler, TimeControl3dButton } from '../view';
+import { TimeControl3d, TimeControl3dHandler } from '../view';
+import { ControlIcon } from '../view/icons';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -10,6 +12,7 @@ const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.B
 class TimeControl3dPlugin extends BasicMapModulePlugin {
     constructor (config) {
         super(config);
+        this._conf = config || {};
         this._clazz = 'Oskari.mapping.time-control-3d.TimeControl3dPlugin';
         this._name = 'TimeControl3dPlugin';
         this._defaultLocation = 'top right';
@@ -51,9 +54,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             if (this.isOpen()) {
                 this._toggleToolState();
             }
-            el.off('click');
-        } else {
-            this._bindIcon(el);
         }
     }
     /**
@@ -66,8 +66,13 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
 
     redrawUI (mapInMobileMode, forced) {
         this._isMobile = mapInMobileMode;
-        this.teardownUI();
-        return this._createUI(forced);
+        if (this.getElement()) {
+            this.teardownUI();
+        } else {
+            this._createUI(forced);
+        }
+
+        this.changeToolStyle();
     }
 
     _createEventHandlers () {
@@ -122,8 +127,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
-        el.attr('title', this.loc('tooltip'));
-        this._bindIcon(el);
         this._element = el;
         return el;
     }
@@ -133,22 +136,27 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._element = el;
         return el;
     }
-    _bindIcon (el) {
-        el.off('click');
-        el.on('click', event => {
-            this._toggleToolState();
-            event.stopPropagation();
-        });
-    }
     _renderControlElement () {
         const el = this.getElement();
         if (!el) return;
 
+        const conf = this._conf;
+        const styleClass = conf && conf.toolStyle ? conf.toolStyle : this.getToolStyleFromMapModule();
+
         ReactDOM.render(
-            <TimeControl3dButton
-                isMobile={this._isMobile}
-                controlIsActive={this.isOpen()}
-            />, el.get(0));
+            <MapModuleButton
+                className='t_timecontrol'
+                title={this.loc('tooltip')}
+                styleName={styleClass || 'rounded-dark'}
+                icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
+                onClick={() => {
+                    if (!this.inLayerToolsEditMode()) {
+                        this._toggleToolState();
+                    }
+                }}
+            />,
+            el.get(0)
+        );
     }
 
     _addToMobileToolBar (el, forced) {
@@ -189,6 +197,35 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             </LocaleProvider>,
             popupContent.get(0));
         this._popupContent = popupContent;
+    }
+
+    changeToolStyle () {
+        const el = this.getElement();
+        if (!el) {
+            return;
+        }
+        const conf = this._conf;
+
+        const styleClass = conf && conf.toolStyle ? conf.toolStyle : this.getToolStyleFromMapModule();
+
+        ReactDOM.render(
+            <MapModuleButton
+                className='t_timecontrol'
+                title={this.loc('tooltip')}
+                styleName={styleClass || 'rounded-dark'}
+                icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
+                onClick={() => {
+                    if (!this.inLayerToolsEditMode()) {
+                        this._toggleToolState();
+                    }
+                }}
+            />,
+            el.get(0)
+        );
+
+        this._setLayerToolsEditMode(
+            this.getMapModule().isInLayerToolsEditMode()
+        );
     }
 
     _showPopup () {
