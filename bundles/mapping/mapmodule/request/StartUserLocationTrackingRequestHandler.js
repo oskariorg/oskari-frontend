@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
                 },
                 stroke: {
                     color: 'rgba(38, 112, 181, 0.3)',
-                    width: 1,
+                    width: 1
                 },
                 // without null image we get the default image
                 image: null,
