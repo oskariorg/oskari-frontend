@@ -6,7 +6,6 @@ const Container = styled('div')`
     margin: 0 0 10px 30px;
     width: 32px;
     height: 32px;
-    z-index: 15000;
 `;
 
 const THEME_LIGHT = {
