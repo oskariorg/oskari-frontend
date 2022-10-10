@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
+import { QuestionOutlined } from '@ant-design/icons';
+
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
     function (config, plugins) {
         var me = this;
@@ -6,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         me._clazz = 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin';
         me._defaultLocation = 'top right';
         me._templates = {
-            maplegend: jQuery('<div class="mapplugin maplegend"><div class="icon"></div></div>'),
+            maplegend: jQuery('<div class="mapplugin maplegend"></div>'),
             legendContainer: jQuery('<div class="legendSelector"></div>'),
             legendInfo: jQuery('<div class="legendInfo"></div>'),
             legendDivider: jQuery('<div class="maplegend-divider"></div>')
@@ -141,16 +146,91 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
+            const styleClass = style || 'rounded-dark';
 
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
-                }
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_maplegend'
+                    title={me._loc.tooltip}
+                    icon={<QuestionOutlined />}
+                    styleName={styleClass}
+                    onClick={() => {
+                        if (!me.inLayerToolsEditMode()) {
+                            me.togglePopup();
+                        }
+                    }}
+                />,
+                el[0]
+            );
+        },
+        togglePopup: function () {
+            const me = this;
+            const themeColours = me.getMapModule().getThemeColours();
+            let singleLegend = false;
+            let dropdown = null;
+            const popupLocation = this.getPopupPosition();
+            const legend = me.getElement();
+
+            if (me._toggleToolState() === false) {
+                return;
             }
-            el.addClass(styleClass);
+            const legends = me.getLegends();
+            let title = me._loc.title;
+            if (legends.length === 1) {
+                title = me._loc.singleLegend + legends[0].title;
+                singleLegend = true;
+                me._popup.show(title, null);
+            } else {
+                me._popup.show(title, null);
+                me._popup.moveTo(legend, popupLocation, true);
+            }
+
+            const content = me._popup.getJqueryContent();
+            const legendContent = me.generateLegendContainer(singleLegend);
+            if (!singleLegend) {
+                dropdown = legendContent.find('.oskari-select');
+            }
+            content.append(legendContent);
+
+            const popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
+
+            me._popup.createCloseIcon();
+            me._popup.setColourScheme({
+                'bgColour': themeColours.backgroundColour,
+                'titleColour': themeColours.textColour,
+                'iconCls': popupCloseIcon
+            });
+
+            me._popup.makeDraggable();
+            me._popup.onClose(function () {
+                me._popup.dialog.children().empty();
+                me._isVisible = false;
+                me._popup.close();
+            });
+            me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
+            me._isVisible = true;
+            me.getLayerLegend(function (img) {
+                content.find('.imgDiv').remove();
+                content.find('.legendLink').remove();
+                content.find('.error').remove();
+                var legendImage = jQuery('<div class="imgDiv"></div>');
+                var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
+                legendLink.find('a').attr('href', img.src);
+                legendLink.find('a').text(me._loc.newtab);
+                legendImage.append(img);
+                content.append(legendLink);
+                content.append(legendImage);
+                me._popup.moveTo(legend, popupLocation, true);
+            }, function () {
+                me._popup.moveTo(legend, popupLocation, true);
+                content.find('.imgDiv').remove();
+                content.find('.error').remove();
+                content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
+            }, singleLegend, dropdown);
+
+            if (!singleLegend) {
+                dropdown.trigger('change');
+            }
         },
         createDesktopElement: function () {
             var me = this;
@@ -158,80 +238,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
             me._popup = popupService.createPopup();
             me._popup.addClass('maplegend__popup');
-            var themeColours = me.getMapModule().getThemeColours();
-            var singleLegend = false;
-            var dropdown = null;
             popupService.closeAllPopups(true);
 
-            legend.attr('title', me._loc.tooltip);
-
-            var popupLocation = this.getPopupPosition();
-
-            legend.on('click', function () {
-                if (me.inLayerToolsEditMode()) {
-                    return;
-                }
-                if (me._toggleToolState() === false) {
-                    return;
-                }
-                var legends = me.getLegends();
-                var title = me._loc.title;
-                if (legends.length === 1) {
-                    title = me._loc.singleLegend + legends[0].title;
-                    singleLegend = true;
-                    me._popup.show(title, null);
-                } else {
-                    me._popup.show(title, null);
-                    me._popup.moveTo(legend, popupLocation, true);
-                }
-
-                var content = me._popup.getJqueryContent();
-                var legendContent = me.generateLegendContainer(singleLegend);
-                if (!singleLegend) {
-                    dropdown = legendContent.find('.oskari-select');
-                }
-                content.append(legendContent);
-
-                var popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
-
-                me._popup.createCloseIcon();
-                me._popup.setColourScheme({
-                    'bgColour': themeColours.backgroundColour,
-                    'titleColour': themeColours.textColour,
-                    'iconCls': popupCloseIcon
-                });
-
-                me._popup.makeDraggable();
-                me._popup.onClose(function () {
-                    me._popup.dialog.children().empty();
-                    me._isVisible = false;
-                    me._popup.close();
-                });
-                me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
-                me._isVisible = true;
-                me.getLayerLegend(function (img) {
-                    content.find('.imgDiv').remove();
-                    content.find('.legendLink').remove();
-                    content.find('.error').remove();
-                    var legendImage = jQuery('<div class="imgDiv"></div>');
-                    var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
-                    legendLink.find('a').attr('href', img.src);
-                    legendLink.find('a').text(me._loc.newtab);
-                    legendImage.append(img);
-                    content.append(legendLink);
-                    content.append(legendImage);
-                    me._popup.moveTo(legend, popupLocation, true);
-                }, function () {
-                    me._popup.moveTo(legend, popupLocation, true);
-                    content.find('.imgDiv').remove();
-                    content.find('.error').remove();
-                    content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-                }, singleLegend, dropdown);
-
-                if (!singleLegend) {
-                    dropdown.trigger('change');
-                }
-            });
             return legend;
         },
         getPopupPosition: function () {

@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { PanButton } from './PanButton';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
  * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a
@@ -45,94 +49,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            const centerTooltip = Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip');
-            var me = this,
-                ppid = (new Date()).getTime().toString(),
-                el = jQuery(
-                    '<div class="mapplugin panbuttonDiv panbuttons">' +
-                    '  <div>' +
-                    '    <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
-                    '      <map name="panbuttons_' + ppid + '">' +
-                    '        <area shape="circle"  class="panbuttons_center" title="' + centerTooltip + '" coords="45,45,20" href="#">' +
-                    '        <area shape="polygon" class="panbuttons_left"   coords="13,20,25,30,20,45,27,65,13,70,5,45" href="#">' +
-                    '        <area shape="polygon" class="panbuttons_up"     coords="30,8,45,4,60,8,60,23,45,20,30,23" href="#">' +
-                    '        <area shape="polygon" class="panbuttons_right"  coords="79,20,67,30,72,45,65,65,79,70,87,45" href="#">' +
-                    '        <area shape="polygon" class="panbuttons_down"   coords="30,82,45,86,60,82,60,68,45,70,30,68" href="#">' +
-                    '      </map>' +
-                    '   </img>' +
-                    '  </div>' +
-                    '</div>'
-                ),
-                center = el.find('.panbuttons_center'),
-                left = el.find('.panbuttons_left'),
-                right = el.find('.panbuttons_right'),
-                top = el.find('.panbuttons_up'),
-                bottom = el.find('.panbuttons_down'),
-                panbuttonDivImg = el.find('.panbuttonDivImg');
-            // update path from config
-            panbuttonDivImg.attr('src', me.getImagePath('empty.png'));
-
-            center.on('mouseover', function (event) {
-                panbuttonDivImg.addClass('root');
-            });
-            center.on('mouseout', function (event) {
-                panbuttonDivImg.removeClass('root');
-            });
-            center.on('click', function (event) {
-                me._resetClicked();
-            });
-
-            left.on('mouseover', function (event) {
-                panbuttonDivImg.addClass('left');
-            });
-            left.on('mouseout', function (event) {
-                panbuttonDivImg.removeClass('left');
-            });
-            left.on('click', function (event) {
-                me._panClicked(-1, 0);
-            });
-
-            right.on('mouseover', function (event) {
-                panbuttonDivImg.addClass('right');
-            });
-            right.on('mouseout', function (event) {
-                panbuttonDivImg.removeClass('right');
-            });
-            right.on('click', function (event) {
-                me._panClicked(1, 0);
-            });
-
-            top.on('mouseover', function (event) {
-                panbuttonDivImg.addClass('up');
-            });
-            top.on('mouseout', function (event) {
-                panbuttonDivImg.removeClass('up');
-            });
-            top.on('click', function () {
-                me._panClicked(0, -1);
-            });
-
-            bottom.on('mouseover', function (event) {
-                panbuttonDivImg.addClass('down');
-            });
-            bottom.on('mouseout', function (event) {
-                panbuttonDivImg.removeClass('down');
-            });
-            bottom.on('click', function (event) {
-                me._panClicked(0, 1);
-            });
-            el.on('mousedown', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    var radius = Math.round(0.5 * panbuttonDivImg[0].width),
-                        pbOffset = panbuttonDivImg.offset(),
-                        centerX = pbOffset.left + radius,
-                        centerY = pbOffset.top + radius;
-                    if (Math.sqrt(Math.pow(centerX - event.pageX, 2) + Math.pow(centerY - event.pageY, 2)) < radius) {
-                        event.stopPropagation();
-                    }
-                }
-            });
-
+            const el = jQuery(
+                '<div class="mapplugin panbuttonDiv panbuttons"></div>'
+            );
             return el;
         },
         _resetClicked: function () {
@@ -173,9 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             } else {
                 // not found -> use the style config obtained from the mapmodule.
                 var toolStyle = me.getToolStyleFromMapModule();
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
+                me.changeToolStyle(toolStyle, me.getElement());
             }
         },
 
@@ -192,16 +109,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (!div) {
                 return;
             }
-            var panButtons = div.find('img.panbuttonDivImg');
-            if (styleName === null) {
-                panButtons.removeAttr('style');
-            } else {
-                var bgImg = this.getImagePath('panbutton-sprites-' + styleName + '.png');
 
-                panButtons.css({
-                    'background-image': 'url("' + bgImg + '")'
-                });
-            }
+            const styleClass = styleName || 'rounded-dark';
+
+            ReactDOM.render(
+                <PanButton resetClicked={() => this._resetClicked()} panClicked={(x, y) => this._panClicked(x, y)} styleName={styleClass} />,
+                div[0]
+            );
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode

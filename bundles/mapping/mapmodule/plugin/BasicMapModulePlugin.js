@@ -370,17 +370,17 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
         },
         addToolbarButtons: function (buttons, group) {
-            var sandbox = this.getSandbox();
-            var toolbar = this.getMapModule().getMobileToolbar();
-            var themeColors = this.getMapModule().getThemeColours();
+            const sandbox = this.getSandbox();
+            const toolbar = this.getMapModule().getMobileToolbar();
+            const themeColors = this.getMapModule().getThemeColours();
             if (buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 return true;
             }
-            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+            const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
             if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
-                for (var tool in buttons) {
-                    var buttonConf = buttons[tool];
+                for (let tool in buttons) {
+                    const buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
                     // add active color if sticky and toggleChangeIcon
                     if (buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
@@ -388,10 +388,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
+                // we need to calculate new size to show toolbar after adding a button
+                // TODO: this should be responsibility of the toolbar instead
+                setTimeout(() => this.getMapModule()._adjustMobileMapSize(), 200);
             }
         },
         removeToolbarButtons: function (buttons, group) {
-            var sandbox = this.getSandbox();
+            const sandbox = this.getSandbox();
             if (!sandbox) {
                 return true;
             }
@@ -401,13 +404,16 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if (buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
                 return true;
             }
-            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
-            var toolbar = this.getMapModule().getMobileToolbar();
-            for (var tool in buttons) {
-                var buttonConf = buttons[tool];
+            const removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
+            const toolbar = this.getMapModule().getMobileToolbar();
+            for (let tool in buttons) {
+                const buttonConf = buttons[tool];
                 buttonConf.toolbarid = toolbar;
                 sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
             }
+            // we need to calculate new size to possibly hide toolbar after removing a button
+            // TODO: this should be responsibility of the toolbar instead
+            setTimeout(() => this.getMapModule()._adjustMobileMapSize(), 200);
         },
 
         /**

@@ -22,42 +22,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/toolbar/instance.js"
             }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/button-methods.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/default-buttons.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/AddToolButtonRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/RemoveToolButtonRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/ToolButtonStateRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/SelectToolButtonRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/ToolButtonRequestHandler.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/ShowMapMeasurementRequestHandler.ol.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/event/ToolSelectedEvent.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/event/ToolbarLoadedEvent.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/ToolbarRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/toolbar/request/ToolbarRequestHandler.js"
-            }, {
                 "type": "text/css",
                 "src": "../../../../bundles/mapping/toolbar/resources/scss/toolbar.scss"
             }],

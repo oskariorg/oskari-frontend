@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { AimOutlined } from '@ant-design/icons';
+import { MapModuleButton } from '../../MapModuleButton';
+
 /**
  * @class Oskari.mapframework.bundle.mappublished.MyLocationPlugin
  *
@@ -39,7 +44,7 @@ Oskari.clazz.define(
         };
 
         me._templates = {
-            plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
+            plugin: jQuery('<div class="mapplugin mylocationplugin"></div>')
         };
         this._waiting = false; // used with single location request
         this._timeouts = 0; // timeouts for single location request
@@ -54,34 +59,7 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             const el = this._templates.plugin.clone();
-            el.attr('title', this.loc('plugin.MyLocationPlugin.tooltip'));
-            this._bindIcon(el);
-            this._element = el;
             return el;
-        },
-
-        _bindIcon: function (el) {
-            el.on('click', () => {
-                this._setupRequest();
-            });
-        },
-
-        /**
-         * @private @method _setLayerToolsEditModeImpl
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                // disable icon
-                el.off('click');
-            } else {
-                // enable icon
-                this._bindIcon(el);
-            }
         },
         /**
          * @private @method _setWaiting
@@ -102,7 +80,6 @@ Oskari.clazz.define(
         },
         _setTracking: function (bln) {
             this._tracking = bln;
-            this._toggleToolStyle(this._tracking);
         },
         _clearRequests: function () {
             this._setWaiting(false);
@@ -138,49 +115,22 @@ Oskari.clazz.define(
             if (!el) {
                 return;
             }
-            var styleClass = 'toolstyle-' + (style || 'rounded-dark');
-            this._defaultIconCls = styleClass;
-            this.changeCssClasses(styleClass, /^toolstyle-/, [el]);
-        },
-        // used with continuous mode
-        _toggledIconStyle: function (styleClass) {
-            const light = styleClass.indexOf('-light');
-            if (light > 0) {
-                return styleClass.substring(0, light) + '-dark';
-            }
-            const dark = styleClass.indexOf('-dark');
-            if (dark > 0) {
-                return styleClass.substring(0, dark) + '-light';
-            }
-            return styleClass;
-        },
-        // used with continuous mode
-        _toggleToolStyle: function (active) {
-            let regEx;
-            let styleCls;
-            let el;
-            if (Oskari.util.isMobile()) {
-                el = this.getMapModule().getMobileDiv().find('.mobile-my-location');
-                const { iconCls } = this._mobileDefs.buttons['mobile-my-location'];
-                regEx = new RegExp('^' + iconCls + '-');
-                const { activeColour } = this.getMapModule().getThemeColours();
-                const isDark = Oskari.util.isDarkColor(activeColour);
-                if (active) {
-                    el.css('background-color', activeColour);
-                    styleCls = isDark ? iconCls + '-dark' : iconCls + '-light';
-                } else {
-                    el.css('background-color', '');
-                    styleCls = isDark ? iconCls + '-light' : iconCls + '-dark';
-                }
-            } else {
-                styleCls = this._defaultIconCls;
-                regEx = /^toolstyle-/;
-                el = this.getElement();
-                if (active) {
-                    styleCls = this._toggledIconStyle(styleCls);
-                }
-            }
-            this.changeCssClasses(styleCls, regEx, [el]);
+            const styleClass = style || 'rounded-dark';
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_mylocation'
+                    styleName={styleClass}
+                    icon={<AimOutlined />}
+                    title={this.loc('plugin.MyLocationPlugin.tooltip')}
+                    onClick={(e) => {
+                        if (!this.inLayerToolsEditMode()) {
+                            this._setupRequest();
+                        }
+                    }}
+                />
+                ,
+                el[0]
+            );
         },
 
         /**
@@ -242,12 +192,9 @@ Oskari.clazz.define(
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-                this._createControlElement();
+                this._element = this._createControlElement();
                 this.refresh();
                 this.addToPluginContainer(this.getElement());
-            }
-            if (this._tracking) {
-                this._toggleToolStyle(true);
             }
         },
         teardownUI: function () {

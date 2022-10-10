@@ -1,3 +1,5 @@
+import './VectorTileLayer';
+
 import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';

@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
+
 const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
 /**
@@ -47,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._reverseGeocodeNotImplementedError = false;
         me._popupContent = null;
         me._templates = {
-            coordinatetool: jQuery('<div class="mapplugin coordinatetool"><div class="icon"></div></div>'),
+            coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popupContent: jQuery(
                 '<div>' +
                 '   <div class="coordinatetool__popup__content"></div>' +
@@ -629,18 +633,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var me = this,
                 el = me._templates.coordinatetool.clone();
 
-            el.attr('title', me._locale('display.tooltip.tool'));
-
-            // Bind event listeners
-            // XY icon click
-            el.off('click');
-            el.on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    me._toggleToolState();
-                    event.stopPropagation();
-                }
-            });
-
             if (me._config.noUI) {
                 return null;
             }
@@ -1153,23 +1145,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {jQuery} div
          */
         changeToolStyle: function (style, div) {
-            var me = this,
+            const me = this,
                 el = div || me.getElement();
 
             if (!el) {
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
+            const CoordinateIcon = () => (
+                <div>XY</div>
+            );
 
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
-                }
-            }
-            el.addClass(styleClass);
+            const styleClass = style || 'rounded-dark';
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_coordinatetool'
+                    title={me._locale('display.tooltip.tool')}
+                    icon={<CoordinateIcon />}
+                    styleName={styleClass}
+                    onClick={() => {
+                        if (!this.inLayerToolsEditMode()) {
+                            me._toggleToolState();
+                        }
+                    }}
+                />,
+                el[0]
+            );
         },
         _labelMetricOrDegrees: function (projection) {
             const loc = this._locale;

@@ -364,7 +364,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          */
         cancel: function () {
             this.instance.setPublishMode(false);
-            this._editToolLayoutOff();
         },
         /**
          * @private @method _getButtons

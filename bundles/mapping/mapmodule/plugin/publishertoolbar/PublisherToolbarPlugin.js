@@ -1,3 +1,10 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../MapModuleButton';
+import { MenuOutlined } from '@ant-design/icons';
+import './request/ToolContainerRequest';
+import './request/ToolContainerRequestHandler';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
  * Provides publisher toolbar container
@@ -50,11 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         // templates for tools-mapplugin
         templates: {
             main: jQuery(
-                '<div class="mapplugin tools">' +
-                '  <div class="icon menu-rounded-dark"></div>' +
-                '  <div class="publishedToolbarContainer">' +
-                '  </div>' +
-                '</div>'
+                '<div class="mapplugin tools"></div>'
             ),
             container: jQuery('<div></div>'),
             publishedToolbarPopupContent: jQuery(
@@ -189,11 +192,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             if (this.inLayerToolsEditMode()) {
                 // close toolbar
                 this._closeToolsPopup();
-                // disable icon
-                this.getElement().find('div.icon').off('click');
-            } else {
-                // enable icon
-                this._bindIcon();
             }
         },
 
@@ -294,14 +292,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     toolStyle = 'rounded-dark';
                 }
 
-                var icon = div.find('.icon');
-
-                if (toolStyle === null) {
-                    icon.removeAttr('style');
-                } else {
-                    icon.removeClass();
-                    icon.addClass('icon menu-' + toolStyle);
-                }
+                ReactDOM.render(
+                    <MapModuleButton
+                        className='t_publishertoolbar'
+                        styleName={toolStyle}
+                        icon={<MenuOutlined />}
+                        title={me._loc.title}
+                        onClick={() => {
+                            if (!me.inLayerToolsEditMode()) {
+                                if (me.popup && me.popup.isVisible()) {
+                                    me._closeToolsPopup();
+                                } else {
+                                    me._openToolsPopup();
+                                }
+                            }
+                        }}
+                    />,
+                    div[0]
+                );
             };
 
             if (!toolbarNotReady && isMobile) {
@@ -310,7 +318,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             } else {
                 this.addToPluginContainer(me._element);
                 changeToolStyle();
-                me._bindIcon();
             }
         },
 
@@ -416,21 +423,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             }
-        },
-
-        _bindIcon: function () {
-            var me = this,
-                el = me.getElement(),
-                icon = el.find('div.icon');
-
-            icon.off('click');
-            icon.on('click', function () {
-                if (me.popup && me.popup.isVisible()) {
-                    me._closeToolsPopup();
-                } else {
-                    me._openToolsPopup();
-                }
-            });
         },
         _closeToolsPopup: function () {
             if (this.popup) {

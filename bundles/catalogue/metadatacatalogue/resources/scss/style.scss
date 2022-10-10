@@ -210,6 +210,10 @@ div.metadataCatalogueContainer {
         div.panelHeader {
             margin-top: 10px;
             margin-bottom: 20px;
+
+            &.resultTitle {
+                margin-right: 20px;
+            }
         }
 
         div.resultHeaderContainer {
