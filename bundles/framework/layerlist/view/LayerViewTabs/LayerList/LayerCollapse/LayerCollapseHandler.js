@@ -117,15 +117,19 @@ class ViewHandler extends StateHandler {
     }
     setFilter (activeId, searchText = '') {
         const previousSearchText = this.filter.searchText;
-        // generate search terms by splitting by * and space
-        const terms = searchText
+        // Generate search terms by splitting by * and space
+        // Opening layerlist with request might send searchText as null
+        //  so we need to make sure it's string before processing it.
+        //  Nulls are not changed to function param default values, this is required even with default value.
+        const normalizedQuery = searchText || '';
+        const terms = normalizedQuery
             .replaceAll('*', ' ')
             .replaceAll(',', ' ')
             .split(' ')
             .filter(item => item !== '');
         this.filter = {
             activeId,
-            searchText,
+            normalizedQuery,
             terms
         };
 
