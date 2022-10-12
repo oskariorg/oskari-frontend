@@ -3,9 +3,7 @@ import { MapButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Container = styled('div')`
-    margin: 0 0 10px 30px;
-    width: 32px;
-    height: 32px;
+    margin: ${props => props.noMargin ? '0' : '0 0 10px 30px'};
 `;
 
 const THEME_LIGHT = {
@@ -33,7 +31,7 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false }) => {
     let roundingPercent = 0;
     let color;
 
@@ -66,12 +64,13 @@ export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
     }
 
     return (
-        <Container>         
+        <Container size={size} noMargin={noMargin}>
             <MapButton
                 onClick={onClick}
                 icon={icon}
                 theme={{ ...color, roundingPercent }}
                 title={title}
+                size={size}
             />
         </Container>
     );
