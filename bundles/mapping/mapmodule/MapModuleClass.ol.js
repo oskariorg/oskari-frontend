@@ -474,11 +474,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomArea (geometry) {
-        if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getArea(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getArea(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
@@ -493,11 +493,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomLength (geometry) {
-        if (!geometry || geometry.getType() !== 'LineString') {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getLength(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getLength(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
