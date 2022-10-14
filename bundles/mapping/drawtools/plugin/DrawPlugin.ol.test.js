@@ -1,5 +1,4 @@
-import { afterAll } from '@jest/globals';
-import { Polygon, LineString } from 'ol/geom';
+import { afterAll, afterEach } from '@jest/globals';
 
 // plugin stuff
 import '../instance';
@@ -77,7 +76,7 @@ const getOverlayText = feature => {
     return overlay.getElement().innerHTML;
 };
 
-const getDrawInteraction = () => plugin._draw[NAME];
+const getDrawInteraction = () => plugin._draw;
 
 const draw = (shape, opts = {}, id = NAME) => {
     sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, shape, { ...OPTIONS, ...opts }]);
@@ -98,8 +97,10 @@ afterAll(() => {
 
 describe('DrawPlugin', () => {
     describe('getFeaturesAsGeoJSON', () => {
+        const getGeoJSON = () => plugin.getFeaturesAsGeoJSON(plugin.getDrawFeatures());
+
         test('no features', () => {
-            const { type, crs, features } = plugin.getFeaturesAsGeoJSON();
+            const { type, crs, features } = getGeoJSON();
             expect(type).toEqual('FeatureCollection');
             expect(crs).toEqual('EPSG:3067');
             expect(features).toEqual([]);
@@ -110,15 +111,16 @@ describe('DrawPlugin', () => {
                 coordinates: [[350208, 7011328], [385024, 6982144], [330240, 6947328]]
             };
             draw('Point', { allowMultipleDrawing: 'multiGeom', geojson });
-            const layerId = plugin.getLayerIdForFunctionality(NAME);
-            const olFeatures = plugin.getFeatures(layerId);
             // drawtools doesn't handle multi geoms
+            // check from source that multigeom is parsed to simple features
+            const olFeatures = plugin.getDrawSource().getFeatures();
             expect(olFeatures.length).toBe(3);
             olFeatures.forEach(feat => {
                 expect(feat.getGeometry().getType()).toEqual('Point');
             });
-            const { features } = plugin.getFeaturesAsGeoJSON(olFeatures);
+
             // for event splitted features are gathered to one MultiPoint
+            const { features } = getGeoJSON();
             expect(features.length).toBe(1);
             expect(features[0].geometry.type).toEqual('MultiPoint');
             expect(features[0].properties.valid).toBe(true);
@@ -130,14 +132,12 @@ describe('DrawPlugin', () => {
                 coordinates: [[[350208, 7011328], [385024, 6982144], [330240, 6947328], [386560, 6924800], [350208, 7011328]]]
             };
             draw('Polygon', { geojson });
-            const layerId = plugin.getLayerIdForFunctionality(NAME);
-            const olFeatures = plugin.getFeatures(layerId);
-            const { valid, area } = plugin.getFeaturesAsGeoJSON(olFeatures).features[0].properties;
+            const { valid, area } = getGeoJSON().features[0].properties;
             const reason = Oskari.getMsg('DrawTools', 'intersectionNotAllowed');
             expect(area).toEqual(reason);
             expect(valid).toBe(false);
             // warning tooltip is created even showMeasureOnMap is false
-            expect(getOverlayText(olFeatures[0])).toEqual(reason);
+            expect(getOverlayText(plugin.getDrawFeatures()[0])).toEqual(reason);
             clear();
         });
         test('invalidLineLenght', () => {
@@ -147,17 +147,16 @@ describe('DrawPlugin', () => {
             };
             const limits = { length: 1000 };
             draw('LineString', { limits, geojson });
-            const layerId = plugin.getLayerIdForFunctionality(NAME);
-            const olFeatures = plugin.getFeatures(layerId);
-            const { valid, length } = plugin.getFeaturesAsGeoJSON(olFeatures).features[0].properties;
+            const { valid, length } = getGeoJSON().features[0].properties;
             const formatted = mapModule.formatMeasurementResult(limits.length, 'line');
             const reason = Oskari.getMsg('DrawTools', 'invalidLineLenght', { length: formatted });
             expect(length).toEqual(reason);
             expect(valid).toBe(false);
             // warning tooltip is created even showMeasureOnMap is false
-            expect(getOverlayText(olFeatures[0])).toEqual(reason);
+            expect(getOverlayText(plugin.getDrawFeatures()[0])).toEqual(reason);
         });
         afterAll(() => {
+            // Clear only after all tests to be sure that different shapes with same id doesn't mess geojson features count
             clear();
         });
     });
@@ -165,20 +164,23 @@ describe('DrawPlugin', () => {
     describe('DrawingEvent', () => {
         test('LineString length', done => {
             draw('LineString', { showMeasureOnMap: true, geojson: COLLECTION });
-
-            const olFeatures = plugin.getFeatures(plugin.getLayerIdForFunctionality(NAME));
-            expect(olFeatures.map(getOverlayText)).toEqual(['105,459 km', '72,470 km']);
+            // Test lengths and sum against hard coded lengths
+            const lengths = [105459.38565591227, 72469.86192228278];
+            const lengthsSum = lengths.reduce((a, b) => a + b, 0);
+            const olFeatures = plugin.getDrawFeatures();
+            const formatted = lengths.map(l => (l / 1000).toFixed(3).replace('.', Oskari.getDecimalSeparator()) + ' km');
+            expect(olFeatures.map(getOverlayText)).toEqual(formatted);
 
             eventCallback = event => {
                 try {
                     const { features } = event.getGeoJson();
                     const data = event.getData();
                     expect(features.length).toBe(2);
-                    const lengths = features.map(f => f.properties.length);
-                    expect(lengths).toEqual([105459.38565591227, 72469.86192228278]);
-                    const sum = lengths.reduce((a, b) => a + b, 0);
-                    expect(sum).toEqual(plugin.sumMeasurements(olFeatures).length);
-                    expect(sum).toEqual(data.length);
+                    const featLengths = features.map(f => f.properties.length);
+                    expect(featLengths).toEqual(lengths);
+                    const featureSum = featLengths.reduce((a, b) => a + b, 0);
+                    expect(featureSum).toBe(lengthsSum);
+                    expect(data.length).toBe(lengthsSum);
                     const allValid = features.map(f => f.properties.valid).every(v => v === true);
                     expect(allValid).toBe(true);
                     done();
@@ -188,17 +190,22 @@ describe('DrawPlugin', () => {
             };
             finish();
         });
+        // TODO: getFeaturesAsGeoJSON 3. test
         test('new LineString without clearing previous', done => {
             draw('LineString', { geojson: COLLECTION });
             eventCallback = event => {
-                const { features } = event.getGeoJson();
-                expect(features.length).toBe(4);
-                done();
+                try {
+                    const { features } = event.getGeoJson();
+                    expect(features.length).toBe(4);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
             };
             finish();
         });
+        // TODO: getFeaturesAsGeoJSON 2. test
         test('other drawing without clear', done => {
-            clear();
             draw('LineString', { geojson: COLLECTION }, 'other');
             finish('other');
             draw('LineString');
@@ -207,7 +214,7 @@ describe('DrawPlugin', () => {
                 // FIXME: event has features from 'other' functionality
                 // The problem is that features are gathered from shape related layer and these aren't filtered by functionality/id
                 try {
-                    expect(features.length).toBe(2); // should be 0
+                    expect(features.length).toBe(0);
                     done();
                 } catch (error) {
                     done(error);
@@ -226,13 +233,14 @@ describe('DrawPlugin', () => {
                 ]]
             };
             draw('Polygon', { showMeasureOnMap: true, geojson });
+            const olGeom = plugin.getDrawFeatures()[0].getGeometry();
+            const area = mapModule.getGeomArea(olGeom);
+            const length = mapModule.getGeomLength(olGeom);
             eventCallback = event => {
                 try {
                     const { features } = event.getGeoJson();
                     const data = event.getData();
                     expect(features.length).toBe(1);
-                    const area = mapModule.getGeomArea(new Polygon(geojson.coordinates));
-                    const length = mapModule.getGeomLength(new LineString(geojson.coordinates[0]));
                     const { properties } = features[0];
                     expect(properties.area).toBe(area);
                     expect(data.area).toBe(area);
@@ -252,13 +260,14 @@ describe('DrawPlugin', () => {
     });
 
     describe('bufferedGeoJson', () => {
+        // getFeaturesAsGeoJSON last test or remove
         test('Should be empty', () => {
+            clear();
             draw('LineString');
-            const olFeatures = plugin.getFeatures(plugin.getLayerIdForFunctionality(NAME));
+            const olFeatures = plugin.getDrawFeatures();
             // FIXME: plugin clearDrawing(id) should remove features
             // The problem is that previous afterAll clear removes features only from Polygon layer (draw + Polygon => functionality/id (NAME) is linked to Polygon draw layer)
-            expect(olFeatures.length).toBe(2); // should be 0
-            clear();
+            expect(olFeatures.length).toBe(0);
         });
         test('LineString', done => {
             draw('LineString', { buffer: 1000, geojson: COLLECTION });
@@ -268,7 +277,7 @@ describe('DrawPlugin', () => {
                     expect(event.getGeoJson().features.length).toBe(2);
                     expect(crs).toEqual('EPSG:3067');
                     // FIXME: plugin should return buffered features for all, not just for sketch
-                    expect(features.length).toBe(0); // should be 2
+                    expect(features.length).toBe(2);
                     done();
                 } catch (error) {
                     done(error);
@@ -344,7 +353,7 @@ describe('DrawPlugin', () => {
                 try {
                     expect(event.getGeoJson().features.length).toBe(2);
                     // FIXME: plugin should return buffered features for all, not just for sketch
-                    expect(event.getData().bufferedGeoJson.features.length).toBe(1); // should be 2
+                    expect(event.getData().bufferedGeoJson.features.length).toBe(2);
                     done();
                 } catch (error) {
                     done(error);
@@ -353,7 +362,7 @@ describe('DrawPlugin', () => {
             interaction.appendCoordinates([[385024, 6982144]]);
             interaction.finishDrawing();
         });
-        afterAll(() => {
+        afterEach(() => {
             clear();
         });
     });
