@@ -9,22 +9,22 @@ import { ThemeProvider } from '../../util/contexts';
 const StyledButton = styled(Button)`
     border: none;
     border-radius: ${props => props.rounding};
-    color: ${props => props.accent};
+    color: ${props => props.iconActive ? '#ffd400' : props.accent};
     path {
-        fill: ${props => props.accent}
+        fill: ${props => props.iconActive ? '#ffd400' : props.accent};
     }
     background: ${props => props.primary};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     &:hover {
-        color: ${props => props.accent};
+        color: ${props => props.iconActive ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     &:active {
-        color: ${props => props.accent};
+        color: ${props => props.iconActive ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     &:focus {
-        color: ${props => props.accent};
+        color: ${props => props.iconActive ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     display: flex;

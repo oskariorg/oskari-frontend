@@ -317,6 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._toolOpen = false;
                 me._showMouseCoordinates = false;
                 me._showReverseGeocodeCheckbox = false;
+                me.renderButton(null, null);
             });
 
             var themeColours = mapmodule.getThemeColours();
@@ -533,6 +534,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 me._labelMetricOrDegrees(jQuery('#projection option:selected').val());
             }
+            this.renderButton(null, null);
         },
 
         /**
@@ -1152,26 +1154,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
+            const styleClass = style || 'rounded-dark';
+            this.renderButton(styleClass, el);
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             const CoordinateIcon = () => (
                 <div>XY</div>
             );
 
-            const styleClass = style || 'rounded-dark';
             ReactDOM.render(
                 <MapModuleButton
                     className='t_coordinatetool'
-                    title={me._locale('display.tooltip.tool')}
+                    title={this._locale('display.tooltip.tool')}
                     icon={<CoordinateIcon />}
-                    styleName={styleClass}
+                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
-                            me._toggleToolState();
+                            this._toggleToolState();
                         }
                     }}
+                    iconActive={this._toolOpen}
                 />,
                 el[0]
             );
         },
+
         _labelMetricOrDegrees: function (projection) {
             const loc = this._locale;
             const conf = this._config || {};

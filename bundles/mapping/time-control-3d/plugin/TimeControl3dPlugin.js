@@ -208,23 +208,39 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
 
         const styleClass = conf && conf.toolStyle ? conf.toolStyle : this.getToolStyleFromMapModule();
 
+        this.renderButton(styleClass, el);
+
+        this._setLayerToolsEditMode(
+            this.getMapModule().isInLayerToolsEditMode()
+        );
+    }
+
+    renderButton (style, element) {
+        let el = element;
+        if (!element) {
+            el = this.getElement();
+        }
+        if (!el) return;
+
+        let styleName = style;
+        if (!style) {
+            styleName = this.getToolStyleFromMapModule();
+        }
+
         ReactDOM.render(
             <MapModuleButton
                 className='t_timecontrol'
                 title={this.loc('tooltip')}
-                styleName={styleClass || 'rounded-dark'}
+                styleName={styleName || 'rounded-dark'}
                 icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
                 onClick={() => {
                     if (!this.inLayerToolsEditMode()) {
                         this._toggleToolState();
                     }
                 }}
+                iconActive={this.isOpen()}
             />,
             el.get(0)
-        );
-
-        this._setLayerToolsEditMode(
-            this.getMapModule().isInLayerToolsEditMode()
         );
     }
 
@@ -242,6 +258,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._popup.onClose(function () {
             me.unmountReactPopup();
             me.setOpen(false);
+            me.renderButton(null, null);
         });
 
         const themeColours = mapmodule.getThemeColours();
@@ -263,6 +280,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
         this._popup.moveTo(elem, popupLocation, true);
         this.setOpen(true);
+        this.renderButton(null, null);
     }
 }
 

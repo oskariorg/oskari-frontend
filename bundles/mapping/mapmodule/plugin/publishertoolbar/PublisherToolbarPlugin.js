@@ -292,24 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     toolStyle = 'rounded-dark';
                 }
 
-                ReactDOM.render(
-                    <MapModuleButton
-                        className='t_publishertoolbar'
-                        styleName={toolStyle}
-                        icon={<MenuOutlined />}
-                        title={me._loc.title}
-                        onClick={() => {
-                            if (!me.inLayerToolsEditMode()) {
-                                if (me.popup && me.popup.isVisible()) {
-                                    me._closeToolsPopup();
-                                } else {
-                                    me._openToolsPopup();
-                                }
-                            }
-                        }}
-                    />,
-                    div[0]
-                );
+                me.renderButton(toolstyle, div);
             };
 
             if (!toolbarNotReady && isMobile) {
@@ -319,6 +302,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 this.addToPluginContainer(me._element);
                 changeToolStyle();
             }
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_publishertoolbar'
+                    styleName={styleName || 'rounded-dark'}
+                    icon={<MenuOutlined />}
+                    title={this._loc.title}
+                    onClick={() => {
+                        if (!this.inLayerToolsEditMode()) {
+                            if (this.popup && this.popup.isVisible()) {
+                                this._closeToolsPopup();
+                            } else {
+                                this._openToolsPopup();
+                            }
+                        }
+                    }}
+                    iconActive={this.popup && this.popup.isVisible()}
+                />,
+                el[0]
+            );
         },
 
         _createToolbar: function (mapInMobileMode) {
@@ -430,6 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 this.popup.close(true);
                 this.popup = null;
             }
+            this.renderButton(null, null);
         },
         _openToolsPopup: function () {
             var me = this,
@@ -481,6 +498,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     sandbox.request(me.getName(), request);
                 }
             }
+            me.renderButton(null, null);
         },
 
         setToolbarContainer: function () {
