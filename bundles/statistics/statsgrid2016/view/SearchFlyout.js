@@ -415,8 +415,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                             resolve();
                             return;
                         }
-                        let counter = 0;
-                        const enoughData = Object.values(data).some(val => !isNaN(val) && ++counter > 1);
+                        const enoughData = Object.values(data).some(val => !isNaN(val));
                         if (!enoughData) {
                             searchFailed(search);
                             resolve();

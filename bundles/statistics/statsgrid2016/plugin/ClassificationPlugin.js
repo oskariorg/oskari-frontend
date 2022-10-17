@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         getEditOptions: function (state, uniqueCount, minMax) {
             const { activeIndicator } = state;
-            const { type, count, reverseColors, mapStyle, base } = activeIndicator.classification;
+            const { type, count, reverseColors, mapStyle, base, method } = activeIndicator.classification;
             const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
 
             const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
@@ -137,6 +137,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const disabled = [];
             if (uniqueCount < 3) {
                 disabled.push('jenks');
+                // only jenks breaks with small unique count, show at least count 2 for others
+                if (method !== 'jenks') {
+                    uniqueCount = 2;
+                }
             }
 
             // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
