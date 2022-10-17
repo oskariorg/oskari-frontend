@@ -148,21 +148,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             const styleClass = style || 'rounded-dark';
 
+            me.renderButton(styleClass, el);
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maplegend'
-                    title={me._loc.tooltip}
+                    title={this._loc.tooltip}
                     icon={<QuestionOutlined />}
-                    styleName={styleClass}
+                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
-                        if (!me.inLayerToolsEditMode()) {
-                            me.togglePopup();
+                        if (!this.inLayerToolsEditMode()) {
+                            this.togglePopup();
                         }
                     }}
+                    iconActive={this._isVisible}
                 />,
                 el[0]
             );
         },
+
         togglePopup: function () {
             const me = this;
             const themeColours = me.getMapModule().getThemeColours();
@@ -206,6 +223,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.dialog.children().empty();
                 me._isVisible = false;
                 me._popup.close();
+                me.renderButton(null, null);
             });
             me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
             me._isVisible = true;
@@ -231,6 +249,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             if (!singleLegend) {
                 dropdown.trigger('change');
             }
+            me.renderButton(null, null);
         },
         createDesktopElement: function () {
             var me = this;

@@ -33,7 +33,7 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, iconActive = false }) => {
     let roundingPercent = 0;
     let color;
 
@@ -72,6 +72,7 @@ export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
                 icon={icon}
                 theme={{ ...color, roundingPercent }}
                 title={title}
+                iconActive={iconActive}
             />
         </Container>
     );
