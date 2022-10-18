@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapModuleButton } from '../../MapModuleButton';
 import styled from 'styled-components';
-import { Slider } from 'antd';
+import { Slider } from 'oskari-ui';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 
 const Container = styled('div')`
@@ -51,6 +51,14 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.styles.handleRounding};
         width: ${props => props.styles.handleWidth};
     }
+`;
+
+const PlusIcon = styled(PlusOutlined)`
+    font-size: 12px;
+`;
+
+const MinusIcon = styled(MinusOutlined)`
+    font-size: 12px;
 `;
 
 const STYLE_ROUNDED_DARK = {
@@ -147,7 +155,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
     return (
         <Container>
             <MapModuleButton
-                icon={<PlusOutlined size={14} />}
+                icon={<PlusIcon />}
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100)
                 }}
@@ -170,7 +178,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                 />
             )}
             <MapModuleButton
-                icon={<MinusOutlined size={14} />}
+                icon={<MinusIcon />}
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0)
                 }}

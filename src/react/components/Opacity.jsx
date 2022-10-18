@@ -13,6 +13,19 @@ const StyledSlider = styled('div')`
     float: left;
     margin-left: 10px;
     margin-right: 10px;
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+        margin-top: -6px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
 `;
 
 const StyledNumberInput = styled('div')`

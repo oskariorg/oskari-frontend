@@ -190,15 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
 
             me._suppressEvents = true;
-            ReactDOM.render(
-                <ZoomSlider
-                    changeZoom={(value) => this.setZoomLevel(value)}
-                    zoom={this.getMapModule().getMapZoom()}
-                    maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    styleName={toolStyle || 'rounded-dark'}
-                />,
-                div[0]
-            );
+            this.renderButton(toolStyle, div);
             me._suppressEvents = false;
         },
 
@@ -248,16 +240,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 return;
             }
 
-            const styleName = style || 'rounded-dark';
+            this.renderButton(style, div);
+        },
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!element) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
 
             ReactDOM.render(
                 <ZoomSlider
                     changeZoom={(value) => this.setZoomLevel(value)}
                     zoom={this.getMapModule().getMapZoom()}
                     maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    styleName={styleName}
+                    styleName={styleName || 'rounded-dark'}
                 />,
-                div[0]
+                el[0]
             );
         },
         teardownUI: function () {
