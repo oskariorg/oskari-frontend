@@ -11,22 +11,22 @@ const StyledButton = styled(Button)`
     height: ${props => props.size};
     border: none;
     border-radius: ${props => props.rounding};
-    color: ${props => props.accent};
+    color: ${props => props.$active ? '#ffd400' : props.accent};
     path {
-        fill: ${props => props.accent}
+        fill: ${props => props.$active ? '#ffd400' : props.accent};
     }
     background: ${props => props.primary};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     &:hover {
-        color: ${props => props.accent};
+        color: ${props => props.$active ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     &:active {
-        color: ${props => props.accent};
+        color: ${props => props.$active ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     &:focus {
-        color: ${props => props.accent};
+        color: ${props => props.$active ? '#ffd400' : props.accent};
         background: ${props => props.primary};
     }
     display: flex;
@@ -34,14 +34,14 @@ const StyledButton = styled(Button)`
     justify-content: center;
 `;
 
-const ThemeButton = ThemeConsumer(({ theme = {}, ...rest }) => {
+const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const primary = theme?.color?.primary || '#3c3c3c';
     const accent = theme?.color?.accent || '#ffffff';
     const rounding = `${theme.roundingPercent || 0}%`;
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
@@ -50,6 +50,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                         icon={icon}
                         onClick={onClick}
                         size={size}
+                        $active={iconActive}
                         { ...rest }
                     />
                 </ThemeProvider>
@@ -62,6 +63,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                     icon={icon}
                     onClick={onClick}
                     size={size}
+                    $active={iconActive}
                     { ...rest }
                 />
             </ThemeProvider>
