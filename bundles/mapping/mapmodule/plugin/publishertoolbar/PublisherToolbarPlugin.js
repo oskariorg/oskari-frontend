@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../MapModuleButton';
+import { ToolbarButtonItem } from 'oskari-ui/components/buttons';
+import { BackwardIcon, ForwardIcon } from 'oskari-ui/components/icons';
 import { MenuOutlined } from '@ant-design/icons';
 import './request/ToolContainerRequest';
 import './request/ToolContainerRequestHandler';
@@ -322,18 +324,71 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     styleName={styleName || 'rounded-dark'}
                     icon={<MenuOutlined />}
                     title={this._loc.title}
-                    onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            if (this.popup && this.popup.isVisible()) {
-                                this._closeToolsPopup();
-                            } else {
-                                this._openToolsPopup();
-                            }
-                        }
-                    }}
-                    iconActive={this.popup && this.popup.isVisible()}
-                />,
+                    withToolbar
+                >
+                    {this.renderToolbarItems()}
+                </MapModuleButton>,
                 el[0]
+            );
+        },
+
+        renderToolbarItems: function () {
+            const sandbox = this.getSandbox();
+            return (
+                [
+                    <ToolbarButtonItem
+                        key='tool-back'
+                        icon={<BackwardIcon />}
+                        title={this._loc.history.back}
+                        onClick={() => {
+                            if (!this._isPublisherActive()) {
+                                const reqBuilder = Oskari.requestBuilder(
+                                    'ToolSelectionRequest'
+                                );
+                                sandbox.request(
+                                    this,
+                                    reqBuilder('map_control_tool_prev')
+                                );
+                            }
+                        }}
+                    />,
+                    <ToolbarButtonItem
+                        key='tool-next'
+                        icon={<ForwardIcon />}
+                        title={this._loc.history.next}
+                        onClick={() => {
+                            if (!this._isPublisherActive()) {
+                                const reqBuilder = Oskari.requestBuilder(
+                                    'ToolSelectionRequest'
+                                );
+                                sandbox.request(
+                                    this,
+                                    reqBuilder('map_control_tool_next')
+                                );
+                            }
+                        }}
+                    />,
+                    <ToolbarButtonItem
+                        key='tool-line'
+                        icon={<div className='tool-measure-line-dark' />}
+                        title={this._loc.measure.line}
+                        onClick={() => {
+                            const rn = 'map_control_measure_tool';
+                            const tool = 'measureline';
+                            this._handleMeasureTool(tool, rn);
+                        }}
+                    />,
+                    <ToolbarButtonItem
+                        key='tool-area'
+                        icon={<div className='tool-measure-area-dark' />}
+                        title={this._loc.measure.area}
+                        onClick={() => {
+                            const rn = 'map_control_measure_area_tool';
+                            const tool = 'measurearea';
+                            this._handleMeasureTool(tool, rn);
+                        }}
+                    />
+                ]
             );
         },
 
