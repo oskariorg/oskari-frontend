@@ -17,10 +17,6 @@ const StyledSlider = styled(Opacity)`
     margin: 0 20px 0 10px;
 `;
 
-const SliderContainer = styled('div')`
-    width: auto;
-`;
-
 export const OpacitySlider = ({ value, onChange }) => {
     const [sliderValue, setSliderValue] = useState(value);
     const [eventTimeout, setEventTimeout] = useState(null);
@@ -39,9 +35,7 @@ export const OpacitySlider = ({ value, onChange }) => {
     return (
         <InputGroup compact>
             <Border>
-                <SliderContainer>
-                    <StyledSlider defaultValue={sliderValue} onChange={instantValueChange} />
-                </SliderContainer>
+                <StyledSlider defaultValue={sliderValue} onChange={instantValueChange} />
             </Border>
         </InputGroup>
     );
