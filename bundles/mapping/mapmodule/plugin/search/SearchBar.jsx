@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Input } from 'antd';
-import { Button } from 'oskari-ui';
+import { Button, TextInput } from 'oskari-ui';
 import { SearchOutlined } from '@ant-design/icons';
 
-const StyledInput = styled(Input)`
+const StyledInput = styled(TextInput)`
     height: 25px;
 `;
 
