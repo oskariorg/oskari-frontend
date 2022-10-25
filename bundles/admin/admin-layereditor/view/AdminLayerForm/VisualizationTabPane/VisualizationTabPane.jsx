@@ -17,6 +17,13 @@ import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
 import { Declutter } from './Declutter';
+import styled from 'styled-components';
+
+const StyledSlider = styled(Opacity)`
+    width: 350px;
+    margin-left: 10px;
+    margin-right: 10px;
+`;
 
 const {
     OPACITY,
@@ -42,7 +49,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
     return (<Fragment>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
-                <Opacity layer={layer} controller={controller} />
+                <StyledSlider layer={layer} controller={controller} />
             }
             { propertyFields.includes(COVERAGE) &&
                 <Coverage id={layer.id} controller={controller} />

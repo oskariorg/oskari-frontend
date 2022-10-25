@@ -9,6 +9,7 @@ const Container = styled('div')`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0 0 30px 0;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -35,13 +36,13 @@ const StyledSlider = styled(Slider)`
         border-radius: ${props => props.styles.railRounding};
         box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
         &:hover {
-            background-color: #3c3c3c;
+            background-color: ${props => props.styles.railBackground};
         }
         &:focus {
-            background-color: #3c3c3c;
+            background-color: ${props => props.styles.railBackground};
         }
         &:active {
-            background-color: #3c3c3c;
+            background-color: ${props => props.styles.railBackground};
         }
     }
     .ant-slider-handle {
@@ -50,6 +51,18 @@ const StyledSlider = styled(Slider)`
         box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
         border-radius: ${props => props.styles.handleRounding};
         width: ${props => props.styles.handleWidth};
+        &:hover {
+            background: ${props => props.styles.handleBackground};
+            border: ${props => props.styles.handleBorder};
+        }
+        &:focus {
+            background: ${props => props.styles.handleBackground};
+            border: ${props => props.styles.handleBorder};
+        }
+        &:active {
+            background: ${props => props.styles.handleBackground};
+            border: ${props => props.styles.handleBorder};
+        }
     }
 `;
 

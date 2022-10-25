@@ -4,7 +4,11 @@ import styled from 'styled-components';
 import { ReturnIcon } from 'oskari-ui/components/icons';
 
 const StyledButtonContainer = styled('div')`
+    width: 84px;
+    height: 84px;
+    position: relative;
     margin-bottom: 20px;
+    right: -29.5px;
 `;
 
 const StyledButton = styled('div')`
