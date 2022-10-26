@@ -90,18 +90,27 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         rotateIcon: function (degrees) {
             const el = this.getElement();
             if (el) {
-                const conf = this._config;
-                const styleClass = conf && conf.toolStyle ? conf.toolStyle : 'rounded-dark';
-                this._renderButton(degrees, styleClass, el);
+                this._renderButton(degrees, null, el);
             }
         },
         _renderButton: function (degrees, style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maprotator'
                     title={this._locale.tooltip.tool}
                     icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
-                    styleName={style}
+                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
                             this.setRotation(0);
