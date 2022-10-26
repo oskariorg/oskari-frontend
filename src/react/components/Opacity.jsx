@@ -23,7 +23,7 @@ const StyledSlider = styled('div')`
     }
     ${props => props.bordered && (
         `
-            border-radius: 4px;
+            border-radius: 4px 0 0 4px;
             border: 1px solid #d9d9d9;
         `
     )}
@@ -42,11 +42,12 @@ const NumberInputContainer = styled('div')`
 
 const NumberSuffix = styled('span')`
     margin: 0;
+    padding-top: 5px;
 `;
 
 const StyledNumberInput = styled(NumberInput)`
     width: 65px;
-    margin: 0 5px 0 5px;
+    margin: 0 5px 0 -1px;
 `;
 
 const StyledClear = styled('br')`
