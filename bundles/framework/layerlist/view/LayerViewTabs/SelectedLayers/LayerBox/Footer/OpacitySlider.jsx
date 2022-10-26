@@ -7,14 +7,8 @@ import { Opacity } from 'oskari-ui';
 
 const OPACITY_EVENT_FIRING_DELAY = 100;
 
-const Border = styled('div')`
-    border-radius: 4px;
-    border: 1px solid #d9d9d9;
-    width: 100%;
-    padding: 10px 15px;
-`;
-const StyledSlider = styled(Opacity)`
-    margin: 0 20px 0 10px;
+const Container = styled('div')`
+    width: 200px;
 `;
 
 export const OpacitySlider = ({ value, onChange }) => {
@@ -34,9 +28,9 @@ export const OpacitySlider = ({ value, onChange }) => {
     }, [value]);
     return (
         <InputGroup compact>
-            <Border>
-                <StyledSlider defaultValue={sliderValue} onChange={instantValueChange} />
-            </Border>
+            <Container>
+                <Opacity bordered defaultValue={sliderValue} onChange={instantValueChange} />
+            </Container>
         </InputGroup>
     );
 };

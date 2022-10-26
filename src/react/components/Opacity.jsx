@@ -6,7 +6,7 @@ import { NumberInput } from './NumberInput';
 
 const StyledSlider = styled('div')`
     width: 100%;
-    margin: 0 20px 0 0;
+    padding: 0 10px 0 5px;
     float: left;
     .ant-slider-track {
         background-color: #0091ff;
@@ -21,20 +21,31 @@ const StyledSlider = styled('div')`
     &:hover .ant-slider-handle {
         border: #003fc3 solid 2px !important;
     }
+    ${props => props.bordered && (
+        `
+            border-radius: 4px;
+            border: 1px solid #d9d9d9;
+        `
+    )}
 `;
 
 const Container = styled('div')`
     width: 100%;
-`;
-
-const StyledNumberInputContainer = styled('div')`
-    float: left;
     display: flex;
     flex-direction: row;
 `;
 
+const NumberInputContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
+const NumberSuffix = styled('span')`
+    margin: 0;
+`;
+
 const StyledNumberInput = styled(NumberInput)`
-    width: 75px;
+    width: 65px;
     margin: 0 5px 0 5px;
 `;
 
@@ -61,7 +72,7 @@ export class Opacity extends React.Component {
         const { opacity } = this.state;
         return (
             <Container>
-                <StyledSlider>
+                <StyledSlider bordered={this.props.bordered}>
                     <Slider
                         min={0}
                         max={100}
@@ -69,15 +80,17 @@ export class Opacity extends React.Component {
                         value={typeof opacity === 'number' ? opacity : 0}
                     />
                 </StyledSlider>
-                <StyledNumberInputContainer>
+                <NumberInputContainer>
                     <StyledNumberInput
                         min={0}
                         max={100}
                         value={opacity}
                         onChange={this.onChange}
                     />
-                    <span>%</span>
-                </StyledNumberInputContainer>
+                    <NumberSuffix>
+                        %
+                    </NumberSuffix>
+                </NumberInputContainer>
                 <StyledClear />
             </Container>
         );
