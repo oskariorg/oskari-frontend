@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle": "Default style"
         },
+        "mapLayerUnavailable": `Map layer \"{name}"\ can not be shown.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
@@ -119,6 +120,10 @@ Oskari.registerLocalization(
                     "tooltip": "Show only 3D-datasets"
                 }
             }
+        },
+        "layerVisibility": {
+            "notInScale": "The map layer \"{name}\" has no visible features in this zoom level. Move to a suitable map level.",
+            "notInGeometry": "The map layer \"{name}\" has no features in this area. Move to a better location on map."
         },
         "guidedTour": {
             "help1": {

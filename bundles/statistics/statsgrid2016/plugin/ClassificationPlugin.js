@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const { data, status, uniqueCount, minMax } = this.getIndicatorData(state);
             if (status === 'PENDING') return;
             const editOptions = this.getEditOptions(state, uniqueCount, minMax);
-            const classifiedDataset = this.classifyDataset(state, data);
+            const classifiedDataset = this.classifyDataset(state, data, uniqueCount);
             // Histogram doesn't need to be updated on every events but props are gathered here
             // and histogram is updated only if it's opened, so update here for now
             this.updateHistogram(state, classifiedDataset, data, editOptions);
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         getEditOptions: function (state, uniqueCount, minMax) {
             const { activeIndicator } = state;
-            const { type, count, reverseColors, mapStyle, base } = activeIndicator.classification;
+            const { type, count, reverseColors, mapStyle, base, method } = activeIndicator.classification;
             const { count: { min, max }, methods, modes, mapStyles, types, fractionDigits } = this.service.getClassificationService().getLimits(mapStyle, type);
 
             const colorCount = mapStyle === 'points' ? 2 + count % 2 : count;
@@ -137,6 +137,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const disabled = [];
             if (uniqueCount < 3) {
                 disabled.push('jenks');
+                // only jenks breaks with small unique count, show at least count 2 for others
+                if (method !== 'jenks') {
+                    uniqueCount = 2;
+                }
             }
 
             // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
@@ -162,9 +166,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 colorsets
             };
         },
-        classifyDataset: function (state, data) {
+        classifyDataset: function (state, data, uniqueCount) {
             const { activeIndicator: { classification }, seriesStats } = state;
-            return this.service.getClassificationService().getClassification(data, classification, seriesStats);
+            return this.service.getClassificationService().getClassification(data, classification, seriesStats, uniqueCount);
         },
         startHistogramView: function (state, classifiedDataset, data, editOptions) {
             if (this.histogramControls) {

@@ -52,7 +52,8 @@ Oskari.registerLocalization(
                 'hidden': 'The map layer is temporarily hidden.',
                 'hide': 'Hide map layer',
                 'show': 'Show map layer',
-                'drag': 'Drag the map layer up/down in the list: layers listed nearer the top are shown on the map over layers listed lower.'
+                'drag': 'Drag the map layer up/down in the list: layers listed nearer the top are shown on the map over layers listed lower.',
+                'hiddenNotification': 'You have hidden the map layer earlier. Change the setting under "Selected layers" tab.'
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',
@@ -67,8 +68,8 @@ Oskari.registerLocalization(
                 'wmts': 'Raster layer',
                 'arcgis93': 'Raster layer',
                 'arcgis': 'Raster layer',
+                'vectortile': 'Raster layer',
                 'wfs': 'Vector layer',
-                'vectortile': 'Vector layer',
                 'vector': 'Vector layer',
                 'userlayer': '',
                 'myplaces': '',

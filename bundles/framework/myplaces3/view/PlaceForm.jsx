@@ -79,13 +79,13 @@ const PlaceForm = ({ values = {}, categoryId, categories, controller }) => {
 
             <Tooltip title={getLabel('link')}>
                 <UrlInput
-                    url={state.link}
+                    value={state.link}
                     placeholder={getLabel('link')}
                     onChange={link => updateState({ link })}/>
             </Tooltip>
             <Tooltip title={getLabel('imagelink')}>
                 <UrlInput
-                    url={state.imageLink}
+                    value={state.imageLink}
                     placeholder={getLabel('imagelink')}
                     onChange={imageLink => updateState({ imageLink })}/>
             </Tooltip>

@@ -1,5 +1,93 @@
 # Release Notes
 
+## 2.9.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/41?closed=1
+
+- Fixed an issue with GFI functionality on 3D-map module
+- Fixed an issue with "Add map layer" button in publisher functionality
+- Fixed an issue with removed layers in layer analytics listing for admin
+- Fixed a visual issue in background layer selection plugin for map
+- Improved metadata search form
+- Improved user location tracking visualization so it can't hide itself as well on problematic parts of the background map
+
+## 2.9.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/39?closed=1
+
+### Draw tools
+
+Added an option for draw tools to use a validation limit for length of a line and area of a polygon.
+The limits can be set with `StartDrawingRequest` options:
+
+```
+{
+    ...,
+    limits: {
+        area: `number in m2 limiting area size`,
+        length: `number in meters limiting line length`
+    }
+} 
+```
+
+Enabled modifying a geometry with a limited shape for `Circle`, `Box` and `Square`. Previously modifying a polygon shape was always done in a way that resulted in losing the original shape (new points could be added and individual points could be moved to skew the geometry). The previous method for editing is still available when using the shape `Polygon` to be used for editing.
+
+Fixed issues with intersection checks and measurements results when editing a feature.
+
+### Guided tour
+
+Guided tour implementation has been migrated from jQuery to React. This might affect custom/app-specific bundles that add content to the Guided tour.
+
+Text content should work like before/without changes but any custom actions that for example open a functionality etc needs to be migrated. You can see the changes required for bundles on this PR: https://github.com/oskariorg/oskari-frontend/pull/1927/files
+
+### Admin layer-editor
+
+Admin now has an option to visualize the layer coverage area (when available) on the map in the layer admin visualization tab. This is helpful for debugging issues where layer contents are not shown properly due to coverage area issues.
+
+Vector tile layers now have an option to enable "declutter" which draws labels separately from features. This has some performance implications but can be used to fix an issue where labels are clipped at tile edges.
+
+### Swipe tool
+
+Hover on vector features is now disabled when the "swipe" tool is active. This prevents an issue where features that are not shown due to swipe could be hovered on, bringing them visible.
+
+GFI/vector object data is no longer queried for clicks on "hidden" side of the swipe tool for the layer that is not shown due to swipe.
+
+### Layer selection tool on embedded maps
+
+The layer list implementation for embedded maps has been rewritten with React.
+
+The default UI option is now the rounded dark one with an icon (like most of the other tools) instead of the textual button on the map.
+
+### Publisher
+
+- First steps has been taken on publisher for jQuery -> React migration
+- Layer selection tool now allows showing metadata links for layers (option in publisher)
+- Fixed an error where map size was not always properly reset from preview size to full size when exiting the publisher
+- Fixed an issue where the mobile toolbar was not shown properly when tools were added with the map size preview set to small
+
+### Other fixes
+
+- Marker size backward compatibility fix: https://github.com/oskariorg/oskari-frontend/pull/1947
+- Improved support to show diverging statistical data with choropleth visualization
+- Searching/filtering layers with text has been improved
+- Replaced lot of custom Delete-button impls with the generic on under oskari-ui
+- Fixed a visual issue where some icons on buttons were clipped from the bottom when using Safari as browser
+- The frontend no longer expects WMTS-layers to have resource urls
+- An error notification is now displayed to user if there is a technical problem showing a WMTS-layer (tile matrix can't be parsed etc)
+- Added a notification when user adds a layer to map that was previously hidden (a very specific scenario where user adds a layer, hides it, removes it from map and adds it to map again)
+- Fixed an issue with the table-component where large continuous content on a cell (like my places feature with a long name without any spaces etc) could push the rest of table columns "off screen"
+- Restored proper data provider "groups" for user generated content (my places, userlayers etc)
+- Fixed an issue where removing a personal default view on geoportal could reload the page with an unexpected system default (like a 3d geoportal instead of the default 2d)
+- Vector tile layers are now listed under "raster layers" filter since they behave more like raster than vector layers from end-user perspective (previously they were not listed under any layer type filters)
+
+### Library updates
+
+- OpenLayers 6.13 -> 7.1 (NOTE! OpenLayers 7.0 dropped support for Internet Explorer)
+- geostats 1.8.0 -> 2.0.0
+- Unused libraries that were stored under oskari-frontend/libraries have been removed: jstree, clipper
+
 ## 2.8.0
 
 For a full list of changes see:

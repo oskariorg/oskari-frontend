@@ -110,7 +110,8 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                     "selectAsBaselayer": "Taustakarttataso",
-                    "allowStyleChange": "Salli esitystyylin valinta"
+                    "allowStyleChange": "Salli esitystyylin valinta",
+                    "showMetadata": "Näytä metatietolinkit"
                 },
                 "mylocation": {
                     "modes": {

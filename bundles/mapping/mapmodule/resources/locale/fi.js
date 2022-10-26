@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle" : "Oletustyyli"
         },
+        "mapLayerUnavailable": `Karttatasoa \"{name}"\ ei voida näyttää.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
@@ -117,6 +118,10 @@ Oskari.registerLocalization(
                     "tooltip": "Näytä vain 3D-aineistot"
                 }
             }
+        },
+        "layerVisibility": {
+            "notInScale": "Karttatason \"{name}\" kohteet eivät näy tässä mittakaavassa. Siirry soveltuvalle mittakaavatasolle.",
+            "notInGeometry": "Karttatasolla \"{name}\" ei ole kohteita tällä alueella. Siirry kohteeseen kartalla."
         },
         "guidedTour": {
             "help1": {

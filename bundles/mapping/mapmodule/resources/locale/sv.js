@@ -26,6 +26,7 @@ Oskari.registerLocalization(
         "styles": {
             "defaultTitle": "Standard stil"
         },
+        "mapLayerUnavailable": `Kartlagret \"{name}"\ kan inte visas.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",
@@ -119,6 +120,10 @@ Oskari.registerLocalization(
                     "tooltip": "Visa endast 3D-datamängder"
                 }
             }
+        },
+        "layerVisibility": {
+            "notInScale": "\"{name}\" kartlagrets objekter kan inte visas i denna skala. Välj en lämplig skalnivå.",
+            "notInGeometry": "Kartlagret \"{name}\" har inga objekter i detta område. Gå till en annan vy på kartan."
         },
         "guidedTour": {
             "help1": {

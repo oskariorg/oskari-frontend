@@ -28,34 +28,50 @@ const getOption = (style) => (
 
 export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
-    const styleTool = layer.getTool('ownStyle');
+
+    /**
+     * ownStyle = wfs layers (added in WfsLayerModelBuilder)
+     * editStyle = myplaces & userlayers (added in MyPlacesLayerModelBuilder)
+     */
+    const ownStyle = layer.getTool('ownStyle');
+    const editStyle = layer.getTool('editStyle');
+
+    const styleTool = ownStyle || editStyle;
     const currentStyle = layer.getCurrentStyle();
-    if (styles.length < 2 && !styleTool) {
+
+    if (!styleTool && styles.length < 2) {
         return null;
     }
+
     return (
         <Fragment>
-            <Message messageKey={'layer.styles.title'} LabelComponent={Label} />
+            {!editStyle && (
+                <Message messageKey={'layer.styles.title'} LabelComponent={Label} />
+            )}
             <InputGroup compact>
-                <StyledSelect
-                    value={currentStyle.getName()}
-                    disabled={styles.length < 2}
-                    onChange={onChange}
-                    dropdownMatchSelectWidth={false}
-                >
-                    { styles.length < 2 &&
-                        getOption(currentStyle)
+                <div>
+                    {!editStyle && (
+                        <StyledSelect
+                            value={currentStyle.getName()}
+                            disabled={styles.length < 2}
+                            onChange={onChange}
+                            dropdownMatchSelectWidth={false}
+                        >
+                            { styles.length < 2 &&
+                                getOption(currentStyle)
+                            }
+                            { styles.length >= 2 &&
+                                styles.map(getOption)
+                            }
+                        </StyledSelect>
+                    )}
+                    { styleTool &&
+                        <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
+                            onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
+                            <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
+                        </Button>
                     }
-                    { styles.length >= 2 &&
-                        styles.map(getOption)
-                    }
-                </StyledSelect>
-                { styleTool &&
-                    <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
-                        onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
-                        <EditOutlined style={{ color: THEME_COLOR, fontSize: '16px' }}/>
-                    </Button>
-                }
+                </div>
             </InputGroup>
         </Fragment>
     );

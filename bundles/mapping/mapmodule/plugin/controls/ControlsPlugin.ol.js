@@ -1,3 +1,12 @@
+import './request/DisableMapKeyboardMovementRequest';
+import './request/DisableMapMouseMovementRequest';
+import './request/EnableMapKeyboardMovementRequest';
+import './request/EnableMapMouseMovementRequest';
+import './request/MapMovementControlsRequestHandler';
+
+import './request/ToolSelectionRequest';
+import './request/ToolSelectionHandler';
+
 import olInteractionDragZoom from 'ol/interaction/DragZoom';
 import olInteractionDragPan from 'ol/interaction/DragPan';
 import olInteractionKeyboardPan from 'ol/interaction/KeyboardPan';

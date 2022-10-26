@@ -2,6 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 import { FILTER_ALL_LAYERS } from '..';
 import { GROUPING_PRESET, GROUPING_DATAPROVIDER } from '../preset';
+import { Messaging } from 'oskari-ui/util';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -28,7 +29,7 @@ const providerReducer = (accumulator, currentLayer) => {
     if (!id) {
         return accumulator;
     }
-    const dataProviderId = '' + id;
+    let dataProviderId = '' + id;
     let orgLayers = accumulator[dataProviderId] || [];
     if (!orgLayers.length) {
         accumulator[dataProviderId] = orgLayers;
@@ -60,14 +61,14 @@ const getDataProviders = (providers = [], layers = []) => {
  * @param {String} searchText input to filter by. If empty or "falsy" the groups param is returned as-is.
  * @returns Removes any groups/subgroups that don't have layers matching the searchText.
  */
-const filterGroups = (groups = [], searchText) => {
-    if (!searchText || !searchText.trim()) {
+const filterGroups = (groups = [], searchTerms = []) => {
+    if (!searchTerms.length) {
         return groups;
     }
     return groups.map(group => {
         group.unfilteredLayerCount = group.getLayerCount();
-        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-        group.groups = filterGroups(group.groups, searchText);
+        group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchTerms));
+        group.groups = filterGroups(group.groups, searchTerms);
         if (!group.getLayerCount()) {
             // no layers and no subgroups with layers
             return null;
@@ -114,9 +115,24 @@ class ViewHandler extends StateHandler {
         this.groupingType = groupingType;
         this.updateLayerGroups();
     }
-    setFilter (activeId, searchText) {
+    setFilter (activeId, searchText = '') {
         const previousSearchText = this.filter.searchText;
-        this.filter = { activeId, searchText };
+        // Generate search terms by splitting by * and space
+        // Opening layerlist with request might send searchText as null
+        //  so we need to make sure it's string before processing it.
+        //  Nulls are not changed to function param default values, this is required even with default value.
+        const normalizedQuery = searchText || '';
+        const terms = normalizedQuery
+            .replaceAll('*', ' ')
+            .replaceAll(',', ' ')
+            .split(' ')
+            .filter(item => item !== '');
+        this.filter = {
+            activeId,
+            normalizedQuery,
+            terms
+        };
+
         this.updateLayerGroups();
 
         if (searchText !== previousSearchText) {
@@ -142,6 +158,12 @@ class ViewHandler extends StateHandler {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
         }
+
+        const layer = this.mapLayerService.findMapLayer(id);
+        if (layer && !layer.isVisible()) {
+            Messaging.notify(this.loc.layer.hiddenNotification);
+        }
+
         const selectedLayerIds = [...this.state.selectedLayerIds, id];
         this.updateState({ selectedLayerIds });
         // Adding a map layer can be a resource exhausting task.
@@ -187,7 +209,7 @@ class ViewHandler extends StateHandler {
     }
 
     updateLayerGroups () {
-        const { searchText, activeId: filterId } = this.filter;
+        const { terms, activeId: filterId } = this.filter;
         const isPresetFiltered = filterId !== FILTER_ALL_LAYERS;
         const layers = !isPresetFiltered ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
@@ -204,7 +226,7 @@ class ViewHandler extends StateHandler {
         }
 
         const groups = groupLayers([...layers], GROUPING_METHODS[this.groupingType], tools, groupsToProcess, this.loc.grouping.noGroup, isPresetFiltered);
-        this.updateState({ groups: filterGroups(groups, searchText) });
+        this.updateState({ groups: filterGroups(groups, terms) });
     }
 
     updateOpenGroupTitles (openGroupTitles) {

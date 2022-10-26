@@ -1,5 +1,8 @@
 import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 
+import React from 'react';
+import { Message } from 'oskari-ui';
+
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
 import './domain/style';
@@ -8,6 +11,34 @@ import './domain/MaplayerGroup';
 import './service/map.layer';
 import './service/map.state';
 import './service/VectorFeatureService.ol';
+
+// plugins
+import './plugin/Plugin';
+import './plugin/fullscreen/FullScreen';
+import './plugin/getinfo/GetInfoPlugin';
+import './plugin/search/SearchPlugin';
+import './plugin/logo/LogoPlugin';
+import './plugin/datasource/DataSourcePlugin';
+import './plugin/layers/LayerSelectionPlugin';
+import './plugin/layers/BackgroundLayerSelectionPlugin';
+import './plugin/location/GeoLocationPlugin';
+import './plugin/publishertoolbar/PublisherToolbarPlugin';
+import './plugin/realtime/RealtimePlugin';
+import './plugin/mylocation/MyLocationPlugin';
+import './plugin/zoombar/Portti2Zoombar';
+import './plugin/panbuttons/PanButtons';
+
+import './plugin/controls/ControlsPlugin.ol';
+import './plugin/indexmap/IndexMapPlugin.ol';
+import './plugin/scalebar/ScaleBarPlugin.ol';
+import './plugin/markers/MarkersPlugin.ol';
+
+// layer plugins
+import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
+import './plugin/wmslayer/WmsLayerPlugin.ol';
+import './plugin/vectorlayer/VectorLayerPlugin.ol';
+import './plugin/vectortilelayer/VectorTileLayerPlugin';
+import './plugin/bingmapslayer/BingMapsLayerPlugin';
 
 import './event/MapClickedEvent';
 import './event/MapMoveStartEvent';
@@ -27,8 +58,6 @@ import './event/GetInfoResultEvent';
 import './event/MapSizeChangedEvent';
 import './event/FeatureEvent';
 
-import './request/ToolSelectionRequest';
-import './plugin/controls/ToolSelectionHandler';
 import './request/activate.map.layer';
 import './request/add.map.layer';
 import './request/remove.map.layer';
@@ -68,7 +97,6 @@ import './request/GetUserLocationRequest';
 import './request/GetUserLocationRequestHandler';
 import './event/UserLocationEvent';
 
-import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 
@@ -1376,7 +1404,7 @@ Oskari.clazz.define(
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
         },
-
+        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
         _adjustMobileMapSize: function () {
             var mapDivHeight = this.getMapEl().height();
             var mobileDiv = this.getMobileDiv();
@@ -2575,9 +2603,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help1.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.help1.message);
-                return content;
+                return <Message bundleKey='MapModule' messageKey='guidedTour.help1.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.panbuttonDiv');
@@ -2590,9 +2616,7 @@ Oskari.clazz.define(
                 return this.getLocalization().guidedTour.help2.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.help2.message);
-                return content;
+                return <Message bundleKey='MapModule' messageKey='guidedTour.help2.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('.pzbDiv');
@@ -2675,12 +2699,17 @@ Oskari.clazz.define(
                         config: dataAttributes
                     };
 
-                    if (layer.getMaxScale() && layer.getMinScale()) {
+                    if (layer.getMaxScale() || layer.getMinScale()) {
                         const layerResolutions = me.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
-                        const minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
-                        const maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
-                        layerObject.minZoom = minZoomLevel;
-                        layerObject.maxZoom = maxZoomLevel;
+                        const minRes = layerResolutions[0];
+                        const maxRes = layerResolutions[layerResolutions.length - 1];
+                        // only set if limiting
+                        if (mapResolutions[0] !== layerResolutions[0]) {
+                            layerObject.minZoom = mapResolutions.indexOf(minRes);
+                        }
+                        if (mapResolutions[mapResolutions.length - 1] !== layerResolutions[layerResolutions.length - 1]) {
+                            layerObject.maxZoom = mapResolutions.indexOf(maxRes);
+                        }
                     };
 
                     if (layer.getMetadataIdentifier() !== '') {

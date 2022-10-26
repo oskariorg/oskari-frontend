@@ -51,7 +51,8 @@ Oskari.registerLocalization(
                 'hidden': 'Kartlagret är tillfälligt dolt.',
                 'hide': 'Dölja kartlaget',
                 'show': 'Visa kartlaget',
-                'drag': 'Dra-och-släpp kartlagret upp/ner på listan. Kartlagren längst upp visas ovanpå de nedanstående på kartan.'
+                'drag': 'Dra-och-släpp kartlagret upp/ner på listan. Kartlagren längst upp visas ovanpå de nedanstående på kartan.',
+                'hiddenNotification': 'Du har gömt detta kartlager. Vill du återställa synligheten, gå till Kartlager-menyn.'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',
@@ -66,8 +67,8 @@ Oskari.registerLocalization(
                 'wmts': 'Kartlager i rasterformat',
                 'arcgis93': 'Kartlager i rasterformat',
                 'arcgis': 'Kartlager i rasterformat',
+                'vectortile': 'Kartlager i rasterformat',
                 'wfs': 'Kartlager i vektorformat',
-                'vectortile': 'Kartlager i vektorformat',
                 'vector': 'Kartlager i vektorformat',
                 'userlayer': '',
                 'myplaces': '',

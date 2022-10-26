@@ -1,3 +1,5 @@
+import './VectorTileLayer';
+
 import olSourceVectorTile from 'ol/source/VectorTile';
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import olFormatMVT from 'ol/format/MVT';
@@ -5,7 +7,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
-import mapboxStyleFunction from 'ol-mapbox-style/dist/stylefunction';
+import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
 import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
@@ -43,7 +45,8 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLES_JSON,
                 LayerComposingModel.TILE_GRID,
-                LayerComposingModel.URL
+                LayerComposingModel.URL,
+                LayerComposingModel.DECLUTTER
             ], null, [LayerComposingModel.NAME]); // common field name is not used in vectortilelayers so it is skipped on LayerComposingModel
 
             mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);

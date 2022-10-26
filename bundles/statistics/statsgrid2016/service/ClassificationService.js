@@ -64,15 +64,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
          * @param  {geostats} groupStats precalculated geostats | optional
          * @return {Object}               result with classified values
          */
-        getClassification: function (indicatorData, opts, groupStats) {
+        getClassification: function (indicatorData, opts, groupStats, uniqueCount) {
             if (typeof indicatorData !== 'object') {
                 this.log.warn('Data expected as object with region/value as keys/values.');
                 return { error: 'noData' };
             }
-            // TODO: data should be validated in one place (stateservice?)
+            // TODO: data should be validated and unique values counted in one place
+            // stateservice.getState() => returns or service triggers state for all components
             const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
-            const minData = opts.method === 'jenks' ? 3 : 2;
-            if ((groupStats && groupStats.serie.length < 3) || dataAsList.length < minData) {
+            const dataSize = uniqueCount || new Set(dataAsList).size;
+            // geostats fails with jenks if there isn't at least one more unique values than count
+            const minData = opts.method === 'jenks' ? Math.max(opts.count + 1, 3) : 1;
+            if ((groupStats && groupStats.serie.length < 3) || dataSize < minData) {
                 return { error: 'noEnough' };
             }
             const isDivided = opts.type === 'div';

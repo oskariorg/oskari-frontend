@@ -1,3 +1,23 @@
+import React from 'react';
+import { Message } from 'oskari-ui';
+
+import './button-methods';
+import './default-buttons';
+
+import './request/ShowMapMeasurementRequest';
+import './request/ShowMapMeasurementRequestHandler.ol';
+
+import './request/ToolbarRequest';
+import './request/ToolbarRequestHandler';
+import './event/ToolbarLoadedEvent';
+
+import './request/AddToolButtonRequest';
+import './request/RemoveToolButtonRequest';
+import './request/ToolButtonStateRequest';
+import './request/SelectToolButtonRequest';
+import './request/ToolButtonRequestHandler';
+import './event/ToolSelectedEvent';
+
 /**
  * @class Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance
  *
@@ -539,9 +559,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
-                content.append(this.getLocalization().guidedTour.message);
-                return content;
+                return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getPositionRef: function () {
                 return jQuery('#toolbar');

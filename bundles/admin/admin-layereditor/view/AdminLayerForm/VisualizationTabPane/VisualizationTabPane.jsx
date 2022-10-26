@@ -16,6 +16,7 @@ import { RasterStyle } from './RasterStyle';
 import { TimeSeries } from './TimeSeries';
 import { VectorStyle } from './VectorStyle';
 import { LayerTypeNotSupported } from '../LayerTypeNotSupported';
+import { Declutter } from './Declutter';
 
 const {
     OPACITY,
@@ -29,7 +30,8 @@ const {
     SCALE,
     COVERAGE,
     TIMES,
-    CESIUM_ION
+    CESIUM_ION,
+    DECLUTTER
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, scales, propertyFields, controller }) => {
@@ -44,6 +46,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             }
             { propertyFields.includes(COVERAGE) &&
                 <Coverage id={layer.id} controller={controller} />
+            }
+            { propertyFields.includes(DECLUTTER) &&
+                <Declutter layer={layer} controller={controller} />
             }
             { (propertyFields.includes(TIMES) && layer.capabilities.times) &&
                 <TimeSeries layer={layer} scales={scales} controller={controller} />

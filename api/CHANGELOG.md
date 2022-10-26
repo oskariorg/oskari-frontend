@@ -9,12 +9,47 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.9.0
+
+### [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest
+
+For built-in symbols everything stays the same.
+
+For external graphic symbols in markers the size of the marker is:
+- when below 10 is calculated as size * 10 + 40 for actual size (while hack'ish this is for backwards compatibility reasons)
+- 10 + values are now considered as a pixel value (as documented on the API page)
+
+### [mod] [rpc] DrawTools.StartDrawingRequest
+
+Enabled modifying a geometry with a limited shape for `Circle`, `Box` and `Square`. Previously modifying a polygon shape was always done in a way that resulted in losing the original shape (new points could be added and individual points could be moved to skew the geometry). The previous method for editing is still available when using the shape `Polygon` to be used for editing.
+
+Added an option to use a validation limit for length of a line and area of a polygon.
+The `limits` can be set with options:
+```javascript
+{
+    ...,
+    limits: {
+        area: `number in m2 limiting area size`,
+        length: `number in meters limiting line length`
+    }
+}
+```
+Changed to show self intersection warning for Polygons as in API documentation. Previously warning was shown only with showMeasureOnMap option.
+
+### [mod] [rpc] DrawingEvent
+Added valid property for GeoJson features. Used with `DrawTools.StartDrawingRequest` limits option.
+
 ## 2.8.0
 
 ### [add] [rpc] StateChangedEvent
 
 Event is sent when a massive application state change occurs like user clicks on the "reset map to default".
 This allows RPC-based apps to detect such occurance and re-add for example markers that they need after such reset.
+
+## 2.7.0 [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest
+
+The size value is now considered as a pixel value instead of abstracted WHEN using external graphic for marker symbol.
+For built-in symbols everything stays the same.
 
 ## 2.6.0
 

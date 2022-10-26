@@ -28,7 +28,7 @@ Oskari.registerLocalization({
                 asc: 'Sortera i stigande ordning',
                 cancel: 'Annullera sorteringen'
             },
-            emptyText: 'Inga data.'
+            emptyText: 'Ingen data.'
         },
         ColorPicker: {
             tooltip: 'Välj färg',

@@ -299,6 +299,21 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             });
             return sanitized;
         },
+        /**
+         * Close enough "backwards compatibility" workaround for marker size when using external graphic/svg as icon.
+         * If the requested size is below 10 -> use the formula used pre-2.7 to calculate size.
+         * Otherwise keep the requested size (documented as pixel size).
+         * @param {Number} requestedSize pixel value or previously supported value of 1-5 like for built-in symbols. Cut off point for logic is at 10.
+         */
+        __workaroundForBackwardsCompatibilitySize: function (requestedSize) {
+            if (typeof requestedSize === 'number' && requestedSize < 10) {
+                const mapmodule = this.getMapModule();
+                if (mapmodule && typeof mapmodule.getPixelForSize === 'function') {
+                    return mapmodule.getPixelForSize(requestedSize);
+                }
+            }
+            return requestedSize;
+        },
         _getStyleFromMarkerData: function (markerData) {
             const style = jQuery.extend(true, {}, DEFAULT_STYLE);
             const { color, shape, size, msg, offsetX, offsetY } = markerData;
@@ -307,7 +322,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             style.text.labelText = msg;
             // use pixel size if shape is svg or url
             if (typeof shape === 'string') {
-                style.image.sizePx = size;
+                style.image.sizePx = this.__workaroundForBackwardsCompatibilitySize(size);
             } else {
                 style.image.size = size;
             }

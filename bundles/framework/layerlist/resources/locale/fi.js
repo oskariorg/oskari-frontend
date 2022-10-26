@@ -52,7 +52,8 @@ Oskari.registerLocalization(
                 'hidden': 'Karttataso on tilapäisesti piilotettu.',
                 'hide': 'Piilota karttataso',
                 'show': 'Näytä karttataso',
-                'drag': 'Raahaa karttatasoa ylemmäs tai alemmas: järjestys kartalla määräytyy tämän mukaisesti.'
+                'drag': 'Raahaa karttatasoa ylemmäs tai alemmas: järjestys kartalla määräytyy tämän mukaisesti.',
+                'hiddenNotification': 'Olet aiemmin piilottanut karttatason. Aseta karttataso näkyväksi "Valitut tasot" -valikosta.'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',
@@ -67,8 +68,8 @@ Oskari.registerLocalization(
                 'wmts': 'Rasteritaso',
                 'arcgis93': 'Rasteritaso',
                 'arcgis': 'Rasteritaso',
+                'vectortile': 'Rasteritaso',
                 'wfs': 'Vektoritaso',
-                'vectortile': 'Vektoritaso',
                 'vector': 'Vektoritaso',
                 'userlayer': '',
                 'myplaces': '',

@@ -31,7 +31,8 @@ const PROPERTY_FIELDS = [
     'TIMES',
     'URL',
     'VERSION',
-    'WFS_RENDER_MODE'
+    'WFS_RENDER_MODE',
+    'DECLUTTER'
 ];
 
 // Common fields are enforced on composing model.
