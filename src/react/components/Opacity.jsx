@@ -4,20 +4,38 @@ import PropTypes from 'prop-types';
 import { Slider } from './Slider';
 import { NumberInput } from './NumberInput';
 
-const StyledRoot = styled('div')`
-    width: 500px;
-`;
-
 const StyledSlider = styled('div')`
-    width: 350px;
+    width: 100%;
+    margin: 0 20px 0 0;
     float: left;
-    margin-left: 10px;
-    margin-right: 10px;
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+        margin-top: -6px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
 `;
 
-const StyledNumberInput = styled('div')`
-    width: 120px;
+const Container = styled('div')`
+    width: 100%;
+`;
+
+const StyledNumberInputContainer = styled('div')`
     float: left;
+    display: flex;
+    flex-direction: row;
+`;
+
+const StyledNumberInput = styled(NumberInput)`
+    width: 75px;
+    margin: 0 5px 0 5px;
 `;
 
 const StyledClear = styled('br')`
@@ -42,7 +60,7 @@ export class Opacity extends React.Component {
     render () {
         const { opacity } = this.state;
         return (
-            <StyledRoot>
+            <Container>
                 <StyledSlider>
                     <Slider
                         min={0}
@@ -51,16 +69,17 @@ export class Opacity extends React.Component {
                         value={typeof opacity === 'number' ? opacity : 0}
                     />
                 </StyledSlider>
-                <StyledNumberInput>
-                    <NumberInput
+                <StyledNumberInputContainer>
+                    <StyledNumberInput
                         min={0}
                         max={100}
                         value={opacity}
                         onChange={this.onChange}
-                    /> %
-                </StyledNumberInput>
+                    />
+                    <span>%</span>
+                </StyledNumberInputContainer>
                 <StyledClear />
-            </StyledRoot>
+            </Container>
         );
     }
 }
