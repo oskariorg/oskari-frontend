@@ -100,5 +100,6 @@ export class Opacity extends React.Component {
 
 Opacity.propTypes = {
     defaultValue: PropTypes.number,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    bordered: PropTypes.bool
 };
