@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { FeatureDataButton } from './FeatureDataButton';
+
 /**
  * @class Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin
  * Provides WFS grid link on top of map
@@ -60,15 +64,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         _createControlElement: function () {
             var me = this,
                 el = jQuery('<div class="mapplugin featuredataplugin">' +
-                    '<a href="JavaScript: void(0);"></a>' +
                     '</div>');
-            var link = el.find('a');
             me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
-            link.html(me._loc.title);
-            me._bindLinkClick(el);
-            el.on('mousedown', function (event) {
-                event.stopPropagation();
-            });
 
             return el;
         },
@@ -89,6 +86,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 }
             }
             return false;
+        },
+        _setLayerToolsEditModeImpl: function () {
+            var me = this,
+                el = me.getElement();
+            if (!el) {
+                return;
+            }
+            if (this.inLayerToolsEditMode()) {
+                this.renderButton(null, el, true);
+            } else {
+                this.renderButton(null, el);
+            }
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -138,36 +147,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             return this._mapStatusChanged;
         },
 
-        _bindLinkClick: function (link) {
-            var me = this,
-                element = me.getElement(),
-                linkElement = link || (element ? element.find('a') : null),
-                sandbox = me.getSandbox();
-
-            if (!linkElement) {
-                return;
-            }
-
-            linkElement.on('click', function () {
-                if (me.inLayerToolsEditMode()) {
-                    return;
-                }
-                if (!me._flyoutOpen) {
-                    if (me._mapStatusChanged) {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                        me._mapStatusChanged = false;
-                    } else {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                    }
-                    me._flyoutOpen = true;
-                } else {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-                    me._flyoutOpen = undefined;
-                }
-                return false;
-            });
-        },
-
         handleCloseFlyout: function () {
             var me = this,
                 el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-featuredata');
@@ -179,6 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
             me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
+            this.renderButton(null, null);
         },
         /**
          * @method refresh
@@ -213,16 +193,48 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
+            this.renderButton(style, div);
+        },
+        renderButton: function (style, element, disabled = false) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
 
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
+            let styleName = style;
+            if (!style) {
+                style = this.getToolStyleFromMapModule();
+            }
+
+            ReactDOM.render(
+                <FeatureDataButton
+                    icon={<span>{this._loc.title}</span>}
+                    title={this._loc.title}
+                    onClick={() => this.openFlyout()}
+                    styleName={styleName}
+                    disabled={disabled}
+                    active={this._flyoutOpen}
+                />,
+                el[0]
+            );
+        },
+        openFlyout: function () {
+            if (!this.inLayerToolsEditMode()) {
+                const sandbox = this.getSandbox();
+                if (!this._flyoutOpen) {
+                    if (this._mapStatusChanged) {
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
+                        this._mapStatusChanged = false;
+                    } else {
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
+                    }
+                    this._flyoutOpen = true;
+                } else {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
+                    this._flyoutOpen = undefined;
                 }
             }
-            el.addClass(styleClass);
         },
         showLoadingIndicator: function (blnLoad) {
             if (!this.getElement()) {
@@ -269,6 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 flyoutTop = parseInt(top) + parseInt(height);
 
             flyout.container.parentElement.parentElement.style.top = flyoutTop + 'px';
+            this.renderButton(null, null);
         },
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
