@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import { ThemeProvider } from '../../util/contexts';
 
 const StyledButton = styled(Button)`
+    width: ${props => props.size};
+    height: ${props => props.size};
     border: none;
     border-radius: ${props => props.rounding};
     color: ${props => props.$active ? '#ffd400' : props.accent};
@@ -39,7 +41,7 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, iconActive, children, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, children, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
@@ -47,6 +49,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, iconActive, c
                     <ThemeButton
                         icon={icon}
                         onClick={onClick}
+                        size={size}
                         $active={iconActive}
                         { ...rest }
                     />
@@ -59,6 +62,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, iconActive, c
                 <ThemeButton
                     icon={icon}
                     onClick={onClick}
+                    size={size}
                     $active={iconActive}
                     { ...rest }
                 />

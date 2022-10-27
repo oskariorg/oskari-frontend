@@ -3,7 +3,6 @@ import { MapButton, Toolbar } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Container = styled('div')`
-    margin: 0 0 10px 30px;
     width: 32px;
     height: 32px;
     position: relative;
@@ -13,6 +12,7 @@ const StyledButton = styled(MapButton)`
     position: absolute;
     left: 0;
     top: 0;
+    margin: ${props => props.noMargin ? '0' : '0 0 10px 30px'};
 `;
 
 const THEME_LIGHT = {
@@ -40,7 +40,7 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick, iconActive = false, withToolbar = false, children }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, children }) => {
     const [toolbarOpen, setToolbarOpen] = useState(false);
 
     let roundingPercent = 0;
@@ -75,12 +75,13 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, iconActive = 
     }
 
     return (
-        <Container>
+        <Container size={size} noMargin={noMargin}>
             <StyledButton
                 onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
                 icon={icon}
                 theme={{ ...color, roundingPercent }}
                 title={title}
+                size={size}
                 iconActive={iconActive || (withToolbar && toolbarOpen)}
             />
             {withToolbar && (
