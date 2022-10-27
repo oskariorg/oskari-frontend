@@ -1,8 +1,17 @@
-import React from 'react';
-import { MapButton } from 'oskari-ui/components/buttons';
+import React, { useState } from 'react';
+import { MapButton, Toolbar } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Container = styled('div')`
+    width: 32px;
+    height: 32px;
+    position: relative;
+`;
+
+const StyledButton = styled(MapButton)`
+    position: absolute;
+    left: 0;
+    top: 0;
     margin: ${props => props.noMargin ? '0' : '0 0 10px 30px'};
 `;
 
@@ -31,7 +40,9 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, children }) => {
+    const [toolbarOpen, setToolbarOpen] = useState(false);
+
     let roundingPercent = 0;
     let color;
 
@@ -65,14 +76,19 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
 
     return (
         <Container size={size} noMargin={noMargin}>
-            <MapButton
-                onClick={onClick}
+            <StyledButton
+                onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
                 icon={icon}
                 theme={{ ...color, roundingPercent }}
                 title={title}
                 size={size}
-                iconActive={iconActive}
+                iconActive={iconActive || (withToolbar && toolbarOpen)}
             />
+            {withToolbar && (
+                <Toolbar height='32px' open={toolbarOpen} shape={shape}>
+                    {children}
+                </Toolbar>
+            )}
         </Container>
     );
 };

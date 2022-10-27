@@ -5,7 +5,8 @@ export { SecondaryButton } from './SecondaryButton';
 export { DeleteButton } from './DeleteButton';
 export { IconButton } from './IconButton';
 export { MapButton } from './MapButton';
-
+export { Toolbar } from './ToolbarButton';
+export { ToolbarButtonItem } from './ToolbarButton';
 
 export const ButtonContainer = styled.div`
     display: flex;

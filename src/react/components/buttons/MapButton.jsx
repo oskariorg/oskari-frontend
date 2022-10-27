@@ -41,7 +41,7 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, children, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
