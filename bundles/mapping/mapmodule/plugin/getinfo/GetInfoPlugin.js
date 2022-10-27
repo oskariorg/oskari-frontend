@@ -1,5 +1,15 @@
 import '../BasicMapModulePlugin';
 import './event/DataForMapLocationEvent';
+
+import './formatter/GetFeatureInfoFormatter';
+import './request/GetFeatureInfoHandler';
+import './request/GetFeatureInfoRequest';
+import './request/GetFeatureInfoActivationRequest';
+import './request/ResultHandlerRequest';
+import './request/ResultHandlerRequestHandler';
+import './request/SwipeStatusRequest';
+import './request/SwipeStatusRequestHandler';
+
 import { getGfiContent, getGfiResponseType, hasGfiData } from './GfiHelper';
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin

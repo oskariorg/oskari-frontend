@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const dataAsList = Object.values(indicatorData).filter(val => val !== null && val !== undefined);
             const dataSize = uniqueCount || new Set(dataAsList).size;
             // geostats fails with jenks if there isn't at least one more unique values than count
-            const minData = opts.method === 'jenks' ? Math.max(opts.count + 1, 3) : 2;
+            const minData = opts.method === 'jenks' ? Math.max(opts.count + 1, 3) : 1;
             if ((groupStats && groupStats.serie.length < 3) || dataSize < minData) {
                 return { error: 'noEnough' };
             }

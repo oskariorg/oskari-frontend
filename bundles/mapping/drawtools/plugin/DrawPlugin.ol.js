@@ -35,7 +35,7 @@ const OPTIONS = {
     buffer: 0,
     bufferAccuracy: 10 // is number of line segments used to represent a quadrant circle
 };
-const isModifyLimited = shape => ['Square', 'Circle', 'Box'].some(s => s === shape);
+const isModifyLimited = shape => ['Square', 'Circle', 'Box'].includes(shape);
 
 /**
  * @class Oskari.mapping.drawtools.plugin.DrawPlugin
@@ -64,7 +64,6 @@ Oskari.clazz.define(
         this._draw = {};
         this._modify = {};
         this._functionalityIds = {};
-        this._circleHasGeom = false;
         this._defaultStyle = {
             fill: {
                 color: 'rgba(255,0,255,0.2)'
@@ -116,56 +115,15 @@ Oskari.clazz.define(
             this._defaultStyle = style;
         },
         /**
-         * @Return{String} reference system as defined in GeoJSON format
-         * @method _getSRS
-         */
-        _getSRS: function () {
-            return this.getSandbox().getMap().getSrsName();
-        },
-        /**
-         * Used to toggle GFI functionality off when the user is drawing to not generate popups on clicks
-         * and on after the drawing is finished to resume showing GFI popups.
-         * @param {Boolean} enabled
-         */
-        setGFIEnabled: function (enabled) {
-            var reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
-            if (!reqBuilder) {
-                // GFI functionality not available
-                return;
-            }
-            // enable (resume showing gfi popups after drawing is completed)
-            // or disable (when drawing in progress to not generate popups on clicks)
-            this.getSandbox().request(this, reqBuilder(!!enabled));
-        },
-        /**
          * @method draw
          * - activates draw and modify controls
          *
          * @param {String} id, that identifies the request
          * @param {String} shape: drawing shape: Point/Circle/Polygon/Box/Square/LineString
-         * @param {Object} options include:
-         *                  {Number} buffer: buffer for drawing buffered line and dot. If not given or 0, will disable dragging.
-         *                  {Object} style: styles for draw, modify and intersect mode. If options don't include custom style, sets default styles
-         *                  {Boolean/String} allowMultipleDrawing: true - multiple selection is allowed,
-         *                                                         false - after drawing is finished (by doubleclick), will stop drawing tool, but keeps selection on the map.
-         *                                                        'single' - selection will be removed before drawing a new selection.
-         *                                                        'multiGeom' - form multigeometry from drawn features.
-         *                  {Boolean} showMeasureOnMap: true - if measure result should be displayed on map near drawing feature.
-         *                  {Boolean} drawControl: true - will activate draw control, false - will not activate.
-         *                  {Boolean} modifyControl: true - will activate modify control, false, will not activate.
-         *                  {String} geojson: geojson for editing. If not given, will activate draw/modify control according to given shape.
-         *                  {Boolean} selfIntersection: true - user will see warning text if polygon has self-intersection. Features will be not sended to event before polygon is valid. false - itself intersection will be not checked.
+         * @param {Object} options
          */
         draw: function (id, shape, options) {
-            // TODO: implementations
-            // if shape == geojson -> setup editing it
-            // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
-            // if shape is one of the predefined draw options -> start corresponding draw tool
-            // if options.buffer is defined -> use it for dot and line and prevent dragging to create buffer
-            // TODO : start draw control
-            // use default style if options don't include custom style
             var me = this;
-            me.drawMultiGeom = options.allowMultipleDrawing === 'multiGeom';
             if (me._gfiTimeout) {
                 clearTimeout(me._gfiTimeout);
             }
@@ -197,11 +155,7 @@ Oskari.clazz.define(
             me._functionalityIds[id] = me.getCurrentLayerId();
 
             // activate drawcontrols
-            if (shape) {
-                me.drawShape(shape, geojson);
-            } else {
-                // if shape == undefined -> update buffer for existing drawing (any other reason for this? text etc?)
-            }
+            me.drawShape(shape, geojson);
         },
         initOptions: function (options) {
             const { selfIntersection = true, limits: optLimits = {}, ...rest } = options;
@@ -223,7 +177,7 @@ Oskari.clazz.define(
                 const jsonFormat = new olFormatGeoJSON();
                 let featuresFromJson = jsonFormat.readFeatures(geojson);
                 // parse multi geometries to single geometries
-                if (this.drawMultiGeom) {
+                if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
                     featuresFromJson = this.parseMultiGeometries(featuresFromJson);
                 }
                 featuresFromJson.forEach(f => {
@@ -505,10 +459,8 @@ Oskari.clazz.define(
                 // Do common stuff
                 // buffer is used for circle's radius
                 if (requestedBuffer > 0) {
-                    features = this.getCircleAsPolygonFeature(features, requestedBuffer);
+                    features = features.map(feat => this.getCircleAsPolygonFeature(feat));
                     bufferedFeatures = features; // or = [];
-                } else {
-                    features = this.getCircleAsPolygonFeature(features);
                 }
                 break;
             }
@@ -581,7 +533,7 @@ Oskari.clazz.define(
             var me = this,
                 geoJsonObject = {
                     type: 'FeatureCollection',
-                    crs: this._getSRS(),
+                    crs: this.getSandbox().getMap().getSrsName(),
                     features: []
                 },
                 measures,
@@ -594,7 +546,7 @@ Oskari.clazz.define(
                 return geoJsonObject;
             }
             // form multigeometry from features
-            if (me.drawMultiGeom) {
+            if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
                 measures = me.sumMeasurements(features);
                 var geometries = [];
 
@@ -681,24 +633,21 @@ Oskari.clazz.define(
          * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
          */
         sumMeasurements: function (features) {
-            const value = {};
+            let area = 0;
+            let length = 0;
             const mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                const geomType = f.getGeometry().getType();
-                if (geomType === 'LineString' || geomType === 'Polygon') {
-                    if (!value.length) {
-                        value.length = 0;
-                    }
-                    value.length += mapmodule.getGeomLength(f.getGeometry());
-                }
-                if (geomType === 'Polygon') {
-                    if (!value.area) {
-                        value.area = 0;
-                    }
-                    value.area += mapmodule.getGeomArea(f.getGeometry());
+                const geom = f.getGeometry();
+                const geomType = geom.getType();
+                if (geomType === 'LineString') {
+                    length += mapmodule.getGeomLength(geom);
+                } else if (geomType === 'Polygon') {
+                    const line = new olGeom.LineString(geom.getCoordinates()[0]);
+                    length += mapmodule.getGeomLength(line);
+                    area += mapmodule.getGeomArea(geom);
                 }
             });
-            return value;
+            return { area, length };
         },
         /**
          * @method addVectorLayer
@@ -724,7 +673,7 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         addDrawInteraction: function (layerId, shape) {
-            const options = this.getOpts();
+            const { buffer } = this.getOpts();
             var me = this;
             var geometryFunction, maxPoints;
             var functionalityId = this.getCurrentFunctionalityId();
@@ -741,6 +690,14 @@ Oskari.clazz.define(
                 this.updateMeasurementTooltip();
                 this.sendDrawingEvent();
             };
+            const getReqularPolygonGeometryFunction = sides => {
+                const geometryFunction = createRegularPolygon(sides);
+                return (...args) => {
+                    const geometry = geometryFunction(...args);
+                    notifyChange();
+                    return geometry;
+                };
+            };
             if (shape === 'LineString') {
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
@@ -748,8 +705,8 @@ Oskari.clazz.define(
                     } else {
                         geometry.setCoordinates(coordinates);
                     }
-                    if (options.buffer > 0) {
-                        me.drawBufferedGeometry(geometry, options.buffer);
+                    if (buffer > 0) {
+                        me.drawBufferedGeometry(geometry);
                     }
                     notifyChange();
                     return geometry;
@@ -774,28 +731,27 @@ Oskari.clazz.define(
                     if (!geometry) {
                         geometry = new olGeom.Point(coordinates);
                     }
-                    if (options.buffer > 0) {
-                        me.drawBufferedGeometry(geometry, options.buffer);
+                    if (buffer > 0) {
+                        me.drawBufferedGeometry(geometry, buffer);
                     }
                     notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = createRegularPolygon(4);
-            } else if (shape === 'Circle' && options.buffer > 0) {
+                geometryFunction = getReqularPolygonGeometryFunction(4);
+            } else if (shape === 'Circle' && buffer > 0) {
                 geometryType = 'Point';
-                me._circleHasGeom = true;
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
-                        geometry = new olGeom.Circle(coordinates, options.buffer);
+                        geometry = new olGeom.Circle(coordinates, buffer);
                     }
                     notifyChange();
                     return geometry;
                 };
-            } else if (shape === 'Circle' && !options.buffer) {
+            } else if (shape === 'Circle' && !buffer) {
                 geometryType = 'Circle';
-                geometryFunction = createRegularPolygon(50);
+                geometryFunction = getReqularPolygonGeometryFunction(50);
             } else if (shape === 'Polygon') {
                 geometryFunction = function (coordinates, geometry) {
                     var coords = makeClosedPolygonCoords(coordinates);
@@ -1063,10 +1019,9 @@ Oskari.clazz.define(
          * -  adds buffered feature to the map
          *
          * @param {Geometry} geometry
-         * @param {Number} buffer
          */
-        drawBufferedGeometry: function (geometry, buffer) {
-            var bufferedFeature = this.getBufferedFeature(geometry, buffer, this._styles.draw, this._options.bufferAccuracy);
+        drawBufferedGeometry: function (geometry) {
+            const bufferedFeature = this.getBufferedFeature(geometry);
             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
             this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
         },
@@ -1123,10 +1078,10 @@ Oskari.clazz.define(
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
                     if (shape === 'LineString') {
                         if (buffer > 0) {
-                            me.drawBufferedGeometry(feature.getGeometry(), buffer);
+                            me.drawBufferedGeometry(feature.getGeometry());
                         }
                     } else if (shape === 'Point' && buffer > 0) {
-                        me.drawBufferedGeometry(feature.getGeometry(), buffer);
+                        me.drawBufferedGeometry(feature.getGeometry());
                     } else if (shape === 'Polygon') {
                         me.checkIntersection();
                     } else if (isModifyLimited(shape)) {
@@ -1195,15 +1150,16 @@ Oskari.clazz.define(
          * @param {Number} side amount of polygon
          * @return {ol/Feature} feature
          */
-        getBufferedFeature: function (geometry, buffer, style, sides) {
-            var input = olParser.read(geometry);
-            var bufferGeometry = BufferOp.bufferOp(input, buffer, new BufferParameters(sides));
+        getBufferedFeature: function (geometry) {
+            const input = olParser.read(geometry);
+            const { bufferAccuracy, buffer } = this.getOpts();
+            let bufferGeometry = BufferOp.bufferOp(input, buffer, new BufferParameters(bufferAccuracy));
             bufferGeometry.CLASS_NAME = 'jsts.geom.Polygon';
             bufferGeometry = olParser.write(bufferGeometry);
-            var feature = new olFeature({
+            const feature = new olFeature({
                 geometry: bufferGeometry
             });
-            feature.setStyle(style);
+            feature.setStyle(this._styles.draw);
             feature.buffer = buffer;
             return feature;
         },
@@ -1223,37 +1179,6 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method reportDrawingEvents
-         * -  reports draw and modify control's events
-         */
-        reportDrawingEvents: function () {
-            var me = this;
-
-            if (me._draw[me._id]) {
-                me._draw[me._id].on('drawstart', function () {
-                    Oskari.log('DrawPlugin').debug('drawstart');
-                });
-                me._draw[me._id].on('drawend', function () {
-                    Oskari.log('DrawPlugin').debug('drawend');
-                });
-                me._draw[me._id].on('change:active', function () {
-                    Oskari.log('DrawPlugin').debug('drawchange');
-                });
-            }
-            if (me._modify[me._id]) {
-                me._modify[me._id].on('modifystart', function () {
-                    Oskari.log('DrawPlugin').debug('modifystart');
-                });
-                me._modify[me._id].on('change', function () {
-                    Oskari.log('DrawPlugin').debug('modifychange');
-                });
-
-                me._modify[me._id].on('modifyend', function () {
-                    Oskari.log('DrawPlugin').debug('modifyend');
-                });
-            }
-        },
-        /**
          * @method  @private _getFeatureCenter get feature center coordinates.
          * @param  {ol/feature} feature feature where need to get center point
          * @return {Array} coordinates array
@@ -1266,77 +1191,18 @@ Oskari.clazz.define(
             return feature.getGeometry().getCenter();
         },
         /**
-         * @method  @private _getFeatureRadius get circle/point geometry radius.
-         * @param  {ol/feature} feature fetarue where need to get circle radius
-         * @return {Number}     circle radius
-         */
-        _getFeatureRadius: function (feature) {
-            var type = feature.getGeometry().getType();
-            // If circle ol geometry type is polygon then calculate radius
-            if (type === 'Polygon') {
-                return Math.sqrt(feature.getGeometry().getArea() / Math.PI);
-            } else if (type === 'Circle') {
-                return feature.getGeometry().getRadius();
-            }
-            // else if drawing point, radius is 0
-            return 0;
-        },
-        /**
-         * [getCircleFeature description]
-         * @param  {Array} features
-         * @return {Array}  polygon or point features
-         */
-        getCircleFeature: function (features) {
-            var me = this;
-            if (me.getCurrentDrawShape() === 'Point') {
-                return me.getCircleAsPointFeature(features);
-            }
-            return me.getCircleAsPolygonFeature(features);
-        },
-        /**
          * @method getCircleAsPolygonFeature
          * - converts circle geometry to polygon geometry
-         *
-         * @param {Array} features
-         * @return {Array} polygonfeatures
+         *  Used for Circle + buffer
          */
-        getCircleAsPolygonFeature: function (features, requestedBuffer) {
-            var me = this;
-            var polygonFeatures = [];
-            if (!features) {
-                return polygonFeatures;
+        getCircleAsPolygonFeature: function (feature) {
+            if (feature.getGeometry().getType() === 'Polygon') {
+                return feature;
             }
-            features.forEach(function (f) {
-                var pointFeature = new olGeom.Point(me._getFeatureCenter(f));
-                var buffer = requestedBuffer || me._getFeatureRadius(f); // requested buffer is used for circle radius
-                var bufferedFeature = me.getBufferedFeature(pointFeature, buffer, me._styles.draw, me._options.bufferAccuracy);
-                var id = me.generateNewFeatureId();
-                bufferedFeature.setId(id);
-                polygonFeatures.push(bufferedFeature);
-            });
-            return polygonFeatures;
-        },
-        /**
-         * @method getCircleAsPointFeature
-         * - converts circle geometry to point geometry
-         *
-         * @param {Array} features
-         * @return {Array} pointFeatures
-         */
-        getCircleAsPointFeature: function (features) {
-            var me = this;
-            var pointFeatures = [];
-            if (!features) {
-                return pointFeatures;
-            }
-            features.forEach(function (f) {
-                var feature = new olFeature({
-                    geometry: new olGeom.Point(me._getFeatureCenter(f))
-                });
-                me.addBufferPropertyToFeatures([feature], me._getFeatureRadius(f));
-                pointFeatures.push(feature);
-            });
-            return pointFeatures;
+            const pointFeature = new olGeom.Point(this._getFeatureCenter(feature));
+            const bufferedFeature = this.getBufferedFeature(pointFeature);
+            bufferedFeature.setId(feature.getId());
+            return bufferedFeature;
         },
         /**
          * @method addBufferPropertyToFeatures
@@ -1383,11 +1249,11 @@ Oskari.clazz.define(
             delete this._overlays[id];
         }
     }, {
-        'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
+        extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */
-        'protocol': [
+        protocol: [
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]

@@ -28,18 +28,6 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
             "scripts": [{
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/drawtools/instance.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/request/StopDrawingRequest.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/event/DrawingEvent.js"
             },
     		/*CSS*/
     		{

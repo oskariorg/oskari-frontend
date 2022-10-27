@@ -1,3 +1,6 @@
+import './request/ToolContainerRequest';
+import './request/ToolContainerRequestHandler';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
  * Provides publisher toolbar container

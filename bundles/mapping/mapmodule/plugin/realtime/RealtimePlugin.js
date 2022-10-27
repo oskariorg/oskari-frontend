@@ -1,3 +1,4 @@
+import './event/RefreshLayerEvent';
 /**
  * Interface/protocol definition for map plugins
  *
