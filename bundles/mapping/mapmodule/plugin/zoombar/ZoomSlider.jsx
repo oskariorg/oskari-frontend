@@ -9,13 +9,11 @@ const Container = styled('div')`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0 0 30px 0;
+    margin: 0 15px 0 30px;
 `;
 
 const StyledSlider = styled(Slider)`
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 13px;
+    margin: -5px 17px 10px 0;
     height: 150px;
     .ant-slider-mark-text {
         color: #ffffff;

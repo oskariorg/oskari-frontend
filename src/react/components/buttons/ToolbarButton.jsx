@@ -36,6 +36,7 @@ const StyledToolbar = styled('div')`
 
 const ToolbarItem = styled('div')`
     color: #ffffff;
+    fill: #ffffff;
     margin: 0 10px 0 10px;
     cursor: pointer;
     display: flex;
