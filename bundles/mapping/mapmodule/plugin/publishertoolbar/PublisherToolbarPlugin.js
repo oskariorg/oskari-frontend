@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../MapModuleButton';
 import { ToolbarButtonItem } from 'oskari-ui/components/buttons';
-import { BackwardIcon, ForwardIcon } from 'oskari-ui/components/icons';
+import { BackwardIcon, ForwardIcon, MeasureAreaIcon, MeasureLineIcon } from 'oskari-ui/components/icons';
 import { MenuOutlined } from '@ant-design/icons';
 import './request/ToolContainerRequest';
 import './request/ToolContainerRequestHandler';
@@ -370,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     />,
                     <ToolbarButtonItem
                         key='tool-line'
-                        icon={<div className='tool-measure-line-dark' />}
+                        icon={<MeasureLineIcon />}
                         title={this._loc.measure.line}
                         onClick={() => {
                             const rn = 'map_control_measure_tool';
@@ -380,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     />,
                     <ToolbarButtonItem
                         key='tool-area'
-                        icon={<div className='tool-measure-area-dark' />}
+                        icon={<MeasureAreaIcon />}
                         title={this._loc.measure.area}
                         onClick={() => {
                             const rn = 'map_control_measure_area_tool';

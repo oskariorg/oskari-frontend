@@ -6,13 +6,14 @@ const Container = styled('div')`
     width: 32px;
     height: 32px;
     position: relative;
+    ${props => props.noMargin ? 'margin: 0' : 'margin: 0 0 10px 30px'};
+    ${props => props.withToolbar && props.toolbarMargin};
 `;
 
 const StyledButton = styled(MapButton)`
     position: absolute;
     left: 0;
     top: 0;
-    margin: ${props => props.noMargin ? '0' : '0 0 10px 30px'};
 `;
 
 const THEME_LIGHT = {
@@ -74,8 +75,13 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
         }
     }
 
+    let toolbarMargin = 'margin-right: 0';
+    if (withToolbar && toolbarOpen && children) {
+        toolbarMargin = `margin-right: ${children.length * 34 + 10}px`;
+    }
+
     return (
-        <Container size={size} noMargin={noMargin}>
+        <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarMargin={toolbarMargin}>
             <StyledButton
                 onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
                 icon={icon}
