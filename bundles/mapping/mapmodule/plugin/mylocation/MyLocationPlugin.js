@@ -28,20 +28,6 @@ Oskari.clazz.define(
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
         me._dialog = null;
         me._defaultIconCls = null;
-        me._mobileDefs = {
-            buttons: {
-                'mobile-my-location': {
-                    iconCls: 'mobile-my-location',
-                    tooltip: '',
-                    sticky: false,
-                    show: true,
-                    callback: function (el) {
-                        me._setupRequest();
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
 
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin"></div>')
@@ -50,6 +36,7 @@ Oskari.clazz.define(
         this._timeouts = 0; // timeouts for single location request
         this._tracking = false;
         this._trackingOptions = null;
+        this.inMobileMode = false;
     }, {
         /**
          * @private @method _createControlElement
@@ -179,28 +166,17 @@ Oskari.clazz.define(
                 // no point in drawing the ui if we are not visible or enabled
                 return;
             }
-            var mobileDefs = this.getMobileDefs();
 
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
 
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                this._element = this._createControlElement();
-                this.refresh();
-                this.addToPluginContainer(this.getElement());
-            }
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.refresh();
+            this.addToPluginContainer(this.getElement());
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
