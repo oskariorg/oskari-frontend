@@ -22,38 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-featuredata': {
-                    iconCls: 'mobile-info-marker',
-                    tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
-                    show: true,
-                    callback: function () {
-                        if (me._flyoutOpen) {
-                            var sandbox = me.getSandbox();
-                            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-                            var el = jQuery(me.getMapModule().getMobileDiv()).find('.mobile-info-marker');
-                            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
-                            me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
-                            me._flyoutOpen = undefined;
-                            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
-                            jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-                        } else {
-                            // kill open popups
-                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
-
-                            me._openFeatureDataFlyout();
-                            me._flyoutOpen = true;
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
+        me.inMobileMode = false;
     }, {
         /**
          * @method _createControlElement
@@ -108,31 +77,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         redrawUI: function (mapInMobileMode, forced) {
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
             var me = this;
-            var mobileDefs = this.getMobileDefs();
 
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
 
-            if (!toolbarNotReady && isMobile) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                me._element = me._createControlElement();
-                this.addToPluginContainer(me._element);
-                this.refresh();
-            }
+            this.inMobileMode = isMobile;
+
+            me._element = me._createControlElement();
+            this.addToPluginContainer(me._element);
+            this.refresh();
         },
 
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
             this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -148,8 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         },
 
         handleCloseFlyout: function () {
-            var me = this,
-                el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-featuredata');
+            var me = this;
 
             if (!me._flyoutOpen) {
                 return;
@@ -157,7 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             me._flyoutOpen = undefined;
             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-            me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-featuredata'].iconCls);
             this.renderButton(null, null);
         },
         /**

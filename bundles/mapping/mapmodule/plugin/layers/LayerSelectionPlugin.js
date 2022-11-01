@@ -27,25 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         me.initialSetup = true;
         me.templates = {};
-        me._mobileDefs = {
-            buttons: {
-                'mobile-layerselection': {
-                    iconCls: 'mobile-layers',
-                    tooltip: '',
-                    sticky: true,
-                    show: true,
-                    callback: function () {
-                        me._toggleToolState();
-                    },
-                    toggleChangeIcon: true
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
+        me.inMobileMode = false;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -92,7 +78,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
         popupCleanup: function () {
             if (this.popupControls) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popupControls.close();
             }
             this.popupControls = null;
@@ -359,8 +344,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove old element
             this.removeFromPluginContainer(this.getElement());
             this.popupCleanup();
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -375,23 +358,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            const mobileDefs = this.getMobileDefs();
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            const toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                this._element = this._createControlElement();
-                this.changeToolStyle(null, this._element);
-                this.refresh();
-                this.addToPluginContainer(this._element);
-            }
+
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.changeToolStyle(null, this._element);
+            this.refresh();
+            this.addToPluginContainer(this._element);
         },
 
         refresh: function () {

@@ -98,6 +98,8 @@ Oskari.clazz.define(
 
             me.service = Oskari.clazz.create(
                 'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
+
+            me.inMobileMode = false;
         },
 
         _setLayerToolsEditModeImpl: function () {
@@ -503,38 +505,21 @@ Oskari.clazz.define(
 
             // remove old element
             this.teardownUI();
+            this.inMobileMode = isMobile;
+            me._element.removeClass('mobilesearch');
 
-            if (isMobile) {
-                // remove old element
-                this.removeFromPluginContainer(this.getElement(), true);
-
-                var mobileDivElement = me.getMapModule().getMobileDiv();
-                me._element.addClass('mobilesearch');
-                // FIXME is index is not first then this fails
-                mobileDivElement.prepend(me._element[0]);
-                me._uiMode = 'mobile';
-                me.changeToolStyle('rounded-light', me._element);
-                me._element.find('div.close-results').remove();
-                me._element.find('input.search-input').css({
-                    'height': '26px',
-                    'margin': 'auto'
-                });
-            } else {
-                me._element.removeClass('mobilesearch');
-
-                var conf = me.getConfig();
-                if (conf) {
-                    if (conf.toolStyle) {
-                        me.changeToolStyle(conf.toolStyle, me._element);
-                    } else {
-                        var toolStyle = me.getToolStyleFromMapModule();
-                        me.changeToolStyle(toolStyle, me._element);
-                    }
+            var conf = me.getConfig();
+            if (conf) {
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, me._element);
+                } else {
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    me.changeToolStyle(toolStyle, me._element);
                 }
-
-                this.addToPluginContainer(me._element);
-                me.refresh();
             }
+
+            this.addToPluginContainer(me._element);
+            me.refresh();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
