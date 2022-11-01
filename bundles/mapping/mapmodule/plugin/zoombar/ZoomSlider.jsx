@@ -163,6 +163,29 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
             break;
     }
 
+    if (isMobile) {
+        return (
+            <div>
+                <MapModuleButton
+                    icon={<PlusIcon />}
+                    onClick={() => {
+                        changeZoom(zoom < 100 ? zoom + 1 : 100)
+                    }}
+                    size='32px'
+                    styleName={styleName}
+                />
+                <MapModuleButton
+                    icon={<MinusIcon />}
+                    onClick={() => {
+                        changeZoom(zoom > 0 ? zoom - 1 : 0)
+                    }}
+                    size='32px'
+                    styleName={styleName}
+                />
+            </div>
+        );
+    }
+
     return (
         <Container>
             <MapModuleButton

@@ -58,47 +58,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 '<div class="oskariui mapplugin pzbDiv zoombar"></div>'
             );
 
-            /* el.on('mousedown', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    event.stopPropagation();
-                }
-            });
-
-            sliderEl.css(
-                'height',
-                (mapModule.getMaxZoomLevel() * 11) + 'px'
-            );
-            me._slider = sliderEl.slider({
-                orientation: 'vertical',
-                range: 'min',
-                min: 0,
-                max: mapModule.getMaxZoomLevel(),
-                value: mapModule.getMapZoom(),
-                slide: function (event, ui) {
-                    me.getMapModule().setZoomLevel(ui.value);
-                }
-            });
-
-            el.find('.pzbDiv-plus').on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
-                        me.getMapModule().setZoomLevel(
-                            me._slider.slider('value') + 1
-                        );
-                    }
-                }
-            });
-
-            el.find('.pzbDiv-minus').on('click', function (event) {
-                if (!me.inLayerToolsEditMode()) {
-                    if (me._slider && me._slider.slider('value') > 0) {
-                        me.getMapModule().setZoomLevel(
-                            me._slider.slider('value') - 1
-                        );
-                    }
-                }
-            }); */
-
             return el;
         },
 
@@ -227,6 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     zoom={this.getMapModule().getMapZoom()}
                     maxZoom={this.getMapModule().getMaxZoomLevel()}
                     styleName={styleName || 'rounded-dark'}
+                    isMobile={this.inMobileMode}
                 />,
                 el[0]
             );
