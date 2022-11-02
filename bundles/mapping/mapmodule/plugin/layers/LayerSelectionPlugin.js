@@ -226,9 +226,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         updateLayers: function () {
             const { baseLayers = [] } = this.getConfig() || {};
             const isBaseLayer = (layer) => baseLayers.some(id => '' + id === '' + layer.getId());
-
-            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l));
-            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer);
+            // bottom layer is first in list. Reverse lists to render in correct order.
+            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l)).reverse();
+            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer).reverse();
             this._updateLayerSelectionPopup();
         },
         _selectStyle: function (layerId, style) {
