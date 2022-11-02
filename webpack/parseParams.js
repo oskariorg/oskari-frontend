@@ -35,9 +35,7 @@ module.exports = function parseParams (env) {
 };
 
 function getVersion (appdefParts) {
-    // After we upgrade webpack to latest we can use env: https://github.com/webpack/webpack-dev-server/pull/1929
-    // const isDevServer = !!process.env.WEBPACK_DEV_SERVER;
-    const isDevServer = !!process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
+    const isDevServer = !!process.env.WEBPACK_DEV_SERVER;
     if (appdefParts.length > 1) {
         return appdefParts[0];
     } else if (!isDevServer) {
