@@ -115,6 +115,7 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
                 styleName={`3d-${color}`}
                 onClick={() => resetClicked}
                 iconSize='18px'
+                className='t_reset'
             />
         );
     }
@@ -122,19 +123,19 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
     return (
         <StyledButtonContainer>
             <StyledButton backgroundV={backgroundV} backgroundH={backgroundH} >
-                <ArrowButton color={iconColor} onClick={() => panClicked(0, -1)} right='2.5px' top='0'>
+                <ArrowButton color={iconColor} onClick={() => panClicked(0, -1)} right='2.5px' top='0' className='t_pan_up'>
                     <CaretUpOutlined />
                 </ArrowButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(-1, 0)} left='-29.5px' top='32px'>
+                <ArrowButton color={iconColor} onClick={() => panClicked(-1, 0)} left='-29.5px' top='32px' className='t_pan_right'>
                     <CaretLeftOutlined />
                 </ArrowButton>
-                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={iconColor} onClick={() => resetClicked()}>
+                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={iconColor} onClick={() => resetClicked()} className='t_reset'>
                     <ReturnIcon />
                 </StyledReturnButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(0, 1)} right='2.5px' bottom='0'>
+                <ArrowButton color={iconColor} onClick={() => panClicked(0, 1)} right='2.5px' bottom='0' className='t_pan_right'>
                     <CaretDownOutlined />
                 </ArrowButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(1, 0)} right='-29.5px' top='32px'>
+                <ArrowButton color={iconColor} onClick={() => panClicked(1, 0)} right='-29.5px' top='32px' className='t_pan_left'>
                     <CaretRightOutlined />
                 </ArrowButton>
             </StyledButton>
