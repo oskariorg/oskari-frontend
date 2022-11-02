@@ -172,6 +172,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                         changeZoom(zoom < 100 ? zoom + 1 : 100)
                     }}
                     size='32px'
+                    className='t_plus'
                     styleName={styleName}
                 />
                 <MapModuleButton
@@ -180,6 +181,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                         changeZoom(zoom > 0 ? zoom - 1 : 0)
                     }}
                     size='32px'
+                    className='t_minus'
                     styleName={styleName}
                 />
             </div>
