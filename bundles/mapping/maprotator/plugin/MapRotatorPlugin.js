@@ -30,22 +30,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         me._templates = {
             maprotatortool: jQuery('<div class="mapplugin maprotator"></div>')
         };
-        me._mobileDefs = {
-            buttons: {
-                'mobile-maprotatetool': {
-                    iconCls: 'mobile-north',
-                    tooltip: '',
-                    show: true,
-                    callback: function () {
-                        me.setRotation(0);
-                    },
-                    sticky: false,
-                    toggleChangeIcon: false
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
+        me.inMobileMode = false;
     }, {
         handleEvents: function () {
             var me = this;
@@ -126,12 +112,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.handleEvents();
             this.addToPluginContainer(this._element);
         },
-        _createMobileUI: function () {
-            var mobileDefs = this.getMobileDefs();
-            this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            this._element = jQuery('.' + mobileDefs.buttons['mobile-maprotatetool'].iconCls);
-            this.handleEvents();
-        },
         setRotation: function (deg) {
             // if deg is number then transform degrees to radians otherwise use 0
             var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
@@ -193,19 +173,16 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function () {
+        redrawUI: function (mapInMobileMode) {
             var conf = this._config;
-            var isMobile = Oskari.util.isMobile();
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if (this.getElement()) {
                 this.teardownUI(true);
             }
-            if (isMobile) {
-                var mobileDefs = this.getMobileDefs();
-                this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                this._createMobileUI();
-            } else {
-                this._createUI();
-            }
+
+            this.inMobileMode = isMobile;
+            this._createUI();
+
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 this.changeToolStyle(conf.toolStyle, this.getElement());
@@ -219,10 +196,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             if (!this.getElement()) {
                 return;
             }
-            var mobileDefs = this.getMobileDefs();
             this.getElement().detach();
             this.removeFromPluginContainer(this.getElement());
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         hasUi: function () {
             return !this._config.noUI;
