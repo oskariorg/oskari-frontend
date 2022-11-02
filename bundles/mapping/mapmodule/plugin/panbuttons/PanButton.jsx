@@ -3,6 +3,7 @@ import { CaretDownOutlined, CaretUpOutlined, CaretLeftOutlined, CaretRightOutlin
 import styled from 'styled-components';
 import { PanButton3D } from './PanButton3D';
 import { ReturnIcon } from 'oskari-ui/components/icons';
+import { MapModuleButton } from '../../MapModuleButton';
 
 const StyledButtonContainer = styled('div')`
     width: 84px;
@@ -31,10 +32,6 @@ const StyledReturnButton = styled('div')`
         width: 18px;
         height: 18px;
     }
-`;
-
-const MobileButtonContainer = styled('div')`
-    margin: 0 30px;
 `;
 
 const StyledArrowsButton = styled('div')`
@@ -87,16 +84,18 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
     }
 
     if (shape === '3d') {
-        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} />
+        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} isMobile={isMobile} />
     }
 
     if (isMobile) {
         return (
-            <MobileButtonContainer>
-                <StyledReturnButton onClick={() => resetClicked()} title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} backgroundColor={backgroundColor} iconColor={iconColor} rounded={shape === 'rounded'} >
-                    <ReturnIcon />
-                </StyledReturnButton>
-            </MobileButtonContainer>
+            <MapModuleButton
+                onClick={() => resetClicked()}
+                title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')}
+                styleName={styleName}
+                icon={<ReturnIcon />}
+                iconSize='18px'
+            />
         );
     }
 

@@ -32,6 +32,10 @@ const StyledButton = styled(Button)`
     display: flex;
     align-items: center;
     justify-content: center;
+    svg {
+        max-width: ${props => props.$iconSize};
+        max-height: ${props => props.$iconSize};
+    }
 `;
 
 const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
@@ -41,7 +45,7 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, children, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, ...rest }) => {
     if (title) {
         return (
             <Tooltip title={title}>
@@ -51,6 +55,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                         onClick={onClick}
                         size={size}
                         $active={iconActive}
+                        $iconSize={iconSize}
                         { ...rest }
                     />
                 </ThemeProvider>
@@ -64,6 +69,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                     onClick={onClick}
                     size={size}
                     $active={iconActive}
+                    $iconSize={iconSize}
                     { ...rest }
                 />
             </ThemeProvider>

@@ -138,7 +138,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             this.teardownUI();
 
             this.inMobileMode = mapInMobileMode;
-            console.log(mapInMobileMode);
 
             this._element = this._createControlElement();
             this.refresh();
