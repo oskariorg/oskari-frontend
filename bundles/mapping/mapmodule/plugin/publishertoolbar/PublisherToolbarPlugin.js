@@ -25,50 +25,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._defaultLocation = 'top left';
         me._index = 0;
         me._name = 'PublisherToolbarPlugin';
-
-        me.toolbarId = 'PublisherToolbar';
-        me.toolbarContent = 'publishedToolbarContent';
-        me.toolbarPopupContent = 'publishedToolbarPopupContent';
-        me.toolbarContainer = 'publishedToolbarContainer'; // Note! this needs to match styles and templates
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-publishedtoolbar': {
-                    iconCls: 'mobile-menu',
-                    tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
-                    show: true,
-                    callback: function () {
-                        if (me.popup && me.popup.isVisible()) {
-                            me._closeToolsPopup();
-                            var sandbox = me.getSandbox();
-                            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
-                            sandbox.request(me, toolbarRequest);
-                        } else {
-                            me._openToolsPopup();
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
-
-        me._buttons = conf.buttons || [];
+        me._toolButtons = conf.buttons || [];
+        me.inMobileMode = false;
     }, {
         // templates for tools-mapplugin
         templates: {
             main: jQuery(
                 '<div class="mapplugin tools"></div>'
             ),
-            container: jQuery('<div></div>'),
-            publishedToolbarPopupContent: jQuery(
-                '<div class="publishedToolPopupContent">' +
-                '  <h3></h3>' +
-                '  <div class="content"></div>' +
-                '  <div class="actions"></div>' +
-                '</div>'
-            )
+            container: jQuery('<div></div>')
         },
 
         /**
@@ -79,85 +44,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          */
         _initImpl: function () {
             var me = this;
-            var sandbox = me.getSandbox();
-            var mapmodule = me.getMapModule();
-            var theme = mapmodule.getTheme();
-            var wantedTheme = (theme === 'dark') ? 'light' : 'dark';
-            var themeColours = mapmodule.getThemeColours(wantedTheme);
 
             me.template = jQuery(me.templates.main);
-
-            /// //////////////////////////////
-            // ADD TOOL CONFIGURATION HERE //
-            /// //////////////////////////////
-            me.buttonGroups = [
-                {
-                    name: 'basictools',
-                    buttons: {
-                        history_back: {
-                            toolbarid: me.toolbarId,
-                            iconCls: 'tool-history-back',
-                            tooltip: me._loc.history.back,
-                            prepend: true,
-                            sticky: false,
-                            callback: function () {
-                                if (!me._isPublisherActive()) {
-                                    var reqBuilder = Oskari.requestBuilder(
-                                        'ToolSelectionRequest'
-                                    );
-                                    sandbox.request(
-                                        me,
-                                        reqBuilder('map_control_tool_prev')
-                                    );
-                                }
-                            }
-                        },
-                        history_forward: {
-                            toolbarid: me.toolbarId,
-                            iconCls: 'tool-history-forward',
-                            tooltip: me._loc.history.next,
-                            sticky: false,
-                            callback: function () {
-                                if (!me._isPublisherActive()) {
-                                    var reqBuilder = Oskari.requestBuilder(
-                                        'ToolSelectionRequest'
-                                    );
-                                    sandbox.request(
-                                        me,
-                                        reqBuilder('map_control_tool_next')
-                                    );
-                                }
-                            }
-                        },
-                        measureline: {
-                            toolbarid: me.toolbarId,
-                            iconCls: 'tool-measure-line',
-                            tooltip: me._loc.measure.line,
-                            sticky: (!me._isPublisherActive()),
-                            toggleChangeIcon: (!me._isPublisherActive()),
-                            activeColour: themeColours.activeColour,
-                            callback: function () {
-                                const rn = 'map_control_measure_tool';
-                                const tool = 'measureline';
-                                me._handleMeasureTool(tool, rn);
-                            }
-                        },
-                        measurearea: {
-                            toolbarid: me.toolbarId,
-                            iconCls: 'tool-measure-area',
-                            tooltip: me._loc.measure.area,
-                            sticky: (!me._isPublisherActive()),
-                            toggleChangeIcon: (!me._isPublisherActive()),
-                            activeColour: themeColours.activeColour,
-                            callback: function () {
-                                const rn = 'map_control_measure_area_tool';
-                                const tool = 'measurearea';
-                                me._handleMeasureTool(tool, rn);
-                            }
-                        }
-                    }
-                }
-            ];
+            this.inMobileMode = false;
         },
 
         _createRequestHandlers: function () {
@@ -192,68 +81,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
             if (this.inLayerToolsEditMode()) {
-                // close toolbar
-                this._closeToolsPopup();
+                this.renderButton(null, null);
             }
         },
 
-        show: function (isShown) {
-            var showHide = isShown ? 'show' : 'hide';
-            this.getSandbox().requestByName(
-                this,
-                'Toolbar.ToolbarRequest',
-                [
-                    this.toolbarId,
-                    showHide
-                ]
-            );
+        addToolButton: function (name) {
+            if (this._toolButtons.indexOf(name) < 0) {
+                this._toolButtons.push(name);
+            }
+            this.renderButton(null, null);
         },
-
-        destroy: function () {
-            this.getSandbox().requestByName(
-                this,
-                'Toolbar.ToolbarRequest',
-                [
-                    this.toolbarId,
-                    'remove'
-                ]
-            );
-        },
-
-        changeName: function (title) {
-            this.getSandbox().requestByName(
-                this,
-                'Toolbar.ToolbarRequest',
-                [
-                    this.toolbarId,
-                    'changeName',
-                    title
-                ]
-            );
+        removeToolButton: function (name) {
+            const index = this._toolButtons.indexOf(name);
+            if (index > -1) {
+                this._toolButtons.splice(index, 1);
+            }
+            this.renderButton(null, null);
         },
 
         /**
          * @private @method _createControlElement
          */
-        _createControlElement: function (mapInMobileMode) {
+        _createControlElement: function () {
             var me = this,
                 el;
 
             el = me.template.clone();
-            if (!me._toolbarContent) {
-                me._createToolbar(mapInMobileMode);
-                me._addToolButtons();
-            }
             return el;
         },
 
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
-
-            this._closeToolsPopup();
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -270,17 +129,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
 
             var me = this;
-            var mobileDefs = this.getMobileDefs();
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
-
             this.teardownUI();
+            this.inMobileMode = isMobile;
 
-            me._element = me._createControlElement(isMobile);
+            me._element = me._createControlElement();
 
             var changeToolStyle = function (toolstyle, div) {
                 var toolStyle = toolstyle || me.getToolStyleFromMapModule();
@@ -297,13 +149,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 me.renderButton(toolstyle, div);
             };
 
-            if (!toolbarNotReady && isMobile) {
-                changeToolStyle(null, me._element);
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                this.addToPluginContainer(me._element);
-                changeToolStyle();
-            }
+            this.addToPluginContainer(me._element);
+            changeToolStyle();
         },
 
         renderButton: function (style, element) {
@@ -334,260 +181,83 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         renderToolbarItems: function () {
             const sandbox = this.getSandbox();
-            return (
-                [
-                    <ToolbarButtonItem
-                        key='tool-back'
-                        icon={<BackwardIcon />}
-                        title={this._loc.history.back}
-                        onClick={() => {
-                            if (!this._isPublisherActive()) {
-                                const reqBuilder = Oskari.requestBuilder(
-                                    'ToolSelectionRequest'
-                                );
-                                sandbox.request(
-                                    this,
-                                    reqBuilder('map_control_tool_prev')
-                                );
-                            }
-                        }}
-                    />,
-                    <ToolbarButtonItem
-                        key='tool-next'
-                        icon={<ForwardIcon />}
-                        title={this._loc.history.next}
-                        onClick={() => {
-                            if (!this._isPublisherActive()) {
-                                const reqBuilder = Oskari.requestBuilder(
-                                    'ToolSelectionRequest'
-                                );
-                                sandbox.request(
-                                    this,
-                                    reqBuilder('map_control_tool_next')
-                                );
-                            }
-                        }}
-                    />,
-                    <ToolbarButtonItem
-                        key='tool-line'
-                        icon={<MeasureLineIcon />}
-                        title={this._loc.measure.line}
-                        onClick={() => {
-                            const rn = 'map_control_measure_tool';
-                            const tool = 'measureline';
-                            this._handleMeasureTool(tool, rn);
-                        }}
-                    />,
-                    <ToolbarButtonItem
-                        key='tool-area'
-                        icon={<MeasureAreaIcon />}
-                        title={this._loc.measure.area}
-                        onClick={() => {
-                            const rn = 'map_control_measure_area_tool';
-                            const tool = 'measurearea';
-                            this._handleMeasureTool(tool, rn);
-                        }}
-                    />
-                ]
-            );
-        },
+            let buttons = [];
 
-        _createToolbar: function (mapInMobileMode) {
-            var me = this,
-                request,
-                sandbox = me.getSandbox(),
-                builder = Oskari.requestBuilder('Toolbar.ToolbarRequest'),
-                mapmodule = me.getMapModule(),
-                theme = mapmodule.getTheme(),
-                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
-                themeColours = mapmodule.getThemeColours(wantedTheme);
-
-            if (builder) {
-                me._toolbarContent = me.templates.container.clone();
-                request = builder(
-                    me.toolbarId,
-                    'add',
-                    {
-                        show: true,
-                        toolbarContainer: me._toolbarContent,
-                        disableHover: mapInMobileMode,
-                        colours: {
-                            hover: themeColours.hoverColour,
-                            background: themeColours.backgroundColour
-                        }
-                    }
-                );
-                sandbox.request(me.getName(), request);
-            }
-        },
-
-        _addToolButtons: function () {
-            var me = this,
-                sandbox = this.getSandbox(),
-                toolbarId = me.toolbarId,
-                addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-            if (!addToolButtonBuilder) {
-                return;
-            }
-
-            if (me._buttons.length === 0) {
-                return;
-            }
-
-            for (var group in me.buttonGroups) {
-                if (me.buttonGroups.hasOwnProperty(group)) {
-                    var buttonGroup = me.buttonGroups[group],
-                        tool;
-                    for (tool in buttonGroup.buttons) {
-                        if (me._buttons.includes(tool)) {
-                            var buttonConf = buttonGroup.buttons[tool];
-                            buttonConf.toolbarid = toolbarId;
-                            sandbox.request(this, addToolButtonBuilder(tool, buttonGroup.name, buttonGroup.buttons[tool]));
-                        }
-                    }
-                }
-            }
-        },
-
-        addToolButton: function (toolName) {
-            var me = this,
-                sandbox = me.getSandbox(),
-                toolbarId = me.toolbarId,
-                addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-            if (!addToolButtonBuilder) {
-                return;
-            }
-
-            for (var group in me.buttonGroups) {
-                if (me.buttonGroups.hasOwnProperty(group)) {
-                    var buttonGroup = me.buttonGroups[group];
-                    if (buttonGroup.buttons[toolName]) {
-                        var buttonConf = buttonGroup.buttons[toolName];
-                        buttonConf.toolbarid = toolbarId;
-                        sandbox.request(this, addToolButtonBuilder(toolName, buttonGroup.name, buttonGroup.buttons[toolName]));
-                    }
-                }
-            }
-        },
-
-        removeToolButton: function (toolName) {
-            var me = this,
-                sandbox = me.getSandbox(),
-                toolbarId = me.toolbarId;
-
-            if (!sandbox) {
-                return;
-            }
-            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
-
-            if (!removeToolButtonBuilder) {
-                return;
-            }
-
-            for (var group in me.buttonGroups) {
-                if (me.buttonGroups.hasOwnProperty(group)) {
-                    var buttonGroup = me.buttonGroups[group];
-                    if (buttonGroup.buttons[toolName]) {
-                        var buttonConf = buttonGroup.buttons[toolName];
-                        buttonConf.toolbarid = toolbarId;
-                        sandbox.request(this, removeToolButtonBuilder(toolName, buttonGroup.name, toolbarId));
-                    }
-                }
-            }
-        },
-        _closeToolsPopup: function () {
-            if (this.popup) {
-                this.popup.getJqueryContent().detach();
-                this.popup.close(true);
-                this.popup = null;
-            }
-            this.renderButton(null, null);
-        },
-        _openToolsPopup: function () {
-            var me = this,
-                mapmodule = me.getMapModule(),
-                isMobile = Oskari.util.isMobile(),
-                sandbox = me.getSandbox(),
-                popupService = sandbox.getService('Oskari.userinterface.component.PopupService');
-
-            var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-publishedtoolbar'),
-                topOffsetElement = jQuery('div.mobileToolbarDiv'),
-                theme = mapmodule.getTheme(),
-                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
-                themeColours = mapmodule.getThemeColours(wantedTheme);
-
-            me.popup = popupService.createPopup();
-            me.popup.addClass('toolbar-popup');
-            me.popup.setColourScheme({ 'bgColour': '#e6e6e6' });
-            if (isMobile) {
-                popupService.closeAllPopups(true);
-            }
-            me.popup.show(undefined, me._toolbarContent);
-
-            if (isMobile) {
-                me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                me.popup.addClass('mobile');
-            } else {
-                me.popup.moveTo(me.getElement(), 'bottom', true);
-            }
-
-            me.popup.setColourScheme({
-                'bodyBgColour': themeColours.backgroundColour
-            });
-
-            if (me._isPublisherActive()) {
-                var request,
-                    builder = Oskari.requestBuilder('Toolbar.ToolbarRequest');
-
-                if (builder) {
-                    request = builder(
-                        me.toolbarId,
-                        'update',
-                        {
-                            colours: {
-                                hover: themeColours.hoverColour,
-                                background: themeColours.backgroundColour
-                            }
-                        }
+            this._toolButtons.forEach(button => {
+                switch (button) {
+                case 'history_back':
+                    buttons.push(
+                        <ToolbarButtonItem
+                            key='tool-back'
+                            icon={<BackwardIcon />}
+                            title={this._loc.history.back}
+                            onClick={() => {
+                                if (!this._isPublisherActive()) {
+                                    const reqBuilder = Oskari.requestBuilder(
+                                        'ToolSelectionRequest'
+                                    );
+                                    sandbox.request(
+                                        this,
+                                        reqBuilder('map_control_tool_prev')
+                                    );
+                                }
+                            }}
+                        />
                     );
-                    sandbox.request(me.getName(), request);
+                    break;
+                case 'history_forward':
+                    buttons.push(
+                        <ToolbarButtonItem
+                            key='tool-next'
+                            icon={<ForwardIcon />}
+                            title={this._loc.history.next}
+                            onClick={() => {
+                                if (!this._isPublisherActive()) {
+                                    const reqBuilder = Oskari.requestBuilder(
+                                        'ToolSelectionRequest'
+                                    );
+                                    sandbox.request(
+                                        this,
+                                        reqBuilder('map_control_tool_next')
+                                    );
+                                }
+                            }}
+                        />
+                    );
+                    break;
+                case 'measureline':
+                    buttons.push(
+                        <ToolbarButtonItem
+                            key='tool-line'
+                            icon={<MeasureLineIcon />}
+                            title={this._loc.measure.line}
+                            onClick={() => {
+                                const rn = 'map_control_measure_tool';
+                                const tool = 'measureline';
+                                this._handleMeasureTool(tool, rn);
+                            }}
+                        />
+                    );
+                    break;
+                case 'measurearea':
+                    buttons.push(
+                        <ToolbarButtonItem
+                            key='tool-area'
+                            icon={<MeasureAreaIcon />}
+                            title={this._loc.measure.area}
+                            onClick={() => {
+                                const rn = 'map_control_measure_area_tool';
+                                const tool = 'measurearea';
+                                this._handleMeasureTool(tool, rn);
+                            }}
+                        />
+                    );
+                    break;
+                default:
+                    break;
                 }
-            }
-            me.renderButton(null, null);
-        },
-
-        setToolbarContainer: function () {
-            var me = this,
-                sandbox = me.getSandbox(),
-                builder = Oskari.requestBuilder('Toolbar.ToolbarRequest');
-
-            if (me.toolbarId && (me.toolbarContent) && builder !== null && builder !== undefined) {
-                // add toolbar when toolbarId and target container is configured
-                // We assume the first container is intended for the toolbar
-                sandbox.requestByName(
-                    me,
-                    'Toolbar.ToolbarRequest',
-                    [
-                        me.toolbarId,
-                        'add',
-                        {
-                            title: me._loc.title,
-                            show: false,
-                            toolbarContainer: me.getElement().find('.' + me.toolbarContent)
-                        }
-                    ]
-                );
-            }
-        },
-
-        /**
-         * @method getToolOptions
-         * Function to return plugin options
-         * Currently, this needs more work to make it more general solution
-         */
-        getToolOptions: function () {
-            var me = this;
-            return me.buttonGroups;
+            });
+            return buttons;
         },
 
         /**
@@ -600,110 +270,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         changeToolStyle: function (toolstyle, div) {
             var me = this;
             me.redrawUI();
-        },
-
-        /**
-         * Set tool content container content based on the passed in data values.
-         * data contains:
-         * {String} data.class class definitions for the container
-         * {String} data.title title for the container
-         * {String} data.content content for the container
-         * {Oskari.userinterface.component.Button[]} data.buttons buttons to show on dialog
-         *
-         * Note button handlers seem to malfunction if removed and reattached, therefore buttons are not reused.
-         * className, title, and content can be reused.
-         *
-         * @method setToolContent
-         * @param {Object} data
-         */
-        setToolContent: function (data) {
-            var me = this,
-                className = data.className || '', // defaults to empty
-                title = data.title || '', // defaults to empty
-                content = data.content || '', // defaults to empty
-                buttons = data.buttons || [], // defaults to empty
-                toolbarDiv = me.getElement().find('.' + me.toolbarContent),
-                contentDiv = me.getElement().find('.' + className),
-                appendContentDiv = false,
-                actionDiv,
-                i;
-            if (contentDiv.length === 0) {
-                // no container found, clone a new one
-                contentDiv = me.templates.publishedToolbarPopupContent.clone();
-                appendContentDiv = true;
-            }
-            contentDiv.find('h3').html(title);
-            contentDiv.find('.content').html(content);
-
-            if (className) {
-                contentDiv.removeClass();
-                contentDiv.addClass('publishedToolPopupContent ' + className);
-            }
-
-            // buttons cannot be reattached so that they are functional, it also requires some other stuff, hence the TODO
-            if (appendContentDiv && buttons && buttons.length > 0) {
-                actionDiv = contentDiv.find('.actions');
-                // TODO: save button references and clean up previous buttons
-                actionDiv.empty();
-                for (i = 0; i < buttons.length; i += 1) {
-                    buttons[i].insertTo(actionDiv);
-                }
-            } else if (appendContentDiv) {
-                // if no actions, the user can click on tool content to close it
-                contentDiv.on('click', function () {
-                    me.resetToolContent();
-                });
-            }
-
-            // attach to container
-            if (appendContentDiv) {
-                me.getElement().find('.' + me.toolbarPopupContent).append(contentDiv);
-                toolbarDiv.hide();
-            }
-
-            return contentDiv;
-        },
-
-        /**
-         * Set tool content container content based on the passed in values.
-         */
-        resetToolContent: function (data) {
-            // clear and show toolbar
-            var me = this,
-                className = data.className || 'publishedToolPopupContent', // defaults to publishedToolbarPopupContent
-                toolbarDiv = me.getElement().find('.' + me.toolbarContent),
-                contentDiv = me.getElement().find('.' + className);
-
-            contentDiv.remove();
-            toolbarDiv.show();
-        },
-
-        getToolConfs: function () {
-            var me = this,
-                confs = {},
-                i,
-                confGroup,
-                j,
-                confButton;
-
-            for (i in me.buttonGroups) {
-                if (me.buttonGroups.hasOwnProperty(i)) {
-                    confGroup = me.buttonGroups[i];
-                    // create button groups for confs
-                    confs[confGroup.name] = {};
-
-                    for (j in confGroup.buttons) {
-                        if (confGroup.buttons.hasOwnProperty(j)) {
-                            confButton = confGroup.buttons[j];
-                            // create buttons and add necessary confs
-                            confs[confGroup.name][j] = {
-                                'iconCls': confButton.iconCls
-                            };
-                        }
-                    }
-                }
-            }
-            return confs;
         },
 
         _isPublisherActive: function () {
