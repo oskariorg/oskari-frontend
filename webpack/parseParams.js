@@ -21,10 +21,13 @@ module.exports = function parseParams (env) {
     const version = getVersion(parts);
     const pathParam = parts.length > 1 ? parts[1] : parts[0];
 
+    const externalDomain = env.domain || '';
+    const publicPath = env.absolutePublicPath === 'true' || externalDomain ? '/' : '';
+
     const params = {
         version,
         pathParam,
-        publicPathPrefix: env.absolutePublicPath === 'true' ? '/' : ''
+        publicPathPrefix: externalDomain + publicPath
     };
 
     if (env.theme) {
