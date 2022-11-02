@@ -976,8 +976,10 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
+        // getZIndex returns undefined if z indez isn't set even default is 0.
+        const layerZ = l => l.getZIndex() || 0;
         this.getMap().getLayers().getArray().sort(function (a, b) {
-            return a.getZIndex() - b.getZIndex();
+            return layerZ(a) - layerZ(b);
         });
     }
 
