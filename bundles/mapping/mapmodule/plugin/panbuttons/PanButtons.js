@@ -97,9 +97,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             const styleClass = styleName || 'rounded-dark';
 
+            this.renderButton(styleClass, div);
+        },
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             ReactDOM.render(
-                <PanButton resetClicked={() => this._resetClicked()} panClicked={(x, y) => this._panClicked(x, y)} styleName={styleClass} />,
-                div[0]
+                <PanButton
+                    resetClicked={() => this._resetClicked()}
+                    panClicked={(x, y) => this._panClicked(x, y)}
+                    styleName={styleName || 'rounded-dark'}
+                    isMobile={this.inMobileMode}
+                />,
+                el[0]
             );
         },
         /**

@@ -3,6 +3,7 @@ import { CaretDownOutlined, CaretUpOutlined, CaretLeftOutlined, CaretRightOutlin
 import styled from 'styled-components';
 import { PanButton3D } from './PanButton3D';
 import { ReturnIcon } from 'oskari-ui/components/icons';
+import { MapModuleButton } from '../../MapModuleButton';
 
 const StyledButtonContainer = styled('div')`
     width: 84px;
@@ -71,7 +72,7 @@ const ArrowButton = ({ children, onClick, color, top = 'initial', right = 'initi
     );
 }
 
-export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark' }) => {
+export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark', isMobile = false }) => {
 
     const [shape, color] = styleName.split('-');
     let iconColor = '#ffffff';
@@ -83,7 +84,19 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
     }
 
     if (shape === '3d') {
-        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} />
+        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} isMobile={isMobile} />
+    }
+
+    if (isMobile) {
+        return (
+            <MapModuleButton
+                onClick={() => resetClicked()}
+                title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')}
+                styleName={styleName}
+                icon={<ReturnIcon />}
+                iconSize='18px'
+            />
+        );
     }
 
     return (
@@ -94,7 +107,7 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
             <ArrowButton color={iconColor} onClick={() => panClicked(-1, 0)} left='0' top='32px'>
                 <CaretLeftOutlined />
             </ArrowButton>
-            <StyledArrowsButton backgroundColor={backgroundColor} rounded={shape === 'rounded'} >
+            <StyledArrowsButton backgroundColor={backgroundColor} rounded={shape === 'rounded'}>
                 <StyledReturnButton onClick={() => resetClicked()} title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} backgroundColor={backgroundColor} iconColor={iconColor} rounded={shape === 'rounded'} >
                     <ReturnIcon />
                 </StyledReturnButton>
