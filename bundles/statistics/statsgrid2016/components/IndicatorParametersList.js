@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
                 remove: me.locale('userIndicators.modify.remove')
             }));
             item.find('.user-dataset-edit').on('click', function (evt) {
-                me.trigger('insert.data', {
+                me.trigger('edit.data', {
                     year: dataset.year,
                     regionset: Number(dataset.regionset)
                 });

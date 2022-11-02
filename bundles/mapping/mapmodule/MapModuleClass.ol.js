@@ -976,8 +976,10 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
+        // getZIndex returns undefined if z indez isn't set even default is 0.
+        const layerZ = l => l.getZIndex() || 0;
         this.getMap().getLayers().getArray().sort(function (a, b) {
-            return a.getZIndex() - b.getZIndex();
+            return layerZ(a) - layerZ(b);
         });
     }
 
@@ -1190,8 +1192,8 @@ export class MapModule extends AbstractMapModule {
      * @param {ol/layer/Layer} layer ol3 specific!
      */
     setLayerIndex (layerImpl, index) {
-        var layerColl = this.getMap().getLayers();
-        var layerIndex = this.getLayerIndex(layerImpl);
+        const layerColl = this.getMap().getLayers();
+        const layerIndex = this.getLayerIndex(layerImpl);
 
         /* find */
         /* remove */
@@ -1199,10 +1201,9 @@ export class MapModule extends AbstractMapModule {
 
         if (index === layerIndex) {
             // nothing to do here
-        } else if (index === layerColl.getLength()) {
+        } else if (index >= layerColl.getLength() - 1) {
             /* to top */
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index, layerImpl);
+            this.bringToTop(layerImpl);
         } else if (layerIndex < index) {
             /* must adjust change */
             layerColl.removeAt(layerIndex);

@@ -41,7 +41,7 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', children }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children }) => {
     const [toolbarOpen, setToolbarOpen] = useState(false);
 
     let roundingPercent = 0;
@@ -90,6 +90,7 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
                 size={size}
                 iconActive={iconActive || (withToolbar && toolbarOpen)}
                 iconSize={iconSize}
+                className={className}
             />
             {withToolbar && (
                 <Toolbar height='32px' open={toolbarOpen} shape={shape}>
