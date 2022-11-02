@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._defaultLocation = 'top left';
         me._index = 0;
         me._name = 'PublisherToolbarPlugin';
-        me._toolButtons = [];
+        me._toolButtons = conf.buttons || [];
         me.inMobileMode = false;
     }, {
         // templates for tools-mapplugin

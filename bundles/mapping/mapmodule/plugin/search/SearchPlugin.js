@@ -505,8 +505,7 @@ Oskari.clazz.define(
 
             // remove old element
             this.teardownUI();
-            this.inMobileMode = isMobile;
-            me._element.removeClass('mobilesearch');
+            this.inMobileMode = isMobile
 
             var conf = me.getConfig();
             if (conf) {

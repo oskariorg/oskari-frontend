@@ -190,6 +190,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
         <Container>
             <MapModuleButton
                 icon={<PlusIcon />}
+                className='t_plus'
                 onClick={() => {
                     changeZoom(zoom < 100 ? zoom + 1 : 100)
                 }}
@@ -199,6 +200,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
             />
             {!isMobile && (
                 <StyledSlider
+                    className='t_zoomslider'
                     vertical={true}
                     value={zoom}
                     step={1}
@@ -213,6 +215,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
             )}
             <MapModuleButton
                 icon={<MinusIcon />}
+                className='t_minus'
                 onClick={() => {
                     changeZoom(zoom > 0 ? zoom - 1 : 0)
                 }}
