@@ -42,6 +42,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
                 styleName={styleName}
                 iconSize='24px'
                 noMargin
+                className='t_map_move'
             />
         </MapControlContainer>
         <MapControlContainer>
@@ -53,6 +54,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
                 styleName={styleName}
                 iconSize='24px'
                 noMargin
+                className='t_map_rotate'
             />
         </MapControlContainer>
         <Break/>
@@ -65,6 +67,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
                 iconSize='24px'
                 noMargin
                 disabled={activeMapMoveMethod === mapMoveMethodRotate}
+                className='t_map_up'
             />
         </MapControlContainer>
         <MapControlContainer>
@@ -76,6 +79,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
                 iconSize='24px'
                 noMargin
                 disabled={activeMapMoveMethod === mapMoveMethodRotate}
+                className='t_map_down'
             />
         </MapControlContainer>
     </MapControlsContainer>);
