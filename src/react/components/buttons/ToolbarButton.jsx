@@ -5,10 +5,9 @@ import styled from 'styled-components';
 const StyledToolbar = styled('div')`
     position: absolute;
     z-index: -1;
-    left: 0;
+    ${props => props.direction}: 0;
     top: 0;
-    padding-left: ${props => props.height};
-    padding-right: 5px;
+    padding-${props => props.direction}: ${props => props.height};
     height: ${props => props.height};
     border-radius: ${props => props.rounding};
     background: #707070;
@@ -16,7 +15,7 @@ const StyledToolbar = styled('div')`
     align-items: center;
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
     ${props => props.open ? `
-        max-width: 500px;
+        max-width: ${props => props.maxWidth};
         -moz-transition: max-width .3s linear;
         -ms-transition: max-width .3s linear;
         -o-transition: max-width .3s linear;
@@ -55,11 +54,11 @@ const Icon = styled('div')`
     }
 `;
 
-export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title }) => {
+export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title, disabled = false }) => {
     if (title) {
         return (
             <Tooltip title={title}>
-                <ToolbarItem onClick={onClick}>
+                <ToolbarItem onClick={disabled ? null : onClick}>
                     <Icon $active={iconActive}>
                         {icon}
                     </Icon>
@@ -68,7 +67,7 @@ export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title }) 
         );
     } else {
         return (
-            <ToolbarItem onClick={onClick}>
+            <ToolbarItem onClick={disabled ? null : onClick}>
                 <Icon $active={iconActive}>
                     {icon}
                 </Icon>
@@ -77,12 +76,19 @@ export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title }) 
     }
 }
 
-export const Toolbar = ({ height, children, open = false, shape = 'rounded' }) => {
+export const Toolbar = ({ height, children, open = false, shape = 'rounded', direction, maxWidth }) => {
     let rounding = '25px';
     if (shape === 'sharp') rounding = '0px';
     else if (shape === '3d') rounding = '5px';
+
+    let toolbarMaxWidth = `${maxWidth}px`;
+    let directionControl = 'left';
+    if (direction === 'left') {
+        directionControl = 'right';
+    }
+
     return (
-        <StyledToolbar open={open} height={height} rounding={rounding}>
+        <StyledToolbar open={open} height={height} rounding={rounding} direction={directionControl} maxWidth={toolbarMaxWidth}>
             {children}
         </StyledToolbar>
     );

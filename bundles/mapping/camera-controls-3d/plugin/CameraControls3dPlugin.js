@@ -61,28 +61,24 @@ Oskari.clazz.define(className,
         },
         _createUI: function (mapInMobileMode, forced) {
             this._element = this._mountPoint.clone();
-            if (mapInMobileMode) {
-                if (this._addToMobileToolBar(forced)) {
-                    return true;
-                }
-            } else {
-                this.addToPluginContainer(this._element);
-            }
-            const cls = mapInMobileMode ? 'tool' : 'mapplugin';
-            this._element.addClass(cls);
+            this.addToPluginContainer(this._element);
+            this._element.addClass('mapplugin');
             this._render(mapInMobileMode);
         },
         _render (mapInMobileMode, state = this.handler.getState()) {
             if (!this.getElement()) {
                 return;
             }
+            const style = this.getToolStyleFromMapModule() || 'rounded-dark';
             const { activeMapMoveMethod } = state;
             const ui = (
                 <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d
                         mapInMobileMode={mapInMobileMode}
                         activeMapMoveMethod={activeMapMoveMethod}
-                        controller={this.handler.getController()}/>
+                        controller={this.handler.getController()}
+                        styleName={style}
+                    />
                 </LocaleProvider>
             );
             ReactDOM.render(ui, this._element.get(0));
@@ -97,31 +93,6 @@ Oskari.clazz.define(className,
         getIndex: function () {
             // i.e. position
             return this._index;
-        },
-        _addToMobileToolBar (forced) {
-            // TODO: create mapmodule method and tools service for svg based mobile tools
-            const el = this.getElement();
-            const toolbar = jQuery('.toolbar_' + this.getMapModule().getMobileToolbar());
-            const resetMapStateControl = toolbar.find('.mobile-reset-map-state');
-            // if mapmove controls exists then add after them
-            if (resetMapStateControl.length) {
-                el.insertAfter(resetMapStateControl);
-                return false;
-            }
-            // no mapmove controls, add first
-            const toolrow = toolbar.find('.toolrow');
-            if (toolrow.length) {
-                toolrow.prepend(el);
-                return false;
-            }
-            // there's no other tools added, add toolrow
-            if (forced) {
-                const row = jQuery('<div class="toolrow"></div>');
-                row.append(el);
-                toolbar.append(row);
-                return false;
-            }
-            return true; // waiting for toolbar
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

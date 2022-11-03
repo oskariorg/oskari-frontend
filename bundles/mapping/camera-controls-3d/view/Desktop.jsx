@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './Icons';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 
 const iconShadow = '1px 1px 2px rgba(0,0,0,0.6)';
 const darkBgColor = 'rgba(20,20,20,0.8)';
@@ -21,26 +22,8 @@ const MapControlsContainer = styled.div`
 `;
 
 const MapControlContainer = styled.div`
-    border-radius: 50%;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-    z-index: 15000;
     margin-bottom: 5px;
     margin-left: 5px;
-    box-shadow: ${iconShadow};
-    background-color: ${props => props.controlIsActive ? secondaryColor : darkBgColor};
-    opacity: ${props => props.disabled ? 0.3 : 1.0};
-    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
-`;
-
-const MapControl = styled.div`
-    width: 32px;
-    height: 32px;
-    background-repeat: no-repeat;
-    margin: 0;
-    padding-top:3px;
-    text-align: center;
 `;
 
 const Break = styled.div`
@@ -48,36 +31,52 @@ const Break = styled.div`
     height: 0;
 `;
 
-export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMessage }) => {
-    const mapInMobileMode = false;
-
+export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMessage, styleName }) => {
     return (<MapControlsContainer>
-        <MapControlContainer controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}>
-            <MapControl>
-                <MoveMapIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
-                    title={getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>
-            </MapControl>
+        <MapControlContainer>
+            <MapModuleButton
+                onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
+                icon={<MoveMapIcon mapInMobileMode={false} />}
+                title={getMessage('tooltip.move')}
+                iconActive={activeMapMoveMethod === mapMoveMethodMove}
+                styleName={styleName}
+                iconSize='24px'
+                noMargin
+            />
         </MapControlContainer>
-        <MapControlContainer controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}>
-            <MapControl>
-                <RotateMapIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
-                    title={ getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>
-            </MapControl>
+        <MapControlContainer>
+            <MapModuleButton
+                onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
+                icon={<RotateMapIcon mapInMobileMode={false} />}
+                title={getMessage('tooltip.rotate')}
+                iconActive={activeMapMoveMethod === mapMoveMethodRotate}
+                styleName={styleName}
+                iconSize='24px'
+                noMargin
+            />
         </MapControlContainer>
         <Break/>
-        <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
-            <MapControl>
-                <UpIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => controller.changeCameraAltitude(true)} title={getMessage('tooltip.up')}/>
-            </MapControl>
+        <MapControlContainer>
+            <MapModuleButton
+                onClick={() => controller.changeCameraAltitude(true)}
+                icon={<UpIcon mapInMobileMode={false} />}
+                title={getMessage('tooltip.up')}
+                styleName={styleName}
+                iconSize='24px'
+                noMargin
+                disabled={activeMapMoveMethod === mapMoveMethodRotate}
+            />
         </MapControlContainer>
-        <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
-            <MapControl>
-                <DownIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => controller.changeCameraAltitude(false)} title={getMessage('tooltip.down')}/>
-            </MapControl>
+        <MapControlContainer>
+            <MapModuleButton
+                onClick={() => controller.changeCameraAltitude(false)}
+                icon={<DownIcon mapInMobileMode={false} />}
+                title={getMessage('tooltip.down')}
+                styleName={styleName}
+                iconSize='24px'
+                noMargin
+                disabled={activeMapMoveMethod === mapMoveMethodRotate}
+            />
         </MapControlContainer>
     </MapControlsContainer>);
 });

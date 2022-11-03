@@ -4,9 +4,9 @@ import { Controller } from 'oskari-ui/util';
 import { Desktop } from './Desktop';
 import { Mobile } from './Mobile';
 
-export const CameraControls3d = ({ mapInMobileMode, activeMapMoveMethod, controller }) => {
+export const CameraControls3d = ({ mapInMobileMode, activeMapMoveMethod, styleName, controller }) => {
     const CameraControlsComponent = mapInMobileMode ? Mobile : Desktop;
-    return <CameraControlsComponent activeMapMoveMethod={activeMapMoveMethod} controller={controller} />;
+    return <CameraControlsComponent activeMapMoveMethod={activeMapMoveMethod} controller={controller} styleName={styleName} />;
 };
 
 CameraControls3d.propTypes = {
