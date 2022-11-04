@@ -36,7 +36,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
         <MapControlContainer>
             <MapModuleButton
                 onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
-                icon={<MoveMapIcon mapInMobileMode={false} />}
+                icon={<MoveMapIcon />}
                 title={getMessage('tooltip.move')}
                 iconActive={activeMapMoveMethod === mapMoveMethodMove}
                 styleName={styleName}
@@ -48,7 +48,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
         <MapControlContainer>
             <MapModuleButton
                 onClick={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
-                icon={<RotateMapIcon mapInMobileMode={false} />}
+                icon={<RotateMapIcon />}
                 title={getMessage('tooltip.rotate')}
                 iconActive={activeMapMoveMethod === mapMoveMethodRotate}
                 styleName={styleName}
@@ -61,7 +61,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
         <MapControlContainer>
             <MapModuleButton
                 onClick={() => controller.changeCameraAltitude(true)}
-                icon={<UpIcon mapInMobileMode={false} />}
+                icon={<UpIcon />}
                 title={getMessage('tooltip.up')}
                 styleName={styleName}
                 iconSize='24px'
@@ -73,7 +73,7 @@ export const Desktop = LocaleConsumer(({ activeMapMoveMethod, controller, getMes
         <MapControlContainer>
             <MapModuleButton
                 onClick={() => controller.changeCameraAltitude(false)}
-                icon={<DownIcon mapInMobileMode={false} />}
+                icon={<DownIcon />}
                 title={getMessage('tooltip.down')}
                 styleName={styleName}
                 iconSize='24px'
