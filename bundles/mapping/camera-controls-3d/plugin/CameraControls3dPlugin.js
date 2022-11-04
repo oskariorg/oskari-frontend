@@ -17,7 +17,8 @@ Oskari.clazz.define(className,
         this._mountPoint = jQuery('<div class="camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
-        this.handler = new CameraControls3dHandler(state => this._render(Oskari.util.isMobile(), state));
+        this.inMobileMode = false;
+        this.handler = new CameraControls3dHandler(state => this._render(null, null));
     }, {
         getName: function () {
             return shortName;
@@ -39,7 +40,8 @@ Oskari.clazz.define(className,
          */
         redrawUI: function (mapInMobileMode, forced) {
             this.teardownUI();
-            return this._createUI(mapInMobileMode, forced);
+            this.inMobileMode = mapInMobileMode;
+            return this._createUI();
         },
         teardownUI: function () {
             if (!this.getElement()) {
@@ -59,29 +61,56 @@ Oskari.clazz.define(className,
         stopPlugin: function () {
             this.teardownUI();
         },
-        _createUI: function (mapInMobileMode, forced) {
+        /**
+         * Changes the tool style of the plugin
+         *
+         * @method changeToolStyle
+         * @param {Object} style
+         * @param {jQuery} div
+         */
+        changeToolStyle: function (style, el) {
+            const div = el || this.getElement();
+            if (!div) {
+                return;
+            }
+
+            this._render(style, div);
+
+            this._setLayerToolsEditMode(
+                this.getMapModule().isInLayerToolsEditMode()
+            );
+        },
+        _createUI: function () {
             this._element = this._mountPoint.clone();
             this.addToPluginContainer(this._element);
             this._element.addClass('mapplugin');
-            this._render(mapInMobileMode);
+            this._render(null, null);
         },
-        _render (mapInMobileMode, state = this.handler.getState()) {
-            if (!this.getElement()) {
-                return;
+        _render (style, element, state = this.handler.getState()) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
             }
-            const style = this.getToolStyleFromMapModule() || 'rounded-dark';
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             const { activeMapMoveMethod } = state;
             const ui = (
                 <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d
-                        mapInMobileMode={mapInMobileMode}
+                        mapInMobileMode={this.inMobileMode}
                         activeMapMoveMethod={activeMapMoveMethod}
                         controller={this.handler.getController()}
-                        styleName={style}
+                        styleName={styleName || 'rounded-dark'}
+                        location={this.getLocation()}
                     />
                 </LocaleProvider>
             );
-            ReactDOM.render(ui, this._element.get(0));
+            ReactDOM.render(ui, el[0]);
         },
         /**
          * @public @method getIndex

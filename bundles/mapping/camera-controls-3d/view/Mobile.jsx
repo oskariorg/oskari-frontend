@@ -41,15 +41,14 @@ const buildToolbarItems = (controller, activeMapMoveMethod) => {
     ];
 };
 
-export const Mobile = ({ activeMapMoveMethod, controller, styleName }) => {
-
-
+export const Mobile = ({ activeMapMoveMethod, controller, styleName, location = 'top left' }) => {
     return (
         <MapModuleButton
             icon={<VideoCameraOutlined />}
             withToolbar
             className='t_mobile_camera_tools'
-            toolbarDirection='left'
+            toolbarDirection={location.includes('right') ? 'left' : 'right'}
+            styleName={styleName}
         >
             {buildToolbarItems(controller, activeMapMoveMethod)}
         </MapModuleButton>

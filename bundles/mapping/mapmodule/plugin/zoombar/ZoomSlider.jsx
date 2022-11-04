@@ -64,6 +64,12 @@ const StyledSlider = styled(Slider)`
     }
 `;
 
+const MobileContainer = styled('div')`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+`;
+
 const PlusIcon = styled(PlusOutlined)`
     font-size: 12px;
 `;
@@ -165,7 +171,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
 
     if (isMobile) {
         return (
-            <div>
+            <MobileContainer>
                 <MapModuleButton
                     icon={<PlusIcon />}
                     onClick={() => {
@@ -184,7 +190,7 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                     className='t_minus'
                     styleName={styleName}
                 />
-            </div>
+            </MobileContainer>
         );
     }
 

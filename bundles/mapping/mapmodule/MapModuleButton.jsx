@@ -6,8 +6,9 @@ const Container = styled('div')`
     width: 32px;
     height: 32px;
     position: relative;
-    ${props => props.noMargin ? 'margin: 0' : 'margin: 0 0 10px 30px'};
+    ${props => props.noMargin ? 'margin: 0' : 'margin: 0 30px 10px 30px'};
     ${props => props.withToolbar && props.toolbarOpen && props.toolbarMargin};
+    display: inline-block;
 `;
 
 const StyledButton = styled(MapButton)`
