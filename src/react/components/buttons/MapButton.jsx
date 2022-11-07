@@ -56,6 +56,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                         size={size}
                         $active={iconActive}
                         $iconSize={iconSize}
+                        disabled={disabled}
                         { ...rest }
                     />
                 </ThemeProvider>
@@ -70,6 +71,7 @@ export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px'
                     size={size}
                     $active={iconActive}
                     $iconSize={iconSize}
+                    disabled={disabled}
                     { ...rest }
                 />
             </ThemeProvider>
