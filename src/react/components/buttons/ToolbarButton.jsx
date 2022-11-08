@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 const StyledToolbar = styled('div')`
     position: absolute;
-    z-index: -1;
     ${props => props.direction}: 0;
     top: 0;
     padding-${props => props.direction}: ${props => props.height};
@@ -45,8 +44,8 @@ const ToolbarItem = styled('div')`
 `;
 
 const Icon = styled('div')`
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
     svg {
         path {
             fill: ${props => props.$active ? '#ffd400': '#ffffff'};
