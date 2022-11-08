@@ -1,11 +1,20 @@
-import React from 'react';
-import { MapButton } from 'oskari-ui/components/buttons';
+import React, { useState } from 'react';
+import { MapButton, Toolbar } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Container = styled('div')`
-    margin: 0 0 10px 30px;
     width: 32px;
     height: 32px;
+    position: relative;
+    ${props => props.noMargin ? 'margin: 0' : 'margin: 0 30px 10px 30px'};
+    ${props => props.withToolbar && props.toolbarOpen && props.toolbarMargin};
+    display: inline-block;
+`;
+
+const StyledButton = styled(MapButton)`
+    position: absolute;
+    left: 0;
+    top: 0;
 `;
 
 const THEME_LIGHT = {
@@ -33,7 +42,9 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, toolbarDirection = 'right' }) => {
+    const [toolbarOpen, setToolbarOpen] = useState(false);
+
     let roundingPercent = 0;
     let color;
 
@@ -65,14 +76,32 @@ export const MapModuleButton = ({ styleName, title, icon, onClick }) => {
         }
     }
 
+    let toolbarMaxWidth = 50;
+    const marginDirection = toolbarDirection === 'right' ? 'right' : 'left';
+    let toolbarMargin = `margin-${marginDirection}: 0`;
+    if (withToolbar && toolbarOpen && children) {
+        toolbarMaxWidth = children.length * 34 + 10;
+        toolbarMargin = `margin-${marginDirection}: ${toolbarMaxWidth}px`;
+    }
+
     return (
-        <Container>         
-            <MapButton
-                onClick={onClick}
+        <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarOpen={toolbarOpen} toolbarMargin={toolbarMargin}>
+            <StyledButton
+                onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
                 icon={icon}
                 theme={{ ...color, roundingPercent }}
                 title={title}
+                size={size}
+                iconActive={iconActive || (withToolbar && toolbarOpen)}
+                iconSize={iconSize}
+                className={className}
+                disabled={disabled}
             />
+            {withToolbar && (
+                <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarDirection} maxWidth={toolbarMaxWidth + 100}>
+                    {children}
+                </Toolbar>
+            )}
         </Container>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { showLayerSelectionPopup } from './LayerSelectionPopup';
 import { MapModuleButton } from '../../MapModuleButton';
 import ReactDOM from 'react-dom';
+import { LayersIcon } from 'oskari-ui/components/icons';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
@@ -26,25 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         me.initialSetup = true;
         me.templates = {};
-        me._mobileDefs = {
-            buttons: {
-                'mobile-layerselection': {
-                    iconCls: 'mobile-layers',
-                    tooltip: '',
-                    sticky: true,
-                    show: true,
-                    callback: function () {
-                        me._toggleToolState();
-                    },
-                    toggleChangeIcon: true
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
+        me.inMobileMode = false;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -76,6 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 },
                 this.getLocation()
             );
+            this.renderButton(null, null);
         },
         _updateLayerSelectionPopup: function () {
             if (!this.popupControls) {
@@ -90,10 +78,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
         popupCleanup: function () {
             if (this.popupControls) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popupControls.close();
             }
             this.popupControls = null;
+            const div = this.getElement();
+            if (!div) return;
+            this.renderButton(null, null);
         },
         /**
          * @private @method _initImpl
@@ -221,9 +211,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         updateLayers: function () {
             const { baseLayers = [] } = this.getConfig() || {};
             const isBaseLayer = (layer) => baseLayers.some(id => '' + id === '' + layer.getId());
-
-            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l));
-            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer);
+            // bottom layer is first in list. Reverse lists to render in correct order.
+            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l)).reverse();
+            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer).reverse();
             this._updateLayerSelectionPopup();
         },
         _selectStyle: function (layerId, style) {
@@ -354,8 +344,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove old element
             this.removeFromPluginContainer(this.getElement());
             this.popupCleanup();
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -370,23 +358,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            const mobileDefs = this.getMobileDefs();
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            const toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                this._element = this._createControlElement();
-                this.changeToolStyle(null, this._element);
-                this.refresh();
-                this.addToPluginContainer(this._element);
-            }
+
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.changeToolStyle(null, this._element);
+            this.refresh();
+            this.addToPluginContainer(this._element);
         },
 
         refresh: function () {
@@ -435,33 +414,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             ReactDOM.unmountComponentAtNode(header[0]);
             header.empty();
 
-            const ButtonIcon = () => (
-                <svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-                        <g transform="translate(-10.000000, -10.000000)">
-                            <path d="M26.822,20.6490471 L27.6897848,21.1075254 C27.9339631,21.2364889 28.0273631,21.5389801 27.8983996,21.7831583 C27.8514267,21.8720963 27.7787228,21.9448002 27.6897848,21.9917731 L20.4670182,25.8064996 C20.1747992,25.960836 19.8252008,25.960836 19.5329818,25.8064996 L12.3102152,21.9917731 C12.0660369,21.8628096 11.9726369,21.5603184 12.1016004,21.3161402 C12.1485733,21.2272022 12.2212772,21.1544983 12.3102152,21.1075254 L13.178,20.6490471 L20,24.2517537 L26.822,20.6490471 Z M20.4670182,14.1403437 L27.6897848,17.9550702 C27.9339631,18.0840337 28.0273631,18.3865249 27.8983996,18.6307031 C27.8514267,18.7196411 27.7787228,18.792345 27.6897848,18.8393179 L20.4670182,22.6540444 C20.1747992,22.8083808 19.8252008,22.8083808 19.5329818,22.6540444 L12.3102152,18.8393179 C12.0660369,18.7103544 11.9726369,18.4078632 12.1016004,18.163685 C12.1485733,18.074747 12.2212772,18.0020431 12.3102152,17.9550702 L19.5329818,14.1403437 C19.8252008,13.9860073 20.1747992,13.9860073 20.4670182,14.1403437 Z" id="Combined-Shape-Copy-2"></path>
-                        </g>
-                    </g>
-                </svg>
+            this.renderButton(styleName, header);
+
+            this._setLayerToolsEditMode(
+                this.getMapModule().isInLayerToolsEditMode()
             );
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                const div = this.getElement();
+                if (!div) return;
+                el = div.find('div.header');
+            };
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
 
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerselect'
-                    styleName={styleName}
-                    icon={<ButtonIcon />}
+                    styleName={styleName || 'rounded-dark'}
+                    icon={<LayersIcon />}
                     title={this._loc.title}
                     onClick={(e) => {
                         if (!this.inLayerToolsEditMode()) {
                             this._togglePopup();
                         }
                     }}
+                    iconActive={this.popupControls ? true : false}
                 />,
-                header[0]
-            );
-
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
+                el[0]
             );
         },
 

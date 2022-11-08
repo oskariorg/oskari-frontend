@@ -1,5 +1,17 @@
 # Release Notes
 
+## 2.9.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/41?closed=1
+
+- Fixed an issue with GFI functionality on 3D-map module
+- Fixed an issue with "Add map layer" button in publisher functionality
+- Fixed an issue with removed layers in layer analytics listing for admin
+- Fixed a visual issue in background layer selection plugin for map
+- Improved metadata search form
+- Improved user location tracking visualization so it can't hide itself as well on problematic parts of the background map
+
 ## 2.9.0
 
 For a full list of changes see:

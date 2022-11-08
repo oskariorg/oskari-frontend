@@ -17,28 +17,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
      *
      */
     function (config) {
-        var me = this;
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
         this._defaultLocation = 'top right';
         this._index = 20;
         this._name = 'PanButtons';
         this._panPxs = 100;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-reset': {
-                    iconCls: 'mobile-reset-map-state',
-                    tooltip: '',
-                    sticky: false,
-                    show: true,
-                    callback: function () {
-                        me._resetClicked();
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
+        this.inMobileMode = false;
     }, {
         /**
          * @private @method _createControlElement
@@ -112,9 +97,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
             const styleClass = styleName || 'rounded-dark';
 
+            this.renderButton(styleClass, div);
+        },
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             ReactDOM.render(
-                <PanButton resetClicked={() => this._resetClicked()} panClicked={(x, y) => this._panClicked(x, y)} styleName={styleClass} />,
-                div[0]
+                <PanButton
+                    resetClicked={() => this._resetClicked()}
+                    panClicked={(x, y) => this._panClicked(x, y)}
+                    styleName={styleName || 'rounded-dark'}
+                    isMobile={this.inMobileMode}
+                />,
+                el[0]
             );
         },
         /**
@@ -128,29 +132,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 // no point in drawing the ui if we are not visible
                 return;
             }
-            var me = this;
-            var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
 
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                me._element = me._createControlElement();
-                me.refresh();
-                this.addToPluginContainer(me._element);
-            }
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.refresh();
+            this.addToPluginContainer(this._element);
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override

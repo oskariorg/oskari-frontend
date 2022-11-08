@@ -15,9 +15,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     me.on('hide', function () {
         me.reset();
     });
-    // handle paramslist "add data button" -> show form to input/edit data
+    // handle paramslist "add data button" -> show form to input data
     this.indicatorParamsList.on('insert.data', function (selectors) {
-        me.showDatasetForm(selectors);
+        me.showDatasetForm(selectors, true);
+    });
+    // handle paramslist edit link -> show form to edit data
+    this.indicatorParamsList.on('edit.data', function (selectors) {
+        me.showDatasetForm(selectors, false);
     });
 
     this.indicatorParamsList.on('delete.data', function (selectors) {
@@ -224,7 +228,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     /**
      * Opens a form for user to add or edit data for indicators year/regionset
      */
-    showDatasetForm: function (selectors) {
+    showDatasetForm: function (selectors, isNew) {
         const me = this;
         const locale = this.locale;
         me.genericInfoPanel.close();
@@ -255,8 +259,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 me.indicatorDataForm.showTable(selectors, formRegions, labels);
                 me.saveBtn.setPrimary(true);
             };
-            if (!me.indicatorId) {
-                // not editing an indicator -> just show an empty form with regions
+            if (!me.indicatorId || isNew) {
+                // don't try to get data from backend, just show an empty form with regions
                 showDataForm(regions);
                 return;
             }

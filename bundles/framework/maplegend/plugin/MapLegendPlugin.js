@@ -21,21 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         me._isVisible = false;
         me._loc = null;
         me._popup = null;
-        me._mobileDefs = {
-            buttons: {
-                'mobile-maplegend': {
-                    iconCls: 'mobile-maplegend',
-                    tooltip: '',
-                    show: true,
-                    callback: function () {
-                        me._toggleToolState();
-                    },
-                    sticky: true,
-                    toggleChangeIcon: true
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
+        me.inMobileMode = false;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (this.inLayerToolsEditMode() && this.isOpen()) {
@@ -47,90 +33,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 loc = Oskari.getLocalization('maplegend', Oskari.getLang());
             var isMobile = Oskari.util.isMobile();
 
+            this.inMobileMode = isMobile;
             me._loc = loc;
 
-            if (isMobile) {
-                return this.createMobileElement();
-            } else {
-                return this.createDesktopElement();
-            }
+            return this.createDesktopElement();
         },
-        createMobileElement: function () {
-            var me = this;
-            var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-maplegend');
-            var topOffsetElement = jQuery('div.mobileToolbarDiv');
-            var popupCloseIcon = null;
-            var themeColours = me.getMapModule().getThemeColours();
-            var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
-            me._popup = popupService.createPopup();
-            var singleLegend = false;
-            var dropdown = null;
-            popupService.closeAllPopups(true);
 
-            var legends = me.getLegends();
-            if (legends.length === 1) {
-                singleLegend = true;
-            }
-            var content = me._popup.getJqueryContent();
-            var legendContent = me.generateLegendContainer(singleLegend);
-
-            if (!singleLegend) {
-                dropdown = legendContent.find('.oskari-select');
-            }
-
-            var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
-            me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
-
-            me.getLayerLegend(function (img) {
-                content.find('.imgDiv').remove();
-                content.find('.legendLink').remove();
-                content.find('.error').remove();
-                var legendImage = jQuery('<div class="imgDiv"></div>');
-                var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
-                legendLink.find('a').attr('href', img.src);
-                legendLink.find('a').text(me._loc.newtab);
-                legendImage.append(img);
-                content.append(legendContent);
-                content.append(legendLink);
-                content.append(legendImage);
-                // move popup if el and topOffsetElement
-                if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
-                    me._popup.moveTo(el, 'bottom', true, topOffsetElement);
-                } else {
-                    me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
-                }
-            }, function () {
-                // move popup if el and topOffsetElement
-                if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
-                    me._popup.moveTo(el, 'bottom', true, topOffsetElement);
-                } else {
-                    me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
-                }
-                content.find('.error').remove();
-                content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-            }, singleLegend, dropdown);
-
-            if (!singleLegend) {
-                dropdown.trigger('change');
-            }
-
-            if (me._isVisible) {
-                me._popup.show(title, null);
-                popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
-                me._popup.createCloseIcon();
-                me._popup.onClose(function () {
-                    me._isVisible = false;
-                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-maplegend'].iconCls);
-                });
-                me._popup.setColourScheme({
-                    'bgColour': themeColours.activeColour,
-                    'titleColour': themeColours.activeTextColour,
-                    'iconCls': popupCloseIcon
-                });
-                me._popup.addClass('maplegend__popup');
-                me._popup.addClass('mobile-popup');
-            }
-        },
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
@@ -148,21 +56,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             const styleClass = style || 'rounded-dark';
 
+            me.renderButton(styleClass, el);
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maplegend'
-                    title={me._loc.tooltip}
+                    title={this._loc.tooltip}
                     icon={<QuestionOutlined />}
-                    styleName={styleClass}
+                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
-                        if (!me.inLayerToolsEditMode()) {
-                            me.togglePopup();
+                        if (!this.inLayerToolsEditMode()) {
+                            this.togglePopup();
                         }
                     }}
+                    iconActive={this._isVisible}
                 />,
                 el[0]
             );
         },
+
         togglePopup: function () {
             const me = this;
             const themeColours = me.getMapModule().getThemeColours();
@@ -206,6 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me._popup.dialog.children().empty();
                 me._isVisible = false;
                 me._popup.close();
+                me.renderButton(null, null);
             });
             me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
             me._isVisible = true;
@@ -231,6 +157,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             if (!singleLegend) {
                 dropdown.trigger('change');
             }
+            me.renderButton(null, null);
         },
         createDesktopElement: function () {
             var me = this;
@@ -372,14 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             if (this.getElement()) {
                 this.teardownUI(true);
             }
-            var mobileDefs = this.getMobileDefs();
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            }
+
             this._createUI();
         },
         teardownUI: function () {
@@ -388,27 +308,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 this.getElement().detach();
                 this.removeFromPluginContainer(this.getElement());
             }
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         /**
          * Toggle tool state.
          * @method @private _toggleToolState
          */
         _toggleToolState: function () {
-            const isMobile = Oskari.util.isMobile();
-
             if (this.isOpen()) {
                 this._isVisible = false;
                 this._popup.close(true);
                 return this.isOpen();
             } else {
                 this._isVisible = true;
-                if (isMobile) {
-                    this.createMobileElement();
-                } else {
-                    this.createDesktopElement();
-                }
+                this.createDesktopElement();
             }
         },
         /**

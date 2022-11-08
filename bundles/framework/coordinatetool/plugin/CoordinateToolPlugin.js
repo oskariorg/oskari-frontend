@@ -123,23 +123,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         };
         me.spinnerStopTimer = null;
         // me.lastLonLat = null;
-        me._mobileDefs = {
-            buttons: {
-                'mobile-coordinatetool': {
-                    iconCls: 'mobile-xy',
-                    tooltip: '',
-                    show: true,
-                    callback: function () {
-                        me._toggleToolState();
-                    },
-                    sticky: true,
-                    toggleChangeIcon: true
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me._decimalSeparator = Oskari.getDecimalSeparator();
         me._log = Oskari.log('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin');
+        me.inMobileMode = false;
     }, {
         /**
          * Get popup-
@@ -317,13 +303,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._toolOpen = false;
                 me._showMouseCoordinates = false;
                 me._showReverseGeocodeCheckbox = false;
+                me.renderButton(null, null);
             });
 
             var themeColours = mapmodule.getThemeColours();
             var popupCloseIcon = null;
             if (isMobile) {
-                var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-coordinatetool');
-                var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({ 'bgColour': '#e6e6e6' });
@@ -332,17 +317,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupContent.find('.mousecoordinates-div').hide();
 
                 popupService.closeAllPopups(true);
-                me._popup.onClose(function () {
-                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-coordinatetool'].iconCls);
-                });
 
                 me._popup.show(popupTitle, popupContent, buttons);
-                // move popup if el and topOffsetElement
-                if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
-                    me._popup.moveTo(el, 'bottom', true, topOffsetElement);
-                } else {
-                    me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
-                }
+
+                me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
 
                 popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
@@ -533,6 +511,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
                 me._labelMetricOrDegrees(jQuery('#projection option:selected').val());
             }
+            this.renderButton(null, null);
         },
 
         /**
@@ -652,8 +631,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (this._popup) {
                 this._popup.close(true);
             }
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -667,26 +644,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
-            var me = this;
-            var mobileDefs = this.getMobileDefs();
+            this.inMobileMode = mapInMobileMode;
 
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
-                if (!me._config.noUI) {
-                    this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                }
-            } else {
-                if (!me._config.noUI) {
-                    me._element = me._createControlElement();
-                    me.refresh();
-                    this.addToPluginContainer(me._element);
-                }
+            if (!this._config.noUI) {
+                this._element = this._createControlElement();
+                this.refresh();
+                this.addToPluginContainer(this._element);
             }
         },
 
@@ -1152,26 +1116,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
+            const styleClass = style || 'rounded-dark';
+            this.renderButton(styleClass, el);
+        },
+
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
             const CoordinateIcon = () => (
                 <div>XY</div>
             );
 
-            const styleClass = style || 'rounded-dark';
             ReactDOM.render(
                 <MapModuleButton
                     className='t_coordinatetool'
-                    title={me._locale('display.tooltip.tool')}
+                    title={this._locale('display.tooltip.tool')}
                     icon={<CoordinateIcon />}
-                    styleName={styleClass}
+                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
-                            me._toggleToolState();
+                            this._toggleToolState();
                         }
                     }}
+                    iconActive={this._toolOpen}
                 />,
                 el[0]
             );
         },
+
         _labelMetricOrDegrees: function (projection) {
             const loc = this._locale;
             const conf = this._config || {};

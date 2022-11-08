@@ -1,4 +1,7 @@
 import '../../../../service/search/searchservice';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { SearchBar } from './SearchBar';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
@@ -39,7 +42,6 @@ Oskari.clazz.define(
             me.template = jQuery(
                 '<div class="mapplugin search default-search-div">' +
                 '  <div class="search-textarea-and-button">' +
-                '    <input placeholder="' + me._loc.placeholder + '" type="text" /><input type="button" value="' + me._loc.search + '" name="search" />' +
                 '  </div>'
             );
 
@@ -93,70 +95,23 @@ Oskari.clazz.define(
                 '  <td></td>' +
                 '</tr>'
             );
-            me.toolStyles = {
-                'default': {
-                    val: null
-                },
-                'rounded-dark': {
-                    val: 'rounded-dark',
-                    widthLeft: 17,
-                    widthRight: 32
-                },
-                'rounded-light': {
-                    val: 'rounded-light',
-                    widthLeft: 17,
-                    widthRight: 32
-                },
-                'sharp-dark': {
-                    val: 'sharp-dark',
-                    widthLeft: 5,
-                    widthRight: 30
-                },
-                'sharp-light': {
-                    val: 'sharp-light',
-                    widthLeft: 5,
-                    widthRight: 30
-                },
-                '3d-dark': {
-                    val: '3d-dark',
-                    widthLeft: 5,
-                    widthRight: 44
-                },
-                '3d-light': {
-                    val: '3d-light',
-                    widthLeft: 5,
-                    widthRight: 44
-                }
-            };
 
             me.service = Oskari.clazz.create(
                 'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
+
+            me.inMobileMode = false;
         },
 
         _setLayerToolsEditModeImpl: function () {
             var me = this,
-                el = me.getElement(),
-                overlay;
+                el = me.getElement();
             if (!el) {
                 return;
             }
-            if (me.inLayerToolsEditMode()) {
-                me._inputField.prop('disabled', true);
-                me._searchButton.prop('disabled', true);
-
-                overlay = jQuery('<div class="search-editmode-overlay">');
-                me.getElement().find('.search-textarea-and-button')
-                    .css({
-                        'position': 'relative'
-                    })
-                    .append(overlay);
-                overlay.on('mousedown', function (e) {
-                    e.preventDefault();
-                });
+            if (this.inLayerToolsEditMode()) {
+                this.renderSearchBar(null, el, true);
             } else {
-                me._inputField.prop('disabled', false);
-                me._searchButton.prop('disabled', false);
-                me.getElement().find('.search-editmode-overlay').remove();
+                this.renderSearchBar(null, el);
             }
         },
 
@@ -176,14 +131,10 @@ Oskari.clazz.define(
             }
             if (conf && conf.toolStyle) {
                 el = me.styledTemplate.clone();
-                me._inputField = el.find('input[type=text]');
-                me._searchButton = el.find('input[type=button]');
                 me._element = el;
                 me.changeToolStyle(conf.toolStyle, el);
             } else {
                 el = me.template.clone();
-                me._inputField = el.find('input[type=text]');
-                me._searchButton = el.find('input[type=button]');
                 me._element = el;
             }
 
@@ -194,73 +145,19 @@ Oskari.clazz.define(
 
         _bindUIEvents: function (el) {
             var me = this,
-                reqBuilder,
-                sandbox = me.getSandbox(),
                 content = el || me.getElement();
-
-            // Toggle map keyboard controls so the user can use arrowkeys in the search...
-            me._inputField.on('focus', function () {
-                reqBuilder = Oskari.requestBuilder(
-                    'DisableMapKeyboardMovementRequest'
-                );
-                if (reqBuilder) {
-                    sandbox.request(me.getName(), reqBuilder());
-                }
-                // me._checkForKeywordClear();
-            });
-            me._inputField.on('blur', function () {
-                reqBuilder = Oskari.requestBuilder(
-                    'EnableMapKeyboardMovementRequest'
-                );
-                if (reqBuilder) {
-                    sandbox.request(me.getName(), reqBuilder());
-                }
-                // me._checkForKeywordInsert();
-            });
-
-            me._inputField.on('keypress', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    me._checkForEnter(event);
-                }
-            });
-
-            // FIXME these are the same thing now...
-            // to search button
-            me._searchButton.on('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    me._doSearch();
-                }
-            });
-            content.find('div.search-right').on('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    me._doSearch();
-                }
-            });
-
             // to close button
             content.find('div.close').on('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
-                    me._inputField.val('');
-                    // TODO: this should also unbind the TR tag click listeners?
                 }
             });
             content.find('div.close-results').on('click', function (event) {
                 if (!me.isInLayerToolsEditMode) {
                     me._hideSearch();
-                    me._inputField.val('');
                 }
             });
             content.find('div.results').hide();
-
-            if (me.getConfig() && me.getConfig().toolStyle) {
-                // Hide the results if esc was pressed or if the field is empty.
-                me._inputField.keyup(function (e) {
-                    if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
-                        me._hideSearch();
-                    }
-                });
-            }
         },
 
         refresh: function () {
@@ -290,34 +187,18 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _checkForEnter
-         * @private
-         * @param {Object} event
-         *      keypress event object from browser
-         * Detects if <enter> key was pressed and calls #_doSearch if it was
-         */
-        _checkForEnter: function (event) {
-            if (event.keyCode === 13) {
-                this._doSearch();
-            }
-        },
-
-        /**
          * @private @method _doSearch
          * Uses SearchService to make the actual search and calls  #_showResults
          *
          *
          */
-        _doSearch: function () {
+        _doSearch: function (text) {
             if (this._searchInProgess) {
                 return;
             }
             this._hideSearch();
             this._searchInProgess = true;
-            const inputField = this.getElement().find('input[type=text]');
-            inputField.addClass('search-loading');
-            const searchText = inputField.val();
-            this.service.doSearch(searchText, results => this._showResults(results), () => this._enableSearch());
+            this.service.doSearch(text, results => this._showResults(results), () => this._enableSearch());
         },
 
         _setMarker: function (result) {
@@ -472,7 +353,6 @@ Oskari.clazz.define(
          */
         _enableSearch: function () {
             this._searchInProgess = false;
-            jQuery('#search-string').removeClass('search-loading');
         },
 
         /**
@@ -507,99 +387,39 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (!style) {
-                style = this.toolStyles['default'];
-            } if (!style.hasOwnProperty('widthLeft')) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles['default'];
-            }
-
-            // Set the correct template for the style... ugly.
-            // FIXME use the same HTML for both of these so we don't have to muck about with the DOM
-            if (style.val === null) {
-                // hackhack
-                var conf = me.getConfig();
-                conf.toolStyle = null;
-                me._config = conf;
-                div.removeClass('published-search-div').addClass(
-                    'default-search-div'
-                );
-
-                div.empty();
-                me.template.children().clone().appendTo(div);
-                me._inputField = div.find('input[type=text]');
-                me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents(div);
-                me._setLayerToolsEditMode(
-                    me.getMapModule().isInLayerToolsEditMode()
-                );
-
-                return;
-            }
-
-            // Remove the old unstyled search box and create a new one.
-            if (div.hasClass('default-search-div')) {
-                // hand replace with styled version so we don't destroy this.element
-                div.removeClass('default-search-div').addClass(
-                    'published-search-div'
-                );
-
-                div.empty();
-                me.styledTemplate.children().clone().appendTo(div);
-                me._inputField = div.find('input[type=text]');
-                me._searchButton = div.find('input[type=button]');
-                me._bindUIEvents(div);
-            }
-
-            var styleName = style.val,
-                bgLeft = this.getMapModule().getImageUrl('search-tool-' + styleName + '_01.png'),
-                bgMiddle = this.getMapModule().getImageUrl('search-tool-' + styleName + '_02.png'),
-                bgRight = this.getMapModule().getImageUrl('search-tool-' + styleName + '_03.png'),
-                left = div.find('div.search-left'),
-                middle = div.find('div.search-middle'),
-                right = div.find('div.search-right'),
-                closeResults = middle.find('div.close-results'),
-                inputField = div.find('input.search-input');
-
-            left.css({
-                'background-image': 'url("' + bgLeft + '")',
-                'width': style.widthLeft + 'px'
-            });
-            right.css({
-                'background-image': 'url("' + bgRight + '")',
-                'width': style.widthRight + 'px'
-            });
-            // calculate the width for the middle container of the search
-            var middleWidth = parseInt(jQuery('.search-area-div').css('width')) - style.widthLeft - style.widthRight;
-            middle.css({
-                'background-image': 'url("' + bgMiddle + '")',
-                'background-repeat': 'repeat-x',
-                'width': middleWidth + 'px'
-            });
-            jQuery('.search-area-div').css('width', parseInt(left.outerWidth() + middleWidth + right.outerWidth()) + 'px');
-            closeResults.removeClass('icon-close icon-close-white');
-
-            // Change the font colour to whitish and the close icon to white
-            // if the style is dark themed
-            if (/dark/.test(styleName)) {
-                closeResults.addClass('icon-close-white');
-                closeResults.css({
-                    'margin-top': '10px'
-                });
-                inputField.css({
-                    'color': '#ddd'
-                });
-            } else {
-                closeResults.addClass('icon-close');
-                closeResults.css({
-                    'margin-top': '10px'
-                });
-                inputField.css({
-                    'color': ''
-                });
-            }
+            this.renderSearchBar(style, div);
 
             me._setLayerToolsEditMode(
                 me.getMapModule().isInLayerToolsEditMode()
+            );
+        },
+
+        renderSearchBar: function (style, element, disabled = false) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+
+            ReactDOM.render(
+                <SearchBar
+                    loading={this._searchInProgess}
+                    search={text => {
+                        if (!this.inLayerToolsEditMode()) {
+                            this._doSearch(text);
+                        }
+                    }}
+                    styleName={styleName}
+                    searchText={this.searchText}
+                    disabled={disabled}
+                    placeholder={this._loc.placeholder}
+                />,
+                el[0]
             );
         },
 
@@ -685,42 +505,20 @@ Oskari.clazz.define(
 
             // remove old element
             this.teardownUI();
+            this.inMobileMode = isMobile;
 
-            if (isMobile) {
-                // remove old element
-                this.removeFromPluginContainer(this.getElement(), true);
-
-                var mobileDivElement = me.getMapModule().getMobileDiv();
-                me._element.addClass('mobilesearch');
-                // FIXME is index is not first then this fails
-                mobileDivElement.prepend(me._element[0]);
-                me._uiMode = 'mobile';
-                me.changeToolStyle('rounded-light', me._element);
-                me._element.find('div.close-results').remove();
-                me._element.find('input.search-input').css({
-                    'height': '26px',
-                    'margin': 'auto'
-                });
-            } else {
-                me._element.removeClass('mobilesearch');
-
-                var conf = me.getConfig();
-                if (conf) {
-                    if (conf.toolStyle) {
-                        me.changeToolStyle(conf.toolStyle, me._element);
-                    } else {
-                        var toolStyle = me.getToolStyleFromMapModule();
-                        if (toolStyle !== null && toolStyle !== undefined) {
-                            me.changeToolStyle(me.toolStyles[toolStyle], me._element);
-                        } else {
-                            me.changeToolStyle(me.toolStyles['default'], me._element);
-                        }
-                    }
+            var conf = me.getConfig();
+            if (conf) {
+                if (conf.toolStyle) {
+                    me.changeToolStyle(conf.toolStyle, me._element);
+                } else {
+                    var toolStyle = me.getToolStyleFromMapModule();
+                    me.changeToolStyle(toolStyle, me._element);
                 }
-
-                this.addToPluginContainer(me._element);
-                me.refresh();
             }
+
+            this.addToPluginContainer(me._element);
+            me.refresh();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
