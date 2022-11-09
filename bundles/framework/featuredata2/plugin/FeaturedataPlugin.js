@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
             this.renderButton(style, div);
         },
-        renderButton: function (style, element, disabled = false) {
+        renderButton: function (style, element, disabled = false, loading = false) {
             let el = element;
             if (!element) {
                 el = this.getElement();
@@ -171,6 +171,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     styleName={styleName}
                     disabled={disabled}
                     active={this._flyoutOpen}
+                    loading={loading}
                 />,
                 el[0]
             );
@@ -193,13 +194,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
         },
         showLoadingIndicator: function (blnLoad) {
-            if (!this.getElement()) {
-                return;
-            }
             if (blnLoad) {
-                this.getElement().addClass('loading');
+                this.renderButton(null, null, false, true);
             } else {
-                this.getElement().removeClass('loading');
+                this.renderButton(null, null, false, false);
             }
         },
         showErrorIndicator: function (blnLoad) {
