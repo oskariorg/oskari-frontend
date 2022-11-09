@@ -103,6 +103,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                         }
                     }}
                     iconActive={degrees !== 0}
+                    position={this.getLocation()}
                 />,
                 element[0]
             );

@@ -45,10 +45,17 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     return <StyledButton primary={primary} accent={accent} rounding={rounding} { ...rest }/>
 });
 
-export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, ...rest }) => {
+export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, ...rest }) => {
+    let tooltipPosition = 'top';
+    if (position && position.includes('right')) {
+        tooltipPosition = 'left';
+    } else if (position && position.includes('left')) {
+        tooltipPosition = 'right';
+    }
+
     if (title) {
         return (
-            <Tooltip title={title}>
+            <Tooltip title={title} placement={tooltipPosition}>
                 <ThemeProvider value={theme}>
                     <ThemeButton
                         icon={icon}

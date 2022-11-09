@@ -83,6 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                         }
                     }}
                     iconActive={this._isVisible}
+                    position={this.getLocation()}
                 />,
                 el[0]
             );
