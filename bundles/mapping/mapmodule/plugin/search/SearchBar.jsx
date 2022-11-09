@@ -31,6 +31,7 @@ const StyledButton = styled(Button)`
 `;
 
 const SearchContainer = styled('div')`
+    margin: 0 10px 10px 10px;
     display: flex;
     flex-direction: row;
     background: ${props => props.$searchStyle.backgroundColor};
