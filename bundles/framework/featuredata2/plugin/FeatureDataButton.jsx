@@ -94,15 +94,18 @@ export const FeatureDataButton = ({ title, icon, active, onClick, disabled, styl
         );
     }
     return (
-        <StyledButton
-            onClick={onClick}
-            $theme={color}
-            $rounding={shape === 'sharp' ? '0px' : '5px'}
-            disabled={disabled}
-            $active={active}
-            {...rest}
-        >
-            {icon}
-        </StyledButton>
+        <div>
+            <StyledButton
+                onClick={onClick}
+                $theme={color}
+                $rounding={shape === 'sharp' ? '0px' : '5px'}
+                disabled={disabled}
+                $active={active}
+                loading={loading}
+                {...rest}
+            >
+                {icon}
+            </StyledButton>
+        </div>
     );
 };
