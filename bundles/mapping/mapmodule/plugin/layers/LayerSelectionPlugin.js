@@ -447,6 +447,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                         }
                     }}
                     iconActive={this.popupControls ? true : false}
+                    position={this.getLocation()}
                 />,
                 el[0]
             );

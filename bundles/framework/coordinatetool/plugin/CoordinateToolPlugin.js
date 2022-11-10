@@ -1148,6 +1148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         }
                     }}
                     iconActive={this._toolOpen}
+                    position={this.getLocation()}
                 />,
                 el[0]
             );

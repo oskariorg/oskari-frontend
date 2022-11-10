@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button } from 'oskari-ui';
+import { Button, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 
 const StyledButton = styled(Button)`
     height: 32px;
-    width: 105px;
     font-size: 14px;
     border: none;
     border-radius: ${props => props.$rounding};
@@ -45,7 +44,7 @@ const THEME_DARK_GRADIENT = {
         accent: '#ffffff'
 };
 
-export const FeatureDataButton = ({ title, icon, active, onClick, disabled, styleName, loading, ...rest }) => {
+export const FeatureDataButton = ({ title, icon, active, onClick, disabled, styleName, iconActive, position, ...rest }) => {
     let style = 'rounded-dark';
     if (styleName) {
         style = styleName;
@@ -68,10 +67,35 @@ export const FeatureDataButton = ({ title, icon, active, onClick, disabled, styl
         }
     }
 
+    let tooltipPosition = 'top';
+    if (position && position.includes('right')) {
+        tooltipPosition = 'left';
+    } else if (position && position.includes('left')) {
+        tooltipPosition = 'right';
+    }
+
+    if (title) {
+        return (
+            <div>
+                <Tooltip title={title} placement={tooltipPosition}>
+                    <StyledButton
+                        title={title}
+                        onClick={onClick}
+                        $theme={color}
+                        $rounding={shape === 'sharp' ? '0px' : '5px'}
+                        disabled={disabled}
+                        $active={active}
+                        {...rest}
+                    >
+                        {icon}
+                    </StyledButton>        
+                </Tooltip>
+            </div>
+        );
+    }
     return (
         <div>
             <StyledButton
-                title={title}
                 onClick={onClick}
                 $theme={color}
                 $rounding={shape === 'sharp' ? '0px' : '5px'}

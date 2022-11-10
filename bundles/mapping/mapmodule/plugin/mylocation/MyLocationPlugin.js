@@ -114,6 +114,7 @@ Oskari.clazz.define(
                             this._setupRequest();
                         }
                     }}
+                    position={this.getLocation()}
                 />
                 ,
                 el[0]

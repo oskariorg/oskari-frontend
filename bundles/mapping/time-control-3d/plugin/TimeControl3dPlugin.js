@@ -154,6 +154,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
                         this._toggleToolState();
                     }
                 }}
+                position={this.getLocation()}
             />,
             el.get(0)
         );

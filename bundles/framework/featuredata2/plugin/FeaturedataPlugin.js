@@ -172,6 +172,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     disabled={disabled}
                     active={this._flyoutOpen}
                     loading={loading}
+                    position={this.getLocation()}
                 />,
                 el[0]
             );
