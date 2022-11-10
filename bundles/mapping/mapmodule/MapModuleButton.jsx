@@ -43,7 +43,7 @@ const THEME_DARK_GRADIENT = {
     }
 };
 
-export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection = 'right' }) => {
+export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
     const [toolbarOpen, setToolbarOpen] = useState(false);
 
     let roundingPercent = 0;
@@ -77,8 +77,16 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
         }
     }
 
+    let toolbarOpenDirection = 'right';
+    if (toolbarDirection) {
+        toolbarOpenDirection = toolbarDirection;
+    } else if (position) {
+        if (position.includes('left')) toolbarOpenDirection = 'right';
+        else toolbarOpenDirection = 'left';
+    }
+
     let toolbarMaxWidth = 50;
-    const marginDirection = toolbarDirection === 'right' ? 'right' : 'left';
+    const marginDirection = toolbarOpenDirection === 'right' ? 'right' : 'left';
     let toolbarMargin = `margin-${marginDirection}: 0`;
     if (withToolbar && toolbarOpen && children) {
         toolbarMaxWidth = children.length * 34 + 10;
@@ -100,7 +108,7 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
                 position={position}
             />
             {withToolbar && (
-                <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarDirection} maxWidth={toolbarMaxWidth + 100}>
+                <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarOpenDirection} maxWidth={toolbarMaxWidth + 100}>
                     {children}
                 </Toolbar>
             )}

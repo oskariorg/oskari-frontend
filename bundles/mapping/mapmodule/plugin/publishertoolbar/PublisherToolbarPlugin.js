@@ -172,7 +172,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     icon={<MenuOutlined />}
                     title={this._loc.title}
                     withToolbar
-                    toolbarDirection={this.getLocation() && this.getLocation().includes('right') ? 'left' : 'right'}
                     position={this.getLocation()}
                 >
                     {this.renderToolbarItems()}

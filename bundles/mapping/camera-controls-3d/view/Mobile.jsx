@@ -47,8 +47,8 @@ export const Mobile = ({ activeMapMoveMethod, controller, styleName, location = 
             icon={<VideoCameraOutlined />}
             withToolbar
             className='t_mobile_camera_tools'
-            toolbarDirection={location.includes('right') ? 'left' : 'right'}
             styleName={styleName}
+            position={location}
         >
             {buildToolbarItems(controller, activeMapMoveMethod)}
         </MapModuleButton>
