@@ -25,7 +25,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._popupContent = null;
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin time-control-3d"><div></div></div>');
-        this._mobileMountPoint = jQuery('<div class="tool mobile-time-control-3d"></div>');
         this._popupTemplate = jQuery('<div></div>');
 
         const sandbox = Oskari.getSandbox();
@@ -114,25 +113,12 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
 
     _createUI (forced) {
         let el;
-        if (this._isMobile) {
-            el = this._createMobileControlElement();
-            if (this._addToMobileToolBar(el, forced)) {
-                return true;
-            };
-        } else {
-            el = this._createControlElement();
-            this.addToPluginContainer(el);
-        }
+        el = this._createControlElement();
+        this.addToPluginContainer(el);
         this._renderControlElement();
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
-        this._element = el;
-        return el;
-    }
-    _createMobileControlElement () {
-        const el = this._mobileMountPoint.clone();
-        this._bindIcon(el);
         this._element = el;
         return el;
     }
@@ -148,34 +134,17 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
                 className='t_timecontrol'
                 title={this.loc('tooltip')}
                 styleName={styleClass || 'rounded-dark'}
-                icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
+                icon={<ControlIcon />}
                 onClick={() => {
                     if (!this.inLayerToolsEditMode()) {
                         this._toggleToolState();
                     }
                 }}
                 position={this.getLocation()}
+                iconActive={this.isOpen()}
             />,
             el.get(0)
         );
-    }
-
-    _addToMobileToolBar (el, forced) {
-        // TODO: create mapmodule method and tools service for svg based mobile tools
-        const toolbar = jQuery('.toolbar_' + this.getMapModule().getMobileToolbar());
-        const toolrow = toolbar.find('.toolrow');
-        if (toolrow.length) {
-            toolrow.append(el);
-            return false;
-        }
-        // there's no other tools added, add toolrow
-        if (forced) {
-            const row = jQuery('<div class="toolrow"></div>');
-            row.append(el);
-            toolbar.append(row);
-            return false;
-        }
-        return true; // waiting for toolbar
     }
 
     _toggleToolState () {
