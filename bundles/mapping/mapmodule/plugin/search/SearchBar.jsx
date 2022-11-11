@@ -5,28 +5,30 @@ import { SearchOutlined } from '@ant-design/icons';
 
 const StyledInput = styled(TextInput)`
     height: 25px;
+    border-radius: ${props => props.$searchStyle.inputRounding};
 `;
 
 const StyledButton = styled(Button)`
-    margin-left: 15px;
+    margin-left: 7px;
     height: 25px;
     border-radius: ${props => props.$searchStyle.buttonRounding};
     background: ${props => props.$searchStyle.backgroundColor};
     color: ${props => props.$searchStyle.iconColor};
+    border: none;
     &:hover {
         background: ${props => props.$searchStyle.backgroundColor};
-        border-color: #d9d9d9;
         color: ${props => props.$searchStyle.iconColor};
+        border: none;
     }
     &:focus {
         background: ${props => props.$searchStyle.backgroundColor};
-        border-color: #d9d9d9;
         color: ${props => props.$searchStyle.iconColor};
+        border: none;
     }
     &:active {
         background: ${props => props.$searchStyle.backgroundColor};
-        border-color: #d9d9d9;
         color: ${props => props.$searchStyle.iconColor};
+        border: none;
     }
 `;
 
@@ -36,7 +38,7 @@ const SearchContainer = styled('div')`
     flex-direction: row;
     background: ${props => props.$searchStyle.backgroundColor};
     align-items: center;
-    padding: 5px 15px;
+    padding: 3px 7px 3px 3px;
     border-radius: ${props => props.$searchStyle.rounding};
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 `;
@@ -56,20 +58,23 @@ export const SearchBar = ({ search, loading, styleName, disabled = false, placeh
 
     let searchStyle = {
         ...THEME_DARK,
-        rounding: '25px',
-        buttonRounding: '50%'
+        rounding: '8px',
+        buttonRounding: '8px'
     }
 
     const [shape, theme] = style.split('-');
     if (shape === 'rounded') {
-        searchStyle.rounding = '25px';
-        searchStyle.buttonRounding = '50%';
+        searchStyle.rounding = '8px';
+        searchStyle.buttonRounding = '8px';
+        searchStyle.inputRounding = '8px';
     } else if (shape === 'sharp') {
         searchStyle.rounding = '0px';
-        searchStyle.buttonRounding = '0%';
+        searchStyle.buttonRounding = '3px';
+        searchStyle.inputRounding = '3px';
     } else if (shape === '3d') {
         searchStyle.rounding = '5px';
         searchStyle.buttonRounding = '5px';
+        searchStyle.inputRounding = '5px';
     }
 
     if (theme === 'dark') {
