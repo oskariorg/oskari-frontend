@@ -12,6 +12,7 @@ const VerticalComponent = styled('div')`
     flex-direction: column;
     padding-bottom: 20px;
     margin-left: 25%;
+    align-items: start;
 `;
 
 const FieldLabel = styled('div')`
@@ -19,7 +20,6 @@ const FieldLabel = styled('div')`
 `;
 
 const SliderContainer = styled('div')`
-    padding-left: 20%;
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -36,12 +36,12 @@ const ScaleInput = styled(Numeric)`
 `;
 
 const PlusIcon = styled(PlusCircleOutlined)`
-text-align: left;
-padding-left: 16%;
+    text-align: left;
+    margin-left: 8px;
 `;
 const MinusIcon = styled(MinusCircleOutlined)`
-text-align: left;
-padding-left: 16%;
+    text-align: left;
+    margin-left: 8px;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
