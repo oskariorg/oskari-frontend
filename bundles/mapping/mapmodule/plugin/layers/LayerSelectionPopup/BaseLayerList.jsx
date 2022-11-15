@@ -41,7 +41,7 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
                                 </Radio.Choice>
                                 {showMetadata && <MetadataIcon metadataId={layer.getMetadataIdentifier()} />}
                             </LayerRow>
-                            {styleSelectable && <StyleSelect layer={layer} selectStyle={selectStyle} />}
+                            {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
                         </div>
                     );
                 })}
