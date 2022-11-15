@@ -26,7 +26,7 @@ There seems to be a problem with tooltips with styled-components as direct child
 https://stackoverflow.com/questions/61450739/understanding-warning-function-components-cannot-be-given-refs
 */
 export const Tooltip = ({children, ...restOfProps}) => {
-    return (<AntTooltip {...restOfProps}>
+    return (<AntTooltip overlayStyle={{ pointerEvents: 'none' }} {...restOfProps}>
         <span>{children}</span>
     </AntTooltip>);
 };
