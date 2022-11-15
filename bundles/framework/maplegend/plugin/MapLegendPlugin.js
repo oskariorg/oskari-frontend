@@ -31,11 +31,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             },
             buttonGroup: 'mobile-toolbar'
         };
+        me._popupControls = null;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (this.inLayerToolsEditMode() && this.isOpen()) {
                 this._toggleToolState();
             }
+        },
+        clearPopup: function () {
+            if (this._popupControls) {
+                this._popupControls.close();
+            }
+            this._popupControls = null;
         },
         _createControlElement: function () {
             var me = this,

@@ -60,7 +60,7 @@ Oskari.clazz.define(
             me._headerWrapper = jQuery('<div class="popupHeader"></div>');
             // FIXME move styles to css
             me._headerCloseButton = jQuery(
-                '<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'
+                '<div class="olPopupCloseBox icon-close-white"></div>'
             );
             me._headerAdditionalButton = jQuery(
                 '<div class="icon-close-white"></div>'
