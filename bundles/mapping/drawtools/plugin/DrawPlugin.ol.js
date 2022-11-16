@@ -187,15 +187,25 @@ Oskari.clazz.define(
             const options = { ...OPTIONS, ...rest, limits };
 
             // add localized warning tooltips and buffer params to options as these doesn't change during request
+            const locPath = options.modifyControl ? 'modify' : 'new';
             if (limits.area) {
-                const formatted = this.getMapModule().formatMeasurementResult(limits.area, 'area');
-                options.limits.areaTooltip = this.loc(INVALID_REASONS.AREA_SIZE, { size: formatted });
+                const formatted = this.getMapModule().formatMeasurementResult(limits.area, 'area', 0);
+                const warn = this.loc(INVALID_REASONS.AREA_SIZE, { size: formatted });
+                const tip = this.loc(`${locPath}.area`);
+                options.limits.areaTooltip = `${warn} ${tip}`;
             }
             if (limits.length) {
-                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line');
-                options.limits.lengthTooltip = this.loc(INVALID_REASONS.LINE_LENGTH, { length: formatted });
+                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line', 0);
+                const warn = this.loc(INVALID_REASONS.LINE_LENGTH, { length: formatted });
+                const tip = this.loc(`${locPath}.line`);
+                options.limits.lengthTooltip = `${warn} ${tip}`;
             }
-            if (options.buffer) {
+            if (limits.selfIntersection) {
+                const warn = this.loc(INVALID_REASONS.INTERSECTION);
+                const tip = this.loc(`${locPath}.area`);
+                options.limits.intersectionTooltip = `${warn} ${tip}`;
+            }
+            if (options.buffer || options.radius) {
                 options.bufferParams = new BufferParameters(options.bufferAccuracy);
             }
             this._options = options;
@@ -248,7 +258,7 @@ Oskari.clazz.define(
         // for wrapping features to one feature with multi geometry used with 'multiGeom'
         createMultiGeometry: function (features) {
             if (!features.length) {
-                return;
+                return features;
             }
             const first = features[0];
             const coords = features.map(f => f.getGeometry().getCoordinates());
@@ -268,7 +278,18 @@ Oskari.clazz.define(
             }
             const feature = new olFeature({ geometry });
             feature.setId(first.getId());
-            return feature;
+
+            // Gather properties for createGeoJsonFeature => feature.geProperties
+            const props = {
+                valid: features.every(f => f.get('valid')),
+                length: features.map(f => f.get('length') || 0).reduce((s, l) => s + l, 0),
+                area: features.map(f => f.get('area') || 0).reduce((s, a) => s + a, 0),
+                radius: first.get('radius') || 0,
+                buffer: first.get('buffer') || 0,
+                tooltip: features.filter(f => f.get('valid') === false).map(f => f.get('tooltip'))[0]
+            };
+            feature.setProperties(props, true);
+            return [feature];
         },
 
         /**
@@ -438,14 +459,9 @@ Oskari.clazz.define(
          */
         sendDrawingEvent: function (isFinished = false) {
             const shape = this.getShape();
-            const { showMeasureOnMap, buffer, radius } = this.getOpts();
+            const { showMeasureOnMap, buffer } = this.getOpts();
 
-            let features = this.getDrawFeatures();
-            // TODO: circle + radius + buffer doens't work -> has to be polygon for buffer
-            if (shape === 'Circle' && radius) {
-                features = features.map(feat => this.getCircleAsPolygonFeature(feat, radius));
-            }
-
+            const features = this.getDrawFeatures();
             let bufferFeatures = [];
             if (buffer > 0) {
                 bufferFeatures = this.getBufferFeatures();
@@ -469,7 +485,7 @@ Oskari.clazz.define(
             });
             if (sumArea) data.area = sumArea;
             if (sumLength) data.length = sumLength;
-            // TODO: isFinished === this._interacting ???
+
             const event = Oskari.eventBuilder('DrawingEvent')(this.getRequestId(), geojson, data, isFinished);
             this.getSandbox().notifyAll(event);
         },
@@ -509,12 +525,6 @@ Oskari.clazz.define(
                 // include the unfinished (currently drawn) feature
                 features.push(this._sketch);
             }
-            // form multigeometry from features
-            // TODO: return simple and create multi later for geojson?? buffer? jest?
-            if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
-                const feature = this.createMultiGeometry(features);
-                return feature ? [feature] : [];
-            }
             return features;
         },
         /**
@@ -527,6 +537,9 @@ Oskari.clazz.define(
          * @return {String} geojson
          */
         getFeaturesAsGeoJSON: function (features) {
+            if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
+                features = this.createMultiGeometry(features);
+            }
             return {
                 type: 'FeatureCollection',
                 crs: this.getSandbox().getMap().getSrsName(),
@@ -594,9 +607,10 @@ Oskari.clazz.define(
                 geometryFunction = createRegularPolygon(4);
             } else if (shape === 'Circle' && radius > 0) {
                 type = 'Point';
-                geometryFunction = function (coordinates, geometry) {
+                geometryFunction = (coordinates, geometry) => {
                     if (!geometry) {
-                        geometry = new olGeom.Circle(coordinates, radius);
+                        const point = new olGeom.Point(coordinates);
+                        geometry = this.getBufferedGeometry(point, radius);
                     }
                     return geometry;
                 };
@@ -719,7 +733,7 @@ Oskari.clazz.define(
             if (type === 'Polygon') {
                 if (this.checkIntersection(feature)) {
                     invalidReason = INVALID_REASONS.INTERSECTION;
-                    tooltip = this.loc(invalidReason);
+                    tooltip = limits.intersectionTooltip;
                 } else if (limits.area && area > limits.area) {
                     invalidReason = INVALID_REASONS.AREA_SIZE;
                     tooltip = limits.areaTooltip;
@@ -981,22 +995,6 @@ Oskari.clazz.define(
                 return olExtent.getCenter(geom.getExtent());
             }
             return geom.getCenter();
-        },
-        /**
-         * @method getCircleAsPolygonFeature
-         * - converts circle geometry to polygon geometry
-         *  Used for Circle + buffer
-         */
-        getCircleAsPolygonFeature: function (feature, radius) {
-            if (feature.getGeometry().getType() === 'Polygon') {
-                return feature;
-            }
-            const pointFeature = new olGeom.Point(this._getFeatureCenter(feature));
-            const geometry = this.getBufferedGeometry(pointFeature, radius);
-            const bufferedFeature = new olFeature({ geometry });
-            bufferedFeature.setId(feature.getId());
-            // TODO: clone properties? measurements stays same?
-            return bufferedFeature;
         },
         /** @method getDrawingTooltip
         * - returns tooltip and creates a new tooltip if not exist
