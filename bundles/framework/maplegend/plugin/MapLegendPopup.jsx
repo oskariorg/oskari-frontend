@@ -58,7 +58,7 @@ const MapLegendPopup = ({ legends, getLegendImage }) => {
                         <Message bundleKey={BUNDLE_KEY} messageKey='invalidLegendUrl' />
                     ) : (
                         <Legend>
-                            {legends.length === 1 && (<Message bundleKey={BUNDLE_KEY} messageKey='singleLegend' className="t_newtab" />)}
+                            {legends.length === 1 && (<Message bundleKey={BUNDLE_KEY} messageKey='singleLegend' />)}
                             <a href={legend} target="_blank"><Message bundleKey={BUNDLE_KEY} messageKey='newtab' className="t_newtab" /></a>
                             <img src={legend} />
                         </Legend>
