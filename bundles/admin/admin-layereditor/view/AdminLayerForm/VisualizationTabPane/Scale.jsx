@@ -25,7 +25,6 @@ const ScaleSlider = styled(Slider)`
     }
     .ant-slider-handle {
         border: #0091ff solid 2px;
-        margin-top: -6px;
     }
     &:hover .ant-slider-track {
         background-color: #003fc3 !important;
