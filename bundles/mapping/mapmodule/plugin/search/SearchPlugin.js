@@ -315,14 +315,8 @@ Oskari.clazz.define(
                 'iconCls': popupCloseIcon
             });
 
-            if (!Oskari.util.isMobile()) {
-                me.popup.addClass('searchresult');
-                me.popup.moveTo(me.getElement(), 'bottom', true);
-            } else {
-                me.popup.addClass('mobile-popup');
-                me.popup.moveTo(me.getElement(), 'bottom', true, mapmodule.getMobileDiv());
-                me.popup.getJqueryContent().parent().parent().css('left', 0);
-            }
+            me.popup.addClass('searchresult');
+            me.popup.moveTo(me.getElement(), 'bottom', true);
         },
 
         /**
