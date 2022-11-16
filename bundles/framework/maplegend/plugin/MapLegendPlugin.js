@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
 import { QuestionOutlined } from '@ant-design/icons';
+import { showMapLegendPopup } from './MapLegendPopup';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
     function (config, plugins) {
@@ -21,12 +22,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         me._isVisible = false;
         me._loc = null;
         me._popup = null;
-        me.inMobileMode = false;
+        me._popupControls = null;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (this.inLayerToolsEditMode() && this.isOpen()) {
                 this._toggleToolState();
             }
+        },
+        clearPopup: function () {
+            if (this._popupControls) {
+                this._popupControls.close();
+            }
+            this._popupControls = null;
+            this.renderButton(null, null);
         },
         _createControlElement: function () {
             var me = this,
@@ -82,83 +90,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                             this.togglePopup();
                         }
                     }}
-                    iconActive={this._isVisible}
+                    iconActive={this._popupControls && this._popupControls !== null}
                     position={this.getLocation()}
                 />,
                 el[0]
             );
         },
-
-        togglePopup: function () {
-            const me = this;
-            const themeColours = me.getMapModule().getThemeColours();
-            let singleLegend = false;
-            let dropdown = null;
-            const popupLocation = this.getPopupPosition();
-            const legend = me.getElement();
-
-            if (me._toggleToolState() === false) {
+        getLegend: function (legendId) {
+            const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendId);
+            if (!layer) {
                 return;
             }
-            const legends = me.getLegends();
-            let title = me._loc.title;
-            if (legends.length === 1) {
-                title = me._loc.singleLegend + legends[0].title;
-                singleLegend = true;
-                me._popup.show(title, null);
+            return layer.getLegendImage();
+        },
+        togglePopup: function () {
+            if (this._popupControls) {
+                this.clearPopup();
             } else {
-                me._popup.show(title, null);
-                me._popup.moveTo(legend, popupLocation, true);
+                const legends = this.getLegends();
+                this._popupControls = showMapLegendPopup(legends, (id) => this.getLegend(id), () => this.clearPopup());
             }
-
-            const content = me._popup.getJqueryContent();
-            const legendContent = me.generateLegendContainer(singleLegend);
-            if (!singleLegend) {
-                dropdown = legendContent.find('.oskari-select');
-            }
-            content.append(legendContent);
-
-            const popupCloseIcon = (me.getMapModule().getTheme() === 'dark') ? 'icon-close-white' : undefined;
-
-            me._popup.createCloseIcon();
-            me._popup.setColourScheme({
-                'bgColour': themeColours.backgroundColour,
-                'titleColour': themeColours.textColour,
-                'iconCls': popupCloseIcon
-            });
-
-            me._popup.makeDraggable();
-            me._popup.onClose(function () {
-                me._popup.dialog.children().empty();
-                me._isVisible = false;
-                me._popup.close();
-                me.renderButton(null, null);
-            });
-            me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
-            me._isVisible = true;
-            me.getLayerLegend(function (img) {
-                content.find('.imgDiv').remove();
-                content.find('.legendLink').remove();
-                content.find('.error').remove();
-                var legendImage = jQuery('<div class="imgDiv"></div>');
-                var legendLink = jQuery('<div class="legendLink"><a target="_blank" ></a></br></br></div>');
-                legendLink.find('a').attr('href', img.src);
-                legendLink.find('a').text(me._loc.newtab);
-                legendImage.append(img);
-                content.append(legendLink);
-                content.append(legendImage);
-                me._popup.moveTo(legend, popupLocation, true);
-            }, function () {
-                me._popup.moveTo(legend, popupLocation, true);
-                content.find('.imgDiv').remove();
-                content.find('.error').remove();
-                content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-            }, singleLegend, dropdown);
-
-            if (!singleLegend) {
-                dropdown.trigger('change');
-            }
-            me.renderButton(null, null);
+            this.renderButton(null, null);
         },
         createDesktopElement: function () {
             var me = this;
@@ -179,87 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 popupLocation = 'left';
             }
             return popupLocation;
-        },
-        generateLegendContainer: function (singleLegend) {
-            var me = this;
-            var legendContainer = this._templates.legendContainer.clone();
-            var legendInfo = this._templates.legendInfo.clone();
-            var legendDivider = this._templates.legendDivider.clone();
-
-            legendInfo.text(me._loc.infotext);
-
-            if (!singleLegend) {
-                var dropdown = me.createDropdown();
-                legendContainer.append(legendInfo);
-                legendContainer.append(legendDivider);
-                legendContainer.append(dropdown);
-            } else {
-                legendContainer.append(legendDivider);
-            }
-            return legendContainer;
-        },
-        createDropdown: function () {
-            var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-
-            var legendLayers = this.getLegends();
-            var options = {
-                placeholder_text: 'layers',
-                allow_single_deselect: false,
-                disable_search_threshold: 10,
-                width: '100%'
-            };
-            var dropdown = select.create(legendLayers, options);
-            dropdown.css({
-                width: '96%',
-                paddingBottom: '1em'
-            });
-            select.adjustChosen();
-            select.selectFirstValue();
-            return dropdown;
-        },
-        getLayerLegend: function (successCb, errorCb, singleLegend, dropdown) {
-            var layer,
-                me = this;
-
-            if (singleLegend) {
-                var legendLayer = me.getLegends();
-                layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendLayer[0].id);
-
-                if (!layer) {
-                    return;
-                }
-                var legendImg = jQuery('<img id="legendImg"></img>');
-                legendImg.attr('src', layer.getLegendImage());
-
-                if (typeof successCb === 'function') {
-                    legendImg.on('load', function () {
-                        successCb(this);
-                    });
-                }
-                if (typeof errorCb === 'function') {
-                    legendImg.on('error', function () {
-                        errorCb(this);
-                    });
-                }
-            } else {
-                dropdown.on('change', function (e, params) {
-                    var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
-                    layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
-
-                    if (!layer) {
-                        return;
-                    }
-                    var legendImg = jQuery('<img id="legendImg"></img>');
-                    legendImg.attr('src', layer.getLegendImage());
-                    legendImg.on('load', function () {
-                        // do stuff on success
-                        successCb(this);
-                    });
-                    legendImg.on('error', function () {
-                        errorCb(this);
-                    });
-                });
-            }
         },
         getLegends: function () {
             var layers = this.getSandbox().findAllSelectedMapLayers().slice(0);
