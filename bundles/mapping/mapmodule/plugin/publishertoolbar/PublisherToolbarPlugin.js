@@ -69,11 +69,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 const toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
                 sb.request(this, toolbarRequest);
                 this.activeTool = undefined;
+                this.renderButton(null, null);
                 return;
             }
             const toolRequest = Oskari.requestBuilder('ToolSelectionRequest')(requestName);
             sb.request(this, toolRequest);
             this.activeTool = tool;
+            this.renderButton(null, null);
         },
 
         _setLayerToolsEditModeImpl: function () {
@@ -237,6 +239,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                 const tool = 'measureline';
                                 this._handleMeasureTool(tool, rn);
                             }}
+                            iconActive={this.activeTool === 'measureline'}
                         />
                     );
                     break;
@@ -251,6 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                 const tool = 'measurearea';
                                 this._handleMeasureTool(tool, rn);
                             }}
+                            iconActive={this.activeTool === 'measurearea'}
                         />
                     );
                     break;
