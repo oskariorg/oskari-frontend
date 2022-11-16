@@ -223,24 +223,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 }
             };
         },
-
-        _openFeatureDataFlyout: function () {
-            this._instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
-            // set style to mobile flyout
-            var flyout = this._instance.plugins['Oskari.userinterface.Flyout'];
-            jQuery(flyout.container.parentElement.parentElement).addClass('mobile');
-            var mapModule = this._instance.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                mobileDiv = mapModule.getMobileDiv(),
-                top = jQuery(mobileDiv).offset().top,
-                height = jQuery(mobileDiv).outerHeight(true),
-                flyoutTop = parseInt(top) + parseInt(height);
-
-            flyout.container.parentElement.parentElement.style.top = flyoutTop + 'px';
-            this.renderButton(null, null);
-        },
-        _stopPluginImpl: function (sandbox) {
-            this.teardownUI();
-        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

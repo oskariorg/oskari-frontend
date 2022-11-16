@@ -48,34 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me._isMobileVisible = true;
         me._inMobileMode = false;
         me._isStopped = false;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-timeseries': {
-                    iconCls: 'mobile-timeseries',
-                    tooltip: '',
-                    sticky: true,
-                    toggleChangeIcon: true,
-                    show: true,
-                    selected: true,
-                    callback: function () {
-                        if (me._isMobileVisible) {
-                            me.teardownUI();
-
-                            var el = jQuery(me.getMapModule().getMobileDiv())
-                                .find('.mobile-timeseries');
-
-                            me._resetMobileIcon(el, 'mobile-timeseries');
-                        } else {
-                            me._isMobileVisible = true;
-                            me._buildUI(true);
-                            me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
     }, {
         __fullAxisYPos: 35,
         __speedOptions: [
