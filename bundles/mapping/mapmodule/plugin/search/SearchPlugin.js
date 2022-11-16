@@ -171,7 +171,7 @@ Oskari.clazz.define(
                 } else {
                     var toolStyle = me.getToolStyleFromMapModule();
                     if (toolStyle !== null && toolStyle !== undefined) {
-                        me.changeToolStyle(me.toolStyles[toolStyle], element);
+                        me.changeToolStyle(toolStyle, element);
                     }
                 }
 
