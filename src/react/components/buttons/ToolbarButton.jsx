@@ -47,6 +47,7 @@ const Icon = styled('div')`
     width: 18px;
     height: 18px;
     svg {
+        fill: ${props => props.$active ? '#ffd400': '#ffffff'};
         path {
             fill: ${props => props.$active ? '#ffd400': '#ffffff'};
         }
