@@ -19,6 +19,21 @@ const FieldLabel = styled('div')`
     padding-bottom: 5px;
 `;
 
+const ScaleSlider = styled(Slider)`
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
+`;
+
 const SliderContainer = styled('div')`
     height: 200px;
     padding-top: 15px;
@@ -82,7 +97,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                 onChange={value => controller.setMinAndMaxScale([minscale, value])} />
             <PlusIcon />
             <SliderContainer>
-                <Slider
+                <ScaleSlider
                     vertical
                     range
                     reversed
