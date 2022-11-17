@@ -8,13 +8,12 @@ const Container = styled('div')`
     position: relative;
     ${props => props.noMargin ? 'margin: 0' : 'margin: 0 10px 10px 10px'};
     ${props => props.withToolbar && props.toolbarOpen && props.toolbarMargin};
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledButton = styled(MapButton)`
-    position: absolute;
-    left: 0;
-    top: 0;
     z-index: 1;
 `;
 

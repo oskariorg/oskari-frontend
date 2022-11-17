@@ -69,6 +69,8 @@ div.mapplugins {
         padding: 0;
 
         .mappluginsContent {
+            display: flex;
+            flex-direction: column;
 
             &.ui-droppable {
                 background-color: rgba(255, 255, 255, 0.5);
@@ -144,6 +146,7 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-top: $pluginMargin;
+            align-items: center;
         }
 
         &.center {
@@ -152,7 +155,6 @@ div.mapplugins {
             .mappluginsContainer .mappluginsContent {
                 margin-right: auto;
                 margin-left: auto;
-                display: inline-block;
 
                 &.ui-droppable {
                     min-height: 120px;
@@ -179,6 +181,10 @@ div.mapplugins {
         }
 
         &.right {
+
+            .mappluginsContainer .mappluginsContent {
+                align-items: flex-end;
+            }
 
             .mapplugin {
 
@@ -208,6 +214,10 @@ div.mapplugins {
         }
 
         &.left {
+
+            .mappluginsContainer .mappluginsContent {
+                align-items: flex-start;
+            }
 
             .mapplugin {
 
@@ -239,6 +249,7 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-bottom: $pluginMargin;
+            align-items: center;
         }
 
         &.center {
