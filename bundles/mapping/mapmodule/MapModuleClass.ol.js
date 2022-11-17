@@ -510,17 +510,17 @@ export class MapModule extends AbstractMapModule {
      *
      * @param  {number} measurement
      * @param  {String} drawMode
+     * @param  {Number} fixedDigits (optional)
      * @return {String}
      *
      */
-    // TODO: move to util
-    formatMeasurementResult (measurement, drawMode) {
-        var result,
-            unit,
-            decimals;
+    formatMeasurementResult (measurement, drawMode, fixedDigits) {
         if (typeof measurement !== 'number') {
             return;
         }
+        let result;
+        let unit;
+        let decimals;
         const zoomedForAccuracy = this.getResolution() < 1;
 
         if (drawMode === 'area') {
@@ -528,34 +528,35 @@ export class MapModule extends AbstractMapModule {
             if (measurement >= 1000000) {
                 result = measurement / 1000000; // (Math.round(measurement) / 1000000);
                 decimals = 3;
-                unit = ' km²';
+                unit = 'km²';
             } else if (measurement < 10000) {
                 result = measurement;// (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m²';
+                unit = 'm²';
             } else {
                 result = measurement / 10000; // (Math.round(100 * measurement) / 100);
                 decimals = 2;
-                unit = ' ha';
+                unit = 'ha';
             }
         } else if (drawMode === 'line') {
             // 1 000 m === 1 km
             if (measurement >= 1000) {
                 result = measurement / 1000; // (Math.round(measurement) / 1000);
                 decimals = 3;
-                unit = ' km';
+                unit = 'km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m';
+                unit = 'm';
             }
         } else {
             return '';
         }
-        return result.toFixed(decimals).replace(
+        const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+        return result.toFixed(digits).replace(
             '.',
             Oskari.getDecimalSeparator()
-        ) + unit;
+        ) + ' ' + unit;
     }
 
     /**
