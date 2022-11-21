@@ -155,6 +155,7 @@ div.mapplugins {
             .mappluginsContainer .mappluginsContent {
                 margin-right: auto;
                 margin-left: auto;
+                max-width: fit-content;
 
                 &.ui-droppable {
                     min-height: 120px;
@@ -162,7 +163,6 @@ div.mapplugins {
 
                 .mapplugin {
                     display: inline-block;
-                    vertical-align: top;
                     margin: 0 $pluginMargin / 2;
 
                     &.search {
