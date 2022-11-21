@@ -13,11 +13,13 @@ let defaultSequence = new Sequence();
 let sequences = {};
 // keep track of existing loggers
 let loggers = {};
+const getBodyTag = () => document.getElementsByTagName('body')[0];
 
 let _urls= {};
 function getUrl (key) {
     return _urls[key];
 }
+
 
 function encodeParams(params) {
     if (typeof params !== 'object') {
@@ -59,13 +61,17 @@ const Oskari = {
             rootEl = document.getElementById(id);
         }
         if (!rootEl) {
-            rootEl = document.getElementsByTagName('body')[0];
+            rootEl = getBodyTag();
             if (!rootEl.style.height) {
-                // rendering directly to body -> set CSS to follow expected styling
+                // rendering directly to body and no height set
+                // -> set CSS to follow expected styling/assume full screen app
                 rootEl.style.height = '100vh';
-                rootEl.style.display = 'flex';
             }
         }
+        // use styles from .oskari-root-el for body like display: flex
+        rootEl.classList.add('oskari-root-el');
+        const body = getBodyTag();
+        body.style.overflow = 'hidden';
         return rootEl;
     },
     getRootEl () {

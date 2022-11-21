@@ -42,19 +42,17 @@ body {
   background: #fafafa;
 }
 
-
-#oskari {
+.oskari-root-el {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   gap: 0px;
   position: relative;
-  overflow: hidden;
-  /* for application to set */
   height: 100%;
   width: 100%;
 }
-#oskari nav {
+
+.oskari-root-el > nav {
   min-width: 170px;
   flex-basis: 170px;
   display: block;
