@@ -62,7 +62,7 @@ Oskari.clazz.define(
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
             el.append(me._indElement);
 
-            var toggleButton = jQuery('<div class="container"></div>');
+            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
             // button has to be added separately so the element order is correct...
             el.append(toggleButton);
             var toolStyle = this.getToolStyleFromMapModule();
@@ -152,7 +152,7 @@ Oskari.clazz.define(
                 el = this.getElement();
             }
             if (!el) return;
-            el = el.find('.container');
+            el = el.find('.indexmapToggle');
 
             let styleName = style;
             if (!style) {
