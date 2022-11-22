@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
     function () {
     }, {
         index: 4,
-        allowedLocations: ['top left', 'top right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [],
         bundleName: 'maplegend',
         /**
          * Get tool object.
