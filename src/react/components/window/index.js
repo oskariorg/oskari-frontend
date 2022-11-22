@@ -5,6 +5,8 @@ import { Popup } from './Popup';
 import { Banner } from './Banner';
 import { REGISTER, TYPE } from './register';
 import { ThemeProvider } from '../../util/contexts';
+// expose util function for centering elements
+export { getPositionForCentering } from './util';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
