@@ -13,13 +13,16 @@ let defaultSequence = new Sequence();
 let sequences = {};
 // keep track of existing loggers
 let loggers = {};
+
+// for constructing/referencing the base HTML
+const DEFAULT_ROOT_EL_ID = 'oskari';
+const ROOT_EL_CLASS_FOR_STYLING = 'oskari-root-el';
 const getBodyTag = () => document.getElementsByTagName('body')[0];
 
 let _urls= {};
 function getUrl (key) {
     return _urls[key];
 }
-
 
 function encodeParams(params) {
     if (typeof params !== 'object') {
@@ -69,14 +72,12 @@ const Oskari = {
             }
         }
         // use styles from .oskari-root-el for body like display: flex
-        rootEl.classList.add('oskari-root-el');
-        const body = getBodyTag();
-        body.style.overflow = 'hidden';
+        rootEl.classList.add(ROOT_EL_CLASS_FOR_STYLING);
         return rootEl;
     },
     getRootEl () {
         if (!rootEl) {
-            return this.setRootEl('oskari');
+            return this.setRootEl(DEFAULT_ROOT_EL_ID);
         }
         return rootEl;
     },

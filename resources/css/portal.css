@@ -40,6 +40,11 @@ body {
   color: #3c3c3c;
   font-family: 'Open Sans', Arial, sans-serif;
   background: #fafafa;
+  /*
+  overflow hidden so draggable windows don't create scrollbars.
+  For more contained app this could be overridden and set for element with class .oskari-root-el
+  */
+  overflow: hidden;
 }
 
 .oskari-root-el {
@@ -52,6 +57,7 @@ body {
   width: 100%;
 }
 
+/* Assumes that the root element has a <nav> tag that holds the main navigation in for example geoportal. */
 .oskari-root-el > nav {
   min-width: 170px;
   flex-basis: 170px;
