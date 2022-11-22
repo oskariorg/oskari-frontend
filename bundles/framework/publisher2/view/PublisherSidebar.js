@@ -71,7 +71,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.mainPanel = content;
 
             me.progressSpinner.insertTo(content);
-
+            // prepend makes the sidebar go on the left side of the map
+            // we could use getNavigationDimensions() and check placement from it to append OR prepend,
+            // but it does work with the navigation even on the right hand side being hidden,
+            //  a new panel appearing on the left hand side and the map moves accordingly
             container.prepend(content);
             var contentDiv = content.find('div.content'),
                 accordion = Oskari.clazz.create(
