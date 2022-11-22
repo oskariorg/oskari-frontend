@@ -2,18 +2,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
     function () {
     }, {
         index: 4,
-        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
+        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.time-control-3d.TimeControl3dPlugin',
-            'Oskari.mapping.maprotator.MapRotatorPlugin'
-        ],
+        allowedSiblings: ['*'],
 
         groupedSiblings: true,
         defaultExtraOptions: {

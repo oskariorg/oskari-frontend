@@ -2,11 +2,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
     function () {
     }, {
         index: 3,
-        allowedLocations: ['top left', 'top center', 'top right'],
+        allowedLocations: ['*'],
         lefthanded: 'top right',
         righthanded: 'top left',
-        allowedSiblings: ['Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
-        ],
+        allowedSiblings: ['*'],
 
         groupedSiblings: false,
         // user's own layers (not id's)

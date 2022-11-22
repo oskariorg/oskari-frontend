@@ -2,18 +2,10 @@ Oskari.clazz.define('Oskari.mapping.time-control-3d.TimeControl3dTool',
     function () {
     }, {
         index: 2,
-        allowedLocations: ['top left', 'top right'],
+        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.maprotator.MapRotatorPlugin'
-        ],
+        allowedSiblings: ['*'],
         groupedSiblings: true,
         /**
         * Get tool object.

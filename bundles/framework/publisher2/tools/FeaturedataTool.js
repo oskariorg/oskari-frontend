@@ -3,18 +3,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     }, {
         index: 9,
         // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-        allowedLocations: ['top right'],
+        allowedLocations: ['*'],
         lefthanded: 'top right',
         righthanded: 'top right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.time-control-3d.TimeControl3dPlugin',
-            'Oskari.mapping.maprotator.MapRotatorPlugin'
-        ],
+        allowedSiblings: ['*'],
         groupedSiblings: false,
         /**
     * Get tool object.

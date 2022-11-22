@@ -2,15 +2,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
     function () {
     }, {
         index: 1,
-        allowedLocations: ['bottom left', 'bottom right'],
+        allowedLocations: ['*'],
         lefthanded: 'bottom right',
         righthanded: 'bottom left',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            'Oskari.statistics.statsgrid.ClassificationPlugin',
-            'Oskari.statistics.statsgrid.TogglePlugin'
-        ],
+        allowedSiblings: ['*'],
 
         groupedSiblings: false,
 
