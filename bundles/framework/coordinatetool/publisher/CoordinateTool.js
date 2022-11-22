@@ -3,10 +3,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     function () {
     }, {
         index: 4,
-        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: ['*'],
         templates: {
             'toolOptions': '<div class="tool-options"></div>'
         },

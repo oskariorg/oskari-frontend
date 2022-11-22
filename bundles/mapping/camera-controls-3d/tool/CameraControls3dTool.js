@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
     function () {
     }, {
         index: 3,
-        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: ['*'],
 
         groupedSiblings: true,
 

@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
     function () {
     }, {
         index: 4,
-        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: ['*'],
 
         groupedSiblings: true,
         defaultExtraOptions: {

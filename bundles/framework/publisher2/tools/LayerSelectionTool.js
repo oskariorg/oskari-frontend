@@ -2,10 +2,8 @@ const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugi
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool', function () {
 }, {
     index: 1,
-    allowedLocations: ['*'],
     lefthanded: 'top right',
     righthanded: 'top left',
-    allowedSiblings: ['*'],
     groupedSiblings: false,
     _templates: {
         extraOptions: jQuery(`

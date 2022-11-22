@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
     function () {
     }, {
         index: 1,
-        allowedLocations: ['*'],
         lefthanded: 'bottom right',
         righthanded: 'bottom left',
-        allowedSiblings: ['*'],
 
         groupedSiblings: false,
 

@@ -3,10 +3,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     }, {
         index: 9,
         // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
-        allowedLocations: ['*'],
         lefthanded: 'top right',
         righthanded: 'top right',
-        allowedSiblings: ['*'],
         groupedSiblings: false,
         /**
     * Get tool object.

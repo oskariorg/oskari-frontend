@@ -3,10 +3,8 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
     function () {
     }, {
         index: 500,
-        allowedLocations: ['*'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: ['*'],
         templates: {
             'toolOptions': '<div class="tool-options"></div>'
         },
