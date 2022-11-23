@@ -45,36 +45,6 @@ Oskari.clazz.define(
                 '<div class="mapplugin search default-search-div" />'
             );
 
-            me.resultsContainer = jQuery(
-                '  <div class="results">' +
-                '    <div class="content"></div>' +
-                '  </div>' +
-                '</div>'
-            );
-            me.templateResultsTable = jQuery(
-                '<table class="search-results">' +
-                '  <thead>' +
-                '    <tr>' +
-                '      <th class="search-results-count" colspan="3"/>' +
-                '    </tr>' +
-                '    <tr>' +
-                '      <th>' + me._loc.column_name + '</th>' +
-                '      <th>' + me._loc.column_region + '</th>' +
-                '      <th>' + me._loc.column_type + '</th>' +
-                '    </tr>' +
-                '  </thead>' +
-                '  <tbody></tbody>' +
-                '</table>'
-            );
-
-            me.templateResultsRow = jQuery(
-                '<tr>' +
-                '  <td><a href="JavaScript:void(0);""></a></td>' +
-                '  <td></td>' +
-                '  <td></td>' +
-                '</tr>'
-            );
-
             me.service = Oskari.clazz.create(
                 'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
 
