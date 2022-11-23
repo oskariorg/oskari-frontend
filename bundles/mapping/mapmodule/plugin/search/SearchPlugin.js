@@ -2,6 +2,7 @@ import '../../../../service/search/searchservice';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchBar } from './SearchBar';
+import { showResultsPopup } from './SearchResultsPopup';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
@@ -25,6 +26,7 @@ Oskari.clazz.define(
         me._index = 10;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
+        me._popupControls = null;
     }, {
 
         /**
@@ -40,60 +42,7 @@ Oskari.clazz.define(
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
 
             me.template = jQuery(
-                '<div class="mapplugin search default-search-div">' +
-                '  <div class="search-textarea-and-button">' +
-                '  </div>'
-            );
-
-            me.resultsContainer = jQuery(
-                '  <div class="results">' +
-                '    <div class="content"></div>' +
-                '  </div>' +
-                '</div>'
-            );
-
-            // FIXME
-            // - use only this template
-            // - add header to results
-            // - hide header when styled
-            // - search-right is effectively the search button?
-            me.styledTemplate = jQuery(
-                '<div class="mapplugin search published-search-div">' +
-                '  <div class="search-area-div search-textarea-and-button">' +
-                '    <div class="search-left"></div>' +
-                '    <div class="search-middle">' +
-                '      <input class="search-input" placeholder="' + me._loc.placeholder + '" type="text" />' +
-                '      <div class="close-results icon-close" title="' + me._loc.close + '"></div>' +
-                '    </div>' +
-                '    <div class="search-right"></div>' +
-                '  </div>' +
-                '  <div class="results published-search-results">' +
-                '    <div class="content published-search-content"></div>' +
-                '  </div>' +
-                '</div>'
-            );
-            me.templateResultsTable = jQuery(
-                '<table class="search-results">' +
-                '  <thead>' +
-                '    <tr>' +
-                '      <th class="search-results-count" colspan="3"/>' +
-                '    </tr>' +
-                '    <tr>' +
-                '      <th>' + me._loc.column_name + '</th>' +
-                '      <th>' + me._loc.column_region + '</th>' +
-                '      <th>' + me._loc.column_type + '</th>' +
-                '    </tr>' +
-                '  </thead>' +
-                '  <tbody></tbody>' +
-                '</table>'
-            );
-
-            me.templateResultsRow = jQuery(
-                '<tr>' +
-                '  <td><a href="JavaScript:void(0);""></a></td>' +
-                '  <td></td>' +
-                '  <td></td>' +
-                '</tr>'
+                '<div class="mapplugin search default-search-div" />'
             );
 
             me.service = Oskari.clazz.create(
@@ -101,7 +50,27 @@ Oskari.clazz.define(
 
             me.inMobileMode = false;
         },
-
+        _clearPopup: function () {
+            if (this._popupControls) {
+                this._popupControls.close();
+            }
+            this._popupControls = null;
+        },
+        _showResultsPopup: function (results) {
+            this._enableSearch();
+            this._clearPopup();
+            const { totalCount, hasMore, locations } = results;
+            const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
+            let description = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + msgKey, { count: totalCount });
+            if (totalCount === 0) {
+                description = this._loc.noresults;
+            } else if (totalCount === 1) {
+                // only one result, show it immediately
+                this._resultClicked(locations[0]);
+                return;
+            }
+            this._popupControls = showResultsPopup(this._loc.title, description, locations, (result) => this._resultClicked(result), () => this._clearPopup());
+        },
         _setLayerToolsEditModeImpl: function () {
             var me = this,
                 el = me.getElement();
@@ -130,7 +99,7 @@ Oskari.clazz.define(
                 conf.toolStyle = me.getToolStyleFromMapModule();
             }
             if (conf && conf.toolStyle) {
-                el = me.styledTemplate.clone();
+                el = me.template.clone();
                 me._element = el;
                 me.changeToolStyle(conf.toolStyle, el);
             } else {
@@ -198,7 +167,7 @@ Oskari.clazz.define(
             }
             this._hideSearch();
             this._searchInProgess = true;
-            this.service.doSearch(text, results => this._showResults(results), () => this._enableSearch());
+            this.service.doSearch(text, results => this._showResultsPopup(results), () => this._enableSearch());
         },
 
         _setMarker: function (result) {
@@ -225,98 +194,6 @@ Oskari.clazz.define(
                     }, me._searchMarkerId)
                 );
             }
-        },
-
-        _showResults: function (results) {
-            const me = this;
-            const { totalCount, error, hasMore, locations } = results;
-            const resultsContainer = me.resultsContainer.clone();
-            const content = resultsContainer.find('div.content');
-            const mapmodule = me.getMapModule();
-            const popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
-
-            /* clear the existing search results */
-            this._enableSearch();
-            if (me.popup) {
-                me.popup.close();
-                me.popup = null;
-            }
-            me.popup = popupService.createPopup();
-            if (error) {
-                content.html(error);
-            } else {
-                // success
-                if (totalCount === 0) {
-                    content.html(this._loc.noresults);
-                } else if (totalCount === 1) {
-                    // only one result, show it immediately
-                    this._resultClicked(locations[0]);
-                    return;
-                } else {
-                    // many results, show all
-                    const table = me.templateResultsTable.clone();
-                    const tableBody = table.find('tbody');
-                    const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
-                    const resultMsg = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + msgKey, { count: totalCount });
-                    table.find('.search-results-count').html(resultMsg);
-
-                    locations.forEach((result, i) => {
-                        const { type, region, name } = result;
-                        const row = me.templateResultsRow.clone();
-                        const cells = row.find('td');
-                        const xref = jQuery(cells[0]).find('a');
-                        row.attr('data-location', i);
-                        xref.attr('data-location', i);
-                        xref.attr('title', name);
-                        xref.append(name);
-                        xref.on('click', () => this._resultClicked(result));
-                        jQuery(cells[1]).attr('title', region).append(region);
-                        jQuery(cells[2]).attr('title', type).append(type);
-
-                        tableBody.append(row);
-                    });
-
-                    if (!(me.getConfig() && me.getConfig().toolStyle)) {
-                        tableBody.find(':odd').addClass('odd');
-                    }
-
-                    content.html(table);
-
-                    // Change the font of the rendered table as well
-                    var conf = me.getConfig();
-                    if (conf) {
-                        if (conf.font) {
-                            me.changeFont(conf.font, content);
-                        }
-                        if (conf.toolStyle) {
-                            me.changeResultListStyle(
-                                conf.toolStyle,
-                                resultsContainer
-                            );
-                        }
-                    }
-                }
-            }
-
-            var popupContent = resultsContainer;
-            if (Oskari.util.isMobile()) {
-                // get the sticky buttons into their initial state and kill all popups
-                me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
-                popupService.closeAllPopups(true);
-            }
-
-            me.popup.show(me._loc.title, popupContent);
-            me.popup.createCloseIcon();
-            const { backgroundColour, textColour } = mapmodule.getThemeColours();
-            const popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
-            me.popup.setColourScheme({
-                'bgColour': backgroundColour,
-                'titleColour': textColour,
-                'iconCls': popupCloseIcon
-            });
-
-            me.popup.addClass('searchresult');
-            me.popup.moveTo(me.getElement(), 'bottom', true);
         },
 
         /**
