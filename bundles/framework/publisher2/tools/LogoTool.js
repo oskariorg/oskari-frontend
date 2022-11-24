@@ -2,14 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
     function () {
     }, {
         index: 1,
-        allowedLocations: ['bottom left', 'bottom right'],
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-            'Oskari.statistics.statsgrid.ClassificationPlugin'
-        ],
 
         groupedSiblings: false,
 

@@ -1,5 +1,8 @@
 import './DataProviderInfoService';
 import './logo.service';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Links } from './Links';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
@@ -25,8 +28,7 @@ Oskari.clazz.define(
                 '<div class="mapplugin logoplugin"></div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
-            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
-            extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
+            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>')
         },
         _initImpl: function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -375,29 +377,18 @@ Oskari.clazz.define(
          *
          */
         updateLabels: function (el) {
-            var me = this;
             var template = el || this.getElement();
             if (!template) {
                 return;
             }
             var labels = this._extendService.getLabels();
 
-            labels.forEach(function (link) {
-                var extend = me.templates.extend.clone();
-                if (link.options.id) {
-                    extend.addClass(link.options.id.toLowerCase());
-                }
-                if (link.options.id !== 'icon') {
-                    extend.css('margin', '5px');
-                }
-                extend.find('a').text(link.title);
-                template.append(extend);
-                if (typeof link.options.callback === 'function') {
-                    extend.on('click', function (e) {
-                        link.options.callback(e);
-                    });
-                }
-            });
+            ReactDOM.render(
+                <Links
+                    links={labels}
+                />,
+                template[0]
+            );
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

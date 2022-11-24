@@ -12,14 +12,29 @@ const VerticalComponent = styled('div')`
     flex-direction: column;
     padding-bottom: 20px;
     margin-left: 25%;
+    align-items: start;
 `;
 
 const FieldLabel = styled('div')`
     padding-bottom: 5px;
 `;
 
+const ScaleSlider = styled(Slider)`
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
+`;
+
 const SliderContainer = styled('div')`
-    padding-left: 20%;
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
@@ -36,12 +51,12 @@ const ScaleInput = styled(Numeric)`
 `;
 
 const PlusIcon = styled(PlusCircleOutlined)`
-text-align: left;
-padding-left: 16%;
+    text-align: left;
+    margin-left: 8px;
 `;
 const MinusIcon = styled(MinusCircleOutlined)`
-text-align: left;
-padding-left: 16%;
+    text-align: left;
+    margin-left: 8px;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
@@ -82,7 +97,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                 onChange={value => controller.setMinAndMaxScale([minscale, value])} />
             <PlusIcon />
             <SliderContainer>
-                <Slider
+                <ScaleSlider
                     vertical
                     range
                     reversed

@@ -15,8 +15,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._visible = true;
         // plugin index, override this. Smaller number = first plugin, bigger number = latest
         this._index = 1000;
-
-        this._mobileDefs = null;
     }, {
         /**
          * @method _startPluginImpl
@@ -109,9 +107,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
-        },
-        getMobileDefs: function () {
-            return this._mobileDefs || {};
         },
 
         /**
@@ -368,68 +363,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
-        },
-        addToolbarButtons: function (buttons, group) {
-            const sandbox = this.getSandbox();
-            const toolbar = this.getMapModule().getMobileToolbar();
-            const themeColors = this.getMapModule().getThemeColours();
-            if (buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
-                return true;
-            }
-            const addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-
-            if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
-                for (let tool in buttons) {
-                    const buttonConf = buttons[tool];
-                    buttonConf.toolbarid = toolbar;
-                    // add active color if sticky and toggleChangeIcon
-                    if (buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
-                        buttonConf.activeColour = themeColors.activeColour;
-                    }
-                    sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
-                }
-                // we need to calculate new size to show toolbar after adding a button
-                // TODO: this should be responsibility of the toolbar instead
-                setTimeout(() => this.getMapModule()._adjustMobileMapSize(), 200);
-            }
-        },
-        removeToolbarButtons: function (buttons, group) {
-            const sandbox = this.getSandbox();
-            if (!sandbox) {
-                return true;
-            }
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            if (buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
-                return true;
-            }
-            const removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
-            const toolbar = this.getMapModule().getMobileToolbar();
-            for (let tool in buttons) {
-                const buttonConf = buttons[tool];
-                buttonConf.toolbarid = toolbar;
-                sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
-            }
-            // we need to calculate new size to possibly hide toolbar after removing a button
-            // TODO: this should be responsibility of the toolbar instead
-            setTimeout(() => this.getMapModule()._adjustMobileMapSize(), 200);
-        },
-
-        /**
-         * Set a tool's mobile icon back to it's initial state after popup closing.
-         */
-        _resetMobileIcon: function (el, iconCls) {
-            var me = this,
-                restoreCls;
-
-            el.css('background-color', '');
-            el.removeClass('selected');
-            el.removeClass(iconCls + '-light');
-            el.removeClass(iconCls + '-dark');
-
-            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls + '-light' : iconCls + '-dark';
-            el.addClass(restoreCls);
         }
     }, {
         /**
