@@ -13,10 +13,11 @@ div.notLoggedIn {
 }
 
 div.basic_publisher {
+    position: relative;
     background: #FFF;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    top: 0;
-    left: 0;
 
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
@@ -124,7 +125,12 @@ div.basic_publisher {
 
     > div.content {
         overflow: auto;
-        height: unquote("calc(100% - 108px)");
+        position: absolute;
+        top: 50px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        /* height: unquote("calc(100% - 108px)"); */
     }
 
     > div.header {

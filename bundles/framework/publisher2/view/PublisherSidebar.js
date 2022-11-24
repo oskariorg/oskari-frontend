@@ -20,8 +20,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.data = data;
         me.panels = [];
         me.instance = instance;
+        // basic_publisher needs a wrapper div for styles to work properly
         me.template = jQuery(
-            '<div class="basic_publisher">' +
+            '<div><div class="basic_publisher">' +
             '  <div class="header">' +
             '    <div class="icon-close">' +
             '    </div>' +
@@ -29,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             '  </div>' +
             '  <div class="content">' +
             '  </div>' +
-            '</div>');
+            '</div></div>');
 
         me.templates = {
             publishedGridTemplate: '<div class="publishedgrid"></div>'
