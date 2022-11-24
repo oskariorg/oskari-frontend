@@ -230,8 +230,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         stopPlugin: function () {
             this.teardownUI();
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         _overflowCheck: function (storeOverflow) {
             var pluginEl = this.getElement();
