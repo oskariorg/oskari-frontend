@@ -298,35 +298,6 @@ Oskari.clazz.define(
                 }
             }
 
-            // Fix popup header height to match title content height if using desktop popup
-            // we need to do this AFTER _adaptPopupSize() since it might make the popup smaller -> making the title add more height
-            if (title && !isInMobileMode) {
-                var popupEl = jQuery(popup.getElement());
-                var popupHeaderEl = popupEl.find('.popupHeader');
-
-                var fixSize = {
-                    top: 0,
-                    left: 0,
-                    height: 24
-                };
-
-                var popupHeaderChildrens = popupHeaderEl.children();
-                popupHeaderChildrens.each(function () {
-                    var popupHeaderChildren = jQuery(this);
-                    fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
-                    fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
-                    fixSize.height += popupHeaderChildren.height() - popupHeaderChildren.position().top;
-                    if (fixSize.height < 37) {
-                        // sending empty tags as title might result in height lower than 37 which breaks the heading visually
-                        // magic numbers going on here... Perhaps a React rewrite will fix these.
-                        fixSize.height = 37;
-                    }
-                });
-
-                var fixedHeight = fixSize.height;
-                popupHeaderEl.height(fixedHeight);
-            }
-
             if (popupType === 'desktop') {
                 setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
             }
