@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Message } from 'oskari-ui';
 import PropTypes from 'prop-types';
 

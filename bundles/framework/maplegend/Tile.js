@@ -36,19 +36,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * Interface method implementation, calls #refresh()
          */
         startPlugin: function () {
-            this._addTileStyleClasses();
-            this.refresh();
-        },
-        _addTileStyleClasses: function () {
-            var isContainer = !!((this.container && this.instance.mediator));
-            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
-            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
-
-            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
-                this.container.addClass(this.instance.mediator.instanceId);
-            }
-            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
-                this.container.addClass(this.instance.mediator.bundleId);
+            if (this.container) {
+                this.container.addClass(this.instance.getName());
             }
         },
         /**
@@ -63,14 +52,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * @return {String} localized text for the title of the tile
          */
         getTitle: function () {
-            return this.instance.getLocalization('title');
+            return this.instance.loc('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the tile
          */
         getDescription: function () {
-            return this.instance.getLocalization('desc');
+            return this.instance.loc('desc');
         },
         /**
          * @method getOptions
@@ -95,5 +84,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Tile']
+        protocol: ['Oskari.userinterface.Tile']
     });
