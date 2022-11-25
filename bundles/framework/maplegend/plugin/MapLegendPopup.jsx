@@ -15,11 +15,6 @@ const LegendContainer = styled('div')`
     margin-top: 10px;
 `;
 
-const Legend = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
 const SelectContainer = styled('div')`
     display: flex;
     flex-direction: column;
@@ -57,11 +52,12 @@ const MapLegendPopup = ({ legends, getLegendImage }) => {
                     {!legend || legend === null || legend === 'null' ? (
                         <Message bundleKey={BUNDLE_KEY} messageKey='invalidLegendUrl' />
                     ) : (
-                        <Legend>
-                            {legends.length === 1 && (<Message bundleKey={BUNDLE_KEY} messageKey='singleLegend' />)}
+                        <div>
+                            {legends.length === 1 && (<><Message bundleKey={BUNDLE_KEY} messageKey='singleLegend' /><br/></>)}
                             <a href={legend} target="_blank"><Message bundleKey={BUNDLE_KEY} messageKey='newtab' className="t_newtab" /></a>
+                            <br/>
                             <img src={legend} />
-                        </Legend>
+                        </div>
                     )}
                 </LegendContainer>
             </Content>
