@@ -1,7 +1,5 @@
 import './request/MapWindowFullScreenRequest';
 import './request/MapWindowFullScreenRequestHandler';
-import './request/MapSizeUpdateRequest';
-import './request/MapSizeUpdateRequestHandler';
 import { automagicPlugins } from './automagicPlugins';
 
 const LOG = Oskari.log('MapFullBundleInstance');
@@ -176,8 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // create request handlers
             const requestHandlers = {
-                'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
-                'MapFull.MapSizeUpdateRequest': 'Oskari.mapframework.bundle.mapfull.request.MapSizeUpdateRequestHandler'
+                'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler'
             };
             Object.keys(requestHandlers).forEach(requestName => {
                 const handler = Oskari.clazz.create(requestHandlers[requestName], this);
