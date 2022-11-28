@@ -11,11 +11,11 @@ export const Legend = ({ url, hasError, setError }) => {
 
     return (
         <div>
-            <img src={url} onError={ () => setError(true) } />
-            <br/>
-            <Link url={url}>
+            <Link tooltip={null} url={url}>
                 <Message messageKey='newtab'/>
             </Link>
+            <br/>
+            <img src={url} onError={ () => setError(true) } />
         </div>
     );
 };
