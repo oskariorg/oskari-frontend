@@ -106,10 +106,6 @@ Oskari.clazz.define(
             };
 
             me.getMapModule().getMapEl().parents('#contentMap').removeClass('oskari-map-window-fullscreen');
-            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
-                return;
-            }
-            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         },
         _hideNavigation: function () {
             var me = this;
@@ -121,10 +117,6 @@ Oskari.clazz.define(
                 fullscreen: true
             };
             me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
-            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
-                return;
-            }
-            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         }
     },
     {
