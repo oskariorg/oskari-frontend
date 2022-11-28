@@ -1237,22 +1237,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         },
 
         /**
-         * @method _toggleMapWindowFullScreen
-         * Sends a request to toggle between the normal and the full screen view
-         * of the map window.
-         */
-        _toggleMapWindowFullScreen: function () {
-            var me = this,
-                reqBuilder = Oskari.requestBuilder(
-                    'MapFull.MapWindowFullScreenRequest'
-                );
-
-            if (reqBuilder) {
-                me.sandbox.request(me.getName(), reqBuilder());
-            }
-        },
-
-        /**
          *
          * @method shuffleZIndexes
          *
