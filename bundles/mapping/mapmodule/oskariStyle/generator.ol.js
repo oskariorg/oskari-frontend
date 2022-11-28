@@ -9,7 +9,7 @@ import { LINE_DASH, LINE_JOIN, EFFECT, FILL_STYLE, STYLE_TYPE, PATTERN_STROKE } 
 import { filterOptionalStyle, getOptionalStyleFilter } from './filter';
 
 const log = Oskari.log('MapModule.util.style');
-const TRANSPARENT = 'rgba(0,0,0,0)';
+const TRANSPARENT = 'rgba(1,1,1,0)';
 
 const merge = (...styles) => jQuery.extend(true, {}, ...styles);
 
@@ -66,7 +66,8 @@ export const geometryTypeToStyleType = type => {
  **/
 export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
     const featureStyle = getFeatureStyle(layer, extendedDef);
-    if (!useStyleFunction(layer)) {
+    const applyOpacity = mapmodule.getSupports3D();
+    if (!applyOpacity && !useStyleFunction(layer)) {
         const styleType = geometryTypeToStyleType(layer.getGeometryType());
         return mapmodule.getStyle(featureStyle, styleType);
     }
@@ -77,7 +78,7 @@ export const getOlStyleForLayer = (mapmodule, layer, extendedDef) => {
             typed: mapmodule.getGeomTypedStyles(merge(featureStyle, optionalDef))
         };
     });
-    return getStyleFunction({ typed, optional });
+    return getStyleFunction({ typed, optional }, layer, applyOpacity);
 };
 
 export const getStylesForGeometry = (geometry, styleTypes) => {
@@ -131,7 +132,7 @@ const clusterStyleFunc = feature => {
     return style;
 };
 
-export const getStyleFunction = styles => {
+export const getStyleFunction = (styles, layer, applyOpacity) => {
     return (feature) => {
         const found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
         const typed = found ? found.typed : styles.typed;
@@ -141,6 +142,10 @@ export const getStyleFunction = styles => {
         const textStyle = olStyles.length ? olStyles[0].getText() : undefined;
         if (textStyle) {
             _setFeatureLabel(feature, textStyle, label);
+        }
+        if (applyOpacity) {
+            // apply opacity only for main style. other styles may use aplha for workarounds
+            applyOpacityToStyle(olStyles[0], layer.getOpacity());
         }
         return olStyles;
     };
@@ -183,6 +188,12 @@ const applyAlphaToColorable = (colorable, alpha) => {
         return;
     }
     if (colorLike.startsWith('rgba')) {
+        // null colors use transparent to avoid ol rendering default black color
+        // 3D uses alpha for layer opacity. On opacity change alphas are updated.
+        // Don't set alpha (opacity) for transparent color
+        if (colorLike === TRANSPARENT) {
+            return;
+        }
         colorLike = colorLike.substring(0, colorLike.lastIndexOf(','));
         colorLike += `,${alpha})`;
         colorable.setColor(colorLike);
@@ -202,11 +213,11 @@ const applyAlphaToColorable = (colorable, alpha) => {
     colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
 };
 
-export const applyOpacity = (olStyle, opacity) => {
+export const applyOpacityToStyle = (olStyle, opacity) => {
     if (!olStyle || isNaN(opacity)) {
         return;
     }
-    const alpha = opacity < 1 ? opacity : opacity / 100.0;
+    const alpha = opacity <= 1 ? opacity : opacity / 100.0;
     applyAlphaToColorable(olStyle.getFill(), alpha);
     applyAlphaToColorable(olStyle.getStroke(), alpha);
     if (olStyle.getImage()) {

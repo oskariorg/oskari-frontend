@@ -76,6 +76,11 @@ export const styleGenerator = (mapmodule, layer) => {
     if (!layer) {
         return getDefaultStyleFunction(mapmodule);
     }
+    // 3D doesn't support cluster and layer opacity is applied to style
+    // Don't use default styles or cluster
+    if (mapmodule.getSupports3D()) {
+        return mapmodule.getStyleForLayer(layer);
+    }
     const style = layer.getCurrentStyle();
     if (!style || !style.hasDefinitions()) {
         return defaultStyleGenerator(mapmodule, layer);
