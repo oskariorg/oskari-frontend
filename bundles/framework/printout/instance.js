@@ -399,20 +399,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            const me = this;
-            const map = jQuery('#contentMap');
+            const root = jQuery(Oskari.getRootEl());
+            const navigation = root.find('nav');
+            navigation.css('display', blnEnabled ? 'none' : 'block');
 
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
-                map.addClass('mapPrintoutMode');
-                me.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
                 // proceed with printout view
                 this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
-                this.printout.render(map);
+                this.printout.render(root);
 
                 if (this.state && this.state.form) {
                     this.printout.setState(this.state.form);
@@ -425,10 +424,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
             } else {
-                map.removeClass('mapPrintoutMode');
-                if (me.sandbox._mapMode === 'mapPrintoutMode') {
-                    delete me.sandbox._mapMode;
-                }
                 if (this.printout) {
                     this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
                     this.printout.setEnabled(false);
@@ -437,11 +432,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
                 this.sandbox.request(this, builder());
                 this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
-            }
-            // resize map to fit screen with expanded/normal sidebar
-            var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
-            if (reqBuilder) {
-                me.sandbox.request(me, reqBuilder(true));
             }
         },
         /**
