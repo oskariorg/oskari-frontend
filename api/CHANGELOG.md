@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.10.0
+
+### [rem] MapResizeEnabledRequest
+
+Removed request that was not used or needed anymore.
+
 ## 2.9.0
 
 ### [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest

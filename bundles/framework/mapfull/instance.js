@@ -57,28 +57,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @method  @public adjustMapSize adjust map size
          */
         adjustMapSize: function () {
-            if (this.resizeEnabled === false) {
-                // do not resize map if resizeEnabled is false
-                return;
-            }
-            /*
-            const contentMap = jQuery('#' + this.contentMapDivId);
-            const mapDiv = jQuery('#' + this.mapDivId);
-            const containerHeight = jQuery(Oskari.getRootEl()).height();
-            let mapHeight = containerHeight;
-            let mapWidth = contentMap.width();
-            let maxMapWidth = jQuery(Oskari.getRootEl()).width();
-
-            // adjust map size of there is a toolbar above the map
-            const toolbar = contentMap.find('#menutoolbar:visible');
-            if (toolbar.length > 0) {
-                mapHeight -= toolbar.height();
-            }
-            mapDiv.height(mapHeight);
-            if (mapWidth > maxMapWidth) {
-                mapWidth = maxMapWidth;
-            }
-            */
             // notify map module that size has changed
             this.updateSize();
         },
@@ -118,15 +96,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             me.mapmodule = module;
             me.getSandbox().register(module);
-            // TODO true path can prolly be removed, we can just set the size on the iframe/container and let the map fill the available space
-            if (me.conf.size) {
-                // contentMap holds the total width and height of the document
-                jQuery('#' + me.contentMapDivId)
-                    .width(me.conf.size.width)
-                    .height(me.conf.size.height);
-                // TODO check if we need to set mapDiv size at all here...
-                // jQuery('#' + me.mapDivId).height(me.conf.size.height);
-            }
 
             // react to window resize with timer so app stays responsive
             jQuery(window).on('resize', function () {
@@ -226,7 +195,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // create request handlers
             const requestHandlers = {
-                'MapFull.MapResizeEnabledRequest': 'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler',
                 'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler',
                 'MapFull.MapSizeUpdateRequest': 'Oskari.mapframework.bundle.mapfull.request.MapSizeUpdateRequestHandler'
             };
