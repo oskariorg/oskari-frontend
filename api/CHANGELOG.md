@@ -19,6 +19,10 @@ Removed request that was not used or needed anymore. The request could be used f
 
 Removed request that was not used or needed anymore now that mapmodule listens to the element size. The request was NOT used to set a new size like the name suggests, but to notify mapmodule about size change like it was an event. This should have been an event instead, but it's no longer required.
 
+### [rem] MapWindowFullScreenRequest
+
+Removed request that was not needed anymore now that mapmodule listens to the element size. The request was NOT used to set a new size for map like the name suggests, but to notify mapmodule about size change like it was an event. This should have been an event instead, but it's no longer required.
+
 ## 2.9.0
 
 ### [mod] [rpc] [breaking] MapModulePlugin.AddMarkerRequest
