@@ -99,7 +99,7 @@ import './event/UserLocationEvent';
 
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
-
+import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -384,9 +384,10 @@ Oskari.clazz.define(
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
-            me._adjustMobileMapSize();
             this.updateCurrentState();
             this._registerForGuidedTour();
+            // monitor size of element map is rendered in
+            monitorResize(this.getMapEl()[0], this.updateSize.bind(this));
         },
         /**
          * @method stop
@@ -398,6 +399,7 @@ Oskari.clazz.define(
             if (!this.started) {
                 return;
             }
+            unmonitorResize(this.updateSize.bind(this));
 
             sandbox = sandbox || this.getSandbox();
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', null);
@@ -1071,21 +1073,15 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function () {
-            var sandbox = this.getSandbox();
-            var mapVO = sandbox.getMap();
-            var width = mapVO.getWidth();
-            var height = mapVO.getHeight();
-
             this._updateSizeImpl();
             this.updateDomain();
 
-            var widthNew = mapVO.getWidth();
-            var heightNew = mapVO.getHeight();
+            const sandbox = this.getSandbox();
+            const mapVO = sandbox.getMap();
+
             // send as an event forward
-            if (width !== widthNew || height !== heightNew) {
-                var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
-                sandbox.notifyAll(evt);
-            }
+            const evt = Oskari.eventBuilder('MapSizeChangedEvent')(mapVO.getWidth(), mapVO.getHeight());
+            sandbox.notifyAll(evt);
         },
         /**
          * @method updateCurrentState
@@ -1298,7 +1294,6 @@ Oskari.clazz.define(
             if (modeChanged) {
                 me.redrawPluginUIs(modeChanged);
             }
-            me._adjustMobileMapSize();
         },
         /**
          * @method redrawPluginUIs
@@ -1334,10 +1329,6 @@ Oskari.clazz.define(
             };
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
-        },
-        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
-        _adjustMobileMapSize: function () {
-            this.updateSize();
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
@@ -1608,7 +1599,6 @@ Oskari.clazz.define(
                     me.lazyStartPlugins.push(plugin);
                 }
             });
-            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin

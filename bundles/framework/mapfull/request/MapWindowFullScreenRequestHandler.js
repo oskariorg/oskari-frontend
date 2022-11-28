@@ -21,7 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
      *      request to handle
      */
         handleRequest: function (core, request) {
-            this.mapfull.toggleFullScreen();
+            // FIXME: this is wrong. The FullScreen plugin makes the map element go "full screen", this just updates the size...
+            this.mapfull.updateSize();
         }
     }, {
     /**

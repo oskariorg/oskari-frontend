@@ -7,6 +7,8 @@ import { REGISTER, TYPE } from './register';
 import { ThemeProvider } from '../../util/contexts';
 // expose util function for centering elements
 export { getPositionForCentering } from './util';
+// expose monitor function for detecting size changes
+export { monitorResize, unmonitorResize } from './WindowWatcher';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!

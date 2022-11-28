@@ -1,3 +1,7 @@
+import './request/MapWindowFullScreenRequest';
+import './request/MapWindowFullScreenRequestHandler';
+import './request/MapSizeUpdateRequest';
+import './request/MapSizeUpdateRequestHandler';
 import { automagicPlugins } from './automagicPlugins';
 
 const LOG = Oskari.log('MapFullBundleInstance');
@@ -24,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         this.mapDivId = 'mapdiv';
         this.contentMapDivId = 'contentMap';
-        this.resizeTimer = null;
         this._initialStateInit = true;
     }, {
         getName: function () {
@@ -51,14 +54,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getSandbox: function () {
             return this.sandbox;
-        },
-
-        /**
-         * @method  @public adjustMapSize adjust map size
-         */
-        adjustMapSize: function () {
-            // notify map module that size has changed
-            this.updateSize();
         },
 
         /**
@@ -96,20 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             me.mapmodule = module;
             me.getSandbox().register(module);
-
-            // react to window resize with timer so app stays responsive
-            jQuery(window).on('resize', function () {
-                clearTimeout(me.resizeTimer);
-                me.resizeTimer = setTimeout(
-                    function () {
-                        me.adjustMapSize();
-                    },
-                    100
-                );
-            });
-
-            me.adjustMapSize();
-
             // startup plugins
             if (me.conf.plugins) {
                 const plugins = this.conf.plugins;
@@ -510,16 +491,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         },
 
         /**
-         * @method toggleFullScreen
-         * Toggles normal/full screen view of the map window.
-         *
-         *
-         */
-        toggleFullScreen: function () {
-            this.adjustMapSize();
-        },
-
-        /**
          * @public @method updateSize
          * Tells the map module that it should update/refresh its size.
          *
@@ -528,12 +499,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * we update the container size as well.
          *
          */
-        updateSize: function (fullUpdate) {
-            if (fullUpdate) {
-                this.adjustMapSize();
-            } else {
-                this.getMapModule().updateSize();
-            }
+        updateSize: function () {
+            // FIXME: remove this function. Map module now listens to its own size
+            // this.getMapModule().updateSize();
         },
 
         /**

@@ -20,7 +20,8 @@ Oskari.clazz.define(
          *
          */
         handleRequest: function (core, request) {
-            this.mapfull.updateSize(request.fullUpdate);
+            // FIXME: this is wrong. The Publisher makes the map element go to set size, this just updates the size info for map...
+            this.mapfull.updateSize();
         }
     }, {
         /**
