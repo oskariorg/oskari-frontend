@@ -1070,20 +1070,14 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function () {
-            var sandbox = this.getSandbox();
-            var mapVO = sandbox.getMap();
-            var width = mapVO.getWidth();
-            var height = mapVO.getHeight();
-
             this._updateSizeImpl();
             this.updateDomain();
 
-            var widthNew = mapVO.getWidth();
-            var heightNew = mapVO.getHeight();
+            const sandbox = this.getSandbox();
+            const mapVO = sandbox.getMap();
+
             // send as an event forward
-            console.log('w: ' + width + ' -> ' + widthNew + '\n' +
-            'h: ' + height + ' -> ' + heightNew + '\n');
-            var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
+            const evt = Oskari.eventBuilder('MapSizeChangedEvent')(mapVO.getWidth(), mapVO.getHeight());
             sandbox.notifyAll(evt);
         },
         /**
