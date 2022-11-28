@@ -4,6 +4,16 @@ $pluginMargin: 10px;
     height: 100%;
 }
 
+/* Fullscreen mode assigns this class for #contentMap div */
+#contentMap.oskari-map-window-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    margin: 0 !important;
+}
+
 .mapplugin.toollayoutedit.ui-draggable-handle > div::after {
     content: url("../images/holder-icon.svg");
     width: 24px;

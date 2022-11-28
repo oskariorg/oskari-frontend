@@ -1,3 +1,7 @@
+import './request/MapWindowFullScreenRequest';
+import './request/MapWindowFullScreenRequestHandler';
+import './request/MapSizeUpdateRequest';
+import './request/MapSizeUpdateRequestHandler';
 import { automagicPlugins } from './automagicPlugins';
 
 const LOG = Oskari.log('MapFullBundleInstance');
@@ -54,14 +58,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         },
 
         /**
-         * @method  @public adjustMapSize adjust map size
-         */
-        adjustMapSize: function () {
-            // notify map module that size has changed
-            this.updateSize();
-        },
-
-        /**
          * @private @method _createUi
          * Creates the map module and rendes it to DOM element that has the id
          * specified by #mapDivId. Sets the size of the element if specified in
@@ -102,13 +98,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 clearTimeout(me.resizeTimer);
                 me.resizeTimer = setTimeout(
                     function () {
-                        me.adjustMapSize();
+                        me.updateSize();
                     },
                     100
                 );
             });
 
-            me.adjustMapSize();
+            me.updateSize();
 
             // startup plugins
             if (me.conf.plugins) {
@@ -510,16 +506,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         },
 
         /**
-         * @method toggleFullScreen
-         * Toggles normal/full screen view of the map window.
-         *
-         *
-         */
-        toggleFullScreen: function () {
-            this.adjustMapSize();
-        },
-
-        /**
          * @public @method updateSize
          * Tells the map module that it should update/refresh its size.
          *
@@ -528,12 +514,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * we update the container size as well.
          *
          */
-        updateSize: function (fullUpdate) {
-            if (fullUpdate) {
-                this.adjustMapSize();
-            } else {
-                this.getMapModule().updateSize();
-            }
+        updateSize: function () {
+            this.getMapModule().updateSize();
         },
 
         /**
