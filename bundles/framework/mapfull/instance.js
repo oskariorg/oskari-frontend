@@ -28,7 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         this.mapDivId = 'mapdiv';
         this.contentMapDivId = 'contentMap';
-        this.resizeTimer = null;
         this._initialStateInit = true;
     }, {
         getName: function () {
@@ -92,20 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             me.mapmodule = module;
             me.getSandbox().register(module);
-
-            // react to window resize with timer so app stays responsive
-            jQuery(window).on('resize', function () {
-                clearTimeout(me.resizeTimer);
-                me.resizeTimer = setTimeout(
-                    function () {
-                        me.updateSize();
-                    },
-                    100
-                );
-            });
-
-            me.updateSize();
-
             // startup plugins
             if (me.conf.plugins) {
                 const plugins = this.conf.plugins;
@@ -515,7 +500,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         updateSize: function () {
-            this.getMapModule().updateSize();
+            // FIXME: remove this function. Map module now listens to its own size
+            // this.getMapModule().updateSize();
         },
 
         /**

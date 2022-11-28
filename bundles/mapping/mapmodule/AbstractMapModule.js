@@ -99,7 +99,7 @@ import './event/UserLocationEvent';
 
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
-
+import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -386,6 +386,8 @@ Oskari.clazz.define(
             me.startPlugins();
             this.updateCurrentState();
             this._registerForGuidedTour();
+            // monitor size of element map is rendered in
+            monitorResize(this.getMapEl()[0], this.updateSize.bind(this));
         },
         /**
          * @method stop
@@ -397,6 +399,7 @@ Oskari.clazz.define(
             if (!this.started) {
                 return;
             }
+            unmonitorResize(this.updateSize.bind(this));
 
             sandbox = sandbox || this.getSandbox();
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', null);
