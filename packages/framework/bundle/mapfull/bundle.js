@@ -61,12 +61,6 @@ function() {
             "src" : "../../../../bundles/framework/mapfull/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequestHandler.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapfull/request/MapWindowFullScreenRequest.js"
         }, {
             "type" : "text/javascript",
