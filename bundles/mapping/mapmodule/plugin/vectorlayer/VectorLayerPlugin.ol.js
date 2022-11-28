@@ -11,6 +11,7 @@ import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 import { filterOptionalStyle } from '../../oskariStyle/filter';
+import { applyOpacityToStyle } from '../../oskariStyle/generator.ol';
 import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
 
 import './vectorlayer';
@@ -160,7 +161,6 @@ Oskari.clazz.define(
         _afterChangeMapLayerOpacityEvent: function (event) {
             var me = this;
             var layer = event.getMapLayer();
-
             if (!layer.isLayerOfType('VECTOR')) {
                 return;
             }
@@ -470,6 +470,12 @@ Oskari.clazz.define(
             var olLayer = me._olLayers[layer.getId()];
             if (olLayer) {
                 olLayer.setOpacity(opacity);
+                if (this.getMapModule().getSupports3D()) {
+                    olLayer.getSource().forEachFeature(f => {
+                        this.setStyleOpacity(f.getStyle(), opacity);
+                        f.changed();
+                    });
+                }
             }
         },
         /**
@@ -1183,11 +1189,19 @@ Oskari.clazz.define(
             const olStyles = me.getMapModule().getStyle(cached.oskari, null, overrideStyle);
             const zIndex = this.getStyleZIndex(cached.ol);
             this.setStyleZIndex(olStyles, zIndex);
+            this.setStyleOpacity(olStyles, options.opacity);
             cached.ol = olStyles;
             return cached.ol;
         },
         setStyleZIndex: function (olStyles = [], zIndex) {
             olStyles.forEach(style => style.setZIndex(zIndex));
+        },
+        setStyleOpacity: function (olStyles = [], opacity) {
+            if (!this.getMapModule().getSupports3D()) {
+                return;
+            }
+            // apply opacity only for main style. other styles may use aplha for workarounds
+            applyOpacityToStyle(olStyles[0], opacity);
         },
         getStyleZIndex: function (olStyles = []) {
             // get z index from main style, default to 1
