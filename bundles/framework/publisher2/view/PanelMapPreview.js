@@ -182,12 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         _updateMapModuleSize: function (isStopping) {
             // turn off event handlers in order to avoid consecutive calls to mapsizechanged
             this._unregisterEventHandlers();
-            var me = this;
-            if (me.sandbox.hasHandler('MapFull.MapSizeUpdateRequest')) {
-                me.sandbox.request(me.instance, Oskari.requestBuilder('MapFull.MapSizeUpdateRequest')());
-            }
-
-            me._updateMapMode();
+            this._updateMapMode();
 
             // turn event handlers back on.
             if (!isStopping) {
@@ -200,11 +195,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * Update map mode
         */
         _updateMapMode: function () {
-            var me = this,
-                size = me._getSelectedMapSize();
+            const size = this._getSelectedMapSize();
 
-            if (me.modeChangedCB) {
-                me.modeChangedCB(size.option.id);
+            if (typeof this.modeChangedCB === 'function') {
+                this.modeChangedCB(size.option.id);
             }
         },
         /**
