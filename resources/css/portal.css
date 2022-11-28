@@ -22,11 +22,7 @@ footer, header, nav, section, audio, video {
 a img {
   border: 0;
 }
-/*
-html, body {
-  height: 100% !important;
-}
-*/
+
 html {
   font-size: 100%;
   -webkit-overflow-scrolling: touch;
@@ -68,7 +64,7 @@ body {
   background-color: #333438;
 }
 
-#contentMap {
+.oskari-map-container-el {
   height: 100%;
   width: 100%;
 }

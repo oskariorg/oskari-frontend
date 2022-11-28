@@ -80,7 +80,7 @@ export class MapModule extends AbstractMapModule {
             // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
             pixelRatio: 1,
             keyboardEventTarget: document,
-            target: this.getMapElementId(),
+            target: this.getMapDOMEl(),
             controls: controls,
             interactions: this._initInteractions(),
             moveTolerance: 2
