@@ -36,8 +36,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',
          * Interface method implementation, calls #refresh()
          */
         startPlugin: function () {
-            if (this.container) {
-                this.container.addClass(this.instance.getName());
+            this._addTileStyleClasses();
+            this.refresh();
+        },
+        _addTileStyleClasses: function () {
+            const isContainer = !!((this.container && this.instance.mediator));
+            const isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            const isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
+
+            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                this.container.addClass(this.instance.mediator.instanceId);
+            }
+            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                this.container.addClass(this.instance.mediator.bundleId);
             }
         },
         /**
