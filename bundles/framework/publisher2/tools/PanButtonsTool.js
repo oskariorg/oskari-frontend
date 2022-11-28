@@ -4,29 +4,39 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
         index: 2,
         lefthanded: 'top left',
         righthanded: 'top right',
-
         groupedSiblings: true,
+        _templates: {
+            extraOptions: jQuery(`
+                <div class="publisher2 panbutton-options tool-options">
+                    <div class="arrows-selection">
+                        <label><input type="checkbox"/><span></span></label>
+                    </div>
+                </div>
+            `)
+        },
+        extraOptions: null,
 
         /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
+            const plugin = this._getToolPluginMapfullConf();
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 title: 'PanButtons',
-                config: {}
+                config: plugin.config || {}
             };
         },
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
             var me = this;
 
@@ -42,6 +52,63 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
                 };
             } else {
                 return null;
+            }
+        },
+        /**
+         * Get extra options.
+         * @method getExtraOptions
+         * @public
+         *
+         * @returns {Object} jQuery element
+         */
+        getExtraOptions: function () {
+            var me = this;
+            if (!me._extraOptions) {
+                const initialConf = me._getToolPluginMapfullConf();
+                const showArrows = initialConf && initialConf.config && initialConf.config.showArrows;
+                const extraOptions = me._templates.extraOptions.clone();
+                extraOptions.find('.arrows-selection label span').append(me.__loc.panButtonsOptions.showArrows);
+                const arrowsCheckbox = extraOptions.find('.arrows-selection label input')
+                    .on('change', function () {
+                        const isChecked = jQuery(this).is(':checked');
+                        me.__plugin.setShowArrows(isChecked);
+                    });
+                if (showArrows) {
+                    arrowsCheckbox.prop('checked', true).change();
+                    me.__plugin.setShowArrows(true);
+                }
+                me._extraOptions = extraOptions;
+            }
+            return me._extraOptions;
+        },
+        /**
+         * @private @method _getToolPluginMapfullConf
+         * Get map view cofiguration (from mapfull) for this tool
+         * @return {Object / null} config or null if not found
+         */
+        _getToolPluginMapfullConf: function () {
+            const { configuration } = this.data || {};
+            if (!configuration) {
+                return null;
+            }
+            const { mapfull = {} } = configuration;
+            const { conf = {} } = mapfull;
+            const { plugins = [] } = conf;
+            // data.configuration.mapfull.conf.plugins
+            return plugins.find(plug => plug.id === 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons');
+        },
+        init: function (data) {
+            var me = this;
+            me.data = data;
+
+            if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
+                const plugins = data.configuration.mapfull.conf.plugins;
+                plugins.forEach(function (plugin) {
+                    if (me.getTool().id !== plugin.id) {
+                        return;
+                    }
+                    me.setEnabled(true);
+                });
             }
         }
     }, {
