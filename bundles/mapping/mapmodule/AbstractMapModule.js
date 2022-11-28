@@ -384,7 +384,6 @@ Oskari.clazz.define(
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
-            me._adjustMobileMapSize();
             this.updateCurrentState();
             this._registerForGuidedTour();
         },
@@ -1082,10 +1081,10 @@ Oskari.clazz.define(
             var widthNew = mapVO.getWidth();
             var heightNew = mapVO.getHeight();
             // send as an event forward
-            if (width !== widthNew || height !== heightNew) {
-                var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
-                sandbox.notifyAll(evt);
-            }
+            console.log('w: ' + width + ' -> ' + widthNew + '\n' +
+            'h: ' + height + ' -> ' + heightNew + '\n');
+            var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
+            sandbox.notifyAll(evt);
         },
         /**
          * @method updateCurrentState
@@ -1298,7 +1297,6 @@ Oskari.clazz.define(
             if (modeChanged) {
                 me.redrawPluginUIs(modeChanged);
             }
-            me._adjustMobileMapSize();
         },
         /**
          * @method redrawPluginUIs
@@ -1334,10 +1332,6 @@ Oskari.clazz.define(
             };
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
-        },
-        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
-        _adjustMobileMapSize: function () {
-            this.updateSize();
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
@@ -1608,7 +1602,6 @@ Oskari.clazz.define(
                     me.lazyStartPlugins.push(plugin);
                 }
             });
-            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin
