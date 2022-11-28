@@ -1,5 +1,3 @@
-import './request/MapWindowFullScreenRequest';
-import './request/MapWindowFullScreenRequestHandler';
 import { automagicPlugins } from './automagicPlugins';
 
 const LOG = Oskari.log('MapFullBundleInstance');
@@ -171,15 +169,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             this._initialStateInit = true;
             this.setState(this.state, skipLocation);
             this._initialStateInit = false;
-
-            // create request handlers
-            const requestHandlers = {
-                'MapFull.MapWindowFullScreenRequest': 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler'
-            };
-            Object.keys(requestHandlers).forEach(requestName => {
-                const handler = Oskari.clazz.create(requestHandlers[requestName], this);
-                sandbox.requestHandler(requestName, handler);
-            });
         },
         /**
          * Used to detect if we should use the center coordinate from state on initial render or
@@ -485,20 +474,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 return {};
             }
             return this.conf.link || {};
-        },
-
-        /**
-         * @public @method updateSize
-         * Tells the map module that it should update/refresh its size.
-         *
-         * @param {Boolean} fullUpdate
-         * Whether we only tell the map implementation to update its size or if
-         * we update the container size as well.
-         *
-         */
-        updateSize: function () {
-            // FIXME: remove this function. Map module now listens to its own size
-            // this.getMapModule().updateSize();
         },
 
         /**
