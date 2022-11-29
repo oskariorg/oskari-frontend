@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var position = navDimensions.right;
         var offset = 40;
         const y = this._positionY;
-        const container = jQuery(Oskari.getRootEl());
+        const container = jQuery(Oskari.dom.getRootEl());
         this.flyoutInfo.forEach((info) => {
             var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                 width: 'auto',

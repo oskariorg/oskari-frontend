@@ -154,7 +154,7 @@ Oskari.clazz.define(
             this.togglePlugin.toggleTool(tool, visible);
         },
         isEmbedded: function () {
-            return jQuery('#contentMap').hasClass('published');
+            return Oskari.dom.isEmbedded();
         },
         hasData: function () {
             return !!this.statsService.getDatasources().length;

@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 }
                 // Request pdf
                 if (!me.printout) {
-                    var map = jQuery('#contentMap');
+                    var map = jQuery(Oskari.dom.getRootEl());
                     me.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
                     me.printout.render(map);
                     me.printout.setEnabled(false);
@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            const root = jQuery(Oskari.getRootEl());
+            const root = jQuery(Oskari.dom.getRootEl());
             const navigation = root.find('nav');
             navigation.css('display', blnEnabled ? 'none' : 'block');
 

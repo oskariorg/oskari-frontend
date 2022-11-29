@@ -138,7 +138,7 @@ Oskari.clazz.define(
      srsName : "EPSG:3067"
      *  }
      */
-    function (id, imageUrl, options, mapDivId) {
+    function (id, imageUrl, options, mapDivRef) {
         var me = this;
         this.log = Oskari.log('AbstractMapModule');
 
@@ -148,7 +148,16 @@ Oskari.clazz.define(
 
         // Id will be a prefix for getName()
         me._id = id;
-        me._mapDivId = mapDivId;
+        if (typeof mapDivRef === 'string') {
+            me._mapDivId = mapDivRef;
+            me._mapDivEl = document.getElementById(mapDivRef);
+        } else if (mapDivRef instanceof Element) {
+            me._mapDivEl = mapDivRef;
+            // TODO: we should get rid of id here
+            me._mapDivId = mapDivRef.id;
+        } else {
+            this.log.error('Reference to map element must be of type string as element id or the element itself. Unable to start.');
+        }
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -387,7 +396,7 @@ Oskari.clazz.define(
             this.updateCurrentState();
             this._registerForGuidedTour();
             // monitor size of element map is rendered in
-            monitorResize(this.getMapEl()[0], this.updateSize.bind(this));
+            monitorResize(this.getMapDOMEl(), this.updateSize.bind(this));
         },
         /**
          * @method stop
@@ -584,11 +593,18 @@ Oskari.clazz.define(
          * Get jQuery reference to map element
          */
         getMapEl: function () {
-            var mapDiv = jQuery('#' + this.getMapElementId());
+            var mapDiv = jQuery(this.getMapDOMEl());
             if (!mapDiv.length) {
-                this.log.warn('mapDiv not found with #' + this._mapDivId);
+                this.log.warn('mapDiv not found with #' + this.getMapElementId());
             }
             return mapDiv;
+        },
+        /**
+         * @method getMapEl
+         * Get jQuery reference to map element
+         */
+        getMapDOMEl: function () {
+            return this._mapDivEl;
         },
         /**
          * @method getMap

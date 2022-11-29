@@ -6,6 +6,7 @@
 import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
 import pkg from '../package.json';
+import { DOMHelper } from './oskari.dom.js';
 
 let _markers = [];
 
@@ -13,11 +14,6 @@ let defaultSequence = new Sequence();
 let sequences = {};
 // keep track of existing loggers
 let loggers = {};
-
-// for constructing/referencing the base HTML
-const DEFAULT_ROOT_EL_ID = 'oskari';
-const ROOT_EL_CLASS_FOR_STYLING = 'oskari-root-el';
-const getBodyTag = () => document.getElementsByTagName('body')[0];
 
 let _urls= {};
 function getUrl (key) {
@@ -49,7 +45,6 @@ function appendQueryToURL(url, query) {
     }
     return `${url}&${query}`;
 }
-let rootEl;
 
 const Oskari = {
     VERSION: pkg.version,
@@ -59,28 +54,8 @@ const Oskari = {
     getMarkers () {
         return _markers;
     },
-    setRootEl (id) {
-        if (id) {
-            rootEl = document.getElementById(id);
-        }
-        if (!rootEl) {
-            rootEl = getBodyTag();
-            if (!rootEl.style.height) {
-                // rendering directly to body and no height set
-                // -> set CSS to follow expected styling/assume full screen app
-                rootEl.style.height = '100vh';
-            }
-        }
-        // use styles from .oskari-root-el for body like display: flex
-        rootEl.classList.add(ROOT_EL_CLASS_FOR_STYLING);
-        return rootEl;
-    },
-    getRootEl () {
-        if (!rootEl) {
-            return this.setRootEl(DEFAULT_ROOT_EL_ID);
-        }
-        return rootEl;
-    },
+    // from oskari.dom
+    dom: DOMHelper,
     getDefaultMarker () {
         return (_markers.length >= 3) ? _markers[2] : _markers[0];
     },

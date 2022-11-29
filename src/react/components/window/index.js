@@ -227,7 +227,7 @@ export const showBanner = (content, onClose, options = {}) => {
 };
 
 export const getNavigationDimensions = () => {
-    let nav = [...Oskari.getRootEl().children].find(c => c.localName === 'nav');
+    let nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
     if (!nav) {
         return {
             top: 0,

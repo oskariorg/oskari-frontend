@@ -17,13 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         this.__name = 'mapfull';
         this.sandbox = null;
         this.mapmodule = null;
-        /**
-         * @property {String} mapDivId
-         * ID of the DOM element the map will be rendered to
-         * Configurable through conf.mapElement
-         */
-        this.mapDivId = 'mapdiv';
-        this.contentMapDivId = 'contentMap';
         this._initialStateInit = true;
     }, {
         getName: function () {
@@ -62,27 +55,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         _createUi: function () {
             const me = this;
-            // Note! Oskari.getRootEl(); generates a side-effect to set body size to 100% height
-            // FIXME: call the getRootEl() on app start to generate the side-effect instead of here or refactor the side-effect to app start?
-            const rootEl = Oskari.getRootEl();
-            let contentMapEl = document.getElementById(this.contentMapDivId);
-            if (!contentMapEl) {
-                contentMapEl = document.createElement('div');
-                contentMapEl.setAttribute('id', this.contentMapDivId);
-                rootEl.append(contentMapEl);
-            }
-            let mapdivEl = document.getElementById(this.mapDivId);
-            if (!mapdivEl) {
-                mapdivEl = document.createElement('div');
-                mapdivEl.setAttribute('id', this.mapDivId);
-                contentMapEl.append(mapdivEl);
-            }
             const module = Oskari.clazz.create(
                 'Oskari.mapframework.ui.module.common.MapModule',
                 'Main',
                 me.conf.imageLocation,
                 me.conf.mapOptions,
-                me.mapDivId
+                Oskari.dom.getMapImplEl()
             );
 
             me.mapmodule = module;
@@ -133,14 +111,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             this._handleProjectionDefs(conf.projectionDefs);
             this.sandbox = sandbox;
-
-            // take map div ID from config if available
-            if (conf.mapElement) {
-                this.mapDivId = conf.mapElement;
-            }
-            if (conf.mapContainer) {
-                this.contentMapDivId = conf.mapContainer;
-            }
 
             // create services & enhancements
             var services = this._createServices(conf);
@@ -474,31 +444,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 return {};
             }
             return this.conf.link || {};
-        },
-
-        /**
-         * @public @method getMapEl
-         * Get jQuery map element
-         *
-         *
-         * @return {jQuery} jQuery map element
-         */
-        getMapEl: function () {
-            var mapDiv = this.getMapElDom();
-            if (!mapDiv) {
-                LOG.warn('mapDiv not found with id ' + this.mapDivId);
-            }
-            return jQuery(mapDiv);
-        },
-
-        /**
-         * @public @method getMapElDom
-         * Get DOM map element
-         *
-         * @return {Element} Map element
-         */
-        getMapElDom: function () {
-            return document.getElementById(this.mapDivId);
         }
     }, {
         /**
