@@ -101,14 +101,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
             var me = this;
             me.data = data;
 
-            if (data.configuration && data.configuration.mapfull && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
-                const plugins = data.configuration.mapfull.conf.plugins;
-                plugins.forEach(function (plugin) {
-                    if (me.getTool().id !== plugin.id) {
-                        return;
-                    }
-                    me.setEnabled(true);
-                });
+            if (me._getToolPluginMapfullConf()) {
+                me.setEnabled(true);
             }
         }
     }, {
