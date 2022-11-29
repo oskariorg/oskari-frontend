@@ -62,6 +62,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             this.setEnabled(this._enabled);
             return this.setVisible(this._visible);
         },
+
+        /**
+         * @public @method changeToolStyle
+         * Changes the tool style of the plugin
+         *
+         * @param {Object} style
+         * @param {jQuery} div
+         *
+         */
+         changeToolStyle: function (style, div) {
+            const conf = this.getConfig();
+            // Change the style if in the conf
+            if (style) {
+                conf.toolStyle = style;
+            }
+            this.refresh();
+        },
+        getStyleForRender: function() {
+            const conf = this.getConfig();
+            let toolStyle;
+            // Change the style if in the conf
+            if (conf && conf.toolStyle) {
+                toolStyle = conf.toolStyle;
+            } else {
+                toolStyle = this.getToolStyleFromMapModule();
+            }
+            return toolStyle || 'rounded-dark';
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function (mapInMobileMode, forced) {
+            if (!this.isVisible() || !this.isEnabled()) {
+                // no point in drawing the ui if we are not visible or enabled
+                return;
+            }
+
+            this.teardownUI();
+
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.refresh();
+            this.addToPluginContainer(this.getElement());
+        },
         /**
          * @public @method refresh
          */
@@ -89,55 +137,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
                 ,
                 el[0]
             );
-        },
-        
-        getStyleForRender: function() {
-            const conf = this.getConfig();
-            let toolStyle;
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                toolStyle = conf.toolStyle;
-            } else {
-                toolStyle = this.getToolStyleFromMapModule();
-            }
-            return toolStyle || 'rounded-dark';
-        },
-
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         *
-         */
-         changeToolStyle: function (style, div) {
-            const conf = this.getConfig();
-            // Change the style if in the conf
-            if (style) {
-                conf.toolStyle = style;
-            }
-            this.refresh();
-        },
-        /**
-         * Handle plugin UI and change it when desktop / mobile mode
-         * @method  @public createPluginUI
-         * @param  {Boolean} mapInMobileMode is map in mobile mode
-         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
-         */
-        redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible() || !this.isEnabled()) {
-                // no point in drawing the ui if we are not visible or enabled
-                return;
-            }
-
-            this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
-            this._element = this._createControlElement();
-            this.refresh();
-            this.addToPluginContainer(this.getElement());
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
