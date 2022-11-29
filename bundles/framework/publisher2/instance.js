@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             const navigation = root.find('nav');
             navigation.css('display', blnEnabled ? 'none' : 'block');
             const mapContainer = Oskari.dom.getMapContainerEl();
-
+            const extraClasses = ['mapPublishMode', 'published']
             data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
@@ -299,9 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.getService().setNonPublisherLayers(deniedLayers || this.getNonPublisherLayers());
                 me.getService().removeLayers();
                 me.oskariLang = Oskari.getLang();
-
-                mapContainer.addClass('mapPublishMode');
-                mapContainer.addClass('published');
+                extraClasses.forEach(cssClass => mapContainer.classList.add(cssClass));
 
                 // hide flyout
                 me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'hide']);
@@ -325,8 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.publisher.destroy();
                 }
                 // first return all needed plugins before adding the layers back
-                mapContainer.removeClass('mapPublishMode');
-                mapContainer.removeClass('published');
+                extraClasses.forEach(cssClass => mapContainer.classList.removeClass(cssClass));
                 me.getService().setIsActive(false);
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
