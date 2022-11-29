@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 title: 'PanButtons',
-                config: plugin.config || {}
+                config: plugin?.config || {}
             };
         },
         /**
