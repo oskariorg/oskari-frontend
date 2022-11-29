@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             const navigation = root.find('nav');
             navigation.css('display', blnEnabled ? 'none' : 'block');
             const mapContainer = Oskari.dom.getMapContainerEl();
-            const extraClasses = ['mapPublishMode', 'published']
+            const extraClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
             data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
@@ -323,7 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.publisher.destroy();
                 }
                 // first return all needed plugins before adding the layers back
-                extraClasses.forEach(cssClass => mapContainer.classList.removeClass(cssClass));
+                extraClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
                 me.getService().setIsActive(false);
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
