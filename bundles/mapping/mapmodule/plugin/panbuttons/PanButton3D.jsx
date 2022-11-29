@@ -92,7 +92,7 @@ const ArrowButton = ({ children, onClick, color, top = 'initial', right = 'initi
     );
 }
 
-export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile = false }) => {
+export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile = false, showArrows = false }) => {
 
     let backgroundV = 'linear-gradient(180deg,rgba(101,101,101,1) 0%,rgba(60,60,60,1) 35%,rgba(9,9,9,1) 100%)';
     let backgroundH = 'linear-gradient(180deg,#3c3c3c 0%,rgba(60,60,60,1) 35%,#232323 100%)';
@@ -104,7 +104,7 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
         iconColor = '#3c3c3c';
     }
 
-    if (isMobile) {
+    if (isMobile || !showArrows) {
         return (
             <MapModuleButton
                 icon={<MobileIcon />}

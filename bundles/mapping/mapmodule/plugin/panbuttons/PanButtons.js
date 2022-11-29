@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._name = 'PanButtons';
         this._panPxs = 100;
         this.inMobileMode = false;
+        this.showArrows = !!this.getConfig().showArrows;
     }, {
         /**
          * @private @method _createControlElement
@@ -117,6 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     panClicked={(x, y) => this._panClicked(x, y)}
                     styleName={styleName || 'rounded-dark'}
                     isMobile={this.inMobileMode}
+                    showArrows={this.showArrows}
                 />,
                 el[0]
             );
@@ -152,6 +154,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          */
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
+        },
+        /**
+         * @method setShowArrows
+         * @param {Boolean} showArrows
+         */
+        setShowArrows: function (showArrows) {
+            this.setConfig({
+                ...this.getConfig(),
+                showArrows: !!showArrows
+            });
+            this.showArrows = !!showArrows;
+            this.renderButton(null, null);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
