@@ -1,68 +1,51 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
-import { Message, Select, Option } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
-
-const Content = styled('div')`
-    margin: 12px 24px 24px;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-`;
-
-const LegendContainer = styled('div')`
-    margin-top: 10px;
-`;
-
-const SelectContainer = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
+import { LegendSelect } from './components/LegendSelect';
+import { Legend } from './components/Legend';
 
 const BUNDLE_KEY = 'maplegend';
 
+const Content = styled('div')`
+    margin: 12px 24px 24px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+`;
+
+const Margin = styled('div')`
+    margin-top: 10px;
+`;
+
 const MapLegendPopup = ({ legends, getLegendImage }) => {
-    const [selected, setSelected] = useState(legends && legends.length > 0 ? legends[0].id : null);
-    const [legend, setLegend] = useState(legends && legends.length > 0 ? getLegendImage(legends[0].id) : null);
+    const [selected, setSelected] = useState(legends.length > 0 ? legends[0].id : null);
+    const [legend, setLegend] = useState(legends.length > 0 ? getLegendImage(legends[0].id) : null);
+    const [hasError, setError] = useState(false);
     const onChange = (value) => {
         setSelected(value);
+        setError(false);
         setLegend(getLegendImage(value));
     };
-    
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
-                {legends && legends.length > 1 && (
-                    <SelectContainer>
-                        <Message bundleKey={BUNDLE_KEY} messageKey='infotext' />
-                        <Select value={selected} onChange={onChange} className="t_legends">
-                            {
-                                legends.map(l =>
-                                    <Option key={l.id} value={l.id}>
-                                        {l.title}
-                                    </Option>
-                                )
-                            }
-                        </Select>
-                    </SelectContainer>
-                )}
-                {!legends || legends.length === 0 && (<Message bundleKey={BUNDLE_KEY} messageKey='noLegendsText' />)}
-                <LegendContainer>
-                    {!legend || legend === null || legend === 'null' ? (
-                        <Message bundleKey={BUNDLE_KEY} messageKey='invalidLegendUrl' />
-                    ) : (
-                        <div>
-                            {legends.length === 1 && (<><Message bundleKey={BUNDLE_KEY} messageKey='singleLegend' /><br/></>)}
-                            <a href={legend} target="_blank"><Message bundleKey={BUNDLE_KEY} messageKey='newtab' className="t_newtab" /></a>
-                            <br/>
-                            <img src={legend} />
-                        </div>
-                    )}
-                </LegendContainer>
+                <LegendSelect
+                    legends={legends}
+                    selected={selected}
+                    onChange={onChange} />
+                <Margin />
+                <Legend url={legend} hasError={hasError} setError={setError}/>
             </Content>
         </LocaleProvider>
     );
+};
+
+MapLegendPopup.propTypes = {
+    legends: PropTypes.array.isRequired,
+    getLegendImage: PropTypes.func.isRequired
 };
 
 export const showMapLegendPopup = (legends, getLegendImage, onClose) => {
