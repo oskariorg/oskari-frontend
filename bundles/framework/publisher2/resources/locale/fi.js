@@ -68,7 +68,7 @@ Oskari.registerLocalization(
                 "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
+                "PanButtons": "Palaa alkutilaan",
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
@@ -123,6 +123,9 @@ Oskari.registerLocalization(
                         "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
                 }
             },
             "toollayout": {

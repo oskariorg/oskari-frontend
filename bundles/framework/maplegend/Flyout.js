@@ -25,7 +25,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.sandbox = this.instance.getSandbox();
         this.state = null;
         this._legendImagesNotLoaded = {};
     }, {
@@ -71,14 +70,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * @return {String} localized text for the title of the flyout
          */
         getTitle: function () {
-            return this.instance.getLocalization('title');
+            return this.instance.loc('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the flyout
          */
         getDescription: function () {
-            return this.instance.getLocalization('desc');
+            return this.instance.loc('desc');
         },
         /**
          * @method getOptions
@@ -104,9 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         },
         showMetadataFlyout: function (event, uuid) {
             event.stopPropagation();
-            this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-                uuid: uuid
-            }]);
+            this.instance.getSandbox().postRequestByName('catalogue.ShowMetadataRequest', [{ uuid }]);
         },
         /**
          * @method _populateLayerList
@@ -115,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Renders legend images as an accordion for the selected layers.
          */
         _populateLayerList: function () {
-            const layers = this.sandbox.findAllSelectedMapLayers();
+            const layers = this.instance.getSandbox().findAllSelectedMapLayers();
 
             // populate selected layer list
             const showMetadata = (event, uuid) => this.showMetadataFlyout(event, uuid);
@@ -147,5 +144,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.userinterface.Flyout']
+        protocol: ['Oskari.userinterface.Flyout']
     });

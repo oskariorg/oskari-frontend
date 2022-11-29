@@ -313,11 +313,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         /**
          * @public @method getToolStyleFromMapModule
          *
-         * @return {Object} style object used by mapmodule or null if not available.
+         * @return {String} style class used by mapmodule or default.
          */
         getToolStyleFromMapModule: function () {
-            var value = this.getMapModule().getToolStyle();
-            return value || null;
+            return this.getMapModule().getToolStyle() || 'rounded-dark';
         },
         /**
          * @public @method getToolStyleFromMapModule

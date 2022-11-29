@@ -24,42 +24,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
         },
         getPlugin: function () {
-            var maplegend = this.getInstance() || {};
-            return maplegend.plugin;
+            return this.getInstance().getPlugin();
         },
         /**
          * Initialise tool
          * @method init
          */
         init: function (data) {
-            var me = this;
-
-            if (!data || !data.configuration[me.bundleName]) {
+            if (!data || !data.configuration[this.bundleName]) {
                 return;
             }
-
-            me.setEnabled(true);
+            this.setEnabled(true);
         },
         isDisplayed: function () {
-            var legendLayers = [];
-            var layers = this.__sandbox.findAllSelectedMapLayers().slice(0);
-            layers.forEach(function (layer) {
-                if (!layer.getLegendImage()) {
-                    return;
-                }
-
-                var layerObject = {
-                    id: layer.getId(),
-                    title: Oskari.util.sanitize(layer.getName())
-                };
-
-                legendLayers.push(layerObject);
-            });
-
-            if (legendLayers === undefined || legendLayers.length == 0) {
-                return false;
-            }
-            return true;
+            return this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
         },
         /**
          * Set enabled.
@@ -69,22 +47,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
          * @param {Boolean} enabled is tool enabled or not
          */
         setEnabled: function (enabled) {
-            var me = this;
-
             // state actually hasn't changed -> do nothing
-            if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+            if (enabled === this.state.enabled) {
                 return;
             }
-            me.state.enabled = enabled;
+            this.state.enabled = enabled;
 
             if (enabled) {
-                me.getInstance().createPlugin();
-                me.__started = true;
+                this.getInstance().createPlugin();
+                this.__started = true;
             } else {
-                if (me.getInstance().plugin) {
-                    me.getInstance().stopPlugin();
-                }
-                me.__started = false;
+                this.getInstance().stopPlugin();
+                this.__started = false;
             }
         },
         /**
@@ -95,23 +69,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-
-                var json = {
-                    configuration: {}
+            if (this.isEnabled()) {
+                return {
+                    configuration: {
+                        [this.bundleName]: {
+                            conf: this.getPlugin().getConfig(),
+                            state: {}
+                        }
+                    }
                 };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: {}
-                };
-                return json;
-            } else {
-                return null;
             }
+            return null;
         }
     }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        extend: ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        protocol: ['Oskari.mapframework.publisher.Tool']
     });

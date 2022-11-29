@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         this.started = false;
         this.plugins = {};
         this.plugin = null;
-        this.localization = null;
+        this.loc = Oskari.getMsg.bind(null, this.getName());
     }, {
         /**
          * @static
@@ -36,74 +36,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return this.__name;
         },
         /**
-         * @method setSandbox
-         * @param {Oskari.Sandbox} sandbox
-         * Sets the sandbox reference to this component
-         */
-        setSandbox: function (sandbox) {
-            this.sandbox = sandbox;
-        },
-        /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
         },
-
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                return this._localization[key];
-            }
-            return this._localization;
-        },
         /**
          * @method start
          * implements BundleInstance protocol start method
          */
-        start: function () {
-            var me = this;
-
-            if (me.started) {
+        start: function (sandbox) {
+            if (this.started) {
                 return;
             }
-
-            me.started = true;
-
-            var conf = this.conf || {};
-            var sandbox = Oskari.getSandbox(conf.sandbox || 'sandbox');
-            this.setSandbox(sandbox);
-
-            sandbox.register(me);
-            Object.keys(me.eventHandlers).forEach(function (eventName) {
-                sandbox.registerForEventByName(me, eventName);
-            });
+            this.started = true;
+            this.sandbox = sandbox;
+            sandbox.register(this);
+            Object.keys(this.eventHandlers).forEach(event => sandbox.registerForEventByName(this, event));
 
             if (this.isEmbedded()) {
                 this.createPlugin();
             } else {
                 // Let's extend UI
-                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+                const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
                 sandbox.request(this, request);
-
                 // draw ui
-                me.createUi();
+                this.createUi();
             }
-            me._setupLayerTools();
-            this.localization = Oskari.getLocalization(this.getName());
+            this._setupLayerTools();
             this._registerForGuidedTour();
         },
         /**
@@ -126,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
+            const handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
@@ -138,37 +99,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @static
          */
         eventHandlers: {
-
-            /**
-             * @method AfterMapLayerRemoveEvent
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
-             */
-            'AfterMapLayerRemoveEvent': function () {
+            AfterMapLayerRemoveEvent: function () {
                 this.refreshUI();
             },
-            /**
-             * @method AfterMapLayerAddEvent
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
-             */
-            'AfterMapLayerAddEvent': function () {
+            AfterMapLayerAddEvent: function () {
                 this.refreshUI();
             },
-            /**
-             * @method AfterChangeMapLayerStyleEvent
-             */
-            'AfterChangeMapLayerStyleEvent': function () {
+            AfterChangeMapLayerStyleEvent: function () {
                 this.refreshUI();
             },
-            'AfterRearrangeSelectedMapLayerEvent': function () {
+            AfterRearrangeSelectedMapLayerEvent: function () {
                 this.refreshUI();
             },
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             */
-            'MapLayerEvent': function (event) {
+            MapLayerEvent: function (event) {
                 if (event.getOperation() === 'update') {
                     this.refreshUI();
                     return;
@@ -193,13 +136,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var me = this;
-            var sandbox = this.sandbox();
-            Object.keys(this.eventHandlers).forEach(function (eventName) {
-                sandbox.unregisterFromEventByName(me, eventName);
-            });
+            const sandbox = this.sandbox;
+            Object.keys(this.eventHandlers).forEach(event => sandbox.unregisterFromEventByName(this, event));
 
-            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             this.stopPlugin();
@@ -234,25 +174,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         getPlugins: function () {
             return this.plugins;
         },
+        getPlugin: function () {
+            return this.plugin;
+        },
         /**
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
         getTitle: function () {
-            return this.getLocalization('title');
+            return this.loc('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
         getDescription: function () {
-            return this.getLocalization('desc');
+            return this.loc('desc');
         },
         isEmbedded: function () {
             return jQuery('#contentMap').hasClass('published');
         },
         refreshUI: function () {
-            var uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
+            const uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
             if (uicomponent) {
                 uicomponent.refresh();
             }
@@ -266,11 +209,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
         createPlugin: function () {
-            var conf = this.conf || {};
-
-            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin', conf, this.plugins);
-
-            var mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            if (this.plugin) {
+                return;
+            }
+            const plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin', this.conf);
+            const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
             mapmodule.registerPlugin(plugin);
             mapmodule.startPlugin(plugin);
             this.plugin = plugin;
@@ -279,7 +222,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             if (!this.plugin) {
                 return;
             }
-            var mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            const mapmodule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
             mapmodule.unregisterPlugin(this.plugin);
             mapmodule.stopPlugin(this.plugin);
             this.plugin = null;
@@ -296,11 +239,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          */
         _setupLayerTools: function () {
             // add tools for feature data layers
-            var service = this.getLayerService();
-            var layers = service.getAllLayers();
+            const layers = this.getLayerService().getAllLayers();
             layers.forEach(layer => this._addTool(layer, true));
             // update all layers at once since we suppressed individual events
-            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
+            const event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             this.sandbox.notifyAll(event);
         },
         /**
@@ -309,8 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
         _addTool: function (layer, suppressEvent) {
-            var me = this;
-            var service = this.getLayerService();
+            const service = this.getLayerService();
             if (typeof layer !== 'object') {
                 // detect layerId and replace with the corresponding layer
                 layer = service.findMapLayer(layer);
@@ -319,16 +260,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 return;
             }
 
-            var tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('show-layer-legend-tool');
             tool.setIconCls('show-layer-legend-tool');
-            tool.setTitle(me.getLocalization().title);
-            tool.setTooltip(me.getLocalization().tooltip);
-            tool.setCallback(function () {
-                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'maplegend']);
-            });
+            tool.setTitle(this.loc('title'));
+            tool.setTooltip(this.loc('tooltip'));
+            tool.setCallback(() => this.toggleFlyout(true));
 
             service.addToolForLayer(layer, tool, suppressEvent);
+        },
+
+        toggleFlyout: function (show) {
+            const request = show ? 'attach' : 'close';
+            this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, request, this.getName()]);
         },
         /**
          * @static
@@ -339,29 +283,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
         __guidedTourDelegateTemplate: {
             priority: 60,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'maplegend']);
+                this.toggleFlyout(true);
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'maplegend']);
+                this.toggleFlyout(false);
             },
             getTitle: function () {
-                return this.localization.guidedTour.title;
+                return this.loc('guidedTour.title');
             },
             getContent: function () {
                 return <Message bundleKey={this.getName()} messageKey='guidedTour.message' allowHTML />;
             },
             getLinks: function () {
-                var me = this;
-                var loc = this.localization.guidedTour;
                 return [
                     {
-                        title: loc.openLink,
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'maplegend']),
+                        title: this.loc('guidedTour.openLink'),
+                        onClick: () => this.toggleFlyout(true),
                         visible: false
                     },
                     {
-                        title: loc.closeLink,
-                        onClick: () => me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'maplegend']),
+                        title: this.loc('guidedTour.closeLink'),
+                        onClick: () => this.toggleFlyout(false),
                         visible: true
                     }
                 ];
@@ -372,14 +314,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
         _registerForGuidedTour: function () {
-            var me = this;
+            const me = this;
             function sendRegister () {
-                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                const requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
-                    var delegate = {
+                    const delegate = {
                         bundleName: me.getName()
                     };
-                    for (var prop in me.__guidedTourDelegateTemplate) {
+                    for (const prop in me.__guidedTourDelegateTemplate) {
                         if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
@@ -396,7 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 }
             }
 
-            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            const tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
             if (tourInstance) {
                 sendRegister();
             } else {
@@ -408,5 +350,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

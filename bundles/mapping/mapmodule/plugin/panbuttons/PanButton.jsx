@@ -70,7 +70,7 @@ const ArrowButton = ({ children, onClick, color, top = 'initial', right = 'initi
     );
 }
 
-export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark', isMobile = false }) => {
+export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark', isMobile = false, showArrows = false }) => {
 
     const [shape, color] = styleName.split('-');
     let iconColor = '#ffffff';
@@ -82,10 +82,10 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
     }
 
     if (shape === '3d') {
-        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} isMobile={isMobile} />
+        return <PanButton3D resetClicked={resetClicked} panClicked={panClicked} color={color} isMobile={isMobile} showArrows={showArrows} />
     }
 
-    if (isMobile) {
+    if (isMobile || !showArrows) {
         return (
             <MapModuleButton
                 onClick={() => resetClicked()}
