@@ -14,6 +14,10 @@ div.mapplugin.indexmap {
         background-position: 50%;
     }
 
+    .indexmapToggle {
+        align-self: flex-end;
+    }
+
     .indexmapToggle[class$=-light] div.icon {
         background-image: $lightIcon;
     }
