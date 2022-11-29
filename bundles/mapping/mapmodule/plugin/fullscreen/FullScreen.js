@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          * @param {jQuery} div
          *
          */
-         changeToolStyle: function (style, div) {
+        changeToolStyle: function (style, div) {
             const conf = this.getConfig();
             // Change the style if in the conf
             if (style) {
@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             }
             this.refresh();
         },
-        getStyleForRender: function() {
+        getStyleForRender: function () {
             const conf = this.getConfig();
             let toolStyle;
             // Change the style if in the conf
