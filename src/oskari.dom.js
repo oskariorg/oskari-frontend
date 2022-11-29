@@ -1,5 +1,34 @@
+/*
+The base html is:
+------
+div.oskari-root-el
+    (nav)
+    (div.functionality-sidebar)
+    div.oskari-map-container-el
+        div.oskari-map-impl-el
+------
+nav - optional (geoportal has it, embedded does not)
+- expected to be present on the HTML if needed
+- holds the main menu with "tiles", toolbar etc and it can also be after map-container for right-handed navigation
 
-// for constructing/referencing the base HTML
+div.functionality-sidebar - optional
+- created at runtime by functionalities
+- functionality specific sidebar for things like the publisher, printout, analysis etc
+- nav is usually hidden and this is prepended to .oskari-root-el when active
+
+div.oskari-map-container-el
+- created at runtime by core functionality OR mapped to an existing element with id #contentMap
+- tries to stretch as much as there is space available as container where the map component is located in
+- limits the maximum size of map
+
+div.oskari-map-impl-el
+- created at runtime by core functionality OR mapped to an existing element with id #mapdiv
+- root for the actual map engine impl == 'target' for OpenLayers Map
+- sets the size of the map: usually as large as oskari-map-container-el, but in publisher the preview size is set by limiting the size of this element
+
+*/
+
+// constants for constructing/referencing the base HTML
 const DEFAULT_ROOT_EL_ID = 'oskari';
 const MAP_CONTAINER_ID = 'contentMap';
 const MAP_IMPL_ID = 'mapdiv';
