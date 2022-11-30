@@ -58,7 +58,6 @@ Oskari.clazz.define(
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-            
 
             var toggleButton = jQuery('<div class="indexmapToggle"></div>');
             // button has to be added separately so the element order is correct...
@@ -135,7 +134,6 @@ Oskari.clazz.define(
         _handleClick: function () {
             if (!this._indexMap) {
                 this._createIndexMap(false);
-                return;
             } else {
                 this._removeIndexMap();
             }
