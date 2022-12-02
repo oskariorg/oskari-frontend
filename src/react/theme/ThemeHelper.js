@@ -4,7 +4,7 @@ import { EFFECT } from './constants';
 export const getHeaderTheme = (theme) => {
     const headerTextColor = getTextColor(theme.color.primary);
     const funcs = {
-        getBgColor: () => theme.color.primary,
+        getBgColor: () => theme.color.header?.bg || theme.color.primary,
         getAccentColor: () => theme.color.accent,
         getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
