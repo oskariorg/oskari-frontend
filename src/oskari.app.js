@@ -2,7 +2,7 @@ import { THEMING } from './theming';
 import './global';
 
 // Tests not using global jQuery so this is not needed.
-if (jQuery) {
+if (typeof jQuery !== 'undefined') {
     // So IE won't use a cached xhr result -> adds a _=timestamp param for each request...
     jQuery.ajaxSetup({ cache: false });
 }
