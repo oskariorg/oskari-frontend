@@ -1,10 +1,12 @@
 // Oskari global
+import 'jquery';
 import './oskari.es6.js';
 import './store.js';
 import './events.js';
 import './util.js';
 import './i18n.js';
 import './message_types.js';
+
 // class system
 import './class_system.js';
 import './bundle_manager.js';
