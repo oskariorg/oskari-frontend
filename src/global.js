@@ -18,6 +18,11 @@ import './sandbox/sandbox-map-layer-methods.js';
 import './sandbox/sandbox-map-methods.js';
 import './sandbox/sandbox-abstraction-methods.js';
 
+// Oskari application helpers
+import '../src/loader.js';
+import '../src/oskari.app.js';
+import '../src/BasicBundle.js';
+
 // deprecated functions
 import './deprecated/deprecated.core.js';
 import './deprecated/deprecated.sandbox.js';
