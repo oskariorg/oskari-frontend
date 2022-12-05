@@ -52,6 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (this.inLayerToolsEditMode()) {
                 return;
             }
+            if (this.resetPopup) return;
             const cb = () => {
                 if (this.getSandbox().hasHandler('StateHandler.SetStateRequest')) {
                     this.getSandbox().postRequestByName('StateHandler.SetStateRequest');

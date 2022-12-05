@@ -189,6 +189,7 @@ Oskari.clazz.category(
             }
         },
         _resetClicked: function () {
+            if (this.resetPopup) return;
             const cb = () => {
                 // statehandler reset state
                 const rb = Oskari.requestBuilder(
