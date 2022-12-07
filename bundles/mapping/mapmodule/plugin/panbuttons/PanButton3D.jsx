@@ -110,7 +110,7 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
                 icon={<MobileIcon />}
                 title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')}
                 styleName={`3d-${color}`}
-                onClick={() => resetClicked}
+                onClick={resetClicked}
                 iconSize='18px'
                 className='t_reset'
             />
@@ -126,7 +126,7 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
                 <ArrowButton color={iconColor} onClick={() => panClicked(-1, 0)} left='-29.5px' top='32px' className='t_pan_right'>
                     <CaretLeftOutlined />
                 </ArrowButton>
-                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={iconColor} onClick={() => resetClicked()} className='t_reset'>
+                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={iconColor} onClick={resetClicked} className='t_reset'>
                     <ReturnIcon />
                 </StyledReturnButton>
                 <ArrowButton color={iconColor} onClick={() => panClicked(0, 1)} right='2.5px' bottom='0' className='t_pan_right'>
