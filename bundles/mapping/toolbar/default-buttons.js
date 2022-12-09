@@ -1,3 +1,5 @@
+import { showResetPopup } from '../mapmodule/MapResetPopup';
+
 Oskari.clazz.category(
     'Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
     'default-buttons', {
@@ -187,8 +189,7 @@ Oskari.clazz.category(
             }
         },
         _resetClicked: function () {
-            const loc = this.getLocalization('buttons');
-            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (this.resetPopup) return;
             const cb = () => {
                 // statehandler reset state
                 const rb = Oskari.requestBuilder(
@@ -198,8 +199,13 @@ Oskari.clazz.category(
                     this.getSandbox().request(this, rb());
                 }
             };
-            popup.show(null, loc.history.confirmReset, popup.createConfirmButtons(cb));
-            popup.makeModal();
+            this.resetPopup = showResetPopup(() => cb(), () => this.clearResetPopup());
+        },
+        clearResetPopup: function () {
+            if (this.resetPopup) {
+                this.resetPopup.close();
+            }
+            this.resetPopup = null;
         },
         _createMapLinkPopup: function () {
             var sandbox = Oskari.getSandbox();

@@ -1,4 +1,9 @@
+import React from 'react';
 import { showLayerSelectionPopup } from './LayerSelectionPopup';
+import { MapModuleButton } from '../../MapModuleButton';
+import ReactDOM from 'react-dom';
+import { LayersIcon } from 'oskari-ui/components/icons';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
  *
@@ -22,25 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         me.initialSetup = true;
         me.templates = {};
-        me._mobileDefs = {
-            buttons: {
-                'mobile-layerselection': {
-                    iconCls: 'mobile-layers',
-                    tooltip: '',
-                    sticky: true,
-                    show: true,
-                    callback: function () {
-                        me._toggleToolState();
-                    },
-                    toggleChangeIcon: true
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me._styleSelectable = !!this.getConfig().isStyleSelectable;
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
+        me.inMobileMode = false;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -50,7 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
         },
         showPopup: function () {
-            const mapModule = this.getMapModule();
             // TODO: set default baselayer!!
             this.popupControls = showLayerSelectionPopup(
                 this._baseLayers,
@@ -66,12 +56,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 (layerId, style) => this._selectStyle(layerId, style),
-                {
-                    theme: mapModule.getTheme(),
-                    font: this.getToolFontFromMapModule()
-                },
                 this.getLocation()
             );
+            this.renderButton(null, null);
         },
         _updateLayerSelectionPopup: function () {
             if (!this.popupControls) {
@@ -86,10 +73,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         },
         popupCleanup: function () {
             if (this.popupControls) {
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 this.popupControls.close();
             }
             this.popupControls = null;
+            const div = this.getElement();
+            if (!div) return;
+            this.renderButton(null, null);
         },
         /**
          * @private @method _initImpl
@@ -172,12 +161,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (!this.getElement()) {
                 return;
             }
-            var header = this.getElement().find('div.header');
-            header.off('click');
             if (this.inLayerToolsEditMode()) {
                 this.popupCleanup();
-            } else {
-                this._bindHeader(header);
             }
         },
 
@@ -221,9 +206,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         updateLayers: function () {
             const { baseLayers = [] } = this.getConfig() || {};
             const isBaseLayer = (layer) => baseLayers.some(id => '' + id === '' + layer.getId());
-
-            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l));
-            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer);
+            // bottom layer is first in list. Reverse lists to render in correct order.
+            this._layers = this.getSandbox().findAllSelectedMapLayers().filter(l => !isBaseLayer(l)).reverse();
+            this._baseLayers = this.getSandbox().findAllSelectedMapLayers().filter(isBaseLayer).reverse();
             this._updateLayerSelectionPopup();
         },
         _selectStyle: function (layerId, style) {
@@ -330,15 +315,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [selectedBaseLayerId, 0]);
         },
 
-        _bindHeader: function (header) {
-            var me = this;
-            header.on('click', function () {
-                if (me.popupControls) {
-                    me.popupCleanup();
-                } else {
-                    me.showPopup();
-                }
-            });
+        _togglePopup: function () {
+            if (this.popupControls) {
+                this.popupCleanup();
+            } else {
+                this.showPopup();
+            }
         },
 
         /**
@@ -350,11 +332,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _createControlElement: function () {
             const el = this.templates.main.clone();
-            const header = el.find('div.header');
-
-            header.append(this._loc.title);
-            this._bindHeader(header);
-
             return el;
         },
 
@@ -362,8 +339,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // remove old element
             this.removeFromPluginContainer(this.getElement());
             this.popupCleanup();
-            var mobileDefs = this.getMobileDefs();
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
 
         /**
@@ -378,23 +353,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            const mobileDefs = this.getMobileDefs();
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            const toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
             this.teardownUI();
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            } else {
-                // TODO: redrawUI is basically refresh, move stuff here from refresh if needed
-                this._element = this._createControlElement();
-                this.changeToolStyle(null, this._element);
-                this.refresh();
-                this.addToPluginContainer(this._element);
-            }
+
+            this.inMobileMode = mapInMobileMode;
+
+            this._element = this._createControlElement();
+            this.changeToolStyle(null, this._element);
+            this.refresh();
+            this.addToPluginContainer(this._element);
         },
 
         refresh: function () {
@@ -433,7 +399,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {jQuery} div
          */
         changeToolStyle: function (styleName, div) {
-            var me = this;
             div = div || this.getElement();
             if (!div) {
                 return;
@@ -441,29 +406,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var header = div.find('div.header');
 
+            ReactDOM.unmountComponentAtNode(header[0]);
             header.empty();
-            if (styleName !== null) {
-                div.addClass('published-styled-layerselector');
 
-                header.addClass('published-styled-layerselector-header');
+            this.renderButton(styleName, header);
 
-                let bgImg = this.getMapModule().getImageUrl('map-layer-button-' + styleName + '.png');
-                header.css({
-                    'background-image': 'url("' + bgImg + '")'
-                });
-            } else {
-                div.addClass('published-styled-layerselector');
+            this._setLayerToolsEditMode(
+                this.getMapModule().isInLayerToolsEditMode()
+            );
+        },
 
-                header.addClass('published-styled-layerselector-header');
+        renderButton: function (style, element) {
+            let el = element;
+            if (!element) {
+                const div = this.getElement();
+                if (!div) return;
+                el = div.find('div.header');
+            };
+            if (!el) return;
 
-                let bgImg = this.getMapModule().getImageUrl('map-layer-button-rounded-dark.png');
-                header.css({
-                    'background-image': 'url("' + bgImg + '")'
-                });
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
             }
 
-            me._setLayerToolsEditMode(
-                me.getMapModule().isInLayerToolsEditMode()
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_layerselect'
+                    styleName={styleName || 'rounded-dark'}
+                    icon={<LayersIcon />}
+                    title={this._loc.title}
+                    onClick={(e) => {
+                        if (!this.inLayerToolsEditMode()) {
+                            this._togglePopup();
+                        }
+                    }}
+                    iconActive={this.popupControls ? true : false}
+                    position={this.getLocation()}
+                />,
+                el[0]
             );
         },
 

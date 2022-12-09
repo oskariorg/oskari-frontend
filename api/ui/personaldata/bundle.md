@@ -4,6 +4,8 @@ Provides generic functionality to show user-specific information.
 
 ## Description
 
+**Note! This bundle is deprecated. There is a new implementation for same functionality that `personaldata` offers. Any new instances should use `mydata` instead of `personaldata`.**
+
 The bundle lists user's account information and saved data in the application.
 Currently lists account info, saved map views and embedded maps.
 Other bundles can request to list data related to their domain (eg. my places, user indicators) here.

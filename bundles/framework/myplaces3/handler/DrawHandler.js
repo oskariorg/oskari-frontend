@@ -68,7 +68,7 @@ export class DrawHandler {
     // DrawTools sends FeatureCollection with one Feature with multi geometry
     // It shouldn't send Feature with invalid geometry (no need to validate coordinates)
     hasValidGeometry () {
-        return this._drawing && this._drawing.features.length > 0;
+        return this._drawing && this._drawing.features.length > 0 && this._drawing.features[0].properties.valid;
     }
 
     setPlaceGeometry (place) {

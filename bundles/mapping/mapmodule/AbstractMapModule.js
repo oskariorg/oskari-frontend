@@ -207,9 +207,6 @@ Oskari.clazz.define(
         me._wellknownStyles = {};
 
         me._isInMobileMode = null;
-        me._mobileToolbar = null;
-        me._mobileToolbarId = 'mobileToolbar';
-        me._toolbarContent = null;
         me._supports3D = false;
 
         // possible custom css cursor set via rpc
@@ -308,7 +305,6 @@ Oskari.clazz.define(
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
-            this._addMobileDiv();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -324,6 +320,32 @@ Oskari.clazz.define(
             if (this.started) {
                 return;
             }
+
+            let theme = Oskari.app.getTheming().getTheme();
+            me.theme = theme;
+
+            const style = me.getToolStyle();
+
+            let bgColor = theme.color.primary;
+            let textColor = '#000000';
+            if (style?.includes('dark') || style?.includes('default')) {
+                bgColor = '#3c3c3c';
+                textColor = '#ffffff';
+            } else if (style?.includes('light')) {
+                bgColor = '#ffffff';
+            }
+
+            theme = {
+                ...theme,
+                color: {
+                    header: {
+                        bg: bgColor,
+                        text: textColor
+                    }
+                }
+            };
+
+            Oskari.app.getTheming().setTheme(theme);
 
             this.log.debug('Starting ' + this.getName());
 
@@ -401,6 +423,10 @@ Oskari.clazz.define(
         stop: function (sandbox) {
             if (!this.started) {
                 return;
+            }
+
+            if (this.theme) {
+                Oskari.app.getTheming().setTheme(this.theme);
             }
 
             sandbox = sandbox || this.getSandbox();
@@ -1280,73 +1306,8 @@ Oskari.clazz.define(
         },
         /* --------------- /MAP STATE ------------------------ */
 
-        /* ---------------- MAP MOBILE MODE ------------------- */
-
-        _addMobileDiv: function () {
-            var mapDiv = this.getMapEl();
-            if (!mapDiv.length || !mapDiv[0].parentElement) {
-                this.log.warn('Unable to create mobile toolbar for page');
-                return;
-            }
-            jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
-        },
-
-        getMobileDiv: function () {
-            var mapDiv = this.getMapEl();
-            if (!mapDiv.length || !mapDiv[0].parentElement) {
-                this.log.warn('Unable to find mobile toolbar from page');
-                return jQuery('<div></div>');
-            }
-            return jQuery(mapDiv[0].parentElement).find('.mobileToolbarDiv');
-        },
-
-        getMobileToolbar: function () {
-            var me = this;
-            if (!me._mobileToolbar) {
-                me._createMobileToolbar();
-            }
-            return me._mobileToolbarId;
-        },
-
-        _createMobileToolbar: function () {
-            var me = this,
-                request,
-                sandbox = me.getSandbox();
-
-            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest')) {
-                return;
-            }
-            me._mobileToolbar = true;
-            me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
-            me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
-            // add toolbar when toolbarId and target container is configured
-            // We assume the first container is intended for the toolbar
-            request = Oskari.requestBuilder('Toolbar.ToolbarRequest')(
-                me._mobileToolbarId,
-                'add',
-                {
-                    show: true,
-                    toolbarContainer: me._toolbarContent,
-                    colours: {
-                        hover: this.getThemeColours().hoverColour,
-                        background: this.getThemeColours().backgroundColour
-                    },
-                    disableHover: true
-                }
-            );
-            sandbox.request(me.getName(), request);
-        },
-
         setMobileMode: function (isInMobileMode) {
             this._isInMobileMode = isInMobileMode;
-
-            var mobileDiv = this.getMobileDiv();
-            if (isInMobileMode) {
-                mobileDiv.show();
-                mobileDiv.css('backgroundColor', this.getThemeColours().backgroundColour);
-            } else {
-                mobileDiv.hide();
-            }
         },
 
         getMobileMode: function () {
@@ -1406,38 +1367,6 @@ Oskari.clazz.define(
         },
         // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
         _adjustMobileMapSize: function () {
-            var mapDivHeight = this.getMapEl().height();
-            var mobileDiv = this.getMobileDiv();
-            var toolbar = mobileDiv.find('.mobileToolbarContent');
-
-            if (toolbar.find('.toolbar_mobileToolbar').children().length === 0 && !mobileDiv.find('.mapplugin').length) {
-                // plugins didn't add any content -> hide it so the empty bar is not visible
-                mobileDiv.hide();
-            } else {
-                // case: tools in toolbar, show the div as it might be hidden and remove explicit size
-                if (toolbar.find('.tool').length) {
-                    // if only lazy plugins on startup -> mobilediv is hidden on startup -> need to make it visible here
-                    mobileDiv.show();
-                    // if there are a tools, make sure we don't restrict it's height by setting specific size
-                    // tools may flow to multiple rows
-                    mobileDiv.height('');
-                }
-                // case: no tools in toolbar or no toolbar -> force height
-                else if (mobileDiv.height() < mobileDiv.children().height()) {
-                    // any floated plugins might require manual height setting if there is no toolbar
-                    mobileDiv.height(mobileDiv.children().height());
-                }
-            }
-
-            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
-            // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
-            if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
-                var totalHeight = jQuery('#contentMap').height();
-                if (totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
-                    mapDivHeight = totalHeight - mobileDiv.outerHeight();
-                    jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                }
-            }
             this.updateSize();
         },
 
@@ -2208,6 +2137,28 @@ Oskari.clazz.define(
                 this._options = {};
             }
             this._options.style = clonedStyle;
+
+            let theme = Oskari.app.getTheming().getTheme();
+            let bgColor = theme.color.primary;
+            let textColor = '#000000';
+            if (style?.toolStyle?.includes('dark') || style?.toolStyle?.includes('default')) {
+                bgColor = '#3c3c3c';
+                textColor = '#ffffff';
+            } else if (style?.toolStyle?.includes('light')) {
+                bgColor = '#ffffff';
+            }
+
+            theme = {
+                ...theme,
+                color: {
+                    header: {
+                        bg: bgColor,
+                        text: textColor
+                    }
+                }
+            };
+
+            Oskari.app.getTheming().setTheme(theme);
 
             // notify plugins of the style change.
             Object.values(this._pluginInstances)

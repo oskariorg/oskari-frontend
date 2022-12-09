@@ -508,6 +508,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!allowedLocations || !dropzone) {
                 return false;
             }
+            if (allowedLocations.indexOf('*') > -1) return true;
             for (i = 0; i < allowedLocations.length; i += 1) {
                 isAllowedLocation = dropzone.is('.' + allowedLocations[i].split(' ').join('.'));
                 if (isAllowedLocation) {
@@ -571,6 +572,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 return;
             // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
             } else if (!tool) {
+                return 2;
+            } else if (tool.allowedSiblings.indexOf('*') > -1) {
                 return 2;
             } else if (!pluginClazz) {
                 return;
@@ -637,7 +640,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 tool = me.getToolById(pluginClazz);
 
             for (i = 0; i < siblings.length; i += 1) {
-                if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
+                if (tool.allowedSiblings.indexOf('*') < 0 && jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
                     // Unallowed sibling, move to source
                     sibling = me.getToolById(siblings[i]) && me.getToolById(siblings[i]).getPlugin() ? me.getToolById(siblings[i]).getPlugin() : null;
                     if (sibling) {

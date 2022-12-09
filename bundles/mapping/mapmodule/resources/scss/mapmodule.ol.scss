@@ -1,5 +1,18 @@
 $pluginMargin: 10px;
 
+.mapplugin.toollayoutedit.ui-draggable-handle > div::after {
+    content: url("../images/holder-icon.svg");
+    width: 24px;
+    height: 24px;
+    fill: #979797;
+    display: inline-block;
+    position: absolute;
+    right: -24px;
+    opacity: 0.5;
+    top: 20%;
+    cursor: pointer;
+}
+
 div.olMap {
     position : relative;
 
@@ -56,6 +69,8 @@ div.mapplugins {
         padding: 0;
 
         .mappluginsContent {
+            display: flex;
+            flex-direction: column;
 
             &.ui-droppable {
                 background-color: rgba(255, 255, 255, 0.5);
@@ -87,7 +102,8 @@ div.mapplugins {
                  */
                 pointer-events: auto;
                 position: relative;
-                margin: 0 auto;
+                display: flex;
+                justify-content: center;
                 z-index: 15000;
                 /* Hackish margin fixes */
 
@@ -130,6 +146,7 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-top: $pluginMargin;
+            align-items: center;
         }
 
         &.center {
@@ -138,7 +155,7 @@ div.mapplugins {
             .mappluginsContainer .mappluginsContent {
                 margin-right: auto;
                 margin-left: auto;
-                display: inline-block;
+                max-width: fit-content;
 
                 &.ui-droppable {
                     min-height: 120px;
@@ -146,7 +163,6 @@ div.mapplugins {
 
                 .mapplugin {
                     display: inline-block;
-                    vertical-align: top;
                     margin: 0 $pluginMargin / 2;
 
                     &.search {
@@ -165,6 +181,10 @@ div.mapplugins {
         }
 
         &.right {
+
+            .mappluginsContainer .mappluginsContent {
+                align-items: flex-end;
+            }
 
             .mapplugin {
 
@@ -194,6 +214,10 @@ div.mapplugins {
         }
 
         &.left {
+
+            .mappluginsContainer .mappluginsContent {
+                align-items: flex-start;
+            }
 
             .mapplugin {
 
@@ -225,6 +249,7 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-bottom: $pluginMargin;
+            align-items: center;
         }
 
         &.center {
@@ -301,7 +326,6 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-left: $pluginMargin;
-            text-align: left;
         }
 
         &.center {
@@ -329,7 +353,6 @@ div.mapplugins {
 
         .mappluginsContainer .mappluginsContent {
             margin-right: $pluginMargin;
-            text-align: right;
         }
 
         &.center {

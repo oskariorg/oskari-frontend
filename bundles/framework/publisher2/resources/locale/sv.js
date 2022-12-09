@@ -68,7 +68,7 @@ Oskari.registerLocalization(
                 "ScaleBarPlugin": "Skalstock",
                 "TimeseriesControlPlugin": "Tidseriespelare",
                 "IndexMapPlugin": "Indexkarta",
-                "PanButtons": "Panoreringsverktyg",
+                "PanButtons": "Gå tillbaka till standardvyn för kartvyn",
                 "Portti2Zoombar": "Skalans glidreglage",
                 "MyLocationPlugin": "Centrera kartan på användarens position",
                 "ControlsPlugin": "Flytta kartvyn med musen",
@@ -123,6 +123,9 @@ Oskari.registerLocalization(
                         "mobileOnly": "Tillåt funktionen endast för mobilapparater",
                         "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Panoreringsverktyg"
                 }
             },
             "toollayout": {

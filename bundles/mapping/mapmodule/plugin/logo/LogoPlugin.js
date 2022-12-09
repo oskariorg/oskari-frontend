@@ -1,5 +1,9 @@
 import './DataProviderInfoService';
 import './logo.service';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Links } from './Links';
+import { showDataProviderPopup } from './DataProviderPopup';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
@@ -18,15 +22,13 @@ Oskari.clazz.define(
         this._defaultLocation = 'bottom left';
         this._index = 1;
         this._name = 'LogoPlugin';
+        this._popupControls = null;
     }, {
         constLayerGroupId: 'layers',
         templates: {
             main: jQuery(
                 '<div class="mapplugin logoplugin"></div>'
-            ),
-            dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
-            dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
-            extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
+            )
         },
         _initImpl: function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
@@ -56,6 +58,17 @@ Oskari.clazz.define(
                 }
             }
             return this._service;
+        },
+        clearPopup: function () {
+            if (this._popupControls) {
+                this._popupControls.close();
+            }
+            this._popupControls = null;
+        },
+        openDataProvidersPopup: function (data) {
+            if (!this._popupControls) {
+                this._popupControls = showDataProviderPopup(this._loc.dataSources, data, () => this.clearPopup());
+            }
         },
         registerForUpdateLabels: function (el) {
             var me = this;
@@ -95,14 +108,6 @@ Oskari.clazz.define(
                     }
                     service.addItemToGroup(this.constLayerGroupId, this.getItemFromLayer(layer));
                 },
-                MapSizeChangedEvent: function (event) {
-                    if (this.dataSourcesDialog) {
-                        var target = this.getElement().find('.data-sources');
-                        if (target) {
-                            this.dataSourcesDialog.moveTo(target, 'top');
-                        }
-                    }
-                },
                 MapLayerEvent: function (event) {
                     if (event.getOperation() !== 'update') {
                         return;
@@ -137,9 +142,8 @@ Oskari.clazz.define(
                         'data-location'
                     )
                 );
-            } else if (me.dataSourcesDialog) {
-                me.dataSourcesDialog.close(true);
-                me.dataSourcesDialog = null;
+            } else if (me._popupControls) {
+                me.clearPopup();
             }
         },
 
@@ -155,7 +159,6 @@ Oskari.clazz.define(
             var container = this.templates.main.clone();
             var conf = this.getConfig() || {};
             this.registerForUpdateLabels(container);
-            this.changeFont(conf.font || this.getToolFontFromMapModule(), container);
             this._createServiceLink(container);
 
             var termsUrl = Oskari.getLocalized(conf.termsUrl);
@@ -236,11 +239,10 @@ Oskari.clazz.define(
             var options = {
                 id: 'data-sources',
                 callback: function (e) {
-                    if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
+                    if (!me.inLayerToolsEditMode() && !me._popupControls) {
                         me._openDataSourcesDialog(e.target);
-                    } else if (me.dataSourcesDialog) {
-                        me.dataSourcesDialog.close(true);
-                        me.dataSourcesDialog = null;
+                    } else if (me._popupControls) {
+                        me.clearPopup();
                     }
                 }
             };
@@ -248,96 +250,12 @@ Oskari.clazz.define(
             me._extendService.addLabel(me._loc.dataSources, options);
         },
 
-        /**
-         * @public @method changeFont
-         * Changes the font plugin's font by adding a class to its DOM elements.
-         *
-         * @param {String} fontId
-         * @param {jQuery} div
-         *
-         */
-        changeFont: function (fontId, div) {
-            var classToAdd,
-                testRegex;
-
-            div = div || this.getElement();
-
-            if (!div || !fontId) {
-                return;
-            }
-
-            classToAdd = 'oskari-publisher-font-' + fontId;
-            testRegex = /oskari-publisher-font-/;
-
-            this.changeCssClasses(classToAdd, testRegex, [div]);
-        },
-
         updateDialog: function () {
-            if (!this.dataSourcesDialog) {
+            if (!this._popupControls) {
                 return;
             }
-            this.dataSourcesDialog.setContent(this.getDialogContent());
-            this.dataSourcesDialog.moveTo(this.getElement().find('div.data-sources'), 'top');
-        },
-
-        getDialogContent: function () {
-            var service = this.getService();
-            if (!service) {
-                return;
-            }
-            var me = this;
-            var content = this.templates.dataSourcesDialog.clone();
-            var groups = this._service.getNonEmptyGroups();
-            groups.forEach(function (group) {
-                var tpl = me.templates.dataSourceGroup.clone();
-                tpl.addClass(group.id);
-                tpl.find('h4').text(group.name);
-                group.items.forEach(function (item) {
-                    var itemTpl = jQuery('<div></div>');
-                    itemTpl.text(item.name);
-                    itemTpl.append(me.__formatItemSources(item.source));
-                    tpl.append(itemTpl);
-                });
-                content.append(tpl);
-            });
-            return content;
-        },
-        /**
-         * The parameter can be undefined, string, object with url and name keys or array of such objects.
-         * @param  {String|Object|Object[]} src datasources for item to show on the UI
-         * @return {String|jQuery} appendable presentation of datasources for an UI item.
-         */
-        __formatItemSources: function (src) {
-            if (!src) {
-                return '';
-            }
-            var SEPARATOR = ' - ';
-            var formatSrc = function (item) {
-                if (typeof item === 'string') {
-                    return item;
-                }
-                if (!item.url) {
-                    return item.name;
-                }
-                var link = jQuery('<a target="_blank"></a>');
-                link.attr('href', item.url);
-                link.text(item.name);
-                return link;
-            };
-            var tpl = jQuery('<span></span>');
-            if (typeof src.forEach !== 'function') {
-                tpl.append(SEPARATOR);
-                tpl.append(formatSrc(src));
-                return tpl;
-            }
-
-            src.forEach(function (item) {
-                if (item) {
-                    tpl.append(SEPARATOR);
-                    tpl.append(formatSrc(item));
-                }
-            });
-            return tpl;
+            this.clearPopup();
+            this._openDataSourcesDialog();
         },
         /**
          * @method _openDataSourcesDialog
@@ -349,22 +267,13 @@ Oskari.clazz.define(
          *
          * @return {undefined}
          */
-        _openDataSourcesDialog: function (target) {
-            var me = this;
-            var popupTitle = me._loc.dataSources;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            me.dataSourcesDialog = dialog;
-
-            var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-            closeButton.setHandler(function () {
-                me.dataSourcesDialog = null;
-                dialog.close(true);
-            });
-            var content = this.getDialogContent();
-            dialog.show(popupTitle, content, [closeButton]);
-
-            target = target || me.getElement().find('div.data-sources');
-            dialog.moveTo(target, 'top');
+        _openDataSourcesDialog: function () {
+            const service = this.getService();
+            if (!service) {
+                return;
+            }
+            const groups = this._service.getNonEmptyGroups();
+            this.openDataProvidersPopup(groups);
         },
 
         /**
@@ -375,29 +284,18 @@ Oskari.clazz.define(
          *
          */
         updateLabels: function (el) {
-            var me = this;
             var template = el || this.getElement();
             if (!template) {
                 return;
             }
             var labels = this._extendService.getLabels();
 
-            labels.forEach(function (link) {
-                var extend = me.templates.extend.clone();
-                if (link.options.id) {
-                    extend.addClass(link.options.id.toLowerCase());
-                }
-                if (link.options.id !== 'icon') {
-                    extend.css('margin', '5px');
-                }
-                extend.find('a').text(link.title);
-                template.append(extend);
-                if (typeof link.options.callback === 'function') {
-                    extend.on('click', function (e) {
-                        link.options.callback(e);
-                    });
-                }
-            });
+            ReactDOM.render(
+                <Links
+                    links={labels}
+                />,
+                template[0]
+            );
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
