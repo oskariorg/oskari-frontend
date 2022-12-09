@@ -34,7 +34,7 @@ const OPTIONS = {
     showMeasureOnMap: false,
     buffer: 0,
     bufferAccuracy: 10, // is number of line segments used to represent a quadrant circle
-    sidesForCircle: 50 // is number of sides/vertices used to reprsesnt circle as polygon
+    sidesForCircle: 50 // is number of sides/vertices used to represent circle as polygon
 };
 const isModifyLimited = shape => ['Square', 'Circle', 'Box'].includes(shape);
 
