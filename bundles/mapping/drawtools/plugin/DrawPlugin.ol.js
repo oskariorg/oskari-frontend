@@ -21,9 +21,6 @@ olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olG
 const arrayValuesEqual = (array1, array2) => array1.length === array2.length && array1.every((value, index) => value === array2[index]);
 const firstAndLastCoordinatesEqual = (coordinates) => coordinates.length > 1 && arrayValuesEqual(coordinates[0], coordinates[coordinates.length - 1]);
 const hasEnoughCoordinatesForIntersect = (coordinates) => coordinates.length > 4;
-// TODO: is it cleaner to use funcion to check validity??
-// const isValid = feature => feature.get('valid') !== false;
-// const isValid = feature => !feature.get('invalidReason');
 
 const INVALID_REASONS = {
     INTERSECTION: 'intersectionNotAllowed',
@@ -61,7 +58,7 @@ Oskari.clazz.define(
         this._drawFeatureIdSequence = 0;
         this._draw = null;
         this._modify = null;
-        this._interacting = false; // TODO: could interacting be checked from !this._sketch
+        this._interacting = false;
         this._options = {};
         this._defaultStyle = {
             fill: {
@@ -239,7 +236,6 @@ Oskari.clazz.define(
         // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
         parseMultiGeometries: function (features) {
             const createFeatures = geometries => geometries.map(geometry => new olFeature({ geometry }));
-            // TODO: set id for first feature?
             return features.flatMap(feat => {
                 const geom = feat.getGeometry();
                 const type = geom.getType();
@@ -414,7 +410,6 @@ Oskari.clazz.define(
                     this._cleanSketch();
                 }
             }
-            // TODO: use this.onFinishedFeature() or (feature) and remove updateMeasurements
             this._sketch = null; // clean sketch to not add to drawing event
         },
         _cleanSketch: function () {
@@ -467,7 +462,7 @@ Oskari.clazz.define(
                 bufferFeatures = this.getBufferFeatures();
             }
             if (!features.length && !bufferFeatures.length) {
-                Oskari.log('DrawPlugin').info('No features, skip send drawing event.');
+                Oskari.log('DrawPlugin').debug('No features, skip send drawing event.');
                 return;
             }
 
@@ -506,8 +501,6 @@ Oskari.clazz.define(
             if (!source) {
                 return [];
             }
-            // TODO: is this really needed? source feature !== sketch (coordinates?)
-            // TODO: maybe it's needed for unfinished geometry to get pointer coordinate??
             const addSketch = this._sketch && !skipSketch;
             const reqId = this.getRequestId();
             const reqShape = this.getShape();
@@ -684,9 +677,6 @@ Oskari.clazz.define(
                 this._modify.setActive(enabled);
             }
         },
-        hideWarning: function () {
-            return !this._mode;
-        },
         onDrawingChange: function (feature) {
             if (!feature) {
                 return;
@@ -729,7 +719,6 @@ Oskari.clazz.define(
 
             let { area, length, tooltip } = feature.getProperties();
             let invalidReason;
-            // TODO: use _interacting for area/length to show measurement and waring only for finished geom
             if (type === 'Polygon') {
                 if (this.checkIntersection(feature)) {
                     invalidReason = INVALID_REASONS.INTERSECTION;
@@ -788,7 +777,6 @@ Oskari.clazz.define(
             }
         },
         updateTooltip: function (feature) {
-            // TODO: if no limits and showMeasureOnMap false, we are creating and adjusting useless overlay
             const overlay = this.getDrawingTooltip(feature.getId());
             const geom = feature.getGeometry();
             let tooltipCoord;
@@ -849,22 +837,19 @@ Oskari.clazz.define(
             const source = this.getBufferSource();
             const id = feature.getId();
             let bufferFeature = source.getFeatureById(id);
-            if (bufferFeature && feature.get('valid') === false) {
-                // TODO: why blinks
-                // source.removeFeature(bufferFeature);
-                return;
-            }
             const geometry = this.getBufferedGeometry(featGeom, buffer);
             if (bufferFeature) {
                 bufferFeature.setGeometry(geometry);
+                this.updateMeasurements(bufferFeature);
                 return;
             }
             bufferFeature = new olFeature({ geometry });
             // copy id from actual feature
             bufferFeature.setId(id);
-            bufferFeature.setProperties({ buffer }, true);
+            bufferFeature.setProperties({ buffer, valid: true }, true);
             this.onNewFeature(bufferFeature);
             source.addFeature(bufferFeature);
+            this.updateMeasurements(bufferFeature);
         },
         /**
          * @method modifyStartEvent
@@ -884,7 +869,6 @@ Oskari.clazz.define(
             let dragCoord;
             let startCoord;
             const updateDragCoord = evt => (dragCoord = evt.coordinate);
-            // TODO: only for isModifyLimited??
             const tempStyle = this.getTempModifyStyle();
             this._modify.on('modifystart', function (evt) {
                 const feature = evt.features.item(0);

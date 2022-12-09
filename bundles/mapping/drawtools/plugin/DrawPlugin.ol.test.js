@@ -118,8 +118,8 @@ describe('DrawPlugin', () => {
         // Limit tooltips should be integer and contain unit
         draw('Polygon', { limits: { length: 1000, area: 1000000 } });
         const { areaTooltip, lengthTooltip } = plugin.getOpts('limits');
-        expect(lengthTooltip.includes('1 km')).toBe(false);
-        expect(areaTooltip.includes('1 km²')).toBe(false);
+        expect(lengthTooltip.includes('1 km')).toBe(true);
+        expect(areaTooltip.includes('1 km²')).toBe(true);
     });
 
     describe('getFeaturesAsGeoJSON', () => {
@@ -350,11 +350,10 @@ describe('DrawPlugin', () => {
                     expect(buffered.length).toBe(1);
                     const { properties, geometry } = buffered[0];
                     expect(geometry.type).toBe('Polygon');
-                    // TODO: buffer feature properties
-                    // expect(properties.valid).toBe(true);
+                    expect(properties.valid).toBe(true);
                     expect(properties.buffer).toBe(buffer);
-                    // expect(properties.area).toBe(3110083.444244218);
-                    // expect(properties.length).toBe(6258.038619283929);
+                    expect(properties.area).toBe(3110083.444244218);
+                    expect(properties.length).toBe(6258.038619283929);
                     expect(data.buffer).toBe(buffer);
                 } catch (error) {
                     done(error);
