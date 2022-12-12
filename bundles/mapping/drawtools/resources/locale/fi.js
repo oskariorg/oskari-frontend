@@ -3,8 +3,16 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "DrawTools",
     "value": {
-        "intersectionNotAllowed": "Alue ei saa muodostaa silmukkaa. Muokkaa aluetta tai piirrä uusi.",
-        "invalidAreaSize": "Alue on liian suuri. Suurin sallittu koko on {size}. Muokkaa aluetta tai piirrä uusi.",
-        "invalidLineLenght": "Viiva on liian pitkä. Suurin sallittu pituus on {length}. Muokkaa viivaa tai piirrä uusi viiva."
+        "intersectionNotAllowed": "Alue ei saa muodostaa silmukkaa.",
+        "invalidAreaSize": "Alue on liian suuri. Suurin sallittu koko on {size}.",
+        "invalidLineLenght": "Viiva on liian pitkä. Suurin sallittu pituus on {length}.",
+        "modify": {
+            "area": "Muokkaa aluetta tai piirrä uusi.",
+            "line": "Muokkaa viivaa tai piirrä uusi."
+        },
+        "new": {
+            "area": "Piirrä uusi alue.",
+            "line": "Piirrä uusi viiva."
+        }
     }
 });
