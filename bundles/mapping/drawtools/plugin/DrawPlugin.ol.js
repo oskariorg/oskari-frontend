@@ -261,13 +261,13 @@ Oskari.clazz.define(
             let geometry;
             switch (first.getGeometry().getType()) {
             case 'Point':
-                geometry = new olGeom.MultiPoint([coords]);
+                geometry = new olGeom.MultiPoint(coords);
                 break;
             case 'LineString':
-                geometry = new olGeom.MultiLineString([coords]);
+                geometry = new olGeom.MultiLineString(coords);
                 break;
             case 'Polygon':
-                geometry = new olGeom.MultiPolygon([coords]);
+                geometry = new olGeom.MultiPolygon(coords);
                 break;
             default:
                 throw new Error('Unsupported geometry type!');

@@ -132,11 +132,11 @@ describe('DrawPlugin', () => {
             expect(features).toEqual([]);
         });
         test('multiGeom', () => {
-            const geojson = {
+            const geom = {
                 type: 'MultiPoint',
                 coordinates: [[350208, 7011328], [385024, 6982144], [330240, 6947328]]
             };
-            draw('Point', { allowMultipleDrawing: 'multiGeom', geojson });
+            draw('Point', { allowMultipleDrawing: 'multiGeom', geojson: geom });
             // drawtools doesn't handle multi geoms
             // check from source that multigeom is parsed to simple features
             const olFeatures = plugin.getDrawSource().getFeatures();
@@ -148,7 +148,7 @@ describe('DrawPlugin', () => {
             // for event splitted features are gathered to one MultiPoint
             const { features } = getGeoJSON();
             expect(features.length).toBe(1);
-            expect(features[0].geometry.type).toEqual('MultiPoint');
+            expect(features[0].geometry).toEqual(geom);
             expect(features[0].properties.valid).toBe(true);
         });
         test('selfIntersect', () => {
