@@ -88,7 +88,7 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
     if (isMobile || !showArrows) {
         return (
             <MapModuleButton
-                onClick={() => resetClicked()}
+                onClick={resetClicked}
                 title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')}
                 styleName={styleName}
                 icon={<ReturnIcon />}
@@ -108,7 +108,7 @@ export const PanButton = ({ resetClicked, panClicked, styleName = 'rounded-dark'
                     <CaretLeftOutlined />
                 </ArrowButton>
                 <StyledArrowsButton backgroundColor={backgroundColor} rounded={shape === 'rounded'}>
-                    <StyledReturnButton onClick={() => resetClicked()} title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} backgroundColor={backgroundColor} iconColor={iconColor} rounded={shape === 'rounded'} className='t_reset'>
+                    <StyledReturnButton onClick={resetClicked} title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} backgroundColor={backgroundColor} iconColor={iconColor} rounded={shape === 'rounded'} className='t_reset'>
                         <ReturnIcon />
                     </StyledReturnButton>
                 </StyledArrowsButton>

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { PanButton } from './PanButton';
+import { showResetPopup } from '../../MapResetPopup';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
@@ -25,6 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._panPxs = 100;
         this.inMobileMode = false;
         this.showArrows = !!this.getConfig().showArrows;
+        this.resetPopup = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -40,11 +42,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             );
             return el;
         },
+        clearPopup: function () {
+            if (this.resetPopup) {
+                this.resetPopup.close();
+            }
+            this.resetPopup = null;
+        },
         _resetClicked: function () {
             if (this.inLayerToolsEditMode()) {
                 return;
             }
-            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if (this.resetPopup) return;
             const cb = () => {
                 if (this.getSandbox().hasHandler('StateHandler.SetStateRequest')) {
                     this.getSandbox().postRequestByName('StateHandler.SetStateRequest');
@@ -52,8 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     this.getSandbox().resetState();
                 }
             };
-            popup.show(null, Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.confirmReset'), popup.createConfirmButtons(cb));
-            popup.makeModal();
+            this.resetPopup = showResetPopup(() => cb(), () => this.clearPopup());
         },
         _panClicked: function (x, y) {
             if (this.inLayerToolsEditMode()) {

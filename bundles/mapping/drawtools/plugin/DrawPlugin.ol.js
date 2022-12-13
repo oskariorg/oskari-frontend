@@ -10,17 +10,17 @@ import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import olCollection from 'ol/Collection';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import { BufferOp, BufferParameters } from 'jsts/org/locationtech/jts/operation/buffer';
 import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
 
 const olParser = new jstsOL3Parser();
+const geoJsonFormatter = new olFormatGeoJSON();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
 const arrayValuesEqual = (array1, array2) => array1.length === array2.length && array1.every((value, index) => value === array2[index]);
 const firstAndLastCoordinatesEqual = (coordinates) => coordinates.length > 1 && arrayValuesEqual(coordinates[0], coordinates[coordinates.length - 1]);
-const hasEnoughCoordinatesForArea = (coordinates) => coordinates.length > 3;
+const hasEnoughCoordinatesForIntersect = (coordinates) => coordinates.length > 4;
 
 const INVALID_REASONS = {
     INTERSECTION: 'intersectionNotAllowed',
@@ -33,7 +33,8 @@ const OPTIONS = {
     allowMultipleDrawing: true,
     showMeasureOnMap: false,
     buffer: 0,
-    bufferAccuracy: 10 // is number of line segments used to represent a quadrant circle
+    bufferAccuracy: 10, // is number of line segments used to represent a quadrant circle
+    sidesForCircle: 50 // is number of sides/vertices used to represent circle as polygon
 };
 const isModifyLimited = shape => ['Square', 'Circle', 'Box'].includes(shape);
 
@@ -50,20 +51,15 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapping.drawtools.plugin.DrawPlugin';
         this._name = 'GenericDrawPlugin';
-        this._bufferedFeatureLayerId = 'BufferedFeatureDrawLayer';
+        this._bufferLayer = null;
+        this._drawLayer = null;
         this._styles = {};
-        this._drawLayers = {};
         this._overlays = {};
         this._drawFeatureIdSequence = 0;
-        this._tooltipClassForMeasure = 'drawplugin-tooltip-measure';
-        this._mode = '';
-        this._invalidFeatures = {}; // id: INVALID_REASON
-        // TODO: figure out why we have some variables that are "globally reset" and some that are functionality id specific.
-        // As some are "global"/shared between functionalities resuming a previous id will probably NOT work the way expected
-        //  and storing these for each id is probably not needed.
-        this._draw = {};
-        this._modify = {};
-        this._functionalityIds = {};
+        this._draw = null;
+        this._modify = null;
+        this._interacting = false;
+        this._options = {};
         this._defaultStyle = {
             fill: {
                 color: 'rgba(255,0,255,0.2)'
@@ -109,10 +105,32 @@ Oskari.clazz.define(
             // style def for invalid can be intersect or invalid in request
             const invalid = styles.invalid || styles.intersect;
             setStyle('invalid', invalid);
-            setStyle('temp', styles.modify);
         },
         setDefaultStyle: function (style) {
             this._defaultStyle = style;
+        },
+        getStyleFunction: function () {
+            return (feature) => {
+                const { valid, isFinished } = feature.getProperties();
+                if (valid === false) {
+                    return this._styles.invalid;
+                }
+                if (isFinished) {
+                    return this._styles.modify;
+                }
+                return this._styles.draw;
+            };
+        },
+        // used for interactions' style. Render style only for pointer to render Polygon's invalid style.
+        getPointerStyleFunction: function () {
+            return (feature) => {
+                const type = feature.getGeometry().getType();
+                return type === 'Point' ? this._styles.draw : null;
+            };
+        },
+        getTempModifyStyle: function () {
+            // style (not array)
+            return this._styles.modify[0].clone();
         },
         /**
          * @method draw
@@ -123,83 +141,101 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         draw: function (id, shape, options) {
-            var me = this;
-            if (me._gfiTimeout) {
-                clearTimeout(me._gfiTimeout);
+            if (this._gfiTimeout) {
+                clearTimeout(this._gfiTimeout);
             }
             // disable gfi
-            me.getMapModule().setDrawingMode(true);
+            this.getMapModule().setDrawingMode(true);
 
-            me.removeInteractions(me._draw, me._id);
-            me.removeInteractions(me._modify, me._id);
-            this._cleanupInternalState();
+            // remove previous draw and modify controls
+            this._cleanupInternalState(options.clear);
 
-            me._shape = shape;
-
-            // setup functionality id
-            me._id = id;
-            // setup options
+            // setup request
+            this._id = id;
+            this._shape = shape;
             const { geojson, style, ...opts } = options;
-            this.initOptions(opts);
-            // this sets styles for this and all the following requests (not functionality id specific, written to "class variables")
+            this.setOptionsForRequest(opts);
             this.setStyles(style);
+            this.setFeaturesFromGeoJson(geojson);
 
-            // creating layer for drawing (if layer not already added)
-            if (!me.getCurrentDrawLayer()) {
-                me.addVectorLayer(me.getCurrentLayerId());
-            } else {
-                me.getCurrentDrawLayer().setStyle(me._styles.draw);
-            }
-
-            // always assign layerId for functionality id
-            me._functionalityIds[id] = me.getCurrentLayerId();
-
-            // activate drawcontrols
-            me.drawShape(shape, geojson);
-        },
-        initOptions: function (options) {
-            const { selfIntersection = true, limits: optLimits = {}, ...rest } = options;
-            const limits = {
-                selfIntersection,
-                ...optLimits
-            };
-            this._options = { ...OPTIONS, ...rest, limits };
-        },
-        /**
-         * @method drawShape
-         * - activates draw/modify controls. If geojson is given, setup editing it
-         *
-         * @param {String} shape
-         * @param {Object} geojson optional feature for editing
-         */
-        drawShape: function (shape, geojson) {
-            if (geojson) {
-                const jsonFormat = new olFormatGeoJSON();
-                let featuresFromJson = jsonFormat.readFeatures(geojson);
-                // parse multi geometries to single geometries
-                if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
-                    featuresFromJson = this.parseMultiGeometries(featuresFromJson);
-                }
-                featuresFromJson.forEach(f => {
-                    if (!f.getId()) {
-                        f.setId(this.generateNewFeatureId());
-                    }
-                    this.handleFinishedDrawing(f, true);
-                });
-                this.getCurrentDrawLayer().getSource().addFeatures(featuresFromJson);
-            }
+            // activate draw and modify controls
             const { drawControl, modifyControl } = this.getOpts();
             if (drawControl) {
-                this.addDrawInteraction(this.getCurrentLayerId(), shape);
+                this.addDrawInteraction();
             }
             if (modifyControl) {
-                this.addModifyInteraction(this.getCurrentLayerId(), shape);
+                this.addModifyInteraction();
             }
+        },
+        setOptionsForRequest: function (reqOpts = {}) {
+            /* backwards compatibility:
+            *  - self intersection is moved from options to limits
+            *  - buffer was used as radius with Circle
+            */
+            if (this.getShape() === 'Circle' && reqOpts.buffer && !reqOpts.radius) {
+                reqOpts.radius = reqOpts.buffer;
+                delete reqOpts.buffer;
+            }
+            const { selfIntersection = true, limits: reqLimits = {}, ...rest } = reqOpts;
+            const limits = {
+                selfIntersection,
+                ...reqLimits
+            };
+            const options = { ...OPTIONS, ...rest, limits };
+
+            // add localized warning tooltips and buffer params to options as these doesn't change during request
+            const locPath = options.modifyControl ? 'modify' : 'new';
+            if (limits.area) {
+                const formatted = this.getMapModule().formatMeasurementResult(limits.area, 'area', 0);
+                const warn = this.loc(INVALID_REASONS.AREA_SIZE, { size: formatted });
+                const tip = this.loc(`${locPath}.area`);
+                options.limits.areaTooltip = `${warn} ${tip}`;
+            }
+            if (limits.length) {
+                const formatted = this.getMapModule().formatMeasurementResult(limits.length, 'line', 0);
+                const warn = this.loc(INVALID_REASONS.LINE_LENGTH, { length: formatted });
+                const tip = this.loc(`${locPath}.line`);
+                options.limits.lengthTooltip = `${warn} ${tip}`;
+            }
+            if (limits.selfIntersection) {
+                const warn = this.loc(INVALID_REASONS.INTERSECTION);
+                const tip = this.loc(`${locPath}.area`);
+                options.limits.intersectionTooltip = `${warn} ${tip}`;
+            }
+            if (options.buffer || options.radius) {
+                options.bufferParams = new BufferParameters(options.bufferAccuracy);
+            }
+            this._options = options;
+        },
+        _cleanupInternalState: function (clearDrawing) {
+            const map = this.getMap();
+            map.removeInteraction(this._draw);
+            map.removeInteraction(this._modify);
+            this._cleanSketch();
+            this._draw = null;
+            this._modify = null;
+            if (clearDrawing) {
+                this.clearDrawing();
+            }
+        },
+        setFeaturesFromGeoJson: function (geojson) {
+            if (!geojson) {
+                return;
+            }
+            let featuresFromJson = geoJsonFormatter.readFeatures(geojson);
+            // parse multi geometries to single geometries
+            if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
+                featuresFromJson = this.parseMultiGeometries(featuresFromJson);
+            }
+            featuresFromJson.forEach(f => {
+                this.onNewFeature(f);
+                this.onFinishedFeature(f, true);
+            });
+            this.getDrawSource().addFeatures(featuresFromJson);
         },
         // used only for editing multigeometries (allowMultipleDrawing === 'multiGeom')
         parseMultiGeometries: function (features) {
             const createFeatures = geometries => geometries.map(geometry => new olFeature({ geometry }));
-
             return features.flatMap(feat => {
                 const geom = feat.getGeometry();
                 const type = geom.getType();
@@ -215,60 +251,86 @@ Oskari.clazz.define(
                 return feat;
             });
         },
+        // for wrapping features to one feature with multi geometry used with 'multiGeom'
+        createMultiGeometry: function (features) {
+            if (!features.length) {
+                return features;
+            }
+            const first = features[0];
+            const coords = features.map(f => f.getGeometry().getCoordinates());
+            let geometry;
+            switch (first.getGeometry().getType()) {
+            case 'Point':
+                geometry = new olGeom.MultiPoint(coords);
+                break;
+            case 'LineString':
+                geometry = new olGeom.MultiLineString(coords);
+                break;
+            case 'Polygon':
+                geometry = new olGeom.MultiPolygon(coords);
+                break;
+            default:
+                throw new Error('Unsupported geometry type!');
+            }
+            const feature = new olFeature({ geometry });
+            feature.setId(first.getId());
+
+            // Gather properties for createGeoJsonFeature => feature.geProperties
+            const props = {
+                valid: features.every(f => f.get('valid')),
+                length: features.map(f => f.get('length') || 0).reduce((s, l) => s + l, 0),
+                area: features.map(f => f.get('area') || 0).reduce((s, a) => s + a, 0),
+                radius: first.get('radius') || 0,
+                buffer: first.get('buffer') || 0,
+                tooltip: features.filter(f => f.get('valid') === false).map(f => f.get('tooltip'))[0]
+            };
+            feature.setProperties(props, true);
+            return [feature];
+        },
+
         /**
          * This is the shape type that is currently being drawn
          * @return {String} 'Polygon' / 'LineString' etc
          */
-        getCurrentDrawShape: function () {
+        getShape: function () {
             return this._shape;
         },
         /**
-         * This is the layer ID for the current functionality
-         * @return {String}
+         * Returns a source for drawn features.
          */
-        getCurrentLayerId: function () {
-            return this.getCurrentDrawShape() + 'DrawLayer';
-        },
-        /**
-         * This is the layer for the current functionality
-         * @return {ol/Layer}
-         */
-        getCurrentDrawLayer: function () {
-            return this.getLayer(this.getCurrentLayerId());
-        },
-        /**
-         * Returns a shared buffering layer.
-         */
-        // for some reason there's always just one buffered features layer even though there are multiple draw layers
-        getBufferedFeatureLayer: function () {
-            if (!this.getLayer(this._bufferedFeatureLayerId)) {
-                // creating layer for buffered features (if layer not already added)
-                this.addVectorLayer(this._bufferedFeatureLayerId);
+        getDrawSource: function () {
+            if (!this._drawLayer) {
+                this._drawLayer = this.createVectorLayer('DrawPluginLayer');
             }
-            return this.getLayer(this._bufferedFeatureLayerId);
+            return this._drawLayer.getSource();
         },
         /**
-         * Layer id for functionality.
-         * TODO: is this really needed? some of the variables used are shared between functionalities anyway. Consider using just "currentLayer"
-         * @param  {String|Number} id functionality id
-         * @return {String} layer ID
+         * Returns a source for buffered features.
          */
-        getLayerIdForFunctionality: function (id) {
-            return this._functionalityIds[id];
+        getBufferSource: function () {
+            if (!this._bufferLayer) {
+                this._bufferLayer = this.createVectorLayer('DrawPluginBufferLayer');
+            }
+            return this._bufferLayer.getSource();
         },
         /**
-         * Returns the actual layer matching the given id
-         * @param  {String} layerId
-         * @return {ol/Layer}
+         * @method addVectorLayer
+         * -  adds a new layer to the map
          */
-        getLayer: function (layerId) {
-            return this._drawLayers[layerId];
+        createVectorLayer: function (id) {
+            const layer = new olLayerVector({
+                id,
+                source: new olSourceVector(),
+                title: id
+            });
+            this.getMapModule().addOverlayLayer(layer);
+            return layer;
         },
         /**
          * The id sent in startdrawing request like "measure" or "feedback"
          * @return {String|Number}
          */
-        getCurrentFunctionalityId: function () {
+        getRequestId: function () {
             return this._id;
         },
         /**
@@ -290,60 +352,25 @@ Oskari.clazz.define(
             return this._options;
         },
         /**
-         * Returns true if the user has an unfinished sketch in the works (started drawing a geometry, but not yet finished it)
-         * @return {Boolean}
-         */
-        isCurrentlyDrawing: function () {
-            return this._mode === 'draw';
-        },
-        /**
-         * Returns true if the user is currently holding on to one of the edges in geometry and in process of editing the sketch
-         * @return {Boolean}
-         */
-        isCurrentlyModifying: function () {
-            return this._mode === 'modify';
-        },
-        /**
          * @method stopDrawing
-         * -  sends DrawingEvent and removes draw and modify controls
-         *
+         * - used for clear or end drawing
+         * - if id isn't given clears all drawings and doesn't send event
          * @param {String} id
          */
         stopDrawing: function (id, clearCurrent, supressEvent) {
-            const me = this;
-
-            if (!me.getLayerIdForFunctionality(id)) {
-                // layer not found for functionality id
-                // clear drawings from all drawing layers
-                me.clearDrawing();
-                return;
-            }
-            if (clearCurrent) {
-                // another bundle sends StopDrawingRequest to clear own drawing (e.g. toolselected)
-                // skip deactivate draw and modify controls
-                // should be also with suppressEvent !== true ??
-                // TODO: remove this hack, when stopdrawing, startdrawing, cleardrawing,. methods and requests are handled more properly
-                if (me._id !== id) {
-                    me.clearDrawing(); // clear all
-                    return;
-                } else {
-                    me.clearDrawing(id); // clear drawing from given layer
-                }
+            if (!id || clearCurrent) {
+                this.clearDrawing(id);
             } else {
                 // try to finish unfinished (currently drawn) feature
-                me.forceFinishDrawing();
+                this.forceFinishDrawing();
             }
-            if (!supressEvent) {
-                me.sendDrawingEvent(true);
+            if (id && !supressEvent) {
+                this.sendDrawingEvent(true);
             }
-            // deactivate draw and modify controls
-            me.removeInteractions(me._draw, id);
-            me.removeInteractions(me._modify, id);
-            me._cleanupInternalState();
+            // remove draw and modify controls
+            this._cleanupInternalState();
             // enable gfi
-            me._gfiTimeout = setTimeout(function () {
-                me.getMapModule().setDrawingMode(false);
-            }, 500);
+            this._gfiTimeout = setTimeout(() => this.getMapModule().setDrawingMode(false), 500);
         },
         /**
          * @method forceFinishDrawing
@@ -351,24 +378,23 @@ Oskari.clazz.define(
          * Updates measurement on map and cleans sketch
          */
         forceFinishDrawing: function () {
-            if (!this._sketch) {
+            const feature = this._sketch;
+            if (!feature) {
                 return;
             }
-            const feature = this._sketch;
             const geom = feature.getGeometry();
-            const source = this.getCurrentDrawLayer().getSource();
+            const source = this.getDrawSource();
 
             if (geom.getType() === 'LineString') {
                 const coords = geom.getCoordinates();
                 if (coords.length > 2) {
                     const parsedCoords = coords.slice(0, coords.length - 1); // remove last point
                     geom.setCoordinates(parsedCoords);
-                    feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    this.updateMeasurementTooltip(feature);
+                    this.updateMeasurements(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
-                    this._cleanupInternalState();
+                    this._cleanSketch();
                 }
             } else if (geom.getType() === 'Polygon') {
                 // only for exterior linear ring, drawtools doesn't support linear rings (holes)
@@ -377,17 +403,16 @@ Oskari.clazz.define(
                     const parsedCoords = coords.slice(0, coords.length - 2); // remove second last point
                     parsedCoords.push(coords[coords.length - 1]); // add last point to close linear ring
                     geom.setCoordinates([parsedCoords]); // add parsed exterior linear ring
-                    feature.setStyle(this._styles.modify);
                     source.addFeature(feature);
-                    this.updateMeasurementTooltip(feature);
+                    this.updateMeasurements(feature);
                 } else {
                     // cannot finish geometry, remove measurement result from map
-                    this._cleanupInternalState();
+                    this._cleanSketch();
                 }
             }
             this._sketch = null; // clean sketch to not add to drawing event
         },
-        _cleanupInternalState: function () {
+        _cleanSketch: function () {
             // Remove measure result from map
             if (this._sketch) {
                 this.removeDrawingTooltip(this._sketch.getId());
@@ -400,24 +425,26 @@ Oskari.clazz.define(
          * @param {String} functionality id. If not given, will remove features from all drawLayers
          */
         clearDrawing: function (id) {
-            var me = this;
-            if (id) {
-                var layer = me.getLayer(me.getLayerIdForFunctionality(id));
-                if (layer) {
-                    layer.getSource().getFeaturesCollection().clear();
-                }
-            } else {
-                Object.keys(me._drawLayers).forEach(function (key) {
-                    me._drawLayers[key].getSource().getFeaturesCollection().clear();
-                });
+            const drawSource = this.getDrawSource();
+            const bufferSource = this.getBufferSource();
+            // Clear all (e.g. another bundle sends stopdrawing)
+            if (!id) {
+                drawSource.clear();
+                bufferSource.clear();
+                Object.keys(this._overlays).forEach(id => this.removeDrawingTooltip(id));
+                this._overlays = {};
+                return;
             }
-            me.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
 
-            // remove overlays from map (measurement tooltips)
-            Object.keys(me._overlays).forEach(function (key) {
-                me.getMap().removeOverlay(me._overlays[key]);
-            });
-            me._overlays = {};
+            const remove = (source, feat) => {
+                if (feat.get('requestId') === id) {
+                    this.removeDrawingTooltip(feat.getId());
+                    source.removeFeature(feat);
+                }
+            };
+
+            drawSource.getFeatures().forEach(feat => remove(drawSource, feat));
+            bufferSource.getFeatures().forEach(feat => remove(bufferSource, feat));
         },
         /**
          * @method sendDrawingEvent
@@ -426,97 +453,70 @@ Oskari.clazz.define(
          * @param {Boolean} isFinished  true - if drawing is completed. Default is false.
          */
         sendDrawingEvent: function (isFinished = false) {
-            let bufferedFeatures = [];
-            const id = this.getCurrentFunctionalityId();
-            const layerId = this.getLayerIdForFunctionality(id);
-            const requestedBuffer = this.getOpts('buffer');
-            let features = this.getFeatures(layerId);
-            if (!isFinished && this._sketch) {
-                const id = this._sketch.getId();
-                features = features.filter(f => f.getId() !== id);
-                features.push(this._sketch);
-            }
+            const shape = this.getShape();
+            const { showMeasureOnMap, buffer } = this.getOpts();
 
-            if (!features) {
-                Oskari.log('DrawPlugin').debug('Layer "' + layerId + '" has no features, not send drawing event.');
+            const features = this.getDrawFeatures();
+            let bufferFeatures = [];
+            if (buffer > 0) {
+                bufferFeatures = this.getBufferFeatures();
+            }
+            if (!features.length && !bufferFeatures.length) {
+                Oskari.log('DrawPlugin').debug('No features, skip send drawing event.');
                 return;
             }
 
-            if (requestedBuffer > 0) {
-                // TODO: check the ifs below if they should only be run if buffer is used
-                // TODO: doesn't work for multi drawing because buffered layer contains only currently drawn feature
-                bufferedFeatures = this.getFeatures(this._bufferedFeatureLayerId);
-            }
-
-            switch (this.getCurrentDrawShape()) {
-            case 'Point':
-            case 'LineString':
-                if (requestedBuffer > 0) {
-                    this.addBufferPropertyToFeatures(features, requestedBuffer);
-                }
-                break;
-            case 'Circle':
-                // Do common stuff
-                // buffer is used for circle's radius
-                if (requestedBuffer > 0) {
-                    features = features.map(feat => this.getCircleAsPolygonFeature(feat));
-                    bufferedFeatures = features; // or = [];
-                }
-                break;
-            }
-
             const geojson = this.getFeaturesAsGeoJSON(features);
-            const bufferedGeoJson = this.getFeaturesAsGeoJSON(bufferedFeatures);
+            const bufferedGeoJson = this.getFeaturesAsGeoJSON(bufferFeatures);
 
-            const measures = this.sumMeasurements(features);
-            const data = {
-                buffer: requestedBuffer,
-                bufferedGeoJson: bufferedGeoJson,
-                shape: this.getCurrentDrawShape(),
-                showMeasureOnMap: this.getOpts('showMeasureOnMap')
-            };
+            const data = { buffer, shape, showMeasureOnMap, bufferedGeoJson };
 
-            if (measures.length) {
-                data.length = measures.length;
-            }
-            if (measures.area) {
-                data.area = measures.area;
-            }
-            const event = Oskari.eventBuilder('DrawingEvent')(id, geojson, data, isFinished);
+            let sumArea = 0;
+            let sumLength = 0;
+            features.forEach(f => {
+                const { area, length } = f.getProperties();
+                if (area) sumArea += area;
+                if (length) sumLength += length;
+            });
+            if (sumArea) data.area = sumArea;
+            if (sumLength) data.length = sumLength;
+
+            const event = Oskari.eventBuilder('DrawingEvent')(this.getRequestId(), geojson, data, isFinished);
             this.getSandbox().notifyAll(event);
+        },
+        getDrawFeatures: function () {
+            return this._getFeatures(this.getDrawSource());
+        },
+        getBufferFeatures: function () {
+            // sketch is always drawn feature, don't add it for buffer
+            return this._getFeatures(this.getBufferSource(), true);
         },
         /**
          * @method getFeatures
          * -  gets features from layer
          *
-         * @param {String} layerId
          * @return {Array} features
          */
-        getFeatures: function (layerId) {
-            var me = this,
-                features = [],
-                layer = me.getLayer(layerId);
-
-            if (!layer) {
-                return null;
+        _getFeatures: function (source, skipSketch) {
+            if (!source) {
+                return [];
             }
+            const addSketch = this._sketch && !skipSketch;
+            const reqId = this.getRequestId();
+            const reqShape = this.getShape();
+            const sketchId = addSketch ? this._sketch.getId() : '';
+            const filterFeature = feat => {
+                // when modifying drawn feature, don't add dublicate feature
+                if (addSketch && sketchId === feat.getId()) return false;
+                const { requestId, shape } = feat.getProperties();
+                return requestId === reqId && shape === reqShape;
+            };
 
-            var featuresFromLayer = me.getLayer(layerId).getSource().getFeatures();
+            const features = source.getFeatures().filter(filterFeature);
 
-            if (me._sketch && layerId === me.getCurrentLayerId()) {
+            if (addSketch) {
                 // include the unfinished (currently drawn) feature
-                var sketchFeatId = me._sketch.getId();
-                featuresFromLayer.forEach(function (f) {
-                    // when modifying drawn feature, don't add dublicate feature
-                    if (f.getId() !== sketchFeatId) {
-                        features.push(f);
-                    }
-                });
-                features.push(me._sketch);
-            } else {
-                featuresFromLayer.forEach(function (f) {
-                    features.push(f);
-                });
+                features.push(this._sketch);
             }
             return features;
         },
@@ -530,140 +530,36 @@ Oskari.clazz.define(
          * @return {String} geojson
          */
         getFeaturesAsGeoJSON: function (features) {
-            var me = this,
-                geoJsonObject = {
-                    type: 'FeatureCollection',
-                    crs: this.getSandbox().getMap().getSrsName(),
-                    features: []
-                },
-                measures,
-                jsonObject,
-                buffer,
-                i,
-                feature;
-
-            if (!features || features.length === 0) {
-                return geoJsonObject;
-            }
-            // form multigeometry from features
             if (this.getOpts('allowMultipleDrawing') === 'multiGeom') {
-                measures = me.sumMeasurements(features);
-                var geometries = [];
-
-                for (i = 0; i < features.length; i++) {
-                    feature = features[i];
-                    if (!buffer && feature.buffer) {
-                        buffer = feature.buffer;
-                    }
-                    var geometry = feature.getGeometry();
-                    geometries.push(geometry);
-                }
-
-                var multiGeometry = me.createMultiGeometry(geometries);
-
-                feature = new olFeature({ geometry: multiGeometry });
-                feature.setId(me.generateNewFeatureId());
-
-                jsonObject = me.formJsonObject(feature, measures, buffer);
-                geoJsonObject.features.push(jsonObject);
-            } else {
-                features.forEach(function (feature) {
-                    if (feature.buffer) {
-                        buffer = feature.buffer;
-                    }
-                    measures = me.sumMeasurements([feature]);
-                    jsonObject = me.formJsonObject(feature, measures, buffer);
-                    geoJsonObject.features.push(jsonObject);
-                });
+                features = this.createMultiGeometry(features);
             }
-
-            return geoJsonObject;
+            return {
+                type: 'FeatureCollection',
+                crs: this.getSandbox().getMap().getSrsName(),
+                features: features.map(f => this.createGeoJsonFeature(f))
+            };
         },
 
-        createMultiGeometry: function (geometries) {
-            var coordinatesAgg = geometries.map(function (geometry) {
-                return geometry.getCoordinates();
-            });
+        createGeoJsonFeature: function (feature) {
+            const json = geoJsonFormatter.writeFeatureObject(feature);
 
-            var featureGeom;
-
-            switch (geometries[0].getType()) {
-            case 'Point':
-                featureGeom = new olGeom.MultiPoint(coordinatesAgg);
-                break;
-            case 'LineString':
-                featureGeom = new olGeom.MultiLineString(coordinatesAgg);
-                break;
-            case 'Polygon':
-                featureGeom = new olGeom.MultiPolygon(coordinatesAgg);
-                break;
-            default:
-                throw new Error('Unsupported geometry type!');
-            }
-
-            return featureGeom;
-        },
-
-        formJsonObject: function (feature, measures, buffer) {
-            const geoJSONformatter = new olFormatGeoJSON();
-            const jsonObject = geoJSONformatter.writeFeatureObject(feature);
-
-            const id = feature.getId();
-            const valid = this.isFeatureValid(id);
-            const invalidReason = this.getInvalidReasonMessage(id);
+            const { length, area, radius, buffer, tooltip, valid } = feature.getProperties();
             const properties = { valid };
-
-            if (measures.length) {
-                properties.length = valid ? measures.length : invalidReason;
+            if (length) {
+                properties.length = valid ? length : tooltip;
             }
-            if (measures.area) {
-                properties.area = valid ? measures.area : invalidReason;
+            if (area) {
+                properties.area = valid ? area : tooltip;
+            }
+            if (radius) {
+                properties.radius = radius;
             }
             if (buffer) {
                 properties.buffer = buffer;
             }
-
-            jsonObject.properties = properties;
-            return jsonObject;
-        },
-
-        /**
-         * Calculates line length and polygon area as measurements
-         * @param  {Array} features features with geometries
-         * @return {Object} object with length and area keys with numbers as values indicating meters/m2.
-         */
-        sumMeasurements: function (features) {
-            let area = 0;
-            let length = 0;
-            const mapmodule = this.getMapModule();
-            features.forEach(function (f) {
-                const geom = f.getGeometry();
-                const geomType = geom.getType();
-                if (geomType === 'LineString') {
-                    length += mapmodule.getGeomLength(geom);
-                } else if (geomType === 'Polygon') {
-                    const line = new olGeom.LineString(geom.getCoordinates()[0]);
-                    length += mapmodule.getGeomLength(line);
-                    area += mapmodule.getGeomArea(geom);
-                }
-            });
-            return { area, length };
-        },
-        /**
-         * @method addVectorLayer
-         * -  adds a new layer to the map
-         *
-         * @param {String} layerId
-         */
-        addVectorLayer: function (layerId) {
-            var me = this;
-            var vector = new olLayerVector({
-                id: layerId,
-                source: new olSourceVector({ features: new olCollection() }),
-                style: me._styles.draw
-            });
-            me.getMapModule().addOverlayLayer(vector);
-            me._drawLayers[layerId] = vector;
+            // override
+            json.properties = properties;
+            return json;
         },
         /**
          * @method addDrawInteraction
@@ -672,32 +568,13 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        addDrawInteraction: function (layerId, shape) {
-            const { buffer } = this.getOpts();
-            var me = this;
-            var geometryFunction, maxPoints;
-            var functionalityId = this.getCurrentFunctionalityId();
-            var geometryType = shape;
+        addDrawInteraction: function () {
+            const shape = this.getShape();
+            const { radius, allowMultipleDrawing } = this.getOpts();
+            let geometryFunction;
+            let maxPoints;
+            let type = shape;
 
-            function makeClosedPolygonCoords (coords) {
-                return coords.map(function (ring) {
-                    ring = ring.slice();
-                    ring.push(ring[0].slice());
-                    return ring;
-                });
-            }
-            const notifyChange = () => {
-                this.updateMeasurementTooltip();
-                this.sendDrawingEvent();
-            };
-            const getReqularPolygonGeometryFunction = sides => {
-                const geometryFunction = createRegularPolygon(sides);
-                return (...args) => {
-                    const geometry = geometryFunction(...args);
-                    notifyChange();
-                    return geometry;
-                };
-            };
             if (shape === 'LineString') {
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
@@ -705,204 +582,158 @@ Oskari.clazz.define(
                     } else {
                         geometry.setCoordinates(coordinates);
                     }
-                    if (buffer > 0) {
-                        me.drawBufferedGeometry(geometry);
-                    }
-                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Box') {
                 maxPoints = 2;
-                geometryType = 'LineString';
-                geometryFunction = function (coordinates, geometry) {
-                    var start = coordinates[0];
-                    var end = coordinates[1];
-                    var coords = [[start, [start[0], end[1]], end, [end[0], start[1]], start]];
-                    if (!geometry) {
-                        geometry = new olGeom.Polygon(coords);
-                    } else {
-                        geometry.setCoordinates(coords);
-                    }
-                    notifyChange();
-                    return geometry;
-                };
+                type = 'LineString';
+                geometryFunction = createBox();
             } else if (shape === 'Point') {
                 geometryFunction = function (coordinates, geometry) {
                     if (!geometry) {
                         geometry = new olGeom.Point(coordinates);
                     }
-                    if (buffer > 0) {
-                        me.drawBufferedGeometry(geometry, buffer);
-                    }
-                    notifyChange();
                     return geometry;
                 };
             } else if (shape === 'Square') {
-                geometryType = 'Circle';
-                geometryFunction = getReqularPolygonGeometryFunction(4);
-            } else if (shape === 'Circle' && buffer > 0) {
-                geometryType = 'Point';
-                geometryFunction = function (coordinates, geometry) {
+                type = 'Circle';
+                geometryFunction = createRegularPolygon(4);
+            } else if (shape === 'Circle' && radius > 0) {
+                type = 'Point';
+                geometryFunction = (coordinates, geometry) => {
                     if (!geometry) {
-                        geometry = new olGeom.Circle(coordinates, buffer);
+                        const point = new olGeom.Point(coordinates);
+                        geometry = this.getBufferedGeometry(point, radius);
                     }
-                    notifyChange();
                     return geometry;
                 };
-            } else if (shape === 'Circle' && !buffer) {
-                geometryType = 'Circle';
-                geometryFunction = getReqularPolygonGeometryFunction(50);
+            } else if (shape === 'Circle') {
+                const { sidesForCircle } = this.getOpts();
+                geometryFunction = createRegularPolygon(sidesForCircle);
             } else if (shape === 'Polygon') {
-                geometryFunction = function (coordinates, geometry) {
-                    var coords = makeClosedPolygonCoords(coordinates);
+                geometryFunction = (coordinates, geometry) => {
+                    // make closed Polygon
+                    const coords = coordinates.map(ring => {
+                        ring = ring.slice();
+                        ring.push(ring[0].slice());
+                        return ring;
+                    });
                     if (!geometry) {
                         geometry = new olGeom.Polygon(coords);
                     } else {
                         geometry.setCoordinates(coords);
                     }
-                    me.checkIntersection();
-                    notifyChange();
                     return geometry;
                 };
             }
+
+            const wrappedFunction = (...args) => {
+                const geometry = geometryFunction(...args);
+                this.onSketchChange();
+                return geometry;
+            };
+
             const drawOpts = {
-                features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
-                type: geometryType,
-                style: me._styles.draw,
-                geometryFunction: geometryFunction,
-                maxPoints: maxPoints
+                type,
+                maxPoints,
+                source: this.getDrawSource(),
+                style: this.getPointerStyleFunction(),
+                geometryFunction: wrappedFunction
             };
 
             if (!Oskari.util.isMobile(true)) {
                 // use smaller snap tolerance on desktop
                 drawOpts.snapTolerance = 3;
             }
-            var drawInteraction = new olInteractionDraw(drawOpts);
-            // does this need to be registered here and/or for each functionalityId?
-            me._draw[functionalityId] = drawInteraction;
 
-            me.getMap().addInteraction(drawInteraction);
+            this._draw = new olInteractionDraw(drawOpts);
 
-            me.bindDrawStartEvent(drawInteraction);
-            me.bindDrawEndEvent(drawInteraction, shape);
-        },
-        /**
-         * @method bindDrawStartEvent
-         * -  binds drawstart event handling to interaction
-         */
-        bindDrawStartEvent: function (interaction) {
-            var me = this;
-            interaction.on('drawstart', function (evt) {
+            this._draw.on('drawstart', ({ feature }) => {
+                this._sketch = feature;
+                this.onNewFeature();
+                if (allowMultipleDrawing === 'single') {
+                    this.clearDrawing(this.getRequestId());
+                }
                 // stop modify interaction while draw-mode is active
-                me.removeInteractions(me._modify, me._id);
-                me._mode = 'draw';
-                evt.feature.setId(me.generateNewFeatureId());
-                me._sketch = evt.feature;
-                if (me.getOpts('allowMultipleDrawing') === 'single') {
-                    me.clearDrawing();
-                }
+                this.toggleModify(false);
             });
-        },
-        /**
-         * @method bindDrawEndEvent
-         * -  binds drawend event handling to interaction
-         * @param {Object} options
-         */
-        bindDrawEndEvent: function (interaction, shape) {
-            const me = this;
-            const { modifyControl, allowMultipleDrawing } = this.getOpts();
-            interaction.on('drawend', function (evt) {
-                me.handleFinishedDrawing();
-
-                if (allowMultipleDrawing === false && !modifyControl) {
-                    // stop drawing without modifying
-                    me.stopDrawing(me.getCurrentFunctionalityId());
-                    return;
-                }
+            this._draw.on('drawend', () => {
                 if (allowMultipleDrawing === false) {
-                    // stop drawing and start modifying
-                    me.removeInteractions(me._draw, me._id);
+                    this.toggleDraw(false);
                 }
-
-                evt.feature.setStyle(me._styles.modify);
                 // activate modify interaction after new drawing is finished
-                if (modifyControl !== false) {
-                    me.addModifyInteraction(me.getCurrentLayerId(), shape);
-                }
+                this.toggleModify(true);
+                this.onFinishedFeature();
             });
+            this.getMap().addInteraction(this._draw);
         },
-        handleFinishedDrawing: function (feature = this._sketch, suppressEvent) {
-            this._mode = '';
-            if (!this.validateGeometry(feature)) {
-                this.updateTooltip(feature, this.getInvalidReasonMessage(feature.getId()));
-            } else if (this.getOpts('showMeasureOnMap')) {
-                this.updateMeasurementTooltip(feature);
-            } else {
-                this.updateTooltip(feature);
+        toggleDraw: function (enabled) {
+            if (this._draw) {
+                this._draw.setActive(enabled);
             }
+        },
+        toggleModify: function (enabled) {
+            if (this._modify) {
+                this._modify.setActive(enabled);
+            }
+        },
+        onDrawingChange: function (feature) {
+            if (!feature) {
+                return;
+            }
+            // update measurement before validating
+            this.updateMeasurements(feature);
+            // validate geometry before updating tooltip
+            this.validateGeometry(feature);
+            this.updateTooltip(feature);
+            this.drawBuffer(feature);
+        },
+        // called on click for Point or pointer move for others
+        onSketchChange: function () {
+            this._interacting = true;
+            this.onDrawingChange(this._sketch);
+            this.sendDrawingEvent();
+        },
+        onFinishedFeature: function (feature = this._sketch, suppressEvent) {
+            this._interacting = false;
+            feature.setProperties({ isFinished: true }, true);
+            this.onDrawingChange(feature);
             if (!suppressEvent) {
                 this.sendDrawingEvent(true);
             }
             this._sketch = null;
         },
-        setFeatureValidity: function (id, invalidReason) {
-            // For now handles only one reason in order: intersection, size/length
-            if (invalidReason) {
-                this._invalidFeatures[id] = invalidReason;
-                return;
+        onNewFeature: function (feature = this._sketch) {
+            if (!feature.getId()) {
+                feature.setId(this.generateNewFeatureId());
             }
-            delete this._invalidFeatures[id];
-        },
-        isFeatureValid: function (id) {
-            return !this._invalidFeatures[id];
-        },
-        getInvalidReasonMessage: function (id) {
-            const reason = this._invalidFeatures[id];
-            if (!reason) {
-                return '';
-            }
-            if (reason === INVALID_REASONS.LINE_LENGTH) {
-                const { length } = this.getOpts('limits');
-                const formatted = this.getMapModule().formatMeasurementResult(length, 'line');
-                return this.loc(reason, { length: formatted });
-            }
-            if (reason === INVALID_REASONS.AREA_SIZE) {
-                const { area } = this.getOpts('limits');
-                const size = this.getMapModule().formatMeasurementResult(area, 'area');
-                return this.loc(reason, { size });
-            }
-            return this.loc(reason);
+            feature.setStyle(this.getStyleFunction());
+            const requestId = this.getRequestId();
+            const shape = this.getShape();
+            feature.setProperties({ requestId, shape }, true);
         },
         validateGeometry: function (feature) {
             const limits = this.getOpts('limits');
-            if (!limits || !feature) {
-                return;
-            }
-
-            const id = feature.getId();
             const geometry = feature.getGeometry();
             const type = geometry.getType();
-            const mapmodule = this.getMapModule();
 
+            let { area, length, tooltip } = feature.getProperties();
             let invalidReason;
             if (type === 'Polygon') {
                 if (this.checkIntersection(feature)) {
                     invalidReason = INVALID_REASONS.INTERSECTION;
-                } else if (limits.area) {
-                    const area = mapmodule.getGeomArea(geometry);
-                    if (area > limits.area) {
-                        invalidReason = INVALID_REASONS.AREA_SIZE;
-                    }
+                    tooltip = limits.intersectionTooltip;
+                } else if (limits.area && area > limits.area) {
+                    invalidReason = INVALID_REASONS.AREA_SIZE;
+                    tooltip = limits.areaTooltip;
                 }
             }
-            if (limits.length && type === 'LineString') {
-                const length = mapmodule.getGeomLength(geometry);
-                if (length > limits.length) {
-                    invalidReason = INVALID_REASONS.LINE_LENGTH;
-                }
+            if (limits.length && type === 'LineString' && length > limits.length) {
+                invalidReason = INVALID_REASONS.LINE_LENGTH;
+                tooltip = limits.lengthTooltip;
             }
-            this.setFeatureValidity(id, invalidReason);
-            return !invalidReason;
+            const valid = !invalidReason;
+            feature.setProperties({ invalidReason, tooltip, valid }, true);
         },
         /**
          * @method checkIntersection
@@ -914,67 +745,46 @@ Oskari.clazz.define(
             if (!this.getOpts('limits').selfIntersection) {
                 return false;
             }
-            const currentDrawing = feature || this._sketch;
-            if (!currentDrawing) {
-                return false;
-            }
-            const geometry = currentDrawing.getGeometry();
+            const geometry = feature.getGeometry();
             const coordinates = geometry.getCoordinates()[0];
-            const id = currentDrawing.getId();
             // This function is called twice when modifying geometry from the point where the drawing initially began
             // That is because the first and the last point of the geometry are being modified at the same time
             // The points should have identical values but in the first call they don't
             // So the first call is ignored by the if statement below since it would otherwise throw an error from a 3rd party library
-            if (hasEnoughCoordinatesForArea(coordinates) && firstAndLastCoordinatesEqual(coordinates)) {
+            if (hasEnoughCoordinatesForIntersect(coordinates) && firstAndLastCoordinatesEqual(coordinates)) {
                 if (!isValidOp.isValid(olParser.read(geometry))) {
                     // lines intersect -> problem!!
-                    currentDrawing.setStyle(this._styles.invalid);
-                    this.setFeatureValidity(id, INVALID_REASONS.INTERSECTION);
                     return true;
                 }
             }
-            // geometry is valid
-            if (geometry.getArea() > 0) {
-                if (this.isCurrentlyDrawing()) {
-                    currentDrawing.setStyle(this._styles.draw);
-                } else {
-                    currentDrawing.setStyle(this._styles.modify);
-                }
-                this.setFeatureValidity(id);
-            }
             return false;
         },
-        updateMeasurementTooltip: function (feature = this._sketch) {
-            if (!feature || !this.getOpts('showMeasureOnMap')) {
-                return;
-            }
-            if (this._invalidFeatures[feature.getId()] === INVALID_REASONS.INTERSECTION) {
-                // remove measurement for self intersecting geometries while drawing/modifying
-                if (this.isCurrentlyDrawing() || this.isCurrentlyModifying()) {
-                    this.updateTooltip(feature);
-                }
-                return;
-            }
-
+        updateMeasurements: function (feature) {
             const mapmodule = this.getMapModule();
             const geom = feature.getGeometry();
-            let output = '';
+            const format = this.getOpts('showMeasureOnMap');
             if (geom instanceof olGeom.Polygon) {
                 const area = mapmodule.getGeomArea(geom);
-                output = mapmodule.formatMeasurementResult(area, 'area');
-            } else if (geom instanceof olGeom.LineString) {
                 const length = mapmodule.getGeomLength(geom);
-                output = mapmodule.formatMeasurementResult(length, 'line');
-            }
-            this.updateTooltip(feature, output);
-        },
-        updateTooltip: function (feature = this._sketch, text = '') {
-            if (!feature) {
+                const tooltip = format ? mapmodule.formatMeasurementResult(area, 'area') : '';
+                feature.setProperties({ area, length, tooltip }, true);
                 return;
             }
+            if (geom instanceof olGeom.LineString) {
+                const length = mapmodule.getGeomLength(geom);
+                const tooltip = format ? mapmodule.formatMeasurementResult(length, 'line') : '';
+                feature.setProperties({ length, tooltip }, true);
+            }
+        },
+        updateTooltip: function (feature) {
             const overlay = this.getDrawingTooltip(feature.getId());
             const geom = feature.getGeometry();
             let tooltipCoord;
+            let { tooltip = '', valid } = feature.getProperties();
+            // don't show warning tooltip while drawing
+            if (!valid && this._interacting) {
+                tooltip = '';
+            }
             if (geom instanceof olGeom.Polygon) {
                 tooltipCoord = geom.getInteriorPoint().getCoordinates();
             } else if (geom instanceof olGeom.LineString) {
@@ -984,8 +794,8 @@ Oskari.clazz.define(
                 overlay.setPosition(tooltipCoord);
             }
             const elem = overlay.getElement();
-            elem.innerHTML = text;
-            if (text) {
+            elem.innerHTML = tooltip;
+            if (tooltip) {
                 elem.classList.remove('withoutText');
             } else {
                 elem.classList.add('withoutText');
@@ -998,21 +808,16 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        addModifyInteraction: function (layerId, shape) {
-            const me = this;
-            const layer = me.getLayer(layerId);
-            if (layer) {
-                me._modify[me._id] = new olInteractionModify({
-                    features: layer.getSource().getFeaturesCollection(),
-                    style: me._styles.modify,
-                    insertVertexCondition: isModifyLimited(shape) ? olEventsCondition.never : olEventsCondition.always,
-                    deleteCondition: function (event) {
-                        return olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event);
-                    }
-                });
-            }
-            me.modifyStartEvent(shape);
-            me.getMap().addInteraction(me._modify[me._id]);
+        addModifyInteraction: function () {
+            const isLimited = isModifyLimited(this.getShape());
+            this._modify = new olInteractionModify({
+                source: this.getDrawSource(),
+                style: this.getPointerStyleFunction(),
+                insertVertexCondition: isLimited ? olEventsCondition.never : olEventsCondition.always,
+                deleteCondition: isLimited ? olEventsCondition.never : event => olEventsCondition.shiftKeyOnly(event) && olEventsCondition.singleClick(event)
+            });
+            this.bindModifyEvents();
+            this.getMap().addInteraction(this._modify);
         },
         /**
          * @method drawBufferedGeometry
@@ -1020,10 +825,31 @@ Oskari.clazz.define(
          *
          * @param {Geometry} geometry
          */
-        drawBufferedGeometry: function (geometry) {
-            const bufferedFeature = this.getBufferedFeature(geometry);
-            this.getBufferedFeatureLayer().getSource().getFeaturesCollection().clear();
-            this.getBufferedFeatureLayer().getSource().getFeaturesCollection().push(bufferedFeature);
+        drawBuffer: function (feature) {
+            const { buffer } = this.getOpts();
+            if (!buffer) {
+                return;
+            }
+            const featGeom = feature.getGeometry();
+            if (this.getShape() === 'Polygon' && featGeom.getCoordinates()[0].length < 4) {
+                return;
+            }
+            const source = this.getBufferSource();
+            const id = feature.getId();
+            let bufferFeature = source.getFeatureById(id);
+            const geometry = this.getBufferedGeometry(featGeom, buffer);
+            if (bufferFeature) {
+                bufferFeature.setGeometry(geometry);
+                this.updateMeasurements(bufferFeature);
+                return;
+            }
+            bufferFeature = new olFeature({ geometry });
+            // copy id from actual feature
+            bufferFeature.setId(id);
+            bufferFeature.setProperties({ buffer, valid: true }, true);
+            this.onNewFeature(bufferFeature);
+            source.addFeature(bufferFeature);
+            this.updateMeasurements(bufferFeature);
         },
         /**
          * @method modifyStartEvent
@@ -1031,23 +857,21 @@ Oskari.clazz.define(
          * @param {String} shape
          * @param {Object} options
          */
-        modifyStartEvent: function (shape) {
-            var me = this;
-
+        bindModifyEvents: function () {
+            const me = this;
+            const shape = this.getShape();
             // if modifyend didn't get called for some reason, nullify the old listeners to be on the safe side
-            if (me.modifyFeatureChangeEventCallback) {
-                me.toggleDrawLayerChangeFeatureEventHandler(false);
-                me.modifyFeatureChangeEventCallback = null;
+            if (this.modifyFeatureChangeEventCallback) {
+                this.toggleDrawLayerChangeFeatureEventHandler(false);
+                this.modifyFeatureChangeEventCallback = null;
             }
 
             let dragCoord;
             let startCoord;
             const updateDragCoord = evt => (dragCoord = evt.coordinate);
-            const tempStyle = this._styles.temp[0];
-            const { buffer } = this.getOpts();
-            me._modify[me._id].on('modifystart', function (evt) {
+            const tempStyle = this.getTempModifyStyle();
+            this._modify.on('modifystart', function (evt) {
                 const feature = evt.features.item(0);
-                me._mode = 'modify';
                 if (isModifyLimited(shape)) {
                     dragCoord = evt.mapBrowserEvent.coordinate;
                     if (shape === 'Box') {
@@ -1076,15 +900,7 @@ Oskari.clazz.define(
                 me.modifyFeatureChangeEventCallback = function ({ feature }) {
                     // turn off changehandler in case something we touch here triggers a change event -> avoid eternal loop
                     me.toggleDrawLayerChangeFeatureEventHandler(false);
-                    if (shape === 'LineString') {
-                        if (buffer > 0) {
-                            me.drawBufferedGeometry(feature.getGeometry());
-                        }
-                    } else if (shape === 'Point' && buffer > 0) {
-                        me.drawBufferedGeometry(feature.getGeometry());
-                    } else if (shape === 'Polygon') {
-                        me.checkIntersection();
-                    } else if (isModifyLimited(shape)) {
+                    if (isModifyLimited(shape)) {
                         const geomToRender = me.getModifiedGeometry(startCoord, dragCoord);
                         // set rendered geometry to sketch to get correct measurements and geojson to unfinished event
                         me._sketch.setGeometry(geomToRender);
@@ -1093,35 +909,29 @@ Oskari.clazz.define(
                         tempStyle.setGeometry(geomToRender);
                         feature.setStyle(tempStyle);
                     }
-                    me.updateMeasurementTooltip();
-                    me.sendDrawingEvent();
+                    me.onSketchChange();
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);
                 };
                 me.toggleDrawLayerChangeFeatureEventHandler(true);
             });
-            me._modify[me._id].on('modifyend', function (evt) {
+            this._modify.on('modifyend', function (evt) {
                 me.getMap().un('pointerdrag', updateDragCoord);
                 me.toggleDrawLayerChangeFeatureEventHandler(false);
                 me.modifyFeatureChangeEventCallback = null;
                 me._sketch = evt.features.item(0);
                 const newGeom = me.getModifiedGeometry(startCoord, evt.mapBrowserEvent.coordinate);
-                me._sketch.setStyle(me._styles.modify);
                 if (newGeom) {
                     me._sketch.setGeometry(newGeom);
                 }
-                me.handleFinishedDrawing();
+                me.onFinishedFeature();
             });
         },
         toggleDrawLayerChangeFeatureEventHandler: function (enable) {
-            var me = this,
-                layer = me.getLayer(me.getCurrentLayerId());
-            if (layer) {
-                if (enable) {
-                    layer.getSource().on('changefeature', me.modifyFeatureChangeEventCallback, me);
-                } else {
-                    layer.getSource().un('changefeature', me.modifyFeatureChangeEventCallback, me);
-                }
+            if (enable) {
+                this.getDrawSource().on('changefeature', this.modifyFeatureChangeEventCallback, this);
+            } else {
+                this.getDrawSource().un('changefeature', this.modifyFeatureChangeEventCallback, this);
             }
         },
         getModifiedGeometry: function (start, end) {
@@ -1129,7 +939,7 @@ Oskari.clazz.define(
                 return;
             }
             const coords = [start, end];
-            const shape = this.getCurrentDrawShape();
+            const shape = this.getShape();
             if (shape === 'Circle') {
                 return createRegularPolygon(50)(coords);
             }
@@ -1148,94 +958,44 @@ Oskari.clazz.define(
          * @param {Number} buffer
          * @param {ol/style/Style} style
          * @param {Number} side amount of polygon
-         * @return {ol/Feature} feature
+         * @return {ol/Geometry} geometry
          */
-        getBufferedFeature: function (geometry) {
+        getBufferedGeometry: function (geometry, buffer) {
             const input = olParser.read(geometry);
-            const { bufferAccuracy, buffer } = this.getOpts();
-            let bufferGeometry = BufferOp.bufferOp(input, buffer, new BufferParameters(bufferAccuracy));
+            const bufferGeometry = BufferOp.bufferOp(input, buffer, this.getOpts('bufferParams'));
             bufferGeometry.CLASS_NAME = 'jsts.geom.Polygon';
-            bufferGeometry = olParser.write(bufferGeometry);
-            const feature = new olFeature({
-                geometry: bufferGeometry
-            });
-            feature.setStyle(this._styles.draw);
-            feature.buffer = buffer;
-            return feature;
+            return olParser.write(bufferGeometry);
         },
-        /**
-         * @method removeInteractions
-         * -  removes draw and modify controls
-         * @param {String} id
-         */
-        removeInteractions: function (interaction, id) {
-            var me = this;
-            if (!id || id === undefined || id === '') {
-                Object.keys(interaction).forEach(function (key) {
-                    me.getMap().removeInteraction(interaction[key]);
-                });
-            } else {
-                me.getMap().removeInteraction(interaction[id]);
-            }
-        },
+
         /**
          * @method  @private _getFeatureCenter get feature center coordinates.
          * @param  {ol/feature} feature feature where need to get center point
          * @return {Array} coordinates array
          */
         _getFeatureCenter: function (feature) {
+            const geom = feature.getGeometry();
             // Circle has (multi)polygon or (multi)point ol type and it center need calculated different way
-            if (feature.getGeometry().getType().indexOf('Polygon') > -1 || feature.getGeometry().getType().indexOf('Point') > -1) {
-                return olExtent.getCenter(feature.getGeometry().getExtent());
+            if (geom.getType().indexOf('Polygon') > -1 || geom.getType().indexOf('Point') > -1) {
+                return olExtent.getCenter(geom.getExtent());
             }
-            return feature.getGeometry().getCenter();
-        },
-        /**
-         * @method getCircleAsPolygonFeature
-         * - converts circle geometry to polygon geometry
-         *  Used for Circle + buffer
-         */
-        getCircleAsPolygonFeature: function (feature) {
-            if (feature.getGeometry().getType() === 'Polygon') {
-                return feature;
-            }
-            const pointFeature = new olGeom.Point(this._getFeatureCenter(feature));
-            const bufferedFeature = this.getBufferedFeature(pointFeature);
-            bufferedFeature.setId(feature.getId());
-            return bufferedFeature;
-        },
-        /**
-         * @method addBufferPropertyToFeatures
-         * - adds buffer property to given features. This is needed for converting buffered Point and buffered LineString to geoJson
-         *
-         * @param {Array} features
-         * @param {Number} buffer
-         */
-        addBufferPropertyToFeatures: function (features, buffer) {
-            if (features && buffer) {
-                features.forEach(function (f) {
-                    f.buffer = buffer;
-                });
-            }
+            return geom.getCenter();
         },
         /** @method getDrawingTooltip
-       * - returns tooltip and creates a new tooltip if not exist
-       */
+        * - returns tooltip and creates a new tooltip if not exist
+        */
         getDrawingTooltip: function (id) {
             if (this._overlays[id]) {
                 return this._overlays[id];
             }
-            const tooltipClass = this._tooltipClassForMeasure + ' ' + this.getCurrentDrawShape() + ' ' + id;
+            const shape = this.getShape();
             const tooltipElement = document.createElement('div');
-            tooltipElement.className = tooltipClass;
+            tooltipElement.className = `drawplugin-tooltip-measure ${shape} ${id}`;
             const tooltip = new olOverlay({
                 element: tooltipElement,
                 offset: [0, -5],
                 positioning: 'bottom-center',
                 id: id
             });
-            tooltipElement.parentElement.style.pointerEvents = 'none';
-            tooltip.id = id;
             this.getMap().addOverlay(tooltip);
             this._overlays[id] = tooltip;
             return tooltip;

@@ -1,18 +1,19 @@
 const exampleCommand = `
 -----------------------------------------------------------
 Development (version defaults to "devapp"):
-    npm start -- --env.appdef=applications/sample
+    npm start -- --env.appdef=applications
 Production (version example 44.6 - defaults to package.json version):
-    npm run build -- --env.appdef=44.6:applications/sample
+    npm run build -- --env.appdef=44.6:applications
 -----------------------------------------------------------
 `;
 
 module.exports = function parseParams (env) {
-    if (!env || !env.appdef) {
+    const appdef = getParam(env, 'appdef');
+    if (!appdef) {
         throw new Error('Must give "appdef" env variable, eg.:' + exampleCommand);
     }
 
-    const parts = env.appdef.split(':');
+    const parts = appdef.split(':');
 
     if (parts.length > 2) {
         throw new Error('Format for "appdef" is "version:pathToAppsetupDirectory", eg.: ' + exampleCommand);
@@ -21,21 +22,46 @@ module.exports = function parseParams (env) {
     const version = getVersion(parts);
     const pathParam = parts.length > 1 ? parts[1] : parts[0];
 
-    const externalDomain = env.domain || '';
-    const publicPath = env.absolutePublicPath === 'true' || externalDomain ? '/' : '';
+    const externalDomain = getParam(env, 'domain') || '';
+    const publicPath = getParam(env, 'absolutePublicPath') === 'true' || externalDomain ? '/' : '';
 
     const params = {
         version,
         pathParam,
         publicPathPrefix: externalDomain + publicPath
     };
-
-    if (env.theme) {
-        params.theme = env.theme;
+    const theme = getParam(env, 'theme');
+    if (theme) {
+        params.theme = theme;
     }
 
     return params;
 };
+
+function getParam (env, key) {
+    if (!key || !process) {
+        return;
+    }
+    const npmValue = process.env['npm_config_' + key];
+    if (npmValue) {
+        // this should work if run like this:
+        //  npm run build --appdef=applications
+        console.log('Found npm var for ' + key + ' = ' + npmValue);
+        return npmValue;
+    }
+
+    if (!env) {
+        return;
+    }
+    const envValue = env[key];
+    if (envValue) {
+        // this should work if run like this:
+        //  npm run build -- --env.appdef=applications
+        console.log('Found env var for ' + key + ' = ' + envValue);
+    }
+
+    return envValue;
+}
 
 function getVersion (appdefParts) {
     const isDevServer = !!process.env.WEBPACK_DEV_SERVER;

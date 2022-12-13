@@ -330,6 +330,32 @@ Oskari.clazz.define(
                 return;
             }
 
+            let theme = Oskari.app.getTheming().getTheme();
+            me.theme = theme;
+
+            const style = me.getToolStyle();
+
+            let bgColor = theme.color.primary;
+            let textColor = '#000000';
+            if (style?.includes('dark') || style?.includes('default')) {
+                bgColor = '#3c3c3c';
+                textColor = '#ffffff';
+            } else if (style?.includes('light')) {
+                bgColor = '#ffffff';
+            }
+
+            theme = {
+                ...theme,
+                color: {
+                    header: {
+                        bg: bgColor,
+                        text: textColor
+                    }
+                }
+            };
+
+            Oskari.app.getTheming().setTheme(theme);
+
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
@@ -409,6 +435,10 @@ Oskari.clazz.define(
                 return;
             }
             unmonitorResize(this.updateSize.bind(this));
+
+            if (this.theme) {
+                Oskari.app.getTheming().setTheme(this.theme);
+            }
 
             sandbox = sandbox || this.getSandbox();
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', null);
@@ -2113,6 +2143,28 @@ Oskari.clazz.define(
                 this._options = {};
             }
             this._options.style = clonedStyle;
+
+            let theme = Oskari.app.getTheming().getTheme();
+            let bgColor = theme.color.primary;
+            let textColor = '#000000';
+            if (style?.toolStyle?.includes('dark') || style?.toolStyle?.includes('default')) {
+                bgColor = '#3c3c3c';
+                textColor = '#ffffff';
+            } else if (style?.toolStyle?.includes('light')) {
+                bgColor = '#ffffff';
+            }
+
+            theme = {
+                ...theme,
+                color: {
+                    header: {
+                        bg: bgColor,
+                        text: textColor
+                    }
+                }
+            };
+
+            Oskari.app.getTheming().setTheme(theme);
 
             // notify plugins of the style change.
             Object.values(this._pluginInstances)

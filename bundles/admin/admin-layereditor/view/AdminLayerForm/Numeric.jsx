@@ -4,11 +4,6 @@ import { Message, NumberInput } from 'oskari-ui';
 import { InlineFlex } from './InlineFlex';
 import { StyledFormField } from '../styled';
 import { InfoTooltip } from './InfoTooltip';
-import styled from 'styled-components';
-
-const Input = styled(NumberInput)`
-    min-width: 100px;
-`;
 
 const defaultOptions = {
     allowNegative: true,
@@ -63,7 +58,7 @@ export const Numeric = ({
     };
 
     let input =
-        <Input
+        <NumberInput
             value={value}
             onChange={validationFilter(onChange, validationOptions)}
             formatter={formatNumber}

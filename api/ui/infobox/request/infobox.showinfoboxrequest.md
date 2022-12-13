@@ -64,7 +64,7 @@ Parameters for options-object:
   <td> mobileBreakpoints </td><td> Object </td><td> The size of the screen in pixels to start showing infobox in mobile mode {width: 'mobileModeWidth', height: 'mobileModeHight'}. Both values are not necessary. </td><td> If not given, uses values {width:500, height:480} </td>
 </tr>
 <tr>
-  <td> positioning </td><td> String </td><td> <b><i style="color:#FF0000;">NOTE! OPENLAYERS 3 ONLY!</i></b> Optional parameter, tells the relative position of the popup to the coordinates. Possible values: top, bottom, left, right</td><td> If not provided, the default bottom-right positioning is used. Only affects the popup in desktop-mode. </td>
+  <td> positioning </td><td> String </td><td> Optional parameter, tells the relative position of the popup to the coordinates. Possible values: top, bottom, left, right</td><td> If not provided, the default bottom-right positioning is used. Only affects the popup in desktop-mode. </td>
 </tr>
 
 </table>

@@ -193,6 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     this._flyoutOpen = undefined;
                 }
             }
+            this.renderButton(null, null);
         },
         showLoadingIndicator: function (blnLoad) {
             if (blnLoad) {
