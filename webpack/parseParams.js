@@ -30,7 +30,7 @@ module.exports = function parseParams (env) {
         pathParam,
         publicPathPrefix: externalDomain + publicPath
     };
-    const theme = getParam(env, 'theme')
+    const theme = getParam(env, 'theme');
     if (theme) {
         params.theme = theme;
     }
@@ -38,7 +38,7 @@ module.exports = function parseParams (env) {
     return params;
 };
 
-function getParam(env, key) {
+function getParam (env, key) {
     if (!key || !process) {
         return;
     }
