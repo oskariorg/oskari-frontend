@@ -1,7 +1,7 @@
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { Message, Button, TextInput, Checkbox, Select, Option } from 'oskari-ui';
+import { Message, Button, TextInput, Checkbox, Select, Option, Spin } from 'oskari-ui';
 import { ButtonContainer } from 'oskari-ui/components/buttons';
 
 const BUNDLE_KEY = 'coordinatetool';
@@ -13,6 +13,7 @@ const OPTIONS = {
 const Content = styled('div')`
     margin: 12px 24px 24px;
     display: flex;
+    width: 350px;
     flex-direction: column;
 `;
 
@@ -51,6 +52,10 @@ const SelectField = styled('div')`
     flex-direction: column;
 `;
 
+const EmergencyInfo = styled('div')`
+    margin-top: 10px;
+`;
+
 const PopupContent = ({ state, controller }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
@@ -61,12 +66,12 @@ const PopupContent = ({ state, controller }) => {
 
     let degmin;
     let dec;
-    if (controller.allowDegrees() && state?.xy?.lonlat?.lon && state?.xy?.lonlat?.lat) {
-        dec = Oskari.util.coordinateDegreesToMetric([state.xy.lonlat.lon, state.xy.lonlat.lat], 20);
+    if (controller.allowDegrees() && state?.displayXy?.lonlat?.lon && state?.displayXy?.lonlat?.lat) {
+        dec = Oskari.util.coordinateDegreesToMetric([state.displayXy.lonlat.lon, state.displayXy.lonlat.lat], 20);
         degmin = controller.formatDegrees(dec[0], dec[1], 'min');
     }
 
-    return (
+    const content = (
         <Content>
             <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
             <br />
@@ -91,7 +96,7 @@ const PopupContent = ({ state, controller }) => {
                 <CoordinateField>
                     <CoordinateLabel>{latLabel}:</CoordinateLabel>
                     <TextInput
-                        value={state?.xy?.lonlat?.lat}
+                        value={state?.displayXy?.lonlat?.lat}
                         onChange={(e) => controller.setLat(e.target.value)}
                         disabled={state.showMouseCoordinates}
                     />
@@ -105,7 +110,7 @@ const PopupContent = ({ state, controller }) => {
                 <CoordinateField>
                     <CoordinateLabel>{lonLabel}:</CoordinateLabel>
                     <TextInput
-                        value={state?.xy?.lonlat?.lon}
+                        value={state?.displayXy?.lonlat?.lon}
                         onChange={(e) => controller.setLon(e.target.value)}
                         disabled={state.showMouseCoordinates}
                     />
@@ -124,12 +129,12 @@ const PopupContent = ({ state, controller }) => {
                 <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
             </Checkbox>
             {state.emergencyInfo && (
-                <div>
+                <EmergencyInfo>
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabel' />
                     {` ${state.emergencyInfo.degreesY}° `}{` ${state.emergencyInfo.minutesY}\' `}
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabelAnd' />
                     {` ${state.emergencyInfo.degreesX}° `}{` ${state.emergencyInfo.minutesX}\'`}
-                </div>
+                </EmergencyInfo>
             )}
             <ButtonContainer>
                 <Button
@@ -150,10 +155,20 @@ const PopupContent = ({ state, controller }) => {
             </ButtonContainer>
         </Content>
     );
+
+    if (state.loading) {
+        return (
+            <Spin>
+                {content}
+            </Spin>
+        );
+    } else {
+        return content;
+    }
 };
 
-export const showCoordinatePopup = (state, controller, onClose) => {
-    const controls = showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} />, onClose, OPTIONS);
+export const showCoordinatePopup = (state, controller, location, onClose) => {
+    const controls = showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} />, onClose, {...OPTIONS, placement: location});
     return {
         ...controls,
         update: (state) => {

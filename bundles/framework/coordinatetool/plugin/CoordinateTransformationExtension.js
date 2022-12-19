@@ -63,8 +63,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 srs = this._mapmodule.getProjection();
             }
             
-            if (srs && targetSRS) {
-                data.lonlat = this._mapmodule.transformCoordinates(data.lonlat, srs, targetSRS);
+            try {
+                if (srs && targetSRS) {
+                    data.lonlat = this._mapmodule.transformCoordinates(data.lonlat, srs, targetSRS);
+                }
+            } catch (e) {
+                throw new Error('SrsName not supported!');
             }
             return data;
         },

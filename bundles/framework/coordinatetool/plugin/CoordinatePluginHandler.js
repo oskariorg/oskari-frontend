@@ -1,5 +1,6 @@
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
+import { PLACEMENTS } from 'oskari-ui/components/window';
 
 const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
@@ -14,11 +15,12 @@ class UIHandler extends StateHandler {
         this.config = config;
         this.setState({
             xy: {},
+            displayXy: {},
             loading: false,
             popupControls: null,
             showMouseCoordinates: false,
             selectedProjection: this.mapModule.getProjection(),
-            previousProjection: null,
+            originalProjection: this.mapModule.getProjection(),
             emergencyInfo: null
         });
         this.popupControls = null;
@@ -81,22 +83,37 @@ class UIHandler extends StateHandler {
         this.updateLonLat(data);
     }
 
+    popupLocation () {
+        const location = this.plugin.getLocation();
+        if (location.includes('right')) {
+            return PLACEMENTS.RIGHT;
+        } else if (location.includes('left')) {
+            return PLACEMENTS.LEFT;
+        } else if (location.includes('top')) {
+            return PLACEMENTS.TOP;
+        } else {
+            return PLACEMENTS.BOTTOM;
+        }
+    }
+
     updateLonLat (data, fromServer = false) {
         let xy = data;
         if (!xy || !xy.lonlat) {
             // update with map coordinates if coordinates not given
             xy = this.getMapXY();
         }
-        if (this.preciseTransform) {
+
+        this.updateState({
+            xy: xy
+        });
+
+        if (this.preciseTransform && !fromServer) {
             try {
                 const fromProjection = this.mapModule.getProjection();
                 const toProjection = this.state.selectedProjection;            
                 xy = this.coordinateTransformationExtension.transformCoordinates(xy, fromProjection, toProjection);
             } catch (e) {
-                this.updateState({
-                    xy: {}
-                });
-                return;
+                this.getTransformedCoordinatesFromServer(xy, false, true);
             }
         }
 
@@ -160,12 +177,13 @@ class UIHandler extends StateHandler {
         }
 
         this.updateState({
-            xy: {
+            displayXy: {
                 'lonlat': {
                     'lon': lon,
                     'lat': lat
                 }
-            }
+            },
+            loading: false
         });
 
         this.updatePopup();
@@ -189,7 +207,7 @@ class UIHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), () => this.popupCleanup());
+            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), () => this.popupCleanup());
         }
     }
 
@@ -387,9 +405,12 @@ class UIHandler extends StateHandler {
     }
 
     getTransformedCoordinatesFromServer (data, showMarker, swapProjections, centerMap, markerMessageData) {
+
+        data = data || this.getMapXY();
+
         let fromProj = this.state.selectedProjection;
         let toProj = this.mapModule.getProjection();
-        const successCb = (data) => {console.log(data)
+        const successCb = (data) => {
             if (showMarker) {
                 this.addMarker(data, markerMessageData);
             }
@@ -548,10 +569,10 @@ class UIHandler extends StateHandler {
                 };
                 const dataServer = cloneJSON(data);
                 if (!this.showMouseCoordinates) {
-                    // don't manipulate the original data- object, we need the coordinates in map projection for the reverse geocoding to work
-                    this.refreshDisplayData(cloneJSON(data));
                     if (this.preciseTransform) {
                         this.getTransformedCoordinatesFromServer(dataServer, false, true);
+                    } else {
+                        this.updateLonLat(data);
                     }
                 }
 
