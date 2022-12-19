@@ -221,6 +221,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                  */
                 AfterMapMoveEvent: function (event) {
                     this.refresh();
+                },
+                /**
+                 * @method AfterMapLayerAddEvent
+                 * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+                 *
+                 * Calls flyouts layerAdded() method
+                 */
+                'AfterMapLayerAddEvent': function (event) {
+                    if (event.getMapLayer().hasFeatureData()) {
+                        this.refresh();
+                    }
+                },
+                'AfterMapLayerRemoveEvent': function (event) {
+                    if (event.getMapLayer().hasFeatureData()) {
+                        this.refresh();
+                    }
                 }
             };
         }
