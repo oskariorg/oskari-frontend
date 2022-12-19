@@ -297,21 +297,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'AfterMapLayerRemoveEvent': function (event) {
                 if (event.getMapLayer().hasFeatureData()) {
-                    this.plugin.refresh();
                     delete this.__loadingStatus['' + event.getMapLayer().getId()];
                     this.__refreshLoadingStatus();
-                }
-            },
-
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Calls flyouts layerAdded() method
-             */
-            'AfterMapLayerAddEvent': function (event) {
-                if (event.getMapLayer().hasFeatureData()) {
-                    this.plugin.refresh();
                 }
             },
 
