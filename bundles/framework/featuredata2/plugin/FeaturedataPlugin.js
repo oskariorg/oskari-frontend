@@ -234,7 +234,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     }
                 },
                 'AfterMapLayerRemoveEvent': function (event) {
-                    this.refresh();
+                    if (event.getMapLayer().hasFeatureData()) {
+                        this.refresh();
+                    }
                 }
             };
         }
