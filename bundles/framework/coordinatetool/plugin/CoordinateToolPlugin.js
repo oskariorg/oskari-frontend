@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
-import { showCoordinatePopup } from './CoordinatePopup';
 import { CoordinatePluginHandler } from './CoordinatePluginHandler';
-
-const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin

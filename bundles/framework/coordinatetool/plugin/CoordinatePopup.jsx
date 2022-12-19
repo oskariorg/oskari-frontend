@@ -128,6 +128,14 @@ const PopupContent = ({ state, controller }) => {
             >
                 <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
             </Checkbox>
+            {controller.showReverseGeoCodeCheckbox() && (
+                <Checkbox
+                    checked={state.showReverseGeoCode}
+                    onChange={() => controller.toggleReverseGeoCode()}
+                >
+                    <Message bundleKey={BUNDLE_KEY} messageKey='display.reversegeocode.moreInfo' />
+                </Checkbox>
+            )}
             {state.emergencyInfo && (
                 <EmergencyInfo>
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.emergencyCallLabel' />

@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (!srs) {
                 srs = this._mapmodule.getProjection();
             }
-            
+
             try {
                 if (srs && targetSRS) {
                     data.lonlat = this._mapmodule.transformCoordinates(data.lonlat, srs, targetSRS);

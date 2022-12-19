@@ -1,4 +1,4 @@
-import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
 
@@ -21,7 +21,8 @@ class UIHandler extends StateHandler {
             showMouseCoordinates: false,
             selectedProjection: this.mapModule.getProjection(),
             originalProjection: this.mapModule.getProjection(),
-            emergencyInfo: null
+            emergencyInfo: null,
+            showReverseGeoCode: false
         });
         this.popupControls = null;
         this.eventHandlers = this.createEventHandlers();
@@ -59,6 +60,13 @@ class UIHandler extends StateHandler {
     toggleMouseCoordinates () {
         this.updateState({
             showMouseCoordinates: !this.state.showMouseCoordinates
+        });
+        this.updatePopup();
+    }
+
+    toggleReverseGeoCode () {
+        this.updateState({
+            showReverseGeoCode: !this.state.showReverseGeoCode
         });
         this.updatePopup();
     }
@@ -110,11 +118,9 @@ class UIHandler extends StateHandler {
         if (this.preciseTransform && !fromServer) {
             try {
                 const fromProjection = this.mapModule.getProjection();
-                const toProjection = this.state.selectedProjection;            
+                const toProjection = this.state.selectedProjection;
                 xy = this.coordinateTransformationExtension.transformCoordinates(xy, fromProjection, toProjection);
-            } catch (e) {
-                this.getTransformedCoordinatesFromServer(xy, false, true);
-            }
+            } catch (e) {}
         }
 
         const isSupported = !!((this.config && Array.isArray(this.config.supportedProjections)));
@@ -197,10 +203,10 @@ class UIHandler extends StateHandler {
     }
 
     showErrorMessage (message, title) {
-        /* const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(this.loc('tabs.myviews.button.ok'));
+        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        const button = dialog.createCloseButton(this.loc('display.checkValuesDialog.button'));
         button.addClass('primary');
-        dialog.show(this.loc('tabs.myviews.error.title'), message, [button]); */
+        dialog.show(title ? title : this.loc('display.checkValuesDialog.title'), message, [button]);
     }
 
     showPopup () {
@@ -281,7 +287,7 @@ class UIHandler extends StateHandler {
         // Check at data is given. If data is given then use for it.
         // If not then use input data's and try change data to map projection and use it to place marker
         try {
-            data = data || this.coordinateTransformationExtension.transformCoordinates(inputLonLatData, this.state.selectedProjection, me.getMapModule().getProjection());
+            data = data || this.coordinateTransformationExtension.transformCoordinates(inputLonLatData, this.state.selectedProjection, this.mapModule.getProjection());
         } catch (err) {
             // Cannot transform coordinates in _coordinateTransformationExtension.transformCoordinates -function
             this.showErrorMessage(this.loc('cannotTransformCoordinates.message'), this.loc('cannotTransformCoordinates.title'));
@@ -337,9 +343,7 @@ class UIHandler extends StateHandler {
         const projFormats = this.config.projectionShowFormat || {};
         const formatDef = projFormats[projection];
 
-        if (!formatDef) {
-            this.showErrorMessage('Not specified projection format. Used defaults from map projection units.');
-        } else {
+        if (formatDef) {
             showDegrees = (formatDef.format === 'degrees');
         }
         return showDegrees;
@@ -405,7 +409,6 @@ class UIHandler extends StateHandler {
     }
 
     getTransformedCoordinatesFromServer (data, showMarker, swapProjections, centerMap, markerMessageData) {
-
         data = data || this.getMapXY();
 
         let fromProj = this.state.selectedProjection;
@@ -424,7 +427,7 @@ class UIHandler extends StateHandler {
             }
         };
         const errorCb = () => {
-            this.showErrorMessage(this.loc('cannotTransformCoordinates.message'), this.loc('display.cannotTransformCoordinates.title'));
+            this.setLoading(false);
         };
 
         this.setLoading(true);
@@ -438,6 +441,8 @@ class UIHandler extends StateHandler {
         this.setLoading(false);
     }
 
+    updateReverseGeocode (data) {}
+
     getEmergencyCallCoordinatesFromServer (data, cb) {
         // get the transform from current data
         const sourceProjection = this.mapModule.getProjection();
@@ -449,9 +454,7 @@ class UIHandler extends StateHandler {
                 (responseDataTo4326) => {
                     cb(this.formatEmergencyCallMessage(responseDataTo4326));
                 },
-                () => {
-                    this.showErrorMessage(this.loc('cannotTransformCoordinates.message'), this.loc('display.cannotTransformCoordinates.title'));
-                });
+                () => {});
         }
         // Else if coordinates are from 'EPSG:4326' then use these
         else {
@@ -506,6 +509,10 @@ class UIHandler extends StateHandler {
         };
     }
 
+    showReverseGeoCodeCheckbox () {
+        return this.config?.reverseGeocodingIds?.split(',').length > 2;
+    }
+
     createEventHandlers () {
         const handlers = {
             /**
@@ -527,11 +534,11 @@ class UIHandler extends StateHandler {
                     if (event.isPaused() && this.preciseTransform) {
                         this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     }
-                    /*
-                    if (event.isPaused() && me._showReverseGeocode) {
-                        me._updateReverseGeocode(cloneJSON(data));
+
+                    if (event.isPaused() && this.config.isReverseGeocode) {
+                        this.updateReverseGeocode(cloneJSON(data));
                     }
-                    */
+
                     if (event.isPaused()) {
                         this.getEmergencyCallInfo(cloneJSON(data));
                     }
@@ -611,7 +618,8 @@ const wrapped = controllerMixin(UIHandler, [
     'allowDegrees',
     'formatDegrees',
     'getEmergencyCallInfo',
-    'popupCleanup'
+    'popupCleanup',
+    'showReverseGeoCodeCheckbox'
 ]);
 
 export { wrapped as CoordinatePluginHandler };
