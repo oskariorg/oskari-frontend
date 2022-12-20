@@ -23,7 +23,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin';
         me._defaultLocation = 'top left';
-        me._index = 10;
+        me._index = 0;
         me._name = 'SearchPlugin';
         me._searchMarkerId = 'SEARCH_RESULT_MARKER';
         me._popupControls = null;
