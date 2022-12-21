@@ -1,6 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
+import { getTransformedCoordinatesFromServer, transformCoordinates, formatDegrees } from './helper';
 
 const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
@@ -26,9 +27,6 @@ class UIHandler extends StateHandler {
         });
         this.popupControls = null;
         this.eventHandlers = this.createEventHandlers();
-        this.coordinateTransformationExtension =
-            Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateTransformationExtension',
-                this.instance, this.config, this.loc, this.mapModule, this.sandbox);
         this.decimalSeparator = Oskari.getDecimalSeparator();
         this.preciseTransform = Array.isArray(this.config.supportedProjections);
         this.updateLonLat();
@@ -119,8 +117,12 @@ class UIHandler extends StateHandler {
             try {
                 const fromProjection = this.mapModule.getProjection();
                 const toProjection = this.state.selectedProjection;
-                xy = this.coordinateTransformationExtension.transformCoordinates(xy, fromProjection, toProjection);
-            } catch (e) {}
+                xy = transformCoordinates(this.mapModule, xy, fromProjection, toProjection);
+            } catch (e) {
+                this.updateState({
+                    error: e
+                });
+            }
         }
 
         const isSupported = !!((this.config && Array.isArray(this.config.supportedProjections)));
@@ -213,7 +215,7 @@ class UIHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), () => this.popupCleanup());
+            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, () => this.popupCleanup());
         }
     }
 
@@ -287,9 +289,9 @@ class UIHandler extends StateHandler {
         // Check at data is given. If data is given then use for it.
         // If not then use input data's and try change data to map projection and use it to place marker
         try {
-            data = data || this.coordinateTransformationExtension.transformCoordinates(inputLonLatData, this.state.selectedProjection, this.mapModule.getProjection());
+            data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.mapModule.getProjection());
         } catch (err) {
-            // Cannot transform coordinates in _coordinateTransformationExtension.transformCoordinates -function
+            // Cannot transform coordinates in transformCoordinates -function
             this.showErrorMessage(this.loc('cannotTransformCoordinates.message'), this.loc('cannotTransformCoordinates.title'));
             return;
         }
@@ -364,7 +366,7 @@ class UIHandler extends StateHandler {
     }
 
     formatDegrees (lon, lat, type) {
-        return this.coordinateTransformationExtension._formatDegrees(lon, lat, type);
+        return formatDegrees(lon, lat, type);
     }
 
     getDecimalSeparator () {
@@ -391,10 +393,6 @@ class UIHandler extends StateHandler {
         return decimals;
     }
 
-    getPreciseTransform () {
-        return this.preciseTransform;
-    }
-
     markersSupported () {
         const builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
         return !!builder;
@@ -404,57 +402,74 @@ class UIHandler extends StateHandler {
         return this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
     }
 
-    getSupportedProjections () {
-        return this.config?.supportedProjections || [];
-    }
-
-    getTransformedCoordinatesFromServer (data, showMarker, swapProjections, centerMap, markerMessageData) {
+    async getTransformedCoordinatesFromServer (data, showMarker, swapProjections, centerMap, markerMessageData) {
+        this.setLoading(true);
         data = data || this.getMapXY();
-
         let fromProj = this.state.selectedProjection;
         let toProj = this.mapModule.getProjection();
-        const successCb = (data) => {
-            if (showMarker) {
-                this.addMarker(data, markerMessageData);
-            }
-
-            if (showMarker || centerMap) {
-                this.centerMap(data);
-            }
-
-            if (!centerMap) {
-                this.updateLonLat(data, true);
-            }
-        };
-        const errorCb = () => {
-            this.setLoading(false);
-        };
-
-        this.setLoading(true);
 
         if (swapProjections) {
             fromProj = this.mapModule.getProjection();
             toProj = this.state.selectedProjection;
         }
 
-        this.coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, fromProj, toProj, successCb, errorCb);
+        try {
+            const response = await getTransformedCoordinatesFromServer(this.mapModule, data, fromProj, toProj);
+            if (response?.lat && response?.lon) {
+                const newData = {
+                    'lonlat': {
+                        'lon': response.lon,
+                        'lat': response.lat
+                    }
+                };
+
+                if (showMarker) {
+                    this.addMarker(newData, markerMessageData);
+                }
+
+                if (showMarker || centerMap) {
+                    this.centerMap(newData);
+                }
+
+                if (!centerMap) {
+                    this.updateLonLat(newData, true);
+                }
+            } else {
+                this.updateLonLat();
+            }
+        } catch (e) {
+            this.updateState({
+                error: e
+            });
+        }
         this.setLoading(false);
     }
 
     updateReverseGeocode (data) {}
 
-    getEmergencyCallCoordinatesFromServer (data, cb) {
+    async getEmergencyCallCoordinatesFromServer (data) {
         // get the transform from current data
         const sourceProjection = this.mapModule.getProjection();
 
         // If coordinates are not  EPSG:4326 then
         // need to get 'EPSG:4326' coordinates from service
         if (sourceProjection !== 'EPSG:4326') {
-            this.coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, sourceProjection, 'EPSG:4326',
-                (responseDataTo4326) => {
-                    cb(this.formatEmergencyCallMessage(responseDataTo4326));
-                },
-                () => {});
+            try {
+                const response = await getTransformedCoordinatesFromServer(this.mapModule, data, sourceProjection, 'EPSG:4326');
+                if (response?.lat && response?.lon) {
+                    const newData = {
+                        'lonlat': {
+                            'lon': response.lon,
+                            'lat': response.lat
+                        }
+                    };
+                    return this.formatEmergencyCallMessage(newData);
+                }
+            } catch (e) {
+                this.updateState({
+                    error: e
+                });
+            }
         }
         // Else if coordinates are from 'EPSG:4326' then use these
         else {
@@ -478,11 +493,12 @@ class UIHandler extends StateHandler {
                     })
                 });
             } else {
-                this.getEmergencyCallCoordinatesFromServer(data, (serverData) => {
-                    this.updateState({
-                        emergencyInfo: serverData
+                this.getEmergencyCallCoordinatesFromServer(data)
+                    .then(emergencyData => {
+                        this.updateState({
+                            emergencyInfo: emergencyData
+                        });
                     });
-                });
             }
         } else {
             this.updateState({
@@ -493,7 +509,7 @@ class UIHandler extends StateHandler {
     }
 
     formatEmergencyCallMessage (data) {
-        const degmin = this.coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min');
+        const degmin = formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min');
 
         let minutesX = '' + parseFloat(degmin.minutesX.replace(this.decimalSeparator, '.')).toFixed(3);
         minutesX = minutesX.replace('.', this.decimalSeparator);
@@ -549,7 +565,7 @@ class UIHandler extends StateHandler {
                  * Shows map center coordinates after map move
                  */
             AfterMapMoveEvent: function (event) {
-                if (this.state.showMouseCoordinates) {
+                if (!this.state.showMouseCoordinates) {
                     this.updateState({
                         loading: true
                     });
@@ -610,9 +626,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setLat',
     'setLon',
     'getCrsText',
-    'getPreciseTransform',
     'setLoading',
-    'getSupportedProjections',
     'setSelectedProjection',
     'getDecimalSeparator',
     'allowDegrees',

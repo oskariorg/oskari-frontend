@@ -24,9 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._messageDialog = null;
         me._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
-        me._coordinateTransformationExtension =
-                    Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateTransformationExtension',
-                        instance, config, locale, mapmodule, sandbox);
         me._defaultLocation = 'top right';
         me._index = 60;
         me._name = 'CoordinateToolPlugin';

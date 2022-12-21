@@ -56,7 +56,7 @@ const EmergencyInfo = styled('div')`
     margin-top: 10px;
 `;
 
-const PopupContent = ({ state, controller }) => {
+const PopupContent = ({ state, controller, preciseTransform, supportedProjections }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
     if (!controller.showDegrees()) {
@@ -75,7 +75,7 @@ const PopupContent = ({ state, controller }) => {
         <Content>
             <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
             <br />
-            {!controller.getPreciseTransform() ? (
+            {!preciseTransform ? (
                 controller.getCrsText()
             ) : (
                 <SelectField>
@@ -84,7 +84,7 @@ const PopupContent = ({ state, controller }) => {
                         value={state.selectedProjection}
                         onChange={value => controller.setSelectedProjection(value)}
                     >
-                        {controller.getSupportedProjections()?.map(option => (
+                        {supportedProjections.map(option => (
                             <Option key={option} value={option}>
                                 <Message bundleKey={BUNDLE_KEY} messageKey={`display.coordinatesTransform.projections.${option}`} />
                             </Option>
@@ -175,12 +175,15 @@ const PopupContent = ({ state, controller }) => {
     }
 };
 
-export const showCoordinatePopup = (state, controller, location, onClose) => {
-    const controls = showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} />, onClose, {...OPTIONS, placement: location});
+export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, onClose) => {
+    const controls = showPopup(
+        <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />,
+        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} />, onClose, {...OPTIONS, placement: location}
+    );
     return {
         ...controls,
         update: (state) => {
-            controls.update(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} />);
+            controls.update(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} />);
         }
     };
 };
