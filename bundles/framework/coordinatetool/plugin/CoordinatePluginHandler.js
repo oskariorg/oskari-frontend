@@ -460,7 +460,7 @@ class UIHandler extends StateHandler {
         }
     }
 
-    getEmergencyCallInfo (data) {
+    async getEmergencyCallInfo (data) {
         const xy = data || this.getMapXY();
 
         // update emergency if configured
@@ -476,7 +476,7 @@ class UIHandler extends StateHandler {
                     })
                 });
             } else {
-                this.getEmergencyCallCoordinatesFromServer(data)
+                await this.getEmergencyCallCoordinatesFromServer(data)
                     .then(emergencyData => {
                         this.updateState({
                             emergencyInfo: emergencyData
