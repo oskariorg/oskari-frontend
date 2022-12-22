@@ -992,6 +992,7 @@ Oskari.clazz.define(
             tooltipElement.className = `drawplugin-tooltip-measure ${shape} ${id}`;
             const tooltip = new olOverlay({
                 element: tooltipElement,
+                stopEvent: false,
                 offset: [0, -5],
                 positioning: 'bottom-center',
                 id: id
