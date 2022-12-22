@@ -148,6 +148,14 @@ Oskari.clazz.define(
             }
             if (!el) return;
             el = el.find('.indexmapToggle');
+            // the icon is switched based on styleName -> passed to classes -> see scss
+            let styleName = style;
+            if (!style) {
+                styleName = this.getToolStyleFromMapModule();
+            }
+            if (!styleName) {
+                styleName = 'rounded-dark';
+            }
 
             ReactDOM.render(
                 <div className={`indexmapToggle ${styleName}`}>

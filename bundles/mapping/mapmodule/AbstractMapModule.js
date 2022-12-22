@@ -1392,7 +1392,7 @@ Oskari.clazz.define(
             }
         },
         __cachedTheme: null,
-        getMapTheme: function() {
+        getMapTheme: function () {
             if (this.__cachedTheme) {
                 return this.__cachedTheme;
             }
