@@ -742,7 +742,8 @@ Oskari.clazz.define(
          * @param {Object} options
          */
         checkIntersection: function (feature) {
-            if (!this.getOpts('limits').selfIntersection) {
+            // user can draw or modify intersecting polygons only if shape is polygon (not for Circle, Box, Square)
+            if (this.getShape() !== 'Polygon' || !this.getOpts('limits').selfIntersection) {
                 return false;
             }
             const geometry = feature.getGeometry();
