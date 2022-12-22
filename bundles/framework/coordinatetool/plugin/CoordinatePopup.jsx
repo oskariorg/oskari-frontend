@@ -56,7 +56,7 @@ const EmergencyInfo = styled('div')`
     margin-top: 10px;
 `;
 
-const PopupContent = ({ state, controller, preciseTransform, supportedProjections }) => {
+const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
     if (!controller.showDegrees()) {
@@ -76,7 +76,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
             <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
             <br />
             {!preciseTransform ? (
-                controller.getCrsText()
+                crsText
             ) : (
                 <SelectField>
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.header' />
@@ -104,7 +104,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                 {degmin && (
                     <DegreeContainer>
                         <span>{`${degmin.degreesY}° ${degmin.minutesY}\'`}</span>
-                        <span>{`${parseFloat(dec[1]).toFixed(9).replace('.', controller.getDecimalSeparator)}°`}</span>
+                        <span>{`${parseFloat(dec[1]).toFixed(9).replace('.', decimalSeparator)}°`}</span>
                     </DegreeContainer>
                 )}
                 <CoordinateField>
@@ -118,7 +118,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                 {degmin && (
                     <DegreeContainer>
                         <span>{`${degmin.degreesX}° ${degmin.minutesX}\'`}</span>
-                        <span>{`${parseFloat(dec[0]).toFixed(9).replace('.', controller.getDecimalSeparator)}°`}</span>
+                        <span>{`${parseFloat(dec[0]).toFixed(9).replace('.', decimalSeparator)}°`}</span>
                     </DegreeContainer>
                 )}
             </CoordinateFields>
@@ -175,15 +175,15 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
     }
 };
 
-export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, onClose) => {
+export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, crsText, decimalSeparator, onClose) => {
     const controls = showPopup(
         <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />,
-        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} />, onClose, {...OPTIONS, placement: location}
+        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />, onClose, {...OPTIONS, placement: location}
     );
     return {
         ...controls,
         update: (state) => {
-            controls.update(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} />);
+            controls.update(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />);
         }
     };
 };

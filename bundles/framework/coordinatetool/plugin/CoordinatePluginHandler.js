@@ -1,4 +1,4 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
 import { getTransformedCoordinatesFromServer, transformCoordinates, formatDegrees } from './helper';
@@ -120,7 +120,8 @@ class UIHandler extends StateHandler {
                 xy = transformCoordinates(this.mapModule, xy, fromProjection, toProjection);
             } catch (e) {
                 this.updateState({
-                    error: e
+                    xy: {},
+                    displayXy: {}
                 });
             }
         }
@@ -204,18 +205,12 @@ class UIHandler extends StateHandler {
         this.updateLonLat();
     }
 
-    showErrorMessage (message, title) {
-        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        const button = dialog.createCloseButton(this.loc('display.checkValuesDialog.button'));
-        button.addClass('primary');
-        dialog.show(title ? title : this.loc('display.checkValuesDialog.title'), message, [button]);
-    }
-
     showPopup () {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, () => this.popupCleanup());
+            const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
+            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, crsText, this.decimalSeparator, () => this.popupCleanup());
         }
     }
 
@@ -232,7 +227,7 @@ class UIHandler extends StateHandler {
                 }
             }
         } catch (e) {
-            this.showErrorMessage(this.loc('display.checkValuesDialog.message'), this.loc('display.checkValuesDialog.title'));
+            Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
     }
 
@@ -242,7 +237,7 @@ class UIHandler extends StateHandler {
             const moveReq = moveReqBuilder(data.lonlat.lon, data.lonlat.lat);
             this.sandbox.request(this, moveReq);
         } else {
-            this.showErrorMessage(this.loc('display.checkValuesDialog.message'), this.loc('display.checkValuesDialog.title'));
+            Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
     }
 
@@ -271,7 +266,7 @@ class UIHandler extends StateHandler {
                 }
             }
         } catch (e) {
-            this.showErrorMessage(this.loc('display.checkValuesDialog.message'), this.loc('display.checkValuesDialog.title'));
+            Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
     }
 
@@ -292,7 +287,7 @@ class UIHandler extends StateHandler {
             data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.mapModule.getProjection());
         } catch (err) {
             // Cannot transform coordinates in transformCoordinates -function
-            this.showErrorMessage(this.loc('cannotTransformCoordinates.message'), this.loc('cannotTransformCoordinates.title'));
+            Messaging.error(this.loc('cannotTransformCoordinates.message'));
             return;
         }
 
@@ -369,10 +364,6 @@ class UIHandler extends StateHandler {
         return formatDegrees(lon, lat, type);
     }
 
-    getDecimalSeparator () {
-        return this.decimalSeparator;
-    }
-
     getProjectionDecimals (checkedProjection) {
         const conf = this.config;
         const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.mapModule.getProjection();
@@ -396,10 +387,6 @@ class UIHandler extends StateHandler {
     markersSupported () {
         const builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
         return !!builder;
-    }
-
-    getCrsText () {
-        return this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
     }
 
     async getTransformedCoordinatesFromServer (data, showMarker, swapProjections, centerMap, markerMessageData) {
@@ -438,9 +425,7 @@ class UIHandler extends StateHandler {
                 this.updateLonLat();
             }
         } catch (e) {
-            this.updateState({
-                error: e
-            });
+            Messaging.error('display.cannotTransformCoordinates.message');
         }
         this.setLoading(false);
     }
@@ -466,9 +451,7 @@ class UIHandler extends StateHandler {
                     return this.formatEmergencyCallMessage(newData);
                 }
             } catch (e) {
-                this.updateState({
-                    error: e
-                });
+                Messaging.error(this.loc('display.cannotTransformCoordinates.message'));
             }
         }
         // Else if coordinates are from 'EPSG:4326' then use these
@@ -561,9 +544,9 @@ class UIHandler extends StateHandler {
                 }
             },
             /**
-                 * @method AfterMapMoveEvent
-                 * Shows map center coordinates after map move
-                 */
+             * @method AfterMapMoveEvent
+             * Shows map center coordinates after map move
+             */
             AfterMapMoveEvent: function (event) {
                 if (!this.state.showMouseCoordinates) {
                     this.updateState({
@@ -625,13 +608,10 @@ const wrapped = controllerMixin(UIHandler, [
     'centerMap',
     'setLat',
     'setLon',
-    'getCrsText',
     'setLoading',
     'setSelectedProjection',
-    'getDecimalSeparator',
     'allowDegrees',
     'formatDegrees',
-    'getEmergencyCallInfo',
     'popupCleanup',
     'showReverseGeoCodeCheckbox'
 ]);
