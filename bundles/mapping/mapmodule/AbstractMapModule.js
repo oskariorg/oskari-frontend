@@ -1391,6 +1391,50 @@ Oskari.clazz.define(
                 return 'light';
             }
         },
+        __cachedTheme: null,
+        getMapTheme: function() {
+            if (this.__cachedTheme) {
+                return this.__cachedTheme;
+            }
+            const { map = {}, ...appTheme } = Oskari.app.getTheming().getTheme();
+            // take "global" theme as base and override anything specified for map
+            let mapTheme = {
+                ...appTheme,
+                ...map
+            };
+            if (!mapTheme.navigation) {
+                mapTheme.navigation = {};
+            }
+            const style = this.getToolStyle() || 'rounded-dark';
+            const [shape, theme] = style.split('-');
+            if (!mapTheme.navigation.roundness) {
+                mapTheme.navigation.roundness = 0;
+                if (shape === 'rounded') {
+                    mapTheme.navigation.roundness = 100;
+                } else if (shape === '3d') {
+                    mapTheme.navigation.roundness = 20;
+                }
+            }
+            if (!mapTheme.navigation.color) {
+                mapTheme.navigation.color = {};
+            }
+            // #141414 -> rgb(20,20,20)
+            // #3c3c3c -> rgb(60,60,60)
+            mapTheme.navigation.color.primary = '#141414';
+            mapTheme.navigation.color.accent = '#ffd400';
+            mapTheme.navigation.color.text = '#ffffff';
+
+            if (shape === '3d') {
+                // themehelper calculates gradients when this is set
+                mapTheme.navigation.effect = '3D';
+            }
+            if (theme === 'light') {
+                mapTheme.navigation.color.primary = '#ffffff';
+                mapTheme.navigation.color.text = '#000000';
+            }
+            this.__cachedTheme = mapTheme;
+            return mapTheme;
+        },
 
         getThemeColours: function (theme) {
             var me = this;
@@ -2130,6 +2174,7 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
+            this.__cachedTheme = null;
             const clonedStyle = {
                 ...style
             };

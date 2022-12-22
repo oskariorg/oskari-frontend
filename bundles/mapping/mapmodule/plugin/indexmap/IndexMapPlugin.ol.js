@@ -149,14 +149,6 @@ Oskari.clazz.define(
             if (!el) return;
             el = el.find('.indexmapToggle');
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-            if (!styleName) {
-                styleName = 'rounded-dark';
-            }
-
             ReactDOM.render(
                 <div className={`indexmapToggle ${styleName}`}>
                     <MapModuleButton
@@ -167,7 +159,6 @@ Oskari.clazz.define(
                             }
                         }}
                         size='48px'
-                        styleName={styleName}
                         icon={<div className='icon' />}
                     />
                 </div>,

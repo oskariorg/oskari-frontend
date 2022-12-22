@@ -50,16 +50,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
         renderButton: function (style) {
             const el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
-            const styleName = style || this.getToolStyleFromMapModule();
             const title = Oskari.getMsg('maplegend', 'tooltip');
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maplegend'
                     title={title}
                     icon={<QuestionOutlined />}
-                    styleName={styleName}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
                             this.togglePopup();
