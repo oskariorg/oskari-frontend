@@ -125,6 +125,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._log = Oskari.log('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin');
         me.inMobileMode = false;
         me.handler = new CoordinatePluginHandler(me, me._mapmodule, me._config, me._instance);
+        me.popupOpen = false;
+        me.handler.addPopupListener((isOpen) => {
+            me.popupOpen = isOpen;
+            me.renderButton();
+        });
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (this.inLayerToolsEditMode() && this.isOpen()) {
@@ -325,7 +330,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (!element) {
                 el = this.getElement();
             }
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <MapModuleButton
@@ -337,7 +344,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             this.handler.getController().showPopup();
                         }
                     }}
-                    iconActive={this.handler.getState().popupControls}
+                    iconActive={!!this.popupOpen}
                     position={this.getLocation()}
                 />,
                 el[0]
