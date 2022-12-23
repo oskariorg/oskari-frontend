@@ -36,7 +36,7 @@ class UIHandler extends StateHandler {
     addPopupListener (func) {
         this.popupListeners.push(func);
     }
-    notifyPopupListeners(isOpen) {
+    notifyPopupListeners (isOpen) {
         this.popupListeners.forEach(func => func(isOpen));
     }
 
