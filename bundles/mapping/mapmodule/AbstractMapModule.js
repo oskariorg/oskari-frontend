@@ -1407,6 +1407,7 @@ Oskari.clazz.define(
             this.__cachedTheme = mapTheme;
             return mapTheme;
         },
+        // generates base style for map
         __injectThemeByToolStyle: function (toolStyle) {
             // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
             const mapTheme = {
@@ -1427,12 +1428,12 @@ Oskari.clazz.define(
                 color: {
                     header: {
                         bg: '#3c3c3c'
-                    },
+                    }
                     // accent should be inherited from global theme accent if not configured
                     // accent: '#ffd400'
                 }
                 // /For popup headers opened by map ^
-            }
+            };
             const style = toolStyle || 'rounded-dark';
             const [shape, theme] = style.split('-');
             if (shape === 'rounded') {
@@ -1447,10 +1448,10 @@ Oskari.clazz.define(
                 // buttons
                 mapTheme.navigation.color.primary = '#ffffff';
                 mapTheme.navigation.color.text = '#000000';
-                //  popup
+                // popup
                 mapTheme.color.header.bg = '#ffffff';
             }
-            
+
             return mapTheme;
         },
 
