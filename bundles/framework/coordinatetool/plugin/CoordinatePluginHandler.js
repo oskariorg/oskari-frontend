@@ -79,11 +79,11 @@ class UIHandler extends StateHandler {
         this.updateLonLat(data);
     }
 
-    setlat (value) {
+    setLat (value) {
         const data = {
             'lonlat': {
-                'lon': this.state?.xy?.lonlat?.lon,
-                'lat': value
+                'lat': value,
+                'lon': this.state?.xy?.lonlat?.lon
             }
         };
         this.updateLonLat(data);
@@ -220,7 +220,7 @@ class UIHandler extends StateHandler {
             if (!this.preciseTransform) {
                 this.centerMapToSelectedCoordinates(data);
             } else {
-                if (this.selectedProjection === this.mapModule.getProjection()) {
+                if (this.state.selectedProjection === this.mapModule.getProjection()) {
                     this.centerMapToSelectedCoordinates(data);
                 } else {
                     this.getTransformedCoordinatesFromServer(data, false, false, true);
@@ -233,9 +233,7 @@ class UIHandler extends StateHandler {
 
     centerMapToSelectedCoordinates (data) {
         if (this.mapModule.isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
-            const moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
-            const moveReq = moveReqBuilder(data.lonlat.lon, data.lonlat.lat);
-            this.sandbox.request(this, moveReq);
+            this.sandbox.postRequestByName('MapMoveRequest', [data.lonlat.lon, data.lonlat.lat, this.sandbox.getMap().getZoom()]);
         } else {
             Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
@@ -606,8 +604,8 @@ const wrapped = controllerMixin(UIHandler, [
     'markersSupported',
     'setMarker',
     'centerMap',
-    'setLat',
     'setLon',
+    'setLat',
     'setLoading',
     'setSelectedProjection',
     'allowDegrees',
