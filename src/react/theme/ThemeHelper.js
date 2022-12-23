@@ -2,9 +2,10 @@
 import { EFFECT } from './constants';
 
 export const getHeaderTheme = (theme) => {
-    const headerTextColor = getTextColor(theme.color.primary);
+    const bgColor = theme.color.header?.bg || theme.color.primary;
+    const headerTextColor = getTextColor(bgColor);
     const funcs = {
-        getBgColor: () => theme.color.header?.bg || theme.color.primary,
+        getBgColor: () => bgColor,
         getAccentColor: () => theme.color.accent,
         getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
@@ -31,7 +32,7 @@ export const getNavigationTheme = (theme) => {
         getPrimary: () => primary,
         getTextColor: () => theme.navigation?.color?.text || textColor,
         getButtonColor: () => buttonColor,
-        getButtonHoverColor: () => theme.navigation?.color?.accent || '#ffd400',
+        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || '#ffd400',
         getButtonRoundness: () => borderRadius,
         getEffect: () => theme.navigation?.effect
     };
