@@ -31,7 +31,14 @@ class UIHandler extends StateHandler {
         this.preciseTransform = Array.isArray(this.config.supportedProjections);
         this.updateLonLat();
         this.getEmergencyCallInfo(this.state.xy);
+        this.popupListeners = [];
     };
+    addPopupListener (func) {
+        this.popupListeners.push(func);
+    }
+    notifyPopupListeners(isOpen) {
+        this.popupListeners.forEach(func => func(isOpen));
+    }
 
     getName () {
         return 'CoordinatePluginHandler';
@@ -40,6 +47,7 @@ class UIHandler extends StateHandler {
     popupCleanup () {
         if (this.popupControls) this.popupControls.close();
         this.popupControls = null;
+        this.notifyPopupListeners(false);
     }
 
     updatePopup () {
@@ -211,6 +219,7 @@ class UIHandler extends StateHandler {
         } else {
             const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
             this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, crsText, this.decimalSeparator, () => this.popupCleanup());
+            this.notifyPopupListeners(true);
         }
     }
 
