@@ -1400,39 +1400,57 @@ Oskari.clazz.define(
             // take "global" theme as base and override anything specified for map
             let mapTheme = {
                 ...appTheme,
+                ...this.__injectThemeByToolStyle(this.getToolStyle()),
                 ...map
             };
-            if (!mapTheme.navigation) {
-                mapTheme.navigation = {};
-            }
-            const style = this.getToolStyle() || 'rounded-dark';
-            const [shape, theme] = style.split('-');
-            if (!mapTheme.navigation.roundness) {
-                mapTheme.navigation.roundness = 0;
-                if (shape === 'rounded') {
-                    mapTheme.navigation.roundness = 100;
-                } else if (shape === '3d') {
-                    mapTheme.navigation.roundness = 20;
-                }
-            }
-            if (!mapTheme.navigation.color) {
-                mapTheme.navigation.color = {};
-            }
-            // #141414 -> rgb(20,20,20)
-            // #3c3c3c -> rgb(60,60,60)
-            mapTheme.navigation.color.primary = '#141414';
-            mapTheme.navigation.color.accent = '#ffd400';
-            mapTheme.navigation.color.text = '#ffffff';
 
-            if (shape === '3d') {
+            this.__cachedTheme = mapTheme;
+            return mapTheme;
+        },
+        __injectThemeByToolStyle: function (toolStyle) {
+            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
+            const mapTheme = {
+                // For buttons on map
+                navigation: {
+                    roundness: 0,
+                    color: {
+                        // #141414 -> rgb(20,20,20)
+                        // #3c3c3c -> rgb(60,60,60)
+                        primary: '#141414',
+                        accent: '#ffd400',
+                        text: '#ffffff'
+                    }
+                },
+                // /For buttons on map ^
+                // --------------
+                // For popup headers opened by map:
+                color: {
+                    header: {
+                        bg: '#3c3c3c'
+                    },
+                    // accent should be inherited from global theme accent if not configured
+                    // accent: '#ffd400'
+                }
+                // /For popup headers opened by map ^
+            }
+            const style = toolStyle || 'rounded-dark';
+            const [shape, theme] = style.split('-');
+            if (shape === 'rounded') {
+                mapTheme.navigation.roundness = 100;
+            } else if (shape === '3d') {
+                mapTheme.navigation.roundness = 20;
                 // themehelper calculates gradients when this is set
                 mapTheme.navigation.effect = '3D';
             }
+
             if (theme === 'light') {
+                // buttons
                 mapTheme.navigation.color.primary = '#ffffff';
                 mapTheme.navigation.color.text = '#000000';
+                //  popup
+                mapTheme.color.header.bg = '#ffffff';
             }
-            this.__cachedTheme = mapTheme;
+            
             return mapTheme;
         },
 
