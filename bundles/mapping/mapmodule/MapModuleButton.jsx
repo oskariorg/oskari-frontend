@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MapButton, Toolbar } from 'oskari-ui/components/buttons';
+import { ThemeProvider } from 'oskari-ui/util/contexts';
 import styled from 'styled-components';
 
 const Container = styled('div')`
@@ -14,67 +15,11 @@ const Container = styled('div')`
 `;
 
 const StyledButton = styled(MapButton)`
+    opacity: 0.8;
     z-index: 1;
 `;
-
-const THEME_LIGHT = {
-    color: {
-        primary: '#ffffff',
-        accent: '#000000'
-    }
-};
-const THEME_LIGHT_GRADIENT = {
-    color: {
-        primary: 'linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(240,240,240,1) 35%, rgba(221,221,221,1) 100%)',
-        accent: '#000000'
-    }
-};
-const THEME_DARK = {
-    color: {
-        primary: '#3c3c3c',
-        accent: '#ffffff'
-    }
-};
-const THEME_DARK_GRADIENT = {
-    color: {
-        primary: 'linear-gradient(180deg, rgba(101,101,101,1) 0%, rgba(60,60,60,1) 35%, rgba(9,9,9,1) 100%)',
-        accent: '#ffffff'
-    }
-};
-
-export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
+export const MapModuleButton = ({ title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
     const [toolbarOpen, setToolbarOpen] = useState(false);
-
-    let roundingPercent = 0;
-    let color;
-
-    let style = 'rounded-dark';
-    if (styleName) {
-        style = styleName;
-    }
-
-    const [shape, theme] = style.split('-');
-
-    if (shape === 'rounded') {
-        roundingPercent = 50;
-    } else if (shape === 'sharp') {
-        roundingPercent = 0;
-    } else if (shape === '3d') {
-        roundingPercent = 10;
-    }
-    if (theme === 'light') {
-        if (shape === '3d') {
-            color = THEME_LIGHT_GRADIENT;
-        } else {
-            color = THEME_LIGHT;
-        }
-    } else if (theme === 'dark') {
-        if (shape === '3d') {
-            color = THEME_DARK_GRADIENT
-        } else {
-            color = THEME_DARK;
-        }
-    }
 
     let toolbarOpenDirection = 'right';
     if (toolbarDirection) {
@@ -91,26 +36,29 @@ export const MapModuleButton = ({ styleName, title, icon, onClick, size = '32px'
         toolbarMaxWidth = children.length * 34 + 10;
         toolbarMargin = `margin-${marginDirection}: ${toolbarMaxWidth}px`;
     }
-
+    // FIXME: we shouldn't reference mapmodule here, BUT the themeprovider should be in map module and not here.
+    // after we have fully migrated the tools on map to React we can pass theme from map module with ThemeProvider and remove it from here.
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     return (
-        <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarOpen={toolbarOpen} toolbarMargin={toolbarMargin}>
-            <StyledButton
-                onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
-                icon={icon}
-                theme={{ ...color, roundingPercent }}
-                title={title}
-                size={size}
-                iconActive={iconActive || (withToolbar && toolbarOpen)}
-                iconSize={iconSize}
-                className={className}
-                disabled={disabled}
-                position={position}
-            />
-            {withToolbar && (
-                <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarOpenDirection} maxWidth={toolbarMaxWidth + 100}>
-                    {children}
-                </Toolbar>
-            )}
-        </Container>
+        <ThemeProvider value={mapModule.getMapTheme()}>
+            <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarOpen={toolbarOpen} toolbarMargin={toolbarMargin}>
+                <StyledButton
+                    onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
+                    icon={icon}
+                    title={title}
+                    size={size}
+                    iconActive={iconActive || (withToolbar && toolbarOpen)}
+                    iconSize={iconSize}
+                    className={className}
+                    disabled={disabled}
+                    position={position}
+                />
+                {withToolbar && (
+                    <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarOpenDirection} maxWidth={toolbarMaxWidth + 100}>
+                        {children}
+                    </Toolbar>
+                )}
+            </Container>
+        </ThemeProvider>
     );
 };

@@ -42,7 +42,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     setOpen (bln) {
         this._toolOpen = bln;
-        this._renderControlElement();
+        this.renderButton();
     }
     _setLayerToolsEditModeImpl () {
         const el = this.getElement();
@@ -115,36 +115,12 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         let el;
         el = this._createControlElement();
         this.addToPluginContainer(el);
-        this._renderControlElement();
+        this.renderButton();
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
         this._element = el;
         return el;
-    }
-    _renderControlElement () {
-        const el = this.getElement();
-        if (!el) return;
-
-        const conf = this._conf;
-        const styleClass = conf && conf.toolStyle ? conf.toolStyle : this.getToolStyleFromMapModule();
-
-        ReactDOM.render(
-            <MapModuleButton
-                className='t_timecontrol'
-                title={this.loc('tooltip')}
-                styleName={styleClass || 'rounded-dark'}
-                icon={<ControlIcon />}
-                onClick={() => {
-                    if (!this.inLayerToolsEditMode()) {
-                        this._toggleToolState();
-                    }
-                }}
-                position={this.getLocation()}
-                iconActive={this.isOpen()}
-            />,
-            el.get(0)
-        );
     }
 
     _toggleToolState () {
@@ -192,16 +168,10 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
         if (!el) return;
 
-        let styleName = style;
-        if (!style) {
-            styleName = this.getToolStyleFromMapModule();
-        }
-
         ReactDOM.render(
             <MapModuleButton
                 className='t_timecontrol'
                 title={this.loc('tooltip')}
-                styleName={styleName || 'rounded-dark'}
                 icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
                 onClick={() => {
                     if (!this.inLayerToolsEditMode()) {

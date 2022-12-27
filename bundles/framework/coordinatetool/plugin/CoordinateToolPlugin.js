@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../../mapping/mapmodule/MapModuleButton';
+import styled from 'styled-components';
 
 const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
+const StyledDiv = styled('div')`
+    font-weight: bold;
+`;
+const CoordinateIcon = () => (<StyledDiv>XY</StyledDiv>);
 /**
  * @class Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin
  * Provides a coordinate display for map
@@ -1127,21 +1132,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
-            const CoordinateIcon = () => (
-                <div>XY</div>
-            );
-
             ReactDOM.render(
                 <MapModuleButton
                     className='t_coordinatetool'
                     title={this._locale('display.tooltip.tool')}
                     icon={<CoordinateIcon />}
-                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
                             this._toggleToolState();

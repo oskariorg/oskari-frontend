@@ -425,15 +425,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             };
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerselect'
-                    styleName={styleName || 'rounded-dark'}
                     icon={<LayersIcon />}
                     title={this._loc.title}
                     onClick={(e) => {
