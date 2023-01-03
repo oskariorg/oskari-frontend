@@ -15,7 +15,6 @@ const Container = styled('div')`
 `;
 
 const StyledButton = styled(MapButton)`
-    opacity: 0.8;
     z-index: 1;
 `;
 export const MapModuleButton = ({ title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
@@ -54,7 +53,7 @@ export const MapModuleButton = ({ title, icon, onClick, size = '32px', noMargin 
                     position={position}
                 />
                 {withToolbar && (
-                    <Toolbar height='32px' open={toolbarOpen} shape={shape} direction={toolbarOpenDirection} maxWidth={toolbarMaxWidth + 100}>
+                    <Toolbar height='32px' open={toolbarOpen} direction={toolbarOpenDirection} toolbarWidth={toolbarMaxWidth} maxWidth={toolbarMaxWidth + 100}>
                         {children}
                     </Toolbar>
                 )}

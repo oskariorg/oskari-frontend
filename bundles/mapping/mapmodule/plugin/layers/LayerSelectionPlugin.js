@@ -406,9 +406,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var header = div.find('div.header');
 
-            ReactDOM.unmountComponentAtNode(header[0]);
-            header.empty();
-
             this.renderButton(styleName, header);
 
             this._setLayerToolsEditMode(

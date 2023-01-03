@@ -1,15 +1,18 @@
 import React from 'react';
 import { Tooltip } from '../Tooltip';
 import styled from 'styled-components';
+import { ThemeConsumer } from '../../util';
+import { getNavigationTheme } from '../../theme';
 
 const StyledToolbar = styled('div')`
     position: absolute;
+    opacity: 0.8;
     ${props => props.direction}: 0;
     top: 0;
     padding-${props => props.direction}: ${props => props.height};
     height: ${props => props.height};
-    border-radius: ${props => props.rounding};
-    background: #707070;
+    border-radius: calc(${props => props.rounding ? props.rounding.replace('%', '') / 100 : 0} * ${props => props.height});
+    background: ${props => props.background};
     display: flex;
     align-items: center;
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
@@ -33,8 +36,8 @@ const StyledToolbar = styled('div')`
 `;
 
 const ToolbarItem = styled('div')`
-    color: #ffffff;
-    fill: #ffffff;
+    color: ${props => props.color};
+    fill: ${props => props.color};
     margin: 0 10px 0 10px;
     cursor: pointer;
     display: flex;
@@ -47,19 +50,27 @@ const Icon = styled('div')`
     width: 18px;
     height: 18px;
     svg {
-        fill: ${props => props.$active ? '#ffd400': '#ffffff'};
+        fill: ${props => props.$active ? props.$activeColor : props.$iconColor};
         path {
-            fill: ${props => props.$active ? '#ffd400': '#ffffff'};
+            fill: ${props => props.$active ? props.$activeColor : props.$iconColor};
         }
     }
 `;
 
-export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title, disabled = false }) => {
+export const ToolbarButtonItem = ThemeConsumer(({ theme = {}, icon, onClick, iconActive = false, title, disabled = false }) => {
+    const helper = getNavigationTheme(theme);
+    const iconColor = helper.getTextColor();
+    const hoverColor = helper.getButtonHoverColor();
+
     if (title) {
         return (
             <Tooltip title={title}>
-                <ToolbarItem onClick={disabled ? null : onClick}>
-                    <Icon $active={iconActive}>
+                <ToolbarItem onClick={disabled ? null : onClick} color={iconColor}>
+                    <Icon
+                        $active={iconActive}
+                        $activeColor={hoverColor}
+                        $iconColor={iconColor}
+                    >
                         {icon}
                     </Icon>
                 </ToolbarItem>
@@ -67,29 +78,48 @@ export const ToolbarButtonItem = ({ icon, onClick, iconActive = false, title, di
         );
     } else {
         return (
-            <ToolbarItem onClick={disabled ? null : onClick}>
-                <Icon $active={iconActive}>
+            <ToolbarItem onClick={disabled ? null : onClick} color={iconColor}>
+                <Icon
+                    $active={iconActive}
+                    $activeColor={hoverColor}
+                    $iconColor={iconColor}
+                >
                     {icon}
                 </Icon>
             </ToolbarItem>
         );
     }
-}
+});
 
-export const Toolbar = ({ height, children, open = false, shape = 'rounded', direction, maxWidth }) => {
-    let rounding = '25px';
-    if (shape === 'sharp') rounding = '0px';
-    else if (shape === '3d') rounding = '5px';
+const ThemedToolbar = ThemeConsumer(({ theme = {}, realWidth, maxWidth, children, ...rest }) => {
+    const helper = getNavigationTheme(theme);
+    const bgColor = helper.getButtonColor();
+    const rounding = helper.getButtonRoundness();
 
-    let toolbarMaxWidth = `${maxWidth}px`;
+    return (
+        <StyledToolbar
+            rounding={rounding}
+            background={bgColor}
+            maxWidth={maxWidth}
+            realWidth={realWidth}
+            {...rest}
+        >
+            {children}
+        </StyledToolbar>
+    );
+});
+
+export const Toolbar = ({ height, children, open = false, direction, toolbarWidth, maxWidth, ...rest }) => {
+    const toolbarMaxWidth = `${maxWidth}px`;
+    const realWidth = `${toolbarWidth}px`;
     let directionControl = 'left';
     if (direction === 'left') {
         directionControl = 'right';
     }
 
     return (
-        <StyledToolbar open={open} height={height} rounding={rounding} direction={directionControl} maxWidth={toolbarMaxWidth}>
+        <ThemedToolbar open={open} height={height} direction={directionControl} realWidth={realWidth} maxWidth={toolbarMaxWidth} {...rest}>
             {children}
-        </StyledToolbar>
+        </ThemedToolbar>
     );
-}
+};

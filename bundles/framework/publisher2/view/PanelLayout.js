@@ -1,3 +1,7 @@
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { PanelToolStyles } from './PanelToolStyles';
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelToolLayout
  *
@@ -296,7 +300,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
+            const styleEditor = jQuery('<div />');
+            contentPanel.append(styleEditor);
+            ReactDOM.render(
+                <PanelToolStyles mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                styleEditor[0]
+            );
+
             return panel;
+        },
+        updateTheme: function (mapTheme) {
+            this.mapModule.setMapTheme(mapTheme);
         },
         /**
          * @method _getFontsTemplate

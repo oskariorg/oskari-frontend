@@ -182,7 +182,14 @@ Oskari.registerLocalization(
                         "sharp-light": "Angular (light)",
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-up header background color",
+                    "buttonBackgroundColor": "Button background color",
+                    "buttonTextColor": "Icon color",
+                    "buttonAccentColor": "Icon effect color",
+                    "buttonRounding": "Button rounding",
+                    "effect": "Effect",
+                    "3d": "3D"
                 },
                 "popup": {
                     "title": "Select Color Scheme",

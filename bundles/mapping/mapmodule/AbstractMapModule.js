@@ -1407,6 +1407,14 @@ Oskari.clazz.define(
             this.__cachedTheme = mapTheme;
             return mapTheme;
         },
+        setMapTheme: function (mapTheme) {
+            let theme = {
+                ...this.getMapTheme(),
+                ...mapTheme
+            };
+            this.__cachedTheme = theme;
+            this.changeToolStyle();
+        },
         // generates base style for map
         __injectThemeByToolStyle: function (toolStyle) {
             // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
@@ -2193,7 +2201,6 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
-            this.__cachedTheme = null;
             const clonedStyle = {
                 ...style
             };
@@ -2201,28 +2208,6 @@ Oskari.clazz.define(
                 this._options = {};
             }
             this._options.style = clonedStyle;
-
-            let theme = Oskari.app.getTheming().getTheme();
-            let bgColor = theme.color.primary;
-            let textColor = '#000000';
-            if (style?.toolStyle?.includes('dark') || style?.toolStyle?.includes('default')) {
-                bgColor = '#3c3c3c';
-                textColor = '#ffffff';
-            } else if (style?.toolStyle?.includes('light')) {
-                bgColor = '#ffffff';
-            }
-
-            theme = {
-                ...theme,
-                color: {
-                    header: {
-                        bg: bgColor,
-                        text: textColor
-                    }
-                }
-            };
-
-            Oskari.app.getTheming().setTheme(theme);
 
             // notify plugins of the style change.
             Object.values(this._pluginInstances)

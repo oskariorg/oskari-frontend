@@ -182,7 +182,14 @@ Oskari.registerLocalization(
                         "sharp-light": "Kulmikas (vaalea)",
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
+                    "buttonBackgroundColor": "Painikkeiden taustaväri",
+                    "buttonTextColor": "Ikonien väri",
+                    "buttonAccentColor": "Ikonien tehosteväri",
+                    "buttonRounding": "Painikkeiden pyöristys",
+                    "effect": "Efekti",
+                    "3d": "3D"
                 },
                 "popup": {
                     "title": "Valitse värimaailma",

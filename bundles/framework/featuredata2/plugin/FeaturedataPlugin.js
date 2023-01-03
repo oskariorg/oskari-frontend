@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ThemeProvider } from '../../../../src/react/util';
 import { FeatureDataButton } from './FeatureDataButton';
 
 /**
@@ -158,22 +159,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                style = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
-                <FeatureDataButton
-                    icon={<span>{this._loc.title}</span>}
-                    title={this._loc.title}
-                    onClick={() => this.openFlyout()}
-                    styleName={styleName}
-                    disabled={disabled}
-                    active={this._flyoutOpen}
-                    loading={loading}
-                    position={this.getLocation()}
-                />,
+                <ThemeProvider value={this.getMapModule().getMapTheme()}>
+                    <FeatureDataButton
+                        icon={<span>{this._loc.title}</span>}
+                        title={this._loc.title}
+                        onClick={() => this.openFlyout()}
+                        disabled={disabled}
+                        active={this._flyoutOpen}
+                        loading={loading}
+                        position={this.getLocation()}
+                    />
+                </ThemeProvider>,
                 el[0]
             );
         },
