@@ -1,7 +1,7 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showCoordinatePopup } from './CoordinatePopup';
 import { PLACEMENTS } from 'oskari-ui/components/window';
-import { getTransformedCoordinatesFromServer, transformCoordinates, formatDegrees } from './helper';
+import { getTransformedCoordinates, transformCoordinates, formatDegrees } from './helper';
 
 const cloneJSON = (original) => JSON.parse(JSON.stringify(original));
 
@@ -14,14 +14,14 @@ class UIHandler extends StateHandler {
         this.loc = Oskari.getMsg.bind(null, 'coordinatetool');
         this.mapModule = mapModule;
         this.config = config;
+        this.originalProjection = this.mapModule.getProjection();
         this.setState({
             xy: {},
             displayXy: {},
             loading: false,
             popupControls: null,
             showMouseCoordinates: false,
-            selectedProjection: this.mapModule.getProjection(),
-            originalProjection: this.mapModule.getProjection(),
+            selectedProjection: this.originalProjection,
             emergencyInfo: null,
             showReverseGeoCode: false
         });
@@ -123,7 +123,7 @@ class UIHandler extends StateHandler {
 
         if (this.preciseTransform && !fromServer) {
             try {
-                const fromProjection = this.mapModule.getProjection();
+                const fromProjection = this.originalProjection;
                 const toProjection = this.state.selectedProjection;
                 xy = transformCoordinates(this.mapModule, xy, fromProjection, toProjection);
             } catch (e) {
@@ -135,7 +135,7 @@ class UIHandler extends StateHandler {
         }
 
         const isSupported = !!((this.config && Array.isArray(this.config.supportedProjections)));
-        const isDifferentProjection = !!((this.state.selectedProjection !== this.mapModule.getProjection() &&
+        const isDifferentProjection = !!((this.state.selectedProjection !== this.originalProjection &&
             xy.lonlat.lat !== 0 && xy.lonlat.lon !== 0));
         let lat = parseFloat(xy.lonlat.lat);
         let lon = parseFloat(xy.lonlat.lon);
@@ -229,7 +229,7 @@ class UIHandler extends StateHandler {
             if (!this.preciseTransform) {
                 this.centerMapToSelectedCoordinates(data);
             } else {
-                if (this.state.selectedProjection === this.mapModule.getProjection()) {
+                if (this.state.selectedProjection === this.originalProjection) {
                     this.centerMapToSelectedCoordinates(data);
                 } else {
                     this.getTransformedCoordinatesFromServer(data, false, false, true);
@@ -265,7 +265,7 @@ class UIHandler extends StateHandler {
                 this.addMarker(data, msg);
                 this.centerMapToSelectedCoordinates(data);
             } else {
-                if (this.state.selectedProjection === this.mapModule.getProjection()) {
+                if (this.state.selectedProjection === this.originalProjection) {
                     this.addMarker(data, msg);
                     this.centerMapToSelectedCoordinates(data);
                 } else {
@@ -291,7 +291,7 @@ class UIHandler extends StateHandler {
         // Check at data is given. If data is given then use for it.
         // If not then use input data's and try change data to map projection and use it to place marker
         try {
-            data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.mapModule.getProjection());
+            data = data || transformCoordinates(this.mapModule, inputLonLatData, this.state.selectedProjection, this.originalProjection);
         } catch (err) {
             // Cannot transform coordinates in transformCoordinates -function
             Messaging.error(this.loc('cannotTransformCoordinates.message'));
@@ -342,7 +342,7 @@ class UIHandler extends StateHandler {
     }
 
     showDegrees () {
-        const projection = this.state.selectedProjection || this.mapModule.getProjection();
+        const projection = this.state.selectedProjection || this.originalProjection;
         let showDegrees = (this.mapModule.getProjectionUnits() === 'degrees');
         const projFormats = this.config.projectionShowFormat || {};
         const formatDef = projFormats[projection];
@@ -354,7 +354,7 @@ class UIHandler extends StateHandler {
     }
 
     allowDegrees (checkedProjection) {
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.mapModule.getProjection();
+        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
         const projection = checkedProjection || selectedProjection;
 
         const isProjectionShowConfig = !!((this.config.projectionShowFormat && this.config.projectionShowFormat[projection] && this.config.projectionShowFormat[projection].format));
@@ -373,7 +373,7 @@ class UIHandler extends StateHandler {
 
     getProjectionDecimals (checkedProjection) {
         const conf = this.config;
-        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.mapModule.getProjection();
+        const selectedProjection = this.state.selectedProjection ? this.state.selectedProjection : this.originalProjection;
         const projection = checkedProjection || selectedProjection;
         const isProjectionShowConfig = !!((conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number'));
 
@@ -400,15 +400,15 @@ class UIHandler extends StateHandler {
         this.setLoading(true);
         data = data || this.getMapXY();
         let fromProj = this.state.selectedProjection;
-        let toProj = this.mapModule.getProjection();
+        let toProj = this.originalProjection;
 
         if (swapProjections) {
-            fromProj = this.mapModule.getProjection();
+            fromProj = this.originalProjection;
             toProj = this.state.selectedProjection;
         }
 
         try {
-            const response = await getTransformedCoordinatesFromServer(this.mapModule, data, fromProj, toProj);
+            const response = await getTransformedCoordinates(this.originalProjection, data, fromProj, toProj);
             if (response?.lat && response?.lon) {
                 const newData = {
                     'lonlat': {
@@ -432,7 +432,7 @@ class UIHandler extends StateHandler {
                 this.updateLonLat();
             }
         } catch (e) {
-            Messaging.error('display.cannotTransformCoordinates.message');
+            Messaging.error(this.loc('display.cannotTransformCoordinates.message'));
         }
         this.setLoading(false);
     }
@@ -441,13 +441,13 @@ class UIHandler extends StateHandler {
 
     async getEmergencyCallCoordinatesFromServer (data) {
         // get the transform from current data
-        const sourceProjection = this.mapModule.getProjection();
+        const sourceProjection = this.originalProjection;
 
         // If coordinates are not  EPSG:4326 then
         // need to get 'EPSG:4326' coordinates from service
         if (sourceProjection !== 'EPSG:4326') {
             try {
-                const response = await getTransformedCoordinatesFromServer(this.mapModule, data, sourceProjection, 'EPSG:4326');
+                const response = await getTransformedCoordinates(this.mapModule, data, sourceProjection, 'EPSG:4326');
                 if (response?.lat && response?.lon) {
                     const newData = {
                         'lonlat': {
@@ -473,7 +473,7 @@ class UIHandler extends StateHandler {
         // update emergency if configured
         if (this.config.showEmergencyCallMessage) {
             // already in degrees, don't fetch again
-            if (this.allowDegrees() && this.mapModule.getProjection() === 'EPSG:4326') {
+            if (this.allowDegrees() && this.originalProjection === 'EPSG:4326') {
                 this.updateState({
                     emergencyInfo: this.formatEmergencyCallMessage({
                         'lonlat': {
@@ -490,12 +490,8 @@ class UIHandler extends StateHandler {
                         });
                     });
             }
-        } else {
-            this.updateState({
-                emergencyInfo: null
-            });
+            this.updatePopup();
         }
-        this.updatePopup();
     }
 
     formatEmergencyCallMessage (data) {
