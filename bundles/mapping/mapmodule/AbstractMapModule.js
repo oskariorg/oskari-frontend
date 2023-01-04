@@ -325,10 +325,10 @@ Oskari.clazz.define(
             this.__originalTheme = theme;
             // listen to changes
             Oskari.app.getTheming().addListener(newTheme => {
-                this.setMapTheme(newTheme.map)
+                this.setMapTheme(newTheme.map);
             });
 
-/*
+            /*
             const style = me.getToolStyle();
 
             let bgColor = theme.color.primary;
@@ -351,7 +351,7 @@ Oskari.clazz.define(
             };
 
             Oskari.app.getTheming().setTheme(theme);
-*/
+            */
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
