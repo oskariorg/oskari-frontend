@@ -178,7 +178,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                     }}
                     size='32px'
                     className='t_plus'
-                    styleName={styleName}
                 />
                 <MapModuleButton
                     icon={<MinusIcon />}
@@ -187,7 +186,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                     }}
                     size='32px'
                     className='t_minus'
-                    styleName={styleName}
                 />
             </MobileContainer>
         );
@@ -203,7 +201,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                 }}
                 size='18px'
                 noMargin
-                styleName={styleName}
             />
             {!isMobile && (
                 <StyledSlider
@@ -228,7 +225,6 @@ export const ZoomSlider = ({ changeZoom, zoom = 0, maxZoom, styleName = 'rounded
                 }}
                 size='18px'
                 noMargin
-                styleName={styleName}
             />
         </Container>
     );
