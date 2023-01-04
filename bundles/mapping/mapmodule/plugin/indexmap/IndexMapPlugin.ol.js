@@ -148,7 +148,7 @@ Oskari.clazz.define(
             }
             if (!el) return;
             el = el.find('.indexmapToggle');
-
+            // the icon is switched based on styleName -> passed to classes -> see scss
             let styleName = style;
             if (!style) {
                 styleName = this.getToolStyleFromMapModule();
@@ -167,7 +167,6 @@ Oskari.clazz.define(
                             }
                         }}
                         size='48px'
-                        styleName={styleName}
                         icon={<div className='icon' />}
                     />
                 </div>,

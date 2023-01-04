@@ -162,15 +162,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
                 <MapModuleButton
                     className='t_publishertoolbar'
-                    styleName={styleName || 'rounded-dark'}
                     icon={<MenuOutlined />}
                     title={this._loc.title}
                     withToolbar

@@ -1391,6 +1391,69 @@ Oskari.clazz.define(
                 return 'light';
             }
         },
+        __cachedTheme: null,
+        getMapTheme: function () {
+            if (this.__cachedTheme) {
+                return this.__cachedTheme;
+            }
+            const { map = {}, ...appTheme } = Oskari.app.getTheming().getTheme();
+            // take "global" theme as base and override anything specified for map
+            let mapTheme = {
+                ...appTheme,
+                ...this.__injectThemeByToolStyle(this.getToolStyle()),
+                ...map
+            };
+
+            this.__cachedTheme = mapTheme;
+            return mapTheme;
+        },
+        // generates base style for map
+        __injectThemeByToolStyle: function (toolStyle) {
+            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
+            const mapTheme = {
+                // For buttons on map
+                navigation: {
+                    roundness: 0,
+                    color: {
+                        // #141414 -> rgb(20,20,20)
+                        // #3c3c3c -> rgb(60,60,60)
+                        primary: '#141414',
+                        accent: '#ffd400',
+                        text: '#ffffff'
+                    }
+                },
+                // /For buttons on map ^
+                // --------------
+                // For popup headers opened by map:
+                color: {
+                    header: {
+                        bg: '#3c3c3c'
+                    }
+                    // accent should be inherited from global theme accent if not configured
+                    // accent: '#ffd400'
+                }
+                // /For popup headers opened by map ^
+            };
+            const style = toolStyle || 'rounded-dark';
+            const [shape, theme] = style.split('-');
+            if (shape === 'rounded') {
+                mapTheme.navigation.roundness = 100;
+            } else if (shape === '3d') {
+                mapTheme.navigation.roundness = 20;
+                // themehelper calculates gradients when this is set
+                mapTheme.navigation.effect = '3D';
+            }
+
+            if (theme === 'light') {
+                // buttons
+                mapTheme.navigation.color.primary = '#ffffff';
+                mapTheme.navigation.color.text = '#000000';
+                // popup
+                mapTheme.color.header.bg = '#ffffff';
+            }
+
+            return mapTheme;
+        },
 
         getThemeColours: function (theme) {
             var me = this;
@@ -2130,6 +2193,7 @@ Oskari.clazz.define(
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
         changeToolStyle: function (style) {
+            this.__cachedTheme = null;
             const clonedStyle = {
                 ...style
             };

@@ -86,17 +86,11 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maprotator'
                     title={this._locale.tooltip.tool}
                     icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
-                    styleName={styleName || 'rounded-dark'}
                     onClick={() => {
                         if (!this.inLayerToolsEditMode()) {
                             this.setRotation(0);

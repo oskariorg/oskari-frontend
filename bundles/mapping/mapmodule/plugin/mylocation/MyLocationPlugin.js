@@ -102,11 +102,9 @@ Oskari.clazz.define(
             if (!el) {
                 return;
             }
-            const styleClass = style || 'rounded-dark';
             ReactDOM.render(
                 <MapModuleButton
                     className='t_mylocation'
-                    styleName={styleClass}
                     icon={<AimOutlined />}
                     title={this.loc('plugin.MyLocationPlugin.tooltip')}
                     onClick={(e) => {
