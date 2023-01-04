@@ -16,6 +16,7 @@ const Container = styled('div')`
 
 const StyledSlider = styled(Slider)`
     height: 150px;
+    opacity: 0.8;
     .ant-slider-mark-text {
         color: #ffffff;
     }
