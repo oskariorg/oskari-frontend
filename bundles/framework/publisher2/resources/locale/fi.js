@@ -174,8 +174,6 @@ Oskari.registerLocalization(
                         "label": "Valitse fontti"
                     },
                     "toolStyles": {
-                        "label": "Työkalujen tyyli",
-                        "default": "Oletustyyli",
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",
@@ -189,7 +187,8 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Ikonien tehosteväri",
                     "buttonRounding": "Painikkeiden pyöristys",
                     "effect": "Efekti",
-                    "3d": "3D"
+                    "3d": "3D",
+                    "presets": "Valmiit tyylimääritykset"
                 },
                 "popup": {
                     "title": "Valitse värimaailma",

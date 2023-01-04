@@ -174,8 +174,6 @@ Oskari.registerLocalization(
                         "label": "Typsnitt"
                     },
                     "toolStyles": {
-                        "label": "Verktygens stil",
-                        "default": "Förvalt utseende",
                         "rounded-dark": "Avrundad (mörk)",
                         "rounded-light": "Avrundad (ljus)",
                         "sharp-dark": "Kantig (mörk)",
@@ -189,7 +187,8 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Ikonien tehosteväri",
                     "buttonRounding": "Painikkeiden pyöristys",
                     "effect": "Efekti",
-                    "3d": "3D"
+                    "3d": "3D",
+                    "presets": "Valmiit tyylimääritykset"
                 },
                 "popup": {
                     "title": "Välj färgschema",

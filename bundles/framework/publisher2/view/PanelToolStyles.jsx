@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Message, Opacity, Checkbox } from 'oskari-ui';
+import { Message, Opacity, Checkbox, Dropdown, Button } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const BUNDLE_KEY = 'Publisher2';
@@ -58,8 +58,51 @@ export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
         changeTheme(theme);
     }, [popupHeader, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
 
+    const setPreset = (style) => {
+        let rounding = 100;
+        let popupBg = '#3c3c3c';
+        let buttonBg = '#141414';
+        let icon = '#ffffff';
+        let hover = '#ffd400';
+        let effect = undefined;
+
+        if (style.includes('sharp')) {
+            rounding = 0;
+        }
+        if (style.includes('light')) {
+            popupBg = '#ffffff';
+            buttonBg = '#ffffff';
+            icon = '#000000';
+        }
+        if (style.includes('3d')) {
+            rounding = 20;
+            effect = '3D';
+        }
+
+        setPopupHeader(popupBg);
+        setButtonRounding(rounding);
+        setButtonBackground(buttonBg);
+        setButtonText(icon);
+        setButtonAccent(hover);
+        setButtonEffect(effect);
+    };
+
+    const toolStyles = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.fields.toolStyles') || {};
+
     return (
         <Content>
+            <Field>
+                <Dropdown items={Object.keys(toolStyles).map(key => (
+                    {
+                        title: toolStyles[key],
+                        action: () => setPreset(key)
+                    }
+                ))}>
+                    <Button>
+                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.presets' />
+                    </Button>
+                </Dropdown>
+            </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
                 <StyledColorPicker>
