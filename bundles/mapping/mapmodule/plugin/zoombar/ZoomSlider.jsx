@@ -16,7 +16,7 @@ const Container = styled('div')`
 
 const StyledSlider = styled(Slider)`
     height: 150px;
-    opacity: 0.8;
+    opacity: ${props => props.opacity};
     .ant-slider-mark-text {
         color: #ffffff;
     }
@@ -85,6 +85,7 @@ const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
     const bgColor = helper.getButtonColor();
     const icon = helper.getTextColor();
     const rounding = helper.getButtonRoundness();
+    const opacity = helper.getButtonOpacity();
     return (
         <StyledSlider
             railBackground={bgColor}
@@ -92,6 +93,7 @@ const ThemedSlider = ThemeConsumer(({theme = {}, ...rest}) => {
             dotColor={icon}
             rounding={rounding}
             handleBorder={icon}
+            opacity={opacity}
             {...rest}
         />
     )

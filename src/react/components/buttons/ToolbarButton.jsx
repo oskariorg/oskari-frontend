@@ -6,7 +6,7 @@ import { getNavigationTheme } from '../../theme';
 
 const StyledToolbar = styled('div')`
     position: absolute;
-    opacity: 0.8;
+    opacity: ${props => props.opacity};
     ${props => props.direction}: 0;
     top: 0;
     padding-${props => props.direction}: ${props => props.height};
@@ -95,13 +95,14 @@ const ThemedToolbar = ThemeConsumer(({ theme = {}, realWidth, maxWidth, children
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
     const rounding = helper.getButtonRoundness();
-
+    const opacity = helper.getButtonOpacity();
     return (
         <StyledToolbar
             rounding={rounding}
             background={bgColor}
             maxWidth={maxWidth}
             realWidth={realWidth}
+            opacity={opacity}
             {...rest}
         >
             {children}

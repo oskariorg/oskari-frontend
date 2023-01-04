@@ -1422,6 +1422,7 @@ Oskari.clazz.define(
                 // For buttons on map
                 navigation: {
                     roundness: 0,
+                    opacity: 0.8,
                     color: {
                         // #141414 -> rgb(20,20,20)
                         // #3c3c3c -> rgb(60,60,60)

@@ -8,6 +8,7 @@ const StyledButton = styled(Button)`
     height: 32px;
     font-size: 14px;
     border: none;
+    opacity: ${props => props.$opacity};
     border-radius: calc(${props => props.$rounding ? props.$rounding / 100 : 0} * 32px);
     color: ${props => props.$active ? props.$hoverColor : props.$iconColor};
     background: ${props => props.$backgroundColor};
@@ -35,6 +36,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const icon = helper.getTextColor();
     const background = helper.getButtonColor();
     const hover = helper.getButtonHoverColor();
+    const opacity = helper.getButtonOpacity();
     return (
         <StyledButton
             $rounding={rounding}
@@ -42,6 +44,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
             $backgroundColor={background}
             $hoverColor={hover}
             $active={active}
+            $opacity={opacity}
             {...rest}
         />
     );

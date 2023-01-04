@@ -39,6 +39,7 @@ const SearchContainer = styled('div')`
     display: flex;
     height: 32px;
     flex-direction: row;
+    opacity: ${props => props.opacity};
     background: ${props => props.backgroundColor};
     align-items: center;
     padding: 3px 7px 3px 3px;
@@ -51,10 +52,11 @@ export const SearchBar = ThemeConsumer(({ theme = {}, search, loading, disabled 
     const bgColor = helper.getButtonColor();
     const icon = helper.getTextColor();
     const rounding = helper.getButtonRoundness();
+    const opacity = helper.getButtonOpacity();
     const [value, setValue] = useState('');
 
     return (
-        <SearchContainer backgroundColor={bgColor} rounding={rounding}>
+        <SearchContainer backgroundColor={bgColor} rounding={rounding} opacity={opacity}>
             <StyledInput
                 rounding={rounding}
                 value={value}

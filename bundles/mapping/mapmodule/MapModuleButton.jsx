@@ -16,7 +16,6 @@ const Container = styled('div')`
 
 const StyledButton = styled(MapButton)`
     z-index: 1;
-    opacity: 0.8;
 `;
 export const MapModuleButton = ({ title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
     const [toolbarOpen, setToolbarOpen] = useState(false);
