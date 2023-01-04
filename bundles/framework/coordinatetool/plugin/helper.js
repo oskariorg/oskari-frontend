@@ -1,13 +1,13 @@
 /**
  * Transforms the given coordinates using action_route=Coordinates and updates coordinates to the UI
- * @method getTransformedCoordinatesFromServer
+ * @method getTransformedCoordinates
  * @param {Object} data: {lonlat: lat: '', lon: ''} coordinates to be transformed
  * @param {String} srs: projection for given lonlat params like "EPSG:4326"
  * @param {String} targetSRS: projection to transform to like "EPSG:4326"
  * @param {Function} successCb success callback
  * @param {Function} errorCb error callback
  */
-export const getTransformedCoordinatesFromServer = async (mapModule, data, srs, targetSRS) => {
+export const getTransformedCoordinates = async (originalProjection, data, srs, targetSRS) => {
     if (!data) {
         const map = Oskari.getSandbox().getMap();
         data = {
@@ -25,7 +25,7 @@ export const getTransformedCoordinatesFromServer = async (mapModule, data, srs, 
     }
 
     if (!srs) {
-        srs = mapModule.getProjection();
+        srs = originalProjection;
     }
     if (srs !== targetSRS) {
         return await jQuery.ajax({
