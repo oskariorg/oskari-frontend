@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ThemeProvider } from '../../../../src/react/util';
+import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataButton } from './FeatureDataButton';
 
 /**

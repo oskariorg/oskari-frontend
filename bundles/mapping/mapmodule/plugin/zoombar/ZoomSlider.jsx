@@ -3,8 +3,8 @@ import { MapModuleButton } from '../../MapModuleButton';
 import styled from 'styled-components';
 import { Slider } from 'oskari-ui';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
-import { ThemeConsumer, ThemeProvider } from '../../../../../src/react/util';
-import { getNavigationTheme } from '../../../../../src/react/theme';
+import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const Container = styled('div')`
     display: flex;

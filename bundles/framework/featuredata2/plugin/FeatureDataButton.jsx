@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
-import { ThemeConsumer } from '../../../../src/react/util';
-import { getNavigationTheme } from '../../../../src/react/theme';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const StyledButton = styled(Button)`
     height: 32px;

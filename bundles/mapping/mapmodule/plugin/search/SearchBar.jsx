@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, TextInput } from 'oskari-ui';
 import { SearchOutlined } from '@ant-design/icons';
-import { ThemeConsumer } from '../../../../../src/react/util';
-import { getNavigationTheme } from '../../../../../src/react/theme';
+import { ThemeConsumer } from 'oskari-ui/util';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const StyledInput = styled(TextInput)`
     height: 24px;

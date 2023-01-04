@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchBar } from './SearchBar';
 import { showResultsPopup } from './SearchResultsPopup';
-import { ThemeProvider } from '../../../../../src/react/util';
+import { ThemeProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
