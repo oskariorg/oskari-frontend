@@ -176,9 +176,16 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
 };
 
 export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, crsText, decimalSeparator, onClose) => {
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    const options = {
+        ...OPTIONS,
+        placement: location,
+        theme: mapModule.getMapTheme()
+    }
     const controls = showPopup(
         <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />,
-        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />, onClose, {...OPTIONS, placement: location}
+        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />,
+        onClose, options
     );
     return {
         ...controls,

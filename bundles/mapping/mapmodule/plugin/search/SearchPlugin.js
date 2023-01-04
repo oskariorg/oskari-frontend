@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchBar } from './SearchBar';
 import { showResultsPopup } from './SearchResultsPopup';
+import { ThemeProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
@@ -272,24 +273,20 @@ Oskari.clazz.define(
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
-                <SearchBar
-                    loading={this._searchInProgess}
-                    search={text => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this._doSearch(text);
-                        }
-                    }}
-                    styleName={styleName}
-                    searchText={this.searchText}
-                    disabled={disabled}
-                    placeholder={this._loc.placeholder}
-                />,
+                <ThemeProvider value={this.getMapModule().getMapTheme()}>
+                    <SearchBar
+                        loading={this._searchInProgess}
+                        search={text => {
+                            if (!this.inLayerToolsEditMode()) {
+                                this._doSearch(text);
+                            }
+                        }}
+                        searchText={this.searchText}
+                        disabled={disabled}
+                        placeholder={this._loc.placeholder}
+                    />
+                </ThemeProvider>,
                 el[0]
             );
         },

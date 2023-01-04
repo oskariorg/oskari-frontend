@@ -175,17 +175,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
             if (!element) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
                 <ZoomSlider
                     changeZoom={(value) => this.setZoomLevel(value)}
                     zoom={this.getMapModule().getMapZoom()}
                     maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    styleName={styleName || 'rounded-dark'}
                     isMobile={this.inMobileMode}
                 />,
                 el[0]

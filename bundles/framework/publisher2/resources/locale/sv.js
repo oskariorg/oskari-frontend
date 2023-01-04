@@ -182,7 +182,14 @@ Oskari.registerLocalization(
                         "sharp-light": "Kantig (ljus)",
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
+                    "buttonBackgroundColor": "Painikkeiden taustaväri",
+                    "buttonTextColor": "Ikonien väri",
+                    "buttonAccentColor": "Ikonien tehosteväri",
+                    "buttonRounding": "Painikkeiden pyöristys",
+                    "effect": "Efekti",
+                    "3d": "3D"
                 },
                 "popup": {
                     "title": "Välj färgschema",

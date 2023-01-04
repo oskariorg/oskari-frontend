@@ -15,6 +15,7 @@ const StyledButton = styled(Button)`
     width: ${props => props.size};
     height: ${props => props.size};
     border: none;
+    opacity: ${props => props.opacity};
     ${(props) => props.rounding && `border-radius: ${props.rounding};`}
     border-radius: ${props => props.rounding};
     color: ${props => props.$active ? props.hover : props.iconcolor};
@@ -53,7 +54,8 @@ const ThemeButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     const icon = helper.getTextColor();
     const hover = helper.getButtonHoverColor();
     const rounding = helper.getButtonRoundness();
-    return <StyledButton bg={bgColor} iconcolor={icon} hover={hover} rounding={rounding} { ...rest }/>
+    const opacity = helper.getButtonOpacity();
+    return <StyledButton bg={bgColor} iconcolor={icon} hover={hover} rounding={rounding} opacity={opacity} { ...rest }/>
 });
 
 export const MapButton = ({ title, icon, onClick, theme, disabled, size = '32px', iconActive, iconSize = '18px', children, position, ...rest }) => {
