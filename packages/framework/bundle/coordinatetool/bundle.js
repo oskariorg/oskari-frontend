@@ -45,12 +45,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "src": "../../../../bundles/framework/coordinatetool/plugin/CoordinateToolPlugin.js"
         },{
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/coordinatetool/plugin/CoordinateTransformationExtension.js"
-        },{
-           "type": "text/javascript",
-           "src": "../../../../bundles/framework/coordinatetool/plugin/ViewChangerExtension.js"
-        },{
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/service/CoordinateToolService.js"
         },{
             "type": "text/javascript",
