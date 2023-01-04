@@ -35,7 +35,7 @@ export const getNavigationTheme = (theme) => {
         getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || '#ffd400',
         getButtonRoundness: () => borderRadius,
         getEffect: () => theme.navigation?.effect,
-        getButtonOpacity: () => theme.navigation?.opacity
+        getButtonOpacity: () => theme.navigation?.opacity || 1
     };
     return funcs;
 };
