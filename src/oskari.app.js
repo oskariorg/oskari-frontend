@@ -161,7 +161,7 @@ if (typeof jQuery !== 'undefined') {
                 Oskari.user(setup.env.user);
             }
             if (setup.env.app?.theme) {
-                THEMING.setTheme(setup.env.app?.theme);
+                THEMING.setTheme(setup.env.app.theme);
             }
 
             Oskari.urls.set(setup.env.urls);
