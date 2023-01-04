@@ -125,10 +125,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             // for restoring after exit
             this._originalTheme = Oskari.app.getTheming().getTheme();
-            // we should use theming to update instead of maptheme
-            this._originalMapTheme = me.mapModule.getMapTheme();
             if (theme) {
-                me.mapModule.setMapTheme(theme);
+                this.updateTheme(theme.map);
             }
             if (!me.panel) {
                 me.panel = me._populateLayoutPanel();
@@ -166,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     style: {
                         font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null
                     },
-                    theme: me.mapModule.getMapTheme()
+                    theme: Oskari.app.getTheming().getTheme()
                 }
             };
             return me.values;
@@ -194,6 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             const styleEditor = jQuery('<div />');
             contentPanel.append(styleEditor);
+
             ReactDOM.render(
                 <PanelToolStyles mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
                 styleEditor[0]
@@ -202,7 +201,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             return panel;
         },
         updateTheme: function (mapTheme) {
-            this.mapModule.setMapTheme(mapTheme);
+            Oskari.app.getTheming().setTheme({
+                ...this._originalTheme,
+                map: mapTheme
+            });
         },
         /**
          * @method _getFontsTemplate
@@ -264,11 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 me.sandbox.unregisterFromEventByName(me, eventName);
             });
             // change the mapmodule toolstyle back to normal
-            me.mapModule.changeToolStyle({ toolStyle: me._originalToolStyle });
-            // restore theme
-            // FIXME: we should probably only call theming.setTheme() and make mapmodule listen to changes
             Oskari.app.getTheming().setTheme(this._originalTheme);
-            this.mapModule.setMapTheme(this._originalMapTheme);
         }
     }
 );
