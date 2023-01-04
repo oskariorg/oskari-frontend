@@ -33,108 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }, {
                 name: 'Georgia (serif)',
                 val: 'georgia'
-            }],
-            toolStyles: [{
-                val: 'default',
-                zoombar: {},
-                search: {}
-            }, {
-
-                val: 'rounded-dark',
-                zoombar: {
-                    widthPlus: '22px',
-                    widthMinus: '22px',
-                    widthCenter: '22px',
-                    heightPlus: '38px',
-                    heightMinus: '39px',
-                    heightCenter: 12,
-                    heightCursor: '18px',
-                    widthCursor: '17px'
-                },
-                search: {
-                    widthLeft: 17,
-                    widthRight: 32
-                }
-            }, {
-                val: 'rounded-light',
-                zoombar: {
-                    widthPlus: '22px',
-                    widthMinus: '22px',
-                    widthCenter: '22px',
-                    heightPlus: '38px',
-                    heightMinus: '39px',
-                    heightCenter: 12,
-                    heightCursor: '18px',
-                    widthCursor: '17px'
-                },
-                search: {
-                    widthLeft: 17,
-                    widthRight: 32
-                }
-            }, {
-                val: 'sharp-dark',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '17px',
-                    heightMinus: '18px',
-                    heightCenter: 16,
-                    heightCursor: '16px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 30
-                }
-            }, {
-                val: 'sharp-light',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '17px',
-                    heightMinus: '18px',
-                    heightCenter: 16,
-                    heightCursor: '16px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 30
-                }
-            }, {
-                val: '3d-dark',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '35px',
-                    heightMinus: '36px',
-                    heightCenter: 13,
-                    heightCursor: '13px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 44
-                }
-            }, {
-                val: '3d-light',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '35px',
-                    heightMinus: '36px',
-                    heightCenter: 13,
-                    heightCursor: '13px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 44
-                }
             }]
         };
 
@@ -146,19 +44,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             'fonts': {
                 'label': me.loc.layout.fields.fonts.label,
                 'getContent': me._getFontsTemplate
-            },
-            'toolStyles': {
-                'label': me.loc.layout.fields.toolStyles.label,
-                'getContent': me._getToolStylesTemplate
             }
         };
 
         me.__templates = {
             fonts: '<div id="publisher-layout-fonts">' + '<label for="publisher-fonts"></label>' + '<select name="publisher-fonts"></select>' + '</div>',
-            toolStyles: '<div id="publisher-layout-toolStyles">' + '<label for="publisher-toolStyles"></label>' + '<select name="publisher-toolStyles"></select>' + '</div>',
-            option: '<option></option>',
-            inputRadio: '<div><input type="radio" /><label></label></div>',
-            iconClsInput: '<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'
+            option: '<option></option>'
         };
 
         this.template = {};
@@ -212,16 +103,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            // Use current tool style as default
-            var mapToolStyle = me.mapModule.getToolStyle() || 'default';
-            const theme = this.data?.metadata?.theme;
-
             // Set the initial values
+            const theme = this.data?.metadata?.theme;
             me.values = {
                 metadata: {
                     style: {
-                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyle
+                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0]
                     },
                     theme: theme
                 }
@@ -235,18 +122,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                     field.content = template;
                 }
             }
-            me._originalToolStyle = me.mapModule.getToolStyle();
+
             // for restoring after exit
             this._originalTheme = Oskari.app.getTheming().getTheme();
             // we should use theming to update instead of maptheme
             this._originalMapTheme = me.mapModule.getMapTheme();
-            if (me.data.metadata) {
-                me._changeMapModuleToolstyle(me.data.metadata.style);
-                if (theme) {
-                    me.mapModule.setMapTheme(theme);
-                }
+            if (theme) {
+                me.mapModule.setMapTheme(theme);
             }
-
             if (!me.panel) {
                 me.panel = me._populateLayoutPanel();
             }
@@ -281,8 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             me.values = {
                 metadata: {
                     style: {
-                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null,
-                        toolStyle: jQuery('select[name=publisher-toolStyles]').val() ? jQuery('select[name=publisher-toolStyles]').val() : null
+                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null
                     },
                     theme: me.mapModule.getMapTheme()
                 }
@@ -353,41 +235,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // Prepopulate data
             jQuery(template.find('select option')).filter(function () {
                 return (jQuery(this).val() === me.values.metadata.style.font);
-            }).prop('selected', 'selected');
-
-            return template;
-        },
-
-        /**
-         * @method _getToolStylesTemplate
-         * @return {jQuery} the tool styles template
-         */
-        _getToolStylesTemplate: function () {
-            var me = this;
-            var template = this.template.toolStyles.clone();
-            var toolStylesLabel = this.loc.layout.fields.toolStyles.label;
-
-            // Set the localizations.
-            template.find('label').html(toolStylesLabel).after('<br />');
-            var styleSelect = template.find('select');
-            // add options
-            this.initialValues.toolStyles.forEach(function (toolStyle) {
-                var toolStyleOption = me.template.option.clone();
-                var toolStyleName = me.loc.layout.fields.toolStyles[toolStyle.val];
-                toolStyleOption.attr({
-                    value: toolStyle.val
-                }).html(toolStyleName);
-                // add as option
-                styleSelect.append(toolStyleOption);
-            });
-            // Set the select change handler.
-            styleSelect.on('change', function (e) {
-                me._changeMapModuleToolstyle();
-            });
-
-            // Prepopulate data
-            jQuery(template.find('select option')).filter(function () {
-                return (me.values.metadata.style.toolStyle && jQuery(this).val() === me.values.metadata.style.toolStyle);
             }).prop('selected', 'selected');
 
             return template;

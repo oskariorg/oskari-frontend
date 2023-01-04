@@ -174,8 +174,6 @@ Oskari.registerLocalization(
                         "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "Tool style",
-                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Angular (dark)",
@@ -189,7 +187,8 @@ Oskari.registerLocalization(
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",
                     "effect": "Effect",
-                    "3d": "3D"
+                    "3d": "3D",
+                    "presets": "Style presets"
                 },
                 "popup": {
                     "title": "Select Color Scheme",
