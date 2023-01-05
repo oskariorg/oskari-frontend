@@ -31,8 +31,11 @@ export const Links = ({ links }) => {
             );
         } else {
             if (link.options.src) {
+                // additional classes:
+                // - icon (link.options.id) for compatibility for overrides <2.10
+                // - logo for an additional identifier and override enabler for 2.10+
                 labels.push(
-                    <StyledLogo key={link.options.id} src={link.options.src} onClick={callback ? callback : null} />
+                    <StyledLogo key={link.options.id} className={link.options.id + ' logo'} src={link.options.src} onClick={callback ? callback : null} />
                 );
             } else {
                 labels.push(
