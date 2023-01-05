@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Message, Opacity, Checkbox, Dropdown, Button, Select, Option } from 'oskari-ui';
+import { Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const BUNDLE_KEY = 'Publisher2';
@@ -21,8 +21,43 @@ const StyledColorPicker = styled('div')`
     width: 165px;
 `;
 
-const StyledSlider = styled(Opacity)`
+const StyledSlider = styled(Slider)`
     width: 285px;
+    margin: 0 15px 0 5px;
+    .ant-slider-track {
+        background-color: #0091ff;
+    }
+    .ant-slider-handle {
+        border: #0091ff solid 2px;
+        margin-top: -6px;
+    }
+    &:hover .ant-slider-track {
+        background-color: #003fc3 !important;
+    }
+    &:hover .ant-slider-handle {
+        border: #003fc3 solid 2px !important;
+    }
+`;
+
+const SliderContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const StyledNumberInput = styled(NumberInput)`
+    width: 65px;
+    margin: 0 5px 0 -1px;
+`;
+
+const NumberInputContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
+const NumberSuffix = styled('span')`
+    margin: 0;
+    padding-top: 5px;
 `;
 
 const StyledSelect = styled(Select)`
@@ -171,10 +206,23 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.buttonRounding' />
-                <StyledSlider
-                    defaultValue={buttonRounding}
-                    onChange={val => setButtonRounding(val)}
-                />
+                <SliderContainer>
+                    <StyledSlider
+                        value={buttonRounding}
+                        onChange={val => setButtonRounding(val)}
+                    />
+                    <NumberInputContainer>
+                        <StyledNumberInput
+                            min={0}
+                            max={100}
+                            value={buttonRounding}
+                            onChange={val => setButtonRounding(val)}
+                        />
+                        <NumberSuffix>
+                            %
+                        </NumberSuffix>
+                    </NumberInputContainer>
+                </SliderContainer>
             </Field>
             <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.effect' />
             <Field>
