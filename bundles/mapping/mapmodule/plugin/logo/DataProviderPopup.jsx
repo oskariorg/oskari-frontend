@@ -50,5 +50,10 @@ export const PopupContent = ({ dataProviders, onClose }) => {
 };
 
 export const showDataProviderPopup = (title, dataProviders, onClose) => {
-    return showPopup(title, <PopupContent dataProviders={dataProviders} onClose={onClose} />, onClose);
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    const options = {
+        id: 'dataProviders',
+        theme: mapModule.getMapTheme()
+    }
+    return showPopup(title, <PopupContent dataProviders={dataProviders} onClose={onClose} />, onClose, options);
 };
