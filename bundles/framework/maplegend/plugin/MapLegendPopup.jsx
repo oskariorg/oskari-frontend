@@ -49,5 +49,10 @@ MapLegendPopup.propTypes = {
 };
 
 export const showMapLegendPopup = (legends, getLegendImage, onClose) => {
-    return showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='title' />, <MapLegendPopup legends={legends} getLegendImage={(id) => getLegendImage(id)}/>, onClose);
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    const options = {
+        id: BUNDLE_KEY,
+        theme: mapModule.getMapTheme()
+    }
+    return showPopup(<Message bundleKey={BUNDLE_KEY} messageKey='title' />, <MapLegendPopup legends={legends} getLegendImage={(id) => getLegendImage(id)}/>, onClose, options);
 };
