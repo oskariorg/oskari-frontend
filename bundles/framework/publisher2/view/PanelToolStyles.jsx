@@ -123,7 +123,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
     };
 
     const toolStyles = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.fields.toolStyles') || {};
-    console.log(buttonRounding)
+
     return (
         <Content>
             <Field>
