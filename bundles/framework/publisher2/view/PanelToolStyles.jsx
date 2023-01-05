@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Message, Opacity, Checkbox, Dropdown, Button } from 'oskari-ui';
+import { Message, Opacity, Checkbox, Dropdown, Button, Select, Option } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const BUNDLE_KEY = 'Publisher2';
@@ -25,7 +25,19 @@ const StyledSlider = styled(Opacity)`
     width: 285px;
 `;
 
+const fonts = [
+    {
+        name: 'Arial (sans-serif)',
+        val: 'arial'
+    },
+    {
+        name: 'Georgia (serif)',
+        val: 'georgia'
+    }
+];
+
 export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
+    const [font, setFont] = useState()
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
@@ -102,6 +114,14 @@ export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
                         <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.presets' />
                     </Button>
                 </Dropdown>
+            </Field>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.fonts.label' />
+                <Select value={font} onChange={val => setFont(val)}>
+                    {fonts.map(font => (
+                        <Option key={font.val}>{font.name}</Option>
+                    ))}
+                </Select>
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
