@@ -26,39 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.mapModule = mapmodule;
         me._originalToolStyle = null;
         // The values to be sent to plugins to actually change the style.
-        me.initialValues = {
-            fonts: [{
-                name: 'Arial (sans-serif)',
-                val: 'arial'
-            }, {
-                name: 'Georgia (serif)',
-                val: 'georgia'
-            }]
-        };
-
-        // Visible fields:
-        // - colour input
-        // - font input
-        // - tool style input
-        me.fields = {
-            'fonts': {
-                'label': me.loc.layout.fields.fonts.label,
-                'getContent': me._getFontsTemplate
-            }
-        };
-
-        me.__templates = {
-            fonts: '<div id="publisher-layout-fonts">' + '<label for="publisher-fonts"></label>' + '<select name="publisher-fonts"></select>' + '</div>',
-            option: '<option></option>'
-        };
-
-        this.template = {};
-        var t;
-        for (t in this.__templates) {
-            if (this.__templates.hasOwnProperty(t)) {
-                this.template[t] = jQuery(this.__templates[t]);
-            }
-        }
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -114,15 +81,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             };
 
-            // "Precompile" the templates
-            for (var f in me.fields) {
-                if (me.fields.hasOwnProperty(f)) {
-                    var field = me.fields[f];
-                    var template = field.getContent.apply(me, arguments);
-                    field.content = template;
-                }
-            }
-
             // for restoring after exit
             this._originalTheme = Oskari.app.getTheming().getTheme();
             if (theme) {
@@ -161,10 +119,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
+                    theme: Oskari.app.getTheming().getTheme(),
                     style: {
-                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null
-                    },
-                    theme: Oskari.app.getTheming().getTheme()
+                        font: me.values.style.font
+                    }
                 }
             };
             return me.values;
@@ -180,21 +138,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         _populateLayoutPanel: function () {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             var contentPanel = panel.getContainer();
-            var field;
 
             panel.setTitle(this.loc.layout.label);
-            for (var f in this.fields) {
-                if (this.fields.hasOwnProperty(f)) {
-                    field = this.fields[f];
-                    contentPanel.append(field.content);
-                }
-            }
 
             const styleEditor = jQuery('<div />');
             contentPanel.append(styleEditor);
 
             ReactDOM.render(
-                <PanelToolStyles mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                <PanelToolStyles fontValue={this.values?.metadata?.style?.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
                 styleEditor[0]
             );
 
@@ -204,55 +155,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             Oskari.app.getTheming().setTheme({
                 ...this._originalTheme,
                 map: mapTheme
-            });
-        },
-        /**
-         * @method _getFontsTemplate
-         * @return {jQuery} the fonts template
-         */
-        _getFontsTemplate: function () {
-            var me = this,
-                template = this.template.fonts.clone(),
-                fontLabel = this.loc.layout.fields.fonts.label,
-                fonts = this.initialValues.fonts,
-                fLen = fonts.length,
-                fontOption,
-                i;
-            // Set the localization.
-            template.find('label').html(fontLabel).after('<br />');
-
-            for (i = 0; i < fLen; ++i) {
-                fontOption = this.template.option.clone();
-                fontOption.attr({
-                    value: fonts[i].val
-                }).html(fonts[i].name);
-                template.find('select').append(fontOption);
-            }
-
-            // Set the select change handler.
-            template.find('select').on('change', function (e) {
-                me._changeMapModuleToolstyle();
-            });
-
-            // Prepopulate data
-            jQuery(template.find('select option')).filter(function () {
-                return (jQuery(this).val() === me.values.metadata.style.font);
-            }).prop('selected', 'selected');
-
-            return template;
-        },
-        /**
-         * Retrieves the item from the list which value matches the code given
-         * or null if not found on the list.
-         *
-         * @method _getItemByCode
-         * @param {String} code
-         * @param {Array[Object]} list
-         * @return {Object/null}
-         */
-        _getItemByCode: function (code, list) {
-            return list.find(function (item) {
-                return item.val === code;
             });
         },
         /**

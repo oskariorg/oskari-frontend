@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Message, Slider, Checkbox, Dropdown, Button, NumberInput } from 'oskari-ui';
+import { Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const BUNDLE_KEY = 'Publisher2';
@@ -60,7 +60,23 @@ const NumberSuffix = styled('span')`
     padding-top: 5px;
 `;
 
-export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
+const StyledSelect = styled(Select)`
+    width: 200px;
+`;
+
+const fonts = [
+    {
+        name: 'Arial (sans-serif)',
+        val: 'arial'
+    },
+    {
+        name: 'Georgia (serif)',
+        val: 'georgia'
+    }
+];
+
+export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }) => {
+    const [font, setFont] = useState(fontValue)
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
@@ -137,6 +153,20 @@ export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
                         <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.presets' />
                     </Button>
                 </Dropdown>
+            </Field>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.fonts.label' />
+                <StyledSelect
+                    value={font}
+                    onChange={val => {
+                        setFont(val);
+                        changeFont({ font: val });
+                    }}
+                >
+                    {fonts.map(font => (
+                        <Option key={font.val}>{font.name}</Option>
+                    ))}
+                </StyledSelect>
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
