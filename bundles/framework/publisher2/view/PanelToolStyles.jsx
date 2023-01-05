@@ -25,6 +25,10 @@ const StyledSlider = styled(Opacity)`
     width: 285px;
 `;
 
+const StyledSelect = styled(Select)`
+    width: 200px;
+`;
+
 const fonts = [
     {
         name: 'Arial (sans-serif)',
@@ -36,8 +40,8 @@ const fonts = [
     }
 ];
 
-export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
-    const [font, setFont] = useState()
+export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }) => {
+    const [font, setFont] = useState(fontValue)
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
@@ -117,11 +121,17 @@ export const PanelToolStyles = ({ mapTheme, changeTheme }) => {
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.fonts.label' />
-                <Select value={font} onChange={val => setFont(val)}>
+                <StyledSelect
+                    value={font}
+                    onChange={val => {
+                        setFont(val);
+                        changeFont({ font: val });
+                    }}
+                >
                     {fonts.map(font => (
                         <Option key={font.val}>{font.name}</Option>
                     ))}
-                </Select>
+                </StyledSelect>
             </Field>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
