@@ -2,15 +2,40 @@
 import { EFFECT } from './constants';
 
 export const getHeaderTheme = (theme) => {
-    const headerTextColor = getTextColor(theme.color.primary);
+    const bgColor = theme.color.header?.bg || theme.color.primary;
+    const headerTextColor = getTextColor(bgColor);
     const funcs = {
-        getBgColor: () => theme.color.header?.bg || theme.color.primary,
+        getBgColor: () => bgColor,
         getAccentColor: () => theme.color.accent,
         getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
         getTextColor: () => theme.color.header?.text || headerTextColor,
         getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
         getToolHoverColor: () => theme.color.accent
+    };
+    return funcs;
+};
+
+export const getNavigationTheme = (theme) => {
+    const primary = theme.navigation?.color?.primary || '#141414';
+    const textColor = getTextColor(primary);
+    let borderRadius = undefined;
+    if (theme?.navigation?.roundness) {
+        borderRadius = `${(theme?.navigation?.roundness || 0) / 2}%`;
+    }
+
+    let buttonColor = primary;
+    if (theme.navigation?.effect === '3D') {
+        buttonColor = `linear-gradient(180deg, ${getColorEffect(primary, EFFECT.DARKEN)} 0%, ${primary} 35%, ${getColorEffect(primary, EFFECT.LIGHTEN)} 100%)`;
+    }
+    const funcs = {
+        getPrimary: () => primary,
+        getTextColor: () => theme.navigation?.color?.text || textColor,
+        getButtonColor: () => buttonColor,
+        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || '#ffd400',
+        getButtonRoundness: () => borderRadius,
+        getEffect: () => theme.navigation?.effect,
+        getButtonOpacity: () => theme.navigation?.opacity || 1
     };
     return funcs;
 };

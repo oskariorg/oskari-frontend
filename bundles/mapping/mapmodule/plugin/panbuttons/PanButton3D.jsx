@@ -3,10 +3,12 @@ import { CaretDownOutlined, CaretUpOutlined, CaretLeftOutlined, CaretRightOutlin
 import styled from 'styled-components';
 import { ReturnIcon } from 'oskari-ui/components/icons';
 import { MapModuleButton } from '../../MapModuleButton';
+import { getColorEffect, EFFECT } from 'oskari-ui/theme';
 
 const StyledButtonContainer = styled('div')`
     position: relative;
     margin: 0 25px 20px 25px;
+    opacity: 0.8;
 `;
 
 const StyledButton = styled('div')`
@@ -56,7 +58,7 @@ const StyledReturnButton = styled('div')`
     fill: ${(props) => props.color};
     z-index: 1;
     &:hover {
-        fill: #ffd400;
+        fill: ${(props) => props.hovercolor};
     }
     svg {
         width: 18px;
@@ -80,36 +82,27 @@ const ArrowIcon = styled('div')`
     left: ${props => props.left};
     color: ${(props) => props.color};
     &:hover {
-        color: #ffd400;
+        color: ${(props) => props.hovercolor};
     }
 `;
 
-const ArrowButton = ({ children, onClick, color, top = 'initial', right = 'initial', bottom = 'initial', left = 'initial' }) => {
+const ArrowButton = ({ children, onClick, colors, top = 'initial', right = 'initial', bottom = 'initial', left = 'initial' }) => {
     return (
-        <ArrowIcon onClick={onClick} color={color} top={top} right={right} bottom={bottom} left={left}>
+        <ArrowIcon onClick={onClick} color={colors.icon} hovercolor={colors.hover} top={top} right={right} bottom={bottom} left={left}>
             {children}
         </ArrowIcon>
     );
 }
 
-export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile = false, showArrows = false }) => {
-
-    let backgroundV = 'linear-gradient(180deg,rgba(101,101,101,1) 0%,rgba(60,60,60,1) 35%,rgba(9,9,9,1) 100%)';
-    let backgroundH = 'linear-gradient(180deg,#3c3c3c 0%,rgba(60,60,60,1) 35%,#232323 100%)';
-    let iconColor = '#ffffff';
-
-    if (color === 'light') {
-        backgroundV = 'linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(240,240,240,1) 35%,rgba(221,221,221,1) 100%)';
-        backgroundH = 'linear-gradient(180deg,#efefef 0%,rgba(240,240,240,1) 35%,#e6e6e6 100%)';
-        iconColor = '#3c3c3c';
-    }
-
+export const PanButton3D = ({ colors, resetClicked, panClicked, isMobile = false, showArrows = false }) => {
+    const { bgColor, icon, hover, primary } = colors;
+    let backgroundV = bgColor;
+    let backgroundH = `linear-gradient(180deg, ${primary} 0%, ${primary} 35%, ${getColorEffect(primary, EFFECT.LIGHTEN_MINOR)} 100%)`;
     if (isMobile || !showArrows) {
         return (
             <MapModuleButton
                 icon={<MobileIcon />}
                 title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')}
-                styleName={`3d-${color}`}
                 onClick={resetClicked}
                 iconSize='18px'
                 className='t_reset'
@@ -120,22 +113,22 @@ export const PanButton3D = ({ resetClicked, panClicked, color = 'dark', isMobile
     return (
         <StyledButtonContainer>
             <StyledButton backgroundV={backgroundV} backgroundH={backgroundH} >
-                <ArrowButton color={iconColor} onClick={() => panClicked(0, -1)} right='2.5px' top='0' className='t_pan_up'>
+                <ArrowButton colors={colors} onClick={() => panClicked(0, -1)} right='2.5px' top='0' className='t_pan_up'>
                     <CaretUpOutlined />
                 </ArrowButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(-1, 0)} left='-29.5px' top='32px' className='t_pan_right'>
+                <ArrowButton colors={colors} onClick={() => panClicked(-1, 0)} left='-29.5px' top='32px' className='t_pan_right'>
                     <CaretLeftOutlined />
                 </ArrowButton>
-                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={iconColor} onClick={resetClicked} className='t_reset'>
+                <StyledReturnButton title={Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip')} color={icon} hovercolor={hover}  onClick={resetClicked} className='t_reset'>
                     <ReturnIcon />
                 </StyledReturnButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(0, 1)} right='2.5px' bottom='0' className='t_pan_right'>
+                <ArrowButton colors={colors} onClick={() => panClicked(0, 1)} right='2.5px' bottom='0' className='t_pan_right'>
                     <CaretDownOutlined />
                 </ArrowButton>
-                <ArrowButton color={iconColor} onClick={() => panClicked(1, 0)} right='-29.5px' top='32px' className='t_pan_left'>
+                <ArrowButton colors={colors} onClick={() => panClicked(1, 0)} right='-29.5px' top='32px' className='t_pan_left'>
                     <CaretRightOutlined />
                 </ArrowButton>
             </StyledButton>
         </StyledButtonContainer>
     );
-}
+};

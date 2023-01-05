@@ -174,15 +174,21 @@ Oskari.registerLocalization(
                         "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "Tool style",
-                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Angular (dark)",
                         "sharp-light": "Angular (light)",
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-up header background color",
+                    "buttonBackgroundColor": "Button background color",
+                    "buttonTextColor": "Icon color",
+                    "buttonAccentColor": "Icon effect color",
+                    "buttonRounding": "Button rounding",
+                    "effect": "Effect",
+                    "3d": "3D",
+                    "presets": "Style presets"
                 },
                 "popup": {
                     "title": "Select Color Scheme",

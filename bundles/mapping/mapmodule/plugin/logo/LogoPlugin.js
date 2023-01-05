@@ -184,8 +184,11 @@ Oskari.clazz.define(
                 return;
             }
 
+            const logoUrl = Oskari.urls.getRoute('Logo');
+
             var options = {
-                id: 'icon',
+                id: 'logo',
+                src: logoUrl,
                 callback: function (event) {
                     if (!me.inLayerToolsEditMode()) {
                         linkParams = me.getSandbox().generateMapLinkParameters({});

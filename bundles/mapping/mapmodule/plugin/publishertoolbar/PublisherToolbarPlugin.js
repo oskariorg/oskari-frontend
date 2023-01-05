@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin';
         me._defaultLocation = 'top left';
-        me._index = 0;
+        me._index = 2;
         me._name = 'PublisherToolbarPlugin';
         me._toolButtons = conf.buttons || [];
         me.inMobileMode = false;
@@ -162,15 +162,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
                 <MapModuleButton
                     className='t_publishertoolbar'
-                    styleName={styleName || 'rounded-dark'}
                     icon={<MenuOutlined />}
                     title={this._loc.title}
                     withToolbar

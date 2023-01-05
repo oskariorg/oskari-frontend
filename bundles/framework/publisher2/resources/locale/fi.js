@@ -174,15 +174,21 @@ Oskari.registerLocalization(
                         "label": "Valitse fontti"
                     },
                     "toolStyles": {
-                        "label": "Työkalujen tyyli",
-                        "default": "Oletustyyli",
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",
                         "sharp-light": "Kulmikas (vaalea)",
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
+                    "buttonBackgroundColor": "Painikkeiden taustaväri",
+                    "buttonTextColor": "Ikonien väri",
+                    "buttonAccentColor": "Ikonien tehosteväri",
+                    "buttonRounding": "Painikkeiden pyöristys",
+                    "effect": "Efekti",
+                    "3d": "3D",
+                    "presets": "Valmiit tyylimääritykset"
                 },
                 "popup": {
                     "title": "Valitse värimaailma",

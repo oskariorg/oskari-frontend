@@ -331,8 +331,13 @@ Oskari.clazz.define(
             }
 
             let theme = Oskari.app.getTheming().getTheme();
-            me.theme = theme;
+            this.__originalTheme = theme;
+            // listen to changes
+            Oskari.app.getTheming().addListener(newTheme => {
+                this.setMapTheme(newTheme.map);
+            });
 
+            /*
             const style = me.getToolStyle();
 
             let bgColor = theme.color.primary;
@@ -355,7 +360,7 @@ Oskari.clazz.define(
             };
 
             Oskari.app.getTheming().setTheme(theme);
-
+            */
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
@@ -436,8 +441,8 @@ Oskari.clazz.define(
             }
             unmonitorResize(this.updateSize.bind(this));
 
-            if (this.theme) {
-                Oskari.app.getTheming().setTheme(this.theme);
+            if (this.__originalTheme) {
+                Oskari.app.getTheming().setTheme(this.__originalTheme);
             }
 
             sandbox = sandbox || this.getSandbox();
@@ -1398,6 +1403,79 @@ Oskari.clazz.define(
                 return 'light';
             }
         },
+        __cachedTheme: null,
+        getMapTheme: function () {
+            if (this.__cachedTheme) {
+                return this.__cachedTheme;
+            }
+            const { map = {}, ...appTheme } = Oskari.app.getTheming().getTheme();
+            // take "global" theme as base and override anything specified for map
+            let mapTheme = {
+                ...appTheme,
+                ...this.__injectThemeByToolStyle(this.getToolStyle()),
+                ...map
+            };
+
+            this.__cachedTheme = mapTheme;
+            return mapTheme;
+        },
+        setMapTheme: function (mapTheme = {}) {
+            this.__cachedTheme = null;
+            let theme = {
+                ...this.getMapTheme(),
+                ...mapTheme
+            };
+            this.__cachedTheme = theme;
+            this.changeToolStyle();
+        },
+        // generates base style for map
+        __injectThemeByToolStyle: function (toolStyle) {
+            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
+            const mapTheme = {
+                // For buttons on map
+                navigation: {
+                    roundness: 0,
+                    opacity: 0.8,
+                    color: {
+                        // #141414 -> rgb(20,20,20)
+                        // #3c3c3c -> rgb(60,60,60)
+                        primary: '#141414',
+                        accent: '#ffd400',
+                        text: '#ffffff'
+                    }
+                },
+                // /For buttons on map ^
+                // --------------
+                // For popup headers opened by map:
+                color: {
+                    header: {
+                        bg: '#3c3c3c'
+                    }
+                    // accent should be inherited from global theme accent if not configured
+                    // accent: '#ffd400'
+                }
+                // /For popup headers opened by map ^
+            };
+            const style = toolStyle || 'rounded-dark';
+            const [shape, theme] = style.split('-');
+            if (shape === 'rounded') {
+                mapTheme.navigation.roundness = 100;
+            } else if (shape === '3d') {
+                mapTheme.navigation.roundness = 20;
+                // themehelper calculates gradients when this is set
+                mapTheme.navigation.effect = '3D';
+            }
+
+            if (theme === 'light') {
+                // buttons
+                mapTheme.navigation.color.primary = '#ffffff';
+                mapTheme.navigation.color.text = '#000000';
+                // popup
+                mapTheme.color.header.bg = '#ffffff';
+            }
+
+            return mapTheme;
+        },
 
         getThemeColours: function (theme) {
             var me = this;
@@ -2143,28 +2221,6 @@ Oskari.clazz.define(
                 this._options = {};
             }
             this._options.style = clonedStyle;
-
-            let theme = Oskari.app.getTheming().getTheme();
-            let bgColor = theme.color.primary;
-            let textColor = '#000000';
-            if (style?.toolStyle?.includes('dark') || style?.toolStyle?.includes('default')) {
-                bgColor = '#3c3c3c';
-                textColor = '#ffffff';
-            } else if (style?.toolStyle?.includes('light')) {
-                bgColor = '#ffffff';
-            }
-
-            theme = {
-                ...theme,
-                color: {
-                    header: {
-                        bg: bgColor,
-                        text: textColor
-                    }
-                }
-            };
-
-            Oskari.app.getTheming().setTheme(theme);
 
             // notify plugins of the style change.
             Object.values(this._pluginInstances)

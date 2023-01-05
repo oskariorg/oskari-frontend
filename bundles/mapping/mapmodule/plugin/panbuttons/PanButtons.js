@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { PanButton } from './PanButton';
 import { showResetPopup } from '../../MapResetPopup';
+import { ThemeProvider } from 'oskari-ui/util/contexts';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
@@ -114,19 +115,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             }
             if (!el) return;
 
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-
             ReactDOM.render(
-                <PanButton
-                    resetClicked={() => this._resetClicked()}
-                    panClicked={(x, y) => this._panClicked(x, y)}
-                    styleName={styleName || 'rounded-dark'}
-                    isMobile={this.inMobileMode}
-                    showArrows={this.showArrows}
-                />,
+                <ThemeProvider value={this.getMapModule().getMapTheme()}>
+                    <PanButton
+                        resetClicked={() => this._resetClicked()}
+                        panClicked={(x, y) => this._panClicked(x, y)}
+                        isMobile={this.inMobileMode}
+                        showArrows={this.showArrows}
+                    />
+                </ThemeProvider>,
                 el[0]
             );
         },

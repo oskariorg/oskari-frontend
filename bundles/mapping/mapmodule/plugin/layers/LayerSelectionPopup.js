@@ -27,7 +27,7 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
     );
 };
 
-export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, pluginPosition) => {
+export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, pluginPosition, theme) => {
     let position;
     switch (pluginPosition) {
     case 'top right':
@@ -53,9 +53,11 @@ export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadat
         break;
     }
 
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     const options = {
         id: POPUP_ID,
-        placement: position
+        placement: position,
+        theme: mapModule.getMapTheme()
     };
 
     const controls = showPopup(

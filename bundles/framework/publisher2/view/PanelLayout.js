@@ -1,3 +1,7 @@
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { PanelToolStyles } from './PanelToolStyles';
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelToolLayout
  *
@@ -22,148 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.mapModule = mapmodule;
         me._originalToolStyle = null;
         // The values to be sent to plugins to actually change the style.
-        me.initialValues = {
-            fonts: [{
-                name: 'Arial (sans-serif)',
-                val: 'arial'
-            }, {
-                name: 'Georgia (serif)',
-                val: 'georgia'
-            }],
-            toolStyles: [{
-                val: 'default',
-                zoombar: {},
-                search: {}
-            }, {
-
-                val: 'rounded-dark',
-                zoombar: {
-                    widthPlus: '22px',
-                    widthMinus: '22px',
-                    widthCenter: '22px',
-                    heightPlus: '38px',
-                    heightMinus: '39px',
-                    heightCenter: 12,
-                    heightCursor: '18px',
-                    widthCursor: '17px'
-                },
-                search: {
-                    widthLeft: 17,
-                    widthRight: 32
-                }
-            }, {
-                val: 'rounded-light',
-                zoombar: {
-                    widthPlus: '22px',
-                    widthMinus: '22px',
-                    widthCenter: '22px',
-                    heightPlus: '38px',
-                    heightMinus: '39px',
-                    heightCenter: 12,
-                    heightCursor: '18px',
-                    widthCursor: '17px'
-                },
-                search: {
-                    widthLeft: 17,
-                    widthRight: 32
-                }
-            }, {
-                val: 'sharp-dark',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '17px',
-                    heightMinus: '18px',
-                    heightCenter: 16,
-                    heightCursor: '16px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 30
-                }
-            }, {
-                val: 'sharp-light',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '17px',
-                    heightMinus: '18px',
-                    heightCenter: 16,
-                    heightCursor: '16px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 30
-                }
-            }, {
-                val: '3d-dark',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '35px',
-                    heightMinus: '36px',
-                    heightCenter: 13,
-                    heightCursor: '13px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 44
-                }
-            }, {
-                val: '3d-light',
-                zoombar: {
-                    widthPlus: '23px',
-                    widthMinus: '23px',
-                    widthCenter: '23px',
-                    heightPlus: '35px',
-                    heightMinus: '36px',
-                    heightCenter: 13,
-                    heightCursor: '13px',
-                    widthCursor: '23px'
-                },
-                search: {
-                    widthLeft: 5,
-                    widthRight: 44
-                }
-            }]
-        };
-
-        // Visible fields:
-        // - colour input
-        // - font input
-        // - tool style input
-        me.fields = {
-            'fonts': {
-                'label': me.loc.layout.fields.fonts.label,
-                'getContent': me._getFontsTemplate
-            },
-            'toolStyles': {
-                'label': me.loc.layout.fields.toolStyles.label,
-                'getContent': me._getToolStylesTemplate
-            }
-        };
-
-        me.__templates = {
-            fonts: '<div id="publisher-layout-fonts">' + '<label for="publisher-fonts"></label>' + '<select name="publisher-fonts"></select>' + '</div>',
-            toolStyles: '<div id="publisher-layout-toolStyles">' + '<label for="publisher-toolStyles"></label>' + '<select name="publisher-toolStyles"></select>' + '</div>',
-            option: '<option></option>',
-            inputRadio: '<div><input type="radio" /><label></label></div>',
-            iconClsInput: '<div class="iconClsInput">' + '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' + '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' + '</div>'
-        };
-
-        this.template = {};
-        var t;
-        for (t in this.__templates) {
-            if (this.__templates.hasOwnProperty(t)) {
-                this.template[t] = jQuery(this.__templates[t]);
-            }
-        }
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -208,32 +70,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            // Use current tool style as default
-            var mapToolStyle = me.mapModule.getToolStyle() || 'default';
-
             // Set the initial values
+            const theme = this.data?.metadata?.theme;
             me.values = {
                 metadata: {
                     style: {
-                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyle
-                    }
+                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0]
+                    },
+                    theme: theme
                 }
             };
 
-            // "Precompile" the templates
-            for (var f in me.fields) {
-                if (me.fields.hasOwnProperty(f)) {
-                    var field = me.fields[f];
-                    var template = field.getContent.apply(me, arguments);
-                    field.content = template;
-                }
+            // for restoring after exit
+            this._originalTheme = Oskari.app.getTheming().getTheme();
+            if (theme) {
+                this.updateTheme(theme.map);
             }
-            me._originalToolStyle = me.mapModule.getToolStyle();
-            if (me.data.metadata) {
-                me._changeMapModuleToolstyle(me.data.metadata.style);
-            }
-
             if (!me.panel) {
                 me.panel = me._populateLayoutPanel();
             }
@@ -267,9 +119,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
+                    theme: Oskari.app.getTheming().getTheme(),
                     style: {
-                        font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null,
-                        toolStyle: jQuery('select[name=publisher-toolStyles]').val() ? jQuery('select[name=publisher-toolStyles]').val() : null
+                        font: me.values.style.font
                     }
                 }
             };
@@ -286,100 +138,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         _populateLayoutPanel: function () {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             var contentPanel = panel.getContainer();
-            var field;
 
             panel.setTitle(this.loc.layout.label);
-            for (var f in this.fields) {
-                if (this.fields.hasOwnProperty(f)) {
-                    field = this.fields[f];
-                    contentPanel.append(field.content);
-                }
-            }
+
+            const styleEditor = jQuery('<div />');
+            contentPanel.append(styleEditor);
+
+            ReactDOM.render(
+                <PanelToolStyles fontValue={this.values?.metadata?.style?.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                styleEditor[0]
+            );
 
             return panel;
         },
-        /**
-         * @method _getFontsTemplate
-         * @return {jQuery} the fonts template
-         */
-        _getFontsTemplate: function () {
-            var me = this,
-                template = this.template.fonts.clone(),
-                fontLabel = this.loc.layout.fields.fonts.label,
-                fonts = this.initialValues.fonts,
-                fLen = fonts.length,
-                fontOption,
-                i;
-            // Set the localization.
-            template.find('label').html(fontLabel).after('<br />');
-
-            for (i = 0; i < fLen; ++i) {
-                fontOption = this.template.option.clone();
-                fontOption.attr({
-                    value: fonts[i].val
-                }).html(fonts[i].name);
-                template.find('select').append(fontOption);
-            }
-
-            // Set the select change handler.
-            template.find('select').on('change', function (e) {
-                me._changeMapModuleToolstyle();
-            });
-
-            // Prepopulate data
-            jQuery(template.find('select option')).filter(function () {
-                return (jQuery(this).val() === me.values.metadata.style.font);
-            }).prop('selected', 'selected');
-
-            return template;
-        },
-
-        /**
-         * @method _getToolStylesTemplate
-         * @return {jQuery} the tool styles template
-         */
-        _getToolStylesTemplate: function () {
-            var me = this;
-            var template = this.template.toolStyles.clone();
-            var toolStylesLabel = this.loc.layout.fields.toolStyles.label;
-
-            // Set the localizations.
-            template.find('label').html(toolStylesLabel).after('<br />');
-            var styleSelect = template.find('select');
-            // add options
-            this.initialValues.toolStyles.forEach(function (toolStyle) {
-                var toolStyleOption = me.template.option.clone();
-                var toolStyleName = me.loc.layout.fields.toolStyles[toolStyle.val];
-                toolStyleOption.attr({
-                    value: toolStyle.val
-                }).html(toolStyleName);
-                // add as option
-                styleSelect.append(toolStyleOption);
-            });
-            // Set the select change handler.
-            styleSelect.on('change', function (e) {
-                me._changeMapModuleToolstyle();
-            });
-
-            // Prepopulate data
-            jQuery(template.find('select option')).filter(function () {
-                return (me.values.metadata.style.toolStyle && jQuery(this).val() === me.values.metadata.style.toolStyle);
-            }).prop('selected', 'selected');
-
-            return template;
-        },
-        /**
-         * Retrieves the item from the list which value matches the code given
-         * or null if not found on the list.
-         *
-         * @method _getItemByCode
-         * @param {String} code
-         * @param {Array[Object]} list
-         * @return {Object/null}
-         */
-        _getItemByCode: function (code, list) {
-            return list.find(function (item) {
-                return item.val === code;
+        updateTheme: function (mapTheme) {
+            Oskari.app.getTheming().setTheme({
+                ...this._originalTheme,
+                map: mapTheme
             });
         },
         /**
@@ -393,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 me.sandbox.unregisterFromEventByName(me, eventName);
             });
             // change the mapmodule toolstyle back to normal
-            me.mapModule.changeToolStyle({ toolStyle: me._originalToolStyle });
+            Oskari.app.getTheming().setTheme(this._originalTheme);
         }
     }
 );
