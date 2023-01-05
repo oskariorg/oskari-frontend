@@ -104,11 +104,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             }
 
             // Set the initial values
+            const theme = this.data?.metadata?.theme;
             me.values = {
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0]
-                    }
+                    },
+                    theme: theme
                 }
             };
 
@@ -121,6 +123,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
+            // for restoring after exit
+            this._originalTheme = Oskari.app.getTheming().getTheme();
+            if (theme) {
+                this.updateTheme(theme.map);
+            }
             if (!me.panel) {
                 me.panel = me._populateLayoutPanel();
             }
@@ -156,7 +163,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 metadata: {
                     style: {
                         font: jQuery('select[name=publisher-fonts]').val() ? jQuery('select[name=publisher-fonts]').val() : null
-                    }
+                    },
+                    theme: Oskari.app.getTheming().getTheme()
                 }
             };
             return me.values;
@@ -184,6 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             const styleEditor = jQuery('<div />');
             contentPanel.append(styleEditor);
+
             ReactDOM.render(
                 <PanelToolStyles mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
                 styleEditor[0]
@@ -192,7 +201,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             return panel;
         },
         updateTheme: function (mapTheme) {
-            this.mapModule.setMapTheme(mapTheme);
+            Oskari.app.getTheming().setTheme({
+                ...this._originalTheme,
+                map: mapTheme
+            });
         },
         /**
          * @method _getFontsTemplate
@@ -254,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 me.sandbox.unregisterFromEventByName(me, eventName);
             });
             // change the mapmodule toolstyle back to normal
-            me.mapModule.changeToolStyle({ toolStyle: me._originalToolStyle });
+            Oskari.app.getTheming().setTheme(this._originalTheme);
         }
     }
 );

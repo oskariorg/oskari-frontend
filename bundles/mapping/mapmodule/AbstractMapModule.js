@@ -322,8 +322,13 @@ Oskari.clazz.define(
             }
 
             let theme = Oskari.app.getTheming().getTheme();
-            me.theme = theme;
+            this.__originalTheme = theme;
+            // listen to changes
+            Oskari.app.getTheming().addListener(newTheme => {
+                this.setMapTheme(newTheme.map);
+            });
 
+            /*
             const style = me.getToolStyle();
 
             let bgColor = theme.color.primary;
@@ -346,7 +351,7 @@ Oskari.clazz.define(
             };
 
             Oskari.app.getTheming().setTheme(theme);
-
+            */
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
@@ -425,8 +430,8 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (this.theme) {
-                Oskari.app.getTheming().setTheme(this.theme);
+            if (this.__originalTheme) {
+                Oskari.app.getTheming().setTheme(this.__originalTheme);
             }
 
             sandbox = sandbox || this.getSandbox();
@@ -1407,7 +1412,8 @@ Oskari.clazz.define(
             this.__cachedTheme = mapTheme;
             return mapTheme;
         },
-        setMapTheme: function (mapTheme) {
+        setMapTheme: function (mapTheme = {}) {
+            this.__cachedTheme = null;
             let theme = {
                 ...this.getMapTheme(),
                 ...mapTheme
