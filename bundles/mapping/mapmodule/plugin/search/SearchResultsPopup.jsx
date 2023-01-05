@@ -63,5 +63,10 @@ const PopupContent = ({ results, description, showResult }) => {
 };
 
 export const showResultsPopup = (title, description, results = [], showResult, onClose) => {
-    return showPopup(title, <PopupContent description={description} results={results} showResult={showResult} />, onClose);
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    const options = {
+        id: 'searchResults',
+        theme: mapModule.getMapTheme()
+    }
+    return showPopup(title, <PopupContent description={description} results={results} showResult={showResult} />, onClose, options);
 };
