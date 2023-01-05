@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             contentPanel.append(styleEditor);
 
             ReactDOM.render(
-                <PanelToolStyles fontValue={this.values.metadata.style.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                <PanelToolStyles fontValue={this.values?.metadata?.style?.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
                 styleEditor[0]
             );
 
