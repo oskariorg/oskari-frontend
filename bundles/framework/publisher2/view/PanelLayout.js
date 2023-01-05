@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             me.values = {
                 metadata: {
                     theme: Oskari.app.getTheming().getTheme(),
-                    styles: {
+                    style: {
                         font: me.values.style.font
                     }
                 }
