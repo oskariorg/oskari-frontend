@@ -43,7 +43,13 @@ const ToolbarItem = styled('div')`
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%
+    height: 100%;
+    &:hover {
+        fill: ${props => props.$activeColor};
+        &, * {
+            fill: ${props => props.$activeColor};
+        }
+    }
 `;
 
 const Icon = styled('div')`
@@ -65,7 +71,7 @@ export const ToolbarButtonItem = ThemeConsumer(({ theme = {}, icon, onClick, ico
     if (title) {
         return (
             <Tooltip title={title}>
-                <ToolbarItem onClick={disabled ? null : onClick} color={iconColor}>
+                <ToolbarItem onClick={disabled ? null : onClick} $activeColor={hoverColor} color={iconColor}>
                     <Icon
                         $active={iconActive}
                         $activeColor={hoverColor}
