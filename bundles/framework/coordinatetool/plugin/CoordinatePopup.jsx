@@ -13,7 +13,7 @@ const OPTIONS = {
 const Content = styled('div')`
     margin: 12px 24px 24px;
     display: flex;
-    width: 350px;
+    width: 270px;
     flex-direction: column;
 `;
 
@@ -21,7 +21,6 @@ const CoordinateFields = styled('div')`
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    margin-bottom: 10px;
 `;
 
 const CoordinateField = styled('div')`
@@ -46,7 +45,6 @@ const CoordinateLabel = styled('div')`
 `;
 
 const SelectField = styled('div')`
-    margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -74,7 +72,6 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
     const content = (
         <Content>
             <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
-            <br />
             {!preciseTransform ? (
                 crsText
             ) : (
