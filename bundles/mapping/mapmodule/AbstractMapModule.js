@@ -2190,7 +2190,7 @@ Oskari.clazz.define(
          * @method changeToolStyle
          * @param {Object} style The style object to be applied on all plugins that support changing style.
          */
-        changeToolStyle: function (style) {
+        changeToolStyle: function (style = this._options.style) {
             const clonedStyle = {
                 ...style
             };
