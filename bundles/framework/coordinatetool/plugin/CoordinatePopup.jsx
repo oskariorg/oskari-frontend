@@ -96,6 +96,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                         value={state?.displayXy?.lonlat?.lat}
                         onChange={(e) => controller.setLat(e.target.value)}
                         disabled={state.showMouseCoordinates}
+                        className='t_lat'
                     />
                 </CoordinateField>
                 {degmin && (
@@ -110,6 +111,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                         value={state?.displayXy?.lonlat?.lon}
                         onChange={(e) => controller.setLon(e.target.value)}
                         disabled={state.showMouseCoordinates}
+                        className='t_lon'
                     />
                 </CoordinateField>
                 {degmin && (
@@ -146,6 +148,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     type='default'
                     disabled={state.showMouseCoordinates}
                     onClick={() => controller.centerMap()}
+                    className='t_center'
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.searchButton' />
                 </Button>
@@ -153,6 +156,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     <Button
                         type='default'
                         onClick={() => controller.setMarker()}
+                        className='t_add'
                     >
                         <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.addMarkerButton' />
                     </Button>
