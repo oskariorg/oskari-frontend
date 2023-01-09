@@ -30,10 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
     }, {
         // templates for tools-mapplugin
         templates: {
-            main: jQuery(
-                '<div class="mapplugin tools"></div>'
-            ),
-            container: jQuery('<div></div>')
+            main: '<div class="mapplugin tools"></div>'
         },
 
         /**
@@ -105,11 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @private @method _createControlElement
          */
         _createControlElement: function () {
-            var me = this,
-                el;
-
-            el = me.template.clone();
-            return el;
+            return jQuery(this.templates.main);
         },
 
         teardownUI: function () {
