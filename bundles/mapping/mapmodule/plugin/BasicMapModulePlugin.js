@@ -362,6 +362,22 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
+        },
+
+        /** *****************************************
+         * Deprecated functions for backwards compatibility.
+         * Removed usage in Oskari 2.10.
+         * These can be removed after/in Oskari ~2.12
+         */
+        getMobileDefs: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('getMobileDefs');
+            return {};
+        },
+        removeToolbarButtons: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('removeToolbarButtons');
+        },
+        addToolbarButtons: function () {
+            Oskari.log('BasicMapModulePlugin').deprecated('addToolbarButtons');
         }
     }, {
         /**
