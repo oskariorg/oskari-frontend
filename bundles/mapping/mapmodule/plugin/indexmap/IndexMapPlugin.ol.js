@@ -7,6 +7,7 @@ import olLayerVectorTile from 'ol/layer/VectorTile';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../MapModuleButton';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
@@ -33,7 +34,6 @@ Oskari.clazz.define(
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
         me._baseLayerId = null;
-        me._indElement = null;
     },
     {
         _stopPluginImpl: function () {
@@ -59,11 +59,7 @@ Oskari.clazz.define(
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
 
-            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
-            // button has to be added separately so the element order is correct...
-            el.append(toggleButton);
-            var toolStyle = this.getToolStyleFromMapModule();
-            this.changeToolStyle(toolStyle, el);
+            this.changeToolStyle(undefined, el);
 
             return el;
         },
@@ -142,19 +138,17 @@ Oskari.clazz.define(
             this.renderButton(style, element);
         },
         renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
+            let el = element || this.getElement();
+            if (!el) {
+                return;
             }
-            if (!el) return;
-            el = el.find('.indexmapToggle');
+            const theme = this.getMapModule().getMapTheme();
+            const helper = getNavigationTheme(theme);
+            const isDark = Oskari.util.isDarkColor(helper.getPrimary());
             // the icon is switched based on styleName -> passed to classes -> see scss
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
-            if (!styleName) {
-                styleName = 'rounded-dark';
+            let styleName = 'bg-dark';
+            if (!isDark) {
+                styleName = 'bg-light';
             }
 
             ReactDOM.render(
