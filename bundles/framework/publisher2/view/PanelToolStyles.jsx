@@ -64,18 +64,7 @@ const StyledSelect = styled(Select)`
     width: 200px;
 `;
 
-const fonts = [
-    {
-        name: 'Arial (sans-serif)',
-        val: 'arial'
-    },
-    {
-        name: 'Georgia (serif)',
-        val: 'georgia'
-    }
-];
-
-export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }) => {
+export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, fonts, changeFont }) => {
     const [font, setFont] = useState(fontValue)
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);

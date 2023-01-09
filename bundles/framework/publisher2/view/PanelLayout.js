@@ -25,6 +25,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.sandbox = sandbox;
         me.mapModule = mapmodule;
         me._originalToolStyle = null;
+        me.fonts = [
+            {
+                name: 'Arial (sans-serif)',
+                val: 'arial'
+            },
+            {
+                name: 'Georgia (serif)',
+                val: 'georgia'
+            }
+        ];
         // The values to be sent to plugins to actually change the style.
     }, {
         eventHandlers: {
@@ -75,7 +85,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             me.values = {
                 metadata: {
                     style: {
-                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0]
+                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.fonts[0].val
                     },
                     theme: theme
                 }
@@ -121,13 +131,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 metadata: {
                     theme: Oskari.app.getTheming().getTheme(),
                     style: {
-                        font: me.values.style.font
+                        font: me.values.metadata.style.font
                     }
                 }
             };
             return me.values;
         },
-        _changeMapModuleToolstyle: function (style) {
+        _changeMapModuleToolstyle: function (style) {console.log(style)
             var me = this;
 
             if (!style) {
@@ -145,7 +155,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             contentPanel.append(styleEditor);
 
             ReactDOM.render(
-                <PanelToolStyles fontValue={this.values?.metadata?.style?.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                <PanelToolStyles
+                    fontValue={this.values?.metadata?.style?.font}
+                    changeFont={(style) => this._changeMapModuleToolstyle(style)}
+                    mapTheme={this.mapModule.getMapTheme()}
+                    changeTheme={(theme) => this.updateTheme(theme)}
+                    fonts={this.fonts}
+                />,
                 styleEditor[0]
             );
 
