@@ -210,7 +210,11 @@ class UIHandler extends StateHandler {
         this.updateState({
             selectedProjection: projection
         });
-        this.updateLonLat();
+        if (this.preciseTransform) {
+            this.getTransformedCoordinatesFromServer(null, false, true);
+        } else {
+            this.updateLonLat();
+        }
     }
 
     showPopup () {
