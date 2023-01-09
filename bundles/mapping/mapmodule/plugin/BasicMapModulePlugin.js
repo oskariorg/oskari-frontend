@@ -369,14 +369,14 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Removed usage in Oskari 2.10.
          * These can be removed after/in Oskari ~2.12
          */
-        getMobileDefs: function() {
+        getMobileDefs: function () {
             Oskari.log('BasicMapModulePlugin').deprecated('getMobileDefs');
             return {};
         },
-        removeToolbarButtons: function() {
+        removeToolbarButtons: function () {
             Oskari.log('BasicMapModulePlugin').deprecated('removeToolbarButtons');
         },
-        addToolbarButtons: function() {
+        addToolbarButtons: function () {
             Oskari.log('BasicMapModulePlugin').deprecated('addToolbarButtons');
         }
     }, {

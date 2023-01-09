@@ -527,7 +527,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         plugin.stopPlugin(sandbox);
                         mapModule.unregisterPlugin(plugin);
                         this.normalMapPlugins.push(plugin);
-                    } catch(err) {
+                    } catch (err) {
                         Oskari.log('Publisher').error('Enable preview', err);
                         Messaging.error(this.loc.error.enablePreview);
                     }
@@ -550,7 +550,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     try {
                         plugin.stopPlugin(sandbox);
                         mapModule.unregisterPlugin(plugin);
-                    } catch(err) {
+                    } catch (err) {
                         Oskari.log('Publisher').error('Disable preview', err);
                         Messaging.error(this.loc.error.disablePreview);
                     }
