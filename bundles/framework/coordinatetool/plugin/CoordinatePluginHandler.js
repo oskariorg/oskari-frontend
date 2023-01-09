@@ -451,7 +451,7 @@ class UIHandler extends StateHandler {
         // need to get 'EPSG:4326' coordinates from service
         if (sourceProjection !== 'EPSG:4326') {
             try {
-                const response = await getTransformedCoordinates(this.mapModule, data, sourceProjection, 'EPSG:4326');
+                const response = await getTransformedCoordinates(this.originalProjection, data, sourceProjection, 'EPSG:4326');
                 if (response?.lat && response?.lon) {
                     const newData = {
                         'lonlat': {
@@ -537,7 +537,7 @@ class UIHandler extends StateHandler {
 
                     this.updateLonLat(cloneJSON(data));
 
-                    if (event.isPaused() && this.preciseTransform) {
+                    if (event.isPaused() && this.preciseTransform && (this.state.selectedProjection !== this.originalProjection)) {
                         this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     }
 
@@ -572,7 +572,7 @@ class UIHandler extends StateHandler {
              * @method MapClickedEvent
              * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
              */
-            MapClickedEvent: function (event) {
+            MapClickedEvent: async function (event) {
                 const lonlat = event.getLonLat();
                 const data = {
                     'lonlat': {
@@ -582,14 +582,14 @@ class UIHandler extends StateHandler {
                 };
                 const dataServer = cloneJSON(data);
                 if (!this.showMouseCoordinates) {
-                    if (this.preciseTransform) {
-                        this.getTransformedCoordinatesFromServer(dataServer, false, true);
+                    if (this.preciseTransform && (this.state.selectedProjection !== this.originalProjection)) {
+                        await this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     } else {
                         this.updateLonLat(data);
                     }
                 }
 
-                this.getEmergencyCallInfo(cloneJSON(data));
+                await this.getEmergencyCallInfo(cloneJSON(dataServer));
             }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
