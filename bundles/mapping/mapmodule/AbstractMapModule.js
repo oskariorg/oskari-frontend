@@ -327,31 +327,14 @@ Oskari.clazz.define(
             Oskari.app.getTheming().addListener(newTheme => {
                 this.setMapTheme(newTheme.map);
             });
-
-            /*
-            const style = me.getToolStyle();
-
-            let bgColor = theme.color.primary;
-            let textColor = '#000000';
-            if (style?.includes('dark') || style?.includes('default')) {
-                bgColor = '#3c3c3c';
-                textColor = '#ffffff';
-            } else if (style?.includes('light')) {
-                bgColor = '#ffffff';
-            }
-
-            theme = {
+            // setup map theme for well known tool styles
+            Oskari.app.getTheming().setTheme({
                 ...theme,
-                color: {
-                    header: {
-                        bg: bgColor,
-                        text: textColor
-                    }
+                map: {
+                    ...this.getMapTheme()
                 }
-            };
+            });
 
-            Oskari.app.getTheming().setTheme(theme);
-            */
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
