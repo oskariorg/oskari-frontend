@@ -1,3 +1,5 @@
+import { Messaging } from 'oskari-ui/util';
+
 const hasSizeUpdateFn = panel => typeof panel.updateMapSize === 'function';
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
@@ -521,9 +523,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             Object.values(mapModule.getPluginInstances())
                 .filter(plugin => plugin.hasUI && plugin.hasUI())
                 .forEach(plugin => {
-                    plugin.stopPlugin(sandbox);
-                    mapModule.unregisterPlugin(plugin);
-                    this.normalMapPlugins.push(plugin);
+                    try {
+                        plugin.stopPlugin(sandbox);
+                        mapModule.unregisterPlugin(plugin);
+                        this.normalMapPlugins.push(plugin);
+                    } catch(err) {
+                        Oskari.log('Publisher').error('Enable preview', err);
+                        Messaging.error(this.loc.error.enablePreview);
+                    }
                 });
         },
 
@@ -540,8 +547,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             Object.values(mapModule.getPluginInstances())
                 .filter(plugin => plugin.hasUI && plugin.hasUI())
                 .forEach(plugin => {
-                    plugin.stopPlugin(sandbox);
-                    mapModule.unregisterPlugin(plugin);
+                    try {
+                        plugin.stopPlugin(sandbox);
+                        mapModule.unregisterPlugin(plugin);
+                    } catch(err) {
+                        Oskari.log('Publisher').error('Disable preview', err);
+                        Messaging.error(this.loc.error.disablePreview);
+                    }
                 });
 
             // resume normal plugins
