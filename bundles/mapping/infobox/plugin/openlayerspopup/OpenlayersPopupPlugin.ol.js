@@ -826,6 +826,8 @@ Oskari.clazz.define(
          * @param {String} id popup id
          */
         _changeFont: function (fontId, div, id) {
+            // We shouldn't need this anymore. The map element will receive a class that sets font.
+            // However we should check if we have enabled RPC users to set font in a request...
             div = div || jQuery('div#' + id);
 
             if (!div || !fontId) {
@@ -851,7 +853,7 @@ Oskari.clazz.define(
 
                     // Check if there are any old font classes.
                     for (i = 0; i < classNames.length; i += 1) {
-                        if (/oskari-publisher-font-/.test(classNames[i])) {
+                        if (/oskari-theme-font-/.test(classNames[i])) {
                             removeThese += classNames[i] + ' ';
                         }
                     }
@@ -861,7 +863,7 @@ Oskari.clazz.define(
                 });
 
                 // Add the new font as a CSS class.
-                el.addClass('oskari-publisher-font-' + fontId);
+                el.addClass('oskari-theme-font-' + fontId);
             }
         },
 
