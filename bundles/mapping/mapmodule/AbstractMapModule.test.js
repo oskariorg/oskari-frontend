@@ -13,15 +13,13 @@ const dummyPlugin = {
     register: () => {},
     setMapModule: () => {}
 };
-const changeStyleCalls = [];
-const changeFontCalls = [];
+let changeStyleCalls = 0;
 const nonUIPlugin = {
     getName: () => 'Non UI plugin',
     register: () => {},
     setMapModule: () => {},
     hasUI: () => false,
-    changeToolStyle: (style) => { changeStyleCalls.push(style); },
-    changeFont: (font) => { changeFontCalls.push(font); },
+    changeToolStyle: () => { changeStyleCalls++; },
     getIndex: () => 10
 };
 const uiPlugin = {
@@ -29,8 +27,7 @@ const uiPlugin = {
     register: () => {},
     setMapModule: () => {},
     hasUI: () => true,
-    changeToolStyle: (style) => { changeStyleCalls.push(style); },
-    changeFont: (font) => { changeFontCalls.push(font); },
+    changeToolStyle: () => { changeStyleCalls++; },
     getIndex: () => 20
 };
 afterAll(() => mapModule.stop());
@@ -44,18 +41,13 @@ describe('MapModule', () => {
     });
     describe('changeToolStyle', () => {
         test('only called for plugin with UI and with value [undefined]', () => {
-            mapModule.changeToolStyle();
-            expect(changeStyleCalls.length).toEqual(1);
+            mapModule.setMapTheme();
+            expect(changeStyleCalls).toEqual(1);
             expect(changeStyleCalls[0]).toBeUndefined();
-            expect(changeFontCalls.length).toEqual(1);
-            expect(changeFontCalls[0]).toBeUndefined();
         });
         test('only called for plugin with UI and with style "3d-light" and font [undefined]', () => {
-            mapModule.changeToolStyle({ toolStyle: '3d-light' });
-            expect(changeStyleCalls.length).toEqual(2);
-            expect(changeStyleCalls[1]).toEqual('3d-light');
-            expect(changeFontCalls.length).toEqual(2);
-            expect(changeFontCalls[1]).toBeUndefined();
+            mapModule.setMapTheme({ primary: '#FFFFFF' });
+            expect(changeStyleCalls).toEqual(2);
         });
     });
     describe('_getSortedPlugins', () => {
