@@ -1405,13 +1405,16 @@ Oskari.clazz.define(
             // set font class for map module/map controls. Windows/popups will get it through theme
             const prefix = 'oskari-theme-font-';
             const newFontClass = prefix + (theme.font || 'arial');
-            const classlist = this.getMapEl()[0].classList;
-            classlist.forEach(clazz => {
-                if (clazz !== newFontClass && clazz.startsWith(prefix)) {
-                    classlist.remove(clazz);
-                }
-            });
-            classlist.add(newFontClass);
+            // on unit tests the mapEl might be undefined
+            const classlist = this.getMapEl()[0]?.classList;
+            if (classlist) {
+                classlist.forEach(clazz => {
+                    if (clazz !== newFontClass && clazz.startsWith(prefix)) {
+                        classlist.remove(clazz);
+                    }
+                });
+                classlist.add(newFontClass);
+            }
             Object.values(this._pluginInstances)
                 .filter((plugin = {}) => {
                     if (typeof plugin.hasUI === 'function') {
