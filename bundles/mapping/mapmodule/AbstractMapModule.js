@@ -2222,42 +2222,39 @@ Oskari.clazz.define(
          * Gets the style to be used on plugins
          *
          * @method getToolStyle
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} style The mapmodule's style configuration.
          */
         getToolStyle: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.toolStyle) {
-                return me._options.style.toolStyle && me._options.style.toolStyle !== 'default' ? me._options.style.toolStyle : null;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolStyle');
+            return null;
         },
         /**
          * Gets the font to be used on plugins
          * @method getToolFont
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolFont: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.font) {
-                return me._options.style.font;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolFont');
+            return Oskari.app.getTheming().getTheme()?.map?.font || 'arial';
         },
 
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolColourScheme: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.colourScheme) {
-                return me._options.style.colourScheme;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolColourScheme');
+            return null;
         },
         _getContainerWithClasses: function (containerClasses) {
             var containerDiv = jQuery(
