@@ -380,15 +380,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.changeToolStyle(toolStyle, me.getElement());
                 }
             }
-
-            if (conf.font) {
-                me.changeFont(conf.font, element);
-            } else {
-                var font = me.getToolFontFromMapModule();
-                if (font !== null && font !== undefined) {
-                    me.changeFont(font, element);
-                }
-            }
         },
 
         /**
@@ -439,25 +430,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             );
         },
 
-        /**
-         * Changes the font used by plugin by adding a CSS class to its DOM elements.
-         *
-         * @method changeFont
-         * @param {String} fontId
-         * @param {jQuery} div
-         */
-        changeFont: function (fontId, div) {
-            div = div || this.getElement();
-
-            if (!div || !fontId) {
-                return;
-            }
-
-            var classToAdd = 'oskari-publisher-font-' + fontId,
-                testRegex = /oskari-publisher-font-/;
-
-            this.changeCssClasses(classToAdd, testRegex, [div]);
-        },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox

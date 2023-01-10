@@ -156,9 +156,6 @@ Oskari.clazz.define(
                 },
                 'Publisher2.ColourSchemeChangedEvent': function (evt) {
                     this._handleColourSchemeChangedEvent(evt);
-                },
-                'Publisher.ColourSchemeChangedEvent': function (evt) {
-                    this._handleColourSchemeChangedEvent(evt);
                 }
             };
         },
