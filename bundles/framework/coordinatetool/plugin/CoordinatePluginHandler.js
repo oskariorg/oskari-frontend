@@ -78,23 +78,40 @@ class UIHandler extends StateHandler {
     }
 
     setLon (value) {
-        const data = {
-            'lonlat': {
-                'lon': value,
-                'lat': this.state?.xy?.lonlat?.lat
+        this.updateState({
+            displayXy: {
+                lonlat: {
+                    lat: this.state.displayXy?.lonlat?.lat,
+                    lon: value
+                }
             }
-        };
-        this.updateLonLat(data);
+        });
+        this.updatePopup();
     }
 
     setLat (value) {
-        const data = {
+        this.updateState({
+            displayXy: {
+                lonlat: {
+                    lat: value,
+                    lon: this.state.displayXy?.lonlat?.lon
+                }
+            }
+        });
+        this.updatePopup();
+    }
+
+    coordinatesToMetric (data) {
+        const converted = Oskari.util.coordinateDegreesToMetric([data.lonlat?.lon, data.lonlat?.lat], 10);
+        const lon = converted[0];
+        const lat = converted[1];
+
+        return {
             'lonlat': {
-                'lat': value,
-                'lon': this.state?.xy?.lonlat?.lon
+                'lon': lon,
+                'lat': lat
             }
         };
-        this.updateLonLat(data);
     }
 
     popupLocation () {
@@ -227,16 +244,32 @@ class UIHandler extends StateHandler {
         }
     }
 
-    centerMap () {
+    async centerMap (coordinates) {
         try {
-            const data = this.state.xy;
+            let data = coordinates || this.state.displayXy;
+            data = {
+                lonlat: {
+                    lon: data.lonlat?.lon.replace('~', ''),
+                    lat: data.lonlat?.lat.replace('~', '')
+                }
+            };
+            if (Oskari.util.coordinateIsDegrees([data.lonlat?.lon, data.lonlat?.lat])) {
+                data = this.coordinatesToMetric(data);
+            } else {
+                data = {
+                    lonlat: {
+                        lon: this.formatNumber(data.lonlat?.lon, '.'),
+                        lat: this.formatNumber(data.lonlat?.lat, '.')
+                    }
+                };
+            }
             if (!this.preciseTransform) {
                 this.centerMapToSelectedCoordinates(data);
             } else {
                 if (this.state.selectedProjection === this.originalProjection) {
                     this.centerMapToSelectedCoordinates(data);
                 } else {
-                    this.getTransformedCoordinatesFromServer(data, false, false, true);
+                    await this.getTransformedCoordinatesFromServer(data, false, false, true);
                 }
             }
         } catch (e) {
@@ -426,7 +459,7 @@ class UIHandler extends StateHandler {
                 }
 
                 if (showMarker || centerMap) {
-                    this.centerMap(newData);
+                    this.centerMapToSelectedCoordinates(newData);
                 }
 
                 if (!centerMap) {
