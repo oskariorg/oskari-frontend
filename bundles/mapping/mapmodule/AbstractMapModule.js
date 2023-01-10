@@ -1424,7 +1424,6 @@ Oskari.clazz.define(
                         plugin.changeToolStyle();
                     }
                 });
-            //this.changeToolStyle();
         },
         // generates base style for map
         __injectThemeByToolStyle: function (toolStyle) {
