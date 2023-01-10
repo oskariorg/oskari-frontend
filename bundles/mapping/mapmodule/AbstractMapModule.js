@@ -1451,9 +1451,8 @@ Oskari.clazz.define(
                     }
                     // accent should be inherited from global theme accent if not configured
                     // accent: '#ffd400'
-                },
+                }
                 // /For popup headers opened by map ^
-                font: this._options?.style?.font
             };
             const style = toolStyle || 'rounded-dark';
             const [shape, theme] = style.split('-');
