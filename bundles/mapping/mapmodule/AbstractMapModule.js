@@ -1402,7 +1402,31 @@ Oskari.clazz.define(
                 ...mapTheme
             };
             this.__cachedTheme = theme;
-            this.changeToolStyle();
+            // set font class for map module/map controls. Windows/popups will get it through theme
+            const prefix = 'oskari-theme-font-';
+            const newFontClass = prefix + (theme.font || 'arial');
+            // on unit tests the mapEl might be undefined
+            const classlist = this.getMapEl()[0]?.classList;
+            if (classlist) {
+                classlist.forEach(clazz => {
+                    if (clazz !== newFontClass && clazz.startsWith(prefix)) {
+                        classlist.remove(clazz);
+                    }
+                });
+                classlist.add(newFontClass);
+            }
+            Object.values(this._pluginInstances)
+                .filter((plugin = {}) => {
+                    if (typeof plugin.hasUI === 'function') {
+                        return plugin.hasUI();
+                    }
+                    return false;
+                })
+                .forEach((plugin) => {
+                    if (typeof plugin.changeToolStyle === 'function') {
+                        plugin.changeToolStyle();
+                    }
+                });
         },
         // generates base style for map
         __injectThemeByToolStyle: function (toolStyle) {
@@ -2188,75 +2212,50 @@ Oskari.clazz.define(
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
          * @method changeToolStyle
-         * @param {Object} style The style object to be applied on all plugins that support changing style.
+         * @deprecated Use setMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          */
-        changeToolStyle: function (style = this._options.style) {
-            const clonedStyle = {
-                ...style
-            };
-            if (!this._options) {
-                this._options = {};
-            }
-            this._options.style = clonedStyle;
-
-            // notify plugins of the style change.
-            Object.values(this._pluginInstances)
-                .filter((plugin = {}) => {
-                    if (typeof plugin.hasUI === 'function') {
-                        return plugin.hasUI();
-                    }
-                    return false;
-                })
-                .forEach((plugin) => {
-                    var styleConfig = clonedStyle.toolStyle !== 'default' ? clonedStyle.toolStyle : null;
-                    if (typeof plugin.changeToolStyle === 'function') {
-                        plugin.changeToolStyle(styleConfig);
-                    }
-                    if (typeof plugin.changeFont === 'function') {
-                        plugin.changeFont(clonedStyle.font);
-                    }
-                });
+        changeToolStyle: function () {
+            this.log.deprecated('changeToolStyle');
         },
         /**
          * Gets the style to be used on plugins
          *
          * @method getToolStyle
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} style The mapmodule's style configuration.
          */
         getToolStyle: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.toolStyle) {
-                return me._options.style.toolStyle && me._options.style.toolStyle !== 'default' ? me._options.style.toolStyle : null;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolStyle');
+            return null;
         },
         /**
          * Gets the font to be used on plugins
          * @method getToolFont
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolFont: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.font) {
-                return me._options.style.font;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolFont');
+            return Oskari.app.getTheming().getTheme()?.map?.font || 'arial';
         },
 
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolColourScheme: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.colourScheme) {
-                return me._options.style.colourScheme;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolColourScheme');
+            return null;
         },
         _getContainerWithClasses: function (containerClasses) {
             var containerDiv = jQuery(

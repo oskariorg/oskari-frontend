@@ -6,7 +6,7 @@ import { createDraggable, getPositionForCentering, OUTOFSCREEN_CLASSNAME } from 
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
-import { getHeaderTheme, getFont } from '../../theme/ThemeHelper';
+import { getHeaderTheme, getFontClass } from '../../theme/ThemeHelper';
 
 const Container = styled.div`
     position: absolute;
@@ -79,10 +79,9 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
     const [position, setPosition] = useState({ x: -10000, y: 0, centered: false });
     const containerProps = {
         style: {
-            transform: `translate(${position.x}px, ${position.y}px)`,
-            fontFamily: getFont(theme)
+            transform: `translate(${position.x}px, ${position.y}px)`
         },
-        className: `t_popup t_${options.id}`
+        className: `t_popup t_${options.id} ${getFontClass(theme)}`
     };
     const elementRef = useRef();
     const headerProps = {

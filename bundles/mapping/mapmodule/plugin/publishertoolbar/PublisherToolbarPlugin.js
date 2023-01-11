@@ -40,9 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          *
          */
         _initImpl: function () {
-            var me = this;
-
-            me.template = jQuery(me.templates.main);
             this.inMobileMode = false;
         },
 

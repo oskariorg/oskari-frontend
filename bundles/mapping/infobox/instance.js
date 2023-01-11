@@ -126,9 +126,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             'Publisher2.ColourSchemeChangedEvent': function (evt) {
                 this._handleColourSchemeChangedEvent(evt);
             },
-            'Publisher.ColourSchemeChangedEvent': function (evt) {
-                this._handleColourSchemeChangedEvent(evt);
-            },
             'AfterAddMarkerEvent': function (evt) {
                 if (evt.getID()) {
                     this.popupPlugin.markers[evt.getID()] = {

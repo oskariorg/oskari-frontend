@@ -33,17 +33,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             {
                 name: 'Georgia (serif)',
                 val: 'georgia'
+            },
+            {
+                name: 'Fantasy (sans-serif)',
+                val: 'fantasy'
+            },
+            {
+                name: 'Verdana (sans-serif)',
+                val: 'verdana'
             }
         ];
         // The values to be sent to plugins to actually change the style.
     }, {
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                if (event.getTool().state.enabled) {
-                    this._changeMapModuleToolstyle();
-                }
-            }
-        },
         /**
          * @method getName
          * @return {String} the name of the component
@@ -84,9 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             const theme = this.data?.metadata?.theme;
             me.values = {
                 metadata: {
-                    style: {
-                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.fonts[0].val
-                    },
                     theme: theme
                 }
             };
@@ -129,21 +127,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
-                    theme: Oskari.app.getTheming().getTheme(),
-                    style: {
-                        font: me.values.metadata.style.font
-                    }
+                    theme: Oskari.app.getTheming().getTheme()
                 }
             };
             return me.values;
-        },
-        _changeMapModuleToolstyle: function (style) {
-            var me = this;
-
-            if (!style) {
-                style = me.getValues().metadata.style;
-            }
-            me.mapModule.changeToolStyle(style);
         },
         _populateLayoutPanel: function () {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -156,8 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
 
             ReactDOM.render(
                 <PanelToolStyles
-                    fontValue={this.values?.metadata?.style?.font}
-                    changeFont={(style) => this._changeMapModuleToolstyle(style)}
                     mapTheme={this.mapModule.getMapTheme()}
                     changeTheme={(theme) => this.updateTheme(theme)}
                     fonts={this.fonts}
