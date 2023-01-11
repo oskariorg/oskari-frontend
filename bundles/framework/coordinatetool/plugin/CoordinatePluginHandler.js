@@ -15,6 +15,8 @@ class UIHandler extends StateHandler {
         this.mapModule = mapModule;
         this.config = config;
         this.originalProjection = this.mapModule.getProjection();
+        this.isReverseGeoCode = this.config.isReverseGeocode;
+        this.reverseGeocodingIds = this.config.reverseGeocodingIds?.split(',');
         this.setState({
             xy: {},
             displayXy: {},
@@ -23,6 +25,8 @@ class UIHandler extends StateHandler {
             showMouseCoordinates: false,
             selectedProjection: this.originalProjection,
             emergencyInfo: null,
+            reverseGeocodeNotImplementedError: false,
+            reverseGeoCode: [],
             showReverseGeoCode: false
         });
         this.popupControls = null;
@@ -210,6 +214,10 @@ class UIHandler extends StateHandler {
             }
         }
 
+        if (this.isReverseGeoCode) {
+            this.updateReverseGeocode();
+        }
+
         this.updateState({
             displayXy: {
                 'lonlat': {
@@ -239,7 +247,17 @@ class UIHandler extends StateHandler {
             this.popupCleanup();
         } else {
             const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
-            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, crsText, this.decimalSeparator, () => this.popupCleanup());
+            this.popupControls = showCoordinatePopup(
+                this.getState(),
+                this.getController(),
+                this.popupLocation(),
+                this.config?.supportedProjections,
+                this.preciseTransform,
+                crsText,
+                this.decimalSeparator,
+                this.reverseGeocodingIds.length > 2,
+                () => this.popupCleanup()
+            );
             this.notifyPopupListeners(true);
         }
     }
@@ -474,7 +492,67 @@ class UIHandler extends StateHandler {
         this.setLoading(false);
     }
 
-    updateReverseGeocode (data) {}
+    updateReverseGeocode (data) {
+        const service = this.instance.getService();
+
+        if (!this.popupControls || this.state.reverseGeocodeNotImplementedError) {
+            return;
+        }
+
+        if (!data || !data.lonlat) {
+            // update with map coordinates if coordinates not given
+            data = this.getMapXY();
+        }
+
+        let reverseGeoCode = [];
+
+        service.getReverseGeocode(
+            // Success callback
+            (response) => {
+                const hasResponse = !!((response && response.length > 0));
+                const locale = this.loc('display.reversegeocode');
+                // type title is not found in locales
+                if (hasResponse && locale[response[0].channelId]) {
+                    for (let i = 0; i < response.length; i++) {
+                        const r = response[i];
+                        let title = locale[r.channelId].label;
+                        if (!title) {
+                            title = r.type;
+                        }
+                        reverseGeoCode.push({
+                            title: title,
+                            name: r.name
+                        });
+                    }
+                    this.updateState({
+                        reverseGeoCode: reverseGeoCode
+                    });
+                }
+            },
+            // Error callback
+            (jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 501) {
+                    this.updateState({
+                        reverseGeocodeNotImplementedError: true
+                    });
+                }
+                let messageJSON;
+                try {
+                    messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                } catch (err) {}
+                let message = this.instance.getName() + ': Cannot reverse geocode';
+                if (messageJSON && messageJSON.error) {
+                    message = this.instance.getName() + ': ' + messageJSON.error;
+                }
+
+                Oskari.log('coordinatetool').warn(message);
+                this.updateState({
+                    reverseGeoCode: []
+                });
+            },
+            data.lonlat.lon, data.lonlat.lat
+        );
+    }
 
     async getEmergencyCallCoordinatesFromServer (data) {
         // get the transform from current data
@@ -548,10 +626,6 @@ class UIHandler extends StateHandler {
         };
     }
 
-    showReverseGeoCodeCheckbox () {
-        return this.config?.reverseGeocodingIds?.split(',').length > 2;
-    }
-
     createEventHandlers () {
         const handlers = {
             /**
@@ -574,7 +648,7 @@ class UIHandler extends StateHandler {
                         this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     }
 
-                    if (event.isPaused() && this.config.isReverseGeocode) {
+                    if (event.isPaused() && this.isReverseGeoCode) {
                         this.updateReverseGeocode(cloneJSON(data));
                     }
 
@@ -599,6 +673,11 @@ class UIHandler extends StateHandler {
                         this.updateLonLat();
                     }
                 }
+
+                if (this.isReverseGeoCode) {
+                    this.updateReverseGeocode();
+                }
+
                 this.getEmergencyCallInfo();
             },
             /**
@@ -620,6 +699,10 @@ class UIHandler extends StateHandler {
                     } else {
                         this.updateLonLat(data);
                     }
+                }
+
+                if (this.isReverseGeoCode) {
+                    this.updateReverseGeocode(dataServer);
                 }
 
                 await this.getEmergencyCallInfo(cloneJSON(dataServer));
@@ -652,8 +735,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setSelectedProjection',
     'allowDegrees',
     'formatDegrees',
-    'popupCleanup',
-    'showReverseGeoCodeCheckbox'
+    'toggleReverseGeoCode',
+    'popupCleanup'
 ]);
 
 export { wrapped as CoordinatePluginHandler };
