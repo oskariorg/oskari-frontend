@@ -255,7 +255,7 @@ class UIHandler extends StateHandler {
                 this.preciseTransform,
                 crsText,
                 this.decimalSeparator,
-                this.reverseGeocodingIds.length > 2,
+                this.reverseGeocodingIds?.length > 2,
                 () => this.popupCleanup()
             );
             this.notifyPopupListeners(true);
