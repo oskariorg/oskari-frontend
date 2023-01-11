@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 const StyledDiv = styled('div')`
     font-weight: bold;
+    font-family: Open Sans,Arial,sans-serif;
 `;
 const CoordinateIcon = () => (<StyledDiv>XY</StyledDiv>);
 /**
