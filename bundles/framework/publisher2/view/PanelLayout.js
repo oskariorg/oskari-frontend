@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         * @public
         **/
         stop: function () {
-            // change the mapmodule toolstyle back to normal
+            // change the mapmodule theme back to normal
             Oskari.app.getTheming().setTheme(this._originalTheme);
         }
     }
