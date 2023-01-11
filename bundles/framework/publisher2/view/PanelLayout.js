@@ -53,18 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             return 'Oskari.mapframework.bundle.publisher2.view.PanelLayout';
         },
         /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-        /**
          * Creates the DOM elements for layout change components and
          * prepopulates the fields if pData parameter is given.
          *
@@ -164,10 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         * @public
         **/
         stop: function () {
-            var me = this;
-            Object.keys(me.eventHandlers).forEach(function (eventName) {
-                me.sandbox.unregisterFromEventByName(me, eventName);
-            });
             // change the mapmodule toolstyle back to normal
             Oskari.app.getTheming().setTheme(this._originalTheme);
         }
