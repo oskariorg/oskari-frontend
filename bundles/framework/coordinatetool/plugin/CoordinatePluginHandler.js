@@ -280,15 +280,18 @@ class UIHandler extends StateHandler {
     centerMapToSelectedCoordinates (data) {
         if (this.mapModule.isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
             this.sandbox.postRequestByName('MapMoveRequest', [data.lonlat.lon, data.lonlat.lat, this.sandbox.getMap().getZoom()]);
+            this.updateLonLat(data);
         } else {
             Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
     }
 
-    setMarker () {
+    async setMarker () {
+        await this.centerMap();
         const data = this.state.xy || this.getMapXY();
-        let lat = data?.lonlat?.lat;
-        let lon = data?.lonlat?.lon;
+        const displayData = this.state.displayXy || this.getMapXY();
+        let lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
+        let lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
             let msg = null;
             if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.allowDegrees()) {
@@ -300,13 +303,11 @@ class UIHandler extends StateHandler {
 
             if (!this.preciseTransform) {
                 this.addMarker(data, msg);
-                this.centerMapToSelectedCoordinates(data);
             } else {
                 if (this.state.selectedProjection === this.originalProjection) {
                     this.addMarker(data, msg);
-                    this.centerMapToSelectedCoordinates(data);
                 } else {
-                    this.getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                    this.getTransformedCoordinatesFromServer(data, true, false, false, msg);
                 }
             }
         } catch (e) {
