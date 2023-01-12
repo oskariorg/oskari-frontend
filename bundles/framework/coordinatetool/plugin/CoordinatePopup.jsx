@@ -13,7 +13,7 @@ const OPTIONS = {
 const Content = styled('div')`
     margin: 12px 24px 24px;
     display: flex;
-    width: 350px;
+    width: 270px;
     flex-direction: column;
 `;
 
@@ -21,7 +21,6 @@ const CoordinateFields = styled('div')`
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    margin-bottom: 10px;
 `;
 
 const CoordinateField = styled('div')`
@@ -46,7 +45,6 @@ const CoordinateLabel = styled('div')`
 `;
 
 const SelectField = styled('div')`
-    margin-top: 10px;
     margin-bottom: 10px;
     display: flex;
     flex-direction: column;
@@ -56,7 +54,19 @@ const EmergencyInfo = styled('div')`
     margin-top: 10px;
 `;
 
-const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator }) => {
+const SelectLabel = styled('div')`
+    font-size: 12px;
+    margin-top: 5px;
+    opacity: 0.8;
+`;
+
+const ReverseGeoCodes = styled('div')`
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+`;
+
+const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator, showReverseGeoCodeCheckbox }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
     if (!controller.showDegrees()) {
@@ -74,12 +84,13 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
     const content = (
         <Content>
             <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.info' />
-            <br />
             {!preciseTransform ? (
                 crsText
             ) : (
                 <SelectField>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.header' />
+                    <SelectLabel>
+                        <Message bundleKey={BUNDLE_KEY} messageKey='display.coordinatesTransform.header' />
+                    </SelectLabel>
                     <Select
                         value={state.selectedProjection}
                         onChange={value => controller.setSelectedProjection(value)}
@@ -99,6 +110,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                         value={state?.displayXy?.lonlat?.lat}
                         onChange={(e) => controller.setLat(e.target.value)}
                         disabled={state.showMouseCoordinates}
+                        className='t_lat'
                     />
                 </CoordinateField>
                 {degmin && (
@@ -113,6 +125,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                         value={state?.displayXy?.lonlat?.lon}
                         onChange={(e) => controller.setLon(e.target.value)}
                         disabled={state.showMouseCoordinates}
+                        className='t_lon'
                     />
                 </CoordinateField>
                 {degmin && (
@@ -128,13 +141,20 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
             >
                 <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.showMouseCoordinates' />
             </Checkbox>
-            {controller.showReverseGeoCodeCheckbox() && (
+            {showReverseGeoCodeCheckbox && (
                 <Checkbox
                     checked={state.showReverseGeoCode}
                     onChange={() => controller.toggleReverseGeoCode()}
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.reversegeocode.moreInfo' />
                 </Checkbox>
+            )}
+            {((showReverseGeoCodeCheckbox && state.showReverseGeoCode && state.reverseGeoCode.length > 0) || (!showReverseGeoCodeCheckbox && state.reverseGeoCode.length > 0)) && (
+                <ReverseGeoCodes>
+                    {state.reverseGeoCode.map((geoCode, index) => (
+                        <span key={index}>{geoCode.title} <u>{geoCode.name}</u></span>
+                    ))}
+                </ReverseGeoCodes>
             )}
             {state.emergencyInfo && (
                 <EmergencyInfo>
@@ -149,6 +169,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     type='default'
                     disabled={state.showMouseCoordinates}
                     onClick={() => controller.centerMap()}
+                    className='t_center'
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.searchButton' />
                 </Button>
@@ -156,6 +177,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     <Button
                         type='default'
                         onClick={() => controller.setMarker()}
+                        className='t_add'
                     >
                         <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.addMarkerButton' />
                     </Button>
@@ -175,7 +197,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
     }
 };
 
-export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, crsText, decimalSeparator, onClose) => {
+export const showCoordinatePopup = (state, controller, location, supportedProjections = [], preciseTransform, crsText, decimalSeparator, showReverseGeoCodeCheckbox, onClose) => {
     const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     const options = {
         ...OPTIONS,
@@ -184,13 +206,32 @@ export const showCoordinatePopup = (state, controller, location, supportedProjec
     }
     const controls = showPopup(
         <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />,
-        <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />,
+        <PopupContent
+            state={state}
+            controller={controller}
+            preciseTransform={preciseTransform}
+            supportedProjections={supportedProjections}
+            crsText={crsText}
+            decimalSeparator={decimalSeparator}
+            showReverseGeoCodeCheckbox={showReverseGeoCodeCheckbox}
+        />,
         onClose, options
     );
     return {
         ...controls,
         update: (state) => {
-            controls.update(<Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />, <PopupContent state={state} controller={controller} preciseTransform={preciseTransform} supportedProjections={supportedProjections} crsText={crsText} decimalSeparator={decimalSeparator} />);
+            controls.update(
+                <Message bundleKey={BUNDLE_KEY} messageKey='display.popup.title' />,
+                <PopupContent
+                    state={state}
+                    controller={controller}
+                    preciseTransform={preciseTransform}
+                    supportedProjections={supportedProjections}
+                    crsText={crsText}
+                    decimalSeparator={decimalSeparator}
+                    showReverseGeoCodeCheckbox={showReverseGeoCodeCheckbox}
+                />
+            );
         }
     };
 };

@@ -15,6 +15,8 @@ class UIHandler extends StateHandler {
         this.mapModule = mapModule;
         this.config = config;
         this.originalProjection = this.mapModule.getProjection();
+        this.isReverseGeoCode = this.config.isReverseGeocode;
+        this.reverseGeocodingIds = this.config.reverseGeocodingIds?.split(',');
         this.setState({
             xy: {},
             displayXy: {},
@@ -23,6 +25,8 @@ class UIHandler extends StateHandler {
             showMouseCoordinates: false,
             selectedProjection: this.originalProjection,
             emergencyInfo: null,
+            reverseGeocodeNotImplementedError: false,
+            reverseGeoCode: [],
             showReverseGeoCode: false
         });
         this.popupControls = null;
@@ -78,23 +82,40 @@ class UIHandler extends StateHandler {
     }
 
     setLon (value) {
-        const data = {
-            'lonlat': {
-                'lon': value,
-                'lat': this.state?.xy?.lonlat?.lat
+        this.updateState({
+            displayXy: {
+                lonlat: {
+                    lat: this.state.displayXy?.lonlat?.lat,
+                    lon: value
+                }
             }
-        };
-        this.updateLonLat(data);
+        });
+        this.updatePopup();
     }
 
     setLat (value) {
-        const data = {
+        this.updateState({
+            displayXy: {
+                lonlat: {
+                    lat: value,
+                    lon: this.state.displayXy?.lonlat?.lon
+                }
+            }
+        });
+        this.updatePopup();
+    }
+
+    coordinatesToMetric (data) {
+        const converted = Oskari.util.coordinateDegreesToMetric([data.lonlat?.lon, data.lonlat?.lat], 10);
+        const lon = converted[0];
+        const lat = converted[1];
+
+        return {
             'lonlat': {
-                'lat': value,
-                'lon': this.state?.xy?.lonlat?.lon
+                'lon': lon,
+                'lat': lat
             }
         };
-        this.updateLonLat(data);
     }
 
     popupLocation () {
@@ -193,6 +214,10 @@ class UIHandler extends StateHandler {
             }
         }
 
+        if (this.isReverseGeoCode) {
+            this.updateReverseGeocode();
+        }
+
         this.updateState({
             displayXy: {
                 'lonlat': {
@@ -210,7 +235,11 @@ class UIHandler extends StateHandler {
         this.updateState({
             selectedProjection: projection
         });
-        this.updateLonLat();
+        if (this.preciseTransform) {
+            this.getTransformedCoordinatesFromServer(null, false, true);
+        } else {
+            this.updateLonLat();
+        }
     }
 
     showPopup () {
@@ -218,21 +247,47 @@ class UIHandler extends StateHandler {
             this.popupCleanup();
         } else {
             const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
-            this.popupControls = showCoordinatePopup(this.getState(), this.getController(), this.popupLocation(), this.config?.supportedProjections, this.preciseTransform, crsText, this.decimalSeparator, () => this.popupCleanup());
+            this.popupControls = showCoordinatePopup(
+                this.getState(),
+                this.getController(),
+                this.popupLocation(),
+                this.config?.supportedProjections,
+                this.preciseTransform,
+                crsText,
+                this.decimalSeparator,
+                this.reverseGeocodingIds?.length > 2,
+                () => this.popupCleanup()
+            );
             this.notifyPopupListeners(true);
         }
     }
 
-    centerMap () {
+    async centerMap (coordinates) {
         try {
-            const data = this.state.xy;
+            let data = coordinates || this.state.displayXy;
+            data = {
+                lonlat: {
+                    lon: data.lonlat?.lon.replace('~', ''),
+                    lat: data.lonlat?.lat.replace('~', '')
+                }
+            };
+            if (Oskari.util.coordinateIsDegrees([data.lonlat?.lon, data.lonlat?.lat])) {
+                data = this.coordinatesToMetric(data);
+            } else {
+                data = {
+                    lonlat: {
+                        lon: this.formatNumber(data.lonlat?.lon, '.'),
+                        lat: this.formatNumber(data.lonlat?.lat, '.')
+                    }
+                };
+            }
             if (!this.preciseTransform) {
                 this.centerMapToSelectedCoordinates(data);
             } else {
                 if (this.state.selectedProjection === this.originalProjection) {
                     this.centerMapToSelectedCoordinates(data);
                 } else {
-                    this.getTransformedCoordinatesFromServer(data, false, false, true);
+                    await this.getTransformedCoordinatesFromServer(data, false, false, true);
                 }
             }
         } catch (e) {
@@ -243,15 +298,18 @@ class UIHandler extends StateHandler {
     centerMapToSelectedCoordinates (data) {
         if (this.mapModule.isValidLonLat(data.lonlat.lon, data.lonlat.lat)) {
             this.sandbox.postRequestByName('MapMoveRequest', [data.lonlat.lon, data.lonlat.lat, this.sandbox.getMap().getZoom()]);
+            this.updateLonLat(data);
         } else {
             Messaging.error(this.loc('display.checkValuesDialog.message'));
         }
     }
 
-    setMarker () {
+    async setMarker () {
+        await this.centerMap();
         const data = this.state.xy || this.getMapXY();
-        let lat = data?.lonlat?.lat;
-        let lon = data?.lonlat?.lon;
+        const displayData = this.state.displayXy || this.getMapXY();
+        let lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
+        let lon = displayData?.lonlat?.lon || data?.lonlat?.lon;
         try {
             let msg = null;
             if (Oskari.util.coordinateIsDegrees([lon, lat]) && this.allowDegrees()) {
@@ -263,13 +321,11 @@ class UIHandler extends StateHandler {
 
             if (!this.preciseTransform) {
                 this.addMarker(data, msg);
-                this.centerMapToSelectedCoordinates(data);
             } else {
                 if (this.state.selectedProjection === this.originalProjection) {
                     this.addMarker(data, msg);
-                    this.centerMapToSelectedCoordinates(data);
                 } else {
-                    this.getTransformedCoordinatesFromServer(data, true, false, true, msg);
+                    this.getTransformedCoordinatesFromServer(data, true, false, false, msg);
                 }
             }
         } catch (e) {
@@ -422,7 +478,7 @@ class UIHandler extends StateHandler {
                 }
 
                 if (showMarker || centerMap) {
-                    this.centerMap(newData);
+                    this.centerMapToSelectedCoordinates(newData);
                 }
 
                 if (!centerMap) {
@@ -437,7 +493,67 @@ class UIHandler extends StateHandler {
         this.setLoading(false);
     }
 
-    updateReverseGeocode (data) {}
+    updateReverseGeocode (data) {
+        const service = this.instance.getService();
+
+        if (!this.popupControls || this.state.reverseGeocodeNotImplementedError) {
+            return;
+        }
+
+        if (!data || !data.lonlat) {
+            // update with map coordinates if coordinates not given
+            data = this.getMapXY();
+        }
+
+        let reverseGeoCode = [];
+
+        service.getReverseGeocode(
+            // Success callback
+            (response) => {
+                const hasResponse = !!((response && response.length > 0));
+                const locale = this.loc('display.reversegeocode');
+                // type title is not found in locales
+                if (hasResponse && locale[response[0].channelId]) {
+                    for (let i = 0; i < response.length; i++) {
+                        const r = response[i];
+                        let title = locale[r.channelId].label;
+                        if (!title) {
+                            title = r.type;
+                        }
+                        reverseGeoCode.push({
+                            title: title,
+                            name: r.name
+                        });
+                    }
+                    this.updateState({
+                        reverseGeoCode: reverseGeoCode
+                    });
+                }
+            },
+            // Error callback
+            (jqXHR, textStatus, errorThrown) => {
+                if (jqXHR.status === 501) {
+                    this.updateState({
+                        reverseGeocodeNotImplementedError: true
+                    });
+                }
+                let messageJSON;
+                try {
+                    messageJSON = jQuery.parseJSON(jqXHR.responseText);
+                } catch (err) {}
+                let message = this.instance.getName() + ': Cannot reverse geocode';
+                if (messageJSON && messageJSON.error) {
+                    message = this.instance.getName() + ': ' + messageJSON.error;
+                }
+
+                Oskari.log('coordinatetool').warn(message);
+                this.updateState({
+                    reverseGeoCode: []
+                });
+            },
+            data.lonlat.lon, data.lonlat.lat
+        );
+    }
 
     async getEmergencyCallCoordinatesFromServer (data) {
         // get the transform from current data
@@ -447,7 +563,7 @@ class UIHandler extends StateHandler {
         // need to get 'EPSG:4326' coordinates from service
         if (sourceProjection !== 'EPSG:4326') {
             try {
-                const response = await getTransformedCoordinates(this.mapModule, data, sourceProjection, 'EPSG:4326');
+                const response = await getTransformedCoordinates(this.originalProjection, data, sourceProjection, 'EPSG:4326');
                 if (response?.lat && response?.lon) {
                     const newData = {
                         'lonlat': {
@@ -511,10 +627,6 @@ class UIHandler extends StateHandler {
         };
     }
 
-    showReverseGeoCodeCheckbox () {
-        return this.config?.reverseGeocodingIds?.split(',').length > 2;
-    }
-
     createEventHandlers () {
         const handlers = {
             /**
@@ -533,11 +645,11 @@ class UIHandler extends StateHandler {
 
                     this.updateLonLat(cloneJSON(data));
 
-                    if (event.isPaused() && this.preciseTransform) {
+                    if (event.isPaused() && this.preciseTransform && (this.state.selectedProjection !== this.originalProjection)) {
                         this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     }
 
-                    if (event.isPaused() && this.config.isReverseGeocode) {
+                    if (event.isPaused() && this.isReverseGeoCode) {
                         this.updateReverseGeocode(cloneJSON(data));
                     }
 
@@ -562,13 +674,18 @@ class UIHandler extends StateHandler {
                         this.updateLonLat();
                     }
                 }
+
+                if (this.isReverseGeoCode) {
+                    this.updateReverseGeocode();
+                }
+
                 this.getEmergencyCallInfo();
             },
             /**
              * @method MapClickedEvent
              * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
              */
-            MapClickedEvent: function (event) {
+            MapClickedEvent: async function (event) {
                 const lonlat = event.getLonLat();
                 const data = {
                     'lonlat': {
@@ -578,14 +695,18 @@ class UIHandler extends StateHandler {
                 };
                 const dataServer = cloneJSON(data);
                 if (!this.showMouseCoordinates) {
-                    if (this.preciseTransform) {
-                        this.getTransformedCoordinatesFromServer(dataServer, false, true);
+                    if (this.preciseTransform && (this.state.selectedProjection !== this.originalProjection)) {
+                        await this.getTransformedCoordinatesFromServer(dataServer, false, true);
                     } else {
                         this.updateLonLat(data);
                     }
                 }
 
-                this.getEmergencyCallInfo(cloneJSON(data));
+                if (this.isReverseGeoCode) {
+                    this.updateReverseGeocode(dataServer);
+                }
+
+                await this.getEmergencyCallInfo(cloneJSON(dataServer));
             }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
@@ -615,8 +736,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setSelectedProjection',
     'allowDegrees',
     'formatDegrees',
-    'popupCleanup',
-    'showReverseGeoCodeCheckbox'
+    'toggleReverseGeoCode',
+    'popupCleanup'
 ]);
 
 export { wrapped as CoordinatePluginHandler };

@@ -144,15 +144,6 @@ Oskari.clazz.define(
                         me.changeToolStyle(toolStyle, element);
                     }
                 }
-
-                if (conf.font) {
-                    me.changeFont(conf.font, element);
-                } else {
-                    var font = me.getToolFontFromMapModule();
-                    if (font !== null && font !== undefined) {
-                        me.changeFont(font, element);
-                    }
-                }
             }
         },
 
@@ -289,31 +280,6 @@ Oskari.clazz.define(
                 </ThemeProvider>,
                 el[0]
             );
-        },
-
-        /**
-         * @method changeFont
-         * Changes the font used by plugin by adding a CSS class to its DOM elements.
-         *
-         * @param {String} fontId
-         * @param {jQuery} div
-         *
-         */
-        changeFont: function (fontId, div) {
-            div = div || this.getElement();
-
-            if (!div || !fontId) {
-                return;
-            }
-
-            // The elements where the font style should be applied to.
-            var elements = [];
-            elements.push(div.find('table.search-results'));
-            elements.push(div.find('input'));
-
-            var classToAdd = 'oskari-publisher-font-' + fontId,
-                testRegex = /oskari-publisher-font-/;
-            this.changeCssClasses(classToAdd, testRegex, elements);
         },
 
         /**

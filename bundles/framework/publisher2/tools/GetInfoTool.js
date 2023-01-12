@@ -670,7 +670,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @param {Object} colourScheme the changed colour scheme
      */
         _sendColourSchemeChangedEvent: function (colourScheme) {
-            this._sendEvent('Publisher.ColourSchemeChangedEvent', colourScheme);
             this._sendEvent('Publisher2.ColourSchemeChangedEvent', colourScheme);
         },
 

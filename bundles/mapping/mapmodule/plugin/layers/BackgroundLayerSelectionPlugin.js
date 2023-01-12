@@ -305,14 +305,6 @@ Oskari.clazz.define(
             }
             currentSelection.prepend(icon);
             if (conf) {
-                /* TODO is there any tool style to be configured?
-                if (conf.toolStyle) {
-                    me.changeToolStyle(conf.toolStyle, me.getElement());
-                }
-                */
-                if (conf.font) {
-                    me.changeFont(conf.font, me.getElement());
-                }
                 if (conf.colorScheme) {
                     // TODO this'll be fun to implement with all the dynamic elements...
                     me.changeColorScheme(conf.colorScheme, me.getElement());
@@ -449,27 +441,6 @@ Oskari.clazz.define(
                 'background-color': colorScheme.buttonBackgroundColor,
                 'color': colorScheme.buttonColor
             });
-        },
-
-        /**
-         * @method changeFont
-         * Changes the font used by plugin by adding a CSS class to its DOM elements.
-         *
-         * @param {String} fontId
-         * @param {jQuery} div
-         *
-         */
-        changeFont: function (fontId, div) {
-            div = div || this.getElement();
-
-            if (!div || !fontId) {
-                return;
-            }
-
-            var classToAdd = 'oskari-publisher-font-' + fontId,
-                testRegex = /oskari-publisher-font-/;
-
-            this.changeCssClasses(classToAdd, testRegex, [div]);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

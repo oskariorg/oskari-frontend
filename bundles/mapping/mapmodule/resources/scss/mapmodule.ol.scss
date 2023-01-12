@@ -403,13 +403,36 @@ div.mapplugins {
     margin-top: $pluginMargin;
 }
 
-/* Publisher fonts, not part of style guide */
-.oskari-publisher-font-arial {
-  font-family: Arial, sans-serif !important;
+/* Font's recognized from theme/can be set in publisher */
+.oskari-theme-font-arial {
+    font-family: Arial, sans-serif;
+
+    button, input {
+      font-family: Arial, sans-serif;
+    }
 }
 
-.oskari-publisher-font-georgia {
-  font-family: Georgia, serif !important;
+.oskari-theme-font-georgia {
+    font-family: Georgia, serif;
+
+    button, input {
+      font-family: Georgia, serif;
+    }
+}
+
+.oskari-theme-font-fantasy {
+    font-family: fantasy;
+
+    button, input {
+      font-family: fantasy;
+    }
+}
+.oskari-theme-font-verdana {
+    font-family: Verdana, sans-serif;
+
+    button, input {
+      font-family: Verdana, sans-serif;
+    }
 }
 
 .map-move-control-disabled {

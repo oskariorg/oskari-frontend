@@ -25,33 +25,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         me.sandbox = sandbox;
         me.mapModule = mapmodule;
         me._originalToolStyle = null;
+        me.fonts = [
+            {
+                name: 'Arial (sans-serif)',
+                val: 'arial'
+            },
+            {
+                name: 'Georgia (serif)',
+                val: 'georgia'
+            },
+            {
+                name: 'Fantasy (sans-serif)',
+                val: 'fantasy'
+            },
+            {
+                name: 'Verdana (sans-serif)',
+                val: 'verdana'
+            }
+        ];
         // The values to be sent to plugins to actually change the style.
     }, {
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                if (event.getTool().state.enabled) {
-                    this._changeMapModuleToolstyle();
-                }
-            }
-        },
         /**
          * @method getName
          * @return {String} the name of the component
          */
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelLayout';
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
         },
         /**
          * Creates the DOM elements for layout change components and
@@ -74,9 +73,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             const theme = this.data?.metadata?.theme;
             me.values = {
                 metadata: {
-                    style: {
-                        font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0]
-                    },
                     theme: theme
                 }
             };
@@ -119,21 +115,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
-                    theme: Oskari.app.getTheming().getTheme(),
-                    style: {
-                        font: me.values.style.font
-                    }
+                    theme: Oskari.app.getTheming().getTheme()
                 }
             };
             return me.values;
-        },
-        _changeMapModuleToolstyle: function (style) {
-            var me = this;
-
-            if (!style) {
-                style = me.getValues().metadata.style;
-            }
-            me.mapModule.changeToolStyle(style);
         },
         _populateLayoutPanel: function () {
             var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -145,7 +130,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
             contentPanel.append(styleEditor);
 
             ReactDOM.render(
-                <PanelToolStyles fontValue={this.values?.metadata?.style?.font} changeFont={(style) => this._changeMapModuleToolstyle(style)} mapTheme={this.mapModule.getMapTheme()} changeTheme={(theme) => this.updateTheme(theme)} />,
+                <PanelToolStyles
+                    mapTheme={this.mapModule.getMapTheme()}
+                    changeTheme={(theme) => this.updateTheme(theme)}
+                    fonts={this.fonts}
+                />,
                 styleEditor[0]
             );
 
@@ -163,11 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         * @public
         **/
         stop: function () {
-            var me = this;
-            Object.keys(me.eventHandlers).forEach(function (eventName) {
-                me.sandbox.unregisterFromEventByName(me, eventName);
-            });
-            // change the mapmodule toolstyle back to normal
+            // change the mapmodule theme back to normal
             Oskari.app.getTheming().setTheme(this._originalTheme);
         }
     }

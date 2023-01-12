@@ -64,19 +64,8 @@ const StyledSelect = styled(Select)`
     width: 200px;
 `;
 
-const fonts = [
-    {
-        name: 'Arial (sans-serif)',
-        val: 'arial'
-    },
-    {
-        name: 'Georgia (serif)',
-        val: 'georgia'
-    }
-];
-
-export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }) => {
-    const [font, setFont] = useState(fontValue)
+export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
+    const [font, setFont] = useState(mapTheme?.font || fonts[0].val);
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
@@ -87,6 +76,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }
     useEffect(() => {
         const theme = {
             ...mapTheme,
+            font,
             color: {
                 ...mapTheme.color,
                 header: {
@@ -107,7 +97,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }
             }
         };
         changeTheme(theme);
-    }, [popupHeader, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
+    }, [font, popupHeader, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
 
     const setPreset = (style) => {
         let rounding = 100;
@@ -160,7 +150,6 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fontValue, changeFont }
                     value={font}
                     onChange={val => {
                         setFont(val);
-                        changeFont({ font: val });
                     }}
                 >
                     {fonts.map(font => (
