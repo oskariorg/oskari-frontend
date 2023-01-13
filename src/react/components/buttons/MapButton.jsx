@@ -14,6 +14,9 @@ import styled from 'styled-components';
 const StyledButton = styled(Button)`
     width: ${props => props.size};
     height: ${props => props.size};
+    > * {
+        font-size: ${props => props.$iconSize};
+    }
     border: none;
     opacity: ${props => props.opacity};
     ${(props) => props.rounding && `border-radius: ${props.rounding};`}
