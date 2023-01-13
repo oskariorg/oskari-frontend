@@ -445,6 +445,12 @@ Oskari.clazz.define(
 
             drawSource.getFeatures().forEach(feat => remove(drawSource, feat));
             bufferSource.getFeatures().forEach(feat => remove(bufferSource, feat));
+
+            // Freehand drawing (shift) has to be drawn by dragging
+            // If user shift + clicks, drawn (invalid) feature isn't added to source and sketch is cleared
+            // However drawing is started and useless tooltip is added  to map (showMeasureOnMap)
+            // Delete point/vertex (modify) uses also shift key condition, so user may use shift + click while drawing
+            this.clearDetachedTooltips();
         },
         /**
          * @method sendDrawingEvent
@@ -1009,7 +1015,15 @@ Oskari.clazz.define(
             }
             this.getMap().removeOverlay(overlay);
             delete this._overlays[id];
+        },
+        // removes tooltips which aren't attached to any feature in draw source
+        clearDetachedTooltips: function () {
+            const overlayIds = Object.keys(this._overlays);
+            const fetureIds = this.getDrawSource().getFeatures().map(f => f.getId());
+            const detachedIds = overlayIds.filter(id => !fetureIds.includes(id));
+            detachedIds.forEach(id => this.removeDrawingTooltip(id));
         }
+
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
         /**
