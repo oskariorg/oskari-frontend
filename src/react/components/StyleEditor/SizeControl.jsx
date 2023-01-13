@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
-import { InputNumber } from 'antd';
+import { Message, NumberInput } from 'oskari-ui';
 import { ANTD_FORMLAYOUT } from './constants';
 import { FormItem } from '../Form';
 
-const sizeFormatter = (number) => Math.abs(number); 
-
+const sizeFormatter = (number) => Math.abs(number);
 
 export const SizeControl = (props) => {
     return (
@@ -17,11 +15,16 @@ export const SizeControl = (props) => {
             }
             { ...ANTD_FORMLAYOUT }
         >
-            <InputNumber
+            <NumberInput
                 min={ 1 }
                 max={ 5 }
                 formatter={ sizeFormatter }
                 parser={ sizeFormatter }
+                onKeyDown={(e) => {
+                    if (!/^[0-9\b]+$/.test(e.key) && e.key !== 'Backspace') {
+                        e.preventDefault();
+                    }
+                }}
             />
         </FormItem>
     );
