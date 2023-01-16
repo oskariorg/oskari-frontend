@@ -22,8 +22,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         me.data = data;
         me.panels = [];
         me.instance = instance;
+        // basic_publisher needs an extra wrapper-div for styles to work properly
         me.template = jQuery(
-            '<div class="basic_publisher">' +
+            '<div><div class="basic_publisher">' +
             '  <div class="header">' +
             '    <div class="icon-close">' +
             '    </div>' +
@@ -31,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             '  </div>' +
             '  <div class="content">' +
             '  </div>' +
-            '</div>');
+            '</div></div>');
 
         me.templates = {
             publishedGridTemplate: '<div class="publishedgrid"></div>'
@@ -73,8 +74,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.mainPanel = content;
 
             me.progressSpinner.insertTo(content);
-
-            container.append(content);
+            // prepend makes the sidebar go on the left side of the map
+            // we could use getNavigationDimensions() and check placement from it to append OR prepend,
+            // but it does work with the navigation even on the right hand side being hidden,
+            //  a new panel appearing on the left hand side and the map moves accordingly
+            container.prepend(content);
             var contentDiv = content.find('div.content'),
                 accordion = Oskari.clazz.create(
                     'Oskari.userinterface.component.Accordion'
@@ -625,18 +629,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          */
         destroy: function () {
             this.mainPanel.remove();
-            // Resets map position and size to cover the whole space. Maybe find another way to do this?
-            jQuery('#contentMap').width('');
-            jQuery('.oskariui-left')
-                .css({
-                    'width': '',
-                    'height': '',
-                    'float': ''
-                })
-                .empty();
-            jQuery('.oskariui-center').css({
-                'width': '100%',
-                'float': ''
-            });
         }
     });

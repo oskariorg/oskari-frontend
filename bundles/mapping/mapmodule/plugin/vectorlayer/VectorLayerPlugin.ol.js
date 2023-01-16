@@ -213,12 +213,13 @@ Oskari.clazz.define(
             // Update map cursor if feature is/was hovered
             if (oldHoverState || this._hoverState) {
                 const cursor = this._hoverState ? this._hoverState.feature.get('oskari-cursor') : null;
-                var mapDiv = this._map.getTarget();
-                mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
+                // we could use setCursorStyle() but it saves the current cursor on map module
+                // so we couldn't restore it with getCursorStyle()
+                const mapEl = this.getMapModule().getMapEl();
                 if (cursor) {
-                    mapDiv.css('cursor', cursor);
+                    mapEl.css('cursor', cursor);
                 } else {
-                    mapDiv.css('cursor', this.getMapModule().getCursorStyle());
+                    mapEl.css('cursor', this.getMapModule().getCursorStyle());
                 }
             }
         },

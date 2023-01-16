@@ -5,6 +5,7 @@ import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestH
 import { LocalizingFlyout } from './view/LocalizingFlyout';
 import { Messaging } from 'oskari-ui/util';
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { getNavigationDimensions } from 'oskari-ui/components/window';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -285,7 +286,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          */
         _getFlyout () {
             if (!this.flyout) {
-                const xPosition = jQuery('#mapdiv').position().left;
+                const dimensions = getNavigationDimensions();
+                let xPosition = 0;
+                if (dimensions) {
+                    xPosition = dimensions.left + dimensions.width;
+                }
                 const offset = 150;
 
                 this.flyout = new LayerEditorFlyout(this.loc('flyout-title'));

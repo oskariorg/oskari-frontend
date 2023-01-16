@@ -99,7 +99,7 @@ import './event/UserLocationEvent';
 
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
-
+import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -138,7 +138,7 @@ Oskari.clazz.define(
      srsName : "EPSG:3067"
      *  }
      */
-    function (id, imageUrl, options, mapDivId) {
+    function (id, imageUrl, options, mapDivRef) {
         var me = this;
         this.log = Oskari.log('AbstractMapModule');
 
@@ -148,7 +148,16 @@ Oskari.clazz.define(
 
         // Id will be a prefix for getName()
         me._id = id;
-        me._mapDivId = mapDivId;
+        if (typeof mapDivRef === 'string') {
+            me._mapDivId = mapDivRef;
+            me._mapDivEl = document.getElementById(mapDivRef);
+        } else if (mapDivRef instanceof Element) {
+            me._mapDivEl = mapDivRef;
+            // TODO: we should get rid of id here
+            me._mapDivId = mapDivRef.id;
+        } else {
+            this.log.error('Reference to map element must be of type string as element id or the element itself. Unable to start.');
+        }
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -398,9 +407,10 @@ Oskari.clazz.define(
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
-            me._adjustMobileMapSize();
             this.updateCurrentState();
             this._registerForGuidedTour();
+            // monitor size of element map is rendered in
+            monitorResize(this.getMapDOMEl(), this.updateSize.bind(this));
         },
         /**
          * @method stop
@@ -412,6 +422,7 @@ Oskari.clazz.define(
             if (!this.started) {
                 return;
             }
+            unmonitorResize(this.updateSize.bind(this));
 
             if (this.__originalTheme) {
                 Oskari.app.getTheming().setTheme(this.__originalTheme);
@@ -600,11 +611,18 @@ Oskari.clazz.define(
          * Get jQuery reference to map element
          */
         getMapEl: function () {
-            var mapDiv = jQuery('#' + this.getMapElementId());
+            var mapDiv = jQuery(this.getMapDOMEl());
             if (!mapDiv.length) {
-                this.log.warn('mapDiv not found with #' + this._mapDivId);
+                this.log.warn('mapDiv not found with #' + this.getMapElementId());
             }
             return mapDiv;
+        },
+        /**
+         * @method getMapEl
+         * Get jQuery reference to map element
+         */
+        getMapDOMEl: function () {
+            return this._mapDivEl;
         },
         /**
          * @method getMap
@@ -1089,21 +1107,15 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function () {
-            var sandbox = this.getSandbox();
-            var mapVO = sandbox.getMap();
-            var width = mapVO.getWidth();
-            var height = mapVO.getHeight();
-
             this._updateSizeImpl();
             this.updateDomain();
 
-            var widthNew = mapVO.getWidth();
-            var heightNew = mapVO.getHeight();
+            const sandbox = this.getSandbox();
+            const mapVO = sandbox.getMap();
+
             // send as an event forward
-            if (width !== widthNew || height !== heightNew) {
-                var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
-                sandbox.notifyAll(evt);
-            }
+            const evt = Oskari.eventBuilder('MapSizeChangedEvent')(mapVO.getWidth(), mapVO.getHeight());
+            sandbox.notifyAll(evt);
         },
         /**
          * @method updateCurrentState
@@ -1316,7 +1328,6 @@ Oskari.clazz.define(
             if (modeChanged) {
                 me.redrawPluginUIs(modeChanged);
             }
-            me._adjustMobileMapSize();
         },
         /**
          * @method redrawPluginUIs
@@ -1352,10 +1363,6 @@ Oskari.clazz.define(
             };
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
-        },
-        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
-        _adjustMobileMapSize: function () {
-            this.updateSize();
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
@@ -1723,7 +1730,6 @@ Oskari.clazz.define(
                     me.lazyStartPlugins.push(plugin);
                 }
             });
-            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin

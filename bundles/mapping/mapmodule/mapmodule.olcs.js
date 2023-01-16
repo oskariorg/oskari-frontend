@@ -73,7 +73,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         var map = new OLMap({
             keyboardEventTarget: document,
-            target: this.getMapElementId(),
+            target: this.getMapDOMEl(),
             controls: controls,
             interactions: me._olInteractionDefaults,
             moveTolerance: 2

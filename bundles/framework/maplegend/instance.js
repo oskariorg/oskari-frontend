@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             return this.loc('desc');
         },
         isEmbedded: function () {
-            return jQuery('#contentMap').hasClass('published');
+            return Oskari.dom.isEmbedded();
         },
         refreshUI: function () {
             const uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];

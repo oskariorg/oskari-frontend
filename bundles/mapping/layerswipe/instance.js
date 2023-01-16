@@ -214,7 +214,7 @@ Oskari.clazz.define(
             if (!this.splitter) {
                 this.splitter = jQuery('<div class="layer-swipe-splitter"></div>');
                 this.splitter.draggable({
-                    containment: '#mapdiv',
+                    containment: this.mapModule.getMapEl(),
                     axis: 'x',
                     drag: () => {
                         this.updateMapCropping();

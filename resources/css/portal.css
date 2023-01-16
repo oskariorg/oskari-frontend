@@ -1,7 +1,8 @@
 /* Variables */
 /* Mixins */
 /* Resets */
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
+/* removed: html, body, */
+div, span, object, iframe, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
 img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
 dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
@@ -22,10 +23,6 @@ a img {
   border: 0;
 }
 
-html, body {
-  height: 100% !important;
-}
-
 html {
   font-size: 100%;
   -webkit-overflow-scrolling: touch;
@@ -39,6 +36,37 @@ body {
   color: #3c3c3c;
   font-family: 'Open Sans', Arial, sans-serif;
   background: #fafafa;
+  /*
+  overflow hidden so draggable windows don't create scrollbars.
+  For more contained app this could be overridden and set for element with class .oskari-root-el
+  */
+  overflow: hidden;
+}
+
+.oskari-root-el {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 0px;
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+/* Assumes that the root element has a <nav> tag that holds the main navigation in for example geoportal. */
+.oskari-root-el > nav {
+  min-width: 170px;
+  flex-basis: 170px;
+  display: block;
+  overflow: auto;
+
+  /* for application to set */
+  background-color: #333438;
+}
+
+.oskari-map-container-el {
+  height: 100%;
+  width: 100%;
 }
 
 body, button, input, select, textarea {
@@ -84,12 +112,14 @@ img::-moz-selection {
 }
 
 /* Content is only in the portal version afaik so this could be moved there? */
+/*
 #content {
   width: 760px;
   padding-left: 20px;
 }
-
+*/
 /* Portal version */
+/*
 .mml-map #logo.no-hover {
   display: block !important;
 }
@@ -111,6 +141,7 @@ img::-moz-selection {
   width: 100%;
   margin-left: 0;
 }
+*/
 
 
 .oskariui-left {
@@ -471,14 +502,14 @@ select:not([class*="ant-"]) {
 .clearfix:after {
   clear: both;
 }
-
+/*
 #maptools {
   width: 170px !important;
   height: 100% !important;
   overflow: auto;
   position: fixed !important;
 }
-
+*/
 @keyframes backgroundFlash {
   50% {
     background-color: rgb(255,212,0);
