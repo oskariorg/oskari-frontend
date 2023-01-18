@@ -116,8 +116,8 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     </Approximation>
                     <TextInput
                         value={state?.latField}
-                        onChange={(e) => controller.setLat(e.target.value)}
-                        onBlur={() => controller.blur()}
+                        onChange={(e) => controller.setLatInputValue(e.target.value)}
+                        onBlur={() => controller.useUserDefinedCoordinates()}
                         disabled={state.showMouseCoordinates}
                         className='t_lat'
                     />
@@ -135,8 +135,8 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                     </Approximation>
                     <TextInput
                         value={state?.lonField}
-                        onChange={(e) => controller.setLon(e.target.value)}
-                        onBlur={() => controller.blur()}
+                        onChange={(e) => controller.setLonInputValue(e.target.value)}
+                        onBlur={() => controller.useUserDefinedCoordinates()}
                         disabled={state.showMouseCoordinates}
                         className='t_lon'
                     />

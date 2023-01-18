@@ -33,7 +33,6 @@ class UIHandler extends StateHandler {
         this.decimalSeparator = Oskari.getDecimalSeparator();
         this.preciseTransform = Array.isArray(this.config.supportedProjections);
         this.updateLonLat(this.getMapXY(), true, true, true);
-        this.getEmergencyCallInfo(this.state.xy);
         this.popupListeners = [];
     };
 
@@ -82,21 +81,21 @@ class UIHandler extends StateHandler {
         this.updatePopup();
     }
 
-    setLon (value) {
+    setLonInputValue (value) {
         this.updateState({
             lonField: value
         });
         this.updatePopup();
     }
 
-    setLat (value) {
+    setLatInputValue (value) {
         this.updateState({
             latField: value
         });
         this.updatePopup();
     }
 
-    async blur () {
+    async useUserDefinedCoordinates () {
         let data = {
             lonlat: {
                 lon: this.state.lonField,
@@ -630,14 +629,14 @@ const wrapped = controllerMixin(UIHandler, [
     'markersSupported',
     'setMarker',
     'centerMap',
-    'setLon',
-    'setLat',
+    'setLonInputValue',
+    'setLatInputValue',
     'setLoading',
     'setSelectedProjection',
     'allowDegrees',
     'formatDegrees',
     'toggleReverseGeoCode',
-    'blur',
+    'useUserDefinedCoordinates',
     'popupCleanup'
 ]);
 
