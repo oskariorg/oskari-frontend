@@ -33,7 +33,7 @@ const CoordinateField = styled('div')`
 const DegreeContainer = styled('div')`
     display: flex;
     flex-direction: column;
-    margin-left: 45px;
+    margin-left: 59px;
     margin-bottom: 10px;
 `;
 
@@ -66,6 +66,11 @@ const ReverseGeoCodes = styled('div')`
     margin-top: 5px;
 `;
 
+const Approximation = styled('span')`
+    width: 12px;
+    font-size: 14px;
+`;
+
 const PopupContent = ({ state, controller, preciseTransform, supportedProjections, crsText, decimalSeparator, showReverseGeoCodeCheckbox }) => {
     let latLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lat'} />;
     let lonLabel = <Message bundleKey={BUNDLE_KEY} messageKey={'display.compass.lon'} />;
@@ -76,8 +81,8 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
 
     let degmin;
     let dec;
-    if (controller.allowDegrees() && state?.displayXy?.lonlat?.lon && state?.displayXy?.lonlat?.lat) {
-        dec = Oskari.util.coordinateDegreesToMetric([state.displayXy.lonlat.lon, state.displayXy.lonlat.lat], 20);
+    if (controller.allowDegrees() && state?.lonField && state?.latField) {
+        dec = Oskari.util.coordinateDegreesToMetric([state.lonField, state.latField], 20);
         degmin = controller.formatDegrees(dec[0], dec[1], 'min');
     }
 
@@ -106,9 +111,13 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
             <CoordinateFields>
                 <CoordinateField>
                     <CoordinateLabel>{latLabel}:</CoordinateLabel>
+                    <Approximation>
+                        {state.approxValue && ('~')}
+                    </Approximation>
                     <TextInput
-                        value={state?.displayXy?.lonlat?.lat}
-                        onChange={(e) => controller.setLat(e.target.value)}
+                        value={state?.latField}
+                        onChange={(e) => controller.setLatInputValue(e.target.value)}
+                        onBlur={() => controller.useUserDefinedCoordinates()}
                         disabled={state.showMouseCoordinates}
                         className='t_lat'
                     />
@@ -121,9 +130,13 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
                 )}
                 <CoordinateField>
                     <CoordinateLabel>{lonLabel}:</CoordinateLabel>
+                    <Approximation>
+                        {state.approxValue && ('~')}
+                    </Approximation>
                     <TextInput
-                        value={state?.displayXy?.lonlat?.lon}
-                        onChange={(e) => controller.setLon(e.target.value)}
+                        value={state?.lonField}
+                        onChange={(e) => controller.setLonInputValue(e.target.value)}
+                        onBlur={() => controller.useUserDefinedCoordinates()}
                         disabled={state.showMouseCoordinates}
                         className='t_lon'
                     />

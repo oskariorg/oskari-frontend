@@ -67,7 +67,7 @@ export const transformCoordinates = (mapModule, data, srs, targetSRS) => {
             data.lonlat = mapModule.transformCoordinates(data.lonlat, srs, targetSRS);
         }
     } catch (e) {
-        throw new Error('SrsName not supported!');
+        throw new Error();
     }
     return data;
 };
