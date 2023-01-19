@@ -1,23 +1,24 @@
 
-import { EFFECT } from './constants';
+import { EFFECT, DEFAULT_COLORS } from './constants';
+
 
 export const getHeaderTheme = (theme) => {
-    const bgColor = theme.color.header?.bg || theme.color.primary;
+    const bgColor = theme.color?.header?.bg || theme.color?.primary || DEFAULT_COLORS.HEADER_BG;
     const headerTextColor = getTextColor(bgColor);
     const funcs = {
         getBgColor: () => bgColor,
         getAccentColor: () => theme.color.accent,
         getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
-        getTextColor: () => theme.color.header?.text || headerTextColor,
-        getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
-        getToolHoverColor: () => theme.color.accent
+        getTextColor: () => theme.color?.header?.text || headerTextColor,
+        getToolColor: () => theme.color?.header?.icon || funcs.getTextColor(),
+        getToolHoverColor: () => theme.color?.accent
     };
     return funcs;
 };
 
 export const getNavigationTheme = (theme) => {
-    const primary = theme.navigation?.color?.primary || '#141414';
+    const primary = theme.navigation?.color?.primary || DEFAULT_COLORS.DARK_BUTTON_BG;
     const textColor = getTextColor(primary);
     let borderRadius = undefined;
     if (theme?.navigation?.roundness) {
@@ -32,7 +33,7 @@ export const getNavigationTheme = (theme) => {
         getPrimary: () => primary,
         getTextColor: () => theme.navigation?.color?.text || textColor,
         getButtonColor: () => buttonColor,
-        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || '#ffd400',
+        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || DEFAULT_COLORS.ACCENT,
         getButtonRoundness: () => borderRadius,
         getEffect: () => theme.navigation?.effect,
         getButtonOpacity: () => theme.navigation?.opacity || 1
