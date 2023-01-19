@@ -42,6 +42,13 @@ body {
   */
   overflow: hidden;
 }
+/* Setup body size if Oskari is using it as root element */
+body.oskari-root-el {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
+}
 
 .oskari-root-el {
   display: flex;
