@@ -9,11 +9,16 @@
                 fill: #fad500;
                 stroke: #ac9200;
             }
+            &.base .handle-line {
+                stroke: rgba(0,0,0, 0.5);
+                stroke-dasharray: 5;
+                stroke-width: 2;
+            }
         }
         .guide {
             fill: #ddd;
         }
-        .handle-line, .edge path {
+        .handle-line, .edge path, .edge line {
             stroke: rgba(0,0,0, 0.3)
         }
         .edge text {
