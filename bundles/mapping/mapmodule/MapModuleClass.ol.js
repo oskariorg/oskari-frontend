@@ -80,7 +80,7 @@ export class MapModule extends AbstractMapModule {
             // Setting pixelRatio:1 seems to fix this ^ See for example https://github.com/openlayers/openlayers/issues/11465
             pixelRatio: 1,
             keyboardEventTarget: document,
-            target: this.getMapElementId(),
+            target: this.getMapDOMEl(),
             controls: controls,
             interactions: this._initInteractions(),
             moveTolerance: 2
@@ -474,11 +474,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomArea (geometry) {
-        if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getArea(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getArea(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
@@ -493,11 +493,11 @@ export class MapModule extends AbstractMapModule {
      * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomLength (geometry) {
-        if (!geometry || geometry.getType() !== 'LineString') {
-            return 0;
+        if (geometry instanceof olGeom.Geometry) {
+            const projection = this.getMap().getView().getProjection();
+            return olSphere.getLength(geometry, { projection });
         }
-        var sourceProj = this.getMap().getView().getProjection();
-        return olSphere.getLength(geometry, { projection: sourceProj });
+        return 0;
     }
 
     /**
@@ -510,17 +510,17 @@ export class MapModule extends AbstractMapModule {
      *
      * @param  {number} measurement
      * @param  {String} drawMode
+     * @param  {Number} fixedDigits (optional)
      * @return {String}
      *
      */
-    // TODO: move to util
-    formatMeasurementResult (measurement, drawMode) {
-        var result,
-            unit,
-            decimals;
+    formatMeasurementResult (measurement, drawMode, fixedDigits) {
         if (typeof measurement !== 'number') {
             return;
         }
+        let result;
+        let unit;
+        let decimals;
         const zoomedForAccuracy = this.getResolution() < 1;
 
         if (drawMode === 'area') {
@@ -528,34 +528,35 @@ export class MapModule extends AbstractMapModule {
             if (measurement >= 1000000) {
                 result = measurement / 1000000; // (Math.round(measurement) / 1000000);
                 decimals = 3;
-                unit = ' km²';
+                unit = 'km²';
             } else if (measurement < 10000) {
                 result = measurement;// (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m²';
+                unit = 'm²';
             } else {
                 result = measurement / 10000; // (Math.round(100 * measurement) / 100);
                 decimals = 2;
-                unit = ' ha';
+                unit = 'ha';
             }
         } else if (drawMode === 'line') {
             // 1 000 m === 1 km
             if (measurement >= 1000) {
                 result = measurement / 1000; // (Math.round(measurement) / 1000);
                 decimals = 3;
-                unit = ' km';
+                unit = 'km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
                 decimals = zoomedForAccuracy ? 1 : 0;
-                unit = ' m';
+                unit = 'm';
             }
         } else {
             return '';
         }
-        return result.toFixed(decimals).replace(
+        const digits = fixedDigits !== undefined ? fixedDigits : decimals;
+        return result.toFixed(digits).replace(
             '.',
             Oskari.getDecimalSeparator()
-        ) + unit;
+        ) + ' ' + unit;
     }
 
     /**
@@ -976,8 +977,10 @@ export class MapModule extends AbstractMapModule {
      * Orders layers by Z-indexes.
      */
     orderLayersByZIndex () {
+        // getZIndex returns undefined if z indez isn't set even default is 0.
+        const layerZ = l => l.getZIndex() || 0;
         this.getMap().getLayers().getArray().sort(function (a, b) {
-            return a.getZIndex() - b.getZIndex();
+            return layerZ(a) - layerZ(b);
         });
     }
 
@@ -1190,8 +1193,8 @@ export class MapModule extends AbstractMapModule {
      * @param {ol/layer/Layer} layer ol3 specific!
      */
     setLayerIndex (layerImpl, index) {
-        var layerColl = this.getMap().getLayers();
-        var layerIndex = this.getLayerIndex(layerImpl);
+        const layerColl = this.getMap().getLayers();
+        const layerIndex = this.getLayerIndex(layerImpl);
 
         /* find */
         /* remove */
@@ -1199,10 +1202,9 @@ export class MapModule extends AbstractMapModule {
 
         if (index === layerIndex) {
             // nothing to do here
-        } else if (index === layerColl.getLength()) {
+        } else if (index >= layerColl.getLength() - 1) {
             /* to top */
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index, layerImpl);
+            this.bringToTop(layerImpl);
         } else if (layerIndex < index) {
             /* must adjust change */
             layerColl.removeAt(layerIndex);

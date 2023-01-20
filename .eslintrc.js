@@ -34,7 +34,7 @@ module.exports = {
     // ----
     },
     parserOptions: {
-        ecmaVersion: 9,
+        ecmaVersion: 2020,
         sourceType: 'module'
     },
     // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style

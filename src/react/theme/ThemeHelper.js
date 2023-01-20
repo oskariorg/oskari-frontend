@@ -1,16 +1,42 @@
 
-import { EFFECT } from './constants';
+import { EFFECT, DEFAULT_COLORS } from './constants';
+
 
 export const getHeaderTheme = (theme) => {
-    const headerTextColor = getTextColor(theme.color.primary);
+    const bgColor = theme.color?.header?.bg || theme.color?.primary || DEFAULT_COLORS.HEADER_BG;
+    const headerTextColor = getTextColor(bgColor);
     const funcs = {
-        getBgColor: () => theme.color.primary,
+        getBgColor: () => bgColor,
         getAccentColor: () => theme.color.accent,
         getBgBorderColor: () => getColorEffect(theme.color.accent, -10),
         getBgBorderBottomColor: () => getColorEffect(theme.color.accent, 20),
-        getTextColor: () => theme.color.header?.text || headerTextColor,
-        getToolColor: () => theme.color.header?.icon || funcs.getTextColor(),
-        getToolHoverColor: () => theme.color.accent
+        getTextColor: () => theme.color?.header?.text || headerTextColor,
+        getToolColor: () => theme.color?.header?.icon || funcs.getTextColor(),
+        getToolHoverColor: () => theme.color?.accent
+    };
+    return funcs;
+};
+
+export const getNavigationTheme = (theme) => {
+    const primary = theme.navigation?.color?.primary || DEFAULT_COLORS.DARK_BUTTON_BG;
+    const textColor = getTextColor(primary);
+    let borderRadius = undefined;
+    if (theme?.navigation?.roundness) {
+        borderRadius = `${(theme?.navigation?.roundness || 0) / 2}%`;
+    }
+
+    let buttonColor = primary;
+    if (theme.navigation?.effect === '3D') {
+        buttonColor = `linear-gradient(180deg, ${getColorEffect(primary, EFFECT.DARKEN)} 0%, ${primary} 35%, ${getColorEffect(primary, EFFECT.LIGHTEN)} 100%)`;
+    }
+    const funcs = {
+        getPrimary: () => primary,
+        getTextColor: () => theme.navigation?.color?.text || textColor,
+        getButtonColor: () => buttonColor,
+        getButtonHoverColor: () => theme.navigation?.color?.accent || theme.color.accent || DEFAULT_COLORS.ACCENT,
+        getButtonRoundness: () => borderRadius,
+        getEffect: () => theme.navigation?.effect,
+        getButtonOpacity: () => theme.navigation?.opacity || 1
     };
     return funcs;
 };
@@ -21,12 +47,12 @@ export const getTextColor = (bgColor) => {
     };
     return '#000000';
 };
-
-export const getFont = (theme) => {
-    if (theme.font === 'arial') return 'Arial, Helvetica, sans-serif';
-    if (theme.font === 'georgia') return 'Georgia, Times, "Times New Roman"';
-    return theme.font ||  'Arial, Helvetica, sans-serif';
-};
+export const getFontClass = (theme) => {
+    if (theme.font) {
+        return 'oskari-theme-font-' + theme.font;
+    }
+    return '';
+}
 
 /* ------------------------------------------------------------------------------ */
 // Note! Copy-pasted from bundles/mapping/mapmodule/oskariStyle!

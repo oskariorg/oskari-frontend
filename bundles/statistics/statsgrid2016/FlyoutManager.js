@@ -1,3 +1,5 @@
+import { getNavigationDimensions } from 'oskari-ui/components/window';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (instance) {
     this.instance = instance;
     this.flyouts = {};
@@ -43,30 +45,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             return;
         }
 
-        var me = this;
-        var p = jQuery('#mapdiv');
-        var position = p.position().left;
+        const navDimensions = getNavigationDimensions();
+        var position = navDimensions.right;
         var offset = 40;
         const y = this._positionY;
-        this.flyoutInfo.forEach(function (info) {
+        const container = jQuery(Oskari.dom.getRootEl());
+        this.flyoutInfo.forEach((info) => {
             var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                 width: 'auto',
                 cls: info.cls,
+                container,
                 position: {
                     x: position + offset,
                     y
                 }
-            }, me.instance);
+            }, this.instance);
             flyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
                 scroll: false
             });
 
             flyout.bringToTop();
-            flyout.on('hide', function () {
-                me.trigger('hide', info.id);
+            flyout.on('hide', () => {
+                this.trigger('hide', info.id);
             });
-            me.flyouts[info.id] = flyout;
+            this.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;
             if (info.resizable) {
                 const { minWidth, minHeight } = info;

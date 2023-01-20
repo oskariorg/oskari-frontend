@@ -68,7 +68,7 @@ Oskari.registerLocalization(
                 "ScaleBarPlugin": "Scale bar",
                 "TimeseriesControlPlugin": "Time series player",
                 "IndexMapPlugin": "Index map",
-                "PanButtons": "Pan tool",
+                "PanButtons": "Move to the original map view",
                 "Portti2Zoombar": "Zoom bar",
                 "MyLocationPlugin": "Center to location",
                 "ControlsPlugin": "Pan by mouse",
@@ -123,6 +123,9 @@ Oskari.registerLocalization(
                         "mobileOnly": "Enable functionality only for mobile devices",
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Pan tool"
                 }
             },
             "toollayout": {
@@ -171,15 +174,21 @@ Oskari.registerLocalization(
                         "label": "Font style"
                     },
                     "toolStyles": {
-                        "label": "Tool style",
-                        "default": "Default style",
                         "rounded-dark": "Rounded (dark)",
                         "rounded-light": "Rounded (light)",
                         "sharp-dark": "Angular (dark)",
                         "sharp-light": "Angular (light)",
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-up header background color",
+                    "buttonBackgroundColor": "Button background color",
+                    "buttonTextColor": "Icon color",
+                    "buttonAccentColor": "Icon effect color",
+                    "buttonRounding": "Button rounding",
+                    "effect": "Effect",
+                    "3d": "3D",
+                    "presets": "Style presets"
                 },
                 "popup": {
                     "title": "Select Color Scheme",
@@ -234,7 +243,9 @@ Oskari.registerLocalization(
                 "nohelp": "The user guide is not available.",
                 "saveFailed": "The embedded map could not be saved.",
                 "nameIllegalCharacters": "The map name contains illegal characters (e.g. html-tags). Please correct the name and try again.",
-                "domainIllegalCharacters": "The website address contains illegal characters. Type a website URL-address without prefixes or a subpage address. For example: homepage.com. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
+                "domainIllegalCharacters": "The website address contains illegal characters. Type a website URL-address without prefixes or a subpage address. For example: homepage.com. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again.",
+                "enablePreview": "An error occured while opening preview. The preview might have additional tools that will not be part of the embedded map.",
+                "disablePreview": "An error occured while returning from preview mode. Page reload is recommended.",
             },
             "noUI": "Hide user interface (Use RPC interface)"
         },

@@ -99,7 +99,7 @@ import './event/UserLocationEvent';
 
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
-
+import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -138,7 +138,7 @@ Oskari.clazz.define(
      srsName : "EPSG:3067"
      *  }
      */
-    function (id, imageUrl, options, mapDivId) {
+    function (id, imageUrl, options, mapDivRef) {
         var me = this;
         this.log = Oskari.log('AbstractMapModule');
 
@@ -148,7 +148,16 @@ Oskari.clazz.define(
 
         // Id will be a prefix for getName()
         me._id = id;
-        me._mapDivId = mapDivId;
+        if (typeof mapDivRef === 'string') {
+            me._mapDivId = mapDivRef;
+            me._mapDivEl = document.getElementById(mapDivRef);
+        } else if (mapDivRef instanceof Element) {
+            me._mapDivEl = mapDivRef;
+            // TODO: we should get rid of id here
+            me._mapDivId = mapDivRef.id;
+        } else {
+            this.log.error('Reference to map element must be of type string as element id or the element itself. Unable to start.');
+        }
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -207,9 +216,6 @@ Oskari.clazz.define(
         me._wellknownStyles = {};
 
         me._isInMobileMode = null;
-        me._mobileToolbar = null;
-        me._mobileToolbarId = 'mobileToolbar';
-        me._toolbarContent = null;
         me._supports3D = false;
 
         // possible custom css cursor set via rpc
@@ -308,7 +314,6 @@ Oskari.clazz.define(
 
             // TODO remove this whenever we're ready to add the containers when needed
             this._addMapControlPluginContainers();
-            this._addMobileDiv();
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -324,6 +329,20 @@ Oskari.clazz.define(
             if (this.started) {
                 return;
             }
+
+            let theme = Oskari.app.getTheming().getTheme();
+            this.__originalTheme = theme;
+            // listen to changes
+            Oskari.app.getTheming().addListener(newTheme => {
+                this.setMapTheme(newTheme.map);
+            });
+            // setup map theme for well known tool styles
+            Oskari.app.getTheming().setTheme({
+                ...theme,
+                map: {
+                    ...this.getMapTheme()
+                }
+            });
 
             this.log.debug('Starting ' + this.getName());
 
@@ -388,9 +407,10 @@ Oskari.clazz.define(
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());
             me.startPlugins();
-            me._adjustMobileMapSize();
             this.updateCurrentState();
             this._registerForGuidedTour();
+            // monitor size of element map is rendered in
+            monitorResize(this.getMapDOMEl(), this.updateSize.bind(this));
         },
         /**
          * @method stop
@@ -401,6 +421,11 @@ Oskari.clazz.define(
         stop: function (sandbox) {
             if (!this.started) {
                 return;
+            }
+            unmonitorResize(this.updateSize.bind(this));
+
+            if (this.__originalTheme) {
+                Oskari.app.getTheming().setTheme(this.__originalTheme);
             }
 
             sandbox = sandbox || this.getSandbox();
@@ -586,11 +611,18 @@ Oskari.clazz.define(
          * Get jQuery reference to map element
          */
         getMapEl: function () {
-            var mapDiv = jQuery('#' + this.getMapElementId());
+            var mapDiv = jQuery(this.getMapDOMEl());
             if (!mapDiv.length) {
-                this.log.warn('mapDiv not found with #' + this._mapDivId);
+                this.log.warn('mapDiv not found with #' + this.getMapElementId());
             }
             return mapDiv;
+        },
+        /**
+         * @method getMapEl
+         * Get jQuery reference to map element
+         */
+        getMapDOMEl: function () {
+            return this._mapDivEl;
         },
         /**
          * @method getMap
@@ -1075,21 +1107,15 @@ Oskari.clazz.define(
          * Signal map-engine that DOMElement size has changed and trigger a MapSizeChangedEvent
          */
         updateSize: function () {
-            var sandbox = this.getSandbox();
-            var mapVO = sandbox.getMap();
-            var width = mapVO.getWidth();
-            var height = mapVO.getHeight();
-
             this._updateSizeImpl();
             this.updateDomain();
 
-            var widthNew = mapVO.getWidth();
-            var heightNew = mapVO.getHeight();
+            const sandbox = this.getSandbox();
+            const mapVO = sandbox.getMap();
+
             // send as an event forward
-            if (width !== widthNew || height !== heightNew) {
-                var evt = Oskari.eventBuilder('MapSizeChangedEvent')(widthNew, heightNew);
-                sandbox.notifyAll(evt);
-            }
+            const evt = Oskari.eventBuilder('MapSizeChangedEvent')(mapVO.getWidth(), mapVO.getHeight());
+            sandbox.notifyAll(evt);
         },
         /**
          * @method updateCurrentState
@@ -1280,73 +1306,8 @@ Oskari.clazz.define(
         },
         /* --------------- /MAP STATE ------------------------ */
 
-        /* ---------------- MAP MOBILE MODE ------------------- */
-
-        _addMobileDiv: function () {
-            var mapDiv = this.getMapEl();
-            if (!mapDiv.length || !mapDiv[0].parentElement) {
-                this.log.warn('Unable to create mobile toolbar for page');
-                return;
-            }
-            jQuery(mapDiv[0].parentElement).prepend('<div class="mobileToolbarDiv"></div>');
-        },
-
-        getMobileDiv: function () {
-            var mapDiv = this.getMapEl();
-            if (!mapDiv.length || !mapDiv[0].parentElement) {
-                this.log.warn('Unable to find mobile toolbar from page');
-                return jQuery('<div></div>');
-            }
-            return jQuery(mapDiv[0].parentElement).find('.mobileToolbarDiv');
-        },
-
-        getMobileToolbar: function () {
-            var me = this;
-            if (!me._mobileToolbar) {
-                me._createMobileToolbar();
-            }
-            return me._mobileToolbarId;
-        },
-
-        _createMobileToolbar: function () {
-            var me = this,
-                request,
-                sandbox = me.getSandbox();
-
-            if (!me._mobileToolbarId || !sandbox.hasHandler('Toolbar.ToolbarRequest')) {
-                return;
-            }
-            me._mobileToolbar = true;
-            me.getMobileDiv().append('<div class="mobileToolbarContent"></div>');
-            me._toolbarContent = me.getMobileDiv().find('.mobileToolbarContent');
-            // add toolbar when toolbarId and target container is configured
-            // We assume the first container is intended for the toolbar
-            request = Oskari.requestBuilder('Toolbar.ToolbarRequest')(
-                me._mobileToolbarId,
-                'add',
-                {
-                    show: true,
-                    toolbarContainer: me._toolbarContent,
-                    colours: {
-                        hover: this.getThemeColours().hoverColour,
-                        background: this.getThemeColours().backgroundColour
-                    },
-                    disableHover: true
-                }
-            );
-            sandbox.request(me.getName(), request);
-        },
-
         setMobileMode: function (isInMobileMode) {
             this._isInMobileMode = isInMobileMode;
-
-            var mobileDiv = this.getMobileDiv();
-            if (isInMobileMode) {
-                mobileDiv.show();
-                mobileDiv.css('backgroundColor', this.getThemeColours().backgroundColour);
-            } else {
-                mobileDiv.hide();
-            }
         },
 
         getMobileMode: function () {
@@ -1367,7 +1328,6 @@ Oskari.clazz.define(
             if (modeChanged) {
                 me.redrawPluginUIs(modeChanged);
             }
-            me._adjustMobileMapSize();
         },
         /**
          * @method redrawPluginUIs
@@ -1404,42 +1364,6 @@ Oskari.clazz.define(
             plugins.sort((a, b) => getIndex(a) - getIndex(b));
             return plugins;
         },
-        // NOTE! This is called from BasicMapModulePlugin so we can hide or show toolbar when buttons are added/removed
-        _adjustMobileMapSize: function () {
-            var mapDivHeight = this.getMapEl().height();
-            var mobileDiv = this.getMobileDiv();
-            var toolbar = mobileDiv.find('.mobileToolbarContent');
-
-            if (toolbar.find('.toolbar_mobileToolbar').children().length === 0 && !mobileDiv.find('.mapplugin').length) {
-                // plugins didn't add any content -> hide it so the empty bar is not visible
-                mobileDiv.hide();
-            } else {
-                // case: tools in toolbar, show the div as it might be hidden and remove explicit size
-                if (toolbar.find('.tool').length) {
-                    // if only lazy plugins on startup -> mobilediv is hidden on startup -> need to make it visible here
-                    mobileDiv.show();
-                    // if there are a tools, make sure we don't restrict it's height by setting specific size
-                    // tools may flow to multiple rows
-                    mobileDiv.height('');
-                }
-                // case: no tools in toolbar or no toolbar -> force height
-                else if (mobileDiv.height() < mobileDiv.children().height()) {
-                    // any floated plugins might require manual height setting if there is no toolbar
-                    mobileDiv.height(mobileDiv.children().height());
-                }
-            }
-
-            // Adjust map size always if in mobile mode because otherwise bottom tool drop out of screen
-            // only reduce size if div is visible, otherwise padding will make the map smaller than it should be
-            if (Oskari.util.isMobile() && mobileDiv.is(':visible')) {
-                var totalHeight = jQuery('#contentMap').height();
-                if (totalHeight < mapDivHeight + mobileDiv.outerHeight()) {
-                    mapDivHeight = totalHeight - mobileDiv.outerHeight();
-                    jQuery('#' + this.getMapElementId()).css('height', mapDivHeight + 'px');
-                }
-            }
-            this.updateSize();
-        },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
 
@@ -1461,6 +1385,103 @@ Oskari.clazz.define(
             } else {
                 return 'light';
             }
+        },
+        __cachedTheme: null,
+        getMapTheme: function () {
+            if (this.__cachedTheme) {
+                return this.__cachedTheme;
+            }
+            const { map = {}, ...appTheme } = Oskari.app.getTheming().getTheme();
+            // take "global" theme as base and override anything specified for map
+            let mapTheme = {
+                ...appTheme,
+                ...this.__injectThemeByToolStyle(this.getToolStyle()),
+                ...map
+            };
+
+            this.__cachedTheme = mapTheme;
+            return mapTheme;
+        },
+        setMapTheme: function (mapTheme = {}) {
+            this.__cachedTheme = null;
+            let theme = {
+                ...this.getMapTheme(),
+                ...mapTheme
+            };
+            this.__cachedTheme = theme;
+            // set font class for map module/map controls. Windows/popups will get it through theme
+            const prefix = 'oskari-theme-font-';
+            const newFontClass = prefix + (theme.font || 'arial');
+            // on unit tests the mapEl might be undefined
+            const classlist = this.getMapEl()[0]?.classList;
+            if (classlist) {
+                classlist.forEach(clazz => {
+                    if (clazz !== newFontClass && clazz.startsWith(prefix)) {
+                        classlist.remove(clazz);
+                    }
+                });
+                classlist.add(newFontClass);
+            }
+            Object.values(this._pluginInstances)
+                .filter((plugin = {}) => {
+                    if (typeof plugin.hasUI === 'function') {
+                        return plugin.hasUI();
+                    }
+                    return false;
+                })
+                .forEach((plugin) => {
+                    if (typeof plugin.changeToolStyle === 'function') {
+                        plugin.changeToolStyle();
+                    }
+                });
+        },
+        // generates base style for map
+        __injectThemeByToolStyle: function (toolStyle) {
+            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
+            const mapTheme = {
+                // For buttons on map
+                navigation: {
+                    roundness: 0,
+                    opacity: 0.8,
+                    color: {
+                        // #141414 -> rgb(20,20,20)
+                        // #3c3c3c -> rgb(60,60,60)
+                        primary: '#141414',
+                        accent: '#ffd400',
+                        text: '#ffffff'
+                    }
+                },
+                // /For buttons on map ^
+                // --------------
+                // For popup headers opened by map:
+                color: {
+                    header: {
+                        bg: '#3c3c3c'
+                    }
+                    // accent should be inherited from global theme accent if not configured
+                    // accent: '#ffd400'
+                }
+                // /For popup headers opened by map ^
+            };
+            const style = toolStyle || 'rounded-dark';
+            const [shape, theme] = style.split('-');
+            if (shape === 'rounded') {
+                mapTheme.navigation.roundness = 100;
+            } else if (shape === '3d') {
+                mapTheme.navigation.roundness = 20;
+                // themehelper calculates gradients when this is set
+                mapTheme.navigation.effect = '3D';
+            }
+
+            if (theme === 'light') {
+                // buttons
+                mapTheme.navigation.color.primary = '#ffffff';
+                mapTheme.navigation.color.text = '#000000';
+                // popup
+                mapTheme.color.header.bg = '#ffffff';
+            }
+
+            return mapTheme;
         },
 
         getThemeColours: function (theme) {
@@ -1709,7 +1730,6 @@ Oskari.clazz.define(
                     me.lazyStartPlugins.push(plugin);
                 }
             });
-            me._adjustMobileMapSize();
         },
         /**
          * @method stopPlugin
@@ -2198,75 +2218,50 @@ Oskari.clazz.define(
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
          * @method changeToolStyle
-         * @param {Object} style The style object to be applied on all plugins that support changing style.
+         * @deprecated Use setMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          */
-        changeToolStyle: function (style) {
-            const clonedStyle = {
-                ...style
-            };
-            if (!this._options) {
-                this._options = {};
-            }
-            this._options.style = clonedStyle;
-
-            // notify plugins of the style change.
-            Object.values(this._pluginInstances)
-                .filter((plugin = {}) => {
-                    if (typeof plugin.hasUI === 'function') {
-                        return plugin.hasUI();
-                    }
-                    return false;
-                })
-                .forEach((plugin) => {
-                    var styleConfig = clonedStyle.toolStyle !== 'default' ? clonedStyle.toolStyle : null;
-                    if (typeof plugin.changeToolStyle === 'function') {
-                        plugin.changeToolStyle(styleConfig);
-                    }
-                    if (typeof plugin.changeFont === 'function') {
-                        plugin.changeFont(clonedStyle.font);
-                    }
-                });
+        changeToolStyle: function () {
+            this.log.deprecated('changeToolStyle');
         },
         /**
          * Gets the style to be used on plugins
          *
          * @method getToolStyle
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} style The mapmodule's style configuration.
          */
         getToolStyle: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.toolStyle) {
-                return me._options.style.toolStyle && me._options.style.toolStyle !== 'default' ? me._options.style.toolStyle : null;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolStyle');
+            return null;
         },
         /**
          * Gets the font to be used on plugins
          * @method getToolFont
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolFont: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.font) {
-                return me._options.style.font;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolFont');
+            return Oskari.app.getTheming().getTheme()?.map?.font || 'arial';
         },
 
         /**
          * Gets the colourscheme to be used on plugins
          * @method getToolColourScheme
+         * @deprecated Use getMapTheme() instead
+         *
+         * Deprecated in 2.10. Can be removed after ~2.12
          * @return {String} font The mapmodule's font configuration or null if not set.
          */
         getToolColourScheme: function () {
-            var me = this;
-            if (me._options && me._options.style && me._options.style.colourScheme) {
-                return me._options.style.colourScheme;
-            } else {
-                return null;
-            }
+            this.log.deprecated('getToolColourScheme');
+            return null;
         },
         _getContainerWithClasses: function (containerClasses) {
             var containerDiv = jQuery(

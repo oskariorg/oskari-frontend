@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /* @property container the DIV element */
         this.container = null;
         this.options = options || {};
-        Oskari.makeObservable(this);
         this._baseZIndex = 20000;
         this._init();
         Oskari.makeObservable(this);
@@ -94,7 +93,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             if (!me._popup) {
                 if (!me.options.container) {
-                    jQuery('body').append(popup);
+                    jQuery(Oskari.dom.getRootEl()).append(popup);
                 } else {
                     me.options.container.append(popup);
                 }

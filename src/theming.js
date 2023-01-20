@@ -1,3 +1,5 @@
+import { setGlobalStyle } from './react/theme'
+
 const DEFAULT_THEME = {
     color: {
         icon: '#3c3c3c',
@@ -18,6 +20,7 @@ export const THEMING = {
     setTheme(newTheme = {}) {
         // start with new object so we bust any memoized value for listeners and get a good value for reset as well
         currentTheme = merge({}, DEFAULT_THEME, newTheme);
+        setGlobalStyle(currentTheme);
         listeners.forEach(l => l(currentTheme));
     },
     /**

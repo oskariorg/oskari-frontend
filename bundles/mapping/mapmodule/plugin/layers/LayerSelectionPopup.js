@@ -11,20 +11,6 @@ const BUNDLE_NAME = 'MapModule';
 
 const POPUP_ID = 'LayerSelection';
 
-const THEME_LIGHT = {
-    color: {
-        primary: '#ffffff',
-        accent: '#000000'
-    }
-};
-
-const THEME_DARK = {
-    color: {
-        primary: '#3c3c3c',
-        accent: '#ffffff'
-    }
-};
-
 const Content = styled('div')`
     margin: 12px 24px 24px;
 `;
@@ -41,7 +27,7 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
     );
 };
 
-export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, themeConf, pluginPosition) => {
+export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, pluginPosition, theme) => {
     let position;
     switch (pluginPosition) {
     case 'top right':
@@ -67,13 +53,11 @@ export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadat
         break;
     }
 
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     const options = {
         id: POPUP_ID,
-        theme: {
-            ...themeConf.theme === 'light' ? THEME_LIGHT : THEME_DARK,
-            font: themeConf.font
-        },
-        placement: position
+        placement: position,
+        theme: mapModule.getMapTheme()
     };
 
     const controls = showPopup(
@@ -111,7 +95,6 @@ LayerSelectionPopup.propTypes = {
     layers: PropTypes.arrayOf(PropTypes.object),
     showMetadata: PropTypes.bool.isRequired,
     setLayerVisibility: PropTypes.func.isRequired,
-    theme: PropTypes.string,
     selectStyle: PropTypes.func.isRequired,
     styleSelectable: PropTypes.bool.isRequired
 };

@@ -274,8 +274,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @param {Layer[]} deniedLayers layers that the user can't publish (optional)
          */
         setPublishMode: function (blnEnabled, data, deniedLayers) {
-            var me = this;
-            var map = jQuery('#contentMap');
+            const me = this;
+            const root = jQuery(Oskari.dom.getRootEl());
+            const navigation = root.find('nav');
+            navigation.css('display', blnEnabled ? 'none' : 'block');
+            const mapContainer = Oskari.dom.getMapContainerEl();
+            const extraClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
             data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
@@ -295,9 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 me.getService().setNonPublisherLayers(deniedLayers || this.getNonPublisherLayers());
                 me.getService().removeLayers();
                 me.oskariLang = Oskari.getLang();
-
-                map.addClass('mapPublishMode');
-                map.addClass('published');
+                extraClasses.forEach(cssClass => mapContainer.classList.add(cssClass));
 
                 // hide flyout
                 me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'hide']);
@@ -311,7 +313,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
 
                 // call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
-                me.publisher.render(map);
+                me.publisher.render(root);
             } else {
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
@@ -321,8 +323,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.publisher.destroy();
                 }
                 // first return all needed plugins before adding the layers back
-                map.removeClass('mapPublishMode');
-                map.removeClass('published');
+                extraClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
                 me.getService().setIsActive(false);
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();

@@ -68,7 +68,7 @@ Oskari.registerLocalization(
                 "ScaleBarPlugin": "Mittakaavajana",
                 "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
-                "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
+                "PanButtons": "Palaa alkutilaan",
                 "Portti2Zoombar": "Mittakaavasäädin",
                 "MyLocationPlugin": "Käyttäjän sijaintiin keskittäminen",
                 "ControlsPlugin": "Kartan liikuttaminen hiirellä raahaamalla",
@@ -123,6 +123,9 @@ Oskari.registerLocalization(
                         "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
                         "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
+                },
+                "panButtonsOptions": {
+                    "showArrows": "Kartan liikuttaminen nuolipainikkeilla"
                 }
             },
             "toollayout": {
@@ -171,15 +174,21 @@ Oskari.registerLocalization(
                         "label": "Valitse fontti"
                     },
                     "toolStyles": {
-                        "label": "Työkalujen tyyli",
-                        "default": "Oletustyyli",
                         "rounded-dark": "Pyöristetty (tumma)",
                         "rounded-light": "Pyöristetty (vaalea)",
                         "sharp-dark": "Kulmikas (tumma)",
                         "sharp-light": "Kulmikas (vaalea)",
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
-                    }
+                    },
+                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
+                    "buttonBackgroundColor": "Painikkeiden taustaväri",
+                    "buttonTextColor": "Ikonien väri",
+                    "buttonAccentColor": "Ikonien tehosteväri",
+                    "buttonRounding": "Painikkeiden pyöristys",
+                    "effect": "Efekti",
+                    "3d": "3D",
+                    "presets": "Valmiit tyylimääritykset"
                 },
                 "popup": {
                     "title": "Valitse värimaailma",
@@ -234,7 +243,9 @@ Oskari.registerLocalization(
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä (esim. html-tagit). Poista kielletyt merkit ja yritä uudelleen.",
-                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
+                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ().",
+                "enablePreview": "Virheitä esikatselun avaamisessa. Esikatselu ei täysin vastaa julkaistua karttaa.",
+                "disablePreview": "Virheitä esikatselusta palautumisessa. Sivu kannattaa ladata uudestaan.",
             },
             "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
         },

@@ -4,7 +4,6 @@ import { Collapse, CollapsePanel } from 'oskari-ui';
 import { LegendImage } from './LegendImage';
 import { MetadataIcon } from 'oskari-ui/components/icons';
 
-
 export const MapLegendList = ({ legendList }) => {
     const composeHeader = (title, uuid) => {
         return (

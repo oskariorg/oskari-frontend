@@ -2,14 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
     function () {
     }, {
         index: 4,
-        allowedLocations: ['top left', 'top center', 'top right'],
         lefthanded: 'top right',
         righthanded: 'top left',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
-        ],
 
         groupedSiblings: false,
 

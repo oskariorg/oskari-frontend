@@ -1,4 +1,21 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import olInteractionDragRotate from 'ol/interaction/DragRotate';
+import styled from 'styled-components';
+import { NorthIcon } from 'oskari-ui/components/icons';
+
+const StyledIcon = styled.div.attrs(({ degrees }) => ({
+    style: {
+        transform: `rotate(${degrees}deg)`
+    }
+}))`
+    width: 13px;
+    height: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
 
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
     function (config) {
@@ -11,24 +28,10 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         me._currentRot = null;
         me.previousDegrees = null;
         me._templates = {
-            maprotatortool: jQuery('<div class="mapplugin maprotator"><div class="icon"></div></div>')
-        };
-        me._mobileDefs = {
-            buttons: {
-                'mobile-maprotatetool': {
-                    iconCls: 'mobile-north',
-                    tooltip: '',
-                    show: true,
-                    callback: function () {
-                        me.setRotation(0);
-                    },
-                    sticky: false,
-                    toggleChangeIcon: false
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
+            maprotatortool: jQuery('<div class="mapplugin maprotator"></div>')
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
+        me.inMobileMode = false;
     }, {
         handleEvents: function () {
             var me = this;
@@ -36,12 +39,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this._map.addInteraction(DragRotate);
             var degrees;
             var eventBuilder = Oskari.eventBuilder('map.rotated');
-
-            this.getElement().on('click', function () {
-                if (!me.inLayerToolsEditMode()) {
-                    me.setRotation(0);
-                }
-            });
 
             this._map.on('pointerdrag', function (e) {
                 degrees = me.getRotation();
@@ -71,28 +68,44 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
-            compass.attr('title', this._locale.tooltip.tool);
-
             if (!this.hasUi()) {
                 return null;
             }
             return compass;
         },
         rotateIcon: function (degrees) {
-            if (this.getElement()) {
-                this.getElement().find('.icon').css({ transform: 'rotate(' + degrees + 'deg)' });
+            const el = this.getElement();
+            if (el) {
+                this._renderButton(degrees, null, el);
             }
+        },
+        _renderButton: function (degrees, style, element) {
+            let el = element;
+            if (!element) {
+                el = this.getElement();
+            }
+            if (!el) return;
+
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_maprotator'
+                    title={this._locale.tooltip.tool}
+                    icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
+                    onClick={() => {
+                        if (!this.inLayerToolsEditMode()) {
+                            this.setRotation(0);
+                        }
+                    }}
+                    iconActive={degrees !== 0}
+                    position={this.getLocation()}
+                />,
+                element[0]
+            );
         },
         _createUI: function () {
             this._element = this._createControlElement();
             this.handleEvents();
             this.addToPluginContainer(this._element);
-        },
-        _createMobileUI: function () {
-            var mobileDefs = this.getMobileDefs();
-            this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            this._element = jQuery('.' + mobileDefs.buttons['mobile-maprotatetool'].iconCls);
-            this.handleEvents();
         },
         setRotation: function (deg) {
             // if deg is number then transform degrees to radians otherwise use 0
@@ -124,16 +137,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style || 'default');
+            const styleClass = style || 'rounded-dark';
 
-            var classList = el.attr('class').split(/\s+/);
-            for (var c = 0; c < classList.length; c++) {
-                var className = classList[c];
-                if (className.indexOf('toolstyle-') > -1) {
-                    el.removeClass(className);
-                }
-            }
-            el.addClass(styleClass);
+            this._renderButton(this.getDegrees() || 0, styleClass, el);
         },
         /**
          * Create event handlers.
@@ -162,19 +168,16 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function () {
+        redrawUI: function (mapInMobileMode) {
             var conf = this._config;
-            var isMobile = Oskari.util.isMobile();
+            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if (this.getElement()) {
                 this.teardownUI(true);
             }
-            if (isMobile) {
-                var mobileDefs = this.getMobileDefs();
-                this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                this._createMobileUI();
-            } else {
-                this._createUI();
-            }
+
+            this.inMobileMode = isMobile;
+            this._createUI();
+
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 this.changeToolStyle(conf.toolStyle, this.getElement());
@@ -188,10 +191,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             if (!this.getElement()) {
                 return;
             }
-            var mobileDefs = this.getMobileDefs();
             this.getElement().detach();
             this.removeFromPluginContainer(this.getElement());
-            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         hasUi: function () {
             return !this._config.noUI;
