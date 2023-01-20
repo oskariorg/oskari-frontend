@@ -565,12 +565,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             return url;
         },
-        _getWindowSpecs: function () {
-            const isLandscape = this._isLandscape();
-            const width = isLandscape ? WINDOW_SIZE[1] : WINDOW_SIZE[0];
-            const height = isLandscape ? WINDOW_SIZE[0] : WINDOW_SIZE[1];
-            return `location=1,status=1,scrollbars=1,width=${width},height=${height}`;
-        },
         _getSelectedCustomStyles: function () {
             const customStyles = {};
             const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
@@ -583,18 +577,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             });
             return customStyles;
         },
-        /**
-         * @public @method openURLinWindow
-         *
-         * @param {String} infoUrl
-         * @param {boolean} isLandscape
-         *
-         */
-        openURLinWindow: function (infoUrl) {
-            const wopParm = this._getWindowSpecs();
-            window.open(infoUrl, 'BasicPrintout', wopParm);
-        },
-
         /**
          * @private @method openPostPrint
          * Sends the gathered map data to the server to save them/publish the map.

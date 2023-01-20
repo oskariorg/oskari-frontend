@@ -14,7 +14,8 @@ Oskari.registerLocalization({
             yes: 'Yes',
             no: 'No',
             next: 'Next',
-            previous: 'Previous'
+            previous: 'Previous',
+            print: 'Print'
         },
         messages: {
             confirmDelete: 'Are you sure you wish to delete?'

@@ -29,16 +29,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "src": "../../../../bundles/framework/printout/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/Flyout.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/Tile.js"
-        }, {
-            "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/service/PrintService.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/printout/view/StartView.js"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/printout/view/BasicPrintout.js"
