@@ -5,17 +5,26 @@
  * @param {Function} xScale d3 scale function
  * @param {Number} histoHeight height of histogram area in px
  */
-export function edgeLines (svg, handlesData, xScale, histoHeight) {
+export function edgeLines (svg, handlesData, xScale, yScale, histoHeight) {
     const formatter = Oskari.getNumberFormatter(2);
 
+    const left = handlesData[0].value;
+    const right = handlesData[handlesData.length - 1].value;
     const bounds = svg.selectAll('.edge')
-        .data([handlesData[0], handlesData[handlesData.length - 1]]);
+        .data([left, right]);
+
+    const yAxis = d3.axisLeft(yScale)
+        .ticks(4);
+    svg.append('g')
+        .classed('edge', true)
+        .attr('transform', `translate(${xScale(left)} 0)`)
+        .call(yAxis);
 
     const boundsEnter = bounds
         .enter()
         .append('g')
         .classed('edge', true)
-        .attr('transform', (d) => `translate(${xScale(d.value)} 0)`);
+        .attr('transform', (d) => `translate(${xScale(d)} 0)`);
 
     boundsEnter
         .append('path')
@@ -27,5 +36,5 @@ export function edgeLines (svg, handlesData, xScale, histoHeight) {
         .attr('dy', '1em')
         .attr('x', (d, i) => i ? -3 : 3)
         .attr('text-anchor', (d, i) => i ? 'end' : 'start')
-        .text((d) => formatter.format(d.value));
+        .text((d) => formatter.format(d));
 }
