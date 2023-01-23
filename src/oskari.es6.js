@@ -6,6 +6,7 @@
 import Sequence from './counter.es6.js';
 import Logger from './logger.es6.js';
 import pkg from '../package.json';
+import { DOMHelper } from './oskari.dom.js';
 
 let _markers = [];
 
@@ -53,6 +54,8 @@ const Oskari = {
     getMarkers () {
         return _markers;
     },
+    // from oskari.dom
+    dom: DOMHelper,
     getDefaultMarker () {
         return (_markers.length >= 3) ? _markers[2] : _markers[0];
     },

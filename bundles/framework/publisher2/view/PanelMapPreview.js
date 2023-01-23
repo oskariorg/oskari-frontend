@@ -164,61 +164,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @private @method _adjustDataContainer
          * This horrific thing is what sets the left panel components, container and map size.
          */
-        _adjustDataContainer: function (isStopping) {
-            var me = this,
-                selectedSize = me._getSelectedMapSize(),
-                size = selectedSize.valid ? selectedSize : me._getActiveMapSize(),
-                content = jQuery('#contentMap'),
-                container = content.find('.row-fluid'),
-                dataContainer = container.find('.oskariui-left'),
-                mapContainer = container.find('.oskariui-center'),
-                mapDiv = me.mapmodule.getMapEl(),
-                totalWidth = size.width,
-                totalHeight = size.height,
-                leftPanelWidth = me._calculateLeftComponentsWidth(),
-                hasLeftComps = leftPanelWidth > 0;
-
-            if (totalWidth === null || totalWidth === undefined || totalWidth === '') {
-                if (!container.length) {
-                    // check if we actually have .row-fluid structure, fallback to mapmodule as container
-                    container = me.mapmodule.getMapEl();
-                }
-                // Ugly hack, container has a nasty habit of overflowing the viewport...
-                totalWidth = jQuery(window).width() - container.offset().left;
-            }
-            if (totalHeight === null || totalHeight === undefined || totalHeight === '') {
-                totalHeight = jQuery(window).height();
-            }
-
-            if (hasLeftComps) {
-                dataContainer.removeClass('oskari-closed');
-            } else {
-                dataContainer.addClass('oskari-closed');
-            }
-
-            let mapWidth = totalWidth ? (totalWidth - leftPanelWidth) + 'px' : '';
-            let mapHeight = totalHeight ? totalHeight + 'px' : '';
-
-            leftPanelWidth = leftPanelWidth + 'px';
-            dataContainer.css({
-                'width': leftPanelWidth,
-                'height': totalHeight
-            });
-            if (hasLeftComps) {
-                // this is usually statsgrid
-                dataContainer.children().height(mapHeight);
-            }
-
-            // currently we need to set the map width and height by pixel even when we want to "fill" size for map
-            // after https://github.com/oskariorg/oskari-frontend/pull/1768 we could just "unset" the values here with an empty string (undefined value as param will result in getter being called)
-            mapContainer.width(mapWidth);
-            mapContainer.height(mapHeight);
-
-            mapDiv.width(mapWidth);
-            mapDiv.height(mapHeight);
+        _adjustDataContainer: function () {
+            const selectedSize = this._getSelectedMapSize();
+            const size = selectedSize.valid ? selectedSize : this._getActiveMapSize();
+            const mapDiv = this.mapmodule.getMapEl();
+            mapDiv.width(size.width || '100%');
+            mapDiv.height(size.height || '100%');
 
             // notify map module that size has changed
-            me._updateMapModuleSize(isStopping);
+            this._updateMapModuleSize();
         },
 
         /**
@@ -228,12 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         _updateMapModuleSize: function (isStopping) {
             // turn off event handlers in order to avoid consecutive calls to mapsizechanged
             this._unregisterEventHandlers();
-            var me = this;
-            if (me.sandbox.hasHandler('MapFull.MapSizeUpdateRequest')) {
-                me.sandbox.request(me.instance, Oskari.requestBuilder('MapFull.MapSizeUpdateRequest')());
-            }
-
-            me._updateMapMode();
+            this._updateMapMode();
 
             // turn event handlers back on.
             if (!isStopping) {
@@ -246,11 +195,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * Update map mode
         */
         _updateMapMode: function () {
-            var me = this,
-                size = me._getSelectedMapSize();
+            const size = this._getSelectedMapSize();
 
-            if (me.modeChangedCB) {
-                me.modeChangedCB(size.option.id);
+            if (typeof this.modeChangedCB === 'function') {
+                this.modeChangedCB(size.option.id);
             }
         },
         /**

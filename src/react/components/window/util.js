@@ -18,8 +18,8 @@ export const getAvailableHeight = () => {
         window.innerHeight;
 };
 
-const DEFAULT_WIDTH = 50;
-const DEFAULT_HEIGHT = 30;
+const DEFAULT_WIDTH = 700;
+const DEFAULT_HEIGHT = 700;
 const BORDER_MARGIN = 10;
 export const OUTOFSCREEN_CLASSNAME = 'outofviewport';
 
@@ -170,17 +170,21 @@ const getPlacementXY = (width, height, placement) => {
 };
 
 export const getPositionForCentering = (elementRef, placement) => {
-    if (!elementRef) {
-        throw new TypeError('Pass React.useRef() for the element to center');
+    // ref.current is used for React.useRef(), element is just plain old "div" or similar
+    const isReactRef = !!(elementRef && elementRef.current);
+    const isHtmlEl = elementRef instanceof Element;
+    if (!isReactRef && !isHtmlEl) {
+        throw new TypeError('Pass React.useRef() or HTMLElement for the element to center');
     }
-    const element = elementRef.current;
+    const element = elementRef.current || elementRef;
     let width = DEFAULT_WIDTH;
     let height = DEFAULT_HEIGHT;
 
     if (element) {
         const bounds = element.getBoundingClientRect();
-        width = bounds.width;
-        height = bounds.height;
+        // breaks if element is 0x0 so use defaults instead
+        width = bounds.width || DEFAULT_WIDTH;
+        height = bounds.height || DEFAULT_HEIGHT;
     }
     return getPlacementXY(width, height, placement);
 };

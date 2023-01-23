@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 }
                 // Request pdf
                 if (!me.printout) {
-                    var map = jQuery('#contentMap');
+                    var map = jQuery(Oskari.dom.getRootEl());
                     me.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
                     me.printout.render(map);
                     me.printout.setEnabled(false);
@@ -347,16 +347,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            const me = this;
-            const map = jQuery('#contentMap');
+            const root = jQuery(Oskari.dom.getRootEl());
+            const navigation = root.find('nav');
+            navigation.css('display', blnEnabled ? 'none' : 'block');
 
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
-                map.addClass('mapPrintoutMode');
-                me.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
 
                 this.handler?.getController()?.showPanel();
@@ -372,11 +371,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
                 this.sandbox.request(this, builder());
                 this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
-            }
-            // resize map to fit screen with expanded/normal sidebar
-            var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
-            if (reqBuilder) {
-                me.sandbox.request(me, reqBuilder(true));
             }
         },
         /**

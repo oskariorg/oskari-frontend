@@ -33,10 +33,10 @@ const Form = ({
         if (error) {
             return;
         }
-        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, onBoundChange, fractionDigits);
+        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange);
     });
     const { activeIndicator: { classification }, seriesStats, controller } = state;
-    const { method, fractionDigits } = classification;
+    const { method, fractionDigits, base } = classification;
     const { methods } = editOptions;
     const { groups = [], bounds, error } = classifiedDataset;
 
@@ -44,7 +44,13 @@ const Form = ({
     const dataAsList = Object.values(seriesStats ? seriesStats.serie : data);
     const onMethodChange = method => controller.updateClassification('method', method);
     const onBoundChange = (manualBounds, index) => {
-        setActiveBound(index);
+        if (index !== activeBound) {
+            setActiveBound(index);
+        }
+        if (bounds[index] === manualBounds[index]) {
+            // nothing to update
+            return;
+        }
         const updated = { manualBounds };
         if (method !== 'manual') {
             updated.method = 'manual';

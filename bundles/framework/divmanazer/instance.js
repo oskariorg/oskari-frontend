@@ -1,3 +1,4 @@
+import { getNavigationDimensions, getPositionForCentering, PLACEMENTS } from 'oskari-ui/components/window';
 /**
  * @class Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance
  *
@@ -95,7 +96,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             me.sandbox = sandbox;
 
-            me.flyoutContainer = jQuery(document.body);
+            // me.flyoutContainer = jQuery(document.body);
+            me.flyoutContainer = jQuery(Oskari.dom.getRootEl());
 
             me.tileContainer = jQuery(me.menubarContainerId);
             me.tileContainer.addClass('oskari-tile-container');
@@ -181,11 +183,28 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             this.sandbox.unregister(this);
             this.started = false;
         },
-        getMapdivOffset: function () {
-            var mapdiv = jQuery('#mapdiv');
+        // TODO: rename "getDefaultFlyoutPosition()"?
+        getMapdivOffset: function (el) {
+            const dimensions = getNavigationDimensions();
+            let left = 30;
+            let top = 30;
+            if (dimensions.placement === PLACEMENTS.LEFT) {
+                // menu on left side -> make flyouts open next to it
+                left = dimensions.width;
+            }
+            else if (dimensions.placement === PLACEMENTS.TOP) {
+                // menu on top -> make flyouts open under
+                top = dimensions.height;
+            }
+            else if (el) {
+                // flyouts usually don't have their content rendered when this is called, so it doesn't really work :(
+                const { x, y } = getPositionForCentering(el);
+                top = y;
+                left = x;
+            }
             return {
-                'top': mapdiv.offset().top,
-                'left': mapdiv.offset().left
+                top,
+                left
             };
         },
         /**
@@ -445,12 +464,19 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             var me = this;
             const { top, left } = this.getFlyoutDefaultPositions().attach;
             var flyoutOpts = {
+                container: this.flyoutContainer,
                 isExtension: true,
                 top: parseInt(top),
                 left: parseInt(left)
             };
             const flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', plugin.getTitle(), flyoutOpts);
             const elem = flyout.getElement();
+            /*
+            // try to adjust position if nav is not on left
+            // problem: content isn't rendered so placement is off at this point -> commented out for now
+            const newCoords = this.getFlyoutDefaultPositions(elem[0]).attach;
+            flyout.move(newCoords.left, newCoords.top);
+            */
 
             const toolage = {
                 attach: elem.find('.oskari-flyouttool-attach'),
@@ -759,15 +785,16 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             this.sandbox.notifyAll(evt, true);
         },
-        getFlyoutDefaultPositions: function () {
+        getFlyoutDefaultPositions: function (el) {
+            const { left, top } = this.getMapdivOffset(el);
             return {
                 detach: {
                     left: '212px',
                     top: '50px'
                 },
                 attach: {
-                    left: this.getMapdivOffset().left,
-                    top: '30px'
+                    left: left,
+                    top: top
                 }
             };
         },
@@ -965,7 +992,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 flyout.bringToTop();
 
                 let { left, top } = extensionInfo.viewState;
-                const { attach, detach } = this.getFlyoutDefaultPositions();
+                const { attach, detach } = this.getFlyoutDefaultPositions(flyout.getEl && flyout.getEl());
                 if ((!left || !top) || (left === attach.left && top === attach.top)) {
                     flyout.move(parseInt(detach.left), parseInt(detach.top));
                 }
@@ -1206,22 +1233,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                         );
                     }
                 }
-            }
-        },
-
-        /**
-         * @method _toggleMapWindowFullScreen
-         * Sends a request to toggle between the normal and the full screen view
-         * of the map window.
-         */
-        _toggleMapWindowFullScreen: function () {
-            var me = this,
-                reqBuilder = Oskari.requestBuilder(
-                    'MapFull.MapWindowFullScreenRequest'
-                );
-
-            if (reqBuilder) {
-                me.sandbox.request(me.getName(), reqBuilder());
             }
         },
 

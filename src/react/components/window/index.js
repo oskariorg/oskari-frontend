@@ -6,6 +6,10 @@ import { Banner } from './Banner';
 import { SidePanel } from './SidePanel';
 import { REGISTER, TYPE } from './register';
 import { ThemeProvider } from '../../util/contexts';
+// expose util function for centering elements
+export { getPositionForCentering } from './util';
+// expose monitor function for detecting size changes
+export { monitorResize, unmonitorResize } from './WindowWatcher';
 
 /* ************************************************
  * Note! The API is not finalized and can change unexpectedly!!
@@ -245,4 +249,40 @@ export const showBanner = (content, onClose, options = {}) => {
         close: removeWindow,
         bringToTop
     };
-}
+};
+
+export const getNavigationDimensions = () => {
+    let nav = [...Oskari.dom.getRootEl().children].find(c => c.localName === 'nav');
+    if (!nav) {
+        return {
+            top: 0,
+            left: 0,
+            width: 0,
+            height: 0,
+            right: 0,
+            bottom: 0
+        };
+    }
+    const values = {
+        top: nav.offsetTop,
+        left: nav.offsetLeft,
+        width: nav.clientWidth,
+        height: nav.clientHeight,
+        right: nav.offsetLeft + nav.clientWidth,
+        bottom: nav.offsetTop + nav.clientHeight
+    }
+    let placement = PLACEMENTS.LEFT;
+    if (values.left > 0) {
+        placement = PLACEMENTS.RIGHT;
+    } else if (values.width > values.height) {
+        if (values.top > 0) {
+            placement = PLACEMENTS.BOTTOM;
+        } else {
+            placement = PLACEMENTS.TOP;
+        }
+    }
+    return {
+        ...values,
+        placement
+    };
+};
