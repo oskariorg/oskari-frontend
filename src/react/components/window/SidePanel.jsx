@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Message, Confirm, Spin } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { Message, Confirm } from 'oskari-ui';
 import { CloseCircleFilled } from '@ant-design/icons';
 
 const BUNDLE_KEY = 'oskariui';
@@ -12,10 +11,10 @@ const StyledPanel = styled('div')`
     position: absolute;
     height: 100%;
     top: 0;
-    left: 0;
+    left: 40px;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
-    width: 100%;
+    width: 252px;
 
     div.header {
         background-color: #FDF8D9;
@@ -36,7 +35,7 @@ const FloatingIcon = styled('div')`
     float: right;
 `;
 
-const Header = LocaleConsumer(({ title, onClose, confirmExit }) => {
+const Header = ({ title, onClose, confirmExit }) => {
     const iconProps = {};
     if (!confirmExit) {
         iconProps.onClick = onClose;
@@ -57,9 +56,9 @@ const Header = LocaleConsumer(({ title, onClose, confirmExit }) => {
                 <h3>{title}</h3>
             )}
         </div>);
-});
+};
 
-export const SidePanel = ({ title, loading = false, onClose, children }) => {
+export const SidePanel = ({ title, onClose, children }) => {
     return (
         <StyledPanel>
             <Header title={title} onClose={onClose} />

@@ -1,8 +1,6 @@
-import React from 'react';
 import { Messaging } from 'oskari-ui/util';
 import { showTooManyLayersPopup } from './view/TooManyLayersPopup';
 import { PrintoutHandler } from './PrintoutHandler';
-import ReactDOM from 'react-dom';
 
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
@@ -161,7 +159,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
             // sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
-            me._createUi();
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
@@ -213,7 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 }
 
                 var isOpen = event.getViewState() !== 'close';
-                if (isOpen) {
+                if (isOpen && this.handler) {
                     this.handler?.getController()?.updatePanel();
                 }
             },
@@ -244,13 +241,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (tileData && layerId) {
                     this.tileData[layerId] = tileData;
                 }
-            },
+            }
             /**
              * Bundles could plot directly via this event
              * @method Printout.PrintWithoutUIEvent
              * @param {Object} event
              */
-            'Printout.PrintWithoutUIEvent': function (event) {
+            /* 'Printout.PrintWithoutUIEvent': function (event) {
                 var me = this,
                     printParams = event.getPrintParams(),
                     geoJson = event.getGeoJsonData();
@@ -266,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                     me.printout.hide();
                 }
                 me.printout.printMap(printParams);
-            }
+            } */
         },
 
         /**
@@ -274,9 +271,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * Implements BundleInstance protocol stop method
          */
         stop: function () {
-            if (this.printout) {
-                this.printout.destroy();
-                this.printout = undefined;
+            jQuery('#contentMap').removeClass('mapPrintoutMode');
+            if (this.handler) {
+                this.handler.closePanel();
             }
 
             this.geoJson = null;
@@ -335,6 +332,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         getDescription: function () {
             return this.getLocalization('desc');
         },
+        startExtension: function () {
+
+        },
+        stopExtension: function () {
+
+        },
         /**
          * @method setPublishMode
          * Transform the map view to printout mode if parameter is true and back to normal if false.
@@ -355,20 +358,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 map.addClass('mapPrintoutMode');
                 me.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
-                // proceed with printout view
-                /* this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
-                this.printout.render(map); */
-                const container = jQuery('<div class="basic_printout" />')
-                map.append(container);
 
-                this.handler?.getController()?.showPanel(container);
-                /* if (this.state && this.state.form) {
-                    this.printout.setState(this.state.form);
-                }
-                this.printout.show();
-                this.printout.setEnabled(true);
-                this.printout.refresh(false);
-                this.printout.refresh(true); */
+                this.handler?.getController()?.showPanel();
                 // reset and disable map rotation
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
@@ -377,11 +368,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (me.sandbox._mapMode === 'mapPrintoutMode') {
                     delete me.sandbox._mapMode;
                 }
-                /* if (this.printout) {
-                    this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-                    this.printout.setEnabled(false);
-                    this.printout.destroy();
-                } */
                 this.handler.getController().closePanel();
                 var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
                 this.sandbox.request(this, builder());

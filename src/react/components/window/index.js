@@ -3,6 +3,7 @@ import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 import { Banner } from './Banner';
+import { SidePanel } from './SidePanel';
 import { REGISTER, TYPE } from './register';
 import { ThemeProvider } from '../../util/contexts';
 
@@ -184,7 +185,31 @@ export const showFlyout = (title, content, onClose, options = {}) => {
             </ThemeProvider>, element);
     };
     render(title, content);
-    return  {
+    return {
+        update: render,
+        close: removeWindow,
+        bringToTop
+    };
+};
+
+export const showSidePanel = (title, content, onClose, options = {}) => {
+    validate(options, TYPE.SIDE_PANEL);
+    const element = createTmpContainer();
+    const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
+    const bringToTop = createBringToTop(element);
+    const render = (title, content) => {
+        ReactDOM.render(
+            <ThemeProvider>
+                <SidePanel title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>
+                    {content}
+                </SidePanel>
+            </ThemeProvider>,
+            element
+        );
+    }
+    render(title, content);
+    return {
         update: render,
         close: removeWindow,
         bringToTop

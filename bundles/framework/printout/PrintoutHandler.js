@@ -1,13 +1,16 @@
 import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import ReactDOM from 'react-dom';
+import { Message } from 'oskari-ui';
 import { PrintoutPanel } from './view/PrintoutPanel';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, PAGE_OPTIONS, SCALE_OPTIONS, TIME_OPTION, WINDOW_SIZE, PARAMS } from './constants';
+import { showSidePanel } from 'oskari-ui/components/window';
+import { SIZE_OPTIONS, FORMAT_OPTIONS, PARAMS } from './constants';
+
+const BUNDLE_KEY = 'Printout';
 
 class UIHandler extends StateHandler {
     constructor (instance) {
         super();
-        this.instance = instance,
+        this.instance = instance;
         this.sandbox = Oskari.getSandbox();
         this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.setState({
@@ -17,47 +20,70 @@ class UIHandler extends StateHandler {
             showScale: true,
             showDate: true,
             previewImage: null,
+            scaleType: 'map',
+            scale: null,
+            showTimeSeriesDate: false,
             isMapStateChanged: false
         });
         this.sidePanel = null;
         this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
         this.eventHandlers = this.createEventHandlers();
+        this.scaleOptions = this.instance.conf?.scales || this.mapModule?.getScaleArray()?.slice().reverse();
     };
 
-    showPanel (container) {
-        this.sidePanel = container;
-        ReactDOM.render(
-            <PrintoutPanel
-                controller={this.controller}
-                state={this.state}
-            />,
-            this.sidePanel[0]
-        );
+    showPanel () {
+        if (!this.sidePanel) {
+            this.sidePanel = showSidePanel(
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.title' />,
+                <PrintoutPanel
+                    controller={this.controller}
+                    state={this.state}
+                    scaleSelection={this.instance.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />,
+                () => this.closePanel()
+            );
+            this.sidePanel.bringToTop();
+        }
     }
 
     updatePanel () {
         if (this.sidePanel) {
-            ReactDOM.render(
+            this.sidePanel.update(
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.title' />,
                 <PrintoutPanel
                     controller={this.controller}
                     state={this.state}
-                />,
-                this.sidePanel[0]
+                    scaleSelection={this.instance.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />
             );
         }
     }
 
-    getName() {
+    getName () {
         return 'Printout';
     }
 
     closePanel () {
         this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
-        ReactDOM.unmountComponentAtNode(this.sidePanel[0]);
-        this.sidePanel.remove();
-        this.sidePanel = null;
+        if (this.sidePanel) {
+            this.sidePanel.close();
+            this.sidePanel = null;
+            jQuery('#contentMap').removeClass('mapPrintoutMode');
+            const builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+            this.sandbox.request(this, builder());
+            this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
+            // resize map to fit screen with expanded/normal sidebar
+            const reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
+            if (reqBuilder) {
+                this.sandbox.request(this.instance, reqBuilder(true));
+            }
+        }
     }
-    
+
     updateField (field, value) {
         this.updateState({
             [field]: value
@@ -85,7 +111,7 @@ class UIHandler extends StateHandler {
 
     printMap (selections) {
         const { maplinkArgs, customStyles, ...params } = selections || this.gatherParams();
-        if (this.isTimeSeriesActive()) {
+        if (this.state.showTimeSeriesDate) {
             params[PARAMS.TIME] = this.timeseriesPlugin.getCurrentTime();
             if (params.pageTimeSeriesTime) {
                 params[PARAMS.FORMATTED_TIME] = this.timeseriesPlugin.getCurrentTimeFormatted();
@@ -105,11 +131,11 @@ class UIHandler extends StateHandler {
 
         let resolution = this.sandbox.getMap().getResolution();
 
-        const scale = this.state.showScale;
+        const scale = this.state.scale;
         let scaleText = '';
 
-        if (this.instance.conf.scaleSelection && this.state.showScale) {
-            resolution = this.mapmodule.getExactResolution(scale);
+        if (this.instance.conf.scaleSelection && this.state.scaleType === 'configured') {
+            resolution = this.mapModule.getExactResolution(scale);
             scaleText = '1:' + scale;
         }
         const pageTitle = encodeURIComponent(this.state.mapTitle);
@@ -141,7 +167,7 @@ class UIHandler extends StateHandler {
         if (format) {
             fileName += '.' + format.name;
         }
-        
+
         this.updateState({
             loading: true
         });
@@ -288,7 +314,8 @@ const wrapped = controllerMixin(UIHandler, [
     'showPanel',
     'updateField',
     'closePanel',
-    'printMap'
+    'printMap',
+    'updatePanel'
 ]);
 
 export { wrapped as PrintoutHandler };

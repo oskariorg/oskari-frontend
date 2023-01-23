@@ -1,12 +1,13 @@
 import React from 'react';
-import { SidePanel } from 'oskari-ui/components/SidePanel';
-import { Collapse, CollapsePanel, Message, Radio, TextInput, Checkbox } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, Radio, TextInput, Checkbox, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, PAGE_OPTIONS, SCALE_OPTIONS, TIME_OPTION, WINDOW_SIZE, PARAMS } from '../constants';
+import { SIZE_OPTIONS, FORMAT_OPTIONS, SCALE_OPTIONS } from '../constants';
 
 const BUNDLE_KEY = 'Printout';
+
+const Content = styled('div')``;
 
 const StyledPanelHeader = styled('div')`
     display: inline-flex;
@@ -65,13 +66,9 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
     );
 }
 
-export const PrintoutPanel = ({ controller, state }) => {
+export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions, isTimeSeries }) => {
     return (
-        <SidePanel
-            onClose={() => controller.closePanel()}
-            title={<Message bundleKey={BUNDLE_KEY} messageKey='BasicView.title' />}
-            loading={state.loading}
-        >
+        <Content>
             <Collapse>
                 <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />}>
                     <RadioGroup
@@ -122,8 +119,43 @@ export const PrintoutPanel = ({ controller, state }) => {
                         >
                             <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
                         </Checkbox>
+                        {isTimeSeries && (
+                            <Checkbox
+                                checked={state.showTimeSeriesDate}
+                                onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
+                                disabled={state.format !== 'application/pdf'}
+                            >
+                                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageTimeSeriesTime.label' />
+                            </Checkbox>
+                        )}
                     </Checkboxes>
                 </CollapsePanel>
+                {scaleSelection && (
+                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />}>
+                        <RadioGroup
+                            value={state.scaleType}
+                            onChange={(e) => controller.updateField('scaleType', e.target.value)}
+                        >
+                            {SCALE_OPTIONS?.map(option => (
+                                <Radio.Choice value={option} key={option}>
+                                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.scale.${option}`} />
+                                </Radio.Choice>
+                            ))}
+                            {state.scaleType === 'configured' && (
+                                <Select
+                                    value={state.scale}
+                                    onChange={(val) => controller.updateField('scale', val)}
+                                >
+                                    {scaleOptions?.map(option => (
+                                        <Option value={option} key={option}>
+                                            {`1:${option}`}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            )}
+                        </RadioGroup>
+                    </CollapsePanel>
+                )}
                 <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />}>
                     <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
@@ -133,6 +165,6 @@ export const PrintoutPanel = ({ controller, state }) => {
                 <SecondaryButton onClick={() => controller.closePanel()} type='cancel' />
                 <PrimaryButton onClick={() => controller.printMap()} type='print' />
             </Actions>
-        </SidePanel>
+        </Content>
     );
 };
