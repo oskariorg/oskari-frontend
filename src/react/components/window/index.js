@@ -199,10 +199,17 @@ export const showFlyout = (title, content, onClose, options = {}) => {
 export const showSidePanel = (title, content, onClose, options = {}) => {
     validate(options, TYPE.SIDE_PANEL);
     const element = createTmpContainer();
+    const root = jQuery(Oskari.dom.getRootEl());
+
     const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, createRemoveFn(element, onClose));
-    const removeWindow = () => REGISTER.clear(key);
+    const navigation = root.find('nav');
+    const removeWindow = () => {
+        REGISTER.clear(key);
+        navigation.css('display', 'block');
+    }
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
+        navigation.css('display', 'none');
         ReactDOM.render(
             <ThemeProvider>
                 <SidePanel title={title} onClose={removeWindow} bringToTop={bringToTop} options={options}>

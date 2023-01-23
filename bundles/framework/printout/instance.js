@@ -271,7 +271,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * Implements BundleInstance protocol stop method
          */
         stop: function () {
-            jQuery('#contentMap').removeClass('mapPrintoutMode');
             if (this.handler) {
                 this.handler.closePanel();
             }
@@ -347,15 +346,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            const root = jQuery(Oskari.dom.getRootEl());
-            const navigation = root.find('nav');
-            navigation.css('display', blnEnabled ? 'none' : 'block');
-
             // trigger an event letting other bundles know we require the whole UI
-            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+            const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
+                this.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
 
                 this.handler?.getController()?.showPanel();
@@ -363,26 +359,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
             } else {
-                map.removeClass('mapPrintoutMode');
-                if (me.sandbox._mapMode === 'mapPrintoutMode') {
-                    delete me.sandbox._mapMode;
-                }
-                this.handler.getController().closePanel();
-                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-                this.sandbox.request(this, builder());
-                this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
-            }
-        },
-        /**
-         *  Send plotout canceled event
-         */
-        sendCanceledEvent: function (state) {
-            var me = this;
-            var eventBuilder = Oskari.eventBuilder('Printout.PrintCanceledEvent');
-
-            if (eventBuilder) {
-                var event = eventBuilder(state);
-                me.sandbox.notifyAll(event);
+                this.handler?.getController()?.closePanel();
             }
         },
         /**
@@ -402,11 +379,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         getState: function () {
             var state = this.state || {};
-
-            if (this.printout) {
-                var formState = this.printout.getState();
-                state.form = formState;
-            }
 
             return state;
         },

@@ -8,13 +8,14 @@ const BUNDLE_KEY = 'oskariui';
 
 const StyledPanel = styled('div')`
     background: #FFF;
-    position: absolute;
+    position: relative;
     height: 100%;
     top: 0;
-    left: 40px;
     /* sidebar has 3, we want to open it on top of this */
     z-index: 2;
     width: 252px;
+    display: flex;
+    flex-direction: column;
 
     div.header {
         background-color: #FDF8D9;

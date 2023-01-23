@@ -44,7 +44,6 @@ class UIHandler extends StateHandler {
                 />,
                 () => this.closePanel()
             );
-            this.sidePanel.bringToTop();
         }
     }
 
@@ -69,18 +68,15 @@ class UIHandler extends StateHandler {
 
     closePanel () {
         this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
+        if (this.sandbox._mapMode === 'mapPrintoutMode') {
+            delete this.sandbox._mapMode;
+        }
         if (this.sidePanel) {
             this.sidePanel.close();
             this.sidePanel = null;
-            jQuery('#contentMap').removeClass('mapPrintoutMode');
             const builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-            this.sandbox.request(this, builder());
+            this.sandbox.request(this.instance, builder());
             this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
-            // resize map to fit screen with expanded/normal sidebar
-            const reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
-            if (reqBuilder) {
-                this.sandbox.request(this.instance, reqBuilder(true));
-            }
         }
     }
 
