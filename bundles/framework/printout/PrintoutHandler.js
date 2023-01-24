@@ -85,7 +85,7 @@ class UIHandler extends StateHandler {
             [field]: value
         });
         if (field === 'size') {
-            this.refreshPreview();
+            this.refreshPreview(true);
         } else {
             this.updatePanel();
         }

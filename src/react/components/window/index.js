@@ -200,13 +200,29 @@ export const showSidePanel = (title, content, onClose, options = {}) => {
     validate(options, TYPE.SIDE_PANEL);
     const element = createTmpContainer();
     const root = jQuery(Oskari.dom.getRootEl());
+    root.prepend(element);
 
-    const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, createRemoveFn(element, onClose));
+    const removeFn = (element, onClose) => {
+        let alreadyRemoved = false;
+        const remove = () => {
+            if (alreadyRemoved) return;
+            unmountComponentAtNode(element);
+            element.remove();
+            alreadyRemoved = true;
+            if (typeof onClose === 'function') {
+                onClose();
+            }
+        };
+        return remove;
+    };
+
+    const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, removeFn(element, onClose));
     const navigation = root.find('nav');
     const removeWindow = () => {
         REGISTER.clear(key);
         navigation.css('display', 'block');
     }
+
     const bringToTop = createBringToTop(element);
     const render = (title, content) => {
         navigation.css('display', 'none');
