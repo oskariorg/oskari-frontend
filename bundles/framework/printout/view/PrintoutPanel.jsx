@@ -1,9 +1,10 @@
 import React from 'react';
-import { Collapse, CollapsePanel, Message, Radio, TextInput, Checkbox, Select, Option } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, SCALE_OPTIONS } from '../constants';
+import { SIZE_OPTIONS, SCALE_OPTIONS } from '../constants';
+import { AdditionalSettings } from './AdditionalSettings';
 
 const BUNDLE_KEY = 'Printout';
 
@@ -19,19 +20,8 @@ const RadioGroup = styled(Radio.Group)`
     flex-direction: column;
 `;
 
-const MapTitle = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
 const Info = styled('div')`
     margin-left: 10px;
-`;
-
-const Checkboxes = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin-top: 5px;
 `;
 
 const PreviewImage = styled('img')`
@@ -83,52 +73,7 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                     </RadioGroup>
                 </CollapsePanel>
                 <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />}>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.format.label' />
-                    <RadioGroup
-                        value={state.format}
-                        onChange={(e) => controller.updateField('format', e.target.value)}
-                    >
-                        {FORMAT_OPTIONS?.map(option => (
-                            <Radio.Choice value={option.mime} key={option.mime}>
-                                <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.format.options.${option.name}`} />
-                            </Radio.Choice>
-                        ))}
-                    </RadioGroup>
-                    <MapTitle>
-                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.label' />
-                        <TextInput
-                            type='text'
-                            placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.content.mapTitle.placeholder')}
-                            value={state.mapTitle}
-                            onChange={(e) => controller.updateField('mapTitle', e.target.value)}
-                            disabled={state.format !== 'application/pdf'}
-                        />
-                    </MapTitle>
-                    <Checkboxes>
-                        <Checkbox
-                            checked={state.showScale}
-                            onChange={(e) => controller.updateField('showScale', e.target.checked)}
-                            disabled={state.format !== 'application/pdf'}
-                        >
-                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageScale.label' />
-                        </Checkbox>
-                        <Checkbox
-                            checked={state.showDate}
-                            onChange={(e) => controller.updateField('showDate', e.target.checked)}
-                            disabled={state.format !== 'application/pdf'}
-                        >
-                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
-                        </Checkbox>
-                        {isTimeSeries && (
-                            <Checkbox
-                                checked={state.showTimeSeriesDate}
-                                onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
-                                disabled={state.format !== 'application/pdf'}
-                            >
-                                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageTimeSeriesTime.label' />
-                            </Checkbox>
-                        )}
-                    </Checkboxes>
+                    <AdditionalSettings state={state} controller={controller} isTimeSeries={isTimeSeries} />
                 </CollapsePanel>
                 {scaleSelection && (
                     <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />}>

@@ -82,6 +82,23 @@ Oskari.registerLocalization(
                     "label": "Näytä aikasarjan ajanhetki",
                     "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
                     "printLabel": "Aikasarjan ajanhetki"
+                },
+                "coordinates": {
+                    "label": "Näytä koordinaatit",
+                    "position": {
+                        "label": "Sijainti",
+                        "options": {
+                            "center": "Kartan keskipiste",
+                            "corners": "Nurkkapisteet"
+                        }
+                    },
+                    "projection": {
+                        "label": "Projektio",
+                        "options": {
+                            "map": "Kartan projektio",
+                            "EPSG:4326": "WGS84"
+                        }
+                    }
                 }
             },
             "help": "Ohje",
