@@ -27,104 +27,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._mapmodule = mapmodule || Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         me._sandbox = sandbox;
         me._instance = instance;
-        me._messageDialog = null;
         me._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
         me._defaultLocation = 'top right';
         me._index = 60;
         me._name = 'CoordinateToolPlugin';
-        me._toolOpen = false;
-        me._showMouseCoordinates = false;
-        me._showReverseGeocode = this._config ? this._config.isReverseGeocode : false;
-        me._popup = null;
-        me._latInput = null;
-        me._lonInput = null;
-        me._latLabel = null;
-        me._lonLabel = null;
-        me._centerToCoordsBtn = null;
-        me._reverseGeocodeLabel = null;
-        me._showReverseGeocodeCheckbox = false;
-        me._dialog = null;
-        me._projectionSelect = null;
-        me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-        me._reverseGeocodeNotImplementedError = false;
-        me._popupContent = null;
         me._templates = {
-            coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
-            popupContent: jQuery(
-                '<div>' +
-                '   <div class="coordinatetool__popup__content"></div>' +
-                '   <div class="srs"></div>' +
-                '   <div class="lonlat-input-container">' +
-                '       <div class="margintop">' +
-                '           <div class="coordinate-label floatleft lat-label"></div>' +
-                '           <div class="floatleft"><input type="text" class="lat-input"></input></div>' +
-                '           <div class="clear"></div>' +
-                '           <div class="coordinate-lat-container coordinate-container"></div>' +
-                '       </div>' +
-                '       <div class="margintop">' +
-                '           <div class="coordinate-label floatleft lon-label"></div>' +
-                '           <div class="floatleft"><input type="text" class="lon-input"></input></div>' +
-                '           <div class="clear"></div>' +
-                '           <div class="coordinate-lon-container coordinate-container"></div>' +
-                '       </div>' +
-                '       <div class="margintop mousecoordinates-div"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div>' +
-                '   </div>' +
-
-                '   <div class="margintop reverseGeocodeContainer">' +
-                '   </div>' +
-                '   <div class="margintop coordinatedisplay-emergencycall" style="display:none;">' +
-                '       <span class="coordinatedisplay-emergencycall-label"></span>' +
-                '       <span class="coordinatedisplay-emergencycall degreesY"></span>&deg;' +
-                '       <span class="coordinatedisplay-emergencycall minutesY"></span>\'' +
-                '       <span class="coordinatedisplay-emergencycall-label-and"></span> ' +
-                '       <span class="coordinatedisplay-emergencycall degreesX"></span>&deg;' +
-                '       <span class="coordinatedisplay-emergencycall minutesX"></span>\' ' +
-                '   </div>' +
-                '</div>'),
-            reverseGeocodeContainer: jQuery(
-                '<div class="geocodeControl"> ' +
-                  '<input id="reverseGeoCheckbox" class="reverseGeoCheckbox" type="checkbox" />' +
-                  '<label class="reverseGeocodeInfoText" for="reverseGeoCheckbox"></label>' +
-                  '<div class="reversegeocode-label reverseGeocode-label"></div>' +
-                  '</div>'
-            ),
-            coordinateFormatDisplayY: jQuery(
-                '<div class="coordinate-format-display-y">' +
-                    '   <div class="coordinatedisplay-container">' +
-                    '       <div class="margintop coordinatedisplay-degminy">' +
-                    '           <span class="coordinatedisplay-degmin degreesY" style="text-align:center";></span>' +
-                    '           <span class="coordinatedisplay-degmin minutesY" style="text-align:center";></span>' +
-                    '           </br>  ' +
-                    '       </div>' +
-                    '       <div class="margintop coordinatedisplay-degy">' +
-                    '           <span class="coordinatedisplay-deg degreesY" style="text-align:center";></span>' +
-                    '           </br>  ' +
-                    '       </div>' +
-                    '   </div>' +
-                    '</div>'
-            ),
-            coordinateFormatDisplayX: jQuery(
-                '<div class="coordinate-format-display-x">' +
-                    '   <div class="coordinatedisplay-container" >' +
-                    '       <div class="margintop coordinatedisplay-degminx">' +
-                    '           <span class="coordinatedisplay-degmin degreesX" style="text-align:center";></span>' +
-                    '           <span class="coordinatedisplay-degmin minutesX" style="text-align:center";></span>' +
-                    '           </br>  ' +
-                    '       </div>' +
-                    '       <div class="margintop coordinatedisplay-degx">' +
-                    '           <span class="coordinatedisplay-deg degreesX" style="text-align:center";></span>' +
-                    '           </br>  ' +
-                    '       </div>' +
-                    '   </div>' +
-                    '</div>'
-            )
+            coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
-        me.spinnerStopTimer = null;
         // me.lastLonLat = null;
-        me._decimalSeparator = Oskari.getDecimalSeparator();
-        me._log = Oskari.log('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin');
-        me.inMobileMode = false;
         me.handler = new CoordinatePluginHandler(me, me._mapmodule, me._config, me._instance);
         me.popupOpen = false;
         me.handler.addPopupListener((isOpen) => {
@@ -135,35 +46,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _setLayerToolsEditModeImpl: function () {
             if (this.inLayerToolsEditMode() && this.isOpen()) {
                 this.handler.getController().showPopup();
-            }
-        },
-        _showReverseGeocodeContainer: function (popupContent) {
-            var me = this;
-
-            var reverseArray = me._config.reverseGeocodingIds.split(',');
-            var showReverseGeocodeCheckbox;
-
-            if (reverseArray.length > 2) {
-                showReverseGeocodeCheckbox = true;
-            }
-            if (showReverseGeocodeCheckbox) {
-                var geocodeController = me._templates.reverseGeocodeContainer.clone();
-                var geocodeContainer = popupContent.find('div.reverseGeocodeContainer');
-                var reverseGeoCheckbox = geocodeController.find('input.reverseGeoCheckbox');
-                var reverseGeocodeLabel = geocodeController.find('div.reverseGeocode-label');
-                reverseGeocodeLabel.hide();
-                geocodeController.find('label.reverseGeocodeInfoText').html(me._locale('display.reversegeocode.moreInfo'));
-                reverseGeoCheckbox.on('change', function () {
-                    if (this.checked) {
-                        reverseGeocodeLabel.show();
-                    } else {
-                        reverseGeocodeLabel.hide();
-                    }
-                });
-                geocodeContainer.append(geocodeController);
-                me._reverseGeocodeLabel = reverseGeocodeLabel;
-            } else {
-                me._reverseGeocodeLabel = popupContent.find('div.reverseGeocodeContainer');
             }
         },
         _createControlElement: function () {
@@ -207,60 +89,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
         hasUI: function () {
             return !this._config.noUI;
-        },
-        /**
-         * Update reverse geocode value to inputs
-         * @method  @private _updateReverseGeocode
-         * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
-         */
-        _updateReverseGeocode: function (data) {
-            var me = this,
-                locale = me._locale('display.reversegeocode'),
-                service = me._instance.getService();
-
-            if (me._toolOpen !== true || me._reverseGeocodeNotImplementedError === true) {
-                return;
-            }
-
-            if (!data || !data.lonlat) {
-                // update with map coordinates if coordinates not given
-                data = me._getMapXY();
-            }
-
-            service.getReverseGeocode(
-                // Success callback
-                function (response) {
-                    var hasResponse = !!((response && response.length > 0));
-
-                    // type title is not found in locales
-                    if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]) {
-                        me._reverseGeocodeLabel.html('');
-                        for (var i = 0; i < response.length; i++) {
-                            var r = response[i];
-                            var title = locale[r.channelId].label;
-                            if (!title) {
-                                title = r.type;
-                            }
-                            me._reverseGeocodeLabel.append('<div>' + title + '<u>' + r.name + '</u></div>');
-                        }
-                    }
-                },
-                // Error callback
-                function (jqXHR, textStatus, errorThrown) {
-                    if (jqXHR.status === 501) {
-                        me._reverseGeocodeNotImplementedError = true;
-                    }
-                    var messageJSON;
-                    try {
-                        messageJSON = jQuery.parseJSON(jqXHR.responseText);
-                    } catch (err) {}
-                    var message = me._instance.getName() + ': Cannot reverse geocode';
-                    if (messageJSON && messageJSON.error) {
-                        message = me._instance.getName() + ': ' + messageJSON.error;
-                    }
-
-                    Oskari.log('coordinatetool').warn(message);
-                }, data.lonlat.lon, data.lonlat.lat);
         },
         /**
          * Updates the given coordinates to the UI

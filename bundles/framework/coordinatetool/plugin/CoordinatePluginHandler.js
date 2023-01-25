@@ -119,6 +119,17 @@ class UIHandler extends StateHandler {
         };
     }
 
+    isMapCentered () {
+        const mapXy = this.getMapXY();
+        if (
+            mapXy?.lonlat?.lon === this.state.xy?.lonlat?.lon &&
+            mapXy?.lonlat?.lat === this.state.xy?.lonlat?.lat
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     popupLocation () {
         const location = this.plugin.getLocation();
         if (location.includes('right')) {
@@ -637,6 +648,7 @@ const wrapped = controllerMixin(UIHandler, [
     'formatDegrees',
     'toggleReverseGeoCode',
     'useUserDefinedCoordinates',
+    'isMapCentered',
     'popupCleanup'
 ]);
 
