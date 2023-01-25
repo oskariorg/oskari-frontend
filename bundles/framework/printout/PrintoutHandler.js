@@ -1,14 +1,9 @@
-import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
-import { Message } from 'oskari-ui';
-import { PrintoutPanel } from './view/PrintoutPanel';
 import { showSidePanel } from 'oskari-ui/components/window';
 import { SIZE_OPTIONS, FORMAT_OPTIONS, PARAMS } from './constants';
 
-const BUNDLE_KEY = 'Printout';
-
 class UIHandler extends StateHandler {
-    constructor (instance) {
+    constructor (consumer, instance) {
         super();
         this.instance = instance;
         this.sandbox = Oskari.getSandbox();
@@ -28,37 +23,18 @@ class UIHandler extends StateHandler {
         this.sidePanel = null;
         this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
         this.eventHandlers = this.createEventHandlers();
-        this.scaleOptions = this.instance.conf?.scales || this.mapModule?.getScaleArray()?.slice().reverse();
+        this.addStateListener(consumer);
     };
 
-    showPanel () {
-        if (!this.sidePanel) {
-            this.sidePanel = showSidePanel(
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.title' />,
-                <PrintoutPanel
-                    controller={this.controller}
-                    state={this.state}
-                    scaleSelection={this.instance.conf.scaleSelection}
-                    scaleOptions={this.scaleOptions}
-                    isTimeSeries={this.isTimeSeriesActive()}
-                />,
-                () => this.closePanel()
-            );
+    updatePanel (title, content) {
+        if (this.sidePanel) {
+            this.sidePanel.update(title, content);
         }
     }
 
-    updatePanel () {
-        if (this.sidePanel) {
-            this.sidePanel.update(
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.title' />,
-                <PrintoutPanel
-                    controller={this.controller}
-                    state={this.state}
-                    scaleSelection={this.instance.conf.scaleSelection}
-                    scaleOptions={this.scaleOptions}
-                    isTimeSeries={this.isTimeSeriesActive()}
-                />
-            );
+    showPanel (title, content, onClose) {
+        if (!this.sidePanel) {
+            this.sidePanel = showSidePanel(title, content, onClose);
         }
     }
 
@@ -86,8 +62,6 @@ class UIHandler extends StateHandler {
         });
         if (field === 'size') {
             this.refreshPreview(true);
-        } else {
-            this.updatePanel();
         }
     }
 
@@ -102,7 +76,6 @@ class UIHandler extends StateHandler {
                 previewImage: null
             });
         }
-        this.updatePanel();
     }
 
     printMap (selections) {
@@ -213,11 +186,6 @@ class UIHandler extends StateHandler {
         return opt ? opt.landscape : SIZE_OPTIONS[0].landscape;
     }
 
-    isTimeSeriesActive () {
-        const hasLayers = this.instance.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times).length > 0;
-        return hasLayers && !!this.timeseriesPlugin;
-    }
-
     getUrlForPreview (scaledWidth) {
         const pageSize = this.state.size;
         const map = Oskari.getSandbox().getMap();
@@ -230,19 +198,20 @@ class UIHandler extends StateHandler {
             baseLayer.getCurrentStyle().getName();
         }
 
-        let url = Oskari.urls.getRoute('GetPrint') +
-            '&format=image/png' +
-            '&pageSize=' + pageSize +
-            '&resolution=' + map.getResolution() +
-            '&srs=' + map.getSrsName() +
-            '&coord=' + map.getX() + '_' + map.getY() +
-            '&mapLayers=' + mapLayers;
+        let params = {
+            format: 'image/png',
+            pageSize,
+            resolution: map.getResolution(),
+            srs: map.getSrsName(),
+            coord: `${map.getX()}_${map.getY()}`,
+            mapLayers
+        };
 
         if (Number.isInteger(scaledWidth)) {
-            url += '&scaledWidth=' + scaledWidth;
+            params.scaledWidth = scaledWidth;
         }
 
-        return url;
+        return Oskari.urls.getRoute('GetPrint', params);
     }
 
     createEventHandlers () {
@@ -307,11 +276,11 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
+    'updatePanel',
     'showPanel',
     'updateField',
     'closePanel',
-    'printMap',
-    'updatePanel'
+    'printMap'
 ]);
 
 export { wrapped as PrintoutHandler };

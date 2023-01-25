@@ -1,6 +1,10 @@
+
+import React from 'react';
+import { Message } from 'oskari-ui';
 import { Messaging } from 'oskari-ui/util';
 import { showTooManyLayersPopup } from './view/TooManyLayersPopup';
 import { PrintoutHandler } from './PrintoutHandler';
+import { PrintoutPanel } from './view/PrintoutPanel';
 
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
@@ -43,8 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
         };
         this.popupControls = null;
-        this.handler = new PrintoutHandler(this);
+        this.handler = new PrintoutHandler(() => this.updatePanel(), this);
         this._log = Oskari.log(this.getName());
+        this.mapModule = undefined;
+        this.scaleOptions = [];
+        this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
     }, {
         /**
          * @static
@@ -108,6 +115,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             me.sandbox = sandbox;
 
             this.localization = Oskari.getLocalization(this.getName());
+
+            this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            this.scaleOptions = this.conf?.scales || this.mapModule?.getScaleArray()?.slice().reverse();
 
             sandbox.register(me);
 
@@ -180,6 +190,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         },
         getService: function () {
             return this.printService;
+        },
+        showPanel: function () {
+            const controller = this.handler?.getController();
+            controller.showPanel(
+                <Message bundleKey='Printout' messageKey='BasicView.title' />,
+                <PrintoutPanel
+                    controller={controller}
+                    state={this.handler.getState()}
+                    scaleSelection={this.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />,
+                () => controller?.closePanel()
+            );
+        },
+        updatePanel: function () {
+            const controller = this.handler?.getController();
+            controller.updatePanel(
+                <Message bundleKey='Printout' messageKey='BasicView.title' />,
+                <PrintoutPanel
+                    controller={controller}
+                    state={this.handler.getState()}
+                    scaleSelection={this.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />
+            );
+        },
+        isTimeSeriesActive: function () {
+            const hasLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times).length > 0;
+            return hasLayers && !!this.timeseriesPlugin;
         },
         /**
          * @method onEvent
@@ -354,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 this.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
 
-                this.handler?.getController()?.showPanel();
+                this.showPanel();
                 // reset and disable map rotation
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
