@@ -1,5 +1,10 @@
+
+import React from 'react';
+import { Message } from 'oskari-ui';
 import { Messaging } from 'oskari-ui/util';
 import { showTooManyLayersPopup } from './view/TooManyLayersPopup';
+import { PrintoutHandler } from './PrintoutHandler';
+import { PrintoutPanel } from './view/PrintoutPanel';
 
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
@@ -42,7 +47,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
         };
         this.popupControls = null;
+        this.handler = new PrintoutHandler(() => this.updatePanel(), this);
         this._log = Oskari.log(this.getName());
+        this.mapModule = undefined;
+        this.scaleOptions = [];
+        this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
     }, {
         /**
          * @static
@@ -107,6 +116,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
             this.localization = Oskari.getLocalization(this.getName());
 
+            this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            this.scaleOptions = this.conf?.scales || this.mapModule?.getScaleArray()?.slice().reverse();
+
             sandbox.register(me);
 
             for (p in me.eventHandlers) {
@@ -157,7 +169,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
             // sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
-            me._createUi();
 
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
@@ -180,6 +191,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         getService: function () {
             return this.printService;
         },
+        showPanel: function () {
+            const controller = this.handler?.getController();
+            controller.showPanel(
+                <Message bundleKey='Printout' messageKey='BasicView.title' />,
+                <PrintoutPanel
+                    controller={controller}
+                    state={this.handler.getState()}
+                    scaleSelection={this.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />,
+                () => controller?.closePanel()
+            );
+        },
+        updatePanel: function () {
+            const controller = this.handler?.getController();
+            controller.updatePanel(
+                <Message bundleKey='Printout' messageKey='BasicView.title' />,
+                <PrintoutPanel
+                    controller={controller}
+                    state={this.handler.getState()}
+                    scaleSelection={this.conf.scaleSelection}
+                    scaleOptions={this.scaleOptions}
+                    isTimeSeries={this.isTimeSeriesActive()}
+                />
+            );
+        },
+        isTimeSeriesActive: function () {
+            const hasLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times).length > 0;
+            return hasLayers && !!this.timeseriesPlugin;
+        },
         /**
          * @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
@@ -197,39 +239,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @static
          */
         eventHandlers: {
-            'MapLayerVisibilityChangedEvent': function (event) {
-                /* we might get 9 of these if 9 layers would have been selected */
-                if (this.printout && this.printout.isEnabled && this.isMapStateChanged) {
-                    this.isMapStateChanged = false;
-                    this._log.debug('PRINTOUT REFRESH');
-                    this.printout.refresh(true);
-                }
-            },
-            'AfterMapMoveEvent': function (event) {
-                this.isMapStateChanged = true;
-                if (this.printout && this.printout.isEnabled) {
-                    this.printout.refresh(true);
-                }
-                this.isMapStateChanged = true;
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                this.isMapStateChanged = true;
-                if (this.printout && this.printout.isEnabled) {
-                    this.printout.refresh(false);
-                }
-            },
-            'AfterMapLayerRemoveEvent': function (event) {
-                this.isMapStateChanged = true;
-                if (this.printout && this.printout.isEnabled) {
-                    this.printout.refresh(false);
-                }
-            },
-            'AfterChangeMapLayerStyleEvent': function (event) {
-                this.isMapStateChanged = true;
-                if (this.printout && this.printout.isEnabled) {
-                    this.printout.refresh(false);
-                }
-            },
             /**
              * @method userinterface.ExtensionUpdatedEvent
              */
@@ -242,7 +251,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 }
 
                 var isOpen = event.getViewState() !== 'close';
-                me.displayContent(isOpen);
+                if (isOpen && this.handler) {
+                    this.handler?.getController()?.updatePanel();
+                }
             },
 
             /**
@@ -271,13 +282,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (tileData && layerId) {
                     this.tileData[layerId] = tileData;
                 }
-            },
+            }
             /**
              * Bundles could plot directly via this event
              * @method Printout.PrintWithoutUIEvent
              * @param {Object} event
              */
-            'Printout.PrintWithoutUIEvent': function (event) {
+            /* 'Printout.PrintWithoutUIEvent': function (event) {
                 var me = this,
                     printParams = event.getPrintParams(),
                     geoJson = event.getGeoJsonData();
@@ -293,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                     me.printout.hide();
                 }
                 me.printout.printMap(printParams);
-            }
+            } */
         },
 
         /**
@@ -301,9 +312,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * Implements BundleInstance protocol stop method
          */
         stop: function () {
-            if (this.printout) {
-                this.printout.destroy();
-                this.printout = undefined;
+            if (this.handler) {
+                this.handler.closePanel();
             }
 
             this.geoJson = null;
@@ -341,25 +351,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
         },
         /**
-         * @method startExtension
-         * implements Oskari.userinterface.Extension protocol startExtension method
-         * Creates a flyout
-         * Oskari.mapframework.bundle.printout.Flyout
-         */
-        startExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Flyout', this);
-            /* this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Tile', this); */
-        },
-        /**
-         * @method stopExtension
-         * implements Oskari.userinterface.Extension protocol stopExtension method
-         * Clears references to flyout and tile
-         */
-        stopExtension: function () {
-            this.plugins['Oskari.userinterface.Flyout'] = null;
-            /* this.plugins['Oskari.userinterface.Tile'] = null; */
-        },
-        /**
          * @method getPlugins
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout and tile
@@ -381,14 +372,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         getDescription: function () {
             return this.getLocalization('desc');
         },
-        /**
-         * @method _createUi
-         * @private
-         * (re)creates the UI for "printout" functionality
-         */
-        _createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
-            /* this.plugins['Oskari.userinterface.Tile'].refresh(); */
+        startExtension: function () {
+
+        },
+        stopExtension: function () {
+
         },
         /**
          * @method setPublishMode
@@ -399,59 +387,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            const root = jQuery(Oskari.dom.getRootEl());
-            const navigation = root.find('nav');
-            navigation.css('display', blnEnabled ? 'none' : 'block');
-
             // trigger an event letting other bundles know we require the whole UI
-            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+            const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
+                this.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
-                // proceed with printout view
-                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
-                this.printout.render(root);
 
-                if (this.state && this.state.form) {
-                    this.printout.setState(this.state.form);
-                }
-                this.printout.show();
-                this.printout.setEnabled(true);
-                this.printout.refresh(false);
-                this.printout.refresh(true);
+                this.showPanel();
                 // reset and disable map rotation
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
             } else {
-                if (this.printout) {
-                    this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
-                    this.printout.setEnabled(false);
-                    this.printout.destroy();
-                }
-                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-                this.sandbox.request(this, builder());
-                this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
+                this.handler?.getController()?.closePanel();
             }
         },
-        /**
-         *  Send plotout canceled event
-         */
-        sendCanceledEvent: function (state) {
-            var me = this;
-            var eventBuilder = Oskari.eventBuilder('Printout.PrintCanceledEvent');
-
-            if (eventBuilder) {
-                var event = eventBuilder(state);
-                me.sandbox.notifyAll(event);
-            }
-        },
-        displayContent: function (isOpen) {
-            if (isOpen) {
-                this.plugins['Oskari.userinterface.Flyout'].refresh();
-            }
-        },
-
         /**
          * @method setState
          * Sets the bundle state
@@ -469,11 +420,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         getState: function () {
             var state = this.state || {};
-
-            if (this.printout) {
-                var formState = this.printout.getState();
-                state.form = formState;
-            }
 
             return state;
         },

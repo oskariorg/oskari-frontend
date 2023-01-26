@@ -1,7 +1,8 @@
 export const TYPE = {
     POPUP: 'popup',
     FLYOUT: 'flyout',
-    BANNER: 'banner'
+    BANNER: 'banner',
+    SIDE_PANEL: 'sidePanel'
 };
 // activeComponents has id + type as key and remove function as value
 let activeComponents = {};

@@ -3,6 +3,7 @@ import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
 import { Banner } from './Banner';
+import { SidePanel } from './SidePanel';
 import { REGISTER, TYPE } from './register';
 import { ThemeProvider } from '../../util/contexts';
 // expose util function for centering elements
@@ -63,10 +64,12 @@ const validate = (options, type) => {
  * Creates a root element to render a flyout/popup window into
  * @returns {HTMLElement}
  */
-const createTmpContainer = () => {
+const createTmpContainer = (detached = false) => {
     const element = document.createElement('div');
-    document.body.appendChild(element);
     element.classList.add('oskari-react-tmp-container');
+    if (!detached) {
+        document.body.appendChild(element);
+    }
     return element;
 };
 
@@ -76,14 +79,14 @@ const createTmpContainer = () => {
  * @param {Function} optional function to call when window is closed
  * @returns {Function}
  */
-const createRemoveFn = (element, onClose) => {
+const createRemoveFn = (element, onClose, parentEl = document.body) => {
     let alreadyRemoved = false;
     const removeFn = () => {
         if (alreadyRemoved) {
             return;
         }
         unmountComponentAtNode(element);
-        document.body.removeChild(element);
+        parentEl.removeChild(element);
         alreadyRemoved = true;
         if (typeof onClose === 'function') {
             onClose();
@@ -188,10 +191,52 @@ export const showFlyout = (title, content, onClose, options = {}) => {
             </ThemeProvider>, element);
     };
     render(title, content);
-    return  {
+    return {
         update: render,
         close: removeWindow,
         bringToTop
+    };
+};
+
+export const showSidePanel = (title, content, onClose, options = {}) => {
+    validate(options, TYPE.SIDE_PANEL);
+    const root = Oskari.dom.getRootEl();
+    // create detached element instead of one attached to body
+    const element = createTmpContainer(true);
+    // add element to root directly as side panel
+    root.prepend(element);
+    let nav;
+    root.childNodes.forEach(node => {
+        if (node.localName === 'nav') {
+            nav = node;
+        }
+    });
+
+    const key = REGISTER.registerWindow(options.id, TYPE.SIDE_PANEL, createRemoveFn(element, onClose, root));
+    const removeWindow = () => {
+        REGISTER.clear(key);
+        if (nav) {
+            nav.style.display = 'block';
+        }
+    }
+    root.prepend(element)
+    const render = (title, content) => {
+        if (nav) {
+            nav.style.display = 'none';
+        }
+        ReactDOM.render(
+            <ThemeProvider>
+                <SidePanel title={title} onClose={removeWindow} options={options}>
+                    {content}
+                </SidePanel>
+            </ThemeProvider>,
+            element
+        );
+    }
+    render(title, content);
+    return {
+        update: render,
+        close: removeWindow
     };
 };
 
