@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Message, Confirm } from 'oskari-ui';
+import { IconButton } from 'oskari-ui/components/buttons';
 import { CloseCircleFilled } from '@ant-design/icons';
-
-const BUNDLE_KEY = 'oskariui';
+import { ThemeConsumer } from '../../util/contexts';
+import { getFontClass, getHeaderTheme } from '../../theme/ThemeHelper';
 
 const StyledPanel = styled('div')`
     background: #FFF;
@@ -16,14 +16,7 @@ const StyledPanel = styled('div')`
     width: 252px;
     display: flex;
     flex-direction: column;
-
-    div.header {
-        background-color: #FDF8D9;
-        padding: 5px 10px;
-        div.icon-close {
-            float: right;
-        }
-    }
+    font-family: ${props => props.font};
 
     div.content {
         padding: 10px;
@@ -32,41 +25,41 @@ const StyledPanel = styled('div')`
     }
 `;
 
-const FloatingIcon = styled('div')`
+const StyledHeader = styled('div')`
+    background: ${props => props.theme.getBgColor()};
+    color: ${props => props.theme.getTextColor()};
+    padding: 5px 10px;
+`;
+
+const StyledIconButton = styled(IconButton)`
     float: right;
 `;
 
-const Header = ({ title, onClose, confirmExit }) => {
-    const iconProps = {};
-    if (!confirmExit) {
-        iconProps.onClick = onClose;
-    }
+const Header = ({ title, onClose, theme }) => {
     return (
-        <div className="header">
-            <FloatingIcon>
-                <Confirm
-                    disabled={!confirmExit}
-                    title={<Message messageKey='ContentEditorView.exitConfirm' bundleKey={BUNDLE_KEY} />}
-                    onConfirm={onClose}
-                    okText={<Message messageKey='ContentEditorView.buttons.yes' bundleKey={BUNDLE_KEY} />}
-                    cancelText={<Message messageKey='ContentEditorView.buttons.no' bundleKey={BUNDLE_KEY} />}>
-                    <CloseCircleFilled {...iconProps}/>
-                </Confirm>
-            </FloatingIcon>
+        <StyledHeader
+            className="header"
+            theme={theme}
+        >
+            <StyledIconButton
+                onClick={onClose}
+                icon={<CloseCircleFilled />}
+            />
             {title && (
                 <h3>{title}</h3>
             )}
-        </div>);
+        </StyledHeader>);
 };
 
-export const SidePanel = ({ title, onClose, children }) => {
+export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {} }) => {
+    const headerTheme = getHeaderTheme(theme);
     return (
-        <StyledPanel>
-            <Header title={title} onClose={onClose} />
+        <StyledPanel className={`t_print_panel ${getFontClass(theme)}`}>
+            <Header title={title} onClose={onClose} theme={headerTheme} />
             {children}
         </StyledPanel>
     )
-};
+});
 
 SidePanel.propTypes = {
     onClose: PropTypes.func.isRequired

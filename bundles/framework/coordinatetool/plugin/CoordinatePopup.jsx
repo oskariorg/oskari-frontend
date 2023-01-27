@@ -180,7 +180,7 @@ const PopupContent = ({ state, controller, preciseTransform, supportedProjection
             <ButtonContainer>
                 <Button
                     type='default'
-                    disabled={state.showMouseCoordinates}
+                    disabled={state.showMouseCoordinates || controller.isMapCentered()}
                     onClick={() => controller.centerMap()}
                     className='t_center'
                 >
