@@ -84,18 +84,18 @@ Oskari.registerLocalization(
                     "printLabel": "Tidpunkten av tidsserien"
                 },
                 "coordinates": {
-                    "label": "Show coordinates",
+                    "label": "Visa koordinaterna",
                     "position": {
-                        "label": "Location",
+                        "label": "Placering",
                         "options": {
-                            "center": "Map center",
-                            "corners": "Corner points"
+                            "center": "Kartans mittpunkt",
+                            "corners": "Knutpunkter"
                         }
                     },
                     "projection": {
-                        "label": "Projection",
+                        "label": "Projektion",
                         "options": {
-                            "map": "Map projection",
+                            "map": "Kartans projektion",
                             "EPSG:4326": "WGS84"
                         }
                     }
