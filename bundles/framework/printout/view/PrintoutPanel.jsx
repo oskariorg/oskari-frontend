@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Collapse, CollapsePanel, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -13,6 +13,7 @@ const Content = styled('div')``;
 const StyledPanelHeader = styled('div')`
     display: inline-flex;
     flex-direction: row;
+    font-weight: bold;
 `;
 
 const RadioGroup = styled(Radio.Group)`
@@ -34,7 +35,7 @@ const PreviewImage = styled('img')`
     border-top-color: #C0D0E0;
     border-top-style: solid;
     border-top-width: 1pt;
-    @include box-shadow(0 0 8px #D0D0D0);
+    box-shadow: 0 0 8px #D0D0D0;
     height: ${props => props.landscape ? '140px' : '290px'};
     width: 200px;
 `;
@@ -57,10 +58,11 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
 }
 
 export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions, isTimeSeries }) => {
+    const [openPanels, setOpenPanels] = useState([1, 2, 3, 4]);
     return (
         <Content>
-            <Collapse>
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />}>
+            <Collapse defaultActiveKey={openPanels} onChange={setOpenPanels}>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />} key={1}>
                     <RadioGroup
                         value={state.size}
                         onChange={(e) => controller.updateField('size', e.target.value)}
@@ -72,11 +74,11 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                         ))}
                     </RadioGroup>
                 </CollapsePanel>
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />}>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />} key={2}>
                     <AdditionalSettings state={state} controller={controller} isTimeSeries={isTimeSeries} />
                 </CollapsePanel>
                 {scaleSelection && (
-                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />}>
+                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />} key={3}>
                         <RadioGroup
                             value={state.scaleType}
                             onChange={(e) => controller.updateField('scaleType', e.target.value)}
@@ -101,7 +103,7 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                         </RadioGroup>
                     </CollapsePanel>
                 )}
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />}>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />} key={4}>
                     <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
                 </CollapsePanel>

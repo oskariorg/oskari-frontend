@@ -31,87 +31,116 @@ const StyledCheckbox = styled(Checkbox)`
     }
 `;
 
+const FormGroup = styled('div')`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+`;
+
+const Label = styled('div')`
+    font-weight: bold;
+`;
+
 
 export const AdditionalSettings = ({ controller, state, isTimeSeries }) => {
     return (
         <Content>
-            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.format.label' />
-            <RadioGroup
-                value={state.format}
-                onChange={(e) => controller.updateField('format', e.target.value)}
-            >
-                {FORMAT_OPTIONS?.map(option => (
-                    <Radio.Choice value={option.mime} key={option.mime}>
-                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.format.options.${option.name}`} />
-                    </Radio.Choice>
-                ))}
-            </RadioGroup>
-            <MapTitle>
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.label' />
-                <TextInput
-                    type='text'
-                    placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.content.mapTitle.placeholder')}
-                    value={state.mapTitle}
-                    onChange={(e) => controller.updateField('mapTitle', e.target.value)}
-                    disabled={state.format !== 'application/pdf'}
-                />
-            </MapTitle>
-            <StyledCheckbox
-                checked={state.showScale}
-                onChange={(e) => controller.updateField('showScale', e.target.checked)}
-                disabled={state.format !== 'application/pdf'}
-            >
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageScale.label' />
-            </StyledCheckbox>
-            <StyledCheckbox
-                checked={state.showDate}
-                onChange={(e) => controller.updateField('showDate', e.target.checked)}
-                disabled={state.format !== 'application/pdf'}
-            >
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
-            </StyledCheckbox>
-            {isTimeSeries && (
+            <FormGroup>
+                <Label>
+                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.format.label' />
+                </Label>
+                <RadioGroup
+                    value={state.format}
+                    onChange={(e) => controller.updateField('format', e.target.value)}
+                >
+                    {FORMAT_OPTIONS?.map(option => (
+                        <Radio.Choice value={option.mime} key={option.mime}>
+                            <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.format.options.${option.name}`} />
+                        </Radio.Choice>
+                    ))}
+                </RadioGroup>
+            </FormGroup>
+            <FormGroup>
+                <MapTitle>
+                    <Label>
+                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.label' />
+                    </Label>
+                    <TextInput
+                        type='text'
+                        placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.content.mapTitle.placeholder')}
+                        value={state.mapTitle}
+                        onChange={(e) => controller.updateField('mapTitle', e.target.value)}
+                        disabled={state.format !== 'application/pdf'}
+                    />
+                </MapTitle>
+            </FormGroup>
+            <FormGroup>
                 <StyledCheckbox
-                    checked={state.showTimeSeriesDate}
-                    onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
+                    checked={state.showScale}
+                    onChange={(e) => controller.updateField('showScale', e.target.checked)}
                     disabled={state.format !== 'application/pdf'}
                 >
-                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageTimeSeriesTime.label' />
+                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageScale.label' />
                 </StyledCheckbox>
-            )}
-            <StyledCheckbox
-                checked={state.showCoordinates}
-                onChange={(e) => controller.updateField('showCoordinates', e.target.checked)}
-                disabled={state.format !== 'application/pdf'}
-            >
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.label' />
-            </StyledCheckbox>
+                <StyledCheckbox
+                    checked={state.showDate}
+                    onChange={(e) => controller.updateField('showDate', e.target.checked)}
+                    disabled={state.format !== 'application/pdf'}
+                >
+                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
+                </StyledCheckbox>
+                {isTimeSeries && (
+                    <StyledCheckbox
+                        checked={state.showTimeSeriesDate}
+                        onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
+                        disabled={state.format !== 'application/pdf'}
+                    >
+                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageTimeSeriesTime.label' />
+                    </StyledCheckbox>
+                )}
+                {/* TODO: Enable once Coordinates are implemented to back end */}
+                {/* <StyledCheckbox
+                    checked={state.showCoordinates}
+                    onChange={(e) => controller.updateField('showCoordinates', e.target.checked)}
+                    disabled={state.format !== 'application/pdf'}
+                >
+                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.label' />
+                </StyledCheckbox> */}
+            </FormGroup>
             {state.showCoordinates && (
                 <CoordinateOptions>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.position.label' />
-                    <Radio.Group
-                        value={state.coordinatePosition}
-                        onChange={(e) => controller.updateField('coordinatePosition', e.target.value)}
-                        disabled={state.format !== 'application/pdf'}
-                    >
-                        {COORDINATE_POSITIONS.map(pos => (
-                            <Radio.Choice value={pos} key={pos}>
-                                <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.position.options.${pos}`} />
-                            </Radio.Choice>
-                        ))}
-                    </Radio.Group>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.projection.label' />
-                    <Radio.Group
-                        value={state.coordinateProjection}
-                        onChange={(e) => controller.updateField('coordinateProjection', e.target.value)}
-                        disabled={state.format !== 'application/pdf'}
-                    >
-                        {COORDINATE_PROJECTIONS.map(proj => (
-                            <Radio.Choice value={proj} key={proj}>
-                                <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.projection.options.${proj}`} />
-                            </Radio.Choice>
-                        ))}
-                    </Radio.Group>
+                    <FormGroup>
+                            <Label>
+                                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.position.label' />
+                            </Label>
+                            <Radio.Group
+                                value={state.coordinatePosition}
+                                onChange={(e) => controller.updateField('coordinatePosition', e.target.value)}
+                                disabled={state.format !== 'application/pdf'}
+                            >
+                                {COORDINATE_POSITIONS.map(pos => (
+                                    <Radio.Choice value={pos} key={pos}>
+                                        <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.position.options.${pos}`} />
+                                    </Radio.Choice>
+                                ))}
+                            </Radio.Group>
+                    </FormGroup>
+                    <FormGroup>
+                        <Label>
+                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.coordinates.projection.label' />
+                        </Label>
+                        <Radio.Group
+                            value={state.coordinateProjection}
+                            onChange={(e) => controller.updateField('coordinateProjection', e.target.value)}
+                            disabled={state.format !== 'application/pdf'}
+                        >
+                            {COORDINATE_PROJECTIONS.map(proj => (
+                                <Radio.Choice value={proj} key={proj}>
+                                    <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.content.coordinates.projection.options.${proj}`} />
+                                </Radio.Choice>
+                            ))}
+                        </Radio.Group>
+                    </FormGroup>
                 </CoordinateOptions>
             )}
         </Content>
