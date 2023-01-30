@@ -82,6 +82,23 @@ Oskari.registerLocalization(
                     "label": "Include time series timestamp",
                     "tooltip": "You can add a time series timestamp to the printout.",
                     "printLabel": "Time series time"
+                },
+                "coordinates": {
+                    "label": "Show coordinates",
+                    "position": {
+                        "label": "Location",
+                        "options": {
+                            "center": "Map center",
+                            "corners": "Corner points"
+                        }
+                    },
+                    "projection": {
+                        "label": "Projection",
+                        "options": {
+                            "map": "Map projection",
+                            "EPSG:4326": "WGS84"
+                        }
+                    }
                 }
             },
             "help": "Help",

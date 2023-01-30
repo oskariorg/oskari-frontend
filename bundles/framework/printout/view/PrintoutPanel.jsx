@@ -1,9 +1,10 @@
-import React from 'react';
-import { Collapse, CollapsePanel, Message, Radio, TextInput, Checkbox, Select, Option } from 'oskari-ui';
+import React, { useState } from 'react';
+import { Collapse, CollapsePanel, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, SCALE_OPTIONS } from '../constants';
+import { SIZE_OPTIONS, SCALE_OPTIONS } from '../constants';
+import { AdditionalSettings } from './AdditionalSettings';
 
 const BUNDLE_KEY = 'Printout';
 
@@ -12,6 +13,7 @@ const Content = styled('div')``;
 const StyledPanelHeader = styled('div')`
     display: inline-flex;
     flex-direction: row;
+    font-weight: bold;
 `;
 
 const RadioGroup = styled(Radio.Group)`
@@ -19,19 +21,8 @@ const RadioGroup = styled(Radio.Group)`
     flex-direction: column;
 `;
 
-const MapTitle = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
 const Info = styled('div')`
     margin-left: 10px;
-`;
-
-const Checkboxes = styled('div')`
-    display: flex;
-    flex-direction: column;
-    margin-top: 5px;
 `;
 
 const PreviewImage = styled('img')`
@@ -44,7 +35,7 @@ const PreviewImage = styled('img')`
     border-top-color: #C0D0E0;
     border-top-style: solid;
     border-top-width: 1pt;
-    @include box-shadow(0 0 8px #D0D0D0);
+    box-shadow: 0 0 8px #D0D0D0;
     height: ${props => props.landscape ? '140px' : '290px'};
     width: 200px;
 `;
@@ -67,10 +58,11 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
 }
 
 export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions, isTimeSeries }) => {
+    const [openPanels, setOpenPanels] = useState([1, 2, 3, 4]);
     return (
         <Content>
-            <Collapse>
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />}>
+            <Collapse defaultActiveKey={openPanels} onChange={setOpenPanels}>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.size.label' infoMsg='BasicView.size.tooltip' />} key={1}>
                     <RadioGroup
                         value={state.size}
                         onChange={(e) => controller.updateField('size', e.target.value)}
@@ -82,56 +74,11 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                         ))}
                     </RadioGroup>
                 </CollapsePanel>
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />}>
-                    <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.format.label' />
-                    <RadioGroup
-                        value={state.format}
-                        onChange={(e) => controller.updateField('format', e.target.value)}
-                    >
-                        {FORMAT_OPTIONS?.map(option => (
-                            <Radio.Choice value={option.mime} key={option.mime}>
-                                <Message bundleKey={BUNDLE_KEY} messageKey={`BasicView.format.options.${option.name}`} />
-                            </Radio.Choice>
-                        ))}
-                    </RadioGroup>
-                    <MapTitle>
-                        <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.label' />
-                        <TextInput
-                            type='text'
-                            placeholder={Oskari.getMsg(BUNDLE_KEY, 'BasicView.content.mapTitle.placeholder')}
-                            value={state.mapTitle}
-                            onChange={(e) => controller.updateField('mapTitle', e.target.value)}
-                            disabled={state.format !== 'application/pdf'}
-                        />
-                    </MapTitle>
-                    <Checkboxes>
-                        <Checkbox
-                            checked={state.showScale}
-                            onChange={(e) => controller.updateField('showScale', e.target.checked)}
-                            disabled={state.format !== 'application/pdf'}
-                        >
-                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageScale.label' />
-                        </Checkbox>
-                        <Checkbox
-                            checked={state.showDate}
-                            onChange={(e) => controller.updateField('showDate', e.target.checked)}
-                            disabled={state.format !== 'application/pdf'}
-                        >
-                            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
-                        </Checkbox>
-                        {isTimeSeries && (
-                            <Checkbox
-                                checked={state.showTimeSeriesDate}
-                                onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
-                                disabled={state.format !== 'application/pdf'}
-                            >
-                                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageTimeSeriesTime.label' />
-                            </Checkbox>
-                        )}
-                    </Checkboxes>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />} key={2}>
+                    <AdditionalSettings state={state} controller={controller} isTimeSeries={isTimeSeries} />
                 </CollapsePanel>
                 {scaleSelection && (
-                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />}>
+                    <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />} key={3}>
                         <RadioGroup
                             value={state.scaleType}
                             onChange={(e) => controller.updateField('scaleType', e.target.value)}
@@ -156,7 +103,7 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                         </RadioGroup>
                     </CollapsePanel>
                 )}
-                <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />}>
+                <CollapsePanel header={<PanelHeader headerMsg='BasicView.preview.label' />} key={4}>
                     <PreviewImage src={state.previewImage} landscape={state.previewImage && state.previewImage.includes('Landscape')} />
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.preview.notes.extent' />
                 </CollapsePanel>

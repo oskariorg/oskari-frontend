@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSidePanel } from 'oskari-ui/components/window';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, PARAMS } from './constants';
+import { SIZE_OPTIONS, FORMAT_OPTIONS, PARAMS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from './constants';
 
 class UIHandler extends StateHandler {
     constructor (consumer, instance) {
@@ -18,7 +18,11 @@ class UIHandler extends StateHandler {
             scaleType: 'map',
             scale: null,
             showTimeSeriesDate: false,
-            isMapStateChanged: false
+            isMapStateChanged: false,
+            // impl for toggling coordinates is commented out in JSX. This will be enabled on future release.
+            showCoordinates: false,
+            coordinatePosition: COORDINATE_POSITIONS[0],
+            coordinateProjection: COORDINATE_PROJECTIONS[0]
         });
         this.sidePanel = null;
         this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
@@ -86,6 +90,10 @@ class UIHandler extends StateHandler {
                 params[PARAMS.FORMATTED_TIME] = this.timeseriesPlugin.getCurrentTimeFormatted();
                 params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
             }
+        }
+        if (this.state.showCoordinates) {
+            params[PARAMS.COORDINATE_POSITION] = this.state.coordinatePosition;
+            params[PARAMS.COORDINATE_PROJECTION] = this.state.coordinateProjection === 'map' ? this.mapModule.getProjection() : this.state.coordinateProjection;
         }
         const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
         const url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');

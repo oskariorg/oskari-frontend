@@ -26,7 +26,19 @@ export const TIME_OPTION = 'pageTimeSeriesTime';
 export const PARAMS = {
     TIME: 'time',
     FORMATTED_TIME: 'formattedTime',
-    SERIES_LABEL: 'timeseriesPrintLabel'
+    SERIES_LABEL: 'timeseriesPrintLabel',
+    COORDINATE_POSITION: 'coordinateInfo',
+    COORDINATE_PROJECTION: 'coordinateSRS'
 };
 // width, height
 export const WINDOW_SIZE = [850, 1200];
+
+export const COORDINATE_POSITIONS = [
+    'center',
+    'corners'
+];
+
+export const COORDINATE_PROJECTIONS = [
+    'map',
+    'EPSG:4326'
+];

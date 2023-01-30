@@ -82,6 +82,23 @@ Oskari.registerLocalization(
                     "label": "Visa tidpunkten av tidsserien",
                     "tooltip": "Visa tiden för dess tidsserie på utskriften.",
                     "printLabel": "Tidpunkten av tidsserien"
+                },
+                "coordinates": {
+                    "label": "Visa koordinaterna",
+                    "position": {
+                        "label": "Placering",
+                        "options": {
+                            "center": "Kartans mittpunkt",
+                            "corners": "Knutpunkter"
+                        }
+                    },
+                    "projection": {
+                        "label": "Projektion",
+                        "options": {
+                            "map": "Kartans projektion",
+                            "EPSG:4326": "WGS84"
+                        }
+                    }
                 }
             },
             "help": "Hjälp",
