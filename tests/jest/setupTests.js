@@ -12,8 +12,9 @@ global.jQuery = jQuery;
 if (typeof global.ResizeObserver === 'undefined') {
     // We need to mock ResizeObserver and make it available globally for Jest tests
     class ResizeObserver {
-        observe() {}
-        unobserve() {}
+        observe () {}
+        unobserve () {}
+        disconnect () {}
     };
     global.ResizeObserver = ResizeObserver;
 }
