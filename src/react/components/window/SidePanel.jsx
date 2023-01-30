@@ -25,6 +25,11 @@ const StyledPanel = styled('div')`
     }
 `;
 
+const Content = styled('div')`
+    overflow: auto;
+    padding-bottom: 20px;
+`;
+
 const StyledHeader = styled('div')`
     background: ${props => props.theme.getBgColor()};
     color: ${props => props.theme.getTextColor()};
@@ -55,8 +60,10 @@ export const SidePanel = ThemeConsumer(({ title, onClose, children, theme = {} }
     const headerTheme = getHeaderTheme(theme);
     return (
         <StyledPanel className={`t_print_panel ${getFontClass(theme)}`}>
-            <Header title={title} onClose={onClose} theme={headerTheme} />
-            {children}
+            <Content>
+                <Header title={title} onClose={onClose} theme={headerTheme} />
+                {children}
+            </Content>
         </StyledPanel>
     )
 });
