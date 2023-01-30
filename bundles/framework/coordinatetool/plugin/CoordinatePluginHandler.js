@@ -32,7 +32,6 @@ class UIHandler extends StateHandler {
         this.eventHandlers = this.createEventHandlers();
         this.decimalSeparator = Oskari.getDecimalSeparator();
         this.preciseTransform = Array.isArray(this.config.supportedProjections);
-        this.updateLonLat(this.getMapXY(), true, true, true);
         this.popupListeners = [];
     };
 
@@ -234,7 +233,6 @@ class UIHandler extends StateHandler {
         if (this.popupControls) {
             this.popupCleanup();
         } else {
-            this.updateLonLat(this.getMapXY(), true, true, true);
             const crsText = this.loc('display.crs')[this.state.selectedProjection] || this.loc('display.crs.default', { crs: this.state.selectedProjection });
             this.popupControls = showCoordinatePopup(
                 this.getState(),
@@ -247,6 +245,7 @@ class UIHandler extends StateHandler {
                 this.reverseGeocodingIds?.length > 2,
                 () => this.popupCleanup()
             );
+            this.updateLonLat(this.getMapXY(), true, true, true);
             this.notifyPopupListeners(true);
         }
     }
@@ -471,6 +470,10 @@ class UIHandler extends StateHandler {
                     }
                     this.updateState({
                         reverseGeoCode: reverseGeoCode
+                    });
+                } else {
+                    this.updateState({
+                        reverseGeoCode: []
                     });
                 }
             },
