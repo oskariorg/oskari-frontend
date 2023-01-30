@@ -19,6 +19,7 @@ class UIHandler extends StateHandler {
             scale: null,
             showTimeSeriesDate: false,
             isMapStateChanged: false,
+            // impl for toggling coordinates is commented out in JSX. This will be enabled on future release.
             showCoordinates: false,
             coordinatePosition: COORDINATE_POSITIONS[0],
             coordinateProjection: COORDINATE_PROJECTIONS[0]
