@@ -33,6 +33,7 @@ class UIHandler extends StateHandler {
         this.decimalSeparator = Oskari.getDecimalSeparator();
         this.preciseTransform = Array.isArray(this.config.supportedProjections);
         this.popupListeners = [];
+        this.addStateListener(() => this.updatePopup());
     };
 
     addPopupListener (func) {
@@ -63,35 +64,30 @@ class UIHandler extends StateHandler {
         this.updateState({
             loading: status
         });
-        this.updatePopup();
     }
 
     toggleMouseCoordinates () {
         this.updateState({
             showMouseCoordinates: !this.state.showMouseCoordinates
         });
-        this.updatePopup();
     }
 
     toggleReverseGeoCode () {
         this.updateState({
             showReverseGeoCode: !this.state.showReverseGeoCode
         });
-        this.updatePopup();
     }
 
     setLonInputValue (value) {
         this.updateState({
             lonField: value
         });
-        this.updatePopup();
     }
 
     setLatInputValue (value) {
         this.updateState({
             latField: value
         });
-        this.updatePopup();
     }
 
     async useUserDefinedCoordinates () {
@@ -102,7 +98,7 @@ class UIHandler extends StateHandler {
             }
         };
         const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
-        await this.updateLonLat(converted, true, true, true);
+        this.updateLonLat(converted, true, true, true);
     }
 
     coordinatesToMetric (data) {
@@ -158,7 +154,7 @@ class UIHandler extends StateHandler {
         return data;
     }
 
-    async updateLonLat (data, getDataFromServer = false, updateReverseGeoCode = false, updateEmergencyCallInfo = false) {
+    updateLonLat (data, getDataFromServer = false, updateReverseGeoCode = false, updateEmergencyCallInfo = false) {
         if (!data || !data.lonlat) {
             // update with map coordinates if coordinates not given
             data = this.getMapXY();
@@ -173,10 +169,10 @@ class UIHandler extends StateHandler {
         }
 
         if (updateEmergencyCallInfo) {
-            await this.getEmergencyCallInfo(data);
+            this.getEmergencyCallInfo(data);
         }
 
-        await this.updateDisplayValues(data, getDataFromServer);
+        this.updateDisplayValues(data, getDataFromServer);
     }
 
     async updateDisplayValues (data, getDataFromServer) {
@@ -219,7 +215,6 @@ class UIHandler extends StateHandler {
             lonField: lon,
             approxValue: !fromServer && isSupported && isDifferentProjection
         });
-        this.updatePopup();
     }
 
     setSelectedProjection (projection) {
@@ -250,7 +245,7 @@ class UIHandler extends StateHandler {
         }
     }
 
-    async centerMap (coordinates) {
+    centerMap (coordinates) {
         try {
             let data = coordinates || this.state.xy;
             this.centerMapToSelectedCoordinates(data);
@@ -268,8 +263,8 @@ class UIHandler extends StateHandler {
         }
     }
 
-    async setMarker () {
-        await this.centerMap();
+    setMarker () {
+        this.centerMap();
         const data = this.state.xy || this.getMapXY();
         const displayData = { lonlat: { lon: this.state.lonField, lat: this.state.latField } } || this.getMapXY();
         let lat = displayData?.lonlat?.lat || data?.lonlat?.lat;
@@ -579,7 +574,7 @@ class UIHandler extends StateHandler {
              * @method MouseHoverEvent
              * See PorttiMouse.notifyHover
              */
-            MouseHoverEvent: async function (event) {
+            MouseHoverEvent: function (event) {
                 if (this.state.showMouseCoordinates && !this.state.loading) {
                     const data = {
                         'lonlat': {
@@ -588,9 +583,9 @@ class UIHandler extends StateHandler {
                         }
                     };
                     if (event.isPaused()) {
-                        await this.updateLonLat(data, true, true, true);
+                        this.updateLonLat(data, true, true, true);
                     } else {
-                        await this.updateLonLat(data, false, false, false);
+                        this.updateLonLat(data, false, false, false);
                     }
                 }
             },
@@ -598,17 +593,17 @@ class UIHandler extends StateHandler {
              * @method AfterMapMoveEvent
              * Shows map center coordinates after map move
              */
-            AfterMapMoveEvent: async function (event) {
+            AfterMapMoveEvent: function (event) {
                 if (!this.popupControls) return;
                 if (!this.state.showMouseCoordinates) {
-                    await this.updateLonLat(this.getMapXY(), true, true, true);
+                    this.updateLonLat(this.getMapXY(), true, true, true);
                 }
             },
             /**
              * @method MapClickedEvent
              * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
              */
-            MapClickedEvent: async function (event) {
+            MapClickedEvent: function (event) {
                 if (!this.popupControls) return;
                 const lonlat = event.getLonLat();
                 const data = {
@@ -618,7 +613,7 @@ class UIHandler extends StateHandler {
                     }
                 };
                 if (!this.showMouseCoordinates) {
-                    await this.updateLonLat(data, true, true, true);
+                    this.updateLonLat(data, true, true, true);
                 }
             }
         };
