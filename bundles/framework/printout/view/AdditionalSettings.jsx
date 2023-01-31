@@ -26,6 +26,7 @@ const CoordinateOptions = styled('div')`
 `;
 
 const StyledCheckbox = styled(Checkbox)`
+    align-items: flex-start;
     + .ant-checkbox-wrapper {
         margin-left: 0;
     }
