@@ -252,7 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
                 var isOpen = event.getViewState() !== 'close';
                 if (isOpen && this.handler) {
-                    this.handler?.getController()?.updatePanel();
+                    this.updatePanel();
                 }
             },
 
