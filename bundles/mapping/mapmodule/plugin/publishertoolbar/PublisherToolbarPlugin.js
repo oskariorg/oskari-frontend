@@ -167,7 +167,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         renderToolbarItems: function () {
-            const sandbox = this.getSandbox();
             let buttons = [];
 
             this._toolButtons.forEach(button => {
@@ -183,7 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                     const reqBuilder = Oskari.requestBuilder(
                                         'ToolSelectionRequest'
                                     );
-                                    sandbox.request(
+                                    this.getSandbox().request(
                                         this,
                                         reqBuilder('map_control_tool_prev')
                                     );
@@ -203,7 +202,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                     const reqBuilder = Oskari.requestBuilder(
                                         'ToolSelectionRequest'
                                     );
-                                    sandbox.request(
+                                    this.getSandbox().request(
                                         this,
                                         reqBuilder('map_control_tool_next')
                                     );
