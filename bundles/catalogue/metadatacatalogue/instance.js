@@ -331,7 +331,7 @@ Oskari.clazz.define(
                 const isShown = event.getViewState() !== 'close';
 
                 // ExtensionUpdateEvents are fired a lot, only let metadatacatalogue extension event to be handled when enabled
-                if (event.getExtension().getName() !== 'Search') {
+                if (![this.getName(), 'Search'].includes(event.getExtension().getName())) {
                     // wasn't me or disabled -> do nothing
                     return;
                 }
@@ -549,10 +549,12 @@ Oskari.clazz.define(
                 content = me.metadataCatalogueContainer,
                 priority = this.tabPriority,
                 reqBuilder = Oskari.requestBuilder('Search.AddTabRequest');
-
-            const req = reqBuilder(title, content, priority, this.id);
-
-            me.sandbox.request(me, req);
+            if (typeof reqBuilder === 'function') {
+                me.sandbox.request(me, reqBuilder(title, content, priority, this.id));
+            } else {
+                // add a tile and flyout if search is not present on the appsetup
+                this.__addTileAndFlyout();
+            }
 
             // Link to advanced search
             var moreLessLink = this.templates.moreLessLink.clone();
@@ -587,6 +589,50 @@ Oskari.clazz.define(
             me.metadataCatalogueContainer.find('div.moreLess').append(moreLessLink);
         },
 
+        /* ----------- Tile and Flyout ------------- */
+        __addTileAndFlyout: function() {
+            const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+            this.getSandbox().request(this, request);
+            // attach content to flyout when divmanazer has set up root element
+            this.plugins['Oskari.userinterface.Flyout'].getEl().append(this.metadataCatalogueContainer);
+        },
+
+        /**
+         * @method startExtension
+         * implements Oskari.userinterface.Extension protocol startExtension method
+         * Creates a flyout and a tile:
+         * Oskari.mapframework.bundle.layerlist.Flyout
+         * Oskari.mapframework.bundle.layerlist.Tile
+         */
+        startExtension: function () {
+            const title = this.getTitle();
+            this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
+                'Oskari.userinterface.extension.DefaultTile', this, {
+                    title
+                });
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
+                'Oskari.userinterface.extension.DefaultFlyout', this, {
+                    title
+                });
+        },
+        /**
+         * @method stopExtension
+         * implements Oskari.userinterface.Extension protocol stopExtension method
+         * Clears references to flyout and tile
+         */
+        stopExtension: function () {
+            this.plugins['Oskari.userinterface.Flyout'] = null;
+            this.plugins['Oskari.userinterface.Tile'] = null;
+        },
+        /**
+         * @method getPlugins
+         * implements Oskari.userinterface.Extension protocol getPlugins method
+         * @return {Object} references to flyout and tile
+         */
+        getPlugins: function () {
+            return this.plugins;
+        },
+        /* ----------- /Tile and Flyout ------------- */
         _showError: function (error) {
             this.searchPanel.hide();
             this.optionPanel.show();
@@ -718,6 +764,7 @@ Oskari.clazz.define(
 
             me._updateOptions(advancedContainer);
         },
+
         _initCoverageButton: function (me, newButton) {
             this.coverageButton = newButton.find('.metadataCoverageDef');
             this.coverageButton.attr('value', me.loc('delimitArea'));
