@@ -108,7 +108,8 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
         if (style.isExternalStyle() && olLayers.length !== 0) {
             const externalStyleDef = style.getExternalDef() || {};
             const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
-            return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
+            const resolutions = [...this.getMapModule().getResolutionArray()];
+            return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds, resolutions);
         }
         return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
     }
