@@ -51,7 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         this._log = Oskari.log(this.getName());
         this.mapModule = undefined;
         this.scaleOptions = [];
-        this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
     }, {
         /**
          * @static
@@ -220,7 +219,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         },
         isTimeSeriesActive: function () {
             const hasLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times).length > 0;
-            return hasLayers && !!this.timeseriesPlugin;
+            return hasLayers;
         },
         /**
          * @method onEvent

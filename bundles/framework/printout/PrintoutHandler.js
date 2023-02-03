@@ -17,7 +17,7 @@ class UIHandler extends StateHandler {
             previewImage: null,
             scaleType: 'map',
             scale: null,
-            showTimeSeriesDate: false,
+            showTimeSeriesDate: true,
             isMapStateChanged: false,
             // impl for toggling coordinates is commented out in JSX. This will be enabled on future release.
             showCoordinates: false,
@@ -25,7 +25,6 @@ class UIHandler extends StateHandler {
             coordinateProjection: COORDINATE_PROJECTIONS[0]
         });
         this.sidePanel = null;
-        this.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
         this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
     };
@@ -82,13 +81,19 @@ class UIHandler extends StateHandler {
         }
     }
 
-    printMap (selections) {
-        const { maplinkArgs, customStyles, ...params } = selections || this.gatherParams();
+    printMap () {
+        const { maplinkArgs, customStyles, ...params } = this.gatherParams();
         if (this.state.showTimeSeriesDate) {
-            params[PARAMS.TIME] = this.timeseriesPlugin.getCurrentTime();
-            if (params.pageTimeSeriesTime) {
-                params[PARAMS.FORMATTED_TIME] = this.timeseriesPlugin.getCurrentTimeFormatted();
-                params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
+            const layers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times && l.isVisible());
+            if (layers?.length > 0) {
+                const layer = layers.reverse()[0];
+                const time = layer.getParams().time.split('/')[0];
+                const formatted = Oskari.getMsg('timeseries', 'dateRender', { val: new Date(time) });
+                params[PARAMS.TIME] = time;
+                if (params.pageTimeSeriesTime) {
+                    params[PARAMS.FORMATTED_TIME] = formatted;
+                    params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
+                }
             }
         }
         if (this.state.showCoordinates) {
@@ -124,8 +129,9 @@ class UIHandler extends StateHandler {
         const maplinkArgs = this.sandbox.generateMapLinkParameters({ srs, resolution, scaleText }, optimized);
         const pageScale = this.state.showScale;
         const pageDate = this.state.showDate;
+        const pageTimeSeriesTime = this.state.showTimeSeriesDate;
 
-        return { maplinkArgs, pageSize, format, customStyles, pageTitle, pageScale, pageDate };
+        return { maplinkArgs, pageSize, format, customStyles, pageTitle, pageScale, pageDate, pageTimeSeriesTime };
     }
 
     /**
