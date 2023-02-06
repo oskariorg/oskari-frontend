@@ -358,7 +358,7 @@ div.oskari-flyout {
             padding: $flyoutPadding;
         }
         /* TODO: limits the table from blowing up the flyout, but this needs to be handled in some other way */
-        max-width: 700px;
+        width: 516px !important;
 
         table.oskari-grid {
             th.selected {
