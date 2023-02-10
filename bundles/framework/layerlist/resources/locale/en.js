@@ -69,6 +69,7 @@ Oskari.registerLocalization(
                 'arcgis93': 'Raster layer',
                 'arcgis': 'Raster layer',
                 'vectortile': 'Raster layer',
+                'bingmaps': 'Raster layer',
                 'wfs': 'Vector layer',
                 'vector': 'Vector layer',
                 'userlayer': 'Own dataset',

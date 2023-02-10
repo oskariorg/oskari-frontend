@@ -68,6 +68,7 @@ Oskari.registerLocalization(
                 'arcgis93': 'Kartlager i rasterformat',
                 'arcgis': 'Kartlager i rasterformat',
                 'vectortile': 'Kartlager i rasterformat',
+                'bingmaps': 'Kartlager i rasterformat',
                 'wfs': 'Kartlager i vektorformat',
                 'vector': 'Kartlager i vektorformat',
                 'userlayer': 'Eget dataset',
