@@ -176,28 +176,23 @@ Oskari.clazz.define(
         },
 
         _createServiceLink: function (el) {
-            var me = this,
-                element = el || me.getElement(),
-                mapUrl = me.__getMapUrl(),
-                linkParams;
-            if (!element) {
+            if (!el) {
                 return;
             }
-
             const logoUrl = Oskari.urls.getRoute('Logo');
-
-            var options = {
+            const { geoportalLink = true } = this.getConfig();
+            const options = {
                 id: 'logo',
                 src: logoUrl,
-                callback: function (event) {
-                    if (!me.inLayerToolsEditMode()) {
-                        linkParams = me.getSandbox().generateMapLinkParameters({});
+                callback: () => {
+                    if (!this.inLayerToolsEditMode() && geoportalLink) {
+                        const mapUrl = this.__getMapUrl();
+                        const linkParams = this.getSandbox().generateMapLinkParameters({});
                         window.open(mapUrl + linkParams, '_blank');
                     }
                 }
             };
-
-            me._extendService.addLabel('', options);
+            this._extendService.addLabel('', options);
         },
 
         /**
