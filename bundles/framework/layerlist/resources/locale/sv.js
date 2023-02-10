@@ -70,10 +70,10 @@ Oskari.registerLocalization(
                 'vectortile': 'Kartlager i rasterformat',
                 'wfs': 'Kartlager i vektorformat',
                 'vector': 'Kartlager i vektorformat',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'userlayer': 'Eget dataset',
+                'myplaces': 'Mitt kartlager',
+                'analysislayer': 'Min analys',
+                'tiles3d': '3D kartlager'
             },
             'guidedTour': {
                 'title': 'Kartlager',

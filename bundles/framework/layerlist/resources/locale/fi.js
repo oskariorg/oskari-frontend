@@ -71,10 +71,10 @@ Oskari.registerLocalization(
                 'vectortile': 'Rasteritaso',
                 'wfs': 'Vektoritaso',
                 'vector': 'Vektoritaso',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'userlayer': 'Oma aineisto',
+                'myplaces': 'Oma karttataso',
+                'analysislayer': 'Oma analyysi',
+                'tiles3d': '3D-taso'
             },
             'guidedTour': {
                 'title': 'Karttatasot',
