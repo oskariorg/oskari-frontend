@@ -175,10 +175,7 @@ Oskari.clazz.define(
             this.removeFromPluginContainer(this.getElement());
         },
 
-        _createServiceLink: function (el) {
-            if (!el) {
-                return;
-            }
+        _createServiceLink: function () {
             const logoUrl = Oskari.urls.getRoute('Logo');
             const { geoportalLink = true } = this.getConfig();
             const options = {
