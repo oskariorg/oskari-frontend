@@ -69,12 +69,13 @@ Oskari.registerLocalization(
                 'arcgis93': 'Raster layer',
                 'arcgis': 'Raster layer',
                 'vectortile': 'Raster layer',
+                'bingmaps': 'Raster layer',
                 'wfs': 'Vector layer',
                 'vector': 'Vector layer',
-                'userlayer': '',
-                'myplaces': '',
-                'analysislayer': '',
-                'tiles3d': ''
+                'userlayer': 'Own dataset',
+                'myplaces': 'My map layer',
+                'analysislayer': 'Own analysis',
+                'tiles3d': '3D layer'
             },
             'guidedTour': {
                 'title': 'Map layers',
