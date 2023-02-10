@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         // the show "add all layers to map" control for groups is disabled by default. Use instance conf to enable it.
+        // view/bundle modifier adds backend status available conf if bundle is present
         const defaultOpts = {
             [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE,
             [BACKEND_STATUS_AVAILABLE]: false
