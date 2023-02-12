@@ -56,7 +56,7 @@ class SearchHandler extends StateHandler {
         return 'SearchPluginHandler';
     }
 
-    getSandbox() {
+    getSandbox () {
         return this.plugin.getSandbox();
     }
 
