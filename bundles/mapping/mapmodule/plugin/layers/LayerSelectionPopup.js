@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { showPopup, PLACEMENTS } from 'oskari-ui/components/window';
+import { showPopup } from 'oskari-ui/components/window';
 import { BaseLayerList } from './LayerSelectionPopup/BaseLayerList';
 import { LayerList } from './LayerSelectionPopup/LayerList';
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
+import { getPopupOptions } from '../pluginPopupHelper';
 import styled from 'styled-components';
 
 const BUNDLE_NAME = 'MapModule';
@@ -27,38 +28,11 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
     );
 };
 
-export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, pluginPosition, theme) => {
-    let position;
-    switch (pluginPosition) {
-    case 'top right':
-        position = PLACEMENTS.TR;
-        break;
-    case 'right top':
-        position = PLACEMENTS.TR;
-        break;
-    case 'top left':
-        position = PLACEMENTS.TL;
-        break;
-    case 'left top':
-        position = PLACEMENTS.TL;
-        break;
-    case 'center top':
-        position = PLACEMENTS.TOP;
-        break;
-    case 'top center':
-        position = PLACEMENTS.TOP;
-        break;
-    default:
-        position = PLACEMENTS.TL;
-        break;
-    }
-
-    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-    const options = {
-        id: POPUP_ID,
-        placement: position,
-        theme: mapModule.getMapTheme()
-    };
+export const showLayerSelectionPopup = (baseLayers, layers, onClose, showMetadata, styleSelectable, setLayerVisibility, selectStyle, pluginLocation) => {
+    const options = getPopupOptions({
+        getName: () => POPUP_ID,
+        getLocation: () => pluginLocation
+    });
 
     const controls = showPopup(
         <Message bundleKey={BUNDLE_NAME} messageKey='plugin.LayerSelectionPlugin.title' />,
