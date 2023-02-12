@@ -53,9 +53,9 @@ const PopupTitle = styled.span`
     margin-right: auto;
     width: 100%;
 `;
-// Note! max-height isn't recalculated when window size changes :(
+// Note! use vh with max-height so it can handle window size changes
 const PopupBody = styled.div`
-    max-height: ${window.innerHeight - 100}px;
+    max-height: 90vh;
     overflow: auto;
 `;
 const ToolsContainer = styled.div`
