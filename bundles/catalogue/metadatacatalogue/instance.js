@@ -590,7 +590,7 @@ Oskari.clazz.define(
         },
 
         /* ----------- Tile and Flyout ------------- */
-        __addTileAndFlyout: function() {
+        __addTileAndFlyout: function () {
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             this.getSandbox().request(this, request);
             // attach content to flyout when divmanazer has set up root element
