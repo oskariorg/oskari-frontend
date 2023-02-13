@@ -149,6 +149,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Grafisk layout",
+                "title": {
+                    "popup": "Popup window",
+                    "buttons": "Buttons"
+                },
                 "fields": {
                     "colours": {
                         "label": "Färgschema",
@@ -181,7 +185,8 @@ Oskari.registerLocalization(
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
                     },
-                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
+                    "popupHeaderColor": "Otsikon taustaväri",
+                    "popupHeaderTextColor": "Otsikon väri",
                     "buttonBackgroundColor": "Painikkeiden taustaväri",
                     "buttonTextColor": "Ikonien väri",
                     "buttonAccentColor": "Ikonien tehosteväri",
