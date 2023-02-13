@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
-import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS } from './constants';
+import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS, BACKEND_STATUS_AVAILABLE } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -20,8 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         // the show "add all layers to map" control for groups is disabled by default. Use instance conf to enable it.
+        // view/bundle modifier adds backend status available conf if bundle is present
         const defaultOpts = {
-            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE
+            [LAYER_GROUP_TOGGLE_LIMIT]: LAYER_GROUP_TOGGLE_DEFAULTS.DISABLE_TOGGLE,
+            [BACKEND_STATUS_AVAILABLE]: false
         };
         const instanceConf = this.instance.conf || {};
         this.optsForUI = {

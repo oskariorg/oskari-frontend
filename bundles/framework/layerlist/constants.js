@@ -9,3 +9,5 @@ export const LAYER_GROUP_TOGGLE_DEFAULTS = {
     // max reasonable limit of layers to add to the map with a single click
     SANE_LIMIT: 10
 };
+
+export const BACKEND_STATUS_AVAILABLE = 'backendStatusAvailable';
