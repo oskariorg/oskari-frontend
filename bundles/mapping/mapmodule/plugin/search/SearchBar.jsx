@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Button, TextInput } from 'oskari-ui';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { MapModuleButton } from '../../MapModuleButton';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
@@ -47,32 +48,51 @@ const SearchContainer = styled('div')`
     box-shadow: 1px 1px 2px rgb(0 0 0 / 60%);
 `;
 
-export const SearchBar = ThemeConsumer(({ theme = {}, search, loading, disabled = false, placeholder }) => {
+export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placeholder, state = {}, controller }) => {
     const helper = getNavigationTheme(theme);
     const bgColor = helper.getButtonColor();
     const icon = helper.getTextColor();
     const rounding = helper.getButtonRoundness();
     const opacity = helper.getButtonOpacity();
-    const [value, setValue] = useState('');
-
+    if (state.minimized) {
+        return (
+            <MapModuleButton
+                className='t_search_minimized'
+                icon={<SearchOutlined />}
+                onClick={() => controller.requestSearchUI()}
+            />);
+    }
+    const search = () => controller.doSearch();
     return (
         <SearchContainer backgroundColor={bgColor} rounding={rounding} opacity={opacity}>
             <StyledInput
                 rounding={rounding}
-                value={value}
-                onChange={e => setValue(e.target.value)}
+                value={state.query}
+                onChange={e => controller.setQuery(e.target.value)}
                 allowClear
-                loading={loading}
-                onPressEnter={e => search(value)}
+                onPressEnter={search}
                 disabled={disabled}
                 placeholder={placeholder}
             />
+            { state.hasOptions &&
+                <StyledButton
+                    $rounding={rounding}
+                    $iconColor={icon}
+                    $backgroundColor={bgColor}
+                    onClick={() => controller.showOptions()}
+                    icon={<SettingOutlined />}
+                    className='t_search_options'
+                    disabled={disabled}
+                />
+            }
             <StyledButton
                 $rounding={rounding}
                 $iconColor={icon}
                 $backgroundColor={bgColor}
-                onClick={e => search(value)}
+                onClick={search}
                 icon={<SearchOutlined />}
+                loading={state.loading}
+                className='t_search'
                 disabled={disabled}
             />
         </SearchContainer>

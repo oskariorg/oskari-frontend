@@ -1,8 +1,8 @@
 import '../../../../service/search/searchservice';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { SearchHandler } from './SearchHandler';
 import { SearchBar } from './SearchBar';
-import { showResultsPopup } from './SearchResultsPopup';
 import { ThemeProvider } from 'oskari-ui/util';
 
 /**
@@ -26,57 +26,17 @@ Oskari.clazz.define(
         me._defaultLocation = 'top left';
         me._index = 0;
         me._name = 'SearchPlugin';
-        me._searchMarkerId = 'SEARCH_RESULT_MARKER';
-        me._popupControls = null;
     }, {
 
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
-         * Initializes ui templates and search service.
-         *
-         *
+         * Initializes ui templates.
          */
         _initImpl: function () {
-            var me = this;
-
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
-
-            me.template = jQuery(
-                '<div class="mapplugin search default-search-div" />'
-            );
-
-            me.service = Oskari.clazz.create(
-                'Oskari.service.search.SearchService', me.getSandbox(), me.getConfig().url);
-
-            me.inMobileMode = false;
-        },
-        _clearPopup: function () {
-            if (this._popupControls) {
-                this._popupControls.close();
-            }
-            this._popupControls = null;
-        },
-        _showResultsPopup: function (results) {
-            this._enableSearch();
-            this._clearPopup();
-            const { totalCount, hasMore, locations } = results;
-            const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
-            let description = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + msgKey, { count: totalCount });
-            if (totalCount === 0) {
-                description = this._loc.noresults;
-            } else if (totalCount === 1) {
-                // only one result, show it immediately
-                this._resultClicked(locations[0]);
-                return;
-            }
-            this._popupControls = showResultsPopup(
-                this._loc.title,
-                description,
-                locations,
-                (result) => this._resultClicked(result),
-                () => this._clearPopup(),
-                this.getLocation());
+            this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
+            this.template = jQuery('<div class="mapplugin search default-search-div" />');
+            this.inMobileMode = false;
         },
         _setLayerToolsEditModeImpl: function () {
             var me = this,
@@ -115,25 +75,7 @@ Oskari.clazz.define(
             }
 
             // bind events
-            me._bindUIEvents(el);
             return el;
-        },
-
-        _bindUIEvents: function (el) {
-            var me = this,
-                content = el || me.getElement();
-            // to close button
-            content.find('div.close').on('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    me._hideSearch();
-                }
-            });
-            content.find('div.close-results').on('click', function (event) {
-                if (!me.isInLayerToolsEditMode) {
-                    me._hideSearch();
-                }
-            });
-            content.find('div.results').hide();
         },
 
         refresh: function () {
@@ -153,95 +95,6 @@ Oskari.clazz.define(
             }
         },
 
-        /**
-         * @private @method _doSearch
-         * Uses SearchService to make the actual search and calls  #_showResults
-         *
-         *
-         */
-        _doSearch: function (text) {
-            if (this._searchInProgess) {
-                return;
-            }
-            this._hideSearch();
-            this._searchInProgess = true;
-            this.service.doSearch(text, results => this._showResultsPopup(results), () => this._enableSearch());
-        },
-
-        _setMarker: function (result) {
-            var me = this,
-                reqBuilder,
-                sandbox = me.getSandbox(),
-                lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat,
-                lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
-
-            // Add new marker
-            reqBuilder = Oskari.requestBuilder(
-                'MapModulePlugin.AddMarkerRequest'
-            );
-            if (reqBuilder) {
-                sandbox.request(
-                    me.getName(),
-                    reqBuilder({
-                        color: 'ffde00',
-                        msg: result.name,
-                        shape: 2,
-                        size: 3,
-                        x: lon,
-                        y: lat
-                    }, me._searchMarkerId)
-                );
-            }
-        },
-
-        /**
-         * @private @method _resultClicked
-         * Click event handler for search result HTML table rows.
-         * Parses paramStr and sends out Oskari.mapframework.request.common.MapMoveRequest
-         *
-         * @param {Object} result
-         */
-        _resultClicked: function (result) {
-            var zoom = result.zoomLevel;
-            if (result.zoomScale) {
-                zoom = { scale: result.zoomScale };
-            }
-            this.getSandbox().request(
-                this.getName(),
-                Oskari.requestBuilder(
-                    'MapMoveRequest'
-                )(result.lon, result.lat, zoom)
-            );
-            this._setMarker(result);
-        },
-
-        /**
-         * @method _enableSearch
-         * Resets the 'search in progress' flag and removes the loading icon
-         * @private
-         */
-        _enableSearch: function () {
-            this._searchInProgess = false;
-        },
-
-        /**
-         * @private @method _hideSearch
-         * Hides the search result and sends out MapModulePlugin.RemoveMarkersRequest
-         */
-        _hideSearch: function () {
-            var me = this;
-            me.getElement().find('div.results').hide();
-            // Send hide marker request
-            // This is done just so the user can get rid of the marker somehow...
-            var requestBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
-            if (!requestBuilder) {
-                return;
-            }
-            me.getSandbox().request(
-                me.getName(),
-                requestBuilder(me._searchMarkerId)
-            );
-        },
         /**
          * Changes the tool style of the plugin
          *
@@ -269,17 +122,17 @@ Oskari.clazz.define(
                 el = this.getElement();
             }
             if (!el) return;
+            if (!this.handler) {
+                // init handler here so we can be sure we have a sandbox for this instance
+                this.handler = new SearchHandler(this);
+                this.handler.addStateListener(() => this.renderSearchBar());
+            }
 
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <SearchBar
-                        loading={this._searchInProgess}
-                        search={text => {
-                            if (!this.inLayerToolsEditMode()) {
-                                this._doSearch(text);
-                            }
-                        }}
-                        searchText={this.searchText}
+                        state={this.handler.getState()}
+                        controller={this.handler.getController()}
                         disabled={disabled}
                         placeholder={this._loc.placeholder}
                     />
@@ -288,25 +141,9 @@ Oskari.clazz.define(
             );
         },
 
-        /**
-         * @method changeResultListStyle
-         * Changes the style of the search result list.
-         *
-         * @param  {Object} toolStyle
-         * @param  {jQuery} div
-         *
-         * @return {undefined}
-         */
-        changeResultListStyle: function (toolStyle, div) {
-            var cssClass = 'oskari-publisher-search-results-' + toolStyle.val,
-                testRegex = /oskari-publisher-search-results-/;
-
-            this.changeCssClasses(cssClass, testRegex, [div]);
-        },
-
         teardownUI: function () {
-            if (this.popup) {
-                this.popup.close();
+            if (this.handler) {
+                this.handler.clearPopup();
             }
         },
         /**
@@ -317,13 +154,9 @@ Oskari.clazz.define(
         *
         *
         */
-        _stopPluginImpl: function (sandbox) {
-            var me = this;
+        _stopPluginImpl: function () {
             // Remove search results
-            if (me.popup) {
-                me.popup.close();
-                me.popup = null;
-            }
+            this.teardownUI();
             this.removeFromPluginContainer(this.getElement());
         },
         /**
