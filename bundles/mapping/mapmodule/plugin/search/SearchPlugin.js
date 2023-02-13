@@ -70,7 +70,13 @@ Oskari.clazz.define(
                 this._resultClicked(locations[0]);
                 return;
             }
-            this._popupControls = showResultsPopup(this._loc.title, description, locations, (result) => this._resultClicked(result), () => this._clearPopup());
+            this._popupControls = showResultsPopup(
+                this._loc.title,
+                description,
+                locations,
+                (result) => this._resultClicked(result),
+                () => this._clearPopup(),
+                this.getLocation());
         },
         _setLayerToolsEditModeImpl: function () {
             var me = this,

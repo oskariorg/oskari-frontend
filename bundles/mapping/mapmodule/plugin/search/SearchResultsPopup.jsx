@@ -3,6 +3,7 @@ import { showPopup } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Message } from 'oskari-ui';
+import { getPopupOptions } from '../pluginPopupHelper';
 
 const StyledTable = styled(Table)`
     tr {
@@ -62,11 +63,10 @@ const PopupContent = ({ results, description, showResult }) => {
     )
 };
 
-export const showResultsPopup = (title, description, results = [], showResult, onClose) => {
-    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-    const options = {
-        id: 'searchResults',
-        theme: mapModule.getMapTheme()
-    }
+export const showResultsPopup = (title, description, results = [], showResult, onClose, pluginLocation) => {
+    const options = getPopupOptions({
+        getName: () => 'searchResults',
+        getLocation: () => pluginLocation
+    });
     return showPopup(title, <PopupContent description={description} results={results} showResult={showResult} />, onClose, options);
 };
