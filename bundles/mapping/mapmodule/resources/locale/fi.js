@@ -60,7 +60,12 @@ Oskari.registerLocalization(
                 "column_name": "Nimi",
                 "column_region": "Alue",
                 "column_village": "Kunta",
-                "column_type": "Tyyppi"
+                "column_type": "Tyyppi",
+
+                "options": {
+                    "title": "Hakuvalinnat",
+                    "description": "Tarkenna hakuehtoja valitsemalla tietolähteet"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Kohdetiedot",

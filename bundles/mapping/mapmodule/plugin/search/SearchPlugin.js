@@ -143,7 +143,7 @@ Oskari.clazz.define(
 
         teardownUI: function () {
             if (this.handler) {
-                this.handler.clearPopup();
+                this.handler.teardown();
             }
         },
         /**

@@ -6,11 +6,15 @@ import { MapModuleButton } from '../../MapModuleButton';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
 
+// this would make the clear cross be closer to edge:
+// padding: 4px 0px 4px 11px;
 const StyledInput = styled(TextInput)`
     height: 24px;
     border-radius: calc(${props => props.rounding ? props.rounding.replace('%', '') / 100 : 0} * 24px);
 `;
 
+// filtering class means that the search uses other channels than what are used by default
+// -> highlight the button
 const StyledButton = styled(Button)`
     margin-left: 7px;
     height: 24px;
@@ -22,6 +26,9 @@ const StyledButton = styled(Button)`
         background: ${props => props.$backgroundColor};
         color: ${props => props.$iconColor};
         border: none;
+        path {
+            fill: ${props => props.$hoverColor};
+        }
     }
     &:focus {
         background: ${props => props.$backgroundColor};
@@ -33,7 +40,11 @@ const StyledButton = styled(Button)`
         color: ${props => props.$iconColor};
         border: none;
     }
+    &.filtering {
+        color:  ${props => props.$hoverColor};
+    }
 `;
+
 
 const SearchContainer = styled('div')`
     margin: 0 10px 10px 10px;
@@ -54,6 +65,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
     const icon = helper.getTextColor();
     const rounding = helper.getButtonRoundness();
     const opacity = helper.getButtonOpacity();
+    const hover = helper.getButtonHoverColor();
     if (state.minimized) {
         return (
             <MapModuleButton
@@ -63,6 +75,12 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
             />);
     }
     const search = () => controller.doSearch();
+    const { defaultChannels = [], selectedChannels = []} = state;
+    const isUsingDefaultChannels = selectedChannels.length === defaultChannels.length && selectedChannels.every(id => defaultChannels.includes(id));
+    let optionsCSSClasses = 't_search_options';
+    if (!isUsingDefaultChannels) {
+        optionsCSSClasses += ' filtering';
+    }
     return (
         <SearchContainer backgroundColor={bgColor} rounding={rounding} opacity={opacity}>
             <StyledInput
@@ -79,9 +97,10 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
                     $rounding={rounding}
                     $iconColor={icon}
                     $backgroundColor={bgColor}
+                    $hoverColor={hover}
                     onClick={() => controller.showOptions()}
                     icon={<SettingOutlined />}
-                    className='t_search_options'
+                    className={optionsCSSClasses}
                     disabled={disabled}
                 />
             }
@@ -89,6 +108,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
                 $rounding={rounding}
                 $iconColor={icon}
                 $backgroundColor={bgColor}
+                $hoverColor={hover}
                 onClick={search}
                 icon={<SearchOutlined />}
                 loading={state.loading}
