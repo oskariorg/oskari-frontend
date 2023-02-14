@@ -184,7 +184,7 @@ class SearchHandler extends StateHandler {
         // related to state.hasOptions: false
         // hasOptions is always false for now since this has not been implemented yet
     }
-    fetchChannels() {
+    fetchChannels () {
         fetch(Oskari.urls.getRoute('SearchOptions')).then(response => {
             if (!response.ok) {
                 throw Error(response.statusText);
@@ -221,7 +221,7 @@ class SearchHandler extends StateHandler {
         });
     }
 
-    setChannelEnabled(channelId, enabled) {
+    setChannelEnabled (channelId, enabled) {
         let { selectedChannels } = this.getState();
         if (enabled) {
             selectedChannels.push(channelId);
