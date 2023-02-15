@@ -47,7 +47,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
 
         const navDimensions = getNavigationDimensions();
         var position = navDimensions.right;
-        var offset = 40;
         const y = this._positionY;
         const container = jQuery(Oskari.dom.getRootEl());
         this.flyoutInfo.forEach((info) => {
@@ -56,7 +55,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
                 cls: info.cls,
                 container,
                 position: {
-                    x: position + offset,
+                    x: position,
                     y
                 }
             }, this.instance);
