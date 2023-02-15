@@ -27,8 +27,8 @@ const Publishable = styled.span`
 `;
 
 const PublishableCol = styled(ColAutoRight)`
-    padding-left: 20px;
-    padding-right: 0;
+    padding: 0 0 0 20px;
+    align-self: flex-end;
 `;
 
 const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
@@ -83,7 +83,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                             <ColAuto style={{ padding: '0px', flexShrink: 1 }}>
                                                 {organizationName}
                                             </ColAuto>
-                                            <PublishableCol style={{ padding: '0px', alignSelf: 'flex-end' }}>
+                                            <PublishableCol>
                                                 {publishable &&
                                                 <Fragment>
                                                     <CheckOutlined style={{ color: '#01ca79' }} />
