@@ -26,6 +26,11 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
+const PublishableCol = styled(ColAutoRight)`
+    padding: 0 0 0 20px;
+    align-self: flex-end;
+`;
+
 const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const organizationName = layer.getOrganizationName();
     const publishable = layer.hasPermission('publish');
@@ -78,7 +83,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                             <ColAuto style={{ padding: '0px', flexShrink: 1 }}>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px', alignSelf: 'flex-end' }}>
+                                            <PublishableCol>
                                                 {publishable &&
                                                 <Fragment>
                                                     <CheckOutlined style={{ color: '#01ca79' }} />
@@ -87,7 +92,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                                     </Publishable>
                                                 </Fragment>
                                                 }
-                                            </ColAutoRight>
+                                            </PublishableCol>
                                         </Row>
                                     </Col>
                                     <ColAutoRight>
