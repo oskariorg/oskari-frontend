@@ -230,6 +230,11 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
             },
+            "mapLayers": {
+                "label": "Karttatasot",
+                "selectLayers": "Tasojen valinta",
+                "layersDisplay": "Tasojen esitystapa"
+            },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",
             "zoomlevel": "Mittakaavataso",
