@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
+import { Divider, Message, Slider, Checkbox, Dropdown, Button, Select, Option, NumberInput } from 'oskari-ui';
 import { ColorPicker } from 'oskari-ui/components/ColorPicker';
 
 const BUNDLE_KEY = 'Publisher2';
@@ -67,6 +67,8 @@ const StyledSelect = styled(Select)`
 export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
     const [font, setFont] = useState(mapTheme?.font || fonts[0].val);
     const [popupHeader, setPopupHeader] = useState(mapTheme?.color?.header?.bg);
+    const [popupHeaderText, setPopupHeaderText] = useState(mapTheme?.color?.header?.text);
+
     const [buttonBackground, setButtonBackground] = useState(mapTheme?.navigation?.color?.primary);
     const [buttonText, setButtonText] = useState(mapTheme?.navigation?.color?.text);
     const [buttonAccent, setButtonAccent] = useState(mapTheme?.navigation?.color?.accent);
@@ -81,8 +83,11 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                 ...mapTheme.color,
                 header: {
                     ...mapTheme.color.header,
-                    bg: popupHeader
-                }
+                    bg: popupHeader,
+                    text: popupHeaderText,
+                    icon: popupHeaderText
+                },
+                accent: buttonAccent
             },
             navigation: {
                 ...mapTheme.navigation,
@@ -97,7 +102,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
             }
         };
         changeTheme(theme);
-    }, [font, popupHeader, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
+    }, [font, popupHeader, popupHeaderText, buttonBackground, buttonText, buttonAccent, buttonRounding, buttonEffect]);
 
     const setPreset = (style) => {
         let rounding = 100;
@@ -126,6 +131,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
         setButtonText(icon);
         setButtonAccent(hover);
         setButtonEffect(effect);
+        setPopupHeaderText(icon);
     };
 
     const toolStyles = Oskari.getMsg(BUNDLE_KEY, 'BasicView.layout.fields.toolStyles') || {};
@@ -157,15 +163,7 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                     ))}
                 </StyledSelect>
             </Field>
-            <Field>
-                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
-                <StyledColorPicker>
-                    <ColorPicker
-                        value={popupHeader}
-                        onChange={(e) => setPopupHeader(e.target.value)}
-                    />
-                </StyledColorPicker>
-            </Field>
+            <Divider><Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.title.buttons' /></Divider>
             <Field>
                 <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.buttonBackgroundColor' />
                 <StyledColorPicker>
@@ -213,14 +211,33 @@ export const PanelToolStyles = ({ mapTheme, changeTheme, fonts }) => {
                     </NumberInputContainer>
                 </SliderContainer>
             </Field>
-            <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.effect' />
             <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.effect' />
                 <Checkbox
                     checked={buttonEffect === '3D'}
                     onChange={e => setButtonEffect(e.target.checked ? '3D' : undefined)}
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.3d' />
                 </Checkbox>
+            </Field>
+            <Divider><Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.title.popup' /></Divider>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderColor' />
+                <StyledColorPicker>
+                    <ColorPicker
+                        value={popupHeader}
+                        onChange={(e) => setPopupHeader(e.target.value)}
+                    />
+                </StyledColorPicker>
+            </Field>
+            <Field>
+                <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.layout.fields.popupHeaderTextColor' />
+                <StyledColorPicker>
+                    <ColorPicker
+                        value={popupHeaderText}
+                        onChange={(e) => setPopupHeaderText(e.target.value)}
+                    />
+                </StyledColorPicker>
             </Field>
         </Content>
     );

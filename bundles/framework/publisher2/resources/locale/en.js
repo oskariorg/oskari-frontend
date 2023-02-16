@@ -149,6 +149,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Graphic Layout",
+                "title": {
+                    "popup": "Popup window",
+                    "buttons": "Buttons"
+                },
                 "fields": {
                     "colours": {
                         "label": "Color scheme",
@@ -181,8 +185,9 @@ Oskari.registerLocalization(
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
                     },
-                    "popupHeaderColor": "Pop-up header background color",
-                    "buttonBackgroundColor": "Button background color",
+                    "popupHeaderColor": "Title background color",
+                    "popupHeaderTextColor": "Title color",
+                    "buttonBackgroundColor": "Background color",
                     "buttonTextColor": "Icon color",
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",

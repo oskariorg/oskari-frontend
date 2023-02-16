@@ -149,6 +149,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Grafisk layout",
+                "title": {
+                    "popup": "Popupfönster",
+                    "buttons": "Knappar"
+                },
                 "fields": {
                     "colours": {
                         "label": "Färgschema",
@@ -171,7 +175,7 @@ Oskari.registerLocalization(
                         }
                     },
                     "fonts": {
-                        "label": "Typsnitt"
+                        "label": "Välj font"
                     },
                     "toolStyles": {
                         "rounded-dark": "Avrundad (mörk)",
@@ -181,14 +185,15 @@ Oskari.registerLocalization(
                         "3d-dark": "3D (mörk)",
                         "3d-light": "3D (ljus)"
                     },
-                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
-                    "buttonBackgroundColor": "Painikkeiden taustaväri",
-                    "buttonTextColor": "Ikonien väri",
-                    "buttonAccentColor": "Ikonien tehosteväri",
-                    "buttonRounding": "Painikkeiden pyöristys",
-                    "effect": "Efekti",
+                    "popupHeaderColor": "Rubrikens bakgrundsfärg",
+                    "popupHeaderTextColor": "Rubrikens färg",
+                    "buttonBackgroundColor": "Bakgrundsfärg",
+                    "buttonTextColor": "Ikonernas färg",
+                    "buttonAccentColor": "Ikonernas effektfärg",
+                    "buttonRounding": "Knapparnas avrundning",
+                    "effect": "Effekt",
                     "3d": "3D",
-                    "presets": "Valmiit tyylimääritykset"
+                    "presets": "Färdiga stilkonfigurationer"
                 },
                 "popup": {
                     "title": "Välj färgschema",
