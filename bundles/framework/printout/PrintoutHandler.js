@@ -84,15 +84,20 @@ class UIHandler extends StateHandler {
     printMap () {
         const { maplinkArgs, customStyles, ...params } = this.gatherParams();
         if (this.state.showTimeSeriesDate) {
-            const layers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times && l.isVisible());
-            if (layers?.length > 0) {
+            const layers = this.instance.getTimeSeriesLayers();
+            if (layers.length) {
                 const layer = layers.reverse()[0];
-                const time = layer.getParams().time.split('/')[0];
-                const formatted = Oskari.getMsg('timeseries', 'dateRender', { val: new Date(time) });
-                params[PARAMS.TIME] = time;
-                if (params.pageTimeSeriesTime) {
-                    params[PARAMS.FORMATTED_TIME] = formatted;
-                    params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
+                const { time = '' } = layer.getParams();
+                const splittedTime = time.split('/')[0];
+                const date = new Date(splittedTime);
+                if (!isNaN(date)) {
+                    params[PARAMS.TIME] = time;
+                    if (params.pageTimeSeriesTime) {
+                        params[PARAMS.FORMATTED_TIME] = Oskari.getMsg('timeseries', 'dateRender', { val: date });;
+                        params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
+                    }
+                } else {
+                    Oskari.log('BasicPrintout').warn(`Time series layer: ${layer.getName()} has invalid time param. Skipping time param.`);
                 }
             }
         }
