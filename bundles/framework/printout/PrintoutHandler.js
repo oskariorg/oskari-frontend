@@ -93,11 +93,11 @@ class UIHandler extends StateHandler {
                 if (!isNaN(date)) {
                     params[PARAMS.TIME] = time;
                     if (params.pageTimeSeriesTime) {
-                        params[PARAMS.FORMATTED_TIME] = Oskari.getMsg('timeseries', 'dateRender', { val: date });;
+                        params[PARAMS.FORMATTED_TIME] = Oskari.getMsg('timeseries', 'dateRender', { val: date });
                         params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
                     }
                 } else {
-                    Oskari.log('BasicPrintout').warn(`Time series layer: ${layer.getName()} has invalid time param. Skipping time param.`);
+                    Oskari.log('BasicPrintout').warn(`Time series layer "${layer.getName()}" has invalid time param. Skipping time param.`);
                 }
             }
         }
