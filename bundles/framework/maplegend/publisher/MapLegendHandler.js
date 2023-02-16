@@ -9,6 +9,7 @@ class UIHandler extends StateHandler {
         this.setState({
             showLegends: initialData || false
         });
+        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -16,11 +17,7 @@ class UIHandler extends StateHandler {
     }
 
     isDisplayed () {
-        const displayed = this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
-        if (!displayed) {
-            this.setShowLegends(false);
-        }
-        return displayed;
+        return this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
     }
 
     setShowLegends (value) {
@@ -32,6 +29,34 @@ class UIHandler extends StateHandler {
         } else {
             this.tool.setEnabled(true);
         }
+    }
+
+    createEventHandlers () {
+        const handlers = {
+            AfterMapLayerAddEvent: function (event) {
+                const displayed = this.isDisplayed();
+                if (!displayed) {
+                    this.setShowLegends(false);
+                }
+            },
+            AfterMapLayerRemoveEvent: function (event) {
+                const displayed = this.isDisplayed();
+                if (!displayed) {
+                    this.setShowLegends(false);
+                }
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
     }
 }
 
