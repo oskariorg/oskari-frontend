@@ -218,8 +218,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             );
         },
         isTimeSeriesActive: function () {
-            const hasLayers = this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times).length > 0;
-            return hasLayers;
+            return this.getTimeSeriesLayers().length > 0;
+        },
+        getTimeSeriesLayers: function () {
+            return this.sandbox.findAllSelectedMapLayers().filter(l => l.getAttributes().times && this.mapModule.isLayerVisible(l.getId()));
         },
         /**
          * @method onEvent
