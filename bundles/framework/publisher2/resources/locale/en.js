@@ -187,7 +187,7 @@ Oskari.registerLocalization(
                     },
                     "popupHeaderColor": "Title background color",
                     "popupHeaderTextColor": "Title color",
-                    "buttonBackgroundColor": "Button background color",
+                    "buttonBackgroundColor": "Background color",
                     "buttonTextColor": "Icon color",
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",
