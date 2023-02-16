@@ -14,7 +14,8 @@ class UIHandler extends StateHandler {
             baseLayers: [],
             defaultBaseLayer: null,
             showLayerSelection: false,
-            showMetadata: false
+            showMetadata: false,
+            externalOptions: []
         });
         this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
@@ -35,6 +36,24 @@ class UIHandler extends StateHandler {
             });
         }
         this.getLayers();
+
+        const externalTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool');
+        externalTools.forEach(t => {
+            const tool = Oskari.clazz.create(t, this.sandbox);
+            tool.init(this.data);
+            const toolComponent = tool.getComponent();
+            toolComponent.handler.addStateListener(() => this.notify());
+            this.updateState({
+                externalOptions: [
+                    ...this.state.externalOptions,
+                    {
+                        component: toolComponent.component,
+                        handler: toolComponent.handler,
+                        tool: tool
+                    }
+                ]
+            });
+        });
     }
 
     setShowLayerSelection (value) {
@@ -58,7 +77,7 @@ class UIHandler extends StateHandler {
 
     getLayers () {
         let baseLayers = [];
-        const layers = this.sandbox.findAllSelectedMapLayers();
+        const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
 
         if (this.plugin) {
             const isBaseLayer = (layer) => this.plugin.getConfig().baseLayers.some(id => '' + id === '' + layer.getId());

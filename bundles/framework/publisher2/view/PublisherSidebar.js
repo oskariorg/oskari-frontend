@@ -114,11 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            /* var mapLayersPanel = me._createMapLayersPanel();
-            mapLayersPanel.getPanel().addClass('t_layers');
-            me.panels.push(mapLayersPanel);
-            accordion.addPanel(mapLayersPanel.getPanel()); */
-
             const mapLayerPanel = me._createMapLayerPanel();
             mapLayerPanel.getPanel().addClass('t_layer');
             me.panels.push(mapLayerPanel);

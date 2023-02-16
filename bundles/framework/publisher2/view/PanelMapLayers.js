@@ -182,6 +182,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 // published map needs to also include 'metadataflyout' bundle if we want to show metadata
                 conf.configuration.metadataflyout = {};
             }
+
+            state.externalOptions.forEach(opt => {
+                conf.configuration = {
+                    ...conf.configuration,
+                    ...opt.tool.getValues()
+                };
+            });
             return conf;
         },
         /**
@@ -230,6 +237,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 </LocaleProvider>,
                 content[0]
             );
+        },
+        /**
+        * Stop panel.
+        * @method stop
+        * @public
+        **/
+        stop: function () {
+            this.handler?.getState()?.externalOptions?.forEach(t => {
+                t.tool.setEnabled(false);
+            });
         },
         /**
          * Clears previous layer listing and renders a new one to the view.
