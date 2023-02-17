@@ -50,7 +50,7 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const FeatureDataButton = ({ title, icon, active, onClick, disabled, iconActive, position, ...rest }) => {
+export const FeatureDataButton = ({ icon, active, onClick, disabled, iconActive, position, loading, ...rest }) => {
     let tooltipPosition = 'top';
     if (position && position.includes('right')) {
         tooltipPosition = 'left';
@@ -58,23 +58,6 @@ export const FeatureDataButton = ({ title, icon, active, onClick, disabled, icon
         tooltipPosition = 'right';
     }
 
-    if (title) {
-        return (
-            <div>
-                <Tooltip title={title} placement={tooltipPosition}>
-                    <ThemedButton
-                        title={title}
-                        onClick={onClick}
-                        disabled={disabled}
-                        active={active}
-                        {...rest}
-                    >
-                        {icon}
-                    </ThemedButton>        
-                </Tooltip>
-            </div>
-        );
-    }
     return (
         <div>
             <ThemedButton
