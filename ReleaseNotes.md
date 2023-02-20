@@ -98,6 +98,10 @@ To make it easier to migrate any customized plugins to the new plugin structure 
 
 For details see: https://github.com/oskariorg/oskari-frontend/pull/2082
 
+Also documentation about customization for some common cases can be found in:
+- https://oskari.org/documentation/customize/logo
+- https://oskari.org/documentation/customize/indexmap
+
 ### Build scripts
 
 Parameters can now be passed on command line in another way (https://github.com/oskariorg/oskari-frontend/pull/2064)
