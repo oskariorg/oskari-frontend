@@ -38,16 +38,12 @@ The navigation element creation and content is planned to be moved to code as we
 
 For more details see: https://github.com/oskariorg/oskari-frontend/pull/2042
 
-Simplified map size handling:
+This change makes the map size handling much simpler:
 - `.oskari-map-container-el` defines maximum size that the map can have
 - `.oskari-map-impl-el` defines the size of the map itself (can be smaller than `.oskari-map-container-el` but not bigger. Used for example to preview publisher size setting)
 - `mapmodule` bundle now monitors its own element size for changes without external notifications required
-- `MapSizeChangedEvent` is still sent when the map size changes so other parts of the codebase can react to size changes
- 
-This makes some requests unnecessary so they have been removed from the code base:
-- `MapFull.MapResizeEnabledRequest`
-- `MapFull.MapSizeUpdateRequest`
-- `MapFull.MapWindowFullScreenRequest`
+- `MapSizeChangedEvent` is still sent when the map size changes so other parts of the code base can react to size changes
+- This makes the following requests unnecessary and they have been removed from the code base: `MapFull.MapResizeEnabledRequest`, `MapFull.MapSizeUpdateRequest`, `MapFull.MapWindowFullScreenRequest`
 
 ### Theme
 
@@ -55,7 +51,8 @@ https://github.com/oskariorg/oskari-frontend/pull/2056
 https://github.com/oskariorg/oskari-frontend/pull/2099
 https://github.com/oskariorg/oskari-frontend/pull/2100
 
-map theme:
+### Map theme
+
 https://github.com/oskariorg/oskari-frontend/pull/2069
 - theme.map.navigation.color.primary = base color of buttons (as hex color)
 - theme.map.navigation.roundness = button rounding (as integer between 0 and 100)
@@ -64,61 +61,49 @@ https://github.com/oskariorg/oskari-frontend/pull/2069
 - theme.map.color.header.bg = header for popups opened by map controls (as hex color)
 - theme.map.navigation.effect = undefined OR '3D' to get the "well known toolstyle" for 3d effect
 
-Publisher:
-map theme editor
-rounding, effect, colors
-font selection
-previous style options are now provided as preset options for more customizable theme
+### Publisher functionality
 
-Drawtools:
-- Rewrite to make it easier to read and maintain
-- Add buffer (when requested) to all features in multi geometry results instead of just the first one
-- Fix polygon perimeter/outer ring length measurement
-- Improvements how the `Circle` shape is handled
-- unit tests added
-- tooltips (measurement results) no longer block clicks (makes easier to edit measurement) and properly removed if the feature they are for is removed for some reason
-- Updated StopDrawingRequest documentation to match implementation
-- cleanup for code
+Enabled by the new theme support the publisher functionality now includes an initial theme editor for the embedded maps. This allows the end user to select for example colors that affect the controls on the map and the popups they open. The visual options that were previously offered have been changed to preset values for the new theme editor so they can be used as a starting point for more customized theme.
 
-Map controls:
-- layer selection
-- my location
-- coordinate tool (popup as well)
-- map legend
-- map rotator
-- time control
-- zoom bar
-- search -> results in react as well (moved to be closest to the edge when coupled with other plugins as it's bigger than others). When user clicks on the map the search now minimizes to a clickable button that expands it again.
-- feature data
-- terms of use/attributions/logo -> popup as well / logo from server
-- index map
-- fullscreen
+The tool placement/dragging mode in publisher now shows handles for tools as a visual reminder that tools can be dragged. Most restraints for plugin placement have been removed so they can be moved more freely.
 
-- pan buttons! -> by default only shows reset button. Publisher setting allows showing arrows when required
+### Draw tools
 
-- toolbar button !! sliding menu instead of popup
+The drawtools bundle has been rewritten to make it easier to read and maintain. When requesting buffered features for drawing, they are now generated for all features in a multi feature collection. An issue has been fixed on perimeter/outer ring length measurements for polygons. The measurement tooltips no longer block clicks on the map so it's easier to edit measurements. Updated StopDrawingRequest documentation to match implementation.
 
-Most of the png-images used for the map controls have been replaced with SVG versions with slight differences in icons
+### Map controls
 
-Hover/active colors
-tooltips
-popups opened by map controls inherit style from map buttons (instead of global style for popups)
+All of the map controls (buttons on top of map etc) that are included in `oskari-frontend` have been rewritten as React-based components. They can now be styled using theme variables and have icons changed to SVG enabling hovering and more flexible styling options. The popups they open are theme-aware as well and some of the controls gained new functionalities:
 
+- Search can now be minimized to a smaller icon when clicked on the map
+- The previous pan buttons tool now only shows the reset button by default but it can be configured (using publisher UI) to show the arrows when required.
+- The concept of "mobile mode" with the toolbar on top of the map has been removed. Tools now modify themselves to fit a smaller screen more properly. As an example the zoombar hides its slider and makes its buttons bigger instead.
 
-The dragging mode in publisher now shows handles for tools to make it clear that the tools can be dragged.
-Most restrains for plugin placement have been removed so they can be moved more freely.
+To make it easier to migrate any customized plugins to the new plugin structure the deprecated methods in `BasicMapModulePlugin.js` have been kept as no-op functions with logging to tell developers they should migrate a plugin that uses them:
+- getMobileDefs()
+- removeToolbarButtons()
+- addToolbarButtons()
 
+For details see: https://github.com/oskariorg/oskari-frontend/pull/2082
 
-Mobile toolbar / mobile buttons impl removed
-- zoombar now hides slider and makes buttons bigger for mobile
-- pan buttons hide arrows
+### Build scripts
 
-BasicMapModulePlugin.js
-        getMobileDefs()
-        removeToolbarButtons()
-        addToolbarButtons()
-https://github.com/oskariorg/oskari-frontend/pull/2082/files
+Parameters can now be passed on command line in another way (https://github.com/oskariorg/oskari-frontend/pull/2064)
+Both of these work with version 2.10: 
+```
+npm run build -- --env.appdef=applications
+npm run build --appdef=applications
+```
+Build script now allows generating builds to non-default domain with parameter: `--env.domain=https://cdn.domain.org`.
 
+### New React components
+
+- `MapButton` under `oskari-ui` for generic button on the map
+- `MapModuleButton` under `mapmodule` uses MapButton and adds theme handling
+- `SidePanel` under `oskari-ui` is currently used for printout options panel (publisher and others will be migrated to this in future release)
+- `Tooltip` component should now clear from the screen properly when the element they are attached to is not shown
+
+### Other improvements
 
 - VectorTileLayerPlugin now receives the actual map resolutions array instead of using OpenLayers defaults. This might affect styling of vector tile layers: https://github.com/oskariorg/oskari-frontend/pull/2115
 - Thematic map now allows classification with 2 values if method is not `jenks` and histogram view has been improved
@@ -132,23 +117,6 @@ https://github.com/oskariorg/oskari-frontend/pull/2082/files
 - Added a workaround for OpenLayers issue with features having a property named `geometry`: https://github.com/oskariorg/oskari-frontend/pull/2110
 - Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
 - Library updates: OpenLayers 7.1.0 -> 7.2.2 & moment.js 2.29.1 -> 2.29.4 
-
-Build scripts:
-- More flexible param passing for build: https://github.com/oskariorg/oskari-frontend/pull/2064
-Both work: 
-```
-npm run build -- --env.appdef=applications
-npm run build --appdef=applications
-```
-- Build script now allows generating builds to non-default domain with: `--env.domain=https://cdn.domain.org`
-
-Components:
-- oskari-ui  `MapButton`
-- mapmodule `MapModuleButton`
-- SidePanel component (used for printout options panel)
-- Tooltips should now clear from the screen properly when the element they are attached to is not shown.
-
-
 
 
 ## 2.9.1
