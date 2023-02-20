@@ -5,7 +5,7 @@
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/40?closed=1
 
-### Base HTML handling improvements
+### Base HTML structure improvements
 
 A set of new helper functions have been added for referencing "base elements" on the page and add CSS classes for styling these elements.
 All of this is about:
