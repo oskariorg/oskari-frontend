@@ -1,5 +1,156 @@
 # Release Notes
 
+## 2.10.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/40?closed=1
+
+### Base HTML handling improvements
+
+A set of new helper functions have been added for referencing "base elements" on the page and add CSS classes for styling these elements.
+All of this is about:
+- ground work for an upcoming UI improvement
+- making it easier to document things
+- documenting the base elements to make it easier to customize
+- cleaning of the base HTML (unnecessary elements have been removed from the base HTML on the sample-server-extension)
+
+| Prev. selector | JS-getter                        | New selector for styling   | Role                       |
+|----------------|----------------------------------|----------------------------|----------------------------|
+| `body`         | `Oskari.dom.getRootEl()`         | `.oskari-root-el`          | Everything Oskari generates goes under here |
+| `#contentMap`  | `Oskari.dom.getMapContainerEl()` | `.oskari-map-container-el` | Container for the Oskari map |
+| `#mapdiv`      | `Oskari.dom.getMapImplEl()`      | `.oskari-map-impl-el`      | Container for map engine/impl (inside "contentMap") |
+
+The root element now defaults to element with id `oskari` or the `body` tag when not available.
+The `oskari` id can be used when the elements need to be controlled more tightly to work with other content on the page and Oskari should not take control of the page fully.
+Using the custom root element means that the size of the root element need to be set/controlled as well (is NOT handled by Oskari though we might introduce min-size in the future).
+If the whole page is controlled by Oskari the size is set to cover the whole browser window by assuming the root is the body tag.
+
+The elements with ids `contentMap` and `mapdiv` are created under the root element if they are not present.
+The new CSS classes are attached automatically and have styling attached to them.
+The old id's have been kept for compatibility reasons and are no longer used by code under `oskari-frontend`.
+The JS getters should be used for referencing the elements (instead of the old id's) and CSS classes for styling.
+A helper `Oskari.dom.isEmbedded()` was also added for detecting if the app is an embedded map as some tools use this information.
+
+For now the navigation bar that holds toolbar and tile/menu items of Oskari is assumed to be a `<nav>` element directly under the root element.
+The map elements are appended after it by default, but having for example the `#contentMap` element on the page before the `nav` controls which side of the map the navigation is.
+The Oskari flyouts now use this information to determine initial the Flyout location instead of hard coded values.
+The navigation element creation and content is planned to be moved to code as well as there are future requirements for making the navigation element more dynamic.
+
+For more details see: https://github.com/oskariorg/oskari-frontend/pull/2042
+
+Simplified map size handling:
+- `.oskari-map-container-el` defines maximum size that the map can have
+- `.oskari-map-impl-el` defines the size of the map itself (can be smaller than `.oskari-map-container-el` but not bigger. Used for example to preview publisher size setting)
+- `mapmodule` bundle now monitors its own element size for changes without external notifications required
+- `MapSizeChangedEvent` is still sent when the map size changes so other parts of the codebase can react to size changes
+ 
+This makes some requests unnecessary so they have been removed from the code base:
+- `MapFull.MapResizeEnabledRequest`
+- `MapFull.MapSizeUpdateRequest`
+- `MapFull.MapWindowFullScreenRequest`
+
+### Theme
+
+https://github.com/oskariorg/oskari-frontend/pull/2056
+https://github.com/oskariorg/oskari-frontend/pull/2099
+https://github.com/oskariorg/oskari-frontend/pull/2100
+
+map theme:
+https://github.com/oskariorg/oskari-frontend/pull/2069
+- theme.map.navigation.color.primary = base color of buttons (as hex color)
+- theme.map.navigation.roundness = button rounding (as integer between 0 and 100)
+- theme.map.navigation.color.text = icon color on button (as hex color)
+- theme.map.navigation.color.accent= icon color on button when the buttons is active or hovered (as hex color)
+- theme.map.color.header.bg = header for popups opened by map controls (as hex color)
+- theme.map.navigation.effect = undefined OR '3D' to get the "well known toolstyle" for 3d effect
+
+Publisher:
+map theme editor
+rounding, effect, colors
+font selection
+previous style options are now provided as preset options for more customizable theme
+
+Drawtools:
+- Rewrite to make it easier to read and maintain
+- Add buffer (when requested) to all features in multi geometry results instead of just the first one
+- Fix polygon perimeter/outer ring length measurement
+- Improvements how the `Circle` shape is handled
+- unit tests added
+- tooltips (measurement results) no longer block clicks (makes easier to edit measurement) and properly removed if the feature they are for is removed for some reason
+- Updated StopDrawingRequest documentation to match implementation
+- cleanup for code
+
+Map controls:
+- layer selection
+- my location
+- coordinate tool (popup as well)
+- map legend
+- map rotator
+- time control
+- zoom bar
+- search -> results in react as well (moved to be closest to the edge when coupled with other plugins as it's bigger than others). When user clicks on the map the search now minimizes to a clickable button that expands it again.
+- feature data
+- terms of use/attributions/logo -> popup as well / logo from server
+- index map
+- fullscreen
+
+- pan buttons! -> by default only shows reset button. Publisher setting allows showing arrows when required
+
+- toolbar button !! sliding menu instead of popup
+
+Most of the png-images used for the map controls have been replaced with SVG versions with slight differences in icons
+
+Hover/active colors
+tooltips
+popups opened by map controls inherit style from map buttons (instead of global style for popups)
+
+
+The dragging mode in publisher now shows handles for tools to make it clear that the tools can be dragged.
+Most restrains for plugin placement have been removed so they can be moved more freely.
+
+
+Mobile toolbar / mobile buttons impl removed
+- zoombar now hides slider and makes buttons bigger for mobile
+- pan buttons hide arrows
+
+BasicMapModulePlugin.js
+        getMobileDefs()
+        removeToolbarButtons()
+        addToolbarButtons()
+https://github.com/oskariorg/oskari-frontend/pull/2082/files
+
+
+- VectorTileLayerPlugin now receives the actual map resolutions array instead of using OpenLayers defaults. This might affect styling of vector tile layers: https://github.com/oskariorg/oskari-frontend/pull/2115
+- Thematic map now allows classification with 2 values if method is not `jenks` and histogram view has been improved
+- Fixed an issue with layer list in embdded map listing layers in reverse order and style select is no longer shown if there is only one style to select from
+- Added bundle documentation for `mydata`
+- Fixed a visual issue with infobox title
+- Fixed an issue with opacity setting and vector layer features in 3D
+- My places now checks polygon feature validity so users can't save a self-intersecting polygon
+- Fixed an issue with userlayer import and the field for missing projection information is now shown as intended when required
+- Printout options panel has been rewritten with React
+- Added a workaround for OpenLayers issue with features having a property named `geometry`: https://github.com/oskariorg/oskari-frontend/pull/2110
+- Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
+- Library updates: OpenLayers 7.1.0 -> 7.2.2 & moment.js 2.29.1 -> 2.29.4 
+
+Build scripts:
+- More flexible param passing for build: https://github.com/oskariorg/oskari-frontend/pull/2064
+Both work: 
+```
+npm run build -- --env.appdef=applications
+npm run build --appdef=applications
+```
+- Build script now allows generating builds to non-default domain with: `--env.domain=https://cdn.domain.org`
+
+Components:
+- oskari-ui  `MapButton`
+- mapmodule `MapModuleButton`
+- SidePanel component (used for printout options panel)
+- Tooltips should now clear from the screen properly when the element they are attached to is not shown.
+
+
+
+
 ## 2.9.1
 
 For a full list of changes see:
