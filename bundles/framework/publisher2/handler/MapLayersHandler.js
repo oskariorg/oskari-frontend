@@ -78,6 +78,13 @@ class UIHandler extends StateHandler {
         );
     }
 
+    openSelectedLayerList () {
+        this.sandbox.postRequestByName(
+            'ShowFilteredLayerListRequest',
+            ['publishable', true, true]
+        );
+    }
+
     addBaseLayer (layer) {
         this.plugin.addBaseLayer(layer);
         this.getLayers();
@@ -191,6 +198,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setShowMetadata',
     'setShowLayerSelection',
     'openLayerList',
+    'openSelectedLayerList',
     'addBaseLayer',
     'removeBaseLayer'
 ]);

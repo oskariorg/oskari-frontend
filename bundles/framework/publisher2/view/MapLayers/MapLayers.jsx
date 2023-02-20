@@ -100,6 +100,9 @@ export const MapLayers = ({ state, controller }) => {
                 })}
             </LayerContainer>
             <ButtonContainer>
+                <Button onClick={() => controller.openSelectedLayerList()}>
+                    <Message messageKey='BasicView.mapLayers.layersDisplay' />
+                </Button>
                 <Button onClick={() => controller.openLayerList()}>
                     <Message messageKey='BasicView.mapLayers.selectLayers' />
                 </Button>

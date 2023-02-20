@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider, ThemeProvider } from 'oskari-ui/util';
-import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
+import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from './view/LayerViewTabs/';
 import { LAYER_GROUP_TOGGLE_LIMIT, LAYER_GROUP_TOGGLE_DEFAULTS, BACKEND_STATUS_AVAILABLE } from './constants';
 
 /**
@@ -99,14 +99,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * For request handler. This is used when opening the layerlist from outside this bundle.
          * @param {string} activeFilterId
          */
-        setActiveFilter: function (activeFilterId) {
+        setActiveFilter: function (activeFilterId, showSelectedLayers) {
             const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
             filterHandler.stashCurrentState();
             filterHandler.updateState({
                 activeFilterId,
                 searchText: null
             });
-            this.tabsHandler.setTab(TABS_ALL_LAYERS);
+            const activeTab = showSelectedLayers ? TABS_SELECTED_LAYERS : TABS_ALL_LAYERS;
+            this.tabsHandler.setTab(activeTab);
         },
 
         /**
