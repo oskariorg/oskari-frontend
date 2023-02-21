@@ -49,7 +49,7 @@ This change makes the map size handling much simpler:
 
 [ThemeHelper](https://github.com/oskariorg/oskari-frontend/blob/2.10.0/src/react/theme/ThemeHelper.js) now has a function for easily getting theme selections that can be used for navigational elements like the buttons on the map: `ThemeHelper.getNavigationTheme({...theme})` in a similar way that  `ThemeHelper.getHeaderTheme({...theme})` was previously used for windowing elements. The helper is still work-in-progress and comments about it are welcome. The idea is to provide getters that can try several settings from the theme JSON before returning a value for given theme variable. This way we can offer specific choices for theme setting but also provide fallbacks so a simple theme JSON could be given instead of giving a setting for every little detail in the theme.
 
-Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100 This is similar to what we've seen actual applications doing to override colors.
+Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100 This is similar to what Oskari-based applications do to override the default colors.
 
 ### Map theme
 
@@ -88,8 +88,9 @@ The drawtools bundle has been rewritten to make it easier to read and maintain. 
 All of the map controls (buttons on top of map etc) that are included in `oskari-frontend` have been rewritten as React-based components. They can now be styled using theme variables and have icons changed to SVG enabling hovering and more flexible styling options. The popups they open are theme-aware as well and some of the controls gained new functionalities:
 
 - Search can now be minimized to a smaller icon when clicked on the map
-- The previous pan buttons tool now only shows the reset button by default but it can be configured (using publisher UI) to show the arrows when required.
-- The concept of "mobile mode" with the toolbar on top of the map has been removed. Tools now modify themselves to fit a smaller screen more properly. As an example the zoombar hides its slider and makes its buttons bigger instead.
+- The previous pan buttons tool now only shows the reset button by default but it can be configured (using publisher UI) to show the arrows when required
+- **The concept of "mobile mode" with the toolbar on top of the map has been removed**
+- Tools now modify their own UI to fit a smaller screen more properly. As an example the zoombar hides its slider and makes its buttons bigger.
 
 To make it easier to migrate any customized plugins to the new plugin structure the deprecated methods in `BasicMapModulePlugin.js` have been kept as no-op functions with logging to tell developers they should migrate a plugin that uses them:
 - getMobileDefs()
@@ -123,16 +124,18 @@ Build script now allows generating builds to non-default domain with parameter: 
 
 - VectorTileLayerPlugin now receives the actual map resolutions array instead of using OpenLayers defaults. This might affect styling of vector tile layers: https://github.com/oskariorg/oskari-frontend/pull/2115
 - Thematic map now allows classification with 2 values if method is not `jenks` and histogram view has been improved
-- Fixed an issue with layer list in embdded map listing layers in reverse order and style select is no longer shown if there is only one style to select from
+- Fixed issues with layer list in embedded map: layers are now listed in correct/reversed order and style select is no longer shown if there is only one style to select from
 - Added bundle documentation for `mydata`
 - Fixed a visual issue with infobox title
 - Fixed an issue with opacity setting and vector layer features in 3D
 - My places now checks polygon feature validity so users can't save a self-intersecting polygon
-- Fixed an issue with userlayer import and the field for missing projection information is now shown as intended when required
+- Fixed an issue with userlayer import: input for providing missing projection information is now shown when required
 - Printout options panel has been rewritten with React
 - Added a workaround for OpenLayers issue with features having a property named `geometry`: https://github.com/oskariorg/oskari-frontend/pull/2110
 - Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
-- Library updates: OpenLayers 7.1.0 -> 7.2.2 & moment.js 2.29.1 -> 2.29.4 
+- Library updates:
+    - OpenLayers 7.1.0 -> 7.2.2
+    - moment.js 2.29.1 -> 2.29.4 
 
 
 ## 2.9.1
