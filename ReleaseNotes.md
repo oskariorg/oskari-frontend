@@ -47,13 +47,13 @@ This change makes the map size handling much simpler:
 
 ### Theme
 
-[ThemeHelper](https://github.com/oskariorg/oskari-frontend/blob/2.10.0/src/react/theme/ThemeHelper.js) now has a function for easily getting theme selections that can be used for navigational elements like the buttons on the map: `ThemeHelper.getNavigationTheme({...theme})` in a similar way that  `ThemeHelper.getHeaderTheme({...theme})` was previously used for windowing elements.
+[ThemeHelper](https://github.com/oskariorg/oskari-frontend/blob/2.10.0/src/react/theme/ThemeHelper.js) now has a function for easily getting theme selections that can be used for navigational elements like the buttons on the map: `ThemeHelper.getNavigationTheme({...theme})` in a similar way that  `ThemeHelper.getHeaderTheme({...theme})` was previously used for windowing elements. The helper is still work-in-progress and comments about it are welcome. The idea is to provide getters that can try several settings from the theme JSON before returning a value for given theme variable. This way we can offer specific choices for theme setting but also provide fallbacks so a simple theme JSON could be given instead of giving a setting for every little detail in the theme.
 
-Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100
+Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100 This is similar to what we've seen actual applications doing to override colors.
 
 ### Map theme
 
-A new subobject named "map" was added to the theme enabling the map controls to use similar theme structure as the rest of Oskari application but individual toggles that can be adjusted just for the map. An example would be a case where the buttons on the map and the popups they open need to have a different color scheme as the rest of the geoportal. This was the case before theming support where the default UI on Oskari had yellow colored flyouts/popups, but similar components opened by buttons on the map had dark headers instead.
+Handling for a new subobject named "map" was added to the theme enabling the map controls to use similar theme structure as the rest of Oskari application but individual toggles that can be adjusted just for the map. An example would be a case where the buttons on the map and the popups they open need to have a different color scheme as the rest of the geoportal. This was the case before theming support where the default UI on Oskari had yellow colored flyouts/popups, but similar components opened by buttons on the map had dark headers instead.
 
 The way the "map" theme works is it can have the same structure as a normal theme JSON, but the mapmodule generates a theme for itself by combining the geoportal theme and overriding it with keys from the map subobject. As an example:
 ```
@@ -69,7 +69,7 @@ The way the "map" theme works is it can have the same structure as a normal them
     }
 }
 ```
-The mapmodule uses its own ThemeProvider context for its components. The map components would in the example get a theme where the primary color is gray while non-map components would see the primary color as yellow. Both types of components would see the accent color as 'red' as it's not overridden under the map key. The mapmodule has `set/getMapTheme()` methods and it listens to changes on the geoportal theme to update the theme for map components.
+The mapmodule uses its own ThemeProvider context for its components. The map components would (in the example above) get a theme where the primary color is gray while non-map components would see the primary color as yellow. Both types of components would see the accent color as 'red' as it's not overridden under the map key. The mapmodule has `set/getMapTheme()` methods and it listens to changes on the geoportal theme to update the theme for map components.
 
 Some of these are listed in https://github.com/oskariorg/oskari-frontend/pull/2069 and this will be documented in more detail in oskari.org.
 
