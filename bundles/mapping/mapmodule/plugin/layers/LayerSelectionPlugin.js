@@ -89,10 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             var me = this;
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage(), true).plugin.LayerSelectionPlugin;
             me.templates.main = jQuery(
-                '<div class="mapplugin layerselection">' +
-                '  <div class="header">' +
-                '  </div>' +
-                '</div>');
+                '<div class="mapplugin layerselection"></div>');
             this.updateLayers();
         },
         /**
@@ -395,9 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            var header = div.find('div.header');
-
-            this.renderButton(styleName, header);
+            this.renderButton(styleName, div);
 
             this._setLayerToolsEditMode(
                 this.getMapModule().isInLayerToolsEditMode()
@@ -407,9 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         renderButton: function (style, element) {
             let el = element;
             if (!element) {
-                const div = this.getElement();
-                if (!div) return;
-                el = div.find('div.header');
+                el = this.getElement();
             };
             if (!el) return;
 
