@@ -25,13 +25,18 @@ $pluginMargin: 10px;
     content: url("../images/holder-icon.svg");
     width: 24px;
     height: 24px;
-    fill: #979797;
+    fill: #141414;
     display: inline-block;
     position: absolute;
     right: -24px;
-    opacity: 0.5;
+    opacity: 0.7;
     top: 20%;
     cursor: pointer;
+    filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 1));
+}
+
+.mapplugin.toollayoutedit.ui-draggable-handle {
+    margin-right: 15px;
 }
 
 div.olMap {
@@ -221,14 +226,6 @@ div.mapplugins {
                     text-align: right;
                 }
 
-                &.featuredataplugin,
-                &.layerselection,
-                &.search,
-                &.tools {
-                    display: block;
-                    float: right;
-                    margin: 0 0 0 $pluginMargin;
-                }
                 &.statsgrid-classification-plugin,
                 &.statsgrid-classification-plugin-transparent {
                     position: absolute;
