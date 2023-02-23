@@ -519,21 +519,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             // TODO: notify if layer not found?
         },
-        showUnsupportedPopup: function () {
-            if (this.popupCoolOff) {
-                return;
-            }
-            var popup = this._popupService.createPopup();
-
-            var buttons = [popup.createCloseButton('OK')];
-            const dimension = this.getSandbox().getMap().getSupports3D() ? '3D' : '2D';
-            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj', { dimension }).replace(/[\n]/g, '<br>'), buttons);
-
-            this.popupCoolOff = true;
-            setTimeout(function () {
-                this.popupCoolOff = false;
-            }.bind(this), 500);
-        },
 
         /**
          * @method loadAllLayerGroupsAjax
