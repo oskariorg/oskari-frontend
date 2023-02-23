@@ -54,9 +54,6 @@ Oskari.clazz.define(
         /* Min scale for layer */
         me._minScale = null;
 
-        /* is layer visible */
-        me._visible = null;
-
         /* opacity from 0 to 100 */
         me._opacity = 100;
 
@@ -136,7 +133,12 @@ Oskari.clazz.define(
 
         me._orderNumber = 1000000;
 
-        me._unsupportedReason = null;
+        me._visibilityInfo = {
+            visible: true, // {Boolean} visible/hidden by the user
+            inScale: true, // {Boolean} map viewport scale (zoom) is in the layer's scale range
+            geometryMatch: true, // {Boolean} map viewport overlaps defined coverage/geometry
+            unsupported: null // {UnsupportedLayerReason} most severe reason if unsupported
+        };
     }, {
         /**
          * @method setId
@@ -503,14 +505,14 @@ Oskari.clazz.define(
          * @return {Boolean} true if this is should be shown
          */
         isVisible: function () {
-            return this._visible === true;
+            return this._visibilityInfo.visible === true;
         },
         /**
          * @method setVisible
          * @param {Boolean} visible true if this is should be shown
          */
         setVisible: function (visible) {
-            this._visible = visible;
+            this.updateVisibilityInfo({ visible });
         },
         /**
          * @method setOpacity
@@ -1259,6 +1261,19 @@ Oskari.clazz.define(
         },
         getGeometryType: function () {
             return null;
+        },
+        getVisibilityInfo () {
+            return this._visibilityInfo;
+        },
+        setVisibilityInfo (info) {
+            this._visibilityInfo = info;
+        },
+        updateVisibilityInfo (updated) {
+            this._visibilityInfo = { ...this._visibilityInfo, ...updated };
+        },
+        isVisibleOnMap () {
+            const { unsupported, ...booleans } = this.getVisibilityInfo();
+            return Object.values(booleans).every(b => b === true) && !unsupported;
         }
     }
 );
