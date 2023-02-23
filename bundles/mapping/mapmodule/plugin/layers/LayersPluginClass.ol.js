@@ -194,8 +194,9 @@ export class LayersPlugin extends AbstractMapModulePlugin {
         if (geometries.length === 0) {
             return true;
         }
-        const extent = this.getMapModule().getExtentArray();
-        return geometries[0].intersectsExtent(extent);
+        const viewBounds = this.getMapModule().getCurrentExtent();
+        const olExtent = [viewBounds.left, viewBounds.bottom, viewBounds.right, viewBounds.top];
+        return geometries[0].intersectsExtent(olExtent);
     }
 
     /**
