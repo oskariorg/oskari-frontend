@@ -233,7 +233,10 @@ Oskari.registerLocalization(
             "mapLayers": {
                 "label": "Map layers",
                 "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa"
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",

@@ -60,7 +60,7 @@ export const MapLayers = ({ state, controller }) => {
             )}
             {state.showLayerSelection && (
                 <LayerContainer>
-                    <h3>Taustakarttatasot</h3>
+                    <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
                     {state.baseLayers.reverse().map((layer, index) => {
                         const disabled = !layer.isVisible();
                         return (
@@ -78,7 +78,7 @@ export const MapLayers = ({ state, controller }) => {
                 </LayerContainer>
             )}
             {state.showLayerSelection && state.baseLayers?.length < 1 && (
-                'Ei taustakarttoja'
+                <Message messageKey='BasicView.mapLayers.noBaseLayers' />
             )}
             <LayerContainer>
                 <h3><Message messageKey='BasicView.mapLayers.label' /></h3>
@@ -99,6 +99,9 @@ export const MapLayers = ({ state, controller }) => {
                     )
                 })}
             </LayerContainer>
+            {layers?.length < 1 && (
+                <Message messageKey='BasicView.mapLayers.noLayers' />
+            )}
             <ButtonContainer>
                 <Button onClick={() => controller.openLayerList()}>
                     <Message messageKey='BasicView.mapLayers.selectLayers' />
