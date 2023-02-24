@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             accordion.addPanel(mapPreviewPanel.getPanel());
 
             const mapLayersPanel = me._createMapLayersPanel();
-            mapLayersPanel.getPanel().addClass('t_layer');
+            mapLayersPanel.getPanel().addClass('t_layers');
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
