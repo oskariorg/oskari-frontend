@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         getPanel: function () {
             if (!this.panel) {
-                this._populateLayoutPanel();
+                this.panel = this._populateLayoutPanel();
             }
             return this.panel;
         },
