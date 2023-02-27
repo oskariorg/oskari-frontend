@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.request.ShowFilteredLa
             this.instance.filteredLayerListOpenedByRequest = true;
 
             if (request.getSelectedFilter()) {
-                layerSelectorFlyout.setActiveFilter(request.getSelectedFilter());
+                layerSelectorFlyout.setActiveFilter(request.getSelectedFilter(), request.getShowSelectedLayers());
             }
 
             if (request.getOpenLayerList() && request.getOpenLayerList() === true) {
