@@ -24,11 +24,7 @@ class UIHandler extends StateHandler {
         this.updateState({
             showLegends: value
         });
-        if (value === false) {
-            this.tool.setEnabled(false);
-        } else {
-            this.tool.setEnabled(true);
-        }
+        this.tool.setEnabled(!!value)
     }
 
     createEventHandlers () {
