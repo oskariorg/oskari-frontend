@@ -230,6 +230,14 @@ Oskari.registerLocalization(
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
             },
+            "mapLayers": {
+                "label": "Kartlager",
+                "selectLayers": "Tasojen valinta",
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
+            },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
             "zoomlevel": "Skalnivå",
