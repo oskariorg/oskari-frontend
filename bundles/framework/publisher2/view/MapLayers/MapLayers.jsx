@@ -58,6 +58,15 @@ export const MapLayers = ({ state, controller }) => {
                         <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
                     </StyledCheckbox>
             )}
+            {state.externalOptions.map((tool, index) => {
+                return (
+                    <tool.component
+                        key={index}
+                        state={tool.handler.getState()}
+                        controller={tool.handler.getController()}
+                    />
+                )
+            })}
             {state.showLayerSelection && (
                 <LayerContainer>
                     <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
@@ -82,7 +91,7 @@ export const MapLayers = ({ state, controller }) => {
             )}
             <LayerContainer>
                 <h3><Message messageKey='BasicView.mapLayers.label' /></h3>
-                {layers.reverse().map((layer, index) => {
+                {layers.map((layer, index) => {
                     const disabled = !layer.isVisible();
                     return (
                         <LayerBox key={index} disabled={disabled}>
