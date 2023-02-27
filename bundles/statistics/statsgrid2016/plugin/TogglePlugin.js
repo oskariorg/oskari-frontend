@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { PluginHandler } from "../handler/PluginHandler";
+import { PluginHandler } from '../handler/PluginHandler';
 import { ThematicControls } from './ThematicControls';
 import { UnorderedListOutlined, TableOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
@@ -42,25 +42,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
             clickHandler,
             active: false
         };
-        
+
         switch (toolId) {
-            case 'series':
-                tool.icon = <ClockCircleOutlined />;
-                break;
-            case 'table':
-                tool.icon = <TableOutlined />;
-                break;
-            case 'classification':
-                tool.icon = <UnorderedListOutlined />;
-                break;
-            case 'diagram':
-                tool.icon = <BarChartOutlined />;
-                break;
-            default:
-                tool.icon = <TableOutlined />;
-                break;
+        case 'series':
+            tool.icon = <ClockCircleOutlined />;
+            break;
+        case 'table':
+            tool.icon = <TableOutlined />;
+            break;
+        case 'classification':
+            tool.icon = <UnorderedListOutlined />;
+            break;
+        case 'diagram':
+            tool.icon = <BarChartOutlined />;
+            break;
+        default:
+            tool.icon = <TableOutlined />;
+            break;
         }
-        
+
         this.handler.getController().addTool(tool);
 
         if (!this.element) {

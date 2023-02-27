@@ -31,7 +31,7 @@ class UIHandler extends StateHandler {
                 return {
                     ...plugin,
                     active: active
-                }
+                };
             })
         });
     }
