@@ -28,6 +28,8 @@ const StyledButton = styled(Button)`
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-right: ${props => props.$marginRight};
+    margin-left: ${props => props.$marginLeft};
 `;
 
 const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
@@ -50,31 +52,15 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const FeatureDataButton = ({ title, icon, active, onClick, disabled, iconActive, position, ...rest }) => {
-    let tooltipPosition = 'top';
-    if (position && position.includes('right')) {
-        tooltipPosition = 'left';
-    } else if (position && position.includes('left')) {
-        tooltipPosition = 'right';
+export const FeatureDataButton = ({ icon, active, onClick, disabled, iconActive, position, loading, ...rest }) => {
+    let marginRight = '0px';
+    let marginLeft = '0px';
+    if (position.includes('right')) {
+        marginRight = '10px';
+    } else if (position.includes('left')) {
+        marginLeft = '10px';
     }
 
-    if (title) {
-        return (
-            <div>
-                <Tooltip title={title} placement={tooltipPosition}>
-                    <ThemedButton
-                        title={title}
-                        onClick={onClick}
-                        disabled={disabled}
-                        active={active}
-                        {...rest}
-                    >
-                        {icon}
-                    </ThemedButton>        
-                </Tooltip>
-            </div>
-        );
-    }
     return (
         <div>
             <ThemedButton
@@ -82,6 +68,8 @@ export const FeatureDataButton = ({ title, icon, active, onClick, disabled, icon
                 disabled={disabled}
                 active={active}
                 loading={loading}
+                $marginRight={marginRight}
+                $marginLeft={marginLeft}
                 {...rest}
             >
                 {icon}

@@ -114,10 +114,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            const mapLayerPanel = me._createMapLayerPanel();
-            mapLayerPanel.getPanel().addClass('t_layer');
-            me.panels.push(mapLayerPanel);
-            accordion.addPanel(mapLayerPanel.getPanel());
+            const mapLayersPanel = me._createMapLayersPanel();
+            mapLayersPanel.getPanel().addClass('t_layers');
+            me.panels.push(mapLayersPanel);
+            accordion.addPanel(mapLayersPanel.getPanel());
 
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
-        _createMapLayerPanel: function () {
+        _createMapLayersPanel: function () {
             const sandbox = this.instance.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', sandbox, mapModule, this.loc, this.instance);

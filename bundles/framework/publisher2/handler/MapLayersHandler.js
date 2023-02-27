@@ -35,7 +35,6 @@ class UIHandler extends StateHandler {
                 showMetadata: this.pluginConf.config.showMetadata
             });
         }
-        this.getLayers();
 
         const externalTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool');
         externalTools.forEach(t => {
@@ -54,6 +53,7 @@ class UIHandler extends StateHandler {
                 ]
             });
         });
+        this.updateSelectedLayers();
     }
 
     setShowLayerSelection (value) {
@@ -75,7 +75,7 @@ class UIHandler extends StateHandler {
         this.plugin.setShowMetadata(value);
     }
 
-    getLayers () {
+    updateSelectedLayers () {
         let baseLayers = [];
         const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
 
@@ -97,14 +97,21 @@ class UIHandler extends StateHandler {
         );
     }
 
+    openSelectedLayerList () {
+        this.sandbox.postRequestByName(
+            'ShowFilteredLayerListRequest',
+            ['publishable', true, true]
+        );
+    }
+
     addBaseLayer (layer) {
         this.plugin.addBaseLayer(layer);
-        this.getLayers();
+        this.updateSelectedLayers();
     }
 
     removeBaseLayer (layer) {
         this.plugin.removeBaseLayer(layer);
-        this.getLayers();
+        this.updateSelectedLayers();
     }
 
     /**
@@ -157,7 +164,7 @@ class UIHandler extends StateHandler {
              * Updates the layerlist
              */
             AfterMapLayerAddEvent: function (event) {
-                this.getLayers();
+                this.updateSelectedLayers();
             },
 
             /**
@@ -167,7 +174,7 @@ class UIHandler extends StateHandler {
              * Updates the layerlist
              */
             AfterMapLayerRemoveEvent: function (event) {
-                this.getLayers();
+                this.updateSelectedLayers();
             },
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
@@ -176,8 +183,8 @@ class UIHandler extends StateHandler {
              * Updates the layerlist
              */
             AfterRearrangeSelectedMapLayerEvent: function (event) {
-                if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
-                    this.getLayers();
+                if (event._fromPosition !== event._toPosition) {
+                    this.updateSelectedLayers();
                 }
             },
             /**
@@ -188,7 +195,7 @@ class UIHandler extends StateHandler {
              */
             'MapLayerEvent': function (event) {
                 if (event.getOperation() === 'update') {
-                    this.getLayers();
+                    this.updateSelectedLayers();
                 }
             }
         };
@@ -210,6 +217,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setShowMetadata',
     'setShowLayerSelection',
     'openLayerList',
+    'openSelectedLayerList',
     'addBaseLayer',
     'removeBaseLayer'
 ]);

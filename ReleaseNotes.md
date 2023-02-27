@@ -1,5 +1,143 @@
 # Release Notes
 
+## 2.10.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/40?closed=1
+
+### Base HTML structure improvements
+
+A set of new helper functions have been added for referencing "base elements" on the page and add CSS classes for styling these elements.
+All of this is about:
+- ground work for an upcoming UI improvement
+- making it easier to document things
+- documenting the base elements to make it easier to customize
+- cleaning of the base HTML (unnecessary elements have been removed from the base HTML on the sample-server-extension)
+
+| Prev. selector | JS-getter                        | New selector for styling   | Role                       |
+|----------------|----------------------------------|----------------------------|----------------------------|
+| `body`         | `Oskari.dom.getRootEl()`         | `.oskari-root-el`          | Everything Oskari generates goes under here |
+| `#contentMap`  | `Oskari.dom.getMapContainerEl()` | `.oskari-map-container-el` | Container for the Oskari map |
+| `#mapdiv`      | `Oskari.dom.getMapImplEl()`      | `.oskari-map-impl-el`      | Container for map engine/impl (inside "contentMap") |
+
+The root element now defaults to element with id `oskari` or the `body` tag when not available.
+The `oskari` id can be used when the elements need to be controlled more tightly to work with other content on the page and Oskari should not take control of the page fully.
+Using the custom root element means that the size of the root element need to be set/controlled as well (is NOT handled by Oskari though we might introduce min-size in the future).
+If the whole page is controlled by Oskari the size is set to cover the whole browser window by assuming the root is the body tag.
+
+The elements with ids `contentMap` and `mapdiv` are created under the root element if they are not present.
+The new CSS classes are attached automatically and have styling attached to them.
+The old id's have been kept for compatibility reasons and are no longer used by code under `oskari-frontend`.
+The JS getters should be used for referencing the elements (instead of the old id's) and CSS classes for styling.
+A helper `Oskari.dom.isEmbedded()` was also added for detecting if the app is an embedded map as some tools use this information.
+
+For now the navigation bar that holds toolbar and tile/menu items of Oskari is assumed to be a `<nav>` element directly under the root element.
+The map elements are appended after it by default, but having for example the `#contentMap` element on the page before the `nav` controls which side of the map the navigation is.
+The Oskari flyouts now use this information to determine initial the Flyout location instead of hard coded values.
+The navigation element creation and content is planned to be moved to code as well as there are future requirements for making the navigation element more dynamic.
+
+For more details see: https://github.com/oskariorg/oskari-frontend/pull/2042
+
+This change makes the map size handling much simpler:
+- `.oskari-map-container-el` defines maximum size that the map can have
+- `.oskari-map-impl-el` defines the size of the map itself (can be smaller than `.oskari-map-container-el` but not bigger. Used for example to preview publisher size setting)
+- `mapmodule` bundle now monitors its own element size for changes without external notifications required
+- `MapSizeChangedEvent` is still sent when the map size changes so other parts of the code base can react to size changes
+- This makes the following requests unnecessary and they have been removed from the code base: `MapFull.MapResizeEnabledRequest`, `MapFull.MapSizeUpdateRequest`, `MapFull.MapWindowFullScreenRequest`
+
+### Theme
+
+[ThemeHelper](https://github.com/oskariorg/oskari-frontend/blob/2.10.0/src/react/theme/ThemeHelper.js) now has a function for easily getting theme selections that can be used for navigational elements like the buttons on the map: `ThemeHelper.getNavigationTheme({...theme})` in a similar way that  `ThemeHelper.getHeaderTheme({...theme})` was previously used for windowing elements. The helper is still work-in-progress and comments about it are welcome. The idea is to provide getters that can try several settings from the theme JSON before returning a value for given theme variable. This way we can offer specific choices for theme setting but also provide fallbacks so a simple theme JSON could be given instead of giving a setting for every little detail in the theme.
+
+Theme now also injects global style overrides to enable jQuery-based windowing elements have theming support and add initial theming support for the main navigation menu. See details in: https://github.com/oskariorg/oskari-frontend/pull/2100 This is similar to what Oskari-based applications do to override the default colors.
+
+### Map theme
+
+Handling for a new subobject named "map" was added to the theme enabling the map controls to use similar theme structure as the rest of Oskari application but individual toggles that can be adjusted just for the map. An example would be a case where the buttons on the map and the popups they open need to have a different color scheme as the rest of the geoportal. This was the case before theming support where the default UI on Oskari had yellow colored flyouts/popups, but similar components opened by buttons on the map had dark headers instead.
+
+The way the "map" theme works is it can have the same structure as a normal theme JSON, but the mapmodule generates a theme for itself by combining the geoportal theme and overriding it with keys from the map subobject. As an example:
+```
+{
+    color: {
+        primary: 'yellow',
+        accent: 'red'
+    },
+    map: {
+        color: {
+            primary: 'gray'
+        }
+    }
+}
+```
+The mapmodule uses its own ThemeProvider context for its components. The map components would (in the example above) get a theme where the primary color is gray while non-map components would see the primary color as yellow. Both types of components would see the accent color as 'red' as it's not overridden under the map key. The mapmodule has `set/getMapTheme()` methods and it listens to changes on the geoportal theme to update the theme for map components.
+
+Some of these are listed in https://github.com/oskariorg/oskari-frontend/pull/2069 and this will be documented in more detail in oskari.org.
+
+### Publisher functionality
+
+Enabled by the new theme support the publisher functionality now includes an initial theme editor for the embedded maps. This allows the end user to select for example colors that affect the controls on the map and the popups they open. The visual options that were previously offered have been changed to preset values for the new theme editor so they can be used as a starting point for more customized theme.
+
+The tool placement/dragging mode in publisher now shows handles for tools as a visual reminder that tools can be dragged. Most restraints for plugin placement have been removed so they can be moved more freely.
+
+### Draw tools
+
+The drawtools bundle has been rewritten to make it easier to read and maintain. When requesting buffered features for drawing, they are now generated for all features in a multi feature collection. An issue has been fixed on perimeter/outer ring length measurements for polygons. The measurement tooltips no longer block clicks on the map so it's easier to edit measurements. Updated StopDrawingRequest documentation to match implementation.
+
+### Map controls
+
+All of the map controls (buttons on top of map etc) that are included in `oskari-frontend` have been rewritten as React-based components. They can now be styled using theme variables and have icons changed to SVG enabling hovering and more flexible styling options. The popups they open are theme-aware as well and some of the controls gained new functionalities:
+
+- Search can now be minimized to a smaller icon when clicked on the map
+- The previous pan buttons tool now only shows the reset button by default but it can be configured (using publisher UI) to show the arrows when required
+- **The concept of "mobile mode" with the toolbar on top of the map has been removed**
+- Tools now modify their own UI to fit a smaller screen more properly. As an example the zoombar hides its slider and makes its buttons bigger.
+
+To make it easier to migrate any customized plugins to the new plugin structure the deprecated methods in `BasicMapModulePlugin.js` have been kept as no-op functions with logging to tell developers they should migrate a plugin that uses them:
+- getMobileDefs()
+- removeToolbarButtons()
+- addToolbarButtons()
+
+For details see: https://github.com/oskariorg/oskari-frontend/pull/2082
+
+Also documentation about customization for some common cases can be found in:
+- https://oskari.org/documentation/customize/logo
+- https://oskari.org/documentation/customize/indexmap
+
+### Build scripts
+
+Parameters can now be passed on command line in another way (https://github.com/oskariorg/oskari-frontend/pull/2064)
+Both of these work with version 2.10: 
+```
+npm run build -- --env.appdef=applications
+npm run build --appdef=applications
+```
+Build script now allows generating builds to non-default domain with parameter: `--env.domain=https://cdn.domain.org`.
+
+### New React components
+
+- `MapButton` under `oskari-ui` for generic button on the map
+- `MapModuleButton` under `mapmodule` uses MapButton and adds theme handling
+- `SidePanel` under `oskari-ui` is currently used for printout options panel (publisher and others will be migrated to this in future release)
+- `Tooltip` component should now clear from the screen properly when the element they are attached to is not shown
+
+### Other improvements
+
+- VectorTileLayerPlugin now receives the actual map resolutions array instead of using OpenLayers defaults. This might affect styling of vector tile layers: https://github.com/oskariorg/oskari-frontend/pull/2115
+- Thematic map now allows classification with 2 values if method is not `jenks` and histogram view has been improved
+- Fixed issues with layer list in embedded map: layers are now listed in correct/reversed order and style select is no longer shown if there is only one style to select from
+- Added bundle documentation for `mydata`
+- Fixed a visual issue with infobox title
+- Fixed an issue with opacity setting and vector layer features in 3D
+- My places now checks polygon feature validity so users can't save a self-intersecting polygon
+- Fixed an issue with userlayer import: input for providing missing projection information is now shown when required
+- Printout options panel has been rewritten with React
+- Added a workaround for OpenLayers issue with features having a property named `geometry`: https://github.com/oskariorg/oskari-frontend/pull/2110
+- Metadata search (`metadatacatalogue`) bundle can now function without the `search` bundle being present in the application. It now creates its own tile/menu item if it can't inject itself into the normal search UI.
+- Library updates:
+    - OpenLayers 7.1.0 -> 7.2.2
+    - moment.js 2.29.1 -> 2.29.4 
+
+
 ## 2.9.1
 
 For a full list of changes see:

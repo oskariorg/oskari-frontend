@@ -149,6 +149,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Ulkoasu",
+                "title": {
+                    "popup": "Ponnahdusikkuna",
+                    "buttons": "Painikkeet"
+                },
                 "fields": {
                     "colours": {
                         "label": "Värimaailma",
@@ -181,8 +185,9 @@ Oskari.registerLocalization(
                         "3d-dark": "Kolmiulotteinen (tumma)",
                         "3d-light": "Kolmiulotteinen (vaalea)"
                     },
-                    "popupHeaderColor": "Pop-upin otsikon taustaväri",
-                    "buttonBackgroundColor": "Painikkeiden taustaväri",
+                    "popupHeaderColor": "Otsikon taustaväri",
+                    "popupHeaderTextColor": "Otsikon väri",
+                    "buttonBackgroundColor": "Taustaväri",
                     "buttonTextColor": "Ikonien väri",
                     "buttonAccentColor": "Ikonien tehosteväri",
                     "buttonRounding": "Painikkeiden pyöristys",
@@ -233,7 +238,10 @@ Oskari.registerLocalization(
             "mapLayers": {
                 "label": "Karttatasot",
                 "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa"
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
             },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",

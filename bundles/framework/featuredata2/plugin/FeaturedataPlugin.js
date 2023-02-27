@@ -163,7 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
                         icon={<span>{this._loc.title}</span>}
-                        title={this._loc.title}
                         onClick={() => this.openFlyout()}
                         disabled={disabled}
                         active={this._flyoutOpen}
