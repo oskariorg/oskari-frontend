@@ -186,9 +186,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
-            if (Oskari.util.isMobile()) {
-                return;
-            }
             var me = this,
                 el = me.getElement();
 
