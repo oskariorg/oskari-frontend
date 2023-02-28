@@ -1273,7 +1273,8 @@ Oskari.clazz.define(
         },
         isVisibleOnMap () {
             const { unsupported, ...booleans } = this.getVisibilityInfo();
-            return Object.values(booleans).every(b => b === true) && !unsupported;
+            return this.getOpacity() !== 0 && !unsupported &&
+                Object.values(booleans).every(b => b === true);
         }
     }
 );
