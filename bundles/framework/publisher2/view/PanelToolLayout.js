@@ -390,7 +390,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 }
             }
             const elem = plugin.getElement();
-            if (!elem) {
+            if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
             const enabled = tool.state.enabled === true;
