@@ -19,7 +19,7 @@ const Label = styled('label')`
     cursor: pointer;
     > div {
         margin-left: 8px;
-        margin-right: 8px;
+        margin-right: 3px;
     }
 `;
 const StylizedSwitch = styled(Switch)`
@@ -60,10 +60,12 @@ const channelRenderer = (channel, state, controller) => {
     return (
         <Label
             key={channel.id}>
-            <div><Tooltip title={channel.locale.desc}><InfoIcon /></Tooltip></div>
             <StylizedSwitch $color={getColor(channel)} size="small" checked={selected}
                 onChange={checked => controller.setChannelEnabled(channel.id, checked)} />
             <div>{channel.locale.name}</div>
+            { channel.locale.desc &&
+                <div><Tooltip title={channel.locale.desc}><InfoIcon /></Tooltip></div>
+            }
         </Label>);
 };
 
