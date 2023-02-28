@@ -17,6 +17,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
         }
         return Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
     },
+    isStarted: function () {
+        return !!this.getPlugin();
+    },
+    getPlugin: function () {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        return stats?.togglePlugin;
+    },
     getConfiguration: function (conf = {}) {
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup tools configuration
