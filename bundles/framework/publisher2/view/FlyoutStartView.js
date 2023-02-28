@@ -1,5 +1,3 @@
-import { UnsupportedLayerSrs } from '../../../mapping/mapmodule/domain/UnsupportedLayerSrs';
-
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.StartView
  *
@@ -177,7 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
             var listItemTemplate = this.templateListItem;
-            var map = this.instance.sandbox.getMap();
 
             list.forEach((layer) => {
                 var item = listItemTemplate.clone();
