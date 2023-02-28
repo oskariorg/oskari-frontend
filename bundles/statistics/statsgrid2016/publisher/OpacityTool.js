@@ -5,10 +5,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
     group: 'data',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.transparent === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.transparent === true);
     },
     getTool: function (stateData) {
         var me = this;

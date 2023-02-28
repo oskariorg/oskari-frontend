@@ -5,12 +5,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     lefthanded: 'bottom right',
     righthanded: 'bottom right',
 
-    init: function (pdata) {
-        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
-            this.setEnabled(true);
-        } else {
-            this.setEnabled(false);
-        }
+    init: function (data) {
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.allowClassification !== false);
     },
     // required for dragndrop in publisher - also plugin needs to
     getPlugin: function () {
@@ -40,20 +37,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
             service.getStateService().updateClassificationPluginState('editEnabled', enabled);
         }
     },
+
     getValues: function () {
         const allowClassification = this.isEnabled();
-        const legendLocation = 'bottom right';
-        if (this._isStatsActive()) {
-            return {
-                configuration: {
-                    statsgrid: {
-                        conf: { allowClassification, legendLocation },
-                        state: this.__sandbox.getStatefulComponents().statsgrid.getState()
-                    }
-                }
-            };
+        if (!this._isStatsActive()) {
+            return {};
         }
-        return {};
+        // should we use legendLocation from plugin config instead?
+        const legendLocation = 'bottom right';
+        return {
+            configuration: {
+                statsgrid: {
+                    conf: {
+                        allowClassification,
+                        legendLocation
+                    },
+                    state: this.__sandbox.getStatefulComponents().statsgrid.getState()
+                }
+            }
+        };
     },
     /**
     * Stop tool.

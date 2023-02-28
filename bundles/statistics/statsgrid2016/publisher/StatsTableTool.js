@@ -12,11 +12,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
      * @method init
      * @public
      */
-    init: function (pdata) {
-        var enabled = pdata &&
-            Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') &&
-            pdata.configuration.statsgrid.conf.grid === true;
-        this.setEnabled(enabled);
+    init: function (data) {
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.grid === true);
     },
     /**
     * Get tool object.

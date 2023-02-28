@@ -5,10 +5,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
     id: 'classification',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.classification === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.classification === true);
     },
     getTool: function () {
         var me = this;

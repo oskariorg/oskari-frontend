@@ -5,10 +5,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     id: 'diagram',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.diagram === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.diagram === true);
     },
     getTool: function (stateData) {
         var me = this;

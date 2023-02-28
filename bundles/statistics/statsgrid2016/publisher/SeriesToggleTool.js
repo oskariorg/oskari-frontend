@@ -5,10 +5,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     id: 'series',
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.series === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.series === true);
     },
     getTool: function (stateData) {
         var me = this;

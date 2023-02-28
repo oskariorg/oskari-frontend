@@ -1,5 +1,8 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool', function () {
 }, {
+    getStatsgridConf: function (initialData) {
+        return initialData?.configuration?.statsgrid?.conf || {};
+    },
     /**
     * @method @private _isStatsActive
     * @return true when stats layer is on the map, false if removed
