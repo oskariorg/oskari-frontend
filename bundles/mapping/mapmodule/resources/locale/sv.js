@@ -19,7 +19,6 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProj": "Vissa kartlager i denna kartvy kan inte visas med den  kartprojektionen.",
         "styles": {
             "defaultTitle": "Standard stil"
         },

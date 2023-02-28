@@ -19,10 +19,6 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Уведомление",
-        "unsupportedProj": "Некоторые слои, добавленные в этот вид карты, не могут быть показаны в текущей проекции карты.",
-        "unsupported-layer": "Слой карты не может быть показан.",
-        "unsupported-layer-projection": "Слой карты не может быть показан в выбранной проекции карты.",
         "styles": {
             "defaultTitle": "Стиль по умолчанию"
         },
@@ -117,6 +113,12 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Центровать карту относительно вашего местоположения"
             }
+        },
+        "layerUnsupported": {
+            "common": "Слой карты не может быть показан.",
+            "srs": "Слой карты не может быть показан в выбранной проекции карты.",
+            "dimension": "Слой карты не может быть показан в выбранной проекции карты.",
+            "unavailable": "Слой карты не может быть показан."
         },
         "guidedTour": {
             "help1": {
