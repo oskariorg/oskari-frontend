@@ -1,8 +1,19 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool', function () {
 }, {
     getStatsgridConf: function (initialData) {
-        return initialData?.configuration?.statsgrid?.conf || {};
+        const conf = initialData?.configuration?.statsgrid?.conf || {};
+        // Setup the plugin location whenever any of the stats tools parse initial config.
+        // There will be "too many calls" to this but it's not too bad and
+        // we want the location always set or reset no matter which tool sets it
+        this.getStatsgridBundle()?.togglePlugin?.setLocation(conf.location?.classes);
+        this.getStatsgridBundle()?.classificationPlugin?.setLocation(conf.location?.classes);
+        return conf;
     },
+
+    getStatsgridBundle: function () {
+        return Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+    },
+
     /**
     * @method @private _isStatsActive
     * @return true when stats layer is on the map, false if removed
@@ -24,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
         return !!this.getPlugin();
     },
     getPlugin: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         return stats?.togglePlugin;
     },
     getConfiguration: function (conf = {}) {

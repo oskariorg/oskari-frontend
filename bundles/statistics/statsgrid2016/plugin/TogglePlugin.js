@@ -4,15 +4,18 @@ import { PluginHandler } from '../handler/PluginHandler';
 import { ThematicControls } from './ThematicControls';
 import { UnorderedListOutlined, TableOutlined, BarChartOutlined, ClockCircleOutlined } from '@ant-design/icons';
 
-Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyoutManager, locale) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyoutManager, location) {
     var me = this;
     this.flyoutManager = flyoutManager;
-    this.locale = locale;
     this.element = null;
     this._clazz = 'Oskari.statistics.statsgrid.TogglePlugin';
     this._index = 4;
     this._defaultLocation = 'bottom right';
-    this._fixedLocation = false;
+    this._config = {
+        location: {
+            classes: location || this._defaultLocation
+        }
+    }
 
     this.flyoutManager.on('show', function (tool) {
         me.toggleTool(tool, true);

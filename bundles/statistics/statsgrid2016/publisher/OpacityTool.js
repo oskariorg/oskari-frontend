@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
 
         me.state.enabled = enabled;
 
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         if (!stats) {
             return;
         }

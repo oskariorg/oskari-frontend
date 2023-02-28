@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     },
     // required for dragndrop in publisher - also plugin needs to
     getPlugin: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         return stats.classificationPlugin;
     },
     getTool: function (pdata) {
@@ -43,18 +43,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         if (!this._isStatsActive()) {
             return {};
         }
-        // should we use legendLocation from plugin config instead?
-        const legendLocation = 'bottom right';
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         const { location } = stats?.togglePlugin?.getConfig() || {};
         return {
             configuration: {
                 statsgrid: {
                     conf: {
                         allowClassification,
-                        legendLocation,
                         location: location || {
-                            "classes": legendLocation
+                            "classes": 'bottom right'
                         }
                     },
                     state: this.__sandbox.getStatefulComponents().statsgrid.getState()
