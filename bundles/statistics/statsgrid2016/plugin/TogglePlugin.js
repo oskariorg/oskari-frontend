@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         return this.element;
     },
     hasUI: function () {
-        this.changeToolStyle();
+        return true;
     },
     changeToolStyle: function (style, div) {
         this.renderButtons();
