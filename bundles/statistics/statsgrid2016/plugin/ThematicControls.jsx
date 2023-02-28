@@ -9,22 +9,18 @@ const Container = styled('div')`
     align-items: center;
 `;
 
-const ButtonContainer = styled('div')`
-    margin-left: 5px;
-`;
-
 export const ThematicControls = ({ tools }) => {
     return (
         <Container>
             {tools.map((tool, index) => (
-                <ButtonContainer key={index}>
+                <div key={index}>
                     <MapModuleButton
                         onClick={() => tool.clickHandler()}
                         icon={tool.icon}
                         className={`t_${tool.name}`}
                         iconActive={tool.active}
                     />
-                </ButtonContainer>
+                </div>
             ))}
         </Container>
     )
