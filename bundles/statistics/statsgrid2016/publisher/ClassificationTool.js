@@ -45,12 +45,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
         // should we use legendLocation from plugin config instead?
         const legendLocation = 'bottom right';
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        const { location } = stats?.togglePlugin?.getConfig() || {};
         return {
             configuration: {
                 statsgrid: {
                     conf: {
                         allowClassification,
-                        legendLocation
+                        legendLocation,
+                        location: location || {
+                            "classes": legendLocation
+                        }
                     },
                     state: this.__sandbox.getStatefulComponents().statsgrid.getState()
                 }
