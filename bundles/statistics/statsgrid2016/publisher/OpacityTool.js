@@ -3,8 +3,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
 {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
 
     init: function (data) {
         var enabled = data &&

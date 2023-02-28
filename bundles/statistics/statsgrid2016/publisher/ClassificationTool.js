@@ -2,15 +2,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: ['bottom right'],
     lefthanded: 'bottom right',
     righthanded: 'bottom right',
 
-    allowedSiblings: [
-        'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
-    ],
     init: function (pdata) {
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             this.setEnabled(true);
