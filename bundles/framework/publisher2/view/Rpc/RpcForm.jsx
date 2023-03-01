@@ -19,6 +19,11 @@ const StyledCheckbox = styled(Checkbox)`
 `;
 
 export const RpcForm = ({ state, controller }) => {
+    const [componentState, setComponentState] = useState({
+        feedbackBaseUrl: state.feedbackBaseUrl,
+        feedbackApiKey: state.feedbackApiKey,
+        feedbackExtensions: state.feedbackExtensions
+    });
     return (
         <Content>
             <StyledCheckbox
@@ -40,24 +45,36 @@ export const RpcForm = ({ state, controller }) => {
                         label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiUrl' />}
                         placeholder={Oskari.getMsg('feedbackService', 'display.publisher.urlPlaceholder')}
                         type='text'
-                        value={state.feedbackBaseUrl}
-                        onChange={(e) => controller.updateField('feedbackBaseUrl', e.target.value)}
+                        value={componentState.feedbackBaseUrl}
+                        onBlur={(e) => controller.updateField('feedbackBaseUrl', e.target.value)}
+                        onChange={(e) => setComponentState({
+                            ...componentState,
+                            feedbackBaseUrl: e.target.value
+                        })}
                     />
                     <LabeledInput
                         key='t_key'
                         label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiKey' />}
                         placeholder={Oskari.getMsg('feedbackService', 'display.publisher.keyPlaceholder')}
                         type='text'
-                        value={state.feedbackApiKey}
-                        onChange={(e) => controller.updateField('feedbackApiKey', e.target.value)}
+                        value={componentState.feedbackApiKey}
+                        onBlur={(e) => controller.updateField('feedbackApiKey', e.target.value)}
+                        onChange={(e) => setComponentState({
+                            ...componentState,
+                            feedbackApiKey: e.target.value
+                        })}
                     />
                     <LabeledInput
                         key='t_extensions'
                         label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiExtensions' />}
                         placeholder={Oskari.getMsg('feedbackService', 'display.publisher.extensionsPlaceholder')}
                         type='text'
-                        value={state.feedbackExtensions}
-                        onChange={(e) => controller.updateField('feedbackExtensions', e.target.value)}
+                        value={componentState.feedbackExtensions}
+                        onBlur={(e) => controller.updateField('feedbackExtensions', e.target.value)}
+                        onChange={(e) => setComponentState({
+                            ...componentState,
+                            feedbackExtensions: e.target.value
+                        })}
                     />
                 </FeedbackFrom>
             )}
