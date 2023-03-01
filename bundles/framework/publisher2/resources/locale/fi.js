@@ -235,6 +235,10 @@ Oskari.registerLocalization(
                 "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
             },
+            "rpc": {
+                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
+                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
+            },
             "preview": "Kartan esikatselu",
             "location": "Sijainti ja mittakaavataso",
             "zoomlevel": "Mittakaavataso",

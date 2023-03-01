@@ -120,6 +120,5 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
             me.state.enabled = (enabled === true);
         }
     }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol': ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool']
     });

@@ -137,6 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
 
+            const rpcPanel = this._createRpcPanel();
+            rpcPanel.getPanel().addClass('t_rpc');
+            this.panels.push(rpcPanel);
+            accordion.addPanel(rpcPanel.getPanel());
+
             var layoutPanel = me._createLayoutPanel();
             layoutPanel.getPanel().addClass('t_style');
             me.panels.push(layoutPanel);
@@ -257,6 +262,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});
 
+            return form;
+        },
+        _createRpcPanel: function () {
+            const sandbox = this.instance.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
+                sandbox, mapModule, this.loc, this.instance
+            );
+            form.init(this.data, (value) => {});
             return form;
         },
         /**

@@ -73,6 +73,5 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
         }
     }, {
 
-        extend: ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        protocol: ['Oskari.mapframework.publisher.Tool']
+        extend: ['Oskari.mapframework.publisher.tool.AbstractPluginTool']
     });

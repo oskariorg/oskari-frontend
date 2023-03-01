@@ -235,6 +235,10 @@ Oskari.registerLocalization(
                 "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
                 "promote": "Do you want to show also orthophotos on the map?"
             },
+            "rpc": {
+                "label": "Programmatical usage (RPC API)",
+                "info": "You can use the RPC API with published maps to .."
+            },
             "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
