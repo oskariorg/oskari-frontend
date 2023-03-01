@@ -131,7 +131,7 @@ class UIHandler extends StateHandler {
     _getVisibleLayers () {
         // use same visibility filter as mapfull
         return this.sandbox.findAllSelectedMapLayers()
-            .filter(l => l.isVisibleOnMap());
+            .filter(l => l.isVisible());
     }
 
     _getTopmostTimeseries () {
@@ -308,11 +308,8 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'updatePanel',
-    'showPanel',
     'updateField',
     'updateScaleType',
-    'closePanel',
     'printMap'
 ]);
 

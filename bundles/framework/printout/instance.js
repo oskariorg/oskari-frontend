@@ -125,36 +125,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         },
         getProps: function () {
             return {
-                state: this.handler?.getState(),
+                controller: this.handler.getController(),
+                state: this.handler.getState(),
                 scaleSelection: this.conf.scaleSelection,
                 scaleOptions: this.scaleOptions,
                 onClose: () => this.setPublishMode(false)
             };
         },
         showPanel: function () {
-            const controller = this.handler?.getController();
             const props = this.getProps();
-            controller.showPanel(
+            this.handler.showPanel(
                 <Message bundleKey='Printout' messageKey='BasicView.title' />,
-                <PrintoutPanel
-                    controller={controller}
-                    { ...props }
-                />,
+                <PrintoutPanel { ...props } />,
                 props.onClose
             );
         },
         updatePanel: function () {
-            const controller = this.handler?.getController();
-            controller.updatePanel(
+            this.handler.updatePanel(
                 <Message bundleKey='Printout' messageKey='BasicView.title' />,
-                <PrintoutPanel
-                    controller={controller}
-                    { ...this.getProps() }
-                />
+                <PrintoutPanel { ...this.getProps() } />
             );
         },
         closePanel: function () {
-            this.handler?.getController()?.closePanel();
+            this.handler?.closePanel();
         },
         /**
          * @method onEvent
@@ -186,9 +179,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * Implements BundleInstance protocol stop method
          */
         stop: function () {
-            if (this.handler) {
-                this.handler.closePanel();
-            }
+            this.closePanel();
 
             const sandbox = this.getSandbox();
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => sandbox.unregisterFromEventByName(this, p));
