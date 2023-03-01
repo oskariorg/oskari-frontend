@@ -49,7 +49,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
           <FilterContainer onKeyDown={(e) => e.stopPropagation()}>
             <FilterFields>
-                {dataIndex === 'dataProducer' && analyticsData ? (
+                {dataIndex === 'dataProducer' ? (
                     <StyledSelect
                         showSearch
                         ref={selectInput}
@@ -82,9 +82,9 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
                     />
                 )}
                 <SecondaryButton
-                type="reset"
-                onClick={() => clearFilters()}
-                size="small"
+                    type="reset"
+                    onClick={() => clearFilters()}
+                    size="small"
                 />
             </Space>
           </FilterContainer>
