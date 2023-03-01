@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { RpcPanelHandler } from '../handler/RpcPanelHandler';
-import { RpcForm } from './Rpc/RpcForm';
+import { RpcForm } from './form/RpcForm';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
