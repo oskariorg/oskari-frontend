@@ -27,9 +27,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/feedbackService/request/PostFeedbackRequest.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../../bundles/framework/feedbackService/publisher/FeedbackServiceTool.js"
         }],
         "locales": [{
             "lang": "en",
