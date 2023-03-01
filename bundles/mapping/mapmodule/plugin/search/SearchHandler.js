@@ -1,7 +1,7 @@
 import '../../../../service/search/searchservice';
 import { showResultsPopup } from './SearchResultsPopup';
 import { showOptionsPopup } from './SearchOptionsPopup';
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 
 const MARKER_ID = 'SEARCH_RESULT_MARKER';
 
@@ -23,7 +23,7 @@ class SearchHandler extends StateHandler {
         this.plugin = plugin;
         this.setState({
             minimized: false,
-            loading: false,
+            loading: [],
             hasOptions: false,
             selectedChannels: []
         });
@@ -50,24 +50,43 @@ class SearchHandler extends StateHandler {
         return Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + key, args);
     }
 
-    showResultsPopup (results) {
-        this.clearResultPopup();
-        const { totalCount, hasMore, locations } = results;
-        const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
-        let title = this.getMsg('title');
-        let description = this.getMsg(msgKey, { count: totalCount });
+    updateResultsPopup () {
+        const { results = {}, loading, channels } = this.getState();
+        if (!loading.length) {
+            // we have all results
+            // check if we didn't find anything OR if we found just one
+            const currentChannels = Object.keys(results).filter(chan => !!results[chan]);
+            if (!currentChannels.length) {
+                // previous search result cleared
+                return;
+            }
+            const combined = currentChannels.reduce((accumulator, currentValue) => {
+                const channelResults = results[currentValue];
+                if (!channelResults) {
+                    return accumulator;
+                }
+                accumulator.push(...channelResults.locations);
+                return accumulator;
+            },
+            []);
 
-        if (totalCount === 0) {
-            description = this.getMsg('noresults');
-        } else if (totalCount === 1) {
-            // only one result, show it immediately
-            this.resultClicked(locations[0]);
+            if (combined.length === 0) {
+                Messaging.error(this.getMsg('noresults'));
+                return;
+            } else if (combined.length === 1) {
+                // only one result, show it immediately
+                this.resultClicked(locations[0]);
+                return;
+            }
+        }
+        if (this._popupControlsResult) {
+            this._popupControlsResult.update(results, channels);
             return;
         }
+
         this._popupControlsResult = showResultsPopup(
-            title,
-            description,
-            locations,
+            results,
+            channels,
             (result) => this.resultClicked(result),
             () => this.clearResultPopup(),
             this.plugin.getLocation());
@@ -91,27 +110,41 @@ class SearchHandler extends StateHandler {
      * Uses SearchService to make the actual search and calls  #_showResults
      */
     doSearch () {
-        const { loading, query = '', selectedChannels = [] } = this.getState();
-        if (loading || query.length === 0) {
+        const { loading, query = '', selectedChannels = [], channels } = this.getState();
+        if (loading.length || query.length === 0) {
             return;
         }
         this.clearResultPopup();
+        // TODO: cleanup
+        const currentChannels = [...(new Set(loading.concat(selectedChannels)))];
+
         this.updateState({
-            loading: true
+            loading: currentChannels
         });
-        // query, onSuccess, onError, options = {}, channels
-        this.service.doSearch(query, results => {
+        currentChannels.forEach(channel => this.triggerSearchForChannel(channel, query));
+    }
+
+    triggerSearchForChannel (channel, query) {
+        const updateResults = (results) => {
+            const { results:prevResults = {}, loading } = this.getState();
             this.updateState({
-                loading: false
+                loading: results ? loading.filter(item => item !== channel) : loading,
+                results: {
+                    ...prevResults,
+                    [channel]: results
+                }
             });
-            this.showResultsPopup(results);
+            this.updateResultsPopup();
+        };
+        // clear previous results
+        updateResults();
+        this.service.doSearch(query, results => {
+            updateResults(results);
         }, () => {
             // on error
-            this.updateState({
-                loading: false
-            });
+            updateResults();
         }, undefined,
-        selectedChannels.join(','));
+        channel);
     }
 
     resultClicked (result) {

@@ -118,7 +118,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
                 $hoverColor={hover}
                 onClick={search}
                 icon={<SearchOutlined />}
-                loading={state.loading}
+                loading={state.loading.length}
                 className='t_search'
                 disabled={disabled}
             />

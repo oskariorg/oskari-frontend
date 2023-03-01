@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Message } from 'oskari-ui';
+import { Badge, Message, Collapse, CollapsePanel } from 'oskari-ui';
 import { getPopupOptions } from '../pluginPopupHelper';
 
 const StyledTable = styled(Table)`
@@ -16,12 +16,41 @@ const StyledTable = styled(Table)`
     }
 `;
 
-const StyledContent = styled('div')`
-    margin: 12px 24px 24px;
-    min-width: 300px;
-`;
+const PopupContent = ({ results, channels, showResult }) => {
+    const channelIds = Object.keys(results);
+    const largestResultInIndex = channelIds.reduce((largestIndex, channelId, index) => {
+        const prevLargest = channelIds[largestIndex];
+        if (results[channelId]?.totalCount > results[prevLargest]?.totalCount) {
+            return index;
+        }
+        return largestIndex;
+    }, 0);
+    const [activeTab, setActiveTab] = useState(channelIds[largestResultInIndex]);
+    return (
+        <Collapse activeKey={activeTab} onChange={setActiveTab}>
+            { channelIds.map(id => {
+                const channel = channels.find(chan => id === chan.id);
+                const channelResult = results[id];
+                return (
+                <CollapsePanel header={<Header title={channel.locale.name} count={channelResult?.totalCount} />} key={channel.id}>
+                    <ChannelContent
+                        results={channelResult}
+                        channel={channels.find(chan => id === chan.id)}
+                        showResult={showResult} />
+                </CollapsePanel>
+                );
+            })}
+        </Collapse>
+    );
+};
+const Header = ({title, count}) => {
+    return (<span>{title} <Badge count={count} showZero /></span>);
+};
 
-const PopupContent = ({ results, description, showResult }) => {
+const ChannelContent = ({ results, channel, showResult }) => {
+    if (!results) {
+        return null;
+    }
     const columnSettings = [
         {
             align: 'left',
@@ -48,25 +77,42 @@ const PopupContent = ({ results, description, showResult }) => {
             sorter: getSorterFor('type'),
         }
     ];
+
+    const { totalCount, hasMore, locations } = results;
+    if (totalCount === 0) {
+        return (
+            <React.Fragment>
+                <Message messageKey={'plugin.SearchPlugin.noresults'} bundleKey='MapModule' />
+            </React.Fragment>);
+    }
+    const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
     return (
-        <StyledContent>
-            <span>{description}</span>
+        <React.Fragment>
+            <Message messageKey={'plugin.SearchPlugin.' + msgKey} messageArgs={{ count: totalCount }} bundleKey='MapModule' />
             <StyledTable
                 columns={columnSettings}
-                dataSource={results.map((item, index) => ({
+                dataSource={locations.map((item) => ({
                     key: item.id,
                     ...item
                 }))}
                 pagination={false}
             />
-        </StyledContent>
-    )
+        </React.Fragment>
+    );
 };
 
-export const showResultsPopup = (title, description, results = [], showResult, onClose, pluginLocation) => {
+
+export const showResultsPopup = (results = {}, channels = [], showResult, onClose, pluginLocation) => {
     const options = getPopupOptions({
         getName: () => 'searchResults',
         getLocation: () => pluginLocation
     });
-    return showPopup(title, <PopupContent description={description} results={results} showResult={showResult} />, onClose, options);
+    const title = (<Message messageKey='plugin.SearchPlugin.title' bundleKey='MapModule' />);
+    const opts = showPopup(title, <PopupContent results={results} channels={channels} showResult={showResult} />, onClose, options);
+    return {
+        // pass close as is
+        ...opts,
+        // override update so we can update content by just passing new state
+        update: (results, channels) => opts.update(title, <PopupContent results={results} channels={channels} showResult={showResult} />)
+    };
 };
