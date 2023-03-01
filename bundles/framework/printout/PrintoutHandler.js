@@ -131,7 +131,7 @@ class UIHandler extends StateHandler {
     _getVisibleLayers () {
         // use same visibility filter as mapfull
         return this.sandbox.findAllSelectedMapLayers()
-            .filter(l => l.isVisible());
+            .filter(l => l.isVisibleOnMap());
     }
 
     _getTopmostTimeseries () {
