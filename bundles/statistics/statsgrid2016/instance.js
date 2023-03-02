@@ -150,7 +150,7 @@ Oskari.clazz.define(
                     this[plugin].toggleUI();
                 }
             });
-            const visible = this[plugin] && !!this[plugin].getElement();
+            const visible = this[plugin] && this[plugin].isVisible();
             this.togglePlugin.toggleTool(tool, visible);
         },
         isEmbedded: function () {
@@ -479,15 +479,11 @@ Oskari.clazz.define(
                 view: this.visible
             };
         },
-        createClassficationView: function () {
+        createClassificationView: function () {
             const config = jQuery.extend(true, {}, this.getConfiguration());
-            const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
-
             this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config);
             this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
             this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
-            mapModule.registerPlugin(this.classificationPlugin);
-            mapModule.startPlugin(this.classificationPlugin);
             this.classificationPlugin.buildUI();
         },
         // TODO do we need to unregister plugin
@@ -501,7 +497,7 @@ Oskari.clazz.define(
         },
         _setClassificationViewVisible: function (visible) {
             if (!this.classificationPlugin && visible) {
-                this.createClassficationView();
+                this.createClassificationView();
                 return;
             }
             if (visible) {
