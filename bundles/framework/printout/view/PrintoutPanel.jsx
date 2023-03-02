@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { Controller } from 'oskari-ui/util';
 import { Collapse, CollapsePanel, Message, Radio, Select, Option } from 'oskari-ui';
 import { ButtonContainer, PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
@@ -57,7 +59,7 @@ const PanelHeader = ({ headerMsg, infoMsg }) => {
     );
 }
 
-export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions, isTimeSeries }) => {
+export const PrintoutPanel = ({ controller, state, onClose, scaleSelection, scaleOptions }) => {
     const [openPanels, setOpenPanels] = useState([1, 2, 3, 4]);
     return (
         <Content>
@@ -75,13 +77,13 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                     </RadioGroup>
                 </CollapsePanel>
                 <CollapsePanel header={<PanelHeader headerMsg='BasicView.settings.label' infoMsg='BasicView.settings.tooltip' />} key={2}>
-                    <AdditionalSettings state={state} controller={controller} isTimeSeries={isTimeSeries} />
+                    <AdditionalSettings state={state} controller={controller} />
                 </CollapsePanel>
                 {scaleSelection && (
                     <CollapsePanel header={<PanelHeader headerMsg='BasicView.scale.label' infoMsg='BasicView.scale.tooltip' />} key={3}>
                         <RadioGroup
                             value={state.scaleType}
-                            onChange={(e) => controller.updateField('scaleType', e.target.value)}
+                            onChange={(e) => controller.updateScaleType(e.target.value)}
                         >
                             {SCALE_OPTIONS?.map(option => (
                                 <Radio.Choice value={option} key={option}>
@@ -109,9 +111,17 @@ export const PrintoutPanel = ({ controller, state, scaleSelection, scaleOptions,
                 </CollapsePanel>
             </Collapse>
             <Actions>
-                <SecondaryButton onClick={() => controller.closePanel()} type='cancel' />
+                <SecondaryButton onClick={onClose} type='cancel' />
                 <PrimaryButton onClick={() => controller.printMap()} type='print' />
             </Actions>
         </Content>
     );
+};
+
+PrintoutPanel.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    onClose: PropTypes.func.isRequired,
+    scaleSelection: PropTypes.bool,
+    scaleOptions: PropTypes.array
 };

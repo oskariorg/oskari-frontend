@@ -352,6 +352,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 });
             });
         },
+        // TODO: maybe style.getName() could return '' if name === '!default!', so we get rid of this
+        _getCurrentStyleName: function (layer) {
+            // check if we have a style selected and doesn't have THE magic string
+            const currentStyle = typeof layer.getCurrentStyle === 'function' ? layer.getCurrentStyle() : null;
+            const styleName = currentStyle ? currentStyle.getName() : '';
+            if (styleName === '!default!') {
+                return '';
+            }
+            return styleName;
+        },
         /**
          * @method getState
          * Returns bundle state as JSON. State is bundle specific, check the
@@ -376,20 +386,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     id: layer.getId(),
                     opacity: layer.getOpacity()
                 };
+                const style = this._getCurrentStyleName(layer);
+                if (style) {
+                    json.style = style;
+                }
                 if (!layer.isVisible()) {
                     json.hidden = true;
-                }
-                // check if we have a style selected and doesn't have THE magic string
-                if (typeof layer.getCurrentStyle !== 'function') {
-                    return json;
-                }
-                const currentStyle = layer.getCurrentStyle();
-                if (!currentStyle) {
-                    return json;
-                }
-                const styleName = currentStyle.getName();
-                if (styleName && styleName !== '!default!') {
-                    json.style = styleName;
                 }
                 return json;
             });
@@ -406,33 +408,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          * @return {String} layers separated with ',' and layer values separated with '+'
          */
         getStateParameters: function (optimized = false) {
-            const state = this.getState();
+            const map = this.getSandbox().getMap();
             const params = {
                 ...this._getConfiguredLinkParams(),
-                zoomLevel: state.zoom,
-                coord: state.east + '_' + state.north
+                zoomLevel: map.getZoom(),
+                coord: map.getX() + '_' + map.getY()
             };
             // add maplayers
-            params.mapLayers = state.selectedLayers
-                .map(layer => {
-                    if (layer.hidden) {
-                        return null;
-                    }
-                    if (optimized) {
-                        if (layer.opacity === 0) {
-                            // leave out layers that are not visible
-                            return null;
-                        }
-                        // also leave out layers that are not inside zoom-limits, are outside of extent
-                        //  or are otherwise not shown to user
-                        if (!this.getMapModule().isLayerVisible(layer.id)) {
-                            return null;
-                        }
-                    }
-                    return layer.id + '+' + layer.opacity + '+' + (layer.style || '');
-                })
-                // filter out hidden == undefined from map-function
-                .filter(layer => !!layer)
+            params.mapLayers = map.getLayers()
+                .filter(layer => optimized ? layer.isVisibleOnMap() : layer.isVisible())
+                .map(layer => layer.getId() + '+' + layer.getOpacity() + '+' + this._getCurrentStyleName(layer))
                 // separate with comma
                 .join(',');
 

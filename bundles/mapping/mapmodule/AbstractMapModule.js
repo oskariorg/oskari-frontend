@@ -2486,32 +2486,17 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var layer = event.getMapLayer();
-            var keepLayersOrder = true;
-            var isBaseMap = false;
-            var layerPlugins = this.getLayerPlugins();
-            var layerFunctions = [];
-            var sandbox = this.getSandbox();
-            var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
-            var isPublisherActive = publisherService && publisherService.getIsActive();
+            const layer = event.getMapLayer();
+            const keepLayersOrder = true;
+            const isBaseMap = false;
+            const layerPlugins = this.getLayerPlugins();
 
-            if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
-                this._mapLayerService.showUnsupportedPopup();
+            const supportedByPlugins = Object.values(layerPlugins)
+                .filter(plugin => plugin.isLayerSupported && plugin.isLayerSupported(layer));
+            if (supportedByPlugins.length !== 1) {
+                // TODO: should we handle somehow if 0 or > 1 plugins
             }
-            const isSupported = (plugin, layer) => typeof plugin.isLayerSupported === 'function' && plugin.isLayerSupported(layer);
-
-            Object.values(layerPlugins).forEach((plugin) => {
-                // true if either plugin doesn't have the function or says the layer is supported.
-                if (isSupported(plugin, layer) && typeof plugin.addMapLayerToMap === 'function') {
-                    var layerFunction = plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap);
-                    if (typeof layerFunction === 'function') {
-                        layerFunctions.push(layerFunction);
-                    }
-                }
-            });
-
-            // Execute each layer function
-            layerFunctions.forEach((func) => func.apply());
+            supportedByPlugins.forEach(plugin => plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap));
         },
 
         /**

@@ -239,6 +239,14 @@ Oskari.registerLocalization(
                 "label": "Programmatical usage (RPC API)",
                 "info": "You can use the RPC API with published maps to .."
             },
+            "mapLayers": {
+                "label": "Map layers",
+                "selectLayers": "Tasojen valinta",
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
+            },
             "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
@@ -272,7 +280,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
             "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
             "noRights": "no permission",
-            "unsupportedProjection": "unsupported projection",
             "buttons": {
                 "continue": "Continue",
                 "continueAndAccept": "Accept and continue",

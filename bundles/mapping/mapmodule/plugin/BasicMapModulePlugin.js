@@ -170,11 +170,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Plugin's location
          */
         getLocation: function () {
-            var ret = this._defaultLocation;
             if (this._config && this._config.location && this._config.location.classes) {
-                ret = this._config.location.classes;
+                return this._config.location.classes;
             }
-            return ret;
+            return this._defaultLocation;
         },
 
         /**
@@ -186,9 +185,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
-            if (Oskari.util.isMobile()) {
-                return;
-            }
             var me = this,
                 el = me.getElement();
 

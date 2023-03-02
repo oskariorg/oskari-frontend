@@ -64,22 +64,22 @@ Oskari.clazz.define(
             this.flyoutManager.init();
             this.getTile().setupTools(this.flyoutManager);
 
-            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published);
+            this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), conf.location?.classes);
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
-                if (me.conf.grid) {
+                if (conf.grid) {
                     me.togglePlugin.addTool('table');
                 }
-                if (me.conf.diagram) {
+                if (conf.diagram) {
                     me.togglePlugin.addTool('diagram');
                 }
-                if (me.conf.classification) {
+                if (conf.classification) {
                     me.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
                 }
-                if (me.conf.series) {
+                if (conf.series) {
                     me.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
                 }
             }

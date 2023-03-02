@@ -382,15 +382,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             sandbox.notifyAll(event);
         },
         _enableToolDraggable: function (tool) {
-            let plugin;
-            if (typeof tool.getPlugin === 'function') {
-                plugin = tool.getPlugin();
-                if (!plugin || typeof plugin.getElement !== 'function') {
-                    return;
-                }
-            }
-            const elem = plugin.getElement();
-            if (!elem) {
+            const elem = this.__getPluginElement(tool);
+            if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
             const enabled = tool.state.enabled === true;
@@ -401,6 +394,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 elem.draggable('destroy');
                 elem.css('position', '');
             }
+        },
+        __getPluginElement: function (tool) {
+            if (!tool || typeof tool.getPlugin !== 'function') {
+                return;
+            }
+            const plugin = tool.getPlugin();
+            if (!plugin || typeof plugin.getElement !== 'function') {
+                return;
+            }
+            return plugin.getElement();
         },
         _initDraggables: function () {
             const tools = this.tools.filter(tool => tool.isStarted());
