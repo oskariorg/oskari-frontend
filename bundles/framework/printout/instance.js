@@ -193,18 +193,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             this.started = false;
         },
         continueToPrint: function () {
-            if (this._isManyLayers()) {
-                if (this._isTooManyLayers()) {
-                    if (!this.popupControls) {
-                        this.popupControls = showTooManyLayersPopup(() => this.popupCleanup());
-                    }
-                } else {
-                    Messaging.notify(Oskari.getMsg('Printout', 'StartView.info.printoutProcessingTime'));
-                    this.setPublishMode(true);
+            if (this._isTooManyLayers()) {
+                if (!this.popupControls) {
+                    this.popupControls = showTooManyLayersPopup(() => this.popupCleanup());
                 }
-            } else {
-                this.setPublishMode(true);
+                return;
             }
+
+            if (this._isManyLayers()) {
+                Messaging.info({
+                    content: Oskari.getMsg('Printout', 'StartView.info.printoutProcessingTime'),
+                    duration: 8
+                });
+            }
+            this.setPublishMode(true);
         },
         /**
          * @method getPlugins
