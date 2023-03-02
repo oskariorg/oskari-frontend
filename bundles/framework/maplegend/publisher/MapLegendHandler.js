@@ -21,10 +21,11 @@ class UIHandler extends StateHandler {
     }
 
     setShowLegends (value) {
+        const bool = !!value;
         this.updateState({
-            showLegends: value
+            showLegends: bool
         });
-        this.tool.setEnabled(!!value)
+        this.tool.setEnabled(bool);
     }
 
     createEventHandlers () {
