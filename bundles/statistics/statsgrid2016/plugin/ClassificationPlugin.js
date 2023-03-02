@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._locale = Oskari.getMsg.bind(null, 'StatsGrid');
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-        this._defaultLocation = me._config.legendLocation || 'right bottom';
+        this._defaultLocation = 'right bottom';
         me._fixedLocation = true;
         me._name = 'ClassificationPlugin';
         me.element = null;
@@ -29,9 +29,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         // -  mapplugin-class in parent template
         // - _setLayerToolsEditModeImpl()
         // - publisher tool needs to implement getPlugin()
-        // publisher tool writes location to statsgrid.conf.legendLocation since this is not only a plugin
-        //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
-        // me.setLocation(config.legendLocation || me._defaultLocation);
 
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
@@ -232,38 +229,44 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.teardownUI();
         },
         _overflowCheck: function (storeOverflow) {
+            // This is messy.
+            // FIXME: Lets refactor this in a way that it is using the popup/windowing system we have for React
+            // Currently this draggable window is placed inside a plugin container.
             var pluginEl = this.getElement();
             if (!pluginEl) {
                 return;
             }
-            if (pluginEl.css('position') === 'absolute') {
-                const { top, left } = pluginEl.offset();
-                const bottom = top + pluginEl.height();
-                const wHeight = jQuery(window).height();
-                let offsetToWindowBottom = wHeight - bottom - 10; // add margin 10
-                if (this._defaultLocation.includes('bottom')) {
-                    const pluginContainer = jQuery('.mapplugins.bottom.right');
-                    const containerHeight = pluginContainer.outerHeight();
-                    const offsetToContainer = pluginEl.position().left + pluginEl.outerWidth() + 10;
-                    if (offsetToContainer > 0) {
-                        offsetToWindowBottom = offsetToWindowBottom - containerHeight + 10; // remove margin 10
-                    }
-                    // prevent to flow over top when map size is changed
-                    if (top < 0) {
-                        pluginEl.css('top', containerHeight - wHeight + 'px');
-                    }
-                    // prevent to flow over left when map size is changed
-                    if (left < 0) {
-                        const wWidth = jQuery(window).width();
-                        const containerWidth = pluginContainer.outerWidth();
-                        pluginEl.css('left', containerWidth - wWidth + 'px');
-                    }
-                }
-                if (offsetToWindowBottom < 0) {
-                    if (storeOverflow === true) {
-                        this._overflowedOffset = offsetToWindowBottom;
-                    }
-                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
+            const MARGIN = 10;
+            const position = pluginEl.css('position');
+            if (!['absolute', 'relative'].includes(position)) {
+                // left side plugins use relative
+                // right side plugins use absolute
+                return;
+            }
+
+            const locationList = this.getLocation().split(' ');
+            const pluginContainer = jQuery('.mapplugins.' + locationList.join('.'));
+            const pluginContainerWidth = pluginContainer.outerWidth();
+            const pluginHeight = pluginEl.outerHeight();
+            const pluginWidth = pluginEl.outerWidth();
+            if (locationList.includes('bottom')) {
+                // 0 is the plugin container top and we want to move it up
+                const idealTop = 0 - pluginHeight - MARGIN;
+                pluginEl.css('top', idealTop + 'px');
+            }
+            if (locationList.includes('right')) {
+                const idealLeft = 0 + pluginContainerWidth - pluginWidth - MARGIN;
+                pluginEl.css('left', idealLeft + 'px');
+            }
+
+            if (locationList.includes('top')) {
+                const idealTop = 5 * MARGIN;
+                pluginEl.css('top', idealTop + 'px');
+            }
+            if (locationList.includes('left')) {
+                pluginEl.css('left', MARGIN + 'px');
+                if (locationList.includes('bottom')) {
+                    pluginEl.css('top', -MARGIN + 'px');
                 }
             }
         },
