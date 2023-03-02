@@ -229,6 +229,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.teardownUI();
         },
         _overflowCheck: function (storeOverflow) {
+            // This is messy.
+            // FIXME: Lets refactor this in a way that it is using the popup/windowing system we have for React
+            // Currently this draggable window is placed inside a plugin container.
             var pluginEl = this.getElement();
             if (!pluginEl) {
                 return;
@@ -241,7 +244,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 return;
             }
 
-            const locationList = this.getLocation().split(' ')
+            const locationList = this.getLocation().split(' ');
             const pluginContainer = jQuery('.mapplugins.' + locationList.join('.'));
             const pluginContainerWidth = pluginContainer.outerWidth();
             const pluginHeight = pluginEl.outerHeight();

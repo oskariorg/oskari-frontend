@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
                     conf: {
                         allowClassification,
                         location: location || {
-                            "classes": 'bottom right'
+                            classes: 'bottom right'
                         }
                     },
                     state: this.__sandbox.getStatefulComponents().statsgrid.getState()
