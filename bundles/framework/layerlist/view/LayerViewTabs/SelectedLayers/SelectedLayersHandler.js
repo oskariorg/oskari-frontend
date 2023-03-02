@@ -5,10 +5,8 @@ class ViewHandler extends StateHandler {
         super();
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        const layers = this._getLayers();
         this.state = {
-            layers,
-            visibilityInfo: layers.map(lyr => this._getInitialVisibilityInfoForLayer(lyr))
+            layers: this._getLayers()
         };
     }
 
@@ -16,51 +14,13 @@ class ViewHandler extends StateHandler {
         return [...this.sandbox.findAllSelectedMapLayers()].reverse();
     }
 
-    _getInitialVisibilityInfoForLayer (layer) {
-        if (!layer) {
-            return;
-        }
-        const info = {
-            id: layer.getId(),
-            visible: layer.isVisible(),
-            inScale: layer.isInScale(),
-            geometryMatch: true
-        };
-        const map = this.sandbox.getMap();
-        if (!map.isLayerSupported(layer)) {
-            info.unsupported = map.getMostSevereUnsupportedLayerReason(layer);
-        }
-        return info;
-    }
-
-    _refreshVisibilityInfoForLayer (layer) {
-        const oldInfo = this.state.visibilityInfo.find(info => info.id === layer.getId());
-        const geometryMatch = oldInfo ? oldInfo.geometryMatch : true;
-        return {
-            ...this._getInitialVisibilityInfoForLayer(layer),
-            geometryMatch
-        };
-    }
-
     updateLayers () {
-        const layers = this._getLayers();
-        const visibilityInfo = layers.map(layer => this._refreshVisibilityInfoForLayer(layer));
-        this.updateState({ layers, visibilityInfo });
+        this.updateState({ layers: this._getLayers() });
     }
 
     updateVisibilityInfo (event) {
-        // refresh all
-        const visibilityInfo = this.state.layers.map(layer => this._refreshVisibilityInfoForLayer(layer));
-        if (event) {
-            const layer = event.getMapLayer();
-            const layerData = visibilityInfo.find(info => info.id === layer.getId());
-            if (!layerData) {
-                // layer not included in selected layers.
-                return;
-            }
-            layerData.geometryMatch = event.isGeometryMatch();
-        }
-        this.updateState({ visibilityInfo });
+        // trigger change
+        this.updateState({});
     }
 
     reorderLayers (fromPosition, toPosition) {

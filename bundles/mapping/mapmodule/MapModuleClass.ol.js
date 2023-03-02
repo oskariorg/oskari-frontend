@@ -1231,21 +1231,24 @@ export class MapModule extends AbstractMapModule {
     }
 
     isLayerVisible (layer) {
-        if (typeof layer === 'undefined') {
-            return false;
-        }
+        this.log.deprecated('isLayerVisible', 'Use layer.isVisibleOnMap() instead');
+
         if (Array.isArray(layer)) {
-            // getOLMapLayers() returns an array -> check that atleast one of them is visible
-            // group layers can have multiple layers with only some visible
-            return layer.some(l => this.isLayerVisible(l));
+            // passed [layerImpl] directly -> check that atleast one of them is visible
+            return layer.some(l => typeof l.getVisible === 'function' && l.getVisible());
         }
         if (typeof layer === 'object') {
-            // probably passed the layer impl directly
-            return layer.getVisible();
+            if (typeof layer.getVisible === 'function') {
+                // probably passed the layer impl directly
+                return layer.getVisible();
+            } else if (typeof layer.isVisibleOnMap === 'function') {
+                // probably passed the oskari layer directly
+                return layer.isVisibleOnMap();
+            }
         }
         // layer is probably id
-        const layerImpl = this.getOLMapLayers(layer);
-        return this.isLayerVisible(layerImpl);
+        const oskariLayer = this._sandbox.findMapLayerFromSelectedMapLayers(layer);
+        return oskariLayer ? oskariLayer.isVisibleOnMap() : false;
     }
 
     /**

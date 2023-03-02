@@ -268,7 +268,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa tai tasoa ei voida näyttää tässä karttaprojektiossa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
             "myPlacesDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
             "noRights": "ei julkaisuoikeutta",
-            "unsupportedProjection": "väärä karttaprojektio",
             "buttons": {
                 "continue": "Jatka",
                 "continueAndAccept": "Hyväksy ehdot ja jatka",
