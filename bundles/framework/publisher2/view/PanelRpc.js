@@ -15,15 +15,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
      * @method create called automatically on construction
      * @static
      * @param {Object} sandbox
-     * @param {Object} mapmodule
      * @param {Object} localization
      *       publisher localization data
      * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
      */
-    function (sandbox, mapModule, localization, instance) {
+    function (tools, sandbox, localization, instance) {
         this.loc = localization;
         this.instance = instance;
         this.sandbox = sandbox;
+        this.tools = tools;
 
         this.templateHelp = jQuery('<div class="help icon-info"></div>');
         this.panel = null;
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            this.handler = new RpcPanelHandler(data, () => this._populatePanel());
+            this.handler = new RpcPanelHandler(data, this.tools, () => this._populatePanel());
 
             if (!this.panel) {
                 this.panel = Oskari.clazz.create(
@@ -72,33 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * @return {Object}
          */
         getValues: function () {
-            let data = {
-                configuration: {},
-                metadata: {}
-            };
-            const state = this.handler.getState();
-            if (state.allowFeedback) {
-                data.configuration.feedbackService = {
-                    conf: {
-                        publish: true
-                    },
-                    state: {}
-                };
-                data.metadata.feedbackService = {
-                    url: state.feedbackBaseUrl && state.feedbackBaseUrl !== '' ? state.feedbackBaseUrl : null,
-                    key: state.feedbackApiKey && state.feedbackApiKey !== '' ? state.feedbackApiKey : null,
-                    extensions: state.feedbackExtensions && state.feedbackExtensions !== '' ? state.feedbackExtensions : null
-                };
-            }
-            if (state.allowMetadata) {
-                data.configuration.metadatacatalogue = {
-                    conf: {
-                        noUI: true
-                    },
-                    state: {}
-                };
-            }
-            return data;
+            return null;
         },
         /**
          * Returns any errors found in validation (currently doesn't check anything) or an empty
@@ -120,6 +94,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * @private
          */
         _populatePanel: function (isInit) {
+            if (!this.panel) return;
+
             const contentPanel = this.panel.getContainer();
             contentPanel.empty();
 

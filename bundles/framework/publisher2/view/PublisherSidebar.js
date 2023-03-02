@@ -122,25 +122,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
-                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, me.instance, me.loc
-                );
-                toolPanel.init(me.data);
-                me.panels.push(toolPanel);
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
+                if (group === 'maptools') {
+                    const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                        group, tools, me.instance, me.loc
+                    );
+                    toolPanel.init(me.data);
+                    me.panels.push(toolPanel);
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
+                } else if (group === 'rpc') {
+                    const rpcPanel = this._createRpcPanel(tools);
+                    rpcPanel.getPanel().addClass('t_rpc');
+                    this.panels.push(rpcPanel);
+                    accordion.addPanel(rpcPanel.getPanel());
+                }
             });
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
             me.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
-
-            const rpcPanel = this._createRpcPanel();
-            rpcPanel.getPanel().addClass('t_rpc');
-            this.panels.push(rpcPanel);
-            accordion.addPanel(rpcPanel.getPanel());
 
             var layoutPanel = me._createLayoutPanel();
             layoutPanel.getPanel().addClass('t_style');
@@ -264,11 +266,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
-        _createRpcPanel: function () {
+        _createRpcPanel: function (tools) {
             const sandbox = this.instance.getSandbox();
-            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
-                sandbox, mapModule, this.loc, this.instance
+                tools, sandbox, this.loc, this.instance
             );
             form.init(this.data, (value) => {});
             return form;

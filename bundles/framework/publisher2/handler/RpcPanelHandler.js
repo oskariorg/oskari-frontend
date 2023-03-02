@@ -1,20 +1,37 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (data, consumer) {
+    constructor (data, tools, consumer) {
         super();
+        this.data = data;
+        this.tools = tools;
         this.state = {
-            allowMetadata: data?.configuration['metadatacatalogue']?.conf?.noUI ? true : false,
-            allowFeedback: data?.configuration['feedbackService']?.conf?.publish ? true : false,
-            feedbackBaseUrl: data?.metadata['feedbackService']?.url || '',
-            feedbackApiKey: data?.metadata['feedbackService']?.key || '',
-            feedbackExtensions: data?.metadata['feedbackService']?.extensions || ''
+            tools: []
         };
         this.addStateListener(consumer);
+        this.init();
     }
 
     getName () {
         return 'RpcPanelHandler';
+    }
+
+    init () {
+        this.tools.forEach(tool => {
+            tool.init(this.data);
+            const toolComponent = tool.getComponent();
+            toolComponent.handler.addStateListener(() => this.notify());
+            this.updateState({
+                tools: [
+                    ...this.state.tools,
+                    {
+                        component: toolComponent.component,
+                        handler: toolComponent.handler,
+                        tool
+                    }
+                ]
+            });
+        });
     }
 
     updateField (field, value) {
