@@ -20,7 +20,7 @@ export const getAvailableHeight = () => {
 
 const DEFAULT_WIDTH = 700;
 const DEFAULT_HEIGHT = 700;
-const BORDER_MARGIN = 10;
+const BORDER_MARGIN = 50;
 export const OUTOFSCREEN_CLASSNAME = 'outofviewport';
 
 export const createDraggable = (position, setPosition, elementRef) => {

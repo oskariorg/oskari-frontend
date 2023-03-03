@@ -2,6 +2,7 @@ import ReactDOM, { unmountComponentAtNode } from 'react-dom';
 import React from 'react';
 import { Flyout } from './Flyout';
 import { Popup } from './Popup';
+import { MovableContainer } from './MovableContainer';
 import { Banner } from './Banner';
 import { SidePanel } from './SidePanel';
 import { REGISTER, TYPE } from './register';
@@ -124,11 +125,11 @@ const createBringToTop = (element) => {
  *           });
  *       });
  *
- * @param {String} title title for flyout
- * @param {String|ReactElement} content content for flyout
+ * @param {String} title title for popup
+ * @param {String|ReactElement} content content for popup
  * @param {Function} onClose callback that is called when the window closes
  * @param {Object} options (optional) to override default options
- * @returns {Object} that provides functions that can be used to close/update the flyout
+ * @returns {Object} that provides functions that can be used to close/update the popup
  */
 export const showPopup = (title, content, onClose, options = {}) => {
     validate(options, TYPE.POPUP);
@@ -147,6 +148,55 @@ export const showPopup = (title, content, onClose, options = {}) => {
             </ThemeProvider>, element);
     };
     render(title, content);
+    return {
+        update: render,
+        close: removeWindow,
+        bringToTop
+    };
+};
+
+
+/**
+ * Creates a movable container that is similar to popup and flyout but without any frames on the window.
+ * Usage:
+ *
+ *       let containerController = null;
+ *       btn.on('click', (event) => {
+ *           if (containerController) {
+ *               containerController.close();
+ *               return;
+ *           }
+ *           containerController = showMovableContainer(<SomeJSX />, () => {
+ *               // closed -> cleanup
+ *               containerController = null;
+ *           });
+ *       });
+ *
+ * @param {String|ReactElement} content content for flyout
+ * @param {Function} onClose callback that is called when the window closes
+ * @param {Object} options (optional) to override default options
+ * @returns {Object} that provides functions that can be used to close/update the flyout
+ */
+export const showMovableContainer = (content, onClose, options = {}) => {
+    validate(options, TYPE.CONTAINER);
+
+    const element = createTmpContainer();
+    const key = REGISTER.registerWindow(options.id, TYPE.CONTAINER, createRemoveFn(element, onClose));
+    const removeWindow = () => REGISTER.clear(key);
+    const bringToTop = createBringToTop(element);
+    const opts = {
+        isDraggable: true,
+        ...options
+    };
+    const render = (content) => {
+        ReactDOM.render(
+            <ThemeProvider value={options.theme}>
+                <MovableContainer onClose={removeWindow} bringToTop={bringToTop} options={opts}>
+                    {content}
+                </MovableContainer>
+            </ThemeProvider>, element);
+    };
+    render(content);
     return {
         update: render,
         close: removeWindow,
