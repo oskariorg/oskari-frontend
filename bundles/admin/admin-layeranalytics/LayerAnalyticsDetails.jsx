@@ -126,6 +126,7 @@ export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallba
             { layerData.details.length > 0 &&
                 <Table
                     columns={ columnSettings }
+                    size={ 'large '}
                     dataSource={ layerData.details.map(item => {
                         return {
                             key: item.time,

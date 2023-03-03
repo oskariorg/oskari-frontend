@@ -167,7 +167,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
             dataIndex: 'total',
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.total - b.total,
-            showSorterTooltip: sorterTooltipOptions,
+            showSorterTooltip: sorterTooltipOptions
         },
         {
             align: 'left',

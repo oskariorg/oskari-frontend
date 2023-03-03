@@ -1,26 +1,14 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Message, Tooltip, Confirm } from 'oskari-ui'
-import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { EditOutlined } from '@ant-design/icons'
-import styled from 'styled-components';
-import { showSnippetPopup } from './view/embedded/SnippetPopup'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Message, Tooltip, Confirm } from 'oskari-ui';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { EditOutlined } from '@ant-design/icons';
+import { showSnippetPopup } from './view/embedded/SnippetPopup';
 import { DeleteButton } from 'oskari-ui/components/buttons';
 
 const EDIT_ICON_STYLE = {
     fontSize: '14px'
 };
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`
 
 const BUNDLE_NAME = 'PersonalData';
 
@@ -30,15 +18,14 @@ const openView = (view) => {
         'Published',
         'location=1,status=1,scrollbars=yes,width=850,height=800'
     );
-}
+};
 
 const showHtml = (view, setPopup, closePopup) => {
     const controls = showSnippetPopup(view, closePopup);
     setPopup(controls);
-}
+};
 
 export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handlePublish, showOnMap, setPopup, closePopup }) => {
-
     const columnSettings = [
         {
             align: 'left',
@@ -75,11 +62,11 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                         >
                             <a><Message messageKey='tabs.publishedmaps.unpublish' bundleKey={BUNDLE_NAME} /></a>
                         </Confirm>
-                    )
+                    );
                 } else {
                     return (
                         <a onClick={() => handlePublish(item)}><Message messageKey='tabs.publishedmaps.publish' bundleKey={BUNDLE_NAME} /></a>
-                    )
+                    );
                 }
             }
         },
@@ -124,10 +111,10 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
             }
         }
     ];
-    
+
     return (
         <div className="viewsList volatile">
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={views.map((item) => ({
                     key: item.id,
@@ -136,8 +123,8 @@ export const PublishedMapsList = ({ views = [], handleEdit, handleDelete, handle
                 pagination={false}
             />
         </div>
-    )
-}
+    );
+};
 
 PublishedMapsList.propTypes = {
     views: PropTypes.arrayOf(PropTypes.object),
@@ -147,4 +134,4 @@ PublishedMapsList.propTypes = {
     showOnMap: PropTypes.func.isRequired,
     setPopup: PropTypes.func.isRequired,
     closePopup: PropTypes.func.isRequired
-}
+};

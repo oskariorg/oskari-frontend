@@ -17,8 +17,7 @@ const StyledTable = styled('table')`
     }
 `;
 
-export const AccountTab = ({ state, controller }) => {
-
+export const AccountTab = ({ state }) => {
     const { user, changeInfoUrl } = state;
 
     const accountData = [{
@@ -53,9 +52,9 @@ export const AccountTab = ({ state, controller }) => {
                 )}
             </div>
         </div>
-    )
+    );
 };
 
 AccountTab.propTypes = {
     state: PropTypes.object.isRequired
-}
+};
