@@ -135,7 +135,7 @@ class UIHandler extends StateHandler {
     }
 
     _getTopmostTimeseries () {
-        return this._getVisibleLayers().findLast(l => l.getAttributes().times);
+        return this._getVisibleLayers().findLast(l => l.hasTimeseries());
     }
 
     _isTimeSeriesActive () {
@@ -262,7 +262,7 @@ class UIHandler extends StateHandler {
             mapLayers,
             scaledWidth: PREVIEW_SCALED_WIDTH
         };
-        if (layer.getAttributes().times) {
+        if (layer.hasTimeseries()) {
             params.time = this._getTimeParam();
         }
         return Oskari.urls.getRoute('GetPrint', params);
@@ -276,7 +276,7 @@ class UIHandler extends StateHandler {
                 // only baselayer is shown in preview
                 this.refreshPreview();
             }
-            if (layer.getAttributes().times) {
+            if (layer.hasTimeseries()) {
                 this.updateState({
                     isTimeSeries: this._isTimeSeriesActive()
                 });

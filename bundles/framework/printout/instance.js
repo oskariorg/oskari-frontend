@@ -249,16 +249,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
             if (blnEnabled) {
-                this.sandbox._mapMode = 'mapPrintoutMode';
                 this.showPanel();
 
                 // reset and disable map rotation
                 this.sandbox.postRequestByName('rotate.map', []);
                 this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
             } else {
-                if (this.sandbox._mapMode === 'mapPrintoutMode') {
-                    delete this.sandbox._mapMode;
-                }
                 this.closePanel();
 
                 // enable map controls
@@ -274,7 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
         },
         _isTooManyLayers: function () {
             const layerCount = this._getVisibleLayersCount();
-            const isMaxLayersExceeded = layerCount > 7;
+            const isMaxLayersExceeded = layerCount > 8;
             return isMaxLayersExceeded;
         },
         _isManyLayers: function () {
