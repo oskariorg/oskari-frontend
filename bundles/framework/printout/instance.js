@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             Object.getOwnPropertyNames(this.eventHandlers).forEach(p => sandbox.registerForEventByName(this, p));
 
             // requesthandler
-            this.printMapRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, () => this.setPublishMode(true));
+            this.printMapRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, () => this.setPrintMode(true));
             sandbox.requestHandler('printout.PrintMapRequest', this.printMapRequestHandler);
 
             // state handler
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 iconCls: 'tool-print',
                 tooltip: this.loc('btnTooltip'),
                 sticky: false,
-                callback: () => this.continueToPrint()
+                callback: () => this.setPrintMode(true)
             };
             sandbox.request(this, addToolButtonBuilder('print', this.buttonGroup, buttonConf));
 
@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 state: this.handler.getState(),
                 scaleSelection: this.conf.scaleSelection,
                 scaleOptions: this.scaleOptions,
-                onClose: () => this.setPublishMode(false)
+                onClose: () => this.setPrintMode(false)
             };
         },
         showPanel: function () {
@@ -186,35 +186,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             this.sandbox.unregister(this);
             this.started = false;
         },
-        continueToPrint: function () {
-            if (this._isTooManyLayers()) {
-                if (!this.popupControls) {
-                    this.popupControls = showTooManyLayersPopup(() => this.popupCleanup());
-                }
-                return;
-            }
-
-            if (this._isManyLayers()) {
-                Messaging.info({
-                    content: Oskari.getMsg('Printout', 'StartView.info.printoutProcessingTime'),
-                    duration: 8
-                });
-            }
-            this.setPublishMode(true);
-        },
         /**
-         * @method setPublishMode
+         * @method setPrintMode
          * Transform the map view to printout mode if parameter is true and back to normal if false.
-         * Makes note about the map layers that the user cant publish, removes them for publish mode and
-         * returns them when exiting the publish mode.
          *
          * @param {Boolean} blnEnabled
          */
-        setPublishMode: function (blnEnabled) {
+        setPrintMode: function (blnEnabled) {
             // trigger an event letting other bundles know we require the whole UI
             const eventBuilder = Oskari.eventBuilder('UIChangeEvent');
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
             if (blnEnabled) {
+                if (!this._checkLayerCount()) {
+                    return;
+                }
                 this.showPanel();
 
                 // reset and disable map rotation
@@ -234,19 +219,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 this.sandbox.request(this, builder());
             }
         },
-        _isTooManyLayers: function () {
-            const layerCount = this._getVisibleLayersCount();
-            const isMaxLayersExceeded = layerCount > 8;
-            return isMaxLayersExceeded;
-        },
-        _isManyLayers: function () {
-            const layerCount = this._getVisibleLayersCount();
-            const isManyLayersExceeded = layerCount > 3;
-            return isManyLayersExceeded;
-        },
-        _getVisibleLayersCount: function () {
-            const layers = this.getSandbox().findAllSelectedMapLayers();
-            return layers.filter(layer => layer.isVisible()).length;
+        _checkLayerCount: function () {
+            // Count visible layers. Note: actual print uses isVisibleOnMap
+            const count = this.getSandbox().findAllSelectedMapLayers()
+                .filter(layer => layer.isVisible()).length;
+            if (count > 8) {
+                if (!this.popupControls) {
+                    this.popupControls = showTooManyLayersPopup(() => this.popupCleanup());
+                }
+                return false;
+            }
+            if (count > 3) {
+                Messaging.info({
+                    content: this.loc('StartView.info.printoutProcessingTime'),
+                    duration: 5
+                });
+            }
+            return true;
         }
     }, {
         /**
