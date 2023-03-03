@@ -20,13 +20,17 @@ const StyledToolsContainer = styled('div')`
 `;
 
 // AntD defines overflow-wrap: break word for tr td
-//  but for some reason we still need word-break so long texts in the table don't break layout
+// but for some reason we still need word-break so long texts in the table don't break layout
+// For narrow columns sorter icon might get stuck to label -> add margin for column sorter
 const StyledTable = styled(AntTable)`
     tr td {
         word-break: break-word;
     }
     a {
         cursor: pointer;
+    }
+    .ant-table-column-sorter {
+        margin: 0 0 0 5px;
     }
 `;
 

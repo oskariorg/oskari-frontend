@@ -13,12 +13,6 @@ const TitleArea = styled.span`
     }
 `;
 
-const StyledTable = styled(Table)`
-    .ant-table-column-sorter {
-        margin: 0 0 0 5px;
-    }
-`;
-
 const FilterContainer = styled('div')`
     padding: 10px;
 `;
@@ -223,8 +217,9 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
     }
 
     return (
-        <StyledTable
+        <Table
             columns={ columnSettings }
+            size={ 'large' }
             dataSource={ analyticsData.map(item => {
                 return {
                     key: item.id,
