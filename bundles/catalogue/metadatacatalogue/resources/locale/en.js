@@ -73,6 +73,9 @@ Oskari.registerLocalization(
             "creation": "creation",
             "publication": "publication",
             "revision": "revision"
+        },
+        "tool": {
+            "label": "Enable programmatic use of metadata search",
         }
     }
 });

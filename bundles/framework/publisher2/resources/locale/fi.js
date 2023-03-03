@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
                 "CoordinateToolPlugin": "Koordinaattityökalu",
-                "FeedbackServiceTool": "Palautteen antaminen (Open311)",
-                "MetadataSearchTool": "Mahdollista metadatahakujen ohjelmallinen käyttö",
                 "MapLegend": "Näytä karttaselitteet",
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
@@ -234,6 +232,10 @@ Oskari.registerLocalization(
                 "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                 "tooltip": "Valitse julkaistavalla kartalla näytettävät karttatasot.",
                 "promote": "Haluatko näyttää kartalla myös ilmakuvia?"
+            },
+            "rpc": {
+                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
+                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
             },
             "mapLayers": {
                 "label": "Karttatasot",

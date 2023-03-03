@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinatverktyg",
-                "FeedbackServiceTool": "Responsverktyg (Open311)",
-                "MetadataSearchTool": "Möjlig användning av metadatasökningar programmatiskt",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
@@ -234,6 +232,10 @@ Oskari.registerLocalization(
                 "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
+            },
+            "rpc": {
+                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
+                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
             },
             "mapLayers": {
                 "label": "Kartlager",

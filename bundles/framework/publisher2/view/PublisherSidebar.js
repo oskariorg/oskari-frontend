@@ -122,15 +122,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
-                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, me.instance, me.loc
-                );
-                toolPanel.init(me.data);
-                me.panels.push(toolPanel);
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
+                if (group === 'rpc') {
+                    const rpcPanel = this._createRpcPanel(tools);
+                    rpcPanel.getPanel().addClass('t_rpc');
+                    this.panels.push(rpcPanel);
+                    accordion.addPanel(rpcPanel.getPanel());
+                } else {
+                    const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                        group, tools, me.instance, me.loc
+                    );
+                    toolPanel.init(me.data);
+                    me.panels.push(toolPanel);
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
+                }
             });
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
@@ -246,6 +253,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});
 
+            return form;
+        },
+        _createRpcPanel: function (tools) {
+            const sandbox = this.instance.getSandbox();
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
+                tools, sandbox, this.loc, this.instance
+            );
+            form.init(this.data, (value) => {});
             return form;
         },
         /**

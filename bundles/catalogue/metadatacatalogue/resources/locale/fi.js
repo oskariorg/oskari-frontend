@@ -73,6 +73,9 @@ Oskari.registerLocalization(
             "creation": "luonti",
             "publication": "julkaisu",
             "revision": "päivitys"
+        },
+        "tool": {
+            "label": "Mahdollista metadatahakujen ohjelmallinen käyttö",
         }
     }
 });
