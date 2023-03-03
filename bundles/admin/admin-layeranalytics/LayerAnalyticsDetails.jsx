@@ -6,8 +6,10 @@ import { DeleteButton } from 'oskari-ui/components/buttons';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 const dateLocale = 'fi-FI';
-const localeDateOptions = {
-    second: '2-digit'
+const dateOptions = {
+    time: {
+        second: '2-digit'
+    }
 };
 
 const sorterTooltipOptions = {
@@ -55,7 +57,7 @@ export const LayerAnalyticsDetails = ({ layerData, isLoading, closeDetailsCallba
             sortDirections: ['descend', 'ascend', 'descend'],
             sorter: (a, b) => a.time - b.time,
             showSorterTooltip: sorterTooltipOptions,
-            render: (text) => <Space>{ Oskari.util.formatDate(text, localeDateOptions, dateLocale) }</Space>
+            render: (text) => <Space>{ Oskari.util.formatDate(text, dateOptions, dateLocale) }</Space>
         },
         {
             title: '',
