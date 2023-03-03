@@ -101,10 +101,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             // and common functionality.
             this.printService = Oskari.clazz.create('Oskari.mapframework.bundle.printout.service.PrintService', this);
             sandbox.registerService(this.printService);
-
-            // Let's extend UI
-            const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
         },
         /**
          * @method init
@@ -186,8 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
             sandbox.removeRequestHandler('printout.PrintMapRequest', this.printMapRequestHandler);
             this.printMapRequestHandler = null;
-            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
-            sandbox.request(this, request);
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -207,34 +201,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 });
             }
             this.setPublishMode(true);
-        },
-        /**
-         * @method getPlugins
-         * implements Oskari.userinterface.Extension protocol getPlugins method
-         * @return {Object} references to flyout and tile
-         */
-        getPlugins: function () {
-            return {};
-        },
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the component
-         */
-        getTitle: function () {
-            return this.loc('title');
-        },
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the component
-         */
-        getDescription: function () {
-            return this.loc('desc');
-        },
-        startExtension: function () {
-
-        },
-        stopExtension: function () {
-
         },
         /**
          * @method setPublishMode
@@ -287,5 +253,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @property {String[]} protocol
          * @static
          */
-        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });
