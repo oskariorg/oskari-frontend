@@ -18,7 +18,11 @@ const StyledCheckbox = styled(Checkbox)`
     }
 `;
 
-export const FeedbackServicePublisherTool = ({ state, controller }) => {
+export const FeedbackServiceForm = ({ state, controller }) => {
+    /**
+     * controller.updateField() will re-render the form which makes the field that is being edited loose focus after each keypress
+     * -> using useState()to workaround this while waiting for the whole publisher to be written in React.
+     */
     const [componentState, setComponentState] = useState({
         feedbackBaseUrl: state.feedbackBaseUrl,
         feedbackApiKey: state.feedbackApiKey,
@@ -30,7 +34,7 @@ export const FeedbackServicePublisherTool = ({ state, controller }) => {
                 checked={state.allowFeedback}
                 onChange={(e) => controller.updateField('allowFeedback', e.target.checked)}
             >
-                <Message bundleKey='Publisher2' messageKey='BasicView.maptools.FeedbackServiceTool' />
+                <Message bundleKey='feedbackService' messageKey='display.publisher.label' />
             </StyledCheckbox>
             {state.allowFeedback && (
                 <FeedbackFrom>

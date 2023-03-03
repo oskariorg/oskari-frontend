@@ -8,13 +8,13 @@ const StyledCheckbox = styled(Checkbox)`
     }
 `;
 
-export const MetadataSearchPublisherTool = ({ state, controller }) => {
+export const MetadataSearchForm = ({ state, controller }) => {
     return (
         <StyledCheckbox
             checked={state.allowMetadata}
             onChange={(e) => controller.setAllowMetadata(e.target.checked)}
         >
-            <Message bundleKey='Publisher2' messageKey='BasicView.maptools.MetadataSearchTool' />
+            <Message bundleKey='catalogue.bundle.metadatacatalogue' messageKey='tool.label' />
         </StyledCheckbox>
     );
 };

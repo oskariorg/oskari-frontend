@@ -1,4 +1,4 @@
-import { MetadataSearchPublisherTool } from './MetaDataSearchPublisherTool';
+import { MetadataSearchForm } from './MetaDataSearchForm';
 import { MetadataSearchToolHandler } from './MetadataSearchToolHandler';
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
 
         getComponent: function () {
             return {
-                component: MetadataSearchPublisherTool,
+                component: MetadataSearchForm,
                 handler: this.handler
             };
         },
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
         */
         getValues: function () {
             if (this.handler?.getState()?.allowMetadata) {
-                let json = {
+                const json = {
                     configuration: {}
                 };
                 json.configuration[this.bundleName] = {

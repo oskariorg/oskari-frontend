@@ -73,6 +73,9 @@ Oskari.registerLocalization(
             "creation": "skapandedatum",
             "publication": "publiceringsdatum",
             "revision": "datum för senaste revidering"
+        },
+        "tool": {
+            "label": "Möjlig användning av metadatasökningar programmatiskt",
         }
     }
 });

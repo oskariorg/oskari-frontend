@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "FeedbackServiceTool": "Feedback (Open311) service",
-                "MetadataSearchTool": "Enable programmatic use of metadata search",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
                 "CrosshairTool": "Show map focal point",

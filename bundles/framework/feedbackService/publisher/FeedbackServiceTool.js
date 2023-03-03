@@ -1,4 +1,4 @@
-import { FeedbackServicePublisherTool } from './FeedbackServicePublisherTool';
+import { FeedbackServiceForm } from './FeedbackServiceForm';
 import { FeedbackServiceToolHandler } from './FeedbackServiceToolHandler';
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
         },
         getComponent: function () {
             return {
-                component: FeedbackServicePublisherTool,
+                component: FeedbackServiceForm,
                 handler: this.handler
             };
         },
