@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
 
             // if dataset has negative and positive values it can be divided, base !== 0 has to be given in metadata
-            const dividable = minMax.min < 0 && minMax.max > 0;
+            const dividable = minMax && minMax.min < 0 && minMax.max > 0;
             if (typeof base !== 'number' && !dividable) {
                 // disable option if base isn't given in metadata or dataset isn't dividable
                 disabled.push('div');

@@ -6,7 +6,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
         // There will be "too many calls" to this but it's not too bad and
         // we want the location always set or reset no matter which tool sets it
         this.getStatsgridBundle()?.togglePlugin?.setLocation(conf.location?.classes);
-        this.getStatsgridBundle()?.classificationPlugin?.setLocation(conf.location?.classes);
         return conf;
     },
 

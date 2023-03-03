@@ -69,8 +69,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         if (service) {
             service.getStateService().resetClassificationPluginState('editEnabled');
         }
-        // HACK: remove when publisher doesn't delete all draggables
-        setTimeout(() => this.getPlugin()._makeDraggable(), 500);
     }
 }, {
     'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
