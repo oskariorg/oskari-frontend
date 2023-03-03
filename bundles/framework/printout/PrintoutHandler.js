@@ -173,13 +173,8 @@ class UIHandler extends StateHandler {
             params.time = time;
             if (this.state.showTimeSeriesDate) {
                 const splittedTime = time.split('/')[0];
-                const date = new Date(splittedTime);
-                if (!isNaN(date)) {
-                    params.formattedTime = Oskari.getMsg('timeseries', 'dateRender', { val: date });
-                    params.timeseriesPrintLabel = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
-                } else {
-                    Oskari.log('BasicPrintout').warn(`Time series layer has invalid time param. Skipping formatted time.`);
-                }
+                params.formattedTime = Oskari.util.formatDate(splittedTime);
+                params.timeseriesPrintLabel = this.instance.loc('BasicView.content.pageTimeSeriesTime.printLabel');
             }
         }
         return params;
