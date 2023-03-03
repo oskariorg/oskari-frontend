@@ -15,6 +15,7 @@ class UIHandler extends StateHandler {
             defaultBaseLayer: null,
             showLayerSelection: false,
             showMetadata: false,
+            allowStyleChange: false,
             externalOptions: []
         });
         this.eventHandlers = this.createEventHandlers();
@@ -32,7 +33,8 @@ class UIHandler extends StateHandler {
             this.updateState({
                 defaultBaseLayer: this.pluginConf.config.defaultBaseLayer,
                 showLayerSelection: true,
-                showMetadata: this.pluginConf.config.showMetadata
+                showMetadata: this.pluginConf.config.showMetadata,
+                allowStyleChange: this.pluginConf.config.isStyleSelectable
             });
         }
 
@@ -73,6 +75,13 @@ class UIHandler extends StateHandler {
             showMetadata: value
         });
         this.plugin.setShowMetadata(value);
+    }
+
+    setAllowStyleChange (value) {
+        this.updateState({
+            allowStyleChange: value
+        });
+        this.plugin.setStyleSelectable(value);
     }
 
     updateSelectedLayers () {
@@ -135,7 +144,8 @@ class UIHandler extends StateHandler {
         const config = {
             baseLayers: this.pluginConf?.config?.baseLayers || [],
             defaultBaseLayer: this.pluginConf?.config?.defaultBaseLayer || this.pluginConf?.config?.baseLayers[0] || null,
-            showMetadata: this.pluginConf?.config?.showMetadata || false
+            showMetadata: this.pluginConf?.config?.showMetadata || false,
+            isStyleSelectable: this.pluginConf?.config?.isStyleSelectable || false
         };
 
         const plugin = Oskari.clazz.create(TOOL_ID, config);
@@ -216,6 +226,7 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'setShowMetadata',
     'setShowLayerSelection',
+    'setAllowStyleChange',
     'openLayerList',
     'openSelectedLayerList',
     'addBaseLayer',

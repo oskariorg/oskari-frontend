@@ -170,7 +170,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                                     config: {
                                         defaultBaseLayer: state.defaultBaseLayer,
                                         baseLayers: state.baseLayers.map(l => l.getId()),
-                                        showMetadata: state.showMetadata
+                                        showMetadata: state.showMetadata,
+                                        isStyleSelectable: state.allowStyleChange
                                     }
                                 }]
                             }
