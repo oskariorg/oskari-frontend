@@ -537,7 +537,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             this._editToolLayoutOff();
             this.tools.forEach(tool => {
                 // just call stop for the tools that haven't already been shut down by the tool panel
-                if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
+                if (tool.isStarted()) {
                     tool.stop();
                     tool.setEnabled(false);
                 }
