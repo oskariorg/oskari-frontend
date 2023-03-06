@@ -8,7 +8,6 @@ const StyledRoot = styled('div')`
     padding-bottom: 20px;
 `;
 
-const dateLocale = 'fi-FI'; // we are not using here other locales than Finnish so we can hard core it into constant variable
 const dateOptions = {
     time: {
         second: '2-digit'
@@ -16,8 +15,8 @@ const dateOptions = {
 };
 
 export const LayerGeneralInfo = ({ layer }) => {
-    const created = Oskari.util.formatDate(layer.created, dateOptions, dateLocale);
-    const updated = Oskari.util.formatDate(layer.updated, dateOptions, dateLocale);
+    const created = Oskari.util.formatDate(layer.created, dateOptions);
+    const updated = Oskari.util.formatDate(layer.updated, dateOptions);
 
     return (
         <StyledRoot>
