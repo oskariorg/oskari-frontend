@@ -404,7 +404,7 @@ export class MapModule extends AbstractMapModule {
 
         if (this.isLoading()) {
             if (numOfTries < 0) {
-                /* eslint-disable node/no-callback-literal */
+                /* eslint-disable n/no-callback-literal */
                 callback('');
                 return;
             }
@@ -439,7 +439,7 @@ export class MapModule extends AbstractMapModule {
             me.getMap().renderSync();
         } catch (err) {
             me.log.warn('Error in screenshot map render sync: ' + err);
-            /* eslint-disable node/no-callback-literal */
+            /* eslint-disable n/no-callback-literal */
             callback('');
         }
     }
@@ -769,7 +769,7 @@ export class MapModule extends AbstractMapModule {
             if (!isNaN(zoom)) {
                 view.setZoom(zoom);
             }
-            /* eslint-disable node/no-callback-literal */
+            /* eslint-disable n/no-callback-literal */
             callback(true);
             break;
         }
