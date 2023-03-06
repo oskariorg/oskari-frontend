@@ -1,21 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { EditOutlined } from '@ant-design/icons'
-import styled from 'styled-components';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { EditOutlined } from '@ant-design/icons';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
 
 const EDIT_ICON_STYLE = {
     fontSize: '16px'
@@ -81,7 +69,7 @@ export const UserLayersList = ({ data = [], controller, loading }) => {
     ];
 
     return (
-        <StyledTable
+        <Table
             columns={columnSettings}
             dataSource={data.map(item => ({
                 ...item,
