@@ -5,6 +5,7 @@ import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { isSameResult } from './ResultComparator';
 
 const MARKER_ID = 'SEARCH_RESULT_MARKER';
+const RESULTS_LAYER_ID = 'SEARCH_RESULTS_LAYER';
 
 // sort channel in alphabetical order but have defaults on top
 const channelSortFunction = (a, b) => {
@@ -16,6 +17,18 @@ const channelSortFunction = (a, b) => {
         return 1;
     }
     return Oskari.util.naturalSort(a.locale?.name, b.locale?.name);
+};
+
+/**
+ * Generate a runtime id for non-wfs search channel results
+ * @param {SearchResultObject} result
+ * @returns String to use as id
+ */
+const getIdForResult = result => {
+    if (result.id) {
+        return result.id;
+    }
+    return result.name + result.lon + result.lat;
 };
 
 class SearchHandler extends StateHandler {
@@ -42,6 +55,7 @@ class SearchHandler extends StateHandler {
 
     clearResultPopup () {
         this.removeMarker();
+        this.removeResultFromMap();
         if (this._popupControlsResult) {
             this._popupControlsResult.close();
         }
@@ -160,11 +174,13 @@ class SearchHandler extends StateHandler {
                 this.updateState({
                     featuresOnMap
                 });
+                this.showResultOnMap(result);
             } else {
                 // remove from map
                 this.updateState({
                     featuresOnMap: featuresOnMap.filter(item => !isSameResult(item, result))
                 });
+                this.removeResultFromMap(result);
             }
             // TODO: sync on map
             this.updateResultsPopup();
@@ -191,10 +207,39 @@ class SearchHandler extends StateHandler {
             y: lat
         }, MARKER_ID]);
     }
-
     removeMarker () {
         this.getSandbox().postRequestByName('MapModulePlugin.RemoveMarkersRequest', [MARKER_ID]);
     }
+    showResultOnMap (result) {
+        this.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [result.GEOMETRY, {
+            layerId: RESULTS_LAYER_ID,
+            attributes: {
+                ...result,
+                id: getIdForResult(result)
+            }
+        }]);
+        this.getSandbox().postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [{
+            layer: [RESULTS_LAYER_ID],
+            // don't zoom too close for point features
+            maxZoomLevel: 10
+        }]);
+    }
+    removeResultFromMap (result) {
+        const params = [];
+        if (result) {
+            // clear based on id
+            // TODO: not all features have ids (only ones from wfs-search channel does)
+            params.push('id');
+            params.push(getIdForResult(result));
+        } else {
+            // clear all
+            params.push(null);
+            params.push(null);
+        }
+        params.push(RESULTS_LAYER_ID);
+        this.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', params);
+    }
+
 
     /** Restore from minimized state */
     requestSearchUI () {
