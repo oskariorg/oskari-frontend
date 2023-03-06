@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { ThemeConsumer } from 'oskari-ui/util';
 import styled, { css, keyframes } from 'styled-components';
-import { getTextColor } from 'oskari-ui/theme/ThemeHelper';
+import { getTextColor, getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 
 const animation = keyframes`
     0% {opacity: 1;}
@@ -33,7 +33,8 @@ const StyledBadge = styled.div`
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
 const NumberBadge = ThemeConsumer(({theme, isBlinking, count}) => {
-    return (<StyledBadge color={theme?.color?.accent || '#ffd400'} blink={isBlinking}>
+    const helper = getHeaderTheme(theme);
+    return (<StyledBadge color={helper.getAccentColor()} blink={isBlinking}>
                 {count}
             </StyledBadge>);
 });
