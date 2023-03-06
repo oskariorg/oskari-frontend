@@ -27,7 +27,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version:  ${{ matrix.node }}
-          cache: 'npm'
+# We need package-lock.json to use cache this way
+#          cache: 'npm'
       - name: Install dependencies
+# With package-lock.json we should use "npm ci"
         run: npm install
       - run: npm test
