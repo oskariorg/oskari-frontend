@@ -60,6 +60,9 @@ class SearchHandler extends StateHandler {
             this._popupControlsResult.close();
         }
         this._popupControlsResult = null;
+        this.updateState({
+            results: null
+        });
     }
 
     getMsg (key, args) {
@@ -331,7 +334,7 @@ class SearchHandler extends StateHandler {
         } else {
             selectedChannels = selectedChannels.filter(id => id !== channelId);
         }
-
+        this.clearResultPopup();
         this.updateState({
             selectedChannels
         });
