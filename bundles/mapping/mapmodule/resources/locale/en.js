@@ -60,7 +60,12 @@ Oskari.registerLocalization(
                 "column_name": "Name",
                 "column_region": "Region",
                 "column_village": "Municipality",
-                "column_type": "Type"
+                "column_type": "Type",
+
+                "selectResult": "Show result on map",
+                "deselectResult": "Remove result from map",
+                "selectResultAll": "Show all results on map",
+                "deselectResultAll": "Remove all results from map",
             },
             "GetInfoPlugin": {
                 "title": "Feature Data",

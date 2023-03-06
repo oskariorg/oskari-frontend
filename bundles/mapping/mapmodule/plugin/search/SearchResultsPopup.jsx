@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
-import { Collapse, CollapsePanel, Message, Switch, ThemedBadge } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message, Switch, ThemedBadge, Tooltip } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
 import { getPopupOptions } from '../pluginPopupHelper';
 import { isSameResult } from './ResultComparator';
@@ -70,6 +70,23 @@ const Header = ({ title, count }) => {
     return (<span>{title} <ThemedBadge count={count} showZero /></span>);
 };
 
+
+const ToggleColumn = ({ locations, featuresOnMap, showResult }) => {
+    const isSelected = locations.every(loc => !!featuresOnMap.find(res => isSameResult(res, loc)));
+    let tooltip = (<Message messageKey='plugin.SearchPlugin.selectResultAll' bundleKey='MapModule' />);
+    if (isSelected) {
+        tooltip = (<Message messageKey='plugin.SearchPlugin.deselectResultAll' bundleKey='MapModule' />);
+    }
+    return (
+        <Tooltip title={tooltip}>
+            <Switch size="small" checked={!!isSelected}
+                onChange={checked => {
+                    locations.filter(item => checked === !featuresOnMap.find(res => isSameResult(res, item)))
+                    .forEach(item => showResult(item, checked))
+                }}/>
+        </Tooltip>);
+};
+
 const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
     if (!results) {
         return null;
@@ -78,6 +95,11 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
         {
             align: 'left',
             dataIndex: 'selected',
+            title: (<ToggleColumn
+                locations={results.locations}
+                featuresOnMap={featuresOnMap}
+                showResult={showResult} />),
+                /*
             sorter: (a, b) => {
                 const isSelectedA = featuresOnMap.find(res => isSameResult(res, a));
                 const isSelectedB = featuresOnMap.find(res => isSameResult(res, b));
@@ -91,11 +113,18 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
                 }
                 return nameSorter(a,b);
             },
+            */
             render: (title, item) => {
                 const isSelected = featuresOnMap.find(res => isSameResult(res, item));
+                let tooltip = (<Message messageKey='plugin.SearchPlugin.selectResult' bundleKey='MapModule' />);
+                if (isSelected) {
+                    tooltip = (<Message messageKey='plugin.SearchPlugin.deselectResult' bundleKey='MapModule' />);
+                }
                 return (
-                    <Switch size="small" checked={!!isSelected}
-                    onChange={checked => showResult(item, checked)}/>
+                    <Tooltip title={tooltip}>
+                        <Switch size="small" checked={!!isSelected}
+                        onChange={checked => showResult(item, checked)}/>
+                    </Tooltip>
                 );
             }
         },
