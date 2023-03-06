@@ -74,6 +74,7 @@ class SearchHandler extends StateHandler {
 
             if (combined.length === 0) {
                 Messaging.error(this.getMsg('noresults'));
+                this.clearResultPopup();
                 return;
             } else if (combined.length === 1) {
                 // only one result, show it immediately
