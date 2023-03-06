@@ -2,6 +2,7 @@ import '../../../../service/search/searchservice';
 import { showResultsPopup } from './SearchResultsPopup';
 import { showOptionsPopup } from './SearchOptionsPopup';
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
+import { isSameResult } from './ResultComparator';
 
 const MARKER_ID = 'SEARCH_RESULT_MARKER';
 
@@ -25,7 +26,8 @@ class SearchHandler extends StateHandler {
             minimized: false,
             loading: [],
             hasOptions: false,
-            selectedChannels: []
+            selectedChannels: [],
+            featuresOnMap: []
         });
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
@@ -51,7 +53,7 @@ class SearchHandler extends StateHandler {
     }
 
     updateResultsPopup () {
-        const { results = {}, loading, channels } = this.getState();
+        const { results = {}, loading, channels, featuresOnMap } = this.getState();
         if (!loading.length) {
             // we have all results
             // check if we didn't find anything OR if we found just one
@@ -80,14 +82,15 @@ class SearchHandler extends StateHandler {
             }
         }
         if (this._popupControlsResult) {
-            this._popupControlsResult.update(results, channels);
+            this._popupControlsResult.update(results, channels, featuresOnMap);
             return;
         }
 
         this._popupControlsResult = showResultsPopup(
             results,
             channels,
-            (result) => this.resultClicked(result),
+            featuresOnMap,
+            (result, isToggle) => this.resultClicked(result, isToggle),
             () => this.clearResultPopup(),
             this.plugin.getLocation());
     }
@@ -147,7 +150,25 @@ class SearchHandler extends StateHandler {
         channel);
     }
 
-    resultClicked (result) {
+    resultClicked (result, isToggled) {
+        if (typeof isToggled === 'boolean') {
+            const { featuresOnMap } = this.getState();
+            if (isToggled) {
+                // add to map
+                featuresOnMap.push(result);
+                this.updateState({
+                    featuresOnMap
+                });
+            } else {
+                // remove from map
+                this.updateState({
+                    featuresOnMap: featuresOnMap.filter(item => !isSameResult(item, result))
+                });
+            }
+            // TODO: sync on map
+            this.updateResultsPopup();
+            return;
+        }
         var zoom = result.zoomLevel;
         if (result.zoomScale) {
             zoom = { scale: result.zoomScale };
