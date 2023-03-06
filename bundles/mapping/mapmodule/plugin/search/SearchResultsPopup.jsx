@@ -39,10 +39,14 @@ const PopupContent = ({ results, channels, featuresOnMap, showResult }) => {
             { channelIds.map(id => {
                 const channel = channels.find(chan => id === chan.id);
                 const channelResult = results[id];
+                let resultsTitle = channel.locale?.name;
+                if (channelIds.length === 1) {
+                    resultsTitle = (<Message messageKey='plugin.SearchPlugin.title' bundleKey='MapModule' />);
+                }
                 return (
                     <CollapsePanel
                         key={channel.id}
-                        header={<Header title={channel.locale.name} count={channelResult?.totalCount} />}>
+                        header={<Header title={resultsTitle} count={channelResult?.totalCount} />}>
                         <ChannelContent
                             results={channelResult}
                             channel={channels.find(chan => id === chan.id)}
