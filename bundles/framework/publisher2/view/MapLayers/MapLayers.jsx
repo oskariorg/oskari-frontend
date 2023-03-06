@@ -40,6 +40,12 @@ const LayerContainer = styled('div')`
     margin-top: 20px;
 `;
 
+const ExtraOptions = styled('div')`
+    display:flex;
+    flex-direction: column;
+    margin-left: 15px;
+`;
+
 export const MapLayers = ({ state, controller }) => {
     const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
     return (
@@ -51,12 +57,20 @@ export const MapLayers = ({ state, controller }) => {
                 <Message messageKey='BasicView.layerselection.label' />
             </StyledCheckbox>
             {state.showLayerSelection && (
+                <ExtraOptions>
                     <StyledCheckbox
                         checked={state.showMetadata}
                         onChange={(e) => controller.setShowMetadata(e.target.checked)}
                     >
                         <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
                     </StyledCheckbox>
+                    <StyledCheckbox
+                        checked={state.allowStyleChange}
+                        onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
+                    >
+                        <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
+                    </StyledCheckbox>
+                </ExtraOptions>
             )}
             {state.externalOptions.map((tool, index) => {
                 return (
