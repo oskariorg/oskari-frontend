@@ -132,10 +132,9 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
                 <Message messageKey={'plugin.SearchPlugin.noresults'} bundleKey='MapModule' />
             </React.Fragment>);
     }
-    const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
     return (
         <React.Fragment>
-            <Message messageKey={'plugin.SearchPlugin.' + msgKey} messageArgs={{ count: totalCount }} bundleKey='MapModule' />
+            { hasMore && <Message messageKey={'plugin.SearchPlugin.searchMoreResults'} messageArgs={{ count: totalCount }} bundleKey='MapModule' /> }
             <Table
                 columns={columnSettings}
                 dataSource={locations.map((item) => ({
