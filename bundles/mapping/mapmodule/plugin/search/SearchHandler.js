@@ -203,15 +203,18 @@ class SearchHandler extends StateHandler {
         return handler.apply(this, [e]);
     }
 
-    showOptions () {
-        this.clearOptionsPopup();
+    toggleOptionsPopup () {
+        if (this._popupControlsOptions) {
+            this.clearOptionsPopup();
+            return;
+        }
         const title = this.getMsg('options.title');
         const controller = this.getController();
         this._popupControlsOptions = showOptionsPopup(
             title,
             this.getState(),
             controller,
-            () => this.clearResultPopup(),
+            () => this.clearOptionsPopup(),
             this.plugin.getLocation());
         // TODO: if the user can select search channels for the query etc
         // related to state.hasOptions: false
@@ -279,7 +282,7 @@ const wrapped = controllerMixin(SearchHandler, [
     'requestSearchUI',
     'doSearch',
     'setQuery',
-    'showOptions',
+    'toggleOptionsPopup',
     'setChannelEnabled'
 ]);
 

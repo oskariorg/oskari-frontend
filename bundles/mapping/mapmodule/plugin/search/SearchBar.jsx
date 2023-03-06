@@ -105,7 +105,7 @@ export const SearchBar = ThemeConsumer(({ theme = {}, disabled = false, placehol
                     $iconColor={icon}
                     $backgroundColor={bgColor}
                     $hoverColor={hover}
-                    onClick={() => controller.showOptions()}
+                    onClick={() => controller.toggleOptionsPopup()}
                     icon={<SettingOutlined />}
                     className={optionsCSSClasses}
                     disabled={disabled}
