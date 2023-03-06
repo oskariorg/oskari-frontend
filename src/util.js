@@ -779,7 +779,7 @@ Oskari.util = (function () {
      * @param {Array || String} locales optional
      * @returns {String}
      */
-    util.formatDate = (text, options, locales = []) => {
+    util.formatDate = (text, options, locales) => {
         if (!text) {
             return '';
         }
@@ -788,6 +788,13 @@ Oskari.util = (function () {
             return '';
         }
         const { date = {}, time = {}} = options || {};
+        if (!locales) {
+            // default to locale by selected language
+            // en -> en_US -> en-US
+            locales = Oskari.getSupportedLocales()
+                .filter(loc => loc.includes(Oskari.getLang()))
+                .map(loc => loc.replace('_', '-'));
+        }
         const defaults = {
             hour: '2-digit',
             minute: '2-digit'
