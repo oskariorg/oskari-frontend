@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import olInteractionDragRotate from 'ol/interaction/DragRotate';
+import { unByKey } from "ol/Observable";
 import styled from 'styled-components';
 import { NorthIcon } from 'oskari-ui/components/icons';
 
@@ -32,20 +33,19 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
         me.inMobileMode = false;
-        this._eventsHandled = false;
+        this._dragRotate = null;
+        this._removeListenerKey = null;
     }, {
         handleEvents: function () {
-            if (this._eventsHandled) {
+            if (this._dragRotate) {
                 // only add interaction/event handling once and not on every redrawUI()
                 return;
             }
-            this._eventsHandled = true;
             var me = this;
-            var DragRotate = new olInteractionDragRotate();
-            this.getMap().addInteraction(DragRotate);
+            this._dragRotate = new olInteractionDragRotate();
+            this.getMap().addInteraction(this._dragRotate);
             var eventBuilder = Oskari.eventBuilder('map.rotated');
-
-            this._map.on('pointerdrag', function (e) {
+            this._removeListenerKey = this.getMap().on('pointerdrag', function (e) {
                 const degrees = me.getRotation();
                 if (degrees !== me.getDegrees()) {
                     me.rotateIcon(degrees);
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         _createUI: function () {
             this._element = this._createControlElement();
-            this.renderButton();
+            this._renderButton();
             this.handleEvents();
             this.addToPluginContainer(this._element);
         },
@@ -180,6 +180,13 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         stopPlugin: function () {
             this.teardownUI();
+            if (this._dragRotate) {
+                this.getMap().removeInteraction(this._dragRotate);
+            }
+            if (this._removeListenerKey) {
+                unByKey(this._removeListenerKey);
+            }
+            this._dragRotate = null;
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
