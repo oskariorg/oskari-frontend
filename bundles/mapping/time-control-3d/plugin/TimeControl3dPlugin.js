@@ -150,22 +150,15 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         if (!el) {
             return;
         }
-        const conf = this._conf;
 
-        const styleClass = conf && conf.toolStyle ? conf.toolStyle : this.getToolStyleFromMapModule();
-
-        this.renderButton(styleClass, el);
-
+        this.renderButton();
         this._setLayerToolsEditMode(
             this.getMapModule().isInLayerToolsEditMode()
         );
     }
 
-    renderButton (style, element) {
-        let el = element;
-        if (!element) {
-            el = this.getElement();
-        }
+    renderButton () {
+        const el = this.getElement();
         if (!el) return;
 
         ReactDOM.render(
