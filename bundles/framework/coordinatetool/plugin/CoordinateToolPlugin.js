@@ -97,15 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Object} data contains lat/lon information to show on UI
          */
         refresh: function (data) {
-            const conf = this._config;
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                this.changeToolStyle(conf.toolStyle, this.getElement());
-            } else {
-                var toolStyle = this.getToolStyleFromMapModule();
-                this.changeToolStyle(toolStyle, this.getElement());
-            }
-
+            this.renderButton();
             return data;
         },
 
@@ -138,27 +130,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (style, div) {
-            const me = this,
-                el = div || me.getElement();
-
-            if (!el) {
-                return;
-            }
-
-            const styleClass = style || 'rounded-dark';
-            this.renderButton(styleClass, el);
+        changeToolStyle: function () {
+            this.renderButton();
         },
 
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        renderButton: function () {
+            const el = this.getElement();
             if (!el) {
                 return;
             }

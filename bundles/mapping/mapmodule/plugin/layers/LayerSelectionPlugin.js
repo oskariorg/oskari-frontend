@@ -355,7 +355,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.inMobileMode = mapInMobileMode;
 
             this._element = this._createControlElement();
-            this.changeToolStyle(null, this._element);
             this.refresh();
             this.addToPluginContainer(this._element);
         },
@@ -363,47 +362,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         refresh: function () {
             const me = this;
             const conf = me.getConfig();
-            const element = me.getElement();
             this._updateLayerSelectionPopup();
             if (!conf) {
                 return;
             }
-            if (conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, element);
-            } else {
-                // not found -> use the style config obtained from the mapmodule.
-                var toolStyle = me.getToolStyleFromMapModule();
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
-            }
+            me.renderButton();
         },
 
         /**
          * Changes the tool style of the plugin
          *
          * @method changeToolStyle
-         * @param {String} styleName
-         * @param {jQuery} div
          */
-        changeToolStyle: function (styleName, div) {
-            div = div || this.getElement();
-            if (!div) {
+        changeToolStyle: function () {
+            if (!this.getElement()) {
                 return;
             }
 
-            this.renderButton(styleName, div);
+            this.renderButton();
 
             this._setLayerToolsEditMode(
                 this.getMapModule().isInLayerToolsEditMode()
             );
         },
 
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            };
+        renderButton: function () {
+            let el = this.getElement();
             if (!el) return;
 
             ReactDOM.render(

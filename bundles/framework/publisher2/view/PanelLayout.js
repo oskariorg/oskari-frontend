@@ -101,8 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         /**
          * Returns the selections the user has done with the form inputs.
          * {
-         *     font : <selected font (string)>,
-         *     toolStyle : <selected toolStyle (string)>
+         *     metadata : {
+         *          theme: { ... theme for embedded map ... }
+         *     }
          * }
          *
          * @method getValues

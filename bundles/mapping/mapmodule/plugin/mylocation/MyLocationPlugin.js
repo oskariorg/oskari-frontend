@@ -73,32 +73,17 @@ Oskari.clazz.define(
             this._setTracking(false);
         },
         /**
-         * @public @method refresh
-         *
-         *
-         */
-        refresh: function () {
-            const conf = this.getConfig();
-            let toolStyle;
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                toolStyle = conf.toolStyle;
-            } else {
-                toolStyle = this.getToolStyleFromMapModule();
-            }
-            this.changeToolStyle(toolStyle, this.getElement());
-        },
-
-        /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         *
          */
-        changeToolStyle: function (style, div) {
-            const el = div || this.getElement();
+        changeToolStyle: function () {
+            this.refresh();
+        },
+        /**
+         * @public @method refresh
+         */
+        refresh: function () {
+            const el = this.getElement();
             if (!el) {
                 return;
             }

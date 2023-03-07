@@ -633,16 +633,6 @@ Oskari.clazz.define(
             return this._map;
         },
         /**
-         * @method getImageUrl
-         * @param fileName name of image file
-         * Returns path to image asset from mapmodule bundle resources
-         * NOTE: Webpack build creates a "context module" that includes all the images found under ./resources/images/
-         * @return {String}
-         */
-        getImageUrl: function (fileName) {
-            return require('./resources/images/' + fileName);
-        },
-        /**
          * Get map max extent.
          * @method getMaxExtent
          * @return {Object} max extent
