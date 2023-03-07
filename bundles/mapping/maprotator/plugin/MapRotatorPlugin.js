@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import olInteractionDragRotate from 'ol/interaction/DragRotate';
-import { unByKey } from "ol/Observable";
+import { unByKey } from 'ol/Observable';
 import styled from 'styled-components';
 import { NorthIcon } from 'oskari-ui/components/icons';
 
