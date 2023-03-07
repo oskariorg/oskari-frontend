@@ -48,6 +48,18 @@ const ExtraOptions = styled('div')`
 
 export const MapLayers = ({ state, controller }) => {
     const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
+    const disableStyleSelect = state.layers.filter(l => l.getStyles().length > 1).length < 1;
+
+    const StyleSelect = (
+        <StyledCheckbox
+            checked={state.allowStyleChange}
+            onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
+            disabled={disableStyleSelect}
+        >
+            <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
+        </StyledCheckbox>
+    );
+
     return (
         <Content>
             <StyledCheckbox
@@ -64,12 +76,13 @@ export const MapLayers = ({ state, controller }) => {
                     >
                         <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
                     </StyledCheckbox>
-                    <StyledCheckbox
-                        checked={state.allowStyleChange}
-                        onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
-                    >
-                        <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
-                    </StyledCheckbox>
+                    {disableStyleSelect ? (
+                        <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
+                            {StyleSelect}
+                        </Tooltip>
+                    ) : (
+                        StyleSelect
+                    )}
                 </ExtraOptions>
             )}
             {state.externalOptions.map((tool, index) => {
