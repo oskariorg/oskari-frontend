@@ -7,6 +7,10 @@ import { getPopupOptions } from '../pluginPopupHelper';
 import { isSameResult } from './ResultComparator';
 
 export const showResultsPopup = (results = {}, channels = [], featuresOnMap = [], showResult, onClose, pluginLocation) => {
+    if (!Object.keys(results).length) {
+        // don't open popup until there is something to show
+        return null;
+    }
     const options = getPopupOptions({
         getName: () => 'searchResults',
         getLocation: () => pluginLocation

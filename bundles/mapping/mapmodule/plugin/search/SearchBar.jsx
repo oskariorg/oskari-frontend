@@ -45,14 +45,13 @@ const StyledButton = styled(Button)`
     }
 `;
 
-
 const SearchContainer = styled('div')`
     margin: 0 10px 10px 10px;
     display: flex;
     height: 40px;
     flex-direction: row;
-    opacity: ${props => props.opacity};
     background: ${props => props.backgroundColor};
+    opacity: ${props => props.opacity};
     align-items: center;
     padding: 3px 7px 3px 3px;
     border-radius: calc(${props => props.rounding ? props.rounding.replace('%', '') / 100 : 0} * 40px);
@@ -63,6 +62,9 @@ const SearchContainer = styled('div')`
     }
     input {
         font-size: 15px;
+    }
+    &:focus-within {
+        opacity: 0.95;
     }
 `;
 

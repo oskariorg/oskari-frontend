@@ -30,6 +30,22 @@ const getIdForResult = result => {
     }
     return result.name + result.lon + result.lat;
 };
+// generate id and simple geometry
+const processResultLocations = (results) => {
+    if (!results) {
+        return;
+    }
+    const { locations = [] } = results;
+    locations.forEach(loc => {
+        if (!loc.id) {
+            loc.id = getIdForResult(loc);
+        }
+        if (!loc.GEOMETRY) {
+            loc.GEOMETRY = `POINT (${loc.lon} ${loc.lat})`;
+        }
+    });
+    return results;
+};
 
 class SearchHandler extends StateHandler {
     constructor (plugin) {
@@ -79,6 +95,8 @@ class SearchHandler extends StateHandler {
             const currentChannels = Object.keys(results).filter(chan => !!results[chan]);
             if (!currentChannels.length) {
                 // previous search result cleared
+                Messaging.error(this.getMsg('noresults'));
+                this.clearResultPopup();
                 return;
             }
             const combined = currentChannels.reduce((accumulator, currentValue) => {
@@ -133,7 +151,7 @@ class SearchHandler extends StateHandler {
      * Uses SearchService to make the actual search and calls  #_showResults
      */
     doSearch () {
-        const { loading, query = '', selectedChannels = [], channels } = this.getState();
+        const { loading, query = '', selectedChannels = [] } = this.getState();
         if (loading.length || query.length === 0) {
             return;
         }
@@ -150,13 +168,21 @@ class SearchHandler extends StateHandler {
     triggerSearchForChannel (channel, query) {
         const updateResults = (results) => {
             const { results:prevResults = {}, loading } = this.getState();
-            this.updateState({
+            const stateUpdate = {
                 loading: results ? loading.filter(item => item !== channel) : loading,
                 results: {
-                    ...prevResults,
-                    [channel]: results
+                    ...prevResults
                 }
-            });
+            };
+            if (!results) {
+                delete stateUpdate.results[channel];
+            } else if (this.allowOptions || results.totalCount > 0) {
+                // only pass channel results if:
+                // - the user has option to select channels OR
+                // - the result has hits
+                stateUpdate.results[channel] = processResultLocations(results);
+            }
+            this.updateState(stateUpdate);
             this.updateResultsPopup();
         };
         // clear previous results
