@@ -15,7 +15,9 @@ Oskari.registerLocalization({
             no: 'Ei',
             next: 'Seuraava',
             previous: 'Edellinen',
-            print: 'Tulosta'
+            print: 'Tulosta',
+            search: 'Etsi',
+            reset: 'Tyhjennä'
         },
         messages: {
             confirmDelete: 'Haluatko varmasti poistaa?'

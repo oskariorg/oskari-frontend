@@ -1,6 +1,7 @@
 export const TYPE = {
     POPUP: 'popup',
     FLYOUT: 'flyout',
+    CONTAINER: 'container',
     BANNER: 'banner',
     SIDE_PANEL: 'sidePanel'
 };

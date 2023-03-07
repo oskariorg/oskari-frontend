@@ -19,7 +19,7 @@ const getNewSize = (entry) => {
 const SIZE_OBSERVER = hasObserver ? new ResizeObserver(entries => {
     for (let entry of entries) {
         const result = getNewSize(entry);
-        const prev = getCurrentData(entry.target);
+        const prev = getCurrentData(getObserverKey(entry.target));
         if (prev) {
             //console.log('Size changed from', prev.size, 'to', result);
             const prevSize = prev.size;
@@ -38,7 +38,24 @@ const SIZE_OBSERVER = hasObserver ? new ResizeObserver(entries => {
  * @returns {Object} with references to the element, previously recorded size and listeners
  */
 const getCurrentData = (element) => {
+    if (typeof element !== 'string') {
+        const key = getObserverKey(element);
+        return elementMap[key];
+    }
     return elementMap[element];
+};
+
+const observerIdentSeq = Oskari.getSeq('ResizeObservers');
+const getObserverKey = (element) => {
+    if (!element) {
+        return;
+    }
+    let { oskari_observer: key } = element.dataset;
+    if (!key) {
+        key = 'RO_' + observerIdentSeq.nextVal();
+    }
+    element.dataset.oskari_observer = key;
+    return key;
 };
 
 /**
@@ -50,12 +67,13 @@ export const monitorResize = (element, notifyFn) => {
     if (!element) {
         return;
     }
-    const currentMonitor = getCurrentData(element);
+    const elementKey = getObserverKey(element);
+    const currentMonitor = getCurrentData(elementKey);
     if (currentMonitor && typeof notifyFn === 'function') {
         currentMonitor.listeners.push(notifyFn);
     } else {
         SIZE_OBSERVER && SIZE_OBSERVER.observe(element);
-        elementMap[element] = {
+        elementMap[elementKey] = {
             element,
             listeners: [notifyFn].filter(fn => typeof fn === 'function'),
             size: {
@@ -94,5 +112,6 @@ const unmonitorElement = (element) => {
     try {
         SIZE_OBSERVER && SIZE_OBSERVER.unobserve(element);
     } catch(ignored) {}
-    delete elementMap[element];
+    const elementKey = getObserverKey(element);
+    delete elementMap[elementKey];
 };

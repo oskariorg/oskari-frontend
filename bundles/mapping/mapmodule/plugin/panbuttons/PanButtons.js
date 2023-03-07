@@ -78,41 +78,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          *
          */
         refresh: function () {
-            var me = this,
-                conf = me.getConfig();
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
-            } else {
-                // not found -> use the style config obtained from the mapmodule.
-                var toolStyle = me.getToolStyleFromMapModule();
-                me.changeToolStyle(toolStyle, me.getElement());
-            }
+            this.renderButton();
         },
 
         /**
          * @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} styleName
-         * @param {jQuery} div
-         *
          */
-        changeToolStyle: function (styleName, div) {
-            div = div || this.getElement();
-            if (!div) {
-                return;
-            }
-
-            const styleClass = styleName || 'rounded-dark';
-
-            this.renderButton(styleClass, div);
+        changeToolStyle: function () {
+            this.renderButton();
         },
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        renderButton: function () {
+            let el = this.getElement();
             if (!el) return;
 
             ReactDOM.render(

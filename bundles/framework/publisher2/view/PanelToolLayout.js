@@ -361,6 +361,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 hoverClass: 'ui-state-highlight',
                 tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
             });
+
+            // Disable map hover effect when layout edit mode is active
+            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(false);
+
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
@@ -378,19 +382,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
             this._removeDraggables();
+
+            // Restore map hover effects
+            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
+
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
         _enableToolDraggable: function (tool) {
-            let plugin;
-            if (typeof tool.getPlugin === 'function') {
-                plugin = tool.getPlugin();
-                if (!plugin || typeof plugin.getElement !== 'function') {
-                    return;
-                }
-            }
-            const elem = plugin.getElement();
-            if (!elem) {
+            const elem = this.__getPluginElement(tool);
+            if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
             const enabled = tool.state.enabled === true;
@@ -401,6 +402,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 elem.draggable('destroy');
                 elem.css('position', '');
             }
+        },
+        __getPluginElement: function (tool) {
+            if (!tool || typeof tool.getPlugin !== 'function') {
+                return;
+            }
+            const plugin = tool.getPlugin();
+            if (!plugin || typeof plugin.getElement !== 'function') {
+                return;
+            }
+            return plugin.getElement();
         },
         _initDraggables: function () {
             const tools = this.tools.filter(tool => tool.isStarted());
@@ -534,7 +545,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             this._editToolLayoutOff();
             this.tools.forEach(tool => {
                 // just call stop for the tools that haven't already been shut down by the tool panel
-                if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
+                if (tool.isStarted()) {
                     tool.stop();
                     tool.setEnabled(false);
                 }

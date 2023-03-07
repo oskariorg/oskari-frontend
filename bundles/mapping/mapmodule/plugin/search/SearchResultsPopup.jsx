@@ -154,7 +154,7 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
             align: 'left',
             title: <Message messageKey='plugin.SearchPlugin.column_type' bundleKey='MapModule' />,
             dataIndex: 'type',
-            sorter: getSorterFor('type'),
+            sorter: getSorterFor('type')
         }
     ];
 

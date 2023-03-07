@@ -775,11 +775,11 @@ Oskari.util = (function () {
     /**
      * Format timestamp to more readable date
      * @param {String} text
-     * @param {Object} options optional
+     * @param {Object} options optional { time, date }
      * @param {Array || String} locales optional
      * @returns {String}
      */
-    util.formatDate = (text, options = {}, locales = []) => {
+    util.formatDate = (text, options, locales) => {
         if (!text) {
             return '';
         }
@@ -787,13 +787,21 @@ Oskari.util = (function () {
         if (isNaN(dateTime.getMilliseconds())) {
             return '';
         }
+        const { date = {}, time = {}} = options || {};
+        if (!locales) {
+            // default to locale by selected language
+            // en -> en_US -> en-US
+            locales = Oskari.getSupportedLocales()
+                .filter(loc => loc.includes(Oskari.getLang()))
+                .map(loc => loc.replace('_', '-'));
+        }
         const defaults = {
             hour: '2-digit',
             minute: '2-digit'
         };
-        const date = dateTime.toLocaleDateString(locales, options);
-        const time = dateTime.toLocaleTimeString(locales, {...defaults, ...options});
-        return `${date} ${time}`;
+        const localeDate = dateTime.toLocaleDateString(locales, date);
+        const localeTime = dateTime.toLocaleTimeString(locales, {...defaults, ...time});
+        return `${localeDate} ${localeTime}`;
     }
 
     return util;

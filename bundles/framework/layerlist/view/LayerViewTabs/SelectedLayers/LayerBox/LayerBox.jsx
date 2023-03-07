@@ -26,17 +26,17 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
+const PublishableCol = styled(ColAutoRight)`
+    padding: 0 0 0 20px;
+    align-self: flex-end;
+`;
+
+const LayerBox = ({ layer, index, controller }) => {
     const organizationName = layer.getOrganizationName();
     const publishable = layer.hasPermission('publish');
-
-    const [visible, setVisible] = useState(visibilityInfo.visible);
-    useEffect(() => {
-        setVisible(visibilityInfo.visible);
-    }, [visibilityInfo]);
+    const visible = layer.isVisible();
 
     const handleToggleVisibility = () => {
-        setVisible(!visible);
         controller.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
@@ -78,7 +78,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                             <ColAuto style={{ padding: '0px', flexShrink: 1 }}>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px', alignSelf: 'flex-end' }}>
+                                            <PublishableCol>
                                                 {publishable &&
                                                 <Fragment>
                                                     <CheckOutlined style={{ color: '#01ca79' }} />
@@ -87,7 +87,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                                     </Publishable>
                                                 </Fragment>
                                                 }
-                                            </ColAutoRight>
+                                            </PublishableCol>
                                         </Row>
                                     </Col>
                                     <ColAutoRight>
@@ -97,7 +97,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <Footer layer={layer} controller={controller} visibilityInfo={visibilityInfo}/>
+                                <Footer layer={layer} controller={controller}/>
                             </StyledBox>
                         </Col>
                     </Row>
@@ -110,7 +110,6 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    visibilityInfo: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

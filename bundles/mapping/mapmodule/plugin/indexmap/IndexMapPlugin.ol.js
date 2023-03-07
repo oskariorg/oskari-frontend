@@ -49,17 +49,14 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             /* overview map */
-            var me = this,
-                conf = me.getConfig(),
-                el;
+            const conf = this.getConfig() || {};
+            let el;
 
             if (conf.containerId) {
                 el = jQuery('#' + conf.containerId);
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-
-            this.changeToolStyle(undefined, el);
 
             return el;
         },
@@ -134,11 +131,11 @@ Oskari.clazz.define(
                 this._removeIndexMap();
             }
         },
-        changeToolStyle: function (style, element) {
-            this.renderButton(style, element);
+        changeToolStyle: function () {
+            this.renderButton();
         },
-        renderButton: function (style, element) {
-            let el = element || this.getElement();
+        renderButton: function () {
+            let el = this.getElement();
             if (!el) {
                 return;
             }

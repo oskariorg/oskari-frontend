@@ -1,25 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Message, Confirm } from 'oskari-ui'
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Message, Confirm } from 'oskari-ui';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
-import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table'
-import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons'
-import styled from 'styled-components';
+import { Table, getSorterFor, ToolsContainer } from 'oskari-ui/components/Table';
+import { EditOutlined, EyeOutlined, EyeInvisibleOutlined, CopyOutlined, PictureOutlined } from '@ant-design/icons';
 
 const ICON_STYLE = {
     fontSize: '16px'
 };
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
 
 const openView = (view) => {
     window.open(
@@ -27,10 +15,9 @@ const openView = (view) => {
         'Published',
         'location=1,status=1,scrollbars=yes,width=850,height=800'
     );
-}
+};
 
 export const PublishedMapsList = ({ controller, data = [], loading }) => {
-
     const columnSettings = [
         {
             align: 'left',
@@ -48,7 +35,7 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             align: 'left',
             title: <Message messageKey='tabs.publishedmaps.grid.domain' />,
             dataIndex: 'pubDomain',
-            sorter: getSorterFor('pubDomain'),
+            sorter: getSorterFor('pubDomain')
         },
         {
             align: 'left',
@@ -124,9 +111,9 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             }
         }
     ];
-    
+
     return (
-        <StyledTable
+        <Table
             columns={columnSettings}
             dataSource={data.map((item) => ({
                 key: item.id,
@@ -135,11 +122,11 @@ export const PublishedMapsList = ({ controller, data = [], loading }) => {
             pagination={false}
             loading={loading}
         />
-    )
-}
+    );
+};
 
 PublishedMapsList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
     controller: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired
-}
+};

@@ -19,14 +19,9 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Notice",
-        "unsupportedProj": "Some layers added to this map view cannot be shown with the current map projection.",
-        "unsupported-layer": "Map Layer cannot be shown.",
-        "unsupported-layer-projection": "Map layer cannot be shown in selected map projection.",
         "styles": {
             "defaultTitle": "Default style"
         },
-        "mapLayerUnavailable": `Map layer \"{name}"\ can not be shown.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
@@ -129,6 +124,12 @@ Oskari.registerLocalization(
         "layerVisibility": {
             "notInScale": "The map layer \"{name}\" has no visible features in this zoom level. Move to a suitable map level.",
             "notInGeometry": "The map layer \"{name}\" has no features in this area. Move to a better location on map."
+        },
+        "layerUnsupported": {
+            "common": "Map Layer cannot be shown.",
+            "srs": "Map layer cannot be shown with the current map projection.",
+            "dimension": "Map layer cannot be shown with {dimension} map view.",
+            "unavailable": 'Map layer "{name}" cannot be shown.'
         },
         "guidedTour": {
             "help1": {

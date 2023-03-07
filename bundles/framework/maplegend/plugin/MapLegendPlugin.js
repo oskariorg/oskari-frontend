@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         },
         _startPluginImpl: function () {
             this.addToPluginContainer(this._createControlElement());
-            this.renderButton(this._config.toolStyle);
+            this.renderButton();
             return true;
         },
         _stopPluginImpl: function () {
@@ -41,14 +41,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
          */
-        changeToolStyle: function (style) {
-            this.renderButton(style);
+        changeToolStyle: function () {
+            this.renderButton();
         },
 
-        renderButton: function (style) {
+        renderButton: function () {
             const el = this.getElement();
             if (!el) {
                 return;

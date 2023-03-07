@@ -94,15 +94,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
          */
         getPanel: function () {
             if (!this.panel) {
-                this._populateLayoutPanel();
+                this.panel = this._populateLayoutPanel();
             }
             return this.panel;
         },
         /**
          * Returns the selections the user has done with the form inputs.
          * {
-         *     font : <selected font (string)>,
-         *     toolStyle : <selected toolStyle (string)>
+         *     metadata : {
+         *          theme: { ... theme for embedded map ... }
+         *     }
          * }
          *
          * @method getValues

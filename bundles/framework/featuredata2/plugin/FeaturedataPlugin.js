@@ -58,15 +58,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             return false;
         },
         _setLayerToolsEditModeImpl: function () {
-            var me = this,
-                el = me.getElement();
-            if (!el) {
+            if (!this.getElement()) {
                 return;
             }
             if (this.inLayerToolsEditMode()) {
-                this.renderButton(null, el, true);
+                this.renderButton(true);
             } else {
-                this.renderButton(null, el);
+                this.renderButton();
             }
         },
         /**
@@ -115,55 +113,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             me._flyoutOpen = undefined;
             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-            this.renderButton(null, null);
+            this.renderButton();
         },
         /**
          * @method refresh
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
-            var me = this;
-            var conf = me._config || {};
-
-            me.setVisible(me._hasFeaturedataLayers());
-
-            // Change the style if in the conf
-            if (conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
-            } else {
-                var toolStyle = me.getToolStyleFromMapModule();
-                me.changeToolStyle(toolStyle, me.getElement());
-            }
+            this.setVisible(this._hasFeaturedataLayers());
+            this.renderButton();
         },
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (style, div) {
-            var me = this,
-                el = div || me.getElement();
-
-            if (!el) {
-                return;
-            }
-
-            this.renderButton(style, div);
+        changeToolStyle: function () {
+            this.renderButton();
         },
-        renderButton: function (style, element, disabled = false, loading = false) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        renderButton: function (disabled = false, loading = false) {
+            const el = this.getElement();
             if (!el) return;
 
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
                         icon={<span>{this._loc.title}</span>}
-                        title={this._loc.title}
                         onClick={() => this.openFlyout()}
                         disabled={disabled}
                         active={this._flyoutOpen}
@@ -190,13 +164,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     this._flyoutOpen = undefined;
                 }
             }
-            this.renderButton(null, null);
+            this.renderButton();
         },
         showLoadingIndicator: function (blnLoad) {
             if (blnLoad) {
-                this.renderButton(null, null, false, true);
+                this.renderButton(false, true);
             } else {
-                this.renderButton(null, null, false, false);
+                this.renderButton(false, false);
             }
         },
         showErrorIndicator: function (blnLoad) {

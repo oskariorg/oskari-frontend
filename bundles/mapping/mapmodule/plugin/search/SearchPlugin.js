@@ -39,88 +39,43 @@ Oskari.clazz.define(
             this.inMobileMode = false;
         },
         _setLayerToolsEditModeImpl: function () {
-            var me = this,
-                el = me.getElement();
+            const el = this.getElement();
             if (!el) {
                 return;
             }
-            if (this.inLayerToolsEditMode()) {
-                this.renderSearchBar(null, el, true);
-            } else {
-                this.renderSearchBar(null, el);
-            }
+            this.renderSearchBar(!!this.inLayerToolsEditMode());
         },
 
         /**
          * @private @method _createControlElement
          * Creates UI for search functionality and places it on the maps
          * div where this plugin registered.
-         *
-         *
          */
         _createControlElement: function () {
-            var me = this,
-                conf = me.getConfig(),
-                el;
-            if (conf && !conf.toolStyle) {
-                conf.toolStyle = me.getToolStyleFromMapModule();
-            }
-            if (conf && conf.toolStyle) {
-                el = me.template.clone();
-                me._element = el;
-                me.changeToolStyle(conf.toolStyle, el);
-            } else {
-                el = me.template.clone();
-                me._element = el;
-            }
-
-            // bind events
-            return el;
+            return this.template.clone();
         },
 
         refresh: function () {
-            var me = this,
-                conf = me.getConfig(),
-                element = me.getElement();
-
-            if (conf) {
-                if (conf.toolStyle) {
-                    me.changeToolStyle(conf.toolStyle, element);
-                } else {
-                    var toolStyle = me.getToolStyleFromMapModule();
-                    if (toolStyle !== null && toolStyle !== undefined) {
-                        me.changeToolStyle(toolStyle, element);
-                    }
-                }
-            }
+            this.changeToolStyle();
         },
 
         /**
          * Changes the tool style of the plugin
          *
          * @method changeToolStyle
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (style, div) {
-            var me = this;
-            div = div || me.getElement();
-            if (!div) {
+        changeToolStyle: function () {
+            if (!this.getElement()) {
                 return;
             }
-
-            this.renderSearchBar(style, div);
-
-            me._setLayerToolsEditMode(
-                me.getMapModule().isInLayerToolsEditMode()
+            this.renderSearchBar();
+            this._setLayerToolsEditMode(
+                this.getMapModule().isInLayerToolsEditMode()
             );
         },
 
-        renderSearchBar: function (style, element, disabled = false) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        renderSearchBar: function (disabled = false) {
+            let el = this.getElement();
             if (!el) return;
             if (!this.handler) {
                 // init handler here so we can be sure we have a sandbox for this instance
@@ -179,17 +134,6 @@ Oskari.clazz.define(
             // remove old element
             this.teardownUI();
             this.inMobileMode = isMobile;
-
-            var conf = me.getConfig();
-            if (conf) {
-                if (conf.toolStyle) {
-                    me.changeToolStyle(conf.toolStyle, me._element);
-                } else {
-                    var toolStyle = me.getToolStyleFromMapModule();
-                    me.changeToolStyle(toolStyle, me._element);
-                }
-            }
-
             this.addToPluginContainer(me._element);
             me.refresh();
         }

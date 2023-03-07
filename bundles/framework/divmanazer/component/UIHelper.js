@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
                     }
                 },
                 success: function (resp) {
-                    /* eslint-disable node/no-callback-literal */
+                    /* eslint-disable n/no-callback-literal */
                     if (resp && resp.articles[0] && resp.articles[0].content) {
                         callback(true, resp.articles[0].content);
                     } else {

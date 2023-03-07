@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
                 "CoordinateToolPlugin": "Coordinate tool",
-                "FeedbackServiceTool": "Feedback (Open311) service",
-                "MetadataSearchTool": "Enable programmatic use of metadata search",
                 "MapLegend": "Show map legend",
                 "MapRotator": "Enable map rotation",
                 "CrosshairTool": "Show map focal point",
@@ -111,7 +109,8 @@ Oskari.registerLocalization(
                     "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                     "selectAsBaselayer": "Select as baselayer",
                     "allowStyleChange": "Allow style change",
-                    "showMetadata": "Show metadata links"
+                    "showMetadata": "Show metadata links",
+                    "noMultipleStyles": "The selected map layers only have a single visualization option/style."
                 },
                 "mylocation": {
                     "modes": {
@@ -149,6 +148,10 @@ Oskari.registerLocalization(
             },
             "layout": {
                 "label": "Graphic Layout",
+                "title": {
+                    "popup": "Popup window",
+                    "buttons": "Buttons"
+                },
                 "fields": {
                     "colours": {
                         "label": "Color scheme",
@@ -181,8 +184,9 @@ Oskari.registerLocalization(
                         "3d-dark": "Three-dimensional (dark)",
                         "3d-light": "Three-dimensional (light)"
                     },
-                    "popupHeaderColor": "Pop-up header background color",
-                    "buttonBackgroundColor": "Button background color",
+                    "popupHeaderColor": "Title background color",
+                    "popupHeaderTextColor": "Title color",
+                    "buttonBackgroundColor": "Background color",
                     "buttonTextColor": "Icon color",
                     "buttonAccentColor": "Icon effect color",
                     "buttonRounding": "Button rounding",
@@ -230,6 +234,18 @@ Oskari.registerLocalization(
                 "tooltip": "The background layer is shown at the bottom layer on the map. If you select several background maps, only one of them can be visible at a time. User can select a background layer in the user interface. Please select a default background map in the map preview.",
                 "promote": "Do you want to show also orthophotos on the map?"
             },
+            "rpc": {
+                "label": "Programmatical usage (RPC API)",
+                "info": "You can use the RPC API with published maps to .."
+            },
+            "mapLayers": {
+                "label": "Map layers",
+                "selectLayers": "Tasojen valinta",
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
+            },
             "preview": "Map preview",
             "location": "Location and zoom level",
             "zoomlevel": "Zoom level",
@@ -263,7 +279,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
             "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
             "noRights": "no permission",
-            "unsupportedProjection": "unsupported projection",
             "buttons": {
                 "continue": "Continue",
                 "continueAndAccept": "Accept and continue",

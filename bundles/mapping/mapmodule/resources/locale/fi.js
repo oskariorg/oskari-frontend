@@ -19,14 +19,9 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Huom.",
-        "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
-        "unsupported-layer": "Karttatasoa ei voida näyttää.",
-        "unsupported-layer-projection": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
         "styles": {
             "defaultTitle" : "Oletustyyli"
         },
-        "mapLayerUnavailable": `Karttatasoa \"{name}"\ ei voida näyttää.`,
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
@@ -132,6 +127,12 @@ Oskari.registerLocalization(
         "layerVisibility": {
             "notInScale": "Karttatason \"{name}\" kohteet eivät näy tässä mittakaavassa. Siirry soveltuvalle mittakaavatasolle.",
             "notInGeometry": "Karttatasolla \"{name}\" ei ole kohteita tällä alueella. Siirry kohteeseen kartalla."
+        },
+        "layerUnsupported": {
+            "common": "Karttatasoa ei voida näyttää.",
+            "srs": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
+            "dimension": "Karttatasoa ei voida näyttää {dimension}-karttanäkymässä.",
+            "unavailable": 'Karttatasoa "{name}" ei voida näyttää.'
         },
         "guidedTour": {
             "help1": {

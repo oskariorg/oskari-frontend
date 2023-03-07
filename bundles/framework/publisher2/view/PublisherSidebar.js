@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             me.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            var mapLayersPanel = me._createMapLayersPanel();
+            const mapLayersPanel = me._createMapLayersPanel();
             mapLayersPanel.getPanel().addClass('t_layers');
             me.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
@@ -122,15 +122,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // create panel for each tool group
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
-                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                    group, tools, me.instance, me.loc
-                );
-                toolPanel.init(me.data);
-                me.panels.push(toolPanel);
-                const panel = toolPanel.getPanel();
-                panel.addClass('t_tools');
-                panel.addClass('t_' + group);
-                accordion.addPanel(panel);
+                if (group === 'rpc') {
+                    const rpcPanel = this._createRpcPanel(tools);
+                    rpcPanel.getPanel().addClass('t_rpc');
+                    this.panels.push(rpcPanel);
+                    accordion.addPanel(rpcPanel.getPanel());
+                } else {
+                    const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                        group, tools, me.instance, me.loc
+                    );
+                    toolPanel.init(me.data);
+                    me.panels.push(toolPanel);
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
+                }
             });
             var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
@@ -206,22 +213,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             return form;
         },
-
-        /**
-         * @private @method _createMapLayersPanel
-         * Creates the Maplayers panel of publisher
-         */
         _createMapLayersPanel: function () {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
-                    sandbox, mapModule, me.loc, me.instance
-                );
-
-            // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
-
+            const sandbox = this.instance.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', sandbox, mapModule, this.loc, this.instance);
+            form.init(this.data, (value) => {});
             return form;
         },
         /**
@@ -257,6 +253,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});
 
+            return form;
+        },
+        _createRpcPanel: function (tools) {
+            const sandbox = this.instance.getSandbox();
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
+                tools, sandbox, this.loc, this.instance
+            );
+            form.init(this.data, (value) => {});
             return form;
         },
         /**
@@ -318,6 +322,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
+        * Extends object recursive for keeping defaults array.
+        * @method _extendRecursive
+        * @private
+        *
+        * @param {Object} defaults the default extendable object
+        * @param {Object} extend extend object
+        *
+        * @return {Object} extended object
+        */
+        _extendRecursive: function (defaults, extend) {
+            var me = this;
+            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
+                return defaults;
+            } else if (jQuery.isEmptyObject(defaults)) {
+                return jQuery.extend(true, defaults, extend);
+            } else if (jQuery.isArray(defaults)) {
+                if (jQuery.isArray(extend)) {
+                    jQuery.each(extend, function (key, value) {
+                        defaults.push(value);
+                    });
+                }
+                return defaults;
+            } else if (extend.constructor && extend.constructor === Object) {
+                jQuery.each(extend, function (key, value) {
+                    // not an array or an object -> just use the plain value
+                    if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
+                        defaults[key] = value;
+                    } else {
+                        defaults[key] = me._extendRecursive(defaults[key], value);
+                    }
+                });
+                return defaults;
+            }
+        },
+        /**
         * Gather selections.
         * @method gatherSelections
         * @private
@@ -342,7 +381,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     errors = errors.concat(panel.validate());
                 }
 
-                jQuery.extend(true, selections, panel.getValues());
+                me._extendRecursive(selections, panel.getValues());
             });
 
             if (errors.length > 0) {

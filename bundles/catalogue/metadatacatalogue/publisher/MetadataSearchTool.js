@@ -1,10 +1,15 @@
+import { MetadataSearchForm } from './MetaDataSearchForm';
+import { MetadataSearchToolHandler } from './MetadataSearchToolHandler';
+
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
     function () {
+        this.handler = null;
     }, {
         index: 9,
         templates: {},
         noUI: null,
         noUiIsCheckedInModifyMode: false,
+        group: 'rpc',
         getName: function () {
             return 'Oskari.mapframework.publisher.tool.MetadataSearchTool';
         },
@@ -31,15 +36,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
          * @method init
          */
         init: function (data) {
-            var me = this;
-            if (!data || !data.configuration[me.bundleName]) {
-                return;
-            }
-
-            var conf = data.configuration[me.bundleName].conf || {};
+            const conf = data?.configuration[this.bundleName]?.conf || {};
+            let initialValue = false;
             if (conf.noUI) {
-                me.setEnabled(true);
+                initialValue = true;
             }
+            this.handler = new MetadataSearchToolHandler(initialValue);
+        },
+
+        getComponent: function () {
+            return {
+                component: MetadataSearchForm,
+                handler: this.handler
+            };
         },
 
         /**
@@ -50,13 +59,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            const me = this;
-
-            if (me.state.enabled) {
-                var json = {
+            if (this.handler?.getState()?.allowMetadata) {
+                const json = {
                     configuration: {}
                 };
-                json.configuration[me.bundleName] = {
+                json.configuration[this.bundleName] = {
                     conf: {
                         noUI: true
                     },
@@ -66,10 +73,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
             } else {
                 return null;
             }
-        },
-        setEnabled: function (enabled) {
-            var me = this;
-            me.state.enabled = (enabled === true);
         }
     }, {
 

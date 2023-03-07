@@ -45,6 +45,8 @@ class SearchHandler extends StateHandler {
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
         this.service = Oskari.clazz.create('Oskari.service.search.SearchService', this.getSandbox(), plugin.getConfig().url);
+        // options needs to be enabled explicitly
+        this.allowOptions = !!plugin.getConfig().allowOptions;
         this.fetchChannels();
     };
 
@@ -306,7 +308,7 @@ class SearchHandler extends StateHandler {
             let selectedChannels = channels.filter(c => c.isDefault).map(c => c.id);
             this.updateState({
                 channels: sortedChannels,
-                hasOptions: channels.length > 1,
+                hasOptions: this.allowOptions && channels.length > 1,
                 defaultChannels: [...selectedChannels],
                 selectedChannels: [...selectedChannels]
             });

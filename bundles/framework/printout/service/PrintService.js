@@ -33,41 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.service.PrintService',
         init: function () {
 
         },
-
-        /**
-         * @method fetchPrintMapData
-         * Make the AJAX call. This method helps
-         * if we need to do someting for all the calls to backend.
-         *
-         * param url to correct action route
-         * param successCb (success callback)
-         * param errorCb (error callback)
-         */
-        fetchPrintMapData: function (url, successCb, errorCb) {
-            jQuery.ajax({
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    srs: this.sandbox.getMap().getSrsName()
-                },
-                beforeSend: function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                },
-                url: url,
-                success: function (pResp) {
-                    if (successCb) {
-                        successCb(pResp);
-                    }
-                },
-                error: function (jqXHR, textStatus) {
-                    if (errorCb && jqXHR.status !== 0) {
-                        errorCb(jqXHR, textStatus);
-                    }
-                }
-            });
-        },
         fetchPrint: function (url, payload, successCb, errorCb) {
             fetch(url, {
                 method: 'POST',
