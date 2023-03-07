@@ -71,24 +71,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          * @param {jQuery} div
          *
          */
-        changeToolStyle: function (style, div) {
-            const conf = this.getConfig();
-            // Change the style if in the conf
-            if (style) {
-                conf.toolStyle = style;
-            }
+        changeToolStyle: function () {
             this.refresh();
-        },
-        getStyleForRender: function () {
-            const conf = this.getConfig();
-            let toolStyle;
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                toolStyle = conf.toolStyle;
-            } else {
-                toolStyle = this.getToolStyleFromMapModule();
-            }
-            return toolStyle || 'rounded-dark';
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -122,7 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             ReactDOM.render(
                 <StyledButton
                     className='t_fullscreen'
-                    styleName={this.getStyleForRender()}
                     icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     iconActive={isFullscreen}
                     onClick={() => {
