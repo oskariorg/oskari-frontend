@@ -77,12 +77,9 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mylocation.scss'
                 }, {
                     'type': 'text/css',
-                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/search.scss'
-                }, {
-                    'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/mapmodule.ol.scss'
                 },
-                // Attribution import '../../resources/scss/search.scss';
+                // Attribution
                 {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/attribution.ol.scss'
