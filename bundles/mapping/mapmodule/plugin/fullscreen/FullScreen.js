@@ -66,10 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         *
          */
         changeToolStyle: function () {
             this.refresh();
