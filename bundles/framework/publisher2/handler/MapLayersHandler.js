@@ -143,7 +143,7 @@ class UIHandler extends StateHandler {
     startPlugin () {
         const config = {
             baseLayers: this.pluginConf?.config?.baseLayers || [],
-            defaultBaseLayer: this.pluginConf?.config?.defaultBaseLayer || this.pluginConf?.config?.baseLayers[0] || null,
+            defaultBaseLayer: this.pluginConf?.config?.defaultBaseLayer || (this.pluginConf?.config?.baseLayers && this.pluginConf?.config?.baseLayers.length > 0) ? this.pluginConf?.config?.baseLayers[0] : null,
             showMetadata: this.pluginConf?.config?.showMetadata || false,
             isStyleSelectable: this.pluginConf?.config?.isStyleSelectable || false
         };
