@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Collapse, CollapsePanel, Message, Switch, ThemedBadge, Tooltip } from 'oskari-ui';
+import { InfoIcon } from 'oskari-ui/components/icons';
 import { ThemeProvider } from 'oskari-ui/util';
 import { getPopupOptions } from '../pluginPopupHelper';
 import { isSameResult } from './ResultComparator';
+import { ChannelTitle } from './components/ChannelTitle';
 
 export const showResultsPopup = (results = {}, channels = [], featuresOnMap = [], showResult, onClose, pluginLocation) => {
     if (!Object.keys(results).length) {
@@ -43,14 +45,13 @@ const PopupContent = ({ results, channels, featuresOnMap, showResult }) => {
             { channelIds.map(id => {
                 const channel = channels.find(chan => id === chan.id);
                 const channelResult = results[id];
-                let resultsTitle = channel.locale?.name;
-                if (channelIds.length === 1) {
-                    resultsTitle = (<Message messageKey='plugin.SearchPlugin.title' bundleKey='MapModule' />);
-                }
                 return (
                     <CollapsePanel
                         key={channel.id}
-                        header={<Header title={resultsTitle} count={channelResult?.totalCount} />}>
+                        header={<Header
+                            channel={channel}
+                            showGeneric={channelIds.length === 1}
+                            count={channelResult?.totalCount} />}>
                         <ChannelContent
                             results={channelResult}
                             channel={channels.find(chan => id === chan.id)}
@@ -74,10 +75,11 @@ const getChannelWithMostResults = (channelIds = [], results = {}) => {
     return channelIds[largestResultInIndex];
 };
 
-const Header = ({ title, count }) => {
-    return (<span>{title} <ThemedBadge count={count} showZero /></span>);
+const Header = ({ channel, showGeneric = false, count }) => {
+    return (<React.Fragment>
+        <ChannelTitle channel={channel} showGeneric={showGeneric} /> <ThemedBadge count={count} showZero />
+    </React.Fragment>);
 };
-
 
 const ToggleColumn = ({ locations, featuresOnMap, showResult }) => {
     const isSelected = locations.every(loc => !!featuresOnMap.find(res => isSameResult(res, loc)));

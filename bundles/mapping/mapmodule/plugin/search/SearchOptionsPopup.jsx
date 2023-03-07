@@ -2,7 +2,7 @@ import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import styled from 'styled-components';
 import { Switch, Message, Tooltip } from 'oskari-ui';
-import { InfoIcon } from 'oskari-ui/components/icons';
+import { ChannelTitle } from './components/ChannelTitle';
 import { getPopupOptions } from '../pluginPopupHelper';
 
 const StyledContent = styled('div')`
@@ -17,15 +17,12 @@ const Label = styled('label')`
     padding-top: 5px;
     align-items: center;
     cursor: pointer;
-    > div {
-        margin-left: 8px;
-        margin-right: 3px;
-    }
 `;
 const StylizedSwitch = styled(Switch)`
     &.ant-switch-checked {
         background-color: ${props => props.$color};
     }
+    margin-right: 10px;
 `;
 const PopupContent = ({ state, controller }) => {
     return (
@@ -62,10 +59,7 @@ const channelRenderer = (channel, state, controller) => {
             key={channel.id}>
             <StylizedSwitch $color={getColor(channel)} size="small" checked={selected}
                 onChange={checked => controller.setChannelEnabled(channel.id, checked)} />
-            <div>{channel.locale.name}</div>
-            { channel.locale.desc &&
-                <div><Tooltip title={channel.locale.desc}><InfoIcon /></Tooltip></div>
-            }
+            <ChannelTitle channel={channel} />
         </Label>);
 };
 
