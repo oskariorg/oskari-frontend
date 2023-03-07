@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this;
             this.tools.forEach(tool => {
                 // don't call for tools that already have been set enabled (=plugin has already been created.)
-                if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && !tool.state.enabled) {
+                if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && (tool.state && !tool.state.enabled)) {
                     tool.setEnabled(true);
                 }
             });
@@ -386,7 +386,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
-            const enabled = tool.state.enabled === true;
+            let enabled = false;
+            if (tool.state) {
+                enabled = tool.state.enabled === true;
+            } else if (typeof tool.handler !== 'undefined') {
+                enabled = true;
+            }
+
             if (enabled) {
                 this._makeDraggable(elem);
                 this._addedDraggables.push(elem);
