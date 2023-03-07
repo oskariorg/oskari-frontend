@@ -18,7 +18,7 @@ Oskari.clazz.define(className,
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
         this.inMobileMode = false;
-        this.handler = new CameraControls3dHandler(state => this._render(null, null));
+        this.handler = new CameraControls3dHandler(state => this._render(state));
     }, {
         getName: function () {
             return shortName;
@@ -65,16 +65,14 @@ Oskari.clazz.define(className,
          * Changes the tool style of the plugin
          *
          * @method changeToolStyle
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (style, el) {
+        changeToolStyle: function () {
             const div = el || this.getElement();
             if (!div) {
                 return;
             }
 
-            this._render(style, div);
+            this._render();
 
             this._setLayerToolsEditMode(
                 this.getMapModule().isInLayerToolsEditMode()
@@ -84,19 +82,11 @@ Oskari.clazz.define(className,
             this._element = this._mountPoint.clone();
             this.addToPluginContainer(this._element);
             this._element.addClass('mapplugin');
-            this._render(null, null);
+            this._render();
         },
-        _render (style, element, state = this.handler.getState()) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        _render (state = this.handler.getState()) {
+            let el = this.getElement();
             if (!el) return;
-
-            let styleName = style;
-            if (!style) {
-                styleName = this.getToolStyleFromMapModule();
-            }
 
             const { activeMapMoveMethod } = state;
             const ui = (
@@ -105,7 +95,6 @@ Oskari.clazz.define(className,
                         mapInMobileMode={this.inMobileMode}
                         activeMapMoveMethod={activeMapMoveMethod}
                         controller={this.handler.getController()}
-                        styleName={styleName || 'rounded-dark'}
                         location={this.getLocation()}
                     />
                 </LocaleProvider>
