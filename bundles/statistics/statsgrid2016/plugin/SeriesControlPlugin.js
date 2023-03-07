@@ -39,6 +39,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             // instance updates visibility
             return false;
         },
+        isVisible: function () {
+            return !!this.element;
+        },
         teardownUI: function () {
             this._isMobileVisible = false;
             if (this.element) {

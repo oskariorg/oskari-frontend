@@ -20,7 +20,7 @@ export const getAvailableHeight = () => {
 
 const DEFAULT_WIDTH = 700;
 const DEFAULT_HEIGHT = 700;
-const BORDER_MARGIN = 10;
+const BORDER_MARGIN = 50;
 export const OUTOFSCREEN_CLASSNAME = 'outofviewport';
 
 export const createDraggable = (position, setPosition, elementRef) => {
@@ -187,4 +187,59 @@ export const getPositionForCentering = (elementRef, placement) => {
         height = bounds.height || DEFAULT_HEIGHT;
     }
     return getPlacementXY(width, height, placement);
+};
+
+/**
+ * Create ResizeObserver handler for an element to detect if browser window size changes to
+ *  try and keep elements in viewport if they would be out of screen after size change.
+ * @param {React.useRef()} elementRef for element that we want to keep on screen
+ * @param {Object} position with x and y keys
+ * @param {Function} setPosition to set new position
+ * @returns function to register for monitoring
+ */
+export const createDocumentSizeHandler = (elementRef, position, setPosition) => {
+    return (newSize, prevSize) => {
+        const windowIsNowBigger = prevSize.width < newSize.width || prevSize.height < newSize.height;
+        const elementNoLongerOnScreen = position.x > newSize.width || position.y > newSize.height;
+        if (elementRef.current && (windowIsNowBigger || elementNoLongerOnScreen)) {
+            // Note! The class is added in createDraggable()
+            // but we might not be able to remove it there after recentering on window size change
+            // remove it if window is now bigger
+            elementRef.current.classList.remove(OUTOFSCREEN_CLASSNAME);
+        }
+        if (elementNoLongerOnScreen) {
+            // console.log('Element relocating! Window size changed from', prevSize, 'to', newSize);
+            setPosition({
+                ...position,
+                centered: false
+            });
+        }
+    };
+};
+
+/**
+ * Create ResizeObserver handler for an element to detect if it's size changes in a way that would make the element bleed out of screen from the left or bottom.
+ * Tries to keep element in viewport by moving it up/left if it would grow large enough to go out of screen.
+ * @param {React.useRef()} elementRef for element that we want to keep on screen
+ * @param {Object} position with x and y keys
+ * @param {Function} setPosition to set new position
+ * @returns function to register for monitoring
+ */
+export const createDraggableSizeHandler = (elementRef, position, setPosition) => {
+    return (newSize, prevSize) => {
+        const popupGotBigger = prevSize.width < newSize.width || prevSize.height < newSize.height;
+        if (!elementRef.current || !popupGotBigger) {
+            // got smaller, we don't need to relocate
+            return;
+        }
+        let x = Math.min(getAvailableWidth() - newSize.width, position.x);
+        let y = Math.min(getAvailableHeight() - newSize.height, position.y);
+        if (x !== position.x || y !== position.y) {
+            setPosition({
+                x,
+                y,
+                centered: false
+            });
+        }
+    };
 };

@@ -48,16 +48,14 @@ const getStatusColor = (status) => {
 
 const LayerTools = ({ model, controller, opts }) => {
     const backendAvailable = opts[BACKEND_STATUS_AVAILABLE];
-    const map = Oskari.getSandbox().getMap();
-    const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
-    const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
+    const { unsupported } = model.getVisibilityInfo();
     const backendStatus = backendAvailable ? getBackendStatus(model) : {};
     const statusOnClick =
         backendAvailable && backendStatus.status !== 'UNKNOWN' ? () => controller.showLayerBackendStatus(model.getId()) : undefined;
 
     return (
         <Tools className="layer-tools">
-            {reason && <WarningIcon tooltip={reason.getDescription()} />}
+            {unsupported && <WarningIcon tooltip={unsupported.getDescription()} />}
             <LayerStatus backendStatus={backendStatus} model={model} onClick={statusOnClick} />
             <MetadataIcon
                 metadataId={model.getMetadataIdentifier()}

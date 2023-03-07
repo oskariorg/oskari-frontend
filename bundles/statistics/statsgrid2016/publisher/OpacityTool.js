@@ -3,14 +3,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
 {
     index: 1,
     group: 'data',
-    allowedLocations: [],
-    allowedSiblings: [],
 
     init: function (data) {
-        var enabled = data &&
-            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.transparent === true;
-        this.setEnabled(enabled);
+        const conf = this.getStatsgridConf(data);
+        this.setEnabled(conf.transparent === true);
     },
     getTool: function (stateData) {
         var me = this;
@@ -30,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
 
         me.state.enabled = enabled;
 
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        var stats = this.getStatsgridBundle();
         if (!stats) {
             return;
         }

@@ -19,10 +19,6 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
-        "unsupportedProjHeader": "Avis",
-        "unsupportedProj": "Impossible d'afficher certaines couches ajoutées à cette vue cartographique avec la projection cartographique actuelle.",
-        "unsupported-layer": "La couche de carte ne peut pas être affichée.",
-        "unsupported-layer-projection": "La couche cartographique ne peut pas être affichée dans la projection cartographique sélectionnée.",
         "styles": {
             "defaultTitle": "Style par défaut"
         },
@@ -122,6 +118,12 @@ Oskari.registerLocalization(
                     "confirmReset": "Souhaitez-vous revenir à l’étendue précédente?"
                 }
             },
+        },
+        "layerUnsupported": {
+            "common": "La couche de carte ne peut pas être affichée.",
+            "srs": "La couche cartographique ne peut pas être affichée dans la projection cartographique sélectionnée.",
+            "dimension": "La couche cartographique ne peut pas être affichée dans la projection cartographique sélectionnée.",
+            "unavailable": "La couche de carte ne peut pas être affichée."
         },
         "guidedTour": {
             "help1": {

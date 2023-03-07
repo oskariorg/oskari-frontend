@@ -31,17 +31,12 @@ const PublishableCol = styled(ColAutoRight)`
     align-self: flex-end;
 `;
 
-const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
+const LayerBox = ({ layer, index, controller }) => {
     const organizationName = layer.getOrganizationName();
     const publishable = layer.hasPermission('publish');
-
-    const [visible, setVisible] = useState(visibilityInfo.visible);
-    useEffect(() => {
-        setVisible(visibilityInfo.visible);
-    }, [visibilityInfo]);
+    const visible = layer.isVisible();
 
     const handleToggleVisibility = () => {
-        setVisible(!visible);
         controller.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
@@ -102,7 +97,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <Footer layer={layer} controller={controller} visibilityInfo={visibilityInfo}/>
+                                <Footer layer={layer} controller={controller}/>
                             </StyledBox>
                         </Col>
                     </Row>
@@ -115,7 +110,6 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    visibilityInfo: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
 

@@ -10,7 +10,8 @@ Oskari.registerLocalization(
                 "apiKey": "API-kod",
                 "keyPlaceholder": "t.ex. e1301b1ded935fabc5eaa6a2ce975e6",
                 "apiExtensions": "Förlängningar (frivillig)",
-                "extensionsPlaceholder": "e.g. citysdk,media,geometri"
+                "extensionsPlaceholder": "e.g. citysdk,media,geometri",
+                "label": "Responsverktyg (Open311)"
             }
         }
     }

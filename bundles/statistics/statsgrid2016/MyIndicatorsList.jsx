@@ -2,20 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Button } from 'oskari-ui';
 import { Table, ToolsContainer, getSorterFor } from 'oskari-ui/components/Table';
-import { EditOutlined } from '@ant-design/icons'
+import { EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { IconButton, DeleteButton } from 'oskari-ui/components/buttons';
-
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
 
 const ButtonContainer = styled.div`
     margin: 10px 0 10px 0;
@@ -89,7 +78,7 @@ export const MyIndicatorsList = ({ controller, data = [], loading }) => {
                     <Message messageKey='userIndicators.buttonTitle' />
                 </Button>
             </ButtonContainer>
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={data.map(item => ({
                     key: item.id,

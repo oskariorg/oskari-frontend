@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * @param {Function} callback is called when loading is ready or 5000 ms timeout reached
          */
         _bufferImages: function (urls, nextTime, callback) {
-            /* eslint-disable node/no-callback-literal */
+            /* eslint-disable n/no-callback-literal */
             var imgCount = urls.length;
             if (imgCount === 0) {
                 callback(true);

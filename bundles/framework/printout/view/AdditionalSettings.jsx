@@ -1,5 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Message, Radio, TextInput, Checkbox } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { FORMAT_OPTIONS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from '../constants';
 
@@ -42,8 +44,7 @@ const Label = styled('div')`
     font-weight: bold;
 `;
 
-
-export const AdditionalSettings = ({ controller, state, isTimeSeries }) => {
+export const AdditionalSettings = ({ controller, state }) => {
     return (
         <Content>
             <FormGroup>
@@ -90,7 +91,7 @@ export const AdditionalSettings = ({ controller, state, isTimeSeries }) => {
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='BasicView.content.pageDate.label' />
                 </StyledCheckbox>
-                {isTimeSeries && (
+                {state.isTimeSeries && (
                     <StyledCheckbox
                         checked={state.showTimeSeriesDate}
                         onChange={(e) => controller.updateField('showTimeSeriesDate', e.target.checked)}
@@ -146,4 +147,9 @@ export const AdditionalSettings = ({ controller, state, isTimeSeries }) => {
             )}
         </Content>
     );
+};
+
+AdditionalSettings.propTypes = {
+    state: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

@@ -1,12 +1,12 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 import { showSidePanel } from 'oskari-ui/components/window';
-import { SIZE_OPTIONS, FORMAT_OPTIONS, PARAMS, COORDINATE_POSITIONS, COORDINATE_PROJECTIONS } from './constants';
+import { FORMAT_OPTIONS, PREVIEW_SCALED_WIDTH, UNSUPPORTED_FOR_CONFIGURED_SCALE } from './constants';
 
 class UIHandler extends StateHandler {
     constructor (consumer, instance) {
         super();
         this.instance = instance;
-        this.sandbox = Oskari.getSandbox();
+        this.sandbox = instance.getSandbox();
         this.mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this.setState({
             size: 'A4',
@@ -18,16 +18,20 @@ class UIHandler extends StateHandler {
             scaleType: 'map',
             scale: null,
             showTimeSeriesDate: true,
-            isMapStateChanged: false,
             // impl for toggling coordinates is commented out in JSX. This will be enabled on future release.
             showCoordinates: false,
-            coordinatePosition: COORDINATE_POSITIONS[0],
-            coordinateProjection: COORDINATE_PROJECTIONS[0]
+            coordinatePosition: 'center',
+            coordinateProjection: 'map',
+            isTimeSeries: false
         });
         this.sidePanel = null;
         this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
     };
+
+    getName () {
+        return this.instance.getName();
+    }
 
     updatePanel (title, content) {
         if (this.sidePanel) {
@@ -39,23 +43,15 @@ class UIHandler extends StateHandler {
         if (!this.sidePanel) {
             this.sidePanel = showSidePanel(title, content, onClose);
         }
-    }
-
-    getName () {
-        return 'Printout';
+        if (this._isTimeSeriesActive()) {
+            this.updateState({ isTimeSeries: true });
+        }
     }
 
     closePanel () {
-        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
-        if (this.sandbox._mapMode === 'mapPrintoutMode') {
-            delete this.sandbox._mapMode;
-        }
         if (this.sidePanel) {
             this.sidePanel.close();
             this.sidePanel = null;
-            const builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-            this.sandbox.request(this.instance, builder());
-            this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
         }
     }
 
@@ -66,77 +62,122 @@ class UIHandler extends StateHandler {
         if (field === 'size') {
             this.refreshPreview(true);
         }
+        if (field === 'scale') {
+            this.mapModule.zoomToScale(value, false);
+        }
     }
 
-    refreshPreview (isUpdate) {
-        if (isUpdate) {
-            const url = this.getUrlForPreview(200);
-            this.updateState({
-                previewImage: url
-            });
+    updateScaleType (scaleType) {
+        let scale = null;
+        if (scaleType === 'configured') {
+            // select closest value by current scale
+            const mapScale = this.mapModule.getMapScale();
+            const scales = this.instance.scaleOptions;
+            scale = scales.reduce((prev, curr) => Math.abs(curr - mapScale) < Math.abs(prev - mapScale) ? curr : prev);
+            this.mapModule.zoomToScale(scale, false);
+
+            // notify user about ignored layers
+            const unsupported = this._getVisibleLayers()
+                .filter(layer => UNSUPPORTED_FOR_CONFIGURED_SCALE.includes(layer.getLayerType()))
+                .map(layer => layer.getName());
+            if (unsupported.length) {
+                const msg = this.instance.loc('BasicView.scale.unsupportedLayersMessage');
+                Messaging.warn({
+                    content: `${msg}: ${unsupported.join()}.`,
+                    duration: 10
+                });
+            }
+            // disable map zoom
+            this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
+            this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['zoom']]);
         } else {
-            this.updateState({
-                previewImage: null
-            });
+            this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest', [['zoom']]);
+            this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['zoom']]);
         }
+        this.updateState({ scaleType, scale });
+    }
+
+    refreshPreview () {
+        const baseLayer = this.mapModule.getBaseLayer();
+        this.updateState({
+            previewImage: this.getUrlForPreview(baseLayer),
+            baseLayerId: baseLayer?.getId()
+        });
     }
 
     printMap () {
-        const { maplinkArgs, customStyles, ...params } = this.gatherParams();
-        if (this.state.showTimeSeriesDate) {
-            const layers = this.instance.getTimeSeriesLayers();
-            if (layers.length) {
-                const layer = layers.reverse()[0];
-                const { time = '' } = layer.getParams();
-                const splittedTime = time.split('/')[0];
-                const date = new Date(splittedTime);
-                if (!isNaN(date)) {
-                    params[PARAMS.TIME] = time;
-                    if (params.pageTimeSeriesTime) {
-                        params[PARAMS.FORMATTED_TIME] = Oskari.getMsg('timeseries', 'dateRender', { val: date });
-                        params[PARAMS.SERIES_LABEL] = Oskari.getMsg('Printout', 'BasicView.content.pageTimeSeriesTime.printLabel');
-                    }
-                } else {
-                    Oskari.log('BasicPrintout').warn(`Time series layer "${layer.getName()}" has invalid time param. Skipping time param.`);
-                }
-            }
-        }
-        if (this.state.showCoordinates) {
-            params[PARAMS.COORDINATE_POSITION] = this.state.coordinatePosition;
-            params[PARAMS.COORDINATE_PROJECTION] = this.state.coordinateProjection === 'map' ? this.mapModule.getProjection() : this.state.coordinateProjection;
-        }
-        const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
-        const url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
-
-        Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-        this.getPostPrint(url, params, customStyles);
-    }
-
-    gatherParams () {
-        const pageSize = this.state.size;
-        const format = this.state.format || FORMAT_OPTIONS[0].mime;
-
-        let resolution = this.sandbox.getMap().getResolution();
-
-        const scale = this.state.scale;
-        let scaleText = '';
-
-        if (this.instance.conf.scaleSelection && this.state.scaleType === 'configured') {
-            resolution = this.mapModule.getExactResolution(scale);
-            scaleText = '1:' + scale;
-        }
-        const pageTitle = encodeURIComponent(this.state.mapTitle);
-        const srs = this.sandbox.getMap().getSrsName();
-        const customStyles = this.getSelectedCustomStyles();
-        // printMap has been called outside so keep this separation for mapLinkArgs and selections
         // ask for optimized link with non-visible layers excluded
         const optimized = true;
-        const maplinkArgs = this.sandbox.generateMapLinkParameters({ srs, resolution, scaleText }, optimized);
-        const pageScale = this.state.showScale;
-        const pageDate = this.state.showDate;
-        const pageTimeSeriesTime = this.state.showTimeSeriesDate;
+        const srs = this.sandbox.getMap().getSrsName();
+        const maplinkArgs = this.sandbox.generateMapLinkParameters({ srs }, optimized);
+        const params = this.gatherParamsFromState();
 
-        return { maplinkArgs, pageSize, format, customStyles, pageTitle, pageScale, pageDate, pageTimeSeriesTime };
+        const url = Oskari.urls.getRoute('GetPrint', params) + '&' + maplinkArgs;
+
+        Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
+        const payload = {
+            customStyles: this.getSelectedCustomStyles()
+        };
+        this.getPostPrint(url, params, payload);
+    }
+
+    _getResolution () {
+        if (this.instance.conf.scaleSelection && this.state.scaleType === 'configured') {
+            this.mapModule.getExactResolution(this.state.scale);
+        }
+        return this.sandbox.getMap().getResolution();
+    }
+
+    _getVisibleLayers () {
+        // use same visibility filter as mapfull
+        return this.sandbox.findAllSelectedMapLayers()
+            .filter(l => l.isVisibleOnMap());
+    }
+
+    _getTopmostTimeseries () {
+        return this._getVisibleLayers().findLast(l => l.hasTimeseries());
+    }
+
+    _isTimeSeriesActive () {
+        return !!this._getTopmostTimeseries();
+    }
+
+    _getTimeParam () {
+        const layer = this._getTopmostTimeseries();
+        if (!layer) {
+            return '';
+        }
+        return layer.getParams().time || '';
+    }
+
+    gatherParamsFromState () {
+        const params = {
+            pageSize: this.state.size,
+            format: this.state.format,
+            resolution: this._getResolution(),
+            pageTitle: this.state.mapTitle,
+            pageScale: this.state.showScale,
+            pageDate: this.state.showDate,
+            pageTimeSeriesTime: this.state.showTimeSeriesDate
+        };
+
+        if (this.state.scale) {
+            params.scaleText = '1:' + this.state.scale;
+        }
+        if (this.state.showCoordinates) {
+            params.coordinateInfo = this.state.coordinatePosition;
+            params.coordinateSRS = this.state.coordinateProjection === 'map' ? this.mapModule.getProjection() : this.state.coordinateProjection;
+        }
+        if (this.state.isTimeSeries) {
+            const time = this._getTimeParam();
+            params.time = time;
+            if (this.state.showTimeSeriesDate) {
+                const splittedTime = time.split('/')[0];
+                params.formattedTime = Oskari.util.formatDate(splittedTime);
+                params.timeseriesPrintLabel = this.instance.loc('BasicView.content.pageTimeSeriesTime.printLabel');
+            }
+        }
+        return params;
     }
 
     /**
@@ -148,8 +189,7 @@ class UIHandler extends StateHandler {
      * @param {Object} customStyles
      *
      */
-    getPostPrint (printUrl, params, customStyles) {
-        const payload = { customStyles };
+    getPostPrint (printUrl, params, payload) {
         let fileName = params.pageTitle || 'print';
         const format = FORMAT_OPTIONS.find(format => format.mime === params.format);
         if (format) {
@@ -187,10 +227,8 @@ class UIHandler extends StateHandler {
     }
 
     getSelectedCustomStyles () {
-        let customStyles = {};
-        const selectedLayers = this.sandbox.findAllSelectedMapLayers();
-
-        selectedLayers.forEach(l => {
+        const customStyles = {};
+        this._getVisibleLayers().forEach(l => {
             const style = l.getCurrentStyle();
             if (typeof style.isRuntimeStyle === 'function' && style.isRuntimeStyle()) {
                 customStyles[l.getId()] = style.getFeatureStyle();
@@ -199,84 +237,54 @@ class UIHandler extends StateHandler {
         return customStyles;
     }
 
-    isLandscape (pageSize) {
-        const ps = pageSize || this.state.size;
-        const opt = SIZE_OPTIONS.find(o => o.value === ps);
-        return opt ? opt.landscape : SIZE_OPTIONS[0].landscape;
-    }
-
-    getUrlForPreview (scaledWidth) {
-        const pageSize = this.state.size;
-        const map = Oskari.getSandbox().getMap();
-        const baseLayer = this.mapModule.getBaseLayer();
-
-        let mapLayers = '';
-        if (baseLayer) {
-            mapLayers = baseLayer.getId() + ' ' +
-            baseLayer.getOpacity() + ' ' +
-            baseLayer.getCurrentStyle().getName();
+    getUrlForPreview (layer) {
+        if (!layer) {
+            return null;
         }
+        const map = Oskari.getSandbox().getMap();
 
-        let params = {
+        const mapLayers =
+            layer.getId() + ' ' +
+            layer.getOpacity() + ' ' +
+            layer.getCurrentStyle().getName();
+
+        const params = {
             format: 'image/png',
-            pageSize,
-            resolution: map.getResolution(),
+            pageSize: this.state.size,
+            resolution: this._getResolution(),
             srs: map.getSrsName(),
             coord: `${map.getX()}_${map.getY()}`,
-            mapLayers
+            mapLayers,
+            scaledWidth: PREVIEW_SCALED_WIDTH
         };
-
-        if (Number.isInteger(scaledWidth)) {
-            params.scaledWidth = scaledWidth;
+        if (layer.hasTimeseries()) {
+            params.time = this._getTimeParam();
         }
-
         return Oskari.urls.getRoute('GetPrint', params);
     }
 
     createEventHandlers () {
+        const onLayerEvent = event => {
+            const layer = event.getMapLayer();
+            const id = this.state.baseLayerId;
+            if (!id || layer.getId() === id) {
+                // only baselayer is shown in preview
+                this.refreshPreview();
+            }
+            if (layer.hasTimeseries()) {
+                this.updateState({
+                    isTimeSeries: this._isTimeSeriesActive()
+                });
+            }
+        };
         const handlers = {
-            'MapLayerVisibilityChangedEvent': function (event) {
-                /* we might get 9 of these if 9 layers would have been selected */
-                if (this.sidePanel && this.state.isMapStateChanged) {
-                    this.updateState({
-                        isMapStateChanged: false
-                    });
-                    this.refreshPreview(true);
-                }
-            },
-            'AfterMapMoveEvent': function (event) {
-                this.updateState({
-                    isMapStateChanged: true
-                });
-                if (this.sidePanel) {
-                    this.refreshPreview(true);
-                }
-                this.updateState({
-                    isMapStateChanged: false
-                });
-            },
-            'AfterMapLayerAddEvent': function (event) {
-                this.updateState({
-                    isMapStateChanged: true
-                });
-                if (this.sidePanel) {
-                    this.refreshPreview(false);
-                }
-            },
-            'AfterMapLayerRemoveEvent': function (event) {
-                this.updateState({
-                    isMapStateChanged: true
-                });
-                if (this.sidePanel) {
-                    this.refreshPreview(false);
-                }
-            },
-            'AfterChangeMapLayerStyleEvent': function (event) {
-                this.updateState({
-                    isMapStateChanged: true
-                });
-                if (this.sidePanel) {
-                    this.refreshPreview(false);
+            MapLayerVisibilityChangedEvent: onLayerEvent,
+            AfterMapMoveEvent: () => this.refreshPreview(),
+            AfterMapLayerAddEvent: onLayerEvent,
+            AfterChangeMapLayerStyleEvent: onLayerEvent,
+            AfterMapLayerRemoveEvent: (event) => {
+                if (event.getMapLayer().getId() === this.state.baseLayerId) {
+                    this.updateState({ baseLayerId: null });
                 }
             }
         };
@@ -285,8 +293,8 @@ class UIHandler extends StateHandler {
     }
 
     onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
+        const handler = this.eventHandlers[e.getName()];
+        if (!handler || !this.sidePanel) {
             return;
         }
 
@@ -295,10 +303,8 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'updatePanel',
-    'showPanel',
     'updateField',
-    'closePanel',
+    'updateScaleType',
     'printMap'
 ]);
 

@@ -26,8 +26,8 @@ const GrayRow = styled(Row)`
     }
 `;
 
-const getVisibilityInfoProps = ({ layer, visibilityInfo, controller }) => {
-    const { unsupported, visible, inScale, geometryMatch } = visibilityInfo;
+const getVisibilityInfoProps = ({ layer, controller }) => {
+    const { unsupported, visible, inScale, geometryMatch } = layer.getVisibilityInfo();
     if (!visible) {
         return {
             messageKey: 'layer.hidden'
@@ -48,11 +48,11 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, controller }) => {
     }
 };
 
-export const Footer = ({ layer, controller, visibilityInfo }) => {
+export const Footer = ({ layer, controller }) => {
     const tools = layer.getTools();
     const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
-    const visibilityInfoProps = getVisibilityInfoProps({ layer, controller, visibilityInfo });
+    const visibilityInfoProps = getVisibilityInfoProps({ layer, controller });
     return (
         <GrayRow>
             <ColAuto>
@@ -88,6 +88,5 @@ export const Footer = ({ layer, controller, visibilityInfo }) => {
 
 Footer.propTypes = {
     layer: PropTypes.object.isRequired,
-    visibilityInfo: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

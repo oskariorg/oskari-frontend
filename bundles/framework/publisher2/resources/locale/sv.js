@@ -79,8 +79,6 @@ Oskari.registerLocalization(
                 "selectDrawLayer": "Välj lager för nya funktioner",
                 "LayerSelectionPlugin": "Kartlagermeny",
                 "CoordinateToolPlugin": "Koordinatverktyg",
-                "FeedbackServiceTool": "Responsverktyg (Open311)",
-                "MetadataSearchTool": "Möjlig användning av metadatasökningar programmatiskt",
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
@@ -235,6 +233,18 @@ Oskari.registerLocalization(
                 "tooltip": "Bakgrundskartlagret syns som kartans nedersta lager. När du väljer kartan som används som bakgrundskarta syns endast ett lager i taget och du kan växla mellan dem. Du kan göra förval i förhandsgranskningsvyn.",
                 "promote": "Vill du också visa flygbilder?"
             },
+            "rpc": {
+                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
+                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
+            },
+            "mapLayers": {
+                "label": "Kartlager",
+                "selectLayers": "Tasojen valinta",
+                "layersDisplay": "Tasojen esitystapa",
+                "baseLayers": "Taustakarttatasot",
+                "noBaseLayers": "Ei valittuja taustakarttoja",
+                "noLayers": "Ei valittuja karttatasoja"
+            },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",
             "zoomlevel": "Skalnivå",
@@ -266,7 +276,6 @@ Oskari.registerLocalization(
             "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster eller denna kartlager kan inte visas med den valda kartprojektionen. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "myPlacesDisclaimer": "Obs! Du publicerar ditt eget kartlager.",
             "noRights": "inget tillstånd",
-            "unsupportedProjection": "ostödd kartprojektion",
             "buttons": {
                 "continue": "Fortsätt",
                 "continueAndAccept": "Godkänn användningsvillkor och fortsätt",

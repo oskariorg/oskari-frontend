@@ -5,17 +5,6 @@ import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Message } from 'oskari-ui';
 import { getPopupOptions } from '../pluginPopupHelper';
 
-const StyledTable = styled(Table)`
-    tr {
-        th {
-            padding: 8px 8px;
-        }
-        td {
-            padding: 8px;
-        }
-    }
-`;
-
 const StyledContent = styled('div')`
     margin: 12px 24px 24px;
     min-width: 300px;
@@ -45,13 +34,13 @@ const PopupContent = ({ results, description, showResult }) => {
             align: 'left',
             title: <Message messageKey='plugin.SearchPlugin.column_type' bundleKey='MapModule' />,
             dataIndex: 'type',
-            sorter: getSorterFor('type'),
+            sorter: getSorterFor('type')
         }
     ];
     return (
         <StyledContent>
             <span>{description}</span>
-            <StyledTable
+            <Table
                 columns={columnSettings}
                 dataSource={results.map((item, index) => ({
                     key: item.id,
@@ -60,7 +49,7 @@ const PopupContent = ({ results, description, showResult }) => {
                 pagination={false}
             />
         </StyledContent>
-    )
+    );
 };
 
 export const showResultsPopup = (title, description, results = [], showResult, onClose, pluginLocation) => {

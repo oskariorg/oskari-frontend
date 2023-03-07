@@ -1,5 +1,6 @@
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
+export { ThemedBadge } from './components/ThemedBadge';
 export { Button } from './components/Button';
 export { Checkbox } from './components/Checkbox';
 export { Collapse, Panel as CollapsePanel } from './components/Collapse';
