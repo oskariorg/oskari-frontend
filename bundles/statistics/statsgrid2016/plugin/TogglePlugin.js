@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     hasUI: function () {
         return true;
     },
-    changeToolStyle: function (style, div) {
+    changeToolStyle: function () {
         this.renderButtons();
     },
     toggleTool: function (tool, shown) {
