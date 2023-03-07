@@ -125,31 +125,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             this.inMobileMode = isMobile;
 
             me._element = me._createControlElement();
-
-            var changeToolStyle = function (toolstyle, div) {
-                var toolStyle = toolstyle || me.getToolStyleFromMapModule();
-                div = div || me.getElement();
-
-                if (!div) {
-                    return;
-                }
-                // no default exists for the menu icon, using rounded-dark instead...
-                if (!toolStyle) {
-                    toolStyle = 'rounded-dark';
-                }
-
-                me.renderButton(toolstyle, div);
-            };
-
             this.addToPluginContainer(me._element);
-            changeToolStyle();
+            this.renderButton();
         },
 
-        renderButton: function (style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        renderButton: function () {
+            let el = this.getElement();
             if (!el) return;
 
             ReactDOM.render(
@@ -252,12 +233,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * Changes the tool style of the plugin
          *
          * @method changeToolStyle
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (toolstyle, div) {
-            var me = this;
-            me.redrawUI();
+        changeToolStyle: function () {
+            this.redrawUI();
         },
 
         _isPublisherActive: function () {
