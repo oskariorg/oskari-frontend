@@ -18,7 +18,7 @@
   "license": "(MIT OR EUPL-1.1)",
   "main": "grunt.js",
   "engines": {
-    "node": ">=10.12.0",
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0",
     "npm": ">=6.0.0"
   },
   "scripts": {
@@ -51,13 +51,13 @@
     "draft-js-export-html": "1.4.1",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",
-    "eslint": "8.9.0",
-    "eslint-config-standard": "16.0.3",
+    "eslint": "8.35.0",
+    "eslint-config-standard": "17.0.0",
     "eslint-import-resolver-webpack": "0.13.2",
-    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-import": "2.27.5",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "6.0.0",
-    "eslint-plugin-react": "7.29.1",
+    "eslint-plugin-promise": "6.1.1",
+    "eslint-plugin-react": "7.32.2",
     "expose-loader": "0.7.5",
     "file-loader": "4.2.0",
     "fs-extra": "8.1.0",
