@@ -28,7 +28,6 @@ https://stackoverflow.com/questions/61450739/understanding-warning-function-comp
 export const Tooltip = ({children, ...restOfProps}) => {
     return (
         <AntTooltip
-            getPopupContainer={(triggerNode) => triggerNode.parentElement}
             overlayStyle={{ pointerEvents: 'none' }}
             {...restOfProps}
         >
