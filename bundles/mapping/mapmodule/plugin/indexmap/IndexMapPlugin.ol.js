@@ -135,7 +135,7 @@ Oskari.clazz.define(
             this.renderButton();
         },
         renderButton: function () {
-            let el =  this.getElement();
+            let el = this.getElement();
             if (!el) {
                 return;
             }

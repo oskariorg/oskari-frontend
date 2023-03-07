@@ -63,17 +63,13 @@ Oskari.clazz.define(className,
         },
         /**
          * Changes the tool style of the plugin
-         *
          * @method changeToolStyle
          */
         changeToolStyle: function () {
-            const div = el || this.getElement();
-            if (!div) {
+            if (!this.getElement()) {
                 return;
             }
-
             this._render();
-
             this._setLayerToolsEditMode(
                 this.getMapModule().isInLayerToolsEditMode()
             );
