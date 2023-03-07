@@ -32,21 +32,25 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
         me.inMobileMode = false;
+        this._eventsHandled = false;
     }, {
         handleEvents: function () {
+            if (this._eventsHandled) {
+                // only add interaction/event handling once and not on every redrawUI()
+                return;
+            }
+            this._eventsHandled = true;
             var me = this;
             var DragRotate = new olInteractionDragRotate();
-            this._map.addInteraction(DragRotate);
-            var degrees;
+            this.getMap().addInteraction(DragRotate);
             var eventBuilder = Oskari.eventBuilder('map.rotated');
 
             this._map.on('pointerdrag', function (e) {
-                degrees = me.getRotation();
+                const degrees = me.getRotation();
                 if (degrees !== me.getDegrees()) {
                     me.rotateIcon(degrees);
                     me.setDegrees(degrees);
-                    var event = eventBuilder(degrees);
-                    me._sandbox.notifyAll(event);
+                    me._sandbox.notifyAll(eventBuilder(degrees));
                 }
             });
         },
@@ -54,7 +58,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.previousDegrees = degree;
         },
         getDegrees: function () {
-            return this.previousDegrees;
+            return this.previousDegrees || 0;
         },
         /**
          * Creates UI for coordinate display and places it on the maps
@@ -64,26 +68,17 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          * @return {jQuery}
          */
         _createControlElement: function () {
-            var compass = this._templates.maprotatortool.clone();
-
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-
             if (!this.hasUi()) {
                 return null;
             }
-            return compass;
+            return this._templates.maprotatortool.clone();
         },
         rotateIcon: function (degrees) {
-            const el = this.getElement();
-            if (el) {
-                this._renderButton(degrees, null, el);
-            }
+            this._renderButton(degrees);
         },
-        _renderButton: function (degrees, style, element) {
-            let el = element;
-            if (!element) {
-                el = this.getElement();
-            }
+        _renderButton: function (degrees = this.getDegrees()) {
+            let el = this.getElement();
             if (!el) return;
 
             ReactDOM.render(
@@ -99,11 +94,12 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                     iconActive={degrees !== 0}
                     position={this.getLocation()}
                 />,
-                element[0]
+                el[0]
             );
         },
         _createUI: function () {
             this._element = this._createControlElement();
+            this.renderButton();
             this.handleEvents();
             this.addToPluginContainer(this._element);
         },
@@ -125,21 +121,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
-         *
-         * @param {Object} style
-         * @param {jQuery} div
          */
-        changeToolStyle: function (style, div) {
-            var me = this;
-            var el = div || me.getElement();
-
-            if (!el) {
-                return;
-            }
-
-            const styleClass = style || 'rounded-dark';
-
-            this._renderButton(this.getDegrees() || 0, styleClass, el);
+        changeToolStyle: function () {
+            this._renderButton();
         },
         /**
          * Create event handlers.
@@ -155,9 +139,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                  * will open/close coordinatetool's popup
                  */
                 RPCUIEvent: function (event) {
-                    var me = this;
                     if (event.getBundleId() === 'maprotator') {
-                        me._toggleToolState();
+                        this._toggleToolState();
                     }
                 }
             };
@@ -169,7 +152,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode) {
-            var conf = this._config;
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if (this.getElement()) {
                 this.teardownUI(true);
@@ -177,17 +159,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this.inMobileMode = isMobile;
             this._createUI();
-
-            // Change the style if in the conf
-            if (conf && conf.toolStyle) {
-                this.changeToolStyle(conf.toolStyle, this.getElement());
-            } else {
-                var toolStyle = this.getToolStyleFromMapModule();
-                this.changeToolStyle(toolStyle, this.getElement());
-            }
         },
         teardownUI: function () {
-        // detach old element from screen
+            // detach old element from screen
             if (!this.getElement()) {
                 return;
             }
