@@ -361,6 +361,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 hoverClass: 'ui-state-highlight',
                 tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
             });
+
+            // Disable map hover effect when layout edit mode is active
+            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(false);
+
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
         },
@@ -378,6 +382,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
             this._removeDraggables();
+
+            // Restore map hover effects
+            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
+
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
