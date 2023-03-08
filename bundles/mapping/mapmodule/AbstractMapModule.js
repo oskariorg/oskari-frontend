@@ -2097,47 +2097,6 @@ Oskari.clazz.define(
 
         /* --------------- PLUGIN CONTAINERS ------------------------ */
         /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            // TODO: deprecate this, make some error message appear or smthng
-
-            var i,
-                j,
-                el;
-
-            var removeClasses = function (el) {
-                el.removeClass(function (index, classes) {
-                    var removeThese = '';
-                    var classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-            };
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                removeClasses(el);
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-        /**
          * Sets the style to be used on plugins and asks all the active plugins that support changing style to change their style accordingly.
          *
          * @method changeToolStyle

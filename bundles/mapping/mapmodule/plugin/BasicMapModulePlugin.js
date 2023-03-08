@@ -307,43 +307,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             return this._visible;
         },
 
-        /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            var i,
-                j,
-                el;
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
-                el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
-        },
-
         /** *****************************************
          * Deprecated functions for backwards compatibility.
          * Removed usage in Oskari 2.10.
