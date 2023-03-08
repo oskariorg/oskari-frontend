@@ -1359,13 +1359,7 @@ Oskari.clazz.define(
 
         /* ---------------- THEME ------------------- */
         getTheme: function () {
-            var me = this;
-            var toolStyle = me.getToolStyle();
-            if (toolStyle === null || toolStyle.indexOf('-dark') > 0 || toolStyle === 'default') {
-                return 'dark';
-            } else {
-                return 'light';
-            }
+            return 'dark';
         },
 
         getReverseTheme: function () {
