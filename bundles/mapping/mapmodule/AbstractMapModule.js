@@ -1212,8 +1212,9 @@ Oskari.clazz.define(
             var state = {
                 plugins: {}
             };
-            Object.keys(this._pluginInstances).forEach(pluginName => {
-                const plugin = this._pluginInstances[pluginName];
+            const instances = this.getPluginInstances();
+            Object.keys(instances).forEach(pluginName => {
+                const plugin = instances[pluginName];
                 if (typeof plugin?.getState === 'function') {
                     state.plugins[pluginName] = plugin.getState();
                 }
@@ -1226,7 +1227,7 @@ Oskari.clazz.define(
          * @return {String} link parameters for map state
          */
         getStateParameters: function () {
-            return Object.values(this._pluginInstances).map(plugin => {
+            return Object.values(this.getPluginInstances()).map(plugin => {
                 if (typeof plugin?.getStateParameters === 'function') {
                     return plugin.getStateParameters();
                 }
@@ -1241,8 +1242,9 @@ Oskari.clazz.define(
          * @param {Object} properties for each pluginName
          */
         setState: function (state) {
-            Object.keys(this._pluginInstances).forEach(pluginName => {
-                const plugin = this._pluginInstances[pluginName];
+            const instances = this.getPluginInstances();
+            Object.keys(instances).forEach(pluginName => {
+                const plugin = instances[pluginName];
                 if (typeof plugin?.setState === 'function') {
                     plugin.setState(state[pluginName]);
                 }
@@ -1301,7 +1303,7 @@ Oskari.clazz.define(
             this.setMobileMode(isMobile);
             if (modeChanged) {
                 // previously called redrawUI() -> now calls changeToolStyle()
-                refreshPluginsWithUI(this._pluginInstances);
+                refreshPluginsWithUI(this.getPluginInstances());
             }
         },
 
@@ -1333,7 +1335,7 @@ Oskari.clazz.define(
             this.__cachedTheme = theme;
             // set font class for map module/map controls. Windows/popups will get it through theme
             setFont(this.getMapDOMEl(), theme.font);
-            refreshPluginsWithUI(this._pluginInstances);
+            refreshPluginsWithUI(this.getPluginInstances());
         },
 
         getCursorStyle: function () {
@@ -1481,7 +1483,7 @@ Oskari.clazz.define(
                 '[' + this.getName() + ']' + ' Registering ' + pluginName
             );
             plugin.register();
-            if (this._pluginInstances[pluginName]) {
+            if (this.getPluginInstances(pluginName)) {
                 this.log.warn(
                     '[' + this.getName() + ']' + ' Overwriting plugin with same name ' + pluginName
                 );
@@ -1556,7 +1558,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.ui.module.common.mapmodule.Plugin} plugin
          */
         stopPlugin: function (plugin) {
-            this.log.debug('[' + this.getName() + ']' + ' Starting ' + plugin.getName());
+            this.log.debug('[' + this.getName() + ']' + ' Stopping ' + plugin.getName());
             plugin.stopPlugin(this.getSandbox());
         },
         /**
@@ -1565,7 +1567,7 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            const sortedList = getSortedPlugins(this._pluginInstances);;
+            const sortedList = getSortedPlugins(this.getPluginInstances());
             sortedList.forEach((plugin = {}) => {
                 if (typeof plugin.startPlugin === 'function') {
                     this.startPlugin(plugin);
@@ -1578,11 +1580,7 @@ Oskari.clazz.define(
          * calling its stopPlugin() method.
          */
         stopPlugins: function () {
-            for (var pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName)) {
-                    this.stopPlugin(this._pluginInstances[pluginName]);
-                }
-            }
+            Object.values(this.getPluginInstances()).forEach((plugin) => this.stopPlugin(plugin));
         },
 
         /* --------------- /PLUGINS ------------------------ */
