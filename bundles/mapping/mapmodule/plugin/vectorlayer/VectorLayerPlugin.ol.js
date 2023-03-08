@@ -1014,7 +1014,7 @@ Oskari.clazz.define(
                 return;
             }
             var vectorLayer = this._olLayers[layer.getId()];
-            this._map.removeLayer(vectorLayer);
+            this.getMap().removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
         },
         /**

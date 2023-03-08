@@ -1,4 +1,4 @@
-import { FEATURE_QUERY_ERRORS } from './domain/constants';
+import { FEATURE_QUERY_ERRORS } from '../domain/constants';
 import './AbstractMapLayerPlugin';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');

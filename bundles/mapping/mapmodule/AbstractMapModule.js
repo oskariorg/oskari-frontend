@@ -35,7 +35,7 @@ import './plugin/scalebar/ScaleBarPlugin.ol';
 import './plugin/markers/MarkersPlugin.ol';
 
 // layer plugins
-import { AbstractVectorLayerPlugin } from './AbstractVectorLayerPlugin';
+import { AbstractVectorLayerPlugin } from './plugin/AbstractVectorLayerPlugin';
 import './plugin/wmslayer/WmsLayerPlugin.ol';
 import './plugin/vectorlayer/VectorLayerPlugin.ol';
 import './plugin/vectortilelayer/VectorTileLayerPlugin';

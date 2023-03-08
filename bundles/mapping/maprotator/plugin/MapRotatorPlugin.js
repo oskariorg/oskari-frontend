@@ -109,11 +109,11 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             // if deg is number use it for degrees otherwise use 0
             var degrees = (typeof deg === 'number') ? deg : 0;
             this.rotateIcon(degrees);
-            this._map.getView().setRotation(rot);
+            this.getMap().getView().setRotation(rot);
             this.setDegrees(degrees);
         },
         getRotation: function () {
-            var rot = this._map.getView().getRotation();
+            var rot = this.getMap().getView().getRotation();
             // radians to degrees with one decimal
             var deg = Math.round(rot * 573) / 10;
             return deg;
