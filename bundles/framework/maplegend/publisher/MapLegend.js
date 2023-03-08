@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return !!this.getPlugin();
         },
         isEnabled: function () {
-            return this.handler?.getState().showLegends;
+            return this.getPlugin().isEnabled();
         },
         /**
          * Get values.

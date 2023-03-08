@@ -66,7 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 me.panel = me._populateToolLayoutPanel(data);
             }
 
-            me._toggleAdditionalTools();
             // init the tools' plugins location infos
             if (me.data && me.activeToolLayout === 'userlayout') {
                 me._initUserLayout();
@@ -150,20 +149,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 return;
             }
             return handler.apply(this, [event]);
-        },
-        /**
-         * @method _toggleAdditionalTools
-         *   sets on the tools that are displayed but aren't showing in the tools panel (LogoPlugin etc.)
-         */
-        _toggleAdditionalTools: function () {
-            var me = this;
-            this.tools.forEach(tool => {
-                // don't call for tools that already have been set enabled (=plugin has already been created.)
-                if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && (tool.state && !tool.state.enabled)) {
-                    tool.setEnabled(true);
-                }
-            });
-            return null;
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -386,14 +371,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
-            let enabled = false;
-            if (tool.state) {
-                enabled = tool.state.enabled === true;
-            } else if (typeof tool.handler !== 'undefined') {
-                enabled = true;
-            }
 
-            if (enabled) {
+            if (tool.isEnabled()) {
                 this._makeDraggable(elem);
                 this._addedDraggables.push(elem);
             } else if (elem.hasClass('ui-draggable')) {
