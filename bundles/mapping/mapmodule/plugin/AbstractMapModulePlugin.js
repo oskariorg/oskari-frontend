@@ -405,15 +405,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         onEvent: function (event) {
-            var me = this,
-                handler = me._eventHandlers[event.getName()];
-
+            const handler = this._eventHandlers[event.getName()];
             if (handler) {
                 return handler.apply(me, [event]);
             } else {
-                me.getSandbox().printWarn(
-                    'No handler found for registered event', event.getName()
-                );
+                Oskari.log(this.getName())
+                    .warn('No handler found for registered event', event.getName());
             }
         }
     }, {

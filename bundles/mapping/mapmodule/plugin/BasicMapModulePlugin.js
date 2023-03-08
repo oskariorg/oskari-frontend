@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
      */
     function (config) {
         this._config = config;
-        this._ctl = null;
         this._element = null;
         this._enabled = true;
         this._visible = true;
@@ -185,49 +184,18 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
-            var me = this,
-                el = me.getElement();
+            const el = this.getElement();
 
-            if (!me._config) {
-                me._config = {};
+            if (!this._config) {
+                this._config = {};
             }
-            if (!me._config.location) {
-                me._config.location = {};
+            if (!this._config.location) {
+                this._config.location = {};
             }
 
-            me._config.location.classes = location;
+            this._config.location.classes = location;
             this.addToPluginContainer(el);
         },
-
-        /**
-         * @method setColorScheme
-         * Set the plugin's color scheme. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} colorScheme
-         * Magical object with some colors and classes and whatnot...
-         *
-         */
-        _setColorScheme: function (colorScheme) {},
-
-        /**
-         * @method setFont
-         * Set the plugin's font. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {string} font Font ID
-         *
-         */
-        _setFont: function (font) {},
-
-        /**
-         * @method setStyle Set the plugin's style. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} style Magical object with some widths and whatnot...
-         *
-         */
-        _setStyle: function (style) {},
 
         /**
          * @public @method hasUI
