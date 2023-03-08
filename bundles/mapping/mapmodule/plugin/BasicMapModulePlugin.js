@@ -306,22 +306,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         isVisible: function () {
             return this._visible;
         },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {String} style class used by mapmodule or default.
-         */
-        getToolStyleFromMapModule: function () {
-            return this.getMapModule().getToolStyle() || 'rounded-dark';
-        },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {String} the font used by mapmodule or null if not available.
-         */
-        getToolFontFromMapModule: function () {
-            return this.getMapModule().getToolFont();
-        },
 
         /**
          * Removes all the css classes which respond to given regex from all elements
