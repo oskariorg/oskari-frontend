@@ -8,39 +8,48 @@ const StyledContent = styled('div')`
     min-width: 300px;
 `;
 
+const DataSection = styled('div')`
+    margin-bottom: 20px;
+`;
+
 const createLink = (item) => {
     if (typeof item === 'string') return item;
     if (!item.url) return item.name;
-    const link = <a href={item.url} target='_blank'>{item.name}</a>
-    return link;
+    return <a href={item.url} target='_blank'>{item.name}</a>;
 };
 
-const formatSource = (src) => {
-    if (!src) return '';
-    let source;
+const formatSource = (src) => {console.log(src)
+    let source = [];
+    if (!src) return source;
     if (Array.isArray(src)) {
         source = src.map(s => createLink(s));
-        return source.join(' - ')
+        return source;
     } else {
-        return createLink(src);
-
+        source.push(createLink(src));
     }
+    return source;
 };
 
 export const PopupContent = ({ dataProviders, onClose }) => {
     return (
         <StyledContent>
             {dataProviders.map(data => (
-                <div key={data.id}>
+                <DataSection key={data.id}>
                     <h4>{data.name}</h4>
                     <div>
                         {data.items.map(item => (
                             <div key={item.id}>
-                                {item.name} - {formatSource(item.source)}
+                                {item.name} - {formatSource(item.source).map((src, index, arr) => {
+                                    if (arr.length > 1 && index < (arr.length - 1)) {
+                                        return <span key={index}>{src} - </span>
+                                    } else {
+                                        return <span key={index}>{src}</span>
+                                    }
+                                })}
                             </div>
                         ))}
                     </div>
-                </div>
+                </DataSection>
             ))}
             <ButtonContainer>
                 <PrimaryButton type="close" onClick={onClose} />
