@@ -1,7 +1,7 @@
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import styled from 'styled-components';
-import { Switch, Message, Tooltip } from 'oskari-ui';
+import { Switch, Message } from 'oskari-ui';
 import { ChannelTitle } from './components/ChannelTitle';
 import { getPopupOptions } from '../pluginPopupHelper';
 
