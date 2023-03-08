@@ -1359,13 +1359,6 @@ Oskari.clazz.define(
         /* ---------------- /MAP MOBILE MODE ------------------- */
 
         /* ---------------- THEME ------------------- */
-        getTheme: function () {
-            return 'dark';
-        },
-
-        getReverseTheme: function () {
-            return 'light';
-        },
         __cachedTheme: null,
         getMapTheme: function () {
             if (this.__cachedTheme) {
