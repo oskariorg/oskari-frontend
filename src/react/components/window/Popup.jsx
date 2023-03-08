@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { CloseIcon } from './CloseIcon';
-import { createDraggable, getPositionForCentering, createDocumentSizeHandler } from './util';
+import { createDraggable, getPositionForCentering, createDocumentSizeHandler, createDraggableSizeHandler } from './util';
 import { monitorResize, unmonitorResize } from './WindowWatcher';
 import { ICON_SIZE } from './constants';
 import { ThemeConsumer } from '../../util/contexts';
@@ -99,10 +99,16 @@ export const Popup = ThemeConsumer(( {title = '', children, onClose, bringToTop,
         headerProps.onMouseDown = () => headerFuncs.forEach(fn => fn());
         headerProps.onTouchStart = () => headerFuncs.forEach(fn => fn());
     }
+
     const bodyResizeHandler = createDocumentSizeHandler(elementRef, position, setPosition);
-    const handleUnmounting = () => unmonitorResize(bodyResizeHandler);
+    const popupResizeHandler = createDraggableSizeHandler(elementRef, position, setPosition);
+    const handleUnmounting = () => {
+        unmonitorResize(popupResizeHandler);
+        unmonitorResize(bodyResizeHandler);
+    }
     useEffect(() => {
         monitorResize(document.body, bodyResizeHandler);
+        monitorResize(elementRef.current, popupResizeHandler);
         if (position.centered) {
             return handleUnmounting;
         }
