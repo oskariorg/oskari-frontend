@@ -18,7 +18,7 @@ const createLink = (item) => {
     return <a href={item.url} target='_blank'>{item.name}</a>;
 };
 
-const formatSource = (src) => {console.log(src)
+const formatSource = (src) => {
     let source = [];
     if (!src) return source;
     if (Array.isArray(src)) {
