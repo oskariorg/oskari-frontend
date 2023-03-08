@@ -115,7 +115,7 @@ class SearchHandler extends StateHandler {
                 return;
             } else if (combined.length === 1) {
                 // only one result, show it immediately
-                this.resultClicked(locations[0]);
+                this.resultClicked(combined[0]);
                 return;
             }
         }
