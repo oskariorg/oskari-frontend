@@ -35,6 +35,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         me.inMobileMode = false;
         this._dragRotate = null;
         this._removeListenerKey = null;
+        this._name = 'MapRotatorPlugin';
     }, {
         handleEvents: function () {
             if (this._dragRotate) {
@@ -69,7 +70,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          */
         _createControlElement: function () {
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-            if (!this.hasUi()) {
+            if (!this.hasUI()) {
                 return null;
             }
             return this._templates.maprotatortool.clone();
@@ -145,6 +146,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 }
             };
         },
+        _startPluginImpl: function () {
+            this._createUI();
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -152,13 +156,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode) {
-            var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            if (this.getElement()) {
-                this.teardownUI(true);
-            }
-
-            this.inMobileMode = isMobile;
-            this._createUI();
+            // we don't need to do anything here any more
+            // FIXME: remove calls to this OR changeToolStyle() and use one function to update UI
         },
         teardownUI: function () {
             // detach old element from screen
@@ -168,7 +167,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.getElement().detach();
             this.removeFromPluginContainer(this.getElement());
         },
-        hasUi: function () {
+        hasUI: function () {
             return !this._config.noUI;
         },
         /**
@@ -178,7 +177,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         getElement: function () {
             return this._element;
         },
-        stopPlugin: function () {
+        _stopPluginImpl: function () {
             this.teardownUI();
             if (this._dragRotate) {
                 this.getMap().removeInteraction(this._dragRotate);
