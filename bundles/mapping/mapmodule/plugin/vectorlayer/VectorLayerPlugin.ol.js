@@ -69,6 +69,7 @@ Oskari.clazz.define(
         this._log = Oskari.log('VectorLayerPlugin');
         this._styleCache = {};
         this._animatingFeatures = {};
+        this._name = 'VectorLayerPlugin';
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
