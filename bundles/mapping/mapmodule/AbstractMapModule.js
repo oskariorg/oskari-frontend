@@ -2,6 +2,7 @@ import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 
 import React from 'react';
 import { Message } from 'oskari-ui';
+import { DEFAULT_COLORS } from 'oskari-ui/theme';
 
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
@@ -1374,7 +1375,7 @@ Oskari.clazz.define(
             // take "global" theme as base and override anything specified for map
             let mapTheme = {
                 ...appTheme,
-                ...this.__injectThemeByToolStyle(this.getToolStyle()),
+                ...this.__injectThemeByToolStyle(),
                 ...map
             };
 
@@ -1415,18 +1416,15 @@ Oskari.clazz.define(
                 });
         },
         // generates base style for map
-        __injectThemeByToolStyle: function (toolStyle) {
-            // Note! these should be configurable on publisher BUT we might want to use some injected theme for "wellkonwn toolstyles"
+        __injectThemeByToolStyle: function () {
             const mapTheme = {
                 // For buttons on map
                 navigation: {
                     roundness: 0,
                     opacity: 0.8,
                     color: {
-                        // #141414 -> rgb(20,20,20)
-                        // #3c3c3c -> rgb(60,60,60)
-                        primary: '#141414',
-                        accent: '#ffd400',
+                        primary: DEFAULT_COLORS.DARK_BUTTON_BG,
+                        accent: DEFAULT_COLORS.ACCENT,
                         text: '#ffffff'
                     }
                 },
@@ -1435,6 +1433,7 @@ Oskari.clazz.define(
                 // For popup headers opened by map:
                 color: {
                     header: {
+                        // #3c3c3c -> rgb(60,60,60)
                         bg: '#3c3c3c'
                     }
                     // accent should be inherited from global theme accent if not configured
@@ -1442,24 +1441,6 @@ Oskari.clazz.define(
                 }
                 // /For popup headers opened by map ^
             };
-            const style = toolStyle || 'rounded-dark';
-            const [shape, theme] = style.split('-');
-            if (shape === 'rounded') {
-                mapTheme.navigation.roundness = 100;
-            } else if (shape === '3d') {
-                mapTheme.navigation.roundness = 20;
-                // themehelper calculates gradients when this is set
-                mapTheme.navigation.effect = '3D';
-            }
-
-            if (theme === 'light') {
-                // buttons
-                mapTheme.navigation.color.primary = '#ffffff';
-                mapTheme.navigation.color.text = '#000000';
-                // popup
-                mapTheme.color.header.bg = '#ffffff';
-            }
-
             return mapTheme;
         },
 
