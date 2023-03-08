@@ -1444,36 +1444,6 @@ Oskari.clazz.define(
             return mapTheme;
         },
 
-        getThemeColours: function (theme) {
-            var me = this;
-            // Check at the is konowed theme
-            if (theme && theme !== 'light' && theme !== 'dark') {
-                theme = 'dark';
-            }
-            var wantedTheme = theme || me.getTheme();
-
-            var darkTheme = {
-                textColour: '#ffffff',
-                backgroundColour: '#3c3c3c',
-                activeColour: '#E6E6E6',
-                activeTextColour: '#000000',
-                hoverColour: '#E6E6E6'
-            };
-
-            var lightTheme = {
-                textColour: '#000000',
-                backgroundColour: '#ffffff',
-                activeColour: '#3c3c3c',
-                activeTextColour: '#ffffff',
-                hoverColour: '#3c3c3c'
-            };
-
-            if (wantedTheme === 'dark') {
-                return darkTheme;
-            } else {
-                return lightTheme;
-            }
-        },
         getCursorStyle: function () {
             return this._cursorStyle;
         },
