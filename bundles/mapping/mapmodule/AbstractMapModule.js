@@ -2,7 +2,6 @@ import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 
 import React from 'react';
 import { Message } from 'oskari-ui';
-import { DEFAULT_COLORS } from 'oskari-ui/theme';
 
 import './domain/AbstractLayer';
 import './domain/LayerComposingModel';
@@ -101,6 +100,10 @@ import './event/UserLocationEvent';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
+import { getSortedPlugins, refreshPluginsWithUI } from './util/PluginHelper';
+import { getDefaultMapTheme, setFont } from './util/MapThemeHelper';
+import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair'
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -223,14 +226,6 @@ Oskari.clazz.define(
         this._cursorStyle = '';
 
         this.isDrawing = false;
-
-        this.templates = {
-            'crosshair': jQuery(
-                '<div class="oskari-crosshair">' +
-                    '<div class="oskari-crosshair-vertical-bar"></div>' +
-                    '<div class="oskari-crosshair-horizontal-bar"></div>' +
-                '</div>')
-        };
         // adds on/off/trigger functions for internal eventing
         Oskari.makeObservable(this);
     }, {
@@ -305,7 +300,7 @@ Oskari.clazz.define(
 
             me._map = me.createMap();
 
-            if (me._options.crosshair) {
+            if (me._options?.crosshair) {
                 me.toggleCrosshair(true);
             }
 
@@ -348,7 +343,7 @@ Oskari.clazz.define(
             this.log.debug('Starting ' + this.getName());
 
             // listen to application started event and trigger a forced update on any remaining lazy plugins and register RPC functions.
-            Oskari.on('app.start', function (details) {
+            Oskari.on('app.start', function () {
                 // force update on lazy plugins
                 // this means tell plugins to render UI with the means available
                 // if toolbar for example isn't present, most plugins should display "desktop-ui" instead of using the "mobile-ui" toolbar
@@ -471,8 +466,7 @@ Oskari.clazz.define(
             'RPCUIEvent': function (event) {
                 var me = this;
                 if (event.getBundleId() === 'mapmodule.crosshair') {
-                    var show = (me.getMapEl().find('div.oskari-crosshair').length === 0);
-                    me.toggleCrosshair(show);
+                    me.toggleCrosshair(isCrosshairActive(this.getMapDOMEl()));
                 }
             }
         },
@@ -1218,13 +1212,12 @@ Oskari.clazz.define(
             var state = {
                 plugins: {}
             };
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
-                    state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
+            Object.keys(this._pluginInstances).forEach(pluginName => {
+                const plugin = this._pluginInstances[pluginName];
+                if (typeof plugin?.getState === 'function') {
+                    state.plugins[pluginName] = plugin.getState();
                 }
-            }
+            });
             return state;
         },
         /**
@@ -1233,15 +1226,13 @@ Oskari.clazz.define(
          * @return {String} link parameters for map state
          */
         getStateParameters: function () {
-            var params = '';
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getStateParameters) {
-                    params = params + this._pluginInstances[pluginName].getStateParameters();
+            return Object.values(this._pluginInstances).map(plugin => {
+                if (typeof plugin?.getStateParameters === 'function') {
+                    return plugin.getStateParameters();
                 }
-            }
-            return params;
+                return '';
+            })
+            .join('');
         },
         /**
          * Sets state for mapmodule including plugins that have setState() function
@@ -1250,13 +1241,12 @@ Oskari.clazz.define(
          * @param {Object} properties for each pluginName
          */
         setState: function (state) {
-            var pluginName;
-
-            for (pluginName in this._pluginInstances) {
-                if (this._pluginInstances.hasOwnProperty(pluginName) && state[pluginName] && this._pluginInstances[pluginName].setState) {
-                    this._pluginInstances[pluginName].setState(state[pluginName]);
+            Object.keys(this._pluginInstances).forEach(pluginName => {
+                const plugin = this._pluginInstances[pluginName];
+                if (typeof plugin?.setState === 'function') {
+                    plugin.setState(state[pluginName]);
                 }
-            }
+            });
         },
         /**
          * @method notifyStartMove
@@ -1306,54 +1296,13 @@ Oskari.clazz.define(
         },
 
         _handleMapSizeChanges: function (newSize, pluginName) {
-            var me = this;
-            var modeChanged = false;
-            if (Oskari.util.isMobile()) {
-                modeChanged = me.getMobileMode() !== true;
-                me.setMobileMode(true);
-            } else {
-                modeChanged = me.getMobileMode() !== false;
-                me.setMobileMode(false);
-            }
-
+            const isMobile = Oskari.util.isMobile();
+            const modeChanged = this.getMobileMode() !== isMobile;
+            this.setMobileMode(isMobile);
             if (modeChanged) {
-                me.redrawPluginUIs(modeChanged);
+                // previously called redrawUI() -> now calls changeToolStyle()
+                refreshPluginsWithUI(this._pluginInstances);
             }
-        },
-        /**
-         * @method redrawPluginUIs
-         * Called when map size changes, mode changes or when late comer plugins (coordinatetool, featuredata) enter the mobile toolbar.
-         * Basically just redraws the whole toolbar with the tools in correct order.
-         *
-         * @param {boolean} modeChanged whether there was a transition between mobile <> desktop
-         *
-         */
-        redrawPluginUIs: function (modeChanged) {
-            const sortedList = this._getSortedPlugins() || [];
-            const isInMobileMode = this.getMobileMode();
-            sortedList.forEach((plugin = {}) => {
-                if (typeof plugin.redrawUI === 'function') {
-                    plugin.redrawUI(isInMobileMode, modeChanged);
-                }
-            });
-        },
-        /**
-         * Get a sorted list of plugins. This is used to control order of elements in the UI.
-         * Functionality shouldn't assume order.
-         * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin[]} index ordered list of registered plugins
-         */
-        _getSortedPlugins: function () {
-            const plugins = Object.values(this._pluginInstances);
-            const getIndex = (plugin) => {
-                if (typeof plugin.getIndex === 'function') {
-                    return plugin.getIndex();
-                }
-                // index not defined, start after ones that have indexes
-                // This is just for the UI order, functionality shouldn't assume order
-                return 99999999999;
-            };
-            plugins.sort((a, b) => getIndex(a) - getIndex(b));
-            return plugins;
         },
 
         /* ---------------- /MAP MOBILE MODE ------------------- */
@@ -1368,7 +1317,7 @@ Oskari.clazz.define(
             // take "global" theme as base and override anything specified for map
             let mapTheme = {
                 ...appTheme,
-                ...this.__injectThemeByToolStyle(),
+                ...getDefaultMapTheme(),
                 ...map
             };
 
@@ -1383,58 +1332,8 @@ Oskari.clazz.define(
             };
             this.__cachedTheme = theme;
             // set font class for map module/map controls. Windows/popups will get it through theme
-            const prefix = 'oskari-theme-font-';
-            const newFontClass = prefix + (theme.font || 'arial');
-            // on unit tests the mapEl might be undefined
-            const classlist = this.getMapEl()[0]?.classList;
-            if (classlist) {
-                classlist.forEach(clazz => {
-                    if (clazz !== newFontClass && clazz.startsWith(prefix)) {
-                        classlist.remove(clazz);
-                    }
-                });
-                classlist.add(newFontClass);
-            }
-            Object.values(this._pluginInstances)
-                .filter((plugin = {}) => {
-                    if (typeof plugin.hasUI === 'function') {
-                        return plugin.hasUI();
-                    }
-                    return false;
-                })
-                .forEach((plugin) => {
-                    if (typeof plugin.changeToolStyle === 'function') {
-                        plugin.changeToolStyle();
-                    }
-                });
-        },
-        // generates base style for map
-        __injectThemeByToolStyle: function () {
-            const mapTheme = {
-                // For buttons on map
-                navigation: {
-                    roundness: 0,
-                    opacity: 0.8,
-                    color: {
-                        primary: DEFAULT_COLORS.DARK_BUTTON_BG,
-                        accent: DEFAULT_COLORS.ACCENT,
-                        text: '#ffffff'
-                    }
-                },
-                // /For buttons on map ^
-                // --------------
-                // For popup headers opened by map:
-                color: {
-                    header: {
-                        // #3c3c3c -> rgb(60,60,60)
-                        bg: '#3c3c3c'
-                    }
-                    // accent should be inherited from global theme accent if not configured
-                    // accent: '#ffd400'
-                }
-                // /For popup headers opened by map ^
-            };
-            return mapTheme;
+            setFont(this.getMapDOMEl(), theme.font);
+            refreshPluginsWithUI(this._pluginInstances);
         },
 
         getCursorStyle: function () {
@@ -1452,13 +1351,10 @@ Oskari.clazz.define(
          * toggles the crosshair marking the center of the map
          */
         toggleCrosshair: function (show) {
-            var crosshair = null;
-            var mapEl = this.getMapEl();
-
-            mapEl.find('div.oskari-crosshair').remove();
             if (show) {
-                crosshair = this.templates.crosshair.clone();
-                mapEl.append(crosshair);
+                addCrosshair(this.getMapDOMEl());
+            } else {
+                removeCrosshair(this.getMapDOMEl());
             }
         },
 
@@ -1669,7 +1565,7 @@ Oskari.clazz.define(
          * calling its startPlugin() method.
          */
         startPlugins: function () {
-            const sortedList = this._getSortedPlugins() || [];
+            const sortedList = getSortedPlugins(this._pluginInstances);;
             sortedList.forEach((plugin = {}) => {
                 if (typeof plugin.startPlugin === 'function') {
                     this.startPlugin(plugin);
