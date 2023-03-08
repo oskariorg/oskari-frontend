@@ -1363,12 +1363,7 @@ Oskari.clazz.define(
         },
 
         getReverseTheme: function () {
-            var me = this;
-            if (me.getTheme() === 'light') {
-                return 'dark';
-            } else {
-                return 'light';
-            }
+            return 'light';
         },
         __cachedTheme: null,
         getMapTheme: function () {
