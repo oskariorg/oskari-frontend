@@ -287,27 +287,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * and {Oskari.mapframework.publisher.tool.Tool[]} tools not displayed in panel
          */
         _createToolGroupings: function () {
-            var me = this;
-            var sandbox = this.instance.getSandbox();
-            var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
-            var grouping = {};
-            var allTools = [];
+            const sandbox = this.instance.getSandbox();
+            const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            const definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
+            const grouping = {};
+            const allTools = [];
             // group tools per tool-group
             definedTools.forEach(toolname => {
-                var tool = Oskari.clazz.create(toolname, sandbox, mapmodule, me.loc, me.instance, me.getHandlers());
-                if (tool.isDisplayed(me.data) === true && tool.isShownInToolsPanel()) {
-                    var group = tool.getGroup();
-                    if (!grouping[group]) {
-                        grouping[group] = [];
-                    }
-                    me._addToolConfig(tool);
-                    grouping[group].push(tool);
+                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc, this.instance, this.getHandlers());
+                if (tool.isDisplayed(this.data) !== true) {
+                    return;
                 }
-
-                if (tool.isDisplayed(me.data) === true) {
-                    allTools.push(tool);
+                var group = tool.getGroup();
+                if (!grouping[group]) {
+                    grouping[group] = [];
                 }
+                this._addToolConfig(tool);
+                grouping[group].push(tool);
+                allTools.push(tool);
             });
             return {
                 groups: grouping,
