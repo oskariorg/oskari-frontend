@@ -102,7 +102,7 @@ import { FEATURE_QUERY_ERRORS } from './domain/constants';
 import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
 import { getSortedPlugins, refreshPluginsWithUI } from './util/PluginHelper';
 import { getDefaultMapTheme, setFont } from './util/MapThemeHelper';
-import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair'
+import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair';
 
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
@@ -1232,8 +1232,7 @@ Oskari.clazz.define(
                     return plugin.getStateParameters();
                 }
                 return '';
-            })
-            .join('');
+            }).join('');
         },
         /**
          * Sets state for mapmodule including plugins that have setState() function

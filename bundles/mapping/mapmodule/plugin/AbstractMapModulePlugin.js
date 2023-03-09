@@ -41,8 +41,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             if (!mapModule) {
                 // clear references
                 // FIXME: this seems to cause troubles in plugins and they are not prepared to handle this...
-                //this._mapModule = null;
-                //this._pluginName = this._name;
+                // this._mapModule = null;
+                // this._pluginName = this._name;
                 return;
             }
             this._mapModule = mapModule;

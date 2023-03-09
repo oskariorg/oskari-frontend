@@ -1,5 +1,3 @@
-
-
 /**
  * Get a sorted list of plugins. This is used to control order of elements in the UI.
  * Functionality shouldn't assume order.
@@ -22,7 +20,7 @@ const getPluginIndex = (plugin) => {
 };
 
 export const getPluginsWithUI = (pluginInstances = {}) => {
-    const plugins = Object.values(pluginInstances);
+    const plugins = getSortedPlugins(pluginInstances);
     return plugins.filter((plugin = {}) => !!plugin?.hasUI());
 };
 
