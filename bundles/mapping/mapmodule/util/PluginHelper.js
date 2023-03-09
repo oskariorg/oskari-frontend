@@ -21,7 +21,12 @@ const getPluginIndex = (plugin) => {
 
 export const getPluginsWithUI = (pluginInstances = {}) => {
     const plugins = getSortedPlugins(pluginInstances);
-    return plugins.filter((plugin = {}) => !!plugin?.hasUI());
+    return plugins.filter((plugin = {}) => {
+        if (typeof plugin.hasUI === 'function') {
+            return plugin.hasUI();
+        }
+        return false;
+    });
 };
 
 export const refreshPluginsWithUI = (pluginInstances = {}) => {
