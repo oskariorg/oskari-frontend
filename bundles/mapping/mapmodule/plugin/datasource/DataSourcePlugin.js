@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
         _createUI: function () {
             var me = this;
             // get div where the map is rendered from openlayers
-            var parentContainer = jQuery(this._map.div);
+            var parentContainer = jQuery(this.getMap().div);
             if (!this.element) {
                 this.element = this.template.clone();
             }
