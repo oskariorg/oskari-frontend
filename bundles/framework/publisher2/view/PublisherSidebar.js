@@ -39,15 +39,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         };
 
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
-        me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateData = jQuery(
-            '<div class="data ">' +
-            '  <input class="show-grid" type="checkbox"/>' +
-            '  <label class="show-grid-label"></label>' + '<br />' +
-            '  <input class="allow-classification" type="checkbox"/>' +
-            '  <label class="allow-classification-label"></label>' +
-            '</div>');
-
         me.normalMapPlugins = [];
         // additional bundles (=not map plugins) that were stopped when entering publisher
         me.stoppedBundles = [];
@@ -389,11 +380,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         },
 
         /**
-         * @private @method _editToolLayoutOff
-         *
-         *
+         * @private @method _stopEditorPanels
          */
-        _editToolLayoutOff: function () {
+        _stopEditorPanels: function () {
             this.panels.forEach(function (panel) {
                 if (typeof panel.stop === 'function') {
                     panel.stop();
@@ -415,58 +404,54 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @return {jQuery} container with buttons
          */
         _getButtons: function () {
-            var me = this,
-                buttonCont = me.templateButtonsDiv.clone(),
-                cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
-                );
-
+            const me = this;
+            const buttonCont = me.templateButtonsDiv.clone();
+            // cancel
+            const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             cancelBtn.setHandler(function () {
                 me.cancel();
             });
             cancelBtn.insertTo(buttonCont);
-
-            var saveBtn = Oskari.clazz.create(
-                'Oskari.userinterface.component.buttons.SaveButton'
-            );
-
-            if (me.data.uuid) {
-                var save = function () {
-                    var selections = me.gatherSelections();
-                    if (selections) {
-                        me._editToolLayoutOff();
-                        me._publishMap(selections);
-                    }
-                };
-                saveBtn.setTitle(me.loc.buttons.saveNew);
-                saveBtn.setHandler(function () {
-                    me.data.uuid = null;
-                    delete me.data.uuid;
-                    save();
-                });
-                saveBtn.insertTo(buttonCont);
-
-                var replaceBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                );
-                replaceBtn.setTitle(me.loc.buttons.replace);
-                replaceBtn.addClass('primary');
-                replaceBtn.setHandler(function () {
-                    me._showReplaceConfirm(save);
-                });
-                replaceBtn.insertTo(buttonCont);
-            } else {
+            // save
+            const saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
+            if (!me.data.uuid) {
+                // only save when not editing
                 saveBtn.setTitle(me.loc.buttons.save);
                 saveBtn.setHandler(function () {
-                    var selections = me.gatherSelections();
+                    const selections = me.gatherSelections();
                     if (selections) {
-                        me._editToolLayoutOff();
+                        me._stopEditorPanels();
                         me._publishMap(selections);
                     }
                 });
                 saveBtn.insertTo(buttonCont);
+                return buttonCont;
             }
+            // buttons when editing
+            const save = function () {
+                const selections = me.gatherSelections();
+                if (selections) {
+                    me._stopEditorPanels();
+                    me._publishMap(selections);
+                }
+            };
+            saveBtn.setTitle(me.loc.buttons.saveNew);
+            saveBtn.setHandler(function () {
+                // clear the id to save this as a new embedded map
+                me.data.uuid = null;
+                delete me.data.uuid;
+                save();
+            });
+            saveBtn.insertTo(buttonCont);
 
+            // replace
+            const replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            replaceBtn.setTitle(me.loc.buttons.replace);
+            replaceBtn.addClass('primary');
+            replaceBtn.setHandler(function () {
+                me._showReplaceConfirm(save);
+            });
+            replaceBtn.insertTo(buttonCont);
             return buttonCont;
         },
         /**
@@ -517,7 +502,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                             sandbox.createURL(response.url)
                         );
 
-                        me._editToolLayoutOff();
+                        me._stopEditorPanels();
                         sandbox.notifyAll(event);
                     } else {
                         errorHandler();
@@ -540,15 +525,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             if (isEnabled) {
                 this._enablePreview();
             } else {
-                this._editToolLayoutOff();
+                this._stopEditorPanels();
                 this._disablePreview();
             }
+            /*
+            // FIXME: notify all visible tools the enabled status changes? WHY?
             var sb = this.instance.sandbox;
             var publisherTools = this._createToolGroupings();
             publisherTools.tools.forEach(function (tool) {
                 var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
                 sb.notifyAll(event);
             });
+            */
         },
 
         /**
@@ -582,7 +570,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _disablePreview: function () {
             const sandbox = this.instance.sandbox;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
+/*
+            // FIXME: let tools stop the plugins they started on stop() instead!
             // Remove plugins added during publishing session
             Object.values(mapModule.getPluginInstances())
                 .filter(plugin => plugin.hasUI && plugin.hasUI())
@@ -595,7 +584,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         Messaging.error(this.loc.error.disablePreview);
                     }
                 });
-
+*/
             // resume normal plugins
             this.normalMapPlugins.forEach(plugin => {
                 mapModule.registerPlugin(plugin);
