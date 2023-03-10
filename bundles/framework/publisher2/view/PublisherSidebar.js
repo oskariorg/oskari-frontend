@@ -242,7 +242,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createToolGroupings: function () {
             const sandbox = this.instance.getSandbox();
             const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            const definedTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool');
+            const definedTools = [...Oskari.clazz.protocol('Oskari.mapframework.publisher.Tool'), ...Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool')];
             const grouping = {};
             const allTools = [];
             // group tools per tool-group
