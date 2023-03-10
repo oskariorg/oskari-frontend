@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // bind close from header (X)
             container
                 .find('div.header div.icon-close')
-                .on('click',() => this.cancel());
+                .on('click', () => this.cancel());
 
             // -- create panels --
             const genericInfoPanel = this._createGeneralInfoPanel();
@@ -532,7 +532,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _disablePreview: function () {
             const sandbox = this.instance.sandbox;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-/*
+            /*
             // FIXME: let tools stop the plugins they started on stop() instead!
             // Remove plugins added during publishing session
             Object.values(mapModule.getPluginInstances())
@@ -546,7 +546,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                         Messaging.error(this.loc.error.disablePreview);
                     }
                 });
-*/
+            */
             // resume normal plugins
             this.normalMapPlugins.forEach(plugin => {
                 mapModule.registerPlugin(plugin);

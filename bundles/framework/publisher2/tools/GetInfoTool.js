@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             if (!selectedColour?.val) {
                 selectedColour = this.initialValues.find(color => color.val === 'dark_grey');
             }
-            
+
             const colourName = this.getMsg(`BasicView.layout.fields.colours.${selectedColour.val}`);
             const colourLabel = this.getMsg('BasicView.layout.fields.colours.label');
             const colourPlaceholder = this.getMsg('BasicView.layout.fields.colours.placeholder');
@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             var input = Oskari.clazz.create(
                 'Oskari.userinterface.component.CheckboxInput'
             );
-            
+
             input.setTitle(this.getMsg('BasicView.noUI'));
             input.setHandler(function (checked) {
                 if (checked === 'on') {
@@ -349,8 +349,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @return {jQuery} returns the sample gfi
      */
         _createGfiPreview: function () {
-        // Example data
-            
+            // Example data
             const linkUrl = window.location;
             // Templates
             var dialogContent = jQuery('<div></div>'),
@@ -469,8 +468,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             iconClsInputs.find('label[for=icon-close-white]')
                 .html(this.getMsg('BasicView.layout.fields.colours.customLabels.iconCloseWhiteLabel'));
 
-                this._createColorPickers();
-
+            this._createColorPickers();
             var colorPickerBackground = this.templates.colorPickers.background.clone(),
                 colorPickerTitle = this.templates.colorPickers.title.clone(),
                 colorPickerHeader = this.templates.colorPickers.header.clone();
