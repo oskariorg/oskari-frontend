@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Radio, Tooltip } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, BgColorsOutlined } from '@ant-design/icons';
 import { Button, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
@@ -14,9 +14,10 @@ const StyledItem = styled(List.Item)`
     }
 `;
 
-const EditButton = styled(Button)`
-    & {
-        margin: auto 10px auto auto;
+const ButtonContainer = styled.div`
+    margin-left: auto;
+    Button {
+        margin-left: 10px;
     }
 `;
 
@@ -27,15 +28,16 @@ const EmptySelect = styled.div`
     width: 100%;
 `;
 
-const DefaultStyleText = styled.span`
+const StyledText = styled.span`
     font-style: italic;
     font-size: 0.875em;
+    padding-right: 10px;
 `;
 
-export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
-    const { styles } = layer.options;
+export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
+    const { vectorStyles = [] } = layer;
 
-    if (typeof styles !== 'object' || Object.keys(styles).length === 0) {
+    if (vectorStyles.length === 0) {
         return (
             <EmptySelect>
                 <Message messageKey='styles.vector.validation.noStyles' />
@@ -43,37 +45,48 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
         );
     }
 
-    const sortedStyleIds = Object.keys(styles).slice()
-        .sort((a, b) => Oskari.util.naturalSort(styles[a].title, styles[b].title));
+    const sortedStyles = vectorStyles.slice()
+        .sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
 
-    const canEdit = typeof editStyleCallback === 'function';
-    const selectedStyle = layer.style || 'default';
+    const selectedStyle = layer.style;
 
     return (
         <List
-            dataSource={ sortedStyleIds }
-            renderItem={ (styleId) => {
+            dataSource={ sortedStyles }
+            renderItem={ (style) => {
                 return (
                     <StyledItem>
                         <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
-                            <Radio onClick={ () => controller.setStyle(styleId) } checked={ styleId === selectedStyle || sortedStyleIds.length === 1 }>{ styles[styleId].title || styleId }</Radio>
+                            <Radio onClick={ () => controller.setStyle(style.id) } checked={ style.id === selectedStyle }>{ style.name || style.id }</Radio>
                         </Tooltip>
 
-                        { styleId === selectedStyle &&
-                            <DefaultStyleText>
+                        <StyledText>
+                            ({style.type})
+                        </StyledText>
+                        { style.id === selectedStyle &&
+                            <StyledText>
                                 (<Message messageKey='styles.default' />)
-                            </DefaultStyleText>
+                            </StyledText>
                         }
-
-                        { canEdit && <EditButton onClick={ () => editStyleCallback(styleId) } >
-                            <EditOutlined />
-                        </EditButton> }
-
-                        <Tooltip title={ <Message messageKey='styles.vector.deleteStyle' /> }>
-                            <Button onClick={ () => controller.removeStyleFromLayer(styleId) }>
-                                <DeleteOutlined />
-                            </Button>
-                        </Tooltip>
+                        <ButtonContainer>
+                            { style.type === 'oskari' &&
+                                <Tooltip title={ <Message messageKey='styles.vector.edit.editor' /> }>
+                                    <Button onClick={ () => editStyle('editor', style) } >
+                                        <BgColorsOutlined />
+                                    </Button>
+                                </Tooltip>
+                            }
+                            <Tooltip title={ <Message messageKey='styles.vector.edit.json' /> }>
+                                <Button onClick={ () => editStyle('json', style) } >
+                                    <EditOutlined />
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title={ <Message messageKey='styles.vector.deleteStyle' /> }>
+                                <Button onClick={ () => controller.removeVectorStyleFromLayer(style.id) }>
+                                    <DeleteOutlined />
+                                </Button>
+                            </Tooltip>
+                        </ButtonContainer>
                     </StyledItem>
                 );
             }}
@@ -84,5 +97,5 @@ export const VectorStyleSelect = ({ layer, controller, editStyleCallback }) => {
 VectorStyleSelect.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
-    editStyleCallback: PropTypes.func
+    editStyle: PropTypes.func
 };
