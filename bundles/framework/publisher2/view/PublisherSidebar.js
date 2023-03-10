@@ -1,6 +1,5 @@
 import { Messaging } from 'oskari-ui/util';
 
-const hasSizeUpdateFn = panel => typeof panel.updateMapSize === 'function';
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
@@ -144,15 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         },
 
         /**
-        * Handles panels update map size changes
-        * @method @private _handleMapSizeChange
-        */
-        _handleMapSizeChange: function () {
-            this.panels
-                .filter(hasSizeUpdateFn)
-                .forEach(panel => panel.updateMapSize());
-        },
-        /**
          * @private @method _createGeneralInfoPanel
          * Creates the Location panel of publisher
          */
@@ -239,19 +229,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             form.init(this.data, (value) => {});
             return form;
         },
-        /**
-        * Get panel/tool handlers
-        * @method getHandlers
-        * @public
-        */
-        getHandlers: function () {
-            var me = this;
-            return {
-                'MapSizeChanged': function () {
-                    me._handleMapSizeChange();
-                }
-            };
-        },
 
         /**
          * @private @method _createToolGroupings
@@ -270,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const allTools = [];
             // group tools per tool-group
             definedTools.forEach(toolname => {
-                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc, this.instance, this.getHandlers());
+                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc, this.instance);
                 if (tool.isDisplayed(this.data) !== true) {
                     return;
                 }

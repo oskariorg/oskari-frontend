@@ -6,7 +6,7 @@
  * @param  {Oskari.mapframework.bundle.publisher2.PublisherBundleInstance} instance
  * @param  {Object} handlers     with Oskari event names as keys and handler functions as values
  */
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization, instance, handlers) {
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization, instance) {
     this.__index = 0;
     this.__sandbox = sandbox;
     this.__mapmodule = mapmodule;
@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     this.__instance = instance;
     this.__plugin = null;
     this.__tool = null;
-    this.__handlers = handlers;
     // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
     // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
     this.__started = false;
