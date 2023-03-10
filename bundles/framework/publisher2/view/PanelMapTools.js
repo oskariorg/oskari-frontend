@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          */
         init: function (pData) {
             const instance = this.instance;
-            const sandbox = this.sandbox;
             this.data = pData;
 
             if (pData) {
@@ -55,42 +54,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                             .error('Error initializing publisher tool:', tool.getTool().id);
                     }
                 });
-            }
-
-            Object.keys(this.eventHandlers)
-                .forEach(eventName => sandbox.registerForEventByName(this, eventName));
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             *
-             * Calls  handleDrawLayerSelectionChanged() functions
-             */
-            MapLayerEvent: function (event) {
-                const toolbarTool = this._getToolbarTool('PublisherToolbarPlugin');
-                if (toolbarTool && (event.getOperation() === 'add')) {
-                    // handleDrawLayerSelectionChanged
-                    toolbarTool.handleDrawLayerSelectionChanged(
-                        event.getLayerId()
-                    );
-                }
             }
         },
         getName: function () {
@@ -269,8 +232,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         .error('Error stopping publisher tool:', tool.getTool().id);
                 }
             });
-
-            Object.keys(this.eventHandlers)
-                .forEach(eventName => this.sandbox.unregisterFromEventByName(this, eventName));
         }
     });
