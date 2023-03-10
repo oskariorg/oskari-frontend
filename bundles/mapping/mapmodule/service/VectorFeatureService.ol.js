@@ -196,7 +196,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const featureHitCb = (feature, layer) => ({ feature, layer });
             let ftrAndLyr;
             try {
-                ftrAndLyr = this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
+                ftrAndLyr = this.getMap().forEachFeatureAtPixel(pixel, featureHitCb, {
                     layerFilter: layer => this._onlyRegisteredTypesFilter(layer)
                 });
             } catch (ex) {
