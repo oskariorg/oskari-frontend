@@ -61,8 +61,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                     // STYLE combines a list from STYLES_JSON and EXTERNAL_STYLES_JSON
                     // so it's required for selecting defaults style for 3D...
                     LayerComposingModel.STYLE,
-                    LayerComposingModel.STYLES_JSON,
-                    LayerComposingModel.EXTERNAL_STYLES_JSON,
+                    LayerComposingModel.VECTOR_STYLES,
+                    LayerComposingModel.EXTERNAL_VECTOR_STYLES,
                     LayerComposingModel.URL
                 ]);
                 mapLayerService.registerLayerModel(registerType, clazz, composingModel);

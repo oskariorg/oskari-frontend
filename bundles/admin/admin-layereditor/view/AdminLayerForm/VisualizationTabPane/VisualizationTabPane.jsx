@@ -24,8 +24,8 @@ const {
     WFS_RENDER_MODE,
     STYLE,
     CAPABILITIES_STYLES,
-    STYLES_JSON,
-    EXTERNAL_STYLES_JSON,
+    VECTOR_STYLES,
+    EXTERNAL_VECTOR_STYLES,
     HOVER,
     SCALE,
     COVERAGE,
@@ -39,6 +39,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
     if (!isLayerTypeSupported) {
         return (<LayerTypeNotSupported type={layer.type} />);
     }
+    const showExternalVectorStyle = propertyFields.includes(EXTERNAL_VECTOR_STYLES);
+    const showVectorStyle = propertyFields.includes(VECTOR_STYLES) || showExternalVectorStyle;
+
     return (<Fragment>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
@@ -60,19 +63,13 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <WfsRenderMode layer={layer} controller={controller} />
             }
             { propertyFields.includes(STYLE) &&
-                <Style layer={layer} controller={controller} propertyFields={propertyFields} />
+                <Style layer={layer} controller={controller} />
             }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
                 <RasterStyle layer={layer} controller={controller} />
             }
-            { propertyFields.includes(STYLES_JSON) &&
-                <VectorStyle layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(STYLES_JSON) &&
-                <StyleJson layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
-                <ExternalStyleJson layer={layer} controller={controller} />
+            { showVectorStyle &&
+                <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />
