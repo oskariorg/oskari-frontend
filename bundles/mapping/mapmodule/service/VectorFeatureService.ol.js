@@ -194,9 +194,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _getTopmostFeatureAndLayer (event) {
             const pixel = [event.getPageX(), event.getPageY()];
             const featureHitCb = (feature, layer) => ({ feature, layer });
-            let ftrAndLyr;
             try {
-                ftrAndLyr = this.getMap().forEachFeatureAtPixel(pixel, featureHitCb, {
+                return this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
                     layerFilter: layer => this._onlyRegisteredTypesFilter(layer)
                 });
             } catch (ex) {
@@ -206,7 +205,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     throw ex;
                 }
             }
-            return ftrAndLyr || {};
+            return {};
         }
 
         /**
