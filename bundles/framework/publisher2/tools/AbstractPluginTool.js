@@ -3,15 +3,12 @@
  * @param  {Oskari.Sandbox} sandbox
  * @param  {Oskari.mapframework.ui.module.common.MapModule} mapmodule
  * @param  {Object} localization Localization under publisher.BasicView
- * @param  {Oskari.mapframework.bundle.publisher2.PublisherBundleInstance} instance
- * @param  {Object} handlers     with Oskari event names as keys and handler functions as values
  */
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization, instance) {
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization) {
     this.__index = 0;
     this.__sandbox = sandbox;
     this.__mapmodule = mapmodule;
     this.__loc = localization[this.group];
-    this.__instance = instance;
     this.__plugin = null;
     this.__tool = null;
     // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.

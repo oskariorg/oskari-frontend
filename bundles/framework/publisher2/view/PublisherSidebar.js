@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const allTools = [];
             // group tools per tool-group
             definedTools.forEach(toolname => {
-                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc, this.instance);
+                const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc);
                 if (tool.isDisplayed(this.data) !== true) {
                     return;
                 }
