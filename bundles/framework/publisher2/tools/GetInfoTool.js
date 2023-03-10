@@ -170,9 +170,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             }
         },
 
-        isEnabled: function () {
-            return this.state.enabled;
-        },
         /**
     * Get extra options.
     * @method getExtraOptions
