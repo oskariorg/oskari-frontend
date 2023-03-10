@@ -12,9 +12,10 @@ const getContent = (service, styles, values, showStyleForm, onClose) => {
     const { layerId, styleName } = values;
     let content;
     if (showStyleForm) {
-        const style = service.getUserStyle(layerId, styleName) || new VectorStyle('', '', 'user');
+        // service sets id and title if not defined
+        const style = service.getUserStyle(layerId, styleName) || new VectorStyle({ name: '', type: 'user' });
         const onAdd = ({ featureStyle, title }) => {
-            style.setFeatureStyle(featureStyle);
+            style.setStyleDef({ featureStyle });
             style.setTitle(title);
             service.saveUserStyle(layerId, style);
         };
