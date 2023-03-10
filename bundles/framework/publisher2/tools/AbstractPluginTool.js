@@ -141,18 +141,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         return this.__loc[this.getTool().title];
     },
     /**
-    * Is displayed in mode.
-    * @method isDisplayedInMode
-    * @public
-    *
-    * @param {String} mode the checked mode
-    *
-    * @returns {Boolean} is displayed in wanted mode
-    */
-    isDisplayedInMode: function (mode) {
-        return true;
-    },
-    /**
     * Is displayed. We can use this to tell when tool is displayed.
     * For example if stats layers are added to map when opening publisher we can tell at then this tool need to be shown (ShowStatsTableTool).
     * Is there is no stats layer then not show the tool.
@@ -184,16 +172,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     */
     isStarted: function () {
         return this.__started;
-    },
-    /**
-    * Whether or not to create a panel and checkbox for the tool in the tools' panel.
-    * @method isShownInToolsPanel
-    * @public
-    *
-    * @returns {Boolean} is the tool displayed in the tools' panel
-    */
-    isShownInToolsPanel: function () {
-        return true;
     },
 
     /**
