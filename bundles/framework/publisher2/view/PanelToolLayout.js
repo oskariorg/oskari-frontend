@@ -394,8 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!elem || this._addedDraggables.includes(elem)) {
                 return;
             }
-            const enabled = tool.state.enabled === true;
-            if (enabled) {
+            if (tool.isEnabled()) {
                 this._makeDraggable(elem);
                 this._addedDraggables.push(elem);
             } else if (elem.hasClass('ui-draggable')) {
