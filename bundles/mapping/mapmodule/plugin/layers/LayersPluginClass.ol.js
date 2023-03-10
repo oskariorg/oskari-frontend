@@ -8,10 +8,11 @@ import './request/MapMoveByLayerContentRequest';
 import './request/MapMoveByLayerContentRequestHandler';
 
 import olFormatWKT from 'ol/format/WKT';
+import { VectorStyle } from '../../domain/VectorStyle';
 
 const WKT_READER = new olFormatWKT();
 const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin');
-const LAYER_WKT_STATUS = {};
+const LAYER_INFO_STATUS = {};
 const SUPPORTED_DELAY = 2000;
 const VISIBILITY_DELAY = 750;
 
@@ -83,8 +84,8 @@ export class LayersPlugin extends AbstractMapModulePlugin {
 
     _afterMapLayerAddEvent (event) {
         const layer = event.getMapLayer();
-        // parse geom if available
-        this._parseGeometryForLayer(layer);
+        // TODO: should this be loaded in abstractlayerplugin before adding ol layers to map
+        this._loadLayerInfo(layer);
 
         const { unsupported } = layer.getVisibilityInfo();
         if (unsupported) {
@@ -107,34 +108,43 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      *            layer layer for which to parse geometry
      *
      */
-    _parseGeometryForLayer (layer) {
+    _loadLayerInfo (layer) {
         // parse geometry if available
         const layerId = layer.getId();
-        if (LAYER_WKT_STATUS[layerId] === true) {
+        if (LAYER_INFO_STATUS[layerId] === true) {
             // already loading or loaded/handled
             return;
         }
-        // set a flag to notify the layer WKT is loading/loaded/handled and we don't need to try again
-        LAYER_WKT_STATUS[layerId] = true;
+        // set a flag to notify the layer is loading/loaded/handled and we don't need to try again
+        LAYER_INFO_STATUS[layerId] = true;
+        // TODO: use common way to check if layer is 'normal' oskari layer
         if (typeof layer.getGeometry !== 'function') {
             // layer type doesn't support this
             return;
         }
-        if (layer.getGeometry().length > 0) {
-            // already parsed, no need to parse again
-            return;
-        }
-        this.__getLayerCoverageWKT(layer, coverageWKT => {
-            if (!coverageWKT) {
-                return;
+        this.__getDescribeLayer(layer, info => {
+            const { coverage, vectorStyles } = info;
+            if (coverage) {
+                const geometry = WKT_READER.readGeometry(coverage);
+                if (geometry) {
+                    layer.setGeometryWKT(coverage);
+                    layer.setGeometry([geometry]);
+                    // NOTE: this is used only AfterMapLayerAddEvent
+                    // so we can update geometryMatch here
+                    this.handleMapLayerVisibility(layer);
+                }
             }
-            const geometry = WKT_READER.readGeometry(coverageWKT);
-            if (geometry) {
-                layer.setGeometryWKT(coverageWKT);
-                layer.setGeometry([geometry]);
-                // NOTE: this is used only AfterMapLayerAddEvent
-                // so we can update geometryMatch here
-                this.handleMapLayerVisibility(layer);
+            if (Array.isArray(vectorStyles)) {
+                // if users own styles are listed in mydata are them added to layers also
+                // layer addstyle should ignore already added style
+                vectorStyles.map(s => new VectorStyle(s)).forEach(s => layer.addStyle(s));
+                // TODO: getCurrentStyle calls selectStyle('') if selectstyle hasn't been called
+                // and selectStyle fallbacks first or empty style if style isn't found
+                // maybe functions have to be overridden in AbstractVectorLayer (async)
+                layer.selectStyle(layer._currentStyle);
+                // this.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layerId, layer._currentStyle]);
+                const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
+                this.getSandbox().notifyAll(event);
             }
         });
     }
@@ -145,16 +155,10 @@ export class LayersPlugin extends AbstractMapModulePlugin {
      * @param {Function} callback gets the wkt as parameter or undefined if it's not available
      * @returns callback is used for return value
      */
-    __getLayerCoverageWKT (layer, callback) {
-        if (typeof layer.getGeometryWKT === 'function' && layer.getGeometryWKT()) {
-            // we didn't load it but the layer has WKT present -> use it.
-            // userlayers, analysis etc might do this
-            callback(layer.getGeometryWKT());
-            return;
-        }
+    __getDescribeLayer(layer, callback) {
         const layerId = layer.getId();
         if (isNaN(layerId)) {
-            // only layers that have numeric ids can have reasonable coverage WKT response for DescribeLayer
+            // only layers that have numeric ids can have reasonable response for DescribeLayer
             callback();
             return;
         }
@@ -170,11 +174,11 @@ export class LayersPlugin extends AbstractMapModulePlugin {
             }
             return response.json();
         }).then(json => {
-            callback(json.coverage);
+            callback(json);
         }).catch(error => {
             // reset flag to try again later
-            LAYER_WKT_STATUS[layerId] = false;
-            Oskari.log('WKT download').warn(error);
+            LAYER_INFO_STATUS[layerId] = false;
+            Oskari.log('DescribeLayer download').warn(error);
             callback();
         });
     }
