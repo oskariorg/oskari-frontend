@@ -1,53 +1,84 @@
 import { Style } from './style';
-
+import { VECTOR_STYLE } from './constants';
 export const DEFAULT_STYLE_NAME = 'default';
 
 export const createDefaultStyle = () => {
-    return new VectorStyle(DEFAULT_STYLE_NAME, Oskari.getMsg('MapModule', 'styles.defaultTitle'));
+    const style = {
+        id: -1,
+        name: DEFAULT_STYLE_NAME,
+        type: VECTOR_STYLE.OSKARI
+    };
+    return new VectorStyle(style);
 };
 
 export class VectorStyle extends Style {
-    constructor (name, title, type = 'normal', styleDef) {
-        super(name, title);
-        this._type = type; // normal, user, external
-        this._featureStyle = {};
-        this._optionalStyles = [];
-        this._externalDef = null;
-        this.parseStyleDef(styleDef);
+    constructor ({ id, name, style, type }) {
+        super(id, name); // name, title
+        this._type = type;
+        this._styleDef = style || {};
     }
 
+    /* override */
     getLegend () {
         return null;
+    }
+
+    /* override */
+    getTitle () {
+        const title = super.getTitle();
+        if (typeof title === 'undefined' || title === DEFAULT_STYLE_NAME) {
+            return Oskari.getMsg('MapModule', 'styles.defaultTitle');
+        }
+        return title;
     }
 
     getType () {
         return this._type;
     }
 
-    isUserStyle () {
+    isRuntimeStyle () {
+        // TODO: update this after user can save own styles
+        // 'runtime', this._runtime or id starts 'runtime_'
+        // for now id is s_{timestamp}
         return this.getType() === 'user';
     }
 
-    isExternalStyle () {
-        return this.getType() === 'external';
-    }
-
-    isRuntimeStyle () {
-        return this.isUserStyle();
+    _isOskari () {
+        // TODO: remove this when runtime/user styles are handled properly
+        return this.getType() === VECTOR_STYLE.OSKARI || this.isRuntimeStyle();
     }
 
     hasDefinitions () {
         return Object.keys(this.getFeatureStyle()).length > 0 ||
-            this.getOptionalStyles().length > 0 ||
-            !!this.getExternalDef();
+            this.getOptionalStyles().length > 0;
     }
 
-    parseStyleDef (styleDef) {
+    getFeatureStyle () {
+        if (this._isOskari()) {
+            return this._styleDef.featureStyle || {};
+        }
+        return this._styleDef;
+    }
+
+    getOptionalStyles () {
+        if (this._isOskari()) {
+            return this._styleDef.optionalStyles || [];
+        }
+        // only oskari style has optional styles
+        return [];
+    }
+
+    setStyleDef (styleDef) {
+        this._styleDef = styleDef;
+    }
+
+    /* deprecated */
+    parseStyleFromOptions (styleDef) {
         if (!styleDef) {
             return;
         }
-        if (this.isExternalStyle()) {
-            this.setExternalDef({ ...styleDef });
+        if (!this._isOskari()) {
+            this.setStyleDef({ ...styleDef });
             return;
         }
         // Parse Oskari style to fetureStyle and optionalStyles
@@ -82,44 +113,10 @@ export class VectorStyle extends Style {
                 break;
             }
         });
-
-        this.setFeatureStyle({ ...featureStyle });
-        this.setOptionalStyles([...optionalStyles]);
+        this.setStyleDef({ featureStyle, optionalStyles });
 
         if (title) {
             this.setTitle(title);
         }
-        if (!this.getTitle()) {
-            const name = this.getName();
-            if (name === DEFAULT_STYLE_NAME) {
-                this.setTitle(Oskari.getMsg('MapModule', 'styles.defaultTitle'));
-            } else {
-                this.setTitle(name);
-            }
-        }
-    }
-
-    getFeatureStyle () {
-        return this._featureStyle;
-    }
-
-    setFeatureStyle (featureStyle = {}) {
-        this._featureStyle = featureStyle;
-    }
-
-    getOptionalStyles () {
-        return this._optionalStyles;
-    }
-
-    setOptionalStyles (optionalStyles = []) {
-        this._optionalStyles = optionalStyles;
-    }
-
-    getExternalDef () {
-        return this._externalDef;
-    }
-
-    setExternalDef (styleDef) {
-        this._externalDef = styleDef;
     }
 }
