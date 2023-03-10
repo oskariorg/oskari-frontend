@@ -22,7 +22,6 @@ const {
     OPACITY,
     CLUSTERING_DISTANCE,
     WFS_RENDER_MODE,
-    STYLE,
     CAPABILITIES_STYLES,
     VECTOR_STYLES,
     EXTERNAL_VECTOR_STYLES,
@@ -61,9 +60,6 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             }
             { propertyFields.includes(WFS_RENDER_MODE) &&
                 <WfsRenderMode layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(STYLE) &&
-                <Style layer={layer} controller={controller} />
             }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
                 <RasterStyle layer={layer} controller={controller} />

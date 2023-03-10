@@ -25,7 +25,6 @@ const PROPERTY_FIELDS = [
     'COVERAGE',
     'SELECTED_TIME',
     'SRS',
-    'STYLE',
     'VECTOR_STYLES',
     'TILE_GRID',
     'TIMES',
