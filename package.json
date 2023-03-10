@@ -94,7 +94,6 @@
     "webpack-dev-server": "3.8.0"
   },
   "devDependencies": {
-    "canvas": "2.8.0",
-    "eslint-plugin-n": "^15.6.1"
+    "canvas": "2.8.0"
   }
 }

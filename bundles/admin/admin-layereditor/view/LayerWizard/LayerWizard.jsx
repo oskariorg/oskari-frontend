@@ -69,12 +69,15 @@ const LayerWizard = ({
         <Fragment>
             <LoadingIndicator loading={loading}>
                 { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
-                    <StyledSteps current={currentStep}>
-                        <Step title={<Message messageKey='wizard.type'/>} />
-                        <Step title={<Message messageKey='wizard.service'/>} />
-                        <Step title={<Message messageKey='wizard.layers'/>} />
-                        <Step title={<Message messageKey='wizard.details'/>} />
-                    </StyledSteps>
+                    <StyledSteps
+                        current={currentStep}
+                        items={[
+                            { title: <Message messageKey='wizard.type'/> },
+                            { title: <Message messageKey='wizard.service'/> },
+                            { title: <Message messageKey='wizard.layers'/> },
+                            { title: <Message messageKey='wizard.details'/> },
+                        ]}
+                    />
                 }
                 { currentStep === WIZARD_STEP.INITIAL &&
                     <Fragment>
