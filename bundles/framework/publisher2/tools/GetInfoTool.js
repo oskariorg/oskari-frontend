@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             const template = me.templates.colours.clone();
             let selectedColour = me.values.colourScheme;
             if (!selectedColour?.val) {
-                selectedColour = initialValues.find(color => color.val === 'dark_grey');
+                selectedColour = this.initialValues.find(color => color.val === 'dark_grey');
             }
             
             const colourName = this.getMsg(`BasicView.layout.fields.colours.${selectedColour.val}`);
