@@ -6,7 +6,7 @@ import { LocalizationComponent } from 'oskari-ui/components/LocalizationComponen
 import { DateRange } from 'oskari-ui/components/DateRange';
 import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
 import { DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
 import 'draft-js/dist/Draft.css';
@@ -75,8 +75,8 @@ const validateLocale = (state, defaultLang) => {
 
 const initState = announcement => {
     const { beginDate, endDate, options, locale, ...rest } = announcement;
-    const begin = beginDate ? moment(beginDate) : moment().startOf('hour');
-    const end = endDate ? moment(endDate) : moment().startOf('hour');
+    const begin = beginDate ? dayjs(beginDate) : dayjs().startOf('hour');
+    const end = endDate ? dayjs(endDate) : dayjs().startOf('hour');
     return {
         ...rest,
         date: [begin, end],

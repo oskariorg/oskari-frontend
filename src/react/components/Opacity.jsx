@@ -8,25 +8,7 @@ const StyledSlider = styled('div')`
     width: 100%;
     padding: 0 10px 0 5px;
     float: left;
-    .ant-slider-track {
-        background-color: #0091ff;
-    }
-    .ant-slider-handle {
-        border: #0091ff solid 2px;
-        margin-top: -6px;
-    }
-    &:hover .ant-slider-track {
-        background-color: #003fc3 !important;
-    }
-    &:hover .ant-slider-handle {
-        border: #003fc3 solid 2px !important;
-    }
-    ${props => props.bordered && (
-        `
-            border-radius: 4px 0 0 4px;
-            border: 1px solid #d9d9d9;
-        `
-    )}
+
 `;
 
 const Container = styled('div')`

@@ -9,7 +9,7 @@ import * as Cesium from 'cesium/Source/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import 'olcs/olcs.css';
 
 import './event/TimeChangedEvent';
@@ -368,8 +368,8 @@ class MapModuleOlCesium extends MapModuleOl {
     getTimeParams () {
         const time = this.getTime();
         return {
-            date: moment(time).format('D/M'),
-            time: moment(time).format('H:mm'),
+            date: dayjs(time).format('D/M'),
+            time: dayjs(time).format('H:mm'),
             year: time.getFullYear()
         };
     }

@@ -25,7 +25,7 @@ const StyledSlider = styled(Slider)`
         background: ${props => props.dotColor};
         border: none;
         width: 7px;
-        left: 4px;
+        left: 2px;
         opacity: 50%;
     }
     .ant-slider-rail,
@@ -50,7 +50,8 @@ const StyledSlider = styled(Slider)`
         border: 4px solid ${props => props.handleBorder};
         box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
         border-radius: ${props => props.rounding || '0%'};
-        width: 14px;
+        width: 9px;
+        height: 9px;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};

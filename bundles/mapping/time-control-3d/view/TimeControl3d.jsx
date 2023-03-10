@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import { TimeControl } from './TimeControl3d/TimeControl';
 import { DateControl } from './TimeControl3d/DateControl';
 import { validateDate, validateTime } from '../../mapmodule/util/time';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const sliderValueForDate = (d) => {
     const dayMonth = d.split('/');
@@ -86,11 +88,11 @@ export const TimeControl3d = ({ controller, date, time, isMobile }) => {
     };
 
     const addMinutes = (minutes) => {
-        return moment.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
+        return dayjs.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
     };
 
     const addDays = (days) => {
-        return moment.utc(dateValue, 'D/M').add(days, 'day').format('D/M');
+        return dayjs.utc(dateValue, 'D/M').add(days, 'day').format('D/M');
     };
 
     const changeTime = val => {

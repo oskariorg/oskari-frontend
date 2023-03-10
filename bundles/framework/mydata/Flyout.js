@@ -143,8 +143,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
         update: function () {
             const flyout = jQuery(this.container);
 
-            const { TabPane } = Tabs;
-
             const {
                 tabs,
                 activeTab
@@ -154,16 +152,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mydata.Flyout',
                 <LocaleProvider value={{ bundleKey: 'MyData' }}>
                     <ThemeProvider>
                         <FlyoutContent loginStatus={this.getLoginStatus()}>
-                            <Tabs activeKey={activeTab} onChange={(tab) => this.uiHandler.setActiveTab(tab)}>
-                                {tabs.map(t => (
-                                    <TabPane tab={<span className={ 't_tab t_' + t.id }>{t.title}</span>} key={t.id}>
-                                        <t.component
-                                            state={t.handler.getState()}
-                                            controller={t.handler.getController()}
-                                        />
-                                    </TabPane>
+                            <Tabs
+                                activeKey={activeTab}
+                                onChange={(tab) => this.uiHandler.setActiveTab(tab)}
+                                items={tabs.map(t => (
+                                    {
+                                        key: t.id,
+                                        label: <span className={ 't_tab t_' + t.id }>{t.title}</span>,
+                                        children: (
+                                            <t.component
+                                                state={t.handler.getState()}
+                                                controller={t.handler.getController()}
+                                            />
+                                        )
+                                    }
                                 ))}
-                            </Tabs>
+                            />
                         </FlyoutContent>
                     </ThemeProvider>
                 </LocaleProvider>

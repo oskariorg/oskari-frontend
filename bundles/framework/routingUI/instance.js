@@ -1,4 +1,4 @@
-import 'moment';
+import dayjs from 'dayjs';
 
 /**
  * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance
@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
      * @return {String} date formatted string
      */
         _formatDate: function (dateMilliseconds) {
-            var momentString = moment('' + dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
+            var momentString = dayjs('' + dateMilliseconds, 'x').format('DD.MM.YYYY HH:mm:ss');
             return momentString;
         },
 
