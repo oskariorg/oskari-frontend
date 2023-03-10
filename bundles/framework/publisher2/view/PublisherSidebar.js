@@ -40,8 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
         me.templateButtonsDiv = jQuery('<div class="buttons"></div>');
         me.normalMapPlugins = [];
-        // additional bundles (=not map plugins) that were stopped when entering publisher
-        me.stoppedBundles = [];
 
         me.loc = localization;
         me.accordion = null;
@@ -60,54 +58,47 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * rendered to
          */
         render: function (container) {
-            var me = this,
-                content = me.template.clone();
-            me.mainPanel = content;
+            const content = this.template.clone();
+            this.mainPanel = content;
 
-            me.progressSpinner.insertTo(content);
+            this.progressSpinner.insertTo(content);
             // prepend makes the sidebar go on the left side of the map
             // we could use getNavigationDimensions() and check placement from it to append OR prepend,
             // but it does work with the navigation even on the right hand side being hidden,
             //  a new panel appearing on the left hand side and the map moves accordingly
             container.prepend(content);
-            var contentDiv = content.find('div.content'),
-                accordion = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Accordion'
-                );
-            me.accordion = accordion;
+            const accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+            this.accordion = accordion;
 
             // setup title based on new/edit
-            var sidebarTitle = content.find('div.header h3');
+            const sidebarTitle = content.find('div.header h3');
 
-            if (me.data.uuid) {
-                sidebarTitle.append(me.loc.titleEdit);
+            if (this.data.uuid) {
+                sidebarTitle.text(this.loc.titleEdit);
             } else {
-                sidebarTitle.append(me.loc.title);
+                sidebarTitle.text(this.loc.title);
             }
             // bind close from header (X)
-            container.find('div.header div.icon-close').on(
-                'click',
-                function () {
-                    me.cancel();
-                }
-            );
+            container
+                .find('div.header div.icon-close')
+                .on('click',() => this.cancel());
 
             // -- create panels --
-            var genericInfoPanel = me._createGeneralInfoPanel();
+            const genericInfoPanel = this._createGeneralInfoPanel();
             genericInfoPanel.getPanel().addClass('t_generalInfo');
-            me.panels.push(genericInfoPanel);
+            this.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
-            var publisherTools = me._createToolGroupings(accordion);
+            var publisherTools = this._createToolGroupings(accordion);
 
-            var mapPreviewPanel = me._createMapPreviewPanel(publisherTools.tools);
+            var mapPreviewPanel = this._createMapPreviewPanel(publisherTools.tools);
             mapPreviewPanel.getPanel().addClass('t_size');
-            me.panels.push(mapPreviewPanel);
+            this.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            const mapLayersPanel = me._createMapLayersPanel();
+            const mapLayersPanel = this._createMapLayersPanel();
             mapLayersPanel.getPanel().addClass('t_layers');
-            me.panels.push(mapLayersPanel);
+            this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
             // create panel for each tool group
@@ -120,42 +111,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(rpcPanel.getPanel());
                 } else {
                     const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                        group, tools, me.instance, me.loc
+                        group, tools, this.instance, this.loc
                     );
-                    toolPanel.init(me.data);
-                    me.panels.push(toolPanel);
+                    toolPanel.init(this.data);
+                    this.panels.push(toolPanel);
                     const panel = toolPanel.getPanel();
                     panel.addClass('t_tools');
                     panel.addClass('t_' + group);
                     accordion.addPanel(panel);
                 }
             });
-            var toolLayoutPanel = me._createToolLayoutPanel(publisherTools.tools);
+            const toolLayoutPanel = this._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
-            me.panels.push(toolLayoutPanel);
+            this.panels.push(toolLayoutPanel);
             accordion.addPanel(toolLayoutPanel.getPanel());
 
-            var layoutPanel = me._createLayoutPanel();
+            const layoutPanel = this._createLayoutPanel();
             layoutPanel.getPanel().addClass('t_style');
-            me.panels.push(layoutPanel);
+            this.panels.push(layoutPanel);
             accordion.addPanel(layoutPanel.getPanel());
 
             // -- render to UI and setup buttons --
+            const contentDiv = content.find('div.content');
             accordion.insertTo(contentDiv);
-            contentDiv.append(me._getButtons());
+            contentDiv.append(this._getButtons());
 
             // disable keyboard map moving whenever a text-input is focused element
-            var inputs = me.mainPanel.find('input[type=text]');
-            inputs.on('focus', function () {
-                me.instance.sandbox.postRequestByName(
-                    'DisableMapKeyboardMovementRequest'
-                );
-            });
-            inputs.on('blur', function () {
-                me.instance.sandbox.postRequestByName(
-                    'EnableMapKeyboardMovementRequest'
-                );
-            });
+            const inputs = this.mainPanel.find('input[type=text]');
+            const sandbox = this.instance.getSandbox();
+            inputs.on('focus', () => sandbox.postRequestByName('DisableMapKeyboardMovementRequest'));
+            inputs.on('blur', () => sandbox.postRequestByName('EnableMapKeyboardMovementRequest'));
         },
 
         /**
