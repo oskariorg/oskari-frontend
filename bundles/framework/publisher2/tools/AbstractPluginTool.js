@@ -85,30 +85,27 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     * @param {Boolean} enabled is tool enabled or not
     */
     setEnabled: function (enabled) {
-        var me = this;
-        var tool = me.getTool();
+        var tool = this.getTool();
 
         // state actually hasn't changed -> do nothing
-        if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
+        if (this.isEnabled() === enabled) {
             return;
         }
-        me.state.enabled = enabled;
-        if (!me.__plugin && enabled) {
-            me.__plugin = Oskari.clazz.create(tool.id, tool.config);
-            me.__mapmodule.registerPlugin(me.__plugin);
+        this.state.enabled = enabled;
+        if (!this.__plugin && enabled) {
+            this.__plugin = Oskari.clazz.create(tool.id, tool.config);
+            this.__mapmodule.registerPlugin(this.__plugin);
         }
 
-        if (enabled === true) {
-            me.__plugin.startPlugin(me.__sandbox);
-            me.__started = true;
+        if (enabled) {
+            this.__plugin.startPlugin(this.__sandbox);
+            this.__started = true;
         } else {
-            if (me.__started === true) {
-                me.stop();
-            }
+            this.stop();
         }
         this._setEnabledImpl(enabled);
         var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
-        me.getSandbox().notifyAll(event);
+        this.getSandbox().notifyAll(event);
     },
     /**
      * @method _setEnabledImpl
@@ -117,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     _setEnabledImpl: function () {},
 
     isEnabled: function () {
-        return this.state.enabled;
+        return !!this.state.enabled;
     },
 
     /**
@@ -239,13 +236,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     * @public
     */
     stop: function () {
+        // TODO: do we really need started as an additional flag?
+        if (!this.__started) {
+            return;
+        }
         this.__started = false;
-        if (!this.__plugin) {
+        const plugin = this.getPlugin();
+        if (!plugin) {
             return;
         }
         if (this.getSandbox()) {
-            this.__plugin.stopPlugin(this.getSandbox());
+            plugin.stopPlugin(this.getSandbox());
         }
-        this.__mapmodule.unregisterPlugin(this.__plugin);
+        this.__mapmodule.unregisterPlugin(plugin);
+        this.__plugin = null;
     }
 });
