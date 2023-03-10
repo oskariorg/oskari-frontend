@@ -123,13 +123,29 @@ Oskari.registerLocalization(
                 },
                 "vector": {
                     "newStyleName": "New style",
-                    "addStyle": "Add style",
                     "name": "Style name",
                     "selectDefault": "Select default style",
                     "deleteStyle": "Delete style",
+                    "edit": {
+                        "editor": "Edit by using editor",
+                        "json": "Edit JSON"
+                    },
+                    "add": {
+                        "editor": "Add by using editor",
+                        "json": "Add JSON",
+                        "mapbox": "Add Mapbox JSON",
+                        "cesium": "Add Cesium JSON"
+                    } ,
                     "validation": {
                         "name": "Please enter a name for the style",
-                        "noStyles": "No saved styles"
+                        "noStyles": "No saved styles",
+                        "json": "Invalid JSON syntax in Style definitions."
+                    },
+                    "json": {
+                        "featureStyle": "Style definitions (JSON)",
+                        "optionalStyles": "Property based style definitions (JSON)",
+                        "cesium": "3D Tiles/Cesium style definitions (JSON)",
+                        "mapbox": "Mapbox style definitions (JSON)"
                     }
                 }
             },
@@ -174,8 +190,6 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Mandatory fields missing:",
-                "styles": "Invalid JSON syntax in Style definitions.",
-                "externalStyles": "Invalid JSON syntax in 3rd party style definitions.",
                 "hover": "Invalid JSON syntax in Feature highlighting and tooltip.",
                 "attributes": "Invalid Attribute JSON syntax.",
                 "attributions": "Invalid Attributions JSON syntax.",
@@ -204,9 +218,6 @@ Oskari.registerLocalization(
                 "errorFetchCoverage": "Failed to get the map layer coverage from the service.",
                 "noCoverage": "The map layer coverage isn't restricted."
             },
-            "stylesJSON": "Style definitions (JSON)",
-            "externalStylesJSON": "3rd party style definitions (JSON)",
-            "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
             "dynamicScreenSpaceErrorOptions": "Dynamic screen space error options",
             "dynamicScreenSpaceError": "Dynamic screen space error",
             "dynamicScreenSpaceErrorDensity": "Dynamic screen space error density",
