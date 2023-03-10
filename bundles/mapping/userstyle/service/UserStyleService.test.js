@@ -6,8 +6,9 @@ const sandbox = {
     findMapLayerFromAllAvailable: () => {}
 };
 const layerId = 1;
-const styleName = 's_1';
-const style = new VectorStyle(styleName, 'My own style', 'user');
+const id = 's_1';
+const type = 'user';
+const style = new VectorStyle({ id, name: 'My own style', type });
 
 describe('saveUserStyle function ', () => {
     const service = new UserStyleService(sandbox);
@@ -18,7 +19,7 @@ describe('saveUserStyle function ', () => {
         expect(result[0]).toEqual(style);
     });
     test('adds style correctly when styles with given layerId exists but not with given style name', () => {
-        const secondStyle = new VectorStyle('s_2', 'My second style', 'user');
+        const secondStyle = new VectorStyle({ id: 's_2', name: 'My second style', type });
         service.saveUserStyle(layerId, secondStyle);
         const result = service.getUserStylesForLayer(layerId);
         expect(result.length).toEqual(2);
@@ -26,18 +27,20 @@ describe('saveUserStyle function ', () => {
         expect(result[1]).toEqual(secondStyle);
     });
     test('saves style correctly when style with given layerId and given style name exists', () => {
-        const title = 'Updated title';
-        const styleDef = {
-            fill: 'some val'
+        const name = 'Updated title';
+        const style = {
+            featureStyle: {
+                fill: 'some val'
+            }
         };
-        const updatedStyle = new VectorStyle(styleName, title, 'user', styleDef);
+        const updatedStyle = new VectorStyle({ id, name, type, style });
         service.saveUserStyle(layerId, updatedStyle);
         const result = service.getUserStylesForLayer(layerId);
         expect(result.length).toEqual(2);
         const saved = result[0];
         expect(saved).toEqual(updatedStyle);
-        expect(saved.getTitle()).toEqual(title);
-        expect(saved.getFeatureStyle()).toEqual(styleDef);
+        expect(saved.getTitle()).toEqual(name);
+        expect(saved.getFeatureStyle()).toEqual(style.featureStyle);
     });
 });
 
