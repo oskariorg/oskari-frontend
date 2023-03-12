@@ -57,6 +57,8 @@ class SearchHandler extends StateHandler {
             selectedChannels: [],
             featuresOnMap: []
         });
+        // ['selected', 'name', 'region', 'type'] or null/empty array for all
+        this.columns = plugin.getConfig().columns || ['name', 'region', 'type'];
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
         this.service = Oskari.clazz.create('Oskari.service.search.SearchService', plugin.getSandbox(), plugin.getConfig().url);
@@ -130,7 +132,8 @@ class SearchHandler extends StateHandler {
             featuresOnMap,
             (result, isToggle) => this.resultClicked(result, isToggle),
             () => this.clearResultPopup(),
-            this.plugin.getLocation());
+            this.plugin.getLocation(),
+            this.columns);
     }
 
     getName () {

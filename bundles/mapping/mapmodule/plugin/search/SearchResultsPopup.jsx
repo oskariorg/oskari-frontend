@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Table, getSorterFor } from 'oskari-ui/components/Table';
 import { Collapse, CollapsePanel, Message, Switch, ThemedBadge, Tooltip } from 'oskari-ui';
-import { InfoIcon } from 'oskari-ui/components/icons';
-import { ThemeProvider } from 'oskari-ui/util';
+import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
+import { getHeaderTheme } from 'oskari-ui/theme';
 import { getPopupOptions } from '../pluginPopupHelper';
 import { isSameResult } from './ResultComparator';
 import { ChannelTitle } from './components/ChannelTitle';
+import styled from 'styled-components';
 
-export const showResultsPopup = (results = {}, channels = [], featuresOnMap = [], showResult, onClose, pluginLocation) => {
+export const showResultsPopup = (results = {}, channels = [], featuresOnMap = [], showResult, onClose, pluginLocation, columns) => {
     if (!Object.keys(results).length) {
         // don't open popup until there is something to show
         return null;
@@ -20,7 +21,12 @@ export const showResultsPopup = (results = {}, channels = [], featuresOnMap = []
     const title = (<Message messageKey='plugin.SearchPlugin.title' bundleKey='MapModule' />);
     const getContent = (results, channels, featuresOnMap) => {
         return (<ThemeProvider value={options.theme}>
-            <PopupContent results={results} channels={channels} featuresOnMap={featuresOnMap} showResult={showResult} />
+            <PopupContent
+                results={results}
+                channels={channels}
+                featuresOnMap={featuresOnMap}
+                showResult={showResult}
+                columns={columns} />
         </ThemeProvider>);
     };
     const opts = showPopup(title, getContent(results, channels, featuresOnMap), onClose, options);
@@ -32,10 +38,33 @@ export const showResultsPopup = (results = {}, channels = [], featuresOnMap = []
     };
 };
 
-const PopupContent = ({ results, channels, featuresOnMap, showResult }) => {
+const StyledPanel = styled(CollapsePanel)`
+    .ant-collapse-header {
+        background-color: ${props => props.$headerColor};
+        color: ${props => props.$textColor} !important;
+    }
+    .ant-collapse-content-box {
+        padding-top: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+`;
+const EmptyResult = styled('div')`
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
+`;
+const BadgeFloater = styled('div')`
+float: right;
+margin-left: 8px;
+`;
+
+
+const PopupContent = ThemeConsumer(({ results, channels, featuresOnMap, showResult, columns, theme }) => {
     const channelIds = Object.keys(results);
     const mostResultsChannelId = getChannelWithMostResults(channelIds, results);
     const [activeTab, setActiveTab] = useState(mostResultsChannelId);
+    const helper = getHeaderTheme(theme);
     useEffect(() => {
         // show the tab with most results if we get additional results after first render
         setActiveTab(mostResultsChannelId);
@@ -46,23 +75,25 @@ const PopupContent = ({ results, channels, featuresOnMap, showResult }) => {
                 const channel = channels.find(chan => id === chan.id);
                 const channelResult = results[id];
                 return (
-                    <CollapsePanel
+                    <StyledPanel
                         key={channel.id}
+                        $headerColor={helper.getBgColor()}
+                        $textColor={helper.getTextColor()}
                         header={<Header
                             channel={channel}
                             showGeneric={channelIds.length === 1}
                             count={channelResult?.totalCount} />}>
                         <ChannelContent
                             results={channelResult}
-                            channel={channels.find(chan => id === chan.id)}
                             featuresOnMap={featuresOnMap}
-                            showResult={showResult} />
-                    </CollapsePanel>
+                            showResult={showResult}
+                            columns={columns} />
+                    </StyledPanel>
                 );
             })}
         </Collapse>
     );
-};
+});
 
 const getChannelWithMostResults = (channelIds = [], results = {}) => {
     const largestResultInIndex = channelIds.reduce((largestIndex, channelId, index) => {
@@ -77,7 +108,10 @@ const getChannelWithMostResults = (channelIds = [], results = {}) => {
 
 const Header = ({ channel, showGeneric = false, count }) => {
     return (<React.Fragment>
-        <ChannelTitle channel={channel} showGeneric={showGeneric} /> <ThemedBadge count={count} showZero />
+        <ChannelTitle channel={channel} showGeneric={showGeneric} />
+        <BadgeFloater>
+            <ThemedBadge count={count} showZero />
+        </BadgeFloater>
     </React.Fragment>);
 };
 
@@ -97,11 +131,20 @@ const ToggleColumn = ({ locations, featuresOnMap, showResult }) => {
         </Tooltip>);
 };
 
-const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
+const ChannelContent = ({ results, featuresOnMap, showResult, columns = [] }) => {
     if (!results) {
         return null;
     }
-    const columnSettings = [
+
+    const { totalCount, hasMore, locations } = results;
+    if (totalCount === 0) {
+        return (
+            <EmptyResult>
+                <Message messageKey={'plugin.SearchPlugin.noresults'} bundleKey='MapModule' />
+            </EmptyResult>);
+    }
+
+    let columnSettings = [
         {
             align: 'left',
             dataIndex: 'selected',
@@ -109,21 +152,6 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
                 locations={results.locations}
                 featuresOnMap={featuresOnMap}
                 showResult={showResult} />),
-                /*
-            sorter: (a, b) => {
-                const isSelectedA = featuresOnMap.find(res => isSameResult(res, a));
-                const isSelectedB = featuresOnMap.find(res => isSameResult(res, b));
-                const nameSorter = getSorterFor('name');
-                if (isSelectedA && isSelectedB) {
-                    return nameSorter(a,b);
-                } else if(isSelectedA) {
-                    return -1;
-                } else if(isSelectedB) {
-                    return 1;
-                }
-                return nameSorter(a,b);
-            },
-            */
             render: (title, item) => {
                 const isSelected = featuresOnMap.find(res => isSameResult(res, item));
                 let tooltip = (<Message messageKey='plugin.SearchPlugin.selectResult' bundleKey='MapModule' />);
@@ -163,14 +191,10 @@ const ChannelContent = ({ results, channel, featuresOnMap, showResult }) => {
             sorter: getSorterFor('type')
         }
     ];
-
-    const { totalCount, hasMore, locations } = results;
-    if (totalCount === 0) {
-        return (
-            <React.Fragment>
-                <Message messageKey={'plugin.SearchPlugin.noresults'} bundleKey='MapModule' />
-            </React.Fragment>);
+    if (columns.length) {
+        columnSettings = columnSettings.filter(c => columns.includes(c.dataIndex));
     }
+
     return (
         <React.Fragment>
             { hasMore && <Message messageKey={'plugin.SearchPlugin.searchMoreResults'} messageArgs={{ count: totalCount }} bundleKey='MapModule' /> }
