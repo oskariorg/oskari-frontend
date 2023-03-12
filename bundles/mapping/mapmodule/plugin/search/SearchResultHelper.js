@@ -6,10 +6,10 @@ const INFOBOX_ID = 'SEARCH_RESULT_INFOBOX';
 const getMsg = key => Oskari.getMsg('MapModule', key);
 
 export class SearchResultHelper {
-    constructor(sandbox, useInfobox) {
-      this.sandbox = sandbox;
-      this.useInfobox = !!useInfobox;
-      this.resultActions = {};
+    constructor (sandbox, useInfobox) {
+        this.sandbox = sandbox;
+        this.useInfobox = !!useInfobox;
+        this.resultActions = {};
     }
     getSandbox () {
         return this.sandbox;
@@ -20,7 +20,6 @@ export class SearchResultHelper {
     removeSearchResultAction (name) {
         delete this.resultActions[name];
     }
-    
     setMarker (result) {
         if (this.useInfobox) {
             this.showInfobox(result);
@@ -74,8 +73,7 @@ export class SearchResultHelper {
     showInfobox (result) {
         const lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat;
         const lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
-    
-        //var loc = this.instance.getLocalization('resultBox');
+
         const resultActions = Object.keys(this.resultActions).map(name => {
             const actionFn = this.resultActions[name];
             return {
@@ -93,7 +91,7 @@ export class SearchResultHelper {
             action: () => sandbox.postRequestByName('InfoBox.HideInfoBoxRequest', [INFOBOX_ID])
         };
         resultActions.push(closeAction);
-    
+
         const alternatives = createAlternativeNamesHTMLBlock(result);
         const contentItem = {
             html: `<h3>${Oskari.util.sanitize(result.name)}</h3>
@@ -103,7 +101,7 @@ export class SearchResultHelper {
             actions: resultActions
         };
         const content = [contentItem];
-    
+
         const options = {
             hidePrevious: true
         };
@@ -119,8 +117,7 @@ export class SearchResultHelper {
     }
 }
 
-
-const createAlternativeNamesHTMLBlock =  (result) => {
+const createAlternativeNamesHTMLBlock = (result) => {
     if (!result || !result.localized) {
         return '';
     }

@@ -4,7 +4,6 @@ import { showOptionsPopup } from './SearchOptionsPopup';
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { SearchResultHelper } from './SearchResultHelper';
 
-
 // sort channel in alphabetical order but have defaults on top
 const channelSortFunction = (a, b) => {
     if (a.isDefault && b.isDefault) {
@@ -169,7 +168,7 @@ class SearchHandler extends StateHandler {
 
     triggerSearchForChannel (channel, query) {
         const updateResults = (results) => {
-            const { results:prevResults = {}, loading } = this.getState();
+            const { results: prevResults = {}, loading } = this.getState();
             const stateUpdate = {
                 loading: results ? loading.filter(item => item !== channel) : loading,
                 results: {
@@ -211,11 +210,10 @@ class SearchHandler extends StateHandler {
             } else {
                 // remove from map
                 this.updateState({
-                    featuresOnMap: featuresOnMap.filter(item => !isSameResult(item, result))
+                    featuresOnMap: featuresOnMap.filter(item => item.id !== result.id)
                 });
                 this.resultHelper.removeResultFromMap(result);
             }
-            // TODO: sync on map
             this.updateResultsPopup();
             return;
         }
@@ -226,8 +224,6 @@ class SearchHandler extends StateHandler {
         this.getSandbox().postRequestByName('MapMoveRequest', [result.lon, result.lat, zoom]);
         this.resultHelper.setMarker(result);
     }
-
-
 
     /** Restore from minimized state */
     requestSearchUI () {
