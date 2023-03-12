@@ -115,7 +115,7 @@ const Header = ({ channel, showGeneric = false, count }) => {
 };
 
 const ToggleColumn = ({ locations, featuresOnMap, showResult }) => {
-    const isSelected = locations.every(loc => !!featuresOnMap.find(res => isSameResult(res, loc)));
+    const isSelected = locations.every(loc => !!featuresOnMap.find(res => res.id === loc.id));
     let tooltip = (<Message messageKey='plugin.SearchPlugin.selectResultAll' bundleKey='MapModule' />);
     if (isSelected) {
         tooltip = (<Message messageKey='plugin.SearchPlugin.deselectResultAll' bundleKey='MapModule' />);
@@ -124,7 +124,7 @@ const ToggleColumn = ({ locations, featuresOnMap, showResult }) => {
         <Tooltip title={tooltip}>
             <Switch size="small" checked={!!isSelected}
                 onChange={checked => {
-                    locations.filter(item => checked === !featuresOnMap.find(res => isSameResult(res, item)))
+                    locations.filter(item => checked === !featuresOnMap.find(res => res.id === item.id))
                     .forEach(item => showResult(item, checked))
                 }}/>
         </Tooltip>);
@@ -152,7 +152,7 @@ const ChannelContent = ({ results, featuresOnMap, showResult, columns = [] }) =>
                 featuresOnMap={featuresOnMap}
                 showResult={showResult} />),
             render: (title, item) => {
-                const isSelected = featuresOnMap.find(res => isSameResult(res, item));
+                const isSelected = featuresOnMap.find(res => res.id === item.id);
                 let tooltip = (<Message messageKey='plugin.SearchPlugin.selectResult' bundleKey='MapModule' />);
                 if (isSelected) {
                     tooltip = (<Message messageKey='plugin.SearchPlugin.deselectResult' bundleKey='MapModule' />);
