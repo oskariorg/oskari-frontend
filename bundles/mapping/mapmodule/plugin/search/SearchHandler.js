@@ -62,7 +62,7 @@ class SearchHandler extends StateHandler {
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
         this.service = Oskari.clazz.create('Oskari.service.search.SearchService', plugin.getSandbox(), plugin.getConfig().url);
-        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), true);
+        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), !!plugin.getConfig().useInfobox);
         // options needs to be enabled explicitly
         this.allowOptions = !!plugin.getConfig().allowOptions;
         this.fetchChannels();
