@@ -2,6 +2,7 @@ import { afterAll } from '@jest/globals';
 import '../../../src/global';
 import './AbstractMapModule';
 import './service/map.state';
+import { getSortedPlugins } from './util/PluginHelper';
 import jQuery from 'jquery';
 
 const Oskari = window.Oskari;
@@ -51,7 +52,7 @@ describe('MapModule', () => {
         });
     });
     describe('_getSortedPlugins', () => {
-        const sorted = mapModule._getSortedPlugins();
+        const sorted = getSortedPlugins(mapModule.getPluginInstances());
         test('has 3 plugins', () => {
             expect(sorted.length).toEqual(3);
         });

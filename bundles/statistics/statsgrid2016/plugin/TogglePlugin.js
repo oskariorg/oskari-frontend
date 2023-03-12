@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
             classes: location || this._defaultLocation
         }
     };
+    this._name = 'statsgrid.TogglePlugin';
 
     this.flyoutManager.on('show', function (tool) {
         me.toggleTool(tool, true);

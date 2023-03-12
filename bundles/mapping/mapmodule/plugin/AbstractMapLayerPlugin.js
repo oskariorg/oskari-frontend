@@ -1,4 +1,4 @@
-import './plugin/AbstractMapModulePlugin';
+import './AbstractMapModulePlugin';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapLayerPlugin
  * Base class for map layer implementations (wms, wmts, vector tile etc.)
