@@ -2,7 +2,6 @@ import '../../../../service/search/searchservice';
 import { showResultsPopup } from './SearchResultsPopup';
 import { showOptionsPopup } from './SearchOptionsPopup';
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
-import { isSameResult } from './ResultComparator';
 import { SearchResultHelper } from './SearchResultHelper';
 
 

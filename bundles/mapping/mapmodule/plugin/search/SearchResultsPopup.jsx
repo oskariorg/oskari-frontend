@@ -5,7 +5,6 @@ import { Collapse, CollapsePanel, Message, Switch, ThemedBadge, Tooltip } from '
 import { ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { getHeaderTheme } from 'oskari-ui/theme';
 import { getPopupOptions } from '../pluginPopupHelper';
-import { isSameResult } from './ResultComparator';
 import { ChannelTitle } from './components/ChannelTitle';
 import styled from 'styled-components';
 
