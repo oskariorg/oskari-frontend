@@ -61,6 +61,15 @@ Oskari.registerLocalization(
                 "deselectResult": "Remove result from map",
                 "selectResultAll": "Show all results on map",
                 "deselectResultAll": "Remove all results from map",
+                "options": {
+                    "title": "Search options",
+                    "description": "Refine search criteria by choosing data sources"
+                },
+                "resultBox": {
+                    "close": "Close",
+                    "title": "Search Results",
+                    "alternatives": "This location has the following alternative place names:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Feature Data",

@@ -3,9 +3,8 @@ import { showResultsPopup } from './SearchResultsPopup';
 import { showOptionsPopup } from './SearchOptionsPopup';
 import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
 import { isSameResult } from './ResultComparator';
+import { SearchResultHelper } from './SearchResultHelper';
 
-const MARKER_ID = 'SEARCH_RESULT_MARKER';
-const RESULTS_LAYER_ID = 'SEARCH_RESULTS_LAYER';
 
 // sort channel in alphabetical order but have defaults on top
 const channelSortFunction = (a, b) => {
@@ -60,7 +59,8 @@ class SearchHandler extends StateHandler {
         });
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
-        this.service = Oskari.clazz.create('Oskari.service.search.SearchService', this.getSandbox(), plugin.getConfig().url);
+        this.service = Oskari.clazz.create('Oskari.service.search.SearchService', plugin.getSandbox(), plugin.getConfig().url);
+        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), true);
         // options needs to be enabled explicitly
         this.allowOptions = !!plugin.getConfig().allowOptions;
         this.fetchChannels();
@@ -72,8 +72,8 @@ class SearchHandler extends StateHandler {
     }
 
     clearResultPopup () {
-        this.removeMarker();
-        this.removeResultFromMap();
+        this.resultHelper.removeMarker();
+        this.resultHelper.removeResultFromMap();
         if (this._popupControlsResult) {
             this._popupControlsResult.close();
         }
@@ -205,13 +205,13 @@ class SearchHandler extends StateHandler {
                 this.updateState({
                     featuresOnMap
                 });
-                this.showResultOnMap(result);
+                this.resultHelper.showResultOnMap(result);
             } else {
                 // remove from map
                 this.updateState({
                     featuresOnMap: featuresOnMap.filter(item => !isSameResult(item, result))
                 });
-                this.removeResultFromMap(result);
+                this.resultHelper.removeResultFromMap(result);
             }
             // TODO: sync on map
             this.updateResultsPopup();
@@ -222,54 +222,9 @@ class SearchHandler extends StateHandler {
             zoom = { scale: result.zoomScale };
         }
         this.getSandbox().postRequestByName('MapMoveRequest', [result.lon, result.lat, zoom]);
-        this.setMarker(result);
+        this.resultHelper.setMarker(result);
     }
 
-    setMarker (result) {
-        const lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat;
-        const lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
-
-        this.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest', [{
-            color: 'ffde00',
-            msg: result.name,
-            shape: 2,
-            size: 3,
-            x: lon,
-            y: lat
-        }, MARKER_ID]);
-    }
-    removeMarker () {
-        this.getSandbox().postRequestByName('MapModulePlugin.RemoveMarkersRequest', [MARKER_ID]);
-    }
-    showResultOnMap (result) {
-        this.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [result.GEOMETRY, {
-            layerId: RESULTS_LAYER_ID,
-            attributes: {
-                ...result,
-                id: getIdForResult(result)
-            }
-        }]);
-        this.getSandbox().postRequestByName('MapModulePlugin.ZoomToFeaturesRequest', [{
-            layer: [RESULTS_LAYER_ID],
-            // don't zoom too close for point features
-            maxZoomLevel: 10
-        }]);
-    }
-    removeResultFromMap (result) {
-        const params = [];
-        if (result) {
-            // clear based on id
-            // TODO: not all features have ids (only ones from wfs-search channel does)
-            params.push('id');
-            params.push(getIdForResult(result));
-        } else {
-            // clear all
-            params.push(null);
-            params.push(null);
-        }
-        params.push(RESULTS_LAYER_ID);
-        this.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', params);
-    }
 
 
     /** Restore from minimized state */

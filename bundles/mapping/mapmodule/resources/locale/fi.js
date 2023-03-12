@@ -65,6 +65,11 @@ Oskari.registerLocalization(
                 "options": {
                     "title": "Hakuvalinnat",
                     "description": "Tarkenna hakuehtoja valitsemalla tietolähteet"
+                },
+                "resultBox": {
+                    "close": "Sulje",
+                    "title": "Hakutulokset",
+                    "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:"
                 }
             },
             "GetInfoPlugin": {
