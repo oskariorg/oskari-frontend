@@ -23,12 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.request.ShowUserStylesRequest
          *      request to handle
          */
         handleRequest: function (core, request) {
-            const values = {
-                layerId: request.getLayerId(),
-                styleName: request.getStyleName(),
-                showStyle: request.showStyle()
-            };
-            this.instance.showPopup(values);
+            this.instance.showPopup(request.getOptions());
         }
     }, {
         /**

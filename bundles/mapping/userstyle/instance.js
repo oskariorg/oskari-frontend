@@ -1,26 +1,35 @@
 import { UserStyleService } from './service/UserStyleService';
 import { showStylesPopup } from './view';
+import { BUNDLE_KEY } from './constants';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
  */
 Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', function () {
     this.service = null;
+    this.handler = null;
     this.popupController = null;
+    this.sandbox = null;
+    this.loc = Oskari.getMsg.bind(null, this.getName());
 }, {
-    __name: 'UserStyleBundleInstance',
+    __name: BUNDLE_KEY,
     requestHandlers: {
         ShowUserStylesRequest: function () {
             return Oskari.clazz.create('Oskari.mapframework.userstyle.request.ShowUserStylesRequestHandler', this);
         }
     },
     _startImpl: function (sandbox) {
+        this.sandbox = sandbox;
         this.service = new UserStyleService(sandbox);
         sandbox.registerService(this.service);
+        // TODO: switching to stylelist after adding style via editor is confusing
         this.service.on('update', (layerId) => {
             if (this.popupController) {
                 this.popupController.update({ layerId });
             }
         });
+    },
+    getSandbox: function () {
+        return this.sandbox;
     },
     getService: function () {
         return this.service;
@@ -31,12 +40,12 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
         }
         this.popupController = null;
     },
-    showPopup (values) {
+    showPopup (options) {
         const onClose = () => this.cleanPopup();
         if (this.popupController) {
-            this.popupController.update(values);
+            this.popupController.update(options);
         } else {
-            this.popupController = showStylesPopup(this.service, values, onClose);
+            this.popupController = showStylesPopup(this.service, options, onClose);
         }
     }
 }, {
