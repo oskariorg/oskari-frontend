@@ -55,11 +55,13 @@ export class UserStyleService {
         this.notifyStyleUpdate();
     }
 
+    // Used for listing styles in mydata tab
     // Don't apply styles here for layrs. LayersPlugin handles
     fetchUserStyles () {
         if (!Oskari.user().isLoggedIn()) {
             return;
         }
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'GET',
             headers: {
@@ -76,6 +78,7 @@ export class UserStyleService {
     }
 
     deleteStyle (id) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle', { id }), {
             method: 'DELETE'
         }).then(response => {
@@ -89,6 +92,7 @@ export class UserStyleService {
     }
 
     saveStyle (style) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'POST',
             body: JSON.stringify(style)
@@ -103,6 +107,7 @@ export class UserStyleService {
     }
 
     updateStyle (style) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'PUT',
             body: JSON.stringify(style)
@@ -114,6 +119,10 @@ export class UserStyleService {
             }
             this.fetchUserStyles();
         }).catch(error => this.ajaxError('put', error));
+    }
+
+    ajaxStarted () {
+        this.trigger('ajax');
     }
 
     ajaxError (method, error) {
