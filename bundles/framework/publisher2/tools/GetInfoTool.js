@@ -90,22 +90,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
         maxColourValue: 255,
         minColourValue: 0,
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                const tool = event.getTool();
-                if (tool.getTool().id !== this.getTool().id) {
-                    return;
-                }
-                if (tool.isStarted() && this.values.colourScheme) {
-                    this._sendColourSchemeChangedEvent(this.values.colourScheme);
-                }
-            }
-        },
         noUI: false,
         init: function (data) {
-            Object.keys(this.eventHandlers).forEach(eventName => {
-                this.__sandbox.registerForEventByName(this, eventName);
-            });
             if (!Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
                 return;
             }
@@ -117,34 +103,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 // Gets plugin color scheme
                 if (colourScheme) {
                     this.values.colourScheme = colourScheme;
-                    this._sendColourSchemeChangedEvent(colourScheme);
                 }
 
                 this.noUI = !!noUI;
                 this.setEnabled(true);
             }
         },
+        _setEnabledImpl: function () {
+            this._sendColourSchemeChangedEvent(this.values.colourScheme);
+        },
         getName: function () {
             return 'Oskari.mapframework.publisher.tool.GetInfoTool';
         },
         /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-     */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-        /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
@@ -158,12 +134,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         isColourDialogOpen: false,
 
         /**
-    * Get extra options.
-    * @method getExtraOptions
-    * @public
-    *
-    * @returns {Object} jQuery element
-    */
+        * Get extra options.
+        * @method getExtraOptions
+        * @public
+        *
+        * @returns {Object} jQuery element
+        */
         getExtraOptions: function () {
             const me = this;
             const template = me.templates.colours.clone();
@@ -218,42 +194,39 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{
-                                    id: this.getTool().id,
-                                    config: {
-                                        colourScheme: me.values.colourScheme || {},
-                                        noUI: me.noUI
-                                    }
-                                }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{
+                                id: this.getTool().id,
+                                config: {
+                                    colourScheme: this.values.colourScheme || {},
+                                    noUI: this.noUI
+                                }
+                            }]
+                        }
+                    }
+                }
+            };
         },
 
         /**
-     * Creates and opens the dialog from which to choose the colour scheme.
-     * Also handles the creation of the sample gfi popup.
-     *
-     * @method _openColourDialog
-     */
+         * Creates and opens the dialog from which to choose the colour scheme.
+         * Also handles the creation of the sample gfi popup.
+         *
+         * @method _openColourDialog
+         */
         _openColourDialog: function () {
             const me = this;
             const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -329,11 +302,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
-     *
-     * @method _createGfiPreview
-     * @return {jQuery} returns the sample gfi
-     */
+         * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
+         *
+         * @method _createGfiPreview
+         * @return {jQuery} returns the sample gfi
+         */
         _createGfiPreview: function () {
             // Example data
             const linkUrl = window.location;
@@ -377,12 +350,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Sets the styles of the sample gfi with the selected colour scheme.
-     *
-     * @method _changeGfiColours
-     * @param {Object} selectedColour
-     * @param {jQuery} container (optional, defaults to the colour preview element on page)
-     */
+         * Sets the styles of the sample gfi with the selected colour scheme.
+         *
+         * @method _changeGfiColours
+         * @param {Object} selectedColour
+         * @param {jQuery} container (optional, defaults to the colour preview element on page)
+         */
         _changeGfiColours: function (selectedColour, container) {
             container = container || jQuery('div#publisher-colour-popup');
 
@@ -409,11 +382,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Creates a popup from which custom colour scheme can be defined.
-     *
-     * @method _createCustomColoursPopup
-     * @return {undefined}
-     */
+         * Creates a popup from which custom colour scheme can be defined.
+         *
+         * @method _createCustomColoursPopup
+         * @return {undefined}
+         */
         _createCustomColoursPopup: function () {
             const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
@@ -439,11 +412,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Creates the inputs for putting in your favourite colours.
-     *
-     * @method _createCustomColoursInputs
-     * @return {jQuery} return the template to select custom colours
-     */
+         * Creates the inputs for putting in your favourite colours.
+         *
+         * @method _createCustomColoursInputs
+         * @return {jQuery} return the template to select custom colours
+         */
         _createCustomColoursInputs: function () {
             const me = this;
             const template = me.templates.customClrs.clone();
@@ -492,12 +465,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Prepopulates the custom colours template with saved colour values.
-     *
-     * @method  _prepopulateCustomColoursTemplate
-     * @param  {jQuery} template
-     * @return {undefined}
-     */
+         * Prepopulates the custom colours template with saved colour values.
+         *
+         * @method  _prepopulateCustomColoursTemplate
+         * @param  {jQuery} template
+         * @return {undefined}
+         */
         _prepopulateCustomColoursTemplate: function (template) {
             var me = this,
                 iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
@@ -513,18 +486,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Prepopulates an rgb div with given values
-     *
-     * @method _prepopulateRgbDiv
-     * @param  {jQuery} rgbDiv
-     * @param  {Object} colours
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     * @return {undefined}
-     */
+         * Prepopulates an rgb div with given values
+         *
+         * @method _prepopulateRgbDiv
+         * @param  {jQuery} rgbDiv
+         * @param  {Object} colours
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         * @return {undefined}
+         */
         _prepopulateRgbDiv: function (rgbDiv, colours) {
             if (!colours) {
                 return;
@@ -536,12 +509,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Collects the custom colours values from the content div.
-     *
-     * @method _collectCustomColourValues
-     * @param  {jQuery} content
-     * @return {undefined}
-     */
+         * Collects the custom colours values from the content div.
+         *
+         * @method _collectCustomColourValues
+         * @param  {jQuery} content
+         * @return {undefined}
+         */
         _collectCustomColourValues: function (content) {
             var me = this,
                 iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
@@ -559,17 +532,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Returns an rgb colour object parsed from the div.
-     *
-     * @method _getColourFromRgbDiv
-     * @param {jQuery} rgbDiv
-     * @return {Object} returns an rgb colour object
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     */
+         * Returns an rgb colour object parsed from the div.
+         *
+         * @method _getColourFromRgbDiv
+         * @param {jQuery} rgbDiv
+         * @return {Object} returns an rgb colour object
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         */
         _getColourFromRgbDiv: function (rgbDiv) {
             var red = rgbDiv.find('input[name=red]').val(),
                 green = rgbDiv.find('input[name=green]').val(),
@@ -587,23 +560,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Retrieves the item from the list which value matches the code given
-     * or null if not found on the list.
-     *
-     * @method _getItemByCode
-     * @param {String} code
-     * @param {Array[Object]} list
-     * @return {Object/null}
-     */
+         * Retrieves the item from the list which value matches the code given
+         * or null if not found on the list.
+         *
+         * @method _getItemByCode
+         * @param {String} code
+         * @param {Array[Object]} list
+         * @return {Object/null}
+         */
         _getItemByCode: function (code, list) {
             return list.find(l => l.val === code) || null;
         },
 
         /**
-     * @method createColorPickers
-     * Creates an array of color picker components
-     * @private
-     */
+         * @method createColorPickers
+         * Creates an array of color picker components
+         * @private
+         */
         _createColorPickers: function () {
             var options = { className: 'oskari-colorpickerinput', cancelText: this.getMsg('BasicView.buttons.cancel') };
             this._colorPickers = [
@@ -614,11 +587,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * @method updatePreviewFromCustomValues
-     * Updates preview colors from color pickers and icon choice
-     * @param {Object} content
-     */
-
+         * @method updatePreviewFromCustomValues
+         * Updates preview colors from color pickers and icon choice
+         * @param {Object} content
+         */
         _updatePreviewFromCustomValues: function (content) {
             var selectedColour = {};
             selectedColour.bgColour = this._colorPickers[0].getValue();
@@ -633,64 +605,45 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Returns an rgb colour object in css formatted string.
-     *
-     * @method _getCssRgb
-     * @param  {Object} rgb
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     * @return {String}
-     */
+         * Returns an rgb colour object in css formatted string.
+         *
+         * @method _getCssRgb
+         * @param  {Object} rgb
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         * @return {String}
+         */
         _getCssRgb: function (rgb) {
             return 'rgb(' + rgb.red + ', ' + rgb.green + ', ' + rgb.blue + ')';
         },
 
         /**
-     * Sends an event to notify interested parties that the colour scheme has changed.
-     *
-     * @method _sendColourSchemeChangedEvent
-     * @param {Object} colourScheme the changed colour scheme
-     */
+         * Sends an event to notify interested parties that the colour scheme has changed.
+         *
+         * @method _sendColourSchemeChangedEvent
+         * @param {Object} colourScheme the changed colour scheme
+         */
         _sendColourSchemeChangedEvent: function (colourScheme) {
             this._sendEvent('Publisher2.ColourSchemeChangedEvent', colourScheme);
         },
 
         /**
-     * "Sends" an event, that is, notifies other components of something.
-     *
-     * @method _sendEvent
-     * @param {String} eventName the name of the event
-     * @param {Whatever} eventData the data we want to send with the event
-     */
+         * "Sends" an event, that is, notifies other components of something.
+         *
+         * @method _sendEvent
+         * @param {String} eventName the name of the event
+         * @param {Whatever} eventData the data we want to send with the event
+         */
         _sendEvent: function (eventName, eventData) {
-            var eventBuilder = Oskari.eventBuilder(eventName),
-                evt;
+            const eventBuilder = Oskari.eventBuilder(eventName);
 
             if (eventBuilder) {
-                evt = eventBuilder(eventData);
-                this.__sandbox.notifyAll(evt);
+                const evt = eventBuilder(eventData);
+                this.getSandbox().notifyAll(evt);
             }
-        },
-        /**
-    * Stop tool.
-    * @method stop
-    * @public
-    */
-        stop: function () {
-            var me = this;
-            if (me.__plugin) {
-                if (me.__sandbox && me.__plugin.getSandbox()) {
-                    me.__plugin.stopPlugin(me.__sandbox);
-                }
-                me.__mapmodule.unregisterPlugin(me.__plugin);
-            }
-
-            Object.keys(me.eventHandlers).forEach(eventName => {
-                me.__sandbox.unregisterFromEventByName(me, eventName);
-            });
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
