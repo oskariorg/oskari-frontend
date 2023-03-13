@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             var dialogContent = jQuery('<div></div>'),
                 header = jQuery('<div class="popupTitle"></div>'),
                 headerWrapper = jQuery('<div class="popupHeader"></div>'),
-                headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'),
+                headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white"></div>'),
                 contentDiv = jQuery('<div class="popupContent"></div>'),
                 contentWrapper = jQuery('<div class="contentWrapper"></div>'),
                 popupDataContent = jQuery('<div class="myplaces_wrapper"><div class="myplaces_place">' +
@@ -409,6 +409,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             popup.show(this.getMsg('BasicView.layout.fields.colours.custom'), content, [closeButton]);
             this._customColoursPopup = popup;
+        },
+        _stopImpl: function() {
+            if (this._colourSchemePopup) {
+                this._colourSchemePopup.close(true);
+                this._colourSchemePopup = null;
+                this.isColourDialogOpen = false;
+            }
+            if (this._customColoursPopup) {
+                this._customColoursPopup.close(true);
+                this._customColoursPopup = null;
+            }
         },
 
         /**

@@ -227,6 +227,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         return true;
     },
     /**
+     * @method _stopImpl
+     * override if needed.
+     */
+    _stopImpl: function () {},
+    /**
     * Stop tool.
     * @method stop
     * @public
@@ -236,6 +241,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (!this.__started) {
             return;
         }
+        this._stopImpl();
         this.__started = false;
         const plugin = this.getPlugin();
         if (!plugin) {
