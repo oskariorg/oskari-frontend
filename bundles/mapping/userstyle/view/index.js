@@ -2,8 +2,8 @@ import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
-import { StyleForm } from './StyleForm';
-import { UserStyles } from './UserStyles';
+import { UserStyleEditor } from './UserStyles/UserStyleEditor';
+import { UserStylesContent } from './UserStyles/UserStylesContent';
 import { BUNDLE_KEY } from '../constants';
 import { VECTOR_STYLE } from '../../mapmodule/domain/constants';
 
@@ -26,11 +26,11 @@ const getContent = (service, options, onClose) => {
             // const hasStyles = service.getUserStylesForLayer(layerId).length > 0;
             onClose();
         };
-        content = <StyleForm style={ style } onAdd={ onAdd } onCancel={ onClose }/>;
+        content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ onClose }/>;
     } else {
         const styles = service.getUserStylesForLayer(layerId);
         const onDelete = (id) => service.removeUserStyle(id);
-        content = <UserStyles layerId={ layerId } styles={ styles } onDelete={ onDelete } />;
+        content = <UserStylesContent layerId={ layerId } styles={ styles } onDelete={ onDelete } />;
     }
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>

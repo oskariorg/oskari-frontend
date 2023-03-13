@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Message } from 'oskari-ui';
-import { UserStyleRow } from './UserStyles/UserStyleRow';
+import { UserStyleRow } from './UserStyleRow';
 import { PlusOutlined } from '@ant-design/icons';
 
 // TODO: Fix this once style accessible smarter way
@@ -57,7 +57,7 @@ const AddStyleIcon = styled(PlusOutlined)`
 const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
 const addNew = (layerId) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId }]);
 
-export const UserStyles = ({ layerId, styles, onDelete }) => {
+export const UserStylesContent = ({ layerId, styles, onDelete }) => {
     return (
         <Content>
             <Header>
@@ -84,7 +84,7 @@ export const UserStyles = ({ layerId, styles, onDelete }) => {
     );
 };
 
-UserStyles.propTypes = {
+UserStylesContent.propTypes = {
     layerId: PropTypes.number.isRequired,
     styles: PropTypes.array.isRequired,
     onDelete: PropTypes.func.isRequired
