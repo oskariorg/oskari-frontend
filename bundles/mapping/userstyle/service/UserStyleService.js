@@ -87,7 +87,7 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to delete vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('delete');
         }).catch(error => this.ajaxError('delete', error));
     }
 
@@ -102,7 +102,7 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to save vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('post');
         }).catch(error => this.ajaxError('post', error));
     }
 
@@ -117,7 +117,7 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to update vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('put');
         }).catch(error => this.ajaxError('put', error));
     }
 
@@ -132,6 +132,8 @@ export class UserStyleService {
 
     ajaxSuccess (method) {
         Messaging.success(`success.${method}`);
+        // for now loads all user styles on add, update, delete
+        this.fetchUserStyles();
     }
 
     handleFetchResponse (json) {
