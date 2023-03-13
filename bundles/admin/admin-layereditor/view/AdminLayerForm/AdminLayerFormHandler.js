@@ -1121,13 +1121,24 @@ class UIHandler extends StateHandler {
 
     removeVectorStyleFromLayer (id) {
         const layer = this.getState().layer;
-        this._updateVectorStyleStatus(layer, id, 'DELETED');
+        if (layer.vectorStyleStatus?.[id] === 'NEW') {
+            // remove unsaved and deleted style from listing
+            layer.vectorStyles = layer.vectorStyles.filter(s => s.id !== id);
+        } else {
+            // mark to be deleted
+            this._updateVectorStyleStatus(layer, id, 'DELETED');
+        }
         this.updateState({ layer });
     }
 
     _updateVectorStyleStatus(layer, id, status) {
         if (!layer.vectorStyleStatus) {
             layer.vectorStyleStatus = {};
+        }
+        const oldStatus = layer.vectorStyleStatus[id];
+        if (oldStatus === 'NEW') {
+            // don't update status for unsaved styles
+            return;
         }
         layer.vectorStyleStatus[id] = status;
     }

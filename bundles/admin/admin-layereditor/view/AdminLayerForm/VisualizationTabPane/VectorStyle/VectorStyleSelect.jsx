@@ -32,10 +32,20 @@ const StyledText = styled.span`
     font-style: italic;
     font-size: 0.875em;
     padding-right: 10px;
+    color: ${props => props.color}
 `;
 
+const renderStatus = (status) => {
+    const color = status === 'DELETED' ? '#FF0000' : null;
+    return (
+        <StyledText color={color}>
+            ({status})
+        </StyledText>
+    );
+};
+
 export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
-    const { vectorStyles = [] } = layer;
+    const { vectorStyles = [], vectorStyleStatus = {} } = layer;
 
     if (vectorStyles.length === 0) {
         return (
@@ -54,6 +64,8 @@ export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
         <List
             dataSource={ sortedStyles }
             renderItem={ (style) => {
+                const status = vectorStyleStatus[style.id];
+                const disabled = status === 'DELETED';
                 return (
                     <StyledItem>
                         <Tooltip title={ <Message messageKey='styles.vector.selectDefault' /> }>
@@ -68,21 +80,22 @@ export const VectorStyleSelect = ({ layer, controller, editStyle }) => {
                                 (<Message messageKey='styles.default' />)
                             </StyledText>
                         }
+                        { status && renderStatus(status) }
                         <ButtonContainer>
                             { style.type === 'oskari' &&
                                 <Tooltip title={ <Message messageKey='styles.vector.edit.editor' /> }>
-                                    <Button onClick={ () => editStyle('editor', style) } >
+                                    <Button disabled={disabled} onClick={ () => editStyle('editor', style) } >
                                         <BgColorsOutlined />
                                     </Button>
                                 </Tooltip>
                             }
                             <Tooltip title={ <Message messageKey='styles.vector.edit.json' /> }>
-                                <Button onClick={ () => editStyle('json', style) } >
+                                <Button disabled={disabled} onClick={ () => editStyle('json', style) } >
                                     <EditOutlined />
                                 </Button>
                             </Tooltip>
                             <Tooltip title={ <Message messageKey='styles.vector.deleteStyle' /> }>
-                                <Button onClick={ () => controller.removeVectorStyleFromLayer(style.id) }>
+                                <Button disabled={disabled} onClick={ () => controller.removeVectorStyleFromLayer(style.id) }>
                                     <DeleteOutlined />
                                 </Button>
                             </Tooltip>
