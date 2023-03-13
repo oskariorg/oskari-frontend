@@ -57,7 +57,7 @@ const stringify = (json) => {
     } catch { /* ignored */ }
     return '';
 };
-const getRuntimeId = () => 's_' + Date.now().toString();
+const getRuntimeId = () => Date.now().valueOf(); // Long in backend
 
 export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, external }) => {
     const newStyleName = getMessage('styles.vector.newStyleName');
