@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         );
 
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
+        // This is publisher.sidebar.data
         me.data = me.instance.publisher.data;
         me.activeToolLayout = 'userlayout';
         if (me.instance.publisher.data &&
@@ -55,22 +56,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            var me = this;
-            me.toolLayoutEditMode = false;
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.sandbox.registerForEventByName(me, p);
-                }
-            }
-            if (!me.panel) {
-                me.panel = me._populateToolLayoutPanel(data);
+            this.toolLayoutEditMode = false;
+            // Listens to tools being enabled while dragging is active
+            Object.keys(this.eventHandlers)
+                .forEach(eventName => this.sandbox.registerForEventByName(this, eventName));
+            if (!this.panel) {
+                this.panel = this._populateToolLayoutPanel(data);
             }
 
             // init the tools' plugins location infos
-            if (me.data && me.activeToolLayout === 'userlayout') {
-                me._initUserLayout();
+            if (this.data && this.activeToolLayout === 'userlayout') {
+                // this is always true, however we should not call setLocation for plugins here.
+                // Instead they should start at the location they were when saved.
+                // Problem: getTool() returns empty config usually so plugin is created with empty config instead of actual config that was used to save the map.
+                this._initUserLayout();
             } else {
-                me._changeToolLayout(me.activeToolLayout, null);
+                this._changeToolLayout(this.activeToolLayout, null);
             }
         },
         getName: function () {
