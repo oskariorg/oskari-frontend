@@ -20,6 +20,7 @@ Oskari.registerLocalization({
             reset: 'Tyhjennä'
         },
         messages: {
+            confirm: 'Haluatko varmasti jatkaa?',
             confirmDelete: 'Haluatko varmasti poistaa?'
         },
         error: {
