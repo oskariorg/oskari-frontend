@@ -56,6 +56,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
         },
+        getPlugin: function () {
+            return this.plugin;
+        },
         stopPlugin: function () {
             this._mapmodule.unregisterPlugin(this.plugin);
             this._mapmodule.stopPlugin(this.plugin);

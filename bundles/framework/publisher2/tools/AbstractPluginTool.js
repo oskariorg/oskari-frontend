@@ -53,6 +53,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     getSandbox: function () {
         return this.__sandbox;
     },
+    getMapmodule: function () {
+        return this.__mapmodule;
+    },
     /**
      * If the tool requires space for the UI next to the map return the required height/width
      * @return {Object} object with keys height and width used for map size calculation
@@ -88,13 +91,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
             return;
         }
         this.state.enabled = enabled;
-        if (!this.__plugin && enabled) {
-            this.__plugin = Oskari.clazz.create(tool.id, tool.config);
-            this.__mapmodule.registerPlugin(this.__plugin);
+        let plugin = this.getPlugin();
+        if (!plugin && enabled) {
+            plugin = Oskari.clazz.create(tool.id, tool.config);
+            this.__plugin = plugin;
         }
 
         if (enabled) {
-            this.__plugin.startPlugin(this.__sandbox);
+            this.getMapmodule().registerPlugin(plugin);
+            plugin.startPlugin(this.getSandbox());
             this.__started = true;
         } else {
             this.stop();
@@ -250,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (this.getSandbox()) {
             plugin.stopPlugin(this.getSandbox());
         }
-        this.__mapmodule.unregisterPlugin(plugin);
+        this.getMapmodule().unregisterPlugin(plugin);
         this.__plugin = null;
     }
 });

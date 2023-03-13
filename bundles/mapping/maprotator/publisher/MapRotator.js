@@ -48,6 +48,32 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             me.noUiIsCheckedInModifyMode = !!conf.noUI;
             this.getMapRotatorInstance().setState(bundleData.state);
         },
+        // override setEnabled() because we don't want publisher to create the plugin BUT
+        // we want to use maprotator instance for handling the plugin and create it ourself
+        setEnabled: function (enabled) {
+            // state actually hasn't changed -> do nothing
+            if (this.isEnabled() === enabled) {
+                return;
+            }
+            const rotatorInstance = this.getMapRotatorInstance();
+            let plugin = rotatorInstance.getPlugin();
+            this.state.enabled = enabled;
+            if (!plugin && enabled) {
+                rotatorInstance.createPlugin();
+                plugin = rotatorInstance.getPlugin();
+                this.__plugin = plugin;
+            }
+
+            if (enabled) {
+                this.getMapmodule().registerPlugin(plugin);
+                plugin.startPlugin(this.getSandbox());
+                this.__started = true;
+            } else {
+                this.stop();
+            }
+            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
+            this.getSandbox().notifyAll(event);
+        },
         /**
          * Get values.
          * @method getValues
@@ -57,29 +83,28 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          */
         getValues: function () {
             var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                for (var configName in pluginConfig) {
-                    if (configName === 'noUI' && !me.noUI) {
-                        pluginConfig[configName] = null;
-                        delete pluginConfig[configName];
-                    }
-                }
-                if (me.noUI) {
-                    pluginConfig.noUI = me.noUI;
-                }
-                pluginConfig.enabled = me.state.enabled;
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: this.getMapRotatorInstance().getState()
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            var pluginConfig = this.getPlugin().getConfig();
+            for (var configName in pluginConfig) {
+                if (configName === 'noUI' && !me.noUI) {
+                    pluginConfig[configName] = null;
+                    delete pluginConfig[configName];
+                }
+            }
+            if (me.noUI) {
+                pluginConfig.noUI = me.noUI;
+            }
+            pluginConfig.enabled = me.state.enabled;
+            var json = {
+                configuration: {}
+            };
+            json.configuration[me.bundleName] = {
+                conf: pluginConfig,
+                state: this.getMapRotatorInstance().getState()
+            };
+            return json;
         },
         /**
          * Get extra options.
