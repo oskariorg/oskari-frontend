@@ -52,6 +52,7 @@ Oskari.registerLocalization(
                 "noresults": "No results could be found. Please check your search term and try again.",
                 "searchResultCount": "Your search returned {count, plural, one {# result} other {# results}}.",
                 "searchMoreResults": "Search returned more results than are shown ({count}). Please refine you search term.",
+                "autocompleteInfo": "Similar search ideas",
                 "column_name": "Name",
                 "column_region": "Region",
                 "column_village": "Municipality",

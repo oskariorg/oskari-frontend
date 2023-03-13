@@ -2,7 +2,7 @@ import '../../../../service/search/searchservice';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { SearchHandler } from './SearchHandler';
-import { SearchBar } from './SearchBar';
+import { SearchBar } from './components/SearchBar';
 import { ThemeProvider } from 'oskari-ui/util';
 
 /**

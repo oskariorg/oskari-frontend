@@ -64,13 +64,14 @@ const PopupContent = ThemeConsumer(({ results, channels, featuresOnMap, showResu
     const mostResultsChannelId = getChannelWithMostResults(channelIds, results);
     const [activeTab, setActiveTab] = useState(mostResultsChannelId);
     const helper = getHeaderTheme(theme);
+    let loopChannelIds = [mostResultsChannelId, ...channelIds.filter(id => id !== mostResultsChannelId)];
     useEffect(() => {
         // show the tab with most results if we get additional results after first render
         setActiveTab(mostResultsChannelId);
     }, [mostResultsChannelId]);
     return (
         <Collapse activeKey={activeTab} onChange={setActiveTab}>
-            { channelIds.map(id => {
+            { loopChannelIds.map(id => {
                 const channel = channels.find(chan => id === chan.id);
                 const channelResult = results[id];
                 return (
@@ -81,7 +82,8 @@ const PopupContent = ThemeConsumer(({ results, channels, featuresOnMap, showResu
                         header={<Header
                             channel={channel}
                             showGeneric={channelIds.length === 1}
-                            count={channelResult?.totalCount} />}>
+                            count={channelResult?.totalCount}
+                            hasMore={channelResult?.hasMore} />}>
                         <ChannelContent
                             results={channelResult}
                             featuresOnMap={featuresOnMap}
@@ -105,11 +107,15 @@ const getChannelWithMostResults = (channelIds = [], results = {}) => {
     return channelIds[largestResultInIndex];
 };
 
-const Header = ({ channel, showGeneric = false, count }) => {
+const Header = ({ channel, showGeneric = false, count, hasMore = false }) => {
     return (<React.Fragment>
         <ChannelTitle channel={channel} showGeneric={showGeneric} />
-        <BadgeFloater>
-            <ThemedBadge count={count} showZero />
+        <BadgeFloater data-count={count}>
+            { !hasMore && <ThemedBadge count={count} showZero /> }
+            { hasMore && <Tooltip title={<Message messageKey='plugin.SearchPlugin.searchMoreResults' messageArgs={{ count }} bundleKey='MapModule' />}>
+                <ThemedBadge count={count + '+'} showZero className='t_more'/>
+            </Tooltip>
+            }
         </BadgeFloater>
     </React.Fragment>);
 };
