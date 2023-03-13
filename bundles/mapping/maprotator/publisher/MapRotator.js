@@ -82,25 +82,25 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            var me = this;
             if (!this.isEnabled()) {
                 return null;
             }
             var pluginConfig = this.getPlugin().getConfig();
             for (var configName in pluginConfig) {
-                if (configName === 'noUI' && !me.noUI) {
+                if (configName === 'noUI' && !this.noUI) {
                     pluginConfig[configName] = null;
                     delete pluginConfig[configName];
                 }
             }
-            if (me.noUI) {
-                pluginConfig.noUI = me.noUI;
+            if (this.noUI) {
+                pluginConfig.noUI = this.noUI;
             }
-            pluginConfig.enabled = me.state.enabled;
+            // TODO: is this enabled needed? it's always true if tool.isEnabled()
+            pluginConfig.enabled = true;
             var json = {
                 configuration: {}
             };
-            json.configuration[me.bundleName] = {
+            json.configuration[this.bundleName] = {
                 conf: pluginConfig,
                 state: this.getMapRotatorInstance().getState()
             };

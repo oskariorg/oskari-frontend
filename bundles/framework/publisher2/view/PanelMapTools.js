@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @private
          * @method _setToolLocation
          * Sets the tool's location according to users selection. (lefhanded/righthanded/userlayout)
-         * 
+         *
          * FIXME: this is only called because left/right handed layout option. If we replace them with "toggle" we can remove this.
          */
         _setToolLocation: function (tool) {

@@ -60,11 +60,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
                 }
             }
         },
-        isDisplayed: function () {
-            return this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
-        },
-        isShownInToolsPanel: function () {
-            return false;
+        isDisabled: function () {
+            return !this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
         },
         isStarted: function () {
             return !!this.getPlugin();
@@ -91,5 +88,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return null;
         }
     }, {
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
         'protocol': ['Oskari.mapframework.publisher.LayerTool']
     });

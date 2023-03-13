@@ -101,14 +101,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             accordion.addPanel(mapLayersPanel.getPanel());
 
             // create panel for each tool group
+            let rpcPanel = null;
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
                 if (group === 'rpc') {
-                    const rpcPanel = this._createRpcPanel(tools);
+                    rpcPanel = this._createRpcPanel(tools);
                     rpcPanel.getPanel().addClass('t_rpc');
-                    this.panels.push(rpcPanel);
-                    accordion.addPanel(rpcPanel.getPanel());
-                } else {
+                } else if (group !== 'layers'){
                     const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         group, tools, this.instance, this.loc
                     );
@@ -120,6 +119,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
+            if (rpcPanel) {
+                // add rpc panel after the other tools
+                this.panels.push(rpcPanel);
+                accordion.addPanel(rpcPanel.getPanel());
+            }
             const toolLayoutPanel = this._createToolLayoutPanel(publisherTools.tools);
             toolLayoutPanel.getPanel().addClass('t_toollayout');
             this.panels.push(toolLayoutPanel);

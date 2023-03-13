@@ -4,7 +4,7 @@
  * @param  {Oskari.mapframework.ui.module.common.MapModule} mapmodule
  * @param  {Object} localization Localization under publisher.BasicView
  */
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization) {
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', function (sandbox, mapmodule, localization = {}) {
     this.__index = 0;
     this.__sandbox = sandbox;
     this.__mapmodule = mapmodule;
