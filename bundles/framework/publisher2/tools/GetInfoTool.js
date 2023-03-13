@@ -158,20 +158,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         isColourDialogOpen: false,
 
         /**
-    * Set enabled.
-    * @method setEnabled
-    * @public
-    *
-    * @param {Boolean} enabled is tool enabled or not
-    */
-        _setEnabledImpl: function (enabled) {
-            var me = this;
-            if (enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function') {
-                me.__plugin.setMode(me.state.mode);
-            }
-        },
-
-        /**
     * Get extra options.
     * @method getExtraOptions
     * @public
