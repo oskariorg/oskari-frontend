@@ -1107,19 +1107,29 @@ class UIHandler extends StateHandler {
         if (!Array.isArray(layer.vectorStyles)) {
             layer.vectorStyles = [];
         }
+        let status;
         if (isEdit) {
+            status = 'UPDATED';
             layer.vectorStyles = layer.vectorStyles.map(s => s.id !== style.id ? s : style);
         } else {
+            status = 'NEW';
             layer.vectorStyles.push(style);
         }
+        this._updateVectorStyleStatus(layer, style.id, status);
         this.updateState({ layer });
     }
 
-    removeVectorStyleFromLayer (styleId) {
+    removeVectorStyleFromLayer (id) {
         const layer = this.getState().layer;
-        const { vectorStyles = [] } = layer;
-        layer.vectorStyles = vectorStyles.filter(s => s.id !== styleId);
+        this._updateVectorStyleStatus(layer, id, 'DELETED');
         this.updateState({ layer });
+    }
+
+    _updateVectorStyleStatus(layer, id, status) {
+        if (!layer.vectorStyleStatus) {
+            layer.vectorStyleStatus = {};
+        }
+        layer.vectorStyleStatus[id] = status;
     }
 
     showLayerMetadata (uuid) {
