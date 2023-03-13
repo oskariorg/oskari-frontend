@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
     "lang": "en",
-    "key": "userstyle",
+    "key": "UserStyle",
     "value": {
         "title": "Own styles",
         "styles" : "Styles",

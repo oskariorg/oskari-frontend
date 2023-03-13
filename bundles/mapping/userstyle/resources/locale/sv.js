@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
     "lang": "sv",
-    "key": "userstyle",
+    "key": "UserStyle",
     "value": {
         "title": "Egna stilar",
         "styles" : "Stilar",

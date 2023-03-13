@@ -1,50 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-
-// TODO: Fix this once style accessible smarter way
-const secondaryColor = '#006ce8';
+import { IconButton } from 'oskari-ui/components/buttons';
 
 const RowContainer = styled.div`
     display: flex;
+    justify-content: space-between;
 `;
 
 const TextColumn = styled.div`
     padding-left: 10px;
-    flex: 0 0 380px;
     word-wrap: break-word;
-    max-width: 380px;
 `;
 
 const IconContainer = styled.div`
-    display: flex;    
-    width: 50px;
-`;
-const IconColumn = styled.div`
-    padding-right: 10px;
-    flex: 1;
-    cursor: pointer;
+    Button {
+        margin-left: 10px;
+    }
 `;
 
-const IconColumnEdit = styled(IconColumn)`
-    color: ${secondaryColor};
-`;
-
-export const UserStyleRow = ({ styleTitle, editUserStyleHandler, removeUserStyleHandler }) => {
+export const UserStyleRow = ({ name, onEdit, onDelete }) => {
     return (
         <RowContainer>
-            <TextColumn>{styleTitle}</TextColumn>
+            <TextColumn>{name}</TextColumn>
             <IconContainer>
-                <IconColumnEdit><EditOutlined onClick={editUserStyleHandler} /></IconColumnEdit>
-                <IconColumn><DeleteOutlined onClick={removeUserStyleHandler} /></IconColumn>
+                <IconButton
+                    type='edit'
+                    onClick={onEdit}
+                />
+                <IconButton
+                    type='delete'
+                    onConfirm={onDelete}
+                />
             </IconContainer>
         </RowContainer>
     );
 };
 
 UserStyleRow.propTypes = {
-    styleTitle: PropTypes.string.isRequired,
-    editUserStyleHandler: PropTypes.func.isRequired,
-    removeUserStyleHandler: PropTypes.func.isRequired
+    name: PropTypes.string.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 };
