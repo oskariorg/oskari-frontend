@@ -41,11 +41,10 @@ export class UserStyleService {
 
     saveRuntimeStyle (style) {
         const { id } = style;
-        // add flag
-        style.isRuntime = true;
         if (!id) {
             // styles are stored only for runtime, use time to get unique id
-            style.id(Date.now().valueOf());
+            // use string (backend stored styles have number/Long)
+            style.id = 's_' + Date.now().toString();
         }
         const index = this.styles.findIndex(s => s.id === id);
         if (index !== -1) {
@@ -161,7 +160,7 @@ export class UserStyleService {
     }
 
     removeStyleFromLayer (id) {
-        const style = this.getUserStyle(id);
+        const style = this.getStyleById(id);
         const { layerId } = style || {};
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
