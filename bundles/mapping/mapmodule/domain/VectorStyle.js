@@ -12,11 +12,10 @@ export const createDefaultStyle = () => {
 };
 
 export class VectorStyle extends Style {
-    constructor ({ id, name, style, type, isRuntime }) {
+    constructor ({ id, name, style, type }) {
         super(id, name); // name, title
         this._type = type;
         this._styleDef = style || {};
-        this._isRuntime = isRuntime;
     }
 
     /* override */
@@ -37,8 +36,9 @@ export class VectorStyle extends Style {
         return this._type;
     }
 
+    // backend stored styles have number id (long)
     isRuntimeStyle () {
-        return this._isRuntime === true;
+        return typeof this.getName() === 'string';
     }
 
     hasDefinitions () {
