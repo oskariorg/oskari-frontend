@@ -14,7 +14,7 @@ class Handler extends StateHandler {
     };
 
     getName () {
-        return 'UserStylesHandler';
+        return 'UserStyleHandler';
     }
 
     bindEvents () {

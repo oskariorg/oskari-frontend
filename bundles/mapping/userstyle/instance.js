@@ -1,7 +1,7 @@
 import { UserStyleService } from './service/UserStyleService';
 import { showStylesPopup } from './view';
 import { UserStylesTab } from './view/UserStylesTab';
-import { UserStylesHandler } from './handler/UserStylesHandler';
+import { UserStyleHandler } from './handler/UserStyleHandler';
 import { BUNDLE_KEY } from './constants';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     _startImpl: function (sandbox) {
         this.sandbox = sandbox;
         this.service = new UserStyleService(sandbox);
-        this.handler = new UserStylesHandler(this);
+        this.handler = new UserStyleHandler(this);
         sandbox.registerService(this.service);
         // TODO: switching to stylelist after adding style via editor is confusing
         this.service.on('update', (layerId) => {
