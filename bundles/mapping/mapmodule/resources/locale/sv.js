@@ -55,7 +55,16 @@ Oskari.registerLocalization(
                 "column_name": "Namn",
                 "column_region": "Region",
                 "column_village": "Kommun",
-                "column_type": "Typ"
+                "column_type": "Typ",
+                "options": {
+                    "title": "Search options",
+                    "description": "Refine search criteria by choosing data sources"
+                },
+                "resultBox": {
+                    "close": "Stäng",
+                    "title": "Sökresultat",
+                    "alternatives": "Den här platsen har följande alternativa namn:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Objektuppgifter",

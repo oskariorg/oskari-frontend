@@ -57,9 +57,19 @@ Oskari.registerLocalization(
                 "column_village": "Kunta",
                 "column_type": "Tyyppi",
 
+                "selectResult": "Näytä tulos kartalla",
+                "deselectResult": "Poista tulos kartalta",
+                "selectResultAll": "Näytä kaikki kartalla",
+                "deselectResultAll": "Poista kaikki kartalta",
+
                 "options": {
                     "title": "Hakuvalinnat",
                     "description": "Tarkenna hakuehtoja valitsemalla tietolähteet"
+                },
+                "resultBox": {
+                    "close": "Sulje",
+                    "title": "Hakutulokset",
+                    "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:"
                 }
             },
             "GetInfoPlugin": {

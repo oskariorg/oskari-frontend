@@ -34,7 +34,7 @@ Oskari.clazz.define(
          * Initializes ui templates.
          */
         _initImpl: function () {
-            this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.SearchPlugin;
+            this.fieldPlaceHolder = Oskari.getMsg('MapModule', 'plugin.SearchPlugin.placeholder');
             this.template = jQuery('<div class="mapplugin search default-search-div" />');
             this.inMobileMode = false;
         },
@@ -89,7 +89,7 @@ Oskari.clazz.define(
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
                         disabled={disabled}
-                        placeholder={this._loc.placeholder}
+                        placeholder={this.fieldPlaceHolder}
                     />
                 </ThemeProvider>,
                 el[0]
