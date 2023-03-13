@@ -107,7 +107,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 if (group === 'rpc') {
                     rpcPanel = this._createRpcPanel(tools);
                     rpcPanel.getPanel().addClass('t_rpc');
-                } else if (group !== 'layers'){
+                } else if (group !== 'layers') {
+                    // ignore tools under "layers" as these are the new React-based tools shown on the layers panel
                     const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         group, tools, this.instance, this.loc
                     );
