@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
+            form.init(me.data);
 
             return form;
         },
@@ -183,7 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const sandbox = this.instance.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', sandbox, mapModule, this.loc, this.instance);
-            form.init(this.data, (value) => {});
+            form.init(this.data);
             return form;
         },
         /**
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
+            form.init(me.data);
 
             return form;
         },
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 );
 
             // initialize form (restore data when editing)
-            form.init(me.data, function (value) {});
+            form.init(me.data);
 
             return form;
         },
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
                 tools, sandbox, this.loc, this.instance
             );
-            form.init(this.data, (value) => {});
+            form.init(this.data);
             return form;
         },
 
@@ -566,20 +566,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          * @param {Object[]} errors validation error objects to show
          *
          */
-        _showValidationErrorMessage: function (errors) {
-            var dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = dialog.createCloseButton(this.loc.buttons.ok),
-                content = jQuery('<ul></ul>'),
-                i,
-                row;
-
-            for (i = 0; i < errors.length; i += 1) {
-                row = jQuery('<li></li>');
-                row.append(errors[i].error);
-                content.append(row);
-            }
+        _showValidationErrorMessage: function (errors = []) {
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+            const content = jQuery('<ul></ul>');
+            errors.map(err => {
+                const row = jQuery('<li></li>');
+                row.append(err.error);
+                return row;
+            }).forEach(row => content.append(row));
             dialog.makeModal();
             dialog.show(this.loc.error.title, content, [okBtn]);
         },
@@ -591,19 +586,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
          *
          */
         _showReplaceConfirm: function (continueCallback) {
-            var dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                );
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(this.loc.buttons.replace);
             okBtn.addClass('primary');
             okBtn.setHandler(function () {
                 dialog.close();
                 continueCallback();
             });
-            var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+            const cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
             dialog.show(
                 this.loc.confirm.replace.title,
                 this.loc.confirm.replace.msg,
