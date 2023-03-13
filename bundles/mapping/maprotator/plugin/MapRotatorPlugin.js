@@ -100,6 +100,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         _createUI: function () {
             this._element = this._createControlElement();
+            this.setDegrees(this.getRotation());
             this._renderButton();
             this.handleEvents();
             this.addToPluginContainer(this._element);
@@ -132,9 +133,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          */
         _createEventHandlers: function () {
             return {
-                MapSizeChangedEvent: function () {
-                    this.setRotation(this.getDegrees());
-                },
                 /**
                  * @method RPCUIEvent
                  * will open/close coordinatetool's popup
@@ -178,6 +176,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             return this._element;
         },
         _stopPluginImpl: function () {
+            this.setRotation(0);
             this.teardownUI();
             if (this._dragRotate) {
                 this.getMap().removeInteraction(this._dragRotate);

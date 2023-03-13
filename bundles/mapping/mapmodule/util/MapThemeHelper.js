@@ -7,7 +7,7 @@ export const getDefaultMapTheme = () => {
     return {
         // For buttons on map
         navigation: {
-            roundness: 0,
+            roundness: 100,
             opacity: 0.8,
             color: {
                 primary: DEFAULT_COLORS.DARK_BUTTON_BG,

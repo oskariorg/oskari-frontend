@@ -1,12 +1,3 @@
-const toolSortFn = (a, b) => {
-    if (a.getIndex() < b.getIndex()) {
-        return -1;
-    }
-    if (a.getIndex() > b.getIndex()) {
-        return 1;
-    }
-    return 0;
-};
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PanelMapTools
  *
@@ -22,9 +13,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
     function (group, tools = [], instance, localization) {
         this.group = group;
         this.tools = tools;
+        this.tools.sort((a, b) => a.getIndex() - b.getIndex());
         this.loc = localization;
         this.instance = instance;
-        this.sandbox = instance.getSandbox();
         this.templates = {
             tool: ({ title }) => `<div class="tool">
                 <label><input type="checkbox"/>${title}</label>
@@ -32,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             </div>`,
             help: () => '<div class="help icon-info"></div>'
         };
-        this.data = null;
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -43,66 +33,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          */
         init: function (pData) {
             const instance = this.instance;
-            const sandbox = this.sandbox;
             this.data = pData;
 
-            if (pData) {
-                this.tools.forEach(tool => {
-                    try {
-                        tool.init(pData, instance);
-                    } catch (e) {
-                        Oskari.log('publisher2.view.PanelMapTools')
-                            .error('Error initializing publisher tool:', tool.getTool().id);
-                    }
-                });
-            }
-
-            Object.keys(this.eventHandlers)
-                .forEach(eventName => sandbox.registerForEventByName(this, eventName));
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
+            if (!pData) {
                 return;
             }
-            return handler.apply(this, [event]);
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             *
-             * Calls  handleDrawLayerSelectionChanged() functions
-             */
-            MapLayerEvent: function (event) {
-                const toolbarTool = this._getToolbarTool('PublisherToolbarPlugin');
-                if (toolbarTool && (event.getOperation() === 'add')) {
-                    // handleDrawLayerSelectionChanged
-                    toolbarTool.handleDrawLayerSelectionChanged(
-                        event.getLayerId()
-                    );
+            this.tools.forEach(tool => {
+                try {
+                    tool.init(pData, instance);
+                } catch (e) {
+                    Oskari.log('publisher2.view.PanelMapTools')
+                        .error('Error initializing publisher tool:', tool.getTool().id);
                 }
-            }
+            });
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
-        },
-        /**
-        * Sort tools
-        * @method
-        * @private
-        */
-        _sortTools: function () {
-            this.tools.sort(toolSortFn);
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -120,8 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             tooltipCont.attr('title', me.loc[me.group].tooltip);
             panel.getHeader().append(tooltipCont);
 
-            // Sort tools
-            me._sortTools();
             // Add tools to panel
             this.tools.forEach(tool => {
                 const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
@@ -163,10 +107,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @private
          * @method _setToolLocation
          * Sets the tool's location according to users selection. (lefhanded/righthanded/userlayout)
+         *
+         * FIXME: this is only called because left/right handed layout option. If we replace them with "toggle" we can remove this.
          */
         _setToolLocation: function (tool) {
-            const layoutPanel = this.instance.publisher.panels.find(
-                panel => panel.getName && panel.getName() === 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout');
+            const layoutPanel = this.instance.publisher.panels
+                .filter(panel => typeof panel.getName === 'function')
+                .find(panel => panel.getName() === 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout');
             if (!layoutPanel || !tool[layoutPanel.activeToolLayout]) {
                 return;
             }
@@ -184,25 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             }
         },
         /**
-         * Returns a hash containing ids of enabled plugins when restoring a published map.
-         * @method _getEnabledTools
-         * @private
-         *
-         * @return {Object} id's of the enabled plugins
-         */
-        _getEnabledTools: function () {
-            if (!this.data) {
-                return null;
-            }
-            const enabledTools = {};
-            this.tools.forEach(tool => {
-                if (tool.isEnabled()) {
-                    enabledTools[tool.getTool().id] = true;
-                }
-            });
-            return enabledTools;
-        },
-        /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
          * @return {Object}
@@ -210,13 +138,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         getValues: function () {
             // just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
             return null;
-        },
-        /**
-         * Get tool by name
-         * @returns {Object} tool object
-         */
-        _getToolbarTool: function (name) {
-            return this.tools.find(tool => tool.getTool().name === name) || null;
         },
 
         /**
@@ -231,26 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             return this.tools
                 .filter(tool => !tool.validate())
                 .map(tool => tool.getTool().id);
-        },
-        /**
-         * @method setMode
-         * @param {String} mode the mode
-         */
-        setMode: function (mode) {
-            if (!this.panel) {
-                return;
-            }
-
-            const cont = this.panel.getContainer();
-            // update tools
-            this.tools.forEach(tool => {
-                if (tool.isDisplayedInMode(mode) === true) {
-                    cont.find('#tool-' + tool.getTool().id).prop('disabled', true);
-                    cont.find('#tool-' + tool.getTool().id).prop('checked', false);
-                } else {
-                    cont.find('#tool-' + tool.getTool().id).prop('disabled', false);
-                }
-            });
         },
         getTools: function () {
             return this.tools;
@@ -269,8 +170,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         .error('Error stopping publisher tool:', tool.getTool().id);
                 }
             });
-
-            Object.keys(this.eventHandlers)
-                .forEach(eventName => this.sandbox.unregisterFromEventByName(this, eventName));
         }
     });

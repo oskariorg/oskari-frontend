@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
                 return null;
             }
         },
-        isShownInToolsPanel: function () {
+        isDisplayed: function () {
             return false;
         }
     }, {

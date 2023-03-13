@@ -6,59 +6,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         righthanded: 'top left',
 
         groupedSiblings: false,
-        // user's own layers (not id's)
-        myplaces: [],
 
-        // defaultStateConfigs stores the default state values, which is used when reset configs
-        defaultStateConfigs: {
-            'publishedmyplaces2Config': {
-                'toolbarId': 'PublisherToolbar',
-                'layer': null,
-                'myplaces': {
-                    'point': false,
-                    'line': true,
-                    'area': false
-                }
-            }
-        },
         // toolbarConfig stores the current state
         toolbarConfig: {},
-        // publishedmyplaces2Config stores the current state
-        publishedmyplaces2Config: undefined,
-
-        drawButtons: {
-            'point': {
-                iconCls: 'myplaces-draw-point',
-                disabled: true,
-                sticky: true,
-                callback: function () {
-                }
-            },
-            'line': {
-                iconCls: 'myplaces-draw-line',
-                disabled: true,
-                sticky: true,
-                callback: function () {
-                }
-            },
-            'area': {
-                iconCls: 'myplaces-draw-area',
-                disabled: true,
-                sticky: true,
-                callback: function () {
-                }
-            }
-
-        },
 
         templates: {
             'toolOptions': '<div class="tool-options"></div>',
-            'toolOption': '<div class="tool-option"><label><input type="checkbox" /></label></div>',
-            'toolOptionSettings': '<div class="tool-option-settings"></div>',
-            'toolOptionSetting': '<div class="tool-option-setting"></div>',
-            'toolOptionSettingInput': '<label><input type="checkbox" /></label>',
-            'layerSelect': '<select class="publisher-select-layer"></select>',
-            'layerSelectOption': '<option></option>'
+            'toolOption': '<div class="tool-option"><label><input type="checkbox" /></label></div>'
         },
 
         /**
@@ -121,25 +75,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 me.selectedTools['history_back'] = true;
             }
 
-            me.drawOptions = {
-                point: true,
-                line: true,
-                area: true
-            };
-
-            if (data.configuration.publishedmyplaces2) {
-                me._storedData.publishedmyplaces2Config = _.cloneDeep(conf.publishedmyplaces2.conf);
-                var drawToolsConfig = me._storedData.publishedmyplaces2Config.myplaces;
-                for (toolName in drawToolsConfig) {
-                    if (drawToolsConfig.hasOwnProperty(toolName) && !drawToolsConfig[toolName]) {
-                        me.drawOptions[toolName] = false;
-                    }
-                }
-                if (me._hasSelectedDrawTool()) {
-                    me.setEnabled(true);
-                }
-            }
-
             if (pluginConf.id) {
                 me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
                 if (me._hasActiveTools()) {
@@ -196,15 +131,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             // we want toolbar always with no default tools
             retValue.configuration.toolbar = { conf: { 'history': false, 'basictools': false, 'viewtools': false } };
-
-            // PublishedMyPlaces is not supported with ol
-
-            /*
-            if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
-                me.publishedmyplaces2Config.myplaces = me.drawOptions;
-                retValue.configuration.publishedmyplaces2 = { conf : me.publishedmyplaces2Config };
-            }
-            */
             return retValue;
         },
         /**
@@ -329,8 +255,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     }
                 }
 
-                // show drawing controls for admin users
-                me._checkAdminDrawControls();
                 tool.toolContainer.find('.extraOptions').append(options);
             } else {
                 // remove buttons, handlers and toolbar toolbar tools
@@ -342,7 +266,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
                 if (!localeChange) {
                     me.toolbarConfig = {};
-                    me.publishedmyplaces2Config = {};
                 }
 
                 if (tool._isPluginStarted) {
@@ -361,200 +284,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 }
             }
         },
-        _checkAdminDrawControls: function () {
-            // show drawing controls for admin users
-            // TODO: PublishedMyPlaces is not supported with ol!
-        },
-        /**
-         *  Manages drawlayer options in checked and unchecked cases
-         *
-         * @param element
-         * @param toolName
-         * @param groupName
-         * @param toolOption
-         * @param toggleToolHandler
-         * @private
-         */
-        _toggleDrawTools: function (element, toolName, groupName, toolOption) {
-            var me = this,
-                toolButton,
-                toolElement,
-                addLayerButton,
-                addSelectLayerButton,
-                layerSelect,
-                optionSettings,
-                optionSetting,
-                checkbox = jQuery(element),
-                isChecked = checkbox.is(':checked');
-
-            if (isChecked) {
-                layerSelect = me._updateDrawLayerSelection();
-
-                optionSettings = jQuery(me.templates.toolOptionSettings).clone();
-                optionSetting = jQuery(me.templates.toolOptionSetting).clone();
-
-                addLayerButton = me._getAddLayerButton();
-                addSelectLayerButton = me._getAddSelectLayerButton();
-
-                // add select for drawlayer
-                optionSetting.append('<span>' + me.__loc.selectDrawLayer + '</span><br/>');
-                optionSetting.append(layerSelect);
-                addLayerButton.insertTo(optionSetting);
-                addSelectLayerButton.insertTo(optionSetting);
-                optionSettings.append(optionSetting);
-
-                // build DOM based on button configs
-                Object.keys(me.drawOptions).forEach(toolName => {
-                    let isToolChecked = me.drawOptions[toolName];
-                    toolButton = me.drawButtons[toolName];
-                    toolButton.toolbarid = toolOption.toolbarId;
-
-                    // create checkbox
-                    toolButton.toolOption = jQuery(me.templates.toolOptionSetting).clone();
-                    toolButton.toolOption.append(jQuery(me.templates.toolOptionSettingInput).clone());
-                    toolButton.toolOption.find('label')
-                        .attr('for', 'option-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
-
-                    // toggle toolbar tool. i.e. send requests
-                    toolElement = toolButton.toolOption.find('input')
-                        .attr('id', 'option-' + toolName)
-                        .prop('checked', !!isToolChecked)
-                        .on('change', function () {
-                            var toolState = me.drawOptions[toolName];
-                            isToolChecked = (toolState !== true);
-                            me._toggleDrawToolButton(isToolChecked, toolName, groupName, toolButton);
-                        });
-
-                    optionSettings.append(toolButton.toolOption);
-
-                    // execute toolElement change function when checked
-                    me._toggleDrawToolButton(isToolChecked, toolName, groupName, toolButton);
-                });
-                // add different settings
-                checkbox.parent().parent()
-                    .append(optionSettings);
-            } else {
-                toolElement = checkbox.parent().parent();
-
-                for (toolName in me.drawOptions) {
-                    if (me.drawOptions.hasOwnProperty(toolName)) {
-                        toolButton = me.drawButtons[toolName];
-                        toolButton.toolbarid = toolOption.toolbarId;
-                        var request = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, groupName, toolButton.toolbarid);
-                        me.__sandbox.request(me.__instance, request);
-                    }
-                }
-
-                toolElement.find('.tool-option-settings').remove();
-                toolElement = null;
-            }
-        },
 
         /**
-        * Toggle tool button.
-        * @method _toggleToolButton
-        * @private
-        *
-        * @param  {Boolean} isToolChecked is tool checked
-        * @param  {String}  toolName the tool name
-        * @param  {Object}  buttonGroup the button group
-        * @param  {Object}  toolButton the tool button
-        */
-
-        _toggleDrawToolButton: function (isToolChecked, toolName, buttonGroupName, toolButton) {
-            var me = this;
-            var request;
-
-            if (isToolChecked) {
-                request = Oskari.requestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroupName, toolButton);
-                me.__sandbox.request(me.__instance, request);
-                me.drawOptions[toolName] = true;
-            } else {
-                request = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroupName, toolButton.toolbarid);
-                me.__sandbox.request(me.__instance, request);
-                me.drawOptions[toolName] = false;
-            }
-        },
-
-        _updateDrawLayerSelection: function () {
-            var me = this,
-                i,
-                layerSelect = jQuery(me.templates.layerSelect).clone(),
-                layerSelectOption,
-                mapLayerService = me.__sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                myplaces = mapLayerService.getLayersOfType('myplaces');
-
-            for (i = 0; i < myplaces.length; i++) {
-                layerSelectOption = jQuery(me.templates.layerSelectOption).clone();
-                layerSelectOption.attr('value', myplaces[i].getId()).text(myplaces[i].getName());
-                // select correct layer
-                if (me.publishedmyplaces2Config.layer !== null && me.publishedmyplaces2Config.layer !== undefined &&
-                    myplaces[i].getId() === me.publishedmyplaces2Config.layer) {
-                    layerSelectOption.prop('selected', true);
-                }
-                layerSelect.append(layerSelectOption);
-            }
-            // select default
-            if (me.publishedmyplaces2Config.layer === null || me.publishedmyplaces2Config.layer === undefined) {
-                me.publishedmyplaces2Config.layer = myplaces[0].getId();
-            }
-            layerSelect.on('change', function (e) {
-                var target = jQuery(e.target),
-                    value = target.val();
-
-                me.publishedmyplaces2Config.layer = value;
-            });
-            return layerSelect;
-        },
-        /**
-         * Manages drawlayer change in drawlayerselection
-         * @param addedDrawLayerId   drawlayer id
-         */
-        handleDrawLayerSelectionChanged: function (addedDrawLayerId) {
-            this.publishedmyplaces2Config.layer = addedDrawLayerId;
-            var layerSelect = this._updateDrawLayerSelection();
-            jQuery('.publisher-select-layer').replaceWith(layerSelect);
-        },
-        /**
-         * Add new draw layer button and its handler
-         * @returns {Oskari.userinterface.component.Button}
-         * @private
-         */
-        _getAddLayerButton: function () {
-            var me = this,
-                addLayerButton;
-
-            addLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            addLayerButton.setTitle(me.__loc.layers.add);
-            addLayerButton.setHandler(function () {
-                // send OpenAddLayerDialogEvent
-                var request = Oskari.requestBuilder('MyPlaces.OpenAddLayerDialogRequest')('.publisher-select-layer', 'right');
-                me.__sandbox.request(me.__instance, request);
-            });
-            return addLayerButton;
-        },
-        /**
-         * Add select-draw-layer-to-mapselection button and its handler
-         * @returns {Oskari.userinterface.component.Button}
-         * @private
-         */
-        _getAddSelectLayerButton: function () {
-            var me = this,
-                addSelectLayerButton;
-
-            addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            addSelectLayerButton.setTitle(this.__loc.layers.addselect);
-            addSelectLayerButton.setHandler(function () {
-                var request = Oskari.requestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
-                me.__sandbox.request(me.__instance, request);
-                // this intentionally refers to the current DOM element
-                this.blur();
-            });
-            return addSelectLayerButton;
-        },
-
-        /**
-         * Resets the local toolbarConfig and publishedmyplaces2Config to use the values from storedData,
+         * Resets the local toolbarConfig to use the values from storedData,
          * which was passed in as a variable in getPanel.
          * All known configs are reset, unless specified as parameter.
          * Only the specified config is reset.
@@ -573,12 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     (!configToLoad || (configToLoad === configName))) {
                     me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
                 }
-
-                configName = 'publishedmyplaces2Config';
-                if (me._storedData.publishedmyplaces2Config &&
-                    (!configToLoad || (configToLoad === configName))) {
-                    me.publishedmyplaces2Config = _.cloneDeep(me._storedData.publishedmyplaces2Config);
-                }
             }
         },
         _hasActiveTools: function () {
@@ -586,18 +312,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             for (var toolName in me.selectedTools) {
                 if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
-                    return true;
-                }
-            }
-
-            return false;
-        },
-
-        _hasSelectedDrawTool: function () {
-            var me = this;
-
-            for (var toolName in me.drawOptions) {
-                if (me.drawOptions.hasOwnProperty(toolName) && me.drawOptions[toolName]) {
                     return true;
                 }
             }
