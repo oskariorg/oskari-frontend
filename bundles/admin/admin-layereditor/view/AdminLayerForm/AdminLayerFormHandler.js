@@ -1131,7 +1131,7 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    _updateVectorStyleStatus(layer, id, status) {
+    _updateVectorStyleStatus (layer, id, status) {
         if (!layer.vectorStyleStatus) {
             layer.vectorStyleStatus = {};
         }
