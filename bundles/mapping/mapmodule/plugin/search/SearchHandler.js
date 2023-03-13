@@ -53,7 +53,8 @@ class SearchHandler extends StateHandler {
             loading: [],
             hasOptions: false,
             selectedChannels: [],
-            featuresOnMap: []
+            featuresOnMap: [],
+            suggestions: []
         });
         // ['selected', 'name', 'region', 'type'] or null/empty array for all
         this.columns = plugin.getConfig().columns || ['name', 'region', 'type'];
@@ -144,24 +145,35 @@ class SearchHandler extends StateHandler {
 
     setQuery (query) {
         this.updateState({
-            query
+            query,
+            suggestions: []
         });
+        let { selectedChannels } = this.getState();
+        if (query.length > 2) {
+            this.service.doAutocompleteSearch(query, (result) => {
+                this.updateState({ suggestions: result.methods });
+            }, selectedChannels.join(','));
+        }
     }
 
     /**
      * Uses SearchService to make the actual search and calls  #_showResults
      */
-    doSearch () {
-        const { loading, query = '', selectedChannels = [] } = this.getState();
+    doSearch (autocompleteWord) {
+        let { loading, query = '', selectedChannels = [] } = this.getState();
+        if (autocompleteWord) {
+            query = autocompleteWord;
+        }
         if (loading.length || query.length === 0) {
             return;
         }
         this.clearResultPopup();
-        // TODO: cleanup
         const currentChannels = [...(new Set(loading.concat(selectedChannels)))];
 
         this.updateState({
-            loading: currentChannels
+            query,
+            loading: currentChannels,
+            suggestions: []
         });
         currentChannels.forEach(channel => this.triggerSearchForChannel(channel, query));
     }

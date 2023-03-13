@@ -52,6 +52,7 @@ Oskari.registerLocalization(
                 "noresults": "Inga resultat hittades. Vänligen avgränsa din sökning.",
                 "searchResultCount": "Din sökning gav {count} resultat.",
                 "searchMoreResults": "Sökordet gav flera träffar än kunde visas ({count}). Specificera sökordet för bättre resultat.",
+                "autocompleteInfo": "Motsvarande sökvillkor",
                 "column_name": "Namn",
                 "column_region": "Region",
                 "column_village": "Kommun",
