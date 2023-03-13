@@ -1,59 +1,142 @@
+import { Messaging } from 'oskari-ui/util';
+import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
+import { BUNDLE_KEY } from '../constants';
+
 export class UserStyleService {
     constructor (sandbox) {
-        this.styles = new Map();
+        this.styles = []; // server VectorStyle
         this.sandbox = sandbox;
+        this.log = Oskari.log('UserStyleService');
         Oskari.makeObservable(this);
+        this.fetchUserStyles();
     }
 
-    saveUserStyle (layerId, style) {
-        if (!style.getName()) {
-            // styles are stored only for runtime, use time to get unique name
-            style.setName('s_' + Date.now().toString());
+    saveUserStyle (style) {
+        if (!style.name) {
+            const nextVal = Oskari.getSeq(BUNDLE_KEY).nextVal();
+            style.name = Oskari.getMsg(BUNDLE_KEY, 'defaultName') + ' ' + nextVal;
         }
-        const layerStyles = this.getUserStylesForLayer(layerId);
-        if (!style.getTitle()) {
-            const nextVal = Oskari.getSeq('userstyle').nextVal();
-            style.setTitle(Oskari.getMsg('userstyle', 'defaultName') + ' ' + nextVal);
-        }
-        const name = style.getName();
-        const index = layerStyles.findIndex(s => s.getName() === name);
-        if (index !== -1) {
-            layerStyles[index] = style;
+        if (Oskari.user().isLoggedIn()) {
+            if (style.id) {
+                this.updateStyle(style);
+            } else {
+                this.saveStyle(style);
+            }
         } else {
-            layerStyles.push(style);
+            this.saveRuntimeStyle(style);
         }
-        this.styles.set(layerId, layerStyles);
-
-        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
-        if (layer) {
-            layer.addStyle(style);
-            layer.selectStyle(name);
-            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, name]);
-            this.notifyLayerUpdate(layerId);
-        }
-        this.notify(layerId);
+        // Style is saved from selected layer so add saved style to layer
+        this.applyStyleToLayer(style.id);
     }
 
-    removeUserStyle (layerId, name) {
-        if (!layerId || !name) {
+    removeUserStyle (id) {
+        this.removeStyleFromLayer(id);
+        if (Oskari.user().isLoggedIn()) {
+            this.deleteStyle();
+        } else {
+            this.styles = this.styles.filter(s => s.id !== id);
+            this.notifyStyleUpdate();
+        }
+    }
+
+    saveRuntimeStyle (style) {
+        const { id } = style;
+        // add flag
+        style.isRuntime = true;
+        if (!id) {
+            // styles are stored only for runtime, use time to get unique id
+            style.id(Date.now().valueOf());
+        }
+        const index = this.styles.findIndex(s => s.id === id);
+        if (index !== -1) {
+            this.styles[index] = style;
+        } else {
+            this.styles.push(style);
+        }
+        this.notifyStyleUpdate();
+    }
+
+    // Don't apply styles here for layrs. LayersPlugin handles
+    fetchUserStyles () {
+        if (!Oskari.user().isLoggedIn()) {
             return;
         }
-        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
-        if (layer) {
-            layer.removeStyle(name);
-            this.notifyLayerUpdate(layerId);
-        }
-        const layerStyles = this.getUserStylesForLayer(layerId);
-        const index = layerStyles.findIndex(s => s.getName() === name);
-        if (index !== -1) {
-            layerStyles.splice(index, 1);
-            this.styles.set(layerId, layerStyles);
-        }
-        this.notify(layerId);
+        fetch(Oskari.urls.getRoute('VectorStyle'), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (!response.ok) {
+                return Promise.reject(new Error('Fetching user vector styles failed'));
+            }
+            return response.json();
+        }).then(json => {
+            this.handleFetchResponse(json);
+        }).catch(error => this.ajaxError('get', error));
     }
 
-    notify (layerId) {
-        this.trigger('update', layerId);
+    deleteStyle (id) {
+        fetch(Oskari.urls.getRoute('VectorStyle', { id }), {
+            method: 'DELETE'
+        }).then(response => {
+            return response.ok && response;
+        }).then((resp) => {
+            if (resp === false) {
+                throw Error('Failed to delete vector style');
+            }
+            this.fetchUserStyles();
+        }).catch(error => this.ajaxError('delete', error));
+    }
+
+    saveStyle (style) {
+        fetch(Oskari.urls.getRoute('VectorStyle'), {
+            method: 'POST',
+            body: JSON.stringify(style)
+        }).then(response => {
+            return response.ok && response;
+        }).then((resp) => {
+            if (resp === false) {
+                throw Error('Failed to save vector style');
+            }
+            this.fetchUserStyles();
+        }).catch(error => this.ajaxError('post', error));
+    }
+
+    updateStyle (style) {
+        fetch(Oskari.urls.getRoute('VectorStyle'), {
+            method: 'PUT',
+            body: JSON.stringify(style)
+        }).then(response => {
+            return response.ok && response;
+        }).then((resp) => {
+            if (resp === false) {
+                throw Error('Failed to update vector style');
+            }
+            this.fetchUserStyles();
+        }).catch(error => this.ajaxError('put', error));
+    }
+
+    ajaxError (method, error) {
+        Messaging.error(`errors.fetch.${method}`);
+        this.log.error(error);
+    }
+
+    ajaxSuccess (method) {
+        Messaging.success(`success.${method}`);
+    }
+
+    handleFetchResponse (json) {
+        if (!Array.isArray(json)) {
+            return;
+        }
+        this.styles = json;
+        this.notifyStyleUpdate();
+        // TODO: add to selected layers
+    }
+
+    notifyStyleUpdate () {
+        this.trigger('update');
     }
 
     notifyLayerUpdate (layerId) {
@@ -65,12 +148,37 @@ export class UserStyleService {
         return 'Oskari.mapframework.userstyle.service.UserStyleService';
     }
 
-    getUserStylesForLayer (layerId) {
-        return this.styles.get(layerId) || [];
+    applyStyleToLayer (id) {
+        const style = this.getStyleById(id);
+        const { layerId } = style || {};
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
+        if (layer) {
+            layer.addStyle(new VectorStyle(style));
+            layer.selectStyle(id);
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId, id]);
+            this.notifyLayerUpdate(layerId);
+        }
     }
 
-    getUserStyle (layerId, name) {
-        const layerStyles = this.getUserStylesForLayer(layerId);
-        return layerStyles.find(s => s.getName() === name);
+    removeStyleFromLayer (id) {
+        const style = this.getUserStyle(id);
+        const { layerId } = style || {};
+        const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
+        if (layer) {
+            layer.removeStyle(id);
+            this.notifyLayerUpdate(layerId);
+        }
+    }
+
+    getStyles () {
+        return this.styles;
+    }
+
+    getStylesByLayer (layerId) {
+        return this.styles.filter(s => s.layerId === layerId);
+    }
+
+    getStyleById (id) {
+        return this.styles.find(s => s.id === id);
     }
 }

@@ -54,29 +54,28 @@ const AddStyleIcon = styled(PlusOutlined)`
     margin-right: 10px;
 `;
 
-const showVisualizationForm = (layerId, styleName) => {
-    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, true, styleName]);
-};
+const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
+const addNew = (layerId) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId }]);
 
-export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
+export const UserStyles = ({ layerId, styles, onDelete }) => {
     return (
         <Content>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
-                <AddStyle onClick={() => showVisualizationForm(layerId)}>
+                <AddStyle onClick={() => addNew(layerId)}>
                     <AddStyleIcon />
                     <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
             { styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
-                const name = style.getName();
-                const title = style.getTitle();
+                const { id, name } = style;
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleTitle={title}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, name)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, name)}/>
+                        <UserStyleRow
+                            name={name}
+                            onEdit={() => onEdit(id)}
+                            onDelete={() => onDelete(id)}/>
                     </StyledListItem>
                 );
             }}/>
@@ -88,5 +87,5 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
 UserStyles.propTypes = {
     layerId: PropTypes.number.isRequired,
     styles: PropTypes.array.isRequired,
-    removeUserStyleHandler: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired
 };
