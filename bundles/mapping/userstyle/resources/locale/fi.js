@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "fi",
-    "key": "userstyle",
+    "key": "UserStyle",
     "value": {
         "title": "Omat tyylit",
         "styles" : "Tyylit",
