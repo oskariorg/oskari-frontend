@@ -110,7 +110,8 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Taustakarttataso",
                     "allowStyleChange": "Salli esitystyylin valinta",
                     "showMetadata": "Näytä metatietolinkit",
-                    "noMultipleStyles": "Valituilla karttatasoilla on saatavilla vain yksi esitystapa/tyyli."
+                    "noMultipleStyles": "Valituilla karttatasoilla on saatavilla vain yksi esitystapa/tyyli.",
+                    "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla"
                 },
                 "mylocation": {
                     "modes": {

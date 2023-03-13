@@ -32,6 +32,7 @@ export { Tooltip } from './components/Tooltip';
 export { LabeledInput } from './components/LabeledInput';
 export { Pagination } from './components/Pagination';
 export { Link } from './components/Link';
+export { Card } from './components/Card';
 // TODO: consider moving these out of index.js so we don't pack them in for embedded maps
 // or in components that are used on embedded maps we could import the components directly and NOT use this index file for imports
 export { UrlInput } from './components/UrlInput';

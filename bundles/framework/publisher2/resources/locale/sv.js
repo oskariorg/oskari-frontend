@@ -108,9 +108,10 @@ Oskari.registerLocalization(
                 "layerselection": {
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
-                    "allowStyleChange": "Tillåta stiländring",
+                    "allowStyleChange": "Tillåt val av visningsstil",
                     "showMetadata": "Visa länkar för metadata",
-                    "noMultipleStyles": "The selected map layers only have a single visualization option/style."
+                    "noMultipleStyles": "The selected map layers only have a single visualization option/style.",
+                    "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
                 },
                 "mylocation": {
                     "modes": {

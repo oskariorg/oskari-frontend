@@ -11,6 +11,9 @@ Oskari.registerLocalization(
         "singleLegend":"Karttaselite: ",
         "infotext":"Valitse selitettävä karttataso:",
         "newtab":"Avaa uudessa välilehdessä",
+        "tool": {
+            "label": "Karttaselitteet"
+        },
         "guidedTour": {
             "title": "Karttaselitteet",
             "message": "Karttaselitteet selventävät näkyvissä olevien tasojen symboleja ja merkitystä.",
