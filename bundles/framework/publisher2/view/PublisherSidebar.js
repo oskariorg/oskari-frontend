@@ -156,7 +156,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // initialize form (restore data when editing)
             form.init(me.data);
-
             // open generic info by default
             form.getPanel().open();
             return form;
@@ -176,7 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // initialize form (restore data when editing)
             form.init(me.data);
-
             return form;
         },
         _createMapLayersPanel: function () {
@@ -201,7 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
 
             // initialize form (restore data when editing)
             form.init(me.data);
-
             return form;
         },
         /**
@@ -490,15 +487,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 this._stopEditorPanels();
                 this._disablePreview();
             }
-            /*
-            // FIXME: notify all visible tools the enabled status changes? WHY?
-            var sb = this.instance.sandbox;
-            var publisherTools = this._createToolGroupings();
-            publisherTools.tools.forEach(function (tool) {
-                var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
-                sb.notifyAll(event);
-            });
-            */
         },
 
         /**
@@ -532,21 +520,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _disablePreview: function () {
             const sandbox = this.instance.sandbox;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            /*
-            // FIXME: let tools stop the plugins they started on stop() instead!
-            // Remove plugins added during publishing session
-            Object.values(mapModule.getPluginInstances())
-                .filter(plugin => plugin.hasUI && plugin.hasUI())
-                .forEach(plugin => {
-                    try {
-                        plugin.stopPlugin(sandbox);
-                        mapModule.unregisterPlugin(plugin);
-                    } catch (err) {
-                        Oskari.log('Publisher').error('Disable preview', err);
-                        Messaging.error(this.loc.error.disablePreview);
-                    }
-                });
-            */
             // resume normal plugins
             this.normalMapPlugins.forEach(plugin => {
                 mapModule.registerPlugin(plugin);

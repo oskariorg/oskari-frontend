@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     */
     stop: function () {
         // TODO: do we really need started as an additional flag?
-        if (!this.__started) {
+        if (!this.isStarted()) {
             return;
         }
         this._stopImpl();

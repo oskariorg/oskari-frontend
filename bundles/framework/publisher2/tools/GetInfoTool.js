@@ -410,7 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             popup.show(this.getMsg('BasicView.layout.fields.colours.custom'), content, [closeButton]);
             this._customColoursPopup = popup;
         },
-        _stopImpl: function() {
+        _stopImpl: function () {
             if (this._colourSchemePopup) {
                 this._colourSchemePopup.close(true);
                 this._colourSchemePopup = null;
