@@ -12,10 +12,11 @@ export const createDefaultStyle = () => {
 };
 
 export class VectorStyle extends Style {
-    constructor ({ id, name, style, type }) {
+    constructor ({ id, name, style, type, isRuntime }) {
         super(id, name); // name, title
         this._type = type;
         this._styleDef = style || {};
+        this._isRuntime = isRuntime;
     }
 
     /* override */
@@ -37,15 +38,7 @@ export class VectorStyle extends Style {
     }
 
     isRuntimeStyle () {
-        // TODO: update this after user can save own styles
-        // 'runtime', this._runtime or id starts 'runtime_'
-        // for now id is s_{timestamp}
-        return this.getType() === 'user';
-    }
-
-    _isOskari () {
-        // TODO: remove this when runtime/user styles are handled properly
-        return this.getType() === VECTOR_STYLE.OSKARI || this.isRuntimeStyle();
+        return this._isRuntime === true;
     }
 
     hasDefinitions () {
@@ -54,14 +47,14 @@ export class VectorStyle extends Style {
     }
 
     getFeatureStyle () {
-        if (this._isOskari()) {
+        if (this.getType() === VECTOR_STYLE.OSKARI) {
             return this._styleDef.featureStyle || {};
         }
         return this._styleDef;
     }
 
     getOptionalStyles () {
-        if (this._isOskari()) {
+        if (this.getType() === VECTOR_STYLE.OSKARI) {
             return this._styleDef.optionalStyles || [];
         }
         // only oskari style has optional styles
@@ -77,7 +70,7 @@ export class VectorStyle extends Style {
         if (!styleDef) {
             return;
         }
-        if (!this._isOskari()) {
+        if (this.getType() !== VECTOR_STYLE.OSKARI) {
             this.setStyleDef({ ...styleDef });
             return;
         }
