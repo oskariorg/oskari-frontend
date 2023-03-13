@@ -1,5 +1,7 @@
 import { UserStyleService } from './service/UserStyleService';
 import { showStylesPopup } from './view';
+import { UserStylesTab } from './view/UserStylesTab';
+import { UserStylesHandler } from './handler/UserStylesHandler';
 import { BUNDLE_KEY } from './constants';
 /**
  * @class Oskari.mapframework.userstyle.UserStyleBundleInstance
@@ -20,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     _startImpl: function (sandbox) {
         this.sandbox = sandbox;
         this.service = new UserStyleService(sandbox);
+        this.handler = new UserStylesHandler(this);
         sandbox.registerService(this.service);
         // TODO: switching to stylelist after adding style via editor is confusing
         this.service.on('update', (layerId) => {
@@ -27,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
                 this.popupController.update({ layerId });
             }
         });
+        this.addTab();
     },
     getSandbox: function () {
         return this.sandbox;
@@ -46,6 +50,18 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
             this.popupController.update(options);
         } else {
             this.popupController = showStylesPopup(this.service, options, onClose);
+        }
+    },
+    addTab: function () {
+        const myDataService = this.sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+
+        if (myDataService) {
+            myDataService.addTab(this.getName(), this.loc('tab.title'), UserStylesTab, this.handler);
+        } else {
+            // Wait for the application to load all bundles and try again
+            Oskari.on('app.start', () => {
+                this.addTab();
+            });
         }
     }
 }, {
