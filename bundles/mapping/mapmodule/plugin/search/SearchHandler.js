@@ -161,7 +161,7 @@ class SearchHandler extends StateHandler {
      */
     doSearch (autocompleteWord) {
         let { loading, query = '', selectedChannels = [] } = this.getState();
-        if (autocompleteWord) {
+        if (typeof autocompleteWord === 'string') {
             query = autocompleteWord;
         }
         if (loading.length || query.length === 0) {
