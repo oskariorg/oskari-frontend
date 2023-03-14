@@ -57,7 +57,7 @@ const LayerBox = ({ layer, index, controller }) => {
                 <div ref={provided.innerRef} {...provided.draggableProps}>
                     <Row style={{ backgroundColor: '#fafafa', padding: '0px' }}>
                         <ColAuto style={{ padding: '0px' }}>
-                            <Tooltip title={<Message messageKey='layer.drag' />} placement='topRight'>
+                            <Tooltip title={<Message messageKey='layer.drag' />} getPopupContainer={(triggerNode) => triggerNode.parentElement} placement='topRight'>
                                 <DragIcon style={{ marginTop: '5px' }} {...provided.dragHandleProps} />
                             </Tooltip>
                         </ColAuto>
