@@ -12,7 +12,7 @@ const Content = styled('div')`
     width: 500px;
 `;
 
-export const StyleForm = ({ style, onAdd, onCancel }) => {
+export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
     const { featureStyle = {}, name } = style;
     const [state, setState] = useState({
         featureStyle: Object.keys(featureStyle).length > 0 ? featureStyle : OSKARI_BLANK_STYLE,
@@ -46,7 +46,7 @@ export const StyleForm = ({ style, onAdd, onCancel }) => {
     );
 };
 
-StyleForm.propTypes = {
+UserStyleEditor.propTypes = {
     onAdd: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
     style: PropTypes.object.isRequired
