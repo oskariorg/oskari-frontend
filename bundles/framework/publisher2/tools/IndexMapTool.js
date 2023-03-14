@@ -5,8 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
         lefthanded: 'bottom right',
         righthanded: 'bottom left',
 
-        groupedSiblings: false,
-
         /**
         * Get tool object.
         * @method getTool

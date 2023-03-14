@@ -11,9 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     this.__loc = localization[this.group];
     this.__plugin = null;
     this.__tool = null;
-    // This is used to watch tool plugin start/stop changes. If plugin is started then change this value to true, if stopped then change to false.
-    // If tool plugin is started then we can call stop plugin if unchecking this tools (otherwise we get error when sopping plugin).
-    this.__started = false;
     this.state = {
         // This variable is used to save tool state (is checked) and if it's true then we get tool json when saving published map.
         enabled: false,
@@ -29,8 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
     allowedSiblings: ['*'],
-    // ??
-    groupedSiblings: false,
 
     /**
     * Initialize tool
@@ -100,7 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (enabled) {
             this.getMapmodule().registerPlugin(plugin);
             plugin.startPlugin(this.getSandbox());
-            this.__started = true;
         } else {
             this.stop();
         }
@@ -160,16 +154,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     */
     isDisabled: function (data) {
         return false;
-    },
-    /**
-    * Is started.
-    * @method isStarted
-    * @public
-    *
-    * @returns {Boolean} is the tool started.
-    */
-    isStarted: function () {
-        return this.__started;
     },
 
     /**
@@ -242,12 +226,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     * @public
     */
     stop: function () {
-        // TODO: do we really need started as an additional flag?
-        if (!this.isStarted()) {
+        if (!this.isEnabled()) {
             return;
         }
         this._stopImpl();
-        this.__started = false;
         const plugin = this.getPlugin();
         if (!plugin) {
             return;

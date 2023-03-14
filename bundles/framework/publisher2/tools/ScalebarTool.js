@@ -2,10 +2,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
     function () {
     }, {
         index: 0,
-        allowedLocations: ['*'],
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
-        allowedSiblings: ['*'],
 
         /**
         * Get tool object.

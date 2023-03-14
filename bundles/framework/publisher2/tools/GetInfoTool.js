@@ -6,8 +6,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         allowedLocations: [],
         allowedSiblings: [],
 
-        groupedSiblings: true,
-
         templates: {
             colours: jQuery('<div id="publisher-layout-colours" class="tool-options">' + '<label for="publisher-colours"></label>' + '<div id="publisher-layout-coloursSelector">' + '<input type="text" name="publisher-colour" disabled />' + '<button id="publisher-colours"></button>' + '</div>' + '</div>'),
             coloursPopup: jQuery('<div id="publisher-colour-popup">' + '<div id="publisher-colour-inputs"></div>' + '<div id="publisher-colour-preview"></div>' + '</div>'),

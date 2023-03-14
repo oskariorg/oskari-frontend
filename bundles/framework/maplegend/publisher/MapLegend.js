@@ -63,9 +63,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
         isDisabled: function () {
             return !this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
         },
-        isStarted: function () {
-            return !!this.getPlugin();
-        },
         isEnabled: function () {
             return !!this.getPlugin();
         },

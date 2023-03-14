@@ -35,7 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
         ],
 
-        groupedSiblings: true,
         /**
         * Initialize tool
         * Override

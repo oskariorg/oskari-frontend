@@ -5,8 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
 
-        groupedSiblings: false,
-
         /**
         * Get tool object.
         * @method getTool
