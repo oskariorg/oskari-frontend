@@ -2,9 +2,6 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
-import { Style } from './Style';
-import { StyleJson } from './StyleJson';
-import { ExternalStyleJson } from './ExternalStyleJson';
 import { Hover } from './Hover';
 import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
 import { Scale } from './Scale';
@@ -22,10 +19,9 @@ const {
     OPACITY,
     CLUSTERING_DISTANCE,
     WFS_RENDER_MODE,
-    STYLE,
     CAPABILITIES_STYLES,
-    STYLES_JSON,
-    EXTERNAL_STYLES_JSON,
+    VECTOR_STYLES,
+    EXTERNAL_VECTOR_STYLES,
     HOVER,
     SCALE,
     COVERAGE,
@@ -39,6 +35,9 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
     if (!isLayerTypeSupported) {
         return (<LayerTypeNotSupported type={layer.type} />);
     }
+    const showExternalVectorStyle = propertyFields.includes(EXTERNAL_VECTOR_STYLES);
+    const showVectorStyle = propertyFields.includes(VECTOR_STYLES) || showExternalVectorStyle;
+
     return (<Fragment>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
@@ -59,20 +58,11 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
             { propertyFields.includes(WFS_RENDER_MODE) &&
                 <WfsRenderMode layer={layer} controller={controller} />
             }
-            { propertyFields.includes(STYLE) &&
-                <Style layer={layer} controller={controller} propertyFields={propertyFields} />
-            }
             { propertyFields.includes(CAPABILITIES_STYLES) &&
                 <RasterStyle layer={layer} controller={controller} />
             }
-            { propertyFields.includes(STYLES_JSON) &&
-                <VectorStyle layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(STYLES_JSON) &&
-                <StyleJson layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
-                <ExternalStyleJson layer={layer} controller={controller} />
+            { showVectorStyle &&
+                <VectorStyle layer={layer} controller={controller} external={showExternalVectorStyle}/>
             }
             { propertyFields.includes(HOVER) &&
                 <Hover layer={layer} controller={controller} />

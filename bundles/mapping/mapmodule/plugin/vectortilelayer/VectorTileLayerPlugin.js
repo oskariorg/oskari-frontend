@@ -40,10 +40,10 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
             const composingModel = new LayerComposingModel([
                 LayerComposingModel.ATTRIBUTIONS,
                 LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.EXTERNAL_STYLES_JSON,
+                LayerComposingModel.EXTERNAL_VECTOR_STYLES,
                 LayerComposingModel.HOVER,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLES_JSON,
+                LayerComposingModel.VECTOR_STYLES,
                 LayerComposingModel.TILE_GRID,
                 LayerComposingModel.URL,
                 LayerComposingModel.DECLUTTER
