@@ -6,7 +6,7 @@ const INFOBOX_ID = 'SEARCH_RESULT_INFOBOX';
 const getMsg = key => Oskari.getMsg('MapModule', key);
 
 export class SearchResultHelper {
-    constructor (sandbox, useInfobox) {
+    constructor (sandbox, useInfobox = true) {
         this.sandbox = sandbox;
         this.useInfobox = !!useInfobox;
         this.resultActions = {};

@@ -67,7 +67,6 @@ export const SearchInput = ({ query = '', suggestions = [], onChange = noop, onS
                     className='t_searchInput'
                     { ...rest }
                     allowClear={true}
-                    enterButton={true}
                     onChange={(event) => onChange(event.target.value)}
                     onPressEnter={onEnter} />
             </WideAutoComplete>
