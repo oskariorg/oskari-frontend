@@ -90,12 +90,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         minColourValue: 0,
         noUI: false,
         init: function (data) {
-            if (!Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
-                return;
-            }
-            const { id } = this.getTool();
-            const plugin = data.configuration.mapfull.conf.plugins.find(p => p.id === id);
+            const plugin = this.findPluginFromInitData(data);
             if (plugin) {
+                this.storePluginConf(plugin.config);
                 const { colourScheme, noUI } = plugin.config || {};
 
                 // Gets plugin color scheme

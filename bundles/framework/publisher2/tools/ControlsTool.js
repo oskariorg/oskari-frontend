@@ -3,39 +3,51 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
     }, {
         index: 5,
         pluginName: 'ControlsPlugin',
-        init: function (pdata) {
-            var me = this;
-            var data = pdata;
-            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
-                data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
-                    if (me.getTool().id === plugin.id) {
-                        var hasConfig = typeof plugin.config === 'object';
-                        // enabled if either no config OR has config with false flag
-                        me.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
-                    }
-                });
+        init: function (data) {
+            const plugin = this.findPluginFromInitData(data);
+            if (plugin) {
+                var hasConfig = typeof plugin.config === 'object';
+                if (hasConfig) {
+                    this.storePluginConf(plugin.config);
+                }
+                // enabled if either no config OR has config with false flag
+                this.setEnabled(!hasConfig || (hasConfig && plugin.config.keyboardControls !== false));
             }
         },
+        // override since we want to use the instance we currently have, not create a new one
         setEnabled: function (enabled) {
-            this.state.enabled = !!enabled;
-            this.allowPanning(this.state.enabled);
+            // state actually hasn't changed -> do nothing
+            if (this.isEnabled() === enabled) {
+                return;
+            }
+            this.state.enabled = enabled;
+            this.allowPanning(!!enabled);
+
+            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
+            this.getSandbox().notifyAll(event);
         },
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.mapmodule.ControlsPlugin',
                 title: 'ControlsPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
+        getPlugin: function () {
+            // always use the instance on map, not a new copy
+            return this.getMapmodule().getPluginInstances('ControlsPlugin');
+        },
         getConfig: function () {
-            var config = null;
-            if (!this.state.enabled) {
-                config = {
-                    keyboardControls: false,
-                    mouseControls: false
-                };
+            // NOTE! isEnabled returning null is ON PURPOSE!
+            // Usually this is reversed
+            if (this.isEnabled()) {
+                return null;
             }
-            return config;
+            // In this one we want to have the plugin always present but we configure it to disable controls
+            return {
+                keyboardControls: false,
+                mouseControls: false
+            };
         },
         allowPanning: function (enabled) {
             if (!enabled) {

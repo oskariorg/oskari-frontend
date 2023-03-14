@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 title: 'LogoPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         // not displayed on tool panels so user can't disable it

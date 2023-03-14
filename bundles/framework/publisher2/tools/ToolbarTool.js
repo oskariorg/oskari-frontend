@@ -5,9 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         lefthanded: 'top right',
         righthanded: 'top left',
 
-        // toolbarConfig stores the current state
-        toolbarConfig: {},
-
         templates: {
             'toolOptions': '<div class="tool-options"></div>',
             'toolOption': '<div class="tool-option"><label><input type="checkbox" /></label></div>'
@@ -18,67 +15,50 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @method init
          */
         init: function (data) {
-            var me = this;
-            var toolName;
-            me.selectedTools = {};
-            me._storedData = {};
-            if (!data || !data.configuration) {
+            this.selectedTools = {};
+            const plugin = this.findPluginFromInitData(data);
+            if (!plugin) {
                 return;
             }
-            var conf = data.configuration;
-            var pluginConf = null || {};
-
-            if (conf.mapfull.conf && conf.mapfull.conf.plugins) {
-                conf.mapfull.conf.plugins.forEach(function (plugin) {
-                    if (me.getTool().id === plugin.id) {
-                        me.setEnabled(true);
-                        pluginConf = plugin.config || {};
-                    }
-                });
-            }
+            this.storePluginConf(plugin.config);
 
             // checkboxes in ui
-            me.selectedOptionsUi = {
+            this.selectedOptionsUi = {
                 history: true,
                 measureline: true,
                 measurearea: true
             };
 
             // tools on map
-            me.selectedTools = {
+            this.selectedTools = {
                 history_back: true,
                 history_forward: true,
                 measureline: true,
                 measurearea: true
             };
-
-            if (pluginConf.buttons) {
+            const buttons = plugin.config?.buttons;
+            if (buttons) {
                 // if there are no selected tools in configuration, select them all when tools are selected
-                for (toolName in me.selectedTools) {
-                    if (me.selectedTools.hasOwnProperty(toolName) && pluginConf.buttons.indexOf(toolName) === -1) {
-                        me.selectedTools[toolName] = false;
-                        if (me.selectedOptionsUi[toolName]) {
-                            me.selectedOptionsUi[toolName] = false;
+                Object.keys(this.selectedTools).forEach(toolName => {
+                    if (!buttons.includes(toolName)) {
+                        this.selectedTools[toolName] = false;
+                        if (this.selectedOptionsUi[toolName]) {
+                            this.selectedOptionsUi[toolName] = false;
                         }
                     }
-                }
+                });
             }
 
             // unselect history tools only if both are unselected
-            if (!me.selectedTools['history_back'] && !me.selectedTools['history_forward']) {
-                me.selectedOptionsUi['history'] = false;
+            if (!this.selectedTools['history_back'] && !this.selectedTools['history_forward']) {
+                this.selectedOptionsUi['history'] = false;
             } else {
                 // if one of history tools is selected, select the other one too
-                me.selectedTools['history_forward'] = true;
-                me.selectedTools['history_back'] = true;
+                this.selectedTools['history_forward'] = true;
+                this.selectedTools['history_back'] = true;
             }
 
-            if (pluginConf.id) {
-                me._storedData.toolbarConfig = _.cloneDeep(conf.toolbar.conf);
-                if (me._hasActiveTools()) {
-                    me.setEnabled(true);
-                }
-            }
+            this.setEnabled(this._hasActiveTools());
         },
 
         /**
@@ -159,7 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 };
             };
 
-            this._loadDataConfig();
             this.toolContainer = toolContainer;
 
             toolContainer.find('input').on('change', closureMagic(this));
@@ -261,11 +240,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         tool.__plugin.removeToolButton(toolName);
                     }
                 }
-
-                if (!localeChange) {
-                    me.toolbarConfig = {};
-                }
-
                 if (tool._isPluginStarted) {
                     // remove eventlisteners
                     var _removeOptions = function (className, handler) {
@@ -283,38 +257,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
         },
 
-        /**
-         * Resets the local toolbarConfig to use the values from storedData,
-         * which was passed in as a variable in getPanel.
-         * All known configs are reset, unless specified as parameter.
-         * Only the specified config is reset.
-         *
-         * @method _loadDataConfig
-         * @param {String} configToLoad string identifying config to reset
-         */
-        _loadDataConfig: function (configToLoad) {
-            var configName,
-                me = this;
-
-            // if editing a published view, then use the stored settings
-            if (me._storedData) {
-                configName = 'toolbarConfig';
-                if (me._storedData.toolbarConfig &&
-                    (!configToLoad || (configToLoad === configName))) {
-                    me.toolbarConfig = _.cloneDeep(me._storedData.toolbarConfig);
-                }
-            }
-        },
         _hasActiveTools: function () {
-            var me = this;
-
-            for (var toolName in me.selectedTools) {
-                if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
-                    return true;
-                }
-            }
-
-            return false;
+            return Object.keys(this.selectedTools)
+                .some(toolName => this.selectedTools[toolName] === true);
         },
 
         /**
