@@ -31,6 +31,9 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
         getMapRotatorInstance: function () {
             return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
         },
+        getPlugin: function () {
+            return this.getMapRotatorInstance().getPlugin();
+        },
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'maprotator',
         /**
