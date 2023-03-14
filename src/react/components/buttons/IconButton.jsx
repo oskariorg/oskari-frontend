@@ -59,8 +59,8 @@ const getConfirmProps = (type) => {
         };
     }
     return {
-        okText: <Message messageKey='buttons.Kyllä' bundleKey='oskariui'/>,
-        cancelText: <Message messageKey='buttons.Ei' bundleKey='oskariui'/>,
+        okText: <Message messageKey='buttons.yes' bundleKey='oskariui'/>,
+        cancelText: <Message messageKey='buttons.no' bundleKey='oskariui'/>,
         title: <Message messageKey='messages.confirm' bundleKey='oskariui'/>
     };
 };
@@ -96,7 +96,7 @@ export const IconButton = ({
             <Confirm
                 overlayClassName='t_confirm'
                 onConfirm={onConfirm}
-                okButtonProps={{className: `t_button t_${type || 'yes'}`}}
+                okButtonProps={{className: `t_button t_${type || 'ok'}`}}
                 cancelButtonProps={{className: 't_button t_cancel'}}
                 disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
