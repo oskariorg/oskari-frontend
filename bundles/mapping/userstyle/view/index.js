@@ -22,13 +22,18 @@ const getContent = (service, options, onClose) => {
                 name,
                 style: { featureStyle }
             });
-            // TODO: switching to stylelist after adding style via editor is confusing
-            // const hasStyles = service.getUserStylesForLayer(layerId).length > 0;
-            onClose();
+            const hasStyles = service.getStylesByLayer(layerId).length > 0;
+            if (hasStyles) {
+                // toggle to style list view
+                Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId }]);
+            } else {
+                // style editor is opened on layerId request if no styles. so have to close here.
+                onClose();
+            }
         };
         content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ onClose }/>;
     } else {
-        const styles = service.getUserStylesForLayer(layerId);
+        const styles = service.getStylesByLayer(layerId);
         const onDelete = (id) => service.removeUserStyle(id);
         content = <UserStylesContent layerId={ layerId } styles={ styles } onDelete={ onDelete } />;
     }

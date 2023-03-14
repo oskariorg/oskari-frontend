@@ -21,12 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
         this.sandbox = sandbox;
         this.service = new UserStyleService(sandbox);
         sandbox.registerService(this.service);
-        // TODO: switching to stylelist after adding style via editor is confusing
-        this.service.on('update', (layerId) => {
-            if (this.popupController) {
-                this.popupController.update({ layerId });
-            }
-        });
     },
     getSandbox: function () {
         return this.sandbox;
