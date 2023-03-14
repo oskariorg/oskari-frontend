@@ -7,25 +7,29 @@ import { UserStylesContent } from './UserStyles/UserStylesContent';
 import { BUNDLE_KEY } from '../constants';
 import { VECTOR_STYLE } from '../../mapmodule/domain/constants';
 
-const showStyleEditor = (service, options) => typeof options.id !== 'undefined' || service.getStylesByLayer(options.layerId).length === 0;
+const showStyleEditor = (service, options) =>
+    typeof options.id !== 'undefined' ||
+    typeof options.addToLayer === 'number' ||
+    options.showStyle === true || // deprecated, will be removed in version 2.12
+    service.getStylesByLayer(options.layerId).length === 0;
 
 const getContent = (service, options, onClose) => {
-    const { layerId, id } = options;
+    const { layerId, id, addToLayer } = options;
     let content;
     if (showStyleEditor(service, options)) {
         const style = service.getStyleById(id) || {};
         const onAdd = ({ name, featureStyle }) => {
             service.saveUserStyle({
                 id,
-                layerId,
+                layerId: addToLayer || layerId, // layerId in here is deprecated, will be removed in version 2.12
                 type: VECTOR_STYLE.OSKARI,
                 name,
                 style: { featureStyle }
             });
-            const hasStyles = service.getStylesByLayer(layerId).length > 0;
+            const hasStyles = service.getStylesByLayer(addToLayer).length > 0;
             if (hasStyles) {
                 // toggle to style list view
-                Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId }]);
+                Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId: addToLayer }]);
             } else {
                 // style editor is opened on layerId request if no styles. so have to close here.
                 onClose();
