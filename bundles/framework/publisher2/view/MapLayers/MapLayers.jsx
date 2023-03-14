@@ -77,7 +77,7 @@ export const MapLayers = ({ state, controller }) => {
 
     return (
         <Content>
-            <Card title={<Message messageKey='BasicView.maptools.label' />}>
+            <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
                 <ToolsContainer>
                     <StyledCheckbox
                         checked={state.showLayerSelection}
