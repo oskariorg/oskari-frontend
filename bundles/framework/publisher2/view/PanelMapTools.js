@@ -72,38 +72,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             this.tools
                 .filter(tool => tool.isDisplayed())
                 .forEach(tool => {
-                const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
-                // setup values when editing an existing map
-                ui.find('input').prop('checked', !!tool.isEnabled());
-                ui.find('input').prop('disabled', !!tool.isDisabled());
+                    const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
+                    // setup values when editing an existing map
+                    ui.find('input').prop('checked', !!tool.isEnabled());
+                    ui.find('input').prop('disabled', !!tool.isDisabled());
 
-                contentPanel.append(ui);
+                    contentPanel.append(ui);
 
-                ui.find('input').first().on('change', function () {
-                    var enabled = jQuery(this).is(':checked');
-                    // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
-                    tool.setEnabled(enabled);
-                    if (enabled) {
+                    ui.find('input').first().on('change', function () {
+                        var enabled = jQuery(this).is(':checked');
+                        // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
+                        tool.setEnabled(enabled);
+                        if (enabled) {
+                            ui.find('.extraOptions').show();
+                            me._setToolLocation(tool);
+                        } else {
+                            ui.find('.extraOptions').hide();
+                        }
+                    });
+
+                    const extraOptions = tool.getExtraOptions(ui);
+                    if (extraOptions) {
+                        ui.find('.extraOptions').append(extraOptions);
+                    }
+
+                    const initStateEnabled = ui.find('input').first().is(':checked');
+                    tool.setEnabled(initStateEnabled);
+                    if (initStateEnabled) {
                         ui.find('.extraOptions').show();
-                        me._setToolLocation(tool);
                     } else {
                         ui.find('.extraOptions').hide();
                     }
                 });
-
-                const extraOptions = tool.getExtraOptions(ui);
-                if (extraOptions) {
-                    ui.find('.extraOptions').append(extraOptions);
-                }
-
-                const initStateEnabled = ui.find('input').first().is(':checked');
-                tool.setEnabled(initStateEnabled);
-                if (initStateEnabled) {
-                    ui.find('.extraOptions').show();
-                } else {
-                    ui.find('.extraOptions').hide();
-                }
-            });
             me.panel = panel;
             return panel;
         },

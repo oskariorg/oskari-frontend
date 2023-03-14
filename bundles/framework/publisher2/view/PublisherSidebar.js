@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         group, tools, this.instance, this.loc
                     );
-                    var hasToolsToShow = toolPanel.init(this.data);
+                    const hasToolsToShow = toolPanel.init(this.data);
                     this.panels.push(toolPanel);
                     if (hasToolsToShow) {
                         const panel = toolPanel.getPanel();
@@ -252,10 +252,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // group tools per tool-group
             definedTools.forEach(toolname => {
                 const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc);
-                /*
-                if (tool.isDisplayed(this.data) !== true) {
-                    return;
-                }*/
                 var group = tool.getGroup();
                 if (!grouping[group]) {
                     grouping[group] = [];
