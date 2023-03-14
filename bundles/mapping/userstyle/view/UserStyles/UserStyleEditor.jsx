@@ -27,7 +27,7 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
             <Tooltip title={<Message messageKey='popup.name'/>}>
                 <TextInput
                     placeholder={ Oskari.getMsg(BUNDLE_KEY, `popup.name`) }
-                    value={ state.title }
+                    value={ state.name }
                     onChange={ event => updateName(event.target.value) }
                 />
             </Tooltip>
