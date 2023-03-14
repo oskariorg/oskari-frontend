@@ -1,6 +1,7 @@
 
 Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
     function () {
+        this.geoportalLocation = this.getPlugin().getLocation();
     }, {
         index: 500,
         lefthanded: 'top left',
@@ -29,7 +30,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return !!this.getMapRotatorInstance();
         },
         getMapRotatorInstance: function () {
-            return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
+            return this.getSandbox().findRegisteredModuleInstance(this.bundleName);
         },
         getPlugin: function () {
             return this.getMapRotatorInstance().getPlugin();
@@ -41,14 +42,14 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @method init
          */
         init: function (data) {
-            var me = this;
-            var bundleData = data && data.configuration[me.bundleName];
+            var bundleData = data && data.configuration[this.bundleName];
             if (!bundleData) {
                 return;
             }
             var conf = bundleData.conf || {};
-            me.setEnabled(conf.enabled);
-            me.noUiIsCheckedInModifyMode = !!conf.noUI;
+            this.storePluginConf(conf);
+            this.setEnabled(true);
+            this.noUiIsCheckedInModifyMode = !!conf.noUI;
             this.getMapRotatorInstance().setState(bundleData.state);
         },
         // override setEnabled() because we don't want publisher to create the plugin BUT
@@ -70,7 +71,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             if (enabled) {
                 this.getMapmodule().registerPlugin(plugin);
                 plugin.startPlugin(this.getSandbox());
-                this.__started = true;
+                plugin.setLocation(this.state.pluginConfig?.location?.classes);
             } else {
                 this.stop();
             }
@@ -98,8 +99,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             if (this.noUI) {
                 pluginConfig.noUI = this.noUI;
             }
-            // TODO: is this enabled needed? it's always true if tool.isEnabled()
-            pluginConfig.enabled = true;
             var json = {
                 configuration: {}
             };
@@ -144,6 +143,11 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             var inputEl = input.getElement();
             template.append(inputEl);
             return template;
+        },
+        _stopImpl: function () {
+            // when we exit publisher:
+            // move plugin back to where it started
+            this.getPlugin().setLocation(this.geoportalLocation);
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
