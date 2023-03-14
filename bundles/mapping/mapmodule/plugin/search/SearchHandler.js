@@ -37,6 +37,7 @@ const processResultLocations = (results) => {
         if (!loc.id) {
             loc.id = getIdForResult(loc);
         }
+        // WFS search channels have GEOMETRY attached as WKT. For others we can generate a simple point geometry.
         if (!loc.GEOMETRY) {
             loc.GEOMETRY = `POINT (${loc.lon} ${loc.lat})`;
         }
@@ -61,7 +62,7 @@ class SearchHandler extends StateHandler {
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
         this.service = Oskari.clazz.create('Oskari.service.search.SearchService', plugin.getSandbox(), plugin.getConfig()?.url);
-        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), !!plugin.getConfig()?.useInfobox);
+        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), plugin.getConfig()?.useInfobox);
         // options needs to be enabled explicitly
         this.allowOptions = !!plugin.getConfig()?.allowOptions;
         this.fetchChannels();
