@@ -55,7 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         this.tools = tools;
 
         me.panel = null;
-        me.modeChangedCB = null;
         this.templates = {
             help: jQuery('<div class="help icon-info"></div>')
         };
@@ -137,29 +136,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          * @return {Object} size
          */
         _getActiveMapSize: function () {
-            var mapDiv = this.mapmodule.getMapEl(),
-                width = mapDiv.width(),
-                height = mapDiv.height();
-
+            const mapDiv = this.mapmodule.getMapEl();
             return {
-                width: width,
-                height: height
+                width: mapDiv.width(),
+                height: mapDiv.height()
             };
         },
-
-        /**
-         * @private @method _calculateLeftComponentsWidth
-         * Calculates a sensible width for components on the left panel (but doesn't set it...)
-         */
-        _calculateLeftComponentsWidth: function () {
-            var toolsWidth = 0;
-            this.tools.forEach(function (tool) {
-                toolsWidth = toolsWidth + (tool.getAdditionalSize().width || 0);
-            });
-            // Width, but 400 at most.
-            return Math.min(toolsWidth, 400);
-        },
-
         /**
          * @private @method _adjustDataContainer
          * This horrific thing is what sets the left panel components, container and map size.
@@ -170,37 +152,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             const mapDiv = this.mapmodule.getMapEl();
             mapDiv.width(size.width || '100%');
             mapDiv.height(size.height || '100%');
-
-            // notify map module that size has changed
-            this._updateMapModuleSize();
         },
 
-        /**
-        * @private @method _updateMapModuleSize
-        * Update map size
-        */
-        _updateMapModuleSize: function (isStopping) {
-            // turn off event handlers in order to avoid consecutive calls to mapsizechanged
-            this._unregisterEventHandlers();
-            this._updateMapMode();
-
-            // turn event handlers back on.
-            if (!isStopping) {
-                this._registerEventHandlers();
-            }
-        },
-
-        /**
-        * @private @method _updateMapMode
-        * Update map mode
-        */
-        _updateMapMode: function () {
-            const size = this._getSelectedMapSize();
-
-            if (typeof this.modeChangedCB === 'function') {
-                this.modeChangedCB(size.option.id);
-            }
-        },
         /**
          * @private @method _getSelectedMapSize
          * Returns an object containing the user seleted/set map size and the corresponding size option
@@ -243,9 +196,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          *
          * @method init
          * @param {Object} pData initial data
-         * @param {Object} modeChangedCB mode changed callback
          */
-        init: function (pData, modeChangedCB) {
+        init: function (pData) {
             var me = this,
                 fkey,
                 data,
@@ -254,7 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 contentPanel = panel.getContainer(),
                 tooltipCont = me.templates.help.clone();
 
-            me.modeChangedCB = modeChangedCB;
             // initial mode selection if modify.
             if (pData && pData.metadata && pData.metadata.preview) {
                 var selectedOptions = me.sizeOptions.filter(function (option) {

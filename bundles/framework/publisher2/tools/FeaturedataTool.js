@@ -61,17 +61,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             }
         },
         isDisplayed: function () {
-        // Check if selected layers include wfs layers
-            var wfs = false,
-                layers = this.__sandbox.findAllSelectedMapLayers(),
-                j;
-            for (j = 0; j < layers.length; ++j) {
-                if (layers[j].hasFeatureData()) {
-                    wfs = true;
-                    break;
-                }
-            }
-            return wfs;
+            // Check if selected layers include wfs layers
+            return this.getSandbox()
+                .findAllSelectedMapLayers()
+                .some(l => l.hasFeatureData());
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

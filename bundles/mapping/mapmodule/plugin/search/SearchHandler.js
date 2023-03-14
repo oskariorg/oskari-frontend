@@ -1,9 +1,8 @@
 import '../../../../service/search/searchservice';
 import { showResultsPopup } from './SearchResultsPopup';
 import { showOptionsPopup } from './SearchOptionsPopup';
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
-
-const MARKER_ID = 'SEARCH_RESULT_MARKER';
+import { Messaging, StateHandler, controllerMixin } from 'oskari-ui/util';
+import { SearchResultHelper } from './SearchResultHelper';
 
 // sort channel in alphabetical order but have defaults on top
 const channelSortFunction = (a, b) => {
@@ -17,21 +16,55 @@ const channelSortFunction = (a, b) => {
     return Oskari.util.naturalSort(a.locale?.name, b.locale?.name);
 };
 
+/**
+ * Generate a runtime id for non-wfs search channel results
+ * @param {SearchResultObject} result
+ * @returns String to use as id
+ */
+const getIdForResult = result => {
+    if (result.id) {
+        return result.id;
+    }
+    return result.name + result.lon + result.lat;
+};
+// generate id and simple geometry
+const processResultLocations = (results) => {
+    if (!results) {
+        return;
+    }
+    const { locations = [] } = results;
+    locations.forEach(loc => {
+        if (!loc.id) {
+            loc.id = getIdForResult(loc);
+        }
+        // WFS search channels have GEOMETRY attached as WKT. For others we can generate a simple point geometry.
+        if (!loc.GEOMETRY) {
+            loc.GEOMETRY = `POINT (${loc.lon} ${loc.lat})`;
+        }
+    });
+    return results;
+};
+
 class SearchHandler extends StateHandler {
     constructor (plugin) {
         super();
         this.plugin = plugin;
         this.setState({
             minimized: false,
-            loading: false,
+            loading: [],
             hasOptions: false,
-            selectedChannels: []
+            selectedChannels: [],
+            featuresOnMap: [],
+            suggestions: []
         });
+        // ['selected', 'name', 'region', 'type'] or null/empty array for all
+        this.columns = plugin.getConfig().columns || ['name', 'region', 'type'];
         this._popupControlsResult = null;
         this.eventHandlers = this.createEventHandlers();
-        this.service = Oskari.clazz.create('Oskari.service.search.SearchService', this.getSandbox(), plugin.getConfig().url);
+        this.service = Oskari.clazz.create('Oskari.service.search.SearchService', plugin.getSandbox(), plugin.getConfig()?.url);
+        this.resultHelper = new SearchResultHelper(plugin.getSandbox(), plugin.getConfig()?.useInfobox);
         // options needs to be enabled explicitly
-        this.allowOptions = !!plugin.getConfig().allowOptions;
+        this.allowOptions = !!plugin.getConfig()?.allowOptions;
         this.fetchChannels();
     };
 
@@ -41,38 +74,66 @@ class SearchHandler extends StateHandler {
     }
 
     clearResultPopup () {
-        this.removeMarker();
+        this.resultHelper.removeMarker();
+        this.resultHelper.removeResultFromMap();
         if (this._popupControlsResult) {
             this._popupControlsResult.close();
         }
         this._popupControlsResult = null;
+        this.updateState({
+            results: null
+        });
     }
 
     getMsg (key, args) {
         return Oskari.getMsg('MapModule', 'plugin.SearchPlugin.' + key, args);
     }
 
-    showResultsPopup (results) {
-        this.clearResultPopup();
-        const { totalCount, hasMore, locations } = results;
-        const msgKey = hasMore ? 'searchMoreResults' : 'searchResultCount';
-        let title = this.getMsg('title');
-        let description = this.getMsg(msgKey, { count: totalCount });
+    updateResultsPopup () {
+        const { results = {}, loading, channels, featuresOnMap } = this.getState();
+        if (!loading.length) {
+            // we have all results
+            // check if we didn't find anything OR if we found just one
+            const currentChannels = Object.keys(results).filter(chan => !!results[chan]);
+            if (!currentChannels.length) {
+                // previous search result cleared
+                Messaging.error(this.getMsg('noresults'));
+                this.clearResultPopup();
+                return;
+            }
+            const combined = currentChannels.reduce((accumulator, currentValue) => {
+                const channelResults = results[currentValue];
+                if (!channelResults) {
+                    return accumulator;
+                }
+                accumulator.push(...channelResults.locations);
+                return accumulator;
+            },
+            []);
 
-        if (totalCount === 0) {
-            description = this.getMsg('noresults');
-        } else if (totalCount === 1) {
-            // only one result, show it immediately
-            this.resultClicked(locations[0]);
+            if (combined.length === 0) {
+                Messaging.error(this.getMsg('noresults'));
+                this.clearResultPopup();
+                return;
+            } else if (combined.length === 1) {
+                // only one result, show it immediately
+                this.resultClicked(combined[0]);
+                return;
+            }
+        }
+        if (this._popupControlsResult) {
+            this._popupControlsResult.update(results, channels, featuresOnMap);
             return;
         }
+
         this._popupControlsResult = showResultsPopup(
-            title,
-            description,
-            locations,
-            (result) => this.resultClicked(result),
+            results,
+            channels,
+            featuresOnMap,
+            (result, isToggle) => this.resultClicked(result, isToggle),
             () => this.clearResultPopup(),
-            this.plugin.getLocation());
+            this.plugin.getLocation(),
+            this.columns);
     }
 
     getName () {
@@ -85,62 +146,96 @@ class SearchHandler extends StateHandler {
 
     setQuery (query) {
         this.updateState({
-            query
+            query,
+            suggestions: []
         });
+        let { selectedChannels } = this.getState();
+        if (query.length > 2) {
+            this.service.doAutocompleteSearch(query, (result) => {
+                this.updateState({ suggestions: result.methods });
+            }, selectedChannels.join(','));
+        }
     }
 
     /**
      * Uses SearchService to make the actual search and calls  #_showResults
      */
-    doSearch () {
-        const { loading, query = '', selectedChannels = [] } = this.getState();
-        if (loading || query.length === 0) {
+    doSearch (autocompleteWord) {
+        let { loading, query = '', selectedChannels = [] } = this.getState();
+        if (typeof autocompleteWord === 'string') {
+            query = autocompleteWord;
+        }
+        if (loading.length || query.length === 0) {
             return;
         }
         this.clearResultPopup();
+        const currentChannels = [...(new Set(loading.concat(selectedChannels)))];
+
         this.updateState({
-            loading: true
+            query,
+            loading: currentChannels,
+            suggestions: []
         });
-        // query, onSuccess, onError, options = {}, channels
-        this.service.doSearch(query, results => {
-            this.updateState({
-                loading: false
-            });
-            this.showResultsPopup(results);
-        }, () => {
-            // on error
-            this.updateState({
-                loading: false
-            });
-        }, undefined,
-        selectedChannels.join(','));
+        currentChannels.forEach(channel => this.triggerSearchForChannel(channel, query));
     }
 
-    resultClicked (result) {
+    triggerSearchForChannel (channel, query) {
+        const updateResults = (results) => {
+            const { results: prevResults = {}, loading } = this.getState();
+            const stateUpdate = {
+                loading: results ? loading.filter(item => item !== channel) : loading,
+                results: {
+                    ...prevResults
+                }
+            };
+            if (!results) {
+                delete stateUpdate.results[channel];
+            } else if (this.allowOptions || results.totalCount > 0) {
+                // only pass channel results if:
+                // - the user has option to select channels OR
+                // - the result has hits
+                stateUpdate.results[channel] = processResultLocations(results);
+            }
+            this.updateState(stateUpdate);
+            this.updateResultsPopup();
+        };
+        // clear previous results
+        updateResults();
+        this.service.doSearch(query, results => {
+            updateResults(results);
+        }, () => {
+            // on error
+            updateResults();
+        }, undefined,
+        channel);
+    }
+
+    resultClicked (result, isToggled) {
+        if (typeof isToggled === 'boolean') {
+            const { featuresOnMap } = this.getState();
+            if (isToggled) {
+                // add to map
+                featuresOnMap.push(result);
+                this.updateState({
+                    featuresOnMap
+                });
+                this.resultHelper.showResultOnMap(result);
+            } else {
+                // remove from map
+                this.updateState({
+                    featuresOnMap: featuresOnMap.filter(item => item.id !== result.id)
+                });
+                this.resultHelper.removeResultFromMap(result);
+            }
+            this.updateResultsPopup();
+            return;
+        }
         var zoom = result.zoomLevel;
         if (result.zoomScale) {
             zoom = { scale: result.zoomScale };
         }
         this.getSandbox().postRequestByName('MapMoveRequest', [result.lon, result.lat, zoom]);
-        this.setMarker(result);
-    }
-
-    setMarker (result) {
-        const lat = typeof result.lat !== 'number' ? parseFloat(result.lat) : result.lat;
-        const lon = typeof result.lon !== 'number' ? parseFloat(result.lon) : result.lon;
-
-        this.getSandbox().postRequestByName('MapModulePlugin.AddMarkerRequest', [{
-            color: 'ffde00',
-            msg: result.name,
-            shape: 2,
-            size: 3,
-            x: lon,
-            y: lat
-        }, MARKER_ID]);
-    }
-
-    removeMarker () {
-        this.getSandbox().postRequestByName('MapModulePlugin.RemoveMarkersRequest', [MARKER_ID]);
+        this.resultHelper.setMarker(result);
     }
 
     /** Restore from minimized state */
@@ -172,15 +267,18 @@ class SearchHandler extends StateHandler {
         return handler.apply(this, [e]);
     }
 
-    showOptions () {
-        this.clearOptionsPopup();
+    toggleOptionsPopup () {
+        if (this._popupControlsOptions) {
+            this.clearOptionsPopup();
+            return;
+        }
         const title = this.getMsg('options.title');
         const controller = this.getController();
         this._popupControlsOptions = showOptionsPopup(
             title,
             this.getState(),
             controller,
-            () => this.clearResultPopup(),
+            () => this.clearOptionsPopup(),
             this.plugin.getLocation());
         // TODO: if the user can select search channels for the query etc
         // related to state.hasOptions: false
@@ -230,7 +328,7 @@ class SearchHandler extends StateHandler {
         } else {
             selectedChannels = selectedChannels.filter(id => id !== channelId);
         }
-
+        this.clearResultPopup();
         this.updateState({
             selectedChannels
         });
@@ -248,7 +346,7 @@ const wrapped = controllerMixin(SearchHandler, [
     'requestSearchUI',
     'doSearch',
     'setQuery',
-    'showOptions',
+    'toggleOptionsPopup',
     'setChannelEnabled'
 ]);
 

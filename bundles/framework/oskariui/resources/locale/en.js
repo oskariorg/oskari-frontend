@@ -20,6 +20,7 @@ Oskari.registerLocalization({
             reset: 'Reset'
         },
         messages: {
+            confirm: 'Are you sure you want to continue?',
             confirmDelete: 'Are you sure you wish to delete?'
         },
         error: {

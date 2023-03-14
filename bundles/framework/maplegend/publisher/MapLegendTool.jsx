@@ -16,7 +16,7 @@ export const MapLegendTool = ({ state, controller }) => {
             onChange={(e) => controller.setShowLegends(e.target.checked)}
             disabled={disabled}
         >
-            <Message bundleKey='maplegend' messageKey='tooltip' />
+            <Message bundleKey='maplegend' messageKey='tool.label' />
         </StyledCheckbox>
     );
 

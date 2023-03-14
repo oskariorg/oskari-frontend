@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                 }
             });
         },
-        doAutocompleteSearch: function (searchKey, onSuccess) {
+        doAutocompleteSearch: function (searchKey, onSuccess, channels) {
             if (typeof onSuccess !== 'function') {
                 return;
             }
@@ -119,7 +119,8 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'q': searchKey,
                     'lang': Oskari.getLang(),
                     'epsg': sb.getMap().getSrsName(),
-                    'autocomplete': true
+                    'autocomplete': true,
+                    channels
                 },
                 success: function (response) {
                     onSuccess(response);

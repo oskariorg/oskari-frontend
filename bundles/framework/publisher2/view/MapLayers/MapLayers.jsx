@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Message, Checkbox, Tooltip } from 'oskari-ui';
+import { Button, Message, Checkbox, Tooltip, Card } from 'oskari-ui';
 import { ButtonContainer, IconButton } from 'oskari-ui/components/buttons';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 
@@ -46,9 +46,15 @@ const ExtraOptions = styled('div')`
     margin-left: 15px;
 `;
 
+const ToolsContainer = styled('div')`
+    display: flex;
+    flex-direction: column;
+`;
+
 export const MapLayers = ({ state, controller }) => {
     const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
     const disableStyleSelect = state.layers.filter(l => l.getStyles().length > 1).length < 1;
+    const disableMetadataSelect = state.layers.filter(l => l.getMetadataIdentifier() !== null).length < 1;
 
     const StyleSelect = (
         <StyledCheckbox
@@ -59,41 +65,55 @@ export const MapLayers = ({ state, controller }) => {
             <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
         </StyledCheckbox>
     );
+    const MetadataSelect = (
+        <StyledCheckbox
+            checked={state.showMetadata}
+            onChange={(e) => controller.setShowMetadata(e.target.checked)}
+            disabled={disableMetadataSelect}
+        >
+            <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
+        </StyledCheckbox>
+    );
 
     return (
         <Content>
-            <StyledCheckbox
-                checked={state.showLayerSelection}
-                onChange={(e) => controller.setShowLayerSelection(e.target.checked)}
-            >
-                <Message messageKey='BasicView.layerselection.label' />
-            </StyledCheckbox>
-            {state.showLayerSelection && (
-                <ExtraOptions>
+            <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
+                <ToolsContainer>
                     <StyledCheckbox
-                        checked={state.showMetadata}
-                        onChange={(e) => controller.setShowMetadata(e.target.checked)}
+                        checked={state.showLayerSelection}
+                        onChange={(e) => controller.setShowLayerSelection(e.target.checked)}
                     >
-                        <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
+                        <Message messageKey='BasicView.layerselection.label' />
                     </StyledCheckbox>
-                    {disableStyleSelect ? (
-                        <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
-                            {StyleSelect}
-                        </Tooltip>
-                    ) : (
-                        StyleSelect
+                    {state.showLayerSelection && (
+                        <ExtraOptions>
+                            {disableMetadataSelect ? (
+                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMetadata' />}>
+                                    {MetadataSelect}
+                                </Tooltip>
+                            ) : (
+                                MetadataSelect
+                            )}
+                            {disableStyleSelect ? (
+                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
+                                    {StyleSelect}
+                                </Tooltip>
+                            ) : (
+                                StyleSelect
+                            )}
+                        </ExtraOptions>
                     )}
-                </ExtraOptions>
-            )}
-            {state.externalOptions.map((tool, index) => {
-                return (
-                    <tool.component
-                        key={index}
-                        state={tool.handler.getState()}
-                        controller={tool.handler.getController()}
-                    />
-                )
-            })}
+                    {state.externalOptions.map((tool, index) => {
+                        return (
+                            <tool.component
+                                key={index}
+                                state={tool.handler.getState()}
+                                controller={tool.handler.getController()}
+                            />
+                        )
+                    })}
+                </ToolsContainer>
+            </Card>
             {state.showLayerSelection && (
                 <LayerContainer>
                     <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
