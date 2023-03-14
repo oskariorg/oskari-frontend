@@ -36,6 +36,11 @@ Oskari.clazz.define(
         me._baseLayerId = null;
     },
     {
+        _startPluginImpl: function () {
+            this._element = this._createControlElement();
+            this.renderButton();
+            this.addToPluginContainer(this._element);
+        },
         _stopPluginImpl: function () {
             this._removeIndexMap();
             this.teardownUI();

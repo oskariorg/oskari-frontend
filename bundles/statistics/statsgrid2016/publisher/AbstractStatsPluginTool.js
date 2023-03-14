@@ -30,9 +30,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
         }
         return Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
     },
-    isStarted: function () {
-        return !!this.getPlugin();
-    },
     getPlugin: function () {
         var stats = this.getStatsgridBundle();
         return stats?.togglePlugin;

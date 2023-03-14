@@ -5,8 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         lefthanded: 'top right',
         righthanded: 'top left',
 
-        groupedSiblings: false,
-
         // toolbarConfig stores the current state
         toolbarConfig: {},
 
@@ -319,23 +317,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             return false;
         },
 
-        stop: function () {
-            var me = this;
-
-            if (me.__plugin) {
-                // send remove request per active button
-                for (var toolName in me.selectedTools) {
-                    if (me.selectedTools.hasOwnProperty(toolName) && toolName) {
-                        me.__plugin.removeToolButton(toolName);
-                    }
+        /**
+        * Stop _stopImpl.
+        * @method _stopImpl
+        */
+        _stopImpl: function () {
+            // send remove request per active button
+            for (var toolName in this.selectedTools) {
+                if (this.selectedTools.hasOwnProperty(toolName) && toolName) {
+                    this.__plugin.removeToolButton(toolName);
                 }
-                if (me.__sandbox) {
-                    me.__plugin.stopPlugin(me.__sandbox);
-                }
-                me.__mapmodule.unregisterPlugin(me.__plugin);
             }
         }
-
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
         'protocol': ['Oskari.mapframework.publisher.Tool']

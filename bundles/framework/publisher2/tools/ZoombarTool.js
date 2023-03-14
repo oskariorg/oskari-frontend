@@ -5,8 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
         lefthanded: 'top left',
         righthanded: 'top right',
 
-        groupedSiblings: true,
-
         /**
     * Get tool object.
     * @method getTool
@@ -28,21 +26,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
     * @returns {Object} tool value object
     */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    }
+                }
+            };
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

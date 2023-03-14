@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          *
          * @method init
          * @param {Object} pData initial data
+         * @returns {Boolean} if this panel has any tools/should be shown
          */
         init: function (pData) {
             const instance = this.instance;
@@ -46,6 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         .error('Error initializing publisher tool:', tool.getTool().id);
                 }
             });
+            return this.tools.some(tool => tool.isDisplayed());
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
@@ -67,39 +69,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             panel.getHeader().append(tooltipCont);
 
             // Add tools to panel
-            this.tools.forEach(tool => {
-                const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
-                // setup values when editing an existing map
-                ui.find('input').prop('checked', !!tool.isEnabled());
-                ui.find('input').prop('disabled', !!tool.isDisabled());
+            this.tools
+                .filter(tool => tool.isDisplayed())
+                .forEach(tool => {
+                    const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
+                    // setup values when editing an existing map
+                    ui.find('input').prop('checked', !!tool.isEnabled());
+                    ui.find('input').prop('disabled', !!tool.isDisabled());
 
-                contentPanel.append(ui);
+                    contentPanel.append(ui);
 
-                ui.find('input').first().on('change', function () {
-                    var enabled = jQuery(this).is(':checked');
-                    // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
-                    tool.setEnabled(enabled);
-                    if (enabled) {
+                    ui.find('input').first().on('change', function () {
+                        var enabled = jQuery(this).is(':checked');
+                        // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
+                        tool.setEnabled(enabled);
+                        if (enabled) {
+                            ui.find('.extraOptions').show();
+                            me._setToolLocation(tool);
+                        } else {
+                            ui.find('.extraOptions').hide();
+                        }
+                    });
+
+                    const extraOptions = tool.getExtraOptions(ui);
+                    if (extraOptions) {
+                        ui.find('.extraOptions').append(extraOptions);
+                    }
+
+                    const initStateEnabled = ui.find('input').first().is(':checked');
+                    tool.setEnabled(initStateEnabled);
+                    if (initStateEnabled) {
                         ui.find('.extraOptions').show();
-                        me._setToolLocation(tool);
                     } else {
                         ui.find('.extraOptions').hide();
                     }
                 });
-
-                const extraOptions = tool.getExtraOptions(ui);
-                if (extraOptions) {
-                    ui.find('.extraOptions').append(extraOptions);
-                }
-
-                const initStateEnabled = ui.find('input').first().is(':checked');
-                tool.setEnabled(initStateEnabled);
-                if (initStateEnabled) {
-                    ui.find('.extraOptions').show();
-                } else {
-                    ui.find('.extraOptions').hide();
-                }
-            });
             me.panel = panel;
             return panel;
         },
