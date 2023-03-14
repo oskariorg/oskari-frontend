@@ -53,7 +53,7 @@ const parseJsonStyle = (mode, style) => {
 };
 const stringify = (json) => {
     try {
-        return JSON.stringify(json) || '';
+        return JSON.stringify(json, null, 2) || '';
     } catch { /* ignored */ }
     return '';
 };
