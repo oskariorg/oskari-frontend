@@ -40,7 +40,11 @@ export class UserStyleService {
     }
 
     saveRuntimeStyle (style) {
-        const { id } = style;
+        const { id, layerId } = style;
+        if (layerId) {
+            this.log.warn('Tried to add runtime vector style without layerId. Skipping.');
+            return;
+        }
         if (!id) {
             // styles are stored only for runtime, use time to get unique id
             // use string (backend stored styles have number/Long)

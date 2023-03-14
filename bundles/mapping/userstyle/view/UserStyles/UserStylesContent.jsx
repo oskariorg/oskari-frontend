@@ -55,7 +55,7 @@ const AddStyleIcon = styled(PlusOutlined)`
 `;
 
 const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
-const addNew = (layerId) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId }]);
+const addNew = (addToLayer) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ addToLayer }]);
 
 export const UserStylesContent = ({ layerId, styles, onDelete }) => {
     return (
