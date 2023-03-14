@@ -7,6 +7,16 @@ Oskari.registerLocalization(
         "defaultName": "Style personnel",
         "popup": {
             "title": "Style personnel"
+        },
+        "tab": {
+            "title": "Style personnel",
+            "grid": {
+                "layer": "Couche cartographique",
+                "name": "Nom",
+                "created": "Créé",
+                "updated": "Mis à jour",
+                "actions": ""
+            }
         }
     }
 });
