@@ -42,7 +42,7 @@ class Handler extends StateHandler {
     }
 
     showStyleEditor (id) {
-        this.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
+        this.sandbox.postRequestByName('ShowUserStylesRequest', [{ id }]);
     }
 }
 
