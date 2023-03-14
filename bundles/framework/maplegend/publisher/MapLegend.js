@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return !!this.getPlugin();
         },
         isEnabled: function () {
-            return this.getPlugin().isEnabled();
+            return !!this.getPlugin();
         },
         /**
          * Get values.

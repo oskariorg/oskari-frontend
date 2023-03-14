@@ -40,24 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             return container;
         }
 
-        /**
-         * @method _createEventHandlers
-         * Create eventhandlers.
-         *
-         *
-         * @return {Object.<string, Function>} EventHandlers
-         */
-        /*
-        _createEventHandlers: function () {
-            return {
-                'AfterMapMoveEvent': function (event) {
-                    if (this._scalebar) {
-                        this._scalebar.render(event);
-                    }
-                }
-            };
-        }
-        */
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
         /**

@@ -112,12 +112,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         group, tools, this.instance, this.loc
                     );
-                    toolPanel.init(this.data);
+                    var hasToolsToShow = toolPanel.init(this.data);
                     this.panels.push(toolPanel);
-                    const panel = toolPanel.getPanel();
-                    panel.addClass('t_tools');
-                    panel.addClass('t_' + group);
-                    accordion.addPanel(panel);
+                    if (hasToolsToShow) {
+                        const panel = toolPanel.getPanel();
+                        panel.addClass('t_tools');
+                        panel.addClass('t_' + group);
+                        accordion.addPanel(panel);
+                    }
                 }
             });
             if (rpcPanel) {
@@ -250,9 +252,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             // group tools per tool-group
             definedTools.forEach(toolname => {
                 const tool = Oskari.clazz.create(toolname, sandbox, mapmodule, this.loc);
+                /*
                 if (tool.isDisplayed(this.data) !== true) {
                     return;
-                }
+                }*/
                 var group = tool.getGroup();
                 if (!grouping[group]) {
                     grouping[group] = [];

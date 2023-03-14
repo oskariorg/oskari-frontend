@@ -2,20 +2,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
     function () {
     }, {
         index: 0,
-        allowedLocations: ['bottom left', 'bottom right'],
+        allowedLocations: ['*'],
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
-        allowedSiblings: [
-            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
-            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.time-control-3d.TimeControl3dPlugin',
-            'Oskari.mapping.maprotator.MapRotatorPlugin'
-        ],
-        groupedSiblings: false,
+        allowedSiblings: ['*'],
 
         /**
         * Get tool object.
@@ -51,21 +41,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    }
+                }
+            };
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          *
          * @method init
          * @param {Object} pData initial data
+         * @returns {Boolean} if this panel has any tools/should be shown
          */
         init: function (pData) {
             const instance = this.instance;
@@ -46,6 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         .error('Error initializing publisher tool:', tool.getTool().id);
                 }
             });
+            return this.tools.some(tool => tool.isDisplayed());
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
@@ -67,7 +69,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             panel.getHeader().append(tooltipCont);
 
             // Add tools to panel
-            this.tools.forEach(tool => {
+            this.tools
+                .filter(tool => tool.isDisplayed())
+                .forEach(tool => {
                 const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
                 // setup values when editing an existing map
                 ui.find('input').prop('checked', !!tool.isEnabled());

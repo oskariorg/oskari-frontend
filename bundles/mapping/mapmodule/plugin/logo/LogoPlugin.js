@@ -33,6 +33,14 @@ Oskari.clazz.define(
         _initImpl: function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
         },
+        /**
+         * While this plugin DOES have a UI we don't want publisher stopping it on startup so
+         * we are returning false to stay on screen for the duration of publisher.
+         * @returns false
+         */
+        hasUI: function () {
+            return false;
+        },
         getService: function () {
             if (!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
