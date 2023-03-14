@@ -69,6 +69,7 @@ Oskari.clazz.define(
         this._log = Oskari.log('VectorLayerPlugin');
         this._styleCache = {};
         this._animatingFeatures = {};
+        this._name = 'VectorLayerPlugin';
     }, {
         __name: 'Oskari.mapframework.mapmodule.VectorLayerPlugin',
         /**
@@ -1014,7 +1015,7 @@ Oskari.clazz.define(
                 return;
             }
             var vectorLayer = this._olLayers[layer.getId()];
-            this._map.removeLayer(vectorLayer);
+            this.getMap().removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
         },
         /**

@@ -59,11 +59,13 @@ export class UserStyleService {
         this.notifyStyleUpdate();
     }
 
+    // Used for listing styles in mydata tab
     // Don't apply styles here for layrs. LayersPlugin handles
     fetchUserStyles () {
         if (!Oskari.user().isLoggedIn()) {
             return;
         }
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'GET',
             headers: {
@@ -80,6 +82,7 @@ export class UserStyleService {
     }
 
     deleteStyle (id) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle', { id }), {
             method: 'DELETE'
         }).then(response => {
@@ -88,11 +91,12 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to delete vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('delete');
         }).catch(error => this.ajaxError('delete', error));
     }
 
     saveStyle (style) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'POST',
             body: JSON.stringify(style)
@@ -102,11 +106,12 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to save vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('post');
         }).catch(error => this.ajaxError('post', error));
     }
 
     updateStyle (style) {
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'PUT',
             body: JSON.stringify(style)
@@ -116,8 +121,12 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to update vector style');
             }
-            this.fetchUserStyles();
+            this.ajaxSuccess('put');
         }).catch(error => this.ajaxError('put', error));
+    }
+
+    ajaxStarted () {
+        this.trigger('ajax');
     }
 
     ajaxError (method, error) {
@@ -127,6 +136,8 @@ export class UserStyleService {
 
     ajaxSuccess (method) {
         Messaging.success(`success.${method}`);
+        // for now loads all user styles on add, update, delete
+        this.fetchUserStyles();
     }
 
     handleFetchResponse (json) {

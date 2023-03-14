@@ -39,7 +39,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          */
         init: function (data) {
             var me = this;
-
             var bundleData = data && data.configuration[me.bundleName];
             if (!bundleData) {
                 return;

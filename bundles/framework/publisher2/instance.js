@@ -280,11 +280,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             navigation.css('display', blnEnabled ? 'none' : 'block');
             const mapContainer = Oskari.dom.getMapContainerEl();
             const extraClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
-            data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
+                data = data || this.getDefaultData();
                 // trigger an event letting other bundles know we require the whole UI
                 var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
                 this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
