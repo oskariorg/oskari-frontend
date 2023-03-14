@@ -34,7 +34,7 @@ Oskari.clazz
                     return {
                         id: this._styleName,
                         layerId: this._options,
-                        showEditor: this._showStyle
+                        addToLayer: this._showStyle === true ? this._options : null
                     };
                 }
                 return this._options;

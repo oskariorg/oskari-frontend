@@ -10,7 +10,6 @@ import { VECTOR_STYLE } from '../../mapmodule/domain/constants';
 const showStyleEditor = (service, options) =>
     typeof options.id !== 'undefined' ||
     typeof options.addToLayer === 'number' ||
-    options.showStyle === true || // deprecated, will be removed in version 2.12
     service.getStylesByLayer(options.layerId).length === 0;
 
 const getContent = (service, options, onClose) => {
@@ -21,7 +20,7 @@ const getContent = (service, options, onClose) => {
         const onAdd = ({ name, featureStyle }) => {
             service.saveUserStyle({
                 id,
-                layerId: addToLayer || layerId, // layerId in here is deprecated, will be removed in version 2.12
+                layerId: style.layerId || addToLayer,
                 type: VECTOR_STYLE.OSKARI,
                 name,
                 style: { featureStyle }
