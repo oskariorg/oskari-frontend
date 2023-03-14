@@ -111,7 +111,9 @@ const Header = ({ channel, showGeneric = false, count, hasMore = false }) => {
     return (<React.Fragment>
         <ChannelTitle channel={channel} showGeneric={showGeneric} />
         <BadgeFloater data-count={count}>
-            { !hasMore && <ThemedBadge count={count} showZero /> }
+            { !hasMore && <Tooltip title={<Message messageKey='plugin.SearchPlugin.searchResultCount' messageArgs={{ count }} bundleKey='MapModule' />}>
+                <ThemedBadge count={count} showZero />
+            </Tooltip> }
             { hasMore && <Tooltip title={<Message messageKey='plugin.SearchPlugin.searchMoreResults' messageArgs={{ count }} bundleKey='MapModule' />}>
                 <ThemedBadge count={count + '+'} showZero className='t_more'/>
             </Tooltip>
@@ -202,7 +204,6 @@ const ChannelContent = ({ results, featuresOnMap, showResult, columns = [] }) =>
 
     return (
         <React.Fragment>
-            { hasMore && <Message messageKey={'plugin.SearchPlugin.searchMoreResults'} messageArgs={{ count: totalCount }} bundleKey='MapModule' /> }
             <Table
                 columns={columnSettings}
                 dataSource={locations.map((item) => ({
