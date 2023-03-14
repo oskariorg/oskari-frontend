@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Step, Button, Message } from 'oskari-ui';
+import { Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerTypeSelection';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import { ServiceStep } from './ServiceStep';
 import { LoadingIndicator } from './LoadingIndicator';
-import { StyledAlert, StyledSteps, Paragraph, Header } from './styled';
+import { StyledSteps, Paragraph, Header } from './styled';
 
 const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
