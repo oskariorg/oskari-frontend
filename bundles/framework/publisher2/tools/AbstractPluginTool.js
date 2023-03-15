@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         }
     },
     findPluginFromInitData: function (data) {
-        const toolId = this.getTool().id
+        const toolId = this.getTool().id;
         return data?.configuration?.mapfull?.conf?.plugins?.find(plugin => toolId === plugin.id);
     },
     storePluginConf: function (conf) {

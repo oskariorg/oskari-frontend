@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
          * @method init
          */
         init: function (data) {
-            const { configuration = {}} = data;
+            const { configuration = {} } = data;
             if (configuration[this.bundleName]) {
                 this.storePluginConf(configuration[this.bundleName].conf);
                 this.setEnabled(true);
@@ -48,6 +48,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             if (!this.isEnabled()) {
                 return null;
             }
+            // we want to remove instance from plugin config, so it's unused and we use the "rest" of the config
+            // eslint-disable-next-line no-unused-vars
             const { instance, ...pluginConfig } = this.getPlugin().getConfig();
             const json = {
                 configuration: {}
