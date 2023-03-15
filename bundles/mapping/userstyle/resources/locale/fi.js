@@ -15,6 +15,7 @@ Oskari.registerLocalization(
         },
         "tab": {
             "title": "Omat tyylit",
+            "styleCount": "Karttatasolla on {count} tyyliä",
             "grid": {
                 "layer": "Karttataso",
                 "name": "Nimi",
@@ -24,14 +25,12 @@ Oskari.registerLocalization(
             }
         },
         "success": {
-            "post": "Oma tyyli tallennettu",
-            "put": "Oma tyyli päivitetty",
-            "delete": "Oma tyyli poisttettu"
+            "save": "Oma tyyli tallennettu",
+            "delete": "Oma tyyli poistettu"
         },
         "error": {
-            "get": "Omien tyylien haku epäonnistui",
-            "post": "Oman tyylin tallennus epäonnistui",
-            "put": "Oman tyylin päivitys epäonnisui",
+            "fetch": "Omien tyylien haku epäonnistui",
+            "save": "Oman tyylin tallennus epäonnistui",
             "delete": "Oman tyylin poistaminen epäonnistui"
         }
     }
