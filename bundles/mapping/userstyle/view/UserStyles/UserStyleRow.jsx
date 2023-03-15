@@ -1,12 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { IconButton } from 'oskari-ui/components/buttons';
-
-const RowContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
 
 const TextColumn = styled.div`
     padding-left: 10px;
@@ -14,14 +9,16 @@ const TextColumn = styled.div`
 `;
 
 const IconContainer = styled.div`
-    Button {
-        margin-left: 10px;
+    button {
+        width: 24px;
+        height: 24px;
     }
+    padding-right: 5px;
 `;
 
 export const UserStyleRow = ({ name, onEdit, onDelete }) => {
     return (
-        <RowContainer>
+        <Fragment>
             <TextColumn>{name}</TextColumn>
             <IconContainer>
                 <IconButton
@@ -33,7 +30,7 @@ export const UserStyleRow = ({ name, onEdit, onDelete }) => {
                     onConfirm={onDelete}
                 />
             </IconContainer>
-        </RowContainer>
+        </Fragment>
     );
 };
 

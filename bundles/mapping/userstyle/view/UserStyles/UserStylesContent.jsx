@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Message } from 'oskari-ui';
+import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { UserStyleRow } from './UserStyleRow';
-import { PlusOutlined } from '@ant-design/icons';
-
-// TODO: Fix this once style accessible smarter way
-const secondaryColor = '#006ce8';
 
 const Content = styled('div')`
     padding: 24px;
@@ -15,27 +12,13 @@ const Content = styled('div')`
 
 const Header = styled.div`
     display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     margin-bottom: 10px;
 `;
 
 const HeaderText = styled.div`
-    padding-top: 10px;
     font-weight: bold;
-    flex: 0 0 300px;
-`;
-
-const AddStyle = styled.div`
-    font-weight: bold;
-    text-align: center;
-    flex-grow: 1;
-    background-color: #ffffff;
-    padding: 10px;
-    cursor: pointer;
-    color: ${secondaryColor};
-`;
-
-const AddStyleText = styled.div`
-    display: inline-block;
 `;
 
 const StyledListItem = styled(ListItem)`
@@ -50,22 +33,16 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
-const AddStyleIcon = styled(PlusOutlined)`
-    margin-right: 10px;
-`;
-
 const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
 const addNew = (addToLayer) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ addToLayer }]);
 
+// TODO: maybe use layer name as content header?
 export const UserStylesContent = ({ layerId, styles, onDelete }) => {
     return (
         <Content>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
-                <AddStyle onClick={() => addNew(layerId)}>
-                    <AddStyleIcon />
-                    <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
-                </AddStyle>
+                <PrimaryButton type='add' onClick={() => addNew(layerId)}/>
             </Header>
             { styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
