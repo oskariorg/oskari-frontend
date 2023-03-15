@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
             // Add tools to panel
             this.tools
-                .filter(tool => tool.isDisplayed())
+                .filter(tool => tool.isDisplayed(this.data))
                 .forEach(tool => {
                     const ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
                     // setup values when editing an existing map
@@ -85,7 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         tool.setEnabled(enabled);
                         if (enabled) {
                             ui.find('.extraOptions').show();
-                            me._setToolLocation(tool);
                         } else {
                             ui.find('.extraOptions').hide();
                         }
@@ -106,33 +105,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 });
             me.panel = panel;
             return panel;
-        },
-        /**
-         * @private
-         * @method _setToolLocation
-         * Sets the tool's location according to users selection. (lefhanded/righthanded/userlayout)
-         *
-         * FIXME: this is only called because left/right handed layout option. If we replace them with "toggle" we can remove this.
-         */
-        _setToolLocation: function (tool) {
-            const layoutPanel = this.instance.publisher.panels
-                .filter(panel => typeof panel.getName === 'function')
-                .find(panel => panel.getName() === 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout');
-            if (!layoutPanel || !tool[layoutPanel.activeToolLayout]) {
-                return;
-            }
-            if (!tool.config) {
-                tool.config = {};
-            }
-            if (!tool.config.location) {
-                tool.config.location = {};
-            }
-            const layout = layoutPanel.activeToolLayout;
-            tool.config.location.classes = tool[layout];
-            var plugin = tool.getPlugin();
-            if (plugin && plugin.setLocation) {
-                plugin.setLocation(tool.config.location.classes);
-            }
         },
         /**
          * Returns the selections the user has done with the form inputs.

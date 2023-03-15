@@ -37,19 +37,32 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             // preselect tools based on init data
             let buttons = plugin.config?.buttons;
             if (buttons?.length) {
+                // restore saved settings... yes it's a messy state for the tool...
+                Object.keys(this.selectedOptionsUi).forEach(toolName => {
+                    this.selectedOptionsUi[toolName] = false;
+                });
+                Object.keys(this.selectedTools).forEach(toolName => {
+                    this.selectedTools[toolName] = false;
+                });
                 buttons.forEach(toolName => {
-                    this.__changeToolStatus(toolName, true);
+                    if (toolName.startsWith('history')) {
+                        this.selectedOptionsUi.history = true;
+                        this.selectedTools.history_back = true;
+                        this.selectedTools.history_forward = true;
+                    } else {
+                        this.selectedOptionsUi[toolName] = true;
+                        this.selectedTools[toolName] = true
+                    }
                 });
             }
 
             this.setEnabled(this._hasActiveTools());
         },
-
         _setEnabledImpl: function (enabled) {
             if (enabled) {
                 // if there are no selected tools in configuration, select them all when tools are selected
                 Object.keys(this.selectedOptionsUi).forEach(toolName => {
-                    this.__changeToolStatus(toolName, true);
+                    this.__changeToolStatus(toolName, !!this.selectedOptionsUi[toolName]);
                 });
             }
         },
@@ -63,7 +76,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                 title: 'PublisherToolbarPlugin',
-                config: { 'toolbarId': 'PublisherToolbar', buttons: [] }
+                config: {
+                    'toolbarId': 'PublisherToolbar',
+                    buttons: this.state.pluginConfig?.buttons || []
+                }
             };
         },
         /**
@@ -124,6 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 selectTool.find('input')
                     .attr('id', 'tool-opt-' + toolName)
                     //.on('change', _toggleToolOption(toolName));
+                    .prop('checked', !!this.selectedOptionsUi[toolName])
                     .on('change', () => {
                         var toolState = this.selectedOptionsUi[toolName];
                         this.__changeToolStatus(toolName, !toolState);
@@ -141,9 +158,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 this.__changeToolStatus(toolName, true);
                 return;
             }
-            this.optionsContainer
-                .find('input#tool-opt-' + toolName)
-                .prop('checked', isActive);
+            if (this.optionsContainer) {
+                this.optionsContainer
+                    .find('input#tool-opt-' + toolName)
+                    .prop('checked', isActive);
+            }
             if (toolName === 'history') {
                 this.__changeToolStatus('history_back', isActive);
                 this.__changeToolStatus('history_forward', isActive);
@@ -162,16 +181,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         _hasActiveTools: function () {
             return Object.keys(this.selectedOptionsUi)
                 .some(toolName => this.selectedOptionsUi[toolName] === true);
-        },
-
-        /**
-        * Stop _stopImpl.
-        * @method _stopImpl
-        */
-        _stopImpl: function () {
-            // send remove request per active button
-            return Object.keys(this.selectedTools)
-                .forEach(toolName => this.__changeToolStatus(toolName, false));
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
