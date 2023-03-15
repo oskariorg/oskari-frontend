@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                         this.selectedTools.history_forward = true;
                     } else {
                         this.selectedOptionsUi[toolName] = true;
-                        this.selectedTools[toolName] = true
+                        this.selectedTools[toolName] = true;
                     }
                 });
             }
@@ -129,7 +129,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         getExtraOptions: function (toolContainer) {
             const localization = this.__loc;
             const optionsContainer = jQuery(this.templates.toolOptions).clone();
-            
             Object.keys(this.selectedOptionsUi).forEach(toolName => {
                 var selectTool = jQuery(this.templates.toolOption).clone();
                 selectTool.find('label')
@@ -139,7 +138,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 // toggle tool
                 selectTool.find('input')
                     .attr('id', 'tool-opt-' + toolName)
-                    //.on('change', _toggleToolOption(toolName));
                     .prop('checked', !!this.selectedOptionsUi[toolName])
                     .on('change', () => {
                         var toolState = this.selectedOptionsUi[toolName];
