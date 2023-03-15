@@ -20,12 +20,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     * @returns {Object} tool description
     */
         getTool: function () {
-            var coordinatetool = this.__sandbox.findRegisteredModuleInstance('coordinatetool') || null;
             return {
                 id: 'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
                 title: 'CoordinateToolPlugin',
                 config: {
-                    instance: coordinatetool
+                    ...(this.state.pluginConfig || {})
                 }
             };
         },
@@ -60,9 +59,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             if (!this.isEnabled()) {
                 return null;
             }
-            var pluginConfig = this.getPlugin().getConfig();
-            pluginConfig.instance = null;
-            delete pluginConfig.instance;
+
+            const pluginConfig = this.getPlugin().getConfig();
 
             if (me.toolConfig) {
                 for (var configName in me.toolConfig) {
