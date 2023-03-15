@@ -56,6 +56,7 @@ export class UserStyleService {
         } else {
             this.styles.push(style);
         }
+        this.applyStyleToLayer(style);
         this.notifyStyleUpdate();
     }
 
@@ -78,7 +79,7 @@ export class UserStyleService {
             return response.json();
         }).then(json => {
             this.handleFetchResponse(json);
-        }).catch(error => this.ajaxError('get', error));
+        }).catch(error => this.ajaxError('fetch', error));
     }
 
     deleteStyle (id) {
@@ -106,8 +107,8 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to save vector style');
             }
-            this.ajaxSuccess('post');
-        }).catch(error => this.ajaxError('post', error));
+            this.ajaxSuccess('save');
+        }).catch(error => this.ajaxError('save', error));
     }
 
     updateStyle (style) {
@@ -121,21 +122,22 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to update vector style');
             }
-            this.ajaxSuccess('put');
-        }).catch(error => this.ajaxError('put', error));
+            this.ajaxSuccess('save');
+        }).catch(error => this.ajaxError('save', error));
     }
 
     ajaxStarted () {
-        this.trigger('ajax');
+        this.trigger('ajax', true);
     }
 
     ajaxError (method, error) {
-        Messaging.error(`errors.fetch.${method}`);
+        Messaging.error(Oskari.getMsg(BUNDLE_KEY, `error.${method}`));
         this.log.error(error);
+        this.trigger('ajax', false);
     }
 
     ajaxSuccess (method) {
-        Messaging.success(`success.${method}`);
+        Messaging.success(Oskari.getMsg(BUNDLE_KEY, `success.${method}`));
         // for now loads all user styles on add, update, delete
         this.fetchUserStyles();
     }
@@ -146,7 +148,8 @@ export class UserStyleService {
         }
         this.styles = json;
         this.notifyStyleUpdate();
-        // TODO: add to selected layers
+        // Should add style only for selected on start or Describe loaded on save/update
+        // this.styles.forEach(s => this.applyStyleToLayer(s.id));
     }
 
     notifyStyleUpdate () {
