@@ -61,7 +61,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             }
             const rotatorInstance = this.getMapRotatorInstance();
             let plugin = rotatorInstance.getPlugin();
-            this.state.enabled = enabled;
             if (!plugin && enabled) {
                 rotatorInstance.createPlugin();
                 plugin = rotatorInstance.getPlugin();
@@ -75,6 +74,8 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             } else {
                 this.stop();
             }
+            // Stop checks if we are already disabled so toggle the value after
+            this.state.enabled = enabled;
             var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
             this.getSandbox().notifyAll(event);
         },

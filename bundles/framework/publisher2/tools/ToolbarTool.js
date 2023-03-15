@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         getValues: function () {
             var me = this,
                 buttons = [];
-            if (!me.state.enabled) {
+            if (!this.isEnabled()) {
                 return null;
             }
 

@@ -87,7 +87,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (this.isEnabled() === enabled) {
             return;
         }
-        this.state.enabled = enabled;
         let plugin = this.getPlugin();
         if (!plugin && enabled) {
             plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -100,6 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         } else {
             this.stop();
         }
+        // Stop checks if we are already disabled so toggle the value after
+        this.state.enabled = enabled;
         this._setEnabledImpl(enabled);
         var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
         this.getSandbox().notifyAll(event);
