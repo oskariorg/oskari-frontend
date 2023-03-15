@@ -194,11 +194,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _getTopmostFeatureAndLayer (event) {
             const pixel = [event.getPageX(), event.getPageY()];
             const featureHitCb = (feature, layer) => ({ feature, layer });
-            let ftrAndLyr;
             try {
-                ftrAndLyr = this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
+                return this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
                     layerFilter: layer => this._onlyRegisteredTypesFilter(layer)
-                });
+                }) || {};
             } catch (ex) {
                 if (ex.message === `Cannot read property 'forEachFeatureAtCoordinate' of undefined`) {
                     this._log.debug('Could not find features at hover location. Omitted ol renderer error:\n', ex);
@@ -206,7 +205,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     throw ex;
                 }
             }
-            return ftrAndLyr || {};
+            return {};
         }
 
         /**

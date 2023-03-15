@@ -35,16 +35,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 '</div>'),
             inputCheckbox: jQuery('<div><input type="checkbox" name="announcement"/><label></label></div>')
         };
-
-        this.eventHandlers = {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                var me = this;
-                var tool = event.getTool();
-                if (tool.getTool().id === me.getTool().id && tool.isStarted() && this.selectedAnnouncements) {
-                    this.getPlugin().updateAnnouncements(this.selectedAnnouncements);
-                }
-            }
-        };
     }, {
 
         init: function (data) {
@@ -58,12 +48,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 const myId = me.getTool().id;
                 const enabled = data.configuration.announcements.conf.plugin.id === myId;
                 me.setEnabled(enabled);
-            }
-
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.registerForEventByName(me, p);
-                }
             }
 
             service.fetchAnnouncements((err, data) => {
@@ -84,6 +68,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
                 }
                 me.updateSelectedInput();
             });
+        },
+        _setEnabledImpl: function (enabled) {
+            if (enabled && this.selectedAnnouncements) {
+                this.getPlugin().updateAnnouncements(this.selectedAnnouncements);
+            }
         },
 
         getName: function () {
@@ -246,63 +235,33 @@ Oskari.clazz.define('Oskari.admin.bundle.admin-announcements.publisher.Announcem
         getValues: function () {
             const me = this;
 
-            if (me.state.enabled) {
-                const pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
-                const announcementsSelection = me._getAnnouncementsSelection();
-
-                if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
-                    pluginConfig.config.announcements = announcementsSelection.announcements;
-                }
-                return {
-                    configuration: {
-                        announcements: {
-                            conf: {
-                                plugin: pluginConfig
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
-        },
+            const pluginConfig = { id: me.getTool().id, config: me.getPlugin().getConfig() };
+            const announcementsSelection = me._getAnnouncementsSelection();
 
-        /**
-         * "Sends" an event, that is, notifies other components of something.
-         *
-         * @method _sendEvent
-         * @param {String} eventName the name of the event
-         * @param {Whatever} eventData the data we want to send with the event
-         */
-        _sendEvent: function (eventName, eventData) {
-            const eventBuilder = Oskari.eventBuilder(eventName);
-
-            if (eventBuilder) {
-                const evt = eventBuilder(eventData);
-                this.__sandbox.notifyAll(evt);
+            if (announcementsSelection && !jQuery.isEmptyObject(announcementsSelection)) {
+                pluginConfig.config.announcements = announcementsSelection.announcements;
             }
+            return {
+                configuration: {
+                    announcements: {
+                        conf: {
+                            plugin: pluginConfig
+                        }
+                    }
+                }
+            };
         },
 
         /**
-        * Stop tool.
-        * @method stop
-        * @public
+        * Stop _stopImpl.
+        * @method _stopImpl
         */
-        stop: function () {
-            var me = this;
-            if (me.announcementsPopup) {
-                me.announcementsPopup.close(true);
-            }
-            if (me.__plugin) {
-                if (me.__sandbox && me.__plugin.getSandbox()) {
-                    me.__plugin.stopPlugin(me.__sandbox);
-                }
-                me.__mapmodule.unregisterPlugin(me.__plugin);
-            }
-            for (var p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    me.__sandbox.unregisterFromEventByName(me, p);
-                }
+        _stopImpl: function () {
+            if (this.announcementsPopup) {
+                this.announcementsPopup.close(true);
             }
         }
     }, {

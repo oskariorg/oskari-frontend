@@ -1,4 +1,4 @@
-import './plugin/AbstractMapModulePlugin';
+import './AbstractMapModulePlugin';
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapLayerPlugin
  * Base class for map layer implementations (wms, wmts, vector tile etc.)
@@ -20,6 +20,8 @@ Oskari.clazz.define(
         this._log = Oskari.log(this.getName());
     }, {
         /** @static @property __name plugin name */
+        // FIXME: in AbstractMapModulePlugin it's _name or _pluginName (not really sure which will be used ultimately)
+        // This means that layerplugins use __name and other plugins _name (or _pluginName)
         __name: 'OVERRIDETHIS',
         /**
          * @method getName

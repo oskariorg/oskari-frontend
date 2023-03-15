@@ -1,11 +1,10 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     function () {
+        this.getMsg = Oskari.getMsg.bind(null, 'Publisher2');
     }, {
         index: 8,
         allowedLocations: [],
         allowedSiblings: [],
-
-        groupedSiblings: true,
 
         templates: {
             colours: jQuery('<div id="publisher-layout-colours" class="tool-options">' + '<label for="publisher-colours"></label>' + '<div id="publisher-layout-coloursSelector">' + '<input type="text" name="publisher-colour" disabled />' + '<button id="publisher-colours"></button>' + '</div>' + '</div>'),
@@ -89,22 +88,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
         maxColourValue: 255,
         minColourValue: 0,
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                const tool = event.getTool();
-                if (tool.getTool().id !== this.getTool().id) {
-                    return;
-                }
-                if (tool.isStarted() && this.values.colourScheme) {
-                    this._sendColourSchemeChangedEvent(this.values.colourScheme);
-                }
-            }
-        },
         noUI: false,
         init: function (data) {
-            Object.keys(this.eventHandlers).forEach(eventName => {
-                this.__sandbox.registerForEventByName(this, eventName);
-            });
             if (!Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
                 return;
             }
@@ -116,34 +101,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 // Gets plugin color scheme
                 if (colourScheme) {
                     this.values.colourScheme = colourScheme;
-                    this._sendColourSchemeChangedEvent(colourScheme);
                 }
 
                 this.noUI = !!noUI;
                 this.setEnabled(true);
             }
         },
+        _setEnabledImpl: function () {
+            this._sendColourSchemeChangedEvent(this.values.colourScheme);
+        },
         getName: function () {
             return 'Oskari.mapframework.publisher.tool.GetInfoTool';
         },
         /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-     */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
-        },
-        /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
@@ -157,37 +132,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         isColourDialogOpen: false,
 
         /**
-    * Set enabled.
-    * @method setEnabled
-    * @public
-    *
-    * @param {Boolean} enabled is tool enabled or not
-    */
-        _setEnabledImpl: function (enabled) {
-            var me = this;
-            if (enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function') {
-                me.__plugin.setMode(me.state.mode);
-            }
-        },
-
-        isEnabled: function () {
-            return this.state.enabled;
-        },
-        /**
-    * Get extra options.
-    * @method getExtraOptions
-    * @public
-    *
-    * @returns {Object} jQuery element
-    */
+        * Get extra options.
+        * @method getExtraOptions
+        * @public
+        *
+        * @returns {Object} jQuery element
+        */
         getExtraOptions: function () {
-            var me = this,
-                template = me.templates.colours.clone(),
-                selectedColour = me.values.colourScheme || {},
-                colourName = selectedColour.val ? me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val] : me.__instance._localization.BasicView.layout.fields.colours['dark_grey'],
-                colourLabel = me.__instance._localization.BasicView.layout.fields.colours.label,
-                colourPlaceholder = me.__instance._localization.BasicView.layout.fields.colours.placeholder,
-                buttonLabel = me.__instance._localization.BasicView.layout.fields.colours.buttonLabel;
+            const me = this;
+            const template = me.templates.colours.clone();
+            let selectedColour = me.values.colourScheme;
+            if (!selectedColour?.val) {
+                selectedColour = this.initialValues.colours.find(color => color.val === 'dark_grey');
+            }
+
+            const colourName = this.getMsg(`BasicView.layout.fields.colours.${selectedColour.val}`);
+            const colourLabel = this.getMsg('BasicView.layout.fields.colours.label');
+            const colourPlaceholder = this.getMsg('BasicView.layout.fields.colours.placeholder');
+            const buttonLabel = this.getMsg('BasicView.layout.fields.colours.buttonLabel');
 
             // Set the localizations.
             template.find('label').html(colourLabel);
@@ -205,7 +167,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             var input = Oskari.clazz.create(
                 'Oskari.userinterface.component.CheckboxInput'
             );
-            input.setTitle(me.__instance._localization.BasicView.noUI);
+
+            input.setTitle(this.getMsg('BasicView.noUI'));
             input.setHandler(function (checked) {
                 if (checked === 'on') {
                     me.noUI = true;
@@ -229,67 +192,59 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{
-                                    id: this.getTool().id,
-                                    config: {
-                                        colourScheme: me.values.colourScheme || {},
-                                        noUI: me.noUI
-                                    }
-                                }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{
+                                id: this.getTool().id,
+                                config: {
+                                    colourScheme: this.values.colourScheme || {},
+                                    noUI: this.noUI
+                                }
+                            }]
+                        }
+                    }
+                }
+            };
         },
 
         /**
-     * Creates and opens the dialog from which to choose the colour scheme.
-     * Also handles the creation of the sample gfi popup.
-     *
-     * @method _openColourDialog
-     */
+         * Creates and opens the dialog from which to choose the colour scheme.
+         * Also handles the creation of the sample gfi popup.
+         *
+         * @method _openColourDialog
+         */
         _openColourDialog: function () {
-            var me = this,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                title = me.__instance._localization.BasicView.layout.popup.title,
-                content = me.templates.coloursPopup.clone(),
-                colours = me.initialValues.colours,
-                colourInput,
-                colourName,
-                prevColour = me.values.colourScheme,
-                selectedColour;
-            closeButton.setTitle(me.__instance._localization.BasicView.layout.popup.close);
+            const me = this;
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+            const content = this.templates.coloursPopup.clone();
+            const colours = this.initialValues.colours;
+            const prevColour = this.values.colourScheme;
             closeButton.setHandler(function () {
                 popup.close(true);
-                me._colourSchemePopup = null;
-                me.isColourDialogOpen = false;
+                this._colourSchemePopup = null;
+                this.isColourDialogOpen = false;
             });
 
             // Create the preview GFI dialog.
-            content.find('div#publisher-colour-preview').append(me._createGfiPreview());
+            content.find('div#publisher-colour-preview').append(this._createGfiPreview());
 
             // Append the colour scheme inputs to the dialog.
             colours.forEach(color => {
-                colourInput = me.templates.inputRadio.clone();
-                colourName = me.__instance._localization.BasicView.layout.fields.colours[color.val];
+                const colourInput = me.templates.inputRadio.clone();
+                const colourName = this.getMsg(`BasicView.layout.fields.colours.${color.val}`);
 
                 colourInput.find('input[type=radio]').attr({
                     id: color.val,
@@ -304,11 +259,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
                 // Create the inputs for custom colour
                 if (color.val === 'custom') {
-                    content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
+                    content.find('div#publisher-colour-inputs').append(this._createCustomColoursInputs());
                     // Color picker value or icon changed
-                    content.find('div#publisher-custom-colours').on('change', function () {
+                    content.find('div#publisher-custom-colours').on('change', () => {
                         jQuery('#publisher-colour-inputs input[id=custom]').prop('checked', true);
-                        jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(me.__instance._localization.BasicView.layout.fields.colours['custom']).attr('data-colour-code', 'custom');
+                        jQuery('div.basic_publisher')
+                            .find('input[name=publisher-colour]')
+                            .val(this.getMsg('BasicView.layout.fields.colours.custom'))
+                            .attr('data-colour-code', 'custom');
                         me._updatePreviewFromCustomValues(content);
                     });
                 }
@@ -316,12 +274,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             // Things to do when the user changes the colour scheme:
             content.find('input[name=colour]').on('change', function () {
-                selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
+                const selectedColour = me._getItemByCode(jQuery(this).val(), me.initialValues.colours);
                 // change the preview gfi
                 me._changeGfiColours(selectedColour, content);
                 // change the value of the colour scheme input in the layout panel
-                colourName = me.__instance._localization.BasicView.layout.fields.colours[selectedColour.val];
-                jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(colourName).attr('data-colour-code', selectedColour.val);
+                const colourName = me.getMsg(`BasicView.layout.fields.colours.${selectedColour.val}`);
+                jQuery('div.basic_publisher')
+                    .find('input[name=publisher-colour]')
+                    .val(colourName)
+                    .attr('data-colour-code', selectedColour.val);
                 me.values.colourScheme = selectedColour;
                 // notify others of the changed colour scheme
                 me._sendColourSchemeChangedEvent(selectedColour);
@@ -329,33 +290,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             // Set the selected colour
             if (prevColour) {
-                me._changeGfiColours(prevColour, content);
+                this._changeGfiColours(prevColour, content);
                 content.find('input[name=colour][value=' + prevColour.val + ']').attr('checked', 'checked');
             }
 
-            popup.show(title, content, [closeButton]);
+            popup.show(this.getMsg('BasicView.layout.popup.title'), content, [closeButton]);
             this._colourSchemePopup = popup;
-            me.isColourDialogOpen = true;
+            this.isColourDialogOpen = true;
         },
 
         /**
-     * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
-     *
-     * @method _createGfiPreview
-     * @return {jQuery} returns the sample gfi
-     */
+         * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
+         *
+         * @method _createGfiPreview
+         * @return {jQuery} returns the sample gfi
+         */
         _createGfiPreview: function () {
-        // Example data
-            var me = this,
-                title = me.__instance._localization.BasicView.layout.popup.gfiDialog.title,
-                featureName = me.__instance._localization.BasicView.layout.popup.gfiDialog.featureName,
-                featureDesc = me.__instance._localization.BasicView.layout.popup.gfiDialog.featureDesc,
-                linkUrl = window.location;
+            // Example data
+            const linkUrl = window.location;
             // Templates
             var dialogContent = jQuery('<div></div>'),
                 header = jQuery('<div class="popupTitle"></div>'),
                 headerWrapper = jQuery('<div class="popupHeader"></div>'),
-                headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>'),
+                headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white"></div>'),
                 contentDiv = jQuery('<div class="popupContent"></div>'),
                 contentWrapper = jQuery('<div class="contentWrapper"></div>'),
                 popupDataContent = jQuery('<div class="myplaces_wrapper"><div class="myplaces_place">' +
@@ -365,15 +322,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 '<a class="myplaces_link" target="_blank"></a>' +
                 '</div></div>');
 
-            header.append(title);
+            header.text(this.getMsg('BasicView.layout.popup.gfiDialog.title'));
             headerWrapper.append(header);
             headerWrapper.append(headerCloseButton);
             headerWrapper.css({
                 'width': '320px'
             });
 
-            popupDataContent.find('h3.myplaces_header').html(featureName);
-            popupDataContent.find('p.myplaces_desc').html(featureDesc);
+            popupDataContent.find('h3.myplaces_header').html(this.getMsg('BasicView.layout.popup.gfiDialog.featureName'));
+            popupDataContent.find('p.myplaces_desc').html(this.getMsg('BasicView.layout.popup.gfiDialog.featureDesc'));
             popupDataContent.find('a.myplaces_link').html(linkUrl).attr('href', linkUrl);
             contentDiv.append(popupDataContent);
             contentDiv.css({
@@ -391,12 +348,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Sets the styles of the sample gfi with the selected colour scheme.
-     *
-     * @method _changeGfiColours
-     * @param {Object} selectedColour
-     * @param {jQuery} container (optional, defaults to the colour preview element on page)
-     */
+         * Sets the styles of the sample gfi with the selected colour scheme.
+         *
+         * @method _changeGfiColours
+         * @param {Object} selectedColour
+         * @param {jQuery} container (optional, defaults to the colour preview element on page)
+         */
         _changeGfiColours: function (selectedColour, container) {
             container = container || jQuery('div#publisher-colour-popup');
 
@@ -423,73 +380,83 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Creates a popup from which custom colour scheme can be defined.
-     *
-     * @method _createCustomColoursPopup
-     * @return {undefined}
-     */
+         * Creates a popup from which custom colour scheme can be defined.
+         *
+         * @method _createCustomColoursPopup
+         * @return {undefined}
+         */
         _createCustomColoursPopup: function () {
-            var me = this,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                title = me.__instance._localization.BasicView.layout.fields.colours.custom,
-                content = me._createCustomColoursInputs(),
-                customColours;
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+            const content = this._createCustomColoursInputs();
+            let customColours;
 
-            closeButton.setTitle(me.__instance._localization.BasicView.layout.popup.close);
-            closeButton.setHandler(function () {
-                me._collectCustomColourValues(content);
+            closeButton.setHandler(() => {
+                this._collectCustomColourValues(content);
                 // Change the preview gfi and send event only if currently checked
                 if (jQuery('div#publisher-colour-inputs input#custom').prop('checked')) {
-                    customColours = me._getItemByCode('custom', me.initialValues.colours);
+                    customColours = this._getItemByCode('custom', this.initialValues.colours);
                     // Change the colours of the preview popup
-                    me._changeGfiColours(customColours);
+                    this._changeGfiColours(customColours);
                     // Send an event notifying the changed colours
-                    me._sendColourSchemeChangedEvent(customColours);
+                    this._sendColourSchemeChangedEvent(customColours);
                 }
                 popup.close(true);
-                me._customColoursPopup = null;
+                this._customColoursPopup = null;
             });
 
-            popup.show(title, content, [closeButton]);
-            me._customColoursPopup = popup;
+            popup.show(this.getMsg('BasicView.layout.fields.colours.custom'), content, [closeButton]);
+            this._customColoursPopup = popup;
+        },
+        _stopImpl: function () {
+            if (this._colourSchemePopup) {
+                this._colourSchemePopup.close(true);
+                this._colourSchemePopup = null;
+                this.isColourDialogOpen = false;
+            }
+            if (this._customColoursPopup) {
+                this._customColoursPopup.close(true);
+                this._customColoursPopup = null;
+            }
         },
 
         /**
-     * Creates the inputs for putting in your favourite colours.
-     *
-     * @method _createCustomColoursInputs
-     * @return {jQuery} return the template to select custom colours
-     */
+         * Creates the inputs for putting in your favourite colours.
+         *
+         * @method _createCustomColoursInputs
+         * @return {jQuery} return the template to select custom colours
+         */
         _createCustomColoursInputs: function () {
-            var me = this,
-                template = me.templates.customClrs.clone(),
-                layoutLoc = me.__instance._localization.BasicView.layout,
-                bgLoc = layoutLoc.fields.colours.customLabels.bgLabel,
-                titleLoc = layoutLoc.fields.colours.customLabels.titleLabel,
-                headerLoc = layoutLoc.fields.colours.customLabels.headerLabel,
-                iconClsInputs = me.templates.iconClsInput.clone(),
-                iconClsLoc = layoutLoc.fields.colours.customLabels.iconLabel,
-                iconCloseLoc = layoutLoc.fields.colours.customLabels.iconCloseLabel,
-                iconCloseWhiteLoc = layoutLoc.fields.colours.customLabels.iconCloseWhiteLabel,
-                rgbValue;
-            iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
-            iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
+            const me = this;
+            const template = me.templates.customClrs.clone();
+            const iconClsInputs = me.templates.iconClsInput.clone();
+            let rgbValue;
+            iconClsInputs.find('label[for=icon-close]')
+                .html(this.getMsg('BasicView.layout.fields.colours.customLabels.iconCloseLabel'));
+            iconClsInputs.find('label[for=icon-close-white]')
+                .html(this.getMsg('BasicView.layout.fields.colours.customLabels.iconCloseWhiteLabel'));
 
-            me._createColorPickers();
+            this._createColorPickers();
+            var colorPickerBackground = this.templates.colorPickers.background.clone(),
+                colorPickerTitle = this.templates.colorPickers.title.clone(),
+                colorPickerHeader = this.templates.colorPickers.header.clone();
 
-            var colorPickerBackground = me.templates.colorPickers.background.clone(),
-                colorPickerTitle = me.templates.colorPickers.title.clone(),
-                colorPickerHeader = me.templates.colorPickers.header.clone();
+            colorPickerBackground.append(this._colorPickers[0].getElement());
+            colorPickerTitle.append(this._colorPickers[1].getElement());
+            colorPickerHeader.append(this._colorPickers[2].getElement());
 
-            colorPickerBackground.append(me._colorPickers[0].getElement());
-            colorPickerTitle.append(me._colorPickers[1].getElement());
-            colorPickerHeader.append(me._colorPickers[2].getElement());
-
-            template.find('div#publisher-custom-colours-bg').append(bgLoc).append(colorPickerBackground);
-            template.find('div#publisher-custom-colours-title').append(titleLoc).append(colorPickerTitle);
-            template.find('div#publisher-custom-colours-header').append(headerLoc).append(colorPickerHeader);
-            template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
+            template.find('div#publisher-custom-colours-bg')
+                .append(this.getMsg('BasicView.layout.fields.colours.customLabels.bgLabel'))
+                .append(colorPickerBackground);
+            template.find('div#publisher-custom-colours-title')
+                .append(this.getMsg('BasicView.layout.fields.colours.customLabels.titleLabel'))
+                .append(colorPickerTitle);
+            template.find('div#publisher-custom-colours-header')
+                .append(this.getMsg('BasicView.layout.fields.colours.customLabels.headerLabel'))
+                .append(colorPickerHeader);
+            template.find('div#publisher-custom-colours-iconcls')
+                .append(this.getMsg('BasicView.layout.fields.colours.customLabels.iconLabel'))
+                .append(iconClsInputs);
 
             this._prepopulateCustomColoursTemplate(template);
 
@@ -507,12 +474,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Prepopulates the custom colours template with saved colour values.
-     *
-     * @method  _prepopulateCustomColoursTemplate
-     * @param  {jQuery} template
-     * @return {undefined}
-     */
+         * Prepopulates the custom colours template with saved colour values.
+         *
+         * @method  _prepopulateCustomColoursTemplate
+         * @param  {jQuery} template
+         * @return {undefined}
+         */
         _prepopulateCustomColoursTemplate: function (template) {
             var me = this,
                 iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
@@ -528,18 +495,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Prepopulates an rgb div with given values
-     *
-     * @method _prepopulateRgbDiv
-     * @param  {jQuery} rgbDiv
-     * @param  {Object} colours
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     * @return {undefined}
-     */
+         * Prepopulates an rgb div with given values
+         *
+         * @method _prepopulateRgbDiv
+         * @param  {jQuery} rgbDiv
+         * @param  {Object} colours
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         * @return {undefined}
+         */
         _prepopulateRgbDiv: function (rgbDiv, colours) {
             if (!colours) {
                 return;
@@ -551,12 +518,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Collects the custom colours values from the content div.
-     *
-     * @method _collectCustomColourValues
-     * @param  {jQuery} content
-     * @return {undefined}
-     */
+         * Collects the custom colours values from the content div.
+         *
+         * @method _collectCustomColourValues
+         * @param  {jQuery} content
+         * @return {undefined}
+         */
         _collectCustomColourValues: function (content) {
             var me = this,
                 iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
@@ -574,17 +541,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Returns an rgb colour object parsed from the div.
-     *
-     * @method _getColourFromRgbDiv
-     * @param {jQuery} rgbDiv
-     * @return {Object} returns an rgb colour object
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     */
+         * Returns an rgb colour object parsed from the div.
+         *
+         * @method _getColourFromRgbDiv
+         * @param {jQuery} rgbDiv
+         * @return {Object} returns an rgb colour object
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         */
         _getColourFromRgbDiv: function (rgbDiv) {
             var red = rgbDiv.find('input[name=red]').val(),
                 green = rgbDiv.find('input[name=green]').val(),
@@ -602,25 +569,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Retrieves the item from the list which value matches the code given
-     * or null if not found on the list.
-     *
-     * @method _getItemByCode
-     * @param {String} code
-     * @param {Array[Object]} list
-     * @return {Object/null}
-     */
+         * Retrieves the item from the list which value matches the code given
+         * or null if not found on the list.
+         *
+         * @method _getItemByCode
+         * @param {String} code
+         * @param {Array[Object]} list
+         * @return {Object/null}
+         */
         _getItemByCode: function (code, list) {
             return list.find(l => l.val === code) || null;
         },
 
         /**
-     * @method createColorPickers
-     * Creates an array of color picker components
-     * @private
-     */
+         * @method createColorPickers
+         * Creates an array of color picker components
+         * @private
+         */
         _createColorPickers: function () {
-            var options = { className: 'oskari-colorpickerinput', cancelText: this.__instance._localization.BasicView.buttons.cancel };
+            var options = { className: 'oskari-colorpickerinput', cancelText: this.getMsg('BasicView.buttons.cancel') };
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
@@ -629,11 +596,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * @method updatePreviewFromCustomValues
-     * Updates preview colors from color pickers and icon choice
-     * @param {Object} content
-     */
-
+         * @method updatePreviewFromCustomValues
+         * Updates preview colors from color pickers and icon choice
+         * @param {Object} content
+         */
         _updatePreviewFromCustomValues: function (content) {
             var selectedColour = {};
             selectedColour.bgColour = this._colorPickers[0].getValue();
@@ -648,64 +614,45 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
 
         /**
-     * Returns an rgb colour object in css formatted string.
-     *
-     * @method _getCssRgb
-     * @param  {Object} rgb
-     *          {
-     *              red: <0-255>,
-     *              green: <0-255>,
-     *              blue: <0-255>
-     *          }
-     * @return {String}
-     */
+         * Returns an rgb colour object in css formatted string.
+         *
+         * @method _getCssRgb
+         * @param  {Object} rgb
+         *          {
+         *              red: <0-255>,
+         *              green: <0-255>,
+         *              blue: <0-255>
+         *          }
+         * @return {String}
+         */
         _getCssRgb: function (rgb) {
             return 'rgb(' + rgb.red + ', ' + rgb.green + ', ' + rgb.blue + ')';
         },
 
         /**
-     * Sends an event to notify interested parties that the colour scheme has changed.
-     *
-     * @method _sendColourSchemeChangedEvent
-     * @param {Object} colourScheme the changed colour scheme
-     */
+         * Sends an event to notify interested parties that the colour scheme has changed.
+         *
+         * @method _sendColourSchemeChangedEvent
+         * @param {Object} colourScheme the changed colour scheme
+         */
         _sendColourSchemeChangedEvent: function (colourScheme) {
             this._sendEvent('Publisher2.ColourSchemeChangedEvent', colourScheme);
         },
 
         /**
-     * "Sends" an event, that is, notifies other components of something.
-     *
-     * @method _sendEvent
-     * @param {String} eventName the name of the event
-     * @param {Whatever} eventData the data we want to send with the event
-     */
+         * "Sends" an event, that is, notifies other components of something.
+         *
+         * @method _sendEvent
+         * @param {String} eventName the name of the event
+         * @param {Whatever} eventData the data we want to send with the event
+         */
         _sendEvent: function (eventName, eventData) {
-            var eventBuilder = Oskari.eventBuilder(eventName),
-                evt;
+            const eventBuilder = Oskari.eventBuilder(eventName);
 
             if (eventBuilder) {
-                evt = eventBuilder(eventData);
-                this.__sandbox.notifyAll(evt);
+                const evt = eventBuilder(eventData);
+                this.getSandbox().notifyAll(evt);
             }
-        },
-        /**
-    * Stop tool.
-    * @method stop
-    * @public
-    */
-        stop: function () {
-            var me = this;
-            if (me.__plugin) {
-                if (me.__sandbox && me.__plugin.getSandbox()) {
-                    me.__plugin.stopPlugin(me.__sandbox);
-                }
-                me.__mapmodule.unregisterPlugin(me.__plugin);
-            }
-
-            Object.keys(me.eventHandlers).forEach(eventName => {
-                me.__sandbox.unregisterFromEventByName(me, eventName);
-            });
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

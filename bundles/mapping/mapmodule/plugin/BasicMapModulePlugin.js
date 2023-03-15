@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
      */
     function (config) {
         this._config = config;
-        this._ctl = null;
         this._element = null;
         this._enabled = true;
         this._visible = true;
@@ -185,49 +184,18 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
-            var me = this,
-                el = me.getElement();
+            const el = this.getElement();
 
-            if (!me._config) {
-                me._config = {};
+            if (!this._config) {
+                this._config = {};
             }
-            if (!me._config.location) {
-                me._config.location = {};
+            if (!this._config.location) {
+                this._config.location = {};
             }
 
-            me._config.location.classes = location;
+            this._config.location.classes = location;
             this.addToPluginContainer(el);
         },
-
-        /**
-         * @method setColorScheme
-         * Set the plugin's color scheme. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} colorScheme
-         * Magical object with some colors and classes and whatnot...
-         *
-         */
-        _setColorScheme: function (colorScheme) {},
-
-        /**
-         * @method setFont
-         * Set the plugin's font. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {string} font Font ID
-         *
-         */
-        _setFont: function (font) {},
-
-        /**
-         * @method setStyle Set the plugin's style. Implement if needed.
-         * This will be deprecated if/when we move this to a map-level property.
-         *
-         * @param {Object} style Magical object with some widths and whatnot...
-         *
-         */
-        _setStyle: function (style) {},
 
         /**
          * @public @method hasUI
@@ -305,59 +273,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         isVisible: function () {
             return this._visible;
-        },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {String} style class used by mapmodule or default.
-         */
-        getToolStyleFromMapModule: function () {
-            return this.getMapModule().getToolStyle() || 'rounded-dark';
-        },
-        /**
-         * @public @method getToolStyleFromMapModule
-         *
-         * @return {String} the font used by mapmodule or null if not available.
-         */
-        getToolFontFromMapModule: function () {
-            return this.getMapModule().getToolFont();
-        },
-
-        /**
-         * Removes all the css classes which respond to given regex from all elements
-         * and adds the given class to them.
-         *
-         * @method changeCssClasses
-         * @param {String} classToAdd the css class to add to all elements.
-         * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
-         * @param {Array[jQuery]} elements The elements where the classes should be changed.
-         */
-        changeCssClasses: function (classToAdd, removeClassRegex, elements) {
-            var i,
-                j,
-                el;
-
-            for (i = 0; i < elements.length; i += 1) {
-                el = elements[i];
-                // FIXME build the function outside the loop
-                el.removeClass(function (index, classes) {
-                    var removeThese = '',
-                        classNames = classes.split(' ');
-
-                    // Check if there are any old font classes.
-                    for (j = 0; j < classNames.length; j += 1) {
-                        if (removeClassRegex.test(classNames[j])) {
-                            removeThese += classNames[j] + ' ';
-                        }
-                    }
-
-                    // Return the class names to be removed.
-                    return removeThese;
-                });
-
-                // Add the new font as a CSS class.
-                el.addClass(classToAdd);
-            }
         },
 
         /** *****************************************

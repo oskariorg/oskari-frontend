@@ -6,12 +6,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
         this.handler = null;
         this.tool = null;
         this.sandbox = sandbox;
+        this.allowedLocations = ['*'];
+        this.allowedSiblings = ['*'];
     }, {
+        group: 'layers',
         bundleName: 'maplegend',
         getComponent: function () {
             return {
                 component: MapLegendTool,
                 handler: this.handler
+            };
+        },
+        getTool: function () {
+            return {
+                id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
+                title: 'MapLegend',
+                config: {
+                    instance: this.getInstance()
+                }
             };
         },
         getInstance: function () {
@@ -48,6 +60,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
                 }
             }
         },
+        isDisabled: function () {
+            return !this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
+        },
+        isEnabled: function () {
+            return !!this.getPlugin();
+        },
         /**
          * Get values.
          * @method getValues
@@ -67,5 +85,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return null;
         }
     }, {
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
         'protocol': ['Oskari.mapframework.publisher.LayerTool']
     });

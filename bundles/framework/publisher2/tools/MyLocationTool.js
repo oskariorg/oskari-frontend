@@ -5,7 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
         lefthanded: 'top left',
         righthanded: 'top right',
 
-        groupedSiblings: true,
         defaultExtraOptions: {
             mode: 'single',
             centerMapAutomatically: false,
@@ -53,30 +52,27 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
     * @returns {Object} tool value object
     */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-
-                // add selected extraoptions to conf
-                for (var key in me.selected) {
-                    if (me.selected.hasOwnProperty(key)) {
-                        pluginConfig[key] = me.selected[key];
-                    }
-                }
-
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: pluginConfig }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            const pluginConfig = this.getPlugin().getConfig();
+
+            // add selected extraoptions to conf
+            for (var key in this.selected) {
+                if (this.selected.hasOwnProperty(key)) {
+                    pluginConfig[key] = this.selected[key];
+                }
+            }
+
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: pluginConfig }]
+                        }
+                    }
+                }
+            };
         },
         /**
      * Get extra options.

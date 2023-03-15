@@ -31,6 +31,9 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
         getMapRotatorInstance: function () {
             return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
         },
+        getPlugin: function () {
+            return this.getMapRotatorInstance().getPlugin();
+        },
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'maprotator',
         /**
@@ -39,7 +42,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          */
         init: function (data) {
             var me = this;
-
             var bundleData = data && data.configuration[me.bundleName];
             if (!bundleData) {
                 return;
@@ -49,6 +51,32 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             me.noUiIsCheckedInModifyMode = !!conf.noUI;
             this.getMapRotatorInstance().setState(bundleData.state);
         },
+        // override setEnabled() because we don't want publisher to create the plugin BUT
+        // we want to use maprotator instance for handling the plugin and create it ourself
+        setEnabled: function (enabled) {
+            // state actually hasn't changed -> do nothing
+            if (this.isEnabled() === enabled) {
+                return;
+            }
+            const rotatorInstance = this.getMapRotatorInstance();
+            let plugin = rotatorInstance.getPlugin();
+            this.state.enabled = enabled;
+            if (!plugin && enabled) {
+                rotatorInstance.createPlugin();
+                plugin = rotatorInstance.getPlugin();
+                this.__plugin = plugin;
+            }
+
+            if (enabled) {
+                this.getMapmodule().registerPlugin(plugin);
+                plugin.startPlugin(this.getSandbox());
+                this.__started = true;
+            } else {
+                this.stop();
+            }
+            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
+            this.getSandbox().notifyAll(event);
+        },
         /**
          * Get values.
          * @method getValues
@@ -57,30 +85,29 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                for (var configName in pluginConfig) {
-                    if (configName === 'noUI' && !me.noUI) {
-                        pluginConfig[configName] = null;
-                        delete pluginConfig[configName];
-                    }
-                }
-                if (me.noUI) {
-                    pluginConfig.noUI = me.noUI;
-                }
-                pluginConfig.enabled = me.state.enabled;
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: this.getMapRotatorInstance().getState()
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            var pluginConfig = this.getPlugin().getConfig();
+            for (var configName in pluginConfig) {
+                if (configName === 'noUI' && !this.noUI) {
+                    pluginConfig[configName] = null;
+                    delete pluginConfig[configName];
+                }
+            }
+            if (this.noUI) {
+                pluginConfig.noUI = this.noUI;
+            }
+            // TODO: is this enabled needed? it's always true if tool.isEnabled()
+            pluginConfig.enabled = true;
+            var json = {
+                configuration: {}
+            };
+            json.configuration[this.bundleName] = {
+                conf: pluginConfig,
+                state: this.getMapRotatorInstance().getState()
+            };
+            return json;
         },
         /**
          * Get extra options.

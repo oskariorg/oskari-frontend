@@ -14,6 +14,7 @@ const DataSection = styled('div')`
 
 const createLink = (item) => {
     if (typeof item === 'string') return item;
+    if (!item || !item.name) return null;
     if (!item.url) return item.name;
     return <a href={item.url} target='_blank'>{item.name}</a>;
 };
@@ -39,11 +40,12 @@ export const PopupContent = ({ dataProviders, onClose }) => {
                     <div>
                         {data.items.map(item => (
                             <div key={item.id}>
-                                {item.name} - {formatSource(item.source).map((src, index, arr) => {
+                                {item.name} {formatSource(item.source).map((src, index, arr) => {
+                                    if (!src) return;
                                     if (arr.length > 1 && index < (arr.length - 1)) {
-                                        return <span key={index}>{src} - </span>
+                                        return <span key={index}>{index === 0 && (' - ')}{src} - </span>
                                     } else {
-                                        return <span key={index}>{src}</span>
+                                        return <span key={index}>{index === 0 && (' - ')}{src}</span>
                                     }
                                 })}
                             </div>

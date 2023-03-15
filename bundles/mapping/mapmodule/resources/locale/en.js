@@ -52,10 +52,25 @@ Oskari.registerLocalization(
                 "noresults": "No results could be found. Please check your search term and try again.",
                 "searchResultCount": "Your search returned {count, plural, one {# result} other {# results}}.",
                 "searchMoreResults": "Search returned more results than are shown ({count}). Please refine you search term.",
+                "autocompleteInfo": "Similar search ideas",
                 "column_name": "Name",
                 "column_region": "Region",
                 "column_village": "Municipality",
-                "column_type": "Type"
+                "column_type": "Type",
+
+                "selectResult": "Show result on map",
+                "deselectResult": "Remove result from map",
+                "selectResultAll": "Show all results on map",
+                "deselectResultAll": "Remove all results from map",
+                "options": {
+                    "title": "Search options",
+                    "description": "Refine search criteria by choosing data sources"
+                },
+                "resultBox": {
+                    "close": "Close",
+                    "title": "Search Results",
+                    "alternatives": "This location has the following alternative place names:"
+                }
             },
             "GetInfoPlugin": {
                 "title": "Feature Data",

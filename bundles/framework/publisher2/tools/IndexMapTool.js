@@ -5,8 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
         lefthanded: 'bottom right',
         righthanded: 'bottom left',
 
-        groupedSiblings: false,
-
         /**
         * Get tool object.
         * @method getTool
@@ -40,21 +38,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                        }
+                    }
+                }
+            };
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

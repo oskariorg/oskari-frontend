@@ -6,14 +6,14 @@ import { ThemeConsumer } from '../util';
 import 'antd/es/badge/style/index.js';
 import { getTextColor, getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 
-export const ThemedBadge = ThemeConsumer(({ count, theme }) => {
+export const ThemedBadge = ThemeConsumer(({ count, theme, ...rest }) => {
     const helper = getHeaderTheme(theme);
     const style = {
         backgroundColor: helper.getAccentColor(),
         color: getTextColor(helper.getAccentColor()),
         whiteSpace: 'nowrap',
     };
-    return <AntBadge count={count} style={style} overflowCount={999} showZero={true}/>;
+    return <AntBadge count={count} style={style} overflowCount={999} showZero={true} {...rest} />;
 });
 ThemedBadge.propTypes = {
     count: PropTypes.oneOfType([

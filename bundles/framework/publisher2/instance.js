@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // Create edit request handler callback
                 openingOnAppStart = true;
                 // Send request on app start
-                Oskari.on('app.start', function (details) {
+                Oskari.on('app.start', function () {
                     if (Oskari.user().isLoggedIn()) {
                         me._sendEditRequest(uuid);
                     } else {
@@ -170,61 +170,57 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * @return {function} callback function for PublishMapEditorRequestHandler
          */
         _openPublisherForEditingCbFactory: function (infoDialog, openingOnAppStart) {
-            var me = this;
-            var layerCheckDone = false;
+            const me = this;
+            let layerCheckDone = false;
             return function (data) {
-                if (openingOnAppStart && !layerCheckDone) {
-                    // Check that the data contains selected layers configuration
-                    var dataHasLayersConfig =
-                        data &&
-                        data.configuration &&
-                        data.configuration.mapfull &&
-                        data.configuration.mapfull.state &&
-                        data.configuration.mapfull.state.selectedLayers;
+                if (!openingOnAppStart || layerCheckDone) {
+                    // open publisher
+                    me.setPublishMode(true, data);
+                    return;
+                }
+                // Opening on startup
+                // Check that the data contains selected layers configuration
+                const selectedLayers = data?.configuration?.mapfull?.state?.selectedLayers || [];
+                // Perform layer check only once when opening the publisher on startup.
+                layerCheckDone = true;
 
-                    if (dataHasLayersConfig) {
-                        var selectedLayers = data.configuration.mapfull.state.selectedLayers;
-                        var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                        var timeoutInMillis = 1000; // one second;
-                        var maxTries = 30;
-                        var numTries = 0;
+                if (!selectedLayers.length) {
+                    if (infoDialog) {
+                        infoDialog.fadeout();
+                    }
+                    me._showOpeningPublisherErrorMsg();
+                    return;
+                }
+                const mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                const timeoutInMillis = 1000; // one second;
+                const maxTries = 30;
+                let numTries = 0;
 
-                        // Interval checks if layers have been loaded.
-                        var intervalId = setInterval(function () {
-                            var layerIds = selectedLayers.map(function (l) { return l.id; });
-                            var layersFound = mapLayerService.hasLayers(layerIds);
+                // Interval checks if layers have been loaded.
+                const intervalId = setInterval(function () {
+                    const layerIds = selectedLayers.map(function (l) { return l.id; });
+                    const layersFound = mapLayerService.hasLayers(layerIds);
 
-                            // try until we get the layers...
-                            if (layersFound) {
-                                if (infoDialog) {
-                                    infoDialog.close();
-                                }
-                                clearInterval(intervalId);
-                                me.setPublishMode(true, data);
-                                return;
-                            }
-                            numTries++;
+                    // try until we get the layers...
+                    if (layersFound) {
+                        if (infoDialog) {
+                            infoDialog.close();
+                        }
+                        clearInterval(intervalId);
+                        me.setPublishMode(true, data);
+                        return;
+                    }
+                    numTries++;
 
-                            // ...or the max try count is reached
-                            if (numTries === maxTries) {
-                                clearInterval(intervalId);
-                                if (infoDialog) {
-                                    infoDialog.fadeout();
-                                }
-                                me._showOpeningPublisherErrorMsg();
-                            }
-                        }, timeoutInMillis);
-                    } else {
+                    // ...or the max try count is reached
+                    if (numTries === maxTries) {
+                        clearInterval(intervalId);
                         if (infoDialog) {
                             infoDialog.fadeout();
                         }
                         me._showOpeningPublisherErrorMsg();
                     }
-                    // Perform layer check only once when opening the publisher on startup.
-                    layerCheckDone = true;
-                } else {
-                    me.setPublishMode(true, data);
-                }
+                }, timeoutInMillis);
             };
         },
         /**
@@ -280,11 +276,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             navigation.css('display', blnEnabled ? 'none' : 'block');
             const mapContainer = Oskari.dom.getMapContainerEl();
             const extraClasses = ['mapPublishMode', Oskari.dom.APP_EMBEDDED_CLASS];
-            data = data || this.getDefaultData();
             if (this.getCustomTileRef()) {
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
+                data = data || this.getDefaultData();
                 // trigger an event letting other bundles know we require the whole UI
                 var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
                 this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));

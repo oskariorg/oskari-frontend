@@ -44,7 +44,7 @@ Oskari.clazz.define(
             toolOwnStyle.setTitle(locOwnStyle);
             toolOwnStyle.setIconCls('show-own-style-tool');
             toolOwnStyle.setTooltip(locOwnStyle);
-            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [layer.getId(), false]));
+            toolOwnStyle.setCallback(() => this.sandbox.postRequestByName('ShowUserStylesRequest', [{ layerId: layer.getId() }]));
             layer.addTool(toolOwnStyle);
         },
         /**
