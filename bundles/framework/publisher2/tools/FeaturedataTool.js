@@ -5,7 +5,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
         // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
         lefthanded: 'top right',
         righthanded: 'top right',
-        groupedSiblings: false,
         /**
     * Get tool object.
     * @method getTool

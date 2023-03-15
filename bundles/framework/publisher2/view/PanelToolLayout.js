@@ -399,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             return plugin.getElement();
         },
         _initDraggables: function () {
-            const tools = this.tools.filter(tool => tool.isStarted());
+            const tools = this.tools.filter(tool => tool.isEnabled());
             tools.forEach(tool => this._enableToolDraggable(tool));
         },
         _removeDraggables: function () {
@@ -528,14 +528,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         **/
         stop: function () {
             this._editToolLayoutOff();
-            this.tools.forEach(tool => {
-                // just call stop for the tools that haven't already been shut down by the tool panel
-                if (tool.isStarted()) {
-                    tool.stop();
-                    tool.setEnabled(false);
-                }
-            });
-
             Object.keys(this.eventHandlers)
                 .forEach(eventName => this.sandbox.unregisterFromEventByName(this, eventName));
         },
