@@ -15,8 +15,12 @@ import { Backward } from '../icons/Backward'
 const BorderlessButton = styled(Button)`
     border: none;
     background: none;
+    padding: 0px;
     &:hover {
         color: ${props => props.color};
+        background: none;
+    }
+    &:disabled {
         background: none;
     }
 `;
