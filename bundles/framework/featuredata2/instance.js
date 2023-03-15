@@ -7,6 +7,7 @@
  *
  */
 import { FilterSelector } from './FilterSelector';
+import './publisher/FeaturedataTool';
 
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleInstance',
 

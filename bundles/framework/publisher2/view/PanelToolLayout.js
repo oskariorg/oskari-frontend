@@ -119,24 +119,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @return {Object}
          */
         getValues: function () {
-            var me = this,
-                values = {};
+            let values = {};
 
             this.tools.forEach(tool => {
-                if (tool.isDisplayed(me.data)) {
-                    var value = tool.getValues();
-                    if (value !== undefined && value !== null) {
-                        me._extendRecursive(values, value);
-                    }
+                var value = tool.getValues();
+                if (value !== undefined && value !== null) {
+                    this._extendRecursive(values, value);
                 }
             });
 
             var toolLayout = {
                 metadata: {
-                    toolLayout: me.activeToolLayout
+                    toolLayout: this.activeToolLayout
                 }
             };
-            me._extendRecursive(values, toolLayout);
+            this._extendRecursive(values, toolLayout);
             return values;
         },
         /**
@@ -649,7 +646,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          */
         _restartActivePlugins: function () {
             this.tools.forEach(tool => {
-                if (tool.isDisplayed(this.data) && tool.isStarted()) {
+                if (tool.isDisplayed(this.data) && tool.isEnabled()) {
                     // reset
                     tool.setEnabled(false);
                     tool.setEnabled(true);

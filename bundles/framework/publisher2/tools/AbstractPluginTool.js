@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     this.state = {
         // This variable is used to save tool state (is checked) and if it's true then we get tool json when saving published map.
         enabled: false,
-        mode: null
+        pluginConfig: null
     };
 }, {
     // override to change group
@@ -33,17 +33,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     * @method init
     * @public
     */
-    init: function (pdata) {
-        var me = this;
-        var data = pdata;
-
-        if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
-            data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
-                if (me.getTool().id === plugin.id) {
-                    me.setEnabled(true);
-                }
-            });
+    init: function (data) {
+        const plugin = this.findPluginFromInitData(data);
+        if (plugin) {
+            this.storePluginConf(plugin.config);
+            this.setEnabled(true);
         }
+    },
+    findPluginFromInitData: function (data) {
+        const toolId = this.getTool().id;
+        return data?.configuration?.mapfull?.conf?.plugins?.find(plugin => toolId === plugin.id);
+    },
+    storePluginConf: function (conf) {
+        this.state.pluginConfig = conf || {};
     },
     getSandbox: function () {
         return this.__sandbox;
@@ -85,7 +87,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (this.isEnabled() === enabled) {
             return;
         }
-        this.state.enabled = enabled;
         let plugin = this.getPlugin();
         if (!plugin && enabled) {
             plugin = Oskari.clazz.create(tool.id, tool.config);
@@ -98,6 +99,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         } else {
             this.stop();
         }
+        // Stop checks if we are already disabled so toggle the value after
+        this.state.enabled = enabled;
         this._setEnabledImpl(enabled);
         var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
         this.getSandbox().notifyAll(event);

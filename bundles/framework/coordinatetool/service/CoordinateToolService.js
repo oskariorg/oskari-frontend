@@ -6,9 +6,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
  * @method create called automatically on construction
  * @static
  */
-    function (instance, config) {
-        this._instance = instance;
-        this._sandbox = instance.sandbox;
+    function (sandbox, config) {
+        this._sandbox = sandbox;
         this._config = config;
         this._reverseGeocodingIds = config.reverseGeocodingIds;
         this.urls = {};

@@ -6,19 +6,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
         lefthanded: 'top right',
         righthanded: 'top right',
         /**
-    * Get tool object.
-    * @method getTool
-    * @private
-    *
-    * @returns {Object} tool
-    */
+        * Get tool object.
+        * @method getTool
+        * @private
+        *
+        * @returns {Object} tool
+        */
         getTool: function () {
-            var featureData = this.__sandbox.findRegisteredModuleInstance('FeatureData2') || null;
+            var featureData = this.getSandbox().findRegisteredModuleInstance('FeatureData2') || null;
             return {
                 id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                 title: 'FeaturedataPlugin',
                 config: {
-                    instance: featureData
+                    instance: featureData,
+                    ...(this.state.pluginConfig || {})
                 }
             };
         },
@@ -26,13 +27,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
         bundleName: 'featuredata2',
 
         /**
-     * Initialise tool
-     * @method init
-     */
+         * Initialise tool
+         * @method init
+         */
         init: function (data) {
-            var me = this;
-            if (data.configuration[me.bundleName]) {
-                me.setEnabled(true);
+            const { configuration = {} } = data;
+            if (configuration[this.bundleName]) {
+                this.storePluginConf(configuration[this.bundleName].conf);
+                this.setEnabled(true);
             }
         },
         /**
@@ -43,21 +45,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     * @returns {Object} tool value object
     */
         getValues: function () {
-            var me = this;
-            if (me.state.enabled) {
-                var pluginConfig = this.getPlugin().getConfig();
-                pluginConfig.instance = null;
-                var json = {
-                    configuration: {}
-                };
-                json.configuration[me.bundleName] = {
-                    conf: pluginConfig,
-                    state: {}
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            // we want to remove instance from plugin config, so it's unused and we use the "rest" of the config
+            // eslint-disable-next-line no-unused-vars
+            const { instance, ...pluginConfig } = this.getPlugin().getConfig();
+            const json = {
+                configuration: {}
+            };
+            json.configuration[this.bundleName] = {
+                conf: pluginConfig,
+                state: {}
+            };
+            return json;
         },
         isDisplayed: function () {
             // Check if selected layers include wfs layers

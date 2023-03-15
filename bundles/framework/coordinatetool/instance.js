@@ -90,10 +90,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
             me.setSandbox(sandbox);
-            this.coordinateToolService = this.createService(sandbox, conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = Oskari.getMsg.bind(null, 'coordinatetool');
-            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
+            var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', conf, this);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
@@ -112,31 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         isOpen: function () {
             var me = this;
             return (me.plugin) ? me.plugin.isOpen() : false;
-        },
-        /**
-         * Creates the coordinate tool service and registers it to the sandbox.
-         *
-         * @method createService
-         * @param  {Oskari.Sandbox} sandbox
-         * @param  {}  configuration   conf.reverseGeocodingIds is in use
-         * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
-         */
-        createService: function (sandbox, conf) {
-            var coordinateToolService = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
-                this, conf || {}
-            );
-            sandbox.registerService(coordinateToolService);
-            return coordinateToolService;
-        },
-        /**
-         * Returns the coordinate tool service.
-         *
-         * @method getService
-         * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
-         */
-        getService: function () {
-            return this.coordinateToolService;
         },
         /**
          * @public @method showMessage

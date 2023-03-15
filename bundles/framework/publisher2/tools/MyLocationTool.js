@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
                 title: 'MyLocationPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         /**
@@ -131,35 +131,28 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
         * @method init
         * @public
         */
-        init: function (pdata) {
+        init: function (data) {
             var me = this;
             var loc = Oskari.getLocalization('Publisher2').BasicView.maptools;
-            var data = pdata;
 
-            var config = {};
-
-            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
-                data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
-                    if (me.getTool().id === plugin.id) {
-                        me.setEnabled(true);
-                        config = plugin.config || me.defaultExtraOptions;
-                    }
-                });
+            const plugin = this.findPluginFromInitData(data);
+            if (plugin) {
+                this.storePluginConf(plugin.config || this.defaultExtraOptions);
+                this.setEnabled(true);
             }
+            var config = this.state.pluginConfig || {};
 
             // initial selections if modify.
-            var mode = config.mode || me.defaultExtraOptions.mode;
-            var selectedOptions = me.options.mode.filter(function (option) {
-                return (option.id === mode);
-            });
-            if (selectedOptions && selectedOptions.length) {
-                me.selected.mode = selectedOptions[0].id;
+            var mode = config.mode || this.defaultExtraOptions.mode;
+            var selectedOption = this.options.mode.find((option) => option.id === mode);
+            if (selectedOption) {
+                this.selected.mode = selectedOption.id;
             }
-            me.selected.mobileOnly = config.mobileOnly || me.defaultExtraOptions.mobileOnly;
-            me.selected.centerMapAutomatically = config.centerMapAutomatically || me.defaultExtraOptions.centerMapAutomatically;
+            this.selected.mobileOnly = config.mobileOnly || this.defaultExtraOptions.mobileOnly;
+            this.selected.centerMapAutomatically = config.centerMapAutomatically || this.defaultExtraOptions.centerMapAutomatically;
 
             // initialise fields only after it's certain which option is selected (new / modify)
-            me.fields = {
+            this.fields = {
                 mode: {
                     clazz: 'Oskari.userinterface.component.RadioButtonGroup',
                     handler: function (value) {
