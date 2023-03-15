@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Row, Col, ColFixed, StyledButton, StyledDateSlider, CalendarIcon } from './styled';
 import { Input } from './Input';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 /**
  * NOTE! Hardcoded to year 2019 so no leap years
@@ -15,7 +15,7 @@ export const DateControl = props => {
 
     const changeSliderDate = (val) => {
         const d = new Date(2019, 0, val);
-        const timeToSet = moment(d).format('D/M');
+        const timeToSet = dayjs(d).format('D/M');
         changeHandler(timeToSet);
     };
 

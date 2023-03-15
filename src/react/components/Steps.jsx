@@ -3,28 +3,17 @@ import PropTypes from 'prop-types';
 import { Steps as AntSteps } from 'antd';
 import 'antd/es/steps/style/index.js';
 
-export const Step = (props) => {
-    const { children, ...other } = props;
-    return (
-        <AntSteps.Step {...other}>{children}</AntSteps.Step>
-    );
-};
-
-Step.propTypes = {
-    children: PropTypes.any
-};
-
 export const Steps = (props) => {
-    const { children, ...other } = props;
+    const { items, ...other } = props;
     return (
-        <AntSteps {...other}>{children}</AntSteps>
+        <AntSteps {...other}/>
     );
 };
 
 Steps.propTypes = {
-    children: PropTypes.arrayOf(
+    items: PropTypes.arrayOf(
         PropTypes.shape({
-            type: PropTypes.oneOf([Step])
+            type: PropTypes.oneOf([PropTypes.object])
         })
     ).isRequired
 };

@@ -1,13 +1,15 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { TimeseriesMetadataService } from '../../service/TimeseriesMetadataService';
+dayjs.extend(utc);
 
 const _getStartTimeFromYear = (year) => {
-    return moment.utc(year.toString(), 'YYYY').startOf('year');
+    return dayjs.utc(year.toString(), 'YYYY').startOf('year');
 };
 
 const _getEndTimeFromYear = (year) => {
-    return moment.utc(year.toString(), 'YYYY').endOf('year');
+    return dayjs.utc(year.toString(), 'YYYY').endOf('year');
 };
 
 class UIHandler extends StateHandler {
@@ -129,7 +131,7 @@ class UIHandler extends StateHandler {
     _getDataYearsFromWMS () {
         // get years from WMS-layer timeseries
         const times = this._layer.getAttributes().times;
-        return times.map(time => moment(time).year());
+        return times.map(time => dayjs(time).year());
     }
 
     _requestNewTime (value) {

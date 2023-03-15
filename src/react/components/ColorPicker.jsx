@@ -81,9 +81,9 @@ export const ColorPicker = (props) => {
                 content={getContent(props)}
                 trigger="click"
                 placement="bottom"
-                visible={visible}
+                open={visible}
                 zIndex={zIndex}
-                onVisibleChange = {setVisible}
+                onOpenChange = {setVisible}
                 >
             <Tooltip title={chooseTooltip}>
                 <ChooseColor style={{ background: value }} disabled={disabled} >

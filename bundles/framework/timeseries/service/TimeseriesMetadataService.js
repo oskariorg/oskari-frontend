@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const VECTOR_LAYER_PREFIX = 'TimeSeriesMetadata_';
 const DEFAULT_STYLE = {
@@ -87,7 +87,7 @@ export class TimeseriesMetadataService {
                 // handle as year value
                 yearSet.add(time);
             } else if (time) {
-                const year = moment(time).year();
+                const year = dayjs(time).year();
                 yearSet.add(year);
             }
         });
@@ -132,7 +132,7 @@ export class TimeseriesMetadataService {
         const attribute = this._attributeName;
         const geojson = this.getCurrentFeatures(true);
         const features = geojson.features.filter(feature => {
-            const time = moment(feature.properties[attribute]);
+            const time = dayjs(feature.properties[attribute]);
             return startTime < time && time < endTime;
         });
         log.debug('Features count for time range: ' + features.length + '/' + geojson.features.length);

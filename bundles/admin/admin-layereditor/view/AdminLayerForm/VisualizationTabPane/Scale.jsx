@@ -101,7 +101,9 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                     vertical
                     range
                     reversed
-                    tipFormatter={createTooltipFormatter(mapScales, locNoLimit)}
+                    tooltip={{
+                        formatter: createTooltipFormatter(mapScales, locNoLimit)
+                    }}
                     step={1}
                     marks={createSliderLabels(mapScales, locNoLimit)}
                     min={-1}

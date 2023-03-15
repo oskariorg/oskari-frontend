@@ -50,7 +50,7 @@ export const VectorStyle = LocaleConsumer((props) => {
             </Button>
 
             <Modal
-                visible={ editorState.modalVisibility }
+                open={ editorState.modalVisibility }
                 onOk={ onModalOk }
                 onCancel={ onModalCancel }
                 cancelText={ <Message messageKey="cancel" /> }

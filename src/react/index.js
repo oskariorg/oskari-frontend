@@ -1,3 +1,5 @@
+import 'antd/dist/antd.css';
+
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
 export { ThemedBadge } from './components/ThemedBadge';
@@ -19,9 +21,9 @@ export { Select, Option } from './components/Select';
 export { Slider } from './components/Slider';
 export { Space } from './components/Space';
 export { Spin } from './components/Spin';
-export { Step, Steps } from './components/Steps';
+export { Steps } from './components/Steps';
 export { Switch } from './components/Switch';
-export { Tabs, TabPane } from './components/Tabs';
+export { Tabs } from './components/Tabs';
 export { Tag } from './components/Tag';
 export { TextAreaInput } from './components/TextAreaInput';
 export { TextInput } from './components/TextInput';
