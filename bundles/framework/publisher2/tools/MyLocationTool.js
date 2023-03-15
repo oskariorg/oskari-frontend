@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                 this.storePluginConf(plugin.config || this.defaultExtraOptions);
                 this.setEnabled(true);
             }
-            var config = this.state.pluginConfig;
+            var config = this.state.pluginConfig || {};
 
             // initial selections if modify.
             var mode = config.mode || this.defaultExtraOptions.mode;
