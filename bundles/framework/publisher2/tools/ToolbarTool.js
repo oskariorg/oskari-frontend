@@ -1,5 +1,11 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
     function () {
+        // checkboxes in ui
+        this.selectedOptionsUi = {
+            history: true,
+            measureline: true,
+            measurearea: true
+        };
     }, {
         index: 3,
         lefthanded: 'top right',
@@ -22,13 +28,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
             this.storePluginConf(plugin.config);
 
-            // checkboxes in ui
-            this.selectedOptionsUi = {
-                history: true,
-                measureline: true,
-                measurearea: true
-            };
-
             // tools on map
             this.selectedTools = {
                 history_back: true,
@@ -36,31 +35,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 measureline: true,
                 measurearea: true
             };
-            const buttons = plugin.config?.buttons;
-            if (buttons) {
-                // if there are no selected tools in configuration, select them all when tools are selected
-                Object.keys(this.selectedTools).forEach(toolName => {
-                    if (!buttons.includes(toolName)) {
-                        this.selectedTools[toolName] = false;
-                        if (this.selectedOptionsUi[toolName]) {
-                            this.selectedOptionsUi[toolName] = false;
-                        }
-                    }
-                });
-            }
-
-            // unselect history tools only if both are unselected
-            if (!this.selectedTools['history_back'] && !this.selectedTools['history_forward']) {
-                this.selectedOptionsUi['history'] = false;
-            } else {
-                // if one of history tools is selected, select the other one too
-                this.selectedTools['history_forward'] = true;
-                this.selectedTools['history_back'] = true;
-            }
+            const buttons = plugin.config?.buttons || Object.keys(this.selectedOptionsUi);
+            // if there are no selected tools in configuration, select them all when tools are selected
+            buttons.forEach(toolName => {
+                this.__changeToolStatus(toolName, true);
+            });
 
             this.setEnabled(this._hasActiveTools());
         },
 
+        _setEnabledImpl: function (enabled) {
+            if (enabled) {
+                // if there are no selected tools in configuration, select them all when tools are selected
+                Object.keys(this.selectedOptionsUi).forEach(toolName => {
+                    this.__changeToolStatus(toolName, true);
+                });
+            }
+        },
         /**
          * Get tool object.
          * @method getTool
@@ -119,141 +110,46 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * @returns {Object} jQuery element
          */
         getExtraOptions: function (toolContainer) {
-            var me = this;
-            // content
-            var closureMagic = function (tool) {
-                return function () {
-                    var checkbox = jQuery(this),
-                        isChecked = checkbox.is(':checked');
-                    tool.selected = isChecked;
-                    // (un)creates and (un)registers the plugin
-                    // the first time around the plugin has not yet been created and thus this has to be called "manually" for the activatePreviewPlugin to work correctly
-                    if (isChecked) {
-                        tool.setEnabled(isChecked);
-                        me.activatePreviewPlugin(tool, isChecked);
-                    } else {
-                        // toggled off? need to toggle off the previewplugin first, so the toolbar gets notified of removing the buttons
-                        me.activatePreviewPlugin(tool, isChecked);
-                        tool.setEnabled(isChecked);
-                    }
-                };
-            };
-
-            this.toolContainer = toolContainer;
-
-            toolContainer.find('input').on('change', closureMagic(this));
-
-            // modifying an existing and this was already checked?
-            var checkbox = toolContainer.find('input:checked');
-            if (checkbox) {
-                checkbox.trigger('change');
-            }
+            const localization = this.__loc;
+            const optionsContainer = jQuery(this.templates.toolOptions).clone();
+            
+            Object.keys(this.selectedOptionsUi).forEach(toolName => {
+                var selectTool = jQuery(this.templates.toolOption).clone();
+                selectTool.find('label')
+                    .attr('for', 'tool-opt-' + toolName)
+                    .append(localization.toolbarToolNames[toolName]);
+                optionsContainer.append(selectTool);
+                // toggle tool
+                selectTool.find('input')
+                    .attr('id', 'tool-opt-' + toolName)
+                    //.on('change', _toggleToolOption(toolName));
+                    .on('change', () => {
+                        var toolState = this.selectedOptionsUi[toolName];
+                        this.__changeToolStatus(toolName, !toolState);
+                    });
+            });
+            toolContainer.find('.extraOptions').append(optionsContainer);
+            this.optionsContainer = optionsContainer;
         },
-
-        /**
-         * @method activatePreviewPlugin
-         * @private
-         * Enables or disables a plugin on map
-         * @param {Object} tool tool definition as in #tools property
-         * @param {Boolean} enabled, true to enable plugin, false to disable
-         * @param {Boolean} localeChange, true to not reset config when disabling plugin, false to reset config
-         */
-        activatePreviewPlugin: function (tool, enabled, localeChange) {
-            var me = this;
-
-            if (!tool || !tool.__plugin) {
-                // no tool or plugin not created -> nothing to do
+        __changeToolStatus: function (toolName, isActive) {
+            if (typeof this.selectedOptionsUi[toolName] === 'boolean') {
+                this.selectedOptionsUi[toolName] = isActive;
+            }
+            this.optionsContainer
+                .find('input#tool-opt-' + toolName)
+                .prop('checked', isActive);
+            if (toolName === 'history') {
+                this.__changeToolStatus('history_back', isActive);
+                this.__changeToolStatus('history_forward', isActive);
                 return;
             }
-
-            var _toggleToolOption = function (toolName) {
-                return function () {
-                    // check if tool was selected or unselected
-                    var toolState = me.selectedOptionsUi[toolName];
-
-                    // if tool was selected, unselect tool and send removeToolButtonRequest
-                    if (toolState) {
-                        me.selectedOptionsUi[toolName] = false;
-                        if (toolName === 'history') {
-                            tool.__plugin.removeToolButton('history_back');
-                            me.selectedTools['history_back'] = false;
-                            tool.__plugin.removeToolButton('history_forward');
-                            me.selectedTools['history_forward'] = false;
-                        } else {
-                            tool.__plugin.removeToolButton(toolName);
-                            me.selectedTools[toolName] = false;
-                        }
-                    } else {
-                        me.selectedOptionsUi[toolName] = true;
-                        if (toolName === 'history') {
-                            tool.__plugin.addToolButton('history_back');
-                            me.selectedTools['history_back'] = true;
-                            tool.__plugin.addToolButton('history_forward');
-                            me.selectedTools['history_forward'] = true;
-                        } else {
-                            tool.__plugin.addToolButton(toolName);
-                            me.selectedTools[toolName] = true;
-                        }
-                    }
-                };
-            };
-
-            var options,
-                toolName;
-
-            if (enabled) {
-                tool._isPluginStarted = true;
-
-                options = jQuery(me.templates.toolOptions).clone();
-
-                for (toolName in me.selectedOptionsUi) {
-                    if (me.selectedOptionsUi.hasOwnProperty(toolName)) {
-                        // create checkbox
-                        var selectTool = jQuery(me.templates.toolOption).clone();
-                        selectTool.find('label')
-                            .attr('for', 'tool-opt-' + toolName).append(me.__loc.toolbarToolNames[toolName]);
-
-                        // set selected values checked
-                        if (me.selectedOptionsUi[toolName]) {
-                            selectTool.find('input').prop('checked', true);
-                            if (toolName === 'history') {
-                                tool.__plugin.addToolButton('history_back');
-                                tool.__plugin.addToolButton('history_forward');
-                            } else {
-                                tool.__plugin.addToolButton(toolName);
-                            }
-                        }
-
-                        // add button to div
-                        options.append(selectTool);
-
-                        // toggle tool
-                        selectTool.find('input').attr('id', 'tool-opt-' + toolName).on('change', _toggleToolOption(toolName));
-                    }
-                }
-
-                tool.toolContainer.find('.extraOptions').append(options);
+            // toggle checkbox in UI to reflect state
+            this.selectedTools[toolName] = isActive;
+            const plugin = this.getPlugin();
+            if (isActive) {
+                plugin.addToolButton(toolName);
             } else {
-                // remove buttons, handlers and toolbar toolbar tools
-                for (toolName in me.selectedTools) {
-                    if (me.selectedTools.hasOwnProperty(toolName)) {
-                        tool.__plugin.removeToolButton(toolName);
-                    }
-                }
-                if (tool._isPluginStarted) {
-                    // remove eventlisteners
-                    var _removeOptions = function (className, handler) {
-                        var optionContainer = tool.toolContainer.find('.extraOptions').find(className),
-                            toolOptionCheckboxes = optionContainer.find('input').off('change', handler);
-                        // remove dom elements
-                        toolOptionCheckboxes.remove();
-                        optionContainer.remove();
-                    };
-                    _removeOptions('.tool-options', me._toggleToolOption);
-                    _removeOptions('.tool-option-setting', me._toggleToolOption);
-
-                    tool._isPluginStarted = false;
-                }
+                plugin.removeToolButton(toolName);
             }
         },
 
@@ -270,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             // send remove request per active button
             for (var toolName in this.selectedTools) {
                 if (this.selectedTools.hasOwnProperty(toolName) && toolName) {
-                    this.__plugin.removeToolButton(toolName);
+                    this.getPlugin().removeToolButton(toolName);
                 }
             }
         }
