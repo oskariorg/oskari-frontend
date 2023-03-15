@@ -13,7 +13,7 @@ const Content = styled('div')`
 `;
 
 export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
-    const { featureStyle = {}, name } = style;
+    const { style: { featureStyle = {} } = {}, name } = style;
     const [state, setState] = useState({
         featureStyle: Object.keys(featureStyle).length > 0 ? featureStyle : OSKARI_BLANK_STYLE,
         name
