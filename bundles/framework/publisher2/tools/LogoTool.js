@@ -47,7 +47,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
                 configuration: {
                     mapfull: {
                         conf: {
-                            plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
+                            plugins: [{
+                                id: this.getTool().id,
+                                config: {
+                                    location: this.getPlugin().getConfig()?.location
+                                }
+                            }]
                         }
                     }
                 }
