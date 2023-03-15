@@ -20,7 +20,7 @@ const getContent = (service, options, onClose) => {
         const onAdd = ({ name, featureStyle }) => {
             service.saveUserStyle({
                 id,
-                layerId: style.layerId || addToLayer,
+                layerId: style.layerId || addToLayer || layerId,
                 type: VECTOR_STYLE.OSKARI,
                 name,
                 style: { featureStyle }

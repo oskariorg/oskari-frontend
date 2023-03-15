@@ -13,7 +13,7 @@ const Content = styled('div')`
 `;
 
 export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
-    const { featureStyle = {}, name } = style;
+    const { style: { featureStyle = {} } = {}, name } = style;
     const [state, setState] = useState({
         featureStyle: Object.keys(featureStyle).length > 0 ? featureStyle : OSKARI_BLANK_STYLE,
         name
@@ -27,7 +27,7 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
             <Tooltip title={<Message messageKey='popup.name'/>}>
                 <TextInput
                     placeholder={ Oskari.getMsg(BUNDLE_KEY, `popup.name`) }
-                    value={ state.title }
+                    value={ state.name }
                     onChange={ event => updateName(event.target.value) }
                 />
             </Tooltip>
