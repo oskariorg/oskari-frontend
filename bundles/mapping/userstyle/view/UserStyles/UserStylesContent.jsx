@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Message } from 'oskari-ui';
-import { UserStyleRow } from './UserStyles/UserStyleRow';
+import { UserStyleRow } from './UserStyleRow';
 import { PlusOutlined } from '@ant-design/icons';
 
 // TODO: Fix this once style accessible smarter way
@@ -54,29 +54,28 @@ const AddStyleIcon = styled(PlusOutlined)`
     margin-right: 10px;
 `;
 
-const showVisualizationForm = (layerId, styleName) => {
-    Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [layerId, true, styleName]);
-};
+const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
+const addNew = (addToLayer) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ addToLayer }]);
 
-export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
+export const UserStylesContent = ({ layerId, styles, onDelete }) => {
     return (
         <Content>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
-                <AddStyle onClick={() => showVisualizationForm(layerId)}>
+                <AddStyle onClick={() => addNew(layerId)}>
                     <AddStyleIcon />
                     <Message messageKey='addStyle' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
             { styles.length > 0 &&
             <List bordered={false} dataSource={styles} renderItem={style => {
-                const name = style.getName();
-                const title = style.getTitle();
+                const { id, name } = style;
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleTitle={title}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, name)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, name)}/>
+                        <UserStyleRow
+                            name={name}
+                            onEdit={() => onEdit(id)}
+                            onDelete={() => onDelete(id)}/>
                     </StyledListItem>
                 );
             }}/>
@@ -85,8 +84,8 @@ export const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
     );
 };
 
-UserStyles.propTypes = {
+UserStylesContent.propTypes = {
     layerId: PropTypes.number.isRequired,
     styles: PropTypes.array.isRequired,
-    removeUserStyleHandler: PropTypes.func.isRequired
+    onDelete: PropTypes.func.isRequired
 };

@@ -8,7 +8,7 @@ import { defaults as olControlDefaults } from 'ol/control';
 import * as Cesium from 'cesium/Source/Cesium';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
-import { LAYER_ID } from './domain/constants';
+import { LAYER_ID, VECTOR_STYLE } from './domain/constants';
 import moment from 'moment';
 import 'olcs/olcs.css';
 
@@ -965,40 +965,43 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return {Cesium.Cesium3DTileStyle} style Cesium specific!
      */
     get3DStyle (style, opacity = 1) {
-        const oskariStyle = style.getFeatureStyle();
-        const extStyle = style.getExternalDef() || {};
+        if (opacity > 1) {
+            opacity = opacity / 100.0;
+        }
+        let cesiumStyle;
+        if (style.getType() === VECTOR_STYLE.OSKARI) {
+            cesiumStyle = this.oskariStyleToCesium(style.getFeatureStyle());
+        } else {
+            cesiumStyle = style.getFeatureStyle();
+            if (cesiumStyle.color) {
+                // modify color by setting the layer opacity
+                cesiumStyle.color = this._getColorExpressionsWithOpacity(cesiumStyle.color, opacity);
+            } else {
+                // Set light brown default color
+                cesiumStyle.color = `color('${TILESET_DEFAULT_COLOR}', ${opacity})`;
+            }
+        }
+        return new Cesium.Cesium3DTileStyle(cesiumStyle);
+    }
 
+    oskariStyleToCesium (featureStyle, opacity) {
+        // TODO: should we support whole oskari style ??
         const cesiumStyle = {};
         // Set light brown default color;
         let color = TILESET_DEFAULT_COLOR;
-        if (Oskari.util.keyExists(oskariStyle, 'fill.color')) {
-            color = oskariStyle.fill.color;
+        if (Oskari.util.keyExists(featureStyle, 'fill.color')) {
+            color = featureStyle.fill.color;
             if (color.indexOf('rgb(') > -1) {
                 // else check at if color is rgb
                 color = '#' + Oskari.util.rgbToHex(color);
             }
         }
-
-        if (opacity > 1) {
-            opacity = opacity / 100.0;
-        }
         cesiumStyle.color = `color('${color}', ${opacity})`;
 
-        if (Oskari.util.keyExists(oskariStyle, 'image.sizePx')) {
-            cesiumStyle.pointSize = `${oskariStyle.image.sizePx}`;
+        if (Oskari.util.keyExists(featureStyle, 'image.sizePx')) {
+            cesiumStyle.pointSize = `${featureStyle.image.sizePx}`;
         }
-
-        // override and extend with external styles
-        Object.keys(extStyle).forEach(key => {
-            let styleProp = extStyle[key];
-            if (key === 'color') {
-                // make a copy and modify it by setting the opacity
-                styleProp = this._getColorExpressionsWithOpacity(styleProp, opacity);
-            }
-            cesiumStyle[key] = styleProp;
-        });
-
-        return new Cesium.Cesium3DTileStyle(cesiumStyle);
+        return cesiumStyle;
     }
 
     /**

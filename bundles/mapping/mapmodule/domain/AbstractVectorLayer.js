@@ -1,4 +1,5 @@
 import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from './VectorStyle';
+import { VECTOR_STYLE } from './constants';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
@@ -26,6 +27,7 @@ export class AbstractVectorLayer extends AbstractLayer {
         return this.hoverOptions;
     }
 
+    /* deprecated */
     setOptions (options) {
         super.setOptions(options);
         const { styles = {} } = options;
@@ -33,8 +35,9 @@ export class AbstractVectorLayer extends AbstractLayer {
         // Clear styles before adding
         this.setStyles([]);
         // use addStyle to avoid duplicate and invalid styles
-        Object.keys(styles).forEach(styleId => {
-            const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
+        Object.keys(styles).forEach(id => {
+            const style = new VectorStyle({ id, type: VECTOR_STYLE.OSKARI });
+            style.parseStyleFromOptions(styles[id]);
             this.addStyle(style);
         });
         // Remove styles from options to be sure that VectorStyle is used
