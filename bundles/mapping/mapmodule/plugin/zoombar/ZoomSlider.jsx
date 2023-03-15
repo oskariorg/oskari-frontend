@@ -17,6 +17,7 @@ const Container = styled('div')`
 const StyledSlider = styled(Slider)`
     height: 150px;
     opacity: ${props => props.opacity};
+    padding-left: 2px;
     .ant-slider-mark-text {
         color: #ffffff;
     }
@@ -50,8 +51,9 @@ const StyledSlider = styled(Slider)`
         border: 4px solid ${props => props.handleBorder};
         box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 60%);
         border-radius: ${props => props.rounding || '0%'};
-        width: 9px;
-        height: 9px;
+        width: 14px;
+        height: 14px;
+        left: 3px;
         &:hover {
             background: ${props => props.handleBackground};
             border: 4px solid ${props => props.handleBorder};

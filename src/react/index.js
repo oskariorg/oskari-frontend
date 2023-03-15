@@ -1,3 +1,5 @@
+import 'antd/dist/antd.css';
+
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
 export { ThemedBadge } from './components/ThemedBadge';
