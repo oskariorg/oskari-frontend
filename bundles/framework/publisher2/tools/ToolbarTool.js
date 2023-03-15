@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 return;
             }
             this.storePluginConf(plugin.config);
-
             // tools on map
             this.selectedTools = {
                 history_back: true,
@@ -35,11 +34,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 measureline: true,
                 measurearea: true
             };
-            const buttons = plugin.config?.buttons || Object.keys(this.selectedOptionsUi);
-            // if there are no selected tools in configuration, select them all when tools are selected
-            buttons.forEach(toolName => {
-                this.__changeToolStatus(toolName, true);
-            });
+            // preselect tools based on init data
+            let buttons = plugin.config?.buttons;
+            if (buttons?.length) {
+                buttons.forEach(toolName => {
+                    this.__changeToolStatus(toolName, true);
+                });
+            }
 
             this.setEnabled(this._hasActiveTools());
         },
@@ -135,6 +136,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             if (typeof this.selectedOptionsUi[toolName] === 'boolean') {
                 this.selectedOptionsUi[toolName] = isActive;
             }
+            if (!this._hasActiveTools()) {
+                // last tool removed -> enable last unselected
+                this.__changeToolStatus(toolName, true);
+                return;
+            }
             this.optionsContainer
                 .find('input#tool-opt-' + toolName)
                 .prop('checked', isActive);
@@ -154,8 +160,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         },
 
         _hasActiveTools: function () {
-            return Object.keys(this.selectedTools)
-                .some(toolName => this.selectedTools[toolName] === true);
+            return Object.keys(this.selectedOptionsUi)
+                .some(toolName => this.selectedOptionsUi[toolName] === true);
         },
 
         /**
@@ -164,11 +170,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         */
         _stopImpl: function () {
             // send remove request per active button
-            for (var toolName in this.selectedTools) {
-                if (this.selectedTools.hasOwnProperty(toolName) && toolName) {
-                    this.getPlugin().removeToolButton(toolName);
-                }
-            }
+            return Object.keys(this.selectedTools)
+                .forEach(toolName => this.__changeToolStatus(toolName, false));
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
