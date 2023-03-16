@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
                 title: 'IndexMapPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
 
