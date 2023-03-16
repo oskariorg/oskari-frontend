@@ -807,11 +807,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         * @returns callback is used for return value
         */
         getDescribeLayer: function (layerId, callback) {
-            if (isNaN(layerId)) {
-                // only layers that have numeric ids can have reasonable response for DescribeLayer
-                callback();
-                return;
-            }
             const url = Oskari.urls.getRoute('DescribeLayer', {
                 id: layerId,
                 lang: Oskari.getLang(),
