@@ -23,8 +23,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             var me = this;
             var loclayer = me.localization.layer;
             // call parent parseLayerData
+            // TODO: only setHoverOptions and parseLayerAttributes
+            // -> set hoveroptions here and attributes in DescribeLayer
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             layer.setLocale(mapLayerJson.locale);
+            layer.setStylesFromOptions(mapLayerJson.options);
 
             if (loclayer.organization) {
                 layer.setOrganizationName(loclayer.organization);
