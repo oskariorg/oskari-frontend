@@ -40,8 +40,10 @@ export class AbstractVectorLayer extends AbstractLayer {
         const vs = styles.map(s => new VectorStyle(s));
         // override all styles as create map layer -> select style -> created default style
         this.setStyles(vs);
-        // this is done on maplayer add, so try select style
-        Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
+        // this is done on maplayer add, so try select style (defaults to first)
+        if (vs.length) {
+            Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
+        }
     }
 
     // For user data layers
