@@ -14,10 +14,9 @@ export const createDefaultStyle = () => {
 // constructor like function for layer options styles (oskari styles only)
 export const parseStylesFromOptions = (options) => {
     const { styles = {} } = options || {};
-    return Object.keys(styles).forEach(id => {
+    return Object.keys(styles).map(id => {
         const { title, ...style } = styles[id];
-        const name = title || id;
-        return new VectorStyle({ id, type: VECTOR_STYLE.OSKARI, style, name });
+        return new VectorStyle({ id, type: VECTOR_STYLE.OSKARI, style, name: title });
     });
 };
 
