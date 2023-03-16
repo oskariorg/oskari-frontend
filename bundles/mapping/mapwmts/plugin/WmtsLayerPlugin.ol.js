@@ -45,7 +45,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
             this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
-
+        _handleDescribeLayerImpl (layer, info) {
+            // TODO: move __formatCapabilitiesForOpenLayers to helper
+            try {
+                this._log.info('Running capa parsing', info);
+                const caps = this.service.__formatCapabilitiesForOpenLayers(info);
+                // TODO: where to store ol related caps: here? service? layer?
+            } catch (err) {
+                // Messaging.warn(Oskari.getMsg('MapModule', 'mapLayerUnavailable', { name: layer.getName() }));
+                // OR: mark as unsupported => layers plugin will notify user
+            }
+        },
         /**
          * @method _addMapLayerToMap
          * @private
@@ -58,6 +68,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             if (!this.isLayerSupported(layer)) {
                 return;
             }
+            // TODO: after DescripeLayer action route returns capa info
+            // async + placeholder layer can be removed
             var me = this;
             var map = me.getMap();
             var mapModule = me.getMapModule();

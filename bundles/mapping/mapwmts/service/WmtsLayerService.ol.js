@@ -39,6 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @param {Function} failure the failure callback
      *
      */
+    // deprecated
     getCapabilitiesForLayer: function (layer, success, failure) {
         const me = this;
         const url = Oskari.urls.getRoute('GetLayerCapabilities', {
