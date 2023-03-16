@@ -1,4 +1,5 @@
 import { isInScale as utilIsInScale } from '../util/scale';
+import { DESCRIBE_LAYER } from './constants';
 
 /**
  * @class Oskari.mapframework.domain.AbstractLayer
@@ -139,6 +140,7 @@ Oskari.clazz.define(
             geometryMatch: true, // {Boolean} map viewport overlaps defined coverage/geometry
             unsupported: null // {UnsupportedLayerReason} most severe reason if unsupported
         };
+        this._describeLayerStatus = DESCRIBE_LAYER.UNDEFINED;
     }, {
         /**
          * @method setId
@@ -1262,19 +1264,31 @@ Oskari.clazz.define(
         getGeometryType: function () {
             return null;
         },
-        getVisibilityInfo () {
+        getVisibilityInfo: function () {
             return this._visibilityInfo;
         },
-        setVisibilityInfo (info) {
+        setVisibilityInfo: function (info) {
             this._visibilityInfo = info;
         },
-        updateVisibilityInfo (updated) {
+        updateVisibilityInfo: function (updated) {
             this._visibilityInfo = { ...this._visibilityInfo, ...updated };
         },
-        isVisibleOnMap () {
+        isVisibleOnMap: function () {
             const { unsupported, ...booleans } = this.getVisibilityInfo();
             return this.getOpacity() !== 0 && !unsupported &&
                 Object.values(booleans).every(b => b === true);
+        },
+        getDescribeLayerStatus: function () {
+            return this._describeLayerStatus;
+        },
+        setDescribeLayerStatus: function (status) {
+            this._describeLayerStatus = status;
+        },
+        requiresDescripeLayer: function () {
+            return false;
+        },
+        handleDescribeLayer: function (info) {
+            // to override in AbstarctVectorLayer
         }
     }
 );

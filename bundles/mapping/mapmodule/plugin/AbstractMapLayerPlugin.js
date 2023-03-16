@@ -298,6 +298,15 @@ Oskari.clazz.define(
                 olLayers[i].setOpacity(layer.getOpacity() / 100);
             }
         },
+        handleDescribeLayer: function (layer, info) {
+            if (!this.isLayerSupported(layer)) {
+                return;
+            }
+            this._handleDescribeLayerImpl(layer, info);
+        },
+        _handleDescribeLayerImpl: function (layer, info) {
+            // implement if needed
+        },
         /**
          * Handle AfterChangeMapLayerStyleEvent
          * @private

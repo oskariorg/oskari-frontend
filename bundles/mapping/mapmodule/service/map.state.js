@@ -373,7 +373,7 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                 return;
             }
             if (this.isLayerSelected(layer.getId())) {
-                log.warn('Layer already added. Skipping id ' + layer.getId());
+                log.info('Layer already added. Skipping id ' + layer.getId());
                 return false;
             }
             this.getLayers().push(layer);

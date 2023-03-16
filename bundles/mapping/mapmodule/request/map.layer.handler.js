@@ -1,3 +1,4 @@
+import { DESCRIBE_LAYER } from '../domain/constants';
 /**
  * @class map.layer.handler
  * Handles requests concerning map layers.
@@ -14,6 +15,7 @@ Oskari.clazz.define('map.layer.handler',
     function (mapState, layerService) {
         this.mapState = mapState;
         this.layerService = layerService;
+        this.log = Oskari.log('map.layer.handler');
     }, {
         /**
          * @method handleRequest
@@ -37,7 +39,8 @@ Oskari.clazz.define('map.layer.handler',
                 }
             } else if (request.getName() === 'AddMapLayerRequest') {
                 layer = this.layerService.findMapLayer(request.getMapLayerId());
-                this.mapState.addLayer(layer, request._creator);
+                const addLayer = () => this.mapState.addLayer(layer, request._creator);
+                this._loadLayerInfo(layer, addLayer);
             } else if (request.getName() === 'RemoveMapLayerRequest') {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
             } else if (request.getName() === 'RearrangeSelectedMapLayerRequest') {
@@ -64,6 +67,36 @@ Oskari.clazz.define('map.layer.handler',
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
             }
+        },
+        _loadLayerInfo: function (layer, addLayer) {
+            if (typeof layer.getDescribeLayerStatus !== 'function') {
+                // layer type doesn't support this
+                addLayer();
+                return;
+            }
+            const status = layer.getDescribeLayerStatus();
+            if (status === DESCRIBE_LAYER.LOADED || status === DESCRIBE_LAYER.PENDING) {
+                return;
+            }
+            layer.getDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
+            const layerId = layer.getId();
+            this.layerService.getDescribeLayer(layerId, info => {
+                if (!info) {
+                    layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
+                    if (layer.requiresDescripeLayer()) {
+                        // notify user here or in implementations
+                        this.log.error('Attempt to add layer that requires more info. Skipping id: ' + layerId);
+                        return;
+                    }
+                }
+                layer.getDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
+                const sandbox = this.layerService.getSandbox();
+                layer.handleDescribeLayer(info);
+                sandbox.findRegisteredModuleInstance('MainMapModule').handleDescribeLayer(layer, info);
+                const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
+                sandbox.notifyAll(event);
+                addLayer();
+            });
         }
     }, {
         /**

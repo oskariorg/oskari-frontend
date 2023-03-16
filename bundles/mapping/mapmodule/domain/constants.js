@@ -33,3 +33,11 @@ export const FEATURE_QUERY_ERRORS = {
     SCALE: 'scale',
     OUT_OF_BOUNDS: 'out_of_bounds'
 };
+
+// Status codes for DescribeLayer
+export const DESCRIBE_LAYER = {
+    UNDEFINED: 'undefined',
+    PENDING: 'pending',
+    LOADED: 'loaded',
+    ERROR: 'error'
+};
