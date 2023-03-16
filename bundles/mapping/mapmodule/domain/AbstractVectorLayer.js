@@ -1,5 +1,4 @@
-import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from './VectorStyle';
-import { VECTOR_STYLE, parseStylesFromOptions } from './constants';
+import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME, parseStylesFromOptions } from './VectorStyle';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
@@ -7,18 +6,18 @@ export class AbstractVectorLayer extends AbstractLayer {
     constructor () {
         super(...arguments);
         this.hoverOptions = null;
+        this._storedStyleName = null;
     }
 
     /* override */
     selectStyle (name) {
+        // style is seleced on createMapLayer
+        // store selected style name to try selecting it when styles are available
+        this._storedStyleName = name;
         super.selectStyle(name);
-        // TODO: use flag and super? -> how about getCurrentStyle npe
-        // OR: let createlayer select -> empty style which will be removed after info is loaded
-        // -> how to select defult style? describe returns??
-        // -> empty default style is created for every vector layer
     }
-    // getCurrentStyle () {}
 
+    /* override */
     // AbstractLayer selectStyle creates empty if style isn't found
     _createEmptyStyle () {
         return createDefaultStyle();
@@ -37,13 +36,12 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     handleDescribeLayer (info) {
-        const { styles = [], defaultStyleId } = info;
+        const { styles = [] } = info;
         const vs = styles.map(s => new VectorStyle(s));
         // override all styles as create map layer -> select style -> created default style
         this.setStyles(vs);
-        // this is done on maplayer add, so select default style
-        // TODO: what about non-default selected + refresh -> should select
-        Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), defaultStyleId]);
+        // this is done on maplayer add, so try select style
+        Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
     }
 
     // For user data layers
