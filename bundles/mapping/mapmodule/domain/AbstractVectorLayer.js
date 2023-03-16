@@ -1,5 +1,5 @@
 import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from './VectorStyle';
-import { VECTOR_STYLE } from './constants';
+import { VECTOR_STYLE, parseStylesFromOptions } from './constants';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
@@ -46,27 +46,12 @@ export class AbstractVectorLayer extends AbstractLayer {
         Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), defaultStyleId]);
     }
 
-    /* deprecated */
-    // => create/populateStylesFromOptions
-    // => user data layers calls (abstract)
-    setOptions (options) {
-        super.setOptions(options);
-        const { styles = {} } = options;
-        const hasStyles = this.getStyles().length > 0;
-        // Clear styles before adding
-        this.setStyles([]);
-        // use addStyle to avoid duplicate and invalid styles
-        Object.keys(styles).forEach(id => {
-            const style = new VectorStyle({ id, type: VECTOR_STYLE.OSKARI });
-            style.parseStyleFromOptions(styles[id]);
-            this.addStyle(style);
-        });
+    // For user data layers
+    setStylesFromOptions (options) {
+        const styles = parseStylesFromOptions(options);
+        this.setStyles(styles);
         // Remove styles from options to be sure that VectorStyle is used
         delete options.styles;
-        // update current style on styles update
-        if (hasStyles && this._currentStyle) {
-            this.selectStyle(this._currentStyle.getName());
-        }
     }
 
     removeStyle (name) {
