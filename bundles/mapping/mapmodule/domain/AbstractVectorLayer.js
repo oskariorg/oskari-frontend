@@ -10,6 +10,15 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     /* override */
+    selectStyle (name) {
+        super.selectStyle(name);
+        // TODO: use flag and super? -> how about getCurrentStyle npe
+        // OR: let createlayer select -> empty style which will be removed after info is loaded
+        // -> how to select defult style? describe returns??
+        // -> empty default style is created for every vector layer
+    }
+    // getCurrentStyle () {}
+
     // AbstractLayer selectStyle creates empty if style isn't found
     _createEmptyStyle () {
         return createDefaultStyle();
@@ -27,7 +36,19 @@ export class AbstractVectorLayer extends AbstractLayer {
         return this.hoverOptions;
     }
 
+    handleDescribeLayer (info) {
+        const { styles = [], defaultStyleId } = info;
+        const vs = styles.map(s => new VectorStyle(s));
+        // override all styles as create map layer -> select style -> created default style
+        this.setStyles(vs);
+        // this is done on maplayer add, so select default style
+        // TODO: what about non-default selected + refresh -> should select
+        Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), defaultStyleId]);
+    }
+
     /* deprecated */
+    // => create/populateStylesFromOptions
+    // => user data layers calls (abstract)
     setOptions (options) {
         super.setOptions(options);
         const { styles = {} } = options;
