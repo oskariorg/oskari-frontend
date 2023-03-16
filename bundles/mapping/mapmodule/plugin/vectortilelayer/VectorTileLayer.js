@@ -1,6 +1,4 @@
 import { AbstractVectorLayer } from '../../domain/AbstractVectorLayer';
-import { VectorStyle } from '../../domain/VectorStyle';
-import { VECTOR_STYLE } from '../../domain/constants';
 
 export class VectorTileLayer extends AbstractVectorLayer {
     constructor () {
@@ -30,22 +28,6 @@ export class VectorTileLayer extends AbstractVectorLayer {
             return true;
         }
         return this._srsList.indexOf(srsName) !== -1;
-    }
-
-    /* deprecated */
-    setOptions (options) {
-        // super sets normal styles
-        super.setOptions(options);
-        const { externalStyles = {} } = options;
-        // set external styles
-        Object.keys(externalStyles).forEach(id => {
-            // Use name as title
-            const style = new VectorStyle({ id, type: VECTOR_STYLE.MAPBOX });
-            style.parseStyleFromOptions(externalStyles[id]);
-            this.addStyle(style);
-        });
-        // Remove externalStyles from options to be sure that VectorStyle is used
-        delete options.externalStyles;
     }
 }
 
