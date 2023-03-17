@@ -196,6 +196,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         });
 
         const theme = mapmodule.getMapTheme();
+        // TODO: Should use getHeaderTheme() to be consistent with other popups, but it doesn't look as good.
         const helper = getNavigationTheme(theme);
         this._popup.makeDraggable();
         this._popup.addClass('time-control-3d');
