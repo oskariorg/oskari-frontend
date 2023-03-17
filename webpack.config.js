@@ -32,8 +32,9 @@ module.exports = (env, argv) => {
     }));
 
     // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
-    const replacement = path.join(__dirname, 'src/react/ant-globals.less');
-    plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
+    // FIXME: this no longer works with current AntD version?
+    //const replacement = path.join(__dirname, 'src/react/ant-globals.less');
+    //plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     cesiumSourceOptions.forEach(possibleSrcPath => {

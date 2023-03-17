@@ -1,4 +1,5 @@
-import 'antd/dist/antd.css';
+//import 'antd/dist/antd.css';
+import 'antd/dist/antd.less';
 
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
