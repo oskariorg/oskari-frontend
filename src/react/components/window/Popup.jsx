@@ -46,6 +46,7 @@ const PopupHeader = styled.h3`
     background-color: ${props => props.theme.getBgColor()};
     color:  ${props => props.theme.getTextColor()};
     padding: 8px 10px;
+    margin: 0px;
     display: flex;
     cursor: ${props => props.isDraggable ? 'grab' : undefined}
 `;

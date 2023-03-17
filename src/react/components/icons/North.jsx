@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const North = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.5 17.38">
+    <svg width="1em" height="1em" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.5 17.38">
         <g>
             <g>
                 <path d="M9.48,12.22L4.95,.14c-.07-.19-.34-.19-.41,0L.01,12.22c-.07,.2,.15,.38,.33,.26l4.29-2.91c.07-.05,.17-.05,.24,0l4.29,2.91c.18,.12,.4-.06,.33-.26Z"/>
