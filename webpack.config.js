@@ -6,7 +6,7 @@ const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
-const { DefinePlugin, NormalModuleReplacementPlugin } = require('webpack');
+const { DefinePlugin } = require('webpack');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 
 const proxyPort = 8081;
@@ -30,11 +30,6 @@ module.exports = (env, argv) => {
     plugins.push(new MiniCssExtractPlugin({
         filename: '[name]/oskari.min.css'
     }));
-
-    // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
-    // FIXME: this no longer works with current AntD version?
-    //const replacement = path.join(__dirname, 'src/react/ant-globals.less');
-    //plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     cesiumSourceOptions.forEach(possibleSrcPath => {
