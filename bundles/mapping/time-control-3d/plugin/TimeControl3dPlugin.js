@@ -4,6 +4,7 @@ import { MapModuleButton } from '../../mapmodule/MapModuleButton';
 import { LocaleProvider } from 'oskari-ui/util';
 import { TimeControl3d, TimeControl3dHandler } from '../view';
 import { ControlIcon } from '../view/icons';
+import { getNavigationTheme } from 'oskari-ui/theme';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -194,17 +195,21 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             me.renderButton(null, null);
         });
 
-        const themeColours = mapmodule.getThemeColours();
+        const theme = mapmodule.getMapTheme();
+        const helper = getNavigationTheme(theme);
         this._popup.makeDraggable();
         this._popup.addClass('time-control-3d');
 
         this._popup.show(popupTitle, this._popupContent);
         const elem = this.getElement();
 
-        const popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+        const isDark = Oskari.util.isDarkColor(helper.getPrimary());
+        const popupCloseIcon = (isDark) ? 'icon-close-white' : undefined;
         this._popup.setColourScheme({
-            'bgColour': themeColours.backgroundColour,
-            'titleColour': themeColours.textColour,
+            'bgColour': helper.getPrimary(),
+            'bodyBgColour': helper.getPrimary(),
+            'titleColour': helper.getTextColor(),
+            'opacity': 0.8,
             'iconCls': popupCloseIcon
         });
         let popupLocation = this.getLocation().includes('left') ? 'right' : 'left';
