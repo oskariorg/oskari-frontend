@@ -18,6 +18,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
                 config: this.state.pluginConfig || {}
             };
         },
+        init: function (data) {
+            const plugin = this.findPluginFromInitData(data);
+            if (plugin) {
+                this.storePluginConf(plugin.config);
+                // when we enter publisher:
+                // restore saved location for plugin that is not stopped nor started
+                this.getPlugin().setLocation(plugin.config?.location?.classes);
+            }
+        },
         // not displayed on tool panels so user can't disable it
         isDisplayed: function () {
             return false;

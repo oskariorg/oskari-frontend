@@ -1,3 +1,4 @@
+import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
 
 /**
@@ -273,70 +274,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
-        * Extends object recursive for keeping defaults array.
-        * @method _extendRecursive
-        * @private
-        *
-        * @param {Object} defaults the default extendable object
-        * @param {Object} extend extend object
-        *
-        * @return {Object} extended object
-        */
-        _extendRecursive: function (defaults, extend) {
-            var me = this;
-            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
-                return defaults;
-            } else if (jQuery.isEmptyObject(defaults)) {
-                return jQuery.extend(true, defaults, extend);
-            } else if (jQuery.isArray(defaults)) {
-                if (jQuery.isArray(extend)) {
-                    jQuery.each(extend, function (key, value) {
-                        defaults.push(value);
-                    });
-                }
-                return defaults;
-            } else if (extend.constructor && extend.constructor === Object) {
-                jQuery.each(extend, function (key, value) {
-                    // not an array or an object -> just use the plain value
-                    if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
-                        defaults[key] = value;
-                    } else {
-                        defaults[key] = me._extendRecursive(defaults[key], value);
-                    }
-                });
-                return defaults;
-            }
-        },
-        /**
         * Gather selections.
         * @method gatherSelections
         * @private
         */
         gatherSelections: function () {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                selections = {
-                    configuration: {
+            const sandbox = this.instance.getSandbox();
+            let errors = [];
 
+            const mapFullState = sandbox.getStatefulComponents().mapfull.getState();
+            let selections = {
+                configuration: {
+                    mapfull: {
+                        state: mapFullState
                     }
-                },
-                errors = [];
-
-            var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
-            selections.configuration.mapfull = {
-                state: mapFullState
+                }
             };
 
-            jQuery.each(me.panels, function (index, panel) {
-                if (panel.validate && typeof panel.validate === 'function') {
+            this.panels.forEach((panel) => {
+                if (typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
-
-                me._extendRecursive(selections, panel.getValues());
+                selections = mergeValues(selections, panel.getValues());
             });
 
             if (errors.length > 0) {
-                me._showValidationErrorMessage(errors);
+                this._showValidationErrorMessage(errors);
                 return null;
             }
             return selections;
