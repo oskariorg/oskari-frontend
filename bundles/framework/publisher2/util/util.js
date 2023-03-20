@@ -13,9 +13,9 @@ export const isEmpty = (value) => {
 };
 
 /**
-* Extends object recursive for keeping defaults array.
-* @method _extendRecursive
-* @private
+* Extends object recursively. Keeps defaults if extend doesnt' have a new value for primitive.
+* Merges arrays by adding values from both default and extend.
+* @method mergeValues
 *
 * @param {Object} defaults the default extendable object
 * @param {Object} extend extend object
