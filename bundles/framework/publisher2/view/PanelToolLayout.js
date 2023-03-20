@@ -175,15 +175,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          *
          */
         _editToolLayoutOn: function () {
-            var me = this,
-                sandbox = Oskari.getSandbox('sandbox');
-            if (me.toolLayoutEditMode) {
+            const me = this;
+            if (this.toolLayoutEditMode) {
                 return;
             }
-            me.toolLayoutEditMode = true;
-            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
+            this.toolLayoutEditMode = true;
             jQuery('.mapplugins').show();
-            me._initDraggables();
+            this._initDraggables();
             // TODO create droppables on _showDroppable, destroy them on _hideDroppable
             jQuery('.mappluginsContent').droppable({
                 // TODO see if this can be done in hover? Would it even be wanted behaviour?
@@ -210,11 +208,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
             });
 
-            // Disable map hover effect when layout edit mode is active
-            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(false);
-
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
-            sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
             this._renderPanel();
         },
 
@@ -222,21 +217,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @private @method _editToolLayoutOff
          */
         _editToolLayoutOff: function () {
-            var me = this,
-                sandbox = Oskari.getSandbox('sandbox');
-            if (!me.toolLayoutEditMode) {
+            if (!this.toolLayoutEditMode) {
                 return;
             }
-            me.toolLayoutEditMode = false;
-            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
+            this.toolLayoutEditMode = false;
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
             this._removeDraggables();
 
-            // Restore map hover effects
-            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
 
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
-            sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
             this._renderPanel();
         },
         _enableToolDraggable: function (tool) {

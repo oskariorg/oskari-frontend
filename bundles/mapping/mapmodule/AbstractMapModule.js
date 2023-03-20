@@ -453,6 +453,8 @@ Oskari.clazz.define(
             },
             'LayerToolsEditModeEvent': function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
+                // Disable feature hover when tools are being dragged
+                this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(!this._isInLayerToolsEditMode);
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
