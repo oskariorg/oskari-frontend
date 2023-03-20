@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { LocaleProvider } from 'oskari-ui/util';
+import { ToolLayout } from './form/ToolLayout';
 import { mergeValues } from '../util/util';
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelToolLayout
@@ -111,121 +115,59 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _populateToolLayoutPanel: function () {
             const me = this;
             const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-            const contentPanel = panel.getContainer();
+            this.panel = panel;
             const tooltipCont = this.templateHelp.clone(); // tooltip
-            let i,
-                input,
-                layoutContainer,
-                changeListener = function (e) {
-                    if (this.checked) {
-                        me._changeToolLayout(this.value, e);
-                    }
-                };
             panel.setTitle(me.loc.toollayout.label);
 
             tooltipCont.attr('title', me.loc.toollayout.tooltip);
             panel.getHeader().append(tooltipCont);
+            this._renderPanel();
 
-            // content
-            for (i = 0; i < me.toolLayouts.length; i += 1) {
-                layoutContainer = me.templateLayout.clone();
-                input = layoutContainer.find('input');
-                input.val(me.toolLayouts[i]).on('change', changeListener);
-                // FIXME default to 0 index if activeToolLayout is not found
-                // First choice is active unless we have an active layout
-                if (me.activeToolLayout) {
-                    if (me.toolLayouts[i] === me.activeToolLayout) {
-                        input.prop('checked', true);
-                    }
-                } else if (i === 0) {
-                    input.prop('checked', true);
-                }
-                layoutContainer.find('span').html(
-                    me.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]
-                );
-                contentPanel.append(layoutContainer);
-                if (me.toolLayouts[i] === 'userlayout') {
-                    var editBtn = Oskari.clazz.create(
-                        'Oskari.userinterface.component.Button'
-                    );
-                    editBtn.setTitle(me.loc.toollayout.usereditmode);
-                    // FIXME create function outside loop
-                    editBtn.setHandler(function () {
-                        // user is in edit mode
-                        if (jQuery(editBtn.getElement()).val() === me.loc.toollayout.usereditmodeoff) {
-                            // remove edit mode
-                            me._editToolLayoutOff();
-                        } else {
-                            me._editToolLayoutOn();
-                        }
-                    });
-                    editBtn.setEnabled(me.activeToolLayout === 'userlayout');
-                    jQuery(editBtn.getElement()).attr('id', 'editModeBtn');
-                    editBtn.insertTo(layoutContainer);
-                }
-            }
             return panel;
         },
-        /**
-         * @private @method _changeToolLayout
-         *
-         * @param {string} layout
-         * @param {Object} event
-         *
-         */
-        _changeToolLayout: function (layout, event) {
-            // iterate plugins
-            var me = this,
-                tools = me.tools,
-                i,
-                tool,
-                target,
-                button;
-            // store location so we have easy access to it on save
-            me.activeToolLayout = layout;
-            /*
-            if (layout !== 'userlayout') {
-                // make sure we're not in edit mode
-                if (me.toolLayoutEditMode) {
-                    me._editToolLayoutOff();
-                }
-                // set location for all tools
+        _renderPanel: function () {
+            const panel = this.getPanel();
+            const contentPanel = panel.getContainer();
 
-                for (i = tools.length - 1; i > -1; i -= 1) {
-                    tool = tools[i].getTool();
-                    if (tools[i][layout]) {
-                        if (!tool.config) {
-                            tool.config = {};
-                        }
-                        if (!tool.config.location) {
-                            tool.config.location = {};
-                        }
-                        tool.config.location.classes = tools[i][layout];
-                        var plugin = tools[i].getPlugin();
-                        if (plugin && plugin.setLocation) {
-                            plugin.setLocation(tool.config.location.classes);
-                        }
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+                    <ToolLayout
+                        onSwitch={() => this._switchControlsInSides()}
+                        isEdit={this.toolLayoutEditMode}
+                        onEditMode={(isEdit) => {
+                            if(isEdit) {
+                                this._editToolLayoutOn();
+                            } else {
+                                // remove edit mode
+                                this._editToolLayoutOff();
+                            }
+                        }}
+                    />
+                </LocaleProvider>,
+                contentPanel[0]
+            );
+
+        },
+        _switchControlsInSides: function () {
+            // toggle left <> right
+            this.tools
+                .filter(tool => tool.isEnabled())
+                .forEach(tool => {
+                    const plugin = tool.getPlugin();
+                    if (typeof plugin.getLocation !== 'function') {
+                        return;
                     }
-                }
-
-                if (event) {
-                    target = jQuery(event.currentTarget);
-                    button = target.parents('.content').find('input#editModeBtn');
-                    button.prop('disabled', true);
-                    button.addClass('disabled-button');
-                    me._editToolLayoutOff();
-                }
-            } else {
-                if (event) {
-                    target = jQuery(event.currentTarget);
-                    button = target.parents('.tool').find('input#editModeBtn');
-                    button.prop('disabled', false);
-                    button.removeClass('disabled-button');
-
-                    me._editToolLayoutOn();
-                }
-            }
-            */
+                    const currentLoc = plugin.getLocation();
+                    if (!currentLoc) {
+                        // some plugins like GetInfo have the method but no location
+                        return;
+                    }
+                    if (currentLoc.includes('left')) {
+                        plugin.setLocation(currentLoc.replace('left', 'right'));
+                    } else if (currentLoc.includes('right')) {
+                        plugin.setLocation(currentLoc.replace('right', 'left'));
+                    }
+            });
         },
 
         /**
@@ -273,6 +215,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
             sandbox.notifyAll(event);
+            this._renderPanel();
         },
 
         /**
@@ -294,6 +237,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
+            this._renderPanel();
         },
         _enableToolDraggable: function (tool) {
             const elem = this.__getPluginElement(tool);

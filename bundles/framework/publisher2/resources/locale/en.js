@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             "toollayout": {
                 "label": "Tool Placement",
                 "tooltip": "Select a placement for map tools.",
-                "lefthanded": "Lefthanded",
-                "righthanded": "Righthanded",
+                "swapUI": "Swap sides",
                 "userlayout": "Custom placement",
                 "usereditmode": "Start editing",
                 "usereditmodeoff": "Finish editing"
