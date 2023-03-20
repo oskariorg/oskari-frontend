@@ -28,28 +28,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         me.sandbox = sandbox;
 
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateLayout = jQuery(
-            '<div class="tool ">' +
-            '  <label>' +
-            '    <input type="radio" name="toolLayout" /><span></span>' +
-            '  </label>' +
-            '</div>'
-        );
-
-        me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
         // This is publisher.sidebar.data
         me.data = me.instance.publisher.data;
-        me.activeToolLayout = 'userlayout';
         me.toolLayoutEditMode = false;
         me._addedDraggables = [];
     }, {
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                if (!this.toolLayoutEditMode) {
-                    return;
-                }
-                this._enableToolDraggable(event.getTool());
-            }
+        getName: function () {
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
         },
         /**
          * @method init
@@ -64,9 +49,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 this.panel = this._populateToolLayoutPanel(data);
             }
         },
-        getName: function () {
-            return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
-        },
 
         /**
          * Returns the selections the user has done with the form inputs.
@@ -79,23 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             this.tools.forEach(tool => {
                 values = mergeValues(values, tool.getValues());
             });
-            return mergeValues(values, {
-                metadata: {
-                    toolLayout: this.activeToolLayout
-                }
-            });
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
+            return values;
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -113,13 +79,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @private @method _populateToolLayoutPanel
          */
         _populateToolLayoutPanel: function () {
-            const me = this;
             const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
             this.panel = panel;
             const tooltipCont = this.templateHelp.clone(); // tooltip
-            panel.setTitle(me.loc.toollayout.label);
+            panel.setTitle(this.loc.toollayout.label);
 
-            tooltipCont.attr('title', me.loc.toollayout.tooltip);
+            tooltipCont.attr('title', this.loc.toollayout.tooltip);
             panel.getHeader().append(tooltipCont);
             this._renderPanel();
 
@@ -132,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
                     <ToolLayout
-                        onSwitch={() => this._switchControlsInSides()}
+                        onSwitch={() => this._switchControlSides()}
                         isEdit={this.toolLayoutEditMode}
                         onEditMode={(isEdit) => {
                             if (isEdit) {
@@ -147,7 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 contentPanel[0]
             );
         },
-        _switchControlsInSides: function () {
+        _switchControlSides: function () {
             // toggle left <> right
             this.tools
                 .filter(tool => tool.isEnabled())
@@ -169,6 +134,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 });
         },
 
+        eventHandlers: {
+            'Publisher2.ToolEnabledChangedEvent': function (event) {
+                if (!this.toolLayoutEditMode) {
+                    return;
+                }
+                this._enableToolDraggable(event.getTool());
+            }
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
+        },
         /**
          * @private @method _editToolLayoutOn
          *
@@ -195,12 +180,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                         plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
                         // Reset draggable's inline css... couldn't find a cleaner way to do this.
                         // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
-                        /*
+                        // draggable assigns these while dragging:
                         plugin.getElement().css({
                             'top': '0px',
                             'left': '0px'
                         });
-                        */
                     }
                     // draggable.stop doesn't fire if dropped to a droppable so we have to do this here as well...
                     me._hideDroppable();
@@ -300,17 +284,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @private
          */
         _showDroppable: function (pluginClazz, source) {
-            var me = this,
-                allowedLocation,
-                target,
-                tool = me.getToolById(pluginClazz);
+            const me = this;
+            const tool = me.getToolById(pluginClazz);
 
             if (!pluginClazz || !tool) {
                 return;
             }
             jQuery('div.mapplugins').each(function () {
-                target = jQuery(this);
-                allowedLocation = me._locationAllowed(tool.allowedLocations, target);
+                const target = jQuery(this);
+                let allowedLocation = me._locationAllowed(tool.allowedLocations, target);
                 if (allowedLocation) {
                     allowedLocation = me._siblingsAllowed(pluginClazz, source, target);
                     // show allowed-if-we-move-some-siblings-out-of-the-way as allowed for now
@@ -352,28 +334,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Allowed location string if allowed, null if not.
          */
         _locationAllowed: function (allowedLocations, dropzone) {
-            var isAllowedLocation,
-                i;
-
             if (!allowedLocations || !dropzone) {
                 return false;
             }
-            if (allowedLocations.indexOf('*') > -1) return true;
-            for (i = 0; i < allowedLocations.length; i += 1) {
-                isAllowedLocation = dropzone.is('.' + allowedLocations[i].split(' ').join('.'));
-                if (isAllowedLocation) {
-                    return allowedLocations[i];
-                }
+            if (allowedLocations.includes('*')) {
+                return true;
             }
-            return null;
+            return allowedLocations.find(loc => {
+                const cssClasses = loc.split(' ').join('.');
+                return dropzone.is('.' + cssClasses);
+            });
         },
 
         getToolById: function (id) {
-            for (var i = 0; i < this.tools.length; i++) {
-                if (this.tools[i].getTool().id === id) {
-                    return this.tools[i];
-                }
-            }
+            return this.tools.find(tool => tool.getTool().id === id);
         },
         /**
         * Stop panel.
@@ -450,12 +424,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Array of plugin classes
          */
         _getDropzonePlugins: function (dropzone) {
-            var ret = [],
-                clazz;
-
+            const ret = [];
             dropzone.find('.mapplugin').each(function () {
                 // ignore undefined...
-                clazz = jQuery(this).attr('data-clazz');
+                const clazz = jQuery(this).attr('data-clazz');
                 if (clazz) {
                     ret.push(clazz);
                 }
@@ -475,38 +447,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          *
          **/
         _moveSiblings: function (pluginClazz, source, target) {
-            var me = this,
-                sibling,
-                siblings = this._getDropzonePlugins(target),
-                i,
-                tool = me.getToolById(pluginClazz);
-
-            for (i = 0; i < siblings.length; i += 1) {
-                if (tool.allowedSiblings.indexOf('*') < 0 && jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
-                    // Unallowed sibling, move to source
-                    sibling = me.getToolById(siblings[i]) && me.getToolById(siblings[i]).getPlugin() ? me.getToolById(siblings[i]).getPlugin() : null;
-                    if (sibling) {
-                        sibling.setLocation(source.attr('data-location'));
-                    } else {
-                        me.sandbox.printWarn(
-                            'BasicPublisher._moveSiblings(): Couldn\'t find sibling',
-                            siblings[i]
-                        );
-                    }
-                }
+            const siblings = this._getDropzonePlugins(target);
+            const tool = this.getToolById(pluginClazz);
+            if (!tool.allowedSiblings.includes('*')) {
+                // allows everything -> no need to move anything
+                return;
             }
-        },
-        /**
-         * Restarts all active plugins in case of i.e. changing the language.
-         * @method _restartActivePlugins
-         *
-         */
-        _restartActivePlugins: function () {
-            this.tools.forEach(tool => {
-                if (tool.isDisplayed(this.data) && tool.isEnabled()) {
-                    // reset
-                    tool.setEnabled(false);
-                    tool.setEnabled(true);
+            const toolPreviousContainer = source.attr('data-location');
+            siblings.forEach(siblingClazz => {
+                if (tool.allowedSiblings.includes(siblingClazz)) {
+                    return;
+                }
+                const otherTool = this.getToolById(siblingClazz);
+                if (!otherTool) {
+                    return;
+                }
+                const otherToolsPlugin = otherTool.getPlugin();
+                if (otherToolsPlugin) {
+                    otherToolsPlugin.setLocation(toolPreviousContainer);
+                } else {
+                    Oskari.log('BasicPublisher').warn(`_moveSiblings(): Couldn't find sibling`, siblingClazz);
                 }
             });
         }
