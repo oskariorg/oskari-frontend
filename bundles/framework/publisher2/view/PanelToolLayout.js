@@ -59,16 +59,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!this.panel) {
                 this.panel = this._populateToolLayoutPanel(data);
             }
-
-            // init the tools' plugins location infos
-            if (this.data && this.activeToolLayout === 'userlayout') {
-                // this is always true, however we should not call setLocation for plugins here.
-                // Instead they should start at the location they were when saved.
-                // Problem: getTool() returns empty config usually so plugin is created with empty config instead of actual config that was used to save the map.
-                this._initUserLayout();
-            } else {
-                this._changeToolLayout(this.activeToolLayout, null);
-            }
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
@@ -193,6 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 button;
             // store location so we have easy access to it on save
             me.activeToolLayout = layout;
+            /*
             if (layout !== 'userlayout') {
                 // make sure we're not in edit mode
                 if (me.toolLayoutEditMode) {
@@ -234,32 +225,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     me._editToolLayoutOn();
                 }
             }
+            */
         },
 
-        /**
-         * Initialises the plugins' location info when restoring a published map that has a user defined layout
-         * @method _initToolLayout
-         */
-        _initUserLayout: function () {
-            const data = this.data;
-            const pluginsConfigExists = Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins');
-            const pluginConfigs = pluginsConfigExists ? data.configuration.mapfull.conf.plugins : [];
-            this.tools.forEach(tool => {
-                pluginConfigs.forEach(plugin => {
-                    if (tool.getTool().id !== plugin.id || !plugin.config) {
-                        return;
-                    }
-                    const { location = {} } = plugin.config;
-                    if (!location.classes) {
-                        return;
-                    }
-                    tool.getTool().config.location = location;
-                    if (tool.getPlugin() && tool.getPlugin().setLocation) {
-                        tool.getPlugin().setLocation(plugin.config.location.classes);
-                    }
-                });
-            });
-        },
         /**
          * @private @method _editToolLayoutOn
          *
