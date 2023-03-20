@@ -131,16 +131,18 @@ export const UserForm = ({ state, controller, isExternal }) => {
                         type='save'
                         onClick={() => controller.saveUser()}
                     />
-                    <Confirm
-                        title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: state.userFormState.username }} />}
-                        onConfirm={() => controller.deleteUser(state.editingUserId)}
-                        okText={<Message messageKey='buttons.delete' bundleKey='oskariui'/>}
-                        cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
-                    >
-                        <SecondaryButton
-                            type='delete'
-                        />
-                    </Confirm>
+                    {(state.editingUserId && !isExternal) && (
+                        <Confirm
+                            title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: state.userFormState.username }} />}
+                            onConfirm={() => controller.deleteUser(state.editingUserId)}
+                            okText={<Message messageKey='buttons.delete' bundleKey='oskariui'/>}
+                            cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
+                        >
+                            <SecondaryButton
+                                type='delete'
+                            />
+                        </Confirm>
+                    )}
                 </RightButtons>
                 <SecondaryButton
                     type='cancel'
