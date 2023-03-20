@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         gatherSelections: function () {
             const me = this;
             const sandbox = this.instance.getSandbox();
-            const errors = [];
+            let errors = [];
 
             const mapFullState = sandbox.getStatefulComponents().mapfull.getState();
             let selections = {
