@@ -104,5 +104,36 @@ describe('Publisher/util', () => {
     }
 }`);
         });
+        test('mergeValues(multiple merges)', () => {
+            const values = [{
+                testing: {
+                    test1: 'test1',
+                    test1Array: ['test1']
+                }
+            }, {
+                testing: {
+                    test2: 'test2',
+                }
+            }, {
+                testing: {
+                    test1Array: ['test3'],
+                    test2: 'test3'
+                }
+            }];
+
+            const merged = mergeValues(values[0], values[1]);
+            const merged2 = mergeValues(merged, values[2]);
+            expect(JSON.stringify(merged2, null, 4)).toEqual(
+`{
+    "testing": {
+        "test1": "test1",
+        "test1Array": [
+            "test1",
+            "test3"
+        ],
+        "test2": "test3"
+    }
+}`);
+        });
     });
 });
