@@ -1,7 +1,6 @@
 import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
 
-
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
  * Renders the publishers "publish mode" sidebar view where the user can make
@@ -280,7 +279,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         * @private
         */
         gatherSelections: function () {
-            const me = this;
             const sandbox = this.instance.getSandbox();
             let errors = [];
 
@@ -293,15 +291,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             };
 
-            jQuery.each(me.panels, function (index, panel) {
-                if (panel.validate && typeof panel.validate === 'function') {
+            this.panels.forEach((panel)  => {
+                if (typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
                 selections = mergeValues(selections, panel.getValues())
             });
 
             if (errors.length > 0) {
-                me._showValidationErrorMessage(errors);
+                this._showValidationErrorMessage(errors);
                 return null;
             }
             return selections;
