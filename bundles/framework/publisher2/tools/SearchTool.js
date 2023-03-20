@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 title: 'SearchPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         /**

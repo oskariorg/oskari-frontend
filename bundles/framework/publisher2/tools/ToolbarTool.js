@@ -77,6 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                 title: 'PublisherToolbarPlugin',
                 config: {
+                    ...(this.state.pluginConfig || {}),
                     'toolbarId': 'PublisherToolbar',
                     buttons: this.state.pluginConfig?.buttons || []
                 }

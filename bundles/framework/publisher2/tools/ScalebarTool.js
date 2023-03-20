@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
                 title: 'ScaleBarPlugin',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
 
