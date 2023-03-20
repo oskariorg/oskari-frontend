@@ -291,11 +291,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             };
 
-            this.panels.forEach((panel)  => {
+            this.panels.forEach((panel) => {
                 if (typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
-                selections = mergeValues(selections, panel.getValues())
+                selections = mergeValues(selections, panel.getValues());
             });
 
             if (errors.length > 0) {

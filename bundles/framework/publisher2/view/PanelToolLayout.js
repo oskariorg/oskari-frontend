@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                         onSwitch={() => this._switchControlsInSides()}
                         isEdit={this.toolLayoutEditMode}
                         onEditMode={(isEdit) => {
-                            if(isEdit) {
+                            if (isEdit) {
                                 this._editToolLayoutOn();
                             } else {
                                 // remove edit mode
@@ -146,7 +146,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 </LocaleProvider>,
                 contentPanel[0]
             );
-
         },
         _switchControlsInSides: function () {
             // toggle left <> right
@@ -167,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     } else if (currentLoc.includes('right')) {
                         plugin.setLocation(currentLoc.replace('right', 'left'));
                     }
-            });
+                });
         },
 
         /**
@@ -186,20 +185,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             jQuery('.mappluginsContent').droppable({
                 // TODO see if this can be done in hover? Would it even be wanted behaviour?
                 drop: function (event, ui) {
-                    var pluginClazz = ui.draggable.attr('data-clazz'),
-                        plugin = me.getToolById(pluginClazz).getPlugin(),
-                        source = ui.draggable.parents('.mapplugins'),
-                        target = jQuery(this);
+                    const pluginClazz = ui.draggable.attr('data-clazz');
+                    const plugin = me.getToolById(pluginClazz).getPlugin();
+                    const source = ui.draggable.parents('.mapplugins');
+                    const target = jQuery(this);
 
                     me._moveSiblings(pluginClazz, source, target);
                     if (plugin && plugin.setLocation) {
                         plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
                         // Reset draggable's inline css... couldn't find a cleaner way to do this.
                         // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
+                        /*
                         plugin.getElement().css({
                             'top': '0px',
                             'left': '0px'
                         });
+                        */
                     }
                     // draggable.stop doesn't fire if dropped to a droppable so we have to do this here as well...
                     me._hideDroppable();
@@ -223,7 +224,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             this.toolLayoutEditMode = false;
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
             this._removeDraggables();
-
 
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             this.sandbox.notifyAll(event);

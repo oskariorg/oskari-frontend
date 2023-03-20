@@ -26,7 +26,7 @@ describe('Publisher/util', () => {
             expect(isEmpty(['testing'])).toEqual(false);
         });
         test('{ testing: true }', () => {
-            expect(isEmpty({testing: true})).toEqual(false);
+            expect(isEmpty({ testing: true })).toEqual(false);
         });
     });
     describe('mergeValues', () => {
@@ -89,9 +89,10 @@ describe('Publisher/util', () => {
                 }
             }, {
                 testing: {
-                    test: [{'id': 'testingId'}]
+                    test: [{ 'id': 'testingId' }]
                 }
             });
+            /* eslint-disable indent */
             expect(JSON.stringify(merged, null, 4)).toEqual(
 `{
     "testing": {
@@ -104,6 +105,7 @@ describe('Publisher/util', () => {
     }
 }`);
         });
+        /* eslint-enable indent */
         test('mergeValues(multiple merges)', () => {
             const values = [{
                 testing: {
@@ -112,7 +114,7 @@ describe('Publisher/util', () => {
                 }
             }, {
                 testing: {
-                    test2: 'test2',
+                    test2: 'test2'
                 }
             }, {
                 testing: {
@@ -123,6 +125,7 @@ describe('Publisher/util', () => {
 
             const merged = mergeValues(values[0], values[1]);
             const merged2 = mergeValues(merged, values[2]);
+            /* eslint-disable indent */
             expect(JSON.stringify(merged2, null, 4)).toEqual(
 `{
     "testing": {
@@ -134,6 +137,7 @@ describe('Publisher/util', () => {
         "test2": "test3"
     }
 }`);
+        /* eslint-enable indent */
         });
     });
 });

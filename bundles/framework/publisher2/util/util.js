@@ -30,7 +30,7 @@ export const mergeValues = (defaults, extend) => {
     } else if (Array.isArray(defaults)) {
         if (!Array.isArray(extend)) {
             // extension must be array also or the value is ignored
-            return [ ...defaults ];
+            return [...defaults];
         }
         return [...defaults, ...extend];
     // } else if (extend.constructor && extend.constructor === Object) {
