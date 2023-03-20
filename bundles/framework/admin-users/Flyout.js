@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { LocaleProvider } from 'oskari-ui/util';
+import { AdminUsersHandler } from './handler/AdminUsersHandler';
+import { AdminUsersFlyout } from './view/AdminUsersFlyout';
 /**
  * @class Oskari.mapframework.bundle.admin-users.Flyout
  *
@@ -21,14 +26,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
         this.state = {};
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
+        this.handler = null;
     }, {
-        tabs: [{
-            'id': 'adminusers',
-            'clazz': 'Oskari.mapframework.bundle.admin-users.AdminUsers'
-        }, {
-            'id': 'adminroles',
-            'clazz': 'Oskari.mapframework.bundle.admin-users.AdminRoles'
-        }],
         /**
          * @method getName
          * @return {String} the name for the component
@@ -73,44 +72,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             if (this.tabsContainer) {
                 return;
             }
-            var me = this,
-                tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-            this.tabsContainer = tabsContainer;
-
-            this.tabs.forEach(function (tabDef) {
-                var tab = Oskari.clazz.create(tabDef.clazz, me._getLocalization(tabDef.id), me.instance);
-                tab.setId(tabDef.id);
-                tabsContainer.addPanel(tab);
-                tabDef.instance = tab;
-            });
-            tabsContainer.insertTo(this.container);
+            this.handler = new AdminUsersHandler(this.instance, () => this.renderContent());
+            this.renderContent();
         },
-        getEventHandlers: function () {
-            var list = {};
-            this.tabs.forEach(function (tabDef) {
-                var p;
-                if (tabDef.instance.eventHandlers) {
-                    for (p in tabDef.instance.eventHandlers) {
-                        if (tabDef.instance.eventHandlers.hasOwnProperty(p)) {
-                            list[p] = true;
-                        }
-                    }
-                }
-            });
-            return list;
+        renderContent: function () {
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: 'AdminUsers' }}>
+                    <AdminUsersFlyout state={this.handler.getState()} controller={this.handler.getController()} isExternal={this.instance.conf.isExternal} />
+                </LocaleProvider>,
+                this.container[0]
+            );
         },
-        onEvent: function (event) {
-            this.tabs.forEach(function (tabDef) {
-                if (tabDef.instance && tabDef.instance.eventHandlers) {
-                    var handler = tabDef.instance.eventHandlers[event.getName()];
-                    if (!handler) {
-                        return;
-                    }
-                    handler.apply(tabDef.instance, [event]);
-                }
-            });
-        },
-
         /**
          * @method _getLocalization
          */
