@@ -103,7 +103,14 @@ class UIHandler extends StateHandler {
     }
 
     stop () {
-        this.tools.forEach(tool => tool.stop());
+        this.tools.forEach(tool => {
+            try {
+                tool.stop();
+            } catch (e) {
+                Oskari.log('publisher2.view.MapLayersHandler')
+                    .error('Error stopping publisher tool:', tool.getTool().id);
+            }
+        });
     }
 }
 

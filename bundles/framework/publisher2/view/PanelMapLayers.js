@@ -160,39 +160,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @return {Object}
          */
         getValues: function () {
-            const state = this.handler.getState();
-            let conf = {};
-            if (state.showLayerSelection) {
-                conf = {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{
-                                    id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                                    config: {
-                                        defaultBaseLayer: state.defaultBaseLayer,
-                                        baseLayers: state.baseLayers.map(l => l.getId()),
-                                        showMetadata: state.showMetadata,
-                                        isStyleSelectable: state.allowStyleChange
-                                    }
-                                }]
-                            }
-                        }
-                    }
-                };
-            }
-            if (state.showMetadata) {
-                // published map needs to also include 'metadataflyout' bundle if we want to show metadata
-                conf.configuration.metadataflyout = {};
-            }
-
-            state.externalOptions.forEach(opt => {
-                conf.configuration = {
-                    ...conf.configuration,
-                    ...opt.tool.getValues()
-                };
-            });
-            return conf;
+            // just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
+            return null;
         },
         /**
          * Returns any errors found in validation (currently doesn't check anything) or an empty

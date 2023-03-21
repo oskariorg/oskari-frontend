@@ -20,6 +20,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
                 config: this.state.pluginConfig || {}
             };
         },
+        _setEnabledImpl: function (enabled) {
+            this.handler.setShowLayerSelection(enabled, true);
+        },
+        getValues: function () {
+            if (!this.isEnabled()) {
+                return null;
+            }
+            const pluginConfig = this.getPlugin().getConfig();
+            const value = {
+                configuration: {
+                    mapfull: {
+                        conf: {
+                            plugins: [{ id: this.getTool().id, config: pluginConfig }]
+                        }
+                    }
+                }
+            };
+            if (pluginConfig.showMetadata) {
+                // we need to add metadataflyout bundle as well for links to work properly
+                value.configuration.metadataflyout = {};
+            }
+            return value;
+        },
         _stopImpl: function () {
             this.handler.clearState();
         }

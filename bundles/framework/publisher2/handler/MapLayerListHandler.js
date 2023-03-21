@@ -37,9 +37,11 @@ class UIHandler extends StateHandler {
         });
     }
 
-    setShowLayerSelection (value) {
+    setShowLayerSelection (value, stateOnly = false) {
         // enable tool first so when state update triggers UI update, the plugin is enabled
-        this.tool.setEnabled(value);
+        if (!stateOnly) {
+            this.tool.setEnabled(value);
+        }
         const newConfig = this.tool?.getPlugin()?.getConfig() || {};
         this.updateState({
             showLayerSelection: value,
