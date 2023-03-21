@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Message, Checkbox, Tooltip, Card } from 'oskari-ui';
+import { Button, Message, Tooltip, Card } from 'oskari-ui';
 import { ButtonContainer, IconButton } from 'oskari-ui/components/buttons';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 
@@ -28,22 +28,10 @@ const LayerTitle = styled('span')`
     margin-right: 5px;
 `;
 
-const StyledCheckbox = styled(Checkbox)`
-    + .ant-checkbox-wrapper {
-        margin-left: 0;
-    }
-`;
-
 const LayerContainer = styled('div')`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-`;
-
-const ExtraOptions = styled('div')`
-    display:flex;
-    flex-direction: column;
-    margin-left: 15px;
 `;
 
 const ToolsContainer = styled('div')`
@@ -53,57 +41,13 @@ const ToolsContainer = styled('div')`
 
 export const MapLayers = ({ state, controller }) => {
     const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
-    const disableStyleSelect = state.layers.filter(l => l.getStyles().length > 1).length < 1;
-    const disableMetadataSelect = state.layers.filter(l => l.getMetadataIdentifier() !== null).length < 1;
 
-    const StyleSelect = (
-        <StyledCheckbox
-            checked={state.allowStyleChange}
-            onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
-            disabled={disableStyleSelect}
-        >
-            <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
-        </StyledCheckbox>
-    );
-    const MetadataSelect = (
-        <StyledCheckbox
-            checked={state.showMetadata}
-            onChange={(e) => controller.setShowMetadata(e.target.checked)}
-            disabled={disableMetadataSelect}
-        >
-            <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
-        </StyledCheckbox>
-    );
 
     return (
         <Content>
             <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
                 <ToolsContainer>
-                    <StyledCheckbox
-                        checked={state.showLayerSelection}
-                        onChange={(e) => controller.setShowLayerSelection(e.target.checked)}
-                    >
-                        <Message messageKey='BasicView.layerselection.label' />
-                    </StyledCheckbox>
-                    {state.showLayerSelection && (
-                        <ExtraOptions>
-                            {disableMetadataSelect ? (
-                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMetadata' />}>
-                                    {MetadataSelect}
-                                </Tooltip>
-                            ) : (
-                                MetadataSelect
-                            )}
-                            {disableStyleSelect ? (
-                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
-                                    {StyleSelect}
-                                </Tooltip>
-                            ) : (
-                                StyleSelect
-                            )}
-                        </ExtraOptions>
-                    )}
-                    {state.externalOptions.map((tool, index) => {
+                    {state.layerTools.map((tool, index) => {
                         return (
                             <tool.component
                                 key={index}

@@ -2,55 +2,54 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
 class UIHandler extends StateHandler {
-    constructor (tools, sandbox, consumer) {
+    constructor (tool) {
         super();
-        this.sandbox = sandbox;
-        this.tools = tools;
+        this.tool = tool;
+        this.sandbox = tool.getSandbox();
         this.setState({
             layers: [],
             baseLayers: [],
-            layerTools: []
+            defaultBaseLayer: null,
+            showLayerSelection: false,
+            showMetadata: false,
+            allowStyleChange: false,
+            externalOptions: []
         });
         this.eventHandlers = this.createEventHandlers();
-        this.addStateListener(consumer);
+        // this.addStateListener(consumer);
     };
 
     getName () {
-        return 'MapLayersHandler';
+        return 'MapLayerListHandler';
     }
 
-    init (data) {
-        this.data = data;
-        const layerTools = [];
-        this.tools.forEach(tool => {
-            try {
-                tool.init(data);
-            } catch (e) {
-                Oskari.log('publisher2.MapLayersHandler')
-                    .error('Error initializing publisher tool:', tool.getTool().id);
-            }
-            const toolComponent = tool.getComponent();
-            toolComponent.handler.addStateListener(() => this.notify());
-            layerTools.push({
-                component: toolComponent.component,
-                handler: toolComponent.handler,
-                tool: tool
-            });
-        });
+    setShowLayerSelection (value) {
         this.updateState({
-            layerTools
+            showLayerSelection: value
         });
-        this.updateSelectedLayers();
-        return this.tools.some(tool => tool.isDisplayed());
+        this.tool.setEnabled(value);
     }
 
+    setShowMetadata (value) {
+        this.updateState({
+            showMetadata: value
+        });
+        this.tool.getPlugin().setShowMetadata(value);
+    }
+
+    setAllowStyleChange (value) {
+        this.updateState({
+            allowStyleChange: value
+        });
+        this.tool.getPlugin().setStyleSelectable(value);
+    }
 
     updateSelectedLayers () {
         let baseLayers = [];
         const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
 
         if (this.plugin) {
-            const isBaseLayer = (layer) => this.plugin.getConfig().baseLayers.some(id => '' + id === '' + layer.getId());
+            const isBaseLayer = (layer) => this.tool.getPlugin().getConfig().baseLayers.some(id => '' + id === '' + layer.getId());
             baseLayers = layers.filter(isBaseLayer);
         }
 
@@ -60,29 +59,16 @@ class UIHandler extends StateHandler {
         });
     }
 
-    openLayerList () {
-        this.sandbox.postRequestByName(
-            'ShowFilteredLayerListRequest',
-            ['publishable', true]
-        );
-    }
-
-    openSelectedLayerList () {
-        this.sandbox.postRequestByName(
-            'ShowFilteredLayerListRequest',
-            ['publishable', true, true]
-        );
-    }
-
     addBaseLayer (layer) {
-        this.plugin.addBaseLayer(layer);
+        this.tool.getPlugin().addBaseLayer(layer);
         this.updateSelectedLayers();
     }
 
     removeBaseLayer (layer) {
-        this.plugin.removeBaseLayer(layer);
+        this.tool.getPlugin().removeBaseLayer(layer);
         this.updateSelectedLayers();
     }
+
 
     createEventHandlers () {
         const handlers = {
@@ -143,10 +129,11 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'openLayerList',
-    'openSelectedLayerList',
+    'setShowMetadata',
+    'setShowLayerSelection',
+    'setAllowStyleChange',
     'addBaseLayer',
     'removeBaseLayer'
 ]);
 
-export { wrapped as MapLayersHandler };
+export { wrapped as MapLayerListHandler };
