@@ -1,24 +1,23 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (data, tools, consumer) {
+    constructor (tools, consumer) {
         super();
-        this.data = data;
         this.tools = tools;
         this.state = {
             tools: []
         };
         this.addStateListener(consumer);
-        this.init();
     }
 
     getName () {
         return 'RpcPanelHandler';
     }
 
-    init () {
+    init (data) {
+        this.data = data;
         this.tools.forEach(tool => {
-            tool.init(this.data);
+            tool.init(data);
             const toolComponent = tool.getComponent();
             toolComponent.handler.addStateListener(() => this.notify());
             this.updateState({
@@ -32,6 +31,7 @@ class UIHandler extends StateHandler {
                 ]
             });
         });
+        return this.tools.some(tool => tool.isDisplayed());
     }
 
     updateField (field, value) {
