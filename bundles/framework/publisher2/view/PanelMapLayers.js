@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         this.mapModule = mapmodule;
         this.isDataVisible = false;
         this.tools = tools || [];
-        this.tools = [...this.tools].sort((a,b) => a.index - b.index);
+        this.tools = [...this.tools].sort((a, b) => a.index - b.index);
 
         this.config = {
             layers: {
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             }
         },
         _notifyHandler: function () {
-            this.handler?.updateSelectedLayers()
+            this.handler?.updateSelectedLayers();
         },
         /**
          * @method init

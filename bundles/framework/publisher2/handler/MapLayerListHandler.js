@@ -31,7 +31,7 @@ class UIHandler extends StateHandler {
             defaultBaseLayer: null,
             showLayerSelection: false,
             showMetadata: false,
-            allowStyleChange: false,            
+            allowStyleChange: false,
             isDisabledMetadata: !layersHaveMetadata(layers),
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });
