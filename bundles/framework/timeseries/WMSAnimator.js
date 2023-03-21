@@ -65,8 +65,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 var t = dayjs(times.start);
                 times = [t.toISOString()];
                 do {
-                    t = t.add(interval)
-                    times.push(t.toISOString());
+                    if (t < end) {
+                        t = t.add(interval);
+                        times.push(t.toISOString());
+                    }
                 } while (t < end);
                 times.push(end.toISOString());
             }
