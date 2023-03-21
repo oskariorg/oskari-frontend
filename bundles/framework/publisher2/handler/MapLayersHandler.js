@@ -2,13 +2,12 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
 class UIHandler extends StateHandler {
-    constructor (sandbox, mapModule, data, consumer) {
+    constructor (tools, sandbox, consumer) {
         super();
-        this.data = data;
         this.sandbox = sandbox;
         this.pluginConf = this.getToolPluginMapfullConf();
         this.plugin = null;
-        this.mapModule = mapModule;
+        this.tools = tools;
         this.setState({
             layers: [],
             baseLayers: [],
@@ -20,14 +19,22 @@ class UIHandler extends StateHandler {
         });
         this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
-        this.init();
     };
 
     getName () {
         return 'MapLayersHandler';
     }
 
-    init () {
+    init (data) {
+        this.data = data;
+        this.tools.forEach(tool => {
+            try {
+                tool.init(data);
+            } catch (e) {
+                Oskari.log('publisher2.MapLayersHandler')
+                    .error('Error initializing publisher tool:', tool.getTool().id);
+            }
+        });
         if (this.pluginConf) {
             this.plugin = this.startPlugin();
             this.updateState({
@@ -37,11 +44,7 @@ class UIHandler extends StateHandler {
                 allowStyleChange: this.pluginConf.config.isStyleSelectable
             });
         }
-
-        const externalTools = Oskari.clazz.protocol('Oskari.mapframework.publisher.LayerTool');
-        externalTools.forEach(t => {
-            const tool = Oskari.clazz.create(t, this.sandbox);
-            tool.init(this.data);
+        this.tools.forEach(tool => {
             const toolComponent = tool.getComponent();
             toolComponent.handler.addStateListener(() => this.notify());
             this.updateState({
@@ -56,6 +59,7 @@ class UIHandler extends StateHandler {
             });
         });
         this.updateSelectedLayers();
+        return this.tools.some(tool => tool.isDisplayed());
     }
 
     setShowLayerSelection (value) {

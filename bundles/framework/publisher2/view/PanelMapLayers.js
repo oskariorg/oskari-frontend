@@ -22,21 +22,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
      *       publisher localization data
      * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
      */
-    function (sandbox, mapmodule, localization, instance) {
+    function (tools, sandbox, mapmodule, localization, instance) {
         var me = this;
         me.loc = localization;
         me.instance = instance;
         me.sandbox = sandbox;
         me.mapModule = mapmodule;
         me.isDataVisible = false;
+        this.tools = tools || [];
 
         me.config = {
             layers: {
                 promote: [{
                     text: me.loc.layerselection.promote,
-                    id: [24] // , 203
+                    id: [] // 24 , 203
                 }],
-                preselect: ['base_35']
+                preselect: [] // 'base_35'
             }
         };
 
@@ -55,8 +56,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              *
              * Updates the layerlist
              */
-            AfterMapLayerAddEvent: function (event) {
-                this.handlePanelUpdate();
+            AfterMapLayerAddEvent: function () {
+                this._updateUI();
             },
 
             /**
@@ -65,8 +66,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              *
              * Updates the layerlist
              */
-            AfterMapLayerRemoveEvent: function (event) {
-                this.handlePanelUpdate();
+            AfterMapLayerRemoveEvent: function () {
+                this._updateUI();
             },
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
@@ -74,10 +75,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              *
              * Updates the layerlist
              */
-            AfterRearrangeSelectedMapLayerEvent: function (event) {
-                if (event._creator !== this.getName() && event._fromPosition !== event._toPosition) {
-                    this.handlePanelUpdate();
-                }
+            AfterRearrangeSelectedMapLayerEvent: function () {
+                this._updateUI();
             },
             /**
              * @method MapLayerEvent
@@ -87,15 +86,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             'MapLayerEvent': function (event) {
                 if (event.getOperation() === 'update') {
-                    this.handlePanelUpdate();
+                    this._updateUI();
                 }
             },
 
             /**
              * @method MapLayerVisibilityChangedEvent
              */
-            MapLayerVisibilityChangedEvent: function (event) {
-                this.handlePanelUpdate();
+            MapLayerVisibilityChangedEvent: function () {
+                this._updateUI();
             }
         },
         /**
@@ -109,15 +108,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 }
             }
 
-            this.handler = new MapLayersHandler(this.instance.getSandbox(), this.mapModule, data, () => this.handlePanelUpdate());
-
-            if (!this.panel) {
-                this.panel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel'
-                );
-                this.panel.setTitle(this.loc.mapLayers.label);
-                this._populateMapLayerPanel();
-            }
+            this.handler = new MapLayersHandler(this.tools, this.instance.getSandbox(), () => this._updateUI());
+            return this.handler.init(data);
         },
         /**
          * @method onEvent
@@ -141,6 +133,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
+            if (!this.panel) {
+                this.panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                );
+                this.panel.setTitle(this.loc.mapLayers.label);
+                this._updateUI();
+            }
             return this.panel;
         },
         /**
@@ -219,15 +218,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         /**
          * Populates the map layers panel in publisher
          *
-         * @method _populateMapLayerPanel
+         * @method _updateUI
          * @private
          */
-        _populateMapLayerPanel: function () {
+        _updateUI: function () {
+            if (!this.panel) {
+                return;
+            }
             const contentPanel = this.panel.getContainer();
-            contentPanel.empty();
-
-            const content = jQuery('<div />');
-            contentPanel.append(content);
 
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
@@ -236,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                         controller={this.handler.getController()}
                     />
                 </LocaleProvider>,
-                content[0]
+                contentPanel[0]
             );
         },
         /**
@@ -248,16 +246,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             this.handler?.getState()?.externalOptions?.forEach(t => {
                 t.tool.setEnabled(false);
             });
-        },
-        /**
-         * Clears previous layer listing and renders a new one to the view.
-         *
-         * @method handlePanelUpdate
-         */
-        handlePanelUpdate: function () {
-            if (this.panel) {
-                this._populateMapLayerPanel();
-            }
         }
     }
 );
