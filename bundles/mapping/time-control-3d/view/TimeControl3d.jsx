@@ -89,7 +89,7 @@ export const TimeControl3d = ({ controller, date, time, isMobile }) => {
         return nextDate;
     };
 
-    const addMinutes = (minutes) => {console.log(minutes)
+    const addMinutes = (minutes) => {
         return dayjs.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
     };
 
