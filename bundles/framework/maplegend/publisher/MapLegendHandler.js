@@ -2,13 +2,15 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (initialData, sandbox, tool) {
+    constructor (initialData, tool) {
         super();
         this.tool = tool;
-        this.sandbox = sandbox;
+        this.sandbox = tool.getSandbox();
         this.setState({
-            showLegends: initialData || false
+            showLegends: initialData || false,
+            isDisabled: this.hasNoLayersWithLegend()
         });
+        // TODO: we should tear down these handlers when exiting publisher
         this.eventHandlers = this.createEventHandlers();
     };
 
@@ -16,31 +18,39 @@ class UIHandler extends StateHandler {
         return 'MapLegendHandler';
     }
 
-    isDisplayed () {
-        return this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
+    hasNoLayersWithLegend () {
+        return this.tool.isDisabled();
+    }
+
+    handleLayersChanged () {
+        const toolShouldBeDisabled = this.hasNoLayersWithLegend();
+        const { isDisabled } = this.getState();
+        if (!isDisabled && this.hasNoLayersWithLegend()) {
+            this.setShowLegends(false);
+        }
+        else if (isDisabled !== toolShouldBeDisabled) {
+            this.updateState({
+                isDisabled: toolShouldBeDisabled
+            });
+        }
     }
 
     setShowLegends (value) {
         const bool = !!value;
         this.updateState({
-            showLegends: bool
+            showLegends: bool,
+            isDisabled: this.hasNoLayersWithLegend()
         });
         this.tool.setEnabled(bool);
     }
 
     createEventHandlers () {
         const handlers = {
-            AfterMapLayerAddEvent: function (event) {
-                const displayed = this.isDisplayed();
-                if (!displayed) {
-                    this.setShowLegends(false);
-                }
+            AfterMapLayerAddEvent: function () {
+                this.handleLayersChanged();
             },
-            AfterMapLayerRemoveEvent: function (event) {
-                const displayed = this.isDisplayed();
-                if (!displayed) {
-                    this.setShowLegends(false);
-                }
+            AfterMapLayerRemoveEvent: function () {
+                this.handleLayersChanged();
             }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
@@ -58,8 +68,7 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setShowLegends',
-    'isDisplayed'
+    'setShowLegends'
 ]);
 
 export { wrapped as MapLegendHandler };

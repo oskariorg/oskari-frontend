@@ -2,12 +2,8 @@ import { MapLegendTool } from './MapLegendTool';
 import { MapLegendHandler } from './MapLegendHandler';
 
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
-    function (sandbox) {
+    function () {
         this.handler = null;
-        this.tool = null;
-        this.sandbox = sandbox;
-        this.allowedLocations = ['*'];
-        this.allowedSiblings = ['*'];
     }, {
         group: 'layers',
         bundleName: 'maplegend',
@@ -21,50 +17,24 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             return {
                 id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
                 title: 'MapLegend',
-                config: {
-                    instance: this.getInstance()
-                }
+                config: this.state.pluginConfig || {}
             };
-        },
-        getInstance: function () {
-            return this.sandbox.findRegisteredModuleInstance(this.bundleName);
-        },
-        getPlugin: function () {
-            return this.getInstance().getPlugin();
         },
         /**
          * Initialise tool
          * @method init
          */
         init: function (data) {
-            let enabled = false;
-            if (data && data.configuration[this.bundleName]) {
-                enabled = true;
-                this.setEnabled(true);
-            }
-            this.handler = new MapLegendHandler(enabled, this.sandbox, this);
-        },
-        /**
-         * Set enabled.
-         * @method setEnabled
-         * @public
-         *
-         * @param {Boolean} enabled is tool enabled or not
-         */
-        setEnabled: function (enabled) {
+            const myData = data?.configuration[this.bundleName];
+            const enabled = !!myData;
+            this.handler = new MapLegendHandler(enabled, this);
             if (enabled) {
-                this.getInstance().createPlugin();
-            } else {
-                if (this.getInstance().plugin) {
-                    this.getInstance().stopPlugin();
-                }
+                this.storePluginConf(myData.conf);
+                this.setEnabled(true);
             }
         },
         isDisabled: function () {
-            return !this.sandbox.findAllSelectedMapLayers().some(l => l.getLegendImage());
-        },
-        isEnabled: function () {
-            return !!this.getPlugin();
+            return !this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
         },
         /**
          * Get values.
@@ -74,15 +44,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
          * @returns {Object} tool value object
          */
         getValues: function () {
-            if (this.handler?.getState().showLegends) {
-                return {
-                    [this.bundleName]: {
-                        conf: this.getPlugin().getConfig(),
-                        state: {}
-                    }
-                };
+            if (!this.isEnabled()) {
+                return null;
             }
-            return null;
+            return {
+                [this.bundleName]: {
+                    conf: this.getPlugin().getConfig()
+                }
+            };
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
