@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             } else {
                 actionDiv.remove();
             }
-            jQuery('body').append(this.dialog);
+            jQuery(Oskari.dom.getRootEl()).append(this.dialog);
             const focusedIndex = buttons.lastIndexOf(btn => btn.isFocused());
             if (focusedIndex > 0) {
                 buttons[focusedIndex].focus();
