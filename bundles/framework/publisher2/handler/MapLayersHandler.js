@@ -10,7 +10,6 @@ class UIHandler extends StateHandler {
             layers: [],
             layerTools: []
         });
-        this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
     };
 
@@ -103,59 +102,8 @@ class UIHandler extends StateHandler {
         this.updateSelectedLayers();
     }
 
-    createEventHandlers () {
-        const handlers = {
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterMapLayerAddEvent: function (event) {
-                this.updateSelectedLayers();
-            },
-
-            /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterMapLayerRemoveEvent: function (event) {
-                this.updateSelectedLayers();
-            },
-            /**
-             * @method AfterRearrangeSelectedMapLayerEvent
-             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterRearrangeSelectedMapLayerEvent: function (event) {
-                this.updateSelectedLayers();
-            },
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             *
-             * Calls flyouts handlePanelUpdate() and handleDrawLayerSelectionChanged() functions
-             */
-            'MapLayerEvent': function (event) {
-                if (event.getOperation() === 'update') {
-                    this.updateSelectedLayers();
-                }
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
+    stop () {
+        this.tools.forEach(tool => tool.stop());
     }
 }
 

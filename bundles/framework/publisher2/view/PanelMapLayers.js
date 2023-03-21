@@ -20,29 +20,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
      * @param {Object} mapmodule
      * @param {Object} localization
      *       publisher localization data
-     * @param {Oskari.mapframework.bundle.publisher2.insatnce} instance the instance
+     * @param {Oskari.mapframework.bundle.publisher2.instance} instance the instance
      */
     function (tools, sandbox, mapmodule, localization, instance) {
-        var me = this;
-        me.loc = localization;
-        me.instance = instance;
-        me.sandbox = sandbox;
-        me.mapModule = mapmodule;
-        me.isDataVisible = false;
+        this.loc = localization;
+        this.instance = instance;
+        this.sandbox = sandbox;
+        this.mapModule = mapmodule;
+        this.isDataVisible = false;
         this.tools = tools || [];
         this.tools = [...this.tools].sort((a,b) => a.index - b.index);
 
-        me.config = {
+        this.config = {
             layers: {
                 promote: [{
-                    text: me.loc.layerselection.promote,
+                    text: this.loc.layerselection.promote,
                     id: [] // 24 , 203
                 }],
                 preselect: [] // 'base_35'
             }
         };
 
-        me.showLayerSelection = false;
+        this.showLayerSelection = false;
         this.panel = null;
         this.handler = null;
     }, {
@@ -58,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * Updates the layerlist
              */
             AfterMapLayerAddEvent: function () {
-                this._updateUI();
+                this._notifyHandler();
             },
 
             /**
@@ -68,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * Updates the layerlist
              */
             AfterMapLayerRemoveEvent: function () {
-                this._updateUI();
+                this._notifyHandler();
             },
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
@@ -77,7 +76,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * Updates the layerlist
              */
             AfterRearrangeSelectedMapLayerEvent: function () {
-                this._updateUI();
+                this._notifyHandler();
             },
             /**
              * @method MapLayerEvent
@@ -85,9 +84,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              *
              * Calls flyouts handlePanelUpdate() and handleDrawLayerSelectionChanged() functions
              */
-            'MapLayerEvent': function (event) {
+            MapLayerEvent: function (event) {
                 if (event.getOperation() === 'update') {
-                    this._updateUI();
+                    this._notifyHandler();
                 }
             },
 
@@ -95,8 +94,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * @method MapLayerVisibilityChangedEvent
              */
             MapLayerVisibilityChangedEvent: function () {
-                this._updateUI();
+                this._notifyHandler();
             }
+        },
+        _notifyHandler: function () {
+            this.handler?.updateSelectedLayers()
         },
         /**
          * @method init
@@ -206,17 +208,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         },
 
         /**
-         * Returns the published map layer selection
-         *
-         * @method _getLayersList
-         * @private
-         * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-         */
-        _getLayersList: function () {
-            return this.instance.sandbox.findAllSelectedMapLayers();
-        },
-
-        /**
          * Populates the map layers panel in publisher
          *
          * @method _updateUI
@@ -244,9 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         * @public
         **/
         stop: function () {
-            this.handler?.getState()?.externalOptions?.forEach(t => {
-                t.tool.setEnabled(false);
-            });
+            this.handler.stop();
         }
     }
 );
