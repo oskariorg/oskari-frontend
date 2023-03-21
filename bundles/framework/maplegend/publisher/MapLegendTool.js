@@ -1,7 +1,7 @@
-import { MapLegendTool } from './MapLegendTool';
+import { MapLegendTool } from './MapLegendToolComponent';
 import { MapLegendHandler } from './MapLegendHandler';
 
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
     function () {
         this.handler = null;
     }, {
