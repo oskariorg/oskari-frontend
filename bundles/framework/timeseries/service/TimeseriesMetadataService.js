@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 const VECTOR_LAYER_PREFIX = 'TimeSeriesMetadata_';
 const DEFAULT_STYLE = {

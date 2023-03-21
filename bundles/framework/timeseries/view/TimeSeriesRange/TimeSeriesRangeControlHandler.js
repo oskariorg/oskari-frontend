@@ -2,7 +2,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { TimeseriesMetadataService } from '../../service/TimeseriesMetadataService';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 
 const _getStartTimeFromYear = (year) => {
     return dayjs.utc(year.toString(), 'YYYY').startOf('year');

@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import { RichEditor } from 'oskari-ui/components/RichEditor';
 import { DATE_FORMAT, TIME_FORMAT, TYPE, OPTIONS } from './constants';
 import 'draft-js/dist/Draft.css';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /*
 This file contains the form for admin-announcements.
