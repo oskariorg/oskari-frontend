@@ -1,93 +1,87 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
-const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
+const layersHaveMetadata = (layers = []) => layers.some(l => l.getMetadataIdentifier() !== null);
+const layersHaveMultipleStyles = (layers = []) => layers.some(l => l.getStyles().length > 1);
+
 class UIHandler extends StateHandler {
     constructor (tool) {
         super();
         this.tool = tool;
         this.sandbox = tool.getSandbox();
+        const layers = this.sandbox.findAllSelectedMapLayers();
         this.setState({
-            layers: [],
             baseLayers: [],
             defaultBaseLayer: null,
             showLayerSelection: false,
             showMetadata: false,
-            allowStyleChange: false,            
-            isDisabledMetadata: !this.layersHaveMetadata(),
-            isDisabledStyleChange: !this.layersHaveMultipleStyles()
+            allowStyleChange: false,
+            isDisabledMetadata: !layersHaveMetadata(layers),
+            isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });
     };
 
     getName () {
         return 'MapLayerListHandler';
     }
+    clearState () {
+        // plugin is created again on startup, so it's state doesn't need to be cleare
+        const layers = this.sandbox.findAllSelectedMapLayers();
+        this.setState({
+            baseLayers: [],
+            defaultBaseLayer: null,
+            showLayerSelection: false,
+            showMetadata: false,
+            allowStyleChange: false,            
+            isDisabledMetadata: !layersHaveMetadata(layers),
+            isDisabledStyleChange: !layersHaveMultipleStyles(layers)
+        });
+    }
 
     setShowLayerSelection (value) {
-        this.updateState({
-            showLayerSelection: value
-        });
+        // enable tool first so when state update triggers UI update, the plugin is enabled
         this.tool.setEnabled(value);
-    }
-    onLayersChanged () {
-        this.updateSelectedLayers();
-    }
-    handlerLayersChanged () {
-        // TODO: is this needed?
+        const newConfig = this.tool?.getPlugin()?.getConfig() || {};
         this.updateState({
-            isDisabledMetadata: !this.layersHaveMetadata(),
-            isDisabledStyleChange: !this.layersHaveMultipleStyles()
+            showLayerSelection: value,
+            ...newConfig
         });
     }
 
-    layersHaveMetadata () {
-        return this.sandbox.findAllSelectedMapLayers().some(l => l.getMetadataIdentifier() !== null);
-    }
-    layersHaveMultipleStyles () {
-        return this.sandbox.findAllSelectedMapLayers().some(l => l.getStyles().length > 1);
+    onLayersChanged () {
+        const layers = this.sandbox.findAllSelectedMapLayers();
+        // update state with checks if layers now/still have metadata/multiple styles
+        this.updateState({
+            isDisabledMetadata: !layersHaveMetadata(layers),
+            isDisabledStyleChange: !layersHaveMultipleStyles(layers)
+        });
     }
 
     setShowMetadata (value) {
-        this.updateState({
-            showMetadata: value
-        });
         this.tool.getPlugin().setShowMetadata(value);
+        this.updateConfig2State();
     }
 
     setAllowStyleChange (value) {
-        this.updateState({
-            allowStyleChange: value
-        });
         this.tool.getPlugin().setStyleSelectable(value);
-    }
-
-    updateSelectedLayers () {
-        let baseLayers = [];
-        const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
-
-        if (this.tool.isEnabled()) {
-            const isBaseLayer = (layer) => this.tool.getPlugin().getConfig().baseLayers.some(id => '' + id === '' + layer.getId());
-            baseLayers = layers.filter(isBaseLayer);
-        }
-
-        this.updateState({
-            layers: layers,
-            baseLayers: baseLayers,
-            isDisabledMetadata: !this.layersHaveMetadata(),
-            isDisabledStyleChange: !this.layersHaveMultipleStyles()
-        });
+        this.updateConfig2State();
     }
 
     addBaseLayer (layer) {
         this.tool.getPlugin().addBaseLayer(layer);
-        this.updateSelectedLayers();
+        this.updateConfig2State();
     }
 
     removeBaseLayer (layer) {
         this.tool.getPlugin().removeBaseLayer(layer);
-        this.updateSelectedLayers();
+        this.updateConfig2State();
     }
 
-
+    updateConfig2State () {
+        const newConfig = this.tool?.getPlugin()?.getConfig() || {};
+        this.updateState({
+            ...newConfig
+        });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [

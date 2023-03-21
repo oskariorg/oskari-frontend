@@ -40,27 +40,18 @@ const ToolsContainer = styled('div')`
 `;
 
 export const MapLayers = ({ state, controller }) => {
-    const layerListTool = state.layerTools.find(tool => tool.handler.getName() === 'MapLayerListHandler');
-    const layerListPluginSelected = layerListTool && layerListTool.tool.isEnabled();
-
-    let layers = state.layers;
-    let baseLayers = [];
-    let listController = null;
-    if (layerListPluginSelected) {
-        listController = layerListTool.handler.getController();
-        const listState = layerListTool.handler.getState() || {};
-        baseLayers = listState.baseLayers || [];
-        layers = layers.filter(l => !baseLayers.some(bl => bl.getId() === l.getId()));
-    }
+    const layerListPluginEnabled = state.layerListPluginActive;
+    const layers = state.layers;
+    const baseLayers = state.baseLayers;
 
     return (
         <Content>
             <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
                 <ToolsContainer>
-                    {state.layerTools.map((tool, index) => {
+                    {state.layerTools.map((tool) => {
                         return (
                             <tool.component
-                                key={index}
+                                key={tool.tool.getTool().id}
                                 state={tool.handler.getState()}
                                 controller={tool.handler.getController()}
                             />
@@ -68,18 +59,18 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </ToolsContainer>
             </Card>
-            {layerListPluginSelected && (
+            {layerListPluginEnabled && (
                 <LayerContainer>
                     <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
-                    {baseLayers.reverse().map((layer, index) => {
+                    {baseLayers.map((layer) => {
                         const disabled = !layer.isVisible();
                         return (
-                            <LayerBox key={index} disabled={disabled}>
+                            <LayerBox key={layer.getId()} disabled={disabled}>
                                 <LayerTitle>{layer.getName()}</LayerTitle>
                                 {!disabled && (
                                     <IconButton
                                         icon={<DownCircleOutlined />}
-                                        onClick={() => listController.removeBaseLayer(layer)}
+                                        onClick={() => controller.removeBaseLayer(layer)}
                                     />
                                 )}
                             </LayerBox>
@@ -87,21 +78,21 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </LayerContainer>
             )}
-            {layerListPluginSelected && baseLayers?.length < 1 && (
+            {layerListPluginEnabled && baseLayers?.length < 1 && (
                 <Message messageKey='BasicView.mapLayers.noBaseLayers' />
             )}
             <LayerContainer>
                 <h3><Message messageKey='BasicView.mapLayers.label' /></h3>
-                {layers.map((layer, index) => {
+                {layers.map((layer) => {
                     const disabled = !layer.isVisible();
                     return (
-                        <LayerBox key={index} disabled={disabled}>
+                        <LayerBox key={layer.getId()} disabled={disabled}>
                             <LayerTitle>{layer.getName()}</LayerTitle>
-                            {!disabled && layerListPluginSelected && (
+                            {!disabled && layerListPluginEnabled && (
                                 <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
                                     <IconButton
                                         icon={<UpCircleOutlined />}
-                                        onClick={() => listController.addBaseLayer(layer)}
+                                        onClick={() => controller.addBaseLayer(layer)}
                                     />
                                 </Tooltip>
                             )}

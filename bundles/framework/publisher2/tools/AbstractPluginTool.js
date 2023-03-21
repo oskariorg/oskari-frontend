@@ -102,6 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         // Stop checks if we are already disabled so toggle the value after
         this.state.enabled = enabled;
         this._setEnabledImpl(enabled);
+        // notify publisher tool layout panel in case tool placement dragging needs to be toggled
         var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
         this.getSandbox().notifyAll(event);
     },

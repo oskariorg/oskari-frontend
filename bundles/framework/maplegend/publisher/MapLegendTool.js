@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
     function () {
         this.handler = null;
     }, {
+        index: 10,
         group: 'layers',
         bundleName: 'maplegend',
         getComponent: function () {

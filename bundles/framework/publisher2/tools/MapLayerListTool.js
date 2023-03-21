@@ -1,11 +1,11 @@
 import { MapLayerListToolComponent } from '../view/MapLayers/MapLayerListToolComponent';
 import { MapLayerListHandler } from '../handler/MapLayerListHandler';
 
-const TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
     function () {
         this.handler = new MapLayerListHandler(this);
     }, {
+        index: 5,
         group: 'layers',
         getComponent: function () {
             return {
@@ -19,6 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
                 title: 'LayerSelectionPlugin',
                 config: this.state.pluginConfig || {}
             };
+        },
+        _stopImpl: function () {
+            this.handler.clearState();
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

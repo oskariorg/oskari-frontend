@@ -30,6 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
         me.mapModule = mapmodule;
         me.isDataVisible = false;
         this.tools = tools || [];
+        this.tools = [...this.tools].sort((a,b) => a.index - b.index);
 
         me.config = {
             layers: {
