@@ -1,5 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 class UIService extends StateHandler {
     constructor (requestFn, initialDate) {

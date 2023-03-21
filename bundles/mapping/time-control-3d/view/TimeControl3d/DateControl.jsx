@@ -4,6 +4,8 @@ import { Message } from 'oskari-ui';
 import { Row, Col, ColFixed, StyledButton, StyledDateSlider, CalendarIcon } from './styled';
 import { Input } from './Input';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /**
  * NOTE! Hardcoded to year 2019 so no leap years

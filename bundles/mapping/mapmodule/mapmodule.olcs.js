@@ -10,10 +10,11 @@ import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import 'olcs/olcs.css';
 
 import './event/TimeChangedEvent';
-
+dayjs.extend(customParseFormat);
 // OL-cesium expects to find this global
 window.Cesium = Cesium;
 

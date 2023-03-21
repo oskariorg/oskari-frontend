@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance

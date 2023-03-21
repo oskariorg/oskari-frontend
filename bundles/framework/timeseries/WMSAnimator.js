@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(duration);
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.WMSAnimator
@@ -62,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 var end = dayjs(times.end);
                 var t = dayjs(times.start);
                 times = [t.toISOString()];
-                while (t.add(interval) < end) {
+                while (t = t.add(interval) < end) {
                     times.push(t.toISOString());
                 }
                 times.push(end.toISOString());

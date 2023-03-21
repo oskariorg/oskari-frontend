@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
@@ -195,7 +197,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var targetTime = dayjs(fromTime);
             var index;
             if (this._uiState.stepInterval) {
-                targetTime.add(1, this._uiState.stepInterval);
+                targetTime = targetTime.add(1, this._uiState.stepInterval);
                 index = d3.bisectLeft(this._uiState.times, targetTime.toISOString());
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
