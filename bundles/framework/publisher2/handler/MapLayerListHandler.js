@@ -12,11 +12,10 @@ class UIHandler extends StateHandler {
             defaultBaseLayer: null,
             showLayerSelection: false,
             showMetadata: false,
-            allowStyleChange: false,
-            externalOptions: []
+            allowStyleChange: false,            
+            isDisabledMetadata: !this.layersHaveMetadata(),
+            isDisabledStyleChange: !this.layersHaveMultipleStyles()
         });
-        this.eventHandlers = this.createEventHandlers();
-        // this.addStateListener(consumer);
     };
 
     getName () {
@@ -28,6 +27,23 @@ class UIHandler extends StateHandler {
             showLayerSelection: value
         });
         this.tool.setEnabled(value);
+    }
+    onLayersChanged () {
+        this.updateSelectedLayers();
+    }
+    handlerLayersChanged () {
+        // TODO: is this needed?
+        this.updateState({
+            isDisabledMetadata: !this.layersHaveMetadata(),
+            isDisabledStyleChange: !this.layersHaveMultipleStyles()
+        });
+    }
+
+    layersHaveMetadata () {
+        return this.sandbox.findAllSelectedMapLayers().some(l => l.getMetadataIdentifier() !== null);
+    }
+    layersHaveMultipleStyles () {
+        return this.sandbox.findAllSelectedMapLayers().some(l => l.getStyles().length > 1);
     }
 
     setShowMetadata (value) {
@@ -48,14 +64,16 @@ class UIHandler extends StateHandler {
         let baseLayers = [];
         const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
 
-        if (this.plugin) {
+        if (this.tool.isEnabled()) {
             const isBaseLayer = (layer) => this.tool.getPlugin().getConfig().baseLayers.some(id => '' + id === '' + layer.getId());
             baseLayers = layers.filter(isBaseLayer);
         }
 
         this.updateState({
             layers: layers,
-            baseLayers: baseLayers
+            baseLayers: baseLayers,
+            isDisabledMetadata: !this.layersHaveMetadata(),
+            isDisabledStyleChange: !this.layersHaveMultipleStyles()
         });
     }
 
@@ -70,62 +88,6 @@ class UIHandler extends StateHandler {
     }
 
 
-    createEventHandlers () {
-        const handlers = {
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterMapLayerAddEvent: function (event) {
-                this.updateSelectedLayers();
-            },
-
-            /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterMapLayerRemoveEvent: function (event) {
-                this.updateSelectedLayers();
-            },
-            /**
-             * @method AfterRearrangeSelectedMapLayerEvent
-             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
-             *
-             * Updates the layerlist
-             */
-            AfterRearrangeSelectedMapLayerEvent: function (event) {
-                if (event._fromPosition !== event._toPosition) {
-                    this.updateSelectedLayers();
-                }
-            },
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             *
-             * Calls flyouts handlePanelUpdate() and handleDrawLayerSelectionChanged() functions
-             */
-            'MapLayerEvent': function (event) {
-                if (event.getOperation() === 'update') {
-                    this.updateSelectedLayers();
-                }
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
-    }
 }
 
 const wrapped = controllerMixin(UIHandler, [

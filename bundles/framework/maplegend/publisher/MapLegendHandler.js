@@ -10,8 +10,6 @@ class UIHandler extends StateHandler {
             showLegends: initialData || false,
             isDisabled: this.hasNoLayersWithLegend()
         });
-        // TODO: we should tear down these handlers when exiting publisher
-        this.eventHandlers = this.createEventHandlers();
     };
 
     getName () {
@@ -22,6 +20,10 @@ class UIHandler extends StateHandler {
         return this.tool.isDisabled();
     }
 
+    onLayersChanged () {
+        // this is called by publisher/MapLayersHandler when an Oskari event regarding layers has happened
+        this.handleLayersChanged();
+    }
     handleLayersChanged () {
         const toolShouldBeDisabled = this.hasNoLayersWithLegend();
         const { isDisabled } = this.getState();
@@ -42,28 +44,6 @@ class UIHandler extends StateHandler {
             isDisabled: this.hasNoLayersWithLegend()
         });
         this.tool.setEnabled(bool);
-    }
-
-    createEventHandlers () {
-        const handlers = {
-            AfterMapLayerAddEvent: function () {
-                this.handleLayersChanged();
-            },
-            AfterMapLayerRemoveEvent: function () {
-                this.handleLayersChanged();
-            }
-        };
-        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
-        return handlers;
-    }
-
-    onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
-        if (!handler) {
-            return;
-        }
-
-        return handler.apply(this, [e]);
     }
 }
 

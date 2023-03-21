@@ -8,7 +8,6 @@ class UIHandler extends StateHandler {
         this.tools = tools;
         this.setState({
             layers: [],
-            baseLayers: [],
             layerTools: []
         });
         this.eventHandlers = this.createEventHandlers();
@@ -44,20 +43,16 @@ class UIHandler extends StateHandler {
         return this.tools.some(tool => tool.isDisplayed());
     }
 
-
     updateSelectedLayers () {
-        let baseLayers = [];
         const layers = [...this.sandbox.findAllSelectedMapLayers()].reverse();
-
-        if (this.plugin) {
-            const isBaseLayer = (layer) => this.plugin.getConfig().baseLayers.some(id => '' + id === '' + layer.getId());
-            baseLayers = layers.filter(isBaseLayer);
-        }
-
         this.updateState({
-            layers: layers,
-            baseLayers: baseLayers
+            layers: layers
         });
+        this.notifyTools();
+    }
+
+    notifyTools () {
+        this.tools.forEach(tool => tool.handler.onLayersChanged());
     }
 
     openLayerList () {
@@ -112,9 +107,7 @@ class UIHandler extends StateHandler {
              * Updates the layerlist
              */
             AfterRearrangeSelectedMapLayerEvent: function (event) {
-                if (event._fromPosition !== event._toPosition) {
-                    this.updateSelectedLayers();
-                }
+                this.updateSelectedLayers();
             },
             /**
              * @method MapLayerEvent

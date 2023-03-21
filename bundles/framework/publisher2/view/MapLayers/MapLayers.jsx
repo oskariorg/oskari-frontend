@@ -40,8 +40,18 @@ const ToolsContainer = styled('div')`
 `;
 
 export const MapLayers = ({ state, controller }) => {
-    const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
+    const layerListTool = state.layerTools.find(tool => tool.handler.getName() === 'MapLayerListHandler');
+    const layerListPluginSelected = layerListTool && layerListTool.tool.isEnabled();
 
+    let layers = state.layers;
+    let baseLayers = [];
+    let listController = null;
+    if (layerListPluginSelected) {
+        listController = layerListTool.handler.getController();
+        const listState = layerListTool.handler.getState() || {};
+        baseLayers = listState.baseLayers || [];
+        layers = layers.filter(l => !baseLayers.some(bl => bl.getId() === l.getId()));
+    }
 
     return (
         <Content>
@@ -58,10 +68,10 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </ToolsContainer>
             </Card>
-            {state.showLayerSelection && (
+            {layerListPluginSelected && (
                 <LayerContainer>
                     <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
-                    {state.baseLayers.reverse().map((layer, index) => {
+                    {baseLayers.reverse().map((layer, index) => {
                         const disabled = !layer.isVisible();
                         return (
                             <LayerBox key={index} disabled={disabled}>
@@ -69,7 +79,7 @@ export const MapLayers = ({ state, controller }) => {
                                 {!disabled && (
                                     <IconButton
                                         icon={<DownCircleOutlined />}
-                                        onClick={() => controller.removeBaseLayer(layer)}
+                                        onClick={() => listController.removeBaseLayer(layer)}
                                     />
                                 )}
                             </LayerBox>
@@ -77,7 +87,7 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </LayerContainer>
             )}
-            {state.showLayerSelection && state.baseLayers?.length < 1 && (
+            {layerListPluginSelected && baseLayers?.length < 1 && (
                 <Message messageKey='BasicView.mapLayers.noBaseLayers' />
             )}
             <LayerContainer>
@@ -87,11 +97,11 @@ export const MapLayers = ({ state, controller }) => {
                     return (
                         <LayerBox key={index} disabled={disabled}>
                             <LayerTitle>{layer.getName()}</LayerTitle>
-                            {!disabled && state.showLayerSelection && (
+                            {!disabled && layerListPluginSelected && (
                                 <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
                                     <IconButton
                                         icon={<UpCircleOutlined />}
-                                        onClick={() => controller.addBaseLayer(layer)}
+                                        onClick={() => listController.addBaseLayer(layer)}
                                     />
                                 </Tooltip>
                             )}
