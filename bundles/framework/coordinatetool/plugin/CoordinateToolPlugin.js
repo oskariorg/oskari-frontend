@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (this.handler && this.inLayerToolsEditMode() && this.popupOpen) {
-                this.handler.getController().showPopup();
+                this.handler.getController().popupCleanup();
             }
         },
         _createControlElement: function () {
@@ -145,11 +145,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     className='t_coordinatetool'
                     title={this._locale('display.tooltip.tool')}
                     icon={<CoordinateIcon />}
-                    onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.handler.getController().showPopup();
-                        }
-                    }}
+                    onClick={() => this.handler.getController().showPopup()}
                     iconActive={!!this.popupOpen}
                     position={this.getLocation()}
                 />,
