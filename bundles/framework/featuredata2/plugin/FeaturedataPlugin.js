@@ -14,17 +14,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-    function (config) {
+    function () {
         var me = this;
         me._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
         me._defaultLocation = 'top right';
-        me._instance = config.instance;
         me._index = 100;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
         me.inMobileMode = false;
     }, {
+        getInstance: function () {
+            // we only need instance here since the flyout is operated by the instance
+            // TODO: we should move the flyout related code to this plugin
+            if (!this._instance) {
+                if (!this.sandbox) {
+                    // wacky stuff we do since sandbox might be provided
+                    // by mapmodule or not depending if the plugin has been started etc
+                    this.sandbox = this.getSandbox();
+                }
+                if (!this.sandbox) {
+                    // just get a ref to sandbox since we really need it here to get the instance (see TODO above)
+                    this.sandbox = Oskari.getSandbox();
+                }
+                this._instance = this.sandbox.findRegisteredModuleInstance('FeatureData2');
+            }
+            return this._instance;
+        },
         /**
          * @method _createControlElement
          * @private
@@ -89,7 +105,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         teardownUI: function () {
             // remove old element
             this.removeFromPluginContainer(this.getElement());
-            this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
+            const instance = this.getInstance();
+            instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [instance, 'close']);
         },
 
         /**
@@ -111,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 return;
             }
             me._flyoutOpen = undefined;
-            var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
+            var flyout = me.getInstance().plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
             this.renderButton();
         },
@@ -153,14 +170,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 const sandbox = this.getSandbox();
                 if (!this._flyoutOpen) {
                     if (this._mapStatusChanged) {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
                         this._mapStatusChanged = false;
                     } else {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
+                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
                     }
                     this._flyoutOpen = true;
                 } else {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'close']);
                     this._flyoutOpen = undefined;
                 }
             }
