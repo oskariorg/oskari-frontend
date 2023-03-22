@@ -33,15 +33,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @returns {Boolean} if this panel has any tools/should be shown
          */
         init: function (pData) {
-            const instance = this.instance;
             this.data = pData;
-
             if (!pData) {
                 return;
             }
             this.tools.forEach(tool => {
                 try {
-                    tool.init(pData, instance);
+                    tool.init(pData);
                 } catch (e) {
                     Oskari.log('publisher2.view.PanelMapTools')
                         .error('Error initializing publisher tool:', tool.getTool().id);

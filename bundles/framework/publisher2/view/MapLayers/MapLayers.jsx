@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Button, Message, Checkbox, Tooltip, Card } from 'oskari-ui';
+import { Button, Message, Tooltip, Card } from 'oskari-ui';
 import { ButtonContainer, IconButton } from 'oskari-ui/components/buttons';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 
@@ -28,22 +28,10 @@ const LayerTitle = styled('span')`
     margin-right: 5px;
 `;
 
-const StyledCheckbox = styled(Checkbox)`
-    + .ant-checkbox-wrapper {
-        margin-left: 0;
-    }
-`;
-
 const LayerContainer = styled('div')`
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-`;
-
-const ExtraOptions = styled('div')`
-    display:flex;
-    flex-direction: column;
-    margin-left: 15px;
 `;
 
 const ToolsContainer = styled('div')`
@@ -52,61 +40,18 @@ const ToolsContainer = styled('div')`
 `;
 
 export const MapLayers = ({ state, controller }) => {
-    const layers = state.showLayerSelection ? state.layers.filter(l => !state.baseLayers.some(bl => bl.getId() === l.getId())) : state.layers;
-    const disableStyleSelect = state.layers.filter(l => l.getStyles().length > 1).length < 1;
-    const disableMetadataSelect = state.layers.filter(l => l.getMetadataIdentifier() !== null).length < 1;
-
-    const StyleSelect = (
-        <StyledCheckbox
-            checked={state.allowStyleChange}
-            onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
-            disabled={disableStyleSelect}
-        >
-            <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
-        </StyledCheckbox>
-    );
-    const MetadataSelect = (
-        <StyledCheckbox
-            checked={state.showMetadata}
-            onChange={(e) => controller.setShowMetadata(e.target.checked)}
-            disabled={disableMetadataSelect}
-        >
-            <Message messageKey='BasicView.maptools.layerselection.showMetadata' />
-        </StyledCheckbox>
-    );
+    const layerListPluginEnabled = state.layerListPluginActive;
+    const layers = state.layers;
+    const baseLayers = state.baseLayers;
 
     return (
         <Content>
             <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
                 <ToolsContainer>
-                    <StyledCheckbox
-                        checked={state.showLayerSelection}
-                        onChange={(e) => controller.setShowLayerSelection(e.target.checked)}
-                    >
-                        <Message messageKey='BasicView.layerselection.label' />
-                    </StyledCheckbox>
-                    {state.showLayerSelection && (
-                        <ExtraOptions>
-                            {disableMetadataSelect ? (
-                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMetadata' />}>
-                                    {MetadataSelect}
-                                </Tooltip>
-                            ) : (
-                                MetadataSelect
-                            )}
-                            {disableStyleSelect ? (
-                                <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
-                                    {StyleSelect}
-                                </Tooltip>
-                            ) : (
-                                StyleSelect
-                            )}
-                        </ExtraOptions>
-                    )}
-                    {state.externalOptions.map((tool, index) => {
+                    {state.layerTools.map((tool) => {
                         return (
                             <tool.component
-                                key={index}
+                                key={tool.tool.getTool().id}
                                 state={tool.handler.getState()}
                                 controller={tool.handler.getController()}
                             />
@@ -114,13 +59,13 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </ToolsContainer>
             </Card>
-            {state.showLayerSelection && (
+            {layerListPluginEnabled && (
                 <LayerContainer>
                     <h3><Message messageKey='BasicView.mapLayers.baseLayers' /></h3>
-                    {state.baseLayers.reverse().map((layer, index) => {
+                    {baseLayers.map((layer) => {
                         const disabled = !layer.isVisible();
                         return (
-                            <LayerBox key={index} disabled={disabled}>
+                            <LayerBox key={layer.getId()} disabled={disabled}>
                                 <LayerTitle>{layer.getName()}</LayerTitle>
                                 {!disabled && (
                                     <IconButton
@@ -133,17 +78,17 @@ export const MapLayers = ({ state, controller }) => {
                     })}
                 </LayerContainer>
             )}
-            {state.showLayerSelection && state.baseLayers?.length < 1 && (
+            {layerListPluginEnabled && baseLayers?.length < 1 && (
                 <Message messageKey='BasicView.mapLayers.noBaseLayers' />
             )}
             <LayerContainer>
                 <h3><Message messageKey='BasicView.mapLayers.label' /></h3>
-                {layers.map((layer, index) => {
+                {layers.map((layer) => {
                     const disabled = !layer.isVisible();
                     return (
-                        <LayerBox key={index} disabled={disabled}>
+                        <LayerBox key={layer.getId()} disabled={disabled}>
                             <LayerTitle>{layer.getName()}</LayerTitle>
-                            {!disabled && state.showLayerSelection && (
+                            {!disabled && layerListPluginEnabled && (
                                 <Tooltip getPopupContainer={(triggerNode) => triggerNode.parentElement} title={<Message messageKey='BasicView.maptools.layerselection.selectAsBaselayer' />}>
                                     <IconButton
                                         icon={<UpCircleOutlined />}

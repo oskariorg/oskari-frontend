@@ -9,7 +9,7 @@ const StyledCheckbox = styled(Checkbox)`
 `;
 
 export const MapLegendTool = ({ state, controller }) => {
-    const disabled = !controller.isDisplayed();
+    const disabled = state.isDisabled;
     const component = (
         <StyledCheckbox
             checked={state.showLegends}
