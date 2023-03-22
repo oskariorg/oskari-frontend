@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                         .error('Error initializing publisher tool:', tool.getTool().id);
                 }
             });
-            return this.tools.some(tool => tool.isDisplayed());
+            return this.tools.some(tool => tool.isDisplayed(pData));
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
