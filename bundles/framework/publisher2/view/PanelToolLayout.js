@@ -378,41 +378,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * 0 = no, 1 = siblings can be moved out of the way, 2 = yes
          */
         _siblingsAllowed: function (pluginClazz, source, target, excludedSibling) {
-            var me = this,
-                siblings = this._getDropzonePlugins(target),
-                i,
-                ret = 2,
-                tool = me.getToolById(pluginClazz);
             // Series controls doesn't have publisher tools and requires lot of space
-            if (pluginClazz === 'Oskari.statistics.statsgrid.SeriesControlPlugin' ||
+            if (!pluginClazz ||
+                pluginClazz === 'Oskari.statistics.statsgrid.SeriesControlPlugin' ||
                 pluginClazz === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin') {
-                return;
-            // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
-            } else if (!tool) {
+                return 2;
+                // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
+            }
+            const tool = this.getToolById(pluginClazz);
+            if (!tool) {
                 return 2;
             } else if (tool.allowedSiblings.indexOf('*') > -1) {
                 return 2;
-            } else if (!pluginClazz) {
-                return;
             }
 
-            for (i = 0; i < siblings.length; i += 1) {
-                if (!excludedSibling || siblings[i] !== excludedSibling) {
-                    // sibling is not ignored, see if it's an allowed sibling
-                    // sibling can't be moved to source
-                    if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
-                        // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
-                        // only accept 2/yes as a result, moving source plugins out of the way would get too weird
-                        if (source && me._locationAllowed(tool.allowedLocations, source) && me._siblingsAllowed(siblings[i], null, source, pluginClazz) === 2) {
-                            // sibling can be moved to source
-                            ret = 1;
-                        } else {
-                            ret = 0;
-                            break;
-                        }
-                    }
+            const siblings = this._getDropzonePlugins(target);
+            let ret = 2;
+            siblings.forEach(sibling => {
+                if (ret !== 2) {
+                    // we have already detected the proper return code
+                    return;
                 }
-            }
+                if (excludedSibling && sibling === excludedSibling) {
+                    return;
+                }
+                // sibling is not ignored, see if it's an allowed sibling
+                // sibling can't be moved to source
+                if (tool.allowedSiblings.includes(sibling) || pluginClazz === sibling) {
+                    // allowed sibling or self
+                    return;
+                }
+                if (!source) {
+                    // if we haven't left the loop yet and we don't have source -> set value to 0/can't be moved
+                    ret = 0;
+                    return;
+                }
+                // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
+                // only accept 2/yes as a result, moving source plugins out of the way would get too weird
+                // TODO: why would source NOT be in tool.allowedLocations, that's where the tool was when user started moving it?
+                if (this._locationAllowed(tool.allowedLocations, source) && this._siblingsAllowed(sibling, null, source, pluginClazz) === 2) {
+                    // sibling can be moved to source
+                    ret = 1;
+                } else {
+                    ret = 0;
+                }
+            });
             return ret;
         },
         /**
@@ -450,7 +460,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _moveSiblings: function (pluginClazz, source, target) {
             const siblings = this._getDropzonePlugins(target);
             const tool = this.getToolById(pluginClazz);
-            if (!tool.allowedSiblings.includes('*')) {
+            if (tool.allowedSiblings.includes('*')) {
                 // allows everything -> no need to move anything
                 return;
             }
