@@ -39,7 +39,7 @@ class UIHandler extends StateHandler {
             layerTools
         });
         this.updateSelectedLayers(true);
-        return this.tools.some(tool => tool.isDisplayed());
+        return this.tools.some(tool => tool.isDisplayed(data));
     }
 
     updateSelectedLayers (silent) {

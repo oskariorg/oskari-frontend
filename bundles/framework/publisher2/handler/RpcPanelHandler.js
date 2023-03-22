@@ -31,7 +31,7 @@ class UIHandler extends StateHandler {
                 ]
             });
         });
-        return this.tools.some(tool => tool.isDisplayed());
+        return this.tools.some(tool => tool.isDisplayed(data));
     }
 
     updateField (field, value) {
