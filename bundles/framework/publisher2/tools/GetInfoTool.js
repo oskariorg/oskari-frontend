@@ -229,7 +229,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             const content = this.templates.coloursPopup.clone();
             const colours = this.initialValues.colours;
             const prevColour = this.values.colourScheme;
-            closeButton.setHandler(function () {
+            closeButton.setHandler(() => {
                 popup.close(true);
                 this._colourSchemePopup = null;
                 this.isColourDialogOpen = false;
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             // Append the colour scheme inputs to the dialog.
             colours.forEach(color => {
-                const colourInput = me.templates.inputRadio.clone();
+                const colourInput = this.templates.inputRadio.clone();
                 const colourName = this.getMsg(`BasicView.layout.fields.colours.${color.val}`);
 
                 colourInput.find('input[type=radio]').attr({
