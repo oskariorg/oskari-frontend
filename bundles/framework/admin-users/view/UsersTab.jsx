@@ -16,7 +16,7 @@ const SearchContainer = styled('div')`
     margin-bottom: 20px;    
 `;
 
-const AddButton = styled(Button)`
+const AddButton = styled(PrimaryButton)`
     width: 50px;
     margin-bottom: 10px;
     align-self: flex-end;
@@ -38,18 +38,6 @@ const UserBlock = styled('div')`
     background-color: #F3F3F3;
 `;
 
-const UserBlockForm = styled('div')`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`;
-
-const FormTitle = styled('span')`
-    margin-top: 10px;
-    margin-bottom: 15px;
-`;
-
-
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
     const hasFilter = state.userFilter !== null && state.userFilter !== undefined && state.userFilter.length > 0;
@@ -59,52 +47,47 @@ export const UsersTab = ({ state, controller, isExternal }) => {
         (user.user && user.user.toLowerCase().indexOf(state.userFilter.toLowerCase()) > -1));
     return (
         <Content>
-            {state.addingUser && (
-                <UserForm state={state} controller={controller} isExternal={false} />
-            )}
-            <SearchContainer>
-                <TextInput
-                    className='t_user_search'
-                    allowClear
-                    prefix={<SearchOutlined />}
-                    value={filter}
-                    onChange={(e) => setFilter(e.target.value)}
+            {state.addingUser || state.editingUserId ? (
+                <UserForm
+                    state={state}
+                    controller={controller}
+                    isExternal={isExternal}
                 />
-                <PrimaryButton
-                    type='search'
-                    onClick={() => controller.setUserFilter(filter)}
-                />
-            </SearchContainer>
-            {!isExternal && (
-                <AddButton
-                    onClick={() => controller.setAddingUser()}
-                >
-                    <PlusOutlined />
-                </AddButton>
-            )}
-            {users.map(user => (
-                <UserBlock key={user.id}>
-                    {state.editingUserId === user.id ? (
-                        <UserBlockForm>
-                            <FormTitle>{user.user} ({user.firstName} {user.lastName})</FormTitle>
-                            <UserForm
-                                state={state}
-                                controller={controller}
-                                isExternal={isExternal}
-                            />
-                        </UserBlockForm>
-                    ) : (
-                        <>
+            ) : (
+                <>
+                    <SearchContainer>
+                        <TextInput
+                            className='t_user_search'
+                            allowClear
+                            prefix={<SearchOutlined />}
+                            value={filter}
+                            onChange={(e) => setFilter(e.target.value)}
+                        />
+                        <PrimaryButton
+                            type='search'
+                            onClick={() => controller.setUserFilter(filter)}
+                        />
+                    </SearchContainer>
+                    {!isExternal && (
+                        <AddButton
+                            type='add'
+                            onClick={() => controller.setAddingUser()}
+                        >
+                            <PlusOutlined />
+                        </AddButton>
+                    )}
+                    {users.map(user => (
+                        <UserBlock key={user.id}>
                             <span>{user.user} ({user.firstName} {user.lastName})</span>
                             <EditButton
                                 onClick={() => controller.setEditingUserId(user.id)}
                             >
                                 <EditOutlined />
                             </EditButton>
-                        </>
-                    )}
-                </UserBlock>
-            ))}
+                        </UserBlock>
+                    ))}
+                </>
+            )}
         </Content>
     );
 };

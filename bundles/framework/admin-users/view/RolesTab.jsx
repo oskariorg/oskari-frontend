@@ -1,7 +1,6 @@
 import React from 'react';
-import { TextInput, Button, Confirm, Message } from 'oskari-ui';
-import { PrimaryButton } from 'oskari-ui/components/buttons';
-import { DeleteOutlined } from '@ant-design/icons';
+import { TextInput, Confirm, Message } from 'oskari-ui';
+import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Content = styled('div')`
@@ -23,10 +22,6 @@ const AddButton = styled(PrimaryButton)`
     align-self: flex-end;
 `;
 
-const DeleteButton = styled(Button)`
-    width: 50px;
-`;
-
 const StyledInput = styled(TextInput)`
     margin-left: 10px;
     width: 210px;
@@ -43,7 +38,6 @@ const RoleBlock = styled('div')`
     font-size: 16px;
     background-color: #F3F3F3;
 `;
-
 
 export const RolesTab = ({ state, controller }) => {
     let roles = state.roles;
@@ -64,16 +58,11 @@ export const RolesTab = ({ state, controller }) => {
             {roles.map(role => (
                 <RoleBlock key={role.id}>
                     <span>{role.name}</span>
-                    <Confirm
+                    <DeleteButton
+                        type='button'
                         title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
                         onConfirm={() => controller.deleteRole(role.id)}
-                        okText={<Message messageKey='buttons.delete' bundleKey='oskariui'/>}
-                        cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
-                    >
-                        <DeleteButton>
-                            <DeleteOutlined />
-                        </DeleteButton>
-                    </Confirm>
+                    />
                 </RoleBlock>
             ))}
         </Content>

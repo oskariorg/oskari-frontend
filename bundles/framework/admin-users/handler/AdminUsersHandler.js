@@ -1,9 +1,10 @@
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (instance, consumer) {
+    constructor (restUrl, isExternal, consumer) {
         super();
-        this.instance = instance;
+        this.restUrl = restUrl;
+        this.isExternal = isExternal;
         this.setState({
             activeTab: 'admin-users-tab',
             addingUser: false,
@@ -33,10 +34,16 @@ class UIHandler extends StateHandler {
 
     async fetchUsers () {
         try {
-            const result = await jQuery.ajax({
-                type: 'GET',
-                url: Oskari.urls.getRoute() + this.instance.conf.restUrl
+            const response = await fetch(Oskari.urls.getRoute() + this.restUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const result = await response.json();
             this.updateState({
                 users: result.users
             });
@@ -50,12 +57,16 @@ class UIHandler extends StateHandler {
 
     async fetchRoles () {
         try {
-            const result = await jQuery.ajax({
-                type: 'GET',
-                url: Oskari.urls.getRoute('ManageRoles'),
-                lang: Oskari.getLang(),
-                timestamp: new Date().getTime()
+            const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            const result = await response.json();
             this.updateState({
                 roles: result.rolelist || []
             });
@@ -147,7 +158,7 @@ class UIHandler extends StateHandler {
             userFormErrors: []
         });
         const errors = [];
-        if (this.instance.conf.isExternal) {
+        if (this.isExternal) {
             if (!this.state.userFormState.roles || !this.state.userFormState.roles.length > 0) {
                 errors.push('roles');
                 Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
@@ -211,12 +222,16 @@ class UIHandler extends StateHandler {
                 data.append('roles', role);
             });
 
-            await jQuery.ajax({
-                type: this.state.editingUserId ? 'POST' : 'PUT',
-                url: Oskari.urls.getRoute() + this.instance.conf.restUrl,
-                dataType: 'json',
-                data: data.toString()
+            const response = await fetch(Oskari.urls.getRoute() + this.restUrl, {
+                method: this.state.editingUserId ? 'POST' : 'PUT',
+                body: data.toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
             this.fetchUsers();
             this.closeUserForm();
         } catch (e) {
@@ -226,10 +241,12 @@ class UIHandler extends StateHandler {
 
     async deleteUser (uid) {
         try {
-            await jQuery.ajax({
-                type: 'DELETE',
-                url: Oskari.urls.getRoute() + this.instance.conf.restUrl + '&id=' + uid
+            const response = await fetch(Oskari.urls.getRoute() + this.restUrl + '&id=' + uid, {
+                method: 'DELETE'
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
             this.fetchUsers();
             this.closeUserForm();
         } catch (e) {
@@ -249,13 +266,18 @@ class UIHandler extends StateHandler {
             return;
         }
         try {
-            await jQuery.ajax({
-                type: 'PUT',
-                url: Oskari.urls.getRoute('ManageRoles'),
-                lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),
-                data: { name: this.state.roleFormState.name }
+            const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    name: this.state.roleFormState.name
+                })
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
             this.fetchRoles();
             this.updateState({
                 roleFormState: this.initRoleForm()
@@ -267,10 +289,12 @@ class UIHandler extends StateHandler {
 
     async deleteRole (id) {
         try {
-            await jQuery.ajax({
-                type: 'DELETE',
-                url: Oskari.urls.getRoute('ManageRoles') + '&id=' + id
+            const response = await fetch(Oskari.urls.getRoute('ManageRoles') + '&id=' + id, {
+                method: 'DELETE'
             });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
             this.fetchRoles();
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.delete_failed'));

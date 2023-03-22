@@ -1,7 +1,7 @@
 import React from 'react';
-import { Message, TextInput, Label, Select, Confirm } from 'oskari-ui';
+import { Message, TextInput, Label, Select } from 'oskari-ui';
 import { getMandatoryIcon } from 'oskari-ui/util/validators';
-import { PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
+import { PrimaryButton, SecondaryButton, DeleteButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
 
 const Content = styled('div')`
@@ -132,16 +132,11 @@ export const UserForm = ({ state, controller, isExternal }) => {
                         onClick={() => controller.saveUser()}
                     />
                     {(state.editingUserId && !isExternal) && (
-                        <Confirm
+                        <DeleteButton
+                            type='label'
                             title={<Message messageKey='flyout.adminusers.confirm_delete' messageArgs={{ user: state.userFormState.username }} />}
                             onConfirm={() => controller.deleteUser(state.editingUserId)}
-                            okText={<Message messageKey='buttons.delete' bundleKey='oskariui'/>}
-                            cancelText={<Message messageKey='buttons.cancel' bundleKey='oskariui'/>}
-                        >
-                            <SecondaryButton
-                                type='delete'
-                            />
-                        </Confirm>
+                        />
                     )}
                 </RightButtons>
                 <SecondaryButton
