@@ -23,6 +23,8 @@ const getPlacementFromPluginLocation = (pluginLocation) => {
         return PLACEMENTS.TOP;
     case 'top center':
         return PLACEMENTS.TOP;
+    case 'bottom center':
+        return PLACEMENTS.BOTTOM;
     case 'bottom right':
         return PLACEMENTS.BR;
     case 'bottom left':

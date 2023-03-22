@@ -34,6 +34,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
             stats.addMapPluginToggleTool(this.id);
         } else {
             stats.togglePlugin.removeTool(this.id);
+            // if we have hidden classification and then remove the option to hide/show it
+            // -> update visibility to show it
+            stats.updateClassficationViewVisibility();
         }
     },
     getValues: function () {
