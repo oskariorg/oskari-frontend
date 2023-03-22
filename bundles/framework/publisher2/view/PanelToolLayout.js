@@ -450,7 +450,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _moveSiblings: function (pluginClazz, source, target) {
             const siblings = this._getDropzonePlugins(target);
             const tool = this.getToolById(pluginClazz);
-            if (!tool.allowedSiblings.includes('*')) {
+            if (tool.allowedSiblings.includes('*')) {
                 // allows everything -> no need to move anything
                 return;
             }
