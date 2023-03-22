@@ -118,7 +118,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 .filter(tool => tool.isEnabled())
                 .forEach(tool => {
                     const plugin = tool.getPlugin();
-                    if (typeof plugin.getLocation !== 'function') {
+                    if (!plugin || typeof plugin.getLocation !== 'function') {
+                        // for example center cross on map does not have a plugin
                         return;
                     }
                     const currentLoc = plugin.getLocation();
