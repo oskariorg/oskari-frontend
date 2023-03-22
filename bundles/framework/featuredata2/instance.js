@@ -429,9 +429,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', {
-                instance: this
-            });
+            this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
 

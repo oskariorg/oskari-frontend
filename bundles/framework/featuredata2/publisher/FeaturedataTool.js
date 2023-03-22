@@ -13,14 +13,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
         * @returns {Object} tool
         */
         getTool: function () {
-            var featureData = this.getSandbox().findRegisteredModuleInstance('FeatureData2') || null;
             return {
                 id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
                 title: 'FeaturedataPlugin',
-                config: {
-                    instance: featureData,
-                    ...(this.state.pluginConfig || {})
-                }
+                config: this.state.pluginConfig || {}
             };
         },
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
@@ -48,9 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             if (!this.isEnabled()) {
                 return null;
             }
-            // we want to remove instance from plugin config, so it's unused and we use the "rest" of the config
-            // eslint-disable-next-line no-unused-vars
-            const { instance, ...pluginConfig } = this.getPlugin().getConfig();
+            const pluginConfig = this.getPlugin().getConfig();
             const json = {
                 configuration: {}
             };
