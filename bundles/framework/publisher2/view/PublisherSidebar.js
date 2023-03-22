@@ -125,6 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     accordion.addPanel(panel);
                 }
             });
+            // add RPC panel if there are tools for it
             if (rpcTools) {
                 const rpcPanel = this._createRpcPanel(rpcTools);
                 rpcPanel.getPanel().addClass('t_rpc');
