@@ -39,9 +39,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     },
 
     getValues: function () {
-        const allowClassification = this.isEnabled();
         if (!this._isStatsActive()) {
-            return {};
+            return null;
         }
         var stats = this.getStatsgridBundle();
         const { location } = stats?.togglePlugin?.getConfig() || {};
@@ -49,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
             configuration: {
                 statsgrid: {
                     conf: {
-                        allowClassification,
+                        allowClassification: this.isEnabled(),
                         location: location || {
                             classes: 'bottom right'
                         }
