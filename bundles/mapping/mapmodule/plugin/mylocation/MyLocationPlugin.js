@@ -73,13 +73,6 @@ Oskari.clazz.define(
             this._setTracking(false);
         },
         /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.refresh();
-        },
-        /**
          * @public @method refresh
          */
         refresh: function () {

@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         },
         _startPluginImpl: function () {
             this.addToPluginContainer(this._createControlElement());
-            this.renderButton();
+            this.refresh();
             return true;
         },
         _stopPluginImpl: function () {
@@ -35,18 +35,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 this._popupControls.close();
             }
             this._popupControls = null;
-            this.renderButton();
+            this.refresh();
         },
 
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-
-        renderButton: function () {
+        refresh: function () {
             const el = this.getElement();
             if (!el) {
                 return;
@@ -65,6 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 el[0]
             );
         },
+
         getLegend: function (legendId) {
             const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendId);
             if (!layer) {
@@ -79,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
             const legends = this.getLegends();
             this._popupControls = showMapLegendPopup(legends, (id) => this.getLegend(id), () => this.clearPopup());
-            this.renderButton();
+            this.refresh();
         },
         getLegends: function () {
             return this.getSandbox().findAllSelectedMapLayers()

@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             this._flyoutOpen = undefined;
             var flyout = this.getInstance().plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
-            this.renderButton();
+            this.refresh();
         },
         /**
          * @method refresh
@@ -100,30 +100,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             this.setVisible(this._hasFeaturedataLayers());
             this.renderButton();
         },
-        resetUI: function () {
-            if (this._flyoutOpen) {
-                // actually closes flyout when it's open...
-                this.openFlyout();
-            }
-        },
-        /**
-         * @method _hasFeaturedataLayers
-         * @private
-         * Check whether there are layers with featuredata present -> determine the control element's visibility
-         */
-        _hasFeaturedataLayers: function () {
-            // see if there's any wfs layers, show element if so
-            return this.getSandbox()
-                .findAllSelectedMapLayers()
-                .filter(layer => layer.isVisibleOnMap())
-                .some(layer => layer.hasFeatureData && layer.hasFeatureData());
-        },
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.renderButton();
+        showLoadingIndicator: function (blnLoad) {
+            this.renderButton(!!blnLoad);
         },
         renderButton: function (loading = false) {
             const el = this.getElement();
@@ -144,6 +122,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 el[0]
             );
         },
+        resetUI: function () {
+            if (this._flyoutOpen) {
+                // actually closes flyout when it's open...
+                this.openFlyout();
+            }
+        },
+        /**
+         * @method _hasFeaturedataLayers
+         * @private
+         * Check whether there are layers with featuredata present -> determine the control element's visibility
+         */
+        _hasFeaturedataLayers: function () {
+            // see if there's any wfs layers, show element if so
+            return this.getSandbox()
+                .findAllSelectedMapLayers()
+                .filter(layer => layer.isVisibleOnMap())
+                .some(layer => layer.hasFeatureData && layer.hasFeatureData());
+        },
         openFlyout: function () {
             const sandbox = this.getSandbox();
             if (!this._flyoutOpen) {
@@ -158,10 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'close']);
                 this._flyoutOpen = undefined;
             }
-            this.renderButton();
-        },
-        showLoadingIndicator: function (blnLoad) {
-            this.renderButton(!!blnLoad);
+            this.refresh();
         },
         showErrorIndicator: function (blnLoad) {
             if (!this.getElement()) {

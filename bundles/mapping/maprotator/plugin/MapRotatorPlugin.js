@@ -78,26 +78,10 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         rotateIcon: function (degrees) {
             this._renderButton(degrees);
         },
-        _renderButton: function (degrees = this.getDegrees()) {
-            let el = this.getElement();
-            if (!el) return;
-
-            ReactDOM.render(
-                <MapModuleButton
-                    className='t_maprotator'
-                    title={this._locale.tooltip.tool}
-                    icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
-                    onClick={() => this.setRotation(0)}
-                    iconActive={degrees !== 0}
-                    position={this.getLocation()}
-                />,
-                el[0]
-            );
-        },
         _createUI: function () {
             this._element = this._createControlElement();
             this.setDegrees(this.getRotation());
-            this._renderButton();
+            this.refresh();
             this.handleEvents();
             this.addToPluginContainer(this._element);
         },
@@ -116,12 +100,26 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             var deg = Math.round(rot * 573) / 10;
             return deg;
         },
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
+        refresh: function () {
             this._renderButton();
+        },
+        _renderButton: function (degrees = this.getDegrees()) {
+            let el = this.getElement();
+            if (!el) {
+                return;
+            }
+
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_maprotator'
+                    title={this._locale.tooltip.tool}
+                    icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
+                    onClick={() => this.setRotation(0)}
+                    iconActive={degrees !== 0}
+                    position={this.getLocation()}
+                />,
+                el[0]
+            );
         },
         /**
          * Create event handlers.
@@ -151,7 +149,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          */
         redrawUI: function (mapInMobileMode) {
             // we don't need to do anything here any more
-            // FIXME: remove calls to this OR changeToolStyle() and use one function to update UI
         },
         teardownUI: function () {
             // detach old element from screen

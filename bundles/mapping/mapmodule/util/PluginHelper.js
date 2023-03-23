@@ -31,10 +31,8 @@ export const getPluginsWithUI = (pluginInstances = {}) => {
 
 export const refreshPluginsWithUI = (pluginInstances = {}) => {
     return getPluginsWithUI(pluginInstances).forEach((plugin) => {
-        if (typeof plugin.changeToolStyle === 'function') {
-            // TODO: is this the function that we should use?
-            // TODO: call refresh()
-            plugin.changeToolStyle();
+        if (typeof plugin.refresh === 'function') {
+            plugin.refresh();
         }
     });
 };

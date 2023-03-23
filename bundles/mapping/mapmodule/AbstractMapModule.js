@@ -1308,7 +1308,7 @@ Oskari.clazz.define(
             const modeChanged = this.getMobileMode() !== isMobile;
             this.setMobileMode(isMobile);
             if (modeChanged) {
-                // previously called redrawUI() -> now calls changeToolStyle()
+                // previously called redrawUI() -> now calls refresh()
                 refreshPluginsWithUI(this.getPluginInstances());
             }
         },

@@ -14,13 +14,13 @@ const dummyPlugin = {
     register: () => {},
     setMapModule: () => {}
 };
-let changeStyleCalls = 0;
+let refreshCalls = 0;
 const nonUIPlugin = {
     getName: () => 'Non UI plugin',
     register: () => {},
     setMapModule: () => {},
     hasUI: () => false,
-    changeToolStyle: () => { changeStyleCalls++; },
+    refresh: () => { refreshCalls++; },
     getIndex: () => 10
 };
 const uiPlugin = {
@@ -28,7 +28,7 @@ const uiPlugin = {
     register: () => {},
     setMapModule: () => {},
     hasUI: () => true,
-    changeToolStyle: () => { changeStyleCalls++; },
+    refresh: () => { refreshCalls++; },
     getIndex: () => 20
 };
 afterAll(() => mapModule.stop());
@@ -40,15 +40,15 @@ describe('MapModule', () => {
     test('has 3 plugins', () => {
         expect(Object.keys(mapModule.getPluginInstances()).length).toEqual(3);
     });
-    describe('changeToolStyle', () => {
+    describe('refresh', () => {
         test('only called for plugin with UI and with value [undefined]', () => {
             mapModule.setMapTheme();
-            expect(changeStyleCalls).toEqual(1);
-            expect(changeStyleCalls[0]).toBeUndefined();
+            expect(refreshCalls).toEqual(1);
+            expect(refreshCalls[0]).toBeUndefined();
         });
         test('only called for plugin with UI and with style "3d-light" and font [undefined]', () => {
             mapModule.setMapTheme({ primary: '#FFFFFF' });
-            expect(changeStyleCalls).toEqual(2);
+            expect(refreshCalls).toEqual(2);
         });
     });
     describe('_getSortedPlugins', () => {

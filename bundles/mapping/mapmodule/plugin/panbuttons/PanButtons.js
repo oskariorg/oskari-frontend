@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
      *
      *
      */
-    function (config) {
+    function () {
         this._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons';
         this._defaultLocation = 'top right';
@@ -65,26 +65,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             const pxY = this._panPxs * y;
             this.getMapModule().panMapByPixels(pxX, pxY, true);
         },
-        /**
-         * @public  @method _refresh
-         * Called after a configuration change.
-         *
-         *
-         */
         refresh: function () {
-            this.renderButton();
-        },
-
-        /**
-         * @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-        renderButton: function () {
             let el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
@@ -140,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 showArrows: !!showArrows
             });
             this.showArrows = !!showArrows;
-            this.renderButton(null, null);
+            this.refresh();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

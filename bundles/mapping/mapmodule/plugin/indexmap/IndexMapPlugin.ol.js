@@ -38,7 +38,7 @@ Oskari.clazz.define(
     {
         _startPluginImpl: function () {
             this._element = this._createControlElement();
-            this.renderButton();
+            this.refresh();
             this.addToPluginContainer(this._element);
         },
         _stopPluginImpl: function () {
@@ -136,10 +136,7 @@ Oskari.clazz.define(
                 this._removeIndexMap();
             }
         },
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-        renderButton: function () {
+        refresh: function () {
             let el = this.getElement();
             if (!el) {
                 return;

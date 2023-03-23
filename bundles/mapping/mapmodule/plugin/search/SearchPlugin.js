@@ -49,19 +49,6 @@ Oskari.clazz.define(
         },
 
         refresh: function () {
-            this.changeToolStyle();
-        },
-
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         */
-        changeToolStyle: function () {
-            this.renderSearchBar();
-        },
-
-        renderSearchBar: function () {
             let el = this.getElement();
             if (!el) {
                 return;

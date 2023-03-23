@@ -43,7 +43,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     setOpen (bln) {
         this._toolOpen = bln;
-        this.renderButton();
+        this.refresh();
     }
     resetUI () {
         if (this.isOpen()) {
@@ -66,7 +66,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             this._createUI(forced);
         }
 
-        this.changeToolStyle();
+        this.refresh();
     }
 
     _createEventHandlers () {
@@ -110,7 +110,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         let el;
         el = this._createControlElement();
         this.addToPluginContainer(el);
-        this.renderButton();
+        this.refresh();
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
@@ -126,25 +126,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             popup.close(true);
         }
     }
-
-    render () {
-        const popupContent = this._popupTemplate.clone();
-        ReactDOM.render(
-            <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
-                <TimeControl3d {... this.stateHandler.getState()}
-                    controller={this.stateHandler.getController()}
-                    isMobile = {Oskari.util.isMobile()}
-                />
-            </LocaleProvider>,
-            popupContent.get(0));
-        this._popupContent = popupContent;
-    }
-
-    changeToolStyle () {
-        this.renderButton();
-    }
-
-    renderButton () {
+    refresh () {
         const el = this.getElement();
         if (!el) {
             return;
@@ -162,6 +144,19 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         );
     }
 
+    renderPopup () {
+        const popupContent = this._popupTemplate.clone();
+        ReactDOM.render(
+            <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
+                <TimeControl3d {... this.stateHandler.getState()}
+                    controller={this.stateHandler.getController()}
+                    isMobile = {Oskari.util.isMobile()}
+                />
+            </LocaleProvider>,
+            popupContent.get(0));
+        this._popupContent = popupContent;
+    }
+
     _showPopup () {
         const me = this;
         const popupTitle = this.loc('title');
@@ -169,14 +164,14 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         const popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
         this._popup = popupService.createPopup();
-        this.render();
+        this.renderPopup();
 
         // create close icon
         this._popup.createCloseIcon();
         this._popup.onClose(function () {
             me.unmountReactPopup();
             me.setOpen(false);
-            me.renderButton(null, null);
+            me.refresh();
         });
 
         const theme = mapmodule.getMapTheme();
@@ -203,7 +198,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
         this._popup.moveTo(elem, popupLocation, true);
         this.setOpen(true);
-        this.renderButton(null, null);
+        this.refresh();
     }
 }
 

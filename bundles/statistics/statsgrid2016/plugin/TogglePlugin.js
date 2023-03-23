@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     this.flyoutManager.on('hide', function (tool) {
         me.toggleTool(tool, false);
     });
-    this.handler = new PluginHandler(() => this.renderButtons());
+    this.handler = new PluginHandler(() => this.refresh());
 }, {
     getElement: function () {
         return this.element;
@@ -32,8 +32,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     hasUI: function () {
         return true;
     },
-    changeToolStyle: function () {
-        this.renderButtons();
+    refresh: function () {
+        const el = this.getElement();
+        if (!el) {
+            return;
+        }
+
+        ReactDOM.render(
+            <ThematicControls
+                tools={this.handler.getState().plugins}
+            />,
+            el[0]
+        );
     },
     toggleTool: function (tool, shown) {
         this.handler.getController().toggleTool(tool, shown);
@@ -69,20 +79,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         if (!this.element) {
             this.redrawUI();
         }
-    },
-    renderButtons: function (element) {
-        let el = element;
-        if (!el) {
-            el = this.getElement();
-        }
-        if (!el) return;
-
-        ReactDOM.render(
-            <ThematicControls
-                tools={this.handler.getState().plugins}
-            />,
-            el[0]
-        );
     },
     removeTool: function (toolId) {
         this.handler.getController().removeTool(toolId);

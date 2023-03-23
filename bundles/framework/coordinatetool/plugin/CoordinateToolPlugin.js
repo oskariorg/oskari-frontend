@@ -79,14 +79,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return !this._config.noUI;
         },
         /**
-         * Updates the given coordinates to the UI
          * @method @public refresh
-         *
-         * @param {Object} data contains lat/lon information to show on UI
          */
-        refresh: function (data) {
-            this.renderButton();
-            return data;
+        refresh: function () {
+            const el = this.getElement();
+            if (!el) {
+                return;
+            }
+            if (!this.handler) {
+                // init handler here so we can be sure we have a sandbox for this instance
+                this.handler = new CoordinatePluginHandler(this, this.getMapModule(), this.getConfig());
+                this.popupOpen = false;
+                this.handler.addPopupListener((isOpen) => {
+                    this.popupOpen = isOpen;
+                    this.refresh();
+                });
+            }
+
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_coordinatetool'
+                    title={this._locale('display.tooltip.tool')}
+                    icon={<CoordinateIcon />}
+                    onClick={() => this.handler.getController().showPopup()}
+                    iconActive={!!this.popupOpen}
+                    position={this.getLocation()}
+                />,
+                el[0]
+            );
         },
 
         /**
@@ -115,41 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             };
         },
 
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-
-        renderButton: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-            if (!this.handler) {
-                // init handler here so we can be sure we have a sandbox for this instance
-                this.handler = new CoordinatePluginHandler(this, this.getMapModule(), this.getConfig());
-                this.popupOpen = false;
-                this.handler.addPopupListener((isOpen) => {
-                    this.popupOpen = isOpen;
-                    this.renderButton();
-                });
-            }
-
-            ReactDOM.render(
-                <MapModuleButton
-                    className='t_coordinatetool'
-                    title={this._locale('display.tooltip.tool')}
-                    icon={<CoordinateIcon />}
-                    onClick={() => this.handler.getController().showPopup()}
-                    iconActive={!!this.popupOpen}
-                    position={this.getLocation()}
-                />,
-                el[0]
-            );
-        },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox
