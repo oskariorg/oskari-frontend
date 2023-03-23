@@ -2114,10 +2114,9 @@ Oskari.clazz.define(
          * @method removeMapControlPlugin
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
-         * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
+        removeMapControlPlugin: function (element, detachOnly) {
             var container = element.parents('.mapplugins');
             var content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
@@ -2126,7 +2125,7 @@ Oskari.clazz.define(
             } else {
                 element.remove();
             }
-            if (!this.inLayerToolsEditMode() && content.children().length === 0) {
+            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
