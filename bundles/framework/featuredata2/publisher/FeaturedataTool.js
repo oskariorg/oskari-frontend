@@ -30,7 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             const { configuration = {} } = data;
             if (configuration[this.bundleName]) {
                 this.storePluginConf(configuration[this.bundleName].conf);
-                this.setEnabled(true);
+                // even if we have the config, we don't want to enable the tool if its not shown
+                // if we enable it the plugin won't show and everything looks ok, but getValues() will
+                // still return a non-null value which makes featuredata bundle to be
+                // started on the embedded map even if it's not used
+                this.setEnabled(this.isDisplayed(data));
             }
         },
         /**
