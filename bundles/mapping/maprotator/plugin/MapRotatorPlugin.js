@@ -87,11 +87,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                     className='t_maprotator'
                     title={this._locale.tooltip.tool}
                     icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
-                    onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.setRotation(0);
-                        }
-                    }}
+                    onClick={() => this.setRotation(0)}
                     iconActive={degrees !== 0}
                     position={this.getLocation()}
                 />,

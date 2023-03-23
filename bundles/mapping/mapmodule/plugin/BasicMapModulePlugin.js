@@ -1,4 +1,5 @@
 import './AbstractMapModulePlugin';
+// import { AbstractMapPlugin } from './AbstractMapPlugin';
 /**
  * @class Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin
  */

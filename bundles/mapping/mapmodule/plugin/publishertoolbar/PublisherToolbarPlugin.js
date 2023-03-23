@@ -63,36 +63,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 const toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
                 sb.request(this, toolbarRequest);
                 this.activeTool = undefined;
-                this.renderButton(null, null);
+                this.renderButton();
                 return;
             }
             const toolRequest = Oskari.requestBuilder('ToolSelectionRequest')(requestName);
             sb.request(this, toolRequest);
             this.activeTool = tool;
-            this.renderButton(null, null);
-        },
-
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                this.renderButton(null, null);
-            }
+            this.renderButton();
         },
 
         addToolButton: function (name) {
             if (this._toolButtons.indexOf(name) < 0) {
                 this._toolButtons.push(name);
             }
-            this.renderButton(null, null);
+            this.renderButton();
         },
         removeToolButton: function (name) {
             const index = this._toolButtons.indexOf(name);
             if (index > -1) {
                 this._toolButtons.splice(index, 1);
             }
-            this.renderButton(null, null);
+            this.renderButton();
         },
 
         /**
@@ -131,7 +122,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
         renderButton: function () {
             let el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <MapModuleButton

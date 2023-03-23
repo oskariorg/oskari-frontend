@@ -70,9 +70,6 @@ Oskari.clazz.define(className,
                 return;
             }
             this._render();
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
         },
         _createUI: function () {
             this._element = this._mountPoint.clone();

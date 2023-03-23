@@ -33,7 +33,17 @@ export const refreshPluginsWithUI = (pluginInstances = {}) => {
     return getPluginsWithUI(pluginInstances).forEach((plugin) => {
         if (typeof plugin.changeToolStyle === 'function') {
             // TODO: is this the function that we should use?
+            // TODO: call refresh()
             plugin.changeToolStyle();
+        }
+    });
+};
+
+export const resetPluginsWithUI = (pluginInstances = {}) => {
+    return getPluginsWithUI(pluginInstances).forEach((plugin) => {
+        if (typeof plugin.resetUI === 'function') {
+            // TODO: is this the function that we should use?
+            plugin.resetUI();
         }
     });
 };

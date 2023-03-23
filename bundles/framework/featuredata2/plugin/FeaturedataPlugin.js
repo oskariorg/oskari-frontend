@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Message } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataButton } from './FeatureDataButton';
 
@@ -22,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
-        me.inMobileMode = false;
     }, {
         getInstance: function () {
             // we only need instance here since the flyout is operated by the instance
@@ -41,47 +41,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
             return this._instance;
         },
+        _startPluginImpl: function() {
+            this._element = this._createControlElement();
+            this.addToPluginContainer(this.getElement());
+        },
         /**
          * @method _createControlElement
          * @private
-         * Creates UI for coordinate display and places it on the maps
-         * div where this plugin registered.
+         * Creates container for UI for feature data plugin
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery('<div class="mapplugin featuredataplugin">' +
-                    '</div>');
-            me._loc = Oskari.getLocalization('FeatureData2', Oskari.getLang() || Oskari.getDefaultLanguage(), true);
-
-            return el;
-        },
-        /**
-         * @method _hasFeaturedataLayers
-         * @private
-         * Check whether there are layers with featuredata present -> determine the control element's visibility
-         */
-        _hasFeaturedataLayers: function () {
-            var me = this,
-                sandbox = me.getMapModule().getSandbox(),
-                layers = sandbox.findAllSelectedMapLayers(),
-                i;
-            // see if there's any wfs layers, show element if so
-            for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData()) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                this.renderButton(true);
-            } else {
-                this.renderButton();
-            }
+            return jQuery('<div class="mapplugin featuredataplugin"></div>');
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -90,15 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            var me = this;
-
             this.teardownUI();
-
-            this.inMobileMode = isMobile;
-
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
             this.refresh();
         },
 
@@ -122,13 +84,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         },
 
         handleCloseFlyout: function () {
-            var me = this;
-
-            if (!me._flyoutOpen) {
+            if (!this._flyoutOpen) {
                 return;
             }
-            me._flyoutOpen = undefined;
-            var flyout = me.getInstance().plugins['Oskari.userinterface.Flyout'];
+            this._flyoutOpen = undefined;
+            var flyout = this.getInstance().plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
             this.renderButton();
         },
@@ -141,22 +101,35 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             this.renderButton();
         },
         /**
+         * @method _hasFeaturedataLayers
+         * @private
+         * Check whether there are layers with featuredata present -> determine the control element's visibility
+         */
+        _hasFeaturedataLayers: function () {
+            // see if there's any wfs layers, show element if so
+            return this.getSandbox()
+                .findAllSelectedMapLayers()
+                .filter(layer => layer.isVisibleOnMap())
+                .some(layer => layer.hasFeatureData && layer.hasFeatureData());
+        },
+        /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
          */
         changeToolStyle: function () {
             this.renderButton();
         },
-        renderButton: function (disabled = false, loading = false) {
+        renderButton: function (loading = false) {
             const el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
-                        icon={<span>{this._loc.title}</span>}
+                        icon={<Message messageKey='title' bundleKey='FeatureData2'/>}
                         onClick={() => this.openFlyout()}
-                        disabled={disabled}
                         active={this._flyoutOpen}
                         loading={loading}
                         position={this.getLocation()}
@@ -166,29 +139,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             );
         },
         openFlyout: function () {
-            if (!this.inLayerToolsEditMode()) {
-                const sandbox = this.getSandbox();
-                if (!this._flyoutOpen) {
-                    if (this._mapStatusChanged) {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
-                        this._mapStatusChanged = false;
-                    } else {
-                        sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
-                    }
-                    this._flyoutOpen = true;
+            const sandbox = this.getSandbox();
+            if (!this._flyoutOpen) {
+                if (this._mapStatusChanged) {
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
+                    this._mapStatusChanged = false;
                 } else {
-                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'close']);
-                    this._flyoutOpen = undefined;
+                    sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'detach']);
                 }
+                this._flyoutOpen = true;
+            } else {
+                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.getInstance(), 'close']);
+                this._flyoutOpen = undefined;
             }
             this.renderButton();
         },
         showLoadingIndicator: function (blnLoad) {
-            if (blnLoad) {
-                this.renderButton(false, true);
-            } else {
-                this.renderButton(false, false);
-            }
+            this.renderButton(!!blnLoad);
         },
         showErrorIndicator: function (blnLoad) {
             if (!this.getElement()) {
@@ -207,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                  * @method AfterMapMoveEvent
                  * Shows map center coordinates after map move
                  */
-                AfterMapMoveEvent: function (event) {
+                AfterMapMoveEvent: function () {
                     this.refresh();
                 },
                 /**
@@ -225,6 +192,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                     if (event.getMapLayer().hasFeatureData()) {
                         this.refresh();
                     }
+                },
+                MapLayerVisibilityChangedEvent: function () {
+                    this.refresh();
                 }
             };
         }

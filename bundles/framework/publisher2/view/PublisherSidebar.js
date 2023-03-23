@@ -471,7 +471,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const sandbox = this.instance.sandbox;
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.values(mapModule.getPluginInstances())
-                .filter(plugin => plugin.hasUI && plugin.hasUI())
+                .filter(plugin => plugin.isShouldStopForPublisher && plugin.isShouldStopForPublisher())
                 .forEach(plugin => {
                     try {
                         plugin.stopPlugin(sandbox);

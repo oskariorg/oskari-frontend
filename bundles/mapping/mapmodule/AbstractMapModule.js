@@ -100,7 +100,7 @@ import './event/UserLocationEvent';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
-import { getSortedPlugins, refreshPluginsWithUI } from './util/PluginHelper';
+import { getSortedPlugins, resetPluginsWithUI, refreshPluginsWithUI } from './util/PluginHelper';
 import { getDefaultMapTheme, setFont } from './util/MapThemeHelper';
 import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair';
 import { generatePluginContainers } from './util/PluginContainerHelper';
@@ -456,6 +456,10 @@ Oskari.clazz.define(
                 this._isInLayerToolsEditMode = event.isInMode();
                 // Disable feature hover when tools are being dragged
                 this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(!this._isInLayerToolsEditMode);
+                if (this._isInLayerToolsEditMode) {
+                    // when entering edit/drag mode -> allow plugins to close popups etc reset their UIs
+                    resetPluginsWithUI(this.getPluginInstances());
+                }
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
@@ -2122,7 +2126,7 @@ Oskari.clazz.define(
             } else {
                 element.remove();
             }
-            if (!keepContainerVisible && content.children().length === 0) {
+            if (!this.inLayerToolsEditMode() && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },

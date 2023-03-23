@@ -45,15 +45,9 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._toolOpen = bln;
         this.renderButton();
     }
-    _setLayerToolsEditModeImpl () {
-        const el = this.getElement();
-        if (!el) {
-            return;
-        }
-        if (this.inLayerToolsEditMode()) {
-            if (this.isOpen()) {
-                this._toggleToolState();
-            }
+    resetUI () {
+        if (this.isOpen()) {
+            this._toggleToolState();
         }
     }
     /**
@@ -147,31 +141,21 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     changeToolStyle () {
-        const el = this.getElement();
-        if (!el) {
-            return;
-        }
-
         this.renderButton();
-        this._setLayerToolsEditMode(
-            this.getMapModule().isInLayerToolsEditMode()
-        );
     }
 
     renderButton () {
         const el = this.getElement();
-        if (!el) return;
+        if (!el) {
+            return;
+        }
 
         ReactDOM.render(
             <MapModuleButton
                 className='t_timecontrol'
                 title={this.loc('tooltip')}
                 icon={<ControlIcon isMobile={this._isMobile} controlIsActive={this.isOpen()} />}
-                onClick={() => {
-                    if (!this.inLayerToolsEditMode()) {
-                        this._toggleToolState();
-                    }
-                }}
+                onClick={() => this._toggleToolState()}
                 iconActive={this.isOpen()}
             />,
             el.get(0)

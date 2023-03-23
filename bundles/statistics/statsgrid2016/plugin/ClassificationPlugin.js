@@ -22,10 +22,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this._defaultLocation = 'right bottom';
         me._fixedLocation = true;
         me._name = 'ClassificationPlugin';
-        // for publisher dragndrop to work needs to have at least:
-        // -  mapplugin-class in parent template
-        // - _setLayerToolsEditModeImpl()
-        // - publisher tool needs to implement getPlugin()
 
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);

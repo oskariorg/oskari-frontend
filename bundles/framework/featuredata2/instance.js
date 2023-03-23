@@ -432,11 +432,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin', this.conf);
             this.mapModule.registerPlugin(this.plugin);
             this.mapModule.startPlugin(this.plugin);
-
-            // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile()) {
-                this.mapModule.redrawPluginUIs(true);
-            }
         }
     }, {
         /**

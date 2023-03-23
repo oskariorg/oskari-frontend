@@ -12,8 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         this._index = 90;
         this._popupControls = null;
     }, {
-        _setLayerToolsEditModeImpl: function () {
-            if (this.inLayerToolsEditMode() && this.isOpen()) {
+        resetUI: function() {
+            if (this.isOpen()) {
                 this.clearPopup();
             }
         },
@@ -58,11 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     className='t_maplegend'
                     title={title}
                     icon={<QuestionOutlined />}
-                    onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.togglePopup();
-                        }
-                    }}
+                    onClick={() => this.togglePopup()}
                     iconActive={this.isOpen()}
                     position={this.getLocation()}
                 />,

@@ -33,8 +33,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
     }, {
-        _setLayerToolsEditModeImpl: function () {
-            if (this.handler && this.inLayerToolsEditMode() && this.popupOpen) {
+        resetUI: function() {
+            if (this.handler && this.popupOpen) {
                 this.handler.getController().popupCleanup();
             }
         },
@@ -66,8 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             if (!this.hasUI()) {
                 return;
             }
-
-            this.inMobileMode = mapInMobileMode;
 
             this.teardownUI();
             if (!this._config.noUI) {

@@ -92,11 +92,7 @@ Oskari.clazz.define(
                     className='t_mylocation'
                     icon={<AimOutlined />}
                     title={this.loc('plugin.MyLocationPlugin.tooltip')}
-                    onClick={(e) => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this._setupRequest();
-                        }
-                    }}
+                    onClick={() => this._setupRequest()}
                     position={this.getLocation()}
                 />
                 ,

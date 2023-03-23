@@ -50,9 +50,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             this.resetPopup = null;
         },
         _resetClicked: function () {
-            if (this.inLayerToolsEditMode()) {
-                return;
-            }
             if (this.resetPopup) return;
             const cb = () => {
                 if (this.getSandbox().hasHandler('StateHandler.SetStateRequest')) {
@@ -64,9 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             this.resetPopup = showResetPopup(() => cb(), () => this.clearPopup());
         },
         _panClicked: function (x, y) {
-            if (this.inLayerToolsEditMode()) {
-                return;
-            }
             const pxX = this._panPxs * x;
             const pxY = this._panPxs * y;
             this.getMapModule().panMapByPixels(pxX, pxY, true);

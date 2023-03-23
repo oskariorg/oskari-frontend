@@ -105,11 +105,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
                     icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     iconActive={isFullscreen}
                     onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.setState({
-                                fullscreen: !isFullscreen
-                            });
-                        }
+                        this.setState({
+                            fullscreen: !isFullscreen
+                        });
                     }}
                     position={this.getLocation()}
                 />

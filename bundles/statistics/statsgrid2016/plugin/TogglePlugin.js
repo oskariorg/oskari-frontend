@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     });
     this.handler = new PluginHandler(() => this.renderButtons());
 }, {
-    _setLayerToolsEditModeImpl: function () {},
     getElement: function () {
         return this.element;
     },

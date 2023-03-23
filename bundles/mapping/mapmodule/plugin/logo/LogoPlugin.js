@@ -38,7 +38,7 @@ Oskari.clazz.define(
          * we are returning false to stay on screen for the duration of publisher.
          * @returns false
          */
-        hasUI: function () {
+        isShouldStopForPublisher: function () {
             return false;
         },
         getService: function () {
@@ -135,23 +135,9 @@ Oskari.clazz.define(
             };
         },
 
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set.
-         *
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {
-            var me = this;
-            // TODO document why this is done...
-            if (!me.inLayerToolsEditMode() && me.getElement()) {
-                me.setLocation(
-                    me.getElement().parents('.mapplugins').attr(
-                        'data-location'
-                    )
-                );
-            } else if (me._popupControls) {
-                me.clearPopup();
+        resetUI: function() {
+            if (this._popupControls) {
+                this.clearPopup();
             }
         },
 
@@ -190,7 +176,7 @@ Oskari.clazz.define(
                 id: 'logo',
                 src: logoUrl,
                 callback: () => {
-                    if (!this.inLayerToolsEditMode() && geoportalLink) {
+                    if (geoportalLink) {
                         const mapUrl = this.__getMapUrl();
                         const linkParams = this.getSandbox().generateMapLinkParameters({});
                         window.open(mapUrl + linkParams, '_blank');
@@ -222,9 +208,7 @@ Oskari.clazz.define(
                 id: 'terms',
                 callback: function (evt) {
                     evt.preventDefault();
-                    if (!me.inLayerToolsEditMode()) {
-                        window.open(termsUrl, '_blank');
-                    }
+                    window.open(termsUrl, '_blank');
                 }
             };
 
@@ -242,9 +226,9 @@ Oskari.clazz.define(
             var options = {
                 id: 'data-sources',
                 callback: function (e) {
-                    if (!me.inLayerToolsEditMode() && !me._popupControls) {
-                        me._openDataSourcesDialog(e.target);
-                    } else if (me._popupControls) {
+                    if (!me._popupControls) {
+                        me._openDataSourcesDialog();
+                    } else {
                         me.clearPopup();
                     }
                 }

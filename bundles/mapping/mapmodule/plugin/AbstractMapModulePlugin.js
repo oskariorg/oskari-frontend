@@ -180,19 +180,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
 
         _setLayerToolsEditMode: function (isInEditMode) {
             this._isInLayerToolsEditMode = isInEditMode;
-            this._setLayerToolsEditModeImpl();
             if (this.isFixedLocation()) {
                 this.handleDragDisabled();
             }
         },
-
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set, implement if needed.
-         *
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {},
 
         /**
          * @method handleDragDisabled
@@ -243,9 +234,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             } catch (e) {
                 Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + this.getName());
             }
-            // Make sure plugin's edit mode is set correctly
-            // (we might already be in edit mode)
-            this._setLayerToolsEditMode(this.getMapModule().isInLayerToolsEditMode());
             return waitingForToolbar;
         },
 
@@ -378,7 +366,14 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         hasUI: function () {
             return false;
         },
-
+        isShouldStopForPublisher: function () {
+            return this.hasUI();
+        },
+        // Note! This is only called by mapmodule when it LayerToolsEditModeEvent is received/publisher enters drag mode
+        // This provides a hook for plugins to close their popups etc
+        resetUI: function () {
+            // map module should call this when for example publisher goes to dragging mode
+        },
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or

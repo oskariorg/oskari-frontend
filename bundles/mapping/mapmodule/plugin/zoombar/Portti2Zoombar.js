@@ -68,7 +68,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
             };
         },
-        _setLayerToolsEditModeImpl: function () {},
         /**
          * @public @method changeToolStyle
          * Changes the tool style of the plugin
