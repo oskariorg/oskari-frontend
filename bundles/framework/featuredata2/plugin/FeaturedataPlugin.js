@@ -100,6 +100,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             this.setVisible(this._hasFeaturedataLayers());
             this.renderButton();
         },
+        resetUI: function () {
+            if (this._flyoutOpen) {
+                // actually closes flyout when it's open...
+                this.openFlyout();
+            }
+        },
         /**
          * @method _hasFeaturedataLayers
          * @private
