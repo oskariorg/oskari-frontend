@@ -39,6 +39,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setVisible: function (visible) {
+            // this makes call to redrawUI() for plugins that don't override _startPluginImpl()
+            // TODO: if we migrate plugins to not rely on redrawUI() being called and implement _startPluginImpl() instead we can get rid of this
             var notReadyToRender = false;
             var wasVisible = this._visible;
             this._visible = visible;

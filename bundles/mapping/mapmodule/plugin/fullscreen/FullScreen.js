@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         me._element = null;
         me.state = {};
         me._sandbox = null;
+        this._isVisible = true;
         me._templates = {
             plugin: jQuery('<div class="mapplugin fullscreen"></div>')
         };
@@ -56,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          * @method _startPluginImpl
          */
         _startPluginImpl: function () {
-            this._element = this._createControlElement();
+            this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
             this.refresh();
         },
@@ -82,6 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             ReactDOM.render(
                 <StyledButton
                     className='t_fullscreen'
+                    visible={this.isVisible()}
                     icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     iconActive={isFullscreen}
                     onClick={() => {
@@ -129,7 +131,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          *      Request to handle
          */
         handleRequest: function (core, request) {
-            this.setVisible(request.isVisible());
+            this._isVisible = request.isVisible();
+            this.refresh();
+        },
+        isVisible: function() {
+            return this._isVisible;
         },
         setState: function (state) {
             this.state = state || {};
