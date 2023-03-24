@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             this._isVisible = request.isVisible();
             this.refresh();
         },
-        isVisible: function() {
+        isVisible: function () {
             return this._isVisible;
         },
         setState: function (state) {
