@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             return this._instance;
         },
         _startPluginImpl: function () {
-            this._element = this._createControlElement();
+            this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
         },
         /**
@@ -60,7 +60,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            this.teardownUI();
             this.refresh();
         },
 
@@ -97,7 +96,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
-            this.setVisible(this._hasFeaturedataLayers());
             this.renderButton();
         },
         showLoadingIndicator: function (blnLoad) {
@@ -112,6 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
+                        visible={this._hasFeaturedataLayers()}
                         icon={<Message messageKey='title' bundleKey='FeatureData2'/>}
                         onClick={() => this.openFlyout()}
                         active={this._flyoutOpen}

@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         me._element = null;
         me.state = {};
         me._sandbox = null;
+        this._isVisible = true;
         me._templates = {
             plugin: jQuery('<div class="mapplugin fullscreen"></div>')
         };
@@ -54,13 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         },
         /**
          * @method _startPluginImpl
-         *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *          reference to application sandbox
          */
-        _startPluginImpl: function (sandbox) {
-            this.setEnabled(this._enabled);
-            return this.setVisible(this._visible);
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
         },
 
         /**
@@ -70,18 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible() || !this.isEnabled()) {
-                // no point in drawing the ui if we are not visible or enabled
-                return;
-            }
-
-            this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
-            this._element = this._createControlElement();
             this.refresh();
-            this.addToPluginContainer(this.getElement());
         },
         /**
          * @public @method refresh
@@ -95,6 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
             ReactDOM.render(
                 <StyledButton
                     className='t_fullscreen'
+                    visible={this.isVisible()}
                     icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     iconActive={isFullscreen}
                     onClick={() => {
@@ -142,7 +131,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
          *      Request to handle
          */
         handleRequest: function (core, request) {
-            this.setVisible(request.isVisible());
+            this._isVisible = request.isVisible();
+            this.refresh();
+        },
+        isVisible: function () {
+            return this._isVisible;
         },
         setState: function (state) {
             this.state = state || {};

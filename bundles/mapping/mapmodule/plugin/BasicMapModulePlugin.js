@@ -39,17 +39,19 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setVisible: function (visible) {
-            var toolbarNotReady = false;
+            // this makes call to redrawUI() for plugins that don't override _startPluginImpl()
+            // TODO: if we migrate plugins to not rely on redrawUI() being called and implement _startPluginImpl() instead we can get rid of this
+            var notReadyToRender = false;
             var wasVisible = this._visible;
             this._visible = visible;
             if (!this.getElement() && visible) {
-                toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
+                notReadyToRender = this.redrawUI(this.getMapModule().getMobileMode());
             }
             // toggle element - wasVisible might not be in sync with the UI if the elements are recreated - so always hide on setVisible(false)
             if (this.getElement() && (wasVisible !== visible || !visible)) {
                 this.getElement().toggle(visible);
             }
-            return toolbarNotReady;
+            return notReadyToRender;
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -62,13 +64,13 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // no point in drawing the ui if we are not visible
                 return;
             }
-            var me = this;
             if (this.getElement()) {
-                // ui already in place no need to do anything, override in plugins to do responsive
+                // ui already in place, just call refresh to allow plugin to adjust if needed
+                this.refresh();
                 return;
             }
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
+            const el = this._createControlElement();
+            this.addToPluginContainer(el);
         },
         addToPluginContainer: function (element) {
             // var element = this.getElement();
@@ -76,7 +78,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // no element to place, log a warning
                 return;
             }
-            this._element = element;
+            this.setElement(element);
             element.attr('data-clazz', this.getClazz());
             try {
                 this.getMapModule().setMapControlPlugin(
@@ -138,7 +140,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         /**
          * @public @method getElement
          *
-         *
          * @return {jQuery}
          * Plugin jQuery element or null/undefined if no element has been set
          */
@@ -146,6 +147,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             // element should be created in startPlugin and only destroyed in
             // stopPlugin. I.e. don't start & stop the plugin to refresh it.
             return this._element;
+        },
+        setElement: function (el) {
+            this._element = el;
         },
 
         /**
@@ -216,26 +220,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         _createControlElement: function () {},
 
         /**
-         * @method _destroyControlElement
-         * Called before _element is destroyed. Implement if needed.
-         *
-         *
-         */
-        _destroyControlElement: function () {},
-
-        /**
-         * @method _toggleControls
-         * Enable/disable plugin controls. Used in map layout edit mode.
-         *
-         * @param {Boolean} enable Should the controls be enabled or disabled.
-         *
-         */
-        _toggleUIControls: function (enable) {
-            // implement if needed... don't trust this._enabled, set the state
-            // even if enable === this._enabled
-        },
-
-        /**
          * @public @method setEnabled
          * Enable/Disable plugin controls.
          *
@@ -244,8 +228,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setEnabled: function (enabled) {
-            // toggle controls
-            this._toggleUIControls(enabled);
             this._enabled = enabled;
         },
 

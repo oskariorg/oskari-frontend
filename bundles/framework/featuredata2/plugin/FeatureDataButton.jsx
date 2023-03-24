@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Tooltip } from 'oskari-ui';
+import { Button } from 'oskari-ui';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
 import { getNavigationTheme } from 'oskari-ui/theme';
@@ -52,7 +52,10 @@ const ThemedButton = ThemeConsumer(({ theme = {}, active, ...rest }) => {
     );
 });
 
-export const FeatureDataButton = ({ icon, active, onClick, disabled, iconActive, position, loading, ...rest }) => {
+export const FeatureDataButton = ({ visible = true, icon, active, onClick, disabled, iconActive, position, loading, ...rest }) => {
+    if (!visible) {
+        return null;
+    }
     let marginRight = '0px';
     let marginLeft = '0px';
     if (position.includes('right')) {
