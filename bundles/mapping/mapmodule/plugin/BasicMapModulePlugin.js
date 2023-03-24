@@ -218,14 +218,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         _createControlElement: function () {},
 
         /**
-         * @method _destroyControlElement
-         * Called before _element is destroyed. Implement if needed.
-         *
-         *
-         */
-        _destroyControlElement: function () {},
-
-        /**
          * @public @method setEnabled
          * Enable/Disable plugin controls.
          *
