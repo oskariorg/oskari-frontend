@@ -1469,11 +1469,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if a plugin with given name is registered to the map
          */
         isPluginActivated: function (pluginName) {
-            var plugin = this.getPluginInstances(pluginName);
-            if (plugin) {
-                return true;
-            }
-            return false;
+            return !!this.getPluginInstances(pluginName);
         },
         /**
          * @method registerPlugin
