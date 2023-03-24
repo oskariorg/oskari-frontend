@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, Button } from 'oskari-ui';
+import { TextInput, Button, Pagination } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { PlusOutlined, SearchOutlined, EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -26,6 +26,14 @@ const EditButton = styled(Button)`
     width: 50px;
 `;
 
+const Footer = styled('div')`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px;
+`;
+
 const UserBlock = styled('div')`
     display: flex;
     flex-direction: row;
@@ -40,11 +48,6 @@ const UserBlock = styled('div')`
 
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
-    const hasFilter = state.userFilter !== null && state.userFilter !== undefined && state.userFilter.length > 0;
-    let users = !hasFilter ? state.users : state.users.filter(user => 
-        (user.firstName && user.firstName.toLowerCase().indexOf(state.userFilter.toLowerCase()) > -1) ||
-        (user.lastName && user.lastName.toLowerCase().indexOf(state.userFilter.toLowerCase()) > -1) ||
-        (user.user && user.user.toLowerCase().indexOf(state.userFilter.toLowerCase()) > -1));
     return (
         <Content>
             {state.addingUser || state.editingUserId ? (
@@ -65,7 +68,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                         />
                         <PrimaryButton
                             type='search'
-                            onClick={() => controller.setUserFilter(filter)}
+                            onClick={() => controller.search(filter)}
                         />
                     </SearchContainer>
                     {!isExternal && (
@@ -76,7 +79,7 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                             <PlusOutlined />
                         </AddButton>
                     )}
-                    {users.map(user => (
+                    {state.users.map(user => (
                         <UserBlock key={user.id}>
                             <span>{user.user} ({user.firstName} {user.lastName})</span>
                             <EditButton
@@ -86,6 +89,16 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                             </EditButton>
                         </UserBlock>
                     ))}
+                    <Footer>
+                        <Pagination
+                            current={state.userPagination.page}
+                            onChange={(page) => controller.setUserPage(page)}
+                            simple
+                            total={state.userPagination.totalCount}
+                            pageSize={state.userPagination.limit}
+                            showSizeChanger={false}
+                        />
+                    </Footer>
                 </>
             )}
         </Content>
