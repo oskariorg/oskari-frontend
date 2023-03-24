@@ -13,14 +13,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         var me = this;
         me._config = config || {};
         me._eventHandlers = {};
-        me._isInLayerToolsEditMode = false;
         me._loc = {};
         me._mapModule = null;
         me._name = 'AbstractPlugin' + Math.floor(Math.random() * (1632960) + 46656).toString(36);
         me._pluginName = me._name;
         me._requestHandlers = {};
         me._sandbox = null;
-        me._fixedLocation = false;
     }, {
         /**
          * @public @method getName
@@ -169,43 +167,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          */
         _createRequestHandlers: function () {
             return {};
-        },
-
-        inLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
-        },
-        isFixedLocation: function () {
-            return this._fixedLocation;
-        },
-
-        _setLayerToolsEditMode: function (isInEditMode) {
-            this._isInLayerToolsEditMode = isInEditMode;
-            if (this.isFixedLocation()) {
-                this.handleDragDisabled();
-            }
-        },
-
-        /**
-         * @method handleDragDisabled
-         * Disable draggable inLayerToolsEditMode if plugin's location is fixed (publisher edit own tools layout)
-         */
-        handleDragDisabled: function (isInEditMode) {
-            const elem = this.getElement();
-            if (!elem) {
-                return;
-            }
-            const draggable = elem.hasClass('ui-draggable');
-            if (this.inLayerToolsEditMode()) {
-                elem.addClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('disable');
-                }
-            } else {
-                elem.removeClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('enable');
-                }
-            }
         },
 
         /**
