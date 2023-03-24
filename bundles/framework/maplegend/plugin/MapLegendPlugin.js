@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
         this._index = 90;
         this._popupControls = null;
     }, {
-        resetUI: function() {
+        resetUI: function () {
             if (this.isOpen()) {
                 this.clearPopup();
             }

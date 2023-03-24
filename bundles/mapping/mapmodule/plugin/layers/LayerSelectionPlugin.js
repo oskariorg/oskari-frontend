@@ -153,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
-        resetUI: function() {
+        resetUI: function () {
             this.popupCleanup();
         },
 

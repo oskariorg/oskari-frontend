@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
     }, {
-        resetUI: function() {
+        resetUI: function () {
             if (this.handler && this.popupOpen) {
                 this.handler.getController().popupCleanup();
             }

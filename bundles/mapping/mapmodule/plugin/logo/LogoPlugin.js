@@ -135,7 +135,7 @@ Oskari.clazz.define(
             };
         },
 
-        resetUI: function() {
+        resetUI: function () {
             if (this._popupControls) {
                 this.clearPopup();
             }

@@ -162,7 +162,7 @@ Oskari.clazz.define(
                 el[0]
             );
         },
-        resetUI: function() {
+        resetUI: function () {
             if (this._indexMap) {
                 this._removeIndexMap();
             }
