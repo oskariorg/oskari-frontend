@@ -1,4 +1,5 @@
 import './AbstractMapModulePlugin';
+// import { AbstractMapPlugin } from './AbstractMapPlugin';
 /**
  * @class Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin
  */
@@ -95,7 +96,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var mapModule = this.getMapModule();
             mapModule.removeMapControlPlugin(
                 element,
-                this.inLayerToolsEditMode(),
                 !!preserve
             );
             if (!preserve) {

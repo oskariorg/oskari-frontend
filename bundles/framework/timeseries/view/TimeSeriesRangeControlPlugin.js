@@ -26,6 +26,9 @@ class TimeSeriesRangeControlPlugin extends BasicMapModulePlugin {
     }
 
     hasUI () {
+        return true;
+    }
+    isShouldStopForPublisher () {
         // prevent publisher to stop this plugin and start it again when leaving the publisher
         return false;
     }

@@ -64,13 +64,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
         },
 
         /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.refresh();
-        },
-        /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public createPluginUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
@@ -105,11 +98,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugi
                     icon={isFullscreen ? <FullscreenExitOutlined /> : <FullscreenOutlined />}
                     iconActive={isFullscreen}
                     onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.setState({
-                                fullscreen: !isFullscreen
-                            });
-                        }
+                        this.setState({
+                            fullscreen: !isFullscreen
+                        });
                     }}
                     position={this.getLocation()}
                 />

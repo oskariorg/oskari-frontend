@@ -38,13 +38,6 @@ Oskari.clazz.define(
             this.template = jQuery('<div class="mapplugin search default-search-div" />');
             this.inMobileMode = false;
         },
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-            this.renderSearchBar(!!this.inLayerToolsEditMode());
-        },
 
         /**
          * @private @method _createControlElement
@@ -56,27 +49,10 @@ Oskari.clazz.define(
         },
 
         refresh: function () {
-            this.changeToolStyle();
-        },
-
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         */
-        changeToolStyle: function () {
-            if (!this.getElement()) {
+            let el = this.getElement();
+            if (!el) {
                 return;
             }
-            this.renderSearchBar();
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
-        },
-
-        renderSearchBar: function (disabled = false) {
-            let el = this.getElement();
-            if (!el) return;
             if (!this.handler) {
                 // init handler here so we can be sure we have a sandbox for this instance
                 this.handler = new SearchHandler(this);
@@ -88,7 +64,6 @@ Oskari.clazz.define(
                     <SearchBar
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
-                        disabled={disabled}
                         placeholder={this.fieldPlaceHolder}
                     />
                 </ThemeProvider>,

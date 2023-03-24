@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'week', value: 'weeks' },
             { key: 'month', value: 'months' }
         ],
-        hasUI: function () {
+        isShouldStopForPublisher: function () {
             // prevent publisher to stop this plugin and start it again when leaving the publisher
             return false;
         },
