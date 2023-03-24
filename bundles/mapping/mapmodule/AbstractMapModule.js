@@ -2147,16 +2147,16 @@ Oskari.clazz.define(
                 // not found
                 return null;
             }
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            return Object.values(this.getLayerPlugins()).map(plugin => {
-                if (!plugin || typeof plugin.getOLMapLayers !== 'function') {
-                    // can there be null plugins?
-                    return [];
-                }
-                return plugin.getOLMapLayers(layer) || [];
-            })
-            .flatMap(layers => layers);
+            // let the actual layerplugins find the layer since the impl depends on type
+            return Object.values(this.getLayerPlugins())
+                .map(plugin => {
+                    if (!plugin || typeof plugin.getOLMapLayers !== 'function') {
+                        // can there be null plugins?
+                        return [];
+                    }
+                    return plugin.getOLMapLayers(layer) || [];
+                })
+                .flatMap(layers => layers);
         },
         /**
          * Adds the layer to the map through the correct plugin for the layer's type.
