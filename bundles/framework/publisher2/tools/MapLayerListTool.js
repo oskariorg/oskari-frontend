@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                title: 'LayerSelectionPlugin',
+                title: Oskari.getMsg('Publisher2', 'BasicView.layerselection.label'),
                 config: this.state.pluginConfig || {}
             };
         },
