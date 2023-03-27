@@ -39,7 +39,7 @@ class UIHandler extends StateHandler {
     }
 
     setToolEnabled (tool, enabled) {
-        tool.setEnabled(enabled)
+        tool.setEnabled(enabled);
         // trigger re-render
         this.notify();
     }

@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
             return;
         }
         if (!enabled) {
-            this.stop()
+            this.stop();
         } else if (tool.hasNoPlugin !== true) {
             let plugin = this.getPlugin();
             if (!plugin) {
