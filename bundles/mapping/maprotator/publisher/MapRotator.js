@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return {
                 id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
                 title: 'MapRotator',
-                config: this.state.pluginConfig || {},
+                config: this.state.pluginConfig || {}
             };
         },
         isDisplayed: function () {
@@ -100,9 +100,10 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
                 plugin.setConfig({
                     ...plugin.getConfig(),
                     noUI: checked === 'on'
-                })
+                });
                 plugin.refresh();
             });
+            // initial value from pluginconfig that we get when opening the publisher
             input.setChecked(!!this.state.pluginConfig?.noUI);
             var inputEl = input.getElement();
             template.append(inputEl);
