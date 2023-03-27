@@ -93,22 +93,24 @@ const getDataYearStyles = (props) => {
         .map((year) => parseInt(year, 10))
         .sort((a, b) => a - b);
 
+    console.log(dataYears)
+    console.log(markYears)
     return dataYears.map((year) => {
         const index = markYears.indexOf(year) + 1;
         return `
             &:nth-child(${index}) {
+                background-color: ${backgroundColor};
                 border-radius: 50%;
                 border: 2px solid #ffffff;
-                width: 8px;
-                height: 8px;
-                margin-left: -2px;
+                width: 5px;
+                height: 5px;
                 top: -2px;
                 &.ant-slider-dot-active {
                     border: 2px solid ${primaryColor};
                 }
 
                 &:hover {
-                    :after {
+                    &:nth-child(${index})::after {
                         content: '${year}';
                         color: #ffffff;
                         display: flex;
@@ -151,12 +153,18 @@ export const StyledRangeSlider = styled(Slider)`
     .ant-slider-track {
         background-color: ${primaryColor};
     }
+    &:hover {
+        .ant-slider-rail {
+            background-color: #ffffff;    
+        }
+    }
     .ant-slider-handle {
         width: 8px;
         height: 16px;
         border-radius: 6px;
         border: solid 1px ${borderColor};
         margin-left: 2px;
+        top: 2px;
         ${(props => {
             let handleColor = primaryColor;
             if (!props.dataYears.includes(props.value)) {
