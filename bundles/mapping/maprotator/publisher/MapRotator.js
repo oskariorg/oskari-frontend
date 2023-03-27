@@ -1,7 +1,6 @@
 
 Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
     function () {
-        //this.geoportalLocation = this.getPlugin().getLocation();
     }, {
         index: 500,
         lefthanded: 'top left',
