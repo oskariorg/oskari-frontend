@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { RpcPanelHandler } from '../handler/RpcPanelHandler';
-import { RpcForm } from './form/RpcForm';
+import { PublisherToolsList } from './form/PublisherToolsList';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
             const contentPanel = this.panel.getContainer();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <RpcForm
+                    <PublisherToolsList
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
                     />

@@ -1,12 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Checkbox, Message } from 'oskari-ui';
+import { Checkbox } from 'oskari-ui';
 
 const Content = styled('div')`
     display: flex;
     flex-direction: column;
 `;
-
 
 const ToolContainer = styled('div')`
     margin: 5px;
@@ -22,7 +21,7 @@ const StyledCheckbox = styled(Checkbox)`
     }
 `;
 
-export const RpcForm = ({ state, controller }) => {
+export const PublisherToolsList = ({ state, controller }) => {
     return (
         <Content>
             {state.tools.map((tool) => (
