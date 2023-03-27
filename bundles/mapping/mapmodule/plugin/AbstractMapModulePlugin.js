@@ -129,13 +129,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @return {Object} EventHandlers
          */
         createEventHandlers: function () {
-            const me = this;
-            const eventHandlers = this._createEventHandlers();
-
-            eventHandlers.LayerToolsEditModeEvent = function (event) {
-                me._setLayerToolsEditMode(event.isInMode());
-            };
-            return eventHandlers;
+            return this._createEventHandlers();
         },
 
         /**
