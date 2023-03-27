@@ -19,14 +19,18 @@ class UIHandler extends StateHandler {
         this.tools.forEach(tool => {
             tool.init(data);
             const toolComponent = tool.getComponent();
-            toolComponent.handler.addStateListener(() => this.notify());
+            if (toolComponent.handler) {
+                toolComponent.handler.addStateListener(() => this.notify());
+            }
             this.updateState({
                 tools: [
                     ...this.state.tools,
                     {
                         component: toolComponent.component,
                         handler: toolComponent.handler,
-                        tool
+                        tool,
+                        id: tool.getTool().id,
+                        title: tool.getTool().title
                     }
                 ]
             });
@@ -34,15 +38,15 @@ class UIHandler extends StateHandler {
         return this.tools.some(tool => tool.isDisplayed(data));
     }
 
-    updateField (field, value) {
-        this.updateState({
-            [field]: value
-        });
+    setToolEnabled (tool, enabled) {
+        tool.setEnabled(enabled)
+        // trigger re-render
+        this.notify();
     }
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'updateField'
+    'setToolEnabled'
 ]);
 
 export { wrapped as RpcPanelHandler };

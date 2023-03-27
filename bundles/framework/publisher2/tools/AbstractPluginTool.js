@@ -87,17 +87,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (this.isEnabled() === enabled) {
             return;
         }
-        let plugin = this.getPlugin();
-        if (!plugin && enabled) {
-            plugin = Oskari.clazz.create(tool.id, tool.config);
-            this.__plugin = plugin;
-        }
-
-        if (enabled) {
+        if (!enabled) {
+            this.stop()
+        } else if (tool.hasNoPlugin !== true) {
+            let plugin = this.getPlugin();
+            if (!plugin) {
+                plugin = Oskari.clazz.create(tool.id, tool.config);
+                this.__plugin = plugin;
+            }
             this.getMapmodule().registerPlugin(plugin);
             plugin.startPlugin(this.getSandbox());
-        } else {
-            this.stop();
         }
         // Stop checks if we are already disabled so toggle the value after
         this.state.enabled = enabled;
@@ -233,15 +232,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         if (!this.isEnabled()) {
             return;
         }
+        var tool = this.getTool();
         this._stopImpl();
-        const plugin = this.getPlugin();
-        if (!plugin) {
-            return;
+        if (tool.hasNoPlugin !== true) {
+            const plugin = this.getPlugin();
+            if (!plugin) {
+                return;
+            }
+            if (this.getSandbox()) {
+                plugin.stopPlugin(this.getSandbox());
+            }
+            this.getMapmodule().unregisterPlugin(plugin);
+            this.__plugin = null;
         }
-        if (this.getSandbox()) {
-            plugin.stopPlugin(this.getSandbox());
-        }
-        this.getMapmodule().unregisterPlugin(plugin);
-        this.__plugin = null;
     }
 });

@@ -1,6 +1,3 @@
-import { MetadataSearchForm } from './MetaDataSearchForm';
-import { MetadataSearchToolHandler } from './MetadataSearchToolHandler';
-
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
     function () {
         this.handler = null;
@@ -22,9 +19,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
         getTool: function () {
             return {
                 // doesn't actually map to anything real, just need this in order to not break stuff in publisher
-                id: 'Oskari.mapframework.publisher.tool.MetadataSearchTool',
-                title: 'MetadataSearchTool',
-                config: {}
+                // and provide a cleaner selector for selenium testing
+                id: 'metadatacatalogue.MetadataSearchRPCTool',
+                title: Oskari.getMsg('catalogue.bundle.metadatacatalogue', 'tool.label'),
+                config: {},
+                hasNoPlugin: true
             };
         },
 
@@ -37,18 +36,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
          */
         init: function (data) {
             const conf = data?.configuration[this.bundleName]?.conf || {};
-            let initialValue = false;
-            if (conf.noUI) {
-                initialValue = true;
-            }
-            this.handler = new MetadataSearchToolHandler(initialValue);
+            this.setEnabled(!!conf.noUI);
         },
 
         getComponent: function () {
-            return {
-                component: MetadataSearchForm,
-                handler: this.handler
-            };
+            return {};
         },
 
         /**
@@ -59,20 +51,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MetadataSearchTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            if (this.handler?.getState()?.allowMetadata) {
-                const json = {
-                    configuration: {}
-                };
-                json.configuration[this.bundleName] = {
-                    conf: {
-                        noUI: true
-                    },
-                    state: {}
-                };
-                return json;
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+            return {
+                configuration: {
+                    metadatacatalogue: {
+                        conf: {
+                            noUI: true
+                        }
+                    }
+                }
+            };
         }
     }, {
 
