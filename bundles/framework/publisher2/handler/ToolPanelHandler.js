@@ -4,14 +4,10 @@ class UIHandler extends StateHandler {
     constructor (tools, consumer) {
         super();
         this.tools = tools;
-        this.state = {
+        this.setState({
             tools: []
-        };
+        });
         this.addStateListener(consumer);
-    }
-
-    getName () {
-        return 'RpcPanelHandler';
     }
 
     init (data) {
@@ -49,4 +45,4 @@ const wrapped = controllerMixin(UIHandler, [
     'setToolEnabled'
 ]);
 
-export { wrapped as RpcPanelHandler };
+export { wrapped as ToolPanelHandler };

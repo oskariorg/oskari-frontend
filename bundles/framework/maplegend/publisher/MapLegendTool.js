@@ -1,6 +1,3 @@
-import { MapLegendTool } from './MapLegendToolComponent';
-import { MapLegendHandler } from './MapLegendHandler';
-
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
     function () {
         this.handler = null;
@@ -9,16 +6,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
         group: 'layers',
         bundleName: 'maplegend',
         getComponent: function () {
-            return {
-                component: MapLegendTool,
-                handler: this.handler
-            };
+            return {};
         },
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
-                title: 'MapLegend',
-                config: this.state.pluginConfig || {}
+                title: Oskari.getMsg('maplegend', 'tool.label'),
+                config: this.state.pluginConfig || {},
+                disabledReason: Oskari.getMsg('maplegend', 'noLegendsText')
             };
         },
         /**
@@ -27,15 +22,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
          */
         init: function (data) {
             const myData = data?.configuration[this.bundleName];
-            const enabled = !!myData;
-            this.handler = new MapLegendHandler(enabled, this);
-            if (enabled) {
+            if (!!myData) {
                 this.storePluginConf(myData.conf);
                 this.setEnabled(true);
             }
         },
         isDisabled: function () {
+            // should we filter layers with isVisibleOnMap()?
             return !this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
+        },
+        onLayersChanged: function () {
+            if (this.isEnabled() && this.isDisabled()) {
+                // disable if layers changed and there is no longer layers with legends on map
+                this.setEnabled(false);
+            }
         },
         /**
          * Get values.

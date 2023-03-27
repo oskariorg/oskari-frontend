@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Checkbox } from 'oskari-ui';
+import { Checkbox, Tooltip } from 'oskari-ui';
 
 const Content = styled('div')`
     display: flex;
@@ -26,12 +26,7 @@ export const PublisherToolsList = ({ state, controller }) => {
         <Content>
             {state.tools.map((tool) => (
                 <ToolContainer key={tool.id} className='t_tool' data-id={tool.id} data-enabled={tool.tool.isEnabled()}>
-                    <StyledCheckbox
-                        checked={tool.tool.isEnabled()}
-                        onChange={(e) => controller.setToolEnabled(tool.tool, e.target.checked)}
-                    >
-                        {tool.title}
-                    </StyledCheckbox>
+                    <ToolCheckbox tool={tool} controller={controller} />
                     { tool.tool.isEnabled() && tool.component &&
                         <div className="t_options extraOptions">
                             <tool.component
@@ -42,4 +37,22 @@ export const PublisherToolsList = ({ state, controller }) => {
             ))}
         </Content>
     );
+};
+
+const ToolCheckbox = ({tool, controller}) => {
+    const toolClass = tool.tool;
+    if (toolClass.isDisabled()) {
+        return (<Tooltip title={toolClass.getTool().disabledReason}>
+            <StyledCheckbox disabled={true} >
+                {tool.title}
+            </StyledCheckbox>
+        </Tooltip>);
+    }
+    return (
+        <StyledCheckbox
+            checked={toolClass.isEnabled()}
+            onChange={(e) => controller.setToolEnabled(toolClass, e.target.checked)}
+        >
+            {tool.title}
+        </StyledCheckbox>);
 };

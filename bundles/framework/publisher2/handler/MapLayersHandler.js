@@ -1,45 +1,22 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { controllerMixin } from 'oskari-ui/util';
+import { ToolPanelHandler } from './ToolPanelHandler';
 
 const LAYERLIST_TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
-class UIHandler extends StateHandler {
+
+class UIHandler extends ToolPanelHandler {
     constructor (tools, sandbox, consumer) {
-        super();
+        super(tools, consumer);
         this.sandbox = sandbox;
-        this.tools = tools;
-        this.setState({
+        this.updateState({
             layers: [],
             layerTools: []
         });
-        this.addStateListener(consumer);
     };
 
-    getName () {
-        return 'MapLayersHandler';
-    }
-
     init (data) {
-        this.data = data;
-        const layerTools = [];
-        this.tools.forEach(tool => {
-            try {
-                tool.init(data);
-            } catch (e) {
-                Oskari.log('publisher2.MapLayersHandler')
-                    .error('Error initializing publisher tool:', tool.getTool().id);
-            }
-            const toolComponent = tool.getComponent();
-            toolComponent.handler.addStateListener(() => this.updateSelectedLayers(true));
-            layerTools.push({
-                component: toolComponent.component,
-                handler: toolComponent.handler,
-                tool: tool
-            });
-        });
-        this.updateState({
-            layerTools
-        });
+        const hasTools = super.init(data);
         this.updateSelectedLayers(true);
-        return this.tools.some(tool => tool.isDisplayed(data));
+        return hasTools;
     }
 
     updateSelectedLayers (silent) {
@@ -66,7 +43,13 @@ class UIHandler extends StateHandler {
     }
 
     notifyTools () {
-        this.tools.forEach(tool => tool.handler.onLayersChanged());
+        this.tools.forEach(tool => {
+            if (typeof tool.onLayersChanged === 'function') {
+                tool.onLayersChanged();
+            } else if (typeof tool.handler?.onLayersChanged === 'function') {
+                tool.handler.onLayersChanged();
+            }
+        });
     }
 
     openLayerList () {
@@ -118,7 +101,8 @@ const wrapped = controllerMixin(UIHandler, [
     'openLayerList',
     'openSelectedLayerList',
     'addBaseLayer',
-    'removeBaseLayer'
+    'removeBaseLayer',
+    'setToolEnabled'
 ]);
 
 export { wrapped as MapLayersHandler };
