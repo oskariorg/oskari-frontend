@@ -56,7 +56,7 @@ Oskari.clazz.define(
             if (!this.handler) {
                 // init handler here so we can be sure we have a sandbox for this instance
                 this.handler = new SearchHandler(this);
-                this.handler.addStateListener(() => this.renderSearchBar());
+                this.handler.addStateListener(() => this.refresh());
             }
 
             ReactDOM.render(
