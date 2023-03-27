@@ -70,9 +70,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
          */
         _createControlElement: function () {
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-            if (!this.hasUI()) {
-                return null;
-            }
             return this._templates.maprotatortool.clone();
         },
         rotateIcon: function (degrees) {
@@ -112,6 +109,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             ReactDOM.render(
                 <MapModuleButton
                     className='t_maprotator'
+                    visible={this.hasUI()}
                     title={this._locale.tooltip.tool}
                     icon={<StyledIcon degrees={degrees || 0}><NorthIcon /></StyledIcon>}
                     onClick={() => this.setRotation(0)}
