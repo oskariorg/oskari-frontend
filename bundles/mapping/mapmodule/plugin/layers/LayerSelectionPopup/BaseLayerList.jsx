@@ -6,28 +6,50 @@ import { MetadataIcon } from 'oskari-ui/components/icons';
 import { StyleSelect } from './StyleSelect';
 import { LayerRow } from './LayerList';
 
-const RadioGroup = styled(Radio.Group)`
-    margin-bottom: 20px;
+const ListContainer = styled('div')`
+    margin-bottom: 1.5em;
 `;
-const getBaseLayers = (layers) => {
+
+const IconContainer = styled('span')`
+    margin-left: 1em;
+`;
+
+const getSortedLayers = (layers) => {
     const baseLayers = [...layers];
     baseLayers.sort(function (a, b) {
         return Oskari.util.naturalSort(a.getName(), b.getName());
     });
     return baseLayers;
-}
+};
 
 export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLayer, selectStyle, showHeading }) => {
     if (!layers || !layers.length) {
         return null;
     }
-    const baseLayers = getBaseLayers(layers);
-    const selected = baseLayers.find(l => l.isVisible()) || baseLayers[0];
+    if (layers.length === 1) {
+        const layer = layers[0];
+        return (
+            <ListContainer className='t_baselayers'>
+                { showHeading && <h3><Message messageKey='plugin.LayerSelectionPlugin.headingBaseLayer' /></h3> }
+                <div key={layer.getId()} className='t_layer' data-id={layer.getId()} data-checked={true}>
+                    <LayerRow>
+                        { layer.getName() }
+                        { showMetadata &&
+                            <IconContainer>
+                                <MetadataIcon metadataId={layer.getMetadataIdentifier()} />
+                            </IconContainer> }
+                    </LayerRow>
+                    {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
+                </div>
+            </ListContainer>);
+    }
 
+    const baseLayers = getSortedLayers(layers);
+    const selected = baseLayers.find(l => l.isVisible()) || baseLayers[0];
     return (
-        <div className='t_baselayers'>
+        <ListContainer className='t_baselayers'>
             { showHeading && <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3> }
-            <RadioGroup
+            <Radio.Group
                 value={selected.getId()}
                 onChange={e => selectLayer(baseLayers.find(l => '' + l.getId() === '' + e.target.value))}
             >
@@ -39,17 +61,19 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
                                 <Radio.Choice value={layer.getId()}>
                                     {layer.getName()}
                                 </Radio.Choice>
-                                {showMetadata && <MetadataIcon metadataId={layer.getMetadataIdentifier()} />}
+                                { showMetadata &&
+                                    <IconContainer>
+                                        <MetadataIcon metadataId={layer.getMetadataIdentifier()} />
+                                    </IconContainer> }
                             </LayerRow>
                             {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
                         </div>
                     );
                 })}
-            </RadioGroup>
-        </div>
+            </Radio.Group>
+        </ListContainer>
     );
 };
-
 
 BaseLayerList.propTypes = {
     layers: PropTypes.arrayOf(PropTypes.object),

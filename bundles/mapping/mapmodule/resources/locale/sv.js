@@ -41,6 +41,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",
+                "headingBaseLayer": "Bakgrundskarta",
                 "chooseOtherLayers": "Välj andra kartlager",
                 "style": "Stil"
             },
