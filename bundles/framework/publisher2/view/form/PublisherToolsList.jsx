@@ -39,7 +39,7 @@ export const PublisherToolsList = ({ state, controller }) => {
     );
 };
 
-const ToolCheckbox = ({tool, controller}) => {
+const ToolCheckbox = ({ tool, controller }) => {
     const toolClass = tool.tool;
     if (toolClass.isDisabled()) {
         return (<Tooltip title={toolClass.getTool().disabledReason}>

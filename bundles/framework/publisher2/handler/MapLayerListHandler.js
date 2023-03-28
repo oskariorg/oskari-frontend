@@ -13,7 +13,7 @@ class UIHandler extends StateHandler {
             baseLayers: [],
             defaultBaseLayer: null,
             showMetadata: false,
-            allowStyleChange: false,
+            isStyleSelectable: false,
             isDisabledMetadata: !layersHaveMetadata(layers),
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });
@@ -31,7 +31,7 @@ class UIHandler extends StateHandler {
             baseLayers: [],
             defaultBaseLayer: null,
             showMetadata: false,
-            allowStyleChange: false,
+            isStyleSelectable: false,
             isDisabledMetadata: !layersHaveMetadata(layers),
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });

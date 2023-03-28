@@ -12,7 +12,6 @@ const ExtraOptions = styled('div')`
     flex-direction: column;
 `;
 
-
 export const MapLayerListToolComponent = ({ state, controller }) => {
     return (
         <ExtraOptions>
@@ -30,7 +29,7 @@ const StyleSelect = ({ state, controller }) => {
     }
     return (
         <StyledCheckbox
-            checked={state.allowStyleChange}
+            checked={state.isStyleSelectable}
             onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
         >
             <Message messageKey='BasicView.maptools.layerselection.allowStyleChange' />
