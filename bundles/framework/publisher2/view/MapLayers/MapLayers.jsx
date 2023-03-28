@@ -35,11 +35,6 @@ const LayerContainer = styled('div')`
     margin-top: 20px;
 `;
 
-const ToolsContainer = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
 export const MapLayers = ({ state, controller }) => {
     const layerListPluginEnabled = state.layerListPluginActive;
     const layers = state.layers;

@@ -41,6 +41,7 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",
+                "headingBaseLayer": "Background map",
                 "chooseOtherLayers": "Select other map layers",
                 "style": "Style"
             },

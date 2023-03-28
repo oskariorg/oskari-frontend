@@ -12,14 +12,14 @@ export const LayerRow = styled('div')`
     align-items: center;
 `;
 
-export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisibility, selectStyle }) => {
+export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisibility, selectStyle, showHeading }) => {
     if (!layers || !layers.length) {
         return null;
     }
     return (
         <div className='t_otherlayers'>
-            <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3>
-            {layers.map(layer => {
+            { showHeading && <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseOtherLayers' /></h3> }
+            { layers.map(layer => {
                 return (
                     <div key={layer.getId()} className='t_layer' data-id={layer.getId()} data-checked={layer.isVisible()}>
                         <LayerRow>
@@ -43,5 +43,6 @@ LayerList.propTypes = {
     showMetadata: PropTypes.bool.isRequired,
     setLayerVisibility: PropTypes.func.isRequired,
     selectStyle: PropTypes.func.isRequired,
-    styleSelectable: PropTypes.bool.isRequired
+    styleSelectable: PropTypes.bool.isRequired,
+    showHeading: PropTypes.bool
 };

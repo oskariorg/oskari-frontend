@@ -21,8 +21,20 @@ const LayerSelectionPopup = ({ baseLayers, layers, showMetadata, styleSelectable
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_NAME }}>
             <Content>
-                <BaseLayerList layers={baseLayers} showMetadata={showMetadata} styleSelectable={styleSelectable} selectLayer={selectBaseLayer} selectStyle={selectStyle}/>
-                <LayerList layers={layers} showMetadata={showMetadata} styleSelectable={styleSelectable} setLayerVisibility={setLayerVisibility} selectStyle={selectStyle}/>
+                <BaseLayerList
+                    layers={baseLayers}
+                    showHeading={layers && layers.length > 0}
+                    showMetadata={showMetadata}
+                    styleSelectable={styleSelectable}
+                    selectLayer={selectBaseLayer}
+                    selectStyle={selectStyle} />
+                <LayerList
+                    layers={layers}
+                    showHeading={baseLayers && baseLayers.length > 0}
+                    showMetadata={showMetadata}
+                    styleSelectable={styleSelectable}
+                    setLayerVisibility={setLayerVisibility}
+                    selectStyle={selectStyle} />
             </Content>
         </LocaleProvider>
     );
