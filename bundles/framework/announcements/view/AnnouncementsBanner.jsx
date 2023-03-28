@@ -32,6 +32,16 @@ const Column = styled.div`
     display: flex;
     flex-direction: column;
 `;
+const InfoContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+`;
 const Margin = styled.div`
     margin-right: auto;
 `;
@@ -65,21 +75,25 @@ const getContent = (state, controller, renderDescriptionPopup) => {
     }
     return (
         <Fragment>
-            <InfoIcon/>
-            <Column>
-                <StyledTitle>{title}</StyledTitle>
-                <span>
-                    {description}
-                    <Margin/>
-                </span>
-            </Column>
-            <Margin/>
-            <Column style={{ whiteSpace: 'nowrap' }}>
-                <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
-                    <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
-                </StyledCheckbox>
-                <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
-            </Column>
+            <Row>
+                <InfoContainer>
+                    <InfoIcon/>
+                    <Column>
+                        <StyledTitle>{title}</StyledTitle>
+                        <span>
+                            {description}
+                            <Margin/>
+                        </span>
+                    </Column>
+                </InfoContainer>
+                <Margin/>
+                <Column style={{ whiteSpace: 'nowrap' }}>
+                    <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+                        <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
+                    </StyledCheckbox>
+                    <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+                </Column>
+            </Row>
         </Fragment>
     );
 };
