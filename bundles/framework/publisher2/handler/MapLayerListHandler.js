@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
-const layersHaveMetadata = (layers = []) => layers.some(l => l.getMetadataIdentifier() !== null);
+const layersHaveMetadata = (layers = []) => layers.some(l => !!l.getMetadataIdentifier());
 const layersHaveMultipleStyles = (layers = []) => layers.some(l => l.getStyles().length > 1);
 
 class UIHandler extends StateHandler {
