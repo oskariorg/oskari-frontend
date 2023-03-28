@@ -1,15 +1,15 @@
 import { controllerMixin } from 'oskari-ui/util';
 import { ToolPanelHandler } from './ToolPanelHandler';
-
-const LAYERLIST_TOOL_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
+import { LAYERLIST_ID } from '../tools/MapLayerListTool';
 
 class UIHandler extends ToolPanelHandler {
     constructor (tools, sandbox, consumer) {
+        // ToolPanelHandler adds tools to state so we can reference it here
         super(tools, consumer);
         this.sandbox = sandbox;
         this.updateState({
             layers: [],
-            layerTools: []
+            tools: []
         });
     };
 
@@ -23,7 +23,7 @@ class UIHandler extends ToolPanelHandler {
         let layers = [...this.sandbox.findAllSelectedMapLayers()];
         let baseLayers = [];
         const layerListTool = this.getLayerListPlugin();
-
+        // divide layers into two lists IF we have the layerlist plugin selected
         if (layerListTool) {
             const listState = layerListTool.handler.getState() || {};
             const baseLayerIds = listState?.baseLayers || [];
@@ -42,12 +42,26 @@ class UIHandler extends ToolPanelHandler {
         }
     }
 
+    setToolEnabled (tool, enabled) {
+        tool.setEnabled(enabled);
+        const layerListTool = this.getLayerListPlugin();
+        // trigger re-render with check if layerlist was enabled/disabled
+        this.updateState({
+            layerListPluginActive: !!layerListTool
+        });
+    }
+
     notifyTools () {
-        this.tools.forEach(tool => {
-            if (typeof tool.onLayersChanged === 'function') {
-                tool.onLayersChanged();
-            } else if (typeof tool.handler?.onLayersChanged === 'function') {
-                tool.handler.onLayersChanged();
+        const { tools } = this.getState();
+        tools.forEach(tool => {
+            try {
+                if (typeof tool.onLayersChanged === 'function') {
+                    tool.onLayersChanged();
+                } else if (typeof tool.handler?.onLayersChanged === 'function') {
+                    tool.handler.onLayersChanged();
+                }
+            } catch (e) {
+                Oskari.log('Publisher.MapLayersHandler').warn('Error notifying tools about layer changes:', e);
             }
         });
     }
@@ -67,8 +81,8 @@ class UIHandler extends ToolPanelHandler {
     }
 
     getLayerListPlugin () {
-        const { layerTools } = this.getState();
-        const layerListTool = layerTools.find(tool => tool.tool.getTool().id === LAYERLIST_TOOL_ID);
+        const { tools } = this.getState();
+        const layerListTool = tools.find(tool => tool.tool.getTool().id === LAYERLIST_ID);
         if (!layerListTool || !layerListTool.tool.isEnabled()) {
             return null;
         }
@@ -86,11 +100,12 @@ class UIHandler extends ToolPanelHandler {
     }
 
     stop () {
-        this.tools.forEach(tool => {
+        const { tools } = this.getState();
+        tools.forEach(tool => {
             try {
                 tool.stop();
             } catch (e) {
-                Oskari.log('publisher2.view.MapLayersHandler')
+                Oskari.log('Publisher.MapLayersHandler')
                     .error('Error stopping publisher tool:', tool.getTool().id);
             }
         });

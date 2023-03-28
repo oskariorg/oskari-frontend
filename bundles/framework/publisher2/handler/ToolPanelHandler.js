@@ -3,7 +3,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 class UIHandler extends StateHandler {
     constructor (tools, consumer) {
         super();
-        this.tools = tools;
+        this.toolsToInit = tools || [];
         this.setState({
             tools: []
         });
@@ -12,26 +12,32 @@ class UIHandler extends StateHandler {
 
     init (data) {
         this.data = data;
-        this.tools.forEach(tool => {
+        while (this.toolsToInit.length) {
+            const tool = this.toolsToInit.shift()
             tool.init(data);
-            const toolComponent = tool.getComponent();
-            if (toolComponent.handler) {
-                toolComponent.handler.addStateListener(() => this.notify());
-            }
-            this.updateState({
-                tools: [
-                    ...this.state.tools,
-                    {
-                        component: toolComponent.component,
-                        handler: toolComponent.handler,
-                        tool,
-                        id: tool.getTool().id,
-                        title: tool.getTool().title
-                    }
-                ]
-            });
+            this._addToolToState(tool);
+        }
+        const { tools } = this.getState();
+        return tools.some(tool => tool.tool.isDisplayed(data));
+    }
+
+    _addToolToState (tool) {
+        const toolComponent = tool.getComponent();
+        if (toolComponent.handler) {
+            toolComponent.handler.addStateListener(() => this.notify());
+        }
+        this.updateState({
+            tools: [
+                ...this.state.tools,
+                {
+                    component: toolComponent.component,
+                    handler: toolComponent.handler,
+                    tool,
+                    id: tool.getTool().id,
+                    title: tool.getTool().title
+                }
+            ]
         });
-        return this.tools.some(tool => tool.isDisplayed(data));
     }
 
     setToolEnabled (tool, enabled) {
@@ -39,7 +45,7 @@ class UIHandler extends StateHandler {
         // trigger re-render
         this.notify();
     }
-}
+};
 
 const wrapped = controllerMixin(UIHandler, [
     'setToolEnabled'
