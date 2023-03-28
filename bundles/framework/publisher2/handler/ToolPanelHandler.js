@@ -18,7 +18,7 @@ class UIHandler extends StateHandler {
             this._addToolToState(tool);
         }
         const { tools } = this.getState();
-        return tools.some(tool => tool.tool.isDisplayed(data));
+        return tools.some(tool => tool.publisherTool.isDisplayed(data));
     }
 
     _addToolToState (tool) {
@@ -32,7 +32,7 @@ class UIHandler extends StateHandler {
                 {
                     component: toolComponent.component,
                     handler: toolComponent.handler,
-                    tool,
+                    publisherTool: tool,
                     id: tool.getTool().id,
                     title: tool.getTool().title
                 }

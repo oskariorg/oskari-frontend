@@ -25,9 +25,9 @@ export const PublisherToolsList = ({ state, controller }) => {
     return (
         <Content>
             {state.tools.map((tool) => (
-                <ToolContainer key={tool.id} className='t_tool' data-id={tool.id} data-enabled={tool.tool.isEnabled()}>
+                <ToolContainer key={tool.id} className='t_tool' data-id={tool.id} data-enabled={tool.publisherTool.isEnabled()}>
                     <ToolCheckbox tool={tool} controller={controller} />
-                    { tool.tool.isEnabled() && tool.component &&
+                    { tool.publisherTool.isEnabled() && tool.component &&
                         <div className="t_options extraOptions">
                             <tool.component
                                 state={tool.handler.getState()}
@@ -40,7 +40,7 @@ export const PublisherToolsList = ({ state, controller }) => {
 };
 
 const ToolCheckbox = ({ tool, controller }) => {
-    const toolClass = tool.tool;
+    const toolClass = tool.publisherTool;
     if (toolClass.isDisabled()) {
         return (<Tooltip title={toolClass.getTool().disabledReason}>
             <StyledCheckbox disabled={true} >

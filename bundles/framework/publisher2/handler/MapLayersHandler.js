@@ -55,8 +55,8 @@ class UIHandler extends ToolPanelHandler {
         const { tools } = this.getState();
         tools.forEach(tool => {
             try {
-                if (typeof tool.onLayersChanged === 'function') {
-                    tool.onLayersChanged();
+                if (typeof tool.publisherTool.onLayersChanged === 'function') {
+                    tool.publisherTool.onLayersChanged();
                 } else if (typeof tool.handler?.onLayersChanged === 'function') {
                     tool.handler.onLayersChanged();
                 }
@@ -82,8 +82,8 @@ class UIHandler extends ToolPanelHandler {
 
     getLayerListPlugin () {
         const { tools } = this.getState();
-        const layerListTool = tools.find(tool => tool.tool.getTool().id === LAYERLIST_ID);
-        if (!layerListTool || !layerListTool.tool.isEnabled()) {
+        const layerListTool = tools.find(tool => tool.publisherTool.getTool().id === LAYERLIST_ID);
+        if (!layerListTool || !layerListTool.publisherTool.isEnabled()) {
             return null;
         }
         return layerListTool;
@@ -103,7 +103,7 @@ class UIHandler extends ToolPanelHandler {
         const { tools } = this.getState();
         tools.forEach(tool => {
             try {
-                tool.stop();
+                tool.publisherTool.stop();
             } catch (e) {
                 Oskari.log('Publisher.MapLayersHandler')
                     .error('Error stopping publisher tool:', tool.getTool().id);
