@@ -44,11 +44,8 @@ class UIHandler extends ToolPanelHandler {
 
     setToolEnabled (tool, enabled) {
         tool.setEnabled(enabled);
-        const layerListTool = this.getLayerListPlugin();
         // trigger re-render with check if layerlist was enabled/disabled
-        this.updateState({
-            layerListPluginActive: !!layerListTool
-        });
+        this.updateSelectedLayers(true);
     }
 
     notifyTools () {
