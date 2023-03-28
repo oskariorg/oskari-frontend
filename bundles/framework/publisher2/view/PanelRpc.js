@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { RpcPanelHandler } from '../handler/RpcPanelHandler';
-import { RpcForm } from './form/RpcForm';
+import { ToolPanelHandler } from '../handler/ToolPanelHandler';
+import { PublisherToolsList } from './form/PublisherToolsList';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            this.handler = new RpcPanelHandler(this.tools, () => this._updateUI());
+            this.handler = new ToolPanelHandler(this.tools, () => this._updateUI());
             return this.handler.init(data);
         },
         getName: function () {
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
             const contentPanel = this.panel.getContainer();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <RpcForm
+                    <PublisherToolsList
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
                     />

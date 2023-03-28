@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
-const layersHaveMetadata = (layers = []) => layers.some(l => l.getMetadataIdentifier() !== null);
+const layersHaveMetadata = (layers = []) => layers.some(l => !!l.getMetadataIdentifier());
 const layersHaveMultipleStyles = (layers = []) => layers.some(l => l.getStyles().length > 1);
 
 class UIHandler extends StateHandler {
@@ -12,40 +12,28 @@ class UIHandler extends StateHandler {
         this.setState({
             baseLayers: [],
             defaultBaseLayer: null,
-            showLayerSelection: false,
             showMetadata: false,
-            allowStyleChange: false,
+            isStyleSelectable: false,
             isDisabledMetadata: !layersHaveMetadata(layers),
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
         });
     };
-
-    getName () {
-        return 'MapLayerListHandler';
+    init (pluginConfig) {
+        this.updateState({
+            ...pluginConfig
+        });
     }
+
     clearState () {
         // plugin is created again on startup, so it's state doesn't need to be cleare
         const layers = this.sandbox.findAllSelectedMapLayers();
         this.setState({
             baseLayers: [],
             defaultBaseLayer: null,
-            showLayerSelection: false,
             showMetadata: false,
-            allowStyleChange: false,
+            isStyleSelectable: false,
             isDisabledMetadata: !layersHaveMetadata(layers),
             isDisabledStyleChange: !layersHaveMultipleStyles(layers)
-        });
-    }
-
-    setShowLayerSelection (value, stateOnly = false) {
-        // enable tool first so when state update triggers UI update, the plugin is enabled
-        if (!stateOnly) {
-            this.tool.setEnabled(value);
-        }
-        const newConfig = this.tool?.getPlugin()?.getConfig() || {};
-        this.updateState({
-            showLayerSelection: value,
-            ...newConfig
         });
     }
 
@@ -88,7 +76,6 @@ class UIHandler extends StateHandler {
 
 const wrapped = controllerMixin(UIHandler, [
     'setShowMetadata',
-    'setShowLayerSelection',
     'setAllowStyleChange',
     'addBaseLayer',
     'removeBaseLayer'
