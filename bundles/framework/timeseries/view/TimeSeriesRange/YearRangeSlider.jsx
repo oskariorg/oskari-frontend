@@ -18,7 +18,7 @@ export const YearRangeSlider = (props) => {
             }
         }
     }
-    console.log(value)
+
     // data years are those years that has timeseries photos in current map view
     // data years are also marks on the range slider but they are represented
     // as small circles on the timeline (via css styling)
@@ -31,7 +31,6 @@ export const YearRangeSlider = (props) => {
             marks={marks}
             min={start}
             max={end}
-            step={1}
             dots={true}
         />
     );
