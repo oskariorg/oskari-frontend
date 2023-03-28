@@ -17,7 +17,7 @@ const getBaseLayers = (layers) => {
     return baseLayers;
 }
 
-export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLayer, selectStyle }) => {
+export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLayer, selectStyle, showHeading }) => {
     if (!layers || !layers.length) {
         return null;
     }
@@ -26,7 +26,7 @@ export const BaseLayerList = ({ layers, showMetadata, styleSelectable, selectLay
 
     return (
         <div className='t_baselayers'>
-            <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3>
+            { showHeading && <h3><Message messageKey='plugin.LayerSelectionPlugin.chooseDefaultBaseLayer' /></h3> }
             <RadioGroup
                 value={selected.getId()}
                 onChange={e => selectLayer(baseLayers.find(l => '' + l.getId() === '' + e.target.value))}
@@ -56,5 +56,6 @@ BaseLayerList.propTypes = {
     showMetadata: PropTypes.bool.isRequired,
     selectLayer: PropTypes.func.isRequired,
     selectStyle: PropTypes.func.isRequired,
-    styleSelectable: PropTypes.bool.isRequired
+    styleSelectable: PropTypes.bool.isRequired,
+    showHeading: PropTypes.bool
 };
