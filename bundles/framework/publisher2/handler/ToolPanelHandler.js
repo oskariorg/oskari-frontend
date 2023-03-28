@@ -13,7 +13,7 @@ class UIHandler extends StateHandler {
     init (data) {
         this.data = data;
         while (this.toolsToInit.length) {
-            const tool = this.toolsToInit.shift()
+            const tool = this.toolsToInit.shift();
             tool.init(data);
             this._addToolToState(tool);
         }

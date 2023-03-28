@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
          */
         init: function (data) {
             const myData = data?.configuration[this.bundleName];
-            if (!!myData) {
+            if (myData) {
                 this.storePluginConf(myData.conf);
                 this.setEnabled(true);
             }
