@@ -30,7 +30,7 @@ export const LayerList = ({ layers, showMetadata, styleSelectable, setLayerVisib
                                 >{layer.getName()}</Checkbox>
                             {showMetadata && (<MetadataIcon metadataId={layer.getMetadataIdentifier()} />)}
                         </LayerRow>
-                            {styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
+                            {layer.isVisible() && styleSelectable && layer.getStyles().length > 1 && <StyleSelect layer={layer} selectStyle={selectStyle} />}
                     </div>
                 );
             })}
