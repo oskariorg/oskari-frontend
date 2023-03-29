@@ -74,27 +74,25 @@ const getContent = (state, controller, renderDescriptionPopup) => {
         );
     }
     return (
-        <Fragment>
-            <Row>
-                <InfoContainer>
-                    <InfoIcon/>
-                    <Column>
-                        <StyledTitle>{title}</StyledTitle>
-                        <span>
-                            {description}
-                            <Margin/>
-                        </span>
-                    </Column>
-                </InfoContainer>
-                <Margin/>
-                <Column style={{ whiteSpace: 'nowrap' }}>
-                    <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
-                        <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
-                    </StyledCheckbox>
-                    <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+        <Row>
+            <InfoContainer>
+                <InfoIcon/>
+                <Column>
+                    <StyledTitle>{title}</StyledTitle>
+                    <span>
+                        {description}
+                        <Margin/>
+                    </span>
                 </Column>
-            </Row>
-        </Fragment>
+            </InfoContainer>
+            <Margin/>
+            <Column style={{ whiteSpace: 'nowrap' }}>
+                <StyledCheckbox checked={state.dontShowAgain.includes(announcement.id)} onChange={setShowAgain}>
+                    <Message messageKey='dontShow' bundleKey={BUNDLE_KEY} />
+                </StyledCheckbox>
+                <Pagination simple hideOnSinglePage current={currentBanner} total={count} defaultPageSize={1} onChange={onPageChange}/>
+            </Column>
+        </Row>
     );
 };
 
