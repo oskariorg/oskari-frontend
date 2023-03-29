@@ -19,7 +19,7 @@ export const Header = styled.h3`
     cursor: move;
     display: flex;
     align-items: center;
-
+    color: #ffffff;
     .header-mid-spacer {
         flex: 1;
     }
@@ -100,15 +100,15 @@ const getDataYearStyles = (props) => {
                 background-color: ${backgroundColor};
                 border-radius: 50%;
                 border: 2px solid #ffffff;
-                width: 5px;
-                height: 5px;
+                width: 8px;
+                height: 8px;
                 top: -2px;
                 &.ant-slider-dot-active {
                     border: 2px solid ${primaryColor};
                 }
 
                 &:hover {
-                    &:nth-child(${index})::after {
+                    ::after {
                         content: '${year}';
                         color: #ffffff;
                         display: flex;
