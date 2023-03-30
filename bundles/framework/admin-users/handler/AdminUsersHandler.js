@@ -5,21 +5,26 @@ class UIHandler extends StateHandler {
         super();
         this.restUrl = restUrl;
         this.isExternal = isExternal;
+        this.sandbox = Oskari.getSandbox();
         this.setState({
             activeTab: 'admin-users-tab',
             addingUser: false,
             editingUserId: null,
             userFormState: this.initUserForm(),
             roleFormState: this.initRoleForm(),
-            userFilter: '',
             users: [],
             roles: [],
             userFormErrors: [],
-            roleFormErrors: false
+            roleFormErrors: false,
+            userPagination: {
+                limit: 10,
+                page: 1,
+                search: '',
+                totalCount: 0
+            }
         });
+        this.eventHandlers = this.createEventHandlers();
         this.addStateListener(consumer);
-        this.fetchUsers();
-        this.fetchRoles();
     };
 
     getName () {
@@ -32,9 +37,35 @@ class UIHandler extends StateHandler {
         });
     }
 
+    setUserPage (page) {
+        this.updateState({
+            userPagination: {
+                ...this.state.userPagination,
+                page
+            }
+        });
+        this.fetchUsers();
+    }
+
+    search (searchText) {
+        this.updateState({
+            userPagination: {
+                ...this.state.userPagination,
+                search: searchText
+            }
+        });
+        this.fetchUsers();
+    }
+
     async fetchUsers () {
         try {
-            const response = await fetch(Oskari.urls.getRoute() + this.restUrl, {
+            const search = this.state.userPagination.search && this.state.userPagination.search.trim() !== '' ? this.state.userPagination.search : null;
+            const offset = this.state.userPagination.page > 1 ? (this.state.userPagination.page - 1) * this.state.userPagination.limit : 0;
+            const response = await fetch(Oskari.urls.buildUrl(Oskari.urls.getRoute() + this.restUrl, {
+                limit: this.state.userPagination.limit,
+                offset,
+                search
+            }), {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -45,7 +76,11 @@ class UIHandler extends StateHandler {
             }
             const result = await response.json();
             this.updateState({
-                users: result.users
+                users: result.users,
+                userPagination: {
+                    ...this.state.userPagination,
+                    totalCount: result.total_count
+                }
             });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.fetch_failed'));
@@ -147,12 +182,6 @@ class UIHandler extends StateHandler {
         });
     }
 
-    setUserFilter (value) {
-        this.updateState({
-            userFilter: value
-        });
-    }
-
     validateUserForm () {
         this.updateState({
             userFormErrors: []
@@ -230,12 +259,17 @@ class UIHandler extends StateHandler {
                 }
             });
             if (!response.ok) {
-                throw new Error(response.statusText);
+                const json = await response.json();
+                throw new Error(json.error);
             }
-            this.fetchUsers();
             this.closeUserForm();
+            this.fetchUsers();
         } catch (e) {
-            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.save_failed'));
+            if (e.message === 'Password too weak') {
+                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.password_too_short'));
+            } else {
+                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.save_failed'));
+            }
         }
     }
 
@@ -300,6 +334,31 @@ class UIHandler extends StateHandler {
             Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.delete_failed'));
         }
     }
+
+    createEventHandlers () {
+        const handlers = {
+            'userinterface.ExtensionUpdatedEvent': (event) => {
+                if (event.getExtension().getName() !== 'AdminUsers') {
+                    return;
+                }
+                if (event.getViewState() !== 'close') {
+                    this.fetchUsers();
+                    this.fetchRoles();
+                }
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    onEvent (e) {
+        var handler = this.eventHandlers[e.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [e]);
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -313,7 +372,10 @@ const wrapped = controllerMixin(UIHandler, [
     'deleteUser',
     'deleteRole',
     'addRole',
-    'setUserFilter'
+    'fetchUsers',
+    'fetchRoles',
+    'setUserPage',
+    'search'
 ]);
 
 export { wrapped as AdminUsersHandler };
