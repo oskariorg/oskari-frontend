@@ -26,8 +26,10 @@ export const YearRangeSlider = (props) => {
     return (
         <StyledRangeSlider
             {...props}
-            tooltip={{ open: true }}
-            getPopupContainer={(triggerNode) => triggerNode.parentElement}
+            tooltip={{
+                open: true,
+                getPopupContainer: (triggerNode) => triggerNode.parentElement
+            }}
             marks={marks}
             min={start}
             max={end}
