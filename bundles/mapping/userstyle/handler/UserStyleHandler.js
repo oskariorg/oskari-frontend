@@ -20,6 +20,15 @@ class Handler extends StateHandler {
     bindEvents () {
         this.service.on('update', () => this.updateStyleList());
         this.service.on('ajax', (loading) => this.updateState({ loading }));
+        this.sandbox.registerForEventByName(this, 'MapLayerEvent');
+    }
+
+    // listens MapLayerEvent only
+    onEvent (event) {
+        // update style list on add layers (on startup)
+        if (event.getOperation() === 'add' && !event.getLayerId()) {
+            this.updateStyleList();
+        }
     }
 
     updateStyleList () {
