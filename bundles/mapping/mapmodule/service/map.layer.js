@@ -806,9 +806,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         * @param {Function} callback gets the describe info as parameter or undefined if it's not available
         * @returns callback is used for return value
         */
-        getDescribeLayer: function (layerId, callback) {
+        getDescribeLayer: function (layer, callback) {
             const url = Oskari.urls.getRoute('DescribeLayer', {
-                id: layerId,
+                id: layer.getId(),
+                styleId: layer._storedStyleName,
                 lang: Oskari.getLang(),
                 srs: this.getSandbox().getMap().getSrsName()
             });

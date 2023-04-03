@@ -85,7 +85,7 @@ Oskari.clazz.define('map.layer.handler',
                 return;
             }
             layer.getDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
-            this.layerService.getDescribeLayer(layerId, info => {
+            this.layerService.getDescribeLayer(layer, info => {
                 if (!info) {
                     layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
                     if (layer.requiresDescripeLayer()) {
