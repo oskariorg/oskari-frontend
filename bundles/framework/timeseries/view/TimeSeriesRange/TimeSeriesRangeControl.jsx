@@ -33,6 +33,7 @@ export const TimeSeriesRangeControl = ({
                 mode={mode}
                 loading={loading}
                 error={error}
+                value={value}
             />
             {mode === 'year' && (
                 <TimeSeriesYear

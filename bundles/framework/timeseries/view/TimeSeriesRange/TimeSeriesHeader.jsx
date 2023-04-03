@@ -12,8 +12,13 @@ export const TooltipContent = styled.div`
 `;
 export const Paragraph = styled('p')``;
 
-const getHeaderContent = (title, loading = false, error = false) => {
+const getHeaderContent = (title, loading = false, error = false, value) => {
     let content = title;
+    if (Array.isArray(value)) {
+        content = `${title} (${value[0]} - ${value[1]})`;
+    } else {
+        content = `${title} (${value})`;
+    }
     if (loading) {
         content = (
             <span>
@@ -37,14 +42,14 @@ const getTooltipContent = (mode, modeIcon) => {
     );
 }
 
-export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false }) => {
+export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value}) => {console.log(value)
     const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
     const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
     const modeIcon = mode === 'year' ? <LoginOutlined /> : <LogoutOutlined />;
     return (
         <Header className="timeseries-range-drag-handle">
-            {getHeaderContent(title, loading, error)}
+            {getHeaderContent(title, loading, error, value)}
             <div className="header-mid-spacer"></div>
             <Tooltip title={getTooltipContent(mode, modeIcon)}>
                 <IconButton type="text" size="large">
