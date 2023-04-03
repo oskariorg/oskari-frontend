@@ -68,8 +68,6 @@ export const TimeSeriesSlider = ({
     dataPoints,
     markers,
     onChange,
-    allowPlayback = false,
-    playbackSpeeds,
     width = 564,
     type = sliderTypes.YEAR,
     range = false,
@@ -84,8 +82,7 @@ export const TimeSeriesSlider = ({
         handleX: range ? calcHandlePosition(value[0], min, widthUnit, 8, timeUnits.YEAR) : calcHandlePosition(value, min, widthUnit, 8, timeUnits.YEAR),
         secondHandleX: range ? calcHandlePosition(value[1], min, widthUnit, 8, timeUnits.YEAR) : 0,
         dragElement: null,
-        dragOffsetX: null,
-        dragOffsetY: null
+        dragOffsetX: null
     });
 
     useEffect(() => {
@@ -252,10 +249,6 @@ TimeSeriesSlider.propTypes = {
         )
     ),
     onChange: PropTypes.func.isRequired,
-    allowPlayback: PropTypes.bool,
-    playbackSpeeds: PropTypes.arrayOf(
-        PropTypes.string
-    ),
     width: PropTypes.number,
     markers: PropTypes.arrayOf(
         PropTypes.oneOfType(
