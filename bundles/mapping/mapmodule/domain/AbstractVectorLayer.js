@@ -18,6 +18,17 @@ export class AbstractVectorLayer extends AbstractLayer {
     }
 
     /* override */
+    addStyle (style) {
+        const styles = this.getStyles();
+        const index = styles.findIndex(s => s.getName() === style.getName());
+        if (index !== -1) {
+            styles[index] = style;
+        } else {
+            styles.push(style);
+        }
+    }
+
+    /* override */
     // AbstractLayer selectStyle creates empty if style isn't found
     _createEmptyStyle () {
         return createDefaultStyle();
