@@ -44,8 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 LayerComposingModel.VERSION
             ], ['1.0.0']);
             mapLayerService.registerLayerModel(this.layertype, className, composingModel);
-
-            this.service = Oskari.clazz.create('Oskari.mapframework.wmts.service.WMTSLayerService', mapLayerService, this.getSandbox());
         },
         _handleDescribeLayerImpl (layer, info) {
             const { capabilities } = info;
@@ -112,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 // override url to one provided by server since the layer might be proxied
                 options.urls = [layer.getLayerUrl()];
             }
-            // attach params to URLs (might contain apikey or other params that aren't passed by the service on capabilities etc)
+            // attach params to URLs (might contain apikey or other params that aren't passed on capabilities etc)
             options.urls = options.urls.map(url => Oskari.urls.buildUrl(url, layer.getParams()));
             // allows layer.options.wrapX to be passed to source.
             // On OL 6.4.3 it's always false from optionsFromCapabilities()
