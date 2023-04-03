@@ -14,10 +14,12 @@ export const Paragraph = styled('p')``;
 
 const getHeaderContent = (title, loading = false, error = false, value) => {
     let content = title;
-    if (Array.isArray(value)) {
-        content = `${title} (${value[0]} - ${value[1]})`;
-    } else {
-        content = `${title} (${value})`;
+    if (value) {
+        if (Array.isArray(value)) {
+            content = `${title} (${value[0]} - ${value[1]})`;
+        } else {
+            content = `${title} (${value})`;
+        }
     }
     if (loading) {
         content = (
@@ -42,7 +44,7 @@ const getTooltipContent = (mode, modeIcon) => {
     );
 }
 
-export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value}) => {console.log(value)
+export const TimeSeriesHeader = ({ toggleMode, title, mode = 'year', loading = false, error = false, value}) => {
     const helpMessage = <Message messageKey="rangeControl.helpMessage" />;
     const switchButtonMessageKey = mode === 'year' ? 'rangeControl.switchToRange' : 'rangeControl.switchToYear';
     const switchButtonMessage = <Message messageKey={switchButtonMessageKey} />;
