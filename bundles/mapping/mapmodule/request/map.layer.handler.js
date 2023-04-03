@@ -75,13 +75,13 @@ Oskari.clazz.define('map.layer.handler',
                 return;
             }
             const layerId = layer.getId();
-            if (isNaN(layerId)) {
-                // only layers that have numeric ids can have reasonable response for DescribeLayer
+            const status = layer.getDescribeLayerStatus();
+            // only layers that have numeric ids can have reasonable response for DescribeLayer
+            if (isNaN(layerId) || status === DESCRIBE_LAYER.LOADED) {
                 addLayer();
                 return;
             }
-            const status = layer.getDescribeLayerStatus();
-            if (status === DESCRIBE_LAYER.LOADED || status === DESCRIBE_LAYER.PENDING) {
+            if (status === DESCRIBE_LAYER.PENDING) {
                 return;
             }
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
