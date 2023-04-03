@@ -31,7 +31,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         me._showMetadata = !!this.getConfig().showMetadata;
         me._layers = [];
         me._baseLayers = [];
-        me.inMobileMode = false;
     }, {
         _toggleToolState: function () {
             if (this.popupControls) {
@@ -58,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 (layerId, style) => this._selectStyle(layerId, style),
                 this.getLocation()
             );
-            this.renderButton(null, null);
+            this.refresh();
         },
         _updateLayerSelectionPopup: function () {
             if (!this.popupControls) {
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             this.popupControls = null;
             const div = this.getElement();
             if (!div) return;
-            this.renderButton(null, null);
+            this.refresh();
         },
         /**
          * @private @method _initImpl
@@ -154,13 +153,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                this.popupCleanup();
-            }
+        resetUI: function () {
+            this.popupCleanup();
         },
 
         /**
@@ -179,6 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 isStyleSelectable: !!isSelectable
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method setShowMetadata
@@ -189,6 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 showMetadata: !!showMetadata
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method getStyleSelectable
@@ -351,55 +347,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
 
             this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
             this._element = this._createControlElement();
             this.refresh();
             this.addToPluginContainer(this._element);
         },
 
         refresh: function () {
-            const me = this;
-            const conf = me.getConfig();
-            this._updateLayerSelectionPopup();
-            if (!conf) {
-                return;
-            }
-            me.renderButton();
-        },
-
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         */
-        changeToolStyle: function () {
-            if (!this.getElement()) {
-                return;
-            }
-
-            this.renderButton();
-
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
-        },
-
-        renderButton: function () {
             let el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <MapModuleButton
                     className='t_layerselect'
                     icon={<LayersIcon />}
                     title={this._loc.title}
-                    onClick={(e) => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this._togglePopup();
-                        }
-                    }}
+                    onClick={(e) => this._togglePopup()}
                     iconActive={this.popupControls ? true : false}
                     position={this.getLocation()}
                 />,

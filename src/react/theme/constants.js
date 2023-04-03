@@ -16,6 +16,7 @@ export const DEFAULT_COLORS = {
     // 141414 -> rgb(20,20,20)
     DARK_BUTTON_BG: '#141414'
 };
+export const DEFAULT_FONT = 'arial';
 
 export const EFFECT = {
     NONE: 'none',

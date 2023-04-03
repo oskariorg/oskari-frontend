@@ -1,11 +1,13 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 class UIService extends StateHandler {
     constructor (requestFn, initialDate) {
         super();
         this.requestFunction = requestFn;
-        const time = moment(initialDate);
+        const time = dayjs(initialDate);
         this.state = {
             time: time.format('H:mm'),
             date: time.format('D/M'),

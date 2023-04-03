@@ -51,7 +51,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Called after a configuration change.
          */
         refresh: function () {
-            this.renderButton();
+            const el = this.getElement();
+            if (!el) {
+                return;
+            }
+
+            ReactDOM.render(
+                <ZoomSlider
+                    changeZoom={(value) => this.getMapModule().setZoomLevel(value)}
+                    zoom={this.getMapModule().getMapZoom()}
+                    maxZoom={this.getMapModule().getMaxZoomLevel()}
+                    isMobile={this.inMobileMode}
+                />,
+                el[0]
+            );
         },
 
         /**
@@ -64,35 +77,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             var me = this;
             return {
                 AfterMapMoveEvent: function () {
-                    me.renderButton();
+                    me.refresh();
                 }
             };
-        },
-        _setLayerToolsEditModeImpl: function () {},
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         *
-         * @param {Object} styleId
-         * @param {jQuery} div
-         *
-         */
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-        renderButton: function () {
-            const el = this.getElement();
-            if (!el) return;
-
-            ReactDOM.render(
-                <ZoomSlider
-                    changeZoom={(value) => this.getMapModule().setZoomLevel(value)}
-                    zoom={this.getMapModule().getMapZoom()}
-                    maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    isMobile={this.inMobileMode}
-                />,
-                el[0]
-            );
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -114,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             this.inMobileMode = mapInMobileMode;
 
             me._element = me._createControlElement();
-            this.renderButton();
+            this.refresh();
             this.addToPluginContainer(me._element);
         },
         /**

@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         this._closingInProgress = false;
         this._fadeoutTime = 3000;
         this._fadeoutTimer = null;
+        this.defaultOpacity = 1;
     }, {
         /**
          * @method show
@@ -47,7 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             } else {
                 actionDiv.remove();
             }
-            jQuery('body').append(this.dialog);
+            jQuery(Oskari.dom.getRootEl()).append(this.dialog);
             const focusedIndex = buttons.lastIndexOf(btn => btn.isFocused());
             if (focusedIndex > 0) {
                 buttons[focusedIndex].focus();
@@ -56,7 +57,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._setReasonableHeight();
 
             // make popup to visible
-            me.dialog.css('opacity', 1);
+            me.dialog.css('opacity', this.defaultOpacity);
 
             this._isVisible = true;
 
@@ -183,6 +184,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             if (colourScheme.bodyBgColour) {
                 this.dialog.find('.popup-body').css({ 'background-color': colourScheme.bodyBgColour });
+            }
+            if (colourScheme.opacity) {
+                this.defaultOpacity = colourScheme.opacity;
+                this.dialog.css('opacity', this.defaultOpacity);
             }
 
             /* buttons and actionlinks */

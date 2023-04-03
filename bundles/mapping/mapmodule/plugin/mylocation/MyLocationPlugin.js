@@ -36,7 +36,6 @@ Oskari.clazz.define(
         this._timeouts = 0; // timeouts for single location request
         this._tracking = false;
         this._trackingOptions = null;
-        this.inMobileMode = false;
     }, {
         /**
          * @private @method _createControlElement
@@ -45,8 +44,7 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            const el = this._templates.plugin.clone();
-            return el;
+            return this._templates.plugin.clone();
         },
         /**
          * @private @method _setWaiting
@@ -73,13 +71,6 @@ Oskari.clazz.define(
             this._setTracking(false);
         },
         /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.refresh();
-        },
-        /**
          * @public @method refresh
          */
         refresh: function () {
@@ -89,14 +80,11 @@ Oskari.clazz.define(
             }
             ReactDOM.render(
                 <MapModuleButton
+                    visible={this.isEnabled()}
                     className='t_mylocation'
                     icon={<AimOutlined />}
                     title={this.loc('plugin.MyLocationPlugin.tooltip')}
-                    onClick={(e) => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this._setupRequest();
-                        }
-                    }}
+                    onClick={() => this._setupRequest()}
                     position={this.getLocation()}
                 />
                 ,
@@ -146,18 +134,7 @@ Oskari.clazz.define(
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible() || !this.isEnabled()) {
-                // no point in drawing the ui if we are not visible or enabled
-                return;
-            }
-
-            this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
-            this._element = this._createControlElement();
             this.refresh();
-            this.addToPluginContainer(this.getElement());
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -171,14 +148,12 @@ Oskari.clazz.define(
          * @return {Boolean}
          * True if plugin's tools are enabled
          */
-        isEnabled: function (showOnlyMobile) {
-            var conf = this.getConfig();
-            var mobileOnly = showOnlyMobile || conf.mobileOnly;
-
+        isEnabled: function () {
+            var { mobileOnly } = this.getConfig() || {};
             if (mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
             }
-            return this._enabled;
+            return true;
         },
 
         /**
@@ -214,11 +189,10 @@ Oskari.clazz.define(
             this.teardownUI();
         },
         _startPluginImpl: function () {
-            var me = this;
-            me.setEnabled(me._enabled);
-            const toolbarNotReady = me.setVisible(me._visible);
-            me._handleStartMode();
-            return toolbarNotReady;
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
+            this._handleStartMode();
         },
         /**
          * Checks at if device is outside of map viewport when mode is tracking.

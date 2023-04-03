@@ -14,6 +14,10 @@ export const setGlobalStyle = (theme = {}) => {
             background-color: ${navColor};
         }
 
+        .oskari-root-el {
+            font-family: 'Open Sans', Arial, sans-serif;
+        }
+
         .oskari-flyout .oskari-flyouttoolbar {
             background-color: ${headerTheme.getBgColor()};
             color:  ${headerTheme.getTextColor()};

@@ -38,7 +38,7 @@ Oskari.clazz.define(
     {
         _startPluginImpl: function () {
             this._element = this._createControlElement();
-            this.renderButton();
+            this.refresh();
             this.addToPluginContainer(this._element);
         },
         _stopPluginImpl: function () {
@@ -136,10 +136,7 @@ Oskari.clazz.define(
                 this._removeIndexMap();
             }
         },
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-        renderButton: function () {
+        refresh: function () {
             let el = this.getElement();
             if (!el) {
                 return;
@@ -157,11 +154,7 @@ Oskari.clazz.define(
                 <div className={`indexmapToggle ${styleName}`}>
                     <MapModuleButton
                         className='t_indexmap'
-                        onClick={() => {
-                            if (!this.inLayerToolsEditMode()) {
-                                this._handleClick();
-                            }
-                        }}
+                        onClick={() => this._handleClick()}
                         size='48px'
                         icon={<div className='icon' />}
                     />
@@ -169,20 +162,11 @@ Oskari.clazz.define(
                 el[0]
             );
         },
-        _setLayerToolsEditModeImpl: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-
-            if (this.inLayerToolsEditMode()) {
-                // close map
-                if (this._indexMap) {
-                    this._removeIndexMap();
-                }
+        resetUI: function () {
+            if (this._indexMap) {
+                this._removeIndexMap();
             }
         }
-
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

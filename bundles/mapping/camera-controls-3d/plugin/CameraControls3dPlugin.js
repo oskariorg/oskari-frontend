@@ -61,28 +61,14 @@ Oskari.clazz.define(className,
         stopPlugin: function () {
             this.teardownUI();
         },
-        /**
-         * Changes the tool style of the plugin
-         * @method changeToolStyle
-         */
-        changeToolStyle: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            this._render();
-            this._setLayerToolsEditMode(
-                this.getMapModule().isInLayerToolsEditMode()
-            );
-        },
-        _createUI: function () {
-            this._element = this._mountPoint.clone();
-            this.addToPluginContainer(this._element);
-            this._element.addClass('mapplugin');
+        refresh: function () {
             this._render();
         },
         _render (state = this.handler.getState()) {
             let el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             const { activeMapMoveMethod } = state;
             const ui = (
@@ -96,6 +82,12 @@ Oskari.clazz.define(className,
                 </LocaleProvider>
             );
             ReactDOM.render(ui, el[0]);
+        },
+        _createUI: function () {
+            this._element = this._mountPoint.clone();
+            this.addToPluginContainer(this._element);
+            this._element.addClass('mapplugin');
+            this.refresh();
         },
         /**
          * @public @method getIndex

@@ -8,8 +8,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
         templates: {
             'toolOptions': '<div class="tool-options"></div>'
         },
-        noUI: null,
-        noUiIsCheckedInModifyMode: false,
         /**
          * Get tool object.
          * @method getTool
@@ -20,7 +18,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return {
                 id: 'Oskari.mapping.maprotator.MapRotatorPlugin',
                 title: 'MapRotator',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         isDisplayed: function () {
@@ -29,10 +27,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             return !!this.getMapRotatorInstance();
         },
         getMapRotatorInstance: function () {
-            return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
-        },
-        getPlugin: function () {
-            return this.getMapRotatorInstance().getPlugin();
+            return this.getSandbox().findRegisteredModuleInstance(this.bundleName);
         },
         // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'maprotator',
@@ -41,41 +36,24 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
          * @method init
          */
         init: function (data) {
-            var me = this;
-            var bundleData = data && data.configuration[me.bundleName];
+            var bundleData = data && data.configuration[this.bundleName];
             if (!bundleData) {
                 return;
             }
             var conf = bundleData.conf || {};
-            me.setEnabled(conf.enabled);
-            me.noUiIsCheckedInModifyMode = !!conf.noUI;
-            this.getMapRotatorInstance().setState(bundleData.state);
+            this.storePluginConf(conf);
+            this.storePluginState(bundleData.state);
+            this.setEnabled(true);
         },
-        // override setEnabled() because we don't want publisher to create the plugin BUT
-        // we want to use maprotator instance for handling the plugin and create it ourself
-        setEnabled: function (enabled) {
-            // state actually hasn't changed -> do nothing
-            if (this.isEnabled() === enabled) {
-                return;
-            }
-            const rotatorInstance = this.getMapRotatorInstance();
-            let plugin = rotatorInstance.getPlugin();
-            this.state.enabled = enabled;
-            if (!plugin && enabled) {
-                rotatorInstance.createPlugin();
-                plugin = rotatorInstance.getPlugin();
-                this.__plugin = plugin;
-            }
-
-            if (enabled) {
-                this.getMapmodule().registerPlugin(plugin);
-                plugin.startPlugin(this.getSandbox());
-                this.__started = true;
+        storePluginState: function (state) {
+            this.state.pluginState = state || {};
+        },
+        _setEnabledImpl: function (enabled) {
+            if (enabled && this.state.pluginState?.degrees) {
+                this.getPlugin().setRotation(this.state.pluginState?.degrees);
             } else {
-                this.stop();
+                this.getMapmodule().getMap().getView().setRotation(0);
             }
-            var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
-            this.getSandbox().notifyAll(event);
         },
         /**
          * Get values.
@@ -89,17 +67,6 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
                 return null;
             }
             var pluginConfig = this.getPlugin().getConfig();
-            for (var configName in pluginConfig) {
-                if (configName === 'noUI' && !this.noUI) {
-                    pluginConfig[configName] = null;
-                    delete pluginConfig[configName];
-                }
-            }
-            if (this.noUI) {
-                pluginConfig.noUI = this.noUI;
-            }
-            // TODO: is this enabled needed? it's always true if tool.isEnabled()
-            pluginConfig.enabled = true;
             var json = {
                 configuration: {}
             };
@@ -125,22 +92,19 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             );
 
             input.setTitle(labelNoUI);
-            input.setHandler(function (checked) {
-                if (!me.getPlugin()) {
+            input.setHandler((checked) => {
+                const plugin = this.getPlugin();
+                if (!plugin) {
                     return;
                 }
-                if (checked === 'on') {
-                    me.noUI = true;
-                    me.getPlugin().teardownUI();
-                } else {
-                    me.noUI = false;
-                    me.getPlugin().redrawUI();
-                }
+                plugin.setConfig({
+                    ...plugin.getConfig(),
+                    noUI: checked === 'on'
+                });
+                plugin.refresh();
             });
-            if (me.noUiIsCheckedInModifyMode) {
-                input.setChecked(true);
-                me.noUI = true;
-            }
+            // initial value from pluginconfig that we get when opening the publisher
+            input.setChecked(!!this.state.pluginConfig?.noUI);
             var inputEl = input.getElement();
             template.append(inputEl);
             return template;

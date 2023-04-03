@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.SeriesControlPlugin';
         me._defaultLocation = 'center top';
-        me._fixedLocation = true;
         me._index = 5;
 
         me._name = 'SeriesControlPlugin';
@@ -33,10 +32,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             this.element ? this.teardownUI() : this._buildUI();
             return !!this.element;
         },
-        hasUI: function () {
-            // Plugin has ui element but returns false, because
-            // otherwise publisher would stop this plugin and start it again when leaving the publisher,
-            // instance updates visibility
+        /**
+         * While this plugin DOES have a UI we don't want publisher stopping it on startup so
+         * we are returning false to stay on screen for the duration of publisher.
+         * The instance updates visibility
+         * @returns false
+         */
+        isShouldStopForPublisher: function () {
             return false;
         },
         isVisible: function () {

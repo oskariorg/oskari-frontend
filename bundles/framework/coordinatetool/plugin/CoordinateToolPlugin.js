@@ -20,13 +20,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
      * @param {Object} config
      *      JSON config with params needed to run the plugin
      */
-    function (instance, config, locale, mapmodule, sandbox) {
+    function (config) {
         var me = this;
-        me._locale = locale || Oskari.getMsg.bind(null, 'coordinatetool');
+        me._locale = Oskari.getMsg.bind(null, 'coordinatetool');
         me._config = config || {};
-        me._mapmodule = mapmodule || Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-        me._sandbox = sandbox;
-        me._instance = instance;
         me._clazz =
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin';
         me._defaultLocation = 'top right';
@@ -35,17 +32,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         me._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>')
         };
-        // me.lastLonLat = null;
-        me.handler = new CoordinatePluginHandler(me, me._mapmodule, me._config, me._instance);
-        me.popupOpen = false;
-        me.handler.addPopupListener((isOpen) => {
-            me.popupOpen = isOpen;
-            me.renderButton();
-        });
     }, {
-        _setLayerToolsEditModeImpl: function () {
-            if (this.inLayerToolsEditMode() && this.isOpen()) {
-                this.handler.getController().showPopup();
+        resetUI: function () {
+            if (this.handler && this.popupOpen) {
+                this.handler.getController().popupCleanup();
             }
         },
         _createControlElement: function () {
@@ -77,8 +67,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
-            this.inMobileMode = mapInMobileMode;
-
             this.teardownUI();
             if (!this._config.noUI) {
                 this._element = this._createControlElement();
@@ -91,14 +79,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             return !this._config.noUI;
         },
         /**
-         * Updates the given coordinates to the UI
          * @method @public refresh
-         *
-         * @param {Object} data contains lat/lon information to show on UI
          */
-        refresh: function (data) {
-            this.renderButton();
-            return data;
+        refresh: function () {
+            const el = this.getElement();
+            if (!el) {
+                return;
+            }
+            if (!this.handler) {
+                // init handler here so we can be sure we have a sandbox for this instance
+                this.handler = new CoordinatePluginHandler(this, this.getMapModule(), this.getConfig());
+                this.popupOpen = false;
+                this.handler.addPopupListener((isOpen) => {
+                    this.popupOpen = isOpen;
+                    this.refresh();
+                });
+            }
+
+            ReactDOM.render(
+                <MapModuleButton
+                    className='t_coordinatetool'
+                    title={this._locale('display.tooltip.tool')}
+                    icon={<CoordinateIcon />}
+                    onClick={() => this.handler.getController().showPopup()}
+                    iconActive={!!this.popupOpen}
+                    position={this.getLocation()}
+                />,
+                el[0]
+            );
         },
 
         /**
@@ -120,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                  */
                 RPCUIEvent: function (event) {
                     var me = this;
-                    if (event.getBundleId() === 'coordinatetool') {
+                    if (me.handler && event.getBundleId() === 'coordinatetool') {
                         me.handler.getController().showPopup();
                     }
                 }
@@ -128,41 +136,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin
-         */
-        changeToolStyle: function () {
-            this.renderButton();
-        },
-
-        renderButton: function () {
-            const el = this.getElement();
-            if (!el) {
-                return;
-            }
-
-            ReactDOM.render(
-                <MapModuleButton
-                    className='t_coordinatetool'
-                    title={this._locale('display.tooltip.tool')}
-                    icon={<CoordinateIcon />}
-                    onClick={() => {
-                        if (!this.inLayerToolsEditMode()) {
-                            this.handler.getController().showPopup();
-                        }
-                    }}
-                    iconActive={!!this.popupOpen}
-                    position={this.getLocation()}
-                />,
-                el[0]
-            );
-        },
-        /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox
          */
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
+            // TODO: tear down handler?
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from './propTypes';
 import styled from 'styled-components';
-import { Tabs, TabPane, Message } from 'oskari-ui';
+import { Tabs, Message } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
@@ -49,26 +49,28 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, opts, 
         setTimeout(() => focus(searchTermInputRef), TAB_CHANGE_UI_UPDATE_MS);
     };
     return (
-        <ControlledTabs tabPosition='top' tab={tab} onChange={onChange}>
-            <TabPane
-                key={TABS_ALL_LAYERS}
-                tab={<Message messageKey='tabs.layerList' />}
-            >
-                <LayerList ref={searchTermInputRef} opts={opts} {...layerList.state} controller={layerList.controller} />
-            </TabPane>
-            <TabPane
-                key={TABS_SELECTED_LAYERS}
-                tab={
-                    // The initial render causes the badge to blink.
+        <ControlledTabs
+            tabPosition='top' tab={tab}
+            onChange={onChange}
+            items={[
+                {
+                    key: TABS_ALL_LAYERS,
+                    label: <Message messageKey='tabs.layerList' />,
+                    children: <LayerList ref={searchTermInputRef} opts={opts} {...layerList.state} controller={layerList.controller} />
+                },
+                {
+                    key: TABS_SELECTED_LAYERS,
+                    label: // The initial render causes the badge to blink.
                     // When the key changes, React creates a new instance of the component and the blinking starts again.
                     <SelectedTab
                         key={selectedLayers.state.layers.length}
                         num={selectedLayers.state.layers.length}
-                        messageKey='tabs.selectedLayers'/>
-                }>
-                <SelectedLayers {...selectedLayers.state} controller={selectedLayers.controller}/>
-            </TabPane>
-        </ControlledTabs>
+                        messageKey='tabs.selectedLayers'
+                    />,
+                    children: <SelectedLayers {...selectedLayers.state} controller={selectedLayers.controller}/>
+                }
+            ]}
+        />
     );
 };
 

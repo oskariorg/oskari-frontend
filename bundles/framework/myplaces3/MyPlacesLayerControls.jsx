@@ -93,7 +93,7 @@ const DeletePlaces = ({
         </Content>
     );
     return (
-        <Popover trigger="click" placement="bottom" visible={visible} content={content} >
+        <Popover trigger="click" placement="bottom" open={visible} content={content} >
             <Tooltip title={<Message messageKey={deleteTooltip}/>}>
                 <IconButton disabled={isDefault} className='t_delete' onClick={() => setVisible(true)}><DeleteIcon/></IconButton>
             </Tooltip>

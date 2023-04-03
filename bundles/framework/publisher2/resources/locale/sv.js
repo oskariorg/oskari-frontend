@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             "toollayout": {
                 "label": "Verktygsplacering",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
-                "lefthanded": "Vänsterhänt",
-                "righthanded": "Högerhänt",
+                "swapUI": "Swap sides",
                 "userlayout": "Anpassad layout",
                 "usereditmode": "Starta redigering",
                 "usereditmodeoff": "Sluta redigering"

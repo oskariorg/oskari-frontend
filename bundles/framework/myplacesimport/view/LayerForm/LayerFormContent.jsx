@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Tabs, TabPane, Message, Tooltip, Spin } from 'oskari-ui';
+import { Tabs, Message, Tooltip, Spin } from 'oskari-ui';
 import { GeneralTab, VisualizationTab } from './';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { ERRORS } from '../../constants';
@@ -11,7 +11,7 @@ import { MandatoryIcon } from 'oskari-ui/components/icons';
 const Content = styled.div`
     margin: 12px 24px 24px;
 `;
-const Tab = styled(TabPane)`
+const Tab = styled('div')`
     width: 500px;
 `;
 
@@ -79,24 +79,36 @@ export const LayerFormContent = ({ values, config, onOk, onCancel, error }) => {
     const isValid = validationKeys.length === 0;
     const Component = (
         <Content>
-            <Tabs activeKey={state.tab} onChange={tabKey => setTab(tabKey)}>
-                <Tab key='general' tab={getGeneralTabTitle(isValid)} >
-                    <GeneralTab
-                        languages = {languages}
-                        locale = {state.locale}
-                        file = {state.file}
-                        sourceSrs = {state.sourceSrs}
-                        isImport = {isImport}
-                        maxSize = {maxSize}
-                        unzippedMaxSize = {unzippedMaxSize}
-                        showSrs = {showSrs}
-                        updateState = {updateState}
-                    />
-                </Tab>
-                <Tab key='visualization' tab={<Message messageKey='flyout.tabs.visualization'/>}>
-                    <VisualizationTab updateStyle={updateStyle} style={state.style} />
-                </Tab>
-            </Tabs>
+            <Tabs
+                activeKey={state.tab}
+                onChange={tabKey => setTab(tabKey)}
+                items={[
+                    {
+                        key: 'general',
+                        label: getGeneralTabTitle(isValid),
+                        children: (
+                            <Tab>
+                                <GeneralTab
+                                    languages = {languages}
+                                    locale = {state.locale}
+                                    file = {state.file}
+                                    sourceSrs = {state.sourceSrs}
+                                    isImport = {isImport}
+                                    maxSize = {maxSize}
+                                    unzippedMaxSize = {unzippedMaxSize}
+                                    showSrs = {showSrs}
+                                    updateState = {updateState}
+                                />
+                            </Tab>
+                        )
+                    },
+                    {
+                        key: 'visualization',
+                        label: <Message messageKey='flyout.tabs.visualization'/>,
+                        children: <Tab><VisualizationTab updateStyle={updateStyle} style={state.style} /></Tab>
+                    }
+                ]}
+            />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={() => onCancel()}/>
                 <Tooltip key="okButtonTooltip" title={ getValidationMessage(validationKeys) }>
