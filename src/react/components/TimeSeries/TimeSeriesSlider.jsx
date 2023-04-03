@@ -79,8 +79,8 @@ export const TimeSeriesSlider = ({
 
     const [state, setState] = useState({
         sliderPoints: [],
-        handleX: range ? calcHandlePosition(value[0], min, widthUnit, 8, timeUnits.YEAR) : calcHandlePosition(value, min, widthUnit, 8, timeUnits.YEAR),
-        secondHandleX: range ? calcHandlePosition(value[1], min, widthUnit, 8, timeUnits.YEAR) : 0,
+        handleX: range ? calcHandlePosition(value[0], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR) : calcHandlePosition(value, min, widthUnit, 8, timeUnits.YEAR),
+        secondHandleX: range ? calcHandlePosition(value[1], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR) : 0,
         dragElement: null,
         dragOffsetX: null
     });
@@ -89,13 +89,13 @@ export const TimeSeriesSlider = ({
         if (range) {
             setState({
                 ...state,
-                handleX: calcHandlePosition(value[0], min, widthUnit, 8, timeUnits.YEAR),
-                secondHandleX: calcHandlePosition(value[1], min, widthUnit, 8, timeUnits.YEAR)
+                handleX: calcHandlePosition(value[0], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR),
+                secondHandleX: calcHandlePosition(value[1], min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR)
             });
         } else {
             setState({
                 ...state,
-                handleX: calcHandlePosition(value, min, widthUnit, 8, timeUnits.YEAR)
+                handleX: calcHandlePosition(value, min, widthUnit, HANDLE_WIDTH, timeUnits.YEAR)
             });
         }
     }, [value, value[0], value[1]]);
@@ -213,10 +213,10 @@ export const TimeSeriesSlider = ({
                     <Handle
                         className='handle1'
                         stroke='#000000'
-                        rx={4}
+                        rx={HANDLE_WIDTH / 2}
                         strokeWidth={1}
                         width={HANDLE_WIDTH}
-                        height={16}
+                        height={HANDLE_WIDTH * 2}
                         x={state.handleX}
                         y={-7}
                         onMouseDown={(e) => startDrag(e)}
@@ -225,10 +225,10 @@ export const TimeSeriesSlider = ({
                         <Handle
                             className='handle2'
                             stroke='#000000'
-                            rx={4}
+                            rx={HANDLE_WIDTH / 2}
                             strokeWidth={1}
                             width={HANDLE_WIDTH}
-                            height={16}
+                            height={HANDLE_WIDTH * 2}
                             x={state.secondHandleX}
                             y={-7}
                             onMouseDown={(e) => startDrag(e)}
