@@ -44,6 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
+            this.refresh();
         },
         /**
          * @method _createControlElement

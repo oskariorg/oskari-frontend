@@ -172,7 +172,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 // TODO see if this can be done in hover? Would it even be wanted behaviour?
                 drop: function (event, ui) {
                     const pluginClazz = ui.draggable.attr('data-clazz');
-                    const plugin = me.getToolById(pluginClazz).getPlugin();
+                    if (!pluginClazz) {
+                        // we might have dropped a non-plugin element on this like the layerlist flyout
+                        return;
+                    }
+                    const tool = me.getToolById(pluginClazz);
+                    if (!tool) {
+                        // just in case if no tool matches this
+                        // we might have dropped a non-plugin element on this like the layerlist flyout
+                        return;
+                    }
+                    const plugin = tool.getPlugin();
+
                     const source = ui.draggable.parents('.mapplugins');
                     const target = jQuery(this);
 

@@ -1,6 +1,8 @@
 import { MapLayerListToolComponent } from '../view/MapLayers/MapLayerListToolComponent';
 import { MapLayerListHandler } from '../handler/MapLayerListHandler';
 
+export const LAYERLIST_ID = 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin';
+
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
     function () {
         this.handler = new MapLayerListHandler(this);
@@ -15,13 +17,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLayerListTool',
         },
         getTool: function () {
             return {
-                id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-                title: 'LayerSelectionPlugin',
+                id: LAYERLIST_ID,
+                title: Oskari.getMsg('Publisher2', 'BasicView.layerselection.label'),
                 config: this.state.pluginConfig || {}
             };
         },
-        _setEnabledImpl: function (enabled) {
-            this.handler.setShowLayerSelection(enabled, true);
+        init: function (data) {
+            const plugin = this.findPluginFromInitData(data);
+            if (plugin) {
+                this.storePluginConf(plugin.config);
+                // we need some way of restoring state to handler -> passing init data to it
+                this.handler.init(plugin.config);
+                this.setEnabled(true);
+            }
         },
         getValues: function () {
             if (!this.isEnabled()) {

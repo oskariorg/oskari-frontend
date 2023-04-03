@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Button, Message, Tooltip, Card } from 'oskari-ui';
 import { ButtonContainer, IconButton } from 'oskari-ui/components/buttons';
+import { PublisherToolsList } from '../form/PublisherToolsList';
 import { UpCircleOutlined, DownCircleOutlined } from '@ant-design/icons';
 
 const Content = styled('div')`
@@ -34,11 +35,6 @@ const LayerContainer = styled('div')`
     margin-top: 20px;
 `;
 
-const ToolsContainer = styled('div')`
-    display: flex;
-    flex-direction: column;
-`;
-
 export const MapLayers = ({ state, controller }) => {
     const layerListPluginEnabled = state.layerListPluginActive;
     const layers = state.layers;
@@ -47,17 +43,7 @@ export const MapLayers = ({ state, controller }) => {
     return (
         <Content>
             <Card size='small' title={<Message messageKey='BasicView.maptools.label' />}>
-                <ToolsContainer>
-                    {state.layerTools.map((tool) => {
-                        return (
-                            <tool.component
-                                key={tool.tool.getTool().id}
-                                state={tool.handler.getState()}
-                                controller={tool.handler.getController()}
-                            />
-                        )
-                    })}
-                </ToolsContainer>
+                <PublisherToolsList state={state} controller={controller} />
             </Card>
             {layerListPluginEnabled && (
                 <LayerContainer>

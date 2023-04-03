@@ -173,6 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 isStyleSelectable: !!isSelectable
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method setShowMetadata
@@ -183,6 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 ...this.getConfig(),
                 showMetadata: !!showMetadata
             });
+            this._updateLayerSelectionPopup();
         },
         /**
          * @method getStyleSelectable

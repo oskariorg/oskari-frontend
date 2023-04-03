@@ -1,13 +1,12 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (data) {
+    constructor (metadata) {
         super();
         this.setState({
-            allowFeedback: data?.configuration?.feedbackService?.conf?.publish ? true : false,
-            feedbackBaseUrl: data?.metadata?.feedbackService?.url || '',
-            feedbackApiKey: data?.metadata?.feedbackService?.key || '',
-            feedbackExtensions: data?.metadata?.feedbackService?.extensions || ''
+            feedbackBaseUrl: metadata?.url || '',
+            feedbackApiKey: metadata?.key || '',
+            feedbackExtensions: metadata?.extensions || ''
         });
     };
 

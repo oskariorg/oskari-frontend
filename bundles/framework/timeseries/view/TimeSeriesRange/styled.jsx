@@ -83,3 +83,177 @@ export const YearInput = styled(NumberInput)`
         opacity: 1;
     }
 `;
+<<<<<<< HEAD
+=======
+
+const getDataYearStyles = (props) => {
+    const { dataYears, marks } = props;
+    if (dataYears.length === 0) {
+        return '';
+    }
+    const markYears = Object.keys(marks)
+        .map((year) => parseInt(year, 10))
+        .sort((a, b) => a - b);
+
+    return dataYears.map((year) => {
+        const index = markYears.indexOf(year) + 1;
+        return `
+            &:nth-child(${index}) {
+                background-color: ${backgroundColor};
+                border-radius: 50%;
+                border: 2px solid #ffffff;
+                width: 8px;
+                height: 8px;
+                top: -2px;
+                &.ant-slider-dot-active {
+                    border: 2px solid ${primaryColor};
+                }
+
+                &:hover {
+                    ::after {
+                        content: '${year}';
+                        color: #ffffff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 14px;
+                        font-variant: tabular-nums;
+                        font-feature-settings: 'tnum';
+                        padding-top: 20px;
+                    }
+                }
+            }
+        `;
+    }).join('');
+};
+
+export const StyledRangeSlider = styled(Slider)`
+    &&& {
+        height: 16px;
+    }
+    .ant-slider-mark {
+        top: -21px;
+    }
+    .ant-slider-mark-text {
+        color: #ffffff;
+    }
+    .ant-slider-dot {
+        border-radius: 0%;
+        border: 0;
+        margin-left: 0px;
+        width: 2px;
+        top: 0px;
+        height: 4px;
+        ${(props) => getDataYearStyles(props)}
+    }
+    .ant-slider-rail {
+        background-color: #ffffff;
+    }
+    .ant-slider-track {
+        background-color: ${primaryColor};
+    }
+    &:hover {
+        .ant-slider-rail {
+            background-color: #ffffff;    
+        }
+    }
+    .ant-slider-step > .ant-slider-dot {
+        pointer-events: auto;
+    }
+    .ant-slider-handle {
+        width: 8px;
+        height: 16px;
+        border-radius: 6px;
+        border: solid 1px ${borderColor};
+        margin-left: 2px;
+        top: 2px;
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value)) {
+                handleColor = noDataColor;
+            }
+            return `
+                background-color: ${handleColor};
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    .ant-slider-handle-1 {
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value[0])) {
+                handleColor = noDataColor;
+            }
+            return `
+                background-color: ${handleColor} !important;
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    .ant-slider-handle-2 {
+        ${(props => {
+            let handleColor = primaryColor;
+            if (!props.dataYears.includes(props.value[1])) {
+                handleColor = noDataColor;
+            }
+            return `
+                background-color: ${handleColor} !important;
+                &:focus,
+                &:active,
+                &:hover {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+                &:focus .ant-slider-track,
+                &:active .ant-slider-track,
+                &:hover .ant-slider-track {
+                    background-color: ${handleColor} !important;
+                    border: solid 1px ${borderColor} !important;
+                }
+                &:hover .ant-slider-handle {
+                    border: solid 1px ${borderColor} !important;
+                    background-color: ${handleColor} !important;
+                }
+            `;
+        })}
+    }
+    &:hover .ant-slider-track {
+        background-color: ${primaryColor} !important;
+        border: solid 1px ${borderColor} !important;
+    }
+    &:hover .ant-slider-handle {
+        border: solid 1px ${borderColor} !important;
+        background-color: ${(props) => props.dataYears.includes(props.value) ? `${primaryColor};` : `${noDataColor};`} !important;
+    }
+`;
+>>>>>>> develop
