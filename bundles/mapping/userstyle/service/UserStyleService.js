@@ -1,5 +1,5 @@
 import { Messaging } from 'oskari-ui/util';
-import { VectorStyle } from '../../mapmodule/domain/VectorStyle';
+import { VectorStyle, RUNTIME_PREFIX } from '../../mapmodule/domain/VectorStyle';
 import { BUNDLE_KEY } from '../constants';
 
 export class UserStyleService {
@@ -45,7 +45,7 @@ export class UserStyleService {
         // use string prefixed time to get unique id and mark as runtime style
         // backend stored styles have always number (Long) id
         if (!id) {
-            style.id = 's_' + Date.now().toString();
+            style.id = RUNTIME_PREFIX + Date.now().toString();
         }
         const index = this.styles.findIndex(s => s.id === id);
         if (index !== -1) {

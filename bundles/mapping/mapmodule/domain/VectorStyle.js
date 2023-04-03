@@ -1,6 +1,7 @@
 import { Style } from './style';
 import { VECTOR_STYLE } from './constants';
 export const DEFAULT_STYLE_NAME = 'default';
+export const RUNTIME_PREFIX = 's_';
 
 export const createDefaultStyle = () => {
     const style = {
@@ -21,8 +22,9 @@ export const parseStylesFromOptions = (options) => {
 };
 
 export class VectorStyle extends Style {
-    constructor ({ id, name, style, type }) {
-        super(id, name); // name, title
+    constructor ({ id, name: title, style, type }) {
+        const name = id.toString();
+        super(name, title);
         this._type = type;
         this._styleDef = style || {};
     }
@@ -45,9 +47,9 @@ export class VectorStyle extends Style {
         return this._type;
     }
 
-    // backend stored styles have number id (long)
     isRuntimeStyle () {
-        return typeof this.getName() === 'string';
+        const name = this.getName() || '';
+        return name.startsWith(RUNTIME_PREFIX);
     }
 
     hasDefinitions () {
