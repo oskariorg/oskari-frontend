@@ -84,7 +84,7 @@ Oskari.clazz.define('map.layer.handler',
             if (status === DESCRIBE_LAYER.LOADED || status === DESCRIBE_LAYER.PENDING) {
                 return;
             }
-            layer.getDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
+            layer.setDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
             this.layerService.getDescribeLayer(layerId, info => {
                 if (!info) {
                     layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
@@ -94,7 +94,7 @@ Oskari.clazz.define('map.layer.handler',
                         return;
                     }
                 }
-                layer.getDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
+                layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
                 const sandbox = this.layerService.getSandbox();
                 layer.handleDescribeLayer(info);
                 sandbox.findRegisteredModuleInstance('MainMapModule').handleDescribeLayer(layer, info);
