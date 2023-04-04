@@ -59,7 +59,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     redrawUI (mapInMobileMode, forced) {
-        this._isMobile = mapInMobileMode;
         if (this.getElement()) {
             this.teardownUI();
         } else {

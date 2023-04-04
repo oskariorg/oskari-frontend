@@ -1303,7 +1303,7 @@ Oskari.clazz.define(
             return this._isInMobileMode;
         },
 
-        _handleMapSizeChanges: function (newSize, pluginName) {
+        _handleMapSizeChanges: function () {
             const isMobile = Oskari.util.isMobile();
             const modeChanged = this.getMobileMode() !== isMobile;
             this.setMobileMode(isMobile);

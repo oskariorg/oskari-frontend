@@ -33,7 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._index = 30;
         this._name = 'Portti2Zoombar';
         this._suppressEvents = false;
-        this.inMobileMode = false;
     }, {
         /**
          * @private @method _createControlElement
@@ -61,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     changeZoom={(value) => this.getMapModule().setZoomLevel(value)}
                     zoom={this.getMapModule().getMapZoom()}
                     maxZoom={this.getMapModule().getMaxZoomLevel()}
-                    isMobile={this.inMobileMode}
+                    isMobile={Oskari.util.isMobile()}
                 />,
                 el[0]
             );
@@ -97,8 +96,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             }
             var me = this;
             this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
 
             me._element = me._createControlElement();
             this.refresh();
