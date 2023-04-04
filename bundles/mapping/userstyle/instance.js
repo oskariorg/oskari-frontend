@@ -25,6 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
         this.handler = new UserStyleHandler(this);
         sandbox.registerService(this.service);
         this.addTab();
+        this.service.on('update', (layerId) => this.updateStyleList(layerId));
     },
     getSandbox: function () {
         return this.sandbox;
@@ -32,14 +33,38 @@ Oskari.clazz.define('Oskari.mapframework.userstyle.UserStyleBundleInstance', fun
     getService: function () {
         return this.service;
     },
+    updateStyleList: function (layerId) {
+        if (!this.popupController) {
+            return;
+        }
+        this.popupController.update({ layerId });
+    },
     cleanPopup () {
         if (this.popupController) {
             this.popupController.close();
         }
         this.popupController = null;
     },
-    showPopup (options) {
-        const onClose = () => this.cleanPopup();
+    showPopup (requestOpts) {
+        const { id, addToLayer, layerId } = requestOpts;
+        const showEditor =
+            typeof id !== 'undefined' ||
+            typeof addToLayer === 'number' ||
+            this.service.getStylesByLayer(layerId).length === 0;
+        const requestedLayer = addToLayer || layerId;
+
+        const onClose = (wasEditor) => {
+            if (wasEditor === true) {
+                this.updateStyleList(requestedLayer);
+                return;
+            }
+            this.cleanPopup();
+        };
+        const options = {
+            id,
+            layerId: requestedLayer,
+            showEditor
+        };
         if (this.popupController) {
             this.popupController.update(options);
         } else {

@@ -7,34 +7,23 @@ import { UserStylesContent } from './UserStyles/UserStylesContent';
 import { BUNDLE_KEY } from '../constants';
 import { VECTOR_STYLE } from '../../mapmodule/domain/constants';
 
-const showStyleEditor = (service, options) =>
-    typeof options.id !== 'undefined' ||
-    typeof options.addToLayer === 'number' ||
-    service.getStylesByLayer(options.layerId).length === 0;
-
 const getContent = (service, options, onClose) => {
-    const { layerId, id, addToLayer } = options;
+    const { layerId, id, showEditor } = options;
     let content;
-    if (showStyleEditor(service, options)) {
+    if (showEditor) {
+        const wasEditor = true;
         const style = service.getStyleById(id) || {};
         const onAdd = ({ name, featureStyle }) => {
             service.saveUserStyle({
                 id,
-                layerId: style.layerId || addToLayer || layerId,
+                layerId: style.layerId || layerId,
                 type: VECTOR_STYLE.OSKARI,
                 name,
                 style: { featureStyle }
             });
-            const hasStyles = service.getStylesByLayer(addToLayer).length > 0;
-            if (hasStyles) {
-                // toggle to style list view
-                Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ layerId: addToLayer }]);
-            } else {
-                // style editor is opened on layerId request if no styles. so have to close here.
-                onClose();
-            }
+            onClose(wasEditor);
         };
-        content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ onClose }/>;
+        content = <UserStyleEditor style={ style } onAdd={ onAdd } onCancel={ () => onClose(wasEditor) }/>;
     } else {
         const styles = service.getStylesByLayer(layerId);
         const onDelete = (id) => service.removeUserStyle(id);
@@ -47,8 +36,8 @@ const getContent = (service, options, onClose) => {
     );
 };
 
-const getTitle = (service, options) => {
-    const messageKey = showStyleEditor(service, options) ? 'popup.title' : 'title';
+const getTitle = (options) => {
+    const messageKey = options.showEditor ? 'popup.title' : 'title';
     return (
         <Message bundleKey={ BUNDLE_KEY } messageKey={messageKey} />
     );
@@ -56,15 +45,15 @@ const getTitle = (service, options) => {
 
 export const showStylesPopup = (service, options = {}, onClose) => {
     const controls = showPopup(
-        getTitle(service, options),
+        getTitle(options),
         getContent(service, options, onClose),
         onClose,
         { id: BUNDLE_KEY }
     );
     return {
         ...controls,
-        update: (options = {}) => {
-            controls.update(getTitle(service, options), getContent(service, options, onClose));
+        update: (options) => {
+            controls.update(getTitle(options), getContent(service, options, onClose));
         }
     };
 };

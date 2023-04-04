@@ -2176,7 +2176,17 @@ Oskari.clazz.define(
             }
             supportedByPlugins.forEach(plugin => plugin.addMapLayerToMap(layer, keepLayersOrder, isBaseMap));
         },
-
+        handleDescribeLayer: function (layer, info) {
+            const layersPlugin = this.getPluginInstances('LayersPlugin');
+            if (layersPlugin) {
+                layersPlugin.handleDescribeLayer(layer, info);
+            }
+            Object.values(this.getLayerPlugins()).forEach(plugin => {
+                if (typeof plugin.handleDescribeLayer === 'function') {
+                    plugin.handleDescribeLayer(layer, info);
+                }
+            });
+        },
         /**
          * @method afterRearrangeSelectedMapLayerEvent
          * @private

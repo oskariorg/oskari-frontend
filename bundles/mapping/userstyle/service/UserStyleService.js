@@ -23,31 +23,28 @@ export class UserStyleService {
                 this.saveStyle(style);
             }
         } else {
-            this.saveRuntimeStyle(style);
+            this.storeStyle(style);
         }
-        // Style is saved from selected layer so add saved style to layer
-        this.applyStyleToLayer(style.id);
     }
 
     removeUserStyle (id) {
-        this.removeStyleFromLayer(id);
         if (Oskari.user().isLoggedIn()) {
-            this.deleteStyle();
+            this.deleteStyle(id);
         } else {
-            this.styles = this.styles.filter(s => s.id !== id);
-            this.notifyStyleUpdate();
+            this.removeFromStore(id);
         }
     }
 
-    saveRuntimeStyle (style) {
+    storeStyle (style) {
         const { id, layerId } = style;
-        if (layerId) {
-            this.log.warn('Tried to add runtime vector style without layerId. Skipping.');
+        if (!layerId) {
+            this.log.warn('Tried to store vector style without layerId. Skipping.');
             return;
         }
+        // new runtime styles for guest user doesn't have id
+        // use string prefixed time to get unique id and mark as runtime style
+        // backend stored styles have always number (Long) id
         if (!id) {
-            // styles are stored only for runtime, use time to get unique id
-            // use string (backend stored styles have number/Long)
             style.id = 's_' + Date.now().toString();
         }
         const index = this.styles.findIndex(s => s.id === id);
@@ -57,11 +54,21 @@ export class UserStyleService {
             this.styles.push(style);
         }
         this.applyStyleToLayer(style);
-        this.notifyStyleUpdate();
+        this.notifyStyleUpdate(layerId);
     }
 
-    // Used for listing styles in mydata tab
-    // Don't apply styles here for layrs. LayersPlugin handles
+    removeFromStore (id) {
+        const style = this.getStyleById(id);
+        if (!style) {
+            this.log.warn(`Tried to remove vector style: ${id} from storage. Style does not exist. Skipping.`);
+            return;
+        }
+        this.styles = this.styles.filter(s => s.id !== id);
+        this.removeStyleFromLayer(style);
+        this.notifyStyleUpdate(style.layerId);
+    }
+
+    // Used for listing all styles in mydata tab
     fetchUserStyles () {
         if (!Oskari.user().isLoggedIn()) {
             return;
@@ -70,7 +77,7 @@ export class UserStyleService {
         fetch(Oskari.urls.getRoute('VectorStyle'), {
             method: 'GET',
             headers: {
-                'Accept': 'application/json'
+                Accept: 'application/json'
             }
         }).then(response => {
             if (!response.ok) {
@@ -92,6 +99,7 @@ export class UserStyleService {
             if (resp === false) {
                 throw Error('Failed to delete vector style');
             }
+            this.removeFromStore(id);
             this.ajaxSuccess('delete');
         }).catch(error => this.ajaxError('delete', error));
     }
@@ -102,11 +110,12 @@ export class UserStyleService {
             method: 'POST',
             body: JSON.stringify(style)
         }).then(response => {
-            return response.ok && response;
-        }).then((resp) => {
-            if (resp === false) {
-                throw Error('Failed to save vector style');
+            if (!response.ok) {
+                return Promise.reject(new Error('Failed to save vector style'));
             }
+            return response.json();
+        }).then((json) => {
+            this.storeStyle(json);
             this.ajaxSuccess('save');
         }).catch(error => this.ajaxError('save', error));
     }
@@ -117,11 +126,12 @@ export class UserStyleService {
             method: 'PUT',
             body: JSON.stringify(style)
         }).then(response => {
-            return response.ok && response;
-        }).then((resp) => {
-            if (resp === false) {
-                throw Error('Failed to update vector style');
+            if (!response.ok) {
+                return Promise.reject(new Error('Failed to update vector style'));
             }
+            return response.json();
+        }).then((json) => {
+            this.storeStyle(json);
             this.ajaxSuccess('save');
         }).catch(error => this.ajaxError('save', error));
     }
@@ -138,8 +148,7 @@ export class UserStyleService {
 
     ajaxSuccess (method) {
         Messaging.success(Oskari.getMsg(BUNDLE_KEY, `success.${method}`));
-        // for now loads all user styles on add, update, delete
-        this.fetchUserStyles();
+        this.trigger('ajax', false);
     }
 
     handleFetchResponse (json) {
@@ -147,13 +156,12 @@ export class UserStyleService {
             return;
         }
         this.styles = json;
+        // Don't apply styles for layers. Only notify mass update.
         this.notifyStyleUpdate();
-        // Should add style only for selected on start or Describe loaded on save/update
-        // this.styles.forEach(s => this.applyStyleToLayer(s.id));
     }
 
-    notifyStyleUpdate () {
-        this.trigger('update');
+    notifyStyleUpdate (layerId) {
+        this.trigger('update', layerId);
     }
 
     notifyLayerUpdate (layerId) {
@@ -165,9 +173,11 @@ export class UserStyleService {
         return 'Oskari.mapframework.userstyle.service.UserStyleService';
     }
 
-    applyStyleToLayer (id) {
-        const style = this.getStyleById(id);
-        const { layerId } = style || {};
+    applyStyleToLayer (style) {
+        const { layerId, id } = style || {};
+        // Users own styles are loaded (overrides) via DescribeLayer when layer is added first time on the map
+        // Find layer from all available to be sure that style is added to layer
+        // Note that style is selected only when layer is on the map (is selected)
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.addStyle(new VectorStyle(style));
@@ -177,9 +187,8 @@ export class UserStyleService {
         }
     }
 
-    removeStyleFromLayer (id) {
-        const style = this.getStyleById(id);
-        const { layerId } = style || {};
+    removeStyleFromLayer (style) {
+        const { layerId, id } = style || {};
         const layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
         if (layer) {
             layer.removeStyle(id);

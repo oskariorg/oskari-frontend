@@ -21,8 +21,11 @@ Oskari.clazz.define(
          */
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
             // call parent parseLayerData
+            // TODO: only setHoverOptions and parseLayerAttributes
+            // -> set hoveroptions here and attributes in DescribeLayer
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             layer.setLocale(mapLayerJson.locale);
+            layer.setStylesFromOptions(mapLayerJson.options);
 
             const toolName = Oskari.getMsg('MapWfs2', 'editLayer');
             const toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');

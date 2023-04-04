@@ -11,6 +11,15 @@ export const createDefaultStyle = () => {
     return new VectorStyle(style);
 };
 
+// constructor like function for layer options styles (oskari styles only)
+export const parseStylesFromOptions = (options) => {
+    const { styles = {} } = options || {};
+    return Object.keys(styles).map(id => {
+        const { title, ...style } = styles[id];
+        return new VectorStyle({ id, type: VECTOR_STYLE.OSKARI, style, name: title });
+    });
+};
+
 export class VectorStyle extends Style {
     constructor ({ id, name, style, type }) {
         super(id, name); // name, title
@@ -63,53 +72,5 @@ export class VectorStyle extends Style {
 
     setStyleDef (styleDef) {
         this._styleDef = styleDef;
-    }
-
-    /* deprecated */
-    parseStyleFromOptions (styleDef) {
-        if (!styleDef) {
-            return;
-        }
-        if (this.getType() !== VECTOR_STYLE.OSKARI) {
-            this.setStyleDef({ ...styleDef });
-            return;
-        }
-        // Parse Oskari style to fetureStyle and optionalStyles
-        let { featureStyle = {}, optionalStyles = [], title } = styleDef;
-        // Bypass possible layer definitions
-        Object.keys(styleDef).forEach(key => {
-            const val = styleDef[key];
-            if (val.hasOwnProperty('featureStyle')) {
-                featureStyle = val.featureStyle;
-            }
-            if (val.hasOwnProperty('optionalStyles')) {
-                optionalStyles = val.optionalStyles;
-            }
-            if (val.hasOwnProperty('title')) {
-                title = val.title;
-            }
-            // 3D-layers have not required featureStyle it since there hasn't been hover styles implemented yet
-            //  - backwards compatibility == featureStyle is NOT REQUIRED as part of the style
-            //  - consistency == style definitions ARE STORED/USED to/from featureStyle so we can use the visual style editor for WFS and 3D
-            switch (key) {
-            case 'fill':
-                featureStyle.fill = val;
-                break;
-            case 'stroke':
-                featureStyle.stroke = val;
-                break;
-            case 'image':
-                featureStyle.image = val;
-                break;
-            case 'text':
-                featureStyle.text = val;
-                break;
-            }
-        });
-        this.setStyleDef({ featureStyle, optionalStyles });
-
-        if (title) {
-            this.setTitle(title);
-        }
     }
 }
