@@ -50,9 +50,9 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             const layerId = layer.getId();
             try {
                 this._log.debug(`Running WMTS capabilities parsing for layer id: ${layerId}`, capabilities);
-                this.capabilities[layerId] = formatCapabilitiesForOpenLayers(capabilities);
+                this._capabilities[layerId] = formatCapabilitiesForOpenLayers(capabilities);
             } catch (err) {
-                this._log.debug(`Failed to parse capabilities for WMTS layer id: ${layerId}`, capabilities);
+                this._log.warn(`Failed to parse capabilities for WMTS layer id: ${layerId}`, capabilities);
             }
         },
         /**
