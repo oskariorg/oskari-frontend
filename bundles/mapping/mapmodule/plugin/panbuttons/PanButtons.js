@@ -25,7 +25,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._index = 20;
         this._name = 'PanButtons';
         this._panPxs = 100;
-        this.inMobileMode = false;
         this.showArrows = !!this.getConfig().showArrows;
         this.resetPopup = null;
     }, {
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     <PanButton
                         resetClicked={() => this._resetClicked()}
                         panClicked={(x, y) => this._panClicked(x, y)}
-                        isMobile={this.inMobileMode}
+                        isMobile={Oskari.util.isMobile()}
                         showArrows={this.showArrows}
                     />
                 </ThemeProvider>,
@@ -98,9 +97,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             this.teardownUI();
-
-            this.inMobileMode = mapInMobileMode;
-
             this._element = this._createControlElement();
             this.refresh();
             this.addToPluginContainer(this._element);

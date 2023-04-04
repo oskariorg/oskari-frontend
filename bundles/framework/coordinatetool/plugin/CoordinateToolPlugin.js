@@ -39,14 +39,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
         },
         _createControlElement: function () {
-            var me = this,
-                el = me._templates.coordinatetool.clone();
-
-            if (me._config.noUI) {
-                return null;
-            }
-
-            return el;
+            return this._templates.coordinatetool.clone();
+        },
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
+            this.refresh();
         },
         teardownUI: function () {
             // remove old element
@@ -63,16 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.hasUI()) {
-                return;
-            }
-
-            this.teardownUI();
-            if (!this._config.noUI) {
-                this._element = this._createControlElement();
-                this.refresh();
-                this.addToPluginContainer(this._element);
-            }
+            this.refresh();
         },
 
         hasUI: function () {
@@ -99,6 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             ReactDOM.render(
                 <MapModuleButton
                     className='t_coordinatetool'
+                    visible={this.hasUI()}
                     title={this._locale('display.tooltip.tool')}
                     icon={<CoordinateIcon />}
                     onClick={() => this.handler.getController().showPopup()}
