@@ -1,7 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Col, ColFixed, Row, YearInput } from './styled';
+import { Col, ColFixed, YearInput } from './styled';
 import { YearRangeSlider } from './YearRangeSlider';
+import styled from 'styled-components';
+
+const Row = styled('div')`
+    display: flex;
+    flex-direction: row;
+    margin: 0 20px;
+`;
 
 export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobile }) => {
     const [startValue, endValue] = value;
@@ -19,7 +26,6 @@ export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobi
                 <ColFixed>
                     <YearRangeSlider
                         range
-                        step={1}
                         start={start}
                         end={end}
                         dataYears={dataYears}

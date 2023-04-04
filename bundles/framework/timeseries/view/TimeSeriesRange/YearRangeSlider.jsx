@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { StyledRangeSlider } from './styled';
+import { TimeSeriesSlider } from 'oskari-ui/components/TimeSeries/TimeSeriesSlider';
 
 export const YearRangeSlider = (props) => {
-    const { start, end, dataYears, isMobile, value } = props;
+    const { start, end, dataYears, isMobile, onChange, value, range } = props;
     const marks = {
         [start]: start,
         [end]: end
@@ -24,17 +24,17 @@ export const YearRangeSlider = (props) => {
     // as small circles on the timeline (via css styling)
     dataYears.filter((year) => !marks[year]).forEach((year) => (marks[year] = ''));
     return (
-        <StyledRangeSlider
-            {...props}
-            tooltip={{
-                open: true,
-                getPopupContainer: (triggerNode) => triggerNode.parentElement
-            }}
-            marks={marks}
-            min={start}
-            max={end}
-            dots={true}
-        />
+        <>
+            <TimeSeriesSlider
+                range={range}
+                min={start}
+                max={end}
+                dataPoints={dataYears}
+                markers={Object.keys(marks).filter(mark => marks[mark] !== '').map(mark => Number.parseInt(mark, 10))}
+                onChange={onChange}
+                value={value}
+            />
+        </>
     );
 };
 
