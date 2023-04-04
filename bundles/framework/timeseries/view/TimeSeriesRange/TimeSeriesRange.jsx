@@ -7,6 +7,7 @@ import styled from 'styled-components';
 const Row = styled('div')`
     display: flex;
     flex-direction: row;
+    margin: 0 20px;
 `;
 
 export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobile }) => {
@@ -21,16 +22,18 @@ export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobi
                     onChange={(val) => onChange([val, endValue])}
                 ></YearInput>
             </Col>
-            <ColFixed>
-                <YearRangeSlider
-                    range
-                    start={start}
-                    end={end}
-                    dataYears={dataYears}
-                    value={value}
-                    onChange={(val) => onChange(val)}
-                />
-            </ColFixed>
+            {!isMobile && (
+                <ColFixed>
+                    <YearRangeSlider
+                        range
+                        start={start}
+                        end={end}
+                        dataYears={dataYears}
+                        value={value}
+                        onChange={(val) => onChange(val)}
+                    />
+                </ColFixed>
+            )}
             <Col>
                 <YearInput
                     value={endValue}

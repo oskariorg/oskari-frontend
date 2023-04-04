@@ -15,9 +15,7 @@ export const Paragraph = styled('p')``;
 const getHeaderContent = (title, loading = false, error = false, value) => {
     let content = title;
     if (value) {
-        if (Array.isArray(value)) {
-            content = `${title} (${value[0]} - ${value[1]})`;
-        } else {
+        if (!Array.isArray(value)) {
             content = `${title} (${value})`;
         }
     }

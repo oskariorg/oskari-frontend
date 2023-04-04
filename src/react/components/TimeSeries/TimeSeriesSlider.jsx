@@ -68,7 +68,7 @@ export const TimeSeriesSlider = ({
     dataPoints,
     markers,
     onChange,
-    width = 564,
+    width = 524,
     type = sliderTypes.YEAR,
     range = false,
     value
@@ -145,7 +145,9 @@ export const TimeSeriesSlider = ({
             e.preventDefault();
             e.stopPropagation();
             const position = calculateSvgX(e.clientX, state.dragElement);
-            state.dragElement.setAttributeNS(null, 'x', position - state.dragOffsetX);
+            if (position >= 0 && position <= lineWidth) {
+                state.dragElement.setAttributeNS(null, 'x', position - state.dragOffsetX);
+            }
         }
     };
 
@@ -181,7 +183,12 @@ export const TimeSeriesSlider = ({
                             {mark}
                         </Marker>
                     ))}
-                    <Rail onClick={(e) => onHandlePositionChange(e)} className='slider-rail' width={lineWidth} height={3} />
+                    <g onClick={(e) => onHandlePositionChange(e)}>
+                        <Rail className='slider-rail' width={lineWidth} height={3} />
+                        {range && (
+                            <line x1={state.handleX} x2={state.secondHandleX} y1={1} y2={1} stroke='#ecb900' strokeWidth={3} />
+                        )}
+                    </g>
                     {state.sliderPoints.map((point, index) => (
                         <g
                             key={index}

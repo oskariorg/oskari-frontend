@@ -75,10 +75,10 @@ export const ColFixed = styled.div`
     max-width: 100%;
     position: relative;
     flex-grow: 1;
-    padding: 0 20px;
 `;
 
 export const YearInput = styled(NumberInput)`
+    width: 80px;
     .ant-input-number-handler-wrap {
         opacity: 1;
     }
