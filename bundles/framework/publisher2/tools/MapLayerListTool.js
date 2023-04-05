@@ -57,7 +57,7 @@ class MapLayerListTool extends AbstractPublisherTool {
 
 // Attach protocol to make this discoverable by Oskari publisher
 Oskari.clazz.defineES('Oskari.publisher.MapLayerListTool',
-MapLayerListTool,
+    MapLayerListTool,
     {
         'protocol': ['Oskari.mapframework.publisher.LayerTool']
     }
