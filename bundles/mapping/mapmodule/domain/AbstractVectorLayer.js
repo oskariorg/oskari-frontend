@@ -15,7 +15,7 @@ export class AbstractVectorLayer extends AbstractLayer {
         // store selected style name to try selecting it when styles are available
         this._storedStyleName = name;
         // don't create empty style on startup, create it on getCurrentStyle when needed
-        if (this.getStyles.length === 0) {
+        if (this.getStyles().length === 0) {
             return;
         }
         super.selectStyle(name);
@@ -35,7 +35,7 @@ export class AbstractVectorLayer extends AbstractLayer {
     /* override */
     getCurrentStyle () {
         if (!this._currentStyle) {
-            if (this.getStyles.length > 0) {
+            if (this.getStyles().length > 0) {
                 super.selectStyle(this._storedStyleName);
             } else {
                 this._currentStyle = createDefaultStyle(this._storedStyleName);
