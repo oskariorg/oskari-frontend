@@ -8,8 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         };
     }, {
         index: 3,
-        lefthanded: 'top right',
-        righthanded: 'top left',
 
         templates: {
             'toolOptions': '<div class="tool-options"></div>',

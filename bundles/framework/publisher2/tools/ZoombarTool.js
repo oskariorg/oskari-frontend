@@ -2,15 +2,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
     function () {
     }, {
         index: 3,
-        lefthanded: 'top left',
-        righthanded: 'top right',
 
         /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
@@ -19,12 +17,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
             };
         },
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
             if (!this.isEnabled()) {
                 return null;

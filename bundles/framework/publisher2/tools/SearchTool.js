@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
     function () {
     }, {
         index: 4,
-        lefthanded: 'top right',
-        righthanded: 'top left',
 
         /**
         * Get tool object.

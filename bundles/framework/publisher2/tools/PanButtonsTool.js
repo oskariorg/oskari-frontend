@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
     function () {
     }, {
         index: 2,
-        lefthanded: 'top left',
-        righthanded: 'top right',
         _templates: {
             extraOptions: jQuery(`
                 <div class="publisher2 panbutton-options tool-options">
