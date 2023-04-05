@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
     function () {
     }, {
         index: 1,
-        lefthanded: 'bottom left',
-        righthanded: 'bottom right',
 
         /**
         * Get tool object.

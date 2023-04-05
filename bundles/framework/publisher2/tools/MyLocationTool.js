@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
     function () {
     }, {
         index: 4,
-        lefthanded: 'top left',
-        righthanded: 'top right',
 
         defaultExtraOptions: {
             mode: 'single',
@@ -29,14 +27,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             mobileOnly: null,
             centerMapAutomatically: null
         },
-        pluginSelected: false,
 
         /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
@@ -45,12 +42,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             };
         },
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
             if (!this.isEnabled()) {
                 return null;
@@ -75,12 +72,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             };
         },
         /**
-     * Get extra options.
-     * @method getExtraOptions
-     * @public
-     *
-     * @returns {Object} jQuery element
-     */
+         * Get extra options.
+         * @method getExtraOptions
+         * @public
+         *
+         * @returns {Object} jQuery element
+         */
         getExtraOptions: function (toolContainer) {
             var me = this;
             var template = jQuery(me.templates.toolOptions).clone();

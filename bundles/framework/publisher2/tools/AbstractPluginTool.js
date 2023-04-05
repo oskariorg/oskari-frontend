@@ -21,9 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     group: 'maptools',
     // 'bottom left', 'bottom right' etc
     allowedLocations: ['*'],
-    // default location in lefthanded / righthanded layouts. Override.
-    lefthanded: '',
-    righthanded: '',
     // List of plugin classes that can reside in same container(?) like 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin'
     allowedSiblings: ['*'],
 

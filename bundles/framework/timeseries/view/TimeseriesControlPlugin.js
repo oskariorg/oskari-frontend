@@ -47,8 +47,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.currentTime = delegate.getCurrentTime();
         this._validSkipOptions = this._filterSkipOptions(this._uiState.times);
 
-        me._isMobileVisible = true;
-        me._inMobileMode = false;
         me._isStopped = false;
     }, {
         __fullAxisYPos: 35,
@@ -286,60 +284,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function (mapInMobileMode, forced) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var mobileDefs = this.getMobileDefs();
+        redrawUI: function () {
+            this.refresh();
+        },
 
-            me._inMobileMode = mapInMobileMode;
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && toolbarNotReady) {
-                return true;
-            }
+        refresh: function () {
             this.teardownUI();
-
-            if (!toolbarNotReady && mapInMobileMode) {
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
-                sandbox.request(me, toolbarRequest);
-            }
-            if (!mapInMobileMode) {
-                me._buildUI(mapInMobileMode);
-            }
+            this._buildUI();
         },
         /**
          * @method _buildUI Create element and construct DOM structure
          * @private
          * @param  {Boolean} isMobile is UI in mobile mode?
          */
-        _buildUI: function (isMobile) {
-            var me = this;
-            if (me._isStopped) {
+        _buildUI: function (isMobile = Oskari.util.isMobile()) {
+            if (this._isStopped) {
                 return;
             }
-            me._element = me._createControlElement();
-            this.addToPluginContainer(me._element);
+            this.setElement(this._createControlElement());
+            this.addToPluginContainer(this.getElement());
             var aux = '<div class="timeseries-aux"></div>';
-            var times = me._uiState.times;
+            var times = this._uiState.times;
             if (isMobile) {
-                me._timelineWidth = 260;
-                me._setRange(times[0], times[times.length - 1]);
-                me._element.toggleClass('mobile', isMobile);
-                me._element.append(aux);
-                me._isMobileVisible = true;
+                this._timelineWidth = 260;
+                this._setRange(times[0], times[times.length - 1]);
+                this._element.toggleClass('mobile', isMobile);
+                this._element.append(aux);
             } else {
-                me._setWidth(me.getSandbox().getMap().getWidth(), true);
-                me._applyTopMargin(this._topMargin);
-                me._element.prepend(aux);
-                me._initMenus();
-                me._makeDraggable();
+                this._setWidth(this.getSandbox().getMap().getWidth(), true);
+                this._applyTopMargin(this._topMargin);
+                this._element.prepend(aux);
+                this._initMenus();
+                this._makeDraggable();
             }
-            me._initStepper();
-            me._updateTimelines(isMobile);
-            me._updateTimeDisplay();
+            this._initStepper();
+            this._updateTimelines(isMobile);
+            this._updateTimeDisplay();
         },
         _makeDraggable: function () {
             this._element.prepend('<div class="timeseries-handle oskari-flyoutheading"></div>');
@@ -666,7 +646,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @private
          */
         teardownUI: function () {
-            this._isMobileVisible = false;
             this.removeFromPluginContainer(this.getElement());
         },
         /**
