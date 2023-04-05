@@ -1284,7 +1284,7 @@ Oskari.clazz.define(
         setDescribeLayerStatus: function (status) {
             this._describeLayerStatus = status;
         },
-        requiresDescripeLayer: function () {
+        requiresDescribeLayer: function () {
             return false;
         },
         handleDescribeLayer: function (info) {

@@ -100,9 +100,10 @@ import './event/UserLocationEvent';
 import { filterFeaturesByExtent } from './util/vectorfeatures/filter';
 import { FEATURE_QUERY_ERRORS } from './domain/constants';
 import { monitorResize, unmonitorResize } from 'oskari-ui/components/window';
-import { getSortedPlugins, refreshPluginsWithUI } from './util/PluginHelper';
+import { getSortedPlugins, resetPluginsWithUI, refreshPluginsWithUI } from './util/PluginHelper';
 import { getDefaultMapTheme, setFont } from './util/MapThemeHelper';
 import { addCrosshair, isCrosshairActive, removeCrosshair } from './util/Crosshair';
+import { generatePluginContainers } from './util/PluginContainerHelper';
 
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
@@ -309,7 +310,7 @@ Oskari.clazz.define(
             me._calculateScalesImpl(me._mapResolutions);
 
             // TODO remove this whenever we're ready to add the containers when needed
-            this._addMapControlPluginContainers();
+            generatePluginContainers(this.getMapEl());
             return me._initImpl(me._sandbox, me._options, me._map);
         },
         /**
@@ -453,6 +454,12 @@ Oskari.clazz.define(
             },
             'LayerToolsEditModeEvent': function (event) {
                 this._isInLayerToolsEditMode = event.isInMode();
+                // Disable feature hover when tools are being dragged
+                this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(!this._isInLayerToolsEditMode);
+                if (this._isInLayerToolsEditMode) {
+                    // when entering edit/drag mode -> allow plugins to close popups etc reset their UIs
+                    resetPluginsWithUI(this.getPluginInstances());
+                }
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
                 this.afterRearrangeSelectedMapLayerEvent(event);
@@ -1301,7 +1308,7 @@ Oskari.clazz.define(
             const modeChanged = this.getMobileMode() !== isMobile;
             this.setMobileMode(isMobile);
             if (modeChanged) {
-                // previously called redrawUI() -> now calls changeToolStyle()
+                // previously called redrawUI() -> now calls refresh()
                 refreshPluginsWithUI(this.getPluginInstances());
             }
         },
@@ -1462,11 +1469,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if a plugin with given name is registered to the map
          */
         isPluginActivated: function (pluginName) {
-            var plugin = this.getPluginInstances(pluginName);
-            if (plugin) {
-                return true;
-            }
-            return false;
+            return !!this.getPluginInstances(pluginName);
         },
         /**
          * @method registerPlugin
@@ -2038,93 +2041,11 @@ Oskari.clazz.define(
             this.log.deprecated('getToolColourScheme');
             return null;
         },
-        _getContainerWithClasses: function (containerClasses) {
-            var containerDiv = jQuery(
-                '<div class="mapplugins">' +
-                    '  <div class="mappluginsContainer">' +
-                    '    <div class="mappluginsContent"></div>' +
-                    '  </div>' +
-                    '</div>'
-            );
-
-            containerDiv.addClass(containerClasses);
-            containerDiv.attr('data-location', containerClasses);
-            return containerDiv;
-        },
-
-        _getContainerClasses: function () {
-            return [
-                'bottom center',
-                'center top',
-                'center right',
-                'center left',
-                'bottom right',
-                'bottom left',
-                'right top',
-                'left top'
-            ];
-        },
-
-        /**
-         * Adds containers for map control plugins
-         */
-        _addMapControlPluginContainers: function () {
-            var containerClasses = this._getContainerClasses();
-            var mapDiv = this.getMapEl();
-
-            for (var i = 0; i < containerClasses.length; i += 1) {
-                mapDiv.append(
-                    this._getContainerWithClasses(containerClasses[i])
-                );
-            }
-        },
 
         _getMapControlPluginContainer: function (containerClasses) {
-            var splitClasses = (containerClasses + '').split(' ');
-            var selector = '.mapplugins.' + splitClasses.join('.');
-            var containerDiv;
-            var mapDiv = this.getMapEl();
-
-            containerDiv = mapDiv.find(selector);
-            if (!containerDiv.length) {
-                var containersClasses = this._getContainerClasses(),
-                    currentClasses,
-                    previousFound = null,
-                    current,
-                    classesMatch,
-                    i,
-                    j;
-
-                for (i = 0; i < containersClasses.length; i += 1) {
-                    currentClasses = containersClasses[i].split(' ');
-                    current = mapDiv.find('.mapplugins.' + currentClasses.join('.'));
-                    if (current.length) {
-                        // container was found in DOM
-                        previousFound = current;
-                    } else {
-                        // container not in DOM, see if it's the one we're supposed to add
-                        classesMatch = true;
-                        for (j = 0; j < currentClasses.length; j += 1) {
-                            if (jQuery.inArray(currentClasses[j], splitClasses) < 0) {
-                                classesMatch = false;
-                                break;
-                            }
-                        }
-                        if (classesMatch) {
-                            // It's the one we're supposed to add
-                            containerDiv = this._getContainerWithClasses(
-                                currentClasses
-                            );
-                            if (previousFound !== null && previousFound.length) {
-                                previousFound.after(containerDiv);
-                            } else {
-                                mapDiv.prepend(containerDiv);
-                            }
-                        }
-                    }
-                }
-            }
-            return containerDiv;
+            const splitClasses = (containerClasses + '').split(' ');
+            const selector = '.mapplugins.' + splitClasses.join('.');
+            return this.getMapEl().find(selector);
         },
 
         /**
@@ -2137,12 +2058,11 @@ Oskari.clazz.define(
 
         setMapControlPlugin: function (element, containerClasses, position) {
             // Get the container
-            var container = this._getMapControlPluginContainer(containerClasses);
-            var content = container.find('.mappluginsContainer .mappluginsContent');
+            const container = this._getMapControlPluginContainer(containerClasses);
+            const content = container.find('.mappluginsContainer .mappluginsContent');
             // bottom corner container?
-            var inverted = /^(?=.*\bbottom\b)((?=.*\bleft\b)|(?=.*\bright\b)).+/.test(containerClasses);
-            var precedingPlugin = null;
-            var curr;
+            const inverted = (containerClasses + '').includes('bottom');
+            let precedingPlugin = null;
 
             if (!element) {
                 throw new Error('Element is non-existent.');
@@ -2164,7 +2084,7 @@ Oskari.clazz.define(
             // Get container's children, iterate through them
             if (position !== null && position !== undefined) {
                 content.find('.mapplugin').each(function () {
-                    curr = jQuery(this);
+                    const curr = jQuery(this);
                     // if plugin's slot isn't bigger (or smaller for bottom corners) than ours, store it to precedingPlugin
                     if ((!inverted && parseInt(curr.attr('data-position')) <= position) ||
                         (inverted && parseInt(curr.attr('data-position')) > position)) {
@@ -2190,10 +2110,9 @@ Oskari.clazz.define(
          * @method removeMapControlPlugin
          * Removes a map control plugin instance from the map DOM
          * @param  {Object} element Control container (jQuery)
-         * @param  {Boolean} keepContainerVisible Keep container visible even if there's no children left.
          * @param {Boolean} detachOnly true to detach and preserve event handlers, false to remove element
          */
-        removeMapControlPlugin: function (element, keepContainerVisible, detachOnly) {
+        removeMapControlPlugin: function (element, detachOnly) {
             var container = element.parents('.mapplugins');
             var content = element.parents('.mappluginsContent');
             // TODO take this into use in all UI plugins so we can hide unused containers...
@@ -2202,7 +2121,7 @@ Oskari.clazz.define(
             } else {
                 element.remove();
             }
-            if (!keepContainerVisible && content.children().length === 0) {
+            if (!this.isInLayerToolsEditMode() && content.children().length === 0) {
                 container.css('display', 'none');
             }
         },
@@ -2218,38 +2137,22 @@ Oskari.clazz.define(
          * @return {OpenLayers.Layer[]}
          */
         getOLMapLayers: function (layerId) {
-            var me = this;
-            var sandbox = me._sandbox;
+            var sandbox = this.getSandbox();
             var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 // not found
                 return null;
             }
-            var lps = this.getLayerPlugins(),
-                p,
-                layersPlugin,
-                layerList,
-                results = [];
-            // let the actual layerplugins find the layer since the name depends on
-            // type
-            for (p in lps) {
-                if (lps.hasOwnProperty(p)) {
-                    layersPlugin = lps[p];
-                    if (!layersPlugin) {
-                        me.log.warn(
-                            'LayerPlugins has no entry for "' + p + '"'
-                        );
+            // let the actual layerplugins find the layer since the impl depends on type
+            return Object.values(this.getLayerPlugins())
+                .map(plugin => {
+                    if (!plugin || typeof plugin.getOLMapLayers !== 'function') {
+                        // can there be null plugins?
+                        return [];
                     }
-                    // find the actual openlayers layers (can be many)
-                    layerList = layersPlugin ? layersPlugin.getOLMapLayers(layer) : null;
-                    if (layerList) {
-                        // if found -> add to results
-                        // otherwise continue looping
-                        results = results.concat(layerList);
-                    }
-                }
-            }
-            return results;
+                    return plugin.getOLMapLayers(layer) || [];
+                })
+                .flatMap(layers => layers);
         },
         /**
          * Adds the layer to the map through the correct plugin for the layer's type.

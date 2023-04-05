@@ -91,20 +91,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 }
             }
 
-            me.getRoles(function () {
-                // Let's extend UI after we have the role data
-                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-            }, function () {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton('Ok'),
-                    request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-
-                btn.addClass('primary');
-                dialog.show(me._localization.failed_to_get_roles_title, me._localization.failed_to_get_roles_message, [btn]);
-            });
-
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            sandbox.request(me, request);
             // sandbox.registerAsStateful(this.mediator.bundleId, this);
         },
         /**
@@ -127,10 +115,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            if (this.plugins['Oskari.userinterface.Flyout']) {
-                this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
-            }
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -149,35 +133,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== 'close',
-                    p;
+                    doOpen = event.getViewState() !== 'close';
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
                     return;
                 }
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
-                    // flyouts eventHandlers are registered
-                    for (p in this.plugins['Oskari.userinterface.Flyout'].getEventHandlers()) {
-                        if (!this.eventHandlers[p]) {
-                            this.sandbox.registerForEventByName(this, p);
-                        }
-                    }
-                }
-            },
-
-            RoleChangedEvent: function (event) {
-                var i;
-                if (event.getOperation() === 'add') {
-                    this.storedRoles.push(event.getRole());
-                }
-                if (event.getOperation() === 'remove') {
-                    for (i = 0; i < this.storedRoles.length; i += 1) {
-                        if ((this.storedRoles[i].id + '') === (event.getRole().id + '')) {
-                            this.storedRoles.splice(i, 1);
-                            break;
-                        }
-                    }
                 }
             }
         },
@@ -246,33 +208,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          */
         getDescription: function () {
             return this.getLocalization('desc');
-        },
-        /**
-         * Role list
-         * @method getRoles
-         *
-         * @param {Function} callback success callback
-         * @param {Function} errCallback error callback
-         */
-        getRoles: function (callback, errCallback) {
-            var me = this;
-
-            jQuery.ajax({
-                type: 'GET',
-                url: Oskari.urls.getRoute('ManageRoles'),
-                lang: Oskari.getLang(),
-                timestamp: new Date().getTime(),
-                error: function () {
-                    me.storedRoles = [];
-                    errCallback();
-                },
-                success: function (result) {
-                    me.storedRoles = result.rolelist || [];
-                    callback();
-                }
-            });
         }
-
     }, {
         /**
          * @property {String[]} protocol

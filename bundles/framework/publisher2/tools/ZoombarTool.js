@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ZoombarTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
                 title: 'Portti2Zoombar',
-                config: {}
+                config: this.state.pluginConfig || {}
             };
         },
         /**

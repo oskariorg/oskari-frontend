@@ -2,6 +2,13 @@
 .timeseriescontrolplugin {
   background-color: rgba(255, 255, 255, 1);
 }
+
+.timeseries-handle {
+  width: 15px;
+  height: 100px;
+  cursor: grab;
+}
+
 .timeline-svg g.full-axis .tick line {
   visibility: hidden;
 }

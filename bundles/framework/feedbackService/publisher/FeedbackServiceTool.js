@@ -19,9 +19,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
         getTool: function () {
             return {
                 // doesn't actually map to anything real, just need this in order to not break stuff in publisher
-                id: 'Oskari.mapframework.publisher.tool.FeedbackServiceTool',
-                title: 'FeedbackServiceTool',
-                config: {}
+                // and provide a cleaner selector for selenium testing
+                id: 'feedbackService.FeedbackServiceRPCTool',
+                title: Oskari.getMsg('feedbackService', 'display.publisher.label'),
+                config: {},
+                hasNoPlugin: true
             };
         },
 
@@ -33,7 +35,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
          * @method init
          */
         init: function (data) {
-            this.handler = new FeedbackServiceToolHandler(data);
+            this.handler = new FeedbackServiceToolHandler(data?.metadata?.feedbackService);
+            this.setEnabled(!!data?.configuration?.feedbackService);
         },
         getComponent: function () {
             return {
@@ -49,28 +52,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
         * @returns {Object} tool value object
         */
         getValues: function () {
-            if (this.handler?.getState()?.allowFeedback) {
-                const state = this.handler.getState();
-                return {
-                    configuration: {
-                        feedbackService: {
-                            conf: {
-                                publish: true
-                            },
-                            state: {}
-                        }
-                    },
-                    metadata: {
-                        feedbackService: {
-                            url: state.feedbackBaseUrl && state.feedbackBaseUrl !== '' ? state.feedbackBaseUrl : null,
-                            key: state.feedbackApiKey && state.feedbackApiKey !== '' ? state.feedbackApiKey : null,
-                            extensions: state.feedbackExtensions && state.feedbackExtensions !== '' ? state.feedbackExtensions : null
-                        }
-                    }
-                };
-            } else {
+            if (!this.isEnabled()) {
                 return null;
             }
+
+            const state = this.handler.getState() || {};
+            return {
+                configuration: {
+                    feedbackService: {
+                        conf: {}
+                    }
+                },
+                metadata: {
+                    feedbackService: {
+                        url: state.feedbackBaseUrl && state.feedbackBaseUrl !== '' ? state.feedbackBaseUrl : null,
+                        key: state.feedbackApiKey && state.feedbackApiKey !== '' ? state.feedbackApiKey : null,
+                        extensions: state.feedbackExtensions && state.feedbackExtensions !== '' ? state.feedbackExtensions : null
+                    }
+                }
+            };
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

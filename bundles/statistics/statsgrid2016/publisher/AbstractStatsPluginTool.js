@@ -37,8 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     getConfiguration: function (conf = {}) {
         // just to make sure if user removes the statslayer while in publisher
         // if there is no statslayer on map -> don't setup tools configuration
-        if (!this._isStatsActive) {
-            return {};
+        // otherwise the embedded map will get statsgrid config which means that editing the embedded
+        // map will show the thematic map tools panel even if the thematic maps is not used on the embedded map
+        if (!this._isStatsActive()) {
+            return null;
         }
         return {
             configuration: {

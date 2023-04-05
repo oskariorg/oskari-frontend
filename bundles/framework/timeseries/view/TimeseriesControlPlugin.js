@@ -1,4 +1,6 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
@@ -63,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'week', value: 'weeks' },
             { key: 'month', value: 'months' }
         ],
-        hasUI: function () {
+        isShouldStopForPublisher: function () {
             // prevent publisher to stop this plugin and start it again when leaving the publisher
             return false;
         },
@@ -115,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {String[]} times time instants in timeseries, ISO-string
          */
         _filterSkipOptions: function (times) {
-            times = times.map(function (t) { return moment(t); }); // optimization: parse time strings once
+            times = times.map(function (t) { return dayjs(t); }); // optimization: parse time strings once
             var shortestInterval = Number.MAX_VALUE;
             for (var i = 0; i < times.length - 1; i++) {
                 var current = times[i];
@@ -126,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 }
             }
             return this.__skipOptions.filter(function (option) {
-                return option.value === '' || moment.duration(1, option.value).asMilliseconds() >= shortestInterval;
+                return option.value === '' || dayjs.duration(1, option.value).asMilliseconds() >= shortestInterval;
             });
         },
         /**
@@ -192,10 +194,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @return {String} time, ISO-string
          */
         _getNextTime: function (fromTime) {
-            var targetTime = moment(fromTime);
+            var targetTime = dayjs(fromTime);
             var index;
             if (this._uiState.stepInterval) {
-                targetTime.add(1, this._uiState.stepInterval);
+                targetTime = targetTime.add(1, this._uiState.stepInterval);
                 index = d3.bisectLeft(this._uiState.times, targetTime.toISOString());
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
@@ -237,7 +239,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var index1 = Math.max(d3.bisectRight(this._uiState.times, time) - 1, 0);
             var index2 = index1 + 1;
             var index;
-            if (index1 < this._uiState.times.length - 1 && Math.abs(moment(this._uiState.times[index1]).diff(time)) > Math.abs(moment(this._uiState.times[index2]).diff(time))) {
+            if (index1 < this._uiState.times.length - 1 && Math.abs(dayjs(this._uiState.times[index1]).diff(time)) > Math.abs(dayjs(this._uiState.times[index2]).diff(time))) {
                 index = index2;
             } else {
                 index = index1;

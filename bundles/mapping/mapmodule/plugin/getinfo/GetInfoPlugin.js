@@ -101,7 +101,9 @@ Oskari.clazz.define(
                 return;
             }
             // toggle controls
-            this._toggleUIControls(enabled);
+            if (!enabled) {
+                this._closeGfiInfo();
+            }
             this._enabled = enabled;
         },
 
@@ -190,10 +192,8 @@ Oskari.clazz.define(
             };
         },
 
-        _toggleUIControls: function (enabled) {
-            if (!enabled) {
-                this._closeGfiInfo();
-            }
+        resetUI: function () {
+            this._closeGfiInfo();
         },
 
         /**

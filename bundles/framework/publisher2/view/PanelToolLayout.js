@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { LocaleProvider } from 'oskari-ui/util';
+import { ToolLayout } from './form/ToolLayout';
+import { mergeValues } from '../util/util';
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelToolLayout
  *
@@ -23,33 +28,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         me.sandbox = sandbox;
 
         me.templateHelp = jQuery('<div class="help icon-info"></div>');
-        me.templateLayout = jQuery(
-            '<div class="tool ">' +
-            '  <label>' +
-            '    <input type="radio" name="toolLayout" /><span></span>' +
-            '  </label>' +
-            '</div>'
-        );
-
-        me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
         // This is publisher.sidebar.data
         me.data = me.instance.publisher.data;
-        me.activeToolLayout = 'userlayout';
-        if (me.instance.publisher.data &&
-            me.instance.publisher.data.metadata &&
-            me.instance.publisher.data.metadata.toolLayout) {
-            me.activeToolLayout = me.instance.publisher.data.metadata.toolLayout;
-        }
         me.toolLayoutEditMode = false;
         me._addedDraggables = [];
     }, {
-        eventHandlers: {
-            'Publisher2.ToolEnabledChangedEvent': function (event) {
-                if (!this.toolLayoutEditMode) {
-                    return;
-                }
-                this._enableToolDraggable(event.getTool());
-            }
+        getName: function () {
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
         },
         /**
          * @method init
@@ -63,93 +48,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             if (!this.panel) {
                 this.panel = this._populateToolLayoutPanel(data);
             }
-
-            // init the tools' plugins location infos
-            if (this.data && this.activeToolLayout === 'userlayout') {
-                // this is always true, however we should not call setLocation for plugins here.
-                // Instead they should start at the location they were when saved.
-                // Problem: getTool() returns empty config usually so plugin is created with empty config instead of actual config that was used to save the map.
-                this._initUserLayout();
-            } else {
-                this._changeToolLayout(this.activeToolLayout, null);
-            }
-        },
-        getName: function () {
-            return 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout';
         },
 
-        /**
-        * Extends object recursive for keeping defaults array.
-        * @method _extendRecursive
-        * @private
-        *
-        * @param {Object} defaults the default extendable object
-        * @param {Object} extend extend object
-        *
-        * @return {Object} extended object
-        */
-        _extendRecursive: function (defaults, extend) {
-            var me = this;
-            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
-                return defaults;
-            } else if (jQuery.isEmptyObject(defaults)) {
-                return jQuery.extend(true, defaults, extend);
-            } else if (jQuery.isArray(defaults)) {
-                if (jQuery.isArray(extend)) {
-                    jQuery.each(extend, function (key, value) {
-                        defaults.push(value);
-                    });
-                }
-                return defaults;
-            } else if (extend.constructor && extend.constructor === Object) {
-                jQuery.each(extend, function (key, value) {
-                    // not an array or an object -> just use the plain value
-                    if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
-                        defaults[key] = value;
-                    } else {
-                        defaults[key] = me._extendRecursive(defaults[key], value);
-                    }
-                });
-                return defaults;
-            }
-        },
         /**
          * Returns the selections the user has done with the form inputs.
          * @method getValues
          * @return {Object}
          */
         getValues: function () {
-            var me = this,
-                values = {};
+            let values = {};
 
             this.tools.forEach(tool => {
-                if (tool.isDisplayed(me.data)) {
-                    var value = tool.getValues();
-                    if (value !== undefined && value !== null) {
-                        me._extendRecursive(values, value);
-                    }
-                }
+                values = mergeValues(values, tool.getValues());
             });
-
-            var toolLayout = {
-                metadata: {
-                    toolLayout: me.activeToolLayout
-                }
-            };
-            me._extendRecursive(values, toolLayout);
             return values;
-        },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-            return handler.apply(this, [event]);
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -167,175 +79,120 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @private @method _populateToolLayoutPanel
          */
         _populateToolLayoutPanel: function () {
-            var me = this,
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel'),
-                contentPanel = panel.getContainer(),
-                tooltipCont = me.templateHelp.clone(), // tooltip
-                i,
-                input,
-                layoutContainer,
-                changeListener = function (e) {
-                    if (this.checked) {
-                        me._changeToolLayout(this.value, e);
-                    }
-                };
-            panel.setTitle(me.loc.toollayout.label);
+            const panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+            this.panel = panel;
+            const tooltipCont = this.templateHelp.clone(); // tooltip
+            panel.setTitle(this.loc.toollayout.label);
 
-            tooltipCont.attr('title', me.loc.toollayout.tooltip);
+            tooltipCont.attr('title', this.loc.toollayout.tooltip);
             panel.getHeader().append(tooltipCont);
+            this._renderPanel();
 
-            // content
-            for (i = 0; i < me.toolLayouts.length; i += 1) {
-                layoutContainer = me.templateLayout.clone();
-                input = layoutContainer.find('input');
-                input.val(me.toolLayouts[i]).on('change', changeListener);
-                // FIXME default to 0 index if activeToolLayout is not found
-                // First choice is active unless we have an active layout
-                if (me.activeToolLayout) {
-                    if (me.toolLayouts[i] === me.activeToolLayout) {
-                        input.prop('checked', true);
-                    }
-                } else if (i === 0) {
-                    input.prop('checked', true);
-                }
-                layoutContainer.find('span').html(
-                    me.loc.toollayout[me.toolLayouts[i]] || me.toolLayouts[i]
-                );
-                contentPanel.append(layoutContainer);
-                if (me.toolLayouts[i] === 'userlayout') {
-                    var editBtn = Oskari.clazz.create(
-                        'Oskari.userinterface.component.Button'
-                    );
-                    editBtn.setTitle(me.loc.toollayout.usereditmode);
-                    // FIXME create function outside loop
-                    editBtn.setHandler(function () {
-                        // user is in edit mode
-                        if (jQuery(editBtn.getElement()).val() === me.loc.toollayout.usereditmodeoff) {
-                            // remove edit mode
-                            me._editToolLayoutOff();
-                        } else {
-                            me._editToolLayoutOn();
-                        }
-                    });
-                    editBtn.setEnabled(me.activeToolLayout === 'userlayout');
-                    jQuery(editBtn.getElement()).attr('id', 'editModeBtn');
-                    editBtn.insertTo(layoutContainer);
-                }
-            }
             return panel;
         },
-        /**
-         * @private @method _changeToolLayout
-         *
-         * @param {string} layout
-         * @param {Object} event
-         *
-         */
-        _changeToolLayout: function (layout, event) {
-            // iterate plugins
-            var me = this,
-                tools = me.tools,
-                i,
-                tool,
-                target,
-                button;
-            // store location so we have easy access to it on save
-            me.activeToolLayout = layout;
-            if (layout !== 'userlayout') {
-                // make sure we're not in edit mode
-                if (me.toolLayoutEditMode) {
-                    me._editToolLayoutOff();
-                }
-                // set location for all tools
+        _renderPanel: function () {
+            const panel = this.getPanel();
+            const contentPanel = panel.getContainer();
 
-                for (i = tools.length - 1; i > -1; i -= 1) {
-                    tool = tools[i].getTool();
-                    if (tools[i][layout]) {
-                        if (!tool.config) {
-                            tool.config = {};
-                        }
-                        if (!tool.config.location) {
-                            tool.config.location = {};
-                        }
-                        tool.config.location.classes = tools[i][layout];
-                        var plugin = tools[i].getPlugin();
-                        if (plugin && plugin.setLocation) {
-                            plugin.setLocation(tool.config.location.classes);
-                        }
-                    }
-                }
-
-                if (event) {
-                    target = jQuery(event.currentTarget);
-                    button = target.parents('.content').find('input#editModeBtn');
-                    button.prop('disabled', true);
-                    button.addClass('disabled-button');
-                    me._editToolLayoutOff();
-                }
-            } else {
-                if (event) {
-                    target = jQuery(event.currentTarget);
-                    button = target.parents('.tool').find('input#editModeBtn');
-                    button.prop('disabled', false);
-                    button.removeClass('disabled-button');
-
-                    me._editToolLayoutOn();
-                }
-            }
+            ReactDOM.render(
+                <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
+                    <ToolLayout
+                        onSwitch={() => this._switchControlSides()}
+                        isEdit={this.toolLayoutEditMode}
+                        onEditMode={(isEdit) => {
+                            if (isEdit) {
+                                this._editToolLayoutOn();
+                            } else {
+                                // remove edit mode
+                                this._editToolLayoutOff();
+                            }
+                        }}
+                    />
+                </LocaleProvider>,
+                contentPanel[0]
+            );
         },
-
-        /**
-         * Initialises the plugins' location info when restoring a published map that has a user defined layout
-         * @method _initToolLayout
-         */
-        _initUserLayout: function () {
-            const data = this.data;
-            const pluginsConfigExists = Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins');
-            const pluginConfigs = pluginsConfigExists ? data.configuration.mapfull.conf.plugins : [];
-            this.tools.forEach(tool => {
-                pluginConfigs.forEach(plugin => {
-                    if (tool.getTool().id !== plugin.id || !plugin.config) {
+        _switchControlSides: function () {
+            // toggle left <> right
+            this.tools
+                .filter(tool => tool.isEnabled())
+                .forEach(tool => {
+                    const plugin = tool.getPlugin();
+                    if (!plugin || typeof plugin.getLocation !== 'function') {
+                        // for example center cross on map does not have a plugin
                         return;
                     }
-                    const { location = {} } = plugin.config;
-                    if (!location.classes) {
+                    const currentLoc = plugin.getLocation();
+                    if (!currentLoc) {
+                        // some plugins like GetInfo have the method but no location
                         return;
                     }
-                    tool.getTool().config.location = location;
-                    if (tool.getPlugin() && tool.getPlugin().setLocation) {
-                        tool.getPlugin().setLocation(plugin.config.location.classes);
+                    if (currentLoc.includes('left')) {
+                        plugin.setLocation(currentLoc.replace('left', 'right'));
+                    } else if (currentLoc.includes('right')) {
+                        plugin.setLocation(currentLoc.replace('right', 'left'));
                     }
                 });
-            });
+        },
+
+        eventHandlers: {
+            'Publisher2.ToolEnabledChangedEvent': function (event) {
+                if (!this.toolLayoutEditMode) {
+                    return;
+                }
+                this._enableToolDraggable(event.getTool());
+            }
+        },
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+            return handler.apply(this, [event]);
         },
         /**
          * @private @method _editToolLayoutOn
          *
          */
         _editToolLayoutOn: function () {
-            var me = this,
-                sandbox = Oskari.getSandbox('sandbox');
-            if (me.toolLayoutEditMode) {
+            const me = this;
+            if (this.toolLayoutEditMode) {
                 return;
             }
-            me.toolLayoutEditMode = true;
-            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
+            this.toolLayoutEditMode = true;
             jQuery('.mapplugins').show();
-            me._initDraggables();
+            this._initDraggables();
             // TODO create droppables on _showDroppable, destroy them on _hideDroppable
             jQuery('.mappluginsContent').droppable({
                 // TODO see if this can be done in hover? Would it even be wanted behaviour?
                 drop: function (event, ui) {
-                    var pluginClazz = ui.draggable.attr('data-clazz'),
-                        plugin = me.getToolById(pluginClazz).getPlugin(),
-                        source = ui.draggable.parents('.mapplugins'),
-                        target = jQuery(this);
+                    const pluginClazz = ui.draggable.attr('data-clazz');
+                    if (!pluginClazz) {
+                        // we might have dropped a non-plugin element on this like the layerlist flyout
+                        return;
+                    }
+                    const tool = me.getToolById(pluginClazz);
+                    if (!tool) {
+                        // just in case if no tool matches this
+                        // we might have dropped a non-plugin element on this like the layerlist flyout
+                        return;
+                    }
+                    const plugin = tool.getPlugin();
+
+                    const source = ui.draggable.parents('.mapplugins');
+                    const target = jQuery(this);
 
                     me._moveSiblings(pluginClazz, source, target);
                     if (plugin && plugin.setLocation) {
                         plugin.setLocation(jQuery(this).parents('.mapplugins').attr('data-location'));
                         // Reset draggable's inline css... couldn't find a cleaner way to do this.
                         // Can't be removed as that breaks draggable, has to be zeroed because we're changing containers
+                        // draggable assigns these while dragging:
                         plugin.getElement().css({
                             'top': '0px',
                             'left': '0px'
@@ -348,32 +205,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 tolerance: 'pointer' // bit of a compromise, we'd need a combination of pointer and intersect
             });
 
-            // Disable map hover effect when layout edit mode is active
-            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(false);
-
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(true);
-            sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
+            this._renderPanel();
         },
 
         /**
          * @private @method _editToolLayoutOff
          */
         _editToolLayoutOff: function () {
-            var me = this,
-                sandbox = Oskari.getSandbox('sandbox');
-            if (!me.toolLayoutEditMode) {
+            if (!this.toolLayoutEditMode) {
                 return;
             }
-            me.toolLayoutEditMode = false;
-            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
+            this.toolLayoutEditMode = false;
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
             this._removeDraggables();
 
-            // Restore map hover effects
-            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').setHoverEnabled(true);
-
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
-            sandbox.notifyAll(event);
+            this.sandbox.notifyAll(event);
+            this._renderPanel();
         },
         _enableToolDraggable: function (tool) {
             const elem = this.__getPluginElement(tool);
@@ -446,17 +296,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * @private
          */
         _showDroppable: function (pluginClazz, source) {
-            var me = this,
-                allowedLocation,
-                target,
-                tool = me.getToolById(pluginClazz);
+            const me = this;
+            const tool = me.getToolById(pluginClazz);
 
             if (!pluginClazz || !tool) {
                 return;
             }
             jQuery('div.mapplugins').each(function () {
-                target = jQuery(this);
-                allowedLocation = me._locationAllowed(tool.allowedLocations, target);
+                const target = jQuery(this);
+                let allowedLocation = me._locationAllowed(tool.allowedLocations, target);
                 if (allowedLocation) {
                     allowedLocation = me._siblingsAllowed(pluginClazz, source, target);
                     // show allowed-if-we-move-some-siblings-out-of-the-way as allowed for now
@@ -498,28 +346,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Allowed location string if allowed, null if not.
          */
         _locationAllowed: function (allowedLocations, dropzone) {
-            var isAllowedLocation,
-                i;
-
             if (!allowedLocations || !dropzone) {
                 return false;
             }
-            if (allowedLocations.indexOf('*') > -1) return true;
-            for (i = 0; i < allowedLocations.length; i += 1) {
-                isAllowedLocation = dropzone.is('.' + allowedLocations[i].split(' ').join('.'));
-                if (isAllowedLocation) {
-                    return allowedLocations[i];
-                }
+            if (allowedLocations.includes('*')) {
+                return true;
             }
-            return null;
+            return allowedLocations.find(loc => {
+                const cssClasses = loc.split(' ').join('.');
+                return dropzone.is('.' + cssClasses);
+            });
         },
 
         getToolById: function (id) {
-            for (var i = 0; i < this.tools.length; i++) {
-                if (this.tools[i].getTool().id === id) {
-                    return this.tools[i];
-                }
-            }
+            return this.tools.find(tool => tool.getTool().id === id);
         },
         /**
         * Stop panel.
@@ -549,41 +389,51 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * 0 = no, 1 = siblings can be moved out of the way, 2 = yes
          */
         _siblingsAllowed: function (pluginClazz, source, target, excludedSibling) {
-            var me = this,
-                siblings = this._getDropzonePlugins(target),
-                i,
-                ret = 2,
-                tool = me.getToolById(pluginClazz);
             // Series controls doesn't have publisher tools and requires lot of space
-            if (pluginClazz === 'Oskari.statistics.statsgrid.SeriesControlPlugin' ||
+            if (!pluginClazz ||
+                pluginClazz === 'Oskari.statistics.statsgrid.SeriesControlPlugin' ||
                 pluginClazz === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin') {
-                return;
-            // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
-            } else if (!tool) {
+                return 2;
+                // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
+            }
+            const tool = this.getToolById(pluginClazz);
+            if (!tool) {
                 return 2;
             } else if (tool.allowedSiblings.indexOf('*') > -1) {
                 return 2;
-            } else if (!pluginClazz) {
-                return;
             }
 
-            for (i = 0; i < siblings.length; i += 1) {
-                if (!excludedSibling || siblings[i] !== excludedSibling) {
-                    // sibling is not ignored, see if it's an allowed sibling
-                    // sibling can't be moved to source
-                    if (jQuery.inArray(siblings[i], tool.allowedSiblings) < 0 && pluginClazz !== siblings[i]) {
-                        // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
-                        // only accept 2/yes as a result, moving source plugins out of the way would get too weird
-                        if (source && me._locationAllowed(tool.allowedLocations, source) && me._siblingsAllowed(siblings[i], null, source, pluginClazz) === 2) {
-                            // sibling can be moved to source
-                            ret = 1;
-                        } else {
-                            ret = 0;
-                            break;
-                        }
-                    }
+            const siblings = this._getDropzonePlugins(target);
+            let ret = 2;
+            siblings.forEach(sibling => {
+                if (ret !== 2) {
+                    // we have already detected the proper return code
+                    return;
                 }
-            }
+                if (excludedSibling && sibling === excludedSibling) {
+                    return;
+                }
+                // sibling is not ignored, see if it's an allowed sibling
+                // sibling can't be moved to source
+                if (tool.allowedSiblings.includes(sibling) || pluginClazz === sibling) {
+                    // allowed sibling or self
+                    return;
+                }
+                if (!source) {
+                    // if we haven't left the loop yet and we don't have source -> set value to 0/can't be moved
+                    ret = 0;
+                    return;
+                }
+                // not an allowed sibling, see if we can move it out of the way (don't pass a source, it'd cause an infinite loop)
+                // only accept 2/yes as a result, moving source plugins out of the way would get too weird
+                // TODO: why would source NOT be in tool.allowedLocations, that's where the tool was when user started moving it?
+                if (this._locationAllowed(tool.allowedLocations, source) && this._siblingsAllowed(sibling, null, source, pluginClazz) === 2) {
+                    // sibling can be moved to source
+                    ret = 1;
+                } else {
+                    ret = 0;
+                }
+            });
             return ret;
         },
         /**
@@ -596,12 +446,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          * Array of plugin classes
          */
         _getDropzonePlugins: function (dropzone) {
-            var ret = [],
-                clazz;
-
+            const ret = [];
             dropzone.find('.mapplugin').each(function () {
                 // ignore undefined...
-                clazz = jQuery(this).attr('data-clazz');
+                const clazz = jQuery(this).attr('data-clazz');
                 if (clazz) {
                     ret.push(clazz);
                 }
@@ -621,38 +469,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
          *
          **/
         _moveSiblings: function (pluginClazz, source, target) {
-            var me = this,
-                sibling,
-                siblings = this._getDropzonePlugins(target),
-                i,
-                tool = me.getToolById(pluginClazz);
-
-            for (i = 0; i < siblings.length; i += 1) {
-                if (tool.allowedSiblings.indexOf('*') < 0 && jQuery.inArray(siblings[i], tool.allowedSiblings) < 0) {
-                    // Unallowed sibling, move to source
-                    sibling = me.getToolById(siblings[i]) && me.getToolById(siblings[i]).getPlugin() ? me.getToolById(siblings[i]).getPlugin() : null;
-                    if (sibling) {
-                        sibling.setLocation(source.attr('data-location'));
-                    } else {
-                        me.sandbox.printWarn(
-                            'BasicPublisher._moveSiblings(): Couldn\'t find sibling',
-                            siblings[i]
-                        );
-                    }
-                }
+            const siblings = this._getDropzonePlugins(target);
+            const tool = this.getToolById(pluginClazz);
+            if (tool.allowedSiblings.includes('*')) {
+                // allows everything -> no need to move anything
+                return;
             }
-        },
-        /**
-         * Restarts all active plugins in case of i.e. changing the language.
-         * @method _restartActivePlugins
-         *
-         */
-        _restartActivePlugins: function () {
-            this.tools.forEach(tool => {
-                if (tool.isDisplayed(this.data) && tool.isStarted()) {
-                    // reset
-                    tool.setEnabled(false);
-                    tool.setEnabled(true);
+            const toolPreviousContainer = source.attr('data-location');
+            siblings.forEach(siblingClazz => {
+                if (tool.allowedSiblings.includes(siblingClazz)) {
+                    return;
+                }
+                const otherTool = this.getToolById(siblingClazz);
+                if (!otherTool) {
+                    return;
+                }
+                const otherToolsPlugin = otherTool.getPlugin();
+                if (otherToolsPlugin) {
+                    otherToolsPlugin.setLocation(toolPreviousContainer);
+                } else {
+                    Oskari.log('BasicPublisher').warn(`_moveSiblings(): Couldn't find sibling`, siblingClazz);
                 }
             });
         }

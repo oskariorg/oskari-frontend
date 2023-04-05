@@ -1,6 +1,5 @@
 
-import { EFFECT, DEFAULT_COLORS } from './constants';
-
+import { EFFECT, DEFAULT_COLORS, DEFAULT_FONT } from './constants';
 
 export const getHeaderTheme = (theme) => {
     const bgColor = theme.color?.header?.bg || theme.color?.primary || DEFAULT_COLORS.HEADER_BG;
@@ -48,11 +47,10 @@ export const getTextColor = (bgColor) => {
     };
     return '#000000';
 };
+
 export const getFontClass = (theme) => {
-    if (theme.font) {
-        return 'oskari-theme-font-' + theme.font;
-    }
-    return '';
+    let fontClassSuffix = theme.font || DEFAULT_FONT;
+    return 'oskari-theme-font-' + fontClassSuffix;
 }
 
 /* ------------------------------------------------------------------------------ */

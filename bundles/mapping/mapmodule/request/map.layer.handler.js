@@ -75,26 +75,26 @@ Oskari.clazz.define('map.layer.handler',
                 return;
             }
             const layerId = layer.getId();
-            if (isNaN(layerId)) {
-                // only layers that have numeric ids can have reasonable response for DescribeLayer
+            const status = layer.getDescribeLayerStatus();
+            // only layers that have numeric ids can have reasonable response for DescribeLayer
+            if (isNaN(layerId) || status === DESCRIBE_LAYER.LOADED) {
                 addLayer();
                 return;
             }
-            const status = layer.getDescribeLayerStatus();
-            if (status === DESCRIBE_LAYER.LOADED || status === DESCRIBE_LAYER.PENDING) {
+            if (status === DESCRIBE_LAYER.PENDING) {
                 return;
             }
-            layer.getDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
+            layer.setDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
             this.layerService.getDescribeLayer(layer, info => {
                 if (!info) {
                     layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
-                    if (layer.requiresDescripeLayer()) {
+                    if (layer.requiresDescribeLayer()) {
                         // notify user here or in implementations
                         this.log.error('Attempt to add layer that requires more info. Skipping id: ' + layerId);
                         return;
                     }
                 }
-                layer.getDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
+                layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
                 const sandbox = this.layerService.getSandbox();
                 layer.handleDescribeLayer(info);
                 sandbox.findRegisteredModuleInstance('MainMapModule').handleDescribeLayer(layer, info);

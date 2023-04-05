@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { RpcPanelHandler } from '../handler/RpcPanelHandler';
-import { RpcForm } from './form/RpcForm';
+import { ToolPanelHandler } from '../handler/ToolPanelHandler';
+import { PublisherToolsList } from './form/PublisherToolsList';
 import { LocaleProvider } from 'oskari-ui/util';
 
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PanelRpc
- *
- *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
 
@@ -34,16 +32,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered
          */
         init: function (data) {
-            this.handler = new RpcPanelHandler(data, this.tools, () => this._populatePanel());
-
-            if (!this.panel) {
-                this.panel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel'
-                );
-                this.panel.setTitle(this.loc.rpc.label);
-
-                this._populatePanel(true);
-            }
+            this.handler = new ToolPanelHandler(this.tools, () => this._updateUI());
+            return this.handler.init(data);
         },
         getName: function () {
             return 'Oskari.mapframework.bundle.publisher2.view.PanelRpc';
@@ -55,6 +45,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
+            if (!this.panel) {
+                this.panel = Oskari.clazz.create(
+                    'Oskari.userinterface.component.AccordionPanel'
+                );
+                this.panel.setTitle(this.loc.rpc.label);
+                // layer tooltip
+                const tooltipCont = this.templateHelp.clone();
+                tooltipCont.attr('title', this.loc.rpc.info);
+                this.panel.getHeader().append(tooltipCont);
+                this._updateUI();
+            }
             return this.panel;
         },
         /**
@@ -88,35 +89,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelRpc',
         },
 
         /**
-         * Populates the map layers panel in publisher
+         * Populates the RPC panel in publisher
          *
-         * @method _populateMapLayerPanel
+         * @method _updateUI
          * @private
          */
-        _populatePanel: function (isInit) {
-            if (!this.panel) return;
-
-            const contentPanel = this.panel.getContainer();
-            contentPanel.empty();
-
-            const content = jQuery('<div />');
-            contentPanel.append(content);
-
-            if (isInit) {
-                // layer tooltip
-                const tooltipCont = this.templateHelp.clone();
-                tooltipCont.attr('title', this.loc.rpc.info);
-                this.panel.getHeader().append(tooltipCont);
+        _updateUI: function () {
+            if (!this.panel) {
+                return;
             }
-
+            const contentPanel = this.panel.getContainer();
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'Publisher2' }}>
-                    <RpcForm
+                    <PublisherToolsList
                         state={this.handler.getState()}
                         controller={this.handler.getController()}
                     />
                 </LocaleProvider>,
-                content[0]
+                contentPanel[0]
             );
         }
     }

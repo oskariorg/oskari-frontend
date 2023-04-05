@@ -131,8 +131,7 @@ Oskari.registerLocalization(
             "toollayout": {
                 "label": "Työkalujen asettelu kartalla",
                 "tooltip": "Valitse, miten työkalut asetellaan kartalle.",
-                "lefthanded": "Vasenkätinen",
-                "righthanded": "Oikeakätinen",
+                "swapUI": "Vaihda puolet",
                 "userlayout": "Oma asettelu",
                 "usereditmode": "Muokkaa asettelua",
                 "usereditmodeoff": "Lopeta muokkaus"

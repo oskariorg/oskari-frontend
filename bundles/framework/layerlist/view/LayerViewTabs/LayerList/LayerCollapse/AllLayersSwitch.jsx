@@ -35,7 +35,7 @@ export const AllLayersSwitch = ({ checked, onToggle, layerCount = 0 }) => {
     return (
         <Confirm
             title={<Message messageKey='grouping.manyLayersWarn'/>}
-            visible={confirmOnScreen}
+            open={confirmOnScreen}
             onConfirm={(event) => {
                 showConfirm(false);
                 onToggle(true);

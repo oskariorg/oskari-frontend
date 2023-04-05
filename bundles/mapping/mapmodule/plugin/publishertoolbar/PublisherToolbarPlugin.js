@@ -10,7 +10,6 @@ import './request/ToolContainerRequestHandler';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin
  * Provides publisher toolbar container
- * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePublisherToolbarPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
     /**
@@ -26,21 +25,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me._index = 2;
         me._name = 'PublisherToolbarPlugin';
         me._toolButtons = conf.buttons || [];
-        me.inMobileMode = false;
     }, {
         // templates for tools-mapplugin
         templates: {
             main: '<div class="mapplugin tools"></div>'
-        },
-
-        /**
-         * @private @method _initImpl
-         * Interface method for the module protocol.
-         *
-         *
-         */
-        _initImpl: function () {
-            this.inMobileMode = false;
         },
 
         _createRequestHandlers: function () {
@@ -63,36 +51,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 const toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'PublisherToolbar-basictools');
                 sb.request(this, toolbarRequest);
                 this.activeTool = undefined;
-                this.renderButton(null, null);
+                this.refresh();
                 return;
             }
             const toolRequest = Oskari.requestBuilder('ToolSelectionRequest')(requestName);
             sb.request(this, toolRequest);
             this.activeTool = tool;
-            this.renderButton(null, null);
-        },
-
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (this.inLayerToolsEditMode()) {
-                this.renderButton(null, null);
-            }
+            this.refresh();
         },
 
         addToolButton: function (name) {
             if (this._toolButtons.indexOf(name) < 0) {
                 this._toolButtons.push(name);
             }
-            this.renderButton(null, null);
+            this.refresh();
         },
         removeToolButton: function (name) {
             const index = this._toolButtons.indexOf(name);
             if (index > -1) {
                 this._toolButtons.splice(index, 1);
             }
-            this.renderButton(null, null);
+            this.refresh();
         },
 
         /**
@@ -114,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            var isMobile = mapInMobileMode || Oskari.util.isMobile();
             if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
@@ -122,16 +100,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             var me = this;
             this.teardownUI();
-            this.inMobileMode = isMobile;
 
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
-            this.renderButton();
+            this.refresh();
         },
 
-        renderButton: function () {
+        refresh: function () {
             let el = this.getElement();
-            if (!el) return;
+            if (!el) {
+                return;
+            }
 
             ReactDOM.render(
                 <MapModuleButton
@@ -227,15 +206,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             });
             return buttons;
-        },
-
-        /**
-         * Changes the tool style of the plugin
-         *
-         * @method changeToolStyle
-         */
-        changeToolStyle: function () {
-            this.redrawUI();
         },
 
         _isPublisherActive: function () {

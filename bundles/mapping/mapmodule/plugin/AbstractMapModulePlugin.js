@@ -13,14 +13,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         var me = this;
         me._config = config || {};
         me._eventHandlers = {};
-        me._isInLayerToolsEditMode = false;
         me._loc = {};
         me._mapModule = null;
         me._name = 'AbstractPlugin' + Math.floor(Math.random() * (1632960) + 46656).toString(36);
         me._pluginName = me._name;
         me._requestHandlers = {};
         me._sandbox = null;
-        me._fixedLocation = false;
     }, {
         /**
          * @public @method getName
@@ -131,13 +129,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @return {Object} EventHandlers
          */
         createEventHandlers: function () {
-            const me = this;
-            const eventHandlers = this._createEventHandlers();
-
-            eventHandlers.LayerToolsEditModeEvent = function (event) {
-                me._setLayerToolsEditMode(event.isInMode());
-            };
-            return eventHandlers;
+            return this._createEventHandlers();
         },
 
         /**
@@ -171,52 +163,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             return {};
         },
 
-        inLayerToolsEditMode: function () {
-            return this._isInLayerToolsEditMode;
-        },
-        isFixedLocation: function () {
-            return this._fixedLocation;
-        },
-
-        _setLayerToolsEditMode: function (isInEditMode) {
-            this._isInLayerToolsEditMode = isInEditMode;
-            this._setLayerToolsEditModeImpl();
-            if (this.isFixedLocation()) {
-                this.handleDragDisabled();
-            }
-        },
-
-        /**
-         * @method _setLayerToolsEditModeImpl
-         * Called after layerToolsEditMode is set, implement if needed.
-         *
-         *
-         */
-        _setLayerToolsEditModeImpl: function () {},
-
-        /**
-         * @method handleDragDisabled
-         * Disable draggable inLayerToolsEditMode if plugin's location is fixed (publisher edit own tools layout)
-         */
-        handleDragDisabled: function (isInEditMode) {
-            const elem = this.getElement();
-            if (!elem) {
-                return;
-            }
-            const draggable = elem.hasClass('ui-draggable');
-            if (this.inLayerToolsEditMode()) {
-                elem.addClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('disable');
-                }
-            } else {
-                elem.removeClass('plugin-drag-disabled');
-                if (draggable) {
-                    elem.draggable('enable');
-                }
-            }
-        },
-
         /**
          * @public @method startPlugin
          * mapmodule.Plugin protocol method.
@@ -243,9 +189,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             } catch (e) {
                 Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + this.getName());
             }
-            // Make sure plugin's edit mode is set correctly
-            // (we might already be in edit mode)
-            this._setLayerToolsEditMode(this.getMapModule().isInLayerToolsEditMode());
             return waitingForToolbar;
         },
 
@@ -378,7 +321,14 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         hasUI: function () {
             return false;
         },
-
+        isShouldStopForPublisher: function () {
+            return this.hasUI();
+        },
+        // Note! This is only called by mapmodule when it LayerToolsEditModeEvent is received/publisher enters drag mode
+        // This provides a hook for plugins to close their popups etc
+        resetUI: function () {
+            // map module should call this when for example publisher goes to dragging mode
+        },
         /**
          * @public @method onEvent
          * Event is handled forwarded to correct #eventHandlers if found or

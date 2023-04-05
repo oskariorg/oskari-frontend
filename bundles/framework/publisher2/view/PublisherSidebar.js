@@ -1,3 +1,4 @@
+import { mergeValues } from '../util/util';
 import { Messaging } from 'oskari-ui/util';
 
 /**
@@ -88,41 +89,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             this.panels.push(genericInfoPanel);
             accordion.addPanel(genericInfoPanel.getPanel());
 
-            var publisherTools = this._createToolGroupings(accordion);
+            const publisherTools = this._createToolGroupings(accordion);
 
             var mapPreviewPanel = this._createMapPreviewPanel(publisherTools.tools);
             mapPreviewPanel.getPanel().addClass('t_size');
             this.panels.push(mapPreviewPanel);
             accordion.addPanel(mapPreviewPanel.getPanel());
 
-            const mapLayersPanel = this._createMapLayersPanel();
+            // Separate handling for RPC and layers group from other tools
+            // layers panel is added before other tools
+            // RPC panel is added after other tools
+            const rpcTools = publisherTools.groups.rpc;
+            const layerTools = publisherTools.groups.layers;
+            // clear rpc/layers groups from others for looping/group so they are not listed twice
+            delete publisherTools.groups.rpc;
+            delete publisherTools.groups.layers;
+
+            const mapLayersPanel = this._createMapLayersPanel(layerTools);
             mapLayersPanel.getPanel().addClass('t_layers');
             this.panels.push(mapLayersPanel);
             accordion.addPanel(mapLayersPanel.getPanel());
 
             // create panel for each tool group
-            let rpcPanel = null;
             Object.keys(publisherTools.groups).forEach(group => {
                 const tools = publisherTools.groups[group];
-                if (group === 'rpc') {
-                    rpcPanel = this._createRpcPanel(tools);
-                    rpcPanel.getPanel().addClass('t_rpc');
-                } else if (group !== 'layers') {
-                    // ignore tools under "layers" as these are the new React-based tools shown on the layers panel
-                    const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
-                        group, tools, this.instance, this.loc
-                    );
-                    const hasToolsToShow = toolPanel.init(this.data);
-                    this.panels.push(toolPanel);
-                    if (hasToolsToShow) {
-                        const panel = toolPanel.getPanel();
-                        panel.addClass('t_tools');
-                        panel.addClass('t_' + group);
-                        accordion.addPanel(panel);
-                    }
+                const toolPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
+                    group, tools, this.instance, this.loc
+                );
+                const hasToolsToShow = toolPanel.init(this.data);
+                this.panels.push(toolPanel);
+                if (hasToolsToShow) {
+                    const panel = toolPanel.getPanel();
+                    panel.addClass('t_tools');
+                    panel.addClass('t_' + group);
+                    accordion.addPanel(panel);
                 }
             });
-            if (rpcPanel) {
+            // add RPC panel if there are tools for it
+            if (rpcTools) {
+                const rpcPanel = this._createRpcPanel(rpcTools);
+                rpcPanel.getPanel().addClass('t_rpc');
                 // add rpc panel after the other tools
                 this.panels.push(rpcPanel);
                 accordion.addPanel(rpcPanel.getPanel());
@@ -184,10 +190,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             form.init(me.data);
             return form;
         },
-        _createMapLayersPanel: function () {
+        _createMapLayersPanel: function (tools) {
             const sandbox = this.instance.getSandbox();
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', sandbox, mapModule, this.loc, this.instance);
+            const form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers', tools, sandbox, mapModule, this.loc, this.instance);
             form.init(this.data);
             return form;
         },
@@ -273,70 +279,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             tool.toolConfig = conf.toolsConfig[tool.bundleName];
         },
         /**
-        * Extends object recursive for keeping defaults array.
-        * @method _extendRecursive
-        * @private
-        *
-        * @param {Object} defaults the default extendable object
-        * @param {Object} extend extend object
-        *
-        * @return {Object} extended object
-        */
-        _extendRecursive: function (defaults, extend) {
-            var me = this;
-            if (extend === null || extend === undefined || jQuery.isEmptyObject(extend)) {
-                return defaults;
-            } else if (jQuery.isEmptyObject(defaults)) {
-                return jQuery.extend(true, defaults, extend);
-            } else if (jQuery.isArray(defaults)) {
-                if (jQuery.isArray(extend)) {
-                    jQuery.each(extend, function (key, value) {
-                        defaults.push(value);
-                    });
-                }
-                return defaults;
-            } else if (extend.constructor && extend.constructor === Object) {
-                jQuery.each(extend, function (key, value) {
-                    // not an array or an object -> just use the plain value
-                    if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
-                        defaults[key] = value;
-                    } else {
-                        defaults[key] = me._extendRecursive(defaults[key], value);
-                    }
-                });
-                return defaults;
-            }
-        },
-        /**
         * Gather selections.
         * @method gatherSelections
         * @private
         */
         gatherSelections: function () {
-            var me = this,
-                sandbox = this.instance.getSandbox(),
-                selections = {
-                    configuration: {
+            const sandbox = this.instance.getSandbox();
+            let errors = [];
 
+            const mapFullState = sandbox.getStatefulComponents().mapfull.getState();
+            let selections = {
+                configuration: {
+                    mapfull: {
+                        state: mapFullState
                     }
-                },
-                errors = [];
-
-            var mapFullState = sandbox.getStatefulComponents().mapfull.getState();
-            selections.configuration.mapfull = {
-                state: mapFullState
+                }
             };
 
-            jQuery.each(me.panels, function (index, panel) {
-                if (panel.validate && typeof panel.validate === 'function') {
+            this.panels.forEach((panel) => {
+                if (typeof panel.validate === 'function') {
                     errors = errors.concat(panel.validate());
                 }
-
-                me._extendRecursive(selections, panel.getValues());
+                selections = mergeValues(selections, panel.getValues());
             });
 
             if (errors.length > 0) {
-                me._showValidationErrorMessage(errors);
+                this._showValidationErrorMessage(errors);
                 return null;
             }
             return selections;
@@ -503,7 +471,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             const sandbox = this.instance.sandbox;
             const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             Object.values(mapModule.getPluginInstances())
-                .filter(plugin => plugin.hasUI && plugin.hasUI())
+                .filter(plugin => plugin.isShouldStopForPublisher && plugin.isShouldStopForPublisher())
                 .forEach(plugin => {
                     try {
                         plugin.stopPlugin(sandbox);

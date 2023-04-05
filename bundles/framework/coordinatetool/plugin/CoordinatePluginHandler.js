@@ -4,14 +4,20 @@ import { PLACEMENTS } from 'oskari-ui/components/window';
 import { getTransformedCoordinates, transformCoordinates, formatDegrees } from './helper';
 
 class UIHandler extends StateHandler {
-    constructor (plugin, mapModule, config, instance) {
+    constructor (plugin, mapModule, config) {
         super();
-        this.instance = instance;
         this.plugin = plugin;
         this.sandbox = Oskari.getSandbox();
         this.loc = Oskari.getMsg.bind(null, 'coordinatetool');
         this.mapModule = mapModule;
         this.config = config;
+
+        const coordinateToolService = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
+            this.sandbox, config || {}
+        );
+        this.sandbox.registerService(coordinateToolService);
+        this.service = coordinateToolService;
         this.originalProjection = this.mapModule.getProjection();
         this.isReverseGeoCode = this.config.isReverseGeocode;
         this.reverseGeocodingIds = this.config.reverseGeocodingIds?.split(',');
@@ -432,7 +438,7 @@ class UIHandler extends StateHandler {
     }
 
     updateReverseGeocode (data) {
-        const service = this.instance.getService();
+        const service = this.service;
 
         if (!this.popupControls || this.state.reverseGeocodeNotImplementedError) {
             return;
@@ -483,9 +489,9 @@ class UIHandler extends StateHandler {
                 try {
                     messageJSON = jQuery.parseJSON(jqXHR.responseText);
                 } catch (err) {}
-                let message = this.instance.getName() + ': Cannot reverse geocode';
+                let message = 'Cannot reverse geocode';
                 if (messageJSON && messageJSON.error) {
-                    message = this.instance.getName() + ': ' + messageJSON.error;
+                    message = messageJSON.error;
                 }
 
                 Oskari.log('coordinatetool').warn(message);

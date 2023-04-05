@@ -29,7 +29,9 @@ const TRANSPARENCY = {
     min: 0,
     max: 100,
     step: 10,
-    tipFormatter: val => `${val}%`,
+    tooltip: {
+        formatter: val => `${val}%`
+    },
     marks: {
         0: {
             style: { transform: 'translateX(-20%)' },

@@ -28,7 +28,7 @@ const StyledSelect = styled(Select)`
 `;
 
 const SearchIcon = styled(SearchOutlined)`
-    color: ${props => props.filtered ? '#3c3c3c' : '#bfbfbf'}
+    color: ${props => props.$filtered ? '#3c3c3c' : '#bfbfbf'}
 `;
 
 const sorterTooltipOptions = {
@@ -84,7 +84,7 @@ export const LayerAnalyticsList = ({ analyticsData, isLoading, layerEditorCallba
           </FilterContainer>
         ),
         filterIcon: (filtered) => (
-          <SearchIcon filtered={filtered} />
+          <SearchIcon $filtered={filtered} />
         ),
         onFilter: (value, record) =>
           record[dataIndex]

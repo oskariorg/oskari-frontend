@@ -17,7 +17,10 @@ const Container = styled('div')`
 const StyledButton = styled(MapButton)`
     z-index: 1;
 `;
-export const MapModuleButton = ({ title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
+export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '32px', noMargin = false, iconActive = false, withToolbar = false, iconSize = '18px', className, children, disabled = false, position, toolbarDirection }) => {
+    if (!visible) {
+        return null;
+    }
     const [toolbarOpen, setToolbarOpen] = useState(false);
 
     let toolbarOpenDirection = 'right';

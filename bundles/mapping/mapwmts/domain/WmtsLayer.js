@@ -6,7 +6,7 @@
 Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer', function () {
     this._layerType = 'WMTS';
 }, {
-    requiresDescripeLayer: function () {
+    requiresDescribeLayer: function () {
         // requires tileMatrixSet to work properly
         return true;
     }

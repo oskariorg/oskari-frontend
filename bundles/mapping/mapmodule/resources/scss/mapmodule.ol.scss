@@ -20,8 +20,13 @@ $pluginMargin: 10px;
     margin: 0 !important;
 }
 
+/* Disable usual pointer events when we are in publisher edit mode */
+.mapplugin.toollayoutedit.ui-draggable > div {
+    pointer-events: none;
+}
+
 /* This is the drag-n-drop handle on publisher */
-.mapplugin.toollayoutedit.ui-draggable-handle > div::after {
+.mapplugin.ui-draggable-handle > div::after {
     content: url("../images/holder-icon.svg");
     width: 24px;
     height: 24px;
@@ -31,6 +36,8 @@ $pluginMargin: 10px;
     right: -24px;
     opacity: 0.7;
     top: 20%;
+    /* Since we disable pointer events to buttons, we need to enable them for the handle */
+    pointer-events: auto;
     cursor: pointer;
     filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 1));
 }

@@ -19,7 +19,7 @@ export const Header = styled.h3`
     cursor: move;
     display: flex;
     align-items: center;
-
+    color: #ffffff;
     .header-mid-spacer {
         flex: 1;
     }
@@ -97,18 +97,18 @@ const getDataYearStyles = (props) => {
         const index = markYears.indexOf(year) + 1;
         return `
             &:nth-child(${index}) {
+                background-color: ${backgroundColor};
                 border-radius: 50%;
                 border: 2px solid #ffffff;
                 width: 8px;
                 height: 8px;
-                margin-left: -2px;
                 top: -2px;
                 &.ant-slider-dot-active {
                     border: 2px solid ${primaryColor};
                 }
 
                 &:hover {
-                    :after {
+                    ::after {
                         content: '${year}';
                         color: #ffffff;
                         display: flex;
@@ -136,7 +136,6 @@ export const StyledRangeSlider = styled(Slider)`
         color: #ffffff;
     }
     .ant-slider-dot {
-        background-color: ${backgroundColor};
         border-radius: 0%;
         border: 0;
         margin-left: 0px;
@@ -151,12 +150,21 @@ export const StyledRangeSlider = styled(Slider)`
     .ant-slider-track {
         background-color: ${primaryColor};
     }
+    &:hover {
+        .ant-slider-rail {
+            background-color: #ffffff;    
+        }
+    }
+    .ant-slider-step > .ant-slider-dot {
+        pointer-events: auto;
+    }
     .ant-slider-handle {
         width: 8px;
         height: 16px;
         border-radius: 6px;
         border: solid 1px ${borderColor};
         margin-left: 2px;
+        top: 2px;
         ${(props => {
             let handleColor = primaryColor;
             if (!props.dataYears.includes(props.value)) {

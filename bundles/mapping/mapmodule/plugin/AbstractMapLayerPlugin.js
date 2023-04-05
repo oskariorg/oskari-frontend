@@ -66,7 +66,6 @@ Oskari.clazz.define(
          * @method hasUI
          * This plugin doesn't have an UI that we would want to ever hide so always returns false
          *
-         *
          * @return {Boolean}
          */
         hasUI: function () {

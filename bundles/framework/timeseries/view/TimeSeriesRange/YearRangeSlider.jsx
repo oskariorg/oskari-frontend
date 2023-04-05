@@ -3,7 +3,7 @@ import React from 'react';
 import { StyledRangeSlider } from './styled';
 
 export const YearRangeSlider = (props) => {
-    const { start, end, dataYears, isMobile } = props;
+    const { start, end, dataYears, isMobile, value } = props;
     const marks = {
         [start]: start,
         [end]: end
@@ -26,11 +26,14 @@ export const YearRangeSlider = (props) => {
     return (
         <StyledRangeSlider
             {...props}
-            tooltipVisible
-            getTooltipPopupContainer={(triggerNode) => triggerNode.parentElement}
+            tooltip={{
+                open: true,
+                getPopupContainer: (triggerNode) => triggerNode.parentElement
+            }}
             marks={marks}
             min={start}
             max={end}
+            dots={true}
         />
     );
 };
