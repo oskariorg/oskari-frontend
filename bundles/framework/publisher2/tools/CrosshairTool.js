@@ -1,64 +1,60 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
-    function () {
-    }, {
-        getName: function () {
-            return 'Oskari.mapframework.publisher.tool.CrosshairTool';
-        },
-        /**
-        * Get tool object.
-        * @method getTool
-        *
-        * @returns {Object} tool description
-        */
-        getTool: function () {
-            return {
-                id: 'Oskari.mapframework.publisher.tool.CrosshairTool',
-                title: 'CrosshairTool',
-                config: this.state.pluginConfig || {},
-                hasNoPlugin: true
-            };
-        },
-        init: function (data) {
-            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.mapOptions.crosshair')) {
-                this.setEnabled(!!data?.configuration?.mapfull?.conf?.mapOptions?.crosshair);
-            }
-        },
-        /**
-        * Get values.
-        * @method getValues
-        * @public
-        *
-        * @returns {Object} tool value object
-        */
-        getValues: function () {
-            if (!this.isEnabled()) {
-                return null;
-            }
-            return {
-                configuration: {
-                    mapfull: {
-                        conf: {
-                            mapOptions: {
-                                crosshair: true
-                            }
+import { AbstractPublisherTool } from './AbstractPublisherTool';
+
+class CrosshairTool extends AbstractPublisherTool {
+    getTool () {
+        return {
+            id: 'Oskari.mapframework.publisher.tool.CrosshairTool',
+            title: 'CrosshairTool',
+            config: this.state.pluginConfig || {},
+            hasNoPlugin: true
+        };
+    }
+    init (data) {
+        if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.mapOptions.crosshair')) {
+            this.setEnabled(!!data?.configuration?.mapfull?.conf?.mapOptions?.crosshair);
+        }
+    }
+    // override since we want to use the instance we currently have, not create a new one
+    setEnabled (enabled) {
+        const changed = super.setEnabled(enabled);
+        if (!changed) {
+            return;
+        }
+        const mapModule = this.getMapmodule();
+        if (mapModule) {
+            mapModule.toggleCrosshair(enabled);
+        }
+    }
+    getValues () {
+        if (!this.isEnabled()) {
+            return null;
+        }
+        return {
+            configuration: {
+                mapfull: {
+                    conf: {
+                        mapOptions: {
+                            crosshair: true
                         }
                     }
                 }
-            };
-        },
-        _setEnabledImpl: function (enabled) {
-            const mapModule = this.getMapmodule();
-            if (mapModule) {
-                mapModule.toggleCrosshair(enabled);
             }
-        },
-        _stopImpl: function () {
-            const mapModule = this.getMapmodule();
-            if (mapModule) {
-                mapModule.toggleCrosshair(false);
-            }
+        };
+    }
+    stop () {
+        super.stop();
+        // remove crosshair from map
+        const mapModule = this.getMapmodule();
+        if (mapModule) {
+            mapModule.toggleCrosshair(false);
         }
-    }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    }
+}
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.publisher.CrosshairTool',
+    CrosshairTool,
+    {
         'protocol': ['Oskari.mapframework.publisher.Tool']
-    });
+    }
+);
