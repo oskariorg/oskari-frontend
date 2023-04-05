@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             maprotatortool: jQuery('<div class="mapplugin maprotator"></div>')
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
-        me.inMobileMode = false;
         this._dragRotate = null;
         this._removeListenerKey = null;
         this._name = 'MapRotatorPlugin';
@@ -61,26 +60,8 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         getDegrees: function () {
             return this.previousDegrees || 0;
         },
-        /**
-         * Creates UI for coordinate display and places it on the maps
-         * div where this plugin registered.
-         * @private @method _createControlElement
-         *
-         * @return {jQuery}
-         */
-        _createControlElement: function () {
-            this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
-            return this._templates.maprotatortool.clone();
-        },
         rotateIcon: function (degrees) {
             this._renderButton(degrees);
-        },
-        _createUI: function () {
-            this._element = this._createControlElement();
-            this.setDegrees(this.getRotation());
-            this.refresh();
-            this.handleEvents();
-            this.addToPluginContainer(this._element);
         },
         setRotation: function (deg) {
             // if deg is number then transform degrees to radians otherwise use 0
@@ -96,6 +77,17 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             // radians to degrees with one decimal
             var deg = Math.round(rot * 573) / 10;
             return deg;
+        },
+        _startPluginImpl: function () {
+            this.setElement(this._createControlElement());
+            this.setDegrees(this.getRotation());
+            this.refresh();
+            this.handleEvents();
+            this.addToPluginContainer(this._element);
+        },
+        _createControlElement: function () {
+            this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
+            return this._templates.maprotatortool.clone();
         },
         refresh: function () {
             this._renderButton();
@@ -136,9 +128,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 }
             };
         },
-        _startPluginImpl: function () {
-            this._createUI();
-        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -158,13 +147,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         hasUI: function () {
             return !this._config.noUI;
-        },
-        /**
-         * Get jQuery element.
-         * @method @public getElement
-         */
-        getElement: function () {
-            return this._element;
         },
         _stopPluginImpl: function () {
             this.setRotation(0);
