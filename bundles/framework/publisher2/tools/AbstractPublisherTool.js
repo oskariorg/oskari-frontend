@@ -29,7 +29,7 @@ export class AbstractPublisherTool {
             this.setEnabled(true);
         }
     }
-    
+
     // override per tool
     getTool () {
         return {
@@ -157,7 +157,6 @@ export class AbstractPublisherTool {
         return null;
     }
 };
-
 
 /*
 Make base class discoverable through Oskari.clazz.get('Oskari.publisher.AbstractPublisherTool')
