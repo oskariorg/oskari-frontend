@@ -1,60 +1,56 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegendTool',
-    function () {
-        this.handler = null;
-    }, {
-        index: 10,
-        group: 'layers',
-        bundleName: 'maplegend',
-        getComponent: function () {
-            return {};
-        },
-        getTool: function () {
-            return {
-                id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
-                title: Oskari.getMsg('maplegend', 'tool.label'),
-                config: this.state.pluginConfig || {},
-                disabledReason: Oskari.getMsg('maplegend', 'noLegendsText')
-            };
-        },
-        /**
-         * Initialise tool
-         * @method init
-         */
-        init: function (data) {
-            const myData = data?.configuration[this.bundleName];
-            if (myData) {
-                this.storePluginConf(myData.conf);
-                this.setEnabled(true);
-            }
-        },
-        isDisabled: function () {
-            // should we filter layers with isVisibleOnMap()?
-            return !this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
-        },
-        onLayersChanged: function () {
-            if (this.isEnabled() && this.isDisabled()) {
-                // disable if layers changed and there is no longer layers with legends on map
-                this.setEnabled(false);
-            }
-        },
-        /**
-         * Get values.
-         * @method getValues
-         * @public
-         *
-         * @returns {Object} tool value object
-         */
-        getValues: function () {
-            if (!this.isEnabled()) {
-                return null;
-            }
-            return {
-                [this.bundleName]: {
-                    conf: this.getPlugin().getConfig()
-                }
-            };
+import { AbstractPublisherTool } from '../../../framework/publisher2/tools/AbstractPublisherTool';
+
+const BUNDLE_ID = 'maplegend';
+class MapLegendTool extends AbstractPublisherTool {
+    constructor (...args) {
+        super(...args);
+        this.index = 10;
+        this.group = 'layers';
+    }
+    getTool () {
+        return {
+            id: 'Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
+            title: Oskari.getMsg(BUNDLE_ID, 'tool.label'),
+            config: this.state.pluginConfig || {},
+            disabledReason: Oskari.getMsg(BUNDLE_ID, 'noLegendsText')
+        };
+    }
+    getComponent () {
+        return {};
+    }
+    init (data) {
+        const myData = data?.configuration[BUNDLE_ID];
+        if (myData) {
+            this.storePluginConf(myData.conf);
+            this.setEnabled(true);
         }
-    }, {
-        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    }
+    isDisabled () {
+        // should we filter layers with isVisibleOnMap()?
+        return !this.getSandbox().findAllSelectedMapLayers().some(l => l.getLegendImage());
+    }
+    onLayersChanged () {
+        if (this.isEnabled() && this.isDisabled()) {
+            // disable if layers changed and there is no longer layers with legends on map
+            this.setEnabled(false);
+        }
+    }
+    getValues () {
+        if (!this.isEnabled()) {
+            return null;
+        }
+        return {
+            [BUNDLE_ID]: {
+                conf: this.getPlugin().getConfig()
+            }
+        };
+    }
+}
+
+// Attach protocol to make this discoverable by Oskari publisher
+Oskari.clazz.defineES('Oskari.publisher.MapLegendTool',
+    MapLegendTool,
+    {
         'protocol': ['Oskari.mapframework.publisher.LayerTool']
-    });
+    }
+);
