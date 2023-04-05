@@ -51,16 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
         return this.__mapmodule;
     },
     /**
-     * If the tool requires space for the UI next to the map return the required height/width
-     * @return {Object} object with keys height and width used for map size calculation
-     */
-    getAdditionalSize: function () {
-        return {
-            height: 0,
-            width: 0
-        };
-    },
-    /**
     * Get tool object.
     * @method getTool
     * @rivate
