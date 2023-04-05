@@ -8,26 +8,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         const conf = this.getStatsgridConf(data);
         this.setEnabled(conf.diagram === true);
     },
-    getTool: function (stateData) {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'displayDiagram',
-                config: {
-                    diagram: true
-                }
-            };
-        }
-        return me.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'displayDiagram',
+            config: {
+                diagram: true
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
+    _setEnabledImpl: function (enabled) {
         var stats = this.getStatsgridBundle();
-        if (!stats || !changed) {
+        if (!stats) {
             return;
         }
         if (enabled) {
@@ -39,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     getValues: function () {
         return this.getConfiguration({ diagram: this.isEnabled() });
     },
-    stop: function () {
+    _stopImpl: function () {
         var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);

@@ -8,26 +8,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
         const conf = this.getStatsgridConf(data);
         this.setEnabled(conf.series === true);
     },
-    getTool: function (stateData) {
-        var me = this;
-        if (!me.__tool) {
-            me.__tool = {
-                id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'allowHidingSeriesControl',
-                config: {
-                    series: true
-                }
-            };
-        }
-        return me.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.TogglePlugin',
+            title: 'allowHidingSeriesControl',
+            config: {
+                series: true
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        var me = this;
-        var changed = me.state.enabled !== enabled;
-        me.state.enabled = enabled;
-
+    _setEnabledImpl: function (enabled) {
         var stats = this.getStatsgridBundle();
-        if (!stats || !changed) {
+        if (!stats) {
             return;
         }
         if (enabled) {
@@ -48,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
     getValues: function () {
         return this.getConfiguration({ series: this.isEnabled() });
     },
-    stop: function () {
+    _stopImpl: function () {
         var stats = this.getStatsgridBundle();
         if (stats) {
             stats.togglePlugin.removeTool(this.id);

@@ -2,8 +2,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
-    lefthanded: 'bottom right',
-    righthanded: 'bottom right',
 
     init: function (data) {
         const conf = this.getStatsgridConf(data);
@@ -14,24 +12,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         var stats = this.getStatsgridBundle();
         return stats.classificationPlugin;
     },
-    getTool: function (pdata) {
-        if (!this.__tool) {
-            this.__tool = {
-                id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
-                title: 'allowClassification',
-                config: {
-                    allowClassification: false
-                }
-            };
-        }
-        return this.__tool;
+    getTool: function () {
+        return {
+            id: 'Oskari.statistics.statsgrid.ClassificationPlugin',
+            title: 'allowClassification',
+            config: {
+                allowClassification: false
+            },
+            hasNoPlugin: true
+        };
     },
-    setEnabled: function (enabled) {
-        if (typeof enabled !== 'boolean') {
-            enabled = false;
-        }
-
-        this.state.enabled = enabled;
+    _setEnabledImpl: function (enabled) {
         const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         if (service) {
             service.getStateService().updateClassificationPluginState('editEnabled', enabled);
@@ -63,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     * @method stop
     * @public
     */
-    stop: function () {
+    _stopImpl: function () {
         const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
         if (service) {
             service.getStateService().resetClassificationPluginState('editEnabled');
