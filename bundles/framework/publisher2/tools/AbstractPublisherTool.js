@@ -40,7 +40,11 @@ export class AbstractPublisherTool {
     }
     // deprecated - new (React based) tools should use getTool().title instead
     getTitle () {
-        return this.__loc[this.getTool().title];
+        const toolTitle = this.getTool().title;
+        if (!this.__loc) {
+            return toolTitle;
+        }
+        return this.__loc[toolTitle];
     }
     getGroup () {
         return this.group;
