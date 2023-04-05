@@ -12,10 +12,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
         */
         getTool: function () {
             return {
-            // doesn't actually map to anything real, just need this in order to not break stuff in publisher
                 id: 'Oskari.mapframework.publisher.tool.CrosshairTool',
                 title: 'CrosshairTool',
-                config: this.state.pluginConfig || {}
+                config: this.state.pluginConfig || {},
+                hasNoPlugin: true
             };
         },
         init: function (data) {
@@ -46,17 +46,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
                 }
             };
         },
-        // override since it's not really a plugin but a method on mapmodule
-        setEnabled: function (enabled) {
+        _setEnabledImpl: function (enabled) {
             const mapModule = this.getMapmodule();
             if (mapModule) {
                 mapModule.toggleCrosshair(enabled);
             }
-            this.state.enabled = !!enabled;
         },
-        stop: function () {
-            // remove crosshair when exiting
-            this.setEnabled(false);
+        _stopImpl: function () {
+            const mapModule = this.getMapmodule();
+            if (mapModule) {
+                mapModule.toggleCrosshair(false);
+            }
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
