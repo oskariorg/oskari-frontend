@@ -3,10 +3,9 @@ import { VECTOR_STYLE } from './constants';
 export const DEFAULT_STYLE_NAME = 'default';
 export const RUNTIME_PREFIX = 's_';
 
-export const createDefaultStyle = () => {
+export const createDefaultStyle = (name) => {
     const style = {
-        id: -1,
-        name: DEFAULT_STYLE_NAME,
+        id: name || DEFAULT_STYLE_NAME,
         type: VECTOR_STYLE.OSKARI
     };
     return new VectorStyle(style);
@@ -37,7 +36,7 @@ export class VectorStyle extends Style {
     /* override */
     getTitle () {
         const title = super.getTitle();
-        if (typeof title === 'undefined' || title === DEFAULT_STYLE_NAME) {
+        if (!title || title === DEFAULT_STYLE_NAME) {
             return Oskari.getMsg('MapModule', 'styles.defaultTitle');
         }
         return title;
