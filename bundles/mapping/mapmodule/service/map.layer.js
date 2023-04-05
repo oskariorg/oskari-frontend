@@ -809,7 +809,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getDescribeLayer: function (layer, callback) {
             const url = Oskari.urls.getRoute('DescribeLayer', {
                 id: layer.getId(),
-                styleId: layer._storedStyleName,
+                styleId: layer.getCurrentStyle().getName(),
                 lang: Oskari.getLang(),
                 srs: this.getSandbox().getMap().getSrsName()
             });
