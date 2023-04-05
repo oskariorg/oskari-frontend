@@ -11,16 +11,37 @@ export class AbstractVectorLayer extends AbstractLayer {
 
     /* override */
     selectStyle (name) {
-        // style is seleced on createMapLayer
+        // style is seleced on createMapLayer and styles are loaded async for VectorLayer
         // store selected style name to try selecting it when styles are available
         this._storedStyleName = name;
+        // don't create empty style on startup, create it on getCurrentStyle when needed
+        if (this.getStyles().length === 0) {
+            return;
+        }
         super.selectStyle(name);
     }
 
     /* override */
-    // AbstractLayer selectStyle creates empty if style isn't found
-    _createEmptyStyle () {
-        return createDefaultStyle();
+    addStyle (style) {
+        const styles = this.getStyles();
+        const index = styles.findIndex(s => s.getName() === style.getName());
+        if (index !== -1) {
+            styles[index] = style;
+        } else {
+            styles.push(style);
+        }
+    }
+
+    /* override */
+    getCurrentStyle () {
+        if (!this._currentStyle) {
+            if (this.getStyles().length > 0) {
+                super.selectStyle(this._storedStyleName);
+            } else {
+                this._currentStyle = createDefaultStyle(this._storedStyleName);
+            }
+        }
+        return this._currentStyle;
     }
 
     getLegendImage () {
@@ -38,10 +59,10 @@ export class AbstractVectorLayer extends AbstractLayer {
     handleDescribeLayer (info) {
         const { styles = [] } = info;
         const vs = styles.map(s => new VectorStyle(s));
-        // override all styles as create map layer -> select style -> created default style
+        // override all styles as create map layer
         this.setStyles(vs);
-        // this is done on maplayer add, so try select style (defaults to first)
         if (vs.length) {
+            // this is done on maplayer add, so try select style (defaults to first)
             Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
         }
     }

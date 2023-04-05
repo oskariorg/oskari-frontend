@@ -1,11 +1,11 @@
 import { Style } from './style';
 import { VECTOR_STYLE } from './constants';
 export const DEFAULT_STYLE_NAME = 'default';
+export const RUNTIME_PREFIX = 's_';
 
-export const createDefaultStyle = () => {
+export const createDefaultStyle = (name) => {
     const style = {
-        id: -1,
-        name: DEFAULT_STYLE_NAME,
+        id: name || DEFAULT_STYLE_NAME,
         type: VECTOR_STYLE.OSKARI
     };
     return new VectorStyle(style);
@@ -21,8 +21,9 @@ export const parseStylesFromOptions = (options) => {
 };
 
 export class VectorStyle extends Style {
-    constructor ({ id, name, style, type }) {
-        super(id, name); // name, title
+    constructor ({ id, name: title, style, type }) {
+        const name = id.toString();
+        super(name, title);
         this._type = type;
         this._styleDef = style || {};
     }
@@ -35,7 +36,7 @@ export class VectorStyle extends Style {
     /* override */
     getTitle () {
         const title = super.getTitle();
-        if (typeof title === 'undefined' || title === DEFAULT_STYLE_NAME) {
+        if (!title || title === DEFAULT_STYLE_NAME) {
             return Oskari.getMsg('MapModule', 'styles.defaultTitle');
         }
         return title;
@@ -45,9 +46,9 @@ export class VectorStyle extends Style {
         return this._type;
     }
 
-    // backend stored styles have number id (long)
     isRuntimeStyle () {
-        return typeof this.getName() === 'string';
+        const name = this.getName() || '';
+        return name.startsWith(RUNTIME_PREFIX);
     }
 
     hasDefinitions () {
