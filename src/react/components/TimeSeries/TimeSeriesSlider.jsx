@@ -54,7 +54,7 @@ const calcHandlePosition = (data, min, widthUnit, elemWidth, unit) => {
 const findSnapPoint = (x, dataPoints) => {
     const xArray = dataPoints.map(point => point.x);
     const closest = xArray.sort((a, b) => Math.abs(x - a) - Math.abs(x - b))[0];
-    return dataPoints.find(point => point.x === closest).data;
+    return dataPoints.find(point => point.x === closest);
 }
 
 const SVG_PADDING = 35;
@@ -111,22 +111,51 @@ export const TimeSeriesSlider = ({
         });
     }, [dataPoints]);
 
-    const onHandlePositionChange = (e) => {
-        const svgX = calculateSvgX(e.clientX, e.target);
+    const onHandlePositionChange = (e, target) => {
+        const svgX = calculateSvgX(e.clientX, target);
         const snap = findSnapPoint(svgX, state.sliderPoints);
-        handleChange(snap);
+        target.setAttributeNS(null, 'x', snap.x - state.dragOffsetX);
+        handleChange(snap.data, target.id);
     };
 
-    const handleChange = (val) => {
+    const onRailClick = (e) => {
+        const svgX = calculateSvgX(e.clientX, e.target);
+        const snap = findSnapPoint(svgX, state.sliderPoints);
+        handleChange(snap.data);
+    };
+
+    const handleChange = (val, el) => {
         if (range) {
-            const valueToChange = value.indexOf([...value].sort((a, b) => Math.abs(val - a) - Math.abs(val - b))[0]);
-            const newValue = value;
-            newValue[valueToChange] = val;
+            const newValue = [...value];
+            if (el) {
+                // handle drag
+                if (el === 'handle1') {
+                    if (val > value[1]) {
+                        newValue[1] = val;
+                        newValue[0] = value[1]
+                    } else {
+                        newValue[0] = val;
+                    }
+                } else {
+                    if (val < value[0]) {
+                        newValue[0] = val;
+                        newValue[1] = value[0]
+                    } else {
+                        newValue[1] = val;
+                    }
+                }
+            } else {
+                // click on timeline
+                const sorted = [...value].sort((a, b) => Math.abs(val - a) - Math.abs(val - b));
+                const valueToChange = value.indexOf(sorted[0]);
+                newValue[valueToChange] = val;
+            }
+            newValue.sort((a, b) => a - b);
             onChange(newValue);
         } else {
             onChange(val)
         }
-    }
+    };
 
     const startDrag = (e) => {
         if (!state.dragElement) {
@@ -153,12 +182,12 @@ export const TimeSeriesSlider = ({
 
     const endDrag = (e) => {
         if (state.dragElement) {
+            onHandlePositionChange(e, state.dragElement);
             setState({
                 ...state,
                 dragElement: null,
                 dragOffsetX: null
             });
-            onHandlePositionChange(e);
         }
     };
 
@@ -183,10 +212,10 @@ export const TimeSeriesSlider = ({
                             {mark}
                         </Marker>
                     ))}
-                    <g onClick={(e) => onHandlePositionChange(e)}>
+                    <g onClick={(e) => onRailClick(e)}>
                         <Rail className='slider-rail' width={lineWidth} height={3} />
                         {range && (
-                            <line x1={state.handleX} x2={state.secondHandleX} y1={1} y2={1} stroke='#ecb900' strokeWidth={3} />
+                            <line x1={state.handleX} x2={state.secondHandleX} y1={1} y2={1} stroke={ACTIVE_COLOR} strokeWidth={3} />
                         )}
                     </g>
                     {state.sliderPoints.map((point, index) => (
@@ -218,7 +247,7 @@ export const TimeSeriesSlider = ({
                         </g>
                     ))}
                     <Handle
-                        className='handle1'
+                        id='handle1'
                         stroke='#000000'
                         rx={HANDLE_WIDTH / 2}
                         strokeWidth={1}
@@ -230,7 +259,7 @@ export const TimeSeriesSlider = ({
                     />
                     {range && (
                         <Handle
-                            className='handle2'
+                            id='handle2'
                             stroke='#000000'
                             rx={HANDLE_WIDTH / 2}
                             strokeWidth={1}
