@@ -17,6 +17,11 @@ class Tiles3DLayer extends AbstractVectorLayer {
         return false;
     }
 
+    getClusteringDistance () {
+        // Clustering isn't supported
+        return undefined;
+    }
+
     isSupported () {
         return Oskari.getSandbox().getMap().getSupports3D();
     }
