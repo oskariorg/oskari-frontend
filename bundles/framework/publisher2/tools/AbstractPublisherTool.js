@@ -159,7 +159,8 @@ export class AbstractPublisherTool {
 };
 
 /*
-Make base class discoverable through Oskari.clazz.get('Oskari.publisher.AbstractPublisherTool')
+Make base class discoverable through Oskari.clazz.get('Oskari.publisher.AbstractPublisherTool');
+NOTE! This might not work for bundles that are bundled _before_ the publisher bundle
 
 Usage:
 
