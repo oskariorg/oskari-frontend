@@ -42,13 +42,14 @@ export const IconButton = styled(Button)`
 
 export const Row = styled.div`
     margin-top: 10px;
-    padding: 0 20px;
+    padding: 0 20px 10px 20px;
     display: flex;
     flex-flow: row wrap;
     justify-content: space-around;
     align-items: flex-start;
     flex-wrap: wrap;
     text-align: center;
+    align-items: center;
 `;
 
 export const Col = styled.div`
