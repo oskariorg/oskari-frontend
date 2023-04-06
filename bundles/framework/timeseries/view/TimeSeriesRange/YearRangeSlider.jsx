@@ -35,6 +35,7 @@ export const YearRangeSlider = (props) => {
                 markers={Object.keys(marks).filter(mark => marks[mark] !== '').map(mark => Number.parseInt(mark, 10))}
                 onChange={onChange}
                 value={value}
+                width={isMobile ? 234 : 524}
             />
         </ThemeProvider>
     );

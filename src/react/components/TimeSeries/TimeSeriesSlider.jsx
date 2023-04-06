@@ -166,6 +166,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
 
     const startDrag = (e) => {
         if (!state.dragElement) {
+            if (e.changedTouches) e = e.changedTouches[0];
             const svgX = calculateSvgX(e.clientX, e.target);
             const offsetX = svgX - e.target.getAttributeNS(null, 'x');
             setState({
@@ -178,8 +179,12 @@ export const TimeSeriesSlider = ThemeConsumer(({
 
     const drag = (e) => {
         if (state.dragElement) {
-            e.preventDefault();
-            e.stopPropagation();
+            if (e.changedTouches) {
+                e = e.changedTouches[0];
+            } else {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             const position = calculateSvgX(e.clientX, state.dragElement);
             if (position >= 0 && position <= lineWidth) {
                 state.dragElement.setAttributeNS(null, 'x', position - state.dragOffsetX);
@@ -189,6 +194,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
 
     const endDrag = (e) => {
         if (state.dragElement) {
+            if (e.changedTouches) e = e.changedTouches[0];
             onHandlePositionChange(e, state.dragElement);
             setState({
                 ...state,
@@ -206,9 +212,12 @@ export const TimeSeriesSlider = ThemeConsumer(({
                 onMouseMove={(e) => drag(e)}
                 onMouseUp={(e) => endDrag(e)}
                 onMouseLeave={(e) => endDrag(e)}
+                onTouchMove={(e) => drag(e)}
+                onTouchCancel={(e) => endDrag(e)}
+                onTouchEnd={(e) => endDrag(e)}
             >
                 <g
-                    transform={`translate(${SVG_PADDING}, 25)`}
+                    transform={`translate(${SVG_PADDING}, 37.5)`}
                 >
                     <g onClick={(e) => onRailClick(e)}>
                         <Rail className='slider-rail' width={lineWidth} height={3} $theme={navigationTheme} />
@@ -271,6 +280,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                         y={-7}
                         onMouseDown={(e) => startDrag(e)}
                         $theme={navigationTheme}
+                        onTouchStart={(e) => startDrag(e)}
                     />
                     {range && (
                         <Handle
@@ -284,6 +294,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                             y={-7}
                             onMouseDown={(e) => startDrag(e)}
                             $theme={navigationTheme}
+                            onTouchStart={(e) => startDrag(e)}
                         />
                     )}
                 </g>

@@ -7,7 +7,9 @@ import styled from 'styled-components';
 const Row = styled('div')`
     display: flex;
     flex-direction: row;
-    margin: 0 20px;
+    margin: 0 20px 10px 20px;
+    align-items: center;
+    justify-content: space-between;
 `;
 
 export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobile }) => {
@@ -31,6 +33,7 @@ export const TimeSeriesRange = ({ onChange, start, end, value, dataYears, isMobi
                         dataYears={dataYears}
                         value={value}
                         onChange={(val) => onChange(val)}
+                        isMobile={isMobile}
                     />
                 </ColFixed>
             )}
