@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sliderTypes, timeUnits } from './util/constants';
 import { getDifferenceCalculator, calculateSvgX } from './util/calculation';
-import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
+import { getNavigationTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ThemeConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
@@ -18,7 +18,7 @@ const ActiveRail = styled('line')`
     cursor: pointer;
 `;
 const DataPoint = styled('circle')`
-    fill: ${props => props.$theme.getBgColor()};
+    fill: ${props => props.$theme.getButtonColor()};
     cursor: pointer;
     &:hover + .data-tooltip {
         visibility: visible;
@@ -39,10 +39,10 @@ const Marker = styled('text')`
     user-select: none;
 `;
 const LineMarker = styled('rect')`
-    fill: ${props => props.$theme.getBgColor()};
+    fill: ${props => props.$theme.getButtonColor()};
 `;
 const Handle = styled('rect')`
-    fill: ${props => props.$theme.getAccentColor()};
+    fill: ${props => props.$theme.getButtonHoverColor()};
     cursor: pointer;
 `;
 
@@ -68,7 +68,7 @@ const POINT_RADIUS = 3;
 const HANDLE_WIDTH = 8;
 
 export const TimeSeriesSlider = ThemeConsumer(({
-    theme = { color: { header: { bg: '#3c3c3c' } } },
+    theme = {},
     min,
     max,
     dataPoints,
@@ -79,7 +79,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
     range = false,
     value
 }) => {
-    const headerTheme = getHeaderTheme(theme);
+    const navigationTheme = getNavigationTheme(theme);
     const lineWidth = width - (SVG_PADDING * 2);
     const calculator = getDifferenceCalculator(type === sliderTypes.YEAR ? timeUnits.YEAR : timeUnits.DAY);
     const widthUnit = lineWidth / calculator(max, min);
@@ -211,9 +211,9 @@ export const TimeSeriesSlider = ThemeConsumer(({
                     transform={`translate(${SVG_PADDING}, 25)`}
                 >
                     <g onClick={(e) => onRailClick(e)}>
-                        <Rail className='slider-rail' width={lineWidth} height={3} $theme={headerTheme} />
+                        <Rail className='slider-rail' width={lineWidth} height={3} $theme={navigationTheme} />
                         {range && (
-                            <ActiveRail x1={state.handleX} x2={state.secondHandleX} y1={1} y2={1} stroke={headerTheme.getAccentColor()} strokeWidth={3} />
+                            <ActiveRail x1={state.handleX} x2={state.secondHandleX} y1={1.5} y2={1.5} stroke={navigationTheme.getButtonHoverColor()} strokeWidth={3} />
                         )}
                         {markers.map((mark, index) => {
                             return (
@@ -222,11 +222,11 @@ export const TimeSeriesSlider = ThemeConsumer(({
                                         key={mark}
                                         transform={`translate(${calcDataPointX(mark, widthUnit, min, 35, calculator)}, -10)`}
                                         width={35}
-                                        $theme={headerTheme}
+                                        $theme={navigationTheme}
                                     >
                                         {mark}
                                     </Marker>
-                                    <LineMarker key={`line-marker-${index}`} $theme={headerTheme} width={2} height={3} transform={`translate(${calcDataPointX(mark, widthUnit, min, 2, calculator)}, 0)`} />
+                                    <LineMarker key={`line-marker-${index}`} $theme={navigationTheme} width={2} height={3} transform={`translate(${calcDataPointX(mark, widthUnit, min, 2, calculator)}, 0)`} />
                                 </>
                             )
                         })}
@@ -245,17 +245,17 @@ export const TimeSeriesSlider = ThemeConsumer(({
                                 cx={POINT_RADIUS}
                                 cy={POINT_RADIUS}
                                 r={POINT_RADIUS}
-                                $theme={headerTheme}
+                                $theme={navigationTheme}
                                 stroke={
                                     !range ? (
-                                        value === point.data ? headerTheme.getAccentColor() : headerTheme.getTextColor()
+                                        value === point.data ? navigationTheme.getButtonHoverColor() : navigationTheme.getTextColor()
                                     ) : (
-                                        point.data >= value[0] && point.data <= value[1] ? headerTheme.getAccentColor() : headerTheme.getTextColor()
+                                        point.data >= value[0] && point.data <= value[1] ? navigationTheme.getButtonHoverColor() : navigationTheme.getTextColor()
                                     )
                                 }
                                 strokeWidth={2}
                             />
-                            <DataTooltip className='data-tooltip' y={35} $theme={headerTheme}>
+                            <DataTooltip className='data-tooltip' y={35} $theme={navigationTheme}>
                                 {point.data}
                             </DataTooltip>
                         </g>
@@ -270,7 +270,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                         x={state.handleX}
                         y={-7}
                         onMouseDown={(e) => startDrag(e)}
-                        $theme={headerTheme}
+                        $theme={navigationTheme}
                     />
                     {range && (
                         <Handle
@@ -283,7 +283,7 @@ export const TimeSeriesSlider = ThemeConsumer(({
                             x={state.secondHandleX}
                             y={-7}
                             onMouseDown={(e) => startDrag(e)}
-                            $theme={headerTheme}
+                            $theme={navigationTheme}
                         />
                     )}
                 </g>

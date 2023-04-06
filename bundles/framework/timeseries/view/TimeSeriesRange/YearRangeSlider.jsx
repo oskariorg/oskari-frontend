@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { TimeSeriesSlider } from 'oskari-ui/components/TimeSeries/TimeSeriesSlider';
+import { ThemeProvider } from 'oskari-ui/util';
 
 export const YearRangeSlider = (props) => {
     const { start, end, dataYears, isMobile, onChange, value, range } = props;
@@ -23,8 +24,9 @@ export const YearRangeSlider = (props) => {
     // data years are also marks on the range slider but they are represented
     // as small circles on the timeline (via css styling)
     dataYears.filter((year) => !marks[year]).forEach((year) => (marks[year] = ''));
+    const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     return (
-        <>
+        <ThemeProvider value={mapModule.getMapTheme()}>
             <TimeSeriesSlider
                 range={range}
                 min={start}
@@ -34,7 +36,7 @@ export const YearRangeSlider = (props) => {
                 onChange={onChange}
                 value={value}
             />
-        </>
+        </ThemeProvider>
     );
 };
 
