@@ -88,7 +88,7 @@ export class WfsVectorLayerPlugin extends AbstractVectorLayerPlugin {
             LayerComposingModel.CREDENTIALS,
             LayerComposingModel.HOVER,
             LayerComposingModel.SRS,
-            LayerComposingModel.STYLES_JSON,
+            LayerComposingModel.VECTOR_STYLES,
             LayerComposingModel.URL,
             LayerComposingModel.VERSION,
             LayerComposingModel.WFS_RENDER_MODE

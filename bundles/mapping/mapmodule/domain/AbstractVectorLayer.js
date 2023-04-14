@@ -1,4 +1,4 @@
-import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME } from './VectorStyle';
+import { VectorStyle, createDefaultStyle, DEFAULT_STYLE_NAME, parseStylesFromOptions } from './VectorStyle';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
@@ -6,12 +6,42 @@ export class AbstractVectorLayer extends AbstractLayer {
     constructor () {
         super(...arguments);
         this.hoverOptions = null;
+        this._storedStyleName = null;
     }
 
     /* override */
-    // AbstractLayer selectStyle creates empty if style isn't found
-    _createEmptyStyle () {
-        return createDefaultStyle();
+    selectStyle (name) {
+        // style is seleced on createMapLayer and styles are loaded async for VectorLayer
+        // store selected style name to try selecting it when styles are available
+        this._storedStyleName = name;
+        // don't create empty style on startup, create it on getCurrentStyle when needed
+        if (this.getStyles().length === 0) {
+            return;
+        }
+        super.selectStyle(name);
+    }
+
+    /* override */
+    addStyle (style) {
+        const styles = this.getStyles();
+        const index = styles.findIndex(s => s.getName() === style.getName());
+        if (index !== -1) {
+            styles[index] = style;
+        } else {
+            styles.push(style);
+        }
+    }
+
+    /* override */
+    getCurrentStyle () {
+        if (!this._currentStyle) {
+            if (this.getStyles().length > 0) {
+                super.selectStyle(this._storedStyleName);
+            } else {
+                this._currentStyle = createDefaultStyle(this._storedStyleName);
+            }
+        }
+        return this._currentStyle;
     }
 
     getLegendImage () {
@@ -26,23 +56,23 @@ export class AbstractVectorLayer extends AbstractLayer {
         return this.hoverOptions;
     }
 
-    setOptions (options) {
-        super.setOptions(options);
-        const { styles = {} } = options;
-        const hasStyles = this.getStyles().length > 0;
-        // Clear styles before adding
-        this.setStyles([]);
-        // use addStyle to avoid duplicate and invalid styles
-        Object.keys(styles).forEach(styleId => {
-            const style = new VectorStyle(styleId, null, 'normal', styles[styleId]);
-            this.addStyle(style);
-        });
+    handleDescribeLayer (info) {
+        const { styles = [] } = info;
+        const vs = styles.map(s => new VectorStyle(s));
+        // override all styles as create map layer
+        this.setStyles(vs);
+        if (vs.length) {
+            // this is done on maplayer add, so try select style (defaults to first)
+            Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), this._storedStyleName]);
+        }
+    }
+
+    // For user data layers
+    setStylesFromOptions (options) {
+        const styles = parseStylesFromOptions(options);
+        this.setStyles(styles);
         // Remove styles from options to be sure that VectorStyle is used
         delete options.styles;
-        // update current style on styles update
-        if (hasStyles && this._currentStyle) {
-            this.selectStyle(this._currentStyle.getName());
-        }
     }
 
     removeStyle (name) {

@@ -800,6 +800,32 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }, 0);
             }
         },
+        /**
+        * Fetches layer additional info from server if required
+        * @param {AbstractLayer} layer layer to get WKT for
+        * @param {Function} callback gets the describe info as parameter or undefined if it's not available
+        * @returns callback is used for return value
+        */
+        getDescribeLayer: function (layer, callback) {
+            const url = Oskari.urls.getRoute('DescribeLayer', {
+                id: layer.getId(),
+                styleId: layer.getCurrentStyle().getName(),
+                lang: Oskari.getLang(),
+                srs: this.getSandbox().getMap().getSrsName()
+            });
+
+            fetch(url).then(response => {
+                if (!response.ok) {
+                    throw Error(response.statusText);
+                }
+                return response.json();
+            }).then(json => {
+                callback(json);
+            }).catch(error => {
+                Oskari.log('DescribeLayer download').warn(error);
+                callback();
+            });
+        },
 
         /**
          * @method isAllLayersLoaded

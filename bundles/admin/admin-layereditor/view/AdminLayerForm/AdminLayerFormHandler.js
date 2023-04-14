@@ -367,14 +367,6 @@ class UIHandler extends StateHandler {
         this.setOptions(options);
     }
 
-    setStyleJSON (json) {
-        this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
-    }
-
-    setExternalStyleJSON (json) {
-        this.updateOptionsJsonProperty(json, 'tempExternalStylesJSON', 'externalStyles');
-    }
-
     setHoverJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
@@ -865,8 +857,6 @@ class UIHandler extends StateHandler {
             }
         });
 
-        this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
-        this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
         this.validateJsonValue(layer.tempAttributesJSON, 'validation.attributes', validationErrors);
         this.validateJsonValue(layer.tempAttributionsJSON, 'validation.attributions', validationErrors);
@@ -1112,26 +1102,45 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
 
-    saveStyleToLayer (style, styleLabel, styleId) {
+    saveVectorStyleToLayer (style, isEdit) {
         const layer = this.getState().layer;
-        const currentStyles = layer.options.styles || null;
-        const layerStyleId = styleId || 's_' + new Date().getTime();
-
-        layer.options.styles = {
-            ...currentStyles,
-            [layerStyleId]: {
-                title: styleLabel,
-                featureStyle: style
-            }
-        };
-
-        this.updateState({ layer: layer });
+        if (!Array.isArray(layer.vectorStyles)) {
+            layer.vectorStyles = [];
+        }
+        let status;
+        if (isEdit) {
+            status = 'UPDATED';
+            layer.vectorStyles = layer.vectorStyles.map(s => s.id !== style.id ? s : style);
+        } else {
+            status = 'NEW';
+            layer.vectorStyles.push(style);
+        }
+        this._updateVectorStyleStatus(layer, style.id, status);
+        this.updateState({ layer });
     }
 
-    removeStyleFromLayer (styleId) {
+    removeVectorStyleFromLayer (id) {
         const layer = this.getState().layer;
-        delete layer.options.styles[styleId];
-        this.updateState({ layer: layer });
+        if (layer.vectorStyleStatus?.[id] === 'NEW') {
+            // remove unsaved and deleted style from listing
+            layer.vectorStyles = layer.vectorStyles.filter(s => s.id !== id);
+        } else {
+            // mark to be deleted
+            this._updateVectorStyleStatus(layer, id, 'DELETED');
+        }
+        this.updateState({ layer });
+    }
+
+    _updateVectorStyleStatus (layer, id, status) {
+        if (!layer.vectorStyleStatus) {
+            layer.vectorStyleStatus = {};
+        }
+        const oldStatus = layer.vectorStyleStatus[id];
+        if (oldStatus === 'NEW') {
+            // don't update status for unsaved styles
+            return;
+        }
+        layer.vectorStyleStatus[id] = status;
     }
 
     showLayerMetadata (uuid) {
@@ -1181,14 +1190,13 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'addNewFromSameService',
     'layerSelected',
-    'removeStyleFromLayer',
-    'saveStyleToLayer',
+    'removeVectorStyleFromLayer',
+    'saveVectorStyleToLayer',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
     'setDataProviderId',
-    'setExternalStyleJSON',
     'setForcedSRS',
     'setGfiContent',
     'setGfiType',
@@ -1216,7 +1224,6 @@ const wrapped = controllerMixin(UIHandler, [
     'setRenderMode',
     'setSelectedTime',
     'setStyle',
-    'setStyleJSON',
     'setTileGridJSON',
     'setType',
     'setUsername',

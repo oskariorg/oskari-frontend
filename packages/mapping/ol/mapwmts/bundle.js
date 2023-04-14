@@ -29,9 +29,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayer.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/mapwmts/service/WmtsLayerService.ol.js"
 		}],
 		"resources" : []
 	},
