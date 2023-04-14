@@ -53,7 +53,7 @@ describe('saveUserStyle function ', () => {
         expect(s1.isRuntimeStyle()).toBe(true);
         // has number id like backend stored styles
         expect(s2.isRuntimeStyle()).toBe(false);
-        expect(s2.getName()).toBe(2);
+        expect(s2.getName()).toBe('2');
         expect(s2.getTitle()).toBe('Updated title');
         expect(s2.getFeatureStyle()).toEqual({ fill: 'some val' });
     });
