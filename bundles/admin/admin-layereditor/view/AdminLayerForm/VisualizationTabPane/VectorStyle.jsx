@@ -126,7 +126,9 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
                 }
             </Space>
             <Modal
-                open={ editorState.modalVisibility }
+                mask={ false }
+                maskClosable= { false }
+                open={ visible }
                 onOk={ onModalOk }
                 onCancel={ onModalClose }
                 cancelText={ <Message messageKey="cancel" /> }
