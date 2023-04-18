@@ -8,7 +8,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 
 import { VectorTileModelBuilder } from './VectorTileModelBuilder';
 import { stylefunction as mapboxStyleFunction } from 'ol-mapbox-style';
-import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS } from '../../domain/constants';
+import { LAYER_ID, LAYER_TYPE, FEATURE_QUERY_ERRORS, VECTOR_STYLE } from '../../domain/constants';
 import { getZoomLevelHelper } from '../../util/scale';
 import { getFeatureAsGeojson } from '../../util/vectorfeatures/jsonHelper';
 import { getMVTFeaturesInExtent } from '../../util/vectorfeatures/mvtHelper';
@@ -105,11 +105,11 @@ class VectorTileLayerPlugin extends AbstractVectorLayerPlugin {
     _getLayerCurrentStyleFunction (layer) {
         const olLayers = this.getOLMapLayers(layer.getId());
         const style = layer.getCurrentStyle();
-        if (style.isExternalStyle() && olLayers.length !== 0) {
-            const externalStyleDef = style.getExternalDef() || {};
-            const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
+        if (style.getType() === VECTOR_STYLE.MAPBOX && olLayers.length !== 0) {
+            const styleDef = style.getFeatureStyle();
+            const sourceLayerIds = styleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
             const resolutions = [...this.getMapModule().getResolutionArray()];
-            return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds, resolutions);
+            return mapboxStyleFunction(olLayers[0], styleDef, sourceLayerIds, resolutions);
         }
         return style.hasDefinitions() ? this.mapModule.getStyleForLayer(layer) : this._createDefaultStyle();
     }
