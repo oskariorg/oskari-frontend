@@ -47,6 +47,12 @@ export const getLayerHelper = () => {
                 delete transformed[key];
             }
         });
+        // VectorStyle has numeric (long) id (oskari_maplayer_style)
+        // Layer default style is stored in oskari_maplayer as string
+        const { style, vectorStyles } = layer;
+        if (vectorStyles && !isNaN(style)) {
+            transformed.style = parseInt(style);
+        }
         return transformed;
     };
 
@@ -69,9 +75,7 @@ export const getLayerHelper = () => {
         // Add temp json fields to keep the state on invalid json syntax
         layer.tempAttributesJSON = toJson(layer.attributes);
         layer.tempAttributionsJSON = toJson(layer.options.attributions);
-        layer.tempExternalStylesJSON = toJson(layer.options.externalStyles);
         layer.tempHoverJSON = toJson(layer.options.hover);
-        layer.tempStylesJSON = toJson(layer.options.styles);
         layer.tempTileGridJSON = toJson(layer.options.tileGrid);
         layer.isNew = !layer.id;
     };
@@ -80,9 +84,7 @@ export const getLayerHelper = () => {
         delete layer.role_permissions.all;
         delete layer.tempAttributesJSON;
         delete layer.tempAttributionsJSON;
-        delete layer.tempExternalStylesJSON;
         delete layer.tempHoverJSON;
-        delete layer.tempStylesJSON;
         delete layer.tempTileGridJSON;
         delete layer.isNew;
     };
