@@ -1,10 +1,12 @@
+import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
-    constructor (restUrl, isExternal, consumer) {
+    constructor (restUrl, isExternal, passwordRequirements = {}, consumer) {
         super();
         this.restUrl = restUrl;
         this.isExternal = isExternal;
+        this.passwordRequirements = passwordRequirements;
         this.sandbox = Oskari.getSandbox();
         this.setState({
             activeTab: 'admin-users-tab',
@@ -51,7 +53,19 @@ class UIHandler extends StateHandler {
         this.updateState({
             userPagination: {
                 ...this.state.userPagination,
-                search: searchText
+                search: searchText,
+                page: 1
+            }
+        });
+        this.fetchUsers();
+    }
+
+    resetSearch () {
+        this.updateState({
+            userPagination: {
+                ...this.state.userPagination,
+                search: '',
+                page: 1
             }
         });
         this.fetchUsers();
@@ -117,7 +131,8 @@ class UIHandler extends StateHandler {
         this.updateState({
             addingUser: !this.state.addingUser,
             editingUserId: null,
-            userFormState: this.initUserForm()
+            userFormState: this.initUserForm(),
+            userFormErrors: []
         });
     }
 
@@ -134,7 +149,8 @@ class UIHandler extends StateHandler {
                 password: '',
                 rePassword: '',
                 roles: user.roles
-            }
+            },
+            userFormErrors: []
         });
     }
 
@@ -216,9 +232,6 @@ class UIHandler extends StateHandler {
             } else if (this.state.userFormState.password !== this.state.userFormState.rePassword) {
                 errors.push('password');
                 Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.password_mismatch'));
-            } else if (this.state.userFormState.password.length < 8) {
-                errors.push('password');
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.password_too_short'));
             }
         }
 
@@ -266,7 +279,17 @@ class UIHandler extends StateHandler {
             this.fetchUsers();
         } catch (e) {
             if (e.message === 'Password too weak') {
-                Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.password_too_short'));
+                let error = `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements')}`;
+                Object.keys(this.passwordRequirements).forEach((key) => {
+                    error += `\n${key}: ${this.passwordRequirements[key]}`;
+                });
+                Messaging.error(error);
+                this.updateState({
+                    userFormErrors: [
+                        ...this.state.userFormErrors,
+                        'password'
+                    ]
+                });
             } else {
                 Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.save_failed'));
             }
@@ -375,7 +398,8 @@ const wrapped = controllerMixin(UIHandler, [
     'fetchUsers',
     'fetchRoles',
     'setUserPage',
-    'search'
+    'search',
+    'resetSearch'
 ]);
 
 export { wrapped as AdminUsersHandler };

@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "addRole": "Select role(s)",
                 "password_mismatch": "Passwords don't match.",
                 "password_too_short": "Password should be at least eight characters long.",
+                "passwordRequirements": "Password must include:",
                 "form_invalid": "Values are missing or invalid.",
                 "field_required": "Field \"{fieldName}\" is required.",
                 "confirm_delete": "Are you sure you wish to delete user {user}?",
@@ -29,10 +30,11 @@ Oskari.registerLocalization(
                 "save_failed": "User could not be saved.",
                 "save_failed_message": "This username is already reserved. Please try a different one.",
                 "noMatch": "No results matched",
-                "selectRole": "Select role"
+                "selectRole": "Select role",
+                "searchResults": "Search results"
             },
             "adminroles": {
-                "title": "A: Roles",
+                "title": "Roles",
                 "newrole": "Add role:",
                 "confirm_delete": "Are you sure you wish to delete role {role}?",
                 "delete_failed": "The user could not be deleted.",

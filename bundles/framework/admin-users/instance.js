@@ -72,7 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             if (this.started) {
                 return;
             }
-
             var me = this,
                 conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
