@@ -156,6 +156,13 @@ class UIHandler extends StateHandler {
                 }
             };
             data = await this.getTransformedCoordinatesFromServer(data, fromProjection, toProjection);
+        } else {
+            data = {
+                lonlat: {
+                    lon: this.formatNumber(data?.lonlat?.lon, '.'),
+                    lat: this.formatNumber(data?.lonlat?.lat, '.')
+                }
+            };
         }
         return data;
     }
