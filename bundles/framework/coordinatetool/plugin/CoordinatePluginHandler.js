@@ -99,8 +99,8 @@ class UIHandler extends StateHandler {
     async useUserDefinedCoordinates () {
         let data = {
             lonlat: {
-                lon: this.state.lonField,
-                lat: this.state.latField
+                lon: this.formatNumber(this.state.lonField, '.'),
+                lat: this.formatNumber(this.state.latField, '.')
             }
         };
         const converted = await this.convertCoordinates(data, this.state.selectedProjection, this.originalProjection);
@@ -149,20 +149,7 @@ class UIHandler extends StateHandler {
             if (Oskari.util.coordinateIsDegrees([data.lonlat?.lon, data.lonlat?.lat])) {
                 data = this.coordinatesToMetric(data);
             }
-            data = {
-                lonlat: {
-                    lon: this.formatNumber(data?.lonlat?.lon, '.'),
-                    lat: this.formatNumber(data?.lonlat?.lat, '.')
-                }
-            };
             data = await this.getTransformedCoordinatesFromServer(data, fromProjection, toProjection);
-        } else {
-            data = {
-                lonlat: {
-                    lon: this.formatNumber(data?.lonlat?.lon, '.'),
-                    lat: this.formatNumber(data?.lonlat?.lat, '.')
-                }
-            };
         }
         return data;
     }
