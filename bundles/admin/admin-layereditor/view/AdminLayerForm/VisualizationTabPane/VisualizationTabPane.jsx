@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Controller } from 'oskari-ui/util';
+import { Controller, ErrorBoundary } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
 import { Hover } from './Hover';
 import { DynamicScreensPaceErrorOptions } from './DynamicScreensSpaceErrorOptions';
@@ -30,6 +30,7 @@ const {
     DECLUTTER
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
+
 export const VisualizationTabPane = ({ layer, scales, propertyFields, controller }) => {
     const isLayerTypeSupported = propertyFields.length > 0;
     if (!isLayerTypeSupported) {
@@ -37,8 +38,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
     }
     const showExternalVectorStyle = propertyFields.includes(EXTERNAL_VECTOR_STYLES);
     const showVectorStyle = propertyFields.includes(VECTOR_STYLES) || showExternalVectorStyle;
-
-    return (<Fragment>
+    return (<ErrorBoundary>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
@@ -76,7 +76,7 @@ export const VisualizationTabPane = ({ layer, scales, propertyFields, controller
                 <Scale layer={layer} scales={scales} controller={controller} />
             }
         </StyledColumn.Right>
-    </Fragment>);
+    </ErrorBoundary>);
 };
 
 VisualizationTabPane.propTypes = {

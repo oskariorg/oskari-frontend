@@ -1,8 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import { WarningOutlined } from '@ant-design/icons';
 import { getMsg } from './locale';
 
-const DefaultError = () => (<h1>{getMsg('error.generic')}</h1>);
+export const getGenericMsg = () => getMsg('error.generic');
+
+const ErrorTag = styled('h2')`
+    color: red;
+`;
+const DefaultError = () => (
+    <ErrorTag>
+        <WarningOutlined /> {getGenericMsg()}
+    </ErrorTag>);
 /**
  * Usage:
  * 1) Wrap components to "try/catch" with:
