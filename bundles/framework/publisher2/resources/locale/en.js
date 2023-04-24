@@ -235,8 +235,8 @@ Oskari.registerLocalization(
                 "promote": "Do you want to show also orthophotos on the map?"
             },
             "rpc": {
-                "label": "Programmatical usage (RPC API)",
-                "info": "You can use the RPC API with published maps to .."
+                "label": "Programmatic use (RPC API)",
+                "info": "With the RPC API you can utilize published maps. For more information https://oskari.org/documentation/features/rpc/"
             },
             "mapLayers": {
                 "label": "Map layers",
