@@ -240,11 +240,12 @@ Oskari.registerLocalization(
             },
             "mapLayers": {
                 "label": "Map layers",
-                "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
-                "noBaseLayers": "Ei valittuja taustakarttoja",
-                "noLayers": "Ei valittuja karttatasoja"
+                "otherLayers": "Other maps",
+                "selectLayers": "Select map layers",
+                "layersDisplay": "Layer presentation",
+                "baseLayers": "Background maps",
+                "noBaseLayers": "No selected background maps",
+                "noLayers": "No selected map layers"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",
