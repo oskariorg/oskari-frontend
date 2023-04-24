@@ -21,6 +21,7 @@ export const FeedbackServiceForm = ({ state, controller }) => {
         <FeedbackFrom>
             <LabeledInput
                 key='t_url'
+                className='t_base_url'
                 label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiUrl' />}
                 placeholder={Oskari.getMsg('feedbackService', 'display.publisher.urlPlaceholder')}
                 type='text'
@@ -33,6 +34,7 @@ export const FeedbackServiceForm = ({ state, controller }) => {
             />
             <LabeledInput
                 key='t_key'
+                className='t_api_key'
                 label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiKey' />}
                 placeholder={Oskari.getMsg('feedbackService', 'display.publisher.keyPlaceholder')}
                 type='text'
@@ -45,6 +47,7 @@ export const FeedbackServiceForm = ({ state, controller }) => {
             />
             <LabeledInput
                 key='t_extensions'
+                className='t_serv_ext'
                 label={<Message bundleKey='feedbackService' messageKey='display.publisher.apiExtensions' />}
                 placeholder={Oskari.getMsg('feedbackService', 'display.publisher.extensionsPlaceholder')}
                 type='text'

@@ -14,8 +14,8 @@ const FieldWithInfo = styled('div')`
 export const ToolLayout = ({ isEdit, onEditMode, onSwitch }) => {
     return (
         <FieldWithInfo>
-            <Button onClick={onSwitch}><SwapOutlined /> <Message messageKey='BasicView.toollayout.swapUI' /></Button>
-            <Button onClick={() => onEditMode(!isEdit)} danger={isEdit}><EditButtonContent isEdit={isEdit} /></Button>
+            <Button className='t_swap_sides' onClick={onSwitch}><SwapOutlined /> <Message messageKey='BasicView.toollayout.swapUI' /></Button>
+            <Button className='t_custom_placement' onClick={() => onEditMode(!isEdit)} danger={isEdit}><EditButtonContent isEdit={isEdit} /></Button>
         </FieldWithInfo>
     );
 };

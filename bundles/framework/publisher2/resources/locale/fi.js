@@ -236,7 +236,7 @@ Oskari.registerLocalization(
             },
             "rpc": {
                 "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
-                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
+                "info": "RPC-rajapinnan avulla voit hyödyntää julkaistuja karttoja. Lisätietoa https://oskari.org/documentation/features/rpc/"
             },
             "mapLayers": {
                 "label": "Karttatasot",
