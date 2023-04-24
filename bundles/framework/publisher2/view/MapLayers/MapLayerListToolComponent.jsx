@@ -24,11 +24,12 @@ const StyleSelect = ({ state, controller }) => {
     if (state.isDisabledStyleChange) {
         return (
             <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMultipleStyles' />}>
-                <StyledCheckbox disabled><Message messageKey='BasicView.maptools.layerselection.allowStyleChange' /></StyledCheckbox>
+                <StyledCheckbox className='t_allow_style_select' disabled><Message messageKey='BasicView.maptools.layerselection.allowStyleChange' /></StyledCheckbox>
             </Tooltip>);
     }
     return (
         <StyledCheckbox
+            className='t_allow_style_select'
             checked={state.isStyleSelectable}
             onChange={(e) => controller.setAllowStyleChange(e.target.checked)}
         >
@@ -40,11 +41,12 @@ const MetadataSelect = ({ state, controller }) => {
     if (state.isDisabledMetadata) {
         return (
             <Tooltip title={<Message messageKey='BasicView.maptools.layerselection.noMetadata' />}>
-                <StyledCheckbox disabled><Message messageKey='BasicView.maptools.layerselection.showMetadata' /></StyledCheckbox>
+                <StyledCheckbox className='t_show_metalinks' disabled><Message messageKey='BasicView.maptools.layerselection.showMetadata' /></StyledCheckbox>
             </Tooltip>);
     }
     return (
         <StyledCheckbox
+            className='t_show_metalinks'
             checked={state.showMetadata}
             onChange={(e) => controller.setShowMetadata(e.target.checked)}
         >

@@ -68,7 +68,7 @@ export const MapLayers = ({ state, controller }) => {
                 <Message messageKey='BasicView.mapLayers.noBaseLayers' />
             )}
             <LayerContainer>
-                <h3><Message messageKey='BasicView.mapLayers.label' /></h3>
+                <h3><Message messageKey='BasicView.mapLayers.otherLayers' /></h3>
                 {layers.map((layer) => {
                     const disabled = !layer.isVisible();
                     return (

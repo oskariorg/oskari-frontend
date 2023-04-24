@@ -240,11 +240,12 @@ Oskari.registerLocalization(
             },
             "mapLayers": {
                 "label": "Kartlager",
-                "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
-                "noBaseLayers": "Ei valittuja taustakarttoja",
-                "noLayers": "Ei valittuja karttatasoja"
+                "otherLayers": "Andra kartlager",
+                "selectLayers": "Välj kartlager",
+                "layersDisplay": "Kartlagrens visualisering",
+                "baseLayers": "Bakgrundskartor",
+                "noBaseLayers": "Inga bakgrundskartor valda",
+                "noLayers": "Inga kartlager valda"
             },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",

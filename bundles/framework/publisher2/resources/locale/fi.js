@@ -240,9 +240,10 @@ Oskari.registerLocalization(
             },
             "mapLayers": {
                 "label": "Karttatasot",
-                "selectLayers": "Tasojen valinta",
+                "otherLayers": "Muut kartat",
+                "selectLayers": "Valitse tasot",
                 "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
+                "baseLayers": "Taustakartat",
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },
