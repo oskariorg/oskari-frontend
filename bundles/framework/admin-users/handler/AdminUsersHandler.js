@@ -1,4 +1,3 @@
-import React from 'react';
 import { StateHandler, controllerMixin, Messaging } from 'oskari-ui/util';
 
 class UIHandler extends StateHandler {
@@ -279,9 +278,16 @@ class UIHandler extends StateHandler {
             this.fetchUsers();
         } catch (e) {
             if (e.message === 'Password too weak') {
-                let error = `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements')}`;
-                Object.keys(this.passwordRequirements).forEach((key) => {
-                    error += `\n${key}: ${this.passwordRequirements[key]}`;
+                let error = `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements.title')}`;
+                Object.keys(this.passwordRequirements).forEach((key, index) => {
+                    if (key === 'length') {
+                        error += `${Oskari.getMsg('AdminUsers', 'flyout.adminusers.passwordRequirements.length', { length: this.passwordRequirements[key] })}`;
+                    } else {
+                        error += `${Oskari.getMsg('AdminUsers', `flyout.adminusers.passwordRequirements.${key}`)}`;
+                    }
+                    if ((index + 1) < Object.keys(this.passwordRequirements).length) {
+                        error += ', ';
+                    }
                 });
                 Messaging.error(error);
                 this.updateState({

@@ -21,7 +21,11 @@ Oskari.registerLocalization(
                 "addRole": "Select role(s)",
                 "password_mismatch": "Passwords don't match.",
                 "password_too_short": "Password should be at least eight characters long.",
-                "passwordRequirements": "Password must include:",
+                "passwordRequirements": {
+                    "title": "Password requirements: ",
+                    "length": "Minimum length:  {length}",
+                    "case": "Must include lower and UPPER case characters"
+                },
                 "form_invalid": "Values are missing or invalid.",
                 "field_required": "Field \"{fieldName}\" is required.",
                 "confirm_delete": "Are you sure you wish to delete user {user}?",

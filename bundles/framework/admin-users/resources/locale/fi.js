@@ -21,7 +21,11 @@ Oskari.registerLocalization(
                 "addRole": "Valitse rooli(t)",
                 "password_mismatch": "Salasanat eivät täsmää.",
                 "password_too_short": "Salasanan on oltava vähintään kahdeksan merkkiä pitkä.",
-                "passwordRequirements": "Salasanan tulee sisältää:",
+                "passwordRequirements": {
+                    "title": "Salasanan vaatimukset: ",
+                    "length": "Vähimmäispituus:  {length}",
+                    "case": "Pitää sisältää sekä pieniä että ISOJA kirjaimia"
+                },
                 "form_invalid": "Annetut arvot ovat virheellisiä tai puutteellisia.",
                 "field_required": "Kenttä \"{fieldName}\" on pakollinen",
                 "confirm_delete": "Haluatko varmasti poistaa käyttäjän {user}?",

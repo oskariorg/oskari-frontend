@@ -21,7 +21,11 @@ Oskari.registerLocalization(
                 "addRole": "Välj rol(ler)",
                 "password_mismatch": "Lösenord är inte lika.",
                 "password_too_short": "Lösenord måste ha minst åtta märke.",
-                "passwordRequirements": "Password must include:",
+                "passwordRequirements": {
+                    "title": "Lösenordskrav: ",
+                    "length": "Minsta längd:  {length}",
+                    "case": "Måste innehålla små och STORA bokstäver"
+                },
                 "form_invalid": "Information fattas från några fält.",
                 "field_required": "Fältet \"{fieldName}\" är obligatorisk.",
                 "confirm_delete": "Vill du säkert ta bort användaren {user}?",
