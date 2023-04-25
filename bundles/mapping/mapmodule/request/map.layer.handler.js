@@ -81,9 +81,14 @@ Oskari.clazz.define('map.layer.handler',
             // use queue so the layers are added to map in the same order as they are added with the request
             // otherwise layers would be added to map in the order where the additional metadata loading was completed
             this.layerQueue.push(layerStatus);
-            const done = () => {
+            const done = (error) => {
                 // change status for this layer
-                layerStatus.ready = true;
+                if (error) {
+                    // filter layerStatus out from queue so it doesn't block other layers from being added to the map
+                    this.layerQueue = this.layerQueue.filter(status => status !== layerStatus);
+                } else {
+                    layerStatus.ready = true;
+                }
                 // add layers from front of queue to map
                 this.__processLayerQueue();
             };
@@ -126,6 +131,7 @@ Oskari.clazz.define('map.layer.handler',
                     if (layer.requiresDescribeLayer()) {
                         // notify user here or in implementations
                         this.log.error('Attempt to add layer that requires more info. Skipping id: ' + layerId);
+                        done(true);
                         return;
                     }
                 }
