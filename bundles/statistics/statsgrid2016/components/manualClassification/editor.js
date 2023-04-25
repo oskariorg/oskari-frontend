@@ -17,7 +17,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, activeId, fractionDigits, base, changeCallback, disabled) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -66,6 +66,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
             update();
         })
         .on('drag', (d) => {
+            if (disabled) return null;
             const newX = d3.event.x;
             d.value = x.invert(newX);
             selected = d;
@@ -96,6 +97,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
         .classed('input-area', true)
         .append('input')
         .attr('type', 'text')
+        .attr('disabled', disabled ? true : null)
         .on('input', () => {
             const value = valueInput.property('value');
             const validated = parseValidateInput(value);
