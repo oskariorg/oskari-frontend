@@ -132,7 +132,6 @@ Oskari.clazz.define('map.layer.handler',
                 if (!info) {
                     layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
                     if (layer.requiresDescribeLayer()) {
-                        // notify user here or in implementations
                         this.log.error('Attempt to add layer that requires more info. Skipping id: ' + layerId);
                         done(true);
                         return;
