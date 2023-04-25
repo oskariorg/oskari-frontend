@@ -27,14 +27,15 @@ const Form = ({
 }) => {
     const ref = useRef();
     const [activeBound, setActiveBound] = useState();
+    const { editEnabled } = state?.pluginState;
     useEffect(() => {
         // editor appends content to ref element, clear content
         ref.current.innerHTML = '';
         if (error) {
             return;
         }
-        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange);
-    });
+        manualClassificationEditor(ref.current, bounds, dataAsList, colors, activeBound, fractionDigits, base, onBoundChange, !editEnabled);
+    }, [editEnabled]);
     const { activeIndicator: { classification }, seriesStats, controller } = state;
     const { method, fractionDigits, base } = classification;
     const { methods } = editOptions;
@@ -63,6 +64,7 @@ const Form = ({
             <StyledSelect
                 className='t_option-method'
                 value = {method}
+                disabled={!editEnabled}
                 onChange={value => onMethodChange(value)}>
                 {methods.map(({ label, ...rest }, i) => (
                     <Option key={`option-${i}`} {...rest}>
