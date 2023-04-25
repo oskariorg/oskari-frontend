@@ -66,8 +66,8 @@ Oskari.clazz.define('map.layer.handler',
             }
         },
         /**
-         * Triggers loading additional info for layers (if needed)
-         * and adds the layer asynchronously, but in the order the method is called
+         * Triggers loading additional info for layers (when needed) and adding them to a queue to be added to map.
+         * Adding can be asynchronous for some layers, but the order the method is called will be respected
          * @param {String} layerId id for layer to add
          * @param {String} triggeredBy (optional) what triggered the add
          */
@@ -91,8 +91,8 @@ Oskari.clazz.define('map.layer.handler',
         },
         /**
          * Processes the queue for layers to add to map in the order they were requested to be added.
-         * The queue is used so layers can be added in the order that they were requested to be added
-         * even when theres some asynchronous loading happening between request and actual adding to the map
+         * The queue is used to ensure order even when theres some asynchronous loading happening between
+         * request and actual adding to the map
          */
         __processLayerQueue: function () {
             let nextLayer = this.layerQueue[0];
