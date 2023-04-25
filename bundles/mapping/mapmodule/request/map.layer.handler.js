@@ -1,4 +1,5 @@
 import { DESCRIBE_LAYER } from '../domain/constants';
+import { Messaging } from 'oskari-ui/util';
 /**
  * @class map.layer.handler
  * Handles requests concerning map layers.
@@ -12,8 +13,9 @@ Oskari.clazz.define('map.layer.handler',
      *            mapState reference to state object
      */
 
-    function (mapState, layerService) {
+    function (mapState, layerService, getMsg) {
         this.mapState = mapState;
+        this.getMsg = getMsg;
         this.layerService = layerService;
         this.log = Oskari.log('map.layer.handler');
         this.layerQueue = [];
@@ -86,6 +88,7 @@ Oskari.clazz.define('map.layer.handler',
                 if (error) {
                     // filter layerStatus out from queue so it doesn't block other layers from being added to the map
                     this.layerQueue = this.layerQueue.filter(status => status !== layerStatus);
+                    Messaging.error(this.getMsg('layerUnsupported.unavailable', { name: layer.getName() }));
                 } else {
                     layerStatus.ready = true;
                 }
