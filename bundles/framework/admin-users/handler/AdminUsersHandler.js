@@ -15,6 +15,8 @@ class UIHandler extends StateHandler {
             roleFormState: this.initRoleForm(),
             users: [],
             roles: [],
+            roleOptions: [],
+            systemRoles: [],
             userFormErrors: [],
             roleFormErrors: false,
             userPagination: {
@@ -115,8 +117,24 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const result = await response.json();
+            const systemRoles = [];
+            let guestRole;
+            for (const systemRole of result.systemRoles) {
+                for (const key in systemRole) {
+                    if (key === 'anonymous') {
+                        guestRole = systemRole[key];
+                    }
+                    systemRoles.push(systemRole[key]);
+                }
+            }
+            let roles = result.rolelist;
+            if (guestRole) {
+                roles = roles.filter(r => r.name !== guestRole);
+            }
             this.updateState({
-                roles: result.rolelist || []
+                roles: roles || [],
+                systemRoles: systemRoles,
+                roleOptions: result.rolelist
             });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'failed_to_get_roles_title'));

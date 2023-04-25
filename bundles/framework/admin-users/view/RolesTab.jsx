@@ -58,11 +58,13 @@ export const RolesTab = ({ state, controller }) => {
             {roles.map(role => (
                 <RoleBlock key={role.id}>
                     <span>{role.name}</span>
-                    <DeleteButton
-                        type='button'
-                        title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
-                        onConfirm={() => controller.deleteRole(role.id)}
-                    />
+                    {state.systemRoles.findIndex(r => r === role.name) < 0 && (
+                        <DeleteButton
+                            type='button'
+                            title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
+                            onConfirm={() => controller.deleteRole(role.id)}
+                        />
+                    )}
                 </RoleBlock>
             ))}
         </Content>
