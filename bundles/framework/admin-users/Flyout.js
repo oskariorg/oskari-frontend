@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             if (this.tabsContainer) {
                 return;
             }
-            this.handler = new AdminUsersHandler(this.instance.conf.restUrl, this.instance.conf.isExternal, () => this.renderContent());
+            this.handler = new AdminUsersHandler(this.instance.conf.restUrl, this.instance.conf.isExternal, this.instance.conf.requirements, () => this.renderContent());
             this.renderContent();
         },
         renderContent: function () {

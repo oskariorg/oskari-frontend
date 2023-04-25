@@ -52,6 +52,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     onChange={(e) => controller.updateUserFormState('firstName', e.target.value)}
                     status={state.userFormErrors.includes('firstName') ? 'error' : null}
                     disabled={isExternal}
+                    autoComplete='nope'
                 />
             </LabelledField>
             <LabelledField>
@@ -62,6 +63,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     onChange={(e) => controller.updateUserFormState('lastName', e.target.value)}
                     status={state.userFormErrors.includes('lastName') ? 'error' : null}
                     disabled={isExternal}
+                    autoComplete='nope'
                 />
             </LabelledField>
             <LabelledField>
@@ -72,6 +74,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     onChange={(e) => controller.updateUserFormState('username', e.target.value)}
                     status={state.userFormErrors.includes('username') ? 'error' : null}
                     disabled={isExternal}
+                    autoComplete='nope'
                 />
             </LabelledField>
             <LabelledField>
@@ -82,6 +85,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                     onChange={(e) => controller.updateUserFormState('email', e.target.value)}
                     status={state.userFormErrors.includes('email') ? 'error' : null}
                     disabled={isExternal}
+                    autoComplete='nope'
                 />
             </LabelledField>
             {!isExternal && (
@@ -94,6 +98,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                             value={state.userFormState.password}
                             onChange={(e) => controller.updateUserFormState('password', e.target.value)}
                             status={state.userFormErrors.includes('password') ? 'error' : null}
+                            autoComplete='nope'
                         />
                     </LabelledField>
                     <LabelledField>
@@ -104,6 +109,7 @@ export const UserForm = ({ state, controller, isExternal }) => {
                             value={state.userFormState.rePassword}
                             onChange={(e) => controller.updateUserFormState('rePassword', e.target.value)}
                             status={state.userFormErrors.includes('password') ? 'error' : null}
+                            autoComplete='nope'
                         />
                     </LabelledField>
                 </>
