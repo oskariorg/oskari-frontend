@@ -15,8 +15,11 @@ class UIHandler extends StateHandler {
             roleFormState: this.initRoleForm(),
             users: [],
             roles: [],
+            roleOptions: [],
             userFormErrors: [],
             roleFormErrors: false,
+            editingRoleError: false,
+            editingRole: null,
             userPagination: {
                 limit: 10,
                 page: 1,
@@ -115,8 +118,17 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const result = await response.json();
+            let guestRole = result.systemRoles['anonymous'];
+            let roles = result.rolelist.map(role => ({
+                ...role,
+                systemRole: Object.values(result.systemRoles).includes(role.name)
+            }));
+            if (guestRole) {
+                roles = roles.filter(r => r.name !== guestRole);
+            }
             this.updateState({
-                roles: result.rolelist || []
+                roles: roles || [],
+                roleOptions: result.rolelist
             });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'failed_to_get_roles_title'));
@@ -150,6 +162,21 @@ class UIHandler extends StateHandler {
                 roles: user.roles
             },
             userFormErrors: []
+        });
+    }
+
+    setEditingRole (role) {
+        this.updateState({
+            editingRole: role
+        });
+    }
+
+    updateEditingRole (name) {
+        this.updateState({
+            editingRole: {
+                ...this.state.editingRole,
+                name: name
+            }
         });
     }
 
@@ -350,6 +377,40 @@ class UIHandler extends StateHandler {
         }
     }
 
+    async updateRole (role) {
+        this.updateState({
+            editingRoleError: false
+        });
+        if (!this.state.editingRole || !this.state.editingRole.id || !this.state.editingRole.name) {
+            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminusers.form_invalid'));
+            this.updateState({
+                editingRoleError: true
+            });
+            return;
+        }
+        try {
+            const response = await fetch(Oskari.urls.getRoute('ManageRoles'), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    id: role.id,
+                    name: role.name
+                })
+            });
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            this.fetchRoles();
+            this.updateState({
+                editingRole: null
+            });
+        } catch (e) {
+            Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.doSave_failed'));
+        }
+    }
+
     async deleteRole (id) {
         try {
             const response = await fetch(Oskari.urls.getRoute('ManageRoles') + '&id=' + id, {
@@ -359,6 +420,9 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             this.fetchRoles();
+            this.updateState({
+                editingRole: null
+            });
         } catch (e) {
             Messaging.error(Oskari.getMsg('AdminUsers', 'flyout.adminroles.delete_failed'));
         }
@@ -405,7 +469,10 @@ const wrapped = controllerMixin(UIHandler, [
     'fetchRoles',
     'setUserPage',
     'search',
-    'resetSearch'
+    'resetSearch',
+    'setEditingRole',
+    'updateRole',
+    'updateEditingRole'
 ]);
 
 export { wrapped as AdminUsersHandler };
