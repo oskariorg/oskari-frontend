@@ -1,7 +1,8 @@
 import React from 'react';
-import { TextInput, Confirm, Message } from 'oskari-ui';
-import { PrimaryButton, DeleteButton } from 'oskari-ui/components/buttons';
+import { TextInput, Message, Button } from 'oskari-ui';
+import { PrimaryButton, DeleteButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import styled from 'styled-components';
+import { EditOutlined } from '@ant-design/icons';
 
 const Content = styled('div')`
     display: flex;
@@ -39,6 +40,11 @@ const RoleBlock = styled('div')`
     background-color: #F3F3F3;
 `;
 
+const ButtonContainer = styled('div')`
+    display: flex;
+    flex-direction: row;
+`;
+
 export const RolesTab = ({ state, controller }) => {
     let roles = state.roles;
     return (
@@ -57,13 +63,42 @@ export const RolesTab = ({ state, controller }) => {
             </Form>
             {roles.map(role => (
                 <RoleBlock key={role.id}>
-                    <span>{role.name}</span>
-                    {state.systemRoles.findIndex(r => r === role.name) < 0 && (
-                        <DeleteButton
-                            type='button'
-                            title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
-                            onConfirm={() => controller.deleteRole(role.id)}
+                    {state.editingRole && state.editingRole.id === role.id ? (
+                        <StyledInput
+                            value={state.editingRole.name}
+                            onChange={(e) => controller.updateEditingRole(e.target.value)}
+                            status={state.editingRoleError ? 'error' : null}
                         />
+                    ) : (
+                        <span>{role.name}</span>
+                    )}
+                    {state.systemRoles.findIndex(r => r === role.name) < 0 && (
+                        <ButtonContainer>
+                            {state.editingRole && state.editingRole.id === role.id ? (
+                                <div>
+                                    <PrimaryButton
+                                        type='save'
+                                        onClick={() => controller.updateRole(state.editingRole)}
+                                    />
+                                    <SecondaryButton
+                                        type='cancel'
+                                        onClick={() => controller.setEditingRole(null)}
+                                    />
+                                </div>
+                            ) : (
+                                <Button
+                                    type='edit'
+                                    onClick={() => controller.setEditingRole(role)}
+                                >
+                                    <EditOutlined />
+                                </Button>
+                            )}
+                            <DeleteButton
+                                type='button'
+                                title={<Message messageKey='flyout.adminroles.confirm_delete' messageArgs={{ role: role.name }} />}
+                                onConfirm={() => controller.deleteRole(role.id)}
+                            />
+                        </ButtonContainer>
                     )}
                 </RoleBlock>
             ))}
