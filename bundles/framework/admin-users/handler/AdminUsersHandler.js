@@ -16,7 +16,6 @@ class UIHandler extends StateHandler {
             users: [],
             roles: [],
             roleOptions: [],
-            systemRoles: [],
             userFormErrors: [],
             roleFormErrors: false,
             editingRoleError: false,
@@ -119,22 +118,16 @@ class UIHandler extends StateHandler {
                 throw new Error(response.statusText);
             }
             const result = await response.json();
-            const systemRoles = [];
-            let guestRole;
-            for (const key in result.systemRoles) {
-                if (key === 'anonymous') {
-                    guestRole = result.systemRoles[key];
-                }
-                systemRoles.push(result.systemRoles[key]);
-            }
-
-            let roles = result.rolelist;
+            let guestRole = result.systemRoles['anonymous'];
+            let roles = result.rolelist.map(role => ({
+                ...role,
+                systemRole: Object.values(result.systemRoles).includes(role.name)
+            }));
             if (guestRole) {
                 roles = roles.filter(r => r.name !== guestRole);
             }
             this.updateState({
                 roles: roles || [],
-                systemRoles: systemRoles,
                 roleOptions: result.rolelist
             });
         } catch (e) {
