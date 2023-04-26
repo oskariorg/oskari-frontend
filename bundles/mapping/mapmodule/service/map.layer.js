@@ -773,7 +773,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @private
          */
         _loadLayersRecursive: function (layers, callbackSuccess) {
-            var me = this;
+            const me = this;
             // check if recursion should end
             if (layers.length === 0) {
                 me._allLayersAjaxLoaded = true;
@@ -783,8 +783,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
             // remove the first one for recursion
-            var json = layers.shift();
-            var mapLayer = me.createMapLayer(json);
+            const json = layers.shift();
+            const mapLayer = me.createMapLayer(json);
             // unsupported maplayer type returns null so check for it
             if (mapLayer && me._reservedLayerIds[mapLayer.getId()] !== true) {
                 me.addLayer(mapLayer, true);
@@ -806,10 +806,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         * @param {Function} callback gets the describe info as parameter or undefined if it's not available
         * @returns callback is used for return value
         */
-        getDescribeLayer: function (layer, callback) {
+        getDescribeLayer: function (layer, opts, callback) {
+            // gather a list of possible user generated styles to load for layer
+            const userStyles = [
+                layer.getCurrentStyle().getName(),
+                ...(opts.userStyles || [])]
+                .join(',');
             const url = Oskari.urls.getRoute('DescribeLayer', {
                 id: layer.getId(),
-                styleId: layer.getCurrentStyle().getName(),
+                styleId: userStyles,
                 lang: Oskari.getLang(),
                 srs: this.getSandbox().getMap().getSrsName()
             });

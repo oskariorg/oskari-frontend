@@ -39,7 +39,7 @@ Oskari.clazz.define('map.layer.handler',
                     this.mapState.deactivateLayer(layerId, request._creator);
                 }
             } else if (request.getName() === 'AddMapLayerRequest') {
-                this._addToMap(request.getMapLayerId(), request._creator);
+                this._addToMap(request.getMapLayerId(), request.getOptions(), request._creator);
             } else if (request.getName() === 'RemoveMapLayerRequest') {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
             } else if (request.getName() === 'RearrangeSelectedMapLayerRequest') {
@@ -73,7 +73,7 @@ Oskari.clazz.define('map.layer.handler',
          * @param {String} layerId id for layer to add
          * @param {String} triggeredBy (optional) what triggered the add
          */
-        _addToMap: function (layerId, triggeredBy) {
+        _addToMap: function (layerId, opts = {}, triggeredBy) {
             const layer = this.layerService.findMapLayer(layerId);
             const layerStatus = {
                 layer,
@@ -95,7 +95,7 @@ Oskari.clazz.define('map.layer.handler',
                 // add layers from front of queue to map
                 this.__processLayerQueue();
             };
-            this._loadLayerInfo(layer, done);
+            this._loadLayerInfo(layer, opts, done);
         },
         /**
          * Processes the queue for layers to add to map in the order they were requested to be added.
@@ -111,7 +111,7 @@ Oskari.clazz.define('map.layer.handler',
             }
         },
 
-        _loadLayerInfo: function (layer, done) {
+        _loadLayerInfo: function (layer, opts, done) {
             if (typeof layer.getDescribeLayerStatus !== 'function') {
                 // layer type doesn't support this
                 done();
@@ -128,7 +128,7 @@ Oskari.clazz.define('map.layer.handler',
                 return;
             }
             layer.setDescribeLayerStatus(DESCRIBE_LAYER.PENDING);
-            this.layerService.getDescribeLayer(layer, info => {
+            this.layerService.getDescribeLayer(layer, opts, info => {
                 if (!info) {
                     layer.setDescribeLayerStatus(DESCRIBE_LAYER.ERROR);
                     if (layer.requiresDescribeLayer()) {
