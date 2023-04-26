@@ -280,6 +280,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
+                if (me.publisher) return;
                 data = data || this.getDefaultData();
                 // trigger an event letting other bundles know we require the whole UI
                 var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
@@ -317,6 +318,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'close']);
                     me.publisher.setEnabled(false);
                     me.publisher.destroy();
+                    me.publisher = null;
                 }
                 // first return all needed plugins before adding the layers back
                 extraClasses.forEach(cssClass => mapContainer.classList.remove(cssClass));
