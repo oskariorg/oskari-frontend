@@ -125,11 +125,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
                 measureResult = this.loc('tools.' + drawMode + '.noResult');
             }
 
-            if (!this.popupControls) {
-                this.measurementText = measureResult;
-                this.description = message;
-                this.popupControls = showDrawHelperPopup(title, message, () => this.stopDrawing(false), () => this.stopDrawing(true), measureResult);
+            if (this.popupControls) {
+                this.closePopup();
             }
+            this.measurementText = measureResult;
+            this.description = message;
+            this.popupControls = showDrawHelperPopup(title, message, () => this.stopDrawing(false), () => this.stopDrawing(true), measureResult);
         },
         stopDrawing: function (isCancel) {
             if (isCancel) {
