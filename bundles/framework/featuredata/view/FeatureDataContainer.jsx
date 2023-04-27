@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Tabs } from '../../../../src/react/components/Tabs';
+import styled from 'styled-components';
 
-export const FeatureDataContainer = ({ featureData }) => {
-    return (<h1>{featureData}</h1>);
+const ContainerDiv = styled('div')`padding: 1em`;
+export const FeatureDataContainer = ({ tabs, features }) => {
+    return (
+        <ContainerDiv>
+            <Tabs items={tabs}/>
+        </ContainerDiv>
+    );
 };
 
 FeatureDataContainer.propTypes = {
-    featureData: PropTypes.any
+    tabs: PropTypes.any,
+    features: PropTypes.any
 };
