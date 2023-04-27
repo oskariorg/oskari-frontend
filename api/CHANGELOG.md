@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 2.11.0
+
+###  [mod] AddMapLayerRequest
+
+Introduced a second parameter for the request called `options`. This is used to restore vector layer styles on embedded maps for guest users in a way the user that published the map sees them on the publisher functionality.
+
 ## 2.10.0
 
 ### [rem] MapResizeEnabledRequest
