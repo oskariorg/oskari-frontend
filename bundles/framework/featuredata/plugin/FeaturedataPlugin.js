@@ -3,11 +3,7 @@ import ReactDOM from 'react-dom';
 import { Message } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataButton } from './FeatureDataButton';
-import { showFlyout } from '../../../../src/react/components/window';
-import { FeatureDataContainer } from '../view/FeatureDataContainer';
-import { Table, getSorterFor } from '../../../../src/react/components/Table';
-
-export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
@@ -28,7 +24,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
-        me._flyoutController = undefined;
         me._mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     }, {
         getInstance: function () {
@@ -93,6 +88,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
          * Updates the plugins interface (hides if no featuredata layer selected)
          */
         refresh: function () {
+            if (!this.handler) {
+                this.handler = new FeatureDataPluginHandler(this, this.getMapModule(), this.getConfig());
+            }
+
             this.renderButton();
         },
         showLoadingIndicator: function (blnLoad) {
@@ -109,7 +108,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                     <FeatureDataButton
                         visible={this._hasFeaturedataLayers()}
                         icon={<Message messageKey='title' bundleKey='FeatureData'/>}
-                        onClick={() => this.openFlyout()}
+                        onClick={() => this.handler.getController().openFlyout()}
                         active={this._flyoutOpen}
                         loading={loading}
                         position={this.getLocation()}
@@ -136,76 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                 .filter(layer => layer.isVisibleOnMap())
                 .some(layer => layer.hasFeatureData && layer.hasFeatureData());
         },
-        _getFeatureDataLayers: function () {
-            return this.getSandbox()
-                .findAllSelectedMapLayers()
-                .filter(layer => layer.isVisibleOnMap() && layer.hasFeatureData && layer.hasFeatureData());
-        },
-        _getFeaturesByLayerId: function (layerId) {
-            const featuresMap = this._mapmodule.getVectorFeatures(null, { layers: [layerId] });
-            return featuresMap && featuresMap[layerId] ? featuresMap[layerId].features : null;
-        },
-        _createTabContentFromFeatures: function (features) {
-            if (!features || !features.length) {
-                return null;
-            }
-            const columnSettings = this._createColumnSettingsFromFeatures(features);
-            const featureTable = <Table
-                columns={ columnSettings }
-                size={ 'large '}
-                dataSource={ features.map(feature => {
-                    return {
-                        key: feature.properties.__fid,
-                        ...feature.properties
-                    };
-                })}
-                pagination={{ position: ['none', 'none'] }}
-            />;
-
-            return featureTable;
-        },
-        _createColumnSettingsFromFeatures: function (features) {
-            return Object.keys(features[0].properties)
-                .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key))
-                .map(key => {
-                    return {
-                        align: 'left',
-                        title: key,
-                        dataIndex: key,
-                        sorter: getSorterFor(key)
-                    };
-                });
-        },
-        _createTabs: function () {
-            const featureDataLayers = this._getFeatureDataLayers() || null;
-            const layerId = featureDataLayers && featureDataLayers.length ? featureDataLayers[0].getId() : null;
-            const features = layerId ? this._getFeaturesByLayerId(layerId) : null;
-            const tabs = featureDataLayers.map(layer => {
-                return {
-                    key: layer.getId(),
-                    label: layer.getName(),
-                    children: null
-                };
-            });
-            // set features for the first tab
-            if (tabs && tabs.length) {
-                tabs[0].children = this._createTabContentFromFeatures(features);
-            }
-
-            return tabs;
-        },
-        openFlyout: function () {
-            if (this._flyoutController) {
-                this._flyoutController.close();
-                return;
-            }
-            const tabs = this._createTabs();
-            const content = <FeatureDataContainer tabs = { tabs }/>;
-            this._flyoutController = showFlyout('Feature data flyout', content, () => { this._flyoutController = null; }, {});
-
-            this.refresh();
-        },
-
         _createEventHandlers: function () {
             return {
                 /**

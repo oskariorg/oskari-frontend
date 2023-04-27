@@ -4,15 +4,18 @@ import { Tabs } from '../../../../src/react/components/Tabs';
 import styled from 'styled-components';
 
 const ContainerDiv = styled('div')`padding: 1em`;
-export const FeatureDataContainer = ({ tabs, features }) => {
+export const FeatureDataContainer = ({ state }) => {
+    const { tabs, controller, activeTab } = state;
     return (
         <ContainerDiv>
-            <Tabs items={tabs}/>
+            <Tabs
+                activeKey = { activeTab }
+                items={ tabs }
+                onChange={(key) => controller.setActiveTab(key)}/>
         </ContainerDiv>
     );
 };
 
 FeatureDataContainer.propTypes = {
-    tabs: PropTypes.any,
-    features: PropTypes.any
+    state: PropTypes.object
 };
