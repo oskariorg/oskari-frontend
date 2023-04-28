@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs } from '../../../../src/react/components/Tabs';
+import { Tabs } from 'oskari-ui';
 import styled from 'styled-components';
 
-const ContainerDiv = styled('div')`padding: 1em`;
+const ContainerDiv = styled('div')`
+    padding: 1em
+`;
 export const FeatureDataContainer = ({ state }) => {
     const { tabs, controller, activeTab } = state;
     return (

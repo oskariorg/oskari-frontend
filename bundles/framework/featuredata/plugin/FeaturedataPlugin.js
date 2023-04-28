@@ -24,25 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
-        me._mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
     }, {
-        getInstance: function () {
-            // we only need instance here since the flyout is operated by the instance
-            // TODO: we should move the flyout related code to this plugin
-            if (!this._instance) {
-                if (!this.sandbox) {
-                    // wacky stuff we do since sandbox might be provided
-                    // by mapmodule or not depending if the plugin has been started etc
-                    this.sandbox = this.getSandbox();
-                }
-                if (!this.sandbox) {
-                    // just get a ref to sandbox since we really need it here to get the instance (see TODO above)
-                    this.sandbox = Oskari.getSandbox();
-                }
-                this._instance = this.sandbox.findRegisteredModuleInstance('FeatureData');
-            }
-            return this._instance;
-        },
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
             this.addToPluginContainer(this.getElement());
@@ -65,13 +47,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         redrawUI: function (mapInMobileMode, forced) {
             this.refresh();
         },
-        teardownUI: function () {
-            // remove old element
-            this.removeFromPluginContainer(this.getElement());
-            const instance = this.getInstance();
-            instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [instance, 'close']);
-        },
-
         /**
          * @method  @public mapStatusChanged map status changed
          * @param  {Boolean} changed is map status changed
@@ -108,7 +83,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                     <FeatureDataButton
                         visible={this._hasFeaturedataLayers()}
                         icon={<Message messageKey='title' bundleKey='FeatureData'/>}
-                        onClick={() => this.handler.getController().openFlyout()}
+                        onClick={() => this.handler.openFlyout()}
                         active={this._flyoutOpen}
                         loading={loading}
                         position={this.getLocation()}
@@ -118,9 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             );
         },
         resetUI: function () {
-            if (this._flyoutOpen) {
-                // actually closes flyout when it's open...
-                this.openFlyout();
+            if (this.handler) {
+                this.handler.closeFlyout();
             }
         },
         /**

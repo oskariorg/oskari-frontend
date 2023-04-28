@@ -1,6 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { createFeaturedataGrid, showFeatureDataFlyout } from './FeatureDataFlyout';
-import { getSorterFor } from '../../../../src/react/components/Table';
+import { getSorterFor } from 'oskari-ui/components/Table';
 
 const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
