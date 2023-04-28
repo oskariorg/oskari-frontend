@@ -7,7 +7,7 @@ Oskari.registerLocalization(
         "styles" : "Tyylit",
         "addStyle" : "Lisää uusi tyyli",
         "defaultName": "Oma tyyli",
-        "runtime": "Kirjautumattomana oma tyyli on käytettävissä vain tämän session ajan. Kirjaudu sisään tallentaaksesi tyylin tiedot.",
+        "runtime": "Kirjaudu ensin sisään tallentaaksesi tyylin tiedot. Kirjautumattomana oma tyyli on käytettävissä vain tämän session ajan",
         "popup": {
             "title": "Oma tyyli",
             "name" : "Tyylin nimi",

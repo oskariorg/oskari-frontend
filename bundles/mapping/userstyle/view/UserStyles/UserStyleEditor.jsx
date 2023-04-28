@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Message, TextInput, Tooltip, Divider } from 'oskari-ui';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 import { BUNDLE_KEY } from '../../constants';
-
-const Content = styled('div')`
-    padding: 24px;
-    width: 500px;
-`;
 
 export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
     const { style: { featureStyle = {} } = {}, name } = style;
@@ -23,7 +17,7 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
     const updateName = name => setState({ ...state, name });
 
     return (
-        <Content>
+        <div>
             <Tooltip title={<Message messageKey='popup.name'/>}>
                 <TextInput
                     placeholder={ Oskari.getMsg(BUNDLE_KEY, `popup.name`) }
@@ -42,7 +36,7 @@ export const UserStyleEditor = ({ style, onAdd, onCancel }) => {
                 <SecondaryButton type='cancel' onClick={onCancel}/>
                 <PrimaryButton type='save' onClick={() => onAdd(state)}/>
             </ButtonContainer>
-        </Content>
+        </div>
     );
 };
 
