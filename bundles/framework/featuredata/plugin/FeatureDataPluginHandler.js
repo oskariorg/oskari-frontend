@@ -1,8 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { createFeaturedataGrid, showFeatureDataFlyout } from './FeatureDataFlyout';
-import { getSorterFor } from 'oskari-ui/components/Table';
-
-const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+import { showFeatureDataFlyout } from './FeatureDataFlyout';
 
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (plugin, mapModule, config) {
@@ -25,59 +22,22 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return featuresMap && featuresMap[layerId] ? featuresMap[layerId].features : null;
     }
 
-    createColumnSettingsFromFeatures (features) {
-        return Object.keys(features[0].properties)
-            .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key))
-            .map(key => {
-                return {
-                    align: 'left',
-                    title: key,
-                    dataIndex: key,
-                    sorter: getSorterFor(key)
-                };
-            });
-    }
-
-    createDatasourceFromFeatures (features) {
-        return features.map(feature => {
-            return {
-                key: feature.properties.__fid,
-                ...feature.properties
-            };
-        });
-    }
-
-    createLayerTabs (layerId, layers, features) {
-        const tabs = layers?.map(layer => {
-            return {
-                key: layer.getId(),
-                label: layer.getName(),
-                children: layer.getId() === layerId && !!features && features.length
-                    ? createFeaturedataGrid(this.createColumnSettingsFromFeatures(features), this.createDatasourceFromFeatures(features))
-                    : null
-            };
-        }) || [];
-        return tabs;
-    }
-
     setActiveTab (layerId) {
-        const featureDataLayers = this.getFeatureDataLayers() || null;
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
-        const tabs = this.createLayerTabs(layerId, featureDataLayers, features);
         this.updateState({
-            activeTab: layerId,
-            tabs
+            activeLayerId: layerId,
+            activeLayerFeatures: features
         });
     }
 
-    updateStateAfterMapMoveEvent () {
+    updateStateAfterMapEvent () {
         const featureDataLayers = this.getFeatureDataLayers() || [];
-        const layerId = featureDataLayers?.find(layer => layer.getId() === this.state.activeTab) ? this.state.activeTab : featureDataLayers.map(layer => layer.getId())[0] || null;
+        const layerId = featureDataLayers?.find(layer => layer.getId() === this.state.activeLayerId) ? this.state.activeLayerId : featureDataLayers.map(layer => layer.getId())[0] || null;
         const features = layerId ? this.getFeaturesByLayerId(layerId) : [];
-        const tabs = this.createLayerTabs(layerId, featureDataLayers, features);
         this.updateState({
-            activeTab: layerId,
-            tabs
+            activeLayerId: layerId,
+            layers: featureDataLayers,
+            activeLayerFeatures: features
         });
     }
 
@@ -86,12 +46,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
             this.closeFlyout();
             return;
         }
-        const featureDataLayers = this.getFeatureDataLayers() || null;
-        const layerId = featureDataLayers && featureDataLayers.length ? featureDataLayers[0].getId() : null;
-        const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
-        const tabs = this.createLayerTabs(layerId, featureDataLayers, features);
-        this.state = { tabs, controller: this.getController(), activeTab: layerId, onClose: () => this.getController().closeFlyout() };
-        this.flyoutController = showFeatureDataFlyout(this.state);
+        const layers = this.getFeatureDataLayers() || null;
+        const activeLayerId = layers && layers.length ? layers[0].getId() : null;
+        const activeLayerFeatures = activeLayerId ? this.getFeaturesByLayerId(activeLayerId) : null;
+        this.state = { layers, activeLayerId, activeLayerFeatures };
+        this.flyoutController = showFeatureDataFlyout(this.state, this.getController());
     }
 
     closeFlyout () {
@@ -108,6 +67,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapMoveEvent']);
+const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent']);
 
 export { wrapped as FeatureDataPluginHandler };
