@@ -48,15 +48,15 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     createLayerTabs (layerId, layers, features) {
-        const tabs = layers.map(layer => {
+        const tabs = layers?.map(layer => {
             return {
                 key: layer.getId(),
                 label: layer.getName(),
-                children: layer.getId() === layerId && !!features
+                children: layer.getId() === layerId && !!features && features.length
                     ? createFeaturedataGrid(this.createColumnSettingsFromFeatures(features), this.createDatasourceFromFeatures(features))
                     : null
             };
-        });
+        }) || [];
         return tabs;
     }
 
@@ -71,10 +71,12 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     updateStateAfterMapMoveEvent () {
-        const featureDataLayers = this.getFeatureDataLayers() || null;
-        const features = this.getFeaturesByLayerId(this.state.activeTab);
-        const tabs = this.createLayerTabs(this.state.activeTab, featureDataLayers, features);
+        const featureDataLayers = this.getFeatureDataLayers() || [];
+        const layerId = featureDataLayers?.find(layer => layer.getId() === this.state.activeTab) ? this.state.activeTab : featureDataLayers.map(layer => layer.getId())[0] || null;
+        const features = layerId ? this.getFeaturesByLayerId(layerId) : [];
+        const tabs = this.createLayerTabs(layerId, featureDataLayers, features);
         this.updateState({
+            activeTab: layerId,
             tabs
         });
     }

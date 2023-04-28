@@ -91,9 +91,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             if (!this.handler) {
                 this.handler = new FeatureDataPluginHandler(this, this.getMapModule(), this.getConfig());
             }
-
-            this.handler.getController().updateStateAfterMapMoveEvent();
             this.renderButton();
+            this.handler.getController().updateStateAfterMapMoveEvent();
         },
         showLoadingIndicator: function (blnLoad) {
             this.renderButton(!!blnLoad);
