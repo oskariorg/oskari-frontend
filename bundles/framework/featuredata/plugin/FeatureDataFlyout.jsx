@@ -21,7 +21,7 @@ export const showFeatureDataFlyout = (state) => {
     return {
         ...controls,
         update: (state) => {
-            controls.update(<FeatureDataContainer state = { state }/>);
+            controls.update('Feature data flyout', <FeatureDataContainer state = { state }/>);
         }
     };
 };
