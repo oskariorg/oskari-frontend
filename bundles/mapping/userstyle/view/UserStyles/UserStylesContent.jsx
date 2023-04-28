@@ -5,11 +5,6 @@ import { List, ListItem, Message } from 'oskari-ui';
 import { PrimaryButton } from 'oskari-ui/components/buttons';
 import { UserStyleRow } from './UserStyleRow';
 
-const Content = styled('div')`
-    padding: 24px;
-    min-width: 500px;
-`;
-
 const Header = styled.div`
     display: flex;
     justify-content: space-between;
@@ -36,10 +31,9 @@ const StyledListItem = styled(ListItem)`
 const onEdit = (id) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ id }]);
 const addNew = (addToLayer) => Oskari.getSandbox().postRequestByName('ShowUserStylesRequest', [{ addToLayer }]);
 
-// TODO: maybe use layer name as content header?
 export const UserStylesContent = ({ layerId, styles, onDelete }) => {
     return (
-        <Content>
+        <div>
             <Header>
                 <Message messageKey='styles' LabelComponent={HeaderText} />
                 <PrimaryButton type='add' onClick={() => addNew(layerId)}/>
@@ -57,7 +51,7 @@ export const UserStylesContent = ({ layerId, styles, onDelete }) => {
                 );
             }}/>
             }
-        </Content>
+        </div>
     );
 };
 
