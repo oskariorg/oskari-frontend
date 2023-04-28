@@ -52,7 +52,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             return {
                 key: layer.getId(),
                 label: layer.getName(),
-                children: layer.getId() === layerId
+                children: layer.getId() === layerId && !!features
                     ? createFeaturedataGrid(this.createColumnSettingsFromFeatures(features), this.createDatasourceFromFeatures(features))
                     : null
             };
@@ -66,6 +66,15 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const tabs = this.createLayerTabs(layerId, featureDataLayers, features);
         this.updateState({
             activeTab: layerId,
+            tabs
+        });
+    }
+
+    updateStateAfterMapMoveEvent () {
+        const featureDataLayers = this.getFeatureDataLayers() || null;
+        const features = this.getFeaturesByLayerId(this.state.activeTab);
+        const tabs = this.createLayerTabs(this.state.activeTab, featureDataLayers, features);
+        this.updateState({
             tabs
         });
     }
@@ -97,6 +106,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'setActiveTab', 'closeFlyout']);
+const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapMoveEvent']);
 
 export { wrapped as FeatureDataPluginHandler };
