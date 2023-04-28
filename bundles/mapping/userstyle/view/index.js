@@ -42,7 +42,7 @@ const getContent = (service, options, onClose) => {
     return (
         <LocaleProvider value={{ bundleKey: BUNDLE_KEY }}>
             <Content>
-                { isGuest &&  <Info showIcon type='warning' message={ <Message bundleKey={ BUNDLE_KEY } messageKey={'runtime'}/> } />}
+                { isGuest && <Info showIcon type='warning' message={ <Message bundleKey={ BUNDLE_KEY } messageKey={'runtime'}/> } />}
                 { content }
             </Content>
         </LocaleProvider>
