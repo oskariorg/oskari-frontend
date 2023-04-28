@@ -1,3 +1,4 @@
+import { showMapMeasurementPopup } from '../view/MapMeasurementPopup';
 /**
  * @class Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler
  *
@@ -16,7 +17,7 @@ Oskari.clazz.define(
     function (toolbar) {
         this._toolbar = toolbar;
         this._loc = toolbar.getLocalization('measure');
-        this._dialog = null;
+        this.popupControls = null;
     }, {
         /**
          * @method handleRequest
@@ -32,6 +33,12 @@ Oskari.clazz.define(
         getValue: function () {
             return this._value;
         },
+        closePopup: function () {
+            if (this.popupControls) {
+                this.popupControls.close();
+            }
+            this.popupControls = null;
+        },
         /**
          * @method _showMeasurementResults
          */
@@ -41,39 +48,24 @@ Oskari.clazz.define(
                 this._showResultsInPlugin(value);
                 return;
             }
-            // if there is no content container, show the data in dialog
-            if (this._dialog) {
-                this._dialog.setContent(value);
-                return;
-            }
 
-            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.addClass('oskari-measurement');
-            const closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            const clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            closeBtn.setTitle(this._loc.close);
-            closeBtn.setHandler(() => this.stopMeasuring(true));
-            clearBtn.setTitle(this._loc.clear);
-            clearBtn.setHandler(() => this._clearMeasurements());
-            dialog.show(this._loc.title, value, [clearBtn, closeBtn]);
-            dialog.moveTo('#toolbar div.toolrow[tbgroup=default-basictools]', 'top');
-            this._dialog = dialog;
+            if (this.popupControls) {
+                this.popupControls.update(value);
+            } else {
+                this.popupControls = showMapMeasurementPopup(value, () => this._clearMeasurements(), () => this.stopMeasuring(true));
+            }
         },
         stopMeasuring: function (selectDefault) {
-            var me = this;
-            if (this._dialog) {
-                this._dialog.close(true);
-                this._dialog = null;
-            }
             if (this._toolbar.currentMeasureTool) {
                 Oskari.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', ['mapmeasure', true, true]);
             }
+            this.closePopup();
             if (!selectDefault) {
                 return;
             }
             // ask toolbar to select default tool
             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
-            Oskari.getSandbox().request(me._toolbar, toolbarRequest);
+            Oskari.getSandbox().request(this._toolbar, toolbarRequest);
         },
         _clearMeasurements: function () {
             // Clear measurements and continue drawing
