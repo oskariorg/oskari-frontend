@@ -110,7 +110,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Select as baselayer",
                     "allowStyleChange": "Allow presentation style change",
                     "showMetadata": "Show metadata links",
-                    "noMultipleStyles": "The selected map layers only have a single visualization option/style.",
+                    "noMultipleStyles": "Only single presentation style available on the selected map layers.",
                     "noMetadata": "No metadata links availabe on the selected map layers"
                 },
                 "mylocation": {
