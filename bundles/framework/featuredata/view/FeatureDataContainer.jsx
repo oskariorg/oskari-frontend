@@ -1,12 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs } from 'oskari-ui';
+import { Tabs, Message } from 'oskari-ui';
 import { getSorterFor, Table } from 'oskari-ui/components/Table';
 import styled from 'styled-components';
 
 const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+const BUNDLE_ID = 'FeatureData';
 
-const createFeaturedataGrid = (columnSettings, dataSource) => {
+const createFeaturedataGrid = (features) => {
+    if (!features || !features.length) {
+        return <Message bundleKey={BUNDLE_ID} messageKey={'layer.out-of-content-area'}/>;
+    };
+    const columnSettings = createColumnSettingsFromFeatures(features);
+    const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <Table
         columns={ columnSettings }
         size={ 'large '}
@@ -44,8 +50,8 @@ const createLayerTabs = (layerId, layers, features) => {
         return {
             key: layer.getId(),
             label: layer.getName(),
-            children: layer.getId() === layerId && !!features && features.length
-                ? createFeaturedataGrid(createColumnSettingsFromFeatures(features), createDatasourceFromFeatures(features))
+            children: layer.getId() === layerId
+                ? createFeaturedataGrid(features)
                 : null
         };
     }) || [];
@@ -53,7 +59,7 @@ const createLayerTabs = (layerId, layers, features) => {
 };
 
 const ContainerDiv = styled('div')`
-    padding: 1em
+    padding: 1em;
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
     const { layers, activeLayerId, activeLayerFeatures } = state;
