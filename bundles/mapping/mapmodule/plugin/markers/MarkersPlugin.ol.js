@@ -13,7 +13,8 @@ import '../../request/MarkerVisibilityRequestHandler';
 import '../../event/AfterAddMarkerEvent';
 import '../../event/MarkerClickEvent';
 import '../../event/AfterRemoveMarkersEvent';
-import { showAddMarkerPopup } from './MarkersForm';
+import { showAddMarkerPopup } from './view/MarkersForm';
+import { showMarkerPopup } from './view/MarkerPopup';
 import { ID_PREFIX, PLUGIN_NAME, TOOL_GROUP, DEFAULT_STYLE, STYLE_TYPE, DEFAULT_DATA, SEPARATORS } from './constants';
 
 /**
@@ -35,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this._styleData = {}; // store values as it's hard to get them from feature's ol style
 
         this.buttons = null;
-        this.dialog = null;
+        this.markerPopupControls = null;
         this._buttonsAdded = false;
         this._showAddMarkerPopupOnMapClick = false;
 
@@ -116,9 +117,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Creates the base marker layer.
          */
         _startPluginImpl: function () {
-            this.dialog = Oskari.clazz.create(
-                'Oskari.userinterface.component.Popup'
-            );
             this.buttons = {
                 addMarker: {
                     iconCls: 'marker-share',
@@ -200,30 +198,24 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         getMapMarkerBounds: function () {
             return this.getMarkersLayer().getSource().getExtent();
         },
+        closeMarkerPopup: function () {
+            if (this.markerPopupControls) {
+                this.markerPopupControls.close();
+            }
+            this.markerPopupControls = null;
+        },
         /**
          * Activate the "add marker mode" on map.
          */
         startMarkerAdd: function () {
             this.enableGfi(false);
             this._showAddMarkerPopupOnMapClick = true;
-            const clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            const closeBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
 
-            clearBtn.setTitle(this.getMsg('dialog.clear'));
-            clearBtn.setHandler(() => this.removeMarkers());
-            closeBtn.setHandler(() => this.stopMarkerAdd(true));
-            closeBtn.setPrimary(true);
+            if (!this.markerPopupControls) {
+                this.markerPopupControls = showMarkerPopup(() => this.removeMarkers(), () => this.stopMarkerAdd(true));
+            }
 
-            this.dialog.show(
-                this.getMsg('title'),
-                this.getMsg('dialog.message'),
-                [clearBtn, closeBtn]
-            );
             this.getMapModule().setCursorStyle('crosshair');
-            this.dialog.moveTo(
-                '#toolbar div.toolrow[tbgroup=default-selectiontools]',
-                'bottom'
-            );
         },
         /**
          * Stops the marker location selector
@@ -231,9 +223,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         stopMarkerAdd: function (selectDefault) {
             this.enableGfi(true);
             this._showAddMarkerPopupOnMapClick = false;
-            if (this.dialog) {
-                this.dialog.close(true);
-            }
+            this.closeMarkerPopup();
             this.popupCleanup();
             this.getMapModule().setCursorStyle('');
             if (!selectDefault) {
