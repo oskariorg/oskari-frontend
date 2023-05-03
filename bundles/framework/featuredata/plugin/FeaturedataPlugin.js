@@ -80,11 +80,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             if (!el) {
                 return;
             }
-            const { flyoutOpen } = this.handler.getState() || false;
+            const { flyoutOpen, layers } = this.handler.getState();
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
-                        visible={this._hasFeaturedataLayers()}
+                        visible={layers?.length > 0}
                         icon={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
