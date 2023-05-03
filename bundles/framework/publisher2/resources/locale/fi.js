@@ -110,7 +110,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Valitse taustakartaksi",
                     "allowStyleChange": "Salli esitystyylin valinta",
                     "showMetadata": "Näytä metatietolinkit",
-                    "noMultipleStyles": "Valituilla karttatasoilla on saatavilla vain yksi esitystapa/tyyli.",
+                    "noMultipleStyles": "Vain yksi esitystyyli saatavilla valituilla karttatasoilla.",
                     "noMetadata": "Metatietolinkkejä ei saatavilla valituilla karttatasoilla"
                 },
                 "mylocation": {
@@ -236,13 +236,14 @@ Oskari.registerLocalization(
             },
             "rpc": {
                 "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
-                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
+                "info": "RPC-rajapinnan avulla voit hyödyntää julkaistuja karttoja. Lisätietoa https://oskari.org/documentation/features/rpc/"
             },
             "mapLayers": {
                 "label": "Karttatasot",
-                "selectLayers": "Tasojen valinta",
+                "otherLayers": "Muut kartat",
+                "selectLayers": "Valitse tasot",
                 "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
+                "baseLayers": "Taustakartat",
                 "noBaseLayers": "Ei valittuja taustakarttoja",
                 "noLayers": "Ei valittuja karttatasoja"
             },

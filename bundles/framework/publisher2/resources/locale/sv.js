@@ -110,7 +110,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Välj bakgrundskartlager",
                     "allowStyleChange": "Tillåt val av visningsstil",
                     "showMetadata": "Visa länkar för metadata",
-                    "noMultipleStyles": "The selected map layers only have a single visualization option/style.",
+                    "noMultipleStyles": "Endast en visningsstil är tillgänglig för valda kartlager.",
                     "noMetadata": "Metadatalänkar är inte tillgängliga på valda kartlager"
                 },
                 "mylocation": {
@@ -131,7 +131,7 @@ Oskari.registerLocalization(
             "toollayout": {
                 "label": "Verktygsplacering",
                 "tooltip": "Välj placering för det verktyg som ska visas på kartan.",
-                "swapUI": "Swap sides",
+                "swapUI": "Byt sida",
                 "userlayout": "Anpassad layout",
                 "usereditmode": "Starta redigering",
                 "usereditmodeoff": "Sluta redigering"
@@ -235,16 +235,17 @@ Oskari.registerLocalization(
                 "promote": "Vill du också visa flygbilder?"
             },
             "rpc": {
-                "label": "Ohjelmallinen käyttö (RPC-rajapinta)",
-                "info": "Julkaistujen karttojen kanssa voit hyödyntää RPC-rajapintaa, joka mahdollistaa .."
+                "label": "Programmatisk användning (RPC API)",
+                "info": "Med RPC gränssnittet kan du utnyttja publicerad kartor. Mer information https://oskari.org/documentation/features/rpc/"
             },
             "mapLayers": {
                 "label": "Kartlager",
-                "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
-                "noBaseLayers": "Ei valittuja taustakarttoja",
-                "noLayers": "Ei valittuja karttatasoja"
+                "otherLayers": "Andra kartlager",
+                "selectLayers": "Välj kartlager",
+                "layersDisplay": "Kartlagrens visualisering",
+                "baseLayers": "Bakgrundskartor",
+                "noBaseLayers": "Inga bakgrundskartor valda",
+                "noLayers": "Inga kartlager valda"
             },
             "preview": "Den inbäddade kartans förhandsgranskningsvy",
             "location": "Läge och skalnivå.",

@@ -16,9 +16,10 @@ Oskari.clazz.define('Oskari.mapframework.request.common.AddMapLayerRequest',
      *            mapLayerId id of the map layer (matching one in Oskari.mapframework.service.MapLayerService)
      */
 
-    function (mapLayerId) {
+    function (mapLayerId, options) {
         this._creator = null;
         this._mapLayerId = mapLayerId;
+        this._options = options;
     }, {
         /** @static @property __name request name */
         __name: 'AddMapLayerRequest',
@@ -36,11 +37,14 @@ Oskari.clazz.define('Oskari.mapframework.request.common.AddMapLayerRequest',
          */
         getMapLayerId: function () {
             return this._mapLayerId;
+        },
+        getOptions: function () {
+            return this._options || {};
         }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol': ['Oskari.mapframework.request.Request']
+        protocol: ['Oskari.mapframework.request.Request']
     });

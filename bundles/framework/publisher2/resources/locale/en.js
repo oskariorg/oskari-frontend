@@ -110,7 +110,7 @@ Oskari.registerLocalization(
                     "selectAsBaselayer": "Select as baselayer",
                     "allowStyleChange": "Allow presentation style change",
                     "showMetadata": "Show metadata links",
-                    "noMultipleStyles": "The selected map layers only have a single visualization option/style.",
+                    "noMultipleStyles": "Only single presentation style available on the selected map layers.",
                     "noMetadata": "No metadata links availabe on the selected map layers"
                 },
                 "mylocation": {
@@ -235,16 +235,17 @@ Oskari.registerLocalization(
                 "promote": "Do you want to show also orthophotos on the map?"
             },
             "rpc": {
-                "label": "Programmatical usage (RPC API)",
-                "info": "You can use the RPC API with published maps to .."
+                "label": "Programmatic use (RPC API)",
+                "info": "With the RPC API you can utilize published maps. For more information https://oskari.org/documentation/features/rpc/"
             },
             "mapLayers": {
                 "label": "Map layers",
-                "selectLayers": "Tasojen valinta",
-                "layersDisplay": "Tasojen esitystapa",
-                "baseLayers": "Taustakarttatasot",
-                "noBaseLayers": "Ei valittuja taustakarttoja",
-                "noLayers": "Ei valittuja karttatasoja"
+                "otherLayers": "Other maps",
+                "selectLayers": "Select map layers",
+                "layersDisplay": "Layer presentation",
+                "baseLayers": "Background maps",
+                "noBaseLayers": "No selected background maps",
+                "noLayers": "No selected map layers"
             },
             "preview": "Map preview",
             "location": "Location and zoom level",

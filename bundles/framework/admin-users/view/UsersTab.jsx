@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TextInput, Button, Pagination } from 'oskari-ui';
-import { PrimaryButton } from 'oskari-ui/components/buttons';
+import { TextInput, Button, Pagination, Message } from 'oskari-ui';
+import { PrimaryButton, SecondaryButton } from 'oskari-ui/components/buttons';
 import { PlusOutlined, SearchOutlined, EditOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { UserForm } from './UserForm';
@@ -46,6 +46,10 @@ const UserBlock = styled('div')`
     background-color: #F3F3F3;
 `;
 
+const SearchText = styled('span')`
+    font-weight: bold;
+`;
+
 export const UsersTab = ({ state, controller, isExternal }) => {
     const [filter, setFilter] = useState('');
     return (
@@ -61,15 +65,25 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                     <SearchContainer>
                         <TextInput
                             className='t_user_search'
-                            allowClear
                             prefix={<SearchOutlined />}
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
+                            onPressEnter={(e) => controller.search(filter)}
+                            autoComplete='nope'
                         />
                         <PrimaryButton
                             type='search'
                             onClick={() => controller.search(filter)}
                         />
+                        {state.userPagination.search && state.userPagination.search !== '' && (
+                            <SecondaryButton
+                                type='reset'
+                                onClick={() => {
+                                    setFilter('');
+                                    controller.resetSearch();
+                                }}
+                            />
+                        )}
                     </SearchContainer>
                     {!isExternal && (
                         <AddButton
@@ -78,6 +92,9 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                         >
                             <PlusOutlined />
                         </AddButton>
+                    )}
+                    {state.userPagination.search && state.userPagination.search !== '' && (
+                        <SearchText><Message messageKey='flyout.adminusers.searchResults' /> ("{state.userPagination.search}"):</SearchText>
                     )}
                     {state.users.map(user => (
                         <UserBlock key={user.id}>
@@ -89,16 +106,18 @@ export const UsersTab = ({ state, controller, isExternal }) => {
                             </EditButton>
                         </UserBlock>
                     ))}
-                    <Footer>
-                        <Pagination
-                            current={state.userPagination.page}
-                            onChange={(page) => controller.setUserPage(page)}
-                            simple
-                            total={state.userPagination.totalCount}
-                            pageSize={state.userPagination.limit}
-                            showSizeChanger={false}
-                        />
-                    </Footer>
+                    {state.userPagination.totalCount > state.userPagination.limit && (
+                        <Footer>
+                            <Pagination
+                                current={state.userPagination.page}
+                                onChange={(page) => controller.setUserPage(page)}
+                                simple
+                                total={state.userPagination.totalCount}
+                                pageSize={state.userPagination.limit}
+                                showSizeChanger={false}
+                            />
+                        </Footer>
+                    )}
                 </>
             )}
         </Content>
