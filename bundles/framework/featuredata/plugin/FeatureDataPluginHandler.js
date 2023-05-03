@@ -2,7 +2,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from './FeatureDataFlyout';
 
 class FeatureDataPluginUIHandler extends StateHandler {
-    constructor (plugin, mapModule, config) {
+    constructor (mapModule) {
         super();
         this.setState({
             activeTab: null
