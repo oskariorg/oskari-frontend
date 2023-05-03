@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Mina uppgifter",
         "desc": "Mina uppgifter",
-        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.  <a href='/web/sv/login'>Logga in</a>.",
+        "notLoggedIn": "Mina uppgifter innehåller din användarprofil och alla dina sparade funktioner, kartvyer, inbäddade kartor, indikatorer, analys och dataset.",
         "notLoggedInText": "Logga in.",
         "register": "Registrera dig",
         "projectionError": {
