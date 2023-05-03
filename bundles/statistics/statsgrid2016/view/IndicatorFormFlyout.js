@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             }
             const showDataForm = function (regions, data) {
                 data = data || {};
-                const formRegions = regions.map(function (region) {
+                const formRegions = [...regions].sort((a, b) => a.name.localeCompare(b.name)).map(function (region) {
                     // TODO: include existing values per region when editing existing dataset
                     return {
                         id: region.id,
