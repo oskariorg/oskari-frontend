@@ -1,6 +1,6 @@
 import React from 'react';
 import { FeatureDataContainer } from '../view/FeatureDataContainer';
-import { showFlyout } from '../../../../src/react/components/window';
+import { showFlyout } from 'oskari-ui/components/window';
 
 export const showFeatureDataFlyout = (state, controller) => {
     const content = <FeatureDataContainer state = { state } controller = { controller }/>;
