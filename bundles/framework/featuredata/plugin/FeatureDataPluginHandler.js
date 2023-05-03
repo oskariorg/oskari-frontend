@@ -33,6 +33,11 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     updateStateAfterMapEvent () {
         const featureDataLayers = this.getFeatureDataLayers() || [];
+        if (!featureDataLayers || !featureDataLayers.length) {
+            this.closeFlyout();
+            return;
+        }
+
         let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.state.activeLayerId);
         if (!currentLayer && featureDataLayers?.length) {
             currentLayer = featureDataLayers[0];
