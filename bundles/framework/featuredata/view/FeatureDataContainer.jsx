@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 const BUNDLE_ID = 'FeatureData';
 
-const createFeaturedataGrid = (features) => {
+const createFeaturedataGrid = (features, selectedFeatureIds) => {
     if (!features || !features.length) {
         return <Message bundleKey={BUNDLE_ID} messageKey={'layer.out-of-content-area'}/>;
     };
@@ -18,6 +18,7 @@ const createFeaturedataGrid = (features) => {
         size={ 'large '}
         dataSource={ dataSource }
         pagination={{ position: ['none', 'none'] }}
+        rowSelection={{ selectedRowKeys: selectedFeatureIds }}
     />;
 
     return featureTable;
@@ -39,19 +40,19 @@ const createColumnSettingsFromFeatures = (features) => {
 const createDatasourceFromFeatures = (features) => {
     return features.map(feature => {
         return {
-            key: feature.properties.__fid,
+            key: feature.id,
             ...feature.properties
         };
     });
 };
 
-const createLayerTabs = (layerId, layers, features) => {
+const createLayerTabs = (layerId, layers, features, selectedFeatureIds) => {
     const tabs = layers?.map(layer => {
         return {
             key: layer.getId(),
             label: layer.getName(),
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features)
+                ? createFeaturedataGrid(features, selectedFeatureIds)
                 : null
         };
     }) || [];
@@ -61,10 +62,13 @@ const createLayerTabs = (layerId, layers, features) => {
 const ContainerDiv = styled('div')`
     padding: 1em;
     min-width: 35em; //prevents ant-tabs from entering flickering mode
+    .ant-table-selection-col, .ant-table-selection-column {
+        display: none;
+    }
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
-    const { layers, activeLayerId, activeLayerFeatures } = state;
-    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures);
+    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds } = state;
+    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds);
     return (
         <ContainerDiv>
             <Tabs

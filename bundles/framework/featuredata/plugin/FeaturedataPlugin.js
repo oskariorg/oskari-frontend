@@ -137,6 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                 },
                 MapLayerVisibilityChangedEvent: function () {
                     this.handler.updateStateAfterMapEvent();
+                },
+                WFSFeaturesSelectedEvent: function (event) {
+                    this.handler.updateSelectedFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds());
                 }
             };
         }
