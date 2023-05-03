@@ -9,6 +9,7 @@ import { EditOutlined, BgColorsOutlined } from '@ant-design/icons';
 import { Modal } from 'oskari-ui/components/Modal';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
+import { ThemeConsumer } from 'oskari-ui/util';
 
 const FullWidthSpace = styled(Space)`
     & {
@@ -59,7 +60,7 @@ const stringify = (json) => {
 };
 const getRuntimeId = () => Date.now().valueOf(); // Long in backend
 
-export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, external }) => {
+export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, getMessage, controller, external }) => {
     const newStyleName = getMessage('styles.vector.newStyleName');
     const [state, setState] = useState({
         modal: null
@@ -110,7 +111,21 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
     return (
         <FullWidthSpace direction='vertical'>
             <Space direction='horizontal'>
-                <Button onClick={ () => addStyle('editor', { featureStyle: {} }) }>
+                <Button
+                    onClick={ () => {
+                        const style = {
+                            fill: {
+                                color: theme.color.primary
+                            },
+                            image: {
+                                fill: {
+                                    color: theme.color.primary
+                                }
+                            }
+                        };
+                        addStyle('editor', { featureStyle: style }) }
+                    }
+                >
                     <BgColorsOutlined/>&nbsp;
                     <Message messageKey="styles.vector.add.editor" />
                 </Button>
@@ -177,7 +192,7 @@ export const VectorStyle = LocaleConsumer(({ layer, getMessage, controller, exte
             />
         </FullWidthSpace>
     );
-});
+}));
 
 VectorStyle.propTypes = {
     layer: PropTypes.object.isRequired,
