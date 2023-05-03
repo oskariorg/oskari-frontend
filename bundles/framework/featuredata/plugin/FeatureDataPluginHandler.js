@@ -5,7 +5,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
         this.setState({
-            activeTab: null
+            activeTab: null,
+            flyoutOpen: false
         });
         this.mapModule = mapModule;
         this.addStateListener(() => this.updateFlyout());
@@ -49,13 +50,14 @@ class FeatureDataPluginUIHandler extends StateHandler {
         const layers = this.getFeatureDataLayers() || null;
         const activeLayerId = layers && layers.length ? layers[0].getId() : null;
         const activeLayerFeatures = activeLayerId ? this.getFeaturesByLayerId(activeLayerId) : null;
-        this.state = { layers, activeLayerId, activeLayerFeatures };
+        this.updateState({ layers, activeLayerId, activeLayerFeatures, flyoutOpen: true });
         this.flyoutController = showFeatureDataFlyout(this.state, this.getController());
     }
 
     closeFlyout () {
         if (this.flyoutController) {
             this.flyoutController.close();
+            this.updateState({ flyoutOpen: false });
             this.flyoutController = null;
         }
     }

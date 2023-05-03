@@ -65,6 +65,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         refresh: function () {
             if (!this.handler) {
                 this.handler = new FeatureDataPluginHandler(this.getMapModule());
+                this.handler.addStateListener(() => {
+                    this.renderButton();
+                });
             }
             this.renderButton();
             this.handler.getController().updateStateAfterMapEvent();
@@ -77,14 +80,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             if (!el) {
                 return;
             }
-
+            const { flyoutOpen } = this.handler.getState() || false;
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
                         visible={this._hasFeaturedataLayers()}
                         icon={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
-                        active={this._flyoutOpen}
+                        active={flyoutOpen}
                         loading={loading}
                         position={this.getLocation()}
                     />
