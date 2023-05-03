@@ -69,8 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                     this.renderButton();
                 });
             }
-            this.renderButton();
-            this.handler.getController().updateStateAfterMapEvent();
+            this.handler.updateStateAfterMapEvent();
         },
         showLoadingIndicator: function (blnLoad) {
             this.renderButton(!!blnLoad);
@@ -119,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                  * Shows map center coordinates after map move
                  */
                 AfterMapMoveEvent: function () {
-                    this.refresh();
+                    this.handler.updateStateAfterMapEvent();
                 },
                 /**
                  * @method AfterMapLayerAddEvent
@@ -129,16 +128,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                  */
                 AfterMapLayerAddEvent: function (event) {
                     if (event.getMapLayer().hasFeatureData()) {
-                        this.refresh();
+                        this.handler.updateStateAfterMapEvent();
                     }
                 },
                 AfterMapLayerRemoveEvent: function (event) {
                     if (event.getMapLayer().hasFeatureData()) {
-                        this.refresh();
+                        this.handler.updateStateAfterMapEvent();
                     }
                 },
                 MapLayerVisibilityChangedEvent: function () {
-                    this.refresh();
+                    this.handler.updateStateAfterMapEvent();
                 }
             };
         }
