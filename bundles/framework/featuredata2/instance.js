@@ -343,8 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     this.getSandbox().findAllSelectedMapLayers(),
                     this.selectionPlugin.isSelectFromAllLayers());
                 helper.selectWithGeometry(geojson.features[0], layers);
-                this.selectionPlugin.stopDrawing();
-                this.popupHandler.removeButtonSelection();
+                this.selectionPlugin.stopDrawing(true);
             },
             'AfterMapMoveEvent': function () {
                 this.plugin.mapStatusChanged();
@@ -356,8 +355,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (!event.getSticky()) {
                     return;
                 }
-                if (this.popupHandler) {
-                    this.popupHandler.close();
+                if (this.popupHandler && this.popupHandler.selectionPopup) {
+                    this.popupHandler.clearSelectionPopup(false);
                 }
             }
         },

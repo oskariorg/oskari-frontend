@@ -52,10 +52,10 @@ Oskari.clazz.define(
          * Disables all draw controls and
          * clears the layer of any drawn features
          */
-        stopDrawing: function () {
+        stopDrawing: function (keepDrawMode = false) {
             this.clearDrawing();
             // disable all draw controls
-            this._toggleControl();
+            this._toggleControl(null, keepDrawMode);
         },
         setSelectFromAllLayers: function (selectAll) {
             this.selectFromAllLayers = selectAll;
@@ -71,10 +71,14 @@ Oskari.clazz.define(
          * controls)
          * @private
          */
-        _toggleControl: function (drawMode) {
+        _toggleControl: function (drawMode, keepDrawMode = false) {
             var key,
                 control;
-            this.currentDrawMode = drawMode;
+            if (keepDrawMode && !drawMode) {
+                // keep previous draw mode active
+            } else {
+                this.currentDrawMode = drawMode;
+            }
             for (key in this.drawControls) {
                 if (this.drawControls.hasOwnProperty(key)) {
                     control = this.drawControls[key];
