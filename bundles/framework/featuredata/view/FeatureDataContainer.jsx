@@ -81,6 +81,9 @@ const createLayerTabs = (layerId, layers, features, selectedFeatureIds, controll
 const ContainerDiv = styled('div')`
     padding: 1em;
     min-width: 35em; //prevents ant-tabs from entering flickering mode
+    .ant-table-selection-col, .ant-table-selection-column {
+        display: none;
+    }
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
     const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds } = state;
