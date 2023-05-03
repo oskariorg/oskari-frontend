@@ -15,12 +15,6 @@ const ToolContainer = styled('div')`
     } 
 `;
 
-const StyledCheckbox = styled(Checkbox)`
-    + .ant-checkbox-wrapper {
-        margin-left: 0;
-    }
-`;
-
 export const PublisherToolsList = ({ state, controller }) => {
     return (
         <Content>
@@ -43,16 +37,16 @@ const ToolCheckbox = ({ tool, controller }) => {
     const toolClass = tool.publisherTool;
     if (toolClass.isDisabled()) {
         return (<Tooltip title={toolClass.getTool().disabledReason}>
-            <StyledCheckbox disabled={true} >
+            <Checkbox disabled={true} >
                 {tool.title}
-            </StyledCheckbox>
+            </Checkbox>
         </Tooltip>);
     }
     return (
-        <StyledCheckbox
+        <Checkbox
             checked={toolClass.isEnabled()}
             onChange={(e) => controller.setToolEnabled(toolClass, e.target.checked)}
         >
             {tool.title}
-        </StyledCheckbox>);
+        </Checkbox>);
 };
