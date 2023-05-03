@@ -1,4 +1,5 @@
 import { showResetPopup } from '../mapmodule/MapResetPopup';
+import { showMapLinkPopup } from './view/MapLinkPopup';
 
 Oskari.clazz.category(
     'Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
@@ -207,81 +208,30 @@ Oskari.clazz.category(
             }
             this.resetPopup = null;
         },
-        _createMapLinkPopup: function () {
-            var sandbox = Oskari.getSandbox();
-            var loc = this.getLocalization('buttons');
-            var mapUrlPrefix = this.__getMapUrl();
-            var linkParams = sandbox.generateMapLinkParameters({});
-            var viewUuid = this._getLinkUuid();
-            var addMarkerBln = false;
-            var skipInfoBln = true;
-            var content = jQuery('<div class=link-wrapper></div>');
-            var linkContent = jQuery('<div class="link-content"></div>');
-            var options = jQuery('<div class="link-options"></div>');
-            var url;
-
-            this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            this.dialog.addClass('oskari-maplink');
-            this.dialog.makeModal();
-            sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            var closeBtn = this.dialog.createCloseButton();
-            this.dialog.onClose(() => {
-                sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-                this.dialog = null;
-                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
-                sandbox.request(this, builder());
-            });
-            if (!viewUuid) {
-                this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
-                return;
+        clearLinkPopup: function () {
+            if (this.linkPopup) {
+                this.linkPopup.close();
             }
-
-            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
-
-            content.append(linkContent);
-            // checkbox
-            var addMarker = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-            addMarker.setTitle(loc.link.addMarker);
-            addMarker.setChecked(addMarkerBln);
-            addMarker.setHandler(checked => {
-                addMarkerBln = checked;
-                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
-                linkContent.text(url);
-            });
-            options.append(addMarker.getElement());
-
-            if (Oskari.bundle('guidedtour')) {
-                var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-                skipInfo.setTitle(loc.link.skipInfo);
-                skipInfo.setChecked(skipInfoBln);
-                skipInfo.setHandler(checked => {
-                    skipInfoBln = checked;
-                    url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
-                    linkContent.text(url);
-                });
-                options.append(skipInfo.getElement());
-            }
-            content.append(options);
-            // buttons
-            closeBtn.addClass('primary');
-            var copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            copyBtn.setTitle(loc.link.copy);
-            copyBtn.setHandler(() => {
-                Oskari.util.copyTextToClipboard(url, linkContent);
-            });
-            url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
-            linkContent.text(url);
-            this.dialog.show(loc.link.title, content, [copyBtn, closeBtn]);
+            const sandbox = Oskari.getSandbox();
+            const builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+            sandbox.request(this, builder());
+            this.linkPopup = null;
         },
-        _updateUrl: function (baseUrl, addMarker, skipInfo) {
-            var url = baseUrl;
-            if (addMarker) {
-                url += '&showMarker=true';
+        _createMapLinkPopup: function () {
+            if (this.linkPopup) return;
+
+            const sandbox = Oskari.getSandbox();
+            const mapUrlPrefix = this.__getMapUrl();
+            const linkParams = sandbox.generateMapLinkParameters({});
+            const viewUuid = this._getLinkUuid();
+
+            let guidedTour = false;
+            if (Oskari.bundle('guidedtour')) {
+                guidedTour = true;
             }
-            if (skipInfo) {
-                url += '&showIntro=false';
-            }
-            return url;
+            const baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
+
+            this.linkPopup = showMapLinkPopup(guidedTour, baseUrl, () => this.clearLinkPopup());
         },
         /**
          * Returns the map url for link tool

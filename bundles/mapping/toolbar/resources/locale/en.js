@@ -8,6 +8,7 @@ Oskari.registerLocalization(
                 "tooltip": "Make a link to the map view",
                 "ok": "OK",
                 "copy": "Copy the link to the clipboard",
+                "copied": "Copied",
                 "title": "Link to Map View",
                 "cannot": "This map view cannot be linked to. Create a new map view and try again.",
                 "addMarker": "Show a marker in the center of the map",
