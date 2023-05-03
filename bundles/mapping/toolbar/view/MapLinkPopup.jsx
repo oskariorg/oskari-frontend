@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
+import { showPopup } from 'oskari-ui/components/window';
 import { ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
 import { Message, Button, Checkbox } from 'oskari-ui';
 import styled from 'styled-components';
@@ -13,18 +13,13 @@ const LinkContainer = styled('div')`
     display: block;
     border: 1px dashed #000000;
     padding: 5px;
-    border-radius: 5px; 
+    border-radius: 5px;
+    word-break: break-all;
 `;
 const Options = styled('div')`
     display: flex;
     flex-direction: column;
     margin-top: 5px;
-`;
-
-const StyledCheckbox = styled(Checkbox)`
-    + .ant-checkbox-wrapper {
-        margin-left: 0;
-    }
 `;
 
 const copyText = (text) => {
@@ -55,7 +50,7 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
                 {state.url}
             </LinkContainer>
             <Options>
-                <StyledCheckbox
+                <Checkbox
                     checked={state.showMarker}
                     onChange={(e) => setState({
                         ...state,
@@ -65,9 +60,9 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
                     })}
                 >
                     <Message bundleKey={BUNDLE_NAME} messageKey='buttons.link.addMarker' />
-                </StyledCheckbox>
+                </Checkbox>
                 {guidedTour && (
-                    <StyledCheckbox
+                    <Checkbox
                         checked={state.hideGuidedTour}
                         onChange={(e) => setState({
                             ...state,
@@ -77,7 +72,7 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
                         })}
                     >
                         <Message bundleKey={BUNDLE_NAME} messageKey='buttons.link.skipInfo' />
-                    </StyledCheckbox>
+                    </Checkbox>
                 )}
             </Options>
             <ButtonContainer>
@@ -103,14 +98,8 @@ const PopupContent = ({ guidedTour, baseUrl, onClose }) => {
 };
 
 export const showMapLinkPopup = (guidedTour, baseUrl, onClose) => {
-    const dimensions = getNavigationDimensions();
-    let placement = PLACEMENTS.BL;
-    if (dimensions?.placement === 'right') {
-        placement = PLACEMENTS.BR;
-    }
     const options = {
-        id: 'oskari-maplink',
-        placement
+        id: 'oskari-maplink'
     };
     return showPopup(
         <Message bundleKey={BUNDLE_NAME} messageKey='buttons.link.title' />,
