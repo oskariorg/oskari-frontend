@@ -33,6 +33,14 @@ const BorderedButton = styled(Button)`
     }
 `;
 
+/**
+ * This + pointer-events style on button components are used to fix tooltip
+ * not disappearing if the button is disabled. Probably caused by styled-components + antd problem.
+ */
+const DisabledWrapper = styled('div')`
+    cursor: ${props => props.$disabled ? 'not-allowed' : 'default'};
+`;
+
 const getPredefinedIcon = (type) => {
     if (type === 'add') {
         return <PlusOutlined/>;
@@ -108,11 +116,11 @@ export const IconButton = ({
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
                     <Tooltip title={title}>
-                        <div>
+                        <DisabledWrapper $disabled={disabled}>
                             <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
                                 {icon}
                             </ThemeButton>
-                        </div>
+                        </DisabledWrapper>
                     </Tooltip>
             </Confirm>
         );
@@ -120,11 +128,11 @@ export const IconButton = ({
     if (title) {
         return (
             <Tooltip title={title}>
-                <div>
+                <DisabledWrapper $disabled={disabled}>
                     <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
                         {icon}
                     </ThemeButton>
-                </div>
+                </DisabledWrapper>
             </Tooltip>
         );
     }
