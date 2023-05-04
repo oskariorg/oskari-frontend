@@ -16,6 +16,7 @@ const BorderlessButton = styled(Button)`
     border: none;
     background: none;
     padding: 0px;
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     &:hover {
         color: ${props => props.color};
         background: none;
@@ -25,6 +26,7 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     &:hover {
         color: ${props => props.color};
         border-color: ${props => props.color};
@@ -105,20 +107,24 @@ export const IconButton = ({
                 disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
-                <Tooltip title={title}>
-                    <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
-                        {icon}
-                    </ThemeButton>
-                </Tooltip>
+                    <Tooltip title={title}>
+                        <div>
+                            <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                                {icon}
+                            </ThemeButton>
+                        </div>
+                    </Tooltip>
             </Confirm>
         );
     }
     if (title) {
         return (
             <Tooltip title={title}>
-                <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
-                    {icon}
-                </ThemeButton>
+                <div>
+                    <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                        {icon}
+                    </ThemeButton>
+                </div>
             </Tooltip>
         );
     }
