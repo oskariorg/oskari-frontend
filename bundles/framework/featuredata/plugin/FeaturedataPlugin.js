@@ -23,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
         me._index = 100;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
-        me._flyoutOpen = undefined;
     }, {
         _startPluginImpl: function () {
             this.setElement(this._createControlElement());
