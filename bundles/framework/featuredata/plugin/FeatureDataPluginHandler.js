@@ -4,9 +4,13 @@ import { showFeatureDataFlyout } from './FeatureDataFlyout';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
+        const featureDataLayers = this.getFeatureDataLayers() || [];
+        const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         this.setState({
-            activeTab: null,
-            flyoutOpen: false
+            activeLayerId,
+            layers: featureDataLayers,
+            flyoutOpen: false,
+            activeLayerFeatures: null
         });
         this.mapModule = mapModule;
         this.addStateListener(() => this.updateFlyout());
@@ -38,16 +42,15 @@ class FeatureDataPluginUIHandler extends StateHandler {
             return;
         }
 
-        let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.state.activeLayerId);
-        if (!currentLayer && featureDataLayers?.length) {
-            currentLayer = featureDataLayers[0];
-        }
-        const layerId = currentLayer ? currentLayer.getId() : null;
-        const features = layerId ? this.getFeaturesByLayerId(layerId) : [];
+        const activeLayerId = this.determineActiveLayerId(featureDataLayers);
+        let activeLayerFeatures = null;
+        if (activeLayerId && this.state.flyoutOpen) {
+            activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
+        };
         this.updateState({
-            activeLayerId: layerId,
+            activeLayerId,
             layers: featureDataLayers,
-            activeLayerFeatures: features
+            activeLayerFeatures
         });
     }
 
@@ -56,11 +59,21 @@ class FeatureDataPluginUIHandler extends StateHandler {
             this.closeFlyout();
             return;
         }
-        const layers = this.getFeatureDataLayers() || null;
-        const activeLayerId = layers && layers.length ? layers[0].getId() : null;
-        const activeLayerFeatures = activeLayerId ? this.getFeaturesByLayerId(activeLayerId) : null;
-        this.updateState({ layers, activeLayerId, activeLayerFeatures, flyoutOpen: true });
-        this.flyoutController = showFeatureDataFlyout(this.state, this.getController());
+
+        const { activeLayerId, activeLayerFeatures } = this.getState();
+        const newState = {
+            flyoutOpen: true,
+            activeLayerFeatures
+        };
+
+        if (!activeLayerFeatures) {
+            // not empty features, but missing completely
+            // empty should mean there is no features on viewport to list
+            newState.activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
+        }
+
+        this.updateState(newState);
+        this.flyoutController = showFeatureDataFlyout(this.getState(), this.getController());
     }
 
     closeFlyout () {
@@ -75,6 +88,14 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (this.flyoutController) {
             this.flyoutController.update(this.state);
         }
+    }
+
+    determineActiveLayerId (featureDataLayers) {
+        let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.state.activeLayerId);
+        if (!currentLayer && featureDataLayers?.length) {
+            currentLayer = featureDataLayers[0];
+        }
+        return currentLayer ? currentLayer.getId() : null;
     }
 }
 
