@@ -10,6 +10,7 @@ import { Modal } from 'oskari-ui/components/Modal';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
 import styled from 'styled-components';
 import { ThemeConsumer } from 'oskari-ui/util';
+import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
 
 const FullWidthSpace = styled(Space)`
     & {
@@ -114,11 +115,15 @@ export const VectorStyle = ThemeConsumer(LocaleConsumer(({ theme = {}, layer, ge
                 <Button
                     onClick={ () => {
                         const style = {
+                            ...OSKARI_BLANK_STYLE,
                             fill: {
+                                ...OSKARI_BLANK_STYLE.fill,
                                 color: theme.color.primary
                             },
                             image: {
+                                ...OSKARI_BLANK_STYLE.image,
                                 fill: {
+                                    ...OSKARI_BLANK_STYLE.image.fill,
                                     color: theme.color.primary
                                 }
                             }
