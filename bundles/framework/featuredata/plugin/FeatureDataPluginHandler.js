@@ -75,6 +75,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
+    toggleFeature (featureId) {
+        this.selectionService.toggleFeatureSelection(this.state.activeLayerId, featureId);
+    }
+
     openFlyout () {
         if (this.flyoutController) {
             this.closeFlyout();
@@ -121,6 +125,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent', 'updateSelectedFeatures']);
+const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent', 'updateSelectedFeatures', 'toggleFeature']);
 
 export { wrapped as FeatureDataPluginHandler };
