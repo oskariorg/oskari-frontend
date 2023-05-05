@@ -16,6 +16,7 @@ const BorderlessButton = styled(Button)`
     border: none;
     background: none;
     padding: 0px;
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     &:hover {
         color: ${props => props.color};
         background: none;
@@ -25,10 +26,19 @@ const BorderlessButton = styled(Button)`
     }
 `;
 const BorderedButton = styled(Button)`
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
     &:hover {
         color: ${props => props.color};
         border-color: ${props => props.color};
     }
+`;
+
+/**
+ * This + pointer-events style on button components are used to fix tooltip
+ * not disappearing if the button is disabled. Probably caused by styled-components + antd problem.
+ */
+const DisabledWrapper = styled('div')`
+    cursor: ${props => props.$disabled ? 'not-allowed' : 'default'};
 `;
 
 const getPredefinedIcon = (type) => {
@@ -105,20 +115,24 @@ export const IconButton = ({
                 disabled={disabled}
                 placement={title ? 'bottom' : 'top'}
                 { ...getConfirmProps(type) }>
-                <Tooltip title={title}>
-                    <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
-                        {icon}
-                    </ThemeButton>
-                </Tooltip>
+                    <Tooltip title={title}>
+                        <DisabledWrapper $disabled={disabled}>
+                            <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                                {icon}
+                            </ThemeButton>
+                        </DisabledWrapper>
+                    </Tooltip>
             </Confirm>
         );
     }
     if (title) {
         return (
             <Tooltip title={title}>
-                <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
-                    {icon}
-                </ThemeButton>
+                <DisabledWrapper $disabled={disabled}>
+                    <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                        {icon}
+                    </ThemeButton>
+                </DisabledWrapper>
             </Tooltip>
         );
     }
