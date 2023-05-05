@@ -92,9 +92,7 @@ Oskari.registerLocalization(
                     "updateDate": "Updated"
                 },
                 "published": {
-                    "desc": "Copy the HTML code below to your html code and the map will be visible on your website:",
-                    "copy": "Copy to the clipboard",
-                    "copied": "Copied"
+                    "desc": "Copy the HTML code below to your html code and the map will be visible on your website:"
                 },
                 "popup": {
                     "edit": "Edit Map Name",

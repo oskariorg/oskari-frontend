@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextAreaInput, Tooltip, Button } from 'oskari-ui';
+import { Message, Tooltip, CopyField } from 'oskari-ui';
 import styled from 'styled-components';
-import { SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
+import { SecondaryButton, ButtonContainer, CopyButton } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { LocaleProvider } from 'oskari-ui/util';
 
@@ -16,29 +16,30 @@ const Content = styled.div`
     margin: 12px 24px 24px;
 `;
 
-const StyledButton = styled(Button)`
-    width: 165px;
-`;
-
 const SnippetPopup = ({html, onClose}) => {
+    const [highlighted, setHighlighted] = useState(false);
 
-    const [copied, setCopied] = useState(false);
-    
-    const copyText = () => {
-        navigator.clipboard.writeText(html);
-        setCopied(true);
+    const highlightUrl = () => {
+        setHighlighted(true);
+        setTimeout(() => {
+            setHighlighted(false);
+        }, 1000);
     }
 
     return (
         <Content>
             <Message messageKey="tabs.publishedmaps.published.desc" />
-            <TextAreaInput name='html' value={html} />
+            <CopyField
+                value={html}
+                highlighted={highlighted}
+            />
             <ButtonContainer>
                 <SecondaryButton type='cancel' onClick={onClose}/>
                 <Tooltip title={<Message messageKey={`tabs.publishedmaps.published.copy`} />}>
-                    <StyledButton onClick={copyText}>
-                        <Message messageKey={copied ? "tabs.publishedmaps.published.copied" : "tabs.publishedmaps.published.copy"} />
-                    </StyledButton>
+                    <CopyButton
+                        value={html}
+                        onClick={() => highlightUrl()}
+                    />
                 </Tooltip>
             </ButtonContainer>
         </Content>
@@ -46,7 +47,7 @@ const SnippetPopup = ({html, onClose}) => {
 };
 
 export const showSnippetPopup = (view, onClose) => {
-    const title = <Message messageKey="tabs.publishedmaps.published.copy" bundleKey={BUNDLE_NAME} />;
+    const title = <Message messageKey="tabs.publishedmaps.getHTML" bundleKey={BUNDLE_NAME} />;
 
     const url = Oskari.getSandbox().createURL(view.url);
     const size = view.metadata && view.metadata.size ? view.metadata.size : undefined;

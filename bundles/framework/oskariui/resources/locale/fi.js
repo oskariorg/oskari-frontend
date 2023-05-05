@@ -17,11 +17,13 @@ Oskari.registerLocalization({
             previous: 'Edellinen',
             print: 'Tulosta',
             search: 'Etsi',
-            reset: 'Tyhjennä'
+            reset: 'Tyhjennä',
+            copy: 'Kopioi leikepöydälle'
         },
         messages: {
             confirm: 'Haluatko varmasti jatkaa?',
-            confirmDelete: 'Haluatko varmasti poistaa?'
+            confirmDelete: 'Haluatko varmasti poistaa?',
+            copied: 'Kopioitu'
         },
         error: {
             generic: 'Tapahtui odottamaton virhe'
