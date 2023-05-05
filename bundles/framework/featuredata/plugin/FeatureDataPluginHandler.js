@@ -1,6 +1,7 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from './FeatureDataFlyout';
 
+const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
         super();
@@ -13,6 +14,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures: null
         });
         this.mapModule = mapModule;
+        this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.addStateListener(() => this.updateFlyout());
     }
 
@@ -27,11 +29,20 @@ class FeatureDataPluginUIHandler extends StateHandler {
         return featuresMap && featuresMap[layerId] ? featuresMap[layerId].features : null;
     }
 
+    getSelectedFeatureIdsByLayerId (layerId) {
+        if (!this.selectionService) {
+            return [];
+        }
+        return this.selectionService.getSelectedFeatureIdsByLayer(layerId);
+    }
+
     setActiveTab (layerId) {
         const features = layerId ? this.getFeaturesByLayerId(layerId) : null;
+        const selectedFeatureIds = layerId ? this.getSelectedFeatureIdsByLayerId(layerId) : null;
         this.updateState({
             activeLayerId: layerId,
-            activeLayerFeatures: features
+            activeLayerFeatures: features,
+            selectedFeatureIds
         });
     }
 
@@ -44,14 +55,28 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         let activeLayerFeatures = null;
+        let selectedFeatureIds = null;
         if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
+            selectedFeatureIds = activeLayerFeatures && activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
         };
+
         this.updateState({
             activeLayerId,
             layers: featureDataLayers,
-            activeLayerFeatures
+            activeLayerFeatures,
+            selectedFeatureIds
         });
+    }
+
+    updateSelectedFeatures (layerId, selectedFeatureIds) {
+        if (layerId === this.getState().activeLayerId) {
+            this.updateState({ selectedFeatureIds });
+        }
+    }
+
+    toggleFeature (featureId) {
+        this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
     }
 
     openFlyout () {
@@ -70,6 +95,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             // not empty features, but missing completely
             // empty should mean there is no features on viewport to list
             newState.activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
+            newState.selectedFeatureIds = newState.activeLayerFeatures && newState.activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
         }
 
         this.updateState(newState);
@@ -99,6 +125,6 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 }
 
-const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent']);
+const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent', 'updateSelectedFeatures', 'toggleFeature']);
 
 export { wrapped as FeatureDataPluginHandler };
