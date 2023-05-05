@@ -28,3 +28,20 @@ export const OSKARI_BLANK_STYLE = {
         }
     }
 };
+
+export const generateBlankStyle = (theme) => {
+    return {
+        ...OSKARI_BLANK_STYLE,
+        fill: {
+            ...OSKARI_BLANK_STYLE.fill,
+            color: theme.color.primary
+        },
+        image: {
+            ...OSKARI_BLANK_STYLE.image,
+            fill: {
+                ...OSKARI_BLANK_STYLE.image.fill,
+                color: theme.color.primary
+            }
+        }
+    };
+};

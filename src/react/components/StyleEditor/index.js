@@ -11,3 +11,4 @@ export { PreviewCol } from './PreviewCol';
 export { SizeControl } from './SizeControl';
 export { StyleSelector } from './StyleSelector';
 export { SvgRadioButton } from './SvgRadioButton';
+export { generateBlankStyle } from './OskariDefaultStyle';

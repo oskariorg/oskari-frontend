@@ -7,7 +7,7 @@ import { LocaleProvider, ThemeConsumer, ThemeProvider } from 'oskari-ui/util';
 import { SecondaryButton, PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { showPopup } from 'oskari-ui/components/window';
 import { StyleEditor } from 'oskari-ui/components/StyleEditor';
-import { OSKARI_BLANK_STYLE } from 'oskari-ui/components/StyleEditor/index';
+import { generateBlankStyle } from 'oskari-ui/components/StyleEditor/index';
 import { LOCALE_KEY, LAYER_FORM } from './constants';
 
 const Content = styled.div`
@@ -16,20 +16,7 @@ const Content = styled.div`
 `;
 
 const MyPlacesLayerForm = ThemeConsumer(({ theme, locale: initLocale, style: initStyle, onSave, onCancel }) => {
-    const defaultStyle = {
-        ...OSKARI_BLANK_STYLE,
-        fill: {
-            ...OSKARI_BLANK_STYLE.fill,
-            color: theme.color.primary
-        },
-        image: {
-            ...OSKARI_BLANK_STYLE.image,
-            fill: {
-                ...OSKARI_BLANK_STYLE.image.fill,
-                color: theme.color.primary
-            }
-        }
-    };
+    const defaultStyle = generateBlankStyle(theme);
     const [editorState, setEditorState] = useState({
         style: initStyle || defaultStyle,
         locale: initLocale || {}
