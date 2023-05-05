@@ -92,8 +92,7 @@ Oskari.registerLocalization(
                     "updateDate": "Uppdaterad"
                 },
                 "published": {
-                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
-                    "copy": "Kopiera till klippbordet"
+                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats."
                 },
                 "popup": {
                     "edit": "Byt namn på kartan",

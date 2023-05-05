@@ -47,7 +47,7 @@ const SnippetPopup = ({html, onClose}) => {
 };
 
 export const showSnippetPopup = (view, onClose) => {
-    const title = <Message messageKey="tabs.publishedmaps.published.copy" bundleKey={BUNDLE_NAME} />;
+    const title = <Message messageKey="tabs.publishedmaps.getHTML" bundleKey={BUNDLE_NAME} />;
 
     const url = Oskari.getSandbox().createURL(view.url);
     const size = view.metadata && view.metadata.size ? view.metadata.size : undefined;
