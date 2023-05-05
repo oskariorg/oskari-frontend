@@ -44,7 +44,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
         const activeLayerId = this.determineActiveLayerId(featureDataLayers);
         let activeLayerFeatures = null;
-        if (activeLayerId && this.state.flyoutOpen) {
+        if (activeLayerId && this.getState().flyoutOpen) {
             activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
         };
         this.updateState({
@@ -86,12 +86,12 @@ class FeatureDataPluginUIHandler extends StateHandler {
 
     updateFlyout () {
         if (this.flyoutController) {
-            this.flyoutController.update(this.state);
+            this.flyoutController.update(this.getState());
         }
     }
 
     determineActiveLayerId (featureDataLayers) {
-        let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.state.activeLayerId);
+        let currentLayer = featureDataLayers?.find(layer => layer.getId() === this.getState().activeLayerId);
         if (!currentLayer && featureDataLayers?.length) {
             currentLayer = featureDataLayers[0];
         }
