@@ -17,11 +17,13 @@ Oskari.registerLocalization({
             previous: 'Föregående',
             print: 'Få utskrift',
             search: 'Sök',
-            reset: 'Återställa'
+            reset: 'Återställa',
+            copy: 'Kopiera till klippbordet'
         },
         messages: {
             confirm: 'Är du säker på att du vill fortsätta?',
-            confirmDelete: 'Vill du säkert ta bort?'
+            confirmDelete: 'Vill du säkert ta bort?',
+            copied: 'Kopieras'
         },
         error: {
             generic: 'Something went wrong'

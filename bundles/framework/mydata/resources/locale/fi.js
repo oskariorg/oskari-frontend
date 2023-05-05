@@ -93,8 +93,7 @@ Oskari.registerLocalization(
                 },
                 "published": {
                     "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
-                    "copy": "Kopioi leikepöydälle",
-                    "copied": "Kopioitu"
+                    "copy": "Kopioi leikepöydälle"
                 },
                 "popup": {
                     "edit": "Vaihda kartan nimi",

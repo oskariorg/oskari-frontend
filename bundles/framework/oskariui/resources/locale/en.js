@@ -17,11 +17,13 @@ Oskari.registerLocalization({
             previous: 'Previous',
             print: 'Print',
             search: 'Search',
-            reset: 'Reset'
+            reset: 'Reset',
+            copy: 'Copy to clipboard'
         },
         messages: {
             confirm: 'Are you sure you want to continue?',
-            confirmDelete: 'Are you sure you wish to delete?'
+            confirmDelete: 'Are you sure you wish to delete?',
+            copied: 'Copied'
         },
         error: {
             generic: 'Something went wrong'
