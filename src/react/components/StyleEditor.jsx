@@ -73,6 +73,7 @@ export const StyleEditor = ({ oskariStyle, onChange, format, tabs }) => {
         ...OSKARI_BLANK_STYLE,
         ...oskariStyle
     };
+
     const formats = tabs || constants.SUPPORTED_FORMATS;
 
     // initialize state with propvided style settings to show preview correctly and set default format as point
