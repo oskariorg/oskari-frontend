@@ -44,21 +44,37 @@ export const MapModuleButton = ({ visible = true, title, icon, onClick, size = '
     return (
         <ThemeProvider value={mapModule.getMapTheme()}>
             <Container size={size} noMargin={noMargin} withToolbar={withToolbar} toolbarOpen={toolbarOpen} toolbarMargin={toolbarMargin}>
-                <StyledButton
-                    onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
-                    icon={icon}
-                    title={title}
-                    size={size}
-                    iconActive={iconActive || (withToolbar && toolbarOpen)}
-                    iconSize={iconSize}
-                    className={className}
-                    disabled={disabled}
-                    position={position}
-                />
-                {withToolbar && (
-                    <Toolbar height='32px' open={toolbarOpen} direction={toolbarOpenDirection} toolbarWidth={toolbarMaxWidth} maxWidth={toolbarMaxWidth + 100}>
-                        {children}
-                    </Toolbar>
+                {withToolbar && children?.length === 1 ? (
+                    <StyledButton
+                        onClick={children[0].props.onClick}
+                        icon={children[0].props.icon}
+                        title={children[0].props.title}
+                        size={size}
+                        iconActive={children[0].props.iconActive}
+                        iconSize={iconSize}
+                        className={className}
+                        disabled={disabled}
+                        position={position}
+                    />
+                ) : (
+                    <>
+                        <StyledButton
+                            onClick={withToolbar ? () => setToolbarOpen(!toolbarOpen) : onClick}
+                            icon={icon}
+                            title={title}
+                            size={size}
+                            iconActive={iconActive || (withToolbar && toolbarOpen)}
+                            iconSize={iconSize}
+                            className={className}
+                            disabled={disabled}
+                            position={position}
+                        />
+                        {withToolbar && (
+                            <Toolbar height='32px' open={toolbarOpen} direction={toolbarOpenDirection} toolbarWidth={toolbarMaxWidth} maxWidth={toolbarMaxWidth + 100}>
+                                {children}
+                            </Toolbar>
+                        )}
+                    </>
                 )}
             </Container>
         </ThemeProvider>
