@@ -70,13 +70,13 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     updateSelectedFeatures (layerId, selectedFeatureIds) {
-        if (layerId === this.state.activeLayerId) {
+        if (layerId === this.getState().activeLayerId) {
             this.updateState({ selectedFeatureIds });
         }
     }
 
     toggleFeature (featureId) {
-        this.selectionService.toggleFeatureSelection(this.state.activeLayerId, featureId);
+        this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
     }
 
     openFlyout () {
