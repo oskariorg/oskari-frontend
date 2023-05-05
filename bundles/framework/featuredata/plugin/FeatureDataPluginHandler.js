@@ -14,7 +14,7 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerFeatures: null
         });
         this.mapModule = mapModule;
-        this.selectionService = Oskari.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
+        this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
         this.addStateListener(() => this.updateFlyout());
     }
 
