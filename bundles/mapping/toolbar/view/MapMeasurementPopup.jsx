@@ -23,6 +23,7 @@ const PopupContent = ({ text, clearMeasurements, onClose }) => {
                 </Button>
                 <Button
                     className='t_stopMeasurement'
+                    type='primary'
                     onClick={onClose}
                 >
                     <Message bundleKey={BUNDLE_NAME} messageKey='measure.close' />

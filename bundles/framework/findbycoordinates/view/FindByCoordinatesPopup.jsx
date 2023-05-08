@@ -1,7 +1,7 @@
 import React from 'react';
 import { showPopup } from 'oskari-ui/components/window';
 import { Message } from 'oskari-ui';
-import { SecondaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
+import { PrimaryButton, ButtonContainer } from 'oskari-ui/components/buttons';
 import { InfoIcon } from 'oskari-ui/components/icons';
 import styled from 'styled-components';
 
@@ -47,7 +47,7 @@ const PopupContent = ({ results, onClose }) => {
                 )
             })}
             <ButtonContainer>
-                <SecondaryButton
+                <PrimaryButton
                     type='close'
                     onClick={onClose}
                 />
