@@ -1,6 +1,6 @@
 import React from 'react';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
-import { ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
+import { ButtonContainer, SecondaryButton, PrimaryButton } from 'oskari-ui/components/buttons';
 import { Message, Button, Radio, Tooltip } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -51,7 +51,7 @@ const PopupContent = ({ selectedTool, selectFromAll, drawTools, clearSelections,
                 >
                     <Message bundleKey={BUNDLE_NAME} messageKey='selectionTools.button.empty' />
                 </Button>
-                <SecondaryButton
+                <PrimaryButton
                     type='close'
                     onClick={onClose}
                 />

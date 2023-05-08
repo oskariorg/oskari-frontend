@@ -1,6 +1,6 @@
 import React from 'react';
 import { showPopup, getNavigationDimensions, PLACEMENTS } from 'oskari-ui/components/window';
-import { ButtonContainer, SecondaryButton } from 'oskari-ui/components/buttons';
+import { ButtonContainer, SecondaryButton, PrimaryButton } from 'oskari-ui/components/buttons';
 import { Message, Button } from 'oskari-ui';
 import { BUNDLE_KEY } from '../constants';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ const PopupContent = ({ clearMarkers, onClose }) => {
                 >
                     <Message bundleKey={BUNDLE_KEY} messageKey='plugin.MarkersPlugin.dialog.clear' />
                 </Button>
-                <SecondaryButton
+                <PrimaryButton
                     type='close'
                     onClick={onClose}
                 />
