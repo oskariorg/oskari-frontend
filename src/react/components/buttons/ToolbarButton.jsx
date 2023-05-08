@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '../Tooltip';
 import styled from 'styled-components';
 import { ThemeConsumer } from '../../util';
@@ -64,14 +64,22 @@ const Icon = styled('div')`
 `;
 
 export const ToolbarButtonItem = ThemeConsumer(({ theme = {}, icon, onClick, iconActive = false, title, disabled = false }) => {
+    const [tooltipVisible, setTooltipVisible] = useState(false);
+
     const helper = getNavigationTheme(theme);
     const iconColor = helper.getTextColor();
     const hoverColor = helper.getButtonHoverColor();
 
     if (title) {
         return (
-            <Tooltip title={title}>
-                <ToolbarItem onClick={disabled ? null : onClick} $activeColor={hoverColor} color={iconColor}>
+            <Tooltip title={title} open={iconActive || tooltipVisible}>
+                <ToolbarItem
+                    onClick={disabled ? null : onClick}
+                    $activeColor={hoverColor}
+                    color={iconColor}
+                    onMouseEnter={() => setTooltipVisible(true)}
+                    onMouseLeave={() => setTooltipVisible(false)}
+                >
                     <Icon
                         $active={iconActive}
                         $activeColor={hoverColor}
