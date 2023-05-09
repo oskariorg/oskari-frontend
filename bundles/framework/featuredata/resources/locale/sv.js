@@ -5,7 +5,11 @@ Oskari.registerLocalization(
         "value": {
             "title": "Objektuppgifter",
             "layer": {
-                "out-of-content-area": "Detta kartlager saknar innehåll vid dessa koordinater."
-            }
+                "outOfContentArea": "Detta kartlager saknar innehåll vid dessa koordinater."
+            },
+            "flyout": {
+                "sorterTooltip": "Sortera fallande / stigande",
+            },
+            "showSelectedFirst": "Visa de valda först"
         }
     });

@@ -5,7 +5,11 @@ Oskari.registerLocalization(
         "value": {
             "title": "Feature Data",
             "layer": {
-                "out-of-content-area": "The map layer has no features at the map view area."
-            }
-         }
+                "outOfContentArea": "The map layer has no features at the map view area."
+            },
+            "flyout": {
+                "sorterTooltip": "Click to sort descending/ascending",
+            },
+            "showSelectedFirst": "Show selected first"
+        }
     });
