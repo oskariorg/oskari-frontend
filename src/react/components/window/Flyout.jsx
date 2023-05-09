@@ -15,7 +15,15 @@ const Container = styled.div`
     background: #fafafa;
     min-width: 300px;
     border: 1px solid rgba(0, 0, 0, 0.2);
+    max-width: 100vw;
+    max-height: 100vh;
 
+    @media only screen and (max-width: 950px) {
+        min-width: 0;
+        width: 100vw;
+        height: 100vh;
+        transform: none !important;
+    }
 
     &.outofviewport {
         border: 1px solid rgba(255, 0, 0, 0.5);
