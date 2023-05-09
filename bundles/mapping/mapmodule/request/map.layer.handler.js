@@ -128,6 +128,11 @@ Oskari.clazz.define('map.layer.handler',
             const status = layer.getDescribeLayerStatus();
             // only layers that have numeric ids can have reasonable response for DescribeLayer
             if (isNaN(layerId) || status === DESCRIBE_LAYER.LOADED) {
+                if (layerId.startsWith('userlayer')) {
+                    mapModule.handleDescribeLayer(layer, {
+                        coverage: layer.getGeometryWKT()
+                    });
+                }
                 done();
                 return;
             }
