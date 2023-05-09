@@ -5,7 +5,12 @@ Oskari.registerLocalization(
         "value": {
             "title": "Kohdetiedot",
             "layer": {
-                "out-of-content-area": "Karttatasolla ei ole kohteita karttanäkymän alueella."
-            }
+                "outOfContentArea": "Karttatasolla ei ole kohteita karttanäkymän alueella."
+            },
+            "flyout": {
+                "sorterTooltip": "Järjestä laskevasti/nousevasti",
+            },
+            "showSelectedFirst": "Näytä valitut ensin"
+
         }
     });

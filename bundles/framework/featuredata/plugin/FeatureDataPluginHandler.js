@@ -1,6 +1,8 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { showFeatureDataFlyout } from './FeatureDataFlyout';
 
+export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
+
 const SELECTION_SERVICE_CLASSNAME = 'Oskari.mapframework.service.VectorFeatureSelectionService';
 class FeatureDataPluginUIHandler extends StateHandler {
     constructor (mapModule) {
@@ -11,7 +13,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             activeLayerId,
             layers: featureDataLayers,
             flyoutOpen: false,
-            activeLayerFeatures: null
+            activeLayerFeatures: null,
+            showSelectedFirst: false
         });
         this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
@@ -46,6 +49,15 @@ class FeatureDataPluginUIHandler extends StateHandler {
         });
     }
 
+    toggleShowSelectedFirst () {
+        const { activeLayerFeatures, sorting } = this.getState();
+        const newState = { showSelectedFirst: !this.getState().showSelectedFirst };
+        if (newState.showSelectedFirst && !sorting?.order) {
+            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+        }
+        this.updateState(newState);
+    }
+
     updateStateAfterMapEvent () {
         const featureDataLayers = this.getFeatureDataLayers() || [];
         if (!featureDataLayers || !featureDataLayers.length) {
@@ -75,6 +87,16 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
     }
 
+    updateSorting (sorting) {
+        // if show selected first - is checked but sorting is cancelled we need to set default sorting to keep the selected items first.
+        const newState = { sorting };
+        const { showSelectedFirst, activeLayerFeatures } = this.getState();
+        if (showSelectedFirst && !sorting.order) {
+            newState.sorting = this.determineSortingColumn(activeLayerFeatures);
+        }
+        this.updateState(newState);
+    }
+
     toggleFeature (featureId) {
         this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
     }
@@ -94,8 +116,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
         if (!activeLayerFeatures) {
             // not empty features, but missing completely
             // empty should mean there is no features on viewport to list
-            newState.activeLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
-            newState.selectedFeatureIds = newState.activeLayerFeatures && newState.activeLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
+            const newActiveLayerFeatures = this.getFeaturesByLayerId(activeLayerId);
+            newState.activeLayerFeatures = newActiveLayerFeatures;
+            newState.sorting = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.determineSortingColumn(newActiveLayerFeatures) : null;
+            newState.selectedFeatureIds = newActiveLayerFeatures && newActiveLayerFeatures.length ? this.getSelectedFeatureIdsByLayerId(activeLayerId) : null;
         }
 
         this.updateState(newState);
@@ -123,8 +147,24 @@ class FeatureDataPluginUIHandler extends StateHandler {
         }
         return currentLayer ? currentLayer.getId() : null;
     }
+
+    determineSortingColumn (features) {
+        // get the first property that isn't in the default hidden fields and use that as default.
+        const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
+        const sortedInfo = { order: 'ascend', columnKey: defaultSortingColumn };
+        return sortedInfo;
+    }
 }
 
-const wrapped = controllerMixin(FeatureDataPluginUIHandler, ['openFlyout', 'closeFlyout', 'setActiveTab', 'updateStateAfterMapEvent', 'updateSelectedFeatures', 'toggleFeature']);
+const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
+    'openFlyout',
+    'closeFlyout',
+    'setActiveTab',
+    'toggleShowSelectedFirst',
+    'updateStateAfterMapEvent',
+    'updateSelectedFeatures',
+    'updateSorting',
+    'toggleFeature'
+]);
 
 export { wrapped as FeatureDataPluginHandler };
