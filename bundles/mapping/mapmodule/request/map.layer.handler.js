@@ -94,6 +94,11 @@ Oskari.clazz.define('map.layer.handler',
                 }
                 // add layers from front of queue to map
                 this.__processLayerQueue();
+                // zoom to content or center/supported zoom level
+                if (opts.zoomContent) {
+                    const sandbox = this.layerService.getSandbox();
+                    sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layerId, opts.zoomContent]);
+                }
             };
             this._loadLayerInfo(layer, opts, done);
         },
@@ -117,6 +122,8 @@ Oskari.clazz.define('map.layer.handler',
                 done();
                 return;
             }
+            const sandbox = this.layerService.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const layerId = layer.getId();
             const status = layer.getDescribeLayerStatus();
             // only layers that have numeric ids can have reasonable response for DescribeLayer
@@ -138,9 +145,8 @@ Oskari.clazz.define('map.layer.handler',
                     }
                 }
                 layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
-                const sandbox = this.layerService.getSandbox();
                 layer.handleDescribeLayer(info);
-                sandbox.findRegisteredModuleInstance('MainMapModule').handleDescribeLayer(layer, info);
+                mapModule.handleDescribeLayer(layer, info);
                 const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 sandbox.notifyAll(event);
                 done();

@@ -72,11 +72,13 @@ class UserLayersHandler extends StateHandler {
 
     openLayer (id) {
         const addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
-        const mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
-        const addMlRequest = addMLrequestBuilder(id);
+        // const mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
+        const addMlRequest = addMLrequestBuilder(id, {
+            zoomContent: true
+        });
         this.sandbox.request(this.instance, addMlRequest);
-        const mapMoveByContentRequest = mapMoveByContentReqBuilder(id, true);
-        this.sandbox.request(this.instance, mapMoveByContentRequest);
+        // const mapMoveByContentRequest = mapMoveByContentReqBuilder(id, true);
+        // this.sandbox.request(this.instance, mapMoveByContentRequest);
     }
 
     refreshLayersList () {
@@ -109,7 +111,7 @@ class UserLayersHandler extends StateHandler {
 
     createEventHandlers () {
         const handlers = {
-            'MapLayerEvent': (event) => {
+            MapLayerEvent: (event) => {
                 const operation = event.getOperation();
                 if (operation === 'add' || operation === 'update' || operation === 'remove') {
                     this.refreshLayersList();
@@ -121,7 +123,7 @@ class UserLayersHandler extends StateHandler {
     }
 
     onEvent (e) {
-        var handler = this.eventHandlers[e.getName()];
+        const handler = this.eventHandlers[e.getName()];
         if (!handler) {
             return;
         }

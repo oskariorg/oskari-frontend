@@ -36,29 +36,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.PersonalDataUserL
          * @return {jQuery} container reference
          */
         getContent: function () {
-            var me = this;
-            var sandbox = me.instance.getSandbox();
-            var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            var addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
-            var mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
+            const me = this;
+            const sandbox = me.instance.getSandbox();
+            const grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+            const addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
 
             grid.setVisibleFields(this.visibleFields);
             // set up the link from name field
             grid.setColumnValueRenderer('name', function (name, data) {
-                var link = me.template.link.clone();
+                const link = me.template.link.clone();
 
                 link.append(name).on('click', function () {
                     // add myplacesimport layer to map on name click
-                    var request = addMLrequestBuilder(data.id);
-                    sandbox.request(me.instance, request);
-                    request = mapMoveByContentReqBuilder(data.id, true);
+                    const request = addMLrequestBuilder(data.id, {
+                        zoomContent: true
+                    });
                     sandbox.request(me.instance, request);
                     return false;
                 });
                 return link;
             });
             grid.setColumnValueRenderer('edit', function (name, data) {
-                var link = me.template.link.clone();
+                const link = me.template.link.clone();
 
                 link.append(me.loc('tab.grid.editButton')).on('click', function () {
                     me._editUserLayer(data);
