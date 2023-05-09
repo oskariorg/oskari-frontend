@@ -30,9 +30,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var layerId = request.getMapLayerId();
-            var zoomToExtent = request.getZoomToExtent();
-            var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            const layerId = request.getMapLayerId();
+            const zoomToExtent = request.getZoomToExtent();
+            const layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
                 return;
             }
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
             if (zoomToExtent) {
                 // move and zoom map to layer extent
                 if (layer.getGeometry().length > 0) {
-                    var bounds = this.layersPlugin.getGeometryBounds(layer.getGeometry()[0]);
+                    const bounds = this.layersPlugin.getGeometryBounds(layer.getGeometry()[0]);
                     // suppress mapmove-event
                     this.layersPlugin.getMapModule().zoomToExtent(bounds, true, true);
                     const center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                 // move map to geometries if available
                 // this needs to be done after the zoom since it's comparing to viewport which changes in zoom
                 if (layer.getGeometry().length > 0) {
-                    var containsGeometry = this.layersPlugin.isInGeometry(layer);
+                    const containsGeometry = this.layersPlugin.isInGeometry(layer);
                     // only move if not currently in geometry
                     if (!containsGeometry) {
                         const center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
