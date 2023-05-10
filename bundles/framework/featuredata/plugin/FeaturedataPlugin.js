@@ -4,6 +4,7 @@ import { Message } from 'oskari-ui';
 import { ThemeProvider } from 'oskari-ui/util';
 import { FeatureDataButton } from './FeatureDataButton';
 import { FeatureDataPluginHandler } from './FeatureDataPluginHandler';
+import { FEATUREDATA_WFS_STATUS } from '../view/FeatureDataContainer';
 
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
@@ -70,15 +71,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
             }
             this.handler.updateStateAfterMapEvent();
         },
-        showLoadingIndicator: function (blnLoad) {
-            this.renderButton(!!blnLoad);
-        },
         renderButton: function (loading = false) {
             const el = this.getElement();
             if (!el) {
                 return;
             }
-            const { flyoutOpen, layers } = this.handler.getState();
+            const { flyoutOpen, layers, loadingStatus } = this.handler.getState();
             ReactDOM.render(
                 <ThemeProvider value={this.getMapModule().getMapTheme()}>
                     <FeatureDataButton
@@ -86,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                         icon={<Message messageKey='title' bundleKey='FeatureData'/>}
                         onClick={() => this.handler.openFlyout()}
                         active={flyoutOpen}
-                        loading={loading}
+                        loading={loadingStatus.loading}
                         position={this.getLocation()}
                     />
                 </ThemeProvider>,
@@ -140,6 +138,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPl
                 },
                 WFSFeaturesSelectedEvent: function (event) {
                     this.handler.updateSelectedFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds());
+                },
+                WFSStatusChangedEvent: function (event) {
+                    if (event.getLayerId() === undefined) {
+                        return;
+                    }
+                    const { loadingStatus } = this.handler.getState();
+                    if (event.getStatus() === event.status.loading) {
+                        loadingStatus['' + event.getLayerId()] = FEATUREDATA_WFS_STATUS.loading;
+                        this.renderButton(true);
+                    }
+
+                    if (event.getStatus() === event.status.complete) {
+                        delete loadingStatus['' + event.getLayerId()];
+                    }
+
+                    if (event.getStatus() === event.status.error) {
+                        if (loadingStatus.hasOwnProperty('' + event.getLayerId())) {
+                            loadingStatus['' + event.getLayerId()] = FEATUREDATA_WFS_STATUS.error;
+                        }
+                    }
+                    const layersStillLoading = !!Object.keys(loadingStatus).find(key => loadingStatus[key] && loadingStatus[key] === FEATUREDATA_WFS_STATUS.loading);
+                    loadingStatus.loading = layersStillLoading;
+                    this.handler.updateLoadingStatus(loadingStatus);
                 }
             };
         }

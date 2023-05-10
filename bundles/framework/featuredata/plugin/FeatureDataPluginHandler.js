@@ -14,7 +14,8 @@ class FeatureDataPluginUIHandler extends StateHandler {
             layers: featureDataLayers,
             flyoutOpen: false,
             activeLayerFeatures: null,
-            showSelectedFirst: false
+            showSelectedFirst: false,
+            loadingStatus: {}
         });
         this.mapModule = mapModule;
         this.selectionService = mapModule.getSandbox().getService(SELECTION_SERVICE_CLASSNAME);
@@ -97,6 +98,10 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.updateState(newState);
     }
 
+    updateLoadingStatus (loadingStatus) {
+        this.updateState({ loadingStatus });
+    }
+
     toggleFeature (featureId) {
         this.selectionService.toggleFeatureSelection(this.getState().activeLayerId, featureId);
     }
@@ -164,6 +169,7 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'updateStateAfterMapEvent',
     'updateSelectedFeatures',
     'updateSorting',
+    'updateLoadingStatus',
     'toggleFeature'
 ]);
 
