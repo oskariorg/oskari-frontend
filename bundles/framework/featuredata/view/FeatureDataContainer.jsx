@@ -7,6 +7,7 @@ import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
 import { TabErrorTitle, TabLoadingTitle, TabTitle } from './TabStatusIndicator';
+import { FilterVisibleColumns } from './FilterVisibleColumns';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
 export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
@@ -28,14 +29,22 @@ const StyledTable = styled(Table)`
     }
 `;
 
-const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, controller) => {
+const SelectionsContainer = styled('div')`
+    display: flex;
+    padding-bottom: 1em;
+`;
+
+const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller) => {
     if (!features || !features.length) {
         return <Message bundleKey={FEATUREDATA_BUNDLE_ID} messageKey={'layer.outOfContentArea'}/>;
     };
-    const columnSettings = createColumnSettingsFromFeatures(features, selectedFeatureIds, showSelectedFirst, sorting);
+    const columnSettings = createColumnSettingsFromFeatures(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings);
     const dataSource = createDatasourceFromFeatures(features);
     const featureTable = <>
-        <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+        <SelectionsContainer>
+            <ShowSelectedItemsFirst showSelectedFirst={showSelectedFirst} toggleShowSelectedFirst={controller.toggleShowSelectedFirst}/>
+            <FilterVisibleColumns {...visibleColumnsSettings} updateVisibleColumns={controller.updateVisibleColumns}/>
+        </SelectionsContainer>
         <StyledTable
             columns={ columnSettings }
             size={ 'large '}
@@ -57,9 +66,10 @@ const createFeaturedataGrid = (features, selectedFeatureIds, showSelectedFirst, 
     return featureTable;
 };
 
-const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting) => {
+const createColumnSettingsFromFeatures = (features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings) => {
+    const { visibleColumns } = visibleColumnsSettings;
     return Object.keys(features[0].properties)
-        .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key))
+        .filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key))
         .map(key => {
             return {
                 align: 'left',
@@ -95,14 +105,14 @@ const createDatasourceFromFeatures = (features) => {
     });
 };
 
-const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, controller) => {
+const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller) => {
     const tabs = layers?.map(layer => {
         const status = loadingStatus[layer.getId()];
         return {
             key: layer.getId(),
             label: <TabTitle status={status} title={layer.getName()}/>,
             children: layer.getId() === layerId
-                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, controller)
+                ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, visibleColumnsSettings, controller)
                 : null
         };
     }) || [];
@@ -117,8 +127,8 @@ const ContainerDiv = styled('div')`
     }
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
-    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, loadingStatus, sorting } = state;
-    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, controller);
+    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, loadingStatus, visibleColumnsSettings, sorting } = state;
+    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, visibleColumnsSettings, controller);
     return (
         <ContainerDiv>
             <Tabs
