@@ -141,11 +141,11 @@ body {
     margin: 0px;
     padding: 0px;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    max-width: 100vw;
-    max-height: 100vh;
+    max-width: 100%;
+    max-height: 100%;
     @media only screen and (max-width: 950px) {
-        width: 100vw;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         min-width: 0;
         transform: none !important;
         top: 0 !important;
@@ -318,16 +318,6 @@ body {
 
 /** media queries */
 @media screen {
-    .oskari-attached {
-        min-width: 520px;
-        max-width: 840px;
-    }
-
-    .oskari-detached {
-        min-width: 520px;
-        max-width: 840px;
-    }
-
     .oskari-flyoutcontentcontainer {
         width: 100%;
         height: 100%;
@@ -335,54 +325,6 @@ body {
         border: 0;
         overflow: auto;
         max-height: 500px;
-    }
-}
-
-@media only screen and (min-width: 400px) and (max-width: 599px) {
-    .oskari-attached {
-        min-width: 520px;
-        max-width: 500px;
-    }
-
-    .oskari-detached {
-        min-width: 520px;
-        max-width: 500px;
-    }
-}
-
-@media only screen and (min-width: 600px) and (max-width: 799px) {
-    .oskari-attached {
-        min-width: 520px;
-        max-width: 700px;
-    }
-
-    .oskari-detached {
-        min-width: 520px;
-        max-width: 600px;
-    }
-}
-
-@media only screen and (min-width: 800px) and (max-width: 1199px) {
-    .oskari-attached {
-        min-width: 520px;
-        max-width: 1000px;
-    }
-
-    .oskari-detached {
-        min-width: 520px;
-        max-width: 1000px;
-    }
-}
-
-@media only screen and (min-width: 1200px) and (max-width: 1599px) {
-    .oskari-attached {
-        min-width: 520px;
-        max-width: 1000px;
-    }
-
-    .oskari-detached {
-        min-width: 520px;
-        max-width: 1000px;
     }
 }
 
