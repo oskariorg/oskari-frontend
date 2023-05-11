@@ -20,7 +20,6 @@ export const TabTitle = styled('div')`
 
 export const TabLoadingTitle = (props) => {
     const { layer } = props;
-    console.log('theme ', theme);
     return <TabLoadingContainer>
         {layer.getName()}
         <SpinnerContainer>
