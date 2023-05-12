@@ -98,16 +98,9 @@ const createDatasourceFromFeatures = (features) => {
 const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, controller) => {
     const tabs = layers?.map(layer => {
         const status = loadingStatus[layer.getId()];
-        let title;
-        if (!status) {
-            title = <TabTitle>{layer.getName()}</TabTitle>;
-        } else {
-            title = status === FEATUREDATA_WFS_STATUS.error ? <TabErrorTitle>{layer.getName()}</TabErrorTitle> : <TabLoadingTitle layer={layer}/>;
-        }
-
         return {
             key: layer.getId(),
-            label: title,
+            label: <TabTitle status={status} title={layer.getName()}/>,
             children: layer.getId() === layerId
                 ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, controller)
                 : null
