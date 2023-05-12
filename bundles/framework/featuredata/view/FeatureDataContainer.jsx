@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
-import { TabErrorTitle, TabLoadingTitle, TabTitle } from './TabStatusIndicator';
+import { TabTitle } from './TabStatusIndicator';
 import { FilterVisibleColumns } from './FilterVisibleColumns';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
