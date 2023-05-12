@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 /**
  * Draws right/left edges (min/max bounds values) of chart
  * @param {Object} svg node into which to render

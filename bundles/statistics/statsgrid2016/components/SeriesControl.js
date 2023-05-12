@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandbox, locale) {
     this.sb = sandbox;
     this.loc = locale;
@@ -234,20 +236,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             .on('click', function (e) {
                 me.seriesService.setAnimating(false);
                 me._setAnimationState(false);
-                var newX = d3.mouse(this)[0];
+                var newX = d3.pointer(e)[0];
                 valueFromMouse(newX, true);
             });
 
         var dragBehavior = d3.drag()
             .subject(function (d) {
-                return { x: scale(me._uiState.currentSeriesIndex), y: d3.event.y };
+                return { x: scale(me._uiState.currentSeriesIndex), y: d.y };
             })
-            .on('drag', function () {
-                var newX = d3.event.x;
+            .on('drag', function (e) {
+                var newX = e.x;
                 valueFromMouse(newX, false);
             })
-            .on('end', function () {
-                var newX = d3.event.x;
+            .on('end', function (e) {
+                var newX = e.x;
                 valueFromMouse(newX, true);
             });
 

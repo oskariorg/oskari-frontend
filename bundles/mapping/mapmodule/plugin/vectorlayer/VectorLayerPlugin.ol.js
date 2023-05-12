@@ -13,6 +13,7 @@ import { LAYER_ID, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '..
 import { filterOptionalStyle } from '../../oskariStyle/filter';
 import { applyOpacityToStyle } from '../../oskariStyle/generator.ol';
 import { getZoomLevelHelper, getScalesFromOptions } from '../../util/scale';
+import * as d3 from 'd3';
 
 import './vectorlayer';
 import './request/AddFeaturesToMapRequest';
