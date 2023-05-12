@@ -41,6 +41,7 @@ class UserLayersHandler extends StateHandler {
         }
         const conf = {
             maxSize: this.getMaxSize(),
+            unzippedMaxSize: this.getMaxSize() * 15,
             isImport
         };
         const onSuccess = () => this.popupCleanup();
@@ -66,19 +67,16 @@ class UserLayersHandler extends StateHandler {
     }
 
     getMaxSize () {
-        const confMax = this.instance.conf.maxFileSizeMb;
+        const confMax = this.instance.conf?.maxFileSizeMb;
         return isNaN(confMax) ? MAX_SIZE : parseInt(confMax);
     }
 
     openLayer (id) {
         const addMLrequestBuilder = Oskari.requestBuilder('AddMapLayerRequest');
-        // const mapMoveByContentReqBuilder = Oskari.requestBuilder('MapModulePlugin.MapMoveByLayerContentRequest');
         const addMlRequest = addMLrequestBuilder(id, {
             zoomContent: true
         });
         this.sandbox.request(this.instance, addMlRequest);
-        // const mapMoveByContentRequest = mapMoveByContentReqBuilder(id, true);
-        // this.sandbox.request(this.instance, mapMoveByContentRequest);
     }
 
     refreshLayersList () {

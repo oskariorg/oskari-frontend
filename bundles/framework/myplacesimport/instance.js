@@ -1,7 +1,6 @@
-import { showLayerForm } from './view/LayerForm';
 import { UserLayersTab } from './UserLayersTab';
 import { UserLayersHandler } from './handler/UserLayersHandler';
-import { TOOL, BUNDLE_NAME, MAX_SIZE, ERRORS } from './constants';
+import { TOOL, BUNDLE_NAME } from './constants';
 
 /**
  * @class Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBundleInstance
@@ -11,17 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     this.mapLayerService = null;
     this.tab = undefined;
     this.loc = Oskari.getMsg.bind(null, BUNDLE_NAME);
-    this.popupControls = null;
-    this.popupCleanup = () => {
-        if (this.popupControls) {
-            if (!this.popupControls.id) {
-                // select default tool when import popup is closed (started from sticky tool)
-                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest');
-            }
-            this.popupControls.close();
-        }
-        this.popupControls = null;
-    };
 }, {
     __name: BUNDLE_NAME,
 
@@ -36,6 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             // logged in user, create UI
             this.createService();
             this.getService().getUserLayers();
+            this.handler = new UserLayersHandler(this);
             this.addTab();
             this.requestHandlers = {
                 showUserLayerDialogRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplacesimport.request.ShowUserLayerDialogRequestHandler', this)
@@ -55,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
         const loggedIn = Oskari.user().isLoggedIn();
         const toolBtn = {
             iconCls: TOOL.ICON,
-            sticky: true,
             disabled: !loggedIn,
             tooltip: this.loc('tool.tooltip')
         };
@@ -63,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             if (loggedIn) {
                 // toolbar requires a callback so we need to check guest flag
                 // inside callback instead of not giving any callback
-                this.openLayerDialog();
+                this.handler.showLayerDialog({});
             }
         };
         if (reqBuilder) {
@@ -85,45 +73,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
     showLayerDialog: function (id) {
         const layer = this.getMapLayerService().findMapLayer(id);
         if (layer) {
-            this.openLayerDialog({
-                id: id,
+            this.handler.showLayerDialog({
+                id,
                 locale: layer.getLocale(),
                 style: layer.getCurrentStyle().getFeatureStyle()
             });
         }
-    },
-    openLayerDialog: function (values = {}) {
-        const { id } = values;
-        if (this.popupControls) {
-            // already opened
-            if (this.popupControls.id === id) {
-                this.popupControls.bringToTop();
-                return;
-            }
-            // remove previous popup
-            this.popupCleanup();
-        }
-        const isImport = !id;
-        const conf = {
-            maxSize: this.getMaxSize(),
-            unzippedMaxSize: this.getMaxSize() * 15,
-            isImport
-        };
-        const onSuccess = () => this.popupCleanup();
-        const onError = (error = ERRORS.GENERIC) => {
-            if (this.popupControls) {
-                this.popupControls.update(error);
-            }
-        };
-        const save = values => this.getService().submitUserLayer(values, onSuccess, onError);
-        const update = values => this.getService().updateUserLayer(id, values, onSuccess, onError);
-        // create popup
-        const onOk = isImport ? save : update;
-        this.popupControls = showLayerForm(values, conf, onOk, this.popupCleanup);
-    },
-    getMaxSize: function () {
-        const confMax = this.conf.maxFileSizeMb;
-        return isNaN(confMax) ? MAX_SIZE : parseInt(confMax);
     },
     /**
      * Creates the import service and registers it to the sandbox.
@@ -157,11 +112,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
      */
     addTab: function (appStarted) {
         const sandbox = Oskari.getSandbox();
-        let myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
+        const myDataService = sandbox.getService('Oskari.mapframework.bundle.mydata.service.MyDataService');
 
         const reqName = 'PersonalData.AddTabRequest';
         if (myDataService) {
-            myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, new UserLayersHandler(this));
+            myDataService.addTab('userlayers', this.loc('tab.title'), UserLayersTab, this.handler);
         } else if (sandbox.hasHandler(reqName)) {
             // fallback to old personaldata tabs
             this.addTabToPersonalData();
