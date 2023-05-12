@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const SelectedItemsFirstContainer = styled('div')`
-    padding-bottom: 0.5em;
 `;
 export const ShowSelectedItemsFirst = (props) => {
     return <SelectedItemsFirstContainer>

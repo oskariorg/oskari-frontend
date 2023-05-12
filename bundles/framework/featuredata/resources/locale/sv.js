@@ -10,6 +10,10 @@ Oskari.registerLocalization(
             "flyout": {
                 "sorterTooltip": "Sortera fallande / stigande",
             },
+            "visibleColumns": {
+                "propertiesSelected": "vald"
+            },
+
             "showSelectedFirst": "Visa de valda först"
         }
     });

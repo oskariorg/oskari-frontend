@@ -10,6 +10,10 @@ Oskari.registerLocalization(
             "flyout": {
                 "sorterTooltip": "Järjestä laskevasti/nousevasti",
             },
+            "visibleColumns": {
+                "propertiesSelected": "valittu"
+            },
+
             "showSelectedFirst": "Näytä valitut ensin"
 
         }
