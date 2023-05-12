@@ -159,6 +159,9 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     createVisibleColumnsSettings (features) {
+        if (!features || !features.length) {
+            return null;
+        }
         const allColumns = Object.keys(features[0].properties).filter(key => !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key));
         const visibleColumns = [].concat(allColumns);
         return {
@@ -190,16 +193,23 @@ class FeatureDataPluginUIHandler extends StateHandler {
     }
 
     determineSortingColumn (features) {
+        if (!features || !features.length) {
+            return null;
+        }
+
         // get the first property that isn't in the default hidden fields and use that as default.
         const defaultSortingColumn = Object.keys(features[0]?.properties).find((key) => this.columnShouldBeVisible(key));
         const sortedInfo = { order: 'ascend', columnKey: defaultSortingColumn };
         return sortedInfo;
     }
 
-    columnShouldBeVisible(key) {
+    columnShouldBeVisible (key) {
         const { visibleColumnsSettings } = this.getState();
+        if (!visibleColumnsSettings) {
+            return null;
+        }
         const { visibleColumns } = visibleColumnsSettings;
-        return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns.includes(key);
+        return !FEATUREDATA_DEFAULT_HIDDEN_FIELDS.includes(key) && visibleColumns?.includes(key);
     }
 }
 
