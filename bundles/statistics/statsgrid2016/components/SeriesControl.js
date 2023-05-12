@@ -241,8 +241,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             });
 
         var dragBehavior = d3.drag()
-            .subject(function (d) {
-                return { x: scale(me._uiState.currentSeriesIndex), y: d.y };
+            .subject(function (e) {
+                return { x: scale(me._uiState.currentSeriesIndex), y: e.y };
             })
             .on('drag', function (e) {
                 var newX = e.x;

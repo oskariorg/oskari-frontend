@@ -597,8 +597,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 });
 
             var dragBehavior = d3.drag()
-                .subject(function (d) {
-                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: d.y };
+                .subject(function (e) {
+                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: e.y };
                 })
                 .on('drag', function (e) {
                     var newX = e.x;
