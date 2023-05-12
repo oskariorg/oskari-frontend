@@ -6,8 +6,10 @@ import styled from 'styled-components';
 import { getHeaderTheme } from 'oskari-ui/theme/ThemeHelper';
 import { ShowSelectedItemsFirst } from './ShowSelectedItemsFirst';
 import { FEATUREDATA_DEFAULT_HIDDEN_FIELDS } from '../plugin/FeatureDataPluginHandler';
+import { TabErrorTitle, TabLoadingTitle, TabTitle } from './TabStatusIndicator';
 
 export const FEATUREDATA_BUNDLE_ID = 'FeatureData';
+export const FEATUREDATA_WFS_STATUS = { loading: 'loading', error: 'error' };
 
 const theme = getHeaderTheme(Oskari.app.getTheming().getTheme());
 
@@ -93,11 +95,12 @@ const createDatasourceFromFeatures = (features) => {
     });
 };
 
-const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, controller) => {
+const createLayerTabs = (layerId, layers, features, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, controller) => {
     const tabs = layers?.map(layer => {
+        const status = loadingStatus[layer.getId()];
         return {
             key: layer.getId(),
-            label: layer.getName(),
+            label: <TabTitle status={status} title={layer.getName()}/>,
             children: layer.getId() === layerId
                 ? createFeaturedataGrid(features, selectedFeatureIds, showSelectedFirst, sorting, controller)
                 : null
@@ -114,8 +117,8 @@ const ContainerDiv = styled('div')`
     }
 `;
 export const FeatureDataContainer = ({ state, controller }) => {
-    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting } = state;
-    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, controller);
+    const { layers, activeLayerId, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, loadingStatus, sorting } = state;
+    const tabs = createLayerTabs(activeLayerId, layers, activeLayerFeatures, selectedFeatureIds, showSelectedFirst, sorting, loadingStatus, controller);
     return (
         <ContainerDiv>
             <Tabs
