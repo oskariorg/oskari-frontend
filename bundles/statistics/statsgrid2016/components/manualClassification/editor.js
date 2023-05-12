@@ -59,7 +59,7 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     };
 
     const dragBehavior = d3.drag()
-        .subject((d, event) => {
+        .subject((event, d) => {
             return { x: x(d.value), y: event.y };
         })
         .on('start', (event, d) => {
