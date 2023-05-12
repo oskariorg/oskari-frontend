@@ -122,17 +122,22 @@ Oskari.clazz.define('map.layer.handler',
                 done();
                 return;
             }
-            const sandbox = this.layerService.getSandbox();
-            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             const layerId = layer.getId();
             const status = layer.getDescribeLayerStatus();
+            if (status === DESCRIBE_LAYER.LOADED) {
+                // already processed, we can proceed with adding the layer to map
+                done();
+                return;
+            }
+            if (typeof layerId === 'string' && layerId.startsWith('userlayer')) {
+                // process coverage WKT for userlayers
+                // it is included in the layer data for userlayers and DescribeLayer is not used
+                this.__handleLayerInfoSuccess(layer, {
+                    coverage: layer.getGeometryWKT()
+                });
+            }
             // only layers that have numeric ids can have reasonable response for DescribeLayer
-            if (isNaN(layerId) || status === DESCRIBE_LAYER.LOADED) {
-                if (layerId.startsWith('userlayer')) {
-                    mapModule.handleDescribeLayer(layer, {
-                        coverage: layer.getGeometryWKT()
-                    });
-                }
+            if (isNaN(layerId)) {
                 done();
                 return;
             }
@@ -149,13 +154,18 @@ Oskari.clazz.define('map.layer.handler',
                         return;
                     }
                 }
-                layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
-                layer.handleDescribeLayer(info);
-                mapModule.handleDescribeLayer(layer, info);
-                const event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
-                sandbox.notifyAll(event);
+                this.__handleLayerInfoSuccess(layer, info);
                 done();
             });
+        },
+        __handleLayerInfoSuccess: function (layer, describeInfo) {
+            const sandbox = this.layerService.getSandbox();
+            const mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            layer.setDescribeLayerStatus(DESCRIBE_LAYER.LOADED);
+            layer.handleDescribeLayer(describeInfo);
+            mapModule.handleDescribeLayer(layer, describeInfo);
+            const event = Oskari.eventBuilder('MapLayerEvent')(layer.getId(), 'update');
+            sandbox.notifyAll(event);
         }
     }, {
         /**
