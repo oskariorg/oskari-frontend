@@ -1,5 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { showFeatureDataFlyout } from './FeatureDataFlyout';
+import { showFeatureDataFlyout } from '../view/FeatureDataFlyout';
+import { showSelectByPropertiesPopup } from '../view/SelectByProperties';
 
 export const FEATUREDATA_DEFAULT_HIDDEN_FIELDS = ['__fid', '__centerX', '__centerY', 'geometry'];
 
@@ -158,6 +159,21 @@ class FeatureDataPluginUIHandler extends StateHandler {
         this.flyoutController = showFeatureDataFlyout(this.getState(), this.getController());
     }
 
+    openSelectByPropertiesPopup () {
+        if (this.popupController) {
+            this.closePopup();
+            return;
+        }
+        this.popupController = showSelectByPropertiesPopup(this.getState(), this.getController());
+    }
+
+    closePopup () {
+        if (this.popupController) {
+            this.popupController.close();
+            this.popupController = null;
+        }
+    }
+
     createVisibleColumnsSettings (features) {
         if (!features || !features.length) {
             return null;
@@ -223,7 +239,9 @@ const wrapped = controllerMixin(FeatureDataPluginUIHandler, [
     'updateSorting',
     'updateLoadingStatus',
     'updateVisibleColumns',
-    'toggleFeature'
+    'toggleFeature',
+    'openSelectByPropertiesPopup',
+    'closePopup'
 ]);
 
 export { wrapped as FeatureDataPluginHandler };
