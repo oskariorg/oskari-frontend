@@ -1,6 +1,7 @@
 import { equalSizeBands, createClamp } from './util';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
+import * as d3 from 'd3';
 
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService

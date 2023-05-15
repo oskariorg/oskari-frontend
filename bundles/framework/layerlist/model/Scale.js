@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export class Scale {
     constructor ({ min, max, rangeMin, rangeMax, outOfRange }) {
         this.min = min;

@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
     this.svg = null;
     this.dimensions = {};

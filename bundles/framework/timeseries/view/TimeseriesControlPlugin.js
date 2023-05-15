@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import * as d3 from 'd3';
 dayjs.extend(customParseFormat);
 
 /**
@@ -591,16 +592,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 .attr('height', 50)
                 .on('click', null) // remove old event handlers
                 .on('click', function (e) {
-                    var newX = d3.mouse(this)[0];
+                    var newX = d3.pointer(e)[0];
                     timeFromMouse(newX);
                 });
 
             var dragBehavior = d3.drag()
-                .subject(function (d) {
-                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: d3.event.y };
+                .subject(function (e) {
+                    return { x: scaleSubset(new Date(me._uiState.currentTime)), y: e.y };
                 })
-                .on('drag', function () {
-                    var newX = d3.event.x;
+                .on('drag', function (e) {
+                    var newX = e.x;
                     timeFromMouse(newX);
                 });
 
@@ -623,8 +624,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 updateFullAxisControls();
             }
 
-            function brushed () {
-                var selection = d3.event.selection;
+            function brushed (e) {
+                var selection = e.selection;
                 var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
                 scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));
                 svg.select('.subset-axis').call(axisSubset);

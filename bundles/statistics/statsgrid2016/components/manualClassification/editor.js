@@ -3,6 +3,7 @@ import { edgeLines } from './edgeLines';
 import { inputGuide } from './inputGuide';
 import { updateBandBlocks } from './updateBandBlocks';
 import { updateDragHandles } from './updateDragHandles';
+import * as d3 from 'd3';
 
 const width = 500;
 const height = 303;
@@ -58,16 +59,16 @@ export function manualClassificationEditor (el, manualBounds, indicatorData, col
     };
 
     const dragBehavior = d3.drag()
-        .subject((d) => {
-            return { x: x(d.value), y: d3.event.y };
+        .subject((event, d) => {
+            return { x: x(d.value), y: event.y };
         })
-        .on('start', (d) => {
+        .on('start', (event, d) => {
             selected = d;
             update();
         })
-        .on('drag', (d) => {
+        .on('drag', (event, d) => {
             if (disabled) return null;
-            const newX = d3.event.x;
+            const newX = event.x;
             d.value = x.invert(newX);
             selected = d;
             update();
