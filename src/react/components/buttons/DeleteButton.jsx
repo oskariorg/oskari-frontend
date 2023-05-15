@@ -8,9 +8,17 @@ import { DeleteIcon } from '../icons'
 
 const StyledButton = styled(Button)`
     font-size: 16px;
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+`;
+/**
+ * This + pointer-events style on button components are used to fix tooltip
+ * not disappearing if the button is disabled. Probably caused by styled-components + antd problem.
+ */
+const DisabledWrapper = styled('div')`
+    cursor: ${props => props.$disabled ? 'not-allowed' : 'default'};
 `;
 
-const getButton = (type, disabled ) => {
+const getButton = (type, disabled) => {
     const props = {
         className: 't_button t_delete',
         disabled
@@ -19,7 +27,7 @@ const getButton = (type, disabled ) => {
         return <IconButton icon={<DeleteIcon/>} {...props}/>;
     }
     if (type === 'button') {
-        return <StyledButton  {...props}><DeleteIcon/></StyledButton>;
+        return <StyledButton {...props}><DeleteIcon/></StyledButton>;
     }
     if (type === 'label') {
         return <SecondaryButton {...props} danger type="delete"/>;
@@ -47,7 +55,9 @@ export const DeleteButton = ({
             okType='danger'
             placement={placement}>
             <Tooltip title={tooltip}>
-                {getButton(type, disabled)}
+                <DisabledWrapper $disabled={disabled}>
+                    {getButton(type, disabled)}
+                </DisabledWrapper>
             </Tooltip>
         </Confirm>
     );
