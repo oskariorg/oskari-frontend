@@ -17,6 +17,7 @@ const BorderlessButton = styled(Button)`
     background: none;
     padding: 0px;
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+    font-size: ${props => props.$iconSize}px;
     &:hover {
         color: ${props => props.color};
         background: none;
@@ -27,6 +28,7 @@ const BorderlessButton = styled(Button)`
 `;
 const BorderedButton = styled(Button)`
     pointer-events: ${props => props.disabled ? 'none' : 'auto'};
+    font-size: ${props => props.$iconSize}px;
     &:hover {
         color: ${props => props.color};
         border-color: ${props => props.color};
@@ -79,7 +81,7 @@ const getConfirmProps = (type) => {
     };
 };
 
-const ThemeButton = ThemeConsumer(({ theme, bordered, ...rest }) => {
+const ThemeButton = ThemeConsumer(({ theme, bordered, iconSize, ...rest }) => {
     let color = theme?.color?.accent;
     if (color && Oskari.util.isDarkColor(color)) {
         color = theme?.color?.primary;
@@ -90,10 +92,10 @@ const ThemeButton = ThemeConsumer(({ theme, bordered, ...rest }) => {
         color = getColorEffect(color, EFFECT.LIGHTEN);
     }
     if (bordered) {
-        return <BorderedButton color={color} { ...rest }/>
+        return <BorderedButton color={color} $iconSize={iconSize} { ...rest }/>
     }
     // default
-    return <BorderlessButton color={color} { ...rest }/>
+    return <BorderlessButton color={color} $iconSize={iconSize} { ...rest }/>
 });
 
 export const IconButton = ({
@@ -103,6 +105,7 @@ export const IconButton = ({
     onClick,
     onConfirm,
     disabled = false,
+    iconSize = 16,
     ...rest
 }) => {
     if (onConfirm) {
@@ -117,7 +120,7 @@ export const IconButton = ({
                 { ...getConfirmProps(type) }>
                     <Tooltip title={title}>
                         <DisabledWrapper $disabled={disabled}>
-                            <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                            <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
                                 {icon}
                             </ThemeButton>
                         </DisabledWrapper>
@@ -129,7 +132,7 @@ export const IconButton = ({
         return (
             <Tooltip title={title}>
                 <DisabledWrapper $disabled={disabled}>
-                    <ThemeButton disabled={disabled} onClick={onClick} { ...rest }>
+                    <ThemeButton disabled={disabled} iconSize={iconSize} onClick={onClick} { ...rest }>
                         {icon}
                     </ThemeButton>
                 </DisabledWrapper>
@@ -137,7 +140,7 @@ export const IconButton = ({
         );
     }
     return (
-        <ThemeButton onClick={onClick} { ...rest }>
+        <ThemeButton onClick={onClick} iconSize={iconSize} { ...rest }>
             {icon}
         </ThemeButton>
     );
