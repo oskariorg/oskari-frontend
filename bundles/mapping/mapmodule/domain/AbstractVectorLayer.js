@@ -73,6 +73,8 @@ export class AbstractVectorLayer extends AbstractLayer {
         this.setStyles(styles);
         // Remove styles from options to be sure that VectorStyle is used
         delete options.styles;
+        // update current style
+        this.selectStyle(this.getCurrentStyle().getName());
     }
 
     removeStyle (name) {
